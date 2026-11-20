@@ -1298,7 +1298,7 @@ def _verify_steps(
     # between the packs and the manifests, which would then describe two
     # revisions of it. Taken after step 2, whose own refresh needs them
     # exclusive.
-    hold_data_dirs(held, load_data_dir_registry("platforms"))
+    hold_data_dirs(held, load_data_dir_registry(PLATFORMS_DIR))
 
     # Step 3: Verify. The paths each pack holds by this report go to a file
     # step 5 compares with the archives.

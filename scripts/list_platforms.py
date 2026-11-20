@@ -14,9 +14,8 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
+from core.paths import PLATFORMS_DIR
 from model.registry import list_registered_platforms
-
-PLATFORMS_DIR = "platforms"
 
 
 def list_platforms() -> list[str]:

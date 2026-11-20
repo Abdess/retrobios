@@ -41,7 +41,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from model.database import load_database
 from model.profiles import load_emulator_profiles
 from core.cli import run_cli
-from core.paths import REPO_ROOT
+from core.paths import DB_FILE, EMULATORS_DIR, REPO_ROOT
 from sitegen.insights import (
     SOURCES,
     Readings,
@@ -73,8 +73,8 @@ def main() -> int:
     # Search Console data settles two to three days after the fact.
     end = dt.date.today() - dt.timedelta(days=3)
     start = end - dt.timedelta(days=args.days - 1)
-    held, declared = collection_names(load_database(str(REPO_ROOT / "database.json")),
-                                      load_emulator_profiles(str(REPO_ROOT / "emulators")))
+    held, declared = collection_names(load_database(str(REPO_ROOT / DB_FILE)),
+                                      load_emulator_profiles(str(REPO_ROOT / EMULATORS_DIR)))
     now = dt.datetime.now(dt.timezone.utc)
     readings = Readings(start, end, now, held, declared)
     if "gsc" not in skip:

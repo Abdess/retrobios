@@ -32,6 +32,7 @@ from pathlib import Path
 
 from model import releaserecord
 from core.cli import require_directory
+from core.paths import PLATFORMS_DIR
 from core.artifacts import write_text_atomic
 from release.notes import (
     changelog_url,
@@ -49,7 +50,7 @@ def main() -> int:
                         help="release record (default: %(default)s)")
     parser.add_argument("--whats-new", required=True, type=Path,
                         help="what changed since the previous release, written by hand")
-    parser.add_argument("--platforms-dir", default="platforms",
+    parser.add_argument("--platforms-dir", default=PLATFORMS_DIR,
                         help="registry read for each pack's extract folder (default: %(default)s)")
     parser.add_argument("--thanks", type=Path,
                         help="checked Thanks lines to print instead of the ones gh gives")

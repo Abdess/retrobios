@@ -16,7 +16,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from core.cli import run_cli
 from core.artifacts import write_if_changed
-from core.paths import REPO_ROOT
+from core.paths import DB_FILE, REPO_ROOT
+from model.database import load_database
 from model.retired import FIRST_ADDRESSED, RETIRED_FILE, dump, merge, retired_between
 
 
@@ -52,7 +53,7 @@ def main() -> int:
         parser.print_help()
         return 2
     records = backfill()
-    current = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
+    current = load_database(str(REPO_ROOT / DB_FILE))
     records = merge(records, {}, current)
     write_if_changed(args.output, dump(records))
     print(f"{len(records)} files left the collection since {FIRST_ADDRESSED}")

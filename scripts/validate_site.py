@@ -14,6 +14,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from core.paths import PLATFORMS_DIR
 from sitegen.validate import validate_site
 
 
@@ -32,7 +33,7 @@ def main() -> None:
         help="the path the site is served under (default: %(default)s)",
     )
     parser.add_argument(
-        "--platforms-dir", default="platforms", type=Path,
+        "--platforms-dir", default=PLATFORMS_DIR, type=Path,
         help="registry whose platforms each need a get/ page (default: %(default)s)",
     )
     parser.add_argument(

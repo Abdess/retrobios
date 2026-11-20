@@ -16,7 +16,7 @@ import yaml
 from model.registry import load_data_dir_registry, load_platform_registry
 from model.profiles import source_yaml_paths
 from model.safeparse import yaml_load
-from core.paths import PLATFORMS_DIR, REPO_ROOT
+from core.paths import DB_FILE, EMULATORS_DIR, PLATFORMS_DIR, REPO_ROOT
 
 try:
     from jsonschema import Draft202012Validator, FormatChecker
@@ -475,9 +475,9 @@ def _unknown_data_dir_refs() -> list[str]:
     every run printed "not cached" while refresh_data_dirs had nothing to
     refresh.
     """
-    registered = set(load_data_dir_registry(REPO_ROOT / "platforms", required=True))
+    registered = set(load_data_dir_registry(REPO_ROOT / PLATFORMS_DIR, required=True))
     out: list[str] = []
-    for directory in (REPO_ROOT / "emulators", REPO_ROOT / "platforms"):
+    for directory in (REPO_ROOT / EMULATORS_DIR, REPO_ROOT / PLATFORMS_DIR):
         for path in source_yaml_paths(directory):
             if path.name.startswith("_"):
                 continue
@@ -505,7 +505,7 @@ def _repository_layout_in_profiles() -> list[str]:
     `.variants/...`, and the pack then wrote them where no emulator looks.
     """
     out: list[str] = []
-    for path in source_yaml_paths(REPO_ROOT / "emulators"):
+    for path in source_yaml_paths(REPO_ROOT / EMULATORS_DIR):
         document = _source_mapping(path)
         for entry in document.get("files") or []:
             if not isinstance(entry, dict):
@@ -604,7 +604,7 @@ def _registry_contract() -> list[str]:
     registry where no platform carries it would cut a release with no pack
     at all, and every download link would lead to the command.
     """
-    registry_path = REPO_ROOT / "platforms" / "_registry.yml"
+    registry_path = REPO_ROOT / PLATFORMS_DIR / "_registry.yml"
     if not registry_path.is_file():
         return []
     with registry_path.open(encoding="utf-8") as handle:
@@ -681,7 +681,7 @@ def _bios_tree_below(platform: str, folder: str) -> str:
     from model.platforms import load_platform_config
 
     try:
-        config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+        config = load_platform_config(platform, str(REPO_ROOT / PLATFORMS_DIR))
     except FileNotFoundError:
         return ""
     prefix = f"{folder}/".lower()
@@ -701,7 +701,7 @@ def _libretro_systems(platform: str) -> dict:
     from model.platforms import load_platform_config
 
     try:
-        config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+        config = load_platform_config(platform, str(REPO_ROOT / PLATFORMS_DIR))
     except FileNotFoundError:
         return {}
     return config.get("libretro_systems") or {}
@@ -879,7 +879,7 @@ def _romfolder_errors() -> list[str]:
     """Every scraped setup against its schema, and every source_ref against
     the sources the file declares: a ref naming no declared repository can
     never be read back at a pin."""
-    directory = REPO_ROOT / "platforms" / "romfolders"
+    directory = REPO_ROOT / PLATFORMS_DIR / "romfolders"
     if not directory.is_dir():
         return []
     validator = _validator("romfolders.schema.json")
@@ -938,7 +938,7 @@ def _arcade_pin_errors() -> list[str]:
     out: list[str] = []
     for path in sorted((REPO_ROOT / "games" / "arcade").glob("*.json")):
         doc = _json_object(path)
-        profile_path = REPO_ROOT / "emulators" / f"{doc.get('profile')}.yml"
+        profile_path = REPO_ROOT / EMULATORS_DIR / f"{doc.get('profile')}.yml"
         label = str(path.relative_to(REPO_ROOT))
         if not profile_path.is_file():
             out.append(f"{label}: no profile emulators/{profile_path.name}")
@@ -1007,11 +1007,11 @@ def main() -> int:
 
     errors: list[str] = _format_errors()
     errors.extend(
-        _validate_yaml_directory(REPO_ROOT / "emulators", "emulator.schema.json")
+        _validate_yaml_directory(REPO_ROOT / EMULATORS_DIR, "emulator.schema.json")
     )
     errors.extend(
         _validate_yaml_directory(
-            REPO_ROOT / "platforms", "platform.schema.json", skip_private=True
+            REPO_ROOT / PLATFORMS_DIR, "platform.schema.json", skip_private=True
         )
     )
     errors.extend(_unknown_data_dir_refs())
@@ -1025,7 +1025,7 @@ def main() -> int:
     errors.extend(_arcade_pin_errors())
 
     if not args.source_only:
-        database_path = REPO_ROOT / "database.json"
+        database_path = REPO_ROOT / DB_FILE
         errors.extend(
             _validate_json_files(
                 [database_path],

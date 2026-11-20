@@ -9,6 +9,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from core.paths import EMULATORS_DIR
 from sitegen.sources import SOURCE_PATHS, TREE_CACHE, refresh_record
 
 
@@ -26,7 +27,7 @@ def main() -> int:
         help="fetch a tree no cache holds into the last --cache-dir",
     )
     parser.add_argument(
-        "--emulators-dir", default="emulators",
+        "--emulators-dir", default=EMULATORS_DIR,
         help="profiles whose citations are checked (default: %(default)s)",
     )
     parser.add_argument(

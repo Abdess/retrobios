@@ -22,6 +22,7 @@ import sys
 from pathlib import Path
 
 from core.artifacts import ArtifactLockBusy, write_text_atomic
+from core.paths import PLATFORMS_DIR
 from core.sizes import size_text
 from model.releaserecord import RECORD
 from release.record import (
@@ -41,7 +42,7 @@ def main() -> int:
         help="manifests the archives are compared with (default: %(default)s)",
     )
     parser.add_argument(
-        "--platforms-dir", default="platforms",
+        "--platforms-dir", default=PLATFORMS_DIR,
         help="registry the pack names are rebuilt from (default: %(default)s)",
     )
     parser.add_argument(

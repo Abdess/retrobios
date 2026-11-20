@@ -25,6 +25,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 from core.cli import add_repo_inputs
+from core.paths import EMULATORS_DIR
 from model.dumpcatalog import DEFAULT_PROVENANCE_DIR, load_provenance_snapshots
 from model.database import load_database
 from model.profiles import load_emulator_profiles
@@ -76,7 +77,7 @@ def main() -> int:
     )
     parser.add_argument("--json", action="store_true", help="Full report as JSON")
     parser.add_argument(
-        "--emulators-dir", default="emulators",
+        "--emulators-dir", default=EMULATORS_DIR,
         help="profiles whose unheld files a missing dump answers (default: %(default)s)",
     )
     parser.add_argument(
