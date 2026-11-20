@@ -13,6 +13,8 @@ import os
 import re
 from pathlib import Path
 
+from core.lines import LineIndex
+
 # Macros that declare a machine entry. GAMEL is GAME plus a layout and is
 # the only suffixed form MAME declares (src/emu/gamedrv.h): a BIOS root that
 # ships a layout, such as gq863 or aristmk5, is written with it.
@@ -126,6 +128,7 @@ def find_bios_root_sets(source: str, filename: str) -> dict[str, dict]:
     MACHINE_IS_BIOS_ROOT, returns set names with source location.
     """
     results: dict[str, dict] = {}
+    lines = LineIndex(source)
 
     for match in MACHINE_MACROS.finditer(source):
         start = match.end() - 1  # position of opening paren
@@ -154,7 +157,7 @@ def find_bios_root_sets(source: str, filename: str) -> dict[str, dict]:
             continue
 
         set_name = args[1].strip()
-        line_no = source[: match.start()].count("\n") + 1
+        line_no = lines.line(match.start())
 
         results[set_name] = {
             "source_file": filename,

@@ -55,6 +55,7 @@ from core.artifacts import write_if_changed
 from model.profiles import load_emulator_profiles
 from core.cli import run_cli
 from core.hashing import compute_hashes
+from core.upstream import parse_repo
 from .base_scraper import download
 from .listxml import Opener, attrs, iter_elements, open_listxml, rom_members
 from .romset_dat_importer import (
@@ -935,10 +936,11 @@ def _dat_cross_check(
 
 
 def _repo_slug(url: str) -> str:
-    parts = [p for p in urllib.parse.urlsplit(url).path.split("/") if p]
-    if len(parts) < 2:
-        raise ValueError(f"not a repository URL: {url}")
-    return f"{parts[0]}/{parts[1].removesuffix('.git')}"
+    """owner/name of the GitHub repository a profile's source names."""
+    repo = parse_repo(url)
+    if repo is None or repo.family != "github":
+        raise ValueError(f"not a GitHub repository URL: {url}")
+    return repo.slug
 
 
 def fetch_repo_file(slug: str, commit: str, path: str, cache_dir: Path) -> tuple[Path, str]:

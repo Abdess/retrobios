@@ -11,6 +11,8 @@ import os
 import re
 from pathlib import Path
 
+from core.lines import LineIndex
+
 _ROM_ENTRY_RE = re.compile(
     r'\{\s*"([^"]+)"\s*,\s*(0x[\da-fA-F]+)\s*,\s*(0x[\da-fA-F]+)\s*,\s*([^}]+)\}',
 )
@@ -33,6 +35,7 @@ def find_bios_sets(source: str, filename: str) -> dict[str, dict]:
         {set_name: {"source_file": str, "source_line": int}}
     """
     results: dict[str, dict] = {}
+    lines = LineIndex(source)
 
     for match in _BURN_DRIVER_RE.finditer(source):
         body = match.group(2)
@@ -45,7 +48,7 @@ def find_bios_sets(source: str, filename: str) -> dict[str, dict]:
             continue
 
         set_name = name_match.group(1)
-        line_num = source[: match.start()].count("\n") + 1
+        line_num = lines.line(match.start())
 
         results[set_name] = {
             "source_file": filename,
