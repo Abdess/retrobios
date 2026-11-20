@@ -1394,7 +1394,6 @@ before a release (wiki/release-process.md). Its lines stay in
 | `indexnow.py` | List the pages a deploy changes, read against the `digests.json` the live site serves, as the IndexNow request the deploy posts once the new site is live. `--dist` names the built site, `--output` appends the request to a step output |
 | `romset_recipes.py` | Identify which emulator version an arcade archive matches, rebuild a pinned archive from ROMs already held, record a recipe for every archive the collection holds and build any of them from the members it holds (see [Archive recipes](#archive-recipes)) |
 | `scraper/romset_dat_importer.py` | Fetch and import per-set recipes from MAME `-listxml` or FBNeo DATs into `recipes/`. `--fetch` alone takes the newest MAME release, and FBNeo DATs are refreshed by git blob sha. `--fetch <revision>` reads FBNeo at that tag, branch or commit |
-| `core/deterministic_zip.py` | The fixed date pack members carry. Its archive rebuild is no longer called by the pack, which copies each ZIP byte for byte |
 | `core/torrentzip.py` | Build TorrentZip archives for MAME/FBNeo ROM sets (archive bytes depend only on contents, with stock zlib), streaming one member at a time |
 | `core/crypto_verify.py` | 3DS RSA signature and AES crypto verification |
 | `core/sect233r1.py` | Pure Python ECDSA verification on sect233r1 curve (3DS OTP cert) |

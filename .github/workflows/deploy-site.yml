@@ -17,7 +17,6 @@ on:
       - "scripts/core/artifacts.py"
       - "scripts/core/cli.py"
       - "scripts/core/crypto_verify.py"
-      - "scripts/core/deterministic_zip.py"
       - "scripts/core/github.py"
       - "scripts/core/hashing.py"
       - "scripts/core/options.py"

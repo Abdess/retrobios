@@ -12,11 +12,14 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from core.artifacts import set_plain_mode
-from core.deterministic_zip import FIXED_DATE_TIME
 from core.hashing import compute_hashes
 from core.paths import comparable_destination, sanitize_pack_path
 from packs.paths import has_path_conflict, register_path, placement_block
 
+
+# The minimum ZIP timestamp, carried by every pack member so a pack is a
+# function of its inputs and not of the clock.
+FIXED_DATE_TIME = (1980, 1, 1, 0, 0, 0)
 
 # Formats that are already compressed: deflating them again took 28 s of the
 # RetroArch build for 2.1 GB of members and saved 9.6 MB (0.45 %), 16 GB and
