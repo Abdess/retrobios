@@ -195,26 +195,27 @@ def verify_entry_sha1(
 ) -> dict:
     """SHA1 verification -BizHawk firmware hash check."""
     name = file_entry.get("name", "")
-    expected_sha1 = file_entry.get("sha1", "")
+    value = file_entry.get("sha1")
+    expected = [str(v).strip().lower() for v in (value if isinstance(value, list) else [value]) if v]
     required = file_entry.get("required", True)
     base = {"name": name, "required": required}
 
     if not local_path:
         return {**base, "status": Status.MISSING}
 
-    if not expected_sha1:
+    if not expected:
         return {**base, "status": Status.OK, "path": local_path}
 
-    hashes = compute_hashes(local_path)
-    actual_sha1 = hashes["sha1"].lower()
-    if actual_sha1 == expected_sha1.lower():
+    # The builder's comparison, so the two count the same files as held.
+    if frontend_digest_matches(file_entry, local_path, "sha1"):
         return {**base, "status": Status.OK, "path": local_path}
+    actual_sha1 = compute_hashes(local_path)["sha1"].lower()
 
     return {
         **base,
         "status": Status.UNTESTED,
         "path": local_path,
-        "reason": f"expected {expected_sha1[:12]}... got {actual_sha1[:12]}...",
+        "reason": f"expected {expected[0][:12]}... got {actual_sha1[:12]}...",
     }
 
 

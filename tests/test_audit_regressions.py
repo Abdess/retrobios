@@ -7939,5 +7939,35 @@ class EveryReaderOfACoreFileIsNamed(unittest.TestCase):
         self.assertIsNone(omitted["SHARED.BIN"]["cores"])
 
 
+class VerifySha1ReadsTheBuilderDigest(unittest.TestCase):
+    """verify_entry_sha1 accepts what the builder's sha1 comparison accepts:
+    a list of revisions and a padded value, which it crashed on or refused."""
+
+    def setUp(self):
+        scratch = tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp")
+        self.addCleanup(scratch.cleanup)
+        self.path = str(Path(scratch.name) / "fw.bin")
+        Path(self.path).write_bytes(b"bizhawk firmware")
+        self.sha1 = hashlib.sha1(b"bizhawk firmware").hexdigest()
+
+    def _status(self, sha1: object) -> str:
+        from resolve.validation import frontend_digest_matches
+
+        entry = {"name": "fw.bin", "sha1": sha1}
+        builder = frontend_digest_matches(entry, self.path, "sha1")
+        status = verdicts.verify_entry_sha1(entry, self.path)["status"]
+        self.assertEqual(status == verdicts.Status.OK, builder)
+        return status
+
+    def test_a_list_of_revisions(self):
+        self.assertEqual(self._status(["0" * 40, self.sha1]), verdicts.Status.OK)
+
+    def test_a_padded_value(self):
+        self.assertEqual(self._status(self.sha1.upper() + " "), verdicts.Status.OK)
+
+    def test_another_dump(self):
+        self.assertEqual(self._status("0" * 40), verdicts.Status.UNTESTED)
+
+
 if __name__ == "__main__":
     unittest.main()
