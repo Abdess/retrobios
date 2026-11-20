@@ -22,6 +22,7 @@ from dataclasses import dataclass
 
 from core.hashing import parse_hash_list
 from model.declarations import CONFIGS_ROOT, ROMS_ROOT, declared_root, outer_layout
+from model.profiles import lists_files
 from resolve.content import name_match_size_ok
 from resolve.localfile import resolve_local_file
 from core.paths import sanitize_pack_path
@@ -432,7 +433,7 @@ def _named_profiles(record: dict, profiles: Mapping[str, dict], platform: str) -
     for part in (e.strip() for e in str(record.get("emulator", "")).split(",")):
         named = [
             key for key, profile in profiles.items()
-            if profile.get("type") not in ("alias", "launcher")
+            if lists_files(profile)
             and (key == part or part in {str(c) for c in profile.get("cores") or []})
         ]
         own = [k for k in named if platform in (profiles[k].get("built_by") or [])]
@@ -1369,7 +1370,7 @@ class LauncherLayer:
         return sorted(
             key for key in relevant
             if (profile := profiles.get(key)) is not None
-            and profile.get("type") not in ("alias", "launcher")
+            and lists_files(profile)
             and (key == name or name in {str(c) for c in profile.get("cores") or []})
         )
 

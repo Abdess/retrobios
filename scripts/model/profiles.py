@@ -27,6 +27,22 @@ CONTENT_CHECKS = frozenset({"romdir", "masked_sha1"})
 emulator_profiles_cache: dict[tuple[str, bool], dict[str, dict]] = {}
 
 
+# A launcher hands the game to another emulator and an alias is another
+# profile's build under a second name: neither declares files of its own.
+FILELESS_TYPES = frozenset({"launcher", "alias"})
+
+
+def lists_files(profile: dict) -> bool:
+    """Whether a profile declares the files its emulator reads."""
+    return profile.get("type") not in FILELESS_TYPES
+
+
+def is_emulator(profile: dict) -> bool:
+    """Whether a profile counts as an emulator of its own, neither an alias
+    nor a test core."""
+    return profile.get("type") != "alias" and profile.get("role") != "test"
+
+
 class ProfileSelectionError(ValueError):
     """A named profile cannot answer for itself."""
 
@@ -43,7 +59,7 @@ def profiles_for_systems(
     wanted = {norm_system_id(sid) for sid in system_ids}
     matching = []
     for name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias") or profile.get("role") == "test":
+        if not lists_files(profile) or profile.get("role") == "test":
             continue
         if standalone and "standalone" not in profile.get("type", "libretro"):
             continue
@@ -121,7 +137,7 @@ def select_emulator_profiles(
             available = sorted(
                 key
                 for key, value in all_profiles.items()
-                if value.get("type") != "alias" and value.get("role") != "test"
+                if is_emulator(value)
             )
             raise ProfileSelectionError(
                 f"emulator '{name}' not found\n"
@@ -264,7 +280,7 @@ def _normalize_hash_fields(node: object) -> None:
 def unique_emulator_profiles(profiles: dict[str, dict]) -> dict[str, dict]:
     """Profiles counting as distinct emulators (aliases and tests excluded)."""
     return {
-        k: v for k, v in profiles.items() if v.get("type") != "alias" and v.get("role") != "test"
+        k: v for k, v in profiles.items() if is_emulator(v)
     }
 
 

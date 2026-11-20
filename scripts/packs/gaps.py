@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 
 from model.alternatives import set_fields, set_keys, set_requirements, settle_sets
 from model.declarations import OUTER_ROOTS, platform_declarations, platform_declared_contents
-from model.profiles import PROFILE_IDENTITY_FIELDS, entry_system_ids, load_emulator_profiles
+from model.profiles import PROFILE_IDENTITY_FIELDS, entry_system_ids, lists_files, load_emulator_profiles
 from packs.paths import core_save_folder
 from resolve.archives import archive_entry, archive_members
 from resolve.cores import resolve_platform_cores
@@ -498,7 +498,7 @@ def find_undeclared_files(
     )
 
     for emu_name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias"):
+        if not lists_files(profile):
             continue
         if emu_name not in relevant:
             continue

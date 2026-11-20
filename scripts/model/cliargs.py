@@ -13,7 +13,7 @@ except ImportError:
     yaml = None
 
 from model.platforms import load_platform_config
-from model.profiles import load_emulator_profiles
+from model.profiles import is_emulator, load_emulator_profiles
 from model.registry import list_registered_platforms, list_release_pack_platforms
 from model.systems import platform_system_names, system_index
 from core.paths import PLATFORMS_DIR, REPO_ROOT
@@ -92,7 +92,7 @@ def list_emulator_profiles(emulators_dir: str, skip_aliases: bool = True) -> Non
     profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
     for name in sorted(profiles):
         p = profiles[name]
-        if p.get("type") == "alias" or p.get("role") == "test":
+        if not is_emulator(p):
             continue
         display = p.get("emulator", name)
         ptype = p.get("type", "libretro")

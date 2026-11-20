@@ -10,7 +10,7 @@ from core.paths import BIOS_DIR, EMULATORS_DIR, declared_destination
 from core.ziptools import build_zip_contents_index
 from model.alternatives import core_file_spares
 from model.declarations import OUTER_ROOTS, platform_declarations
-from model.profiles import load_emulator_profiles
+from model.profiles import lists_files, load_emulator_profiles
 from model.systems import select_systems
 from packs import slots
 from packs.crossref import launcher_reads_not_held
@@ -707,7 +707,7 @@ def _profile_coverage(
     gt_filenames = set(validation_index)
     profiled_names: set[str] = set()
     for profile in profiles.values():
-        if profile.get("type") in ("launcher", "alias"):
+        if not lists_files(profile):
             continue
         for f in profile.get("files", []):
             name = f.get("name", "")

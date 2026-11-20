@@ -30,6 +30,7 @@ rank: the second core reads it by its own rule, which no rank expresses.
 from __future__ import annotations
 
 from model.alternatives import set_keys
+from model.profiles import lists_files
 
 BIOS_CATEGORY = "bios"
 
@@ -69,7 +70,7 @@ def slot_claims(profiles: dict) -> dict[str, dict[str, dict]]:
     """
     claims: dict[str, dict[str, dict]] = {}
     for emu_name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias"):
+        if not lists_files(profile):
             continue
         for f in profile.get("files") or []:
             if not isinstance(f, dict):

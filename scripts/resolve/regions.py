@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from model.profiles import lists_files
 from model.region import WORLD, normalize_declared, rank
 from resolve.slot import lookup_slot
 
@@ -31,7 +32,7 @@ def build_region_index(profiles: dict) -> dict[str, dict]:
     """
     index: dict[str, dict] = {}
     for emu_name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias"):
+        if not lists_files(profile):
             continue
         for f in profile.get("files") or []:
             if not isinstance(f, dict):

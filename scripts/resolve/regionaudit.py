@@ -10,6 +10,7 @@ import re
 
 from model import region
 from model.region import NOINTRO
+from model.profiles import lists_files
 from resolve.localfile import resolve_local_file
 
 
@@ -70,7 +71,7 @@ def build_report(profiles: dict, db: dict) -> dict:
 
     by_path = {entry.get("path", ""): sha1 for sha1, entry in db["files"].items()}
     for emu_name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias"):
+        if not lists_files(profile):
             continue
         for f in profile.get("files") or []:
             if not isinstance(f, dict) or not f.get("region"):

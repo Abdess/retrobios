@@ -21,7 +21,7 @@ from resolve.content import (
     shape_fits,
 )
 from resolve.archives import archive_members
-from model.profiles import CONTENT_CHECKS, entry_system_ids
+from model.profiles import CONTENT_CHECKS, entry_system_ids, lists_files
 from core.hashing import compute_hashes, parse_hash_list
 from core.paths import BIOS_DIR, sanitize_pack_path
 from core.hashing import md5_composite, parse_md5_list
@@ -385,7 +385,7 @@ def build_validation_index(profiles: dict) -> dict[str, dict]:
     unchecked: set[tuple[str, str, str]] = set()
     checked: set[tuple[str, str, str]] = set()
     for emu_name, profile in profiles.items():
-        if profile.get("type") in ("launcher", "alias"):
+        if not lists_files(profile):
             continue
         for f in _labels_widened(profile):
             fname = f.get("name", "")

@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 from core.hashing import parse_md5_list
-from model.profiles import entry_system_ids
+from model.profiles import entry_system_ids, lists_files
 from resolve import nativemode
 from resolve.archives import archive_entry, holds_required_members
 from resolve.collisions import accepted_by_all, content_sha1, lists_hashes, comparable_destination
@@ -170,7 +170,7 @@ def profile_claims(
         placement = ExtraPlacement(config, base_dest, profiles)
     claims: list[Claim] = []
     for emu_name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias"):
+        if not lists_files(profile):
             continue
         # The gap report skips a filename-agnostic profile whole: the builder
         # carries its scan candidates, never its named entries.

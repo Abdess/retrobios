@@ -13,7 +13,7 @@ from dataclasses import dataclass
 
 from model import siteinputs
 from model.composition import GAME_DATA_TOPS
-from model.profiles import load_emulator_profiles
+from model.profiles import is_emulator, load_emulator_profiles
 
 
 def copy_places(db: dict) -> dict[str, set[tuple[str, str, str]]]:
@@ -95,7 +95,7 @@ def _engine_sections(manufacturers: dict[str, dict[str, list]]) -> dict[str, dic
     """
 
     profiles = {key: profile for key, profile in profiles_on_disk().items()
-                if profile.get("type") != "alias" and profile.get("role") != "test"}
+                if is_emulator(profile)}
     engines = _Engines(profiles, _file_readers(profiles))
     out: dict[str, dict[str, list]] = {}
     for mfr, consoles in manufacturers.items():

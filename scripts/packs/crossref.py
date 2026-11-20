@@ -16,6 +16,7 @@ from core.hashing import parse_hash_list, parse_md5_list, stream_hashes
 from core.paths import BIOS_DIR, PLATFORMS_DIR, REPO_ROOT
 from model.alternatives import set_keys, set_requirements, settle_sets
 from model.database import get_mame_clone_map
+from model.profiles import lists_files
 from model.declarations import OUTER_ROOTS
 from model.platforms import load_platform_config
 from model.registry import list_registered_platforms, load_data_dir_registry
@@ -1132,7 +1133,7 @@ def _profile_names(profiles: dict[str, dict]) -> tuple[dict[str, list[dict]], di
     exact: dict[str, list[dict]] = {}
     folded: dict[str, list[dict]] = {}
     for profile in profiles.values():
-        if profile.get("type") in ("launcher", "alias"):
+        if not lists_files(profile):
             continue
         for entry in profile.get("files") or []:
             names = {str(entry.get("name") or "")} | {str(a) for a in entry.get("aliases") or []}

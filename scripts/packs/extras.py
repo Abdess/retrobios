@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
 from core.options import reject_unknown
-from model.profiles import PROFILE_IDENTITY_FIELDS, entry_system_ids
+from model.profiles import PROFILE_IDENTITY_FIELDS, entry_system_ids, lists_files
 from model.systems import norm_system_id
 from model.alternatives import core_file_spares, required_only_spares, set_fields
 from resolve.archives import archive_members, contents_members, holds_required_members
@@ -619,7 +619,7 @@ def _agnostic_scan_extras(
     # Third pass: the agnostic scan. For filename-agnostic cores, include all
     # DB files matching the system path prefix and size criteria.
     for emu_name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias"):
+        if not lists_files(profile):
             continue
         if emu_name not in relevant:
             continue
@@ -1193,7 +1193,7 @@ def _archive_prefix_extras(
     # the root, add a copy at the prefixed path so the core's .info firmware
     # check finds it.
     for emu_name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias"):
+        if not lists_files(profile):
             continue
         if emu_name not in relevant:
             continue
@@ -1564,7 +1564,7 @@ def collect_emulator_extras(
         extras_prefix,
     )
     for emu_name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias"):
+        if not lists_files(profile):
             continue
         if emu_name not in relevant:
             continue
