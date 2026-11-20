@@ -72,20 +72,12 @@ def build_region_index(profiles: dict) -> dict[str, dict]:
 def lookup_regions(index: dict[str, dict], destination: str, name: str) -> set[str]:
     """Look a candidate file up in the region index.
 
-    Tries the full destination, then progressively shorter path suffixes, then
-    the bare name. Suffix matching bridges a platform entry whose destination
-    carries an extra prefix to the profile entry that declares the region.
+    Tried in lookup_slot's order: the full destination, then progressively
+    shorter path suffixes, then the bare name. Suffix matching bridges a
+    platform entry whose destination carries an extra prefix to the profile
+    entry that declares the region.
     """
-    if destination:
-        entry = index.get(destination)
-        if entry:
-            return set() if entry.get("has_untagged") else set(entry["regions"])
-        parts = destination.split("/")
-        for i in range(1, len(parts)):
-            entry = index.get("/".join(parts[i:]))
-            if entry:
-                return set() if entry.get("has_untagged") else set(entry["regions"])
-    entry = index.get(name)
+    entry = lookup_slot(index, destination, name)
     if not entry or entry.get("has_untagged"):
         return set()
     return set(entry["regions"])
