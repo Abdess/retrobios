@@ -91,8 +91,7 @@ class Source:
             self._ends = [o for o, c in _code_chars(self.text) if c in ";{}"]
         previous = bisect.bisect_left(self._ends, block[0]) - 1
         start = self._ends[previous] + 1 if previous >= 0 else 0
-        text = re.sub(r"//[^\n]*|/\*.*?\*/|^[ \t]*#[^\n]*", "", self.text[start : block[0]],
-                      flags=re.S | re.M)
+        text = re.sub(r"^[ \t]*#[^\n]*", "", _code(self)[start : block[0]], flags=re.M)
         return " ".join(text.split())
 
     def statement_span(self, block: tuple[int, int]) -> tuple[int, int]:
@@ -102,33 +101,53 @@ class Source:
         return (first - 1 if not line_text and first > 1 else first), last
 
 
-def _code_chars(text: str) -> Iterator[tuple[int, str]]:
-    """Characters of C# code outside string, char literals and comments."""
+def _scan(text: str) -> Iterator[tuple[str, int, int]]:
+    """C# text as (kind, start, end) runs: "comment", "literal" (string or
+    char) and "code", one code character per run."""
     i, n = 0, len(text)
     while i < n:
-        char = text[i]
+        start = i
         if text.startswith("//", i):
             i = text.find("\n", i)
             i = n if i < 0 else i
-            continue
-        if text.startswith("/*", i):
+            yield "comment", start, i
+        elif text.startswith("/*", i):
             close = text.find("*/", i + 2)
             i = n if close < 0 else close + 2
-            continue
-        if text.startswith('@"', i):
+            yield "comment", start, i
+        elif text.startswith('@"', i):
             i += 2
             while i < n and not (text[i] == '"' and not text.startswith('""', i)):
                 i += 2 if text.startswith('""', i) else 1
             i += 1
-            continue
-        if char in "\"'":
+            yield "literal", start, min(i, n)
+        elif text[i] in "\"'":
+            quote = text[i]
             i += 1
-            while i < n and text[i] != char and text[i] != "\n":
+            while i < n and text[i] != quote and text[i] != "\n":
                 i += 2 if text[i] == "\\" else 1
             i += 1
-            continue
-        yield i, char
-        i += 1
+            yield "literal", start, min(i, n)
+        else:
+            i += 1
+            yield "code", start, i
+
+
+def _code_chars(text: str) -> Iterator[tuple[int, str]]:
+    """Characters of C# code outside string, char literals and comments."""
+    return ((start, text[start]) for kind, start, _ in _scan(text) if kind == "code")
+
+
+def blank_comments(text: str) -> str:
+    """C# text with every comment blanked, offsets and lines unchanged;
+    a // or /* inside a string literal is text, not a comment."""
+    chars = list(text)
+    for kind, start, end in _scan(text):
+        if kind == "comment":
+            for i in range(start, end):
+                if chars[i] != "\n":
+                    chars[i] = " "
+    return "".join(chars)
 
 
 def _unescape(literal: str) -> str:
@@ -217,44 +236,10 @@ _METHOD = re.compile(
 )
 
 
-def _comment_spans(text: str) -> Iterator[tuple[int, int]]:
-    """Offsets of the comments of C# code, string and char literals skipped."""
-    i, n = 0, len(text)
-    while i < n:
-        if text.startswith("//", i):
-            end = text.find("\n", i)
-            end = n if end < 0 else end
-            yield i, end
-            i = end
-        elif text.startswith("/*", i):
-            close = text.find("*/", i + 2)
-            end = n if close < 0 else close + 2
-            yield i, end
-            i = end
-        elif text.startswith('@"', i):
-            i += 2
-            while i < n and not (text[i] == '"' and not text.startswith('""', i)):
-                i += 2 if text.startswith('""', i) else 1
-            i += 1
-        elif text[i] in "\"'":
-            quote = text[i]
-            i += 1
-            while i < n and text[i] != quote and text[i] != "\n":
-                i += 2 if text[i] == "\\" else 1
-            i += 1
-        else:
-            i += 1
-
-
 def _code(src: Source) -> str:
     """The text with comments blanked, offsets and lines unchanged."""
     if src.code is None:
-        chars = list(src.text)
-        for start, end in _comment_spans(src.text):
-            for i in range(start, end):
-                if chars[i] != "\n":
-                    chars[i] = " "
-        src.code = "".join(chars)
+        src.code = blank_comments(src.text)
     return src.code
 
 

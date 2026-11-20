@@ -3042,6 +3042,18 @@ class TestE2E(unittest.TestCase):
         self.assertNotIn("PS2", systems)
         self.assertEqual(len(records), 1)
 
+    def test_152b_bizhawk_scraper_skips_line_comments(self):
+        """FirmwareDatabase.cs 2.11.1 comments out two MSX options with //:
+        read as live, they were listed required."""
+        from scraper.bizhawk_scraper import parse_firmware_database
+
+        fragment = """
+            FirmwareAndOption("DBEBD76A448447CB6E524AC3CB0FD19FC065D944", 256, "32X", "G", "32X_G_BIOS.BIN", "see http://x");
+            //FirmwareAndOption("E998F0C441F4F1800EF44E42CD1659150206CF79", 32768, "MSX", "bios_pal", "MSX_8020-20bios.rom", "MSX");
+        """
+        records, _ = parse_firmware_database(fragment)
+        self.assertEqual([r["name"] for r in records], ["32X_G_BIOS.BIN"])
+
     def test_153_bizhawk_scraper_arithmetic_size(self):
         """Size expressions like 4 * 1024 * 1024 are evaluated."""
         from scraper.bizhawk_scraper import parse_firmware_database

@@ -1573,6 +1573,11 @@ class AbsentConstructStopsTheScrape(unittest.TestCase):
 
 
 class Helpers(unittest.TestCase):
+    def test_header_keeps_a_string_holding_slashes(self):
+        """The header regex cut `"http://x"` at its // as a comment."""
+        src = Source("a.cs", 'void F(string s = "http://x") /* note */ // tail\n{\n}')
+        self.assertEqual(src.header(src.blocks()[0]), 'void F(string s = "http://x")')
+
     def test_concatenation_renders_operands(self):
         self.assertEqual(
             render_concat('"BIOS file " + name + " does not exist in \'" + dir + "\'."'),

@@ -27,6 +27,7 @@ from .base_scraper import (
     fetch_github_latest_version,
     scraper_cli,
 )
+from .csharp_source import blank_comments
 
 PLATFORM_NAME = "bizhawk"
 
@@ -123,8 +124,8 @@ def _safe_arithmetic(expr: str) -> int:
 
 
 def _strip_comments(source: str) -> str:
-    """Remove block comments and #if false blocks."""
-    source = re.sub(r"/\*.*?\*/", "", source, flags=re.DOTALL)
+    """Remove comments and #if false blocks."""
+    source = blank_comments(source)
     source = re.sub(r"#if\s+false\b.*?#endif", "", source, flags=re.DOTALL)
     return source
 
