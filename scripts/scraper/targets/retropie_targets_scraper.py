@@ -1,7 +1,7 @@
 """Scraper for RetroPie package availability per platform.
 
 Source: https://github.com/RetroPie/RetroPie-Setup/tree/<rev>/scriptmodules,
-read at the revision platforms/retropie.yml was scraped at.
+read from the tarball of the revision platforms/retropie.yml was scraped at.
 Parses rp_module_id and rp_module_flags from each scriptmodule of the
 package sections the platform list reads (emulators, libretrocores, ports)
 to determine which platforms each package supports.
@@ -9,22 +9,19 @@ to determine which platforms each package supports.
 
 from __future__ import annotations
 
-import json
 import re
 import sys
+import tarfile
 from datetime import datetime, timezone
 
-
-from ..retropie_scraper import core_name
-from . import BaseTargetScraper, fetch_text, forge_headers, target_cli
+from ..retropie_scraper import SOURCE_URL, core_name, fetch_archive, script_members
+from . import BaseTargetScraper, target_cli
 
 PLATFORM_NAME = "retropie"
 
+# Written as the targets file's source: the scriptmodules tree at the pin.
 GITHUB_API_URL = (
     "https://api.github.com/repos/RetroPie/RetroPie-Setup/contents/scriptmodules"
-)
-RAW_BASE_URL = (
-    "https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/{rev}/scriptmodules/"
 )
 # The sections the platform scraper reads: a standalone package missing here
 # is filtered out of every targeted pack.
@@ -62,8 +59,11 @@ _MODULE_ID_RE = re.compile(r'rp_module_id\s*=\s*["\']([^"\']+)["\']')
 _MODULE_FLAGS_RE = re.compile(r'rp_module_flags\s*=\s*["\']([^"\']*)["\']')
 
 
-def _fetch(url: str, accept: str = "text/plain") -> str:
-    return fetch_text(url, forge_headers(url, accept))
+def _fetch_archive(url: str) -> bytes:
+    try:
+        return fetch_archive(url)
+    except (ConnectionError, ValueError) as exc:
+        raise RuntimeError(str(exc)) from exc
 
 
 def _is_available(flags_str: str, platform: str) -> bool:
@@ -112,33 +112,32 @@ class Scraper(BaseTargetScraper):
             self._revision = self.pinned_revision(PLATFORM_NAME)
         return self._revision
 
-    def _list_scriptmodules(self) -> list[str]:
-        """Return section/filename for every .sh of the package sections."""
-        names: list[str] = []
+    def _scriptmodules(self) -> dict[str, str]:
+        """section/filename to text for every .sh of the package sections,
+        read from the tarball of the pinned revision in one request."""
+        url = SOURCE_URL.format(rev=self.revision)
+        modules: dict[str, str] = {}
+        try:
+            for relative, text in script_members(_fetch_archive(url)):
+                parts = relative.split("/")
+                if len(parts) == 3 and parts[0] == "scriptmodules" and parts[1] in PACKAGE_DIRS:
+                    modules[f"{parts[1]}/{parts[2]}"] = text
+        except tarfile.TarError as exc:
+            raise RuntimeError(f"{url}: {exc}") from exc
         for section in PACKAGE_DIRS:
-            url = f"{self.url}/{section}?ref={self.revision}"
-            entries = json.loads(_fetch(url, accept="application/vnd.github+json"))
-            listed = [
-                f"{section}/{e['name']}" for e in entries if e.get("name", "").endswith(".sh")
-            ]
-            if not listed:
-                raise RuntimeError(f"no scriptmodules listed at {url}")
-            names.extend(listed)
-        return names
-
-    def _fetch_module(self, filename: str) -> str:
-        return _fetch(f"{RAW_BASE_URL.format(rev=self.revision)}{filename}")
+            if not any(name.startswith(f"{section}/") for name in modules):
+                raise RuntimeError(f"no scriptmodules under {section}/ in {url}")
+        return dict(sorted(modules.items()))
 
     def fetch_targets(self) -> dict:
-        print("  listing RetroPie scriptmodules...", file=sys.stderr)
-        filenames = self._list_scriptmodules()
+        print("  reading RetroPie scriptmodules...", file=sys.stderr)
+        modules = self._scriptmodules()
 
         # A libretro and a standalone package can share a name (lr-dosbox,
         # dosbox): a core list names each once.
         platform_cores: dict[str, set[str]] = {p: set() for p in PLATFORM_FLAGS}
 
-        for filename in filenames:
-            content = self._fetch_module(filename)
+        for filename, content in modules.items():
             module_id, flags = _parse_module(content)
             if not module_id:
                 print(f"  warning: no rp_module_id in {filename}", file=sys.stderr)
@@ -148,7 +147,7 @@ class Scraper(BaseTargetScraper):
                 if _is_available(flags, platform):
                     platform_cores[platform].add(core_name(module_id))
 
-        print(f"  parsed {len(filenames)} scriptmodules", file=sys.stderr)
+        print(f"  parsed {len(modules)} scriptmodules", file=sys.stderr)
 
         targets: dict[str, dict] = {}
         for platform, arch in ARCH_MAP.items():

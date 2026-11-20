@@ -26,6 +26,7 @@ from __future__ import annotations
 import io
 import re
 import tarfile
+from collections.abc import Iterator
 
 from .base_scraper import BaseScraper, BiosRequirement, fetch_branch_head, fetch_bytes
 from .retropie_launchers import SCRIPTMODULES
@@ -60,6 +61,24 @@ def core_name(module_id: str) -> str:
     return module_id
 
 
+def fetch_archive(url: str) -> bytes:
+    """The RetroPie-Setup tarball at *url*, refused past MAX_ARCHIVE."""
+    return fetch_bytes(url, timeout=60, max_bytes=MAX_ARCHIVE)
+
+
+def script_members(raw: bytes) -> Iterator[tuple[str, str]]:
+    """(path in the repository, text) of every shell script of a
+    RetroPie-Setup tarball. The platform scraper, the target scraper and
+    the exporter read the scripts here."""
+    with tarfile.open(fileobj=io.BytesIO(raw), mode="r:gz") as archive:
+        for member in archive:
+            if not member.isfile() or not member.name.endswith(".sh"):
+                continue
+            handle = archive.extractfile(member)
+            if handle is not None:
+                yield member.name.split("/", 1)[-1], handle.read().decode("utf-8", errors="replace")
+
+
 class Scraper(BaseScraper):
     """Scraper for the RetroPie package list."""
 
@@ -76,7 +95,7 @@ class Scraper(BaseScraper):
         self._scripts: dict[str, str] = {}
 
     def _fetch_archive(self) -> bytes:
-        return fetch_bytes(self.url, timeout=60, max_bytes=MAX_ARCHIVE)
+        return fetch_archive(self.url)
 
     def module_ids(self, payload: bytes | None = None) -> list[str]:
         """Every package RetroPie ships, by the id its script declares."""
@@ -85,38 +104,28 @@ class Scraper(BaseScraper):
 
         raw = payload if payload is not None else self._fetch_archive()
         found: set[str] = set()
-        with tarfile.open(fileobj=io.BytesIO(raw), mode="r:gz") as archive:
-            for member in archive:
-                if not member.isfile() or not member.name.endswith(".sh"):
-                    continue
-                relative = member.name.split("/", 1)[-1]
-                parts = relative.split("/")
-                is_version_file = relative == _VERSION_FILE
-                is_package = (
-                    len(parts) == 3
-                    and parts[0] == "scriptmodules"
-                    and parts[1] in _PACKAGE_DIRS
-                )
-                is_launch_script = (
-                    len(parts) == 4 and parts[0] == SCRIPTMODULES and parts[1] in _SCRIPT_SECTIONS
-                )
-                if not (is_version_file or is_package or is_launch_script):
-                    continue
-                handle = archive.extractfile(member)
-                if handle is None:
-                    continue
-                text = handle.read().decode("utf-8", errors="replace")
-                if is_package or is_launch_script:
-                    self._scripts[relative] = text
-                if is_launch_script:
-                    continue
-                match = (_VERSION if is_version_file else _MODULE_ID).search(text)
-                if not match:
-                    continue
-                if is_version_file:
-                    self._version = match.group(1)
-                else:
-                    found.add(match.group(1))
+        for relative, text in script_members(raw):
+            parts = relative.split("/")
+            is_version_file = relative == _VERSION_FILE
+            is_package = (
+                len(parts) == 3
+                and parts[0] == "scriptmodules"
+                and parts[1] in _PACKAGE_DIRS
+            )
+            is_launch_script = (
+                len(parts) == 4 and parts[0] == SCRIPTMODULES and parts[1] in _SCRIPT_SECTIONS
+            )
+            if is_package or is_launch_script:
+                self._scripts[relative] = text
+            if not (is_version_file or is_package):
+                continue
+            match = (_VERSION if is_version_file else _MODULE_ID).search(text)
+            if not match:
+                continue
+            if is_version_file:
+                self._version = match.group(1)
+            else:
+                found.add(match.group(1))
 
         if not found:
             raise ValueError(f"{self.url}: no rp_module_id under {SCRIPTMODULES}/")

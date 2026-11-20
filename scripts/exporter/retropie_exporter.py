@@ -13,15 +13,14 @@ to document from scratch is reported, not drafted.
 
 from __future__ import annotations
 
-import io
 import re
 import sys
-import tarfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from model.profiles import load_emulator_profiles
+from scraper.retropie_scraper import script_members
 
 from .base_exporter import BaseExporter
 from resolve.reconcile import NativeFile, NativeSystem, Report, search_order
@@ -92,22 +91,11 @@ class Exporter(BaseExporter[str]):
     @staticmethod
     def unpack(raw: bytes) -> dict[str, str]:
         """Keep the scriptmodules that say anything about BIOS files."""
-        found: dict[str, str] = {}
-        with tarfile.open(fileobj=io.BytesIO(raw), mode="r:gz") as archive:
-            for member in archive:
-                if not member.isfile() or not member.name.endswith(".sh"):
-                    continue
-                relative = member.name.split("/", 1)[-1]
-                if not relative.startswith("scriptmodules/"):
-                    continue
-                handle = archive.extractfile(member)
-                if handle is None:
-                    continue
-                text = handle.read().decode("utf-8", errors="replace")
-                # xm7, np2pi, quasi88 and five more write "bios".
-                if "bios" in text.lower():
-                    found[relative] = text
-        return found
+        # xm7, np2pi, quasi88 and five more write "bios".
+        return {
+            relative: text for relative, text in script_members(raw)
+            if relative.startswith("scriptmodules/") and "bios" in text.lower()
+        }
 
     def _core_index(self) -> dict[str, dict[str, str]]:
         """Module id (without its lr- prefix) to the profile it stands for,

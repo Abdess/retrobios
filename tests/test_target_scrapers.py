@@ -13,6 +13,7 @@ import tests
 import io
 import json
 import os
+import tarfile
 import unittest
 import urllib.error
 from pathlib import Path
@@ -645,32 +646,41 @@ class RetroPieModuleFlags(unittest.TestCase):
                 self.assertIs(available(flags, platform), expected)
 
     def test_standalone_sections_are_listed_and_keep_their_id(self):
-        listings = {
-            "emulators": [{"name": "dosbox-staging.sh"}, {"name": "dosbox.sh"}],
-            "libretrocores": [{"name": "lr-beetle-psx.sh"}, {"name": "lr-dosbox.sh"}],
-            "ports": [{"name": "openbor.sh"}],
-        }
         modules = {
             "emulators/dosbox-staging.sh": 'rp_module_id="dosbox-staging"\nrp_module_flags="sdl2"',
             "libretrocores/lr-beetle-psx.sh": 'rp_module_id="lr-beetle-psx"',
             "libretrocores/lr-dosbox.sh": 'rp_module_id="lr-dosbox"',
             "emulators/dosbox.sh": 'rp_module_id="dosbox"\nrp_module_flags="sdl1 !mali"',
             "ports/openbor.sh": 'rp_module_id="openbor"\nrp_module_flags="sdl1 !mali !x11"',
+            # Neither a package section nor a package script.
+            "supplementary/runcommand.sh": 'rp_module_id="runcommand"',
+            "emulators/dosbox/launch.sh": 'rp_module_id="nested"',
         }
-
-        def fake_fetch(url, **_kwargs):
-            section = url.split("?", 1)[0].rstrip("/").rsplit("/", 1)[-1]
-            if section in listings:
-                return json.dumps(listings[section])
-            return modules[url.split("scriptmodules/", 1)[1]]
-
-        with mock.patch.object(retropie_targets_scraper, "_fetch", fake_fetch):
+        archive = _retropie_tarball(modules)
+        with mock.patch.object(retropie_targets_scraper, "_fetch_archive", lambda _url: archive):
             targets = retropie_targets_scraper.Scraper().fetch_targets()["targets"]
         self.assertEqual(
             targets["rpi4"]["cores"], ["beetle_psx", "dosbox", "dosbox-staging", "openbor"]
         )
         self.assertEqual(targets["x86_64"]["cores"], ["beetle_psx", "dosbox", "dosbox-staging"])
 
+    def test_a_section_without_scripts_stops_the_scrape(self):
+        archive = _retropie_tarball({"emulators/dosbox.sh": 'rp_module_id="dosbox"'})
+        with mock.patch.object(retropie_targets_scraper, "_fetch_archive", lambda _url: archive), \
+                self.assertRaisesRegex(RuntimeError, "libretrocores"):
+            retropie_targets_scraper.Scraper().fetch_targets()
+
+
+def _retropie_tarball(modules: dict[str, str]) -> bytes:
+    """A RetroPie-Setup tarball as codeload serves it, scripts under scriptmodules/."""
+    buffer = io.BytesIO()
+    with tarfile.open(fileobj=buffer, mode="w:gz") as archive:
+        for name, text in modules.items():
+            data = text.encode()
+            info = tarfile.TarInfo(f"RetroPie-Setup-abc/scriptmodules/{name}")
+            info.size = len(data)
+            archive.addfile(info, io.BytesIO(data))
+    return buffer.getvalue()
 
 
 class TargetsReadThePlatformRevision(unittest.TestCase):
@@ -693,9 +703,20 @@ class TargetsReadThePlatformRevision(unittest.TestCase):
     def test_retropie_reads_its_codeload_pin(self):
         pin = retropie_targets_scraper.Scraper.pinned_revision("retropie")
         self.assertRegex(pin, r"^[0-9a-f]{40}$")
-        urls = self._urls(retropie_targets_scraper, retropie_targets_scraper.Scraper())
-        self.assertTrue(urls)
-        self.assertTrue(all(pin in url for url in urls), urls)
+        seen: list[str] = []
+        archive = _retropie_tarball({
+            f"{section}/x.sh": 'rp_module_id="lr-mgba"'
+            for section in retropie_targets_scraper.PACKAGE_DIRS
+        })
+
+        def fetch(url):
+            seen.append(url)
+            return archive
+
+        with mock.patch.object(retropie_targets_scraper, "_fetch_archive", fetch):
+            retropie_targets_scraper.Scraper().fetch_targets()
+        self.assertEqual(len(seen), 1)
+        self.assertIn(pin, seen[0])
 
     def test_emudeck_steamos_reads_its_pin(self):
         pin = emudeck_targets_scraper.Scraper.pinned_revision("emudeck")
