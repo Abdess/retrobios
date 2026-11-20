@@ -2,14 +2,11 @@
 
 from __future__ import annotations
 
-import contextlib
 import os
 import sys
-import tempfile
 from pathlib import Path
 
-from model.largefiles import registered_paths
-from core.artifacts import copy_file_atomic, set_plain_mode
+from model.largefiles import registered_paths, restore_verified
 from core.hashing import file_digest
 from model.database import load_database
 
@@ -39,32 +36,6 @@ def index_cache(cache_dir: str) -> dict[str, str]:
     return index
 
 
-def _copy_verified(source: str, path: str, sha1: str) -> bool:
-    """Copy *source* to *path* only if the copy hashes to *sha1*.
-
-    The cache was hashed before the copy, and another run can replace a
-    cached name in between (a re-uploaded asset): the copy is what counts.
-    Whole or absent: a scan running beside a plain copy hashed the truncated
-    file and published that in the database.
-    """
-    handle, scratch = tempfile.mkstemp(
-        dir=os.path.dirname(os.path.abspath(path)),
-        prefix=f".{os.path.basename(path)}.", suffix=".tmp",
-    )
-    os.close(handle)
-    try:
-        copy_file_atomic(source, scratch)
-        if file_digest(Path(scratch)) != sha1:
-            print(f"Changed in the cache while restoring: {source}", file=sys.stderr)
-            return False
-        set_plain_mode(scratch)
-        os.replace(scratch, path)
-        return True
-    finally:
-        with contextlib.suppress(FileNotFoundError):
-            os.unlink(scratch)
-
-
 def restore(
     cache_dir: str, db_path: str, gitignore: str
 ) -> tuple[int, list[str]]:
@@ -88,7 +59,7 @@ def restore(
             unsatisfied.append(path)
             continue
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        if not _copy_verified(source, path, sha1):
+        if not restore_verified(source, path, sha1):
             unsatisfied.append(path)
             continue
         print(f"Restored: {path}")

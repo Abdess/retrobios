@@ -11,6 +11,7 @@ import json
 import os
 import sys
 import re
+import shutil
 import tempfile
 import time
 import urllib.error
@@ -21,7 +22,7 @@ from collections.abc import Iterable
 from pathlib import Path
 
 from core.artifacts import set_plain_mode
-from core.hashing import compute_hashes, parse_hash_list
+from core.hashing import compute_hashes, file_digest, parse_hash_list
 from core.paths import REPO_ROOT
 
 
@@ -158,6 +159,33 @@ def fetch_large_file(
         if cached:
             return cached
     return None
+
+
+def restore_verified(source: str, path: str, sha1: str) -> bool:
+    """Copy a cached asset to its registered path, only if the copy hashes to sha1.
+
+    The cache was hashed before the copy, and another run can replace a
+    cached name in between (a re-uploaded asset): the copy is what counts.
+    Whole or absent: a scan running beside a plain copy hashed the truncated
+    file and published that in the database.
+    """
+    directory = os.path.dirname(os.path.abspath(path))
+    os.makedirs(directory, exist_ok=True)
+    handle, scratch = tempfile.mkstemp(
+        dir=directory, prefix=f".{os.path.basename(path)}.", suffix=".tmp"
+    )
+    os.close(handle)
+    try:
+        shutil.copy2(source, scratch)
+        if file_digest(Path(scratch)) != sha1:
+            print(f"Changed in the cache while restoring: {source}", file=sys.stderr)
+            return False
+        set_plain_mode(scratch)
+        os.replace(scratch, path)
+        return True
+    finally:
+        with contextlib.suppress(FileNotFoundError):
+            os.unlink(scratch)
 
 
 def _download(name: str, tmp_path: str) -> bool:

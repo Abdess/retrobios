@@ -453,14 +453,27 @@ class PreservedLargeFileEntries(unittest.TestCase):
         cache.parent.mkdir()
         cache.write_bytes(b"firmware")
         largefiles.fetch_large_file = lambda *_a, **_k: str(cache)
+        sha1 = hashlib.sha1(b"firmware").hexdigest()
         db_path = self._write_db(
-            {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
+            {sha1: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
         )
         files: dict = {}
         count = self.generate_db._preserve_large_file_entries(files, db_path)
         self.assertEqual(count, 1)
-        self.assertEqual(files["b" * 40]["path"], "bios/Sony/PS3/FW.PUP")
+        self.assertEqual(files[sha1]["path"], "bios/Sony/PS3/FW.PUP")
         self.assertEqual((self.tmp / "bios/Sony/PS3/FW.PUP").read_bytes(), b"firmware")
+
+    def test_a_cached_copy_with_other_bytes_is_not_restored(self):
+        cache = self.tmp / "cache" / "FW.PUP"
+        cache.parent.mkdir()
+        cache.write_bytes(b"replaced")
+        largefiles.fetch_large_file = lambda *_a, **_k: str(cache)
+        sha1 = hashlib.sha1(b"firmware").hexdigest()
+        db_path = self._write_db(
+            {sha1: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
+        )
+        self.generate_db._preserve_large_file_entries({}, db_path)
+        self.assertEqual(list((self.tmp / "bios/Sony/PS3").iterdir()), [])
 
     def test_an_interrupted_restore_leaves_no_file_behind(self):
         cache = self.tmp / "cache" / "FW.PUP"
@@ -468,14 +481,14 @@ class PreservedLargeFileEntries(unittest.TestCase):
         cache.write_bytes(b"firmware")
         largefiles.fetch_large_file = lambda *_a, **_k: str(cache)
         db_path = self._write_db(
-            {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
+            {hashlib.sha1(b"firmware").hexdigest(): {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
         )
 
         def interrupted(_src, dst, *_a, **_k):
             Path(dst).write_bytes(b"firm")
             raise KeyboardInterrupt
 
-        with mock.patch.object(self.generate_db.shutil, "copy2", interrupted), \
+        with mock.patch.object(largefiles.shutil, "copy2", interrupted), \
                 self.assertRaises(KeyboardInterrupt):
             self.generate_db._preserve_large_file_entries({}, db_path)
         directory = self.tmp / "bios/Sony/PS3"

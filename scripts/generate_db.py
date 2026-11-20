@@ -13,9 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import shutil
 import sys
-import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -27,7 +25,6 @@ from core.hashing import compute_hashes
 from model.registry import list_registered_platforms
 from core.artifacts import (
     repository_output_lock,
-    set_plain_mode,
     write_if_changed,
     write_text_atomic,
 )
@@ -388,25 +385,6 @@ def _load_gitignored_large_files() -> set[str]:
     return set(load_registered_paths(".gitignore"))
 
 
-def _restore(cached: str, path: str) -> None:
-    """Copy a fetched asset to its registered path, whole or not at all.
-
-    An interrupted copy at the final name is a truncated file the next scan
-    hashes and publishes. A scratch beside it is swapped in only once full.
-    """
-    directory = os.path.dirname(path)
-    os.makedirs(directory, exist_ok=True)
-    fd, scratch = tempfile.mkstemp(dir=directory, prefix=".restore-")
-    os.close(fd)
-    try:
-        shutil.copy2(cached, scratch)
-        set_plain_mode(scratch)
-        os.replace(scratch, path)
-    finally:
-        if os.path.exists(scratch):
-            os.remove(scratch)
-
-
 def _preserve_large_file_entries(files: dict, db_path: str) -> int:
     """Keep the entries of release assets the checkout does not hold.
 
@@ -418,7 +396,7 @@ def _preserve_large_file_entries(files: dict, db_path: str) -> int:
     would send the installer to the repository for it. A fetched asset is
     written back to its registered path.
     """
-    from model.largefiles import fetch_large_file
+    from model.largefiles import fetch_large_file, restore_verified
 
     registered = _load_gitignored_large_files()
     if not registered:
@@ -455,7 +433,7 @@ def _preserve_large_file_entries(files: dict, db_path: str) -> int:
             expected_md5=entry.get("md5", ""),
         )
         if cached and not os.path.exists(path):
-            _restore(cached, path)
+            restore_verified(cached, path, sha1)
         files[sha1] = entry
         count += 1
     return count

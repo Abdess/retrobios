@@ -55,7 +55,7 @@ class EveryWriterGoesThroughIt(unittest.TestCase):
         for name, helper in (
             ("generate_pack.py", "write_text_atomic("),
             ("release_record.py", "write_text_atomic("),
-            ("restore_large_files.py", "copy_file_atomic("),
+            ("restore_large_files.py", "restore_verified("),
         ):
             source = script_source(name)
             with self.subTest(script=name):
