@@ -9,7 +9,7 @@ from pathlib import Path
 
 from model.registry import load_platform_registry
 from core.paths import REPO_ROOT
-from model.safeparse import require_yaml
+from model.sources import source_yaml
 
 
 SH_NAME = "i"
@@ -343,11 +343,10 @@ def load_guides(path: Path = GUIDES_FILE, registry: dict | None = None) -> dict:
     describes. A mistake raises GuideError naming the key, so the site is
     never built from half a guide.
     """
-    yaml = require_yaml()
     if registry is None:
         registry = load_platform_registry(PLATFORMS_DIR, required=True)
     with open(path, encoding="utf-8") as handle:
-        data = yaml.safe_load(handle) or {}
+        data = source_yaml(handle) or {}
     if not isinstance(data, dict):
         raise GuideError(f"{path.name}: expected a mapping")
     _unknown(data, _TOP_KEYS, path.name)

@@ -22,6 +22,7 @@ import yaml
 from sitegen import decorate
 from sitegen import nav as sitegen_nav
 from model import guides
+from core.cli import SourceUnreadable
 from model.guides import GUIDES, GuideError, load_guides
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -75,6 +76,12 @@ class GuidesLiveInYaml(unittest.TestCase):
         data["guides"]["lakka"]["run"] = ["telnet"]
         with self.assertRaisesRegex(GuideError, r"guides\.lakka\.run: no terminal named telnet"):
             self._load(yaml.safe_dump(data))
+
+    def test_a_repeated_guide_is_refused_with_its_line(self):
+        """safe_load kept the second retroarch guide and dropped the first."""
+        text = _guides_text().replace("guides:\n", "guides:\n  lakka: {}\n", 1)
+        with self.assertRaisesRegex(SourceUnreadable, r"_guides\.yml:\d+: duplicate key 'lakka'"):
+            self._load(text)
 
     def test_a_folder_row_without_path_is_the_extract_folder(self):
         """The folder the pack unzips into is written once, in the registry."""
