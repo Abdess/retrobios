@@ -56,6 +56,36 @@ class ThePlatformListsEveryOfferedCore(unittest.TestCase):
         self.assertIn("dosbox_staging", platform["cores"])
 
 
+class OneWalkReadsEsSystems(unittest.TestCase):
+    """The scraper and the target scraper read es_systems.yml through one walk."""
+
+    def test_every_core_in_file_order(self):
+        from scripts.scraper.batocera_scraper import es_systems_entries
+
+        rows = [(s, e, c) for s, e, c, _spec in es_systems_entries(ES_SYSTEMS)]
+        self.assertEqual(rows, [
+            ("dos", "libretro", "dosbox_pure"),
+            ("dos", "libretro", "dosbox_staging"),
+            ("dos", "dosbox", "dosbox"),
+            ("amiga500", "amiberry", "A500"),
+        ])
+
+    def test_an_emulator_without_core_is_yielded_once(self):
+        from scripts.scraper.batocera_scraper import es_systems_entries
+
+        text = "x:\n  emulators:\n    vice:\n      archs_include: [x86_64]\n"
+        self.assertEqual(list(es_systems_entries(text)), [("x", "vice", None, None)])
+
+    def test_a_file_that_is_not_a_mapping_is_refused(self):
+        from scripts.scraper.batocera_scraper import es_systems_entries
+        from scripts.scraper.targets.batocera_targets_scraper import _parse_es_systems
+
+        with self.assertRaises(ValueError):
+            list(es_systems_entries("- a\n- b\n"))
+        with self.assertRaises(ValueError):
+            _parse_es_systems("- a\n")
+
+
 class TheTargetsNameTheStandaloneEmulator(unittest.TestCase):
     def test_the_group_name_is_a_core(self):
         from scripts.scraper.targets.batocera_targets_scraper import _parse_es_systems

@@ -11,7 +11,7 @@ from __future__ import annotations
 import ast
 import re
 import sys
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from pathlib import Path
 
 
@@ -96,54 +96,70 @@ def _not_cores(platform: str = "batocera") -> set[str]:
     return {str(name) for name in default.get("remove_cores", [])}
 
 
-def es_systems_emulators(text: str) -> tuple[set[str], set[str]]:
-    """Every core es_systems.yml offers, and those that run standalone.
-
-    ES lists, per system, each emulator a user may pick and the cores under
-    it. configgen-defaults.yml only names the one picked by default, so
-    reading it alone left DOSBox Staging, melonDS DS and nine other built
-    cores outside the pack.
-    """
+def _es_systems_data(text: str) -> dict:
     data = yaml_load_upstream(text)
     if not isinstance(data, dict):
         raise ValueError("es_systems.yml is not a mapping")
+    return data
+
+
+def _system_entries(spec: object) -> Iterator[tuple[str, str | None, dict | None]]:
+    """(emulator, core, core spec) for each core one es_systems.yml system offers.
+
+    A system lists each emulator a user may pick and the cores under it.
+    Keys whose value is not a mapping (archs_include) describe the entry,
+    not a core. An emulator that lists no core is yielded once with None.
+    """
+    emulators = spec.get("emulators") if isinstance(spec, dict) else None
+    if not isinstance(emulators, dict):
+        return
+    for emulator, entries in emulators.items():
+        if not isinstance(entries, dict):
+            continue
+        offered = [(str(core), item) for core, item in entries.items() if isinstance(item, dict)]
+        if not offered:
+            yield str(emulator), None, None
+        for core, item in offered:
+            yield str(emulator), core, item
+
+
+def es_systems_entries(text: str) -> Iterator[tuple[str, str, str | None, dict | None]]:
+    """(system, emulator, core, core spec) for every core es_systems.yml offers.
+
+    `emulator` is `libretro` for a libretro core. Any other emulator is its
+    own core, and what it lists under it are machines or builds. Raises
+    ValueError when the file is not a mapping.
+    """
+    for system, spec in _es_systems_data(text).items():
+        for emulator, core, item in _system_entries(spec):
+            yield str(system), emulator, core, item
+
+
+def es_systems_emulators(text: str) -> tuple[set[str], set[str]]:
+    """Every core es_systems.yml offers, and those that run standalone.
+
+    configgen-defaults.yml only names the one picked by default, so
+    reading it alone left DOSBox Staging, melonDS DS and nine other built
+    cores outside the pack. The non-cores a standalone emulator lists are
+    named in the overrides.
+    """
     cores: set[str] = set()
     standalone: set[str] = set()
-    for system in data.values():
-        emulators = system.get("emulators") if isinstance(system, dict) else None
-        if not isinstance(emulators, dict):
-            continue
-        for emulator, entries in emulators.items():
-            if not isinstance(entries, dict):
-                continue
-            # A standalone emulator is its own core. What it lists under it
-            # are machines or builds, and the non-cores among them are named
-            # in the overrides. Keys whose value is not a mapping
-            # (archs_include) describe the entry, not a core.
-            if emulator != "libretro":
-                cores.add(str(emulator))
-                standalone.add(str(emulator))
-            for core, spec in entries.items():
-                if not isinstance(spec, dict):
-                    continue
-                cores.add(str(core))
-                if emulator != "libretro":
-                    standalone.add(str(core))
+    for _system, emulator, core, _spec in es_systems_entries(text):
+        names = {core} if core else set()
+        if emulator != "libretro":
+            names.add(emulator)
+            standalone |= names
+        cores |= names
     return cores, standalone
 
 
 def es_systems_libretro(text: str) -> set[str]:
     """The cores es_systems.yml offers under `libretro:` for some system."""
-    data = yaml_load_upstream(text)
-    if not isinstance(data, dict):
-        raise ValueError("es_systems.yml is not a mapping")
-    found: set[str] = set()
-    for system in data.values():
-        emulators = system.get("emulators") if isinstance(system, dict) else None
-        libretro = emulators.get("libretro") if isinstance(emulators, dict) else None
-        if isinstance(libretro, dict):
-            found.update(str(core) for core, spec in libretro.items() if isinstance(spec, dict))
-    return found
+    return {
+        core for _system, emulator, core, _spec in es_systems_entries(text)
+        if emulator == "libretro" and core
+    }
 
 
 def es_systems_libretro_systems(text: str, dropped: set[str]) -> dict[str, list[str]]:
@@ -154,18 +170,10 @@ def es_systems_libretro_systems(text: str, dropped: set[str]) -> dict[str, list[
     a core reads below its save directory sits once in each of these
     system folders.
     """
-    data = yaml_load_upstream(text)
-    if not isinstance(data, dict):
-        raise ValueError("es_systems.yml is not a mapping")
     found: dict[str, set[str]] = {}
-    for system, spec in data.items():
-        emulators = spec.get("emulators") if isinstance(spec, dict) else None
-        libretro = emulators.get("libretro") if isinstance(emulators, dict) else None
-        if not isinstance(libretro, dict):
-            continue
-        for core, entry in libretro.items():
-            if isinstance(entry, dict) and str(core) not in dropped:
-                found.setdefault(str(core), set()).add(str(system))
+    for system, emulator, core, _spec in es_systems_entries(text):
+        if emulator == "libretro" and core and core not in dropped:
+            found.setdefault(core, set()).add(system)
     return {core: sorted(systems) for core, systems in sorted(found.items())}
 
 
@@ -180,21 +188,18 @@ def es_systems_by_system(
     build it lists. The core configgen-defaults.yml starts by default comes
     last when es_systems.yml does not offer it.
     """
-    data = yaml_load_upstream(es_systems_text)
+    data = _es_systems_data(es_systems_text)
     defaults = yaml_load_upstream(defaults_text)
-    if not isinstance(data, dict) or not isinstance(defaults, dict):
-        raise ValueError("es_systems.yml or configgen-defaults.yml is not a mapping")
+    if not isinstance(defaults, dict):
+        raise ValueError("configgen-defaults.yml is not a mapping")
     result: dict[str, list[str]] = {}
     for system, spec in data.items():
-        emulators = spec.get("emulators") if isinstance(spec, dict) else None
         names: list[str] = []
-        if isinstance(emulators, dict):
-            for emulator, entries in emulators.items():
-                if not isinstance(entries, dict):
-                    continue
-                if emulator != "libretro":
-                    names.append(str(emulator))
-                names.extend(str(c) for c, s in entries.items() if isinstance(s, dict))
+        for offered, core, _item in _system_entries(spec):
+            if offered != "libretro":
+                names.append(offered)
+            if core:
+                names.append(core)
         default = defaults.get(system)
         if isinstance(default, dict):
             emulator, core = default.get("emulator"), default.get("core")

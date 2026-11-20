@@ -21,10 +21,6 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
-import yaml
-
-from model.safeparse import yaml_load_upstream
-
 from . import BaseTargetScraper, target_cli
 from ..base_scraper import fetch_present, fetch_text, github_json, github_tree, submodule_commit
 
@@ -255,44 +251,23 @@ def _active_symbols(
 def _parse_es_systems(text: str) -> dict[str, list[str]]:
     """Parse es_systems.yml: map BR2_PACKAGE_* flag -> list of emulator names.
 
-    The file is a dict keyed by system name. Each system has:
-      emulators:
-        <emulator_group>:
-          <core_name>: {requireAnyOf: [BR2_PACKAGE_FOO]}
+    Each core lists the packages that build it under `requireAnyOf`. A
+    standalone emulator is its own core: amiberry, fsuae and vice list
+    machines under their name, and the package that builds a machine builds
+    the emulator.
     """
-    try:
-        data = yaml_load_upstream(text)
-    except yaml.YAMLError:
-        return {}
-
-    if not isinstance(data, dict):
-        return {}
+    # Imported here: batocera_scraper imports this module at load time.
+    from ..batocera_scraper import es_systems_entries
 
     package_to_emulators: dict[str, list[str]] = {}
-
-    for system_data in data.values():
-        if not isinstance(system_data, dict):
+    for _system, emulator, core, spec in es_systems_entries(text):
+        require = spec.get("requireAnyOf", []) if spec else None
+        if not core or not isinstance(require, list):
             continue
-        emulators = system_data.get("emulators")
-        if not isinstance(emulators, dict):
-            continue
-        for group_name, group_data in emulators.items():
-            if not isinstance(group_data, dict):
-                continue
-            for core_name, core_data in group_data.items():
-                if not isinstance(core_data, dict):
-                    continue
-                require = core_data.get("requireAnyOf", [])
-                if not isinstance(require, list):
-                    continue
-                # A standalone emulator is its own core: amiberry, fsuae and
-                # vice list machines under their name, and the package that
-                # builds a machine builds the emulator.
-                names = [core_name] if group_name == "libretro" else [group_name, core_name]
-                for pkg_flag in require:
-                    if isinstance(pkg_flag, str):
-                        package_to_emulators.setdefault(pkg_flag, []).extend(names)
-
+        names = [core] if emulator == "libretro" else [emulator, core]
+        for pkg_flag in require:
+            if isinstance(pkg_flag, str):
+                package_to_emulators.setdefault(pkg_flag, []).extend(names)
     return package_to_emulators
 
 
