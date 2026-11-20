@@ -26,7 +26,6 @@ from model.profiles import (
     select_emulator_profiles,
 )
 from model.registry import load_data_dir_registry
-from model.systems import MANUFACTURER_PREFIXES
 from packs.archive import (
     PackRecord,
     Placed,
@@ -38,7 +37,9 @@ from packs.archive import (
 )
 from packs.datatrees import MISSING_DATA_DIRS, pack_data_tree
 from packs.extras import emulator_region_drops, emulator_required_spares, expand_agnostic_entries
-from packs.naming import bounded_join, bounded_pack_name, file_name_part, pack_narrowings
+from packs.naming import (
+    bounded_join, bounded_pack_name, file_name_part, pack_narrowings, system_display_name,
+)
 from packs.paths import archive_destination, resolve_destination
 from resolve import packfiles as packresolve
 from resolve.archives import archive_entry, archive_is_optional
@@ -617,12 +618,3 @@ def generate_system_pack(
         shutil.rmtree(scratch, ignore_errors=True)
 
 
-def system_display_name(system_id: str) -> str:
-    """Convert system ID to display name for ZIP naming."""
-    s = system_id.lower().replace("_", "-")
-    for prefix in MANUFACTURER_PREFIXES:
-        if s.startswith(prefix):
-            s = s[len(prefix) :]
-            break
-    parts = s.split("-")
-    return "_".join(p.title() for p in parts if p)

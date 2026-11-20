@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import re
 
+from model.collection import manufacturer_slug
+
 
 # bios/Other/<emulator> and bios/Arcade/<emulator or board> file a copy by
 # who loads it, not by machine.
@@ -12,7 +14,7 @@ BUCKET_FOLDERS = frozenset({"Other", "Arcade"})
 
 def names_manufacturer(sys_id: str, manufacturer: str) -> bool:
     """Whether a system id names a maker folder: nec-pc-88 names NEC."""
-    slug = manufacturer.lower().replace(" ", "-")
+    slug = manufacturer_slug(manufacturer)
     return sys_id == slug or sys_id.startswith(f"{slug}-")
 
 
@@ -21,7 +23,13 @@ def maker_folder(path: str, bios_dir: str) -> str | None:
     prefix = f"{bios_dir.rstrip('/')}/"
     if not path.startswith(prefix):
         return None
-    parts = path[len(prefix):].split("/")
+    return maker_of_relative(path[len(prefix):])
+
+
+def maker_of_relative(relative: str) -> str | None:
+    """The maker folder of a path relative to the BIOS directory, None for a
+    file sitting at its root."""
+    parts = relative.split("/")
     return parts[0] if len(parts) >= 2 else None
 
 

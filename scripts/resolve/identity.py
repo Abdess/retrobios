@@ -20,6 +20,7 @@ from pathlib import Path
 
 from core.paths import BIOS_DIR
 from core.hashing import file_digest
+from resolve.ownership import maker_of_relative
 
 
 # A manufacturer directory holding files that genuinely belong to several
@@ -60,8 +61,7 @@ class Duplicate:
 
 def _manufacturer(path: Path, root: Path) -> str:
     """The vendor directory a path sits under, relative to the scanned root."""
-    parts = path.relative_to(root).parts
-    return parts[0] if len(parts) > 1 else ""
+    return maker_of_relative(path.relative_to(root).as_posix()) or ""
 
 
 def scan(bios_dir: str = BIOS_DIR) -> list[Duplicate]:

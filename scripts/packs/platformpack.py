@@ -32,7 +32,7 @@ from packs.archive import (
     writing_pack,
 )
 from packs.datatrees import data_directory_members, core_data_trees, pack_markers
-from packs.emulatorpack import system_display_name
+from packs.naming import system_display_name
 from packs.extras import (
     ExtraResolver,
     collect_emulator_extras,

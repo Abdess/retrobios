@@ -86,18 +86,21 @@ def platform_target(
     return canonical_target_name([platform_name], target, platforms_dir)
 
 
+def system_display_name(system_id: str) -> str:
+    """A system id as a pack file name writes it, its maker prefix dropped."""
+    s = system_id.lower().replace("_", "-")
+    for prefix in MANUFACTURER_PREFIXES:
+        if s.startswith(prefix):
+            s = s[len(prefix) :]
+            break
+    return "_".join(p.title() for p in s.split("-") if p)
+
+
 def system_tag(system_filter: list[str] | None) -> str:
     """Filename tag for a pack limited to some systems, empty for all."""
     if not system_filter:
         return ""
-    display_parts = []
-    for sid in system_filter:
-        s = sid.lower().replace("_", "-")
-        for prefix in MANUFACTURER_PREFIXES:
-            if s.startswith(prefix):
-                s = s[len(prefix) :]
-                break
-        display_parts.append("_".join(p.title() for p in s.split("-") if p))
+    display_parts = [system_display_name(sid) for sid in system_filter]
     return "_" + bounded_join(display_parts, system_filter)
 
 
