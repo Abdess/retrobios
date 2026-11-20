@@ -118,6 +118,19 @@ class FailedRequestsStopTheScrape(unittest.TestCase):
         self.assertEqual(targets["x86_64"]["cores"], ["mgba"])
         self.assertNotIn("x86_wow64", targets)
 
+    def test_the_command_line_names_the_failure(self):
+        """target_cli let the RuntimeError out as a traceback, without the
+        `gh auth login` hint scraper_cli gives on a refused API call."""
+        stderr = io.StringIO()
+        with mock.patch("urllib.request.urlopen", _refuse), mock.patch(
+            "sys.argv", ["retroarch_targets_scraper", "--dry-run"]
+        ), mock.patch("sys.stderr", stderr), mock.patch(
+            "scripts.scraper.base_scraper.github_token", return_value=""
+        ), self.assertRaises(SystemExit) as raised:
+            retroarch_targets_scraper.main()
+        self.assertEqual(raised.exception.code, 1)
+        self.assertIn("Error:", stderr.getvalue())
+
 
 class BatoceraKconfig(unittest.TestCase):
     """The Batocera target scraper read every select as unconditional and

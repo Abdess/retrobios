@@ -518,7 +518,7 @@ def _quoted_str(dumper: yaml.SafeDumper, data: str) -> yaml.ScalarNode:
 _PlatformDumper.add_representer(str, _quoted_str)
 
 
-def _exit_on_scrape_error(error: Exception) -> NoReturn:
+def exit_on_scrape_error(error: Exception) -> NoReturn:
     """Print what failed and what to try, then exit 1 without a traceback."""
     print(f"Error: {error}", file=sys.stderr)
     refused = re.search(r"\b(403|429)\b|rate limit", str(error), re.I)
@@ -617,13 +617,13 @@ def _write_output(
         try:
             config = generate()
         except (OSError, ValueError, RuntimeError) as e:
-            _exit_on_scrape_error(e)
+            exit_on_scrape_error(e)
     else:
         config = _generic_config(reqs)
     if scraper.lists_files and not any(
         (system or {}).get("files") for system in (config.get("systems") or {}).values()
     ):
-        _exit_on_scrape_error(RuntimeError(
+        exit_on_scrape_error(RuntimeError(
             f"{scraper_class.__module__}: the generated platform lists no file"
         ))
     output_path = Path(output)
@@ -658,11 +658,11 @@ def scraper_cli(
         scraper = scraper_class(revision=args.revision) if takes_revision else scraper_class()
         reqs = scraper.fetch_requirements()
     except (OSError, ValueError, RuntimeError) as e:
-        _exit_on_scrape_error(e)
+        exit_on_scrape_error(e)
     if scraper.lists_files and not reqs:
         # Written, an empty read became a platform with no system that
         # verify and the pack count 0/0 and call consistent.
-        _exit_on_scrape_error(RuntimeError(
+        exit_on_scrape_error(RuntimeError(
             f"{scraper_class.__module__}: upstream returned no BIOS entry"
         ))
 

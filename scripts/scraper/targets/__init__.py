@@ -16,7 +16,7 @@ from model.sourcerevision import platform_revision
 
 # Every target scraper reads the network through the platform scrapers'
 # helpers: one retry policy, one size cap, one token rule.
-from ..base_scraper import fetch_text, forge_headers
+from ..base_scraper import exit_on_scrape_error, fetch_text, forge_headers
 
 __all__ = ["BaseTargetScraper", "discover_target_scrapers", "fetch_text", "forge_headers",
            "target_cli"]
@@ -66,8 +66,11 @@ def target_cli(scraper_class: type[BaseTargetScraper], description: str, unit: s
     parser.add_argument("--output", "-o", help="Output YAML file")
     args = parser.parse_args()
 
-    scraper = scraper_class()
-    data = scraper.fetch_targets()
+    try:
+        scraper = scraper_class()
+        data = scraper.fetch_targets()
+    except (OSError, ValueError, RuntimeError) as e:
+        exit_on_scrape_error(e)
     if args.dry_run:
         for name, info in data["targets"].items():
             print(f"  {name} ({info['architecture']}): {len(info['cores'])} {unit}")

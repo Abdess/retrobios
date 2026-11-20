@@ -20,14 +20,11 @@ Buildbot structure varies by platform:
 
 from __future__ import annotations
 
-import argparse
 import re
 import sys
 from datetime import datetime, timezone
 
-import yaml
-
-from . import BaseTargetScraper, fetch_text
+from . import BaseTargetScraper, fetch_text, target_cli
 
 PLATFORM_NAME = "retroarch"
 
@@ -165,36 +162,7 @@ class Scraper(BaseTargetScraper):
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        allow_abbrev=False,
-        description="Scrape RetroArch buildbot nightly targets"
-    )
-    parser.add_argument("--dry-run", action="store_true", help="Show target summary")
-    parser.add_argument("--output", "-o", help="Output YAML file")
-    args = parser.parse_args()
-
-    scraper = Scraper()
-    data = scraper.fetch_targets()
-
-    total_cores = sum(len(t["cores"]) for t in data["targets"].values())
-    print(
-        f"\n{len(data['targets'])} targets, {total_cores} total core entries",
-        file=sys.stderr,
-    )
-
-    if args.dry_run:
-        for name, info in sorted(data["targets"].items()):
-            print(
-                f"  {name:30s} {info['architecture']:10s} {len(info['cores']):>4d} cores"
-            )
-        return
-
-    if args.output:
-        scraper.write_output(data, args.output)
-        print(f"Written to {args.output}")
-        return
-
-    print(yaml.dump(data, default_flow_style=False, sort_keys=False))
+    target_cli(Scraper, "Scrape RetroArch buildbot nightly targets")
 
 
 if __name__ == "__main__":
