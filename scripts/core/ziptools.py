@@ -69,14 +69,14 @@ def _member_md5(
 
 
 @functools.lru_cache(maxsize=4096)
-def _member_crcs(path: str, mtime: float) -> frozenset[str]:
+def _member_crcs(path: str, mtime: float) -> frozenset[str] | None:
     try:
         with zipfile.ZipFile(path) as archive:
             return frozenset(
                 format(info.CRC, "08x") for info in archive.infolist() if not info.is_dir()
             )
     except (zipfile.BadZipFile, OSError):
-        return frozenset()
+        return None
 
 
 @functools.lru_cache(maxsize=4096)
@@ -100,13 +100,19 @@ def zip_member_names(path: str) -> frozenset[str]:
     return _member_names(path, mtime)
 
 
-def zip_member_crcs(path: str) -> frozenset[str]:
-    """CRC-32 of each member, read from the central directory."""
+def readable_zip_member_crcs(path: str) -> frozenset[str] | None:
+    """CRC-32 of each member, read from the central directory, None when
+    the file is no readable archive."""
     try:
         mtime = os.path.getmtime(path)
     except OSError:
-        return frozenset()
+        return None
     return _member_crcs(path, mtime)
+
+
+def zip_member_crcs(path: str) -> frozenset[str]:
+    """CRC-32 of each member, empty when the file is no readable archive."""
+    return readable_zip_member_crcs(path) or frozenset()
 
 
 _zip_contents_cache: tuple[tuple, dict] | None = None

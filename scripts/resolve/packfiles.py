@@ -11,7 +11,6 @@ import os
 import re
 import urllib.error
 import urllib.request
-import zipfile
 from pathlib import Path
 
 from model.largefiles import fetch_large_file
@@ -19,6 +18,7 @@ from core.hashing import cut_md5_owner, parse_hash_list
 from resolve.content import declared_hash_verdict
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from core.paths import REPO_ROOT, declared_destination
+from core.ziptools import readable_zip_member_crcs
 from resolve.validation import inner_rom_check
 # CLI-wide network policy.  Public helpers can override it explicitly, while
 # every CLI mode inherits --offline (including large-file release fallback).
@@ -472,15 +472,6 @@ def _archive_choice(
     return fe if accepted(path) > 0 else None
 
 
-def _member_crcs(path: str) -> frozenset[int] | None:
-    """The crc32 of each member of an archive, None when it is no archive."""
-    try:
-        with zipfile.ZipFile(path) as zf:
-            return frozenset(info.CRC for info in zf.infolist() if not info.is_dir())
-    except (OSError, zipfile.BadZipFile):
-        return None
-
-
 def _covering_archive(candidates: list[tuple[dict, str]]) -> dict | None:
     """The archive holding every member each other candidate holds, and more.
 
@@ -489,9 +480,9 @@ def _covering_archive(candidates: list[tuple[dict, str]]) -> dict | None:
     members, never the container, and its cdi driver needs all three, so
     the larger set serves both readers where the first one serves one.
     """
-    sets: list[tuple[dict, frozenset[int]]] = []
+    sets: list[tuple[dict, frozenset[str]]] = []
     for fe, path in candidates:
-        members = _member_crcs(path)
+        members = readable_zip_member_crcs(path)
         if members is None:
             return None
         sets.append((fe, members))
