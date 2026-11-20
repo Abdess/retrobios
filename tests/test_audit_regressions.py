@@ -2761,11 +2761,11 @@ class ReleaseAssetsMatchTheCollection(unittest.TestCase):
         body = release_assets.render_notes(
             db, gitignore, assets, previous, descriptions, bundles, {"sdlpal-data.zip": "d" * 40}
         )
-        self.assertIn("| [twotiger.zip](https://github.com/Abdess/retrobios/releases/download/large-files/twotiger.zip) | Two Tigers samples | 148 MB | `" + "b" * 40 + "` |", body)
-        self.assertIn("| [nand.bin](https://github.com/Abdess/retrobios/releases/download/large-files/nand.bin) | BootMii NAND backup | 528 MB | `" + "a" * 40 + "` |", body)
-        self.assertIn("| [sdlpal-data.zip](https://github.com/Abdess/retrobios/releases/download/large-files/sdlpal-data.zip) | SDLPAL Chinese Paladin game data (.mkf archives) | 134 MB | `" + "d" * 40 + "` |", body)
+        self.assertIn("| [twotiger.zip](https://github.com/Abdess/retrobios/releases/download/large-files/twotiger.zip) | Two Tigers samples | 147.8 MB | `" + "b" * 40 + "` |", body)
+        self.assertIn("| [nand.bin](https://github.com/Abdess/retrobios/releases/download/large-files/nand.bin) | BootMii NAND backup | 528.0 MB | `" + "a" * 40 + "` |", body)
+        self.assertIn("| [sdlpal-data.zip](https://github.com/Abdess/retrobios/releases/download/large-files/sdlpal-data.zip) | SDLPAL Chinese Paladin game data (.mkf archives) | 134.3 MB | `" + "d" * 40 + "` |", body)
         self.assertIn("## Not indexed", body)
-        self.assertIn("| [whoopee.zip](https://github.com/Abdess/retrobios/releases/download/large-files/whoopee.zip) | Toaplan Whoopee samples | 212 MB |", body)
+        self.assertIn("| [whoopee.zip](https://github.com/Abdess/retrobios/releases/download/large-files/whoopee.zip) | Toaplan Whoopee samples | 212.4 MB |", body)
         self.assertNotIn("9" * 40, body)
         self.assertNotIn("small.bin", body)
         self.assertIn("4 files, 1.0 GB total", body)
