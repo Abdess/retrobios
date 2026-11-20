@@ -217,6 +217,15 @@ def _clear_read_only(dest: Path) -> None:
         pass  # the replace that follows reports the refusal with its reason
 
 
+def _ready_to_place(written: Path, dest: Path, executable: bool) -> None:
+    """Give verified bytes the mode a plain open() gives, executable where
+    the repository file is, and clear the read-only attribute of the file
+    they replace. The temporary file is private, and a folder written with
+    sudo has to stay readable by the emulator's user."""
+    os.chmod(written, (0o777 if executable else 0o666) & ~_UMASK)
+    _clear_read_only(dest)
+
+
 def _replace_with_copy(src: Path, dest: Path) -> None:
     """Put a copy of src at dest's name without following what is there."""
     fd, scratch = tempfile.mkstemp(dir=dest.parent, prefix=f".{dest.name}.", suffix=".part")

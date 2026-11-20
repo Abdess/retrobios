@@ -15,6 +15,11 @@ if TYPE_CHECKING:
     from installer.terminal import Terminal
 
 
+def expected_hashes(entry: dict) -> dict[str, str]:
+    """The SHA-256 and SHA-1 an entry records, lowercased."""
+    return {name: entry[name].lower() for name in ("sha256", "sha1") if entry.get(name)}
+
+
 def _digest_file(path: Path, algorithms: tuple[str, ...]) -> dict[str, str]:
     """Compute several digests of a file in a single read.
 
@@ -85,11 +90,7 @@ def head_reads_done() -> None:
 def _classify_local(entry: dict, dest: Path, remember: bool = False) -> str:
     """Return 'up_to_date' or 'mismatched' for a file already on disk.
     remember keeps what was read for the check after the line menu."""
-    expected = {
-        name: entry.get(name, "").lower()
-        for name in ("sha256", "sha1")
-        if entry.get(name)
-    }
+    expected = expected_hashes(entry)
     try:
         is_file = dest.is_file()
     except OSError:

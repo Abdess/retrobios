@@ -19,17 +19,16 @@ from installer.console import OUTPUT
 from installer.host_fs import (
     NOT_WRITABLE,
     READ_ONLY,
-    _UMASK,
     _Interrupted,
-    _clear_read_only,
     _is_file,
     _is_link,
     _read_only_file,
+    _ready_to_place,
     _stop,
     _write_refused,
 )
 from installer.invocation import _INVOCATION
-from installer.local_check import _digest_file
+from installer.local_check import _digest_file, expected_hashes
 from installer.paths import _MOVED_FOLDERS, _entry_path, _entry_place, _note_spelling, _safe_relative_path, spelled
 from installer.text import _plural, format_size
 
@@ -386,8 +385,7 @@ def _place_verified(f: dict, bios_path: Path, dest: Path, tmp_path: Path, size: 
     for name, label in (("sha256", "SHA-256"), ("sha1", "SHA-1")):
         if name in expected and actual[name] != expected[name]:
             raise ValueError(f"{label} mismatch in {held_in}")
-    os.chmod(tmp_path, (0o777 if f.get("executable") else 0o666) & ~_UMASK)
-    _clear_read_only(dest)
+    _ready_to_place(tmp_path, dest, bool(f.get("executable")))
     KEPT.keep(*_kept_slot(*_entry_place(bios_path, f)), dest, expected, tmp_path)
     os.replace(tmp_path, dest)
 
@@ -404,7 +402,7 @@ def _write_verified(
     are told apart from the write errors: a copy that could not be read
     was reported as a folder not writable. named is the source in the
     reason then, held_in when empty."""
-    expected = {name: f[name].lower() for name in ("sha256", "sha1") if f.get(name)}
+    expected = expected_hashes(f)
     tmp_path: Path | None = None
     counted = 0
 

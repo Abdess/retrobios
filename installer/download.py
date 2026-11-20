@@ -24,19 +24,18 @@ from installer.host_fs import (
     NOT_WRITABLE,
     READ_ONLY,
     _SHARING_VIOLATIONS,
-    _UMASK,
     _Interrupted,
-    _clear_read_only,
     _drive_full,
     _folder_writable,
     _is_file,
     _read_only_file,
+    _ready_to_place,
     _stop,
     _write_refused,
     _writing,
 )
 from installer.invocation import offline_requested
-from installer.local_check import _digest_file, _digest_handle, unreachable_words
+from installer.local_check import _digest_file, _digest_handle, expected_hashes, unreachable_words
 from installer.network import _retry_delay, network_words
 from installer.offline import LOCAL, offline_words
 from installer.outcome import HttpReason, NetworkReason, OfflineReason, _transfer_failure
@@ -382,9 +381,7 @@ def _stream_response(job: _FileFetch, resp: http.client.HTTPResponse,
 def _place_fetched(job: _FileFetch, written: Path) -> None:
     """Check the bytes written against the list, then give them the file's name."""
     f, dest = job.f, job.dest
-    expected = {
-        name: f[name].lower() for name in ("sha256", "sha1") if f.get(name)
-    }
+    expected = expected_hashes(f)
     # A large file is hashed through the handle that holds its lock.
     # On Windows that lock is mandatory: reopening the path to read
     # it failed with a sharing violation, which read as an unwritable
@@ -400,11 +397,7 @@ def _place_fetched(job: _FileFetch, written: Path) -> None:
         job.mismatch = "SHA-1 mismatch"
         raise _Corrupt()
 
-    # The mode a plain open() gives, executable where the repository
-    # file is: the temporary file is private, and a BIOS folder
-    # written with sudo has to stay readable by the emulator's user.
-    os.chmod(written, (0o777 if f.get("executable") else 0o666) & ~_UMASK)
-    _clear_read_only(dest)
+    _ready_to_place(written, dest, bool(f.get("executable")))
     # The file in place, a personal dump or another revision, is
     # moved aside first: replaced, it was gone for good.
     KEPT.keep(*_kept_slot(*_entry_place(job.bios_path, f)), dest, expected, written)

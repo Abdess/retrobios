@@ -1794,6 +1794,15 @@ def _clear_read_only(dest: Path) -> None:
         pass  # the replace that follows reports the refusal with its reason
 
 
+def _ready_to_place(written: Path, dest: Path, executable: bool) -> None:
+    """Give verified bytes the mode a plain open() gives, executable where
+    the repository file is, and clear the read-only attribute of the file
+    they replace. The temporary file is private, and a folder written with
+    sudo has to stay readable by the emulator's user."""
+    os.chmod(written, (0o777 if executable else 0o666) & ~_UMASK)
+    _clear_read_only(dest)
+
+
 def _replace_with_copy(src: Path, dest: Path) -> None:
     """Put a copy of src at dest's name without following what is there."""
     fd, scratch = tempfile.mkstemp(dir=dest.parent, prefix=f".{dest.name}.", suffix=".part")
@@ -2780,6 +2789,11 @@ def fat32_drive(folder: Path) -> bool:
 
 # --- installer/local_check.py ------------------------------------------------
 
+def expected_hashes(entry: dict) -> dict[str, str]:
+    """The SHA-256 and SHA-1 an entry records, lowercased."""
+    return {name: entry[name].lower() for name in ("sha256", "sha1") if entry.get(name)}
+
+
 def _digest_file(path: Path, algorithms: tuple[str, ...]) -> dict[str, str]:
     """Compute several digests of a file in a single read.
 
@@ -2850,11 +2864,7 @@ def head_reads_done() -> None:
 def _classify_local(entry: dict, dest: Path, remember: bool = False) -> str:
     """Return 'up_to_date' or 'mismatched' for a file already on disk.
     remember keeps what was read for the check after the line menu."""
-    expected = {
-        name: entry.get(name, "").lower()
-        for name in ("sha256", "sha1")
-        if entry.get(name)
-    }
+    expected = expected_hashes(entry)
     try:
         is_file = dest.is_file()
     except OSError:
@@ -9018,8 +9028,7 @@ def _place_verified(f: dict, bios_path: Path, dest: Path, tmp_path: Path, size: 
     for name, label in (("sha256", "SHA-256"), ("sha1", "SHA-1")):
         if name in expected and actual[name] != expected[name]:
             raise ValueError(f"{label} mismatch in {held_in}")
-    os.chmod(tmp_path, (0o777 if f.get("executable") else 0o666) & ~_UMASK)
-    _clear_read_only(dest)
+    _ready_to_place(tmp_path, dest, bool(f.get("executable")))
     KEPT.keep(*_kept_slot(*_entry_place(bios_path, f)), dest, expected, tmp_path)
     os.replace(tmp_path, dest)
 
@@ -9036,7 +9045,7 @@ def _write_verified(
     are told apart from the write errors: a copy that could not be read
     was reported as a folder not writable. named is the source in the
     reason then, held_in when empty."""
-    expected = {name: f[name].lower() for name in ("sha256", "sha1") if f.get(name)}
+    expected = expected_hashes(f)
     tmp_path: Path | None = None
     counted = 0
 
@@ -16456,9 +16465,7 @@ def _stream_response(job: _FileFetch, resp: http.client.HTTPResponse,
 def _place_fetched(job: _FileFetch, written: Path) -> None:
     """Check the bytes written against the list, then give them the file's name."""
     f, dest = job.f, job.dest
-    expected = {
-        name: f[name].lower() for name in ("sha256", "sha1") if f.get(name)
-    }
+    expected = expected_hashes(f)
     # A large file is hashed through the handle that holds its lock.
     # On Windows that lock is mandatory: reopening the path to read
     # it failed with a sharing violation, which read as an unwritable
@@ -16474,11 +16481,7 @@ def _place_fetched(job: _FileFetch, written: Path) -> None:
         job.mismatch = "SHA-1 mismatch"
         raise _Corrupt()
 
-    # The mode a plain open() gives, executable where the repository
-    # file is: the temporary file is private, and a BIOS folder
-    # written with sudo has to stay readable by the emulator's user.
-    os.chmod(written, (0o777 if f.get("executable") else 0o666) & ~_UMASK)
-    _clear_read_only(dest)
+    _ready_to_place(written, dest, bool(f.get("executable")))
     # The file in place, a personal dump or another revision, is
     # moved aside first: replaced, it was gone for good.
     KEPT.keep(*_kept_slot(*_entry_place(job.bios_path, f)), dest, expected, written)
@@ -17137,6 +17140,7 @@ def _install_data_member(
         listed = sha1 == meta["sha1"] and size == meta["size"]
         if size != expected or not (listed or follow is not None):
             return "changed", None
+        _ready_to_place(scratch, target, executable=False)
         try:
             KEPT.keep(*_kept_slot(bios_path, slot), target, {"sha1": sha1})
         except _NotKept as exc:

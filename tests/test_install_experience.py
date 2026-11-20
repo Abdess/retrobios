@@ -192,6 +192,17 @@ class InstalledFileModes(unittest.TestCase):
         finally:
             os.umask(umask)
 
+    def test_a_data_tree_member_too(self):
+        data = b"cheat"
+        meta = {"size": len(data), "sha1": hashlib.sha1(data).hexdigest()}
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "sub" / "file.ini"
+            target.parent.mkdir()
+            status, _ = install._install_data_member(
+                lambda: io.BytesIO(data), meta, target, Path(tmp), "data", "file.ini", [])
+            self.assertEqual(status, "installed")
+            self.assertEqual(target.stat().st_mode & 0o777, 0o666 & ~install._UMASK)
+
 
 class ProgramsAreMarked(unittest.TestCase):
     """The manifest says which files are programs, read from their header:

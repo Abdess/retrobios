@@ -23,6 +23,7 @@ from installer.host_fs import (
     _Interrupted,
     _drive_full,
     _folder_writable,
+    _ready_to_place,
     _stop,
     _write_refused,
     _writing,
@@ -461,6 +462,7 @@ def _install_data_member(
         listed = sha1 == meta["sha1"] and size == meta["size"]
         if size != expected or not (listed or follow is not None):
             return "changed", None
+        _ready_to_place(scratch, target, executable=False)
         try:
             KEPT.keep(*_kept_slot(bios_path, slot), target, {"sha1": sha1})
         except _NotKept as exc:
