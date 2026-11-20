@@ -77,7 +77,7 @@ def file_kind(name: str) -> str:
 def title_noun(names: Iterable[str]) -> str:
     """The noun a page title gives its files: each kind holding at least a
     quarter of the distinct names, keys first. A Switch emulator reads keys
-    and "eden keys" is the search; Vita3K reads firmware packages; one
+    and "eden keys" is the search. Vita3K reads firmware packages. One
     rom.key beside nine Kickstarts leaves WinUAE's page "BIOS files". A
     name pattern (<firmware>.zip) is no file to fetch and counts for none."""
     distinct = {Path(name).name.casefold(): name for name in names if "<" not in name}
