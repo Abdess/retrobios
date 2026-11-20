@@ -34,7 +34,7 @@ try:
     import yaml
 except ImportError:
     yaml = None
-from core.gitclone import git_lines, project_main_line
+from core.gitclone import fallback_lines, git_lines, project_main_line
 from resolve.review import (
     ValidationResult,
     load_platform_hashes,
@@ -56,10 +56,7 @@ def get_changed_files() -> list[str]:
     changed: list[str] = []
     compared = False
     project_base = project_main_line()
-    remotes = [[project_base]] if project_base else [
-        [f"{remote}/{base}" for base in ("main", "master", "v2")]
-        for remote in ("upstream", "origin")
-    ]
+    remotes = [[project_base]] if project_base else fallback_lines()
     for candidates in remotes:
         for line in candidates:
             committed = git_lines("diff", "--name-only", f"{line}...HEAD")

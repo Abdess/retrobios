@@ -240,13 +240,12 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def _git_lines(args: list[str]) -> list[str]:
-    result = subprocess.run(
-        ["git", *args], capture_output=True, text=True, check=False
-    )
-    if result.returncode:
-        detail = result.stderr.strip() or f"exit {result.returncode}"
-        raise SystemExit(f"ERROR: git {' '.join(args)}: {detail}")
-    return [line for line in result.stdout.splitlines() if line]
+    from core.gitclone import GitRefused, required_git_lines
+
+    try:
+        return required_git_lines(*args)
+    except GitRefused as exc:
+        raise SystemExit(f"ERROR: {exc}") from exc
 
 
 def branch_profiles(emulators_dir: str, base: str, added_only: bool) -> list[str]:
@@ -286,14 +285,15 @@ def project_base() -> str:
     is HEAD, and --changed --strict found nothing and passed while the PR's
     CI then failed. validate_pr.py resolves the same line the same way.
     """
-    from core.gitclone import git_lines as git_lines, project_main_line
+    from core.gitclone import fallback_lines, git_lines, project_main_line
 
     line = project_main_line()
     if line:
         return line
-    for remote in ("upstream", "origin"):
-        if git_lines("rev-parse", "--verify", "--quiet", f"{remote}/main"):
-            return f"{remote}/main"
+    for candidates in fallback_lines():
+        for candidate in candidates:
+            if git_lines("rev-parse", "--verify", "--quiet", candidate):
+                return candidate
     return "HEAD"
 
 

@@ -6,13 +6,42 @@ import re
 import subprocess
 
 
+class GitRefused(RuntimeError):
+    """A git command that exited non-zero, with what it said."""
+
+
+def _run(args: tuple[str, ...]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(["git", *args], capture_output=True, text=True, check=False)
+
+
+def _lines(output: str) -> list[str]:
+    return [line for line in output.splitlines() if line]
+
 
 def git_lines(*args: str) -> list[str] | None:
     """Output lines of a git command, or None when git refuses it."""
-    result = subprocess.run(["git", *args], capture_output=True, text=True, check=False)
-    if result.returncode != 0:
-        return None
-    return [line for line in result.stdout.splitlines() if line]
+    result = _run(args)
+    return _lines(result.stdout) if result.returncode == 0 else None
+
+
+def required_git_lines(*args: str) -> list[str]:
+    """Output lines of a git command, GitRefused naming its error otherwise."""
+    result = _run(args)
+    if result.returncode:
+        detail = result.stderr.strip() or f"exit {result.returncode}"
+        raise GitRefused(f"git {' '.join(args)}: {detail}")
+    return _lines(result.stdout)
+
+
+# Where a clone with no remote naming the project keeps its main line, each
+# remote's names in the order tried.
+FALLBACK_REMOTES = ("upstream", "origin")
+FALLBACK_BRANCHES = ("main", "master", "v2")
+
+
+def fallback_lines() -> list[list[str]]:
+    """The candidate main lines when project_main_line() finds none, per remote."""
+    return [[f"{remote}/{branch}" for branch in FALLBACK_BRANCHES] for remote in FALLBACK_REMOTES]
 
 
 PROJECT_URLS = (
