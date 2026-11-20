@@ -18,7 +18,7 @@ from pathlib import Path
 
 from model.systems import norm_system_id
 from resolve.cores import resolve_platform_cores, unresolved_platform_cores
-from resolve.reconcile import HASH_FIELDS, NativeSystem, hash_values
+from resolve.reconcile import HASH_FIELDS, NativeSystem, entry_names, hash_values
 from resolve.launchers import record_names as launcher_names
 
 
@@ -97,11 +97,7 @@ class ReadEvidence:
                     for loc in [*locations, str(entry.get("name", ""))] if loc
                 }
                 continue
-            self.names |= {
-                str(n).casefold()
-                for n in (entry.get("name"), *(entry.get("aliases") or []))
-                if n
-            }
+            self.names |= entry_names(entry)
             for location in locations:
                 tails = _tails(location)
                 self.tails.update(tails)
@@ -125,11 +121,7 @@ class ReadEvidence:
 
     def proof(self, entry: dict, destination: str) -> str | None:
         """How a profile reads the entry, or None when nothing answers."""
-        names = {
-            str(n).casefold()
-            for n in (entry.get("name"), *(entry.get("aliases") or []))
-            if n
-        }
+        names = entry_names(entry)
         tails = _tails(destination)
         if any(t in self.tails for t in tails[:-1]):
             return "path"
@@ -188,11 +180,7 @@ class ProofIndex:
 
     def proofs(self, entry: dict, destination: str) -> dict[int, str]:
         """Reader position -> its proof, for the readers that have one."""
-        names = {
-            str(n).casefold()
-            for n in (entry.get("name"), *(entry.get("aliases") or []))
-            if n
-        }
+        names = entry_names(entry)
         tails = _tails(destination)
         last = {tails[-1]} if tails else set()
         hashes = {
@@ -403,7 +391,7 @@ class EntryCategories:
             for position, f in enumerate(self._profiles[key].get("files") or []):
                 if not isinstance(f, dict) or (f.get("category") == GAME_DATA) != (kind == GAME_DATA):
                     continue
-                for n in {str(n).casefold() for n in (f.get("name"), *(f.get("aliases") or [])) if n}:
+                for n in entry_names(f):
                     by_name.setdefault(n, []).append((position, f))
                 for value in self._accepted_by(f):
                     by_hash.setdefault(value, []).append((position, f))
@@ -420,11 +408,7 @@ class EntryCategories:
         A same-named entry is kept, marked `"by": "name"`, only when no
         entry accepts the hash and its own hashes do not contradict it.
         """
-        names = {
-            str(n).casefold()
-            for n in (entry.get("name"), *(entry.get("aliases") or []))
-            if n
-        }
+        names = entry_names(entry)
         declared = _declared_hashes(entry)
         by_name_index, by_hash_index = self._index_of(key, kind)
 

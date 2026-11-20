@@ -378,7 +378,7 @@ def _match_key(entry: dict) -> tuple[str, str]:
     return dest.casefold(), str(entry.get("name", "")).casefold()
 
 
-def _names(entry: dict) -> set[str]:
+def entry_names(entry: dict) -> set[str]:
     """The names an entry answers to: its own and the aliases it declares."""
     return {
         str(n).casefold()
@@ -405,7 +405,7 @@ def by_name(truth_entry: dict, platform_entry: dict) -> bool:
     """One of the truth's names, in the same directory, at the same size."""
     t_dest = _match_key(truth_entry)[0]
     theirs_dest, theirs = _match_key(platform_entry)
-    if not theirs or theirs not in _names(truth_entry):
+    if not theirs or theirs not in entry_names(truth_entry):
         return False
     # Two declared directories that differ name two files: the truth's
     # BeebFile/BIOS.rom is not Recalbox's np2kai/bios.rom.
@@ -650,7 +650,7 @@ class _TruthPass:
         for candidate in (c for c in self._files_of(target_ids) if c.platform is not None):
             own = str(candidate.name).casefold()
             candidate.namesakes.extend(
-                entry for entry in truth_files if own in _names(entry)
+                entry for entry in truth_files if own in entry_names(entry)
             )
 
         for t_index, truth_entry in enumerate(truth_files):
