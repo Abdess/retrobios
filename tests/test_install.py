@@ -2537,6 +2537,25 @@ class TestAvailablePlatforms(unittest.TestCase):
                 self.assertIn(digest, changed[0])
             self.assertEqual((root / "install.sh").stat().st_mode, sh_mode)
 
+    def test_a_second_pin_line_is_refused(self):
+        """sh keeps the last assignment: a second pin line after the right one
+        is the value the bootstrap runs with, so the check refuses it."""
+        from installer_build import pins
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
+            root = Path(directory)
+            for name in ("install.py", "install.sh", "install.ps1"):
+                shutil.copy2(REPO_ROOT / name, root / name)
+            text = (root / "install.sh").read_text(encoding="utf-8")
+            pin = f'DEFAULT_INSTALL_SHA256="{pins.installer_sha256(root)}"\n'
+            self.assertIn(pin, text)
+            doubled = text.replace(pin, f'{pin}DEFAULT_INSTALL_SHA256="{"0" * 64}"\n')
+            (root / "install.sh").write_text(doubled, encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "2 installer pin lines"):
+                pins.stale_pins(root)
+            with self.assertRaisesRegex(ValueError, "2 installer pin lines"):
+                pins.pinned_sha256("install.sh", root)
+
     def test_shell_one_liner_downloads_verifies_and_forwards_arguments(self):
         scratch = REPO_ROOT / "tmp" / "tests"
         scratch.mkdir(parents=True, exist_ok=True)

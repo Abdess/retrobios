@@ -6,7 +6,7 @@ import zipfile
 from pathlib import Path
 
 from core.paths import REPO_ROOT
-from installer_build.pins import PIN, installer_sha256
+from installer_build.pins import installer_sha256, pinned_sha256
 
 
 PORT_DIR = "retrobios"
@@ -19,14 +19,6 @@ TOOLS_ZIP = "RetroBIOS-tools.zip"
 ARCHIVES = (PORT_ZIP, BATOCERA_ZIP, MUOS_APP, TOOLS_ZIP)
 # Which release pack serves each platform, read by tui.txt offline.
 PACKS_TABLE = "packs.txt"
-
-
-def pinned_installer_sha256(root: Path = REPO_ROOT) -> str:
-    """The SHA-256 install.sh accepts for install.py."""
-    found = PIN["install.sh"].search((root / "install.sh").read_text(encoding="utf-8"))
-    if found is None:
-        raise ValueError("install.sh pins no installer SHA-256")
-    return found.group(1)
 
 
 def _engine(folder: str, root: Path, mapping: bool = True) -> list[tuple[str, Path | None]]:
@@ -134,7 +126,7 @@ def packs_table(root: Path) -> bytes:
 
 def build_archive(name: str, output: Path, root: Path = REPO_ROOT) -> Path:
     """Write the launcher archive *name* to *output* and return it."""
-    pinned = pinned_installer_sha256(root)
+    pinned = pinned_sha256("install.sh", root)
     actual = installer_sha256(root)
     if actual != pinned:
         raise ValueError(

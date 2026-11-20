@@ -11,7 +11,7 @@ import tempfile
 from pathlib import Path
 
 from core.paths import REPO_ROOT
-from installer_build.pins import PIN
+from installer_build.pins import pinned_sha256
 
 
 PACKAGE_DIR = REPO_ROOT / "packaging" / "pypi"
@@ -58,8 +58,7 @@ def installer_bytes() -> bytes:
     """install.py, refused unless it is the one install.sh pins: the package
     then runs the installer the one-line command runs, under the same id."""
     data = (REPO_ROOT / "install.py").read_bytes()
-    pins = PIN["install.sh"].findall((REPO_ROOT / "install.sh").read_text(encoding="utf-8"))
-    if pins != [hashlib.sha256(data).hexdigest()]:
+    if pinned_sha256("install.sh", REPO_ROOT) != hashlib.sha256(data).hexdigest():
         raise ValueError("install.py is not the installer install.sh pins: recompute the pin")
     return data
 

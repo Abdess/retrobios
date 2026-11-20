@@ -33,7 +33,7 @@ from pathlib import Path
 
 import yaml
 
-from installer_build import port
+from installer_build import pins, port
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PORTS = REPO_ROOT / "ports"
@@ -334,7 +334,7 @@ class TheArchives(unittest.TestCase):
                 self.assertEqual(inside, [])
 
     def test_each_carries_the_pinned_installer(self):
-        pinned = port.pinned_installer_sha256()
+        pinned = pins.pinned_sha256("install.sh")
         for name, (_script, folder) in self.LAYOUT.items():
             with self.subTest(archive=name):
                 with zipfile.ZipFile(port.build_archive(name, self.out / name)) as zf:

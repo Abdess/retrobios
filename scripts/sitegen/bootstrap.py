@@ -20,7 +20,7 @@ from pathlib import Path
 
 from core.artifacts import write_if_changed
 from model.guides import PS1_NAME, SH_NAME
-from installer_build.pins import PIN, installer_sha256
+from installer_build.pins import installer_sha256, pinned_sha256
 from sitegen.config import build_commit
 
 REPO_RAW = "https://raw.githubusercontent.com/Abdess/retrobios"
@@ -57,12 +57,10 @@ def served_text(name: str, root: Path, commit: str) -> str:
     pair served."""
     source, line = SOURCES[name]
     text = (root / source).read_text(encoding="utf-8")
-    pinned = PIN[source].findall(text)
-    if len(pinned) != 1:
-        raise ValueError(f"{source}: {len(pinned)} installer pins, expected one")
+    pinned = pinned_sha256(source, root)
     actual = installer_sha256(root)
-    if pinned[0] != actual:
-        raise ValueError(f"{source} pins {pinned[0][:12]}, install.py is {actual[:12]}: "
+    if pinned != actual:
+        raise ValueError(f"{source} pins {pinned[:12]}, install.py is {actual[:12]}: "
                          "re-pin the bootstrap before the site serves it")
     served, count = line.subn(
         lambda m: f"{m.group(1)}{installer_url(commit)}{m.group(2)}", text

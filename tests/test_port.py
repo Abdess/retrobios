@@ -25,6 +25,7 @@ import zipfile
 from pathlib import Path
 
 from installer_build import port as installer_build_port
+from installer_build.pins import pinned_sha256
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PORT = REPO_ROOT / "ports" / "RetroBIOS"
@@ -107,7 +108,7 @@ class ThePortArchive(unittest.TestCase):
     def test_bundled_installer_is_the_pinned_one(self):
         with zipfile.ZipFile(self._build()) as zf:
             bundled = hashlib.sha256(zf.read("retrobios/install.py")).hexdigest()
-        self.assertEqual(bundled, installer_build_port.pinned_installer_sha256())
+        self.assertEqual(bundled, pinned_sha256("install.sh"))
         install_sh = (REPO_ROOT / "install.sh").read_text(encoding="utf-8")
         self.assertIn(f'DEFAULT_INSTALL_SHA256="{bundled}"', install_sh)
 
