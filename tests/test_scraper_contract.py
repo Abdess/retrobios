@@ -805,6 +805,21 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
         ):
             emudeck_scraper.Scraper(checkbios_url="pinned")._fetch_installed_emulators("0" * 40)
 
+    def test_emudeck_cheat_sheet_raises(self):
+        """A refused cheat sheet was read as empty and its systems left
+        emudeck.yml; only a 404 says the sheet is gone."""
+        scraper = emudeck_scraper.Scraper(checkbios_url="pinned", csv_base_url="https://x")
+        with mock.patch("urllib.request.urlopen", self._refuse), self.assertRaises(
+            ConnectionError
+        ):
+            scraper._fetch_csv("sony-cheat-sheet.csv")
+
+        def gone(*_args, **_kwargs):
+            raise urllib.error.HTTPError("https://x/a.csv", 404, "not found", {}, None)
+
+        with mock.patch("urllib.request.urlopen", gone):
+            self.assertEqual(scraper._fetch_csv("a.csv"), "")
+
     def test_libretro_core_metadata_raises(self):
         """libretro dropped every system name and manufacturer when the
         core-info listing was refused."""

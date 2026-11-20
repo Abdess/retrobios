@@ -21,7 +21,7 @@ from .base_scraper import (
     BiosRequirement,
     fetch_branch_head,
     fetch_github_latest_version,
-    fetch_text,
+    fetch_present,
     github_json,
     systems_from_requirements,
 )
@@ -235,25 +235,14 @@ class Scraper(BaseScraper):
         super().__init__(url=checkbios_url)
         self.checkbios_url = checkbios_url
         self.csv_base_url = csv_base_url
-        self._raw_script: str | None = None
         self._csv_cache: dict[str, str] = {}
 
-    def _fetch_script(self) -> str:
-        if self._raw_script is not None:
-            return self._raw_script
-        self._raw_script = fetch_text(self.checkbios_url)
-        return self._raw_script
-
     def _fetch_csv(self, sheet: str) -> str:
-        if sheet in self._csv_cache:
-            return self._csv_cache[sheet]
-        url = f"{self.csv_base_url}/{sheet}"
-        try:
-            data = fetch_text(url)
-        except ConnectionError:
-            data = ""
-        self._csv_cache[sheet] = data
-        return data
+        """A cheat sheet's text, empty only when the server says it is gone:
+        an unreadable sheet stops the scrape instead of dropping its systems."""
+        if sheet not in self._csv_cache:
+            self._csv_cache[sheet] = fetch_present(f"{self.csv_base_url}/{sheet}") or ""
+        return self._csv_cache[sheet]
 
     def _parse_hash_arrays(self, script: str) -> dict[str, list[str]]:
         """Extract named MD5 hash arrays from bash script."""
@@ -355,7 +344,7 @@ class Scraper(BaseScraper):
         return results
 
     def fetch_requirements(self) -> list[BiosRequirement]:
-        script = self._fetch_script()
+        script = self._fetch_raw()
         if not self.validate_format(script):
             raise ValueError("checkBIOS.sh format validation failed")
 
