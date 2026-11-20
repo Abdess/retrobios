@@ -335,62 +335,77 @@ def _resolve_truncated_md5(md5: str, md5_index: dict[str, str]) -> str:
     return md5
 
 
+# `systems = {`, or `systems = OrderedDict({` as older forks write it.
+_SYSTEMS_START = re.compile(r"^systems\s*=\s*(?:OrderedDict\(\s*)?\{", re.MULTILINE)
+
+
+def comment_start(line: str) -> int | None:
+    """Index of the # opening a comment on `line`, strings of either quote read whole."""
+    quote = None
+    j = 0
+    while j < len(line):
+        ch = line[j]
+        if ch == "\\":
+            j += 2
+            continue
+        if quote:
+            if ch == quote:
+                quote = None
+        elif ch in ('"', "'"):
+            quote = ch
+        elif ch == "#":
+            return j
+        j += 1
+    return None
+
+
+def _strip_comment(line: str) -> str:
+    """The line without a trailing # comment, strings kept whole."""
+    cut = comment_start(line)
+    return line if cut is None else line[:cut]
+
+
 def _closing_brace(raw: str, start: int) -> int:
     """Index of the brace closing the one at `start`, past strings and comments."""
     depth = 0
     i = start
-    in_str = False
-    str_ch = None
+    quote = None
     while i < len(raw):
         ch = raw[i]
-        if in_str:
+        if quote:
             if ch == "\\":
                 i += 2
                 continue
-            if ch == str_ch:
-                in_str = False
+            if ch == quote:
+                quote = None
         elif ch in ('"', "'"):
-            in_str = True
-            str_ch = ch
+            quote = ch
         elif ch == "{":
             depth += 1
         elif ch == "}":
             depth -= 1
             if depth == 0:
-                break
+                return i
         elif ch == "#":
-            while i < len(raw) and raw[i] != "\n":
-                i += 1
+            i = raw.find("\n", i)
+            if i == -1:
+                break
         i += 1
-    return i
+    raise ValueError("the systems dict is not closed")
 
 
-def _strip_comment(line: str) -> str:
-    """The line without a trailing # comment, strings kept whole."""
-    in_string = False
-    string_char = None
-    clean = []
-    j = 0
-    while j < len(line):
-        ch = line[j]
-        if ch == "\\" and j + 1 < len(line):
-            clean.append(ch)
-            clean.append(line[j + 1])
-            j += 2
-            continue
-        if ch in ('"', "'") and not in_string:
-            in_string = True
-            string_char = ch
-            clean.append(ch)
-        elif ch == string_char and in_string:
-            in_string = False
-            clean.append(ch)
-        elif ch == "#" and not in_string:
-            break
-        else:
-            clean.append(ch)
-        j += 1
-    return "".join(clean)
+def systems_span(raw: str) -> tuple[int, int]:
+    """Offsets of the opening and closing brace of the `systems` dict of a
+    batocera-systems script.
+
+    Found by reading strings and comments, never by running the script.
+    Raises ValueError when the script assigns no such dict or never closes it.
+    """
+    match = _SYSTEMS_START.search(raw)
+    if not match:
+        raise ValueError("no 'systems = {' in the script")
+    start = match.end() - 1
+    return start, _closing_brace(raw, start)
 
 
 def extract_systems_dict(raw: str) -> dict:
@@ -400,15 +415,8 @@ def extract_systems_dict(raw: str) -> dict:
     code. A key written twice keeps its later value, as it does when Python
     runs the script.
     """
-    match = re.search(r"^systems\s*=\s*\{", raw, re.MULTILINE)
-    if not match:
-        raise ValueError("no 'systems = {' in the script")
-
-    start = match.start() + raw[match.start() :].index("{")
-    dict_str = raw[start : _closing_brace(raw, start) + 1]
-    lines = [_strip_comment(line) for line in dict_str.split("\n")]
-
-    clean_dict_str = "\n".join(lines)
+    start, end = systems_span(raw)
+    clean_dict_str = "\n".join(_strip_comment(line) for line in raw[start : end + 1].split("\n"))
 
     # OrderedDict({...}) -> just the inner dict literal
     clean_dict_str = re.sub(r"OrderedDict\(\s*\{", "{", clean_dict_str)
@@ -423,7 +431,7 @@ def extract_systems_dict(raw: str) -> dict:
 def is_checkbios_script(raw_data: str) -> bool:
     """A batocera-systems script as its forks ship it: the `systems` dict of
     biosFiles and the checkBios that reads it."""
-    has_dict = re.search(r"^systems\s*=\s*\{", raw_data, re.MULTILINE) is not None
+    has_dict = _SYSTEMS_START.search(raw_data) is not None
     return has_dict and "def checkBios" in raw_data and '"biosFiles"' in raw_data
 
 
@@ -650,7 +658,7 @@ class Scraper(CheckBiosScraper):
     def validate_format(self, raw_data: str) -> bool:
         """Validate batocera-systems format."""
         has_systems = "systems" in raw_data and "biosFiles" in raw_data
-        has_dict = re.search(r"^systems\s*=\s*\{", raw_data, re.MULTILINE) is not None
+        has_dict = _SYSTEMS_START.search(raw_data) is not None
         has_md5 = '"md5"' in raw_data
         has_file = '"file"' in raw_data
         return has_systems and has_dict and has_md5 and has_file

@@ -243,3 +243,46 @@ class APatchedLibretroBuildTakesItsNameOnly(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class OneLocatorFindsTheSystemsDict(unittest.TestCase):
+    """The scraper and the exporter cut batocera-systems at the same braces."""
+
+    SCRIPT = (
+        "import os\n"
+        "systems = OrderedDict({\n"
+        "    'a': { 'name': 'it''s }', \"biosFiles\": [ # } in a comment\n"
+        "        { \"md5\": \"x\", \"file\": 'bios/#a.bin' } ] },\n"
+        "    })\n"
+        "def checkBios(): pass\n"
+    )
+
+    def test_the_braces_are_read_past_strings_and_comments(self):
+        from scripts.scraper.batocera_scraper import extract_systems_dict, systems_span
+
+        start, end = systems_span(self.SCRIPT)
+        self.assertEqual(self.SCRIPT[start], "{")
+        self.assertEqual(self.SCRIPT[end:end + 2], "})")
+        self.assertEqual(extract_systems_dict(self.SCRIPT)["a"]["biosFiles"][0]["file"], "bios/#a.bin")
+
+    def test_the_exporter_cuts_at_the_same_lines(self):
+        from exporter.batocera_exporter import Exporter
+
+        head, body, tail = Exporter._split_original(self.SCRIPT)
+        self.assertEqual(head[-1], "systems = OrderedDict({")
+        self.assertEqual(len(body), 2)
+        self.assertEqual(tail[0], "    })")
+
+    def test_a_comment_starts_outside_either_quote(self):
+        from scripts.scraper.batocera_scraper import comment_start
+
+        self.assertIsNone(comment_start("'a#b', \"c#d\""))
+        self.assertEqual(comment_start("'a#b' # note"), 6)
+
+    def test_an_unclosed_dict_is_refused(self):
+        from scripts.scraper.batocera_scraper import systems_span
+
+        with self.assertRaisesRegex(ValueError, "not closed"):
+            systems_span("systems = {\n 'a': {}\n")
+        with self.assertRaisesRegex(ValueError, "no 'systems = {'"):
+            systems_span("other = {}\n")

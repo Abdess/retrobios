@@ -11,6 +11,8 @@ from __future__ import annotations
 import ast
 import re
 
+from scraper.batocera_scraper import comment_start, systems_span
+
 from .base_exporter import BaseExporter
 from resolve.reconcile import NativeFile, NativeSystem, Report
 
@@ -30,34 +32,10 @@ _ITEM = re.compile(r"\{[^{}\n]*\}")
 _MD5_VALUE = re.compile(r'("md5"\s*:\s*)("[^"]*"|\[[^\[\]]*\])')
 
 
-_STRING = re.compile(r'"(?:[^"\\\n]|\\.)*"')
-
-
 def _commented(text: str, position: int) -> bool:
     """Whether a '#' outside a string precedes `position` on its line."""
     line_start = text.rfind("\n", 0, position) + 1
-    return "#" in _STRING.sub("", text[line_start:position])
-
-
-def _closing_line(text: str, start: int) -> int | None:
-    """Index of the line holding the brace that closes `systems = {`.
-
-    Read from the parsed module, never executed. None when the script does
-    not parse or names no such assignment at line `start`.
-    """
-    try:
-        tree = ast.parse(text)
-    except SyntaxError:
-        return None
-    for node in tree.body:
-        if (
-            isinstance(node, ast.Assign)
-            and node.lineno - 1 == start
-            and isinstance(node.value, ast.Dict)
-            and node.end_lineno is not None
-        ):
-            return node.end_lineno - 1
-    return None
+    return comment_start(text[line_start:position]) is not None
 
 
 def _md5_subscript(node: ast.expr) -> bool:
@@ -571,21 +549,13 @@ class Exporter(BaseExporter[str]):
     def _split_original(original: str) -> tuple[list[str], list[str], list[str]]:
         """Cut the script into what precedes the dict, the dict, what follows."""
         lines = original.split("\n")
-        start = next(
-            (i for i, line in enumerate(lines) if line.startswith("systems = {")),
-            None,
-        )
-        if start is None:
-            raise ValueError("batocera-systems: no systems dict found")
-        end = next(
-            (i for i in range(start + 1, len(lines)) if lines[i].startswith("}")),
-            None,
-        )
-        if end is None:
-            # EmuELEC closes the dict with an indented brace.
-            end = _closing_line(original, start)
-        if end is None:
-            raise ValueError("batocera-systems: the systems dict is not closed")
+        try:
+            opening, closing = systems_span(original)
+        except ValueError as error:
+            raise ValueError(f"batocera-systems: {error}") from error
+        # Found by brace depth: EmuELEC indents the closing brace.
+        start = original.count("\n", 0, opening)
+        end = original.count("\n", 0, closing)
         return lines[: start + 1], lines[start + 1 : end], lines[end:]
 
     @staticmethod
