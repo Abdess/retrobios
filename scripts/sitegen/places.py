@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from model.collection import copy_places, manufacturer_slug
+from model.systemnames import console_index, spelled_section
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from resolve.ownership import BUCKET_FOLDERS, names_manufacturer
 
@@ -67,38 +68,12 @@ def _system_folder(
     return None
 
 
-def _folders_by_name(manufacturers: dict) -> dict[str, set[tuple[str, str]]]:
-    """Normalized system name -> the console folders that spell it.
-
-    nintendo-nes, nes and the NES folder normalize alike, as do
-    sega-mastersystem and Sega/Master System.
-    """
-    from model.systems import norm_system_id
-
-    index: dict[str, set[tuple[str, str]]] = {}
-    for mfr, consoles in manufacturers.items():
-        for console in consoles:
-            spelled = console.lower().replace(" ", "-")
-            for key in {
-                norm_system_id(f"{manufacturer_slug(mfr)}-{spelled}"), norm_system_id(spelled)
-            }:
-                index.setdefault(key, set()).add((mfr, console))
-    return index
-
-
-def _folder_named(sys_id: str, by_name: dict[str, set[tuple[str, str]]]) -> tuple[str, str] | None:
-    from model.systems import norm_system_id
-
-    places = by_name.get(norm_system_id(sys_id), set())
-    return next(iter(places)) if len(places) == 1 else None
-
-
 def _console_norm_index(manufacturers: dict) -> dict[str, tuple[str, str]]:
     """Normalized console name index for fuzzy matching."""
     console_norm: dict[str, tuple[str, str]] = {}
     for mfr, consoles in manufacturers.items():
-        slug = mfr.lower().replace(" ", "-")
-        mfr_norm = mfr.lower().replace(" ", "-")
+        slug = manufacturer_slug(mfr)
+        mfr_norm = slug
         for console in consoles:
             norm = console.lower().replace(" ", "-")
             entry = (slug, console)
@@ -147,13 +122,13 @@ class _FolderIndex:
         Strategy 2: the folder holding the files the system declares,
         found by content, and most votes win. A bare name stands in only
         where the collection files it in a single console."""
-        place = _folder_named(sys_id, self.folders_by_name) or _system_folder(
+        place = spelled_section(sys_id, self.folders_by_name) or _system_folder(
             files, self.db, self.name_consoles, sys_id, self.copies
         )
         if place is None:
             return None
         mfr, console = place
-        return (mfr.lower().replace(" ", "-"), console)
+        return (manufacturer_slug(mfr), console)
 
 
 def _profile_system_pages(
@@ -202,7 +177,11 @@ def system_pages_from_data(
     console_norm = _console_norm_index(manufacturers)
 
     # Map system_id -> (manufacturer, console) via platform file entries
-    index = _FolderIndex(db, name_consoles, _folders_by_name(manufacturers), _copies_by_path(db))
+    index = _FolderIndex(
+        db, name_consoles,
+        console_index((mfr, console) for mfr, consoles in manufacturers.items() for console in consoles),
+        _copies_by_path(db),
+    )
     pages: dict[str, tuple[str, str]] = {}
     for cov in coverages.values():
         config = cov["config"]

@@ -115,6 +115,17 @@ class OtherSpellingsOfOneSystem(unittest.TestCase):
             manufacturers, {}, {"files": {}, "indexes": {}}, profiles)
         self.assertEqual(pages["commodore-pet"], ("commodore", "PET"))
 
+    def test_two_folders_spelled_alike_go_to_the_maker_the_id_names(self):
+        """Atari and Camputers both file a Lynx: the system names agreed on
+        Atari's while the placement found no folder by its name."""
+        from model.systemnames import console_index
+
+        index = places._FolderIndex(
+            {"files": {}, "indexes": {}}, {},
+            console_index({("Atari", "Lynx"), ("Camputers", "Lynx")}), {})
+        self.assertEqual(index.place("atari-lynx", []), ("atari", "Lynx"))
+        self.assertIsNone(index.place("lynx", []))
+
 
 class ACopyIsOnItsOwnFoldersPage(unittest.TestCase):
     """The database keeps one path per content: the Channel F BIOS was on the

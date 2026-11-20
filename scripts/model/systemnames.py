@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable
+
 from model import siteinputs
 from model.collection import SECTION_LABELS, PROGRAM_TOPS, manufacturer_slug
 
@@ -48,8 +50,6 @@ def set_console_sections(
     group them, or is a set of (manufacturer, console) pairs. ``programs``
     are the emulator names, which never name a system.
     """
-    from model.systems import norm_system_id
-
     pairs = (
         {(mfr, console) for mfr, consoles in sections.items() for console in consoles}
         if isinstance(sections, dict) else set(sections)
@@ -77,11 +77,7 @@ def set_console_sections(
         used = {toc_slug(mfr)}
         for console in sorted(consoles):
             console_anchors[(manufacturer_slug(mfr), console)] = unique_anchor(toc_slug(console), used)
-    for mfr, console in pairs:
-        spelled = console.lower().replace(" ", "-")
-        slug = mfr.lower().replace(" ", "-")
-        for key in {norm_system_id(f"{slug}-{spelled}"), norm_system_id(spelled)}:
-            _console_sections.setdefault(key, set()).add((mfr, console))
+    _console_sections.update(console_index(pairs))
     known_program_names.clear()
     known_program_names.update(name.casefold() for name in programs)
     _sections_installed[0] = True
@@ -107,25 +103,52 @@ def ensure_console_sections() -> None:
     set_console_sections(group_by_manufacturer(db), program_names(profiles))
 
 
-def own_section(sys_id: str) -> tuple[str, str] | None:
-    """The console section that is this id's own, or None.
+def console_index(pairs: Iterable[tuple[str, str]]) -> dict[str, set[tuple[str, str]]]:
+    """Normalized system name -> the console sections that spell it.
 
-    Of two sections spelled alike (Atari and Camputers both file a Lynx),
-    the one under the maker the id names is kept. Two left is no answer,
-    and neither is a section that files a program's copies.
+    nintendo-nes, nes and the NES folder normalize alike, as do
+    sega-mastersystem and Sega/Master System.
     """
     from model.systems import norm_system_id
 
-    ensure_console_sections()
-    places = _console_sections.get(norm_system_id(sys_id), set())
+    index: dict[str, set[tuple[str, str]]] = {}
+    for mfr, console in pairs:
+        spelled = console.lower().replace(" ", "-")
+        for key in {norm_system_id(f"{manufacturer_slug(mfr)}-{spelled}"), norm_system_id(spelled)}:
+            index.setdefault(key, set()).add((mfr, console))
+    return index
+
+
+def spelled_section(
+    sys_id: str, index: dict[str, set[tuple[str, str]]],
+) -> tuple[str, str] | None:
+    """The one section of ``index`` the id spells, or None.
+
+    Of two sections spelled alike (Atari and Camputers both file a Lynx),
+    the one under the maker the id names is kept. Two left is no answer.
+    """
+    from model.systems import norm_system_id
+
+    places = index.get(norm_system_id(sys_id), set())
     if len(places) > 1:
         places = {
             (mfr, console) for mfr, console in places
-            if sys_id.lower().startswith(mfr.lower().replace(" ", "-") + "-")
+            if sys_id.lower().startswith(manufacturer_slug(mfr) + "-")
         }
-    if len(places) != 1:
+    return next(iter(places)) if len(places) == 1 else None
+
+
+def own_section(sys_id: str) -> tuple[str, str] | None:
+    """The console section that is this id's own, or None.
+
+    The section the id spells (spelled_section), unless it files a
+    program's copies.
+    """
+    ensure_console_sections()
+    section = spelled_section(sys_id, _console_sections)
+    if section is None:
         return None
-    mfr, console = next(iter(places))
+    mfr, console = section
     # A folder under a program's top, named like its own page (Dinothawr) or
     # like an emulator holds a program's files, not a system's.
     if (
