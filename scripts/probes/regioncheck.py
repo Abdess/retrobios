@@ -19,6 +19,7 @@ from probes.content import Content, load_content, load_file
 from probes.cores import cached_nightly
 from probes.entries import entry_dest, held_file, regions_of
 from probes.host import CONTENT_FILE
+from resolve.validation import read_by_build
 
 
 CORES = REPO_ROOT / ".cache" / "region" / "cores"
@@ -41,7 +42,7 @@ def region_entries(profile: dict, system: str) -> list[dict]:
         entry for entry in profile.get("files") or ()
         if system in entry_system_ids(entry, profile)
         and regions_of(entry) and "world" not in regions_of(entry)
-        and entry.get("category", "bios") == "bios" and entry.get("mode") != "standalone"
+        and entry.get("category", "bios") == "bios" and read_by_build(entry, False)
     ]
 
 

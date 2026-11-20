@@ -656,10 +656,7 @@ def outside_gap_scope(file_entry: dict, is_standalone: bool) -> bool:
         return True
     if "path" in file_entry and file_entry["path"] is None:
         return True
-    mode = file_entry.get("mode")
-    if (mode == "standalone" and not is_standalone) or (
-        mode == "libretro" and is_standalone
-    ):
+    if not read_by_build(file_entry, is_standalone):
         return True
     return not (
         read_from_system_dir(file_entry, is_standalone)
@@ -779,17 +776,14 @@ def opens_by_name(file_entry: dict, profile: dict, standalone: bool = False) -> 
     return True
 
 
+def read_by_build(entry: dict, standalone: bool) -> bool:
+    """Whether the build that runs (standalone or libretro) reads the entry."""
+    return entry.get("mode") != ("libretro" if standalone else "standalone")
+
+
 def filter_files_by_mode(files: list[dict], standalone: bool) -> list[dict]:
     """Filter file entries by libretro/standalone mode."""
-    result = []
-    for f in files:
-        fmode = f.get("mode", "")
-        if standalone and fmode == "libretro":
-            continue
-        if not standalone and fmode == "standalone":
-            continue
-        result.append(f)
-    return result
+    return [f for f in files if read_by_build(f, standalone)]
 
 
 def installed_with_emulator(entry: dict, platform: str = "") -> bool:

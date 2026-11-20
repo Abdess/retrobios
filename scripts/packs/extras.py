@@ -28,7 +28,7 @@ from resolve.standalone import standalone_set as platform_standalone_set
 from model.declarations import OUTER_ROOTS, outer_layout
 from core.paths import declared_destination, sanitize_pack_path
 from resolve.content import declares_shape, shape_fits, size_fits
-from resolve.validation import deliverable, read_from_save_dir, read_from_system_dir
+from resolve.validation import deliverable, read_by_build, read_from_save_dir, read_from_system_dir
 from packs.paths import libretro_systems, save_destination, save_layout
 from resolve.regions import FILE_GROUP
 
@@ -675,10 +675,7 @@ def _seeds_a_scan(f: dict, layout: dict, standalone: bool) -> bool:
     # A file of the build the platform does not run seeds nothing:
     # armsx2's proverb.zip is fetched by the Android app into its own
     # arcade/ folder, and the libretro packs carried it at system/.
-    mode = f.get("mode")
-    if (mode == "standalone" and not standalone) or (
-        mode == "libretro" and standalone
-    ):
+    if not read_by_build(f, standalone):
         return False
     # The scan walks the BIOS tree: a file read below the save
     # directory is placed by the gap report's pass.
@@ -1707,10 +1704,7 @@ def _copies_entry(f: dict, is_standalone: bool, scope: _CopyScope) -> bool:
     # (Dolphin's codehandler.bin ships in its Sys tree).
     if "path" in f and f["path"] is None:
         return False
-    file_mode = f.get("mode")
-    if file_mode == "standalone" and not is_standalone:
-        return False
-    if file_mode == "libretro" and is_standalone:
+    if not read_by_build(f, is_standalone):
         return False
     return read_from_system_dir(f, is_standalone)
 

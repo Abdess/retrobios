@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-
+from resolve.validation import read_by_build
 
 
 _directory_members_cache: dict[int, tuple[dict, dict[str, dict[str, str]]]] = {}
@@ -78,10 +78,9 @@ def expand_directory_entries(
     # A file the profile names itself is left to that entry, in the same
     # build and below the same root: MAME's libretro floppy samples share
     # their path with the standalone tree RetroPie reads below roms/.
-    other_build = "libretro" if standalone else "standalone"
     named = {
         (entry.get("root") or "", destination(entry)) for entry in files
-        if entry.get("type") != "directory" and entry.get("mode") != other_build
+        if entry.get("type") != "directory" and read_by_build(entry, standalone)
     }
     expanded: list[dict] = []
     for entry in files:
