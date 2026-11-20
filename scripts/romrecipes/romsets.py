@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import json
 from collections import defaultdict
+from collections.abc import Iterator
 from pathlib import Path
+
+from romrecipes.ledger import ARCHIVES_FILE
 
 Recipe = list[tuple[str, str]]
 
@@ -31,15 +34,32 @@ def load_dat_recipes(path: str | Path) -> dict[str, dict[str, Recipe]]:
     target = Path(path)
     if target.is_dir():
         merged: dict[str, dict[str, Recipe]] = {}
-        for snapshot_file in sorted(target.glob("*.json")):
-            merged = merge_recipes(merged, load_dat_recipes(snapshot_file))
+        for source, snapshot in dat_snapshots(target):
+            merged = merge_recipes(merged, _snapshot_recipes(source, snapshot))
         return merged
-    snapshot_path = target
-    if not snapshot_path.is_file():
+    if not target.is_file():
         return {}
-    with snapshot_path.open(encoding="utf-8") as handle:
+    return _snapshot_recipes(*_read_snapshot(target))
+
+
+def _read_snapshot(path: Path) -> tuple[str, dict]:
+    with path.open(encoding="utf-8") as handle:
         snapshot = json.load(handle)
-    source = snapshot.get("source", "dat")
+    return str(snapshot.get("source", path.stem)), snapshot
+
+
+def dat_snapshots(recipes_dir: Path) -> Iterator[tuple[str, dict]]:
+    """(source, snapshot) of every DAT snapshot under ``recipes_dir``.
+
+    archives.json sits beside them and records the collection's archives,
+    not a DAT's sets.
+    """
+    for path in sorted(recipes_dir.glob("*.json")):
+        if path.name != ARCHIVES_FILE.name:
+            yield _read_snapshot(path)
+
+
+def _snapshot_recipes(source: str, snapshot: dict) -> dict[str, dict[str, Recipe]]:
     # A recipe shared by several versions is stored once under the earliest.
     # The label therefore reads "unchanged since", not "is this version".
     recipes: dict[str, dict[str, Recipe]] = defaultdict(dict)

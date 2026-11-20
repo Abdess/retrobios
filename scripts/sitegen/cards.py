@@ -14,6 +14,7 @@ from collections.abc import Callable
 from core.hashing import parse_hash_list
 from model.collection import profiles_on_disk
 from packs.crossref import FileConsumers
+from romrecipes.romsets import dat_snapshots, usable_recipe
 from sitegen import markup, wanted as sitewanted
 from core.paths import REPO_ROOT
 from sitegen.fields import search_excluded
@@ -310,9 +311,7 @@ def _release_name(source: str, label: str, versions: dict) -> str:
 
 @functools.lru_cache(maxsize=1)
 def _romset_snapshots() -> list[tuple[str, dict]]:
-    return [(str(snapshot.get("source", path.stem)), snapshot)
-            for path in sorted((REPO_ROOT / "recipes").glob("*.json"))
-            for snapshot in [json.loads(path.read_text(encoding="utf-8"))]]
+    return list(dat_snapshots(REPO_ROOT / "recipes"))
 
 
 @functools.lru_cache(maxsize=1)
@@ -328,12 +327,10 @@ def romset_releases() -> dict[str, list[tuple[RomsetMembers, str, list[Release]]
         versions = snapshot.get("dats") or {}
         order = {label: index for index, label in enumerate(versions)}
         for entry in snapshot.get("entries") or []:
-            members = tuple(sorted(
-                (str(m["name"]), str(m.get("crc32") or "").lower())
-                for m in entry.get("members") or [] if m.get("name") is not None
-            ))
-            if not entry.get("name") or not members or not all(crc for _n, crc in members):
+            recipe = usable_recipe(entry.get("members") or [])
+            if not entry.get("name") or recipe is None:
                 continue
+            members = tuple(sorted(recipe))
             agreed = [(order.get(label, -1), _release_name(source, str(label), versions))
                       for label in entry.get("dats") or [entry.get("dat")]]
             releases.setdefault(str(entry["name"]), []).append((members, source, agreed))
