@@ -26,8 +26,7 @@ Verification (batocera-systems at the release tag):
 
 from __future__ import annotations
 
-import re
-
+from model.sourcerevision import required_revision
 from .base_scraper import fetch_github_latest_version, fetch_text
 from .batocera_scraper import (
     SYSTEM_SLUG_MAP as BATOCERA_SLUGS,
@@ -92,14 +91,6 @@ SYSTEM_SLUG_MAP = {
 }
 
 
-def launcher_revision(url: str) -> str:
-    """The tag or commit a batocera-systems URL is read at."""
-    found = re.search(rf"/{REPO}/([^/]+)/packages/", url)
-    if found is None:
-        raise ValueError(f"{url} names no {REPO} revision")
-    return found.group(1)
-
-
 class Scraper(CheckBiosScraper):
     """Scraper for EmuELEC's batocera-systems."""
 
@@ -132,7 +123,7 @@ class Scraper(CheckBiosScraper):
         # Runners (retroarch, retrorun) and the launcher's own spellings are
         # no ES core name: only a record of an emulator no image carries goes.
         launchers = [
-            r for r in extract_launchers(RepoTree.github(REPO, launcher_revision(self.url)))
+            r for r in extract_launchers(RepoTree.github(REPO, required_revision(self.url, REPO)))
             if not set(str(r["emulator"]).split(", ")) <= unbuilt
         ]
         return {

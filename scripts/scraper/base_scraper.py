@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import http.client
 import inspect
 import json
 import re
@@ -15,10 +16,11 @@ import yaml
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, NoReturn, Protocol
+from typing import Any, Callable, NoReturn, Protocol, TypeVar
 
 from core.github import github_token
-from core.artifacts import write_text_atomic
+from core.artifacts import copy_stream_atomic, write_text_atomic
+from core.upstream import forge_headers as upstream_headers
 from model.safeparse import yaml_load
 
 
@@ -152,39 +154,196 @@ def _read_limited(resp: _Readable, max_bytes: int = MAX_RESPONSE_SIZE) -> bytes:
     return b"".join(chunks)
 
 
+SCRAPER_AGENT = "retrobios-scraper/1.0"
+GITHUB_API = "https://api.github.com"
+
 # Statuses a forge answers when it asks the client to slow down.
 _RETRYABLE = frozenset({429, 502, 503, 504})
+
+_T = TypeVar("_T")
+
+
+class FetchError(ConnectionError):
+    """A GET that failed. `status` is the HTTP status the server answered,
+    None when no answer came (DNS, refused connection, timeout)."""
+
+    def __init__(self, url: str, reason: object, status: int | None = None) -> None:
+        super().__init__(f"Failed to fetch {url}: {reason}")
+        self.url = url
+        self.status = status
+
+
+def forge_headers(url: str, accept: str | None = None) -> dict[str, str]:
+    """Request headers for `url`: the GitHub token goes to GitHub's API and
+    raw hosts only, compared whole (core.upstream.forge_headers)."""
+    return upstream_headers(url, accept, SCRAPER_AGENT)
+
+
+def github_headers() -> dict[str, str]:
+    """Headers for api.github.com, authenticated when a token is set.
+
+    Anonymous calls share a quota of 60 per hour, so a scrape run after a
+    few others gets 403 for every request.
+    """
+    return forge_headers(GITHUB_API, "application/vnd.github.v3+json")
+
+
+def _open(
+    request: urllib.request.Request,
+    consume: Callable[[http.client.HTTPResponse], _T],
+    timeout: float,
+    attempts: int = 5,
+    sleep: Callable[[float], None] | None = None,
+) -> _T:
+    """Open `request` and hand the response to `consume`, waiting out a rate
+    limit: the wait is the server's Retry-After when it gives one, else 2,
+    4, 8, 16 s. A header the request does not set comes from
+    forge_headers()."""
+    url = request.full_url
+    for name, value in forge_headers(url).items():
+        if not request.has_header(name.capitalize()):
+            request.add_header(name, value)
+    for attempt in range(attempts):
+        try:
+            with urllib.request.urlopen(request, timeout=timeout) as resp:
+                return consume(resp)
+        except urllib.error.HTTPError as e:
+            if e.code not in _RETRYABLE or attempt == attempts - 1:
+                raise FetchError(url, e, e.code) from e
+            retry_after = e.headers.get("Retry-After", "") if e.headers else ""
+            delay = float(retry_after) if retry_after.isdigit() else 2.0 ** (attempt + 1)
+            (sleep or time.sleep)(min(delay, 120.0))
+        except (urllib.error.URLError, http.client.HTTPException, TimeoutError) as e:
+            raise FetchError(url, e) from e
+    raise AssertionError("unreachable")
 
 
 def fetch_bytes(
     url: str,
     headers: dict[str, str] | None = None,
     attempts: int = 5,
-    sleep: Callable[[float], None] = time.sleep,
+    sleep: Callable[[float], None] | None = None,
     data: bytes | None = None,
+    timeout: float = 30,
+    max_bytes: int = MAX_RESPONSE_SIZE,
 ) -> bytes:
     """GET a URL, waiting out a rate limit instead of failing the scrape.
 
     GitLab answers 429 after about a hundred raw-file reads, and Recalbox's
-    cores live in one system.ini per system: the scrape died midway. The
-    wait is the server's Retry-After when it gives one, else 2, 4, 8, 16 s.
+    cores live in one system.ini per system: the scrape died midway. A
+    failure raises FetchError, a body over `max_bytes` ValueError. `headers`
+    add to or replace forge_headers(url).
     """
-    request = urllib.request.Request(
-        url, data=data, headers={"User-Agent": "retrobios-scraper/1.0", **(headers or {})}
-    )
-    for attempt in range(attempts):
-        try:
-            with urllib.request.urlopen(request, timeout=30) as resp:
-                return _read_limited(resp)
-        except urllib.error.HTTPError as e:
-            if e.code not in _RETRYABLE or attempt == attempts - 1:
-                raise ConnectionError(f"Failed to fetch {url}: {e}") from e
-            retry_after = e.headers.get("Retry-After", "") if e.headers else ""
-            delay = float(retry_after) if retry_after.isdigit() else 2.0 ** (attempt + 1)
-            sleep(min(delay, 120.0))
-        except urllib.error.URLError as e:
-            raise ConnectionError(f"Failed to fetch {url}: {e}") from e
-    raise AssertionError("unreachable")
+    request = urllib.request.Request(url, data=data, headers=headers or {})
+    return _open(request, lambda resp: _read_limited(resp, max_bytes), timeout, attempts, sleep)
+
+
+def fetch_text(url: str, headers: dict[str, str] | None = None) -> str:
+    """GET a file as UTF-8 text, FetchError when it cannot be read."""
+    return fetch_bytes(url, headers).decode("utf-8")
+
+
+def fetch_present(url: str, headers: dict[str, str] | None = None) -> str | None:
+    """A file's text, None when the server answers that it does not exist.
+
+    Only a 404 says so: a 429, a 503 or a dropped connection is no answer
+    and raises, else the file would be written up as absent.
+    """
+    try:
+        return fetch_text(url, headers)
+    except FetchError as e:
+        if e.status == 404:
+            return None
+        raise
+
+
+def download(
+    url: str,
+    destination: Path,
+    headers: dict[str, str] | None = None,
+    skip_existing: bool = False,
+    timeout: float = 300,
+) -> str:
+    """Stream `url` into `destination`, whole or not at all, and return the
+    response's Content-Disposition ("" when absent or when skipped).
+
+    The bytes go through a scratch file renamed into place, so a reader or
+    an interrupted run never sees half an archive. `skip_existing` keeps a
+    file already there without asking the server.
+    """
+    if skip_existing and destination.is_file():
+        return ""
+    destination.parent.mkdir(parents=True, exist_ok=True)
+
+    def save(resp: http.client.HTTPResponse) -> str:
+        copy_stream_atomic(resp, str(destination))
+        return resp.headers.get("Content-Disposition", "") or ""
+
+    return _open(urllib.request.Request(url, headers=headers or {}), save, timeout)
+
+
+def github_json(
+    url: str, failure: str, timeout: float = 30, error: type[Exception] = RuntimeError
+) -> Any:
+    """An api.github.com answer, parsed. A request or a body that fails raises
+    `error` with `failure` and the cause: a scrape never goes on without it."""
+    try:
+        return json.loads(fetch_bytes(url, github_headers(), timeout=timeout))
+    except (ConnectionError, ValueError) as e:
+        raise error(f"{failure}: {e}") from e
+
+
+def github_tree(repo: str, ref: str, recursive: bool = True) -> list[dict]:
+    """Every entry of a GitHub repository's tree at `ref`, the whole tree or
+    its top level only."""
+    url = f"{GITHUB_API}/repos/{repo}/git/trees/{ref}" + ("?recursive=1" if recursive else "")
+    return tree_entries(github_json(url, f"cannot list {repo} at {ref}"), repo, ref)
+
+
+def tree_entries(payload: object, repo: str, ref: str) -> list[dict]:
+    """The entries of a git/trees answer, RuntimeError when it is not one or
+    comes back truncated.
+
+    A partial tree drops files without a word, and whatever is written from
+    it loses them too.
+    """
+    entries = payload.get("tree") if isinstance(payload, dict) else None
+    if not isinstance(payload, dict) or not isinstance(entries, list):
+        raise RuntimeError(f"the {repo} tree at {ref} is unreadable")
+    if payload.get("truncated"):
+        raise RuntimeError(f"the {repo} tree at {ref} is truncated")
+    return [entry for entry in entries
+            if isinstance(entry, dict) and isinstance(entry.get("path"), str)]
+
+
+def submodule_commit(repo: str, path: str, ref: str) -> str:
+    """The commit the submodule at `path` of a GitHub repository pins at `ref`.
+
+    RuntimeError when the path is not a submodule: a directory's contents
+    answer carries a sha too, the sha of a tree, which then read as a
+    commit of the submodule's repository.
+    """
+    url = f"{GITHUB_API}/repos/{repo}/contents/{path}?ref={ref}"
+    found = github_json(url, f"cannot read {path} of {repo} at {ref}")
+    is_link = isinstance(found, dict) and found.get("type") == "submodule"
+    sha = found.get("sha") if is_link else None
+    if not isinstance(sha, str) or not sha:
+        raise RuntimeError(f"{path} of {repo} at {ref} is not a submodule")
+    return sha
+
+
+def fetch_github_latest_version(repo: str) -> str:
+    """Return the tag of the latest release of a GitHub repo.
+
+    Raises instead of returning a fallback: a platform YAML written without
+    the release it was read from cannot be patched back by the exporter.
+    """
+    url = f"{GITHUB_API}/repos/{repo}/releases/latest"
+    release = github_json(url, f"cannot read the latest release of {repo}")
+    tag = release.get("tag_name") if isinstance(release, dict) else None
+    if not isinstance(tag, str) or not tag:
+        raise RuntimeError(f"the latest release of {repo} names no tag")
+    return tag
 
 
 def json_object(raw: str) -> dict | None:
@@ -342,59 +501,6 @@ class BaseScraper(ABC):
         ...
 
 
-def github_headers() -> dict[str, str]:
-    """Headers for api.github.com, authenticated when a token is set.
-
-    Anonymous calls share a quota of 60 per hour, so a scrape run after a
-    few others gets 403 for every request.
-    """
-    headers = {
-        "User-Agent": "retrobios-scraper/1.0",
-        "Accept": "application/vnd.github.v3+json",
-    }
-    # GITHUB_TOKEN, else the token gh is logged in with.
-    token = github_token()
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    return headers
-
-
-def fetch_text(url: str) -> str:
-    """GET a platform file as UTF-8 text, ConnectionError when it cannot be read."""
-    req = urllib.request.Request(url, headers={"User-Agent": "retrobios-scraper/1.0"})
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return resp.read().decode("utf-8")
-    except urllib.error.URLError as e:
-        raise ConnectionError(f"Failed to fetch {url}: {e}") from e
-
-
-def github_json(
-    url: str, failure: str, timeout: int = 15, error: type[Exception] = RuntimeError
-) -> Any:
-    """An api.github.com answer, parsed. A request or a body that fails raises
-    `error` with `failure` and the cause: a scrape never goes on without it."""
-    try:
-        req = urllib.request.Request(url, headers=github_headers())
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return json.loads(resp.read())
-    except (urllib.error.URLError, json.JSONDecodeError) as e:
-        raise error(f"{failure}: {e}") from e
-
-
-def fetch_github_latest_version(repo: str) -> str:
-    """Return the tag of the latest release of a GitHub repo.
-
-    Raises instead of returning a fallback: a platform YAML written without
-    the release it was read from cannot be patched back by the exporter.
-    """
-    url = f"https://api.github.com/repos/{repo}/releases/latest"
-    tag = github_json(url, f"cannot read the latest release of {repo}").get("tag_name", "")
-    if not tag:
-        raise RuntimeError(f"the latest release of {repo} names no tag")
-    return tag
-
-
 def fetch_branch_head(repo: str, branch: str) -> str:
     """The commit a branch of a GitHub repo points at right now.
 
@@ -402,9 +508,10 @@ def fetch_branch_head(repo: str, branch: str) -> str:
     so the exporter later patches the revision the data was read from and
     not whatever the branch has become. Raises like the release lookup.
     """
-    url = f"https://api.github.com/repos/{repo}/commits/{branch}"
-    sha = github_json(url, f"cannot read the head of {repo}@{branch}").get("sha", "")
-    if not re.fullmatch(r"[0-9a-f]{40}", sha or ""):
+    url = f"{GITHUB_API}/repos/{repo}/commits/{branch}"
+    commit = github_json(url, f"cannot read the head of {repo}@{branch}")
+    sha = commit.get("sha") if isinstance(commit, dict) else None
+    if not isinstance(sha, str) or not re.fullmatch(r"[0-9a-f]{40}", sha):
         raise RuntimeError(f"{repo}@{branch} answered no commit sha")
     return sha
 
@@ -598,9 +705,13 @@ def fetch_github_latest_tag(repo: str, prefix: str = "") -> str:
     Raises like fetch_github_latest_version: a tag that cannot be read is not
     a reason to scrape a branch under it.
     """
-    url = f"https://api.github.com/repos/{repo}/tags?per_page=50"
+    url = f"{GITHUB_API}/repos/{repo}/tags?per_page=50"
     tags = github_json(url, f"cannot read the tags of {repo}")
-    names = [tag["name"] for tag in tags if tag["name"].startswith(prefix)]
+    names = [
+        tag["name"] for tag in (tags if isinstance(tags, list) else [])
+        if isinstance(tag, dict) and isinstance(tag.get("name"), str)
+        and tag["name"].startswith(prefix)
+    ]
     if not names:
         raise RuntimeError(f"{repo} has no tag starting with {prefix!r}")
     return names[0]

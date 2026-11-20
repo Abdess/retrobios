@@ -43,7 +43,9 @@ def _opener(failure):
 
 class ManifestErrors(unittest.TestCase):
     def fetch(self, failure):
-        with mock.patch("urllib.request.urlopen", _opener(failure)):
+        # A 503 is retried after a wait: the waits are skipped, not the retries.
+        with mock.patch("urllib.request.urlopen", _opener(failure)), \
+                mock.patch("time.sleep"):
             return Scraper()._fetch_remote_manifests()
 
     def test_a_server_error_stops_the_scrape(self):
@@ -76,7 +78,7 @@ class ManifestErrors(unittest.TestCase):
     def test_a_truncated_tree_stops_the_scrape(self):
         TREE["truncated"] = True
         self.addCleanup(TREE.pop, "truncated")
-        with self.assertRaises(ConnectionError):
+        with self.assertRaises(RuntimeError):
             self.fetch(None)
 
 

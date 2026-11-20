@@ -23,6 +23,7 @@ import urllib.error
 from pathlib import Path
 from unittest import mock
 
+from model.sourcerevision import source_revision
 from scraper import emudeck_scraper, libretro_scraper
 from scraper.base_scraper import (
     BaseScraper,
@@ -685,7 +686,7 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
                 "urllib.request.urlopen", self._refuse
             ):
                 self.assertEqual(
-                    module.launcher_revision(module.Scraper().url), module.pinned_revision()
+                    source_revision(module.Scraper().url), module.pinned_revision()
                 )
 
     def test_a_branch_read_records_its_commit(self):
@@ -766,7 +767,7 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
 
         scraper = coreinfo_scraper.Scraper()
         with mock.patch.object(
-            scraper, "_fetch_info_list", return_value=["mednafen_psx_libretro.info"]
+            coreinfo_scraper, "core_info_files", return_value=["mednafen_psx_libretro.info"]
         ), mock.patch("urllib.request.urlopen", self._refuse), self.assertRaises(
             ConnectionError
         ):
@@ -1032,7 +1033,7 @@ class HashScraperRefusesAnEmptyRead(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp) / "mame-hashes.json"
             with mock.patch.object(m, "_CACHE_PATH", cache), \
-                    mock.patch.object(m, "_get_release_tag", return_value="mame0289"), \
+                    mock.patch.object(m, "fetch_github_latest_version", return_value="mame0289"), \
                     mock.patch.object(m, "_sparse_clone"), \
                     mock.patch.object(m, "_cleanup"), \
                     mock.patch.object(m, "_get_commit", return_value="abc"), \

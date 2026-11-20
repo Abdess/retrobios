@@ -8,13 +8,17 @@ from __future__ import annotations
 import argparse
 import importlib
 import pkgutil
-import re
-import urllib.error
-import urllib.request
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from core.github import github_token
+from model.sourcerevision import platform_revision
+
+# Every target scraper reads the network through the platform scrapers'
+# helpers: one retry policy, one size cap, one token rule.
+from ..base_scraper import fetch_text, forge_headers
+
+__all__ = ["BaseTargetScraper", "discover_target_scrapers", "fetch_text", "forge_headers",
+           "target_cli"]
 
 
 class BaseTargetScraper(ABC):
@@ -37,26 +41,10 @@ class BaseTargetScraper(ABC):
         filtered 10.1.1 systems. Moving to a new release is a rescrape of the
         platform first.
         """
-        import yaml
-
         directory = Path(platforms_dir) if platforms_dir else (
             Path(__file__).resolve().parents[3] / "platforms"
         )
-        with open(directory / f"{platform}.yml", encoding="utf-8") as handle:
-            source = str((yaml.safe_load(handle) or {}).get("source", ""))
-        for pattern in (
-            r"^https://raw\.githubusercontent\.com/[^/]+/[^/]+/([^/]+)/",
-            r"^https://github\.com/[^/]+/[^/]+/(?:blob|tree)/([^/]+)/",
-            r"^https://gitlab\.com/.+?/-/(?:raw|blob|tree)/([^/]+)/",
-            r"^https://codeload\.github\.com/[^/]+/[^/]+/(?:tar\.gz|zip)/([^/]+)$",
-        ):
-            match = re.match(pattern, source)
-            if match:
-                return match.group(1)
-        raise RuntimeError(
-            f"platforms/{platform}.yml names no pinned revision in its source "
-            f"({source!r}): rescrape the platform first"
-        )
+        return platform_revision(directory / f"{platform}.yml")
 
     def write_output(self, data: dict, output_path: str) -> None:
         """Write target data to YAML file."""
@@ -69,28 +57,6 @@ class BaseTargetScraper(ABC):
         write_text_atomic(
             output_path, yaml.dump(data, default_flow_style=False, sort_keys=False)
         )
-
-
-def fetch_text(url: str, headers: dict[str, str] | None = None) -> str:
-    """GET a URL as UTF-8 text, RuntimeError with the URL when it fails."""
-    try:
-        req = urllib.request.Request(url, headers=headers or {"User-Agent": "retrobios-scraper/1.0"})
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return resp.read().decode("utf-8")
-    except urllib.error.URLError as e:
-        # A target written from a failed request loses its cores in silence.
-        raise RuntimeError(f"cannot fetch {url}: {e}") from e
-
-
-def forge_headers(url: str, accept: str | None = None) -> dict[str, str]:
-    """Request headers, with the GitHub token when the URL is api.github.com."""
-    headers = {"User-Agent": "retrobios-scraper/1.0"}
-    if accept is not None:
-        headers["Accept"] = accept
-    token = github_token()
-    if token and "api.github.com" in url:
-        headers["Authorization"] = f"Bearer {token}"
-    return headers
 
 
 def target_cli(scraper_class: type[BaseTargetScraper], description: str, unit: str = "cores") -> None:

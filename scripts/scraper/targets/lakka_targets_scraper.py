@@ -12,20 +12,18 @@ a target list, its pack shipped their firmware anyway.
 
 from __future__ import annotations
 
-import json
 import re
 import sys
 from datetime import datetime, timezone
 
 
 from . import BaseTargetScraper, target_cli
-from ..base_scraper import fetch_bytes, github_headers
+from ..base_scraper import fetch_github_latest_version, fetch_text, github_tree
 
 PLATFORM_NAME = "lakka"
 
 REPO = "libretro/Lakka-LibreELEC"
 RAW_BASE = "https://raw.githubusercontent.com/" + REPO + "/{tag}"
-API_BASE = "https://api.github.com/repos/" + REPO
 CORES_MK = "packages/lakka/libretro_cores/package.mk"
 
 _IF_RE = re.compile(r"^(if|elif)\s+\[\s+(.*?)\s+\];?\s*(?:then)?\s*$")
@@ -207,33 +205,22 @@ class Scraper(BaseTargetScraper):
         self.paths: set[str] = set()
 
     def _raw(self, path: str) -> str:
-        return fetch_bytes(f"{RAW_BASE.format(tag=self.tag)}/{path}").decode("utf-8")
-
-    def _latest_tag(self) -> str:
-        release = json.loads(fetch_bytes(f"{API_BASE}/releases/latest", headers=github_headers()))
-        tag = release.get("tag_name") if isinstance(release, dict) else None
-        if not tag:
-            raise RuntimeError(f"{REPO} names no latest release")
-        return tag
+        return fetch_text(f"{RAW_BASE.format(tag=self.tag)}/{path}")
 
     def _devices(self) -> list[tuple[str, str]]:
-        tree = json.loads(fetch_bytes(
-            f"{API_BASE}/git/trees/{self.tag}?recursive=1", headers=github_headers()
-        ))
-        if tree.get("truncated"):
-            raise RuntimeError(f"the {self.tag} tree listing is truncated")
-        self.paths = {item.get("path", "") for item in tree.get("tree", [])}
+        tree = github_tree(REPO, self.tag)
+        self.paths = {item["path"] for item in tree}
         found = sorted({
             (match.group(1), match.group(2))
-            for item in tree.get("tree", [])
-            if (match := re.match(r"^projects/([^/]+)/devices/([^/]+)/options$", item.get("path", "")))
+            for item in tree
+            if (match := re.match(r"^projects/([^/]+)/devices/([^/]+)/options$", item["path"]))
         })
         if not found:
             raise RuntimeError(f"no projects/*/devices/*/options at {self.tag}")
         return found
 
     def fetch_targets(self) -> dict:
-        self.tag = self._latest_tag()
+        self.tag = fetch_github_latest_version(REPO)
         cores_mk = self._raw(CORES_MK)
         targets: dict[str, dict] = {}
         for project, device in self._devices():

@@ -32,12 +32,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import re
-import shutil
 import sys
 import urllib.parse
-import urllib.request
 import zipfile
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
@@ -50,6 +47,7 @@ from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
 from core.cli import add_repo_inputs, run_cli
 from model.dumpcatalog import build_snapshot, load_provenance_snapshots, write_snapshot
+from .base_scraper import download, fetch_github_latest_version, github_json
 from .logiqx_parser import LogiqxDat, parse_logiqx
 
 MAX_MEMBER_SIZE = 200 * 1024 * 1024
@@ -481,37 +479,20 @@ def _iter_dat_contents(pack: Path) -> Iterator[tuple[str, bytes]]:
 MAME_LISTXML_URL = (
     "https://github.com/mamedev/mame/releases/download/{tag}/{tag}lx.zip"
 )
-MAME_LATEST_API = "https://api.github.com/repos/mamedev/mame/releases/latest"
+MAME_REPO = "mamedev/mame"
 FBNEO_API = "https://api.github.com/repos/libretro/FBNeo"
 
 
 def _api_json(url: str) -> object:
-    from .base_scraper import github_headers
-
-    request = urllib.request.Request(url, headers=github_headers())
-    with urllib.request.urlopen(request, timeout=60) as response:
-        return json.load(response)
-
-
-class NoReleaseError(ValueError):
-    def __init__(self) -> None:
-        super().__init__("the newest MAME release carries no tag")
-
-
-def latest_mame_tag() -> str:
-    """Tag of the newest MAME release, the one ``--fetch`` takes by default."""
-    payload = _api_json(MAME_LATEST_API)
-    tag = payload.get("tag_name") if isinstance(payload, dict) else None
-    if not tag:
-        raise NoReleaseError
-    return str(tag)
+    """An api.github.com answer, ConnectionError when it cannot be read."""
+    return github_json(url, f"cannot read {url}", timeout=60, error=ConnectionError)
 
 
 def fetch_tag(source: str, requested: str) -> str:
     """The revision a ``--fetch`` names: bare, the newest MAME release or
     the tip of FBNeo's default branch."""
     if source == "mame" and requested == "latest":
-        tag = latest_mame_tag()
+        tag = fetch_github_latest_version(MAME_REPO)
         print(f"  Derniere release MAME : {tag}")
         return tag
     return requested
@@ -529,25 +510,6 @@ def git_blob_sha(data: bytes) -> str:
     return digest.hexdigest()
 
 
-def _download(url: str, destination: Path) -> Path:
-    """Fetch *url* to *destination* unless it is already there."""
-    if destination.is_file():
-        return destination
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    request = urllib.request.Request(url, headers={"User-Agent": "retrobios"})
-    scratch = destination.with_suffix(destination.suffix + f".{os.getpid()}.part")
-    try:
-        with urllib.request.urlopen(request, timeout=300) as response, scratch.open(
-            "wb"
-        ) as handle:
-            shutil.copyfileobj(response, handle)
-        scratch.replace(destination)
-    finally:
-        if scratch.exists():
-            scratch.unlink()
-    return destination
-
-
 def fetch_pack(
     source: str, tag: str, cache_dir: Path
 ) -> tuple[Path, dict[str, str]]:
@@ -560,10 +522,9 @@ def fetch_pack(
     FBNeo, whose files change under a constant header version.
     """
     if source == "mame":
-        return (
-            _download(MAME_LISTXML_URL.format(tag=tag), cache_dir / f"{tag}lx.zip"),
-            {},
-        )
+        listxml = cache_dir / f"{tag}lx.zip"
+        download(MAME_LISTXML_URL.format(tag=tag), listxml, skip_existing=True)
+        return listxml, {}
 
     # The revision is resolved to a commit first and everything is read at
     # that commit: a branch URL is served through a CDN cache, so the bytes
@@ -587,7 +548,7 @@ def fetch_pack(
         # only while its blob sha is the one the repository lists.
         if destination.is_file() and git_blob_sha(destination.read_bytes()) != item["sha"]:
             destination.unlink()
-        _download(item["download_url"], destination)
+        download(item["download_url"], destination, skip_existing=True)
         if git_blob_sha(destination.read_bytes()) != item["sha"]:
             destination.unlink()
             raise BlobMismatchError(

@@ -12,6 +12,7 @@ import urllib.request
 
 from model.safeparse import yaml_load
 from model.registry import load_versions
+from .base_scraper import fetch_text
 
 
 log = logging.getLogger(__name__)
@@ -26,11 +27,7 @@ DEFAULT_REGISTRY = "platforms/_data_dirs.yml"
 
 def fetch_index() -> set[str]:
     """Fetch .index from buildbot, return set of ZIP filenames."""
-    req = urllib.request.Request(INDEX_URL, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
-        return {
-            line.strip() for line in resp.read().decode().splitlines() if line.strip()
-        }
+    return {line.strip() for line in fetch_text(INDEX_URL).splitlines() if line.strip()}
 
 
 def load_tracked_entries(

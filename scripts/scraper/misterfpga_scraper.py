@@ -23,16 +23,14 @@ from __future__ import annotations
 
 import io
 import json
-import urllib.error
-import urllib.request
 import zipfile
 from datetime import datetime, timezone
 
 from .base_scraper import (
     BaseScraper,
     BiosRequirement,
-    _read_limited,
     fetch_branch_head,
+    fetch_bytes,
     json_object,
     requirement_entry,
 )
@@ -132,15 +130,7 @@ class Scraper(BaseScraper):
         """Fetch bios_db.json.zip and return the JSON it contains."""
         if self._raw_data is not None:
             return self._raw_data
-        req = urllib.request.Request(
-            self.url, headers={"User-Agent": "retrobios-scraper/1.0"}
-        )
-        try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                payload = _read_limited(resp)
-        except urllib.error.URLError as e:
-            raise ConnectionError(f"Failed to fetch {self.url}: {e}") from e
-        with zipfile.ZipFile(io.BytesIO(payload)) as archive:
+        with zipfile.ZipFile(io.BytesIO(fetch_bytes(self.url))) as archive:
             self._raw_data = archive.read(DB_MEMBER).decode("utf-8")
         return self._raw_data
 

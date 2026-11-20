@@ -169,7 +169,7 @@ class TestTokenScope(unittest.TestCase):
 
     def test_sent_to_github_api(self):
         h = upstream._headers("https://api.github.com/repos/o/n/commits")
-        self.assertEqual(h["Authorization"], "token gho_secret")
+        self.assertEqual(h["Authorization"], "Bearer gho_secret")
 
     def test_sent_to_github_raw(self):
         h = upstream._headers("https://raw.githubusercontent.com/o/n/sha/a.c")
@@ -190,6 +190,16 @@ class TestTokenScope(unittest.TestCase):
 
     def test_withheld_from_a_lookalike_host(self):
         h = upstream._headers("https://github.com.evil.example/repos/o/n")
+        self.assertNotIn("Authorization", h)
+
+    def test_withheld_from_a_url_that_only_names_the_api(self):
+        h = upstream._headers("https://evil.example/x?next=https://api.github.com/")
+        self.assertNotIn("Authorization", h)
+
+    def test_withheld_from_the_web_host(self):
+        # A release download on github.com redirects to asset storage, and
+        # urllib carries the header across the redirect.
+        h = upstream._headers("https://github.com/o/n/releases/download/v1/a.zip")
         self.assertNotIn("Authorization", h)
 
     def test_absent_token_adds_no_header(self):

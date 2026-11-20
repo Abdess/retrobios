@@ -15,6 +15,7 @@ import csv
 import io
 import re
 
+from model.sourcerevision import required_revision
 from .base_scraper import (
     BaseScraper,
     BiosRequirement,
@@ -199,14 +200,6 @@ RE_LOCAL_HASHES = re.compile(
     r"(?:local\s+)?\w+=\(\s*((?:[0-9a-fA-F]{32}\s*)+)\)",
     re.MULTILINE,
 )
-
-
-def launcher_revision(url: str) -> str:
-    """The commit a checkBIOS.sh URL is read at."""
-    found = re.search(r"/dragoonDorise/EmuDeck/([0-9a-f]{40})/", url)
-    if found is None:
-        raise ValueError(f"{url} names no EmuDeck commit")
-    return found.group(1)
 
 
 RETROARCH_SCRIPT = "functions/EmuScripts/emuDeckRetroArch.sh"
@@ -442,7 +435,7 @@ class Scraper(BaseScraper):
 
         version = fetch_github_latest_version("dragoonDorise/EmuDeck")
 
-        revision = launcher_revision(self.checkbios_url)
+        revision = required_revision(self.checkbios_url, EMUDECK_REPO, commit=True)
         cores = self._fetch_installed_emulators(revision)
         standalone = [core for core in cores if core != "retroarch"]
         tree = RepoTree.github(EMUDECK_REPO, revision)

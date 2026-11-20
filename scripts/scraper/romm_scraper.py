@@ -28,8 +28,8 @@ import sys
 from .base_scraper import (
     BaseScraper,
     BiosRequirement,
-    fetch_bytes,
     fetch_github_latest_version,
+    fetch_text,
     json_object,
     systems_from_requirements,
 )
@@ -247,7 +247,7 @@ class Scraper(BaseScraper):
             # Firmware.verify_file_hashes: size, then md5, sha1 or crc.
             "hash_rule": "size_and_any_hash",
             "cores": parse_player_cores(
-                fetch_bytes(CORES_URL.format(tag=self.tag)).decode("utf-8")
+                fetch_text(CORES_URL.format(tag=self.tag))
             ),
             "systems": systems,
         }

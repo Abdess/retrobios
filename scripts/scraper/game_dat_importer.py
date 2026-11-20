@@ -29,7 +29,6 @@ import gzip
 import json
 import re
 import sys
-import urllib.request
 import zipfile
 from collections.abc import Iterator
 from dataclasses import dataclass
@@ -39,12 +38,12 @@ from pathlib import Path
 if (_SCRIPTS_DIR := str(Path(__file__).resolve().parents[1])) not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 
-from core.artifacts import copy_stream_atomic, write_if_changed, write_text_atomic
+from core.artifacts import write_if_changed, write_text_atomic
 from model.safeparse import parse_untrusted_xml
 from model.region import REGIONS, WORLD
 from model.region import NOINTRO
 
-from .base_scraper import github_headers
+from .base_scraper import download, github_json
 
 SOURCES = ("no-intro", "redump")
 CACHE_DIR = Path(".cache") / "game-dats"
@@ -286,15 +285,6 @@ class NotCachedError(RuntimeError):
     """An offline run asked for a download the cache does not hold."""
 
 
-def _download(url: str, destination: Path, headers: dict[str, str] | None = None) -> dict[str, str]:
-    """Stream url to destination and return the response headers kept."""
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    request = urllib.request.Request(url, headers={"User-Agent": "retrobios", **(headers or {})})
-    with urllib.request.urlopen(request, timeout=300) as response:
-        copy_stream_atomic(response, str(destination))
-        return {"content_disposition": response.headers.get("Content-Disposition", "")}
-
-
 def _today() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
@@ -309,15 +299,13 @@ def fetch_nointro(cache_dir: Path, offline: bool, refresh: bool) -> tuple[Path, 
             return pack, meta
     if offline:
         raise NotCachedError(f"{meta_path} or its pack is not cached")
-    request = urllib.request.Request(NOINTRO_RELEASE_API, headers=github_headers())
-    with urllib.request.urlopen(request, timeout=60) as response:
-        release = json.loads(response.read())
+    release = github_json(NOINTRO_RELEASE_API, "cannot read the No-Intro release")
     asset = next(a for a in release["assets"] if a["name"] == NOINTRO_ASSET)
     stamp = asset["updated_at"].replace(":", "").replace("-", "")
     file = f"no-intro-{stamp}.zip"
     pack = cache_dir / file
     if not pack.is_file():
-        _download(asset["browser_download_url"], pack)
+        download(asset["browser_download_url"], pack)
     if pack.stat().st_size != asset["size"]:
         pack.unlink()
         raise RuntimeError(f"{NOINTRO_ASSET}: size differs from the release's {asset['size']}")
@@ -342,8 +330,7 @@ def fetch_redump(code: str, cache_dir: Path, offline: bool, refresh: bool) -> tu
     if offline:
         raise NotCachedError(f"{pack} is not cached")
     url = REDUMP_DATFILE_URL.format(code=code)
-    kept = _download(url, pack)
-    match = DISPOSITION.search(kept["content_disposition"])
+    match = DISPOSITION.search(download(url, pack))
     if not match:
         raise RuntimeError(f"{url} answered without a datfile name")
     meta = {"file": match["file"], "url": url, "fetched": _today()}

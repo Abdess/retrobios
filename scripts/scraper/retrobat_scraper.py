@@ -11,6 +11,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+from model.sourcerevision import platform_revision, required_revision
 from .base_scraper import (
     BaseScraper,
     BiosRequirement,
@@ -112,25 +113,13 @@ def es_systems_libretro_systems(text: str) -> dict[str, list[str]]:
     return {core: sorted(systems) for core, systems in sorted(found.items())}
 
 
-def launcher_revision(url: str) -> str:
-    """The emulatorLauncher commit a source URL is pinned to."""
-    found = re.search(r"/emulatorlauncher/([0-9a-f]{40})/", url)
-    if found is None:
-        raise ValueError(f"{url} names no emulatorLauncher commit")
-    return found.group(1)
-
-
 def pinned_revision(platform_file: Path = PLATFORM_FILE) -> str:
     """The emulatorLauncher commit platforms/retrobat.yml was read from.
 
     A rescrape reads this commit unless told to move, so a change to an
     extractor shows in the diff alone, without upstream's commits since.
     """
-    from model.safeparse import yaml_load
-
-    with platform_file.open(encoding="utf-8") as fh:
-        source = str((yaml_load(fh) or {}).get("source") or "")
-    return launcher_revision(source)
+    return platform_revision(platform_file, LAUNCHER_REPO, commit=True)
 
 
 def resolve_revision(revision: str | None) -> str:
@@ -294,7 +283,7 @@ class Scraper(BaseScraper):
             "systems": systems,
             # The systems each libretro core runs for: its save folders.
             "libretro_systems": libretro_systems,
-            "launchers": fetch_launchers(launcher_revision(self.url)),
+            "launchers": fetch_launchers(required_revision(self.url, LAUNCHER_REPO, commit=True)),
         }
 
 

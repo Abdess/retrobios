@@ -26,10 +26,8 @@ from __future__ import annotations
 import io
 import re
 import tarfile
-import urllib.error
-import urllib.request
 
-from .base_scraper import BaseScraper, BiosRequirement, fetch_branch_head
+from .base_scraper import BaseScraper, BiosRequirement, fetch_branch_head, fetch_bytes
 from .retropie_launchers import SCRIPTMODULES
 from .retropie_launchers import SECTIONS as _SCRIPT_SECTIONS
 from .retropie_launchers import extract_launchers
@@ -78,17 +76,7 @@ class Scraper(BaseScraper):
         self._scripts: dict[str, str] = {}
 
     def _fetch_archive(self) -> bytes:
-        request = urllib.request.Request(
-            self.url, headers={"User-Agent": "retrobios-scraper/1.0"}
-        )
-        try:
-            with urllib.request.urlopen(request, timeout=60) as response:
-                payload = response.read(MAX_ARCHIVE + 1)
-        except urllib.error.URLError as exc:
-            raise ConnectionError(f"Failed to fetch {self.url}: {exc}") from exc
-        if len(payload) > MAX_ARCHIVE:
-            raise ValueError(f"{self.url}: response larger than {MAX_ARCHIVE} bytes")
-        return payload
+        return fetch_bytes(self.url, timeout=60, max_bytes=MAX_ARCHIVE)
 
     def module_ids(self, payload: bytes | None = None) -> list[str]:
         """Every package RetroPie ships, by the id its script declares."""

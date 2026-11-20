@@ -18,7 +18,7 @@ from pathlib import Path
 import yaml
 
 from scraper import emuelec_launchers as el
-from scraper.emuelec_scraper import launcher_revision
+from model.sourcerevision import required_revision
 from scraper.shell_launchers import LauncherPatternMissing, RepoTree
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -452,6 +452,11 @@ def ref(path: str, lines: str) -> str:
     return f"{path}:{lines}"
 
 
+def revision_of(url: str) -> str:
+    return required_revision(url, repo="EmuELEC/EmuELEC")
+
+
+
 class Dispatch(unittest.TestCase):
     def test_each_script_is_named_after_the_core_that_starts_it(self):
         runs = el.Runs(tree())
@@ -680,11 +685,11 @@ class Revision(unittest.TestCase):
             "https://raw.githubusercontent.com/EmuELEC/EmuELEC/v4.8/"
             "packages/sx05re/emuelec/bin/batocera/batocera-systems"
         )
-        self.assertEqual(launcher_revision(url), "v4.8")
+        self.assertEqual(revision_of(url), "v4.8")
 
     def test_a_url_without_a_revision_raises(self):
         with self.assertRaises(ValueError):
-            launcher_revision("https://example.org/batocera-systems")
+            revision_of("https://example.org/batocera-systems")
 
 
 class PlatformRecords(unittest.TestCase):

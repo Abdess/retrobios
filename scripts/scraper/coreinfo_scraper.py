@@ -17,8 +17,6 @@ import importlib
 import os
 import re
 import sys
-import urllib.error
-import urllib.request
 
 if not __package__:
     # Allow running directly: python scripts/scraper/coreinfo_scraper.py
@@ -32,12 +30,13 @@ from .base_scraper import (
     BaseScraper,
     BiosRequirement,
     fetch_github_latest_version,
-    github_json,
+    fetch_text,
+    github_tree,
 )
 
 PLATFORM_NAME = "libretro_coreinfo"
 
-GITHUB_API = "https://api.github.com/repos/libretro/libretro-core-info"
+CORE_INFO_REPO = "libretro/libretro-core-info"
 RAW_BASE = "https://raw.githubusercontent.com/libretro/libretro-core-info/master"
 
 CORE_SYSTEM_MAP = {
@@ -200,6 +199,29 @@ def _extract_md5_from_notes(info: dict) -> dict[str, str]:
     return md5_map
 
 
+def core_info_files() -> list[str]:
+    """Paths of every .info file in libretro-core-info, RuntimeError when the
+    listing names none."""
+    info_files = [
+        entry["path"]
+        for entry in github_tree(CORE_INFO_REPO, "master")
+        if entry["path"].endswith("_libretro.info")
+    ]
+    if not info_files:
+        raise RuntimeError(f"no .info file in {CORE_INFO_REPO}")
+    return info_files
+
+
+def fetch_info_file(filename: str) -> dict:
+    """A .info file of libretro-core-info, parsed.
+
+    A file the listing names and the fetch cannot read is an error: read
+    as empty, the core dropped out of the result and --compare-db counted
+    none of its firmware missing.
+    """
+    return _parse_info_file(fetch_text(f"{RAW_BASE}/{filename}"))
+
+
 class Scraper(BaseScraper):
     """Scraper for libretro-core-info firmware declarations."""
 
@@ -207,45 +229,14 @@ class Scraper(BaseScraper):
         super().__init__()
         self._info_files: dict[str, dict] | None = None
 
-    def _fetch_info_list(self) -> list[str]:
-        """Fetch list of all .info files from GitHub API."""
-        # Use the tree API to get all files at once
-        url = f"{GITHUB_API}/git/trees/master?recursive=1"
-        data = github_json(
-            url, "Failed to list core-info files", timeout=30, error=ConnectionError
-        )
-        return [
-            item["path"]
-            for item in data.get("tree", [])
-            if item["path"].endswith("_libretro.info")
-        ]
-
-    def _fetch_info_file(self, filename: str) -> dict:
-        """Fetch and parse a single .info file.
-
-        A file the listing names and the fetch cannot read is an error: read
-        as empty, the core dropped out of the result and --compare-db
-        counted none of its firmware missing.
-        """
-        url = f"{RAW_BASE}/{filename}"
-        try:
-            req = urllib.request.Request(
-                url, headers={"User-Agent": "retrobios-scraper/1.0"}
-            )
-            with urllib.request.urlopen(req, timeout=15) as resp:
-                content = resp.read().decode("utf-8")
-        except (urllib.error.URLError, TimeoutError) as e:
-            raise ConnectionError(f"Failed to fetch {url}: {e}") from e
-        return _parse_info_file(content)
-
     def fetch_requirements(self) -> list[BiosRequirement]:
         """Fetch firmware requirements from all core .info files."""
-        info_files = self._fetch_info_list()
+        info_files = core_info_files()
         requirements = []
         seen = set()
 
         for filename in info_files:
-            info = self._fetch_info_file(filename)
+            info = fetch_info_file(filename)
             firmware_list = _extract_firmware(info)
 
             if not firmware_list:
@@ -315,7 +306,7 @@ def main() -> None:
 
     try:
         reqs = scraper.fetch_requirements()
-    except ConnectionError as e:
+    except (ConnectionError, RuntimeError) as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 

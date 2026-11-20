@@ -18,7 +18,7 @@ from pathlib import Path
 import yaml
 
 from scraper import rocknix_launchers as rl
-from scraper.rocknix_scraper import launcher_revision
+from model.sourcerevision import required_revision
 from scraper.shell_launchers import LauncherPatternMissing, RepoTree
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -309,6 +309,11 @@ def rocknix_tree(files: dict[str, str], links: dict[str, str] | None = None) -> 
 
 def by(records: list[dict], emulator: str) -> list[dict]:
     return [r for r in records if r["emulator"] == emulator]
+
+
+def revision_of(url: str) -> str:
+    return required_revision(url, repo="ROCKNIX/distribution")
+
 
 
 class ConfigsPerDevice(unittest.TestCase):
@@ -654,11 +659,11 @@ class Revision(unittest.TestCase):
             "https://raw.githubusercontent.com/ROCKNIX/distribution/20261001/"
             "projects/ROCKNIX/packages/rocknix/sources/scripts/rocknix-systems"
         )
-        self.assertEqual(launcher_revision(url), "20261001")
+        self.assertEqual(revision_of(url), "20261001")
 
     def test_a_url_without_a_revision_raises(self):
         with self.assertRaises(ValueError):
-            launcher_revision("https://rocknix.org/")
+            revision_of("https://rocknix.org/")
 
 
 class PlatformRecords(unittest.TestCase):

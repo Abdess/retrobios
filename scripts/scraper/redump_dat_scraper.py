@@ -17,13 +17,11 @@ from __future__ import annotations
 import argparse
 import re
 import sys
-import urllib.error
-import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
 from model.dumpcatalog import write_provenance_snapshot
-from .base_scraper import _read_limited
+from .base_scraper import fetch_bytes
 from .logiqx_parser import parse_logiqx, validate_logiqx_format
 
 BASE_URL = "https://redump.info"
@@ -31,12 +29,7 @@ DOWNLOADS_URL = f"{BASE_URL}/downloads"
 
 
 def _fetch(url: str) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": "retrobios-scraper/1.0"})
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return _read_limited(resp).decode("utf-8", "replace")
-    except urllib.error.URLError as e:
-        raise ConnectionError(f"Failed to fetch {url}: {e}") from e
+    return fetch_bytes(url).decode("utf-8", "replace")
 
 
 def discover_bios_datfiles(downloads_html: str) -> list[str]:

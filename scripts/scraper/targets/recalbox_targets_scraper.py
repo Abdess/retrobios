@@ -20,7 +20,7 @@ from datetime import datetime, timezone
 
 
 from . import BaseTargetScraper, target_cli
-from ..base_scraper import fetch_bytes
+from ..base_scraper import fetch_bytes, fetch_text
 from ..recalbox_scraper import SYSTEMS_TREE_URL, Scraper as PlatformScraper, board_cores
 
 PLATFORM_NAME = "recalbox"
@@ -79,7 +79,7 @@ class Scraper(BaseTargetScraper):
 
         targets: dict[str, dict] = {}
         for board, name in sorted(boards.items()):
-            defconfig = fetch_bytes(DEFCONFIG_URL.format(tag=tag, name=name)).decode("utf-8")
+            defconfig = fetch_text(DEFCONFIG_URL.format(tag=tag, name=name))
             enabled = enabled_packages(defconfig)
             cores: set[str] = set()
             for text in inis:

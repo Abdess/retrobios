@@ -15,6 +15,7 @@ import os
 import sys
 import tempfile
 import unittest
+import urllib.request
 from pathlib import Path
 from unittest import mock
 
@@ -131,7 +132,6 @@ class TheNativeIndexKeepsEveryPlatform(unittest.TestCase):
         import io
         import json
 
-        from exporter import originals
         from exporter.originals import SOURCES_INDEX, fetch
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as directory:
@@ -150,7 +150,7 @@ class TheNativeIndexKeepsEveryPlatform(unittest.TestCase):
                 return Response(b"payload")
 
             with mock.patch.object(
-                originals.urllib.request, "urlopen", other_run_records_meanwhile
+                urllib.request, "urlopen", other_run_records_meanwhile
             ):
                 fetch("https://a", root / "batocera" / "file", index)
             recorded = json.loads(index.read_text())

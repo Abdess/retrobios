@@ -17,7 +17,7 @@ from pathlib import Path
 import yaml
 
 from scraper import emudeck_launchers as el
-from scraper.emudeck_scraper import launcher_revision
+from model.sourcerevision import required_revision
 from scraper.shell_launchers import LauncherPatternMissing, RepoTree, words
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -234,6 +234,11 @@ def tree(**scripts: str) -> RepoTree:
     return RepoTree.from_files(files)
 
 
+def revision_of(url: str) -> str:
+    return required_revision(url, repo="dragoonDorise/EmuDeck", commit=True)
+
+
+
 class WrittenIntoTheConfig(unittest.TestCase):
     def test_ares_firmware_follows_the_rewritten_prefix(self):
         colecovision, pcecd = (r.entry() for r in el.ares(tree(**{"emuDeckares.sh": ARES_SH})))
@@ -412,9 +417,9 @@ class Helpers(unittest.TestCase):
             "https://raw.githubusercontent.com/dragoonDorise/EmuDeck/"
             "dddb30229adbbd54d5ff7283cfd70e11c4322c26/functions/checkBIOS.sh"
         )
-        self.assertEqual(launcher_revision(url), "dddb30229adbbd54d5ff7283cfd70e11c4322c26")
+        self.assertEqual(revision_of(url), "dddb30229adbbd54d5ff7283cfd70e11c4322c26")
         with self.assertRaises(ValueError):
-            launcher_revision(
+            revision_of(
                 "https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/functions/checkBIOS.sh"
             )
 

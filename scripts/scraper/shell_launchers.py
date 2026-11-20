@@ -10,14 +10,13 @@ gone, so a rewrite upstream stops the scrape instead of publishing nothing.
 
 from __future__ import annotations
 
-import json
 import re
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 
 from model.sourceref import span
 
-from .base_scraper import fetch_bytes, github_headers
+from .base_scraper import fetch_bytes, github_tree
 from .configgen_launchers import Launcher, LauncherPatternMissing
 
 NAME = r"[A-Za-z_][A-Za-z0-9_]*"
@@ -734,13 +733,12 @@ class RepoTree:
             return fetch_bytes(url).decode("utf-8-sig")
 
         def listdir(path: str) -> dict[str, Entry]:
-            url = f"https://api.github.com/repos/{repo}/git/trees/{rev}:{path}"
             try:
-                listing = json.loads(fetch_bytes(url, headers=github_headers()))
-            except ConnectionError as e:
+                listing = github_tree(repo, f"{rev}:{path}", recursive=False)
+            except RuntimeError as e:
                 raise LauncherPatternMissing(path, f"directory ({e})") from e
             entries = {}
-            for item in listing.get("tree", []):
+            for item in listing:
                 if item["mode"] == "120000":
                     entries[item["path"]] = Entry("link", read(f"{path}/{item['path']}").strip())
                 else:

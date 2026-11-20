@@ -33,7 +33,7 @@ from typing import NamedTuple
 
 
 from . import BaseTargetScraper, target_cli
-from ..base_scraper import fetch_bytes, github_headers
+from ..base_scraper import fetch_text, github_json
 from ..batocera_scraper import _not_cores
 from ..emuelec_systems import (
     BUILDS_OF,
@@ -601,7 +601,7 @@ class Scraper(BaseTargetScraper):
         self.ref = ""
 
     def _raw(self, path: str) -> str:
-        return fetch_bytes(RAW.format(ref=self.ref, path=path)).decode("utf-8")
+        return fetch_text(RAW.format(ref=self.ref, path=path))
 
     def fetch_targets(self) -> dict:
         return self.device_targets()
@@ -610,15 +610,18 @@ class Scraper(BaseTargetScraper):
         """The targets file, read at `ref`, by default the revision
         platforms/emuelec.yml was scraped at."""
         self.ref = ref or self.pinned_revision(PLATFORM_NAME)
-        release = json.loads(
-            fetch_bytes(RELEASE_API.format(ref=self.ref), headers=github_headers())
+        release = github_json(
+            RELEASE_API.format(ref=self.ref), f"cannot read the {self.ref} release"
         )
-        devices = release_devices([asset["name"] for asset in release.get("assets", [])])
+        assets = release.get("assets") if isinstance(release, dict) else None
+        if not isinstance(assets, list):
+            raise RuntimeError(f"the {self.ref} release lists no asset")
+        devices = release_devices([asset["name"] for asset in assets])
         meta = read_metapackage(self._raw(META_MK), self._raw(OPTIONS))
         paths = sorted({i.path for installs in PROVIDERS.values() for i in installs})
         archs = check_installs({path: self._raw(path) for path in paths})
-        es_json = fetch_bytes(ES_SYSTEMS_TEMPLATE.format(ref=self.ref)).decode("utf-8")
-        ports = port_engines(fetch_bytes(PORTS_TEMPLATE.format(ref=self.ref)).decode("utf-8"))
+        es_json = fetch_text(ES_SYSTEMS_TEMPLATE.format(ref=self.ref))
+        ports = port_engines(fetch_text(PORTS_TEMPLATE.format(ref=self.ref)))
         es_mk = self._raw(ES_MK)
         check_names(with_ports(es_systems_for(es_json, es_mk, "Amlogic-ng"), ports))
         targets: dict[str, dict] = {}

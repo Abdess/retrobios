@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import tests
 
+import io
 import json
 import os
 import unittest
@@ -31,18 +32,15 @@ def _refuse(*_args, **_kwargs):
     raise urllib.error.HTTPError("https://api.github.com/x", 403, "rate limited", {}, None)
 
 
-class _Body:
+class _Body(io.BytesIO):
     def __init__(self, body: str | bytes):
-        self.body = body.encode() if isinstance(body, str) else body
+        super().__init__(body.encode() if isinstance(body, str) else body)
 
     def __enter__(self):
         return self
 
     def __exit__(self, *exc):
         return False
-
-    def read(self):
-        return self.body
 
 
 def _serve_batocera(boards: list[str], refuse_board: bool):
@@ -53,7 +51,7 @@ def _serve_batocera(boards: list[str], refuse_board: bool):
         if "/contents/configs" in url:
             return _Body(json.dumps([{"name": b} for b in boards]).encode())
         if "/contents/buildroot" in url:
-            return _Body(b'{"sha": "0123abc"}')
+            return _Body(b'{"type": "submodule", "sha": "0123abc"}')
         if url.endswith("x86_wow64.board"):
             # Builds the 32-bit Wine package, not an image.
             return _Body(b"BR2_PACKAGE_BATOCERA_TARGET_X86=y\n")
@@ -92,23 +90,13 @@ class FailedRequestsStopTheScrape(unittest.TestCase):
         ):
             with self.subTest(scraper=module.__name__), mock.patch(
                 "urllib.request.urlopen", _refuse
-            ), self.assertRaises(RuntimeError):
+            ), self.assertRaises((RuntimeError, ConnectionError)):
                 module.Scraper().fetch_targets()
 
     def test_an_empty_listing_is_not_a_target(self):
-        class _Empty:
-            def __enter__(self):
-                return self
-
-            def __exit__(self, *exc):
-                return False
-
-            def read(self):
-                return b"[]"
-
         for module in (emudeck_targets_scraper, retropie_targets_scraper):
             with self.subTest(scraper=module.__name__), mock.patch(
-                "urllib.request.urlopen", lambda *_a, **_k: _Empty()
+                "urllib.request.urlopen", lambda *_a, **_k: _Body(b"[]")
             ), self.assertRaises(RuntimeError):
                 module.Scraper().fetch_targets()
 
@@ -116,16 +104,13 @@ class FailedRequestsStopTheScrape(unittest.TestCase):
         """No board listed, or one board unreadable, used to print a warning
         and write the targets file without those boards."""
         for boards, refuse_board in (([], False), (["batocera-x86_64.board"], True)):
-            with self.subTest(boards=boards), mock.patch.object(
-                batocera_targets_scraper.urllib.request,
-                "urlopen",
-                _serve_batocera(boards, refuse_board),
-            ), self.assertRaises(RuntimeError):
+            with self.subTest(boards=boards), mock.patch(
+                "urllib.request.urlopen", _serve_batocera(boards, refuse_board),
+            ), self.assertRaises((RuntimeError, ConnectionError)):
                 batocera_targets_scraper.Scraper().fetch_targets()
 
-        with mock.patch.object(
-            batocera_targets_scraper.urllib.request,
-            "urlopen",
+        with mock.patch(
+            "urllib.request.urlopen",
             _serve_batocera(["batocera-x86_64.board", "batocera-x86_wow64.board"], False),
         ):
             targets = batocera_targets_scraper.Scraper().fetch_targets()["targets"]
@@ -440,8 +425,8 @@ class KnulliPerBoard(unittest.TestCase):
         names = [p.removeprefix("configs/") for p in self.FILES if p.startswith("configs/")]
         exact = {
             f"{api}configs?ref={pin}": json.dumps([{"name": n} for n in names]),
-            f"{api}buildroot?ref={pin}": '{"sha": "c2d7985b"}',
-            f"{api}batocera?ref={pin}": '{"sha": "487014d9"}',
+            f"{api}buildroot?ref={pin}": '{"type": "submodule", "sha": "c2d7985b"}',
+            f"{api}batocera?ref={pin}": '{"type": "submodule", "sha": "487014d9"}',
             f"{raw}board/r16/retroarch.cfg": 'menu_show_core_updater = "false"\n',
             f"{raw}package/retroarch/retroarch/retroarch.mk":
                 "RETROARCH_CONF_OPTS = --enable-networking\n",
@@ -470,7 +455,7 @@ class KnulliPerBoard(unittest.TestCase):
                 return _Body(self.FILES[path])
             return _refuse()
 
-        with mock.patch.object(batocera_targets_scraper.urllib.request, "urlopen", urlopen):
+        with mock.patch("urllib.request.urlopen", urlopen):
             data = knulli_targets_scraper.Scraper().fetch_targets()
 
         self.assertEqual(data["platform"], "knulli")
@@ -729,20 +714,11 @@ class TargetsReadThePlatformRevision(unittest.TestCase):
         pin = "d" * 40
         seen: list[str] = []
 
-        class _Body:
-            def __init__(self, url):
-                seen.append(url)
+        def answer(req, **_kw):
+            seen.append(req.full_url)
+            return _Body(json.dumps([{"name": "emuDeckRMG.sh"}]))
 
-            def __enter__(self):
-                return self
-
-            def __exit__(self, *_exc):
-                return False
-
-            def read(self):
-                return json.dumps([{"name": "emuDeckRMG.sh"}]).encode()
-
-        with mock.patch("urllib.request.urlopen", lambda req, **_kw: _Body(req.full_url)):
+        with mock.patch("urllib.request.urlopen", answer):
             cores = emudeck_scraper.Scraper(checkbios_url="pinned")._fetch_installed_emulators(pin)
         self.assertEqual(cores, ["mupen64plus_next"])
         self.assertEqual(len(seen), 1)
@@ -812,7 +788,7 @@ class HashScrapersRefuseAnUnknownVersion(unittest.TestCase):
     def test_mame_raises(self):
         from scripts.scraper import mame_hash_scraper
 
-        with mock.patch.object(mame_hash_scraper.urllib.request, "urlopen", _refuse), \
+        with mock.patch("urllib.request.urlopen", _refuse), \
                 self.assertRaises(RuntimeError):
             mame_hash_scraper._get_version()
 

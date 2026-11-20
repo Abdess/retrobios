@@ -31,8 +31,6 @@ import importlib
 import json
 import re
 import sys
-import urllib.error
-import urllib.request
 from pathlib import Path
 
 if not __package__:
@@ -45,9 +43,10 @@ from .base_scraper import (
     BaseScraper,
     BiosRequirement,
     fetch_branch_head,
-    fetch_bytes,
     fetch_github_latest_version,
-    github_headers,
+    fetch_present,
+    fetch_text,
+    github_tree,
     json_object,
     requirement_entry,
 )
@@ -56,7 +55,6 @@ from .retrodeck_launchers import extract_launchers
 PLATFORM_NAME = "retrodeck"
 COMPONENTS_REPO = "RetroDECK/components"
 COMPONENTS_BRANCH = "main"
-COMPONENTS_API_URL = "https://api.github.com/repos/" + COMPONENTS_REPO + "/git/trees/{rev}"
 RAW_BASE = "https://raw.githubusercontent.com/" + COMPONENTS_REPO + "/{rev}"
 SKIP_DIRS = {"archive_later", "archive_old", "automation-tools", ".github"}
 
@@ -412,31 +410,10 @@ class Scraper(BaseScraper):
 
     def _fetch_remote_manifests(self) -> list[tuple[str, dict]]:
         """Fetch component manifests via GitHub API."""
-        from core.github import github_token
-
-        token = github_token()
-        headers = {"User-Agent": "retrobios-scraper/1.0"}
-        if token:
-            headers["Authorization"] = f"token {token}"
-
-        try:
-            req = urllib.request.Request(
-                COMPONENTS_API_URL.format(rev=self.revision), headers=headers
-            )
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                tree = json.loads(resp.read().decode())
-        except (urllib.error.HTTPError, urllib.error.URLError) as e:
-            raise ConnectionError(f"Failed to fetch component tree: {e}") from e
-
-        if tree.get("truncated"):
-            # A partial tree lists some components: writing the YAML from it
-            # drops the others' systems without a word.
-            raise ConnectionError("GitHub tree response truncated")
-
         component_dirs = [
             item["path"]
-            for item in tree.get("tree", [])
-            if item["type"] == "tree" and item["path"] not in SKIP_DIRS
+            for item in github_tree(COMPONENTS_REPO, self.revision, recursive=False)
+            if item.get("type") == "tree" and item["path"] not in SKIP_DIRS
         ]
 
         manifests: list[tuple[str, dict]] = []
@@ -446,17 +423,12 @@ class Scraper(BaseScraper):
             # Only a 404 says the component has no manifest. A 429, a 503 or
             # a dropped connection is no answer: skipping it wrote
             # retrodeck.yml without that component's systems, exit code 0.
+            text = fetch_present(url)
+            if text is None:
+                print(" no manifest", file=sys.stderr)
+                continue
             try:
-                req = urllib.request.Request(url, headers=headers)
-                with urllib.request.urlopen(req, timeout=15) as resp:
-                    data = json.loads(resp.read().decode())
-            except urllib.error.HTTPError as e:
-                if e.code == 404:
-                    print(" no manifest", file=sys.stderr)
-                    continue
-                raise ConnectionError(f"{url}: HTTP {e.code}") from e
-            except urllib.error.URLError as e:
-                raise ConnectionError(f"{url}: {e.reason}") from e
+                data = json.loads(text)
             except json.JSONDecodeError as e:
                 raise ValueError(f"{url}: not JSON: {e}") from e
             manifests.append((comp, data))
@@ -492,17 +464,7 @@ class Scraper(BaseScraper):
             local = Path(self.manifests_dir) / path
             text = local.read_text(encoding="utf-8") if local.is_file() else None
         else:
-            url = f"{RAW_BASE.format(rev=self.revision)}/{path}"
-            try:
-                req = urllib.request.Request(url, headers=github_headers())
-                with urllib.request.urlopen(req, timeout=30) as resp:
-                    text = resp.read().decode("utf-8")
-            except urllib.error.HTTPError as e:
-                if e.code != 404:
-                    raise ConnectionError(f"{url}: HTTP {e.code}") from e
-                text = None
-            except urllib.error.URLError as e:
-                raise ConnectionError(f"{url}: {e.reason}") from e
+            text = fetch_present(f"{RAW_BASE.format(rev=self.revision)}/{path}")
         self._files[path] = text
         return text
 
@@ -544,7 +506,7 @@ class Scraper(BaseScraper):
         (automation-tools/alchemist/desired_versions.sh, ES_DE_DESIRED_VERSION).
         """
         tag = fetch_github_latest_version(ES_DE_REPO)
-        text = fetch_bytes(ES_DE_SYSTEMS_URL.format(rev=tag)).decode("utf-8")
+        text = fetch_text(ES_DE_SYSTEMS_URL.format(rev=tag))
         return es_systems_libretro_systems(text)
 
     def generate_platform_yaml(self) -> dict:

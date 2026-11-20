@@ -14,20 +14,20 @@ target list, its pack shipped the PS2, GameCube and PS3 firmware anyway.
 
 from __future__ import annotations
 
-import json
 import re
 import sys
 from datetime import datetime, timezone
 
 
 from . import BaseTargetScraper, target_cli
-from ..base_scraper import fetch_bytes, github_headers
+from ..base_scraper import fetch_text, github_json, github_tree
 from ..rocknix_packages import standalone_emulators
 
 PLATFORM_NAME = "rocknix"
 
 RAW_BASE = "https://raw.githubusercontent.com/ROCKNIX/distribution/{tag}"
-GITHUB_API = "https://api.github.com/repos/ROCKNIX/distribution/contents"
+REPO = "ROCKNIX/distribution"
+GITHUB_API = f"https://api.github.com/repos/{REPO}/contents"
 EMULATORS_MK = "projects/ROCKNIX/packages/virtual/emulators/package.mk"
 DEVICES_DIR = "projects/ROCKNIX/devices"
 
@@ -214,27 +214,19 @@ class Scraper(BaseTargetScraper):
         self.tag = ""
 
     def _raw(self, path: str) -> str:
-        return fetch_bytes(f"{RAW_BASE.format(tag=self.tag)}/{path}").decode("utf-8")
+        return fetch_text(f"{RAW_BASE.format(tag=self.tag)}/{path}")
 
     def _devices(self) -> list[str]:
-        import json
-
-        listing = json.loads(fetch_bytes(
-            f"{GITHUB_API}/{DEVICES_DIR}?ref={self.tag}", headers=github_headers()
-        ))
-        devices = [item["name"] for item in listing if item.get("type") == "dir"]
+        url = f"{GITHUB_API}/{DEVICES_DIR}?ref={self.tag}"
+        listing = github_json(url, f"cannot list {DEVICES_DIR} at {self.tag}")
+        devices = [item["name"] for item in listing
+                   if isinstance(item, dict) and item.get("type") == "dir"]
         if not devices:
             raise RuntimeError(f"no device in {DEVICES_DIR} at {self.tag}")
         return sorted(devices)
 
     def _tree(self) -> list[str]:
-        listing = json.loads(fetch_bytes(
-            f"https://api.github.com/repos/ROCKNIX/distribution/git/trees/{self.tag}?recursive=1",
-            headers=github_headers(),
-        ))
-        if listing.get("truncated"):
-            raise RuntimeError(f"ROCKNIX tree at {self.tag} is truncated")
-        return [entry["path"] for entry in listing.get("tree", [])]
+        return [entry["path"] for entry in github_tree(REPO, self.tag)]
 
     def device_builds(self, tag: str | None = None) -> dict[str, tuple[str, list[str], list[str]]]:
         """{device: (architecture, libretro cores, standalone packages)}.

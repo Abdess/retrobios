@@ -861,15 +861,15 @@ class FbneoFetchReadsOneRevision(unittest.TestCase):
             "download_url": "https://raw.githubusercontent.com/libretro/FBNeo/c0ffee/dats/Demo.dat",
         }]
 
-    def _download(self, url: str, destination: Path) -> Path:
+    def _download(self, url: str, destination: Path, **_options: object) -> str:
         destination.write_bytes(self.served)
-        return destination
+        return ""
 
     def _patched(self):
         from unittest import mock
 
         return mock.patch.multiple(
-            self.importer, _api_json=self._api, _download=self._download
+            self.importer, _api_json=self._api, download=self._download
         )
 
     def test_bytes_that_are_not_the_listed_blob_are_refused(self):

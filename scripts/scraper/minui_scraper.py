@@ -35,6 +35,7 @@ from .base_scraper import (
     fetch_branch_head,
     fetch_bytes,
     github_headers,
+    tree_entries,
 )
 
 PLATFORM_NAME = "minui"
@@ -255,10 +256,6 @@ def platform_config(
     }
 
 
-def _fetch_with_headers(url: str, headers: dict[str, str] | None = None) -> bytes:
-    return fetch_bytes(url, headers=headers)
-
-
 class Scraper(BaseScraper):
     """Pak scraper for one frontend of the MinUI family."""
 
@@ -270,7 +267,7 @@ class Scraper(BaseScraper):
         url: str | None = None,
         fetch: Callable[[str, dict[str, str] | None], bytes] | None = None,
     ) -> None:
-        self._fetch = fetch or _fetch_with_headers
+        self._fetch = fetch or fetch_bytes
         self.revision = ""
         if url is None:
             self.revision = fetch_branch_head(self.variant.repo, self.variant.branch)
@@ -298,11 +295,11 @@ class Scraper(BaseScraper):
             return self._config
         if not self.revision:
             self.revision = self.url.rstrip("/").rsplit("/", 1)[-1]
-        tree = self._api(f"git/trees/{self.revision}?recursive=1")
-        if tree.get("truncated"):
-            raise RuntimeError(f"{self.variant.repo}@{self.revision}: tree listing truncated")
+        tree = tree_entries(
+            self._api(f"git/trees/{self.revision}?recursive=1"), self.variant.repo, self.revision
+        )
         paths = [
-            item["path"] for item in tree.get("tree", [])
+            item["path"] for item in tree
             if item.get("type") == "blob"
             and (
                 _PAK.match(item["path"])

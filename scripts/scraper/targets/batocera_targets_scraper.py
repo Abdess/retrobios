@@ -15,11 +15,8 @@ Sources (batocera-linux/buildroot, at the submodule commit the tag pins):
 
 from __future__ import annotations
 
-import json
 import re
 import sys
-import urllib.error
-import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -28,8 +25,8 @@ import yaml
 
 from model.safeparse import yaml_load_upstream
 
-from . import BaseTargetScraper, fetch_text, target_cli
-from ..base_scraper import github_headers
+from . import BaseTargetScraper, target_cli
+from ..base_scraper import fetch_present, fetch_text, github_json, github_tree, submodule_commit
 
 PLATFORM_NAME = "batocera"
 
@@ -66,24 +63,6 @@ def _parse_images(text: str) -> dict[str, list[str]]:
 
 _IF_RE = re.compile(r"^if\s+(.*)$")
 _DEFAULT_Y_RE = re.compile(r"^\s*default\s+y\s*(?:#.*)?$")
-
-
-def _fetch_present(url: str) -> str | None:
-    """A file's text, or None when the server answers that it does not exist."""
-    try:
-        return fetch_text(url)
-    except RuntimeError as e:
-        if isinstance(e.__cause__, urllib.error.HTTPError) and e.__cause__.code == 404:
-            return None
-        raise
-
-
-def _fetch_json(url: str) -> list | dict:
-    text = fetch_text(url, headers=github_headers())
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError as e:
-        raise RuntimeError(f"cannot parse {url}: {e}") from e
 
 
 def _normalise_condition(raw: str) -> str:
@@ -454,12 +433,12 @@ class Scraper(BaseTargetScraper):
     def _raw(self, path: str) -> str:
         return f"https://raw.githubusercontent.com/{self.REPO}/{self.tag}/{path}"
 
-    def _api(self, path: str) -> str:
-        return f"https://api.github.com/repos/{self.REPO}/contents/{path}?ref={self.tag}"
-
     def _list_boards(self) -> list[str]:
         """List <prefix>*.board files from configs/ via GitHub API."""
-        data = _fetch_json(self._api("configs"))
+        data = github_json(
+            f"https://api.github.com/repos/{self.REPO}/contents/configs?ref={self.tag}",
+            f"cannot list configs/ at {self.tag}",
+        )
         boards = [
             item["name"]
             for item in data
@@ -487,12 +466,12 @@ class Scraper(BaseTargetScraper):
             if name in seen:
                 continue
             seen.add(name)
-            try:
-                text = fetch_text(self._raw(f"configs/{name}"))
-            except RuntimeError:
+            found = fetch_present(self._raw(f"configs/{name}"))
+            if found is None:
                 if optional:
                     continue
-                raise
+                raise RuntimeError(f"configs/{name} is absent at {self.tag}")
+            text = found
             flags |= set(_BOARD_FLAG_RE.findall(text))
             if target is None:
                 m = _TARGET_FLAG_RE.search(text)
@@ -511,10 +490,7 @@ class Scraper(BaseTargetScraper):
         """
         bases: list[tuple[str, str]] = []
         for prefix, repo in self.SUBMODULES.items():
-            pin = _fetch_json(self._api(prefix.rstrip("/")))
-            sha = pin.get("sha") if isinstance(pin, dict) else None
-            if not sha:
-                raise RuntimeError(f"no {prefix.rstrip('/')} submodule commit at {self.tag}")
+            sha = submodule_commit(self.REPO, prefix.rstrip("/"), self.tag)
             bases.append((prefix, f"https://raw.githubusercontent.com/{repo}/{sha}/"))
 
         def url(path: str) -> str:
@@ -528,7 +504,7 @@ class Scraper(BaseTargetScraper):
         pending = ["Config.in"]
         with ThreadPoolExecutor(max_workers=8) as pool:
             while pending:
-                found = dict(zip(pending, pool.map(lambda path: _fetch_present(url(path)), pending)))
+                found = dict(zip(pending, pool.map(lambda path: fetch_present(url(path)), pending)))
                 absent += [path for path, text in found.items() if text is None]
                 files.update((path, text or "") for path, text in found.items())
                 pending = sorted({src for text in found.values() if text
@@ -543,16 +519,10 @@ class Scraper(BaseTargetScraper):
         """Every retroarch.cfg the tree ships, its submodules included."""
         repos = [("", self.REPO, self.tag)]
         for prefix, repo in self.SUBMODULES.items():
-            pin = _fetch_json(self._api(prefix.rstrip("/")))
-            if not isinstance(pin, dict) or not isinstance(pin.get("sha"), str):
-                raise RuntimeError(f"no submodule commit for {prefix} at {self.tag}")
-            repos.append((prefix, repo, pin["sha"]))
+            repos.append((prefix, repo, submodule_commit(self.REPO, prefix.rstrip("/"), self.tag)))
         found: dict[str, str] = {}
         for prefix, repo, ref in repos:
-            listing = _fetch_json(f"https://api.github.com/repos/{repo}/git/trees/{ref}?recursive=1")
-            if not isinstance(listing, dict) or listing.get("truncated"):
-                raise RuntimeError(f"{repo} tree at {ref} is unreadable or truncated")
-            for entry in listing.get("tree", []):
+            for entry in github_tree(repo, ref):
                 if re.search(r"(^|/)retroarch\.cfg$", entry["path"]):
                     raw = f"https://raw.githubusercontent.com/{repo}/{ref}/{entry['path']}"
                     found[prefix + entry["path"]] = fetch_text(raw)
@@ -560,10 +530,7 @@ class Scraper(BaseTargetScraper):
 
     def _buildroot_rules(self) -> list[tuple[str, str, str]]:
         """Buildroot's selects for the symbols the tree tests, at its pin."""
-        pin = _fetch_json(self._api("buildroot"))
-        sha = pin.get("sha") if isinstance(pin, dict) else None
-        if not sha:
-            raise RuntimeError(f"no buildroot submodule commit at {self.tag}")
+        sha = submodule_commit(self.REPO, "buildroot", self.tag)
         raw = f"https://raw.githubusercontent.com/{self.BUILDROOT_REPO}/{sha}"
         rules: list[tuple[str, str, str]] = []
         for path in BUILDROOT_KCONFIG:

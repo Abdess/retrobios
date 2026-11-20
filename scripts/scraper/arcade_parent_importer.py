@@ -55,12 +55,12 @@ from core.artifacts import write_if_changed
 from model.profiles import load_emulator_profiles
 from core.cli import run_cli
 from core.hashing import compute_hashes
+from .base_scraper import download
 from .romset_dat_importer import (
     LISTXML_CHUNK,
     MAME_LISTXML_URL,
     BlobMismatchError,
     _api_json,
-    _download,
     _listxml_opener,
     _machine_roms,
     fetch_pack,
@@ -913,7 +913,8 @@ def fetch_driver_source(
         if not tarball.is_file():
             raise FileNotFoundError(f"{tarball} is not cached")
     else:
-        _download(f"https://codeload.github.com/{slug}/tar.gz/{commit}", tarball)
+        download(f"https://codeload.github.com/{slug}/tar.gz/{commit}", tarball,
+                 skip_existing=True)
     source = read_driver_source(tarball)
     if not offline:
         listing = _api_json(f"https://api.github.com/repos/{slug}/git/trees/{commit}")
@@ -996,7 +997,7 @@ def fetch_repo_file(slug: str, commit: str, path: str, cache_dir: Path) -> tuple
         f"https://raw.githubusercontent.com/{slug}/{commit}/"
         f"{urllib.parse.quote(path)}"
     )
-    _download(url, destination)
+    download(url, destination, skip_existing=True)
     if git_blob_sha(destination.read_bytes()) != item["sha"]:
         destination.unlink()
         raise BlobMismatchError(f"{url} is not blob {item['sha']}")

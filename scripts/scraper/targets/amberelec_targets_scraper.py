@@ -23,7 +23,7 @@ from datetime import datetime, timezone
 
 from . import BaseTargetScraper, target_cli
 from ..amberelec_scraper import BUILDS_OF, ES_SYSTEMS_TEMPLATE, RUNNERS
-from ..base_scraper import fetch_bytes
+from ..base_scraper import fetch_text
 from ..batocera_scraper import _not_cores
 from ..es_emulators import es_cores, xml_systems
 
@@ -104,12 +104,12 @@ class Scraper(BaseTargetScraper):
         self.ref = ""
 
     def _raw(self, path: str) -> str:
-        return fetch_bytes(f"{RAW_BASE.format(ref=self.ref)}/{path}").decode("utf-8")
+        return fetch_text(f"{RAW_BASE.format(ref=self.ref)}/{path}")
 
     def fetch_targets(self) -> dict:
         self.ref = self.pinned_revision(PLATFORM_NAME)
         extra, keep = extra_cores(self._raw(META_MK))
-        es_systems = fetch_bytes(ES_SYSTEMS_TEMPLATE.format(ref=self.ref)).decode("utf-8")
+        es_systems = fetch_text(ES_SYSTEMS_TEMPLATE.format(ref=self.ref))
         targets: dict[str, dict] = {}
         for device, arch in sorted(devices(self._raw("Makefile")).items()):
             cores = device_cores(es_systems, extra, device in keep)

@@ -17,10 +17,12 @@ from __future__ import annotations
 
 import re
 
+from model.sourcerevision import required_revision
 from .base_scraper import (
     BaseScraper,
     BiosRequirement,
     fetch_github_latest_version,
+    fetch_text,
     github_json,
     md5_field,
     requirement_entry,
@@ -49,14 +51,6 @@ STANDALONE_TREE_URL = (
     "https://api.github.com/repos/ROCKNIX/distribution/contents/"
     "projects/ROCKNIX/packages/emulators/standalone?ref={ref}"
 )
-
-
-def launcher_revision(url: str) -> str:
-    """The tag or commit a rocknix-systems URL is read at."""
-    found = re.search(r"/ROCKNIX/distribution/([^/]+)/projects/", url)
-    if found is None:
-        raise ValueError(f"{url} names no ROCKNIX/distribution revision")
-    return found.group(1)
 
 
 # ROCKNIX system key -> retrobios system ID
@@ -161,7 +155,7 @@ class Scraper(BaseScraper):
         the targets scraper, where every libretro profile counted before. A
         standalone package no device carries is not run either.
         """
-        builds = DeviceTargets().device_builds(self.tag or launcher_revision(self.url))
+        builds = DeviceTargets().device_builds(self.tag or required_revision(self.url, GITHUB_REPO))
         libretro = sorted({core for _arch, lr, _sa in builds.values() for core in lr})
         carried = set(standalone_emulators(sorted({p for *_rest, sa in builds.values() for p in sa})))
         standalone = [name for name in standalone if name in carried]
@@ -178,15 +172,8 @@ class Scraper(BaseScraper):
 
     def _fetch_emulators_mk(self) -> str:
         """The package.mk that adds each emulator and core to es_systems."""
-        import urllib.error
-        import urllib.request
-
         url = EMULATORS_MK_URL.format(ref=self.tag or "next")
-        try:
-            with urllib.request.urlopen(url, timeout=30) as resp:
-                text = resp.read().decode("utf-8")
-        except urllib.error.URLError as e:
-            raise ConnectionError(f"Failed to fetch {url}: {e}") from e
+        text = fetch_text(url)
         if "add_emu_core" not in text:
             raise RuntimeError(f"no add_emu_core line in {url}")
         return text
@@ -267,7 +254,7 @@ class Scraper(BaseScraper):
             "systems": systems,
             # Read at the revision the BIOS list comes from.
             "launchers": extract_launchers(
-                RepoTree.github(GITHUB_REPO, launcher_revision(self.url))
+                RepoTree.github(GITHUB_REPO, required_revision(self.url, GITHUB_REPO))
             ),
         }
 

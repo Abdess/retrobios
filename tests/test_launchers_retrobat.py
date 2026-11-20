@@ -17,7 +17,7 @@ from pathlib import Path
 
 from scraper import retrobat_launchers as rl
 from scraper.csharp_source import LauncherPatternMissing, Source, render_concat
-from scraper.retrobat_scraper import launcher_revision
+from model.sourcerevision import required_revision
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -352,6 +352,11 @@ def _psx_sources() -> dict[str, Source]:
             f"{G}/LibRetro.CoreOptions.cs": LIBRETRO_PSX,
         }
     )
+
+
+def revision_of(url: str) -> str:
+    return required_revision(url, repo="RetroBat-Official/emulatorlauncher", commit=True)
+
 
 
 class NamesInLauncherOrder(unittest.TestCase):
@@ -1598,9 +1603,9 @@ class Helpers(unittest.TestCase):
             "https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/"
             "48cdc61623c5943bb17647b80a60d32d395c3725/batocera-systems/Resources/batocera-systems.json"
         )
-        self.assertEqual(launcher_revision(url), "48cdc61623c5943bb17647b80a60d32d395c3725")
+        self.assertEqual(revision_of(url), "48cdc61623c5943bb17647b80a60d32d395c3725")
         with self.assertRaises(ValueError):
-            launcher_revision("https://example.test/master/batocera-systems.json")
+            revision_of("https://example.test/master/batocera-systems.json")
 
 
 if __name__ == "__main__":

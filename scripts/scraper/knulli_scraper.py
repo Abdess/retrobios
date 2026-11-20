@@ -27,13 +27,11 @@ where it is older or its own.
 
 from __future__ import annotations
 
-import urllib.error
-import urllib.request
-
 from .base_scraper import (
     fetch_github_latest_version,
     fetch_text,
     optional_core_lists,
+    submodule_commit,
 )
 from .batocera_scraper import (
     SYSTEM_SLUG_MAP as BATOCERA_SLUGS,
@@ -58,8 +56,7 @@ PLATFORM_NAME = "knulli"
 
 REPO = "knulli-cfw/knulli-linux"
 _RAW = "https://raw.githubusercontent.com/knulli-cfw/knulli-linux/{ref}/"
-# The batocera.linux revision KNULLI's submodule pins, and its files.
-_SUBMODULE = "https://api.github.com/repos/knulli-cfw/knulli-linux/contents/{path}?ref={ref}"
+# The files of the batocera.linux revision KNULLI's submodule pins.
 _BATOCERA_RAW = "https://raw.githubusercontent.com/batocera-linux/batocera.linux/{ref}/"
 SOURCE_TEMPLATE = _RAW + "package/system/knulli-scripts/scripts/knulli-systems"
 CONFIGGEN_DEFAULTS_TEMPLATE = (
@@ -88,23 +85,6 @@ class Scraper(CheckBiosScraper):
         self.tag = "" if url else fetch_github_latest_version(REPO)
         super().__init__(url=url or SOURCE_TEMPLATE.format(ref=self.tag))
 
-    def submodule_revision(self) -> str:
-        """The batocera.linux commit KNULLI's batocera submodule pins at the tag."""
-        import json
-
-        from .base_scraper import github_headers
-
-        url = _SUBMODULE.format(path=BATOCERA_SUBMODULE, ref=self.tag)
-        req = urllib.request.Request(url, headers=github_headers())
-        try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                found = json.loads(resp.read().decode("utf-8"))
-        except urllib.error.URLError as e:
-            raise ConnectionError(f"Failed to fetch {url}: {e}") from e
-        if not isinstance(found, dict) or found.get("type") != "submodule" or not found.get("sha"):
-            raise RuntimeError(f"{url}: {BATOCERA_SUBMODULE} is not a submodule")
-        return str(found["sha"])
-
     def generate_platform_yaml(self) -> dict:
         systems = self.platform_systems()
         # es_systems.yml files machine selectors and plugins under an
@@ -113,7 +93,8 @@ class Scraper(CheckBiosScraper):
         defaults = fetch_text(CONFIGGEN_DEFAULTS_TEMPLATE.format(ref=self.tag))
         es_systems = fetch_text(ES_SYSTEMS_TEMPLATE.format(ref=self.tag))
         dropped = _not_cores("batocera") | _not_cores(PLATFORM_NAME)
-        revision = self.submodule_revision()
+        # The batocera.linux commit KNULLI's batocera submodule pins at the tag.
+        revision = submodule_commit(REPO, BATOCERA_SUBMODULE, self.tag)
         launchers = extract_launchers(
             lambda path: fetch_text(_RAW.format(ref=self.tag) + path),
             lambda path: fetch_text(_BATOCERA_RAW.format(ref=revision) + path),

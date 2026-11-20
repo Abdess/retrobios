@@ -9,7 +9,6 @@ import http.client
 import json
 import re
 import tarfile
-import urllib.request
 import zipfile
 import zlib
 from collections.abc import Callable
@@ -17,6 +16,8 @@ from pathlib import Path
 
 from core.artifacts import file_lock, write_bytes_atomic, write_text_atomic
 from core.cli import InputMissing
+from model.sourcerevision import source_revision
+from scraper.base_scraper import fetch_bytes
 from .base_exporter import BaseExporter
 
 DEFAULT_CACHE = ".cache/upstream-native"
@@ -141,11 +142,12 @@ def fetch(
             and _load_sources(index).get(key, url) == url
         ):
             return destination.read_bytes()
-    request = urllib.request.Request(url, headers={"User-Agent": _USER_AGENT})
-    with urllib.request.urlopen(request, timeout=60) as response:
-        payload = response.read(_MAX_BYTES + 1)
-    if len(payload) > _MAX_BYTES:
-        raise OriginalUnreadable(f"{url}: response larger than {_MAX_BYTES} bytes")
+    try:
+        payload = fetch_bytes(
+            url, {"User-Agent": _USER_AGENT}, timeout=60, max_bytes=_MAX_BYTES
+        )
+    except ValueError as exc:
+        raise OriginalUnreadable(f"{url}: response larger than {_MAX_BYTES} bytes") from exc
     # An error page served with 200 replaced a good archive and was then
     # served on every run: what does not read is never cached.
     if check is not None:
@@ -218,23 +220,6 @@ def wanted_sources(
     return {
         relative: _tarball_at(url, source) or url for relative, url in wanted.items()
     }
-
-
-_REVISION = (
-    re.compile(r"^https://raw\.githubusercontent\.com/[^/]+/[^/]+/([^/]+)/"),
-    re.compile(r"^https://github\.com/[^/]+/[^/]+/(?:tree|blob)/([^/]+)"),
-    re.compile(r"^https://gitlab\.com/.+?/-/(?:raw|archive)/([^/]+)/"),
-    re.compile(r"^https://codeload\.github\.com/[^/]+/[^/]+/tar\.gz/([^/]+)$"),
-)
-
-
-def source_revision(source: str) -> str:
-    """The revision a platform YAML's source: URL names, '' when none."""
-    for pattern in _REVISION:
-        match = pattern.match(source)
-        if match:
-            return match.group(1)
-    return ""
 
 
 def unpinned(wanted: dict[str, str], scraped: dict | None) -> list[str]:

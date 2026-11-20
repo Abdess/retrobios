@@ -8,8 +8,6 @@ Hash: SHA1 primary
 
 from __future__ import annotations
 
-import urllib.error
-import urllib.request
 from typing import TypedDict
 
 from .base_scraper import (
@@ -17,7 +15,6 @@ from .base_scraper import (
     BiosRequirement,
     fetch_branch_head,
     fetch_github_latest_version,
-    github_json,
     systems_from_requirements,
 )
 from .dat_parser import parse_dat, parse_dat_metadata, validate_dat_format
@@ -104,21 +101,6 @@ SYSTEM_SLUG_MAP = {
 }
 
 
-def _core_info_files() -> list[str]:
-    """Paths of every .info file in libretro-core-info, or RuntimeError."""
-
-    url = "https://api.github.com/repos/libretro/libretro-core-info/git/trees/master?recursive=1"
-    tree = github_json(url, "cannot list libretro-core-info", timeout=30)
-    info_files = [
-        item["path"]
-        for item in tree.get("tree", [])
-        if item["path"].endswith("_libretro.info")
-    ]
-    if not info_files:
-        raise RuntimeError(f"no .info file in {url}")
-    return info_files
-
-
 class _ExtraSystem(TypedDict):
     """A system System.dat lacks, with the files RetroArch needs for it."""
 
@@ -196,30 +178,15 @@ class Scraper(BaseScraper):
 
     def _fetch_core_metadata(self) -> dict[str, dict]:
         """Fetch per-core metadata from libretro-core-info .info files."""
-        from .coreinfo_scraper import CORE_SYSTEM_MAP
+        from .coreinfo_scraper import CORE_SYSTEM_MAP, core_info_files, fetch_info_file
 
         metadata: dict[str, dict] = {}
-        for filename in _core_info_files():
+        for filename in core_info_files():
             core_name = filename.replace("_libretro.info", "")
             system_slug = CORE_SYSTEM_MAP.get(core_name)
             if not system_slug or system_slug in metadata:
                 continue
-            info_url = f"https://raw.githubusercontent.com/libretro/libretro-core-info/master/{filename}"
-            try:
-                req = urllib.request.Request(
-                    info_url, headers={"User-Agent": "retrobios-scraper/1.0"}
-                )
-                with urllib.request.urlopen(req, timeout=10) as resp:
-                    content = resp.read().decode("utf-8")
-            except urllib.error.URLError as e:
-                raise RuntimeError(f"cannot fetch {info_url}: {e}") from e
-
-            info = {}
-            for line in content.split("\n"):
-                key, sep, value = line.strip().partition(" = ")
-                if sep:
-                    info[key.strip()] = value.strip().strip('"')
-
+            info = fetch_info_file(filename)
             if int(info.get("firmware_count", "0")) == 0:
                 continue
             metadata[system_slug] = {

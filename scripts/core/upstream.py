@@ -38,9 +38,10 @@ RETRY_BACKOFF = (0.5, 2.0)
 # a few hundred requests into a pass and serves again a minute later.
 RATE_LIMIT_WAITS = (5.0, 20.0, 60.0)
 RATE_LIMIT_WAIT_CAP = 120.0
-GITHUB_HOSTS = frozenset(
-    {"github.com", "api.github.com", "raw.githubusercontent.com"}
-)
+# The hosts the GitHub token is sent to. github.com is not one: a release
+# download there redirects to asset storage, and urllib carries the header
+# across the redirect.
+TOKEN_HOSTS = frozenset({"api.github.com", "raw.githubusercontent.com"})
 
 _HOSTS: dict[str, tuple[str, str, str]] = {
     "github.com": (
@@ -224,19 +225,29 @@ def content_url(repo: Repo, sha: str, path: str) -> str:
     return f"{repo.api_base}/repos/{repo.owner}/{repo.name}/raw/{quoted}?ref={sha}"
 
 
-def _headers(url: str, accept_json: bool = False) -> dict[str, str]:
-    """Request headers. GITHUB_TOKEN is only ever sent to GitHub."""
-    headers = {"User-Agent": USER_AGENT}
-    if accept_json:
-        headers["Accept"] = "application/json"
-    if urllib.parse.urlsplit(url).netloc in GITHUB_HOSTS:
+def forge_headers(
+    url: str, accept: str | None = None, user_agent: str = USER_AGENT
+) -> dict[str, str]:
+    """Request headers for a forge URL, the GitHub token on TOKEN_HOSTS only.
+
+    The host is compared whole: a lookalike such as github.com.example or
+    a query string naming api.github.com gets no token.
+    """
+    headers = {"User-Agent": user_agent}
+    if accept is not None:
+        headers["Accept"] = accept
+    if urllib.parse.urlsplit(url).hostname in TOKEN_HOSTS:
         from core.github import github_token
 
         # GITHUB_TOKEN, else the one gh is logged in with.
         token = github_token()
         if token:
-            headers["Authorization"] = f"token {token}"
+            headers["Authorization"] = f"Bearer {token}"
     return headers
+
+
+def _headers(url: str, accept_json: bool = False) -> dict[str, str]:
+    return forge_headers(url, "application/json" if accept_json else None)
 
 
 def _http_failure(url: str, exc: urllib.error.HTTPError) -> UpstreamError:

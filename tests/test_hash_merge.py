@@ -434,7 +434,7 @@ class TheScraperClonesTheReleaseItLabels(unittest.TestCase):
         from scripts.scraper import mame_hash_scraper as scraper
 
         calls: list[list[str]] = []
-        with mock.patch.object(scraper, "_get_release_tag", return_value="mame0289"), \
+        with mock.patch.object(scraper, "fetch_github_latest_version", return_value="mame0289"), \
                 mock.patch.object(scraper, "_run_git",
                                   side_effect=lambda args, cwd=None: calls.append(args)), \
                 mock.patch.object(scraper, "parse_mame_source_tree",

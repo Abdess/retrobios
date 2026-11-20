@@ -15,8 +15,6 @@ import re
 import shutil
 import subprocess
 import sys
-import urllib.error
-import urllib.request
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -32,7 +30,7 @@ from model.safeparse import yaml_load
 
 from core import upstream
 
-from .base_scraper import github_headers
+from .base_scraper import download, fetch_github_latest_version
 from ._hash_merge import (
     _build_contents,
     _build_source_ref,
@@ -72,7 +70,8 @@ _FLOPPY_SOURCE = "src/devices/imagedev/floppy.cpp"
 # Where a device set goes when only machines no seed places load it: MAME
 # starts such a machine from its set name, as an arcade folder passes one.
 UNPLACED_SYSTEM = "arcade"
-_REPO_URL = "https://github.com/mamedev/mame.git"
+MAME_REPO = "mamedev/mame"
+_REPO_URL = f"https://github.com/{MAME_REPO}.git"
 _STALE_HOURS = 24
 
 
@@ -158,26 +157,12 @@ def _sparse_clone(tag: str) -> None:
 
 
 def _get_version() -> str:
-    """The latest MAME release version, such as 0.289."""
-    return _parse_version_tag(_get_release_tag())
-
-
-def _get_release_tag() -> str:
-    """The latest MAME release tag, from the GitHub API.
+    """The latest MAME release version, such as 0.289.
 
     version.cpp is generated at build time, not in the repo. A failed lookup
     raises: "unknown" was cached for a day and written as core_version.
     """
-    url = "https://api.github.com/repos/mamedev/mame/releases/latest"
-    try:
-        req = urllib.request.Request(url, headers=github_headers())
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            tag = json.loads(resp.read()).get("tag_name", "")
-    except (urllib.error.URLError, json.JSONDecodeError, OSError) as exc:
-        raise RuntimeError(f"cannot read the MAME release from {url}: {exc}") from exc
-    if not tag:
-        raise RuntimeError(f"no tag_name in {url}")
-    return tag
+    return _parse_version_tag(fetch_github_latest_version(MAME_REPO))
 
 
 def _parse_version_tag(tag: str) -> str:
@@ -313,7 +298,7 @@ def _fetch_hashes(force: bool) -> dict[str, Any]:
         return cache
 
     try:
-        tag = _get_release_tag()
+        tag = fetch_github_latest_version(MAME_REPO)
         _sparse_clone(tag)
         bios_sets = parse_mame_source_tree(str(_CLONE_DIR))
         version = _parse_version_tag(tag)
@@ -406,12 +391,12 @@ def fetch_release_listxml(version: str) -> Path:
 
     0.289 is the tag mame0289 and the asset mame0289lx.zip.
     """
-    from .romset_dat_importer import MAME_LISTXML_URL, _download
+    from .romset_dat_importer import MAME_LISTXML_URL
 
     tag = "mame" + version.replace(".", "")
-    return _download(
-        MAME_LISTXML_URL.format(tag=tag), REPO_ROOT / ".cache" / "dats" / f"{tag}lx.zip"
-    )
+    listxml = REPO_ROOT / ".cache" / "dats" / f"{tag}lx.zip"
+    download(MAME_LISTXML_URL.format(tag=tag), listxml, skip_existing=True)
+    return listxml
 
 
 def release_profile(

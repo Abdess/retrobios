@@ -880,7 +880,7 @@ class TheGitHubTokenComesFromGh(unittest.TestCase):
         with self._gh():
             self.assertEqual(
                 upstream._headers("https://api.github.com/repos/o/n")["Authorization"],
-                "token gho_fromgh",
+                "Bearer gho_fromgh",
             )
         os.environ.pop("GITHUB_TOKEN")
         with self._gh():
