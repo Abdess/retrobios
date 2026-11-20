@@ -212,6 +212,11 @@ class TheReport(unittest.TestCase):
         text = insights.report(readings(goat=goat, goat_end=dt.date(2026, 11, 19)))
         self.assertIn("2026-10-01 to 2026-11-19 (50 days), UTC days: 4 page views", text)
 
+    def test_the_site_period_starts_on_the_first_day_counted(self) -> None:
+        goat = {"hits": [], "referrers": [], "visits": 4, "actions": 0, "first_day": dt.date(2026, 11, 6)}
+        text = insights.report(readings(goat=goat, goat_end=dt.date(2026, 11, 19)))
+        self.assertIn("2026-11-06 to 2026-11-19 (14 days), UTC days", text)
+
     def test_names_come_from_profiles_and_the_collection(self) -> None:
         db = {"indexes": {"by_name": {"SCPH5501.BIN": ["x"]}}}
         profiles = {"p": {"files": [{"name": "bios/dsp1b.rom", "aliases": ["DSP1B.bin"]}, "str"]}}
@@ -253,6 +258,7 @@ class GoatCounterExport(unittest.TestCase):
         self.assertEqual(dict(got["hits"]), {"/": 7, "/gone/ [404]": 2, "search-none/kenji": 5})
         self.assertEqual(got["referrers"], [("Google", 4), ("(direct)", 3), ("github.com", 2)])
         self.assertEqual((got["visits"], got["actions"]), (9, 5))
+        self.assertEqual(got["first_day"], dt.date(2026, 10, 20))
         self.assertEqual(insights.site_actions(got["hits"])["404"], [("/gone/", 2)])
 
     def test_the_export_is_asked_for_once_and_read_when_ready(self) -> None:

@@ -154,8 +154,9 @@ def _goat_export(first: dt.datetime, auth: dict[str, str]) -> bytes:
 
 def read_export(raw: bytes, first: dt.datetime, after: dt.datetime) -> dict:
     """Paths and events with their counts, the referring domains of page
-    views, from first up to after (excluded). An action is counted as a
-    path without a leading slash and carries no referrer."""
+    views, from first up to after (excluded), and the first day counted.
+    An action is counted as a path without a leading slash and carries no
+    referrer."""
     with zipfile.ZipFile(io.BytesIO(raw)) as archive:
         members = {Path(name).name: name for name in archive.namelist()}
 
@@ -169,15 +170,18 @@ def read_export(raw: bytes, first: dt.datetime, after: dt.datetime) -> dict:
     low, high = first.strftime("%Y-%m-%dT%H:00:00Z"), after.strftime("%Y-%m-%dT%H:00:00Z")
     hits: dict[str, int] = defaultdict(int)
     referrers: dict[str, int] = defaultdict(int)
+    hours: set[str] = set()
     for row in stats:
         if low <= row["hour"] < high:
+            hours.add(row["hour"])
             path = paths[row["path_id"]]
             hits[path] += row["count"]
             if path.startswith("/"):
                 referrers[refs[row["ref_id"]] or "(direct)"] += row["count"]
     actions = sum(count for path, count in hits.items() if not path.startswith("/"))
     return {"hits": list(hits.items()), "referrers": sorted(referrers.items(), key=lambda row: -row[1]),
-            "visits": sum(hits.values()) - actions, "actions": actions}
+            "visits": sum(hits.values()) - actions, "actions": actions,
+            "first_day": dt.date.fromisoformat(min(hours)[:10]) if hours else None}
 
 
 def fetch_goatcounter(start: dt.date, end: dt.date) -> dict:
@@ -487,9 +491,12 @@ SITE_ACTIONS = {"search-none": "Site searches that found nothing", "404": "Broke
 
 
 def _goatcounter(readings: Readings, goat: dict) -> list[str]:
+    # The site counts visits since 2026-11-06: a period that starts
+    # earlier is stated from the first day GoatCounter holds.
     actions = site_actions(goat["hits"])
+    start = max(readings.start, goat.get("first_day") or readings.start)
     out = ["## On the site", "",
-           f"{_span(readings.start, readings.goat_end or readings.end)}, UTC days: "
+           f"{_span(start, readings.goat_end or readings.end)}, UTC days: "
            f"{goat.get('visits', 0):,} page views, {goat.get('actions', 0):,} actions.", ""]
     for kind, title in SITE_ACTIONS.items():
         if kind in actions:
