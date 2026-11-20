@@ -50,7 +50,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from core.cli import require_directory
+from core.cli import add_repo_inputs, require_directory
 from core.torrentzip import zlib_ng_version
 from model.database import load_database
 from model.profiles import load_emulator_profiles
@@ -218,22 +218,7 @@ def main() -> int:
         help="write reconstructions to .variants/ (implies --missing)",
     )
     parser.add_argument("--json", action="store_true", help="machine-readable output")
-    parser.add_argument(
-        "--bios-dir", default="bios",
-        help="BIOS collection directory (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--platforms-dir", default="platforms",
-        help="platform YAML directory (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--emulators-dir", default="emulators",
-        help="emulator profile directory (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--db", default="database.json",
-        help="database file to read (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "bios", "platforms", "emulators", "db")
     parser.add_argument(
         "--dat-recipes",
         default="recipes",

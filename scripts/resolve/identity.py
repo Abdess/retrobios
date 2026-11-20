@@ -18,6 +18,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
+from core.paths import BIOS_DIR
 from core.hashing import file_digest
 
 
@@ -63,7 +64,7 @@ def _manufacturer(path: Path, root: Path) -> str:
     return parts[0] if len(parts) > 1 else ""
 
 
-def scan(bios_dir: str = "bios") -> list[Duplicate]:
+def scan(bios_dir: str = BIOS_DIR) -> list[Duplicate]:
     """Group the tree by content and keep the groups that cross makers.
 
     Only files that share a size can share a content, so a size held by one

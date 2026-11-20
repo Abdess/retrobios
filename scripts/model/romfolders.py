@@ -16,6 +16,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from core.paths import EMULATORS_DIR, PLATFORMS_DIR
 from model.systems import norm_system_id
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles, preferred_profile, upstream_profile_index
@@ -97,7 +98,7 @@ class SystemResolver:
 
     @classmethod
     def from_repo(
-        cls, emulators_dir: str = "emulators", platforms_dir: str = "platforms"
+        cls, emulators_dir: str = EMULATORS_DIR, platforms_dir: str = PLATFORMS_DIR
     ) -> SystemResolver:
         profiles = load_emulator_profiles(emulators_dir)
         use: dict[str, int] = {}
@@ -159,7 +160,7 @@ class ProfileResolver:
     index: dict[str, set[str]]
 
     @classmethod
-    def from_repo(cls, emulators_dir: str = "emulators") -> ProfileResolver:
+    def from_repo(cls, emulators_dir: str = EMULATORS_DIR) -> ProfileResolver:
         return cls(upstream_profile_index(load_emulator_profiles(emulators_dir)))
 
     def resolve(self, core: str | None) -> str | None:

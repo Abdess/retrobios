@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from core.paths import PLATFORMS_DIR
 from model.registry import list_release_pack_platforms
 
 
@@ -32,7 +33,7 @@ def get_page(platform: str, site: str = "") -> str:
     return f"{site}{GET_DIR}/{platform}/"
 
 
-def advertised(record: dict, platforms_dir: str = "platforms") -> dict:
+def advertised(record: dict, platforms_dir: str = PLATFORMS_DIR) -> dict:
     """The record as the download tables show it: release_pack platforms only.
 
     A release cut before a platform lost its release_pack still holds that
@@ -51,7 +52,7 @@ def advertised(record: dict, platforms_dir: str = "platforms") -> dict:
     return {**record, "packs": packs}
 
 
-def load_advertised(path: str | Path = RECORD, platforms_dir: str = "platforms") -> dict:
+def load_advertised(path: str | Path = RECORD, platforms_dir: str = PLATFORMS_DIR) -> dict:
     """The committed record, reduced to the platforms a release publishes."""
     return advertised(load_record(path), platforms_dir)
 

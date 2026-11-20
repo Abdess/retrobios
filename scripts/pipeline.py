@@ -69,6 +69,7 @@ if sys.version_info < (3, 9):
     sys.exit(f"pipeline.py needs Python 3.9 or newer, this is {sys.version.split()[0]}")
 
 sys.path.insert(0, str(Path(__file__).parent))
+from core.paths import DB_FILE, EMULATORS_DIR, PLATFORMS_DIR
 from core.artifacts import (
     ArtifactLockBusy,
     artifact_lock,
@@ -332,7 +333,7 @@ def _match_key(label: str) -> set[str]:
     } - {""}
 
 
-def release_pack_keys(platforms_dir: str = "platforms") -> set[str]:
+def release_pack_keys(platforms_dir: str = PLATFORMS_DIR) -> set[str]:
     """Comparable identities of the platforms --all builds a pack for: their
     registry ids and display names, normalized as _match_key does."""
     from model.registry import list_release_pack_platforms
@@ -452,7 +453,7 @@ _PACK_NOTES = re.compile(
 
 
 def _tree_members(
-    platform: str, platforms_dir: str, emulators_dir: str = "emulators",
+    platform: str, platforms_dir: str, emulators_dir: str = EMULATORS_DIR,
 ) -> dict[str, int]:
     """Archive path -> size of every file the platform's data trees can add."""
     from packs import datatrees
@@ -489,7 +490,7 @@ def _set_difference_lines(label: str, credited: set[str], written: set[str]) -> 
 
 
 def check_pack_destinations(
-    destinations_file: str, pack_output: str, platforms_dir: str = "platforms",
+    destinations_file: str, pack_output: str, platforms_dir: str = PLATFORMS_DIR,
 ) -> bool:
     """Compare the paths verify credits with the members of each archive.
 
@@ -567,8 +568,8 @@ def emulator_variants(profiles: list[dict], full: bool) -> list[tuple[str, dict]
 
 
 def check_emulator_packs(
-    emulators_dir: str = "emulators", platforms_dir: str = "platforms",
-    db_path: str = "database.json", full: bool = False,
+    emulators_dir: str = EMULATORS_DIR, platforms_dir: str = PLATFORMS_DIR,
+    db_path: str = DB_FILE, full: bool = False,
 ) -> bool:
     """Build every emulator and system pack in memory and compare it with verify.
 
@@ -731,8 +732,8 @@ def narrowed_variants(
 
 
 def check_narrowed_packs(
-    emulators_dir: str = "emulators", platforms_dir: str = "platforms",
-    db_path: str = "database.json", full: bool = False,
+    emulators_dir: str = EMULATORS_DIR, platforms_dir: str = PLATFORMS_DIR,
+    db_path: str = DB_FILE, full: bool = False,
 ) -> bool:
     """Build each narrowed platform pack in memory and compare it with verify.
 
@@ -852,8 +853,8 @@ def split_differences(
 
 
 def check_split_packs(
-    emulators_dir: str = "emulators", platforms_dir: str = "platforms",
-    db_path: str = "database.json",
+    emulators_dir: str = EMULATORS_DIR, platforms_dir: str = PLATFORMS_DIR,
+    db_path: str = DB_FILE,
 ) -> bool:
     """Build each platform's --split parts in memory and compare them with
     the full pack: the parts must add up to it, path for path and byte for
@@ -972,7 +973,7 @@ def _refuse_unapplied_flags(
 
 
 def _refuse_offline_without_caches(
-    parser: argparse.ArgumentParser, args: argparse.Namespace, platforms_dir: str = "platforms",
+    parser: argparse.ArgumentParser, args: argparse.Namespace, platforms_dir: str = PLATFORMS_DIR,
 ) -> None:
     """An offline run that builds packs needs the data directories cached.
 

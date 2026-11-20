@@ -29,6 +29,7 @@ from packs import archive
 from packs import emulatorpack
 from packs import md5pack
 from tests.scratchtree import scratch_checkout, snapshot
+from tests.sources import declared_options
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -215,7 +216,7 @@ class AMissingDatabaseIsNamed(unittest.TestCase):
     def _taking_db(self) -> list[str]:
         return sorted(
             path.name for path in (REPO_ROOT / "scripts").glob("*.py")
-            if re.search(r'add_argument\(\s*"--db"', path.read_text(encoding="utf-8"))
+            if "--db" in declared_options(path.read_text(encoding="utf-8"))
         )
 
     def test_every_script_names_the_missing_file(self):
@@ -253,7 +254,7 @@ class AMissingBiosDirIsRefused(unittest.TestCase):
         out = str(Path(scratch.name) / "out")
         taking = sorted(
             path.name for path in (REPO_ROOT / "scripts").glob("*.py")
-            if re.search(r'add_argument\(\s*"--bios-dir"', path.read_text(encoding="utf-8"))
+            if "--bios-dir" in declared_options(path.read_text(encoding="utf-8"))
             and path.name != "generate_db.py"
         )
         self.assertGreater(len(taking), 4)
@@ -271,11 +272,10 @@ class AMissingBiosDirIsRefused(unittest.TestCase):
 
 
 def _scripts_taking(flag: str) -> list[Path]:
-    pattern = re.compile(rf'add_argument\(\s*"{re.escape(flag)}"')
     return [
         path for path in sorted((REPO_ROOT / "scripts").glob("*.py"))
         + sorted((REPO_ROOT / "scripts" / "scraper").glob("*.py"))
-        if pattern.search(path.read_text(encoding="utf-8"))
+        if flag in declared_options(path.read_text(encoding="utf-8"))
     ]
 
 

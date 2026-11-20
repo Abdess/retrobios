@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import os
 import re
+import sys
 from pathlib import Path
 
+from core.paths import PLATFORMS_DIR
 from core.cli import SourceUnreadable, suggest_names
 from model.sources import source_yaml
 
@@ -29,7 +31,7 @@ def _target_alias_index(targets: dict, overrides: dict) -> dict[str, str]:
     return alias_index
 
 
-def platform_files_target(platform: str, target: str, platforms_dir: str = "platforms") -> bool:
+def platform_files_target(platform: str, target: str, platforms_dir: str = PLATFORMS_DIR) -> bool:
     """Whether the platform's targets file knows this target, by any alias."""
     targets_dir = os.path.join(platforms_dir, "targets")
     target_file = os.path.join(targets_dir, f"{platform}.yml")
@@ -41,7 +43,7 @@ def platform_files_target(platform: str, target: str, platforms_dir: str = "plat
 
 
 def canonical_target_name(
-    platforms: list[str], target: str, platforms_dir: str = "platforms"
+    platforms: list[str], target: str, platforms_dir: str = PLATFORMS_DIR
 ) -> str:
     """The name a target is filed under, whichever alias was typed.
 
@@ -66,7 +68,7 @@ def canonical_target_name(
 
 
 def truth_target_dir(
-    output_dir: str, platforms: list[str], target: str, platforms_dir: str = "platforms"
+    output_dir: str, platforms: list[str], target: str, platforms_dir: str = PLATFORMS_DIR
 ) -> str:
     """Where a target-narrowed truth model is written and read.
 
@@ -84,7 +86,7 @@ def truth_target_dir(
 def load_target_config(
     platform_name: str,
     target: str,
-    platforms_dir: str = "platforms",
+    platforms_dir: str = PLATFORMS_DIR,
 ) -> set[str] | None:
     """Load target config and return the set of core names for the given target.
 
@@ -169,7 +171,7 @@ def apply_target_overrides(
 
 def list_available_targets(
     platform_name: str,
-    platforms_dir: str = "platforms",
+    platforms_dir: str = PLATFORMS_DIR,
 ) -> list[dict]:
     """List available targets for a platform with their aliases.
 
@@ -254,6 +256,23 @@ def build_target_cores_cache(
     for note in notes:
         print(note)
     return cache, kept
+
+
+def target_scope(
+    platforms: list[str],
+    target: str | None,
+    platforms_dir: str,
+    is_all: bool = False,
+) -> tuple[dict[str, set[str] | None], list[str]]:
+    """build_target_cores_cache for a command line: no target keeps every
+    platform unfiltered, a refused target ends the run with its reason."""
+    if not target:
+        return {}, platforms
+    try:
+        return build_target_cores_cache(platforms, target, platforms_dir, is_all=is_all)
+    except (FileNotFoundError, ValueError) as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        sys.exit(1)
 
 
 def _unknown_target_message(target: str, platforms: list[str], platforms_dir: str) -> str:

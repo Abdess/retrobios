@@ -9,6 +9,7 @@ try:
 except ImportError:
     yaml = None
 
+from core.paths import PLATFORMS_DIR
 from model.sources import source_yaml
 
 
@@ -181,7 +182,7 @@ def _attach_rom_folders(config: dict, platform_name: str, platforms_dir: str) ->
         config["_rom_folders"] = [row for row in folders if isinstance(row, dict)]
 
 
-def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -> dict:
+def load_platform_config(platform_name: str, platforms_dir: str = PLATFORMS_DIR) -> dict:
     """Load a platform config with inheritance and shared group resolution.
 
     This is the SINGLE implementation used by generate_pack, generate_readme,

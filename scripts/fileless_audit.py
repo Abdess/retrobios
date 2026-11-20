@@ -25,7 +25,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 
 from core import upstream
-from core.cli import require_directory, suggest_names
+from core.cli import add_repo_inputs, require_directory, suggest_names
 from profiling.citations import collect_citations
 from profiling.repos import select_views
 from model.sourceref import ref_role, split_source_ref
@@ -109,10 +109,7 @@ def main() -> None:
         "--all", action="store_true",
         help="every profile that declares no files and has no answer yet",
     )
-    parser.add_argument(
-        "--emulators-dir", default="emulators",
-        help="emulator profile directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "emulators")
     parser.add_argument(
         "--cache-dir", default=".cache",
         help="download cache directory (default: %(default)s)",

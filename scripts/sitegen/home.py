@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import html
 
+from core.paths import PLATFORMS_DIR
 from model.composition import compute_composition
 from model.guides import DEVICE_GROUPS, GROUP_TILES, GUIDES, Guide, TRUST_ITEMS, setup_count
 from model.platforms import load_platform_config
@@ -82,7 +83,7 @@ def generate_home(
     coverages: dict,
     profiles: dict,
     registry: dict | None = None,
-    platforms_dir: str = "platforms",
+    platforms_dir: str = PLATFORMS_DIR,
 ) -> str:
     """The page someone lands on knowing nothing: what a BIOS file is,
     whether they need one, and the three steps to get the right ones.

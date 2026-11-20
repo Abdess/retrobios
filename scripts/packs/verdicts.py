@@ -13,12 +13,6 @@ from resolve.validation import (
 )
 
 
-DEFAULT_BIOS_DIR = "bios"
-
-
-DEFAULT_EMULATORS_DIR = "emulators"
-
-
 # Status model: aligned with Batocera BiosStatus (batocera-systems:967-969)
 
 

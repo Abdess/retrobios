@@ -17,7 +17,7 @@ from model import releaserecord
 from core.artifacts import write_if_changed
 from core.cli import InputMissing
 from core.github import github_token
-from core.paths import REPO_ROOT
+from core.paths import DB_FILE, PLATFORMS_DIR, REPO_ROOT
 from model.composition import compute_composition, count_catalog_matched
 from model.declarations import declared_root
 from model.guides import PACKAGE_COMMAND, install_command
@@ -177,7 +177,7 @@ def platform_coverages(
     db: dict,
     data_registry: dict | None = None,
     emulators_dir: str = _EMULATORS_DIR,
-    db_path: str = "database.json",
+    db_path: str = DB_FILE,
     report: Callable[[str, dict], None] | None = None,
 ) -> dict[str, dict]:
     """compute_coverage for each platform, read from the cache when its
@@ -294,7 +294,7 @@ def asset_links(
 def download_links(
     platform_name: str, record: dict, label: str, attrs: str = "",
     button: Callable[[str, str], str] | None = None,
-    site: str = "", platforms_dir: str = "platforms", page: str | None = None,
+    site: str = "", platforms_dir: str = PLATFORMS_DIR, page: str | None = None,
 ) -> str:
     """The download cell of a platform: its permanent get/ page.
 
@@ -584,7 +584,7 @@ def archive_line(counts: dict[str, int]) -> str:
             f" ([rebuilding an archive]({SITE_URL}wiki/archive-recipes/))")
 
 
-def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json") -> str:
+def generate_readme(db: dict, platforms_dir: str, db_path: str = DB_FILE) -> str:
     total_files = db.get("total_files", 0)
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 

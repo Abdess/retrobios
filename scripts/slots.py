@@ -20,6 +20,8 @@ feeds the report this module prints.
 from __future__ import annotations
 
 
+from core.paths import PLATFORMS_DIR
+from core.cli import add_repo_inputs
 from model.cliargs import platform_arg, require_platform
 from model.database import load_database
 from model.platforms import load_platform_config
@@ -117,7 +119,7 @@ def format_conflict(conflict: Conflict) -> str:
 
 
 def scan_platform(
-    platform: str, profiles: dict, db: dict, platforms_dir: str = "platforms",
+    platform: str, profiles: dict, db: dict, platforms_dir: str = PLATFORMS_DIR,
     target_cores: set[str] | None = None,
 ) -> list[Conflict]:
     """Conflicts on one platform, using the cores that platform actually runs."""
@@ -154,18 +156,7 @@ def main() -> int:
         "--platform", "-p", type=platform_arg,
         help="one platform instead of all",
     )
-    parser.add_argument(
-        "--db", default="database.json",
-        help="database file to read (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--platforms-dir", default="platforms",
-        help="platform YAML directory (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--emulators-dir", default="emulators",
-        help="emulator profile directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "db", "platforms", "emulators")
     parser.add_argument("--json", action="store_true", help="JSON output")
     parser.add_argument(
         "--target", "-t", help="judge only the cores a hardware target builds",

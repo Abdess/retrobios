@@ -41,10 +41,10 @@ from model.cliargs import (
     print_platform_listing,
     list_system_ids,
 )
-from core.cli import require_directory
+from core.cli import add_emulator_selection, add_repo_inputs, require_directory
 from model.targets import (
     target_listing_line,
-    build_target_cores_cache,
+    target_scope,
 )
 from model.systems import (
     resolve_system_arg,
@@ -67,10 +67,11 @@ from model.registry import (
     list_registered_platforms,
     list_release_pack_platforms,
     load_data_dir_registry,
+    load_platform_registry,
 )
 from model.database import load_database
 from model.platforms import load_platform_config
-from model.safeparse import require_yaml, yaml_load
+from model.safeparse import require_yaml
 from resolve import packfiles as packresolve
 from packs.datadirs import hold_data_dirs
 from model import region
@@ -106,12 +107,7 @@ from packs.targets import generate_target_manifests, target_list
 
 yaml = require_yaml()
 
-DEFAULT_PLATFORMS_DIR = "platforms"
-
-
-DEFAULT_DB_FILE = "database.json"
 DEFAULT_OUTPUT_DIR = "dist"
-DEFAULT_BIOS_DIR = "bios"
 
 
 def _json_artifact_kind(path: Path) -> str | None:
@@ -354,10 +350,7 @@ def _run_manifest_mode(
     """Generate JSON manifests instead of ZIP packs."""
     registry_path = os.path.join(args.platforms_dir, "_registry.yml")
     os.makedirs(args.output_dir, exist_ok=True)
-    registry: dict = {}
-    if os.path.exists(registry_path):
-        with open(registry_path) as _rf:
-            registry = yaml_load(_rf) or {}
+    platform_registry = load_platform_registry(args.platforms_dir)
 
     variants = ALL_VARIANTS if args.all_variants else ((args.source, args.required_only),)
 
@@ -433,7 +426,7 @@ def _run_manifest_mode(
                         alias_manifest["base_destination"] = alias_cfg.get(
                             "base_destination", ""
                         )
-                        alias_registry = registry.get("platforms", {}).get(alias_plat, {})
+                        alias_registry = platform_registry.get(alias_plat, {})
                         alias_install = alias_registry.get("install", {})
                         alias_manifest["detect"] = alias_install.get("detect", [])
                         # Placed and completed as the representative's are:
@@ -497,15 +490,9 @@ def _verify_packs_scope(args: argparse.Namespace) -> tuple[list[str], dict[str, 
     # The target is checked as the build checks it: a mistyped one, or one
     # the platform does not publish, was dropped and the full pack verified
     # under it, `all OK` for a pack no build had made.
-    target_cores_cache: dict[str, set[str] | None] = {}
-    if args.target:
-        try:
-            target_cores_cache, platforms = build_target_cores_cache(
-                platforms, args.target, args.platforms_dir, is_all=args.all
-            )
-        except (FileNotFoundError, ValueError) as e:
-            print(f"ERROR: {e}", file=sys.stderr)
-            sys.exit(1)
+    target_cores_cache, platforms = target_scope(
+        platforms, args.target, args.platforms_dir, is_all=args.all
+    )
     return platforms, target_cores_cache
 
 
@@ -1063,34 +1050,13 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Generate the release packs (release_pack in the registry), or with"
         " --manifest the install manifests of every platform",
     )
-    parser.add_argument(
-        "--emulator", "-e", help="Emulator profile name(s), comma-separated"
-    )
-    parser.add_argument("--system", "-s", help="System ID(s), comma-separated")
-    parser.add_argument("--standalone", action="store_true", help="Use standalone mode")
-    parser.add_argument(
-        "--list-emulators", action="store_true", help="List available emulators"
-    )
-    parser.add_argument(
-        "--list-systems", action="store_true", help="List available systems"
-    )
-    parser.add_argument(
-        "--platforms-dir", default=DEFAULT_PLATFORMS_DIR,
-        help="platform YAML directory (default: %(default)s)",
-    )
-    parser.add_argument("--db", default=DEFAULT_DB_FILE, help="Path to database.json")
-    parser.add_argument(
-        "--bios-dir", default=DEFAULT_BIOS_DIR,
-        help="BIOS collection directory (default: %(default)s)",
-    )
+    add_emulator_selection(parser)
+    add_repo_inputs(parser, "platforms", "db", "bios")
     parser.add_argument(
         "--output-dir", "-o", default=DEFAULT_OUTPUT_DIR,
         help="directory the packs and manifests go to (default: %(default)s)",
     )
-    parser.add_argument(
-        "--emulators-dir", default="emulators",
-        help="emulator profile directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "emulators")
     parser.add_argument(
         "--offline",
         action="store_true",
@@ -1371,18 +1337,9 @@ def _run_platform_mode(
     # A mistyped target is refused before the output lock and the data
     # directory refresh: checked after them, `--target swich` waited on a
     # pipeline's caches before saying the target does not exist.
-    target_cores_cache: dict[str, set[str] | None] = {}
-    if args.target:
-        try:
-            target_cores_cache, platforms = build_target_cores_cache(
-                platforms,
-                args.target,
-                args.platforms_dir,
-                is_all=args.all,
-            )
-        except (FileNotFoundError, ValueError) as e:
-            print(f"ERROR: {e}", file=sys.stderr)
-            sys.exit(1)
+    target_cores_cache, platforms = target_scope(
+        platforms, args.target, args.platforms_dir, is_all=args.all
+    )
 
     emu_profiles = load_emulator_profiles(args.emulators_dir)
     if system_filter:

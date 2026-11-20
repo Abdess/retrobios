@@ -8,6 +8,7 @@ import re
 import sys
 from pathlib import Path
 
+from core.paths import PLATFORMS_DIR
 import yaml
 
 from core import upstream
@@ -92,7 +93,7 @@ def _platform_cores(emulators_dir: str, platforms_dir: str) -> tuple[tuple[str, 
 
 
 def shipping_platforms(
-    name: str, emulators_dir: str, platforms_dir: str = "platforms",
+    name: str, emulators_dir: str, platforms_dir: str = PLATFORMS_DIR,
 ) -> list[str]:
     """The registered platforms whose cores resolve to this profile."""
     return [
@@ -107,7 +108,7 @@ def shipping_platforms(
 def bump_commit(
     path: Path, report: ProfileReport, accept_changed: bool = False,
     cache_dir: str = DEFAULT_CACHE, offline: bool = False,
-    platforms_dir: str = "platforms",
+    platforms_dir: str = PLATFORMS_DIR,
 ) -> bool:
     """Advance source_commit to HEAD when nothing needs a read again.
 

@@ -21,6 +21,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from core.cli import add_repo_inputs
 from model.cliargs import platform_arg, require_platform
 from model.registry import list_registered_platforms, load_data_dir_registry, load_platform_registry
 from exporter import discover_exporters
@@ -103,10 +104,7 @@ def main() -> None:
         help="directory of the truth models generate_truth writes (default: "
              "%(default)s)",
     )
-    parser.add_argument(
-        "--platforms-dir", default="platforms",
-        help="platform YAML directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "platforms")
     parser.add_argument(
         "--upstream-dir",
         default=DEFAULT_CACHE,

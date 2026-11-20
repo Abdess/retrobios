@@ -6,6 +6,7 @@ import json
 import zipfile
 from pathlib import Path
 
+from core.paths import PLATFORMS_DIR
 from core.artifacts import artifact_lock
 from model.registry import list_release_pack_platforms
 from model.releaserecord import SCHEMA_VERSION, pack_name_for
@@ -20,7 +21,7 @@ class NotAReleasePackError(Exception):
     """A pack in the directory is not the full pack of a registered platform."""
 
 
-def release_owners(platforms_dir: str = "platforms") -> dict[str, list[str]]:
+def release_owners(platforms_dir: str = PLATFORMS_DIR) -> dict[str, list[str]]:
     """Full pack file name to the platforms it serves, as the builder names it.
 
     Rebuilt from the name builder, never matched by substring: matched by
@@ -43,7 +44,7 @@ def release_owners(platforms_dir: str = "platforms") -> dict[str, list[str]]:
 def build_record(
     dist: Path,
     tag: str,
-    platforms_dir: str = "platforms",
+    platforms_dir: str = PLATFORMS_DIR,
     owners: dict[str, list[str]] | None = None,
 ) -> dict:
     """Read every pack of a directory, parts counted once across them.

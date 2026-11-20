@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
 
+from core.paths import EMULATORS_DIR, PLATFORMS_DIR
 from core.artifacts import set_plain_mode
 from core.options import reject_unknown
 from model.registry import list_registered_platforms
@@ -111,12 +112,12 @@ class FinalizeOptions(TypedDict, total=False):
 class _FinalizeSettings:
     """FinalizeOptions with their defaults."""
 
-    platforms_dir: str = "platforms"
+    platforms_dir: str = PLATFORMS_DIR
     skip_conformance: bool = False
     data_registry: dict | None = None
     regions: list[str] | None = None
     target_name: str | None = None
-    emulators_dir: str = "emulators"
+    emulators_dir: str = EMULATORS_DIR
     no_game_data: bool = False
     pack_systems_by_name: dict[str, dict] | None = None
     built: Iterable[str] | None = None

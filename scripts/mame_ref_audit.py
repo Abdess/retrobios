@@ -27,7 +27,7 @@ from dataclasses import dataclass
 sys.path.insert(0, os.path.dirname(__file__))
 
 from core import upstream
-from core.cli import require_directory
+from core.cli import add_repo_inputs, require_directory
 from model.safeparse import yaml_load
 from scraper.mame_parser import MACHINE_MACROS, strip_comments
 
@@ -129,10 +129,7 @@ def rewrite(name: str, emulators_dir: str, findings: list[Finding]) -> int:
 def main() -> None:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__.splitlines()[0])
     parser.add_argument("emulators", nargs="+", help="MAME-family profiles to audit")
-    parser.add_argument(
-        "--emulators-dir", default="emulators",
-        help="emulator profile directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "emulators")
     parser.add_argument(
         "--cache-dir", default=upstream.CACHE_DIR,
         help="download cache directory (default: %(default)s)",

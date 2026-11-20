@@ -19,6 +19,7 @@ import json
 import subprocess
 import sys
 
+from core.cli import add_repo_inputs
 from model.database import load_database
 from model.largefiles import registered_paths
 from release.assets import (
@@ -35,10 +36,7 @@ from release.assets import (
 
 def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__.split("\n")[0])
-    parser.add_argument(
-        "--db", default="database.json",
-        help="database file to read (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "db")
     parser.add_argument(
         "--gitignore", default=".gitignore",
         help="the .gitignore listing release-asset files (default: %(default)s)",

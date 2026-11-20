@@ -9,6 +9,14 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
+# The inputs a command reads unless told otherwise, relative to the
+# repository root it runs from.
+DB_FILE = "database.json"
+PLATFORMS_DIR = "platforms"
+EMULATORS_DIR = "emulators"
+BIOS_DIR = "bios"
+
+
 def sanitize_pack_path(raw: str) -> str:
     """Strip traversal components from a relative destination.
 

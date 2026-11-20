@@ -9,17 +9,16 @@ import tempfile
 import zipfile
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
 
+from model.registry import load_platform_registry
 from core.hashing import compute_hashes
 from core.options import reject_unknown
-from core.paths import sanitize_pack_path
+from core.paths import EMULATORS_DIR, sanitize_pack_path
 from model.alternatives import core_file_spares
 from model.declarations import OUTER_ROOTS, declared_root
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
-from model.safeparse import yaml_load
 from packs import slots
 from packs.archive import (
     CASE_FOLDING_OS,
@@ -313,7 +312,7 @@ class PackOptions(PackNarrowing, _PartScope, total=False):
 class _PackSettings:
     """PackOptions with their defaults."""
 
-    emulators_dir: str = "emulators"
+    emulators_dir: str = EMULATORS_DIR
     zip_contents: dict | None = None
     data_registry: dict | None = None
     emu_profiles: dict | None = None
@@ -1062,11 +1061,7 @@ class _PlatformPackBuild:
 
 def _platform_registry(platforms_dir: str) -> dict:
     """The platforms of _registry.yml, or nothing when the file is absent."""
-    registry_path = Path(platforms_dir) / "_registry.yml"
-    if not registry_path.exists():
-        return {}
-    with open(registry_path) as f:
-        return (yaml_load(f) or {}).get("platforms", {})
+    return load_platform_registry(platforms_dir)
 
 
 def generate_pack(

@@ -24,6 +24,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
+from core.cli import add_repo_inputs
 from model.dumpcatalog import DEFAULT_PROVENANCE_DIR, load_provenance_snapshots
 from model.database import load_database
 from model.profiles import load_emulator_profiles
@@ -60,7 +61,7 @@ def _print_missing(entry: dict, derived: dict[str, dict]) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Dump-catalog coverage report")
-    parser.add_argument("--db", default="database.json", help="Database path")
+    add_repo_inputs(parser, "db")
     parser.add_argument(
         "--provenance-dir",
         default=DEFAULT_PROVENANCE_DIR,

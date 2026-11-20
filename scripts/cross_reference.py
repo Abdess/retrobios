@@ -19,6 +19,7 @@ import sys
 from dataclasses import dataclass
 
 sys.path.insert(0, os.path.dirname(__file__))
+from core.cli import add_repo_inputs
 from model.cliargs import platform_arg, list_emulator_profiles, require_platform
 from model.profiles import ProfileSelectionError, load_emulator_profiles, select_emulator_profiles
 from model.database import load_database
@@ -34,7 +35,6 @@ from resolve.launchers import (
 )
 
 from packs.crossref import (
-    DEFAULT_PLATFORMS_DIR,
     build_supplemental_index,
     cross_reference,
     declared_names,
@@ -45,9 +45,6 @@ from packs.crossref import (
 )
 
 yaml = require_yaml()
-
-DEFAULT_EMULATORS_DIR = "emulators"
-DEFAULT_DB = "database.json"
 
 
 # The --json key of the launcher reads category, beside the emulator keys.
@@ -187,18 +184,7 @@ def print_report(
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Emulator vs platform gap analysis")
-    parser.add_argument(
-        "--emulators-dir", default=DEFAULT_EMULATORS_DIR,
-        help="emulator profile directory (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--platforms-dir", default=DEFAULT_PLATFORMS_DIR,
-        help="platform YAML directory (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--db", default=DEFAULT_DB,
-        help="database file to read (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "emulators", "platforms", "db")
     parser.add_argument("--emulator", "-e", help="Analyze single emulator")
     parser.add_argument(
         "--platform", "-p", type=platform_arg, help="Restrict analysis to one platform's cores"

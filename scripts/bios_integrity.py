@@ -43,6 +43,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from core.cli import add_repo_inputs
 from core.hashing import file_digest
 from model.largefiles import load_registered_paths
 
@@ -193,8 +194,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__.split("\n\n")[0])
     parser.add_argument("--apply", action="store_true",
                         help="restore confirmed flips of committed files from HEAD")
-    parser.add_argument("--db", default="database.json",
-                        help="database file to read (default: %(default)s)")
+    add_repo_inputs(parser, "db")
     parser.add_argument("--json", action="store_true", help="machine-readable report")
     args = parser.parse_args()
 

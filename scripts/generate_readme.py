@@ -15,6 +15,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
+from core.cli import add_repo_inputs
 from model.database import load_database
 from core.artifacts import repository_output_lock
 from sitegen.readme import write_readme, generate_readme
@@ -22,14 +23,7 @@ from sitegen.readme import write_readme, generate_readme
 
 def main() -> None:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Generate slim README.md")
-    parser.add_argument(
-        "--db", default="database.json",
-        help="database file to read (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--platforms-dir", default="platforms",
-        help="platform YAML directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "db", "platforms")
     args = parser.parse_args()
 
     import contextlib

@@ -13,23 +13,21 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-from model.targets import build_target_cores_cache, truth_target_dir
+from core.paths import DB_FILE
+from model.targets import target_scope, truth_target_dir
 from model.cliargs import platform_arg, require_platform
-from model.registry import list_registered_platforms, load_data_dir_registry
+from model.registry import list_registered_platforms, load_data_dir_registry, load_platform_registry
 from model.database import load_database
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
-from core.cli import require_directory
-from model.safeparse import require_yaml, yaml_load
+from core.cli import add_repo_inputs, require_directory
+from model.safeparse import require_yaml
 from core.artifacts import write_text_atomic
 from resolve.truth import generate_platform_truth
 
 yaml = require_yaml()
 
 DEFAULT_OUTPUT_DIR = "dist/truth"
-DEFAULT_PLATFORMS_DIR = "platforms"
-DEFAULT_EMULATORS_DIR = "emulators"
-DEFAULT_DB_FILE = "database.json"
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -51,17 +49,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=None,
         help="hardware target filter",
     )
-    parser.add_argument(
-        "--platforms-dir",
-        default=DEFAULT_PLATFORMS_DIR,
-        help="platform YAML directory (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--emulators-dir",
-        default=DEFAULT_EMULATORS_DIR,
-        help="emulator profile directory (default: %(default)s)",
-    )
-    parser.add_argument("--db", default=DEFAULT_DB_FILE, help="database.json path")
+    add_repo_inputs(parser, "platforms", "emulators", "db")
     return parser.parse_args(argv)
 
 
@@ -69,9 +57,7 @@ def main(argv: list[str] | None = None) -> None:
     args = parse_args(argv)
     require_directory(args.platforms_dir, "--platforms-dir")
 
-    registry_path = os.path.join(args.platforms_dir, "_registry.yml")
-    with open(registry_path) as f:
-        registry = (yaml_load(f) or {}).get("platforms", {})
+    registry = load_platform_registry(args.platforms_dir, required=True)
 
     profiles = load_emulator_profiles(args.emulators_dir)
     data_registry = load_data_dir_registry(args.platforms_dir)
@@ -79,7 +65,7 @@ def main(argv: list[str] | None = None) -> None:
     # Load database (optional)
     # The default may be absent, but a --db that was named must exist.
     db: dict | None = None
-    if args.db != DEFAULT_DB_FILE or os.path.exists(args.db):
+    if args.db != DB_FILE or os.path.exists(args.db):
         db = load_database(args.db)
 
     if args.all:
@@ -93,15 +79,9 @@ def main(argv: list[str] | None = None) -> None:
     # A named platform without that target is refused, as verify and
     # generate_pack refuse it: skipped, it printed Done. and exited 0 with
     # no model written. --all leaves such platforms out and says so.
-    target_cores_cache: dict[str, set[str] | None] = {}
-    if args.target:
-        try:
-            target_cores_cache, platforms = build_target_cores_cache(
-                platforms, args.target, args.platforms_dir, is_all=args.all
-            )
-        except (FileNotFoundError, ValueError) as exc:
-            print(f"ERROR: {exc}", file=sys.stderr)
-            sys.exit(1)
+    target_cores_cache, platforms = target_scope(
+        platforms, args.target, args.platforms_dir, is_all=args.all
+    )
 
     # A target-narrowed model is a different artifact: written under the
     # platform's own name it overwrote the full one, and diff_truth then

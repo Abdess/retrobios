@@ -29,11 +29,9 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from core.hashing import compute_hashes
-from core.cli import require_directory
+from core.cli import add_repo_inputs, require_directory
 from core.artifacts import write_text_atomic
 from model.nodedup import in_nodedup_dir
-
-DEFAULT_BIOS_DIR = "bios"
 
 
 def path_priority(path: str) -> tuple:
@@ -353,10 +351,7 @@ def main() -> None:
     parser.add_argument(
         "--dry-run", action="store_true", help="Preview without deleting"
     )
-    parser.add_argument(
-        "--bios-dir", default=DEFAULT_BIOS_DIR,
-        help="BIOS collection directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "bios")
     args = parser.parse_args()
     require_directory(args.bios_dir)
 

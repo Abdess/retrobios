@@ -16,6 +16,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from core.cli import add_repo_inputs
 from model.database import load_database
 from model.profiles import load_emulator_profiles
 from resolve.regionaudit import build_report
@@ -67,11 +68,7 @@ def main() -> int:
         allow_abbrev=False,
         description="Cross-check profile region: values against No-Intro provenance"
     )
-    parser.add_argument("--db", default="database.json", help="Path to database.json")
-    parser.add_argument(
-        "--emulators-dir", default="emulators",
-        help="emulator profile directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "db", "emulators")
     parser.add_argument("--json", action="store_true", help="Machine-readable output")
     args = parser.parse_args()
     from model.cliargs import work_from_repo_root

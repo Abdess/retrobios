@@ -13,7 +13,6 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
-from core.cli import suggest_names
 from core.options import reject_unknown
 from core.paths import REPO_ROOT
 from core.ziptools import build_zip_contents_index
@@ -22,11 +21,12 @@ from model.profiles import (
     ProfileSelectionError,
     entry_serves_systems,
     load_emulator_profiles,
+    no_profile_for_systems,
     profiles_for_systems,
     select_emulator_profiles,
 )
 from model.registry import load_data_dir_registry
-from model.systems import MANUFACTURER_PREFIXES, system_index
+from model.systems import MANUFACTURER_PREFIXES
 from packs.archive import (
     PackRecord,
     Placed,
@@ -567,24 +567,7 @@ def generate_system_pack(
     matching = profiles_for_systems(profiles, system_ids, standalone)
 
     if not matching:
-        all_systems: set[str] = set()
-        for p in profiles.values():
-            all_systems.update(p.get("systems", []))
-        if standalone:
-            print(
-                f"No standalone emulators found for system(s): {', '.join(system_ids)}",
-                file=sys.stderr,
-            )
-        else:
-            print(
-                f"No emulators found for system(s): {', '.join(system_ids)}",
-                file=sys.stderr,
-            )
-        # --list-systems merges spellings that differ in case or separator:
-        # the hint counted 579 spellings for the 532 lines it prints.
-        print(suggest_names(system_ids, sorted(all_systems), "--list-systems",
-                            listed=len(system_index(profiles))),
-              file=sys.stderr)
+        print(no_profile_for_systems(profiles, system_ids, standalone), file=sys.stderr)
         return None
 
     # Named like the platform's --system tag: one spelling of a system is

@@ -21,6 +21,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
+from core.cli import add_repo_inputs
 from model.dumpcatalog import annotate_provenance, DEFAULT_PROVENANCE_DIR, load_provenance_snapshots
 from core.hashing import compute_hashes
 from model.registry import list_registered_platforms
@@ -41,7 +42,6 @@ yaml = require_yaml()
 
 CACHE_DIR = ".cache"
 CACHE_FILE = os.path.join(CACHE_DIR, "db_cache.json")
-DEFAULT_BIOS_DIR = "bios"
 DEFAULT_OUTPUT = "database.json"
 
 SKIP_PATTERNS = {".git", ".github", "__pycache__", ".cache", ".DS_Store", "desktop.ini"}
@@ -464,9 +464,7 @@ def _preserve_large_file_entries(files: dict, db_path: str) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Generate multi-indexed BIOS database")
     parser.add_argument("--force", action="store_true", help="Force rehash all files")
-    parser.add_argument(
-        "--bios-dir", default=DEFAULT_BIOS_DIR, help="BIOS directory path"
-    )
+    add_repo_inputs(parser, "bios")
     parser.add_argument(
         "--output", "-o", default=DEFAULT_OUTPUT, help="Output JSON file"
     )

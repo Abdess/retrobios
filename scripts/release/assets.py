@@ -10,6 +10,7 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import NamedTuple
 
+from core.paths import EMULATORS_DIR
 from core.hashing import file_digest
 from model.composition import composition_tier
 from model.largefiles import LARGE_FILES_RELEASE, LARGE_FILES_REPO, asset_names, registered_paths
@@ -234,7 +235,7 @@ def render_notes(
     return "\n".join(out)
 
 
-def profile_descriptions(emulators_dir: str = "emulators") -> dict[str, str]:
+def profile_descriptions(emulators_dir: str = EMULATORS_DIR) -> dict[str, str]:
     """Name -> description, from the first profile that declares the file."""
     from model.profiles import load_emulator_profiles
 

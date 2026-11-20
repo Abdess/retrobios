@@ -28,6 +28,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+from core.cli import add_repo_inputs
 from model.database import load_database
 from release.sync import OUT_OF_DATE, open_findings, plan_uploads, upload_all
 
@@ -35,8 +36,7 @@ from release.sync import OUT_OF_DATE, open_findings, plan_uploads, upload_all
 def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__.split("\n\n")[0])
     parser.add_argument("--apply", action="store_true", help="upload (default: dry run)")
-    parser.add_argument("--db", default="database.json",
-                        help="database file to read (default: %(default)s)")
+    add_repo_inputs(parser, "db")
     args = parser.parse_args()
 
     root = Path.cwd()

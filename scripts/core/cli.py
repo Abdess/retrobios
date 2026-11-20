@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import os
 import signal
 import sys
@@ -9,6 +10,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 from core.artifacts import ArtifactDirectoryMissing, ArtifactLockBusy
+from core.paths import BIOS_DIR, DB_FILE, EMULATORS_DIR, PLATFORMS_DIR
 
 
 # Every build script imports this module. verify.py, slots.py, validate_pr.py
@@ -70,6 +72,31 @@ def suggest_names(
     if len(available) <= SHORT_LIST:
         return f"Known: {', '.join(available)}."
     return f"{listing_flag} lists all {total}."
+
+
+REPO_INPUTS = {
+    "db": ("--db", DB_FILE, "database file to read"),
+    "platforms": ("--platforms-dir", PLATFORMS_DIR, "platform YAML directory"),
+    "emulators": ("--emulators-dir", EMULATORS_DIR, "emulator profile directory"),
+    "bios": ("--bios-dir", BIOS_DIR, "BIOS collection directory"),
+}
+
+
+def add_repo_inputs(parser: argparse.ArgumentParser, *inputs: str) -> None:
+    """Declare the repository inputs a command reads, in the order given:
+    any of "db", "platforms", "emulators", "bios"."""
+    for key in inputs:
+        flag, default, text = REPO_INPUTS[key]
+        parser.add_argument(flag, default=default, help=f"{text} (default: %(default)s)")
+
+
+def add_emulator_selection(parser: argparse.ArgumentParser) -> None:
+    """The --emulator and --system modes that verify and generate_pack share."""
+    parser.add_argument("--emulator", "-e", help="Emulator profile name(s), comma-separated")
+    parser.add_argument("--system", "-s", help="System ID(s), comma-separated")
+    parser.add_argument("--standalone", action="store_true", help="Use standalone mode")
+    parser.add_argument("--list-emulators", action="store_true", help="List available emulators")
+    parser.add_argument("--list-systems", action="store_true", help="List available systems")
 
 
 def _exit_on_signal(signum: int, _frame: object) -> None:

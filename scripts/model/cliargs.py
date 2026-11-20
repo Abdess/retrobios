@@ -16,7 +16,7 @@ from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
 from model.registry import list_registered_platforms, list_release_pack_platforms
 from model.systems import platform_system_names, system_index
-from core.paths import REPO_ROOT
+from core.paths import PLATFORMS_DIR, REPO_ROOT
 
 
 def work_from_repo_root(
@@ -62,7 +62,7 @@ def platform_arg(value: str) -> str:
     return value
 
 
-def require_platform(name: str, platforms_dir: str = "platforms") -> None:
+def require_platform(name: str, platforms_dir: str = PLATFORMS_DIR) -> None:
     """Exit with a usable message when no platform answers to a name.
 
     A typo used to end in a traceback (verify, cross_reference) or in "no

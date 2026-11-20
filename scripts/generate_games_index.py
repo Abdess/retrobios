@@ -43,6 +43,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from core.paths import EMULATORS_DIR, PLATFORMS_DIR
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config, native_layer
 from core.artifacts import repository_output_lock
@@ -74,8 +75,8 @@ class Inputs:
     games: Path = GAMES
     romfolders: Path = Path("platforms") / "romfolders"
     install: Path = Path("install")
-    emulators: str = "emulators"
-    platforms: str = "platforms"
+    emulators: str = EMULATORS_DIR
+    platforms: str = PLATFORMS_DIR
 
 
 def dumps(document: object) -> str:

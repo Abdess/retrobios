@@ -10,9 +10,8 @@ tool prints, and a size is the one the release record holds.
 from __future__ import annotations
 
 import tests
-from tests.sources import script_source
+from tests.sources import declared_options, script_source
 
-import ast
 import contextlib
 import re
 import unittest
@@ -529,14 +528,7 @@ def parser_options(script: str) -> frozenset[str]:
     """The long options *script* declares through add_argument, with the
     shared ones of scraper_cli for a scraper that hands its parser over."""
     source = (REPO_ROOT / script).read_text(encoding="utf-8")
-    tree = ast.parse(source)
-    found = set()
-    for node in ast.walk(tree):
-        if (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
-                and node.func.attr == "add_argument"):
-            found.update(arg.value for arg in node.args
-                         if isinstance(arg, ast.Constant) and isinstance(arg.value, str)
-                         and arg.value.startswith("--"))
+    found = set(declared_options(source))
     if "scraper_cli(" in source and script != "scripts/scraper/base_scraper.py":
         found |= parser_options("scripts/scraper/base_scraper.py")
     return frozenset(found)

@@ -22,7 +22,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from model.cliargs import platform_arg, require_platform
-from core.cli import require_directory
+from core.cli import add_repo_inputs, require_directory
 from model.registry import list_registered_platforms
 from model.database import load_database
 from model.platforms import load_platform_config
@@ -30,10 +30,6 @@ from model.safeparse import require_yaml
 from acquire.fetch import fetch_missing, find_missing, generate_issue_body, lookup_sha1s
 
 yaml = require_yaml()
-
-DEFAULT_DB = "database.json"
-DEFAULT_PLATFORMS_DIR = "platforms"
-DEFAULT_BIOS_DIR = "bios"
 
 
 def main() -> None:
@@ -43,18 +39,7 @@ def main() -> None:
     parser.add_argument(
         "--dry-run", action="store_true", help="Don't download, just report"
     )
-    parser.add_argument(
-        "--db", default=DEFAULT_DB,
-        help="database file to read (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--platforms-dir", default=DEFAULT_PLATFORMS_DIR,
-        help="platform YAML directory (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--bios-dir", default=DEFAULT_BIOS_DIR,
-        help="BIOS collection directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "db", "platforms", "bios")
     parser.add_argument(
         "--create-issues", action="store_true", help="Output GitHub Issue bodies"
     )

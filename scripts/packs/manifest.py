@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING, TypedDict
 
 from core.artifacts import build_timestamp
 from core.options import reject_unknown
-from core.paths import REPO_ROOT, declared_destination, sanitize_pack_path
+from core.paths import EMULATORS_DIR, REPO_ROOT, declared_destination, sanitize_pack_path
 from model.declarations import OUTER_ROOTS, declared_root, outer_layout
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
@@ -109,7 +109,7 @@ class ManifestOptions(InstallListOptions, total=False):
 class _ManifestSettings:
     """ManifestOptions with their defaults."""
 
-    emulators_dir: str = "emulators"
+    emulators_dir: str = EMULATORS_DIR
     zip_contents: dict | None = None
     emu_profiles: dict | None = None
     target_cores: set[str] | None = None

@@ -15,7 +15,7 @@ except ImportError:
 from core.cli import InputMissing, suggest_names
 from model.alternatives import derive_member_requirements
 from model.sources import source_yaml
-from model.systems import norm_system_id
+from model.systems import norm_system_id, system_index
 from core.paths import REPO_ROOT
 
 
@@ -50,6 +50,17 @@ def profiles_for_systems(
         if wanted & {norm_system_id(sid) for sid in profile.get("systems", [])}:
             matching.append(name)
     return matching
+
+
+def no_profile_for_systems(profiles: dict, system_ids: list[str], standalone: bool = False) -> str:
+    """Why profiles_for_systems found nothing, with the closest system ids."""
+    kind = "standalone emulators" if standalone else "emulators"
+    all_systems = sorted({sid for p in profiles.values() for sid in p.get("systems", [])})
+    # --list-systems merges spellings that differ in case or separator:
+    # the hint counted 579 spellings for the 532 lines it prints.
+    hint = suggest_names(system_ids, all_systems, "--list-systems",
+                         listed=len(system_index(profiles)))
+    return f"No {kind} found for system(s): {', '.join(system_ids)}\n{hint}"
 
 
 def entry_system_ids(entry: dict, profile: dict) -> list[str]:

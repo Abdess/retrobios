@@ -7,22 +7,20 @@ import sys
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
-from core.cli import suggest_names
 from core.hashing import compute_hashes
-from core.paths import REPO_ROOT
+from core.paths import BIOS_DIR, REPO_ROOT
 from core.ziptools import build_zip_contents_index
 from model.alternatives import set_requirements, settle_sets, slot_set_keys
 from model.profiles import (
     ProfileSelectionError,
     entry_serves_systems,
     load_emulator_profiles,
+    no_profile_for_systems,
     profiles_for_systems,
     select_emulator_profiles,
 )
 from model.registry import load_data_dir_registry
-from model.systems import system_index
 from packs.verdicts import (
-    DEFAULT_BIOS_DIR,
     RELEASE_ASSET_PENDING,
     Severity,
     Status,
@@ -353,7 +351,7 @@ class _EmulatorPack:
             local_path, resolve_status = self.pending(own_entry, *resolve_file(
                 own_entry,
                 self.db,
-                DEFAULT_BIOS_DIR,
+                BIOS_DIR,
                 self.zip_contents,
                 data_dir_registry=self.data_registry,
                 offline=True,
@@ -406,7 +404,7 @@ class _EmulatorPack:
             local_path, resolve_status = self.pending(file_entry, *resolve_file(
                 {**with_archive_members(file_entry, files), "source_profile": emu_name},
                 self.db,
-                DEFAULT_BIOS_DIR,
+                BIOS_DIR,
                 self.zip_contents,
                 dest_hint=dest_hint,
                 data_dir_registry=self.data_registry,
@@ -464,7 +462,7 @@ class _EmulatorPack:
         # Judged by this emulator's own entries, as it runs its check,
         # through the selection the emulator pack makes.
         chosen, disagreement = validated_choice(
-            file_entry, local_path, self.db, self.validation_index, DEFAULT_BIOS_DIR,
+            file_entry, local_path, self.db, self.validation_index, BIOS_DIR,
             None, emulators={emu_name},
         )
         if disagreement:
@@ -739,24 +737,7 @@ def verify_system(
     matching = profiles_for_systems(profiles, system_ids, standalone)
 
     if not matching:
-        all_systems: set[str] = set()
-        for p in profiles.values():
-            all_systems.update(p.get("systems", []))
-        if standalone:
-            print(
-                f"No standalone emulators found for system(s): {', '.join(system_ids)}",
-                file=sys.stderr,
-            )
-        else:
-            print(
-                f"No emulators found for system(s): {', '.join(system_ids)}",
-                file=sys.stderr,
-            )
-        # --list-systems merges spellings that differ in case or separator:
-        # the hint counted 579 spellings for the 532 lines it prints.
-        print(suggest_names(system_ids, sorted(all_systems), "--list-systems",
-                            listed=len(system_index(profiles))),
-              file=sys.stderr)
+        print(no_profile_for_systems(profiles, system_ids, standalone), file=sys.stderr)
         sys.exit(1)
 
     return verify_emulator(

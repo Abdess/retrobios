@@ -26,8 +26,9 @@ from pathlib import Path
 
 
 sys.path.insert(0, os.path.dirname(__file__))
+from core.paths import DB_FILE
 from model.database import load_database
-from core.cli import require_directory
+from core.cli import add_repo_inputs, require_directory
 
 try:
     import yaml
@@ -40,10 +41,6 @@ from resolve.review import (
     load_profile_hashes,
     validate_file,
 )
-
-DEFAULT_DB = "database.json"
-DEFAULT_PLATFORMS_DIR = "platforms"
-DEFAULT_EMULATORS_DIR = "emulators"
 
 
 def get_changed_files() -> list[str]:
@@ -160,7 +157,7 @@ def _load_database_if_any(path: str) -> dict | None:
     duplicate and placement checks unchecked. A damaged one did the same
     after a warning.
     """
-    if path == DEFAULT_DB and not os.path.exists(path):
+    if path == DB_FILE and not os.path.exists(path):
         return None
     return load_database(path)
 
@@ -171,15 +168,7 @@ def main() -> None:
     parser.add_argument(
         "--changed", action="store_true", help="Auto-detect changed BIOS files"
     )
-    parser.add_argument("--db", default=DEFAULT_DB, help="Path to database.json")
-    parser.add_argument(
-        "--platforms-dir", default=DEFAULT_PLATFORMS_DIR,
-        help="platform YAML directory (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--emulators-dir", default=DEFAULT_EMULATORS_DIR,
-        help="emulator profile directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "db", "platforms", "emulators")
     # One output format: --json beside --markdown printed JSON and dropped
     # the markdown without a word.
     formats = parser.add_mutually_exclusive_group()

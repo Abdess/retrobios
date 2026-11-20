@@ -7,6 +7,8 @@ command keeps its options, the packages keep the rest.
 
 from __future__ import annotations
 
+import ast
+from functools import cache
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
@@ -107,3 +109,40 @@ def script_paths(name: str) -> tuple[Path, ...]:
 def script_source(name: str) -> str:
     """The text of a script and of the package modules that hold its code."""
     return "\n".join(path.read_text(encoding="utf-8") for path in script_paths(name))
+
+
+def _helper_options(function: str) -> frozenset[str]:
+    """The long options a core.cli helper declares through add_argument."""
+    tree = ast.parse((SCRIPTS / "core" / "cli.py").read_text(encoding="utf-8"))
+    body = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == function)
+    return frozenset(_add_argument_flags(body))
+
+
+def _add_argument_flags(tree: ast.AST) -> set[str]:
+    return {
+        arg.value
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+        and node.func.attr == "add_argument"
+        for arg in node.args
+        if isinstance(arg, ast.Constant) and isinstance(arg.value, str) and arg.value.startswith("--")
+    }
+
+
+@cache
+def declared_options(source: str) -> frozenset[str]:
+    """The long options a script's source declares: its add_argument calls and
+    the shared ones core.cli's add_repo_inputs and add_emulator_selection add."""
+    from core.cli import REPO_INPUTS
+
+    tree = ast.parse(source)
+    found = _add_argument_flags(tree)
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Name):
+            continue
+        if node.func.id == "add_repo_inputs":
+            found |= {REPO_INPUTS[arg.value][0] for arg in node.args[1:]
+                      if isinstance(arg, ast.Constant) and arg.value in REPO_INPUTS}
+        elif node.func.id == "add_emulator_selection":
+            found |= _helper_options("add_emulator_selection")
+    return frozenset(found)

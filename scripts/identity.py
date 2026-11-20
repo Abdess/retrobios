@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from core.cli import add_repo_inputs
 from resolve.identity import format_duplicate, scan
 
 
@@ -12,10 +13,7 @@ def main() -> int:
         allow_abbrev=False,
         description="Report one content stored under identities that disagree.",
     )
-    parser.add_argument(
-        "--bios-dir", default="bios",
-        help="BIOS collection directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "bios")
     parser.add_argument("--json", action="store_true", help="JSON output")
     parser.add_argument(
         "--strict", action="store_true", help="exit non-zero when any is found"

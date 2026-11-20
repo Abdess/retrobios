@@ -16,6 +16,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
+from core.cli import add_repo_inputs
 from model.cliargs import platform_arg, require_platform
 from model.registry import list_registered_platforms
 from model.platforms import load_platform_config, native_layer
@@ -206,10 +207,7 @@ def main() -> None:
         help="directory of the truth models generate_truth writes (default: "
              "%(default)s)",
     )
-    parser.add_argument(
-        "--platforms-dir", default="platforms",
-        help="platform YAML directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "platforms")
     parser.add_argument(
         "--target", "-t",
         help="read the models generate_truth --target wrote, each under the "

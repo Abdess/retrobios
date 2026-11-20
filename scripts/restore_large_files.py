@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import os
 
+from core.cli import add_repo_inputs
 from release.restore import restore
 
 
@@ -28,10 +29,7 @@ def main() -> None:
         "--cache", default=".cache/large",
         help="where release assets are cached (default: %(default)s)",
     )
-    parser.add_argument(
-        "--db", default="database.json",
-        help="database file to read (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "db")
     parser.add_argument(
         "--gitignore", default=".gitignore",
         help="the .gitignore listing release-asset files (default: %(default)s)",

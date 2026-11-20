@@ -32,12 +32,13 @@ from pathlib import Path
 
 
 sys.path.insert(0, os.path.dirname(__file__))
+from core.cli import add_emulator_selection, add_repo_inputs
 from resolve.contentlayout import TARGET_KEY
 from model.targets import (
     canonical_target_name,
     target_listing_line,
     list_available_targets,
-    build_target_cores_cache,
+    target_scope,
 )
 from model.cliargs import (
     platform_arg,
@@ -74,12 +75,9 @@ from packs.report import (
     print_emulator_result,
     print_platform_result,
 )
-from packs.verdicts import DEFAULT_EMULATORS_DIR, Severity, Status
+from packs.verdicts import Severity, Status
 
 yaml = require_yaml()
-
-DEFAULT_DB = "database.json"
-DEFAULT_PLATFORMS_DIR = "platforms"
 
 
 def _refuse_listing_narrowings(
@@ -180,17 +178,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--all", action="store_true", help="Verify every registered platform"
     )
-    parser.add_argument(
-        "--emulator", "-e", help="Emulator profile name(s), comma-separated"
-    )
-    parser.add_argument("--system", "-s", help="System ID(s), comma-separated")
-    parser.add_argument("--standalone", action="store_true", help="Use standalone mode")
-    parser.add_argument(
-        "--list-emulators", action="store_true", help="List available emulators"
-    )
-    parser.add_argument(
-        "--list-systems", action="store_true", help="List available systems"
-    )
+    add_emulator_selection(parser)
     parser.add_argument(
         "--list-platforms", action="store_true", help="List available platforms"
     )
@@ -213,18 +201,7 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Report on the pack built with --required-only: files the code "
         "runs without are left out",
     )
-    parser.add_argument(
-        "--db", default=DEFAULT_DB,
-        help="database file to read (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--platforms-dir", default=DEFAULT_PLATFORMS_DIR,
-        help="platform YAML directory (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--emulators-dir", default=DEFAULT_EMULATORS_DIR,
-        help="emulator profile directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "db", "platforms", "emulators")
     parser.add_argument(
         "--verbose",
         "-v",
@@ -332,19 +309,11 @@ def _target_scope(
     platform_systems: list[str] | None,
 ) -> tuple[dict[str, set[str] | None], list[str]]:
     """The cores of each platform on --target, and the platforms that have it."""
-    target_cores_cache: dict[str, set[str] | None] = {}
     if not args.target:
-        return target_cores_cache, platforms
-    try:
-        target_cores_cache, platforms = build_target_cores_cache(
-            platforms,
-            args.target,
-            args.platforms_dir,
-            is_all=args.all,
-        )
-    except (FileNotFoundError, ValueError) as e:
-        print(f"ERROR: {e}", file=sys.stderr)
-        sys.exit(1)
+        return {}, platforms
+    target_cores_cache, platforms = target_scope(
+        platforms, args.target, args.platforms_dir, is_all=args.all
+    )
     # A system the target leaves no core for was reported 0/0 with exit 0,
     # where generate_pack refuses the same request.
     if platform_systems:

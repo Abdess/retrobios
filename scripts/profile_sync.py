@@ -25,7 +25,7 @@ from profiling import version_basis
 from model.systems import norm_system_id, system_index
 from core.github import github_token
 from model.profiles import load_emulator_profiles
-from core.cli import suggest_names
+from core.cli import add_repo_inputs, suggest_names
 from profiling.bump import DEFAULT_CACHE, write_version
 from profiling.realign import realign_prose
 from profiling.reports import ProfileReport
@@ -113,10 +113,7 @@ def build_parser() -> argparse.ArgumentParser:
         "base with HEAD (default: the project's main line, upstream/main or "
         "origin/main when that remote names the project, fetched otherwise)",
     )
-    parser.add_argument(
-        "--emulators-dir", default="emulators",
-        help="emulator profile directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "emulators")
     parser.add_argument("--system", help="keep profiles covering this system")
     parser.add_argument("--type", dest="type_", help="keep profiles of this type")
     parser.add_argument("--stale-before", help="keep profiles profiled before a date")

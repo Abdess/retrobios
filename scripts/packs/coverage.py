@@ -6,7 +6,7 @@ import os
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
-from core.paths import declared_destination
+from core.paths import BIOS_DIR, EMULATORS_DIR, declared_destination
 from core.ziptools import build_zip_contents_index
 from model.alternatives import core_file_spares
 from model.declarations import OUTER_ROOTS, platform_declarations
@@ -16,8 +16,6 @@ from packs import slots
 from packs.crossref import launcher_reads_not_held
 from packs.gaps import find_exclusion_notes, find_undeclared_files
 from packs.verdicts import (
-    DEFAULT_BIOS_DIR,
-    DEFAULT_EMULATORS_DIR,
     RELEASE_ASSET_PENDING,
     Severity,
     Status,
@@ -198,7 +196,7 @@ def _twin_index(
     from resolve.packfiles import preferred_entries as _preferred_entries
 
     preferred_entries = _preferred_entries(
-        verify_systems, db, DEFAULT_BIOS_DIR, base_dest, False,
+        verify_systems, db, BIOS_DIR, base_dest, False,
         zip_contents, True,
     )
     winners = {
@@ -306,7 +304,7 @@ def _resolve_for_platform(
         declared_destination(file_entry)
     )
     local_path, status = resolve_declaration(
-        file_entry, db, DEFAULT_BIOS_DIR, zip_contents, data_dir_registry,
+        file_entry, db, BIOS_DIR, zip_contents, data_dir_registry,
         override, offline=True,
     )
     if status in ("not_found", "hash_mismatch") and not run_is_offline():
@@ -690,7 +688,7 @@ def _platform_gaps(
         run.emulators_dir, run.db, run.emu_profiles, run.target_cores, region_drops,
         report_for_builder,
         ExtraResolver(
-            run.db, DEFAULT_BIOS_DIR, run.zip_contents, run.data_dir_registry,
+            run.db, BIOS_DIR, run.zip_contents, run.data_dir_registry,
             validation_index, validation_owners, profiles=run.profiles,
             pending_assets=True,
         ),
@@ -741,7 +739,7 @@ class PlatformNarrowing(TypedDict, total=False):
 def verify_platform(
     config: dict,
     db: dict,
-    emulators_dir: str = DEFAULT_EMULATORS_DIR,
+    emulators_dir: str = EMULATORS_DIR,
     emu_profiles: dict | None = None,
     target_cores: set[str] | None = None,
     data_dir_registry: dict | None = None,
