@@ -26,6 +26,7 @@ from scripts.scraper._hash_merge import (
     merge_mame_profile,
     merge_mame_support,
 )
+from scripts.scraper.listxml import open_listxml
 from scripts.scraper.mame_devices import (
     ABSENT,
     AMBIGUOUS,
@@ -40,7 +41,6 @@ from scripts.scraper.mame_devices import (
     floppy_drives,
     floppy_sample_systems,
     locate_sources,
-    open_listxml,
     platform_seeds,
     profile_seeds,
     scan_device_sets,

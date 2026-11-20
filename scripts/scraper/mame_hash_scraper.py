@@ -49,12 +49,12 @@ from .mame_devices import (
     floppy_drives,
     floppy_sample_systems,
     locate_sources,
-    open_listxml,
     platform_seeds,
     profile_seeds,
     scan_release,
     source_path,
 )
+from .listxml import open_listxml
 from .mame_parser import parse_mame_source_tree
 from core.paths import REPO_ROOT
 

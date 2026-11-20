@@ -48,6 +48,7 @@ from model.platforms import load_platform_config
 from core.cli import add_repo_inputs, run_cli
 from model.dumpcatalog import build_snapshot, load_provenance_snapshots, write_snapshot
 from .base_scraper import download, fetch_github_latest_version, github_json
+from .listxml import Opener, iter_elements, open_listxml, rom_members, xml_members
 from .logiqx_parser import LogiqxDat, parse_logiqx
 
 MAX_MEMBER_SIZE = 200 * 1024 * 1024
@@ -243,87 +244,26 @@ def recipe_entries(
     return one_set_per_archive(entries)
 
 
-_MACHINE = re.compile(rb'<machine name="([^"]+)"([^>]*)>')
-_ROM = re.compile(
-    rb'<rom name="([^"]+)"(?=[^>]*\bcrc="([0-9a-fA-F]+)")[^>]*>'
-)
-_ROM_ATTR = re.compile(rb'(\w+)="([^"]*)"')
-_ROMOF = re.compile(r'romof="([^"]+)"')
-LISTXML_CHUNK = 8 * 1024 * 1024
-
-
-def _machine_roms(blob: bytes) -> list[dict]:
-    """ROM members of one machine element, undumped ones dropped."""
-    members: list[dict] = []
-    for match in re.finditer(rb"<rom\b([^>]*)>", blob):
-        attrs = {
-            key.decode(): value.decode()
-            for key, value in _ROM_ATTR.findall(match.group(1))
-        }
-        crc = attrs.get("crc", "").lower()
-        name = attrs.get("name", "")
-        if not name or not crc:
-            continue
-        try:
-            size = int(attrs.get("size", "0"))
-        except ValueError:
-            size = 0
-        members.append(
-            {
-                "name": name,
-                "size": size,
-                "crc32": crc,
-                "sha1": attrs.get("sha1", "").lower(),
-            }
-        )
-    return members
-
-
 def _scan_listxml(
     stream: IO[bytes],
     selector: Callable[[str], bool],
     targets: Targets | None = None,
 ) -> dict[str, tuple[str | None, list[dict]]]:
     """Stream a MAME -listxml document, keeping the machines *selector* wants
-    and those holding one of *targets*.
-
-    The document is 311 MB for MAME 0.289, so it is never held whole: the
-    window keeps the element still open from its start tag, and grows until
-    that element closes, whatever its size.
-    """
+    and those holding one of *targets*."""
     found: dict[str, tuple[str | None, list[dict]]] = {}
-    buffer = b""
-    while chunk := stream.read(LISTXML_CHUNK):
-        buffer += chunk
-        position = 0
-        keep_from = None
-        while True:
-            match = _MACHINE.search(buffer, position)
-            if not match:
-                break
-            end = buffer.find(b"</machine>", match.end())
-            if end == -1:
-                keep_from = match.start()
-                break
-            name = match.group(1).decode()
-            wanted = selector(name)
-            if wanted or targets:
-                roms = _machine_roms(buffer[match.end() : end])
-                if wanted or holds_target(roms, targets):
-                    parent = _ROMOF.search(match.group(2).decode())
-                    found[name] = (parent.group(1) if parent else None, roms)
-            position = end + len(b"</machine>")
-        if keep_from is None:
-            # No element open: only a start tag cut by the read can follow.
-            start = buffer.rfind(b"<machine", position)
-            tail = max(position, len(buffer) - len(b"<machine"))
-            keep_from = start if start != -1 else tail
-        buffer = buffer[keep_from:]
+    for element in iter_elements(stream):
+        name = element.attrs.get("name", "")
+        wanted = selector(name)
+        if wanted or targets:
+            roms = rom_members(element.body)
+            if wanted or holds_target(roms, targets):
+                found[name] = (element.attrs.get("romof") or None, roms)
     return found
 
 
 def listxml_entries(
-    open_stream: Callable[[], IO[bytes]],
+    open_stream: Opener,
     label: str,
     keep: set[str] | None,
     targets: Targets | None = None,
@@ -564,32 +504,17 @@ def fetch_pack(
 
 
 def _is_listxml(pack: Path) -> bool:
-    """Whether *pack* holds a MAME -listxml document rather than a DAT."""
+    """Whether *pack* holds a MAME -listxml document rather than a DAT.
+
+    A ZIP of several XML documents is a DAT collection."""
     if pack.is_dir():
         return False
     if pack.suffix.lower() == ".zip":
         with zipfile.ZipFile(pack) as archive:
-            names = [n for n in archive.namelist() if n.lower().endswith(".xml")]
-            if not names:
+            if len(xml_members(archive)) != 1:
                 return False
-            with archive.open(names[0]) as handle:
-                return b"<!ELEMENT mame" in handle.read(4096)
-    with pack.open("rb") as handle:
+    with open_listxml(pack) as handle:
         return b"<!ELEMENT mame" in handle.read(4096)
-
-
-def _listxml_opener(pack: Path) -> Callable[[], IO[bytes]]:
-    """A callable giving a fresh byte stream over the listxml document."""
-    if pack.suffix.lower() == ".zip":
-        def opener() -> IO[bytes]:
-            archive = zipfile.ZipFile(pack)
-            name = next(n for n in archive.namelist() if n.lower().endswith(".xml"))
-            # The member keeps the archive alive: its shared file closes
-            # through the archive's own _fpclose.
-            return archive.open(name)
-
-        return opener
-    return lambda: pack.open("rb")
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -656,7 +581,7 @@ def _selection(args: argparse.Namespace) -> _Selection:
 def _import_listxml(pack: Path, args: argparse.Namespace, output: str, chosen: _Selection) -> int:
     label = f"MAME {pack.stem.replace('lx', '')}"
     entries = listxml_entries(
-        _listxml_opener(pack), label, chosen.keep, chosen.targets, chosen.by_members
+        lambda: open_listxml(pack), label, chosen.keep, chosen.targets, chosen.by_members
     )
     dats = {label: pack.stem}
     print(f"  {label}: {len(entries)} sets retenus")

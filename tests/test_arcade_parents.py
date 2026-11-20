@@ -12,6 +12,7 @@ import zipfile
 from pathlib import Path
 
 from scripts.scraper import arcade_parent_importer as api
+from scripts.scraper import listxml
 
 ROOT = Path(__file__).resolve().parent.parent
 TMP_ROOT = ROOT / "tmp" / "tests"
@@ -29,13 +30,13 @@ COMMIT = "a" * 40
 
 def _sets(name: str, chunk: int | None = None) -> dict:
     data = (FIXTURES / name).read_bytes()
-    saved = api.LISTXML_CHUNK
+    saved = listxml.LISTXML_CHUNK
     if chunk:
-        api.LISTXML_CHUNK = chunk
+        listxml.LISTXML_CHUNK = chunk
     try:
         return api.read_sets([lambda: io.BytesIO(data)])
     finally:
-        api.LISTXML_CHUNK = saved
+        listxml.LISTXML_CHUNK = saved
 
 
 class ListxmlIndex(unittest.TestCase):

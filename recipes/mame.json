@@ -35743,13 +35743,13 @@
           "sha1": "3f9a3d9940b36d4fee5eca9f1359c99d7ed545b9"
         },
         {
-          "name": "f&amp;m.expansion.3.1.e5",
+          "name": "f&m.expansion.3.1.e5",
           "size": 4096,
           "crc32": "818ca2ef",
           "sha1": "ea000097622e7fd472d53e7899e3c83773433045"
         },
         {
-          "name": "f&amp;m.expansion.3.2.e5",
+          "name": "f&m.expansion.3.2.e5",
           "size": 4096,
           "crc32": "0f0fc960",
           "sha1": "eb6b6e7bc9e761d13554482025d8cb5e260c0619"
@@ -35790,13 +35790,13 @@
           "sha1": "e80481054c6997a5f418d8a5872ac0110ae7b75a"
         },
         {
-          "name": "f&amp;m.basic.bin",
+          "name": "f&m.basic.bin",
           "size": 8192,
           "crc32": "22ab7b61",
           "sha1": "68b5770bca37b1ba94083f944086884e612b5a1b"
         },
         {
-          "name": "f&amp;m.eprom.board.1.1.bin",
+          "name": "f&m.eprom.board.1.1.bin",
           "size": 2048,
           "crc32": "a042a31a",
           "sha1": "13831a1350aa62a87988bfcc99c4b7db8ef1cf62"
@@ -36107,7 +36107,7 @@
       "description": "comx_prn",
       "members": [
         {
-          "name": "f&amp;m.printer.1.2.bin",
+          "name": "f&m.printer.1.2.bin",
           "size": 4096,
           "crc32": "2feb997d",
           "sha1": "ee9cb91042696c88ff5f2f44d2f702dc93369ba0"

@@ -407,19 +407,19 @@ class ListXmlRecipes(unittest.TestCase):
     def test_a_machine_larger_than_the_window_is_kept(self):
         """Each machine here spans several reads: the window grows until the
         element closes instead of cutting its start tag away."""
-        from scripts.scraper import romset_dat_importer
+        from scripts.scraper import listxml
 
         expected = listxml_entries(self._opener(self._document()), "MAME 0.289", None)
-        saved = romset_dat_importer.LISTXML_CHUNK
+        saved = listxml.LISTXML_CHUNK
         try:
             for window in (1, 7, 16, 64):
-                romset_dat_importer.LISTXML_CHUNK = window
+                listxml.LISTXML_CHUNK = window
                 entries = listxml_entries(
                     self._opener(self._document()), "MAME 0.289", None
                 )
                 self.assertEqual(entries, expected, window)
         finally:
-            romset_dat_importer.LISTXML_CHUNK = saved
+            listxml.LISTXML_CHUNK = saved
         self.assertEqual(
             [entry["name"] for entry in entries], ["childset.zip", "parentset.zip"]
         )

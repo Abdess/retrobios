@@ -20,26 +20,19 @@ from __future__ import annotations
 
 import html
 import re
-import zipfile
-from collections.abc import Callable, Collection, Iterable, Iterator
+from collections.abc import Callable, Collection, Iterable
 from concurrent.futures import ThreadPoolExecutor
-from contextlib import contextmanager
-from pathlib import Path
 from typing import IO, NamedTuple
 
 from model.safeparse import yaml_load
 
 from ._hash_merge import generated_start
+from .listxml import LISTXML_CHUNK, attrs, iter_elements, rom_members
 from .mame_parser import _collect_rom_macros, _expand_macros, _parse_rom_entries
 
-LISTXML_CHUNK = 8 * 1024 * 1024
-
 _BUILD = re.compile(rb'<mame build="[^"]*\((mame\d+)\)"')
-_MACHINE = re.compile(rb'<machine name="([^"]+)"([^>]*)>')
-_ATTR = re.compile(rb'(\w+)="([^"]*)"')
 _DESCRIPTION = re.compile(rb"<description>(.*?)</description>", re.S)
 _BIOSSET = re.compile(rb"<biosset\b([^>]*)>")
-_ROM = re.compile(rb"<rom\b([^>]*)>")
 _DEVICE_REF = re.compile(rb'<device_ref\b[^>]*\bname="([^"]+)"')
 _SLOT_OPTION = re.compile(rb'<slotoption\b[^>]*\bdevname="([^"]+)"')
 _SOFTWARE_LIST = re.compile(rb'<softwarelist\b[^>]*\bname="([^"]+)"')
@@ -60,53 +53,21 @@ AMBIGUOUS = "ambiguous"
 NO_FILE = "no file"
 
 
-def _attrs(raw: bytes) -> dict[str, str]:
-    return {
-        key.decode(): html.unescape(value.decode())
-        for key, value in _ATTR.findall(raw)
-    }
-
-
 def _device_roms(body: bytes) -> list[dict]:
     """Dumped ROMs of one machine element, first of each name kept."""
     bios_names = {
-        attrs.get("name", ""): attrs.get("description", "")
-        for attrs in map(_attrs, _BIOSSET.findall(body))
+        found.get("name", ""): found.get("description", "")
+        for found in map(attrs, _BIOSSET.findall(body))
     }
-    roms: dict[str, dict] = {}
-    for match in _ROM.finditer(body):
-        attrs = _attrs(match.group(1))
-        name, crc = attrs.get("name", ""), attrs.get("crc", "").lower()
-        if not name or not crc or name in roms:
-            continue
-        rom: dict = {
-            "name": name,
-            "size": int(attrs.get("size", "0") or 0),
-            "crc32": crc,
-            "sha1": attrs.get("sha1", "").lower(),
-        }
-        if attrs.get("status") == "baddump":
+    roms: list[dict] = []
+    for rom in rom_members(body, dedupe=True, extra=("status", "bios")):
+        if rom.pop("status", "") == "baddump":
             rom["bad_dump"] = True
-        description = bios_names.get(attrs.get("bios", ""), "")
+        description = bios_names.get(rom.pop("bios", ""), "")
         if description:
             rom["bios_description"] = description
-        roms[name] = rom
-    return list(roms.values())
-
-
-@contextmanager
-def open_listxml(path: Path) -> Iterator[IO[bytes]]:
-    """Byte stream over a -listxml document, plain or as MAME's release zip."""
-    if path.suffix.lower() != ".zip":
-        with path.open("rb") as stream:
-            yield stream
-        return
-    with zipfile.ZipFile(path) as archive:
-        names = [n for n in archive.namelist() if n.lower().endswith(".xml")]
-        if len(names) != 1:
-            raise ValueError(f"{path}: expected one .xml member, found {len(names)}")
-        with archive.open(names[0]) as stream:
-            yield stream
+        roms.append(rom)
+    return roms
 
 
 class MachineLinks(NamedTuple):
@@ -144,48 +105,37 @@ def scan_release(stream: IO[bytes]) -> Release:
     configuration (2184-2198). device_t::searchpath puts the parent ROM
     device after the device itself (src/emu/device.cpp:140-152).
     """
-    tag = ""
+    head = stream.read(LISTXML_CHUNK)
+    build = _BUILD.search(head)
+    tag = build.group(1).decode() if build else ""
     devices: dict[str, dict] = {}
     machines: dict[str, MachineLinks] = {}
-    buffer = b""
-    while chunk := stream.read(LISTXML_CHUNK):
-        buffer += chunk
-        if not tag and (build := _BUILD.search(buffer)):
-            tag = build.group(1).decode()
-        position = 0
-        while match := _MACHINE.search(buffer, position):
-            end = buffer.find(b"</machine>", match.end())
-            if end == -1:
-                break
-            name = match.group(1).decode()
-            attrs = _attrs(match.group(2))
-            body = buffer[match.end() : end]
-            isdevice = attrs.get("isdevice") == "yes"
-            romof = attrs.get("romof", "")
-            uses = {
-                ref.decode()
-                for ref in (*_DEVICE_REF.findall(body), *_SLOT_OPTION.findall(body))
-            }
-            if isdevice and romof:
-                uses.add(romof)
-            uses.discard(name)
-            softlists = {found.decode() for found in _SOFTWARE_LIST.findall(body)}
-            machines[name] = MachineLinks(
-                romof, isdevice, tuple(sorted(uses)), tuple(sorted(softlists)),
-                attrs.get("sourcefile", ""),
-            )
-            if isdevice:
-                roms = _device_roms(body)
-                if roms:
-                    description = _DESCRIPTION.search(body)
-                    devices[name] = {
-                        "description": html.unescape(description.group(1).decode())
-                        if description else "",
-                        "sourcefile": attrs.get("sourcefile", ""),
-                        "roms": roms,
-                    }
-            position = end + len(b"</machine>")
-        buffer = buffer[position:] if position else buffer[-(2 * LISTXML_CHUNK) :]
+    for element in iter_elements(stream, head=head):
+        name, found, body = element.attrs.get("name", ""), element.attrs, element.body
+        isdevice = found.get("isdevice") == "yes"
+        romof = found.get("romof", "")
+        uses = {
+            ref.decode()
+            for ref in (*_DEVICE_REF.findall(body), *_SLOT_OPTION.findall(body))
+        }
+        if isdevice and romof:
+            uses.add(romof)
+        uses.discard(name)
+        softlists = {item.decode() for item in _SOFTWARE_LIST.findall(body)}
+        machines[name] = MachineLinks(
+            romof, isdevice, tuple(sorted(uses)), tuple(sorted(softlists)),
+            found.get("sourcefile", ""),
+        )
+        if isdevice:
+            roms = _device_roms(body)
+            if roms:
+                description = _DESCRIPTION.search(body)
+                devices[name] = {
+                    "description": html.unescape(description.group(1).decode())
+                    if description else "",
+                    "sourcefile": found.get("sourcefile", ""),
+                    "roms": roms,
+                }
     if not tag:
         raise ValueError("no <mame build=...> header: not a MAME -listxml document")
     return Release(tag, devices, machines)

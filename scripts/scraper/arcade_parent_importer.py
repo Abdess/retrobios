@@ -45,7 +45,7 @@ import sys
 import urllib.parse
 import zipfile
 from collections import Counter
-from collections.abc import Callable, Iterator
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import IO
@@ -56,13 +56,11 @@ from model.profiles import load_emulator_profiles
 from core.cli import run_cli
 from core.hashing import compute_hashes
 from .base_scraper import download
+from .listxml import Opener, attrs, iter_elements, open_listxml, rom_members
 from .romset_dat_importer import (
-    LISTXML_CHUNK,
     MAME_LISTXML_URL,
     BlobMismatchError,
     _api_json,
-    _listxml_opener,
-    _machine_roms,
     fetch_pack,
     git_blob_sha,
 )
@@ -129,61 +127,26 @@ class SetEntry:
     source: str | None = None
 
 
-_ELEMENT = re.compile(rb"<(machine|game)\b([^>]*)>")
-_ATTR = re.compile(rb'([\w:-]+)="([^"]*)"')
 _DEVICE_REF = re.compile(rb'<device_ref\b[^>]*\bname="([^"]+)"')
 _DISK = re.compile(rb"<disk\b([^>]*)>")
-# Longer than any start tag the DATs write, shorter than any element.
-_TAG_TAIL = 4096
-
-
-def _attrs(raw: bytes) -> dict[str, str]:
-    return {k.decode(): v.decode() for k, v in _ATTR.findall(raw)}
 
 
 def iter_sets(stream: IO[bytes]) -> Iterator[SetEntry]:
-    """Every machine or game element of a DAT or -listxml, streamed.
-
-    Attributes come in any order (mame2003 writes ``<game runnable="no"
-    name="neogeo">``), and the document is never held whole: the window
-    keeps only the element being closed.
-    """
-    buffer = b""
-    while True:
-        chunk = stream.read(LISTXML_CHUNK)
-        buffer += chunk
-        position = 0
-        # Where the next read has to resume: the start of an element still
-        # open, else a tail long enough to hold a start tag cut in two.
-        keep_from = max(0, len(buffer) - _TAG_TAIL)
-        while True:
-            match = _ELEMENT.search(buffer, position)
-            if not match:
-                break
-            closing = b"</" + match.group(1) + b">"
-            end = buffer.find(closing, match.end())
-            if end == -1:
-                keep_from = match.start()
-                break
-            attrs = _attrs(match.group(2))
-            body = buffer[match.end() : end]
-            disks = [_attrs(d) for d in _DISK.findall(body)]
-            yield SetEntry(
-                name=attrs.get("name", ""),
-                romof=attrs.get("romof") or None,
-                isbios=attrs.get("isbios") == "yes",
-                isdevice=attrs.get("isdevice") == "yes",
-                runnable=attrs.get("runnable", "yes") != "no",
-                has_roms=bool(_machine_roms(body)),
-                disks=any(d.get("status") != "nodump" for d in disks),
-                devices=[d.decode() for d in _DEVICE_REF.findall(body)],
-                source=attrs.get("sourcefile"),
-            )
-            position = end + len(closing)
-            keep_from = max(position, len(buffer) - _TAG_TAIL)
-        if not chunk:
-            return
-        buffer = buffer[keep_from:]
+    """Every machine or game element of a DAT or -listxml, streamed."""
+    for element in iter_elements(stream, ("machine", "game")):
+        found, body = element.attrs, element.body
+        disks = [attrs(d) for d in _DISK.findall(body)]
+        yield SetEntry(
+            name=found.get("name", ""),
+            romof=found.get("romof") or None,
+            isbios=found.get("isbios") == "yes",
+            isdevice=found.get("isdevice") == "yes",
+            runnable=found.get("runnable", "yes") != "no",
+            has_roms=bool(rom_members(body)),
+            disks=any(d.get("status") != "nodump" for d in disks),
+            devices=[d.decode() for d in _DEVICE_REF.findall(body)],
+            source=found.get("sourcefile"),
+        )
 
 
 def is_bios(entry: SetEntry, marker: str) -> bool:
@@ -313,7 +276,7 @@ def _fbneo_driver_names(entries: list[SetEntry], names: dict[str, set[str]]) -> 
 
 
 def fbneo_sets(
-    openers: list[Callable[[], IO[bytes]]], names: dict[str, set[str]]
+    openers: list[Opener], names: dict[str, set[str]]
 ) -> tuple[dict[str, SetEntry], dict[str, str]]:
     """Every set of FBNeo's DATs keyed by its driver, and the archive of each
     set whose driver name is not its archive name.
@@ -1012,11 +975,11 @@ def _cached_repo_file(slug: str, commit: str, path: str, cache_dir: Path) -> tup
     return destination, git_blob_sha(destination.read_bytes())
 
 
-def _file_opener(path: Path) -> Callable[[], IO[bytes]]:
+def _file_opener(path: Path) -> Opener:
     return lambda: path.open("rb")
 
 
-def _xml_streams(path: Path) -> Iterator[Callable[[], IO[bytes]]]:
+def _xml_streams(path: Path) -> Iterator[Opener]:
     """Openers for the XML documents a file holds: itself, or each XML or
     DAT member of a ZIP."""
     if path.suffix.lower() != ".zip":
@@ -1035,7 +998,7 @@ def _xml_streams(path: Path) -> Iterator[Callable[[], IO[bytes]]]:
         yield opener
 
 
-def read_sets(openers: list[Callable[[], IO[bytes]]]) -> dict[str, SetEntry]:
+def read_sets(openers: list[Opener]) -> dict[str, SetEntry]:
     """Every set of several documents. A set read twice keeps its first
     reading: FBNeo's Arcade and Neogeo DATs both carry the neogeo BIOS."""
     sets: dict[str, SetEntry] = {}
@@ -1059,7 +1022,7 @@ def import_profile(
     source_url = str(data.get("source") or "")
     kind = spec["kind"]
     source: dict[str, object]
-    openers: list[Callable[[], IO[bytes]]]
+    openers: list[Opener]
     if kind == "listxml":
         tag = "mame" + str(data["core_version"]).replace(".", "").zfill(4)
         if offline:
@@ -1073,7 +1036,7 @@ def import_profile(
             "url": MAME_LISTXML_URL.format(tag=tag),
             "sha256": compute_hashes(pack, frozenset({"sha256"}), cache=False)["sha256"],
         }
-        index = build_index(read_sets([_listxml_opener(pack)]), spec["marker"])
+        index = build_index(read_sets([lambda: open_listxml(pack)]), spec["marker"])
     elif kind == "fbneo":
         if offline:
             folder = cache_dir / "fbneo-dats"
