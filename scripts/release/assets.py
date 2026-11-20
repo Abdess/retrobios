@@ -12,6 +12,7 @@ from typing import NamedTuple
 
 from core.paths import EMULATORS_DIR
 from core.hashing import file_digest
+from core.sizes import size_text
 from model.composition import composition_tier
 from model.largefiles import LARGE_FILES_RELEASE, LARGE_FILES_REPO, asset_names, registered_paths
 
@@ -157,10 +158,6 @@ def _section_for(path: str) -> str:
     return "Other"
 
 
-def _mib(size: int) -> str:
-    return f"{round(size / 1048576)} MB"
-
-
 def render_notes(
     db: dict,
     gitignore_text: str,
@@ -205,9 +202,9 @@ def render_notes(
             description = description or name
         link = f"[{name}]({ASSET_URL}{name})"
         if section == NOT_INDEXED:
-            line = f"| {link} | {description} | {_mib(size)} |"
+            line = f"| {link} | {description} | {size_text(size)} |"
         else:
-            line = f"| {link} | {description} | {_mib(size)} | `{sha1}` |"
+            line = f"| {link} | {description} | {size_text(size)} | `{sha1}` |"
         rows[section].append((-size, line))
 
     out = [

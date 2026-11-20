@@ -22,13 +22,13 @@ import sys
 from pathlib import Path
 
 from core.artifacts import ArtifactLockBusy, write_text_atomic
+from core.sizes import size_text
 from model.releaserecord import RECORD
 from release.record import (
     NotAReleasePackError,
     UnfinishedSplitError,
     build_record,
     manifest_mismatches,
-    size_text,
 )
 
 

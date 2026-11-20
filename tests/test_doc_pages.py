@@ -797,13 +797,14 @@ class PublishedNumbersShareOneFormat(unittest.TestCase):
     the site home as 15.6 GB, and the emulators page `10095 files`."""
 
     def test_generators_format_counts_and_sizes_alike(self):
+        from core.sizes import size_text
         from sitegen import readme as sitegen_readme
 
         readme_source = inspect.getsource(sitegen_readme.generate_readme)
         self.assertNotIn("size_mb", readme_source)
-        self.assertIn("format_size(size)", readme_source)
+        self.assertIn("size_text(size)", readme_source)
         self.assertIn("{total_files:,}", script_source("generate_site.py"))
-        self.assertEqual(sitegen_readme.format_size(16011 * 1024 * 1024), "15.6 GB")
+        self.assertEqual(size_text(16011 * 1024 * 1024), "15.6 GB")
 
     def test_the_readme_has_no_bare_large_count(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")

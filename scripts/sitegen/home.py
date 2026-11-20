@@ -5,6 +5,7 @@ from __future__ import annotations
 import html
 
 from core.paths import PLATFORMS_DIR
+from core.sizes import size_text
 from model.composition import compute_composition
 from model.guides import DEVICE_GROUPS, GROUP_TILES, GUIDES, Guide, TRUST_ITEMS, setup_count
 from model.platforms import load_platform_config
@@ -12,7 +13,6 @@ from model.profiles import unique_emulator_profiles
 from model.registry import load_platform_registry
 from sitegen import markup
 from sitegen.readme import demo_description, demo_facts
-from sitegen.render import fmt_size
 
 
 # Home page
@@ -179,7 +179,7 @@ def generate_explore_index(db: dict, coverages: dict, profiles: dict) -> str:
         *stat_block(f"{total_files:,}", COLLECTION_FILES_LABEL),
         *stat_block(str(setup_count()), "Setups supported"),
         *stat_block(str(emulator_count), "Emulators documented"),
-        *stat_block(fmt_size(total_size), "Size of the collection"),
+        *stat_block(size_text(total_size), "Size of the collection"),
         "</div>",
         "",
         composition_sentence(db),

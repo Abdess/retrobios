@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from model import releaserecord
 from core.paths import REPO_ROOT
+from core.sizes import size_text
 from core.ziptools import build_zip_contents_index
 from model import siteinputs
 from model.guides import (
@@ -26,7 +27,6 @@ from sitegen.guides import fence, terminal_tabs, trust_box
 from sitegen.home import group_keys, next_block, runs_on_text, setup_picker
 from sitegen.install import installer_module, has_release_pack
 from sitegen.readme import NO_PACK, download_links
-from sitegen.render import fmt_size
 
 
 # Build cross-reference indexes
@@ -86,7 +86,7 @@ def _pack_cell(name: str, record: dict, prefix: str = "") -> str:
     link = download_links(name, record, "ZIP", page=get_page_link(name, prefix),
                           button=lambda text, url: markup.button(text, url))
     size = pack.get("download_size") if pack else None
-    return f"{link} ({fmt_size(size)})" if size else link
+    return f"{link} ({size_text(size)})" if size else link
 
 
 def _own_root_folders(registry: dict) -> dict[str, str]:

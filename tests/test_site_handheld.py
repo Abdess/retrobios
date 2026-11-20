@@ -23,6 +23,7 @@ from unittest import mock
 
 from installer_build import port
 from model.registry import list_registered_platforms
+from core.sizes import size_text
 from sitegen import handheld as sitehandheld
 from installer_build import handhelds
 
@@ -91,7 +92,7 @@ class TheSiteServesTheLaunchers(unittest.TestCase):
                     self.assertTrue((public / target).is_file(), target)
                     block = text.split(f'href="handheld/{name}"', 1)[1].split("\n\n", 2)[1]
                     self.assertIn(f"SHA-256: `{digest}`", block)
-                    self.assertIn(sitehandheld._size(len(data)), block)
+                    self.assertIn(size_text(len(data)), block)
                     self.assertRegex(block, r"- (Copy it to|Unzip it into) .+\.")
                     self.assertRegex(block, r"- Start it from .+\.")
 

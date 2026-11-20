@@ -9,6 +9,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
 from core.hashing import parse_hash_list
+from core.sizes import size_text
 from model.systemnames import system_name
 from packs.crossref import FileConsumers
 from sitegen import entries as siteentries, markup, measurements as sitemeasurements
@@ -48,7 +49,6 @@ from sitegen.render import (
     code_span,
     count_text,
     escape_tags,
-    fmt_size,
     card_page,
     record_emulator_cards,
 )
@@ -253,7 +253,7 @@ def _data_member_table(members: dict[str, dict], names: list[str], anchors: set[
         anchor = f"sha1-{sha1[:12]}"
         span = "" if anchor in anchors else f'<span id="{anchor}"></span>'
         anchors.add(anchor)
-        table.append(f"| {span}{code_span(member)} | {fmt_size(int(info.get('size', 0)))} | {code_span(sha1)} |")
+        table.append(f"| {span}{code_span(member)} | {size_text(int(info.get('size', 0)))} | {code_span(sha1)} |")
     return table
 
 

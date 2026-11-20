@@ -7,6 +7,7 @@ import re
 import subprocess
 from collections.abc import Callable
 
+from core.sizes import size_text
 from model.guides import install_command
 from model.platforms import load_platform_config
 from model.registry import (
@@ -14,7 +15,6 @@ from model.registry import (
     list_release_pack_platforms,
     load_platform_registry,
 )
-from release import record as release_record
 
 
 REPO = "Abdess/retrobios"
@@ -240,7 +240,7 @@ def render(record: dict, platforms_dir: str, whats_new: str,
         folder = folders.get(name)
         lines.append(
             f"| {_display(name)} | {_link(pack, tag)} |"
-            f" {release_record.size_text(pack['extracted_size'])} | {pack['files']:,} |"
+            f" {size_text(pack['extracted_size'])} | {pack['files']:,} |"
             f" {f'`{folder}`' if folder else '-'} |"
         )
     lines += [

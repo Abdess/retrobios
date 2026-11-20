@@ -29,6 +29,7 @@ from installer_build.port import (
     build_archive,
 )
 from core.paths import REPO_ROOT
+from core.sizes import size_text
 from installer_build.handhelds import Launcher, PLATFORM_OF, SERVED_DIR, launchers_for, systems
 
 GROUP_TITLE = "RetroBIOS app for handhelds"
@@ -98,15 +99,9 @@ def _launcher_block(launcher: Launcher, system: str, root: Path) -> list[str]:
         "",
         f"- {verb} {launcher.folder_for(system)}.",
         f"- Start it from {launcher.start}.",
-        f"- {_size(archive.size)}. SHA-256: `{archive.sha256}`",
+        f"- {size_text(archive.size)}. SHA-256: `{archive.sha256}`",
         "",
     ]
-
-
-def _size(count: int) -> str:
-    if count >= 1024 * 1024:
-        return f"{count / 1024 ** 2:.1f} MB"
-    return f"{count / 1024:.0f} KB"
 
 
 APP_LINE = "RetroBIOS also runs on the handheld, with the controller."

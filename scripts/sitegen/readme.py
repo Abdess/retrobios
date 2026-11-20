@@ -18,6 +18,7 @@ from core.artifacts import write_if_changed
 from core.cli import InputMissing
 from core.github import github_token
 from core.paths import DB_FILE, PLATFORMS_DIR, REPO_ROOT
+from core.sizes import size_text
 from model.composition import compute_composition, count_catalog_matched
 from model.declarations import declared_root
 from model.guides import PACKAGE_COMMAND, install_command
@@ -390,7 +391,7 @@ def download_table(
         files, size = release_totals(name, record)
         lines.append(
             f"| {cov['platform']} | {f'{files:,}' if files else '-'} |"
-            f" {format_size(size) if size else '-'} |"
+            f" {size_text(size) if size else '-'} |"
             f" {extract_paths.get(cov['platform'], '')} |"
             f" {download_links(name, record, 'Download', site=SITE_URL)} |"
         )
@@ -431,13 +432,6 @@ def collection_line(total_files: int, comp: dict) -> str:
     )
 
 
-def format_size(size: int) -> str:
-    """Human-readable pack size."""
-    if size >= 1024**3:
-        return f"{size / 1024**3:.1f} GB"
-    return f"{size / 1024**2:.0f} MB"
-
-
 SITE_URL = "https://abdess.github.io/retrobios/"
 # The installer demo (scripts/make_demo.py): the recording and what it shows.
 DEMO_DIR = REPO_ROOT / "docs_assets" / "demo"
@@ -464,7 +458,7 @@ def clone_line(db: dict) -> str:
     )
     return (
         "Packs are built from a clone, and the clone carries the collection:"
-        f" its checkout alone is over {format_size(committed)}."
+        f" its checkout alone is over {size_text(committed)}."
         f" `git clone --depth 1 https://github.com/{REPO}.git` leaves the"
         " history out. Files kept as release assets are downloaded when a"
         " pack needs them. Then generate packs for any platform, emulator,"
@@ -692,7 +686,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = DB_FILE) -> str
         files, size = release_totals(name, record)
         display = coverages[name]["platform"]
         lines.append(
-            f"| {display} | {files:,} | {format_size(size) if size else '-'} |"
+            f"| {display} | {files:,} | {size_text(size) if size else '-'} |"
             f" {extract_paths.get(display, '')} |"
             f" {download_links(name, record, 'Download', site=SITE_URL)} |"
         )

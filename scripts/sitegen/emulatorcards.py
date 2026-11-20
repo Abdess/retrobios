@@ -10,6 +10,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
+from core.sizes import size_text
 from model.collection import manufacturer_slug
 from model.systemnames import system_name
 from packs.crossref import FileConsumers, entry_target, held_copy
@@ -43,7 +44,6 @@ from sitegen.render import (
     code_span,
     count_text,
     escape_tags,
-    fmt_size,
     card_page,
     console_href,
 )
@@ -273,7 +273,7 @@ def _validation_names(validation: dict | list | None) -> set[str]:
 
 def _exact_size(size: int) -> str:
     """A rounded size with its bytes, where the bytes are not the same figure."""
-    return fmt_size(size) if size < 1024 else f"{fmt_size(size)} ({size:,} bytes)"
+    return size_text(size) if size < 1024 else f"{size_text(size)} ({size:,} bytes)"
 
 
 def _build_file_links(pin_build: list[dict]) -> list[str]:
@@ -393,7 +393,7 @@ def _card_size_details(f: dict) -> list[str]:
     fmax = f.get("max_size")
     # Where the code compares the size, the exact bytes: raze tells three
     # DUKE3D.GRP apart by size, all three shown as 42.3 MB.
-    sized = _exact_size if "size" in _validation_names(f.get("validation", [])) else fmt_size
+    sized = _exact_size if "size" in _validation_names(f.get("validation", [])) else size_text
     bounds = []
     if fmin:
         bounds.append(f"min {sized(fmin)}")
@@ -663,7 +663,7 @@ def _contents_lines(contents: list) -> list[str]:
             if c.get("description"):
                 parts.append(escape_tags(str(c["description"])))
             if c.get("size"):
-                parts.append(fmt_size(c["size"]))
+                parts.append(size_text(c["size"]))
             if c.get("crc32"):
                 parts.append(f"CRC32 `{c['crc32']}`")
             if c.get("sha1"):
@@ -1036,7 +1036,7 @@ def render_metadata_rows(profile: dict) -> list[str]:
             # inside the app's own data folder, which the notes describe.
             lines.append(f"| {label} | {code_span(val)}, inside the app's own data folder |")
         elif field == "bios_size" and isinstance(val, int):
-            lines.append(f"| {label} | {fmt_size(val)} ({val:,} bytes) |")
+            lines.append(f"| {label} | {size_text(val)} ({val:,} bytes) |")
         elif isinstance(val, str) and val.startswith("http"):
             lines.append(f"| {label} | [{val}]({val}) |")
         else:

@@ -662,15 +662,6 @@ def emulator_link(name: str, prefix: str = "") -> str:
     """Generate a markdown link to an emulator page."""
     return f"[{name}]({prefix}emulators/{name}.md)"
 
-def fmt_size(size: int) -> str:
-    if size >= 1024 * 1024 * 1024:
-        return f"{size / (1024**3):.1f} GB"
-    if size >= 1024 * 1024:
-        return f"{size / (1024**2):.1f} MB"
-    if size >= 1024:
-        return f"{size / 1024:.1f} KB"
-    return f"{size} B"
-
 def percent_text(n: int, total: int) -> str:
     if total == 0:
         return "0%"

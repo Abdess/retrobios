@@ -22,11 +22,11 @@ from resolve.nativemode import digest_algorithm
 from installer_build.handhelds import GROUP_PAGE
 from sitegen import handheld as sitehandheld, markup
 from core.paths import REPO_ROOT
+from core.sizes import size_text
 from sitegen.guides import platform_args, terminal_tabs
 from sitegen.home import next_block
 from sitegen.install import installer_module, has_release_pack
 from sitegen.readme import download_links, extract_notes
-from sitegen.render import fmt_size
 from sitegen.versions import release_line, setup_version, version_line
 
 
@@ -316,8 +316,8 @@ def _guide_download(name: str, display: str, guide: Guide, extract_to: str | Non
     if pack and pack.get("assets"):
         parts = len(pack["assets"])
         bullets = [
-            f"{fmt_size(pack['download_size'])} to download, "
-            f"{fmt_size(pack['extracted_size'])} once unzipped."
+            f"{size_text(pack['download_size'])} to download, "
+            f"{size_text(pack['extracted_size'])} once unzipped."
         ]
         if parts > 1:
             bullets.append("Both parts are needed." if parts == 2 else f"All {parts} parts are needed.")

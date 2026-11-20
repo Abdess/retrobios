@@ -18,6 +18,7 @@ import unittest
 from functools import cache
 from pathlib import Path
 
+from core.sizes import size_text
 from model import releaserecord
 from sitegen.readme import (
     SITE_URL,
@@ -25,7 +26,6 @@ from sitegen.readme import (
     contributing_text,
     download_links,
     download_table,
-    format_size,
 )
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -380,8 +380,8 @@ class SizesComeFromTheRecord(unittest.TestCase):
         if tag != RECORD.get("tag"):
             self.skipTest(f"release.json records {RECORD.get('tag')}, not {tag}")
         pack = releaserecord.pack_for(platform.lower(), RECORD)
-        self.assertEqual(download, format_size(pack["download_size"]))
-        self.assertEqual(extracted, format_size(pack["extracted_size"]))
+        self.assertEqual(download, size_text(pack["download_size"]))
+        self.assertEqual(extracted, size_text(pack["extracted_size"]))
 
 
 class ContributorChecksMatchCi(unittest.TestCase):

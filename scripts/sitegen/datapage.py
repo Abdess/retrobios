@@ -13,7 +13,8 @@ from model.safeparse import yaml_load
 from sitegen import markup, measurements as sitemeasurements
 from sitegen.config import RELEASE_URL, REPO_URL, SITE_URL
 from core.paths import REPO_ROOT
-from sitegen.render import escape_tags, fmt_size
+from core.sizes import size_text
+from sitegen.render import escape_tags
 
 
 def _is_manifest(item: dict) -> bool:
@@ -178,7 +179,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         )
         lines.append(
             f"| {item['title']} | [`{item['url']}`]({item['url']}) | "
-            f"{schema} | {fmt_size(item['bytes'])} |"
+            f"{schema} | {size_text(item['bytes'])} |"
         )
     lines.extend([
         "",
@@ -354,7 +355,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
             continue
         lines.append(
             f"| [{item['title']}]({item['url']}) | `{item['media_type']}` | "
-            f"{fmt_size(item['bytes'])} | {_short_sha256(item, 'api/v1/catalog.json')} |"
+            f"{size_text(item['bytes'])} | {_short_sha256(item, 'api/v1/catalog.json')} |"
         )
     lines.extend([
         "",

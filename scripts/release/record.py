@@ -115,9 +115,3 @@ def manifest_mismatches(record: dict, install_dir: str | Path) -> list[str]:
                 f"install/{manifest_path.name} expects {expected}"
             )
     return found
-
-
-def size_text(count: int) -> str:
-    if count >= 1024**3:
-        return f"{count / 1024**3:.1f} GB"
-    return f"{count / 1024**2:.0f} MB"

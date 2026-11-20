@@ -16,6 +16,7 @@ from sitegen import entries as siteentries, markup
 from sitegen.cards import SHORT_HASH
 from sitegen.config import REPO_URL, date_line
 from core.paths import REPO_ROOT
+from core.sizes import size_text
 from sitegen.fields import hash_spans, search_excluded
 from sitegen.parts import (
     PAGE_BYTES,
@@ -32,7 +33,6 @@ from sitegen.render import (
     count_text,
     emulator_link,
     escape_tags,
-    fmt_size,
     card_page,
     console_href,
 )
@@ -276,9 +276,9 @@ def _platform_file_row(f: dict, cfg_entry: dict, hash_type: str = "",
     # The size closes the hash lines: a line of its own was one more
     # element per row.
     if size and facts:
-        facts[-1] += f" ({fmt_size(size)})"
+        facts[-1] += f" ({size_text(size)})"
     elif size:
-        facts.append(f"Size: {fmt_size(size)}")
+        facts.append(f"Size: {size_text(size)}")
     if f.get("status") == "untested" and f.get("reason"):
         facts.append(_text_html(f"Not confirmed: {f['reason']}"))
     # Not every entry is firmware: the platform may list a game's data or a

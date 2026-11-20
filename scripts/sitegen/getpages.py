@@ -14,6 +14,7 @@ from installer_build.handhelds import GROUP_PAGE
 from sitegen import handheld as sitehandheld, markup
 from sitegen.config import RELEASE_URL, REPO_URL
 from core.paths import REPO_ROOT
+from core.sizes import size_text
 from sitegen.descriptions import PAGE_DATA
 from sitegen.guidepage import (
     NO_ZIP_FAQ,
@@ -27,7 +28,6 @@ from sitegen.home import next_block
 from sitegen.install import has_release_pack
 from sitegen.parts import parent_front_matter
 from sitegen.readme import asset_links
-from sitegen.render import fmt_size
 from sitegen.versions import release_line, version_line
 
 
@@ -62,8 +62,8 @@ def _pack_lines(platform_name: str, display: str, record: dict, pack: dict) -> l
         asset_links(platform_name, record, REPO_URL, f"Download {display} Pack",
                     button=lambda text, url: markup.button(text, url, primary=True)),
         "",
-        f"- {fmt_size(pack['download_size'])} to download, "
-        f"{fmt_size(pack['extracted_size'])} once unzipped.",
+        f"- {size_text(pack['download_size'])} to download, "
+        f"{size_text(pack['extracted_size'])} once unzipped.",
         *(["- Both parts are needed." if parts == 2 else f"- All {parts} parts are needed."]
           if parts > 1 else []),
         *_unzip_into(platform_name, display, extract_to, parts),
@@ -104,7 +104,7 @@ def generate_get_page(platform_name: str) -> str:
     if released and pack and tag_date:
         PAGE_DATA[f"{releaserecord.GET_DIR}/{platform_name}.md"] = {"dateModified": "-".join(tag_date.groups())}
     if released and pack and pack.get("assets"):
-        description = (f"The BIOS pack for {display}: {fmt_size(pack['download_size'])} to "
+        description = (f"The BIOS pack for {display}: {size_text(pack['download_size'])} to "
                        "download. The address stays the same and always gives the latest ZIP.")
     else:
         description = f"The BIOS files for {display}: one command installs and checks them."
