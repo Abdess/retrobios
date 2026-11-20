@@ -57,7 +57,6 @@ from exporter.originals import (
     SourcesIndexUnreadable,
     load_sources,
     source_key,
-    source_revision,
     wanted_sources,
 )
 from installer_build import pins as installer_build_pins
@@ -70,6 +69,7 @@ from model.registry import list_registered_platforms, load_data_dir_registry, lo
 from model.profiles import load_emulator_profiles, upstream_profile_index
 from core.artifacts import write_text_atomic
 from model.safeparse import yaml_load
+from model.sourcerevision import scraped_revision
 from exporter import discover_exporters
 from resolve.reconcile import build_native_model
 from scripts.scraper import game_dat_importer
@@ -763,15 +763,12 @@ def _os_source(doc: dict) -> dict:
 def platform_revision(setup: str, doc: dict, platforms_dir: Path) -> str:
     """The revision the setup's own platform file was scraped at, when the
     setup is a registered platform read from the same repository; '' else."""
-    path = platforms_dir / f"{setup}.yml"
-    if setup not in load_platform_registry(str(platforms_dir)) or not path.is_file():
+    if setup not in load_platform_registry(str(platforms_dir)):
         return ""
-    with path.open(encoding="utf-8") as fh:
-        source = str((yaml_load(fh) or {}).get("source") or "")
     repo = upstream.parse_repo(str(_os_source(doc).get("repo") or ""))
-    if repo is None or f"/{repo.slug.lower()}/" not in source.lower() + "/":
+    if repo is None:
         return ""
-    return source_revision(source)
+    return scraped_revision(platforms_dir / f"{setup}.yml", repo.slug)
 
 
 def romfolder_pin_drift(setup: str, doc: dict, platforms_dir: Path) -> str | None:
@@ -1564,15 +1561,10 @@ def build_variable(lines: list[str], variable: str) -> str | None:
 def pin_build_revision(reference: dict, platforms_dir: Path) -> str:
     """The revision of the platform repository its YAML was last scraped at,
     '' when the platform is not registered or reads another repository."""
-    path = platforms_dir / f"{reference.get('platform', '')}.yml"
     repo = upstream.parse_repo(str(reference.get("repo") or ""))
-    if repo is None or not path.is_file():
+    if repo is None:
         return ""
-    with path.open(encoding="utf-8") as fh:
-        source = str((yaml_load(fh) or {}).get("source") or "")
-    if f"/{repo.slug.lower()}/" not in source.lower() + "/":
-        return ""
-    return source_revision(source)
+    return scraped_revision(platforms_dir / f"{reference.get('platform', '')}.yml", repo.slug)
 
 
 def check_pin_builds(

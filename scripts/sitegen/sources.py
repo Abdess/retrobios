@@ -22,6 +22,7 @@ from model.sourceref import (
     source_ref_values,
     split_source_ref,
 )
+from model.sourcerevision import parse_source
 from sitegen.render import by_mode, escape_tags
 
 
@@ -647,18 +648,6 @@ def _guarded_spans(line: str) -> list[tuple[int, int]]:
     return [m.span() for m in re.finditer(r"`[^`]*`|\[[^\]]*\]\([^)]*\)", line)]
 
 
-# Where a platform's list was read: the forge, the repository, the revision
-# and the path inside it, out of the URL its scraper pinned.
-_LIST_URL_RES = (
-    re.compile(r"^https://raw\.githubusercontent\.com/(?P<owner>[^/]+)/(?P<repo>[^/]+)/"
-               r"(?P<rev>[^/]+)/(?P<path>.+)$"),
-    re.compile(r"^https://github\.com/(?P<owner>[^/]+)/(?P<repo>[^/]+)/(?:blob|tree)/"
-               r"(?P<rev>[^/]+)(?:/(?P<path>.+))?$"),
-    re.compile(r"^https://codeload\.github\.com/(?P<owner>[^/]+)/(?P<repo>[^/]+)/"
-               r"tar\.gz/(?P<rev>[^/]+)$"),
-    re.compile(r"^https://(?P<host>gitlab\.com)/(?P<owner>[^/]+)/(?P<repo>[^/]+)/-/"
-               r"(?:raw|blob)/(?P<rev>[^/]+)/(?P<path>.+)$"),
-)
 _BRANCHES = frozenset({"master", "main", "db"})
 
 
@@ -706,17 +695,10 @@ class ListSource:
 
 def list_source(url: str) -> ListSource | None:
     """The forge, repository, revision and path of a platform's `source:`."""
-    url = str(url or "").strip()
-    for pattern in _LIST_URL_RES:
-        found = pattern.match(url)
-        if found:
-            parts = found.groupdict()
-            return ListSource(parts.get("host") or "github.com", parts["owner"],
-                              parts["repo"], parts["rev"], parts.get("path") or "")
-    bare = re.match(r"^https://github\.com/([^/]+)/([^/]+?)/?$", url)
-    if bare:
-        return ListSource("github.com", bare[1], bare[2], "", "")
-    return None
+    parsed = parse_source(url)
+    if parsed is None:
+        return None
+    return ListSource(parsed.host, parsed.owner, parsed.repo, parsed.rev, parsed.path)
 
 
 def launcher_ref_markdown(source: ListSource | None, ref: str) -> str:

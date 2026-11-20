@@ -223,6 +223,8 @@ class EvidenceLinksItsSource(unittest.TestCase):
                          "https://github.com/o/r/tree/v1")
         gitlab = list_source("https://gitlab.com/o/r/-/raw/v1/es_bios.xml")
         self.assertEqual(gitlab.browse(start=3, end=5), "https://gitlab.com/o/r/-/blob/v1/es_bios.xml#L3-5")
+        tree = list_source("https://gitlab.com/recalbox/recalbox/-/tree/10.1.1/configs")
+        self.assertEqual(tree.browse(), "https://gitlab.com/recalbox/recalbox/-/blob/10.1.1/configs")
 
 
 class EachEntryNamesItsFile(unittest.TestCase):

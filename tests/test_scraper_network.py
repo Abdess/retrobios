@@ -15,7 +15,13 @@ from unittest import mock
 
 import yaml
 
-from model.sourcerevision import platform_revision, required_revision, source_revision
+from model.sourcerevision import (
+    parse_source,
+    platform_revision,
+    required_revision,
+    scraped_revision,
+    source_revision,
+)
 from scraper import base_scraper
 from scraper.base_scraper import (
     FetchError,
@@ -116,6 +122,25 @@ class SourceRevisionReadsEveryShape(unittest.TestCase):
         ):
             with self.assertRaises(ValueError):
                 bad()
+
+    def test_a_gitlab_group_is_the_owner(self):
+        parsed = parse_source("https://gitlab.com/g/sub/proj/-/raw/v1/a/b.xml")
+        self.assertEqual((parsed.host, parsed.slug, parsed.rev, parsed.path),
+                         ("gitlab.com", "g/sub/proj", "v1", "a/b.xml"))
+        archive = parse_source("https://gitlab.com/o/r/-/archive/10.1/r-10.1.tar.gz")
+        self.assertEqual((archive.slug, archive.rev, archive.path), ("o/r", "10.1", ""))
+
+    def test_a_repository_is_compared_without_case(self):
+        """Forge owner and repository names ignore case: check_freshness read
+        them so, the scrapers' required_revision did not."""
+        url = "https://raw.githubusercontent.com/ROCKNIX/distribution/20250101/f"
+        self.assertEqual(required_revision(url, "rocknix/distribution"), "20250101")
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+            path = Path(tmp, "p.yml")
+            path.write_text(f"source: {url}\n")
+            self.assertEqual(scraped_revision(path, "rocknix/Distribution"), "20250101")
+            self.assertEqual(scraped_revision(path, "rocknix/other"), "")
+            self.assertEqual(scraped_revision(Path(tmp, "absent.yml")), "")
 
     def test_a_platform_without_a_revision_raises(self):
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
