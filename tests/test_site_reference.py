@@ -710,7 +710,7 @@ class EveryEnvelopeCarriesTheCommit(unittest.TestCase):
 
     def test_the_writers_pass_it(self):
         source = script_source("generate_site.py")
-        self.assertIn('str(db.get("generated_at") or data_timestamp()), source_commit(),\n        )\n'
+        self.assertIn('build_timestamp(db), source_commit(),\n        )\n'
                       "    clash", source)
         block = source[source.index("public_profiles = {"):source.index("pages = emulator_pages(")]
         self.assertIn("write_single_item(", block)

@@ -5,12 +5,13 @@ from __future__ import annotations
 import re
 from datetime import datetime
 
+from core.artifacts import build_timestamp
 from model import releaserecord
 from model import siteinputs
 from model.composition import count_catalog_matched
 from model.platforms import load_platform_config
 from model.profiles import unique_emulator_profiles
-from sitegen.config import RELEASE_URL, REPO_URL, data_timestamp
+from sitegen.config import RELEASE_URL, REPO_URL
 
 
 def compute_stats(db: dict, coverages: dict, profiles: dict) -> dict:
@@ -20,7 +21,7 @@ def compute_stats(db: dict, coverages: dict, profiles: dict) -> dict:
         systems.update(p.get("systems", []))
     return {
         "schema_version": 1,
-        "generated_at": data_timestamp(),
+        "generated_at": build_timestamp(),
         "files": db.get("total_files", 0),
         "size_bytes": db.get("total_size", 0),
         "platforms": len(coverages),

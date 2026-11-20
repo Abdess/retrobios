@@ -48,11 +48,6 @@ def build_commit(root: Path = REPO_ROOT) -> str:
     return commit
 
 
-def data_timestamp() -> str:
-    """The build time for data files (stats, API records), ISO 8601."""
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
 def data_as_of(moment: datetime | None = None) -> str:
     """The build date for a reader, in words, with the machine form beside it.
     A raw ISO stamp ("2026-10-22T22:43:08Z") closed the home page."""

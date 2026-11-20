@@ -13,6 +13,7 @@ import sys
 from collections.abc import Callable
 from pathlib import Path
 
+from core.artifacts import build_timestamp
 from core.artifacts import json_text as _json_text
 from core.hashing import file_digest
 from model import retired as model_retired
@@ -22,7 +23,7 @@ from model.profiles import is_emulator
 from packs.crossref import FileConsumers
 from acquire.provenance import build_report
 from sitegen.apiitems import core_index_items, system_index_items
-from sitegen.config import DATA_LICENSE, REPO_URL, build_commit, data_timestamp
+from sitegen.config import DATA_LICENSE, REPO_URL, build_commit
 from core.paths import REPO_ROOT
 from sitegen.install import release_pack_platforms
 from sitegen.lookup import (
@@ -510,7 +511,7 @@ def _write_sqlite_export(
         commit = source_commit()
         metadata = {
             "schema_version": "1",
-            "generated_at": str(db.get("generated_at") or data_timestamp()),
+            "generated_at": build_timestamp(db),
             **({"commit": commit} if commit else {}),
             "source": REPO_URL,
             "scope": "metadata only, no BIOS or firmware payload bytes",
@@ -690,7 +691,7 @@ def generate_data_exports(
     for directory in (api, downloads, schemas_dest):
         directory.mkdir(parents=True, exist_ok=True)
 
-    generated_at = str(db.get("generated_at") or data_timestamp())
+    generated_at = build_timestamp(db)
     # The revision the data was read at: a tool comparing two downloads
     # could not tell which commit each came from.
     commit = source_commit()

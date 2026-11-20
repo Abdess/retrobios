@@ -11,6 +11,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
+from core.artifacts import build_timestamp
 from romrecipes import ledger
 from model import releaserecord
 from model import siteinputs
@@ -38,7 +39,7 @@ from sitegen import (
     wanted as sitewanted,
 )
 from sitegen.cards import wanted_link, system_install_choices, tables_out_of_search
-from sitegen.config import GENERATED_DIRS, PUBLIC_DIRS, REPO_URL, data_timestamp, yaml
+from sitegen.config import GENERATED_DIRS, PUBLIC_DIRS, REPO_URL, yaml
 from core.paths import REPO_ROOT
 from sitegen.crossref import generate_cross_reference
 from sitegen.dataexports import (
@@ -287,7 +288,7 @@ def _write_system_pages(run: _SiteRun) -> None:
             public / "api" / "v1" / "systems" / f"{slug}.json", "systems",
             # The published data keeps the collection's folders.
             system_export_item(slug, mfr, manufacturers[mfr]),
-            str(db.get("generated_at") or data_timestamp()), source_commit(),
+            build_timestamp(db), source_commit(),
         )
     clash = split_system_stems() & {manufacturer_slug(m) for m in manufacturers}
     if clash:
@@ -422,7 +423,7 @@ def _write_emulator_page(run: _SiteRun, name: str, profile: dict) -> None:
     write_single_item(
         run.public / "api" / "v1" / "emulators" / f"{name}.json", "emulators",
         {"id": name, "profile": profile},
-        str(db.get("generated_at") or data_timestamp()), source_commit(),
+        build_timestamp(db), source_commit(),
     )
     pages = emulator_pages(
         name, profile, db, run.consumers, run.suppl_names, run.data_registry,
