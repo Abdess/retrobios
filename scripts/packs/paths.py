@@ -9,7 +9,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 from dataclasses import dataclass
 
-from core.paths import sanitize_pack_path
+from core.paths import comparable_destination, sanitize_pack_path
 from resolve.validation import read_from_save_dir
 
 
@@ -177,7 +177,7 @@ def placement_block(
     """
     if dest in seen_files:
         return "taken"
-    if case_insensitive and dest.lower() in seen_lower:
+    if case_insensitive and comparable_destination(dest) in seen_lower:
         return "case_twin"
     if has_path_conflict(dest, seen_files, seen_parents):
         return "path_conflict"

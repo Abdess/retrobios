@@ -7,19 +7,10 @@ import zlib
 from dataclasses import dataclass, field
 
 from core.hashing import compute_hashes, parse_hash_list, parse_md5_list
+from core.paths import comparable_destination
 from core.ziptools import check_inside_zip
 from resolve.localfile import resolve_local_file, variant_base_name
 from resolve.packfiles import records_by_path, preferred_entries
-
-
-def comparable_destination(destination: str, fold: bool = True) -> str:
-    """Comparable form of a destination, since layers write it differently.
-
-    Case is folded only where the platform's filesystem folds it: on Linux
-    RetroDECK ships bios/DISK.ROM and bios/disk.rom side by side.
-    """
-    cleaned = destination.strip().strip("/").replace("\\", "/")
-    return cleaned.casefold() if fold else cleaned
 
 
 @dataclass

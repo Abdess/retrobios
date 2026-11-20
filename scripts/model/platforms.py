@@ -9,7 +9,7 @@ try:
 except ImportError:
     yaml = None
 
-from core.paths import PLATFORMS_DIR
+from core.paths import PLATFORMS_DIR, comparable_destination
 from model.sources import source_yaml
 
 
@@ -89,7 +89,7 @@ def _apply_shared_groups(config: dict, shared_groups: dict) -> None:
     # Lakka and RetroPie run on Linux, and np2kai opens 2608_bd.wav beside
     # System.dat's 2608_BD.WAV.
     def fold(destination: str) -> str:
-        return destination.lower() if config.get("case_insensitive_fs") else destination
+        return comparable_destination(destination, bool(config.get("case_insensitive_fs")))
 
     for system in config.get("systems", {}).values():
         for group_name in system.get("includes", []):

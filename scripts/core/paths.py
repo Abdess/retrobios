@@ -28,6 +28,16 @@ def sanitize_pack_path(raw: str) -> str:
     return "/".join(p for p in raw.split("/") if p and p not in ("..", "."))
 
 
+def comparable_destination(destination: str, fold: bool = True) -> str:
+    """Comparable form of a destination, since layers write it differently.
+
+    Case is folded only where the platform's filesystem folds it: on Linux
+    RetroDECK ships bios/DISK.ROM and bios/disk.rom side by side.
+    """
+    cleaned = destination.strip().strip("/").replace("\\", "/")
+    return cleaned.casefold() if fold else cleaned
+
+
 def declared_destination(entry: dict) -> str:
     """The destination a declaration names, its name when it names none,
     normalized as sanitize_pack_path does: the key the builder, the manifest

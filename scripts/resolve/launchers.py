@@ -25,7 +25,7 @@ from model.declarations import CONFIGS_ROOT, ROMS_ROOT, declared_root, outer_lay
 from model.profiles import lists_files
 from resolve.content import name_match_size_ok
 from resolve.localfile import resolve_local_file
-from core.paths import sanitize_pack_path
+from core.paths import comparable_destination, sanitize_pack_path
 from core.paths import REPO_ROOT
 
 # The kinds whose names say which file the launcher opens. A link of a named
@@ -74,7 +74,7 @@ class LauncherPlace:
     passes_to: str = ""
 
     def fold(self, name: str) -> str:
-        return name.lower() if self.case_insensitive else name
+        return comparable_destination(name, self.case_insensitive)
 
     def basenames(self) -> set[str]:
         return {self.fold(p.rsplit("/", 1)[-1]) for p in self.paths}

@@ -14,7 +14,7 @@ from pathlib import Path
 from core.artifacts import set_plain_mode
 from core.deterministic_zip import FIXED_DATE_TIME
 from core.hashing import compute_hashes
-from core.paths import sanitize_pack_path
+from core.paths import comparable_destination, sanitize_pack_path
 from packs.paths import has_path_conflict, register_path, placement_block
 
 
@@ -145,7 +145,7 @@ class Placed:
     tree walk all place files through this one record.
 
     ``content``, when given, records the sha1 of what each taken path holds,
-    keyed by its lowercased destination: a case twin carrying the same
+    keyed by its folded destination: a case twin carrying the same
     bytes serves the core on a filesystem that folds the names.
     """
 
@@ -159,16 +159,18 @@ class Placed:
         self.destinations.add(dest)
         register_path(dest, self.destinations, self.parents)
         if self.fold:
-            self.lower.add(dest.lower())
+            self.lower.add(comparable_destination(dest))
         if self.content is not None:
-            self.content[dest.lower()] = sha1
+            self.content[comparable_destination(dest)] = sha1
 
     def content_at(self, dest: str) -> str | None:
         """The sha1 recorded for the path a destination folds onto."""
-        return (self.content or {}).get(dest.lower())
+        return (self.content or {}).get(comparable_destination(dest))
 
     def holds(self, dest: str) -> bool:
-        return dest in self.destinations or (self.fold and dest.lower() in self.lower)
+        return dest in self.destinations or (
+            self.fold and comparable_destination(dest) in self.lower
+        )
 
     def conflicts(self, dest: str) -> bool:
         return has_path_conflict(dest, self.destinations, self.parents)
