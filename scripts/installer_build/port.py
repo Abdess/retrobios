@@ -102,18 +102,13 @@ def release_pack_labels(root: Path = REPO_ROOT) -> dict[str, str]:
     """
     from resolve.grouping import group_identical_platforms
     from model.registry import list_release_pack_platforms
-    from model.platforms import load_platform_config
-    from packs.naming import file_name_part, platform_pack_stem
+    from packs.naming import platform_pack_prefix
 
     platforms_dir = str(root / "platforms")
     pool = list_release_pack_platforms(platforms_dir)
     labels: dict[str, str] = {}
     for group, representative in group_identical_platforms(pool, platforms_dir):
-        stem = platform_pack_stem(group, representative, platforms_dir)
-        config = load_platform_config(representative, platforms_dir)
-        version = config.get("version", config.get("dat_version", ""))
-        tag = f"_{file_name_part(str(version))}" if version else ""
-        label = stem[: -len(tag)] if tag and stem.endswith(tag) else stem
+        label = platform_pack_prefix(group, representative, platforms_dir)
         for platform in group:
             labels[platform] = label
     return dict(sorted(labels.items()))
