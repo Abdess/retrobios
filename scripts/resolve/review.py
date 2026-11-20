@@ -20,7 +20,7 @@ from model.nodedup import in_nodedup_dir
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
 from model.registry import list_registered_platforms
-from resolve.nativemode import digest_algorithm
+from resolve.nativemode import digest_algorithm, platform_mode
 from resolve.validation import frontend_digest_matches, inner_rom_check
 
 if TYPE_CHECKING:
@@ -175,7 +175,7 @@ def load_platform_hashes(platforms_dir: str, db: dict | None = None) -> dict:
             print(f"WARNING: {name}: {exc}", file=sys.stderr)
             continue
 
-        mode, rule = config.get("verification_mode"), config.get("hash_rule", "")
+        mode, rule = platform_mode(config), config.get("hash_rule", "")
         for system_id, system in config.get("systems", {}).items():
             for file_entry in system.get("files", []):
                 sha1s = parse_hash_list(file_entry.get("sha1"))

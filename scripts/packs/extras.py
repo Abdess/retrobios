@@ -19,6 +19,7 @@ from model.declarations import declared_root, expand_platform_declared_names, pl
 from model.profiles import load_emulator_profiles
 from resolve.localfile import resolution_is_hash_exact
 from resolve.localfile import resolve_local_file
+from resolve.nativemode import platform_mode
 from resolve.cores import resolve_platform_cores
 from resolve.layout import core_system_dirs, system_dir_path
 from resolve.standalone import platform_layouts
@@ -2129,7 +2130,7 @@ def _ships(
     if not path:
         return False
     return baseline_verdict(
-        file_entry, path, status, config.get("verification_mode", "existence"),
+        file_entry, path, status, platform_mode(config),
         config.get("hash_rule", ""),
     )[1] is None
 

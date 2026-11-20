@@ -397,7 +397,7 @@ def _slot_claims(
     # pins an md5 nobody holds, and the primary shipped without the 000-lo.lo
     # geolith and FBNeo read inside it. Decided per entry: EmuDeck, an md5
     # platform, declares the same archive with no hash.
-    mode = config.get("verification_mode", "existence")
+    mode = nativemode.platform_mode(config)
     rule = config.get("hash_rule", "")
     by_slot: dict[str, list[Claim]] = {}
     for claim in profile_claims(
@@ -535,7 +535,7 @@ def slot_choices(
     recorded whole in the install manifest, so a target narrowed from the
     full manifest gets the bytes the target's own pack carries.
     """
-    mode = config.get("verification_mode", "existence")
+    mode = nativemode.platform_mode(config)
     rule = config.get("hash_rule", "")
     platform_profiles = {
         name: profiles[name] for name in resolve_platform_cores(config, profiles)

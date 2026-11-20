@@ -59,7 +59,7 @@ from packs.standalone import standalone_copies, standalone_layouts
 from resolve.contentlayout import TARGET_KEY
 from resolve.cores import filter_systems_by_target, resolve_platform_cores as _platform_cores
 from resolve.gamedata import GAME_DATA, is_game_data, platform_game_data, without_game_data
-from resolve.nativemode import digest_algorithm, reads_file_contents
+from resolve.nativemode import digest_algorithm, platform_mode, reads_file_contents
 from resolve.packfiles import preferred_entries as _preferred_entries, resolve_declaration
 from resolve.validation import (
     build_validation_index,
@@ -189,7 +189,7 @@ class _ManifestBuild:
 
     @property
     def verification_mode(self) -> str:
-        return self.config.get("verification_mode", "existence")
+        return platform_mode(self.config)
 
     @property
     def fields(self) -> SelectionIndex:

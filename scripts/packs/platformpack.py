@@ -50,7 +50,9 @@ from resolve import packfiles as packresolve, regions as resolve_regions, slot a
 from resolve.contentlayout import TARGET_KEY
 from resolve.cores import platform_scope_systems, system_scope_error
 from resolve.gamedata import GameDataCut, without_game_data
-from resolve.nativemode import digest_algorithm, hash_mismatch_excludes_file, reads_file_contents
+from resolve.nativemode import (
+    digest_algorithm, hash_mismatch_excludes_file, platform_mode, reads_file_contents,
+)
 from resolve.packfiles import (
     download_external,
     preferred_entries as _preferred_entries,
@@ -361,7 +363,7 @@ class _PlatformPlan:
 
     @property
     def verification_mode(self) -> str:
-        return self.config.get("verification_mode", "existence")
+        return platform_mode(self.config)
 
     @property
     def platform_display(self) -> str:

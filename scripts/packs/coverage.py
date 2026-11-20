@@ -30,7 +30,7 @@ from packs.verdicts import (
 from resolve.categories import BIOS, EntryCategories
 from resolve.cores import platform_scope_systems, resolve_platform_cores
 from resolve.launchers import launcher_unproven
-from resolve.nativemode import digest_algorithm, normalize as normalize_mode, reads_file_contents
+from resolve.nativemode import digest_algorithm, platform_mode, reads_file_contents
 from resolve.validation import (
     build_validation_index,
     agnostic_substitute,
@@ -773,7 +773,7 @@ def verify_platform(
         )
     # Normalized once: a typo in a platform YAML must not verify with one
     # mode and be scored with another.
-    mode = normalize_mode(config.get("verification_mode"))
+    mode = platform_mode(config)
     platform = config.get("platform", "unknown")
 
     # The builder settles a destination claimed by both layers, and this must read

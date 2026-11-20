@@ -57,6 +57,11 @@ def normalize(mode: str | None) -> str:
     return mode if mode in MODES else DEFAULT_MODE
 
 
+def platform_mode(config: dict) -> str:
+    """The mode a platform config declares, the schema default when it declares none."""
+    return normalize(config.get("verification_mode"))
+
+
 def reads_file_contents(mode: str | None) -> bool:
     """Whether the frontend opens the file rather than just finding it."""
     return normalize(mode) in MODE_DIGEST

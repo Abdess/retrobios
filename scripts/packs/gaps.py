@@ -16,7 +16,7 @@ from resolve.directories import expand_directory_entries
 from resolve.launchers import LauncherLayer, declared_destinations, held_record
 from resolve.layout import runs_standalone, system_dir_path
 from resolve.localfile import resolve_local_file
-from resolve.nativemode import hash_mismatch_excludes_file
+from resolve.nativemode import hash_mismatch_excludes_file, platform_mode
 from resolve.ownership import foreign_tree, owner_tokens
 from resolve.standalone import platform_layouts, standalone_set as platform_standalone_set
 from resolve.validation import (
@@ -493,7 +493,7 @@ def find_undeclared_files(
     scan = _GapScan(
         config, db, data_names, include_all, declared_names, folded_slots,
         declared_contents,
-        hash_mismatch_excludes_file(config.get("verification_mode")),
+        hash_mismatch_excludes_file(platform_mode(config)),
         launcher_layer,
     )
 

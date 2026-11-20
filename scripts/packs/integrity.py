@@ -14,7 +14,7 @@ from core.artifacts import build_timestamp
 from packs.paths import MEDIA_MARKER, has_path_conflict
 from core.ziptools import build_zip_contents_index
 from core.ziptools import check_inside_zip
-from resolve.nativemode import digest_algorithm
+from resolve.nativemode import digest_algorithm, platform_mode
 from resolve.validation import baseline_verdict, digest_verdict
 from resolve.nativemode import hash_mismatch_excludes_file
 import hashlib
@@ -593,7 +593,7 @@ def _builder_extras(
     config, emu_profiles = expect.config, expect.emu_profiles
     data_registry = expect.opts.data_registry
     base_dest = expect.base_dest
-    mode = config.get("verification_mode", "existence")
+    mode = platform_mode(config)
     hash_rule = config.get("hash_rule", "")
     shipped: dict[str, str | None] = {}
     for expected, declarations in baseline_groups.items():
@@ -857,7 +857,7 @@ def _count_baseline(
             db,
             zip_contents=exclusion_index,
             data_dir_registry=data_registry,
-            verification_mode=expect.config.get("verification_mode", "existence"),
+            verification_mode=platform_mode(expect.config),
             hash_rule=expect.config.get("hash_rule", ""),
         ):
             count.excluded += 1
@@ -895,7 +895,7 @@ def _native_hash_errors(
     # error when the repo holds a file matching a declaration: without
     # one, the pack ships its best effort and the gap is a data issue
     # reported by verify.py, not a generation bug.
-    verification_mode = config.get("verification_mode", "existence")
+    verification_mode = platform_mode(config)
     digest = digest_algorithm(verification_mode)
     hash_rule = config.get("hash_rule", "")
     errors: list[str] = []
