@@ -476,20 +476,6 @@ def run_variant(args: argparse.Namespace, emu: Emulator, tree: Path, oracle: dic
             "flags": flags, "verdict": verdict, "verdict_evidence": evidence}
 
 
-def frontend_identity() -> dict:
-    script = Path(__file__).resolve()
-    commit = dirty = None
-    try:
-        commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True,
-                                check=True).stdout.strip()
-        dirty = bool(subprocess.run(["git", "status", "--porcelain", "--", str(script)], cwd=ROOT,
-                                    capture_output=True, text=True, check=True).stdout.strip())
-    except (OSError, subprocess.CalledProcessError) as exc:
-        print(f"WARNING: frontend commit unknown, git failed: {exc}", file=sys.stderr)
-    return {"script": SCRIPT, "commit": commit, "script_modified": dirty,
-            "script_sha256": cp.file_digest(script, "sha256")}
-
-
 def emulator_oracle(emu: Emulator, path: Path, content_sha1: str) -> dict:
     """The oracle core_probe reads (tests/campaign/oracle.yml), looked up by
     the content's sha1 and the emulator's name, with the emulator's own
@@ -566,7 +552,7 @@ def _probe(args: argparse.Namespace, emu: Emulator) -> int:
         "core": {"file": meta["name"], "sha256": meta["sha256"], "repo": f"https://github.com/{meta['repo']}",
                  "commit": None, "build_command": None, "compiler": None, "library_name": emu.name,
                  "library_version": meta["tag"], "artifact": meta["url"]},
-        "frontend": frontend_identity(),
+        "frontend": cp.frontend_identity(Path(__file__).resolve(), SCRIPT),
         "host": {**cp.host_identity(), "load_before": load_before, "load_after": load_after,
                  "max_load": max_load},
         "inputs": {

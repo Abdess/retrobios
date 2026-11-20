@@ -49,7 +49,8 @@ if sys.version_info < (3, 9):
         f"this is {sys.version.split()[0]}"
     )
 
-ROOT = Path(__file__).resolve().parent.parent
+SCRIPT_PATH = Path(__file__).resolve()
+ROOT = SCRIPT_PATH.parent.parent
 MIN_BENCH_REPETITIONS = 5
 DEFAULT_WORK_DIR = ROOT / "tmp" / "core_probe"
 BASE_OBSERVABLES = ("frame_sha1", "video_sha1", "audio_sha1", "state_sha1")
@@ -668,8 +669,9 @@ def host_identity() -> dict:
     }
 
 
-def frontend_identity() -> dict:
-    script = Path(__file__).resolve()
+def frontend_identity(script: Path = SCRIPT_PATH,
+                      label: str = "scripts/core_probe.py") -> dict:
+    """The commit a measurement came from, and whether its script differs from it."""
     commit: str | None = None
     dirty: bool | None = None
     try:
@@ -680,7 +682,7 @@ def frontend_identity() -> dict:
         dirty = bool(status.strip())
     except (OSError, subprocess.CalledProcessError) as exc:
         print(f"WARNING: frontend commit unknown, git failed: {exc}", file=sys.stderr)
-    return {"script": "scripts/core_probe.py", "commit": commit, "script_modified": dirty,
+    return {"script": label, "commit": commit, "script_modified": dirty,
             "script_sha256": file_digest(script, "sha256")}
 
 
