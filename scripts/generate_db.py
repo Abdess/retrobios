@@ -19,7 +19,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from core.cli import add_repo_inputs
+from core.cli import add_repo_inputs, require_directory
 from model.dumpcatalog import annotate_provenance, DEFAULT_PROVENANCE_DIR, load_provenance_snapshots
 from core.hashing import compute_hashes
 from model.registry import list_registered_platforms
@@ -452,15 +452,13 @@ def main() -> int:
         help="Directory with dump-catalog snapshots",
     )
     args = parser.parse_args()
+    require_directory(args.bios_dir)
     with repository_output_lock(args.output):
         return _generate(args)
 
 
 def _generate(args: argparse.Namespace) -> int:
     bios_dir = Path(args.bios_dir)
-    if not bios_dir.is_dir():
-        print(f"Error: BIOS directory '{bios_dir}' not found", file=sys.stderr)
-        sys.exit(1)
 
     # A forced run rehashes every file but keeps the previous digests to
     # check the new ones against.
