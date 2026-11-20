@@ -24,6 +24,7 @@ on:
       - "scripts/core/paths.py"
       - "scripts/core/romdir.py"
       - "scripts/core/sect233r1.py"
+      - "scripts/core/sizes.py"
       - "scripts/core/upstream.py"
       - "scripts/core/ziptools.py"
       - "scripts/devtools/__init__.py"
