@@ -8,6 +8,7 @@ from collections.abc import Collection
 
 from core.cli import suggest_names
 from core.paths import sanitize_pack_path
+from model.declarations import declared_slot
 from model.platforms import load_platform_config
 from model.profiles import preferred_profile, upstream_profile_index
 from model.systems import norm_system_id, select_systems
@@ -348,10 +349,8 @@ def system_core_reach(
         file_cores = {
             core
             for fe in sys_data.get("files", [])
-            for core in dest_cores.get(
-                sanitize_pack_path(fe.get("destination") or fe.get("name", "")).lower(),
-                (),
-            )
+            if (slot := declared_slot(fe))
+            for core in dest_cores.get(slot.lower(), ())
         }
         reach[sys_id] = file_cores | norm_system_cores.get(norm_key, set())
     return reach

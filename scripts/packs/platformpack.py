@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING, TypedDict
 from model.registry import load_platform_registry
 from core.hashing import compute_hashes
 from core.options import reject_unknown
-from core.paths import EMULATORS_DIR, sanitize_pack_path
+from core.paths import EMULATORS_DIR, declared_destination, sanitize_pack_path
 from model.alternatives import core_file_spares
 from model.declarations import OUTER_ROOTS, declared_root
 from model.platforms import load_platform_config
@@ -833,7 +833,7 @@ class _PlatformPackBuild:
 
     def _pack_core_file(self, fe: dict) -> None:
         plan = self.plan
-        dest = sanitize_pack_path(fe.get("destination", fe["name"]))
+        dest = declared_destination(fe)
         if self._region_dropped(fe):
             return
         if not dest:
@@ -985,10 +985,8 @@ class _PlatformPackBuild:
                 continue
             full = extra_full_destination(fe, prefix)
             if (
-                full and full not in self.placed.destinations and full.lower() in self.placed.lower
-                and self.resolve_extra(
-                    fe, sanitize_pack_path(fe.get("destination", fe["name"]))
-                )[0]
+                full and self.placed.block(full) == "case_twin"
+                and self.resolve_extra(fe, declared_destination(fe))[0]
             ):
                 self.case_twins.append(self._flat(full))
 

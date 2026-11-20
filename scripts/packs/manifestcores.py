@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
 from core.options import reject_unknown
-from core.paths import sanitize_pack_path
+from core.paths import declared_destination
 from model.alternatives import core_file_spares
 from model.declarations import OUTER_ROOTS, ROMS_ROOT, declared_root
 from model.profiles import upstream_profile_index
@@ -93,7 +93,7 @@ class _CoreEntryLister:
 
     def list_extra(self, fe: dict) -> None:
         state = self.state
-        dest = sanitize_pack_path(fe.get("destination", fe["name"]))
+        dest = declared_destination(fe)
         if not dest:
             return
         region_key = self.region_key(fe)

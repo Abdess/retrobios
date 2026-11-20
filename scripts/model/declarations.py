@@ -5,7 +5,21 @@ from __future__ import annotations
 import os
 from collections import Counter
 
-from core.paths import sanitize_pack_path
+from core.paths import declared_destination
+
+
+def declared_slot(entry: dict, prefix: str = "") -> str:
+    """The path a declaration claims, relative to the core file directory.
+
+    The declared destination (declared_destination), less the BIOS
+    directory ``prefix`` the platform writes in front of it (declared_root).
+    Empty when the declaration names no path, as EmuDeck's system:md5
+    whitelist entries do: such a declaration claims no slot.
+    """
+    slot = declared_destination(entry)
+    if prefix and slot.lower().startswith(prefix.lower() + "/"):
+        slot = slot[len(prefix) + 1:]
+    return slot
 
 
 def platform_declarations(
@@ -34,9 +48,8 @@ def platform_declarations(
     for system in config.get("systems", {}).values():
         for fe in system.get("files", []):
             name = fe.get("name", "")
-            slot = sanitize_pack_path(fe.get("destination") or name).lower()
-            if prefix and slot.startswith(prefix + "/"):
-                slot = slot[len(prefix) + 1:]
+            # An entry without a path still declares its name and content.
+            slot = declared_slot(fe, prefix).lower()
             # A zipped_file entry pins a member of the archive it names: its
             # md5 and its size, when stated, are not the archive's.
             by_hash: dict = {}
@@ -110,10 +123,7 @@ def platform_declared_contents(config: dict, db: dict) -> dict[str, set[str]]:
                 record = files_db.get(sha1[0] if isinstance(sha1, list) else sha1)
             if not record:
                 continue
-            slot = sanitize_pack_path(fe.get("destination") or fe.get("name", "")).lower()
-            if prefix and slot.startswith(prefix + "/"):
-                slot = slot[len(prefix) + 1:]
-            folder = slot.rpartition("/")[0]
+            folder = declared_slot(fe, prefix).lower().rpartition("/")[0]
             for field in ("md5", "sha1", "crc32"):
                 value = str(record.get(field) or "").lower()
                 if value:

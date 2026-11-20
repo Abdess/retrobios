@@ -691,7 +691,9 @@ def case_folded_slots(
     """
     if not config.get("case_insensitive_fs", False):
         return frozenset()
-    return frozenset(where for places in declarations.values() for _size, where in places)
+    return frozenset(
+        where for places in declarations.values() for _size, where in places if where
+    )
 
 
 def declaration_settles(

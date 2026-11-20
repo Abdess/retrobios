@@ -22,7 +22,7 @@ from dataclasses import dataclass
 
 from core.hashing import parse_hash_list
 from model.database import record_at
-from model.declarations import CONFIGS_ROOT, ROMS_ROOT, declared_root, outer_layout
+from model.declarations import CONFIGS_ROOT, ROMS_ROOT, declared_root, declared_slot, outer_layout
 from model.profiles import lists_files
 from resolve.content import name_match_size_ok
 from resolve.localfile import resolve_local_file
@@ -1253,9 +1253,7 @@ def declared_destinations(config: dict) -> set[str]:
     found: set[str] = set()
     for system in config.get("systems", {}).values():
         for entry in system.get("files", []):
-            slot = sanitize_pack_path(entry.get("destination") or entry.get("name", ""))
-            if prefix and slot.lower().startswith(prefix.lower() + "/"):
-                slot = slot[len(prefix) + 1:]
+            slot = declared_slot(entry, prefix)
             if slot:
                 found.add(slot)
     return found

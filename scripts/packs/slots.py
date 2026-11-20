@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 from core.hashing import parse_md5_list
+from model.declarations import declared_slot
 from model.profiles import entry_system_ids, lists_files
 from resolve import nativemode
 from resolve.archives import archive_entry, holds_required_members
@@ -116,7 +117,7 @@ def platform_claims(
         for entry in system.get("files") or []:
             if not isinstance(entry, dict):
                 continue
-            dest = entry.get("destination") or entry.get("name") or ""
+            dest = declared_slot(entry)
             if not dest:
                 continue
             full = f"{base_dest}/{dest}" if base_dest else dest

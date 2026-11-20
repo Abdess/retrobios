@@ -11,6 +11,7 @@ from core.paths import comparable_destination
 from core.ziptools import check_inside_zip
 from resolve.localfile import resolve_local_file, variant_base_name
 from model.database import record_at
+from model.declarations import declared_slot
 from resolve.packfiles import preferred_entries
 
 
@@ -57,7 +58,7 @@ def find_collisions(
         for entry in system.get("files") or []:
             if not isinstance(entry, dict):
                 continue
-            dest = entry.get("destination") or entry.get("name") or ""
+            dest = declared_slot(entry)
             if dest:
                 by_dest.setdefault(comparable_destination(dest, fold), []).append((sys_id, entry))
 
