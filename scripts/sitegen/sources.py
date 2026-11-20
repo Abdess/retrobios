@@ -693,17 +693,15 @@ class ListSource:
                end: int | None = None) -> str:
         """The page a reader opens: the file, or the tree, at the revision."""
         path = path or self.path
-        if self.host == "gitlab.com":
-            url = f"https://gitlab.com/{self.owner}/{self.repo}/-/blob/{self.rev}/{path}"
-            anchor = f"#L{start}" + (f"-{end}" if end and end != start else "")
-        else:
-            base = f"https://github.com/{self.owner}/{self.repo}"
-            if not self.rev:
-                return base
-            kind = "blob" if path else "tree"
-            url = f"{base}/{kind}/{self.rev}" + (f"/{path}" if path else "")
-            anchor = f"#L{start}" + (f"-L{end}" if end and end != start else "")
-        return url + (anchor if start else "")
+        repo = upstream.make_repo(self.host, self.owner, self.repo)
+        if repo is None:
+            raise ValueError(f"no forge known for {self.host}")
+        base = f"https://{self.host}/{self.owner}/{self.repo}"
+        if not self.rev:
+            return base
+        if not path:
+            return f"{base}/-/tree/{self.rev}" if repo.family == "gitlab" else f"{base}/tree/{self.rev}"
+        return source_permalink(repo, self.rev, path, start or None, end or None)
 
 
 def list_source(url: str) -> ListSource | None:

@@ -214,6 +214,15 @@ class EvidenceLinksItsSource(unittest.TestCase):
         self.assertIn("gitlab.com/recalbox/recalbox/-/blob/10.1.1/a/b.py#L3",
                       launcher_ref_markdown(source, "a/b.py:3"))
 
+    def test_a_list_link_is_the_source_permalink(self):
+        """browse() built its own GitHub and GitLab URLs, a space left unquoted."""
+        github = list_source("https://github.com/o/r/blob/v1/dir/a b.cs")
+        self.assertEqual(github.browse(start=3, end=5), "https://github.com/o/r/blob/v1/dir/a%20b.cs#L3-L5")
+        self.assertEqual(list_source("https://codeload.github.com/o/r/tar.gz/v1").browse(),
+                         "https://github.com/o/r/tree/v1")
+        gitlab = list_source("https://gitlab.com/o/r/-/raw/v1/es_bios.xml")
+        self.assertEqual(gitlab.browse(start=3, end=5), "https://gitlab.com/o/r/-/blob/v1/es_bios.xml#L3-5")
+
 
 class EachEntryNamesItsFile(unittest.TestCase):
     def test_served_held_and_missing(self):
