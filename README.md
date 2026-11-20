@@ -45,10 +45,10 @@ The Files column counts what a pack holds once unzipped.
 |-------|------:|-----:|------------|----------|
 | Batocera | 20,717 | 10.9 GB | `/userdata/bios/` | [Download](https://abdess.github.io/retrobios/get/batocera/) |
 | EmuDeck | 16,038 | 8.1 GB | `~/Emulation/bios/` | [Download](https://abdess.github.io/retrobios/get/emudeck/) |
-| MiSTer FPGA | 90 | 29 MB | `/media/fat/games/` | [Download](https://abdess.github.io/retrobios/get/misterfpga/) |
+| MiSTer FPGA | 90 | 29.2 MB | `/media/fat/games/` | [Download](https://abdess.github.io/retrobios/get/misterfpga/) |
 | RetroArch | 14,989 | 7.5 GB | `system/` | [Download](https://abdess.github.io/retrobios/get/retroarch/) |
 | RetroBat | 11,209 | 8.9 GB | `bios/` | [Download](https://abdess.github.io/retrobios/get/retrobat/) |
-| RomM | 468 | 831 MB | `library/bios/` | [Download](https://abdess.github.io/retrobios/get/romm/) |
+| RomM | 468 | 830.8 MB | `library/bios/` | [Download](https://abdess.github.io/retrobios/get/romm/) |
 
 ZIPs are made for the setups most people download. The others install with the line above, and each page gives the command: [AmberELEC](https://abdess.github.io/retrobios/get/amberelec/), [BizHawk](https://abdess.github.io/retrobios/get/bizhawk/), [EmuELEC](https://abdess.github.io/retrobios/get/emuelec/), [KNULLI](https://abdess.github.io/retrobios/get/knulli/), [Lakka](https://abdess.github.io/retrobios/get/lakka/), [MinUI](https://abdess.github.io/retrobios/get/minui/), [MyMinUI](https://abdess.github.io/retrobios/get/myminui/), [NextUI](https://abdess.github.io/retrobios/get/nextui/), [ROCKNIX](https://abdess.github.io/retrobios/get/rocknix/), [Recalbox](https://abdess.github.io/retrobios/get/recalbox/), [RetroDECK](https://abdess.github.io/retrobios/get/retrodeck/), [RetroPie](https://abdess.github.io/retrobios/get/retropie/).
 
@@ -110,4 +110,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-20T04:23:38Z*
+*Auto-generated on 2026-11-20T22:47:39Z*
