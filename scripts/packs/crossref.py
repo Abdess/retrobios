@@ -596,6 +596,23 @@ def entry_target(entry: dict, files: list[dict]) -> tuple[dict, str]:
     return with_archive_members(entry, files), entry.get("path") or ""
 
 
+def entry_index(db: dict, data_names: set[str] | None) -> dict:
+    """The collection indexes entry_source reads, one build for every caller."""
+    indexes = db.get("indexes", {})
+    by_name = indexes.get("by_name", {})
+    return {
+        "by_name": by_name,
+        "by_name_lower": {k.lower(): k for k in by_name},
+        "by_md5": indexes.get("by_md5", {}),
+        "by_crc32": indexes.get("by_crc32", {}),
+        "by_sha256": indexes.get("by_sha256", {}),
+        "by_path_suffix": indexes.get("by_path_suffix", {}),
+        "db_files": db.get("files", {}),
+        "data_names": data_names,
+        "bios_dir": db.get("bios_dir"),
+    }
+
+
 def entry_source(f: dict, index: dict) -> str | None:
     """Where the collection holds a profile entry, or None.
 
@@ -1399,28 +1416,13 @@ def cross_reference(
     launcher_layer = scope.get("launcher_layer")
     declared_contents = scope.get("declared_contents")
     platform_data_dirs = platform_data_dirs or {}
-    by_name = db.get("indexes", {}).get("by_name", {})
-    by_name_lower = {k.lower(): k for k in by_name}
-    by_md5 = db.get("indexes", {}).get("by_md5", {})
-    by_crc32 = db.get("indexes", {}).get("by_crc32", {})
-    by_sha256 = db.get("indexes", {}).get("by_sha256", {})
-    by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
-    db_files = db.get("files", {})
     report: dict[str, dict] = {}
 
     index = {
-        "by_name": by_name,
-        "by_name_lower": by_name_lower,
-        "by_md5": by_md5,
-        "by_crc32": by_crc32,
-        "by_sha256": by_sha256,
-        "by_path_suffix": by_path_suffix,
-        "db_files": db_files,
-        "data_names": data_names,
+        **entry_index(db, data_names),
         "all_declared": all_declared,
         "folded_slots": folded_slots,
         "declared_contents": declared_contents,
-        "bios_dir": db.get("bios_dir"),
         "launcher_candidates": [] if launcher_layer else None,
     }
     for emu_name, profile in profiles.items():

@@ -80,22 +80,9 @@ def availability_check(
     missing while the gap report called it held would describe a
     different collection on two pages of the same site.
     """
-    from packs.crossref import entry_source
+    from packs.crossref import entry_index, entry_source
 
-    by_name = db.get("indexes", {}).get("by_name", {})
-    by_name_lower = {k.lower(): k for k in by_name}
-    by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
-
-    index = {
-        "by_name": by_name,
-        "by_name_lower": by_name_lower,
-        "by_path_suffix": by_path_suffix,
-        "by_md5": db.get("indexes", {}).get("by_md5", {}),
-        "by_sha256": db.get("indexes", {}).get("by_sha256", {}),
-        "by_crc32": db.get("indexes", {}).get("by_crc32", {}),
-        "db_files": db.get("files", {}),
-        "data_names": data_names,
-    }
+    index = entry_index(db, data_names)
 
     def _file_available(f: dict) -> bool:
         """Check if a file is available using the same resolution as cross_reference."""
