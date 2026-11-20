@@ -33,9 +33,17 @@ _MAX_ENTRIES = 0xFFFF
 _MAX_FIELD = 0xFFFFFFFF
 
 
+def part_of(name: str) -> tuple[str, int, int] | None:
+    """(pack name, part number, part count) of one part of a split pack."""
+    part = _PART_NAME.match(name)
+    if part is None:
+        return None
+    return f"{part['stem']}.zip", int(part["index"]), int(part["count"])
+
+
 def is_part(name: str) -> bool:
     """Whether a file name is one part of a split pack."""
-    return _PART_NAME.match(name) is not None
+    return part_of(name) is not None
 
 
 def pack_of(name: str) -> str:

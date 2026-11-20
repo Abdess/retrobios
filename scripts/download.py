@@ -34,6 +34,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from core.hashing import compute_hashes, parse_sha256sums
 from core.paths import REPO_ROOT
 from core.ziptools import safe_extract_zip
+from packs.parts import part_of
 from model.releaserecord import PACK_SUFFIX, RECORD, load_record, match_key, pack_label, recorded_pack
 
 DEFAULT_API = "https://api.github.com"
@@ -44,9 +45,6 @@ MAX_CHECKSUMS_BYTES = 1 << 20
 CHUNK = 1 << 20
 
 _VOLUME_RE = re.compile(rf"^(?P<base>.+{re.escape(PACK_SUFFIX)})\.(?P<index>\d+)$")
-_PART_RE = re.compile(
-    r"^(?P<stem>.+_BIOS_Pack)\.part(?P<index>\d+)of(?P<count>\d+)\.zip$"
-)
 _LOOPBACK_HOSTS = {"127.0.0.1", "::1", "localhost"}
 
 
@@ -127,14 +125,14 @@ def group_packs(release: dict) -> list[Pack]:
     for asset in release.get("assets", []):
         name = asset["name"]
         volume = _VOLUME_RE.match(name)
-        part = _PART_RE.match(name)
+        part = part_of(name)
         if volume:
             groups.setdefault(volume["base"], []).append((int(volume["index"]), asset))
             joined.add(volume["base"])
         elif part:
-            base = f"{part['stem']}.zip"
-            groups.setdefault(base, []).append((int(part["index"]), asset))
-            expected[base] = int(part["count"])
+            base, index, count = part
+            groups.setdefault(base, []).append((index, asset))
+            expected[base] = count
         elif name.endswith(PACK_SUFFIX):
             groups.setdefault(name, []).append((0, asset))
 
