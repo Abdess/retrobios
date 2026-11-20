@@ -7,7 +7,6 @@ import functools
 import io
 import json
 import os
-import re
 import shutil
 import sqlite3
 import sys
@@ -21,7 +20,7 @@ from model.dumpcatalog import load_provenance_snapshots
 from packs.crossref import FileConsumers
 from acquire.provenance import build_report
 from sitegen.apiitems import sha1_index_by_path, core_index_items, system_index_items
-from sitegen.config import DATA_LICENSE, REPO_URL, data_timestamp
+from sitegen.config import DATA_LICENSE, REPO_URL, build_commit, data_timestamp
 from core.paths import REPO_ROOT
 from sitegen.install import release_pack_platforms
 from sitegen.lookup import (
@@ -642,19 +641,14 @@ def system_export_item(slug: str, manufacturer: str, consoles: dict[str, list]) 
 
 @functools.lru_cache(maxsize=1)
 def source_commit() -> str:
-    """The commit of the checkout the site is built from, empty outside one."""
+    """build_commit, empty outside a checkout: the exports then name no commit."""
     import subprocess
 
     try:
-        result = subprocess.run(
-            ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT,
-            capture_output=True, text=True, check=True,
-        )
-    except (OSError, subprocess.CalledProcessError) as error:
+        return build_commit()
+    except (OSError, subprocess.CalledProcessError, ValueError) as error:
         print(f"  no commit recorded in the exports: {error}", file=sys.stderr)
         return ""
-    commit = result.stdout.strip()
-    return commit if re.fullmatch(r"[0-9a-f]{40}", commit) else ""
 
 
 # One row per dump a catalog describes and the collection lacks: the list

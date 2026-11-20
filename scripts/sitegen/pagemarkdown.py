@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 import re
 import subprocess
 from collections.abc import Callable
@@ -13,6 +12,7 @@ from pathlib import Path
 from typing import ClassVar
 
 from core.paths import REPO_ROOT
+from sitegen.config import build_commit
 
 
 SITE = "https://abdess.github.io"
@@ -378,9 +378,7 @@ def build_stamp() -> dict[str, str]:
     """The commit the site is built from and its date. CI names the commit
     in GITHUB_SHA. The date is the commit's, so two builds of one commit
     write the same bytes."""
-    commit = os.environ.get("GITHUB_SHA") or subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, capture_output=True, text=True,
-        check=True).stdout.strip()
+    commit = build_commit()
     date = subprocess.run(["git", "log", "-1", "--format=%cI", commit], cwd=REPO_ROOT,
                           capture_output=True, text=True, check=True).stdout.strip()
     return {"commit": commit, "date": date}

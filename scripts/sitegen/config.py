@@ -2,8 +2,13 @@
 
 from __future__ import annotations
 
+import os
+import re
+import subprocess
 from datetime import datetime, timezone
+from pathlib import Path
 
+from core.paths import REPO_ROOT
 from model import releaserecord
 from model.safeparse import require_yaml
 
@@ -24,6 +29,23 @@ GENERATED_DIRS = ["platforms", "systems", "emulators", "wiki", "api", "downloads
                   releaserecord.GET_DIR]
 # Generated directories of files served as they are, not pages.
 PUBLIC_DIRS = ("api", "downloads")
+
+
+def build_commit(root: Path = REPO_ROOT) -> str:
+    """The commit the site is built from: GITHUB_SHA in CI, HEAD locally.
+
+    Anything but a full commit id raises: the installer address and the
+    page stamps name it, and a branch name there would move under them.
+    """
+    commit = os.environ.get("GITHUB_SHA", "").strip()
+    if not commit:
+        commit = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=root, check=True,
+            capture_output=True, text=True,
+        ).stdout.strip()
+    if not re.fullmatch(r"[0-9a-f]{40}", commit):
+        raise ValueError(f"not a commit id: {commit!r}")
+    return commit
 
 
 def data_timestamp() -> str:

@@ -15,14 +15,13 @@ Invoke-RestMethod reads any type that is neither JSON nor XML as text.
 
 from __future__ import annotations
 
-import os
 import re
-import subprocess
 from pathlib import Path
 
 from core.artifacts import write_if_changed
 from model.guides import PS1_NAME, SH_NAME
 from installer_build.pins import PIN, installer_sha256
+from sitegen.config import build_commit
 
 REPO_RAW = "https://raw.githubusercontent.com/Abdess/retrobios"
 
@@ -44,19 +43,6 @@ ADVICE: dict[str, re.Pattern[str]] = {
 SERVED_ADVICE = ("The file was changed on its way here, most often by a proxy or an "
                  "antivirus that rewrites downloads. Run the command again from another "
                  "network, or with that web protection paused.")
-
-
-def build_commit(root: Path) -> str:
-    """The commit the site is built from: GITHUB_SHA in CI, HEAD locally."""
-    commit = os.environ.get("GITHUB_SHA", "").strip()
-    if not commit:
-        commit = subprocess.run(
-            ["git", "rev-parse", "HEAD"], cwd=root, check=True,
-            capture_output=True, text=True,
-        ).stdout.strip()
-    if not re.fullmatch(r"[0-9a-f]{40}", commit):
-        raise ValueError(f"not a commit id: {commit!r}")
-    return commit
 
 
 def installer_url(commit: str) -> str:
