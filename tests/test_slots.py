@@ -961,6 +961,10 @@ class ARecordIsFoundByItsPathOnce(unittest.TestCase):
                 Counted.walks += 1
                 return super().values()
 
+            def items(self):
+                Counted.walks += 1
+                return super().items()
+
         files = Counted({"a" * 40: {"path": "bios/x.bin"}, "b" * 40: {"path": "bios/y.bin"}})
         db = {"files": files}
         for _ in range(50):
