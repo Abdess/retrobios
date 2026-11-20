@@ -165,18 +165,35 @@ def build_supplemental_index(
     return names
 
 
-def _zip_member_names(bios_path: Path) -> set[str]:
-    """Basenames of the files inside every ZIP under bios/, both cases."""
-    import zipfile
+_zip_members_cache: dict[str, list[tuple[str, list[str]]]] = {}
 
-    names: set[str] = set()
-    for zpath in bios_path.rglob("*.zip"):
+
+def _zip_members(bios_root: str | Path) -> list[tuple[str, list[str]]]:
+    """Each ZIP under bios/ with the files it holds, walked once per root.
+
+    An unreadable archive is reported and left out.
+    """
+    key = str(Path(bios_root))
+    if key in _zip_members_cache:
+        return _zip_members_cache[key]
+    found: list[tuple[str, list[str]]] = []
+    root = Path(bios_root)
+    for zpath in root.rglob("*.zip") if root.is_dir() else ():
         try:
             with zipfile.ZipFile(zpath) as zf:
                 members = [m for m in zf.namelist() if not m.endswith("/")]
         except (zipfile.BadZipFile, OSError) as exc:
             print(f"  WARNING: unreadable archive {zpath}: {exc}", file=sys.stderr)
             continue
+        found.append((str(zpath), members))
+    _zip_members_cache[key] = found
+    return found
+
+
+def _zip_member_names(bios_path: Path) -> set[str]:
+    """Basenames of the files inside every ZIP under bios/, both cases."""
+    names: set[str] = set()
+    for _zpath, members in _zip_members(bios_path):
         for member in members:
             basename = member.rsplit("/", 1)[-1]
             names.update((basename, basename.lower()))
@@ -335,16 +352,10 @@ def _supplemental_locations(
         for path in root.rglob("*"):
             if path.is_file() and not path.name.startswith("."):
                 found.setdefault(path.name.lower(), []).append((str(path), ""))
-    for zpath in Path(bios_root).rglob("*.zip") if Path(bios_root).is_dir() else ():
-        try:
-            with zipfile.ZipFile(zpath) as zf:
-                members = [m for m in zf.namelist() if not m.endswith("/")]
-        except (zipfile.BadZipFile, OSError) as exc:
-            print(f"  WARNING: unreadable archive {zpath}: {exc}", file=sys.stderr)
-            continue
+    for zpath, members in _zip_members(bios_root):
         for member in members:
             found.setdefault(member.rsplit("/", 1)[-1].lower(), []).append(
-                (str(zpath), member)
+                (zpath, member)
             )
     _locations_cache[key] = found
     return found
