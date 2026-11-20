@@ -2931,6 +2931,8 @@ class FreshnessGuardMechanics(unittest.TestCase):
         forms = [
             '{{"generated_at": "{}"}}',
             '{{"imported_at": "{}"}}',
+            '{{"generated": "{}"}}',
+            '{{"fetched": "{}"}}',
             "*Auto-generated on {}*",
             "*Generated on {}*",
             '<div class="rb-timestamp">Generated on {}.</div>',

@@ -51,7 +51,7 @@ from model.systems import (
     select_systems,
 )
 from core.artifacts import (
-    write_text_atomic,
+    write_if_changed,
     artifact_lock,
     repository_output_lock,
     ArtifactLockBusy,
@@ -321,24 +321,6 @@ def _validate_args(args: argparse.Namespace, parser: argparse.ArgumentParser) ->
             parser.error(message)
 
 
-def _write_manifest_if_changed(path: str, manifest: dict) -> None:
-    """Write manifest JSON only if content (excluding timestamp) changed."""
-    new_json = json.dumps(manifest, indent=2)
-    if os.path.exists(path):
-        with open(path) as f:
-            try:
-                old = json.load(f)
-            except (json.JSONDecodeError, OSError):
-                old = None
-        if old is not None:
-            # Compare everything except the generated timestamp
-            old_cmp = {k: v for k, v in old.items() if k != "generated"}
-            new_cmp = {k: v for k, v in manifest.items() if k != "generated"}
-            if old_cmp == new_cmp:
-                return  # no content change, keep existing timestamp
-    write_text_atomic(path, new_json)
-
-
 def _run_manifest_mode(
     args: argparse.Namespace,
     groups: list[tuple[list[str], str]],
@@ -398,7 +380,7 @@ def _run_manifest_mode(
                     args.output_dir,
                     f"{representative}{narrow_suffix}.json",
                 )
-                _write_manifest_if_changed(out_path, manifest)
+                write_if_changed(out_path, json.dumps(manifest, indent=2))
                 print(
                     f"  {out_path}: {manifest['total_files']} files, "
                     f"{manifest['total_size']} bytes, "
@@ -437,7 +419,7 @@ def _run_manifest_mode(
                              for name in _platform_cores(alias_cfg, emu_profiles)},
                             manifest["files"],
                         )
-                        _write_manifest_if_changed(alias_path, alias_manifest)
+                        write_if_changed(alias_path, json.dumps(alias_manifest, indent=2))
                         print(f"  {alias_path}: alias of {representative}")
             except (FileNotFoundError, OSError, yaml.YAMLError) as e:
                 print(f"  ERROR: {e}", file=sys.stderr)
@@ -1442,9 +1424,9 @@ def _write_standalone_layouts(output_dir: str, platform: str, layouts: dict) -> 
     list. Its [dest, sha1] items take their download from that list."""
     path = os.path.join(output_dir, STANDALONE_DIR, f"{platform}.json")
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    _write_manifest_if_changed(path, {
+    write_if_changed(path, json.dumps({
         "schema": 1, "platform": platform, "standalone_layouts": layouts,
-    })
+    }, indent=2))
     return path
 
 

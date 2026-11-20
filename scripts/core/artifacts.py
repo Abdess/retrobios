@@ -17,10 +17,13 @@ import re
 from core.paths import REPO_ROOT
 
 
+# JSON keys that hold the build clock: database.json (generated_at),
+# install/*.json manifests (generated), provenance snapshots (imported_at),
+# games/catalogs/ (fetched).
+TIMESTAMP_KEYS = frozenset({"generated_at", "generated", "imported_at", "fetched"})
+
 _TIMESTAMP_PATTERNS = [
-    re.compile(r'"generated_at":\s*"[^"]*"'),  # database.json
-    re.compile(r'"imported_at":\s*"[^"]*"'),  # provenance snapshots
-    re.compile(r'"fetched":\s*"[^"]*"'),  # games/catalogs/
+    *(re.compile(rf'"{key}":\s*"[^"]*"') for key in sorted(TIMESTAMP_KEYS)),
     re.compile(r"\*Auto-generated on [^*]*\*"),  # README.md
     re.compile(r"\*Generated on [^*]*\*"),  # docs site pages
     # The decorated pages carry the same stamp again as a rendered element,

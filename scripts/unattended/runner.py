@@ -17,6 +17,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from core.artifacts import TIMESTAMP_KEYS
 from core.hostguard import LockBusy, free_gb, global_lock, lock_busy
 from core.statefile import now_iso, save_state
 from unattended.breaker import may_push, refresh_breaker
@@ -40,7 +41,6 @@ ALERT_FREE_GB = 100
 LOG_DAYS = 30
 SEGFAULT_CODES = (139, -11)
 HOST_MISREAD_MARKERS = ("SystemError", "unknown opcode")
-VOLATILE_KEYS = frozenset({"generated_at", "generated", "imported_at"})
 
 
 @dataclass
@@ -181,7 +181,7 @@ def run_with_retry(
 
 def strip_volatile(value: object) -> object:
     if isinstance(value, dict):
-        return {k: strip_volatile(v) for k, v in value.items() if k not in VOLATILE_KEYS}
+        return {k: strip_volatile(v) for k, v in value.items() if k not in TIMESTAMP_KEYS}
     if isinstance(value, list):
         return [strip_volatile(v) for v in value]
     return value
