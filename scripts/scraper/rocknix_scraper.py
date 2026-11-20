@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import re
 
+from .batocera_scraper import extract_systems_dict
 from model.sourcerevision import required_revision
 from .base_scraper import (
     BaseScraper,
@@ -86,54 +87,18 @@ SYSTEM_SLUG_MAP = {
     "zxspectrum": "sinclair-zx-spectrum",
 }
 
-_SYSTEM_HEADER = re.compile(
-    r'"(?P<key>[\w\-]+)"\s*:\s*\{\s*"name"\s*:\s*"(?P<name>[^"]+)"\s*,'
-    r'\s*"biosFiles"\s*:\s*\[',
-)
-_FIELD = re.compile(r'"(\w+)"\s*:\s*"([^"]*)"')
-# A field written as a list of strings (`"md5": [ "a", "b" ]`), the form
-# batocera.linux 6b08b873 gives the md5 of a file several dumps satisfy.
-_LIST_FIELD = re.compile(r'"(\w+)"\s*:\s*\[([^\[\]]*)\]')
-_LIST_ITEM = re.compile(r'"([^"]*)"')
-
-
-def _slice_bios_block(source: str, start: int) -> tuple[str, int]:
-    """Return the biosFiles list body starting at an opening bracket."""
-    depth = 0
-    for i in range(start, len(source)):
-        char = source[i]
-        if char == "[":
-            depth += 1
-        elif char == "]":
-            depth -= 1
-            if depth == 0:
-                return source[start + 1:i], i
-    raise ValueError("unterminated biosFiles list")
-
-
 def parse_systems(source: str) -> dict[str, dict]:
-    """Extract per-system BIOS declarations from the rocknix-systems source.
-
-    Parsed textually rather than evaluated: the file is upstream code, and
-    the declarations are plain string literals.
-    """
-    source = re.sub(r"#[^\n]*", "", source)
-    systems: dict[str, dict] = {}
-
-    for header in _SYSTEM_HEADER.finditer(source):
-        body, _ = _slice_bios_block(source, header.end() - 1)
-        files = []
-        for raw_entry in re.findall(r"\{[^{}]*\}", body):
-            fields: dict[str, str | list[str]] = dict(_FIELD.findall(raw_entry))
-            for key, items in _LIST_FIELD.findall(raw_entry):
-                fields[key] = _LIST_ITEM.findall(items)
-            if fields.get("file"):
-                files.append(fields)
-        systems[header.group("key")] = {
-            "name": header.group("name"),
-            "biosFiles": files,
+    """Per-system BIOS declarations of the rocknix-systems script, read like
+    batocera-systems (extract_systems_dict), never executed. A list md5
+    (`"md5": ["a", "b"]`, batocera.linux 6b08b873) stays a list."""
+    systems = {
+        key: {
+            "name": entry.get("name"),
+            "biosFiles": [dict(f) for f in entry.get("biosFiles", []) if f.get("file")],
         }
-
+        for key, entry in extract_systems_dict(source).items()
+        if isinstance(entry, dict) and entry.get("biosFiles") is not None
+    }
     if not systems:
         raise ValueError("no system declarations found in rocknix-systems")
     return systems
