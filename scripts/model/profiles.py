@@ -14,7 +14,7 @@ except ImportError:
 
 from core.cli import InputMissing, suggest_names
 from model.alternatives import derive_member_requirements
-from model.sources import source_yaml
+from model.sources import source_yaml_file
 from model.systems import norm_system_id, system_index
 from core.paths import REPO_ROOT
 
@@ -243,8 +243,7 @@ def load_emulator_profiles(
         # source-paths.json, both exiting 0.
         raise InputMissing(f"no emulator profile directory at {emulators_dir}")
     for f in source_yaml_paths(emu_path):
-        with open(f) as fh:
-            profile = source_yaml(fh) or {}
+        profile = source_yaml_file(f) or {}
         if "emulator" not in profile:
             continue
         _normalize_hash_fields(profile)

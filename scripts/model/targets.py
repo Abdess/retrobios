@@ -9,15 +9,14 @@ from pathlib import Path
 
 from core.paths import PLATFORMS_DIR
 from core.cli import SourceUnreadable, suggest_names
-from model.sources import source_yaml
+from model.sources import source_yaml_file
 
 
 def _target_overrides(platform_name: str, targets_dir: str) -> dict:
     overrides_file = os.path.join(targets_dir, "_overrides.yml")
     if not os.path.exists(overrides_file):
         return {}
-    with open(overrides_file) as f:
-        all_overrides = source_yaml(f) or {}
+    all_overrides = source_yaml_file(overrides_file) or {}
     return all_overrides.get(platform_name, {}).get("targets", {})
 
 
@@ -37,8 +36,7 @@ def platform_files_target(platform: str, target: str, platforms_dir: str = PLATF
     target_file = os.path.join(targets_dir, f"{platform}.yml")
     if not os.path.exists(target_file):
         return False
-    with open(target_file) as f:
-        targets = (source_yaml(f) or {}).get("targets", {})
+    targets = (source_yaml_file(target_file) or {}).get("targets", {})
     return target in _target_alias_index(targets, _target_overrides(platform, targets_dir))
 
 
@@ -57,8 +55,7 @@ def canonical_target_name(
         target_file = os.path.join(targets_dir, f"{platform_name}.yml")
         if not os.path.exists(target_file):
             continue
-        with open(target_file) as f:
-            targets = (source_yaml(f) or {}).get("targets", {})
+        targets = (source_yaml_file(target_file) or {}).get("targets", {})
         canonical = _target_alias_index(
             targets, _target_overrides(platform_name, targets_dir)
         ).get(target)
@@ -111,8 +108,7 @@ def load_target_config(
             f"{platform_name} has no hardware targets: drop --target "
             f"(platforms with targets: {', '.join(with_targets)})"
         )
-    with open(target_file) as f:
-        data = source_yaml(f) or {}
+    data = source_yaml_file(target_file) or {}
 
     targets = data.get("targets", {})
     overrides = _target_overrides(platform_name, targets_dir)
@@ -182,8 +178,7 @@ def list_available_targets(
     target_file = os.path.join(targets_dir, f"{platform_name}.yml")
     if not os.path.exists(target_file):
         return []
-    with open(target_file) as f:
-        data = source_yaml(f) or {}
+    data = source_yaml_file(target_file) or {}
 
     # The count --target filters on: overrides applied, as load_target_config
     # applies them. The scraped list counted Batocera's machine variants and
@@ -285,8 +280,7 @@ def _unknown_target_message(target: str, platforms: list[str], platforms_dir: st
         target_file = os.path.join(targets_dir, f"{platform}.yml")
         if not os.path.exists(target_file):
             continue
-        with open(target_file) as f:
-            targets = (source_yaml(f) or {}).get("targets", {})
+        targets = (source_yaml_file(target_file) or {}).get("targets", {})
         overrides = _target_overrides(platform, targets_dir)
         for name in _target_alias_index(targets, overrides):
             owners.setdefault(name, []).append(platform)

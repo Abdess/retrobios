@@ -7,7 +7,7 @@ import json
 import os
 
 from model.platforms import load_platform_config
-from model.sources import source_yaml
+from model.sources import source_yaml_file
 from resolve.layout import CORE_DIR_PREFIX
 from resolve.standalone import standalone_set
 
@@ -33,8 +33,7 @@ def group_identical_platforms(
     for platform in platforms:
         try:
             raw_path = os.path.join(platforms_dir, f"{platform}.yml")
-            with open(raw_path) as f:
-                raw = source_yaml(f) or {}
+            raw = source_yaml_file(raw_path) or {}
             inherits[platform] = "inherits" in raw
             config = load_platform_config(platform, platforms_dir)
         except FileNotFoundError:

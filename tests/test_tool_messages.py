@@ -150,6 +150,22 @@ class ADamagedProfileNamesItself(unittest.TestCase):
                         "--source-only"
                     ])
 
+    def test_every_source_reader_names_the_file_and_line(self):
+        """The rom folders, source revision and data directory readers
+        parsed with yaml_load and stopped on a raw yaml traceback."""
+        from model.romfolders import load_setup
+        from model.sourcerevision import platform_revision
+        from packs.datadirs import load_registry
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as folder:
+            bad = Path(folder) / "bad.yml"
+            bad.write_text("source: a\nb: [\n", encoding="utf-8")
+            for read in (load_setup, platform_revision, lambda p: load_registry(str(p))):
+                with self.subTest(read=read), self.assertRaisesRegex(
+                    SourceUnreadable, rf"{re.escape(str(bad))}:\d+: "
+                ):
+                    read(bad)
+
     def test_a_damaged_file_is_not_an_absent_one(self):
         """Ten callers skip a platform whose file is absent (except
         FileNotFoundError): a damaged one has to stop them instead."""

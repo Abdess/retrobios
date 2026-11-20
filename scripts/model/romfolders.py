@@ -21,7 +21,7 @@ from model.systems import norm_system_id
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles, preferred_profile, upstream_profile_index
 from model.platforms import load_platform_config, native_layer
-from model.safeparse import yaml_load
+from model.sources import source_yaml_file
 
 ROMFOLDERS_DIR = Path("platforms") / "romfolders"
 SOURCES_DIR = ROMFOLDERS_DIR / "_sources"
@@ -47,8 +47,7 @@ def setup_paths(directory: Path = ROMFOLDERS_DIR) -> list[Path]:
 
 
 def load_setup(path: Path) -> dict:
-    with Path(path).open(encoding="utf-8") as handle:
-        return yaml_load(handle)
+    return source_yaml_file(path)
 
 
 def load_setups(directory: Path = ROMFOLDERS_DIR) -> dict[str, dict]:

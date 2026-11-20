@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from typing import Any, TextIO
 
 try:
@@ -32,3 +33,9 @@ def source_yaml(stream: TextIO) -> Any:
             f"{where}: {problem}. Check it with: "
             "python scripts/validate_schemas.py --source-only"
         ) from None
+
+
+def source_yaml_file(path: str | os.PathLike[str]) -> Any:
+    """source_yaml on a file of ours, read as UTF-8 whatever the locale."""
+    with open(path, encoding="utf-8") as handle:
+        return source_yaml(handle)

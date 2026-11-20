@@ -23,7 +23,7 @@ except ImportError:
 from core.artifacts import file_lock as _file_lock, set_plain_mode
 from core.cli import InputMissing
 from core.github import github_token
-from model.safeparse import yaml_load
+from model.sources import source_yaml_file
 from model.registry import VERSIONS_FILE, load_versions
 
 
@@ -46,8 +46,7 @@ def load_registry(registry_path: str = DEFAULT_REGISTRY) -> dict[str, dict]:
     path = Path(registry_path)
     if not path.exists():
         raise InputMissing(f"Registry not found: {registry_path}")
-    with open(path) as f:
-        data = yaml_load(f) or {}
+    data = source_yaml_file(path) or {}
     return data.get("data_directories", {})
 
 

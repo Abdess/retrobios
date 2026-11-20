@@ -8,7 +8,7 @@ from pathlib import Path
 
 from core.paths import PLATFORMS_DIR
 from core.cli import InputMissing
-from model.sources import source_yaml
+from model.sources import source_yaml_file
 
 
 def load_data_dir_registry(platforms_dir: str = PLATFORMS_DIR) -> dict:
@@ -16,8 +16,7 @@ def load_data_dir_registry(platforms_dir: str = PLATFORMS_DIR) -> dict:
     registry_path = os.path.join(platforms_dir, "_data_dirs.yml")
     if not os.path.exists(registry_path):
         return {}
-    with open(registry_path) as f:
-        data = source_yaml(f) or {}
+    data = source_yaml_file(registry_path) or {}
     return data.get("data_directories", {})
 
 
@@ -32,8 +31,7 @@ def load_platform_registry(platforms_dir: str | Path = PLATFORMS_DIR, required: 
         if required:
             raise InputMissing(f"{registry_path} not found")
         return {}
-    with open(registry_path, encoding="utf-8") as f:
-        return (source_yaml(f) or {}).get("platforms") or {}
+    return (source_yaml_file(registry_path) or {}).get("platforms") or {}
 
 
 def list_registered_platforms(platforms_dir: str = PLATFORMS_DIR) -> list[str]:
@@ -49,8 +47,7 @@ def list_registered_platforms(platforms_dir: str = PLATFORMS_DIR) -> list[str]:
     registry_path = os.path.join(platforms_dir, "_registry.yml")
     if not os.path.exists(registry_path):
         raise InputMissing(f"no platform registry at {registry_path}")
-    with open(registry_path) as f:
-        registry = source_yaml(f) or {}
+    registry = source_yaml_file(registry_path) or {}
     platforms = []
     for name, meta in sorted(registry.get("platforms", {}).items()):
         config_path = os.path.join(platforms_dir, meta.get("config", f"{name}.yml"))

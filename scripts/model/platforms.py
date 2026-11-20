@@ -10,7 +10,7 @@ except ImportError:
     yaml = None
 
 from core.paths import PLATFORMS_DIR, comparable_destination
-from model.sources import source_yaml
+from model.sources import source_yaml_file
 
 
 _shared_yml_cache: dict[str, dict] = {}
@@ -31,8 +31,7 @@ def _inherited_yaml(platform_name: str, platforms_dir: str) -> tuple[dict, list[
     if not os.path.exists(config_file):
         raise FileNotFoundError(f"Platform config not found: {config_file}")
 
-    with open(config_file) as f:
-        config = source_yaml(f) or {}
+    config = source_yaml_file(config_file) or {}
     if "inherits" not in config:
         return config, [platform_name]
 
@@ -61,8 +60,7 @@ def _cached_platform_yaml(path: str) -> dict:
     """A registry or shared-group file, parsed once per real path."""
     real = os.path.realpath(path)
     if real not in _shared_yml_cache:
-        with open(path) as f:
-            _shared_yml_cache[real] = source_yaml(f) or {}
+        _shared_yml_cache[real] = source_yaml_file(path) or {}
     return _shared_yml_cache[real]
 
 
@@ -172,12 +170,11 @@ def _attach_rom_folders(config: dict, platform_name: str, platforms_dir: str) ->
     romfolders = os.path.join(platforms_dir, "romfolders", f"{platform_name}.yml")
     if not os.path.exists(romfolders):
         return
-    with open(romfolders) as f:
-        roms_root = (source_yaml(f) or {}).get("roms_root")
+    data = source_yaml_file(romfolders) or {}
+    roms_root = data.get("roms_root")
     if isinstance(roms_root, dict):
         config["_roms_root"] = roms_root
-    with open(romfolders) as f:
-        folders = (source_yaml(f) or {}).get("folders")
+    folders = data.get("folders")
     if isinstance(folders, list):
         config["_rom_folders"] = [row for row in folders if isinstance(row, dict)]
 

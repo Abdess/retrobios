@@ -10,7 +10,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from model.safeparse import yaml_load
+from model.sources import source_yaml_file
 
 # Each pattern captures the revision. A trailing file path is optional: a
 # tree URL names the whole repository at a commit (RetroDECK, MinUI).
@@ -57,8 +57,7 @@ def platform_revision(platform_file: Path, repo: str = "", commit: bool = False)
     the platform's BIOS list: moving to a new release is a rescrape of the
     platform first.
     """
-    with platform_file.open(encoding="utf-8") as handle:
-        source = str((yaml_load(handle) or {}).get("source") or "")
+    source = str((source_yaml_file(platform_file) or {}).get("source") or "")
     try:
         return required_revision(source, repo, commit)
     except ValueError as exc:
