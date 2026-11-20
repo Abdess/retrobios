@@ -162,29 +162,29 @@ def _goat_window(start: dt.datetime, end: dt.datetime, auth: dict[str, str]) -> 
 
 
 def _goat_hits(start: dt.datetime, end: dt.datetime, auth: dict[str, str]) -> list[tuple[str, int]]:
-    """Counts by path over the whole span, summed day by day: GoatCounter
-    keeps hourly counts, so windows add up. The API pages with
+    """Counts by path over the whole span, summed window by window:
+    GoatCounter keeps hourly counts, so windows add up. The API pages with
     exclude_paths, which lengthens the address by every path already read
-    (GOAT_MAX_EXCLUDED). A day with too many paths is read again in
-    halves, down to one hour. Days, not weeks: a window that overflows is
-    read twice, and four weeks cost 432 of the 500 requests GoatCounter
-    allows per window."""
+    (GOAT_MAX_EXCLUDED). A window with too many paths is read again at half
+    the size, down to one hour, and the windows after it keep that size: a
+    busy day is followed by busy days, and reading each one whole first
+    paid every page twice and spent the 500 requests GoatCounter allows
+    per hour on four weeks."""
     totals: dict[str, int] = defaultdict(int)
-    day = dt.timedelta(days=1)
-    pending = [(low, min(low + day, end)) for low in
-               (start + n * day for n in range(-(-(end - start) // day)))]
-    while pending:
-        low, high = pending.pop()
+    hour = dt.timedelta(hours=1)
+    size = dt.timedelta(days=1)
+    low = start
+    while low < end:
+        high = min(low + size, end)
         counts = _goat_window(low, high, auth)
         if counts is None:
-            hours = int((high - low).total_seconds()) // 3600
-            if hours <= 1:
+            if high - low <= hour:
                 raise SystemExit(f"GoatCounter holds more than {GOAT_MAX_EXCLUDED} paths in the hour from {low}")
-            middle = low + dt.timedelta(hours=hours // 2)
-            pending += [(low, middle), (middle, high)]
+            size = max(hour, (high - low) // 2 // hour * hour)
             continue
         for path, count in counts.items():
             totals[path] += count
+        low = high
     return list(totals.items())
 
 

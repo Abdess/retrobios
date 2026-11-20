@@ -273,6 +273,18 @@ class GoatCounterPaging(unittest.TestCase):
         self.assertEqual(got, {f"/p{n}": n + 1 for n in range(250)})
         self.assertGreater(server.calls, 4)
 
+    def test_busy_days_pay_the_overflow_once(self) -> None:
+        # 150 paths every day, at most 100 a window: each day takes two half
+        # days of one page each, and only the first day is read whole first.
+        hourly = {(f"/d{day}p{n}", self.START + dt.timedelta(days=day, hours=n % 24)): 1
+                  for day in range(28) for n in range(150)}
+        server = FakeGoatCounter(hourly)
+        with mock.patch.object(insights, "GOAT_MAX_EXCLUDED", 100):
+            got = self.hits(server)
+        self.assertEqual(len(got), 28 * 150)
+        self.assertEqual(sum(got.values()), 28 * 150)
+        self.assertEqual(server.calls, 1 + 28 * 2)
+
     def test_a_long_rate_limit_ends_the_run_instead_of_sleeping(self) -> None:
         headers = email.message.Message()
         headers["X-Rate-Limit-Reset"] = "2355"
