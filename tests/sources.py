@@ -8,7 +8,7 @@ command keeps its options, the packages keep the rest.
 from __future__ import annotations
 
 import ast
-from functools import cache
+from functools import lru_cache
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
@@ -129,7 +129,7 @@ def _add_argument_flags(tree: ast.AST) -> set[str]:
     }
 
 
-@cache
+@lru_cache(maxsize=None)
 def declared_options(source: str) -> frozenset[str]:
     """The long options a script's source declares: its add_argument calls and
     the shared ones core.cli's add_repo_inputs and add_emulator_selection add."""

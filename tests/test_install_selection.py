@@ -32,11 +32,12 @@ from unittest import mock
 from pathlib import Path
 
 from model import region
-from resolve import regions as resolve_regions
 
 # The screen tests run under 3.8 and import this module for its fakes. The
-# pack builder stops below 3.9, so its modules load only above that floor.
+# build scripts stop below 3.9 (core.cli), so their modules load only above
+# that floor.
 if sys.version_info >= (3, 9):
+    from resolve import regions as resolve_regions
     from packs import archive, coverage, platformpack
     from packs import manifest as packs_manifest
 

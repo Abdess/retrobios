@@ -107,5 +107,12 @@ max-returns = 10
 [tool.ruff.lint.per-file-ignores]
 "install.py" = ["UP"]
 "installer/*.py" = ["UP"]
+# The full-screen tests and the modules they import run under the 3.8 floor too.
+"tests/__init__.py" = ["UP"]
+"tests/sources.py" = ["UP"]
+"tests/netguard/*.py" = ["UP"]
+"tests/test_install_tui.py" = ["UP"]
+"tests/test_install_app.py" = ["UP"]
+"tests/test_install_selection.py" = ["UP"]
 # Shell fixtures inside string literals keep the tabs the real files have.
 "tests/test_launchers_*.py" = ["E101"]
