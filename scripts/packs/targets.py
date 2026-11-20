@@ -8,8 +8,8 @@ import sys
 from pathlib import Path
 
 from core.artifacts import write_text_atomic
-from model.safeparse import yaml_load
-from model.targets import load_target_config
+from model.sources import source_yaml_file
+from model.targets import load_target_config, target_aliases, target_overrides
 
 
 def generate_target_manifests(targets_dir: str, output_dir: str) -> None:
@@ -35,8 +35,7 @@ def target_list(yml_file: Path) -> dict[str, list[str] | dict | None]:
     """A platform's cores per hardware target, as install/targets/ publishes
     them and a pack carries them: aliases included, overrides applied."""
     targets_path = yml_file.parent
-    with open(yml_file) as f:
-        data = yaml_load(f) or {}
+    data = source_yaml_file(yml_file) or {}
     targets = data.get("targets", {})
     if not isinstance(targets, dict):
         raise ValueError(f"{yml_file}: targets must be a mapping")
@@ -45,19 +44,7 @@ def target_list(yml_file: Path) -> dict[str, list[str] | dict | None]:
     # --target switch works there. Emitting only canonical names left the
     # installer rejecting the same word and, worse, carrying on with every
     # file instead: the user asked for a filter and got the full pack.
-    overrides_path = targets_path / "_overrides.yml"
-    alias_map: dict[str, list[str]] = {}
-    platform_overrides: dict = {}
-    if overrides_path.is_file():
-        with open(overrides_path) as f:
-            all_overrides = yaml_load(f) or {}
-        platform_overrides = (
-            all_overrides.get(yml_file.stem, {}).get("targets", {}) or {}
-        )
-        for tname, ovr in platform_overrides.items():
-            names = [a for a in (ovr or {}).get("aliases", []) if isinstance(a, str)]
-            if names:
-                alias_map[tname] = names
+    overrides = target_overrides(yml_file.stem, targets_path)
 
     result: dict[str, list[str] | dict | None] = {}
     for target_name, target_info in targets.items():
@@ -94,10 +81,10 @@ def target_list(yml_file: Path) -> dict[str, list[str] | dict | None]:
             if images and listed is not None else listed
         )
 
-    for target_name, names in alias_map.items():
+    for target_name in overrides:
         if target_name not in result:
             continue
-        for alias in names:
+        for alias in target_aliases(overrides, target_name):
             if alias in result:
                 raise ValueError(
                     f"{yml_file}: alias {alias!r} collides with a target name"

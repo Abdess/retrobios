@@ -16,8 +16,8 @@ from pathlib import Path
 
 
 from model.database import load_database
-from model.targets import load_target_config
-from model.safeparse import yaml_load
+from core.paths import PLATFORMS_DIR, REPO_ROOT
+from model.targets import load_target_config, target_overrides
 from core.hashing import cut_md5_owner
 from model.safeparse import yaml_load_upstream
 
@@ -87,13 +87,12 @@ ES_SYSTEMS_URL = (
 # Names es_systems.yml files under an emulator that are not emulators:
 # machine selectors, video plugins, launchers. Read from the overrides the
 # target scraper applies, so one list says what is not a core.
-OVERRIDES_PATH = Path(__file__).resolve().parents[2] / "platforms" / "targets" / "_overrides.yml"
+TARGETS_DIR = REPO_ROOT / PLATFORMS_DIR / "targets"
 
 
 def _not_cores(platform: str = "batocera") -> set[str]:
-    data = yaml_load(OVERRIDES_PATH.read_text(encoding="utf-8")) or {}
-    default = (data.get(platform, {}).get("targets", {}) or {}).get("_default", {}) or {}
-    return {str(name) for name in default.get("remove_cores", [])}
+    default = target_overrides(platform, TARGETS_DIR).get("_default") or {}
+    return {str(name) for name in default.get("remove_cores") or []}
 
 
 def _es_systems_data(text: str) -> dict:

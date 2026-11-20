@@ -272,7 +272,7 @@ class CoreResolutionTests(unittest.TestCase):
             }
         }
         self.assertEqual(
-            cf.unresolved_target_cores(targets, index, cf._platform_overrides(overrides, "plat")),
+            cf.unresolved_target_cores(targets, index, cf.platform_overrides(overrides, "plat")),
             {"ghost": ["x86_64"]},
         )
 

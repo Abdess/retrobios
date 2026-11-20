@@ -63,7 +63,7 @@ from installer_build import pins as installer_build_pins
 from packs import datadirs
 from core import upstream
 from core.cli import InputMissing, add_repo_inputs, require_directory, suggest_names
-from model.targets import apply_target_overrides
+from model.targets import apply_target_overrides, platform_overrides, read_target_overrides
 from model.registry import list_registered_platforms, load_platform_registry
 from model.profiles import load_emulator_profiles, upstream_profile_index
 from core.artifacts import write_text_atomic
@@ -580,11 +580,6 @@ def profile_name_index(profiles: dict[str, dict]) -> dict[str, set[str]]:
     return upstream_profile_index(profiles, include_aliases=True)
 
 
-def _platform_overrides(overrides: dict, platform: str) -> dict:
-    """The per-target entries of _overrides.yml for one platform."""
-    return ((overrides.get(platform) or {}).get("targets")) or {}
-
-
 def unresolved_target_cores(
     targets: dict, index: Container[str], overrides: dict
 ) -> dict[str, list[str]]:
@@ -618,11 +613,7 @@ def check_targets(
     offline: bool,
 ) -> list[Finding]:
     targets_dir = platforms_dir / "targets"
-    overrides_path = targets_dir / "_overrides.yml"
-    overrides: dict = {}
-    if overrides_path.is_file():
-        with overrides_path.open(encoding="utf-8") as fh:
-            overrides = yaml_load(fh) or {}
+    overrides = read_target_overrides(targets_dir)
     index = profile_name_index(profiles)
     scrapers = _target_scrapers()
     findings: list[Finding] = []
@@ -642,7 +633,7 @@ def check_targets(
             # read as current.
             stamp = str(old.get("scraped_at", ""))[:10]
             out = [Finding("targets", platform, SKIPPED, local=stamp, detail="offline")]
-            missing = unresolved_target_cores(old, index, _platform_overrides(overrides, platform))
+            missing = unresolved_target_cores(old, index, platform_overrides(overrides, platform))
             out.extend(_unresolved_findings(platform, missing))
             return out
         if module is None and targets and all(
@@ -657,7 +648,7 @@ def check_targets(
             declared = _declared_cores(platform)
             missing = unresolved_target_cores(
                 {"targets": {name: {"cores": declared} for name in targets}},
-                index, _platform_overrides(overrides, platform),
+                index, platform_overrides(overrides, platform),
             )
             out.extend(_unresolved_findings(platform, missing))
             return out
@@ -675,7 +666,7 @@ def check_targets(
                     detail=f"{age} days old" if age is not None else "no scrape stamp",
                 )
             ]
-            missing = unresolved_target_cores(old, index, _platform_overrides(overrides, platform))
+            missing = unresolved_target_cores(old, index, platform_overrides(overrides, platform))
             out.extend(_unresolved_findings(platform, missing))
             return out
         try:
@@ -697,7 +688,7 @@ def check_targets(
                 detail=diff.summary(),
             )
         ]
-        missing = unresolved_target_cores(new, index, _platform_overrides(overrides, platform))
+        missing = unresolved_target_cores(new, index, platform_overrides(overrides, platform))
         out.extend(_unresolved_findings(platform, missing))
         return out
 

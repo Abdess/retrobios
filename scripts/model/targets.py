@@ -12,12 +12,33 @@ from core.cli import SourceUnreadable, suggest_names
 from model.sources import source_yaml_file
 
 
-def _target_overrides(platform_name: str, targets_dir: str) -> dict:
+def read_target_overrides(targets_dir: str | os.PathLike[str]) -> dict:
+    """The whole _overrides.yml of a targets directory, {} without one."""
     overrides_file = os.path.join(targets_dir, "_overrides.yml")
     if not os.path.exists(overrides_file):
         return {}
-    all_overrides = source_yaml_file(overrides_file) or {}
-    return all_overrides.get(platform_name, {}).get("targets", {})
+    return source_yaml_file(overrides_file) or {}
+
+
+def platform_overrides(all_overrides: dict, platform: str) -> dict:
+    """The per-target entries of _overrides.yml for one platform, an empty
+    value read as no entry."""
+    return ((all_overrides.get(platform) or {}).get("targets")) or {}
+
+
+def target_overrides(platform: str, targets_dir: str | os.PathLike[str]) -> dict:
+    """One platform's per-target entries, read from its targets directory."""
+    return platform_overrides(read_target_overrides(targets_dir), platform)
+
+
+def target_aliases(overrides: dict, target: str) -> list[str]:
+    """The other names a target answers to: the pack builder and the
+    installer read this one list, or the installer refuses a word the pack
+    accepts."""
+    return [
+        alias for alias in (overrides.get(target) or {}).get("aliases") or []
+        if isinstance(alias, str)
+    ]
 
 
 def _target_alias_index(targets: dict, overrides: dict) -> dict[str, str]:
@@ -25,19 +46,26 @@ def _target_alias_index(targets: dict, overrides: dict) -> dict[str, str]:
     alias_index: dict[str, str] = {}
     for tname in targets:
         alias_index[tname] = tname
-        for alias in overrides.get(tname, {}).get("aliases", []):
+        for alias in target_aliases(overrides, tname):
             alias_index[alias] = tname
     return alias_index
+
+
+def _platform_targets(platform: str, targets_dir: str) -> dict | None:
+    """The `targets:` mapping of a platform's targets file, None without one."""
+    target_file = os.path.join(targets_dir, f"{platform}.yml")
+    if not os.path.exists(target_file):
+        return None
+    return (source_yaml_file(target_file) or {}).get("targets", {})
 
 
 def platform_files_target(platform: str, target: str, platforms_dir: str = PLATFORMS_DIR) -> bool:
     """Whether the platform's targets file knows this target, by any alias."""
     targets_dir = os.path.join(platforms_dir, "targets")
-    target_file = os.path.join(targets_dir, f"{platform}.yml")
-    if not os.path.exists(target_file):
+    targets = _platform_targets(platform, targets_dir)
+    if targets is None:
         return False
-    targets = (source_yaml_file(target_file) or {}).get("targets", {})
-    return target in _target_alias_index(targets, _target_overrides(platform, targets_dir))
+    return target in _target_alias_index(targets, target_overrides(platform, targets_dir))
 
 
 def canonical_target_name(
@@ -50,14 +78,14 @@ def canonical_target_name(
     kept when no platform knows it or when platforms file it differently.
     """
     targets_dir = os.path.join(platforms_dir, "targets")
+    all_overrides = read_target_overrides(targets_dir)
     found: set[str] = set()
     for platform_name in platforms:
-        target_file = os.path.join(targets_dir, f"{platform_name}.yml")
-        if not os.path.exists(target_file):
+        targets = _platform_targets(platform_name, targets_dir)
+        if targets is None:
             continue
-        targets = (source_yaml_file(target_file) or {}).get("targets", {})
         canonical = _target_alias_index(
-            targets, _target_overrides(platform_name, targets_dir)
+            targets, platform_overrides(all_overrides, platform_name)
         ).get(target)
         if canonical:
             found.add(canonical)
@@ -96,8 +124,8 @@ def load_target_config(
     Raises FileNotFoundError if no target file exists for the platform.
     """
     targets_dir = os.path.join(platforms_dir, "targets")
-    target_file = os.path.join(targets_dir, f"{platform_name}.yml")
-    if not os.path.exists(target_file):
+    targets = _platform_targets(platform_name, targets_dir)
+    if targets is None:
         # The expected state for a platform that ships one build, said as
         # such: the file path read like a file missing from the repository.
         with_targets = sorted(
@@ -108,10 +136,7 @@ def load_target_config(
             f"{platform_name} has no hardware targets: drop --target "
             f"(platforms with targets: {', '.join(with_targets)})"
         )
-    data = source_yaml_file(target_file) or {}
-
-    targets = data.get("targets", {})
-    overrides = _target_overrides(platform_name, targets_dir)
+    overrides = target_overrides(platform_name, targets_dir)
     alias_index = _target_alias_index(targets, overrides)
 
     canonical = alias_index.get(target)
@@ -175,19 +200,18 @@ def list_available_targets(
     Returns empty list if no target file exists.
     """
     targets_dir = os.path.join(platforms_dir, "targets")
-    target_file = os.path.join(targets_dir, f"{platform_name}.yml")
-    if not os.path.exists(target_file):
+    targets = _platform_targets(platform_name, targets_dir)
+    if targets is None:
         return []
-    data = source_yaml_file(target_file) or {}
 
     # The count --target filters on: overrides applied, as load_target_config
     # applies them. The scraped list counted Batocera's machine variants and
     # launchers, 198 cores shown for 187 used.
-    overrides = _target_overrides(platform_name, targets_dir)
+    overrides = target_overrides(platform_name, targets_dir)
 
     result = []
-    for tname, tdata in sorted(data.get("targets", {}).items()):
-        aliases = (overrides.get(tname) or {}).get("aliases", [])
+    for tname, tdata in sorted(targets.items()):
+        aliases = target_aliases(overrides, tname)
         # None: the target runs every core the platform declares.
         found = _target_core_set(tdata or {}, overrides, tname, platforms_dir)
         count = None if found is None else len(found)
@@ -275,13 +299,13 @@ def _unknown_target_message(target: str, platforms: list[str], platforms_dir: st
     import difflib
 
     targets_dir = os.path.join(platforms_dir, "targets")
+    all_overrides = read_target_overrides(targets_dir)
     owners: dict[str, list[str]] = {}
     for platform in platforms:
-        target_file = os.path.join(targets_dir, f"{platform}.yml")
-        if not os.path.exists(target_file):
+        targets = _platform_targets(platform, targets_dir)
+        if targets is None:
             continue
-        targets = (source_yaml_file(target_file) or {}).get("targets", {})
-        overrides = _target_overrides(platform, targets_dir)
+        overrides = platform_overrides(all_overrides, platform)
         for name in _target_alias_index(targets, overrides):
             owners.setdefault(name, []).append(platform)
     message = f"unknown target '{target}': no platform has it."

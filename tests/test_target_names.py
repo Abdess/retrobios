@@ -241,5 +241,31 @@ class PublishedListsAreNotNarrowed(unittest.TestCase):
                 self.assertEqual(data["regions"], [])
 
 
+class AnEmptyOverrideIsNoOverride(unittest.TestCase):
+    """`batocera:` or `board:` with no value raised AttributeError in the
+    builder and the installer lists, where check_freshness read it as none."""
+
+    def test_every_reader_takes_an_empty_value(self):
+        from model.targets import list_available_targets, load_target_config
+        from packs.targets import target_list
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            targets = Path(tmp) / "targets"
+            targets.mkdir()
+            for platform in ("p", "q"):
+                (targets / f"{platform}.yml").write_text(
+                    "targets:\n  board:\n    cores: [a]\n", encoding="utf-8"
+                )
+            (targets / "_overrides.yml").write_text(
+                "p:\nq:\n  targets:\n    board:\n", encoding="utf-8"
+            )
+            for platform in ("p", "q"):
+                with self.subTest(platform=platform):
+                    self.assertEqual(load_target_config(platform, "board", tmp), {"a"})
+                    self.assertEqual(list_available_targets(platform, tmp)[0]["aliases"], [])
+                    self.assertEqual(target_list(targets / f"{platform}.yml"), {"board": ["a"]})
+            self.assertEqual(canonical_target_name(["p", "q"], "board", tmp), "board")
+
+
 if __name__ == "__main__":
     unittest.main()
