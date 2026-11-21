@@ -52,8 +52,9 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   probes/                real-condition runs: the campaign, the pack and region probes
   release/               the release record, its notes, the checks of its assets and the pack downloader
   installer_build/       install.py from installer/, its pins, launchers and PyPI package
-  devtools/              the commit message rules and the checks of a pull request
   schemas/               the data contracts behind validate_schemas.py: schemas and semantic invariants
+  devtools/              the commit message rules, the checks of a pull request, the test
+                         runner, the disk cleanup and the bios/ migration
   unattended/            the job registry, worktree, CI breaker and units behind autorun.py
   freshness/             each transcribed layer against its upstream, one module per area (check_freshness.py), and the refresh of each stale row (refresh_stale.py)
   orchestrate/           the pipeline's steps in order and the comparisons of step 5 (pipeline.py)

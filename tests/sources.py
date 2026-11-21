@@ -64,6 +64,9 @@ COMMANDS = {
     "generate_installer_doc.py": ("installer_build/installerdoc.py",),
     "commit_rules.py": ("devtools/commitrules.py",),
     "pr_checks.py": ("devtools/prchecks.py",),
+    "cleanup_disk.py": ("devtools/diskcleanup.py",),
+    "migrate.py": ("devtools/biosclassify.py", "devtools/biosmigrate.py"),
+    "run_tests.py": ("devtools/testrunner.py",),
     "check_buildbot_system.py": ("scraper/buildbot_system.py",),
     "refresh_stale.py": (
         "freshness/stalejob.py", "freshness/stalefindings.py", "freshness/stalecommands.py",

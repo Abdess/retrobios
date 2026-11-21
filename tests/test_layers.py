@@ -43,8 +43,8 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     "release": frozenset({"packs"}),
     # The launcher archives are written by the pack member writer.
     "installer_build": frozenset({"packs"}),
-    "devtools": frozenset(),
-    "collection": frozenset(),
+    # The bios/ migration reads the legacy branches through acquire's fetch.
+    "devtools": frozenset({"acquire"}),
     # A job's commit subjects are checked against the repository's commit rules.
     "unattended": frozenset({"devtools"}),
     # The installer event schema is checked against the one the build writes.

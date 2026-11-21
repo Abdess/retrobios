@@ -34,7 +34,7 @@ from core import hostguard
 from core import statefile
 from collection import integrity as bib
 from collection.gitrestore import GitFailed
-import cleanup_disk as cd
+from devtools import diskcleanup as cd
 from release import sync
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
