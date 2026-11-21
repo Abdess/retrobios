@@ -151,7 +151,7 @@ class AMissingDataDirectoryFailsTheRun(unittest.TestCase):
 
     def test_the_pack_records_it_and_main_exits_non_zero(self):
         import generate_pack as gp
-        from packs import datatrees
+        from packs import datatrees, packmodes
         from packs import platformpack
 
         root = Path(tempfile.mkdtemp())
@@ -179,7 +179,8 @@ class AMissingDataDirectoryFailsTheRun(unittest.TestCase):
             )
         self.assertEqual(datatrees.MISSING_DATA_DIRS, {"assets"})
         # main() starts each run with no notices, so the run itself records it.
-        with mock.patch.object(gp, "_main", lambda held: datatrees.MISSING_DATA_DIRS.add("assets")), \
+        with mock.patch.object(packmodes, "run_pack_command",
+                                  lambda parser, held: datatrees.MISSING_DATA_DIRS.add("assets")), \
                 contextlib.redirect_stderr(io.StringIO()), \
                 self.assertRaises(SystemExit) as stop:
             gp.main()

@@ -21,6 +21,7 @@ COMMANDS = {
         "packs/manifestentry.py", "packs/manifestcores.py", "packs/standalone.py",
         "packs/manifest.py", "packs/finalize.py", "packs/outputdir.py", "packs/variants.py",
         "packs/manifestrun.py", "packs/packcheck.py", "packs/platformrun.py",
+        "packs/packoptions.py", "packs/packmodes.py",
     ),
     "verify.py": (
         "packs/verdicts.py", "packs/gaps.py", "packs/coverage.py", "packs/emulatorcheck.py",

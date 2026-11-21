@@ -68,7 +68,7 @@ class AMistypedTargetIsRefusedFirst(unittest.TestCase):
         from unittest import mock
 
         import generate_pack
-        from packs import platformrun
+        from packs import packmodes, platformrun
 
         def touched(*_a, **_kw):
             raise AssertionError("lock or refresh taken before the target check")
@@ -77,8 +77,8 @@ class AMistypedTargetIsRefusedFirst(unittest.TestCase):
                 "--output-dir", str(REPO_ROOT / "tmp" / "never-written")]
         err = io.StringIO()
         with mock.patch.object(sys, "argv", argv), \
-                mock.patch.object(generate_pack, "pack_output_lock", touched), \
-                mock.patch.object(generate_pack, "hold_data_dirs", touched), \
+                mock.patch.object(packmodes, "pack_output_lock", touched), \
+                mock.patch.object(packmodes, "hold_data_dirs", touched), \
                 mock.patch.object(platformrun, "pack_output_lock", touched), \
                 mock.patch.object(platformrun, "hold_data_dirs", touched), \
                 contextlib.redirect_stdout(io.StringIO()), \

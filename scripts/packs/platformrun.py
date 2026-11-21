@@ -11,7 +11,11 @@ from pathlib import Path
 from core.text import count_text
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
-from model.registry import load_data_dir_registry
+from model.registry import (
+    list_registered_platforms,
+    list_release_pack_platforms,
+    load_data_dir_registry,
+)
 from model.safeparse import require_yaml
 from model.targets import target_scope
 from packs.datadirs import hold_data_dirs
@@ -332,3 +336,21 @@ def run_platform_mode(
         with pack_output_lock(args.output_dir, exclusive=False):
             return run_verify_packs(args)
     return True
+
+
+def requested_platforms(args: argparse.Namespace, parser: argparse.ArgumentParser) -> list[str]:
+    """The platforms a platform run builds for."""
+    if args.all and args.manifest:
+        # Install manifests cover every registered platform: the installer
+        # serves each one, with or without a release pack.
+        return list_registered_platforms(args.platforms_dir)
+    if args.all:
+        # A release publishes the packs the registry marks release_pack and
+        # nothing else: a pack built for another platform is one nobody uploads.
+        platforms = list_release_pack_platforms(args.platforms_dir)
+        if not platforms:
+            parser.error("no registered platform has release_pack: true")
+        return platforms
+    if not args.platform:
+        parser.error("Specify --platform or --all")
+    return [args.platform]
