@@ -5970,6 +5970,7 @@ class EachCitationNamesTheCodeThatAsks(unittest.TestCase):
     """A profile reading a libretro core and the original emulator cited both
     trees alike, and readers could not tell which code asked for a file."""
 
+    dir: str
     setUp = TestBuildReport.setUp
     tearDown = TestBuildReport.tearDown
     MD5 = "0123456789abcdef0123456789abcdef"
@@ -6023,6 +6024,7 @@ class ARoleIsReadPerPart(unittest.TestCase):
     first kept: hypseus-singe's `upstream lair.cpp` decided where every later
     `source lair.cpp` was read, and correct refs were reported MOVED."""
 
+    dir: str
     setUp = TestBuildReport.setUp
     tearDown = TestBuildReport.tearDown
     MD5A = "0123456789abcdef0123456789abcdef"
@@ -6158,7 +6160,7 @@ class AnOnlinePassSaysWhereItIs(unittest.TestCase):
     left no ranking at all, while --offline answered in three."""
 
     def _main(self, *argv: str, stop_after: int | None = None):
-        calls = []
+        calls: list[str] = []
 
         def build(_args, name, _profile, _path, _failed):
             if stop_after is not None and len(calls) == stop_after:
