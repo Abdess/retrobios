@@ -405,7 +405,7 @@ def downloaded_cores(
         if cores is None:
             continue
         for profile, names in reached.items():
-            if downloadable_on(cores, names):
+            if downloadable_on(cores, names, platforms_dir):
                 boards[profile] += [target["name"], *target.get("aliases", [])]
     return {profile: sorted(names) for profile, names in sorted(boards.items())}
 

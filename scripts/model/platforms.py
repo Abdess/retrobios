@@ -4,12 +4,22 @@ from __future__ import annotations
 
 import os
 
-from core.paths import PLATFORMS_DIR, comparable_destination
+from core.paths import PLATFORMS_DIR, REPO_ROOT, comparable_destination
 from model.sources import source_yaml_file
 
 
 _shared_yml_cache: dict[str, dict] = {}
 _platform_config_cache: dict[tuple[str, str], dict] = {}
+
+# The directory a config was loaded from, read by the steps that consult
+# its other files (the RetroArch targets of a downloaded-only core).
+PLATFORMS_DIR_KEY = "_platforms_dir"
+
+
+def config_platforms_dir(config: dict) -> str:
+    """The directory a config was loaded from, the repository's for a config
+    built by hand."""
+    return str(config.get(PLATFORMS_DIR_KEY) or REPO_ROOT / PLATFORMS_DIR)
 
 
 def _inherited_yaml(platform_name: str, platforms_dir: str) -> tuple[dict, list[str]]:
@@ -233,6 +243,7 @@ def load_platform_config(platform_name: str, platforms_dir: str = PLATFORMS_DIR)
     # The registry key, which per-platform profile fields (installed_on,
     # not_bundled_on) name: the display name differs (MiSTer FPGA).
     config["_key"] = platform_name
+    config[PLATFORMS_DIR_KEY] = platforms_dir
     _attach_rom_folders(config, platform_name, platforms_dir)
     _platform_config_cache[cache_key] = config
     return config

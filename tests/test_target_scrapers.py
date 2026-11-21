@@ -373,6 +373,31 @@ class DownloadedCoresReachTheirBoards(unittest.TestCase):
         self.assertIn("x86_64", boards["amiberry"])
         self.assertNotIn("bcm2711", boards["amiberry"])
 
+    def test_the_downloader_lists_come_from_the_configs_own_tree(self):
+        """A downloaded-only core was checked against the repository's
+        RetroArch targets whatever --platforms-dir the run was given."""
+        import tempfile
+
+        from model.platforms import load_platform_config
+        from resolve.cores import resolve_platform_cores
+
+        profiles = {"amiberry": {"type": "libretro", "cores": ["amiberry"],
+                                 "systems": ["amiga"]}}
+        resolved = {}
+        for offered in ("amiberry", "amiberry, mgba"):
+            with tempfile.TemporaryDirectory() as root:
+                (Path(root) / "targets").mkdir()
+                (Path(root) / "demo.yml").write_text(
+                    "platform: Demo\ncores: [mgba]\ninstallable_cores: [amiberry]\n"
+                    "systems: {}\n")
+                (Path(root) / "targets" / "retroarch.yml").write_text(
+                    f"targets:\n  board:\n    cores: [{offered}]\n")
+                config = load_platform_config("demo", root)
+                resolved[offered] = resolve_platform_cores(config, profiles, {"amiberry"})
+        # The board builds amiberry, and only the first tree's downloader
+        # list fits inside what it holds.
+        self.assertEqual(resolved, {"amiberry": {"amiberry"}, "amiberry, mgba": set()})
+
 
 class KnulliPerBoard(unittest.TestCase):
     """KNULLI builds per board on Batocera's model from its own tree:

@@ -19,6 +19,7 @@ from core.hashing import file_digest
 from model import retired as model_retired
 from model.database import sha1_at
 from model.dumpcatalog import load_provenance_snapshots
+from model.platforms import PLATFORMS_DIR_KEY
 from model.profiles import is_emulator
 from packs.crossref import FileConsumers, SupplementalIndex
 from acquire.provenance import build_report
@@ -157,7 +158,7 @@ def _split_contract(config: dict) -> tuple[dict, dict]:
             for sys_id, system in contract["systems"].items()
         }
     registry = {key: value for key, value in config.items()
-                if key not in allowed and key != "_key"}
+                if key not in allowed and key not in ("_key", PLATFORMS_DIR_KEY)}
     # The merged config gives a child its parent's release_pack: Lakka and
     # RetroPie said true in the API while every page said they had no ZIP.
     # The registry's own entry decides, as it does for the pages.

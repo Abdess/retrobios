@@ -3,17 +3,17 @@
 from __future__ import annotations
 
 import functools
+import os
 from collections.abc import Collection
 from dataclasses import dataclass
 
 from core.cli import suggest_names
 from core.paths import sanitize_pack_path
 from model.declarations import declared_slot
-from model.platforms import load_platform_config
+from model.platforms import config_platforms_dir, load_platform_config
 from model.profiles import preferred_profile, profile_names, upstream_profile_index
 from model.systems import norm_system_id, select_systems
 from model.targets import list_available_targets, load_target_config
-from core.paths import REPO_ROOT
 
 
 @dataclass(frozen=True)
@@ -79,14 +79,17 @@ def resolve_platform_cores(
     3. cores: absent, fallback to systems intersection
 
     Alias profiles are always excluded (they point to another profile).
-    If target_cores is provided, result is intersected with it.
+    If target_cores is provided, result is intersected with it, and a core
+    only the RetroArch downloader brings is checked against the RetroArch
+    targets of the directory the config was loaded from.
     """
     result, downloaded_only = _platform_profiles(config, profiles)
     if target_cores is not None:
         result = result & designated_profiles(profiles, target_cores)
+        platforms_dir = config_platforms_dir(config)
         result -= {
             profile for profile, names in downloaded_only.items()
-            if not downloadable_on(target_cores, names)
+            if not downloadable_on(target_cores, names, platforms_dir)
         }
     return result
 
@@ -236,19 +239,20 @@ def _platform_profiles(
     return result, {p: frozenset(names) for p, names in downloaded_only.items()}
 
 
-@functools.lru_cache(maxsize=1)
-def _retroarch_target_sets() -> tuple[frozenset[str], ...]:
-    platforms = str(REPO_ROOT / "platforms")
+@functools.lru_cache(maxsize=8)
+def _retroarch_target_sets(platforms_dir: str) -> tuple[frozenset[str], ...]:
     return tuple(
         frozenset(found)
-        for t in list_available_targets("retroarch", platforms)
-        if (found := load_target_config("retroarch", t["name"], platforms))
+        for t in list_available_targets("retroarch", platforms_dir)
+        if (found := load_target_config("retroarch", t["name"], platforms_dir))
     )
 
 
-def downloadable_on(target_cores: set[str], names: Collection[str]) -> bool:
-    """Whether a board's core set holds a RetroArch download list offering
-    one of `names`.
+def downloadable_on(
+    target_cores: set[str], names: Collection[str], platforms_dir: str
+) -> bool:
+    """Whether a board's core set holds a RetroArch download list of
+    `platforms_dir` offering one of `names`.
 
     A board with a downloader carries a whole RetroArch targets entry in its
     set (load_target_config, `downloads`), a board without one only what it
@@ -256,7 +260,7 @@ def downloadable_on(target_cores: set[str], names: Collection[str]) -> bool:
     """
     return any(
         found <= target_cores and not found.isdisjoint(names)
-        for found in _retroarch_target_sets()
+        for found in _retroarch_target_sets(os.path.realpath(platforms_dir))
     )
 
 

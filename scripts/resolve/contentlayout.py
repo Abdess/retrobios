@@ -18,6 +18,7 @@ from resolve.layout import (
     standalone_layout_path,
 )
 from model.declarations import ROMS_ROOT, outer_layout
+from model.platforms import config_platforms_dir
 from model.profiles import core_key, profile_names
 from core.paths import REPO_ROOT
 
@@ -63,12 +64,13 @@ def offer_boards(config: dict) -> dict[tuple[str, str], frozenset[str] | None]:
 
     ROCKNIX writes a core under a `case "${DEVICE}"` branch for the devices
     it builds (`when`), and a default for a named device in board_defaults
-    (DEVICE=RK3326). Boards are the platform's targets, aliases included.
+    (DEVICE=RK3326). Boards are the platform's targets, aliases included,
+    read from the directory the config was loaded from.
     """
     platform = str(config.get("_key") or "")
-    targets = list_available_targets(
-        platform, str(REPO_ROOT / "platforms")
-    ) if platform else []
+    targets = (
+        list_available_targets(platform, config_platforms_dir(config)) if platform else []
+    )
     names = {t["name"]: [t["name"], *t.get("aliases", [])] for t in targets}
 
     def admitted(test: Callable[[str], bool]) -> set[str]:

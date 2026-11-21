@@ -645,7 +645,7 @@ class TheContractsValidate(unittest.TestCase):
             self.skipTest("jsonschema is a tooling dependency")
 
         from model.registry import list_registered_platforms
-        from model.platforms import load_platform_config
+        from model.platforms import PLATFORMS_DIR_KEY, load_platform_config
 
         schema = json.loads((REPO_ROOT / "schemas" / "platform.schema.json").read_text())
         validator = Draft202012Validator(schema)
@@ -658,7 +658,11 @@ class TheContractsValidate(unittest.TestCase):
                 self.assertEqual(errors, [])
                 self.assertIn("install", registry)
                 self.assertNotIn("_key", registry)
-                self.assertEqual(set(contract) | set(registry) | {"_key"}, set(config) | {"_key"})
+                # The directory a run loaded the config from is no published field.
+                self.assertNotIn(PLATFORMS_DIR_KEY, registry)
+                unpublished = {"_key", PLATFORMS_DIR_KEY}
+                self.assertEqual(set(contract) | set(registry) | unpublished,
+                                 set(config) | unpublished)
 
     def test_every_schema_id_is_the_address_it_is_served_at(self):
         for path in sorted((REPO_ROOT / "schemas").glob("*.schema.json")):
