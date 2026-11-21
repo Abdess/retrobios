@@ -11,12 +11,15 @@ from pathlib import Path
 
 import core_probe as cp
 from core import upstream
-from core.paths import REPO_ROOT
 from core.statefile import now_iso
+from probes.host import main_cache
 from probes.standaloneemulators import Emulator
 from scraper.base_scraper import github_json
 
-CACHE = REPO_ROOT / ".cache" / "standalone"
+
+def cache_root() -> Path:
+    """Where fetched AppImages live: the main checkout's .cache, shared by every worktree."""
+    return main_cache() / "standalone"
 
 
 def select_asset(releases: Sequence[dict], endswith: str, contains: str) -> dict | None:
@@ -51,12 +54,12 @@ def github_releases(repo: str) -> list[dict]:
                        f"cannot list the releases of {repo}", timeout=60, error=cp.ProbeError)
 
 
-def fetch(emu: Emulator, cache: Path = CACHE) -> dict:
+def fetch(emu: Emulator, cache: Path | None = None) -> dict:
     """Download the asset the platform picks, unpack it, and describe it."""
     asset = select_asset(github_releases(emu.repo), emu.asset_endswith, emu.asset_contains)
     if not asset:
         raise cp.ProbeError(f"{emu.repo}: no release asset matches the {emu.platform} rule")
-    folder = cache / emu.name
+    folder = (cache or cache_root()) / emu.name
     folder.mkdir(parents=True, exist_ok=True)
     partial = folder / f"{asset['name']}.part"
     # Whole or absent, retried on a cut stream (core.upstream.download).
@@ -90,9 +93,9 @@ def unpack(appimage: Path) -> Path:
     return tree
 
 
-def installed(emu: Emulator, sha256: str | None, cache: Path = CACHE) -> tuple[dict, Path]:
+def installed(emu: Emulator, sha256: str | None, cache: Path | None = None) -> tuple[dict, Path]:
     """The fetched asset to run: the one named by sha256, else the newest."""
-    folder = cache / emu.name
+    folder = (cache or cache_root()) / emu.name
     metas = sorted(folder.glob("*/asset.json"), key=lambda p: p.stat().st_mtime, reverse=True)
     for path in metas:
         meta = json.loads(path.read_text(encoding="utf-8"))

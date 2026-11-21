@@ -230,14 +230,15 @@ class ContentChecked(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(len(runs), len(regioncheck.VARIANTS))
 
-    def test_default_content_and_cores_are_the_main_checkout_cache(self) -> None:
+    def test_default_caches_are_the_main_checkout_cache(self) -> None:
         """A linked worktree holds no .cache: the default reads the main checkout's."""
-        from probes import content
+        from probes import appimage, content
         from unattended import worktree
 
         cache = worktree.main_checkout() / ".cache"
         self.assertEqual(content.content_root(), cache / "test-content")
         self.assertEqual(host.Paths.default().content, content.content_root())
+        self.assertEqual(appimage.cache_root(), cache / "standalone")
 
 
 class ContentList(unittest.TestCase):

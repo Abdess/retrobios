@@ -67,6 +67,20 @@ class AppImage(unittest.TestCase):
         with self.assertRaises(cp.ProbeError):
             appimage.appimage_offset(b"hsqs" + bytes(60))
 
+    def test_default_cache_is_resolved_at_each_call(self) -> None:
+        """fetch and run share one cache: the root is read when called, not
+        fixed at import to the checkout the module was loaded from."""
+        from unittest import mock
+
+        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as scratch, \
+                mock.patch.object(appimage, "cache_root", return_value=Path(scratch)):
+            asset = Path(scratch) / "duckstation" / "abc" / "asset.json"
+            asset.parent.mkdir(parents=True)
+            asset.write_text('{"sha256": "abc", "name": "x.AppImage"}', encoding="utf-8")
+            (asset.parent / "tree").mkdir()
+            meta, tree = appimage.installed(emus.EMULATORS["duckstation"], None)
+        self.assertEqual((meta["sha256"], tree), ("abc", asset.parent / "tree"))
+
 
 class Framebuffer(unittest.TestCase):
     def test_reads_rgb_and_skips_colormap_and_padding(self) -> None:
