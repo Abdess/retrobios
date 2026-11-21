@@ -10,12 +10,12 @@ from __future__ import annotations
 
 import tests
 
-import os
 import tempfile
 import unittest
 from pathlib import Path
 
-from collection.aliases import UnreadableSource, collect_all_aliases
+from collection.aliases import collect_all_aliases
+from collection.declared import Declarations, UnreadableSource, read_declarations
 from collection.scan import scan_bios_dir
 from tests.sources import script_source
 
@@ -24,17 +24,8 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class AliasesNeedAnUnambiguousName(unittest.TestCase):
     def _aliases(self, files: dict) -> dict:
-        with tempfile.TemporaryDirectory() as tmp:
-            previous = os.getcwd()
-            os.chdir(tmp)
-            try:
-                Path("emulators").mkdir()
-                Path("emulators/x.yml").write_text(
-                    'files:\n  - name: "disk.rom"\n    aliases: ["n88sub.rom"]\n'
-                )
-                return collect_all_aliases(files)
-            finally:
-                os.chdir(previous)
+        profile = [{"name": "disk.rom", "aliases": ["n88sub.rom"]}]
+        return collect_all_aliases(files, Declarations(profile_entries=[profile]))
 
     @staticmethod
     def _file(name: str, path: str, md5: str) -> dict:
@@ -82,61 +73,34 @@ class NoNetworkInTheBuild(unittest.TestCase):
         self.assertNotIn("urllib.request", source)
 
     def test_hash_proven_entry_registers_its_own_name(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            previous = os.getcwd()
-            os.chdir(tmp)
-            try:
-                Path("emulators").mkdir()
-                Path("emulators/g.yml").write_text(
-                    'files:\n  - name: "writer.rom"\n    sha1: "s1"\n'
-                )
-                aliases = collect_all_aliases(
-                    {"s1": {"name": "WRITER.ROM", "path": "bios/WRITER.ROM", "md5": "m"}}
-                )
-            finally:
-                os.chdir(previous)
+        aliases = collect_all_aliases(
+            {"s1": {"name": "WRITER.ROM", "path": "bios/WRITER.ROM", "md5": "m"}},
+            Declarations(profile_entries=[[{"name": "writer.rom", "sha1": "s1"}]]),
+        )
         self.assertEqual([a["name"] for a in aliases.get("s1", [])], ["writer.rom"])
 
 class AcceptedRevisionLists(unittest.TestCase):
     def test_a_list_of_sha1_names_every_held_revision(self):
         """A profile accepting several revisions writes sha1 as a list."""
-        with tempfile.TemporaryDirectory() as tmp:
-            previous = os.getcwd()
-            os.chdir(tmp)
-            try:
-                Path("emulators").mkdir()
-                Path("emulators/m.yml").write_text(
-                    'files:\n  - name: "MT32_CONTROL.ROM"\n'
-                    '    sha1: ["s1", "s2", "absent"]\n'
-                )
-                aliases = collect_all_aliases({
-                    "s1": {"name": "ctrl_1_04.rom", "path": "a", "md5": "m1"},
-                    "s2": {"name": "ctrl_1_05.rom", "path": "b", "md5": "m2"},
-                })
-            finally:
-                os.chdir(previous)
+        profile = [{"name": "MT32_CONTROL.ROM", "sha1": ["s1", "s2", "absent"]}]
+        aliases = collect_all_aliases({
+            "s1": {"name": "ctrl_1_04.rom", "path": "a", "md5": "m1"},
+            "s2": {"name": "ctrl_1_05.rom", "path": "b", "md5": "m2"},
+        }, Declarations(profile_entries=[profile]))
         for sha in ("s1", "s2"):
             self.assertEqual([a["name"] for a in aliases.get(sha, [])], ["MT32_CONTROL.ROM"])
 
 class CrossNamingStaysInItsProfile(unittest.TestCase):
     def test_an_alias_naming_a_sibling_entry_is_not_indexed(self):
         """dosbox-x aliases MT32_CONTROL.ROM and CM32L_CONTROL.ROM to each other."""
-        with tempfile.TemporaryDirectory() as tmp:
-            previous = os.getcwd()
-            os.chdir(tmp)
-            try:
-                Path("emulators").mkdir()
-                Path("emulators/d.yml").write_text(
-                    'files:\n'
-                    '  - name: "MT32_CONTROL.ROM"\n    sha1: "mt"\n    aliases: ["CM32L_CONTROL.ROM"]\n'
-                    '  - name: "CM32L_CONTROL.ROM"\n    sha1: "cm"\n    aliases: ["MT32_CONTROL.ROM"]\n'
-                )
-                aliases = collect_all_aliases({
-                    "mt": {"name": "mt32_control.rom", "path": "a", "md5": "m1"},
-                    "cm": {"name": "cm32l_control.rom", "path": "b", "md5": "m2"},
-                })
-            finally:
-                os.chdir(previous)
+        profile = [
+            {"name": "MT32_CONTROL.ROM", "sha1": "mt", "aliases": ["CM32L_CONTROL.ROM"]},
+            {"name": "CM32L_CONTROL.ROM", "sha1": "cm", "aliases": ["MT32_CONTROL.ROM"]},
+        ]
+        aliases = collect_all_aliases({
+            "mt": {"name": "mt32_control.rom", "path": "a", "md5": "m1"},
+            "cm": {"name": "cm32l_control.rom", "path": "b", "md5": "m2"},
+        }, Declarations(profile_entries=[profile]))
         self.assertEqual([a["name"] for a in aliases["mt"]], ["MT32_CONTROL.ROM"])
         self.assertEqual([a["name"] for a in aliases["cm"]], ["CM32L_CONTROL.ROM"])
 
@@ -145,21 +109,45 @@ class AnUnreadableSourceStopsTheRun(unittest.TestCase):
     written without its aliases and the command exited 0."""
 
     def test_the_file_is_named_and_nothing_collected(self):
-        import os
-        import shutil
-        import tempfile
-
-
-        root = Path(tempfile.mkdtemp())
-        self.addCleanup(shutil.rmtree, root, True)
-        previous = os.getcwd()
-        os.chdir(root)
-        self.addCleanup(os.chdir, previous)
-        Path("emulators").mkdir()
-        Path("emulators/broken.yml").write_text("files: [\n  - name: a\n")
-        with self.assertRaises(UnreadableSource) as caught:
-            collect_all_aliases({})
+        with tempfile.TemporaryDirectory() as tmp:
+            emulators = Path(tmp) / "emulators"
+            emulators.mkdir()
+            (emulators / "broken.yml").write_text("files: [\n  - name: a\n")
+            (emulators / "good.yml").write_text('files:\n  - name: "b"\n')
+            with self.assertRaises(UnreadableSource) as caught:
+                read_declarations(Path(tmp) / "platforms", emulators)
         self.assertIn("broken.yml", str(caught.exception))
+        self.assertNotIn("good.yml", str(caught.exception))
+
+
+class TheBuildReadsTheDeclarationsOnce(unittest.TestCase):
+    """The alias pass and the proven-name index each walked platforms/ and
+    emulators/, the first from paths fixed to the working directory."""
+
+    def test_entries_keep_each_profile_apart(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "platforms").mkdir()
+            (root / "platforms/_registry.yml").write_text("platforms:\n  p:\n    config: p.yml\n")
+            (root / "platforms/p.yml").write_text(
+                'systems:\n  s:\n    files:\n      - name: "a.bin"\n'
+            )
+            (root / "emulators").mkdir()
+            (root / "emulators/x.yml").write_text('files:\n  - name: "b.bin"\n')
+            (root / "emulators/y.yml").write_text('files:\n  - name: "c.bin"\n')
+            declared = read_declarations(root / "platforms", root / "emulators")
+        self.assertEqual([e["name"] for e in declared.platform_entries], ["a.bin"])
+        self.assertEqual(
+            [[e["name"] for e in entries] for entries in declared.profile_entries],
+            [["b.bin"], ["c.bin"]],
+        )
+        self.assertEqual([e["name"] for e in declared.entries()], ["a.bin", "b.bin", "c.bin"])
+
+    def test_the_build_takes_the_directories_from_its_options(self):
+        source = script_source("generate_db.py")
+        self.assertIn("read_declarations(Path(args.platforms_dir), Path(args.emulators_dir))", source)
+        self.assertNotIn('Path("platforms")', source)
+        self.assertNotIn('Path("emulators")', source)
 
 
 class DrasticNamesTheDSDumps(unittest.TestCase):
@@ -169,14 +157,7 @@ class DrasticNamesTheDSDumps(unittest.TestCase):
     its own three names."""
 
     def _aliases(self, files: dict) -> dict:
-        with tempfile.TemporaryDirectory() as tmp:
-            previous = os.getcwd()
-            os.chdir(tmp)
-            try:
-                Path("emulators").mkdir()
-                return collect_all_aliases(files)
-            finally:
-                os.chdir(previous)
+        return collect_all_aliases(files, Declarations())
 
     def test_the_collection_answers_drastic_names(self):
         files = {
@@ -206,23 +187,12 @@ class AliasesFollowContentNotPrimaryCopy(unittest.TestCase):
     a copy. project64 names the second and declares no hash, so its aliases
     attached only while that copy happened to be primary."""
 
-    PROFILE = (
-        'files:\n  - name: "64DD_IPL_v12_JPN.bin"\n'
-        '    aliases: ["64DD_IPL_JP.n64", "64dd_ipl_J.bin"]\n'
-    )
+    PROFILE = [{"name": "64DD_IPL_v12_JPN.bin", "aliases": ["64DD_IPL_JP.n64", "64dd_ipl_J.bin"]}]
 
     def _aliases(self, primary: str, copy: str) -> dict:
         files = {"s": {"name": primary, "path": f"bios/N64DD/{primary}", "md5": "m"}}
         copies = {"s": [{"name": copy, "path": f"bios/N64DD/{copy}"}]}
-        with tempfile.TemporaryDirectory() as tmp:
-            previous = os.getcwd()
-            os.chdir(tmp)
-            try:
-                Path("emulators").mkdir()
-                Path("emulators/p.yml").write_text(self.PROFILE)
-                return collect_all_aliases(files, copies)
-            finally:
-                os.chdir(previous)
+        return collect_all_aliases(files, Declarations(profile_entries=[self.PROFILE]), copies)
 
     def test_either_copy_primary_gives_the_same_names(self):
         names = []
@@ -241,22 +211,13 @@ class AliasesFollowContentNotPrimaryCopy(unittest.TestCase):
             "b": {"name": "Satellaview_BS-X.sfc", "path": "bios/SNES/x.sfc", "md5": "m2"},
         }
         copies = {"b": [{"name": "BS-X.bin", "path": "bios/Satellaview/BS-X.bin"}]}
-        with tempfile.TemporaryDirectory() as tmp:
-            previous = os.getcwd()
-            os.chdir(tmp)
-            try:
-                Path("emulators").mkdir()
-                Path("emulators/s.yml").write_text(
-                    'files:\n  - name: "BS-X.bin"\n    aliases: ["BS-X.bios"]\n'
-                )
-                aliases = collect_all_aliases(files, copies)
-            finally:
-                os.chdir(previous)
+        profile = [{"name": "BS-X.bin", "aliases": ["BS-X.bios"]}]
+        aliases = collect_all_aliases(files, Declarations(profile_entries=[profile]), copies)
         self.assertEqual(aliases, {})
 
     def test_the_build_passes_the_scan_copies(self):
         source = script_source("generate_db.py")
-        self.assertIn("collect_all_aliases(files, aliases, shadowed)", source)
+        self.assertIn("collect_all_aliases(files, declared, aliases, shadowed)", source)
 
 
 class TheSmsBiosKeepsItsNames(unittest.TestCase):
@@ -265,25 +226,24 @@ class TheSmsBiosKeepsItsNames(unittest.TestCase):
     and the two names were refused because .variants/ copies carried them.
     Genesis Plus GX then got the Store Display Unit BIOS as bios_U.sms."""
 
+    @staticmethod
+    def _platform() -> Declarations:
+        with tempfile.TemporaryDirectory() as tmp:
+            platforms = Path(tmp)
+            (platforms / "_registry.yml").write_text("platforms:\n  p:\n    config: p.yml\n")
+            (platforms / "p.yml").write_text(
+                "systems:\n  sms:\n    files:\n"
+                '      - name: "bios_U.sms"\n        sha1: "v13"\n'
+            )
+            return read_declarations(platforms, platforms / "emulators")
+
     def test_a_name_only_variants_carry_is_registered_for_the_pinned_content(self):
         files = {
             "v13": {"name": "SMS_us_1.3.sms", "path": "bios/Sega/MS/SMS_us_1.3.sms", "md5": "m13"},
             "kiosk": {"name": "bios_U.sms", "path": "bios/Sega/MS/.variants/bios_U.sms.ee2c29ba",
                       "md5": "mk"},
         }
-        with tempfile.TemporaryDirectory() as tmp:
-            previous = os.getcwd()
-            os.chdir(tmp)
-            try:
-                Path("platforms").mkdir()
-                Path("platforms/_registry.yml").write_text("platforms:\n  p:\n    config: p.yml\n")
-                Path("platforms/p.yml").write_text(
-                    "systems:\n  sms:\n    files:\n"
-                    '      - name: "bios_U.sms"\n        sha1: "v13"\n'
-                )
-                aliases = collect_all_aliases(files)
-            finally:
-                os.chdir(previous)
+        aliases = collect_all_aliases(files, self._platform())
         self.assertIn("bios_U.sms", {a["name"] for a in aliases.get("v13", [])})
 
     def test_a_primary_name_still_refuses_another_content(self):
@@ -291,19 +251,7 @@ class TheSmsBiosKeepsItsNames(unittest.TestCase):
             "v13": {"name": "SMS_us_1.3.sms", "path": "bios/Sega/MS/SMS_us_1.3.sms", "md5": "m13"},
             "other": {"name": "bios_U.sms", "path": "bios/Sega/MS/bios_U.sms", "md5": "mo"},
         }
-        with tempfile.TemporaryDirectory() as tmp:
-            previous = os.getcwd()
-            os.chdir(tmp)
-            try:
-                Path("platforms").mkdir()
-                Path("platforms/_registry.yml").write_text("platforms:\n  p:\n    config: p.yml\n")
-                Path("platforms/p.yml").write_text(
-                    "systems:\n  sms:\n    files:\n"
-                    '      - name: "bios_U.sms"\n        sha1: "v13"\n'
-                )
-                aliases = collect_all_aliases(files)
-            finally:
-                os.chdir(previous)
+        aliases = collect_all_aliases(files, self._platform())
         self.assertEqual(aliases, {})
 
     def test_a_copy_under_its_machine_is_the_path_over_an_emulator_tree(self):

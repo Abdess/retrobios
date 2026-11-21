@@ -31,7 +31,7 @@ DEFAULT_OUTPUT = "database.json"
 def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Generate multi-indexed BIOS database")
     parser.add_argument("--force", action="store_true", help="Force rehash all files")
-    add_repo_inputs(parser, "bios")
+    add_repo_inputs(parser, "bios", "platforms", "emulators")
     parser.add_argument(
         "--output", "-o", default=DEFAULT_OUTPUT, help="Output JSON file"
     )
@@ -47,6 +47,8 @@ def main() -> int:
     )
     args = parser.parse_args()
     require_directory(args.bios_dir)
+    require_directory(args.platforms_dir, "--platforms-dir")
+    require_directory(args.emulators_dir, "--emulators-dir")
     with repository_output_lock(args.output):
         return generate(args)
 

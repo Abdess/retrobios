@@ -3,13 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from pathlib import Path
 
-from collection.declared import hash_values
-from core.cli import SourceUnreadable
-from model.profiles import source_yaml_paths
-from model.registry import list_registered_platforms
-from model.sources import source_yaml_file
+from collection.declared import Declarations, hash_values
 from resolve.localfile import variant_base_name
 
 
@@ -24,14 +19,6 @@ def _own_aliases(file_entry: dict, primary_names: set[str]) -> list[str]:
         alias for alias in file_entry.get("aliases") or []
         if str(alias).lower() == name or str(alias).lower() not in primary_names
     ]
-
-
-class UnreadableSource(Exception):
-    """Platform or profile files that do not parse, named one per line."""
-
-    def __init__(self, sources: list[str]) -> None:
-        super().__init__("\n".join(sources))
-        self.sources = sources
 
 
 @dataclass
@@ -103,47 +90,29 @@ def _alias_book(files: dict, copies: dict | None) -> _AliasBook:
     return _AliasBook(files, md5_to_sha1, name_to_sha1, holders, families, named_primaries)
 
 
-def _platform_aliases(book: _AliasBook, unreadable: list[str]) -> None:
+def _platform_aliases(book: _AliasBook, entries: list[dict]) -> None:
     """Register the names platform YAMLs give a held content."""
-    platforms_dir = Path("platforms")
-    if not platforms_dir.is_dir():
-        return
-    for platform_name in list_registered_platforms(
-        str(platforms_dir)
-    ):
-        config_file = platforms_dir / f"{platform_name}.yml"
-        try:
-            config = source_yaml_file(config_file) or {}
-        except SourceUnreadable as e:
-            unreadable.append(str(e))
-            continue
-        except OSError as e:
-            unreadable.append(f"{config_file}: {e}")
+    for file_entry in entries:
+        name = file_entry.get("name", "")
+        sha1 = file_entry.get("sha1", "")
+        md5 = file_entry.get("md5", "")
+
+        # A zipped_file entry verifies a ROM INSIDE the archive, so its
+        # hash describes the member and not the file the name designates.
+        # Registering the name against that hash made d2fdc.zip an alias of
+        # a loose 256-byte state-machine-16.rom, which three platforms were
+        # then served in place of the archive.
+        if file_entry.get("zipped_file"):
             continue
 
-        for system in config.get("systems", {}).values():
-            for file_entry in system.get("files", []):
-                name = file_entry.get("name", "")
-                sha1 = file_entry.get("sha1", "")
-                md5 = file_entry.get("md5", "")
+        matched = None
+        if sha1 and sha1 in book.files:
+            matched = sha1
+        elif md5 and md5 in book.md5_to_sha1:
+            matched = book.md5_to_sha1[md5]
 
-                # A zipped_file entry verifies a ROM INSIDE the
-                # archive, so its hash describes the member and not
-                # the file the name designates. Registering the name
-                # against that hash made d2fdc.zip an alias of a
-                # loose 256-byte state-machine-16.rom, which three
-                # platforms were then served in place of the archive.
-                if file_entry.get("zipped_file"):
-                    continue
-
-                matched = None
-                if sha1 and sha1 in book.files:
-                    matched = sha1
-                elif md5 and md5 in book.md5_to_sha1:
-                    matched = book.md5_to_sha1[md5]
-
-                if matched:
-                    book.add(name, matched)
+        if matched:
+            book.add(name, matched)
 
 
 def _profile_entry_aliases(
@@ -196,29 +165,18 @@ def _profile_entry_aliases(
 
 def _profile_aliases(
     book: _AliasBook,
+    profiles: list[list[dict]],
     shadowed: list[tuple[str, set[str], list[str]]] | None,
-    unreadable: list[str],
 ) -> None:
     """Register the aliases emulator YAMLs give (aliases field on file entries)."""
-    emulators_dir = Path("emulators")
-    if not emulators_dir.is_dir():
-        return
-    for emu_file in source_yaml_paths(emulators_dir):
-        try:
-            emu_config = source_yaml_file(emu_file) or {}
-        except SourceUnreadable as e:
-            unreadable.append(str(e))
-            continue
-        except OSError as e:
-            unreadable.append(f"{emu_file}: {e}")
-            continue
+    for entries in profiles:
         # A profile whose entries name each other (dosbox-x opens
         # MT32_CONTROL.ROM and CM32L_CONTROL.ROM alike, so each entry
         # aliases the other) states that ITS slot takes either name.
         # Indexed globally that became evidence for every emulator:
         # ScummVM's MT-32 slot received the CM-32L ROMs.
-        primary_names = _primary_names(emu_config.get("files", []))
-        for file_entry in emu_config.get("files", []):
+        primary_names = _primary_names(entries)
+        for file_entry in entries:
             _profile_entry_aliases(book, file_entry, primary_names, shadowed)
 
 
@@ -269,30 +227,27 @@ KNOWN_ALIAS_GROUPS = [
 
 def collect_all_aliases(
     files: dict,
+    declared: Declarations,
     copies: dict | None = None,
     shadowed: list[tuple[str, set[str], list[str]]] | None = None,
 ) -> dict:
-    """Collect alternate filenames from platform YAMLs, core-info, and known aliases.
+    """Collect alternate filenames from platform YAMLs, profiles, and known aliases.
 
     Registers alternate names so generate_pack can resolve files stored under different names.
+    ``declared`` holds the platform and profile file entries.
     ``copies`` maps a sha1 to the other files the scan found with that content.
     ``shadowed`` receives, per profile entry, its name, the contents its hashes
     designate and the aliases a primary's name already carries.
     """
     book = _alias_book(files, copies)
-
-    # A source that does not parse is reported and the run refused: written
-    # without it, the database lost every alias the file proves and the
-    # command exited 0 (dosbox-x's wqy fonts answered not_found).
-    unreadable: list[str] = []
-    _platform_aliases(book, unreadable)
+    _platform_aliases(book, declared.platform_entries)
 
     # core-info is not read here: it was the only network call of a build
     # that must give the same database offline, and the one name it added
     # (gearcoleco's writer.rom) is a profile entry proven by its sha1, which
     # the profile pass below now registers.
 
-    _profile_aliases(book, shadowed, unreadable)
+    _profile_aliases(book, declared.profile_entries, shadowed)
 
     for group in KNOWN_ALIAS_GROUPS:
         matched_sha1 = None
@@ -305,8 +260,6 @@ def collect_all_aliases(
         for name in group:
             book.add(name, matched_sha1)
 
-    if unreadable:
-        raise UnreadableSource(unreadable)
     return book.aliases
 
 
@@ -314,10 +267,11 @@ def add_declared_aliases(
     files: dict,
     aliases: dict[str, list[dict]],
     shadowed: list[tuple[str, set[str], list[str]]],
+    declared: Declarations,
 ) -> None:
     """Append to the scan's copies every alternate name the declarations give a held content."""
-    declared = collect_all_aliases(files, aliases, shadowed)
-    for sha1, name_list in declared.items():
+    found = collect_all_aliases(files, declared, aliases, shadowed)
+    for sha1, name_list in found.items():
         for alias_entry in name_list:
             if sha1 not in aliases:
                 aliases[sha1] = []

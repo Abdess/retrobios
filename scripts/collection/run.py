@@ -6,8 +6,8 @@ import argparse
 import sys
 from pathlib import Path
 
-from collection.aliases import UnreadableSource, add_declared_aliases
-from collection.declared import declarations
+from collection.aliases import add_declared_aliases
+from collection.declared import UnreadableSource, read_declarations
 from collection.hashcache import CACHE_FILE, load_cache, save_cache
 from collection.indexes import database_indexes
 from collection.record import database_record, record_retired, write_database
@@ -66,19 +66,18 @@ def generate(args: argparse.Namespace) -> int:
 
     shadowed: list[tuple[str, set[str], list[str]]] = []
     try:
-        add_declared_aliases(files, aliases, shadowed)
+        declared = read_declarations(Path(args.platforms_dir), Path(args.emulators_dir))
     except UnreadableSource as exc:
         for source in exc.sources:
             print(f"Error: cannot read {source}", file=sys.stderr)
         print(f"Error: {args.output} not written", file=sys.stderr)
         return 1
+    add_declared_aliases(files, aliases, shadowed, declared)
 
     snapshots = load_provenance_snapshots(args.provenance_dir)
     provenance_counts = annotate_provenance(files, snapshots)
 
-    indexes = database_indexes(
-        files, aliases, shadowed, declarations(Path("platforms"), Path("emulators"))
-    )
+    indexes = database_indexes(files, aliases, shadowed, declared.entries())
     database = database_record(files, indexes, args.bios_dir)
     total_size = database["total_size"]
 
