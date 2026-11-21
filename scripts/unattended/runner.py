@@ -19,6 +19,7 @@ from pathlib import Path
 
 from core.artifacts import TIMESTAMP_KEYS
 from core.hostguard import LockBusy, free_gb, global_lock, lock_busy
+from core.paths import AUTORUN_DIR, AUTORUN_WORKTREE
 from core.statefile import now_iso, save_state
 from unattended.breaker import may_push, refresh_breaker
 from unattended.jobs import AutorunError, BLOCKED, DEFERRED, FAILED, Job, OK, REFUSED, Step, job_env
@@ -32,9 +33,6 @@ from unattended.worktree import (
     sync_worktree,
     unpushed,
 )
-
-
-AUTORUN_DIR = Path(".cache") / "autorun"
 
 
 ALERT_FREE_GB = 100
@@ -81,7 +79,7 @@ class Context:
 
     @property
     def worktree(self) -> Path:
-        return self.home / "worktree"
+        return self.repo / AUTORUN_WORKTREE
 
     @property
     def state_path(self) -> Path:

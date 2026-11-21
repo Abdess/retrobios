@@ -35,7 +35,8 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from devtools.diskcleanup import ALERT_GB, apply, busy_paths, disk_line, inside, main_checkout, plan
+from core.gitclone import main_checkout
+from devtools.diskcleanup import ALERT_GB, apply, busy_paths, disk_line, inside, plan
 
 
 def main() -> int:

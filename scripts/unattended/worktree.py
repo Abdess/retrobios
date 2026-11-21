@@ -11,6 +11,8 @@ import subprocess
 from collections.abc import Callable, Sequence
 from pathlib import Path
 
+from core.gitclone import GitRefused
+from core.gitclone import main_checkout as gitclone_main_checkout
 from core.paths import REPO_ROOT
 from unattended.jobs import AutorunError, BLOCKED, CommitRule, FAILED, token_env
 
@@ -158,7 +160,7 @@ def push_batch(worktree: Path, gate_base: str, regate: Callable[[], bool]) -> st
 
 def main_checkout() -> Path:
     """The main checkout, also when this script runs from a linked worktree."""
-    proc = git(REPO_ROOT, "rev-parse", "--path-format=absolute", "--git-common-dir",
-               check=False)
-    common = Path(proc.stdout.strip()) if proc.returncode == 0 else REPO_ROOT / ".git"
-    return common.parent
+    try:
+        return gitclone_main_checkout(REPO_ROOT)
+    except GitRefused:
+        return REPO_ROOT

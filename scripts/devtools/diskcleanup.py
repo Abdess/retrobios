@@ -11,12 +11,13 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
+from core.paths import AUTORUN_WORKTREE
+
 GENERATED = re.compile(
     r"^(database\.json|install/.*\.json|exports/.*\.json|README\.md|CONTRIBUTING\.md"
     r"|website/src/data/[^/]+\.json)$"
 )
 KEPT_TMP = ("acquire",)
-AUTOMATION_WORKTREE = Path(".cache") / "autorun" / "worktree"
 ALERT_GB = 100
 
 
@@ -35,12 +36,6 @@ def git(cwd: Path, *args: str, check: bool = True) -> str:
     if check and proc.returncode != 0:
         raise RuntimeError(f"git {' '.join(args)}: {proc.stderr.strip()}")
     return proc.stdout
-
-
-def main_checkout(cwd: Path) -> Path:
-    """The main checkout, also when run from inside a linked worktree."""
-    common = git(cwd, "rev-parse", "--path-format=absolute", "--git-common-dir").strip()
-    return Path(common).parent
 
 
 def busy_paths() -> set[str]:
@@ -100,7 +95,7 @@ def linked_worktrees(repo: Path) -> list[Path]:
 
 def session_worktrees(repo: Path) -> list[Path]:
     """Linked worktrees inside the checkout, the automation worktree aside."""
-    keep = repo / AUTOMATION_WORKTREE
+    keep = repo / AUTORUN_WORKTREE
     return [p for p in linked_worktrees(repo) if inside(p, repo) and p != keep]
 
 

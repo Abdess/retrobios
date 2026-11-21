@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 import subprocess
+from pathlib import Path
 
 
 class GitRefused(RuntimeError):
@@ -35,6 +36,17 @@ def required_git_lines(*args: str) -> list[str]:
         detail = result.stderr.strip() or f"exit {result.returncode}"
         raise GitRefused(f"git {' '.join(args)}: {detail}")
     return _lines(result.stdout)
+
+
+def main_checkout(cwd: Path) -> Path:
+    """The main checkout of the clone holding cwd, also from a linked worktree,
+    GitRefused when cwd is in no clone."""
+    args = ("rev-parse", "--path-format=absolute", "--git-common-dir")
+    result = _run(("-C", str(cwd), *args))
+    if result.returncode:
+        detail = result.stderr.strip() or f"exit {result.returncode}"
+        raise GitRefused(f"git {' '.join(args)}: {detail}")
+    return Path(result.stdout.strip()).parent
 
 
 # Where a clone with no remote naming the project keeps its main line, each

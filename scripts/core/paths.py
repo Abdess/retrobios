@@ -19,6 +19,10 @@ BIOS_DIR = "bios"
 DATA_DIRS_FILE = f"{PLATFORMS_DIR}/_data_dirs.yml"
 # Where generate_truth writes its models and diff_truth and export_native read them.
 TRUTH_DIR = "dist/truth"
+# The unattended runner's home, and the worktree it commits from, which disk
+# cleanup must never take for an idle session worktree.
+AUTORUN_DIR = ".cache/autorun"
+AUTORUN_WORKTREE = f"{AUTORUN_DIR}/worktree"
 
 
 def sanitize_pack_path(raw: str) -> str:
