@@ -25,6 +25,8 @@ from packs.emulatorpack import (
     build_system_pack,
     print_emulator_pack,
 )
+from packs.hashinput import ACCEPTED_HASHES, parse_hash_file, parse_hash_input
+from packs.hashlookup import print_hash_lookup
 from packs.md5pack import generate_md5_pack
 from packs.outputdir import holds_other_kind, pack_output_lock
 from packs.packcheck import run_verify_packs
@@ -32,12 +34,7 @@ from packs.packoptions import refuse_for_verify_packs, refuse_unapplied_flags, v
 from packs.platformrun import requested_platforms, run_platform_mode
 from packs.targets import generate_target_manifests
 from resolve import packfiles as packresolve
-from resolve.packfiles import (
-    ACCEPTED_HASHES,
-    lookup_hashes,
-    parse_hash_file,
-    parse_hash_input,
-)
+from resolve.packfiles import lookup_hashes
 
 
 def _run_quick_mode(
@@ -96,9 +93,7 @@ def _run_hash_mode(args: argparse.Namespace) -> None:
     db = load_database(args.db)
     if not args.platform and not args.emulator:
         # A lookup that found nothing is an answer a script must see.
-        if lookup_hashes(
-            hashes, db, args.bios_dir, args.emulators_dir, args.platforms_dir
-        ):
+        if print_hash_lookup(lookup_hashes(hashes, db, args.bios_dir)):
             sys.exit(1)
         return
     zip_contents = build_zip_contents_index(db)

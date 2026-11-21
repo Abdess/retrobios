@@ -2692,7 +2692,7 @@ class TestE2E(unittest.TestCase):
 
     def test_138_parse_hash_input(self):
         """parse_hash_input handles various formats."""
-        from resolve.packfiles import parse_hash_input
+        from packs.hashinput import parse_hash_input
 
         # Plain MD5
         result = parse_hash_input("d8f1206299c48946e6ec5ef96d014eaa")
@@ -2712,7 +2712,7 @@ class TestE2E(unittest.TestCase):
 
     def test_139_parse_hash_file(self):
         """parse_hash_file handles comments, empty lines, various formats."""
-        from resolve.packfiles import parse_hash_file
+        from packs.hashinput import parse_hash_file
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
             f.write("# PS1 BIOS files\n")
@@ -2729,11 +2729,8 @@ class TestE2E(unittest.TestCase):
             os.unlink(tmp_path)
 
     def test_140_lookup_hashes_found(self):
-        """lookup_hashes returns file info for known hashes."""
-        import contextlib
-        import io
-
-        from resolve.packfiles import lookup_hashes
+        """lookup_hashes returns the record of a known hash."""
+        from resolve.packfiles import HashLookup, lookup_hashes
 
         db = {
             "files": {
@@ -2750,34 +2747,52 @@ class TestE2E(unittest.TestCase):
                 "by_crc32": {},
             },
         }
-        buf = io.StringIO()
-        with contextlib.redirect_stdout(buf):
-            missing = lookup_hashes([("md5", "md5abc")], db, "bios", "emulators", "platforms")
-        output = buf.getvalue()
-        self.assertIn("test.bin", output)
-        self.assertIn("sha1abc", output)
+        records = lookup_hashes([("md5", "md5abc")], db, "bios")
         # The record's path, the one field the schema gives it. A read of
         # "paths" printed nothing.
-        self.assertIn("Path: bios/Mfr/Console/test.bin", output)
-        self.assertEqual(missing, 0)
+        self.assertEqual(records, [HashLookup(
+            "md5", "md5abc", "sha1abc", "md5abc", "test.bin",
+            "bios/Mfr/Console/test.bin", False,
+        )])
+        self.assertTrue(records[0].found)
 
     def test_141_lookup_hashes_not_found(self):
-        """lookup_hashes reports unknown hashes."""
+        """lookup_hashes reports unknown hashes, and the report counts them."""
         import contextlib
         import io
 
+        from packs.hashlookup import print_hash_lookup
         from resolve.packfiles import lookup_hashes
 
         db = {"files": {}, "indexes": {"by_md5": {}, "by_crc32": {}}}
+        unknown = "unknown123" + "0" * 22
+        records = lookup_hashes([("md5", unknown)], db, "bios")
+        self.assertEqual([r.found for r in records], [False])
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
-            missing = lookup_hashes(
-                [("md5", "unknown123" + "0" * 22)], db, "bios", "emulators", "platforms"
-            )
-        output = buf.getvalue()
-        self.assertIn("NOT FOUND", output)
+            missing = print_hash_lookup(records)
+        self.assertIn("NOT FOUND", buf.getvalue())
         # The CLI exited 0 on this, so a script read "found".
         self.assertEqual(missing, 1)
+
+    def test_141b_lookup_report_names_the_file(self):
+        """The printed report gives the file's hashes, name, path and presence."""
+        import contextlib
+        import io
+
+        from packs.hashlookup import print_hash_lookup
+        from resolve.packfiles import HashLookup
+
+        record = HashLookup("md5", "md5abc", "sha1abc", "md5abc", "test.bin",
+                            "bios/Mfr/Console/test.bin", True)
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            missing = print_hash_lookup([record])
+        self.assertEqual(buf.getvalue(), (
+            "\nMD5: md5abc\n  SHA1: sha1abc\n  MD5:  md5abc\n  Name: test.bin\n"
+            "  Path: bios/Mfr/Console/test.bin\n  In repo: YES\n"
+        ))
+        self.assertEqual(missing, 0)
 
     def test_142_from_md5_platform_pack(self):
         """--from-md5 with --platform generates correctly laid out ZIP."""

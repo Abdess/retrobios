@@ -7421,7 +7421,7 @@ class HashInputNamesWhatItAccepts(unittest.TestCase):
     found in input"."""
 
     def test_digests_are_read_by_length(self):
-        from scripts.resolve.packfiles import parse_hash_input
+        from scripts.packs.hashinput import parse_hash_input
 
         sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
         self.assertEqual(parse_hash_input(f"0x1A2B3C4D,{sha256}"), [
@@ -7430,7 +7430,7 @@ class HashInputNamesWhatItAccepts(unittest.TestCase):
         self.assertEqual(parse_hash_input("a" * 29), [("md5", "a" * 29)])
 
     def test_anything_else_is_refused_with_the_formats(self):
-        from scripts.resolve.packfiles import parse_hash_file, parse_hash_input
+        from scripts.packs.hashinput import parse_hash_file, parse_hash_input
 
         for raw in ("1234567890ab", "zz", "490f666e1afb15b7362b406ed1cea246,zz"):
             with self.subTest(raw=raw), self.assertRaises(ValueError) as ctx:
