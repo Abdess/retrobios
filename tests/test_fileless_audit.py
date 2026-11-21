@@ -161,7 +161,8 @@ class TestCorpusIsAnswered(unittest.TestCase):
     """
 
     def test_no_fileless_profile_is_left_unexplained(self):
-        if not (ROOT / ".cache").is_dir():
+        cache = ROOT / fileless.upstream.CACHE_DIR
+        if not cache.is_dir():
             self.skipTest("no upstream cache")
         from model.safeparse import yaml_load
 
@@ -187,7 +188,7 @@ class TestCorpusIsAnswered(unittest.TestCase):
                     continue
                 try:
                     hits = fileless.audit(
-                        path.stem, str(ROOT / "emulators"), str(ROOT / ".cache"), True
+                        path.stem, str(ROOT / "emulators"), str(cache), True
                     )
                 except fileless.upstream.NotCachedError:
                     # A cold branch tip is unread too, not a branch gone.

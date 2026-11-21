@@ -38,7 +38,7 @@ def main() -> None:
     )
     add_repo_inputs(parser, "emulators")
     parser.add_argument(
-        "--cache-dir", default=".cache",
+        "--cache-dir", default=upstream.CACHE_DIR,
         help="download cache directory (default: %(default)s)",
     )
     parser.add_argument(
