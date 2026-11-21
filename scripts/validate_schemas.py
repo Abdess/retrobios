@@ -13,6 +13,7 @@ from pathlib import Path, PurePosixPath
 
 import yaml
 
+from core.artifacts import ArtifactLockBusy, artifact_lock
 from model.registry import load_data_dir_registry, load_platform_registry
 from model.profiles import source_yaml_paths
 from model.safeparse import yaml_load
@@ -360,9 +361,6 @@ def _validate_pack_manifests(dist: Path) -> list[str]:
     """
     if not dist.is_dir():
         return []
-
-    sys.path.insert(0, str(REPO_ROOT / "scripts"))
-    from core.artifacts import ArtifactLockBusy, artifact_lock
 
     try:
         with artifact_lock(str(dist), exclusive=False):
