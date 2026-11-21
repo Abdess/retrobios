@@ -9,6 +9,7 @@ from collections.abc import Iterator
 from pathlib import Path
 
 from core.artifacts import artifact_lock, repository_output_lock
+from packs.targets import is_target_list
 
 
 def json_artifact_kind(path: Path) -> str | None:
@@ -23,7 +24,7 @@ def json_artifact_kind(path: Path) -> str | None:
         return None
     if "manifest_version" in data:
         return "manifest"
-    if all(v is None or isinstance(v, list) for v in data.values()):
+    if is_target_list(data):
         return "targets"
     return None
 

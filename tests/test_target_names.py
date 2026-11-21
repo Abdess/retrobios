@@ -266,5 +266,35 @@ class AnEmptyOverrideIsNoOverride(unittest.TestCase):
             self.assertEqual(canonical_target_name(["p", "q"], "board", tmp), "board")
 
 
+class TheOutputGuardKnowsEveryTargetShape(unittest.TestCase):
+    """A board with images is written {"cores", "images"}: the guard read
+    only lists, and --manifest replaced install/targets/batocera.json."""
+
+    def test_a_list_with_board_images_is_refused_to_a_manifest_run(self):
+        import contextlib
+        import io
+        import json
+
+        from packs.outputdir import holds_other_kind, json_artifact_kind
+        from packs.targets import generate_target_manifests
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            targets = Path(tmp) / "targets"
+            targets.mkdir()
+            (targets / "p.yml").write_text(
+                "targets:\n  board:\n    cores: [a]\n    images: [board-x]\n",
+                encoding="utf-8",
+            )
+            out = Path(tmp) / "out"
+            generate_target_manifests(str(targets), str(out))
+            written = out / "p.json"
+            self.assertEqual(json.loads(written.read_text(encoding="utf-8")),
+                             {"board": {"cores": ["a"], "images": ["board-x"]}})
+            self.assertEqual(json_artifact_kind(written), "targets")
+            with contextlib.redirect_stderr(io.StringIO()) as err:
+                self.assertTrue(holds_other_kind(str(out), "manifest"))
+            self.assertIn("p.json", err.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main()

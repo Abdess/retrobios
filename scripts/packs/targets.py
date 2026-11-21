@@ -29,6 +29,18 @@ def generate_target_manifests(targets_dir: str, output_dir: str) -> list[tuple[s
     return written
 
 
+def is_target_list(data: object) -> bool:
+    """Whether a decoded JSON document has the shape target_list writes:
+    each target a core list, None, or its cores beside its board images."""
+    return isinstance(data, dict) and bool(data) and all(
+        held is None or isinstance(held, list) or (
+            isinstance(held, dict) and set(held) == {"cores", "images"}
+            and isinstance(held["cores"], list) and isinstance(held["images"], list)
+        )
+        for held in data.values()
+    )
+
+
 def target_list(yml_file: Path) -> dict[str, list[str] | dict | None]:
     """A platform's cores per hardware target, as install/targets/ publishes
     them and a pack carries them: aliases included, overrides applied."""
