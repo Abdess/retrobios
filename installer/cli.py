@@ -220,9 +220,10 @@ def _main_check_add_app(parser: argparse.ArgumentParser, args: argparse.Namespac
 
 def _main_check_offline(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
     """Record --offline, and refuse --target where no core list can be read."""
-    if args.offline:
+    if args.offline and not offline_requested():
         # The runs the full-screen interface starts read it from here, and
-        # the words name the option given.
+        # the words name the option given. A variable already set keeps its
+        # value: dropping --offline alone would leave the run offline.
         os.environ[OFFLINE_VARIABLE] = OFFLINE_FLAG_VALUE
     named = next((plat for plat in AVAILABLE_PLATFORMS if args.platform and _name_key(
         args.platform) in (_name_key(plat), _name_key(display_name(plat)))), "")

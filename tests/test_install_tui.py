@@ -4462,7 +4462,7 @@ class LineModeOffline(unittest.TestCase):
                          "the line mode run needs pyte and a pty")
     def test_nothing_is_offered_that_cannot_come(self):
         with FakeRepository() as repo:
-            env = {**repo.env(), "TERM": "xterm", install.OFFLINE_VARIABLE: "1"}
+            env = {**repo.env(), "TERM": "xterm"}
             term = Pty(["--plain", "--manifest", str(repo.root / "install" / "retroarch.json"),
                         "--dest", str(repo.dest), "--offline"], env)
             term.wait("q) quit")

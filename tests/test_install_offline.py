@@ -1019,6 +1019,22 @@ class OneOfflineVocabulary(Scratch):
             hint.record(args)
         self.assertIn("--offline", hint.command("retroarch", self.dest, elevated=True))
 
+    def test_the_variable_stays_named_beside_the_option(self):
+        """Both set: "without --offline" left the run offline, the variable
+        still set. The full screen hands --offline to runs that inherit it."""
+        import argparse
+
+        args = argparse.Namespace(offline=True, platform="retroarch", target=None,
+                                  list_targets=False, manifest=None, from_pack=None)
+        with unittest.mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
+            install._main_check_offline(argparse.ArgumentParser(), args)
+            self.assertEqual(os.environ[install.OFFLINE_VARIABLE], "1")
+            self.assertEqual(install.offline_undo(), f"with {install.OFFLINE_VARIABLE} unset")
+        with unittest.mock.patch.dict(os.environ):
+            os.environ.pop(install.OFFLINE_VARIABLE, None)
+            install._main_check_offline(argparse.ArgumentParser(), args)
+            self.assertEqual(install.offline_undo(), "without --offline")
+
     def test_check_offline_says_what_cannot_come(self):
         """"Run the same command without --check to fetch them"."""
         proc = self.run_installer("--check", "--offline", "--manifest", str(self.list))
