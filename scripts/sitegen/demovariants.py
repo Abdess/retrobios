@@ -101,6 +101,19 @@ def load_facts() -> dict:
     return json.loads(FACTS.read_text(encoding="utf-8"))
 
 
+def demo_facts(variant: str = "default") -> dict:
+    """What an installer demo shows, as make_demo.py measured it: one entry
+    per variant (default, handheld)."""
+    facts = json.loads(FACTS.read_text(encoding="utf-8"))
+    return facts[variant]
+
+
+def demo_description(facts: dict | None = None) -> str:
+    """The demo in words, for a reader who cannot see it: the alt text
+    make_demo.py wrote from what it measured."""
+    return str((facts or demo_facts())["alt"])
+
+
 def write_facts(facts: dict) -> None:
     """demo.json, one entry per variant recorded so far, in VARIANTS order."""
     ordered = {name: facts[name] for name in VARIANTS if name in facts}

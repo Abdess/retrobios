@@ -12,7 +12,7 @@ from model.profiles import unique_emulator_profiles
 from model.registry import load_platform_registry
 from sitegen import markup
 from sitegen.install import platform_display
-from sitegen.readme import demo_description, demo_facts
+from sitegen.demovariants import demo_description, demo_facts
 
 
 # Home page

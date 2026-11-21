@@ -27,6 +27,7 @@ from model.systems import system_index
 from resolve.review import LARGE_FILE_ISSUE_URL
 from sitegen.config import REPO_SLUG, REPO_URL, SITE_URL, UPLOAD_ROOT
 from sitegen.coverage import platform_coverages
+from sitegen.demovariants import demo_description
 from sitegen.extraction import extract_targets
 from sitegen.releasepacks import download_links, release_totals
 
@@ -91,7 +92,6 @@ def collection_line(total_files: int, comp: dict) -> str:
 
 
 # The installer demo (scripts/make_demo.py): the recording and what it shows.
-DEMO_DIR = REPO_ROOT / "docs_assets" / "demo"
 DEMO_GIF = "docs_assets/demo/install.gif"
 REPO_PATH = "../.."
 REPO = REPO_SLUG
@@ -121,19 +121,6 @@ def clone_line(db: dict) -> str:
         " pack needs them. Then generate packs for any platform, emulator,"
         " or system:"
     )
-
-
-def demo_facts(variant: str = "default") -> dict:
-    """What an installer demo shows, as make_demo.py measured it: one entry
-    per variant (default, handheld)."""
-    facts = json.loads((DEMO_DIR / "demo.json").read_text(encoding="utf-8"))
-    return facts[variant]
-
-
-def demo_description(facts: dict | None = None) -> str:
-    """The demo in words, for a reader who cannot see it: the alt text
-    make_demo.py wrote from what it measured."""
-    return str((facts or demo_facts())["alt"])
 
 
 def _existing_contributor_block(readme_path: str = "README.md") -> list[str]:

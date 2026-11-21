@@ -144,6 +144,7 @@ on:
       - "scripts/sitegen/dataexports.py"
       - "scripts/sitegen/datapage.py"
       - "scripts/sitegen/decorate.py"
+      - "scripts/sitegen/demovariants.py"
       - "scripts/sitegen/descriptions.py"
       - "scripts/sitegen/diagrams.py"
       - "scripts/sitegen/emulatorcards.py"

@@ -132,14 +132,14 @@ class TheTapeAndTheDriverAgree(unittest.TestCase):
 class TheReadmeShowsTheGif(unittest.TestCase):
     def test_the_gif_sits_under_the_commands_with_its_description(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        line = f"![{sitegen_readme.demo_description()}]({sitegen_readme.DEMO_GIF})"
+        line = f"![{demovariants.demo_description()}]({sitegen_readme.DEMO_GIF})"
         self.assertIn(line, readme)
         self.assertLess(readme.index("## Install in one line"), readme.index(line))
         self.assertLess(readme.index(line), readme.index("## Or download a ZIP"))
 
     def test_the_description_names_what_the_recording_measured(self):
         facts = _facts()
-        words = sitegen_readme.demo_description(facts)
+        words = demovariants.demo_description(facts)
         for value in (facts["setup"], f"{facts['games']} games", f"{facts['files']} BIOS files",
                       facts["size"]):
             self.assertIn(str(value), words)
@@ -197,7 +197,7 @@ class TheTwoPagesShowIt(unittest.TestCase):
         from sitegen import home
 
         tag = home.install_demo()[0]
-        self.assertIn(f'description="{sitegen_readme.demo_description()}"', tag)
+        self.assertIn(f'description="{demovariants.demo_description()}"', tag)
         source = script_source("generate_site.py")
         body = source[source.index("def generate_home("):]
         body = body[:body.index("\ndef ", 1)]
