@@ -2,29 +2,15 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from core.paths import REPO_ROOT
+from freshness.stalecommands import verify_command
 from freshness.stalejob import Job, JobResult
 
-VERIFY_MARK = "scripts/verify.py --platform"
 
-
-def verify_summary(path: Path) -> str:
-    """First line verify printed in a job log, empty when it did not run."""
-    try:
-        text = path.read_text(encoding="utf-8", errors="replace")
-    except OSError:
-        return ""
-    lines = text.splitlines()
-    for index, line in enumerate(lines):
-        if line.startswith("$ ") and VERIFY_MARK in line:
-            return next(
-                (rest.strip() for rest in lines[index + 1:]
-                 if rest.strip() and not rest.startswith("$ ")),
-                "",
-            )
-    return ""
+def verify_summary(result: JobResult) -> str:
+    """First line verify printed in a job, empty when it did not run."""
+    output = result.output_of(verify_command(result.job.subject))
+    return next((line.strip() for line in output.splitlines() if line.strip()), "")
 
 
 def _by_area(jobs: list[Job]) -> list[Job]:
@@ -121,10 +107,10 @@ def render(
                 "before keeping platforms/<name>.yml"
             )
             for r in rescraped:
-                summary = verify_summary(r.job.log_path) or "(no verify output)"
+                summary = verify_summary(r) or "(no verify output)"
                 lines.append(f"  {r.job.subject:12} {summary}")
                 lines.append(
-                    f"  {'':12} python scripts/verify.py --platform {r.job.subject}"
+                    f"  {'':12} python {' '.join(verify_command(r.job.subject)[1:])}"
                 )
 
     if surfaced:

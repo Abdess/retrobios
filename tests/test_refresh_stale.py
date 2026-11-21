@@ -20,8 +20,9 @@ from unittest import mock
 import yaml
 
 from freshness import stalefindings
+from freshness.stalecommands import verify_command
 from freshness.stalefindings import load_findings
-from freshness.stalejob import AUTO_AREAS, MANUAL_AREAS, Job, JobResult
+from freshness.stalejob import AUTO_AREAS, LOG_DIR, MANUAL_AREAS, Job, JobResult
 from freshness.staleplan import plan_jobs
 from freshness.stalereport import render
 from freshness.stalerun import run_job, run_jobs
@@ -202,17 +203,27 @@ class Running(unittest.TestCase):
             self.assertEqual(order.read_text().split(), ["parent", "child"])
 
     def test_the_report_prints_verify_after_a_rescrape(self):
-        with tempfile.TemporaryDirectory() as directory:
-            log = Path(directory) / "x.log"
-            log.write_text(
-                "$ python -m scripts.scraper.x_scraper\nscraped\n"
-                "$ python scripts/verify.py --platform x\n"
-                "X: 10/12 OK, 2 missing [md5]\n"
-            )
-            job = Job("platforms", "x", ["true"], log)
-            text = render([JobResult(job, 0, 1.0, "")], [], [])
+        job = Job("platforms", "x", ["true"], LOG_DIR / "x.log")
+        outputs = (
+            (("true",), "scraped\n"),
+            (tuple(verify_command("x")), "\nX: 10/12 OK, 2 missing [md5]\n"),
+        )
+        text = render([JobResult(job, 0, 1.0, "", outputs)], [], [])
         self.assertIn("X: 10/12 OK, 2 missing [md5]", text)
         self.assertIn("python scripts/verify.py --platform x", text)
+
+    def test_the_verify_output_is_read_whatever_its_command_line(self):
+        """The report found verify by a copy of its command line in the log:
+        a verify run as `-m scripts.verify` read as `(no verify output)`."""
+        with tempfile.TemporaryDirectory() as directory:
+            verify = (sys.executable, "-c", "print('X: 10/12 OK')")
+            job = Job("platforms", "x", [sys.executable, "-c", "print('scraped')"],
+                      Path(directory) / "x.log", (verify,))
+            with mock.patch("freshness.stalereport.verify_command", return_value=list(verify)):
+                result = run_job(job, {})
+                text = render([result], [], [])
+        self.assertEqual(result.output_of(job.command), "scraped\n")
+        self.assertIn("X: 10/12 OK", text)
 
     def _job(self, directory: str, command: list[str], then=()) -> Job:
         return Job("platforms", "x", command, Path(directory) / "x.log", then)

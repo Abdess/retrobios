@@ -64,10 +64,12 @@ def run_job(job: Job, env: dict[str, str]) -> JobResult:
     start = time.monotonic()
     job.log_path.parent.mkdir(parents=True, exist_ok=True)
     returncode = 0
+    outputs: list[tuple[tuple[str, ...], str]] = []
     with job.log_path.open("w", encoding="utf-8") as log:
         for command in (job.command, *job.then):
             log.write(f"$ {' '.join(command)}\n")
             log.flush()
+            start_offset = job.log_path.stat().st_size
             try:
                 proc = subprocess.run(
                     list(command),
@@ -82,11 +84,21 @@ def run_job(job: Job, env: dict[str, str]) -> JobResult:
             except subprocess.TimeoutExpired:
                 log.write(f"\nTIMEOUT after {JOB_TIMEOUT}s\n")
                 returncode = 124
+            log.flush()
+            outputs.append((tuple(command), _log_since(job.log_path, start_offset)))
             if returncode != 0:
                 break
     duration = time.monotonic() - start
     tail = _log_tail(job.log_path)
-    return JobResult(job=job, returncode=returncode, duration=duration, tail=tail)
+    return JobResult(job=job, returncode=returncode, duration=duration, tail=tail,
+                     outputs=tuple(outputs))
+
+
+def _log_since(path: Path, offset: int) -> str:
+    """What a log holds past *offset*: the output of the command that just ran."""
+    with path.open("rb") as log:
+        log.seek(offset)
+        return log.read().decode("utf-8", errors="replace")
 
 
 def _log_tail(path: Path) -> str:

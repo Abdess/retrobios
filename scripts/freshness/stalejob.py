@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -35,3 +36,9 @@ class JobResult:
     returncode: int
     duration: float
     tail: str  # last non-empty line of stderr or stdout
+    # (command, what it printed) for each command that ran, in order.
+    outputs: tuple[tuple[tuple[str, ...], str], ...] = ()
+
+    def output_of(self, command: Sequence[str]) -> str:
+        """What *command* printed in this job, empty when it did not run."""
+        return next((text for ran, text in self.outputs if ran == tuple(command)), "")
