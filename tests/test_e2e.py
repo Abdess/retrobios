@@ -5493,6 +5493,8 @@ struct BurnDriver BurnDrvneogeo = {
         attempts = []
 
         class FakeResponse:
+            headers: dict = {}
+
             def __init__(self, payload):
                 self._payload = payload
 
