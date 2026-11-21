@@ -931,7 +931,7 @@ class FbneoFetchReadsOneRevision(unittest.TestCase):
         self.served = FBNEO_DAT.replace(b"1.0.0.03", b"1.0.0.02")
         with self._patched(), self.assertRaises(self.importer.BlobMismatchError):
             self.importer.fetch_pack("fbneo", "latest", self.dir)
-        self.assertFalse((self.dir / "fbneo-dats" / "Demo.dat").exists())
+        self.assertFalse((self.dir / "fbneo-dats" / "c0ffee" / "Demo.dat").exists())
 
     def test_the_named_revision_is_the_one_listed(self):
         with self._patched():
@@ -942,6 +942,22 @@ class FbneoFetchReadsOneRevision(unittest.TestCase):
              f"{self.importer.FBNEO_API}/contents/dats?ref=c0ffee"],
         )
         self.assertEqual(list(blobs), ["Demo.dat"])
+
+    def test_the_cache_is_keyed_by_the_commit(self):
+        with self._patched():
+            target, blobs = self.importer.fetch_pack("fbneo", "v1.0.0.02", self.dir)
+        self.assertEqual(target, self.dir / "fbneo-dats" / "c0ffee")
+        self.assertEqual(self.importer.cached_pack("fbneo", "c0ffee", self.dir), (target, blobs))
+
+    def test_another_commit_is_not_cached(self):
+        with self._patched():
+            self.importer.fetch_pack("fbneo", "latest", self.dir)
+        with self.assertRaises(self.importer.NotCached):
+            self.importer.cached_pack("fbneo", "da14132b", self.dir)
+
+    def test_an_uncached_listxml_is_named(self):
+        with self.assertRaises(self.importer.NotCached):
+            self.importer.cached_pack("mame", "mame0289", self.dir)
 
     def test_latest_reads_the_default_branch(self):
         with self._patched():

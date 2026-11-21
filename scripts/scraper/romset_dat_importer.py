@@ -40,6 +40,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import IO
 
+from core.hashing import git_blob_sha
 from core.ziptools import is_archive_path, zip_members
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
@@ -419,6 +420,20 @@ def fetch_tag(source: str, requested: str) -> str:
     return requested
 
 
+class NotCached(FileNotFoundError):
+    """The cache holds no pack for the revision asked."""
+
+
+def _listxml_path(tag: str, cache_dir: Path) -> Path:
+    return cache_dir / f"{tag}lx.zip"
+
+
+def _fbneo_folder(commit: str, cache_dir: Path) -> Path:
+    # One folder per commit: a folder refilled for whatever revision was
+    # last asked gave an offline read the DATs of another pin.
+    return cache_dir / "fbneo-dats" / commit
+
+
 def fetch_pack(
     source: str, tag: str, cache_dir: Path
 ) -> tuple[Path, dict[str, str]]:
@@ -431,7 +446,7 @@ def fetch_pack(
     FBNeo, whose files change under a constant header version.
     """
     if source == "mame":
-        listxml = cache_dir / f"{tag}lx.zip"
+        listxml = _listxml_path(tag, cache_dir)
         download(MAME_LISTXML_URL.format(tag=tag), listxml, skip_existing=True)
         return listxml, {}
 
@@ -442,7 +457,7 @@ def fetch_pack(
     listing = _api_json(f"{FBNEO_API}/contents/dats?ref={sha}")
     if not isinstance(listing, list):
         raise BlobMismatchError(f"libretro/FBNeo lists no dats at {sha}")
-    target = cache_dir / "fbneo-dats"
+    target = _fbneo_folder(sha, cache_dir)
     target.mkdir(parents=True, exist_ok=True)
     blobs: dict[str, str] = {}
     for item in listing:
@@ -458,6 +473,23 @@ def fetch_pack(
         if stale.is_file() and stale.name not in blobs:
             stale.unlink()
     return target, blobs
+
+
+def cached_pack(
+    source: str, revision: str, cache_dir: Path
+) -> tuple[Path, dict[str, str]]:
+    """What fetch_pack wrote for *revision* (a MAME tag, a full FBNeo commit),
+    read offline. The FBNeo blobs are recomputed from the bytes."""
+    if source == "mame":
+        listxml = _listxml_path(revision, cache_dir)
+        if not listxml.is_file():
+            raise NotCached(f"{listxml} is not cached")
+        return listxml, {}
+    folder = _fbneo_folder(revision, cache_dir)
+    blobs = {p.name: git_blob_sha(p.read_bytes()) for p in sorted(folder.glob("*.dat"))}
+    if not blobs:
+        raise NotCached(f"{folder} is not cached")
+    return folder, blobs
 
 
 def _is_listxml(pack: Path) -> bool:

@@ -61,7 +61,7 @@ from .fbneo_parser import zip_name
 from .clex import DriverSourceError, blank_comments, call_args, call_span
 from .listxml import Opener, attrs, iter_elements, open_listxml, rom_members
 from model.mamerelease import mame_tag
-from .romset_dat_importer import MAME_LISTXML_URL, _api_json, fetch_pack
+from .romset_dat_importer import MAME_LISTXML_URL, _api_json, cached_pack, fetch_pack
 
 SCHEMA_VERSION = 1
 DEFAULT_OUTPUT = Path("games") / "arcade"
@@ -953,12 +953,7 @@ def import_profile(
     openers: list[Opener]
     if kind == "listxml":
         tag = mame_tag(str(data["core_version"]))
-        if offline:
-            pack = cache_dir / f"{tag}lx.zip"
-            if not pack.is_file():
-                raise FileNotFoundError(f"{pack} is not cached")
-        else:
-            pack, _ = fetch_pack("mame", tag, cache_dir)
+        pack, _ = (cached_pack if offline else fetch_pack)("mame", tag, cache_dir)
         source = {
             "release": f"mamedev/mame {tag}",
             "url": MAME_LISTXML_URL.format(tag=tag),
@@ -966,13 +961,7 @@ def import_profile(
         }
         index = build_index(read_sets([lambda: open_listxml(pack)]), spec["marker"])
     elif kind == "fbneo":
-        if offline:
-            folder = cache_dir / "fbneo-dats"
-            blobs = {p.name: git_blob_sha(p.read_bytes()) for p in sorted(folder.glob("*.dat"))}
-            if not blobs:
-                raise FileNotFoundError(f"{folder} is not cached")
-        else:
-            folder, blobs = fetch_pack("fbneo", commit, cache_dir)
+        folder, blobs = (cached_pack if offline else fetch_pack)("fbneo", commit, cache_dir)
         slug = _repo_slug(source_url)
         listing, listing_sha = (
             _cached_repo_file(slug, commit, FBNEO_DRIVERLIST, cache_dir)
