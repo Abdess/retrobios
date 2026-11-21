@@ -250,7 +250,7 @@ def build_emulator_gap_report(
     from packs.crossref import cross_reference as run_cross_reference, global_report_scope
 
     declared, scope = global_report_scope(
-        [cov["config"] for cov in coverages.values()], db)
+        [cov["config"] for cov in coverages.values()], db, profiles)
     unique_profiles = {
         k: v
         for k, v in profiles.items()

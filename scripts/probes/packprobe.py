@@ -68,12 +68,14 @@ def platform_system(config: dict, system: str) -> str | None:
     return matches[0] if matches else None
 
 
-def libretro_build_runs(name: str, profile: dict, config: dict) -> bool:
+def libretro_build_runs(
+    name: str, profile: dict, config: dict, profiles: dict[str, dict]
+) -> bool:
     """The platform launches this profile's libretro build: it has one, and
     the platform does not run the emulator standalone only."""
     if "libretro" not in str(profile.get("type", "")) or profile.get("type") == "alias":
         return False
-    standalone = standalone_set(config)
+    standalone = standalone_set(config, profiles)
     if not runs_standalone(name, profile, standalone):
         return True
     dual = {c.removeprefix(DUAL_MODE_PREFIX) for c in standalone if c.startswith(DUAL_MODE_PREFIX)}
@@ -102,7 +104,7 @@ def choose_cores(config: dict, profiles: dict[str, dict], system: str, buildbot:
         profile = profiles[name]
         if wanted not in {norm_system_id(s) for s in profile.get("systems") or ()}:
             continue
-        if not libretro_build_runs(name, profile, config):
+        if not libretro_build_runs(name, profile, config, profiles):
             continue
         out.extend(CoreChoice(name, so) for so in so_names(name, profile, buildbot, target))
     return out

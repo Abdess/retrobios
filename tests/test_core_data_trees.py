@@ -135,7 +135,7 @@ class EveryReaderHasTheTreeOrAReason(unittest.TestCase):
         unexplained = []
         for platform in list_registered_platforms(platforms_dir):
             config = load_platform_config(platform, platforms_dir)
-            handed = standalone_set(config)
+            handed = standalone_set(config, profiles)
             for core in sorted(resolve_platform_cores(config, profiles)):
                 profile = profiles[core]
                 if all(standalone for _view, standalone

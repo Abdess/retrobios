@@ -199,7 +199,7 @@ def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> li
     found: list[dict] = []
     for key, coverage in sorted(coverages.items()):
         systems = coverage.get("config", {}).get("systems") or {}
-        standalone_cores = standalone_set(coverage.get("config", {}))
+        standalone_cores = standalone_set(coverage.get("config", {}), profiles)
         by_system: dict[str, list[dict]] = {}
         for detail in coverage.get("details", []):
             by_system.setdefault(detail.get("system", ""), []).append(detail)

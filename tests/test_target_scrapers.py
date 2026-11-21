@@ -334,7 +334,7 @@ class CoreDownloaderReach(unittest.TestCase):
         self.assertEqual(resolve_platform_cores(config, profiles), {"amiberry", "amiberry-7"})
         self.assertEqual(resolve_platform_cores({**config, "installable_cores": []}, profiles),
                          {"amiberry-7"})
-        self.assertIn(DUAL_MODE_PREFIX + "amiberry", standalone_set(config))
+        self.assertIn(DUAL_MODE_PREFIX + "amiberry", standalone_set(config, profiles))
 
 
 class DownloadedCoresReachTheirBoards(unittest.TestCase):

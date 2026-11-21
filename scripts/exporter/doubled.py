@@ -78,7 +78,7 @@ def doubled_destinations(
     collisions = find_collisions(scraped, db, zip_contents, data_registry)
     if not collisions:
         return []
-    standalone = standalone_set(scraped)
+    standalone = standalone_set(scraped, profiles)
     named: dict[str, list[tuple[str, dict, dict, bool]]] = {}
     for key in sorted(resolve_platform_cores(scraped, profiles)):
         profile = profiles[key]

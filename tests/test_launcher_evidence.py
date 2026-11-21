@@ -16,6 +16,7 @@ from types import SimpleNamespace
 import yaml
 
 from model.platforms import load_platform_config
+from model.profiles import load_emulator_profiles
 from resolve.launchers import (
     bound_launchers,
     config_evidence,
@@ -394,7 +395,10 @@ class RepositoryRecords(unittest.TestCase):
         )
         for platform, emulator, directory in cases:
             with self.subTest(platform=platform, emulator=emulator):
-                handed = handed_directories(load_platform_config(platform, str(platforms)))
+                handed = handed_directories(
+                    load_platform_config(platform, str(platforms)),
+                    load_emulator_profiles(str(REPO_ROOT / "emulators")),
+                )
                 self.assertIn(
                     directory, {h.directory for h in handed if h.emulator == emulator}
                 )

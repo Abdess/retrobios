@@ -89,16 +89,16 @@ class CoreChoice(unittest.TestCase):
 
     def test_standalone_only_is_not_run_as_a_core(self) -> None:
         both = {"type": "standalone + libretro", "cores": ["duckstation", "duckstation-sa"]}
-        self.assertTrue(packprobe.libretro_build_runs("duckstation", both, {}))
-        self.assertFalse(packprobe.libretro_build_runs("duckstation", both, {"standalone_cores": ["duckstation"]}))
+        self.assertTrue(packprobe.libretro_build_runs("duckstation", both, {}, {}))
+        self.assertFalse(packprobe.libretro_build_runs("duckstation", both, {"standalone_cores": ["duckstation"]}, {}))
         self.assertTrue(packprobe.libretro_build_runs("duckstation", both, {
-            "standalone_cores": ["duckstation"], "dual_mode_cores": ["duckstation-sa"]}))
+            "standalone_cores": ["duckstation"], "dual_mode_cores": ["duckstation-sa"]}, {}))
         # A buildbot core installable under the standalone name is its
         # libretro build, run both ways (standalone_set).
         self.assertTrue(packprobe.libretro_build_runs("duckstation", both, {
-            "standalone_cores": ["duckstation"], "installable_cores": ["duckstation"]}))
-        self.assertFalse(packprobe.libretro_build_runs("x", {"type": "standalone"}, {}))
-        self.assertFalse(packprobe.libretro_build_runs("x", {"type": "alias"}, {}))
+            "standalone_cores": ["duckstation"], "installable_cores": ["duckstation"]}, {}))
+        self.assertFalse(packprobe.libretro_build_runs("x", {"type": "standalone"}, {}, {}))
+        self.assertFalse(packprobe.libretro_build_runs("x", {"type": "alias"}, {}, {}))
 
     def test_buildbot_name(self) -> None:
         buildbot = {"mednafen_psx", "mednafen_psx_hw", "kronos"}

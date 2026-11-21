@@ -120,7 +120,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
                 configs[name] = config
         self.assertIn("retroarch", configs)
         self.assertIn("retrobat", configs)
-        found = gaps.reading_platforms("blastem", profile, "cdbios.bin", configs)
+        found = gaps.reading_platforms("blastem", {"blastem": profile}, "cdbios.bin", configs)
         self.assertFalse(found & {"retroarch", "lakka", "retrobat"}, found)
 
 

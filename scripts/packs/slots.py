@@ -544,7 +544,7 @@ def slot_choices(
         platform_profiles,
         db,
         config.get("base_destination", ""),
-        platform_standalone_set(config),
+        platform_standalone_set(config, profiles),
         zip_contents,
         data_dir_registry,
     )

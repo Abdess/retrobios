@@ -29,7 +29,7 @@ def scan_platform(
         relevant,
         db,
         config.get("base_destination", ""),
-        platform_standalone_set(config),
+        platform_standalone_set(config, profiles),
         build_zip_contents_index(db) if zip_index is None else zip_index,
         load_data_dir_registry(platforms_dir) if data_registry is None else data_registry,
     )

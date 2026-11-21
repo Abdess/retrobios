@@ -11,6 +11,7 @@ from collections import Counter
 
 from core.text import series
 from model import siteinputs
+from model.collection import profiles_in
 from model.guides import GUIDES, TERMINALS, install_command
 from model.platforms import load_platform_config
 from model.registry import list_release_pack_platforms
@@ -186,13 +187,14 @@ def emulator_install_route(name: str, profile: dict) -> tuple[str, list[str], tu
 
 def _standalone_cores(platform: str) -> frozenset[str]:
     """The emulators a setup launches as apps, by its platform file."""
-    return _standalone_cores_in(str(siteinputs.current().platforms), platform)
+    inputs = siteinputs.current()
+    return _standalone_cores_in(str(inputs.platforms), str(inputs.emulators), platform)
 
 
 @functools.cache
-def _standalone_cores_in(platforms_dir: str, platform: str) -> frozenset[str]:
+def _standalone_cores_in(platforms_dir: str, emulators_dir: str, platform: str) -> frozenset[str]:
     config = load_platform_config(platform, platforms_dir)
-    return frozenset(standalone_set(config))
+    return frozenset(standalone_set(config, profiles_in(emulators_dir, skip_aliases=True)))
 
 
 def install_block(name: str, profile: dict) -> list[str]:

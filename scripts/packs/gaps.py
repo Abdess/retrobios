@@ -484,7 +484,7 @@ def find_undeclared_files(
     )
 
     relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
-    standalone_set = platform_standalone_set(config)
+    standalone_set = platform_standalone_set(config, profiles)
     # What the platform's own launchers open, matched to the cores it runs:
     # the one decision the builder and this report both read.
     launcher_layer = LauncherLayer(
@@ -647,6 +647,7 @@ def find_exclusion_notes(
         platform_systems.add(sys_id)
 
     relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
+    standalone_set = platform_standalone_set(config, profiles)
     notes = []
     for emu_name, profile in sorted(profiles.items()):
         emu_systems = set(profile.get("systems", []))
@@ -682,7 +683,6 @@ def find_exclusion_notes(
 
         # Count standalone-only files, but only report as excluded if the
         # platform does NOT use this emulator in standalone mode
-        standalone_set = platform_standalone_set(config)
         is_standalone = runs_standalone(emu_name, profile, standalone_set)
         if not is_standalone:
             standalone_files = [

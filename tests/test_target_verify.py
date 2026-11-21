@@ -260,7 +260,7 @@ class CrossReferenceReadsTheTargetAcrossPlatforms(unittest.TestCase):
         platforms_dir = str(REPO_ROOT / "platforms")
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         with contextlib.redirect_stderr(io.StringIO()):
-            tree = tree_scope(None, "switch", platforms_dir, profiles)
+            tree = tree_scope(None, "switch", platforms_dir, profiles, profiles)
         cache, kept, _notes = build_target_cores_cache(
             list_registered_platforms(platforms_dir), "switch", platforms_dir, is_all=True,
         )

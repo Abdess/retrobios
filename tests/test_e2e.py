@@ -5853,10 +5853,10 @@ struct BurnDriver BurnDrvneogeo = {
             # Keyed by the normalized system ID, as profiles spell systems
             # differently from platforms.
             db = {"files": {}, "indexes": {}}
-            everything, _ = global_report_scope(platform_configs(plat_dir), db)
+            everything, _ = global_report_scope(platform_configs(plat_dir), db, {})
             self.assertEqual(everything["sharedsystem"], {"a.bin", "b.bin"})
 
-            only_alpha, _ = global_report_scope(platform_configs(plat_dir, ["alpha"]), db)
+            only_alpha, _ = global_report_scope(platform_configs(plat_dir, ["alpha"]), db, {})
             self.assertEqual(only_alpha["sharedsystem"], {"a.bin"})
 
 

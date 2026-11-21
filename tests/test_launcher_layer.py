@@ -156,7 +156,7 @@ class LauncherLayerTest(unittest.TestCase):
             return set(zf.namelist())
 
     def test_places_follow_the_launcher_order(self) -> None:
-        places = launcher_places(self.config)
+        places = launcher_places(self.config, self.profiles)
         self.assertEqual(places[0].paths, ("a.bin", "b.bin", "c.bin"))
         self.assertEqual(places[2].paths, ("sub/fix.bin",))
         self.assertTrue(places[0].stands_for_default)
@@ -373,7 +373,7 @@ class LauncherLayerTest(unittest.TestCase):
         self.config["launchers"][2].update(
             kind="links", names=["fix.bin"], search_dir="/storage/roms/bios",
         )
-        places = [p for p in launcher_places(self.config) if p.kind == "links"]
+        places = [p for p in launcher_places(self.config, self.profiles) if p.kind == "links"]
         self.assertEqual([p.paths for p in places], [("fix.bin",)])
         self.assertTrue(places[0].stands_for_default)
         report = {u["path"]: u for u in self._report()}
@@ -384,7 +384,7 @@ class LauncherLayerTest(unittest.TestCase):
         self.config["launchers"][2].update(
             kind="links", names=[], search_dir="/userdata/bios/sub",
         )
-        self.assertFalse([p for p in launcher_places(self.config) if p.kind == "links"])
+        self.assertFalse([p for p in launcher_places(self.config, self.profiles) if p.kind == "links"])
 
     def test_the_platform_spelling_of_the_bios_folder_is_a_root(self) -> None:
         """RetroPie names $biosdir, EmuDeck ${biosPath}, RetroDECK $bios_path:
@@ -392,7 +392,7 @@ class LauncherLayerTest(unittest.TestCase):
         for spelling in ("$biosdir", "${biosPath}", "$bios_path", "$HOME/RetroPie/bios"):
             self.config["launchers"][2]["search_dir"] = f"{spelling}/sub"
             with self.subTest(spelling=spelling):
-                self.assertEqual(launcher_places(self.config)[2].paths, ("sub/sub/fix.bin",))
+                self.assertEqual(launcher_places(self.config, self.profiles)[2].paths, ("sub/sub/fix.bin",))
 
     def test_every_extractor_spelling_of_the_bios_folder_is_known(self) -> None:
         from resolve import launchers
@@ -435,7 +435,7 @@ class LauncherLayerTest(unittest.TestCase):
 
         selected = ["launchertest"]
         declared, scope = global_report_scope(
-            platform_configs(self.platforms_dir, selected), self.db)
+            platform_configs(self.platforms_dir, selected), self.db, self.profiles)
         layer = LauncherLayer(
             self.config, self.profiles, self.profiles, self.db,
             declared_destinations(self.config),

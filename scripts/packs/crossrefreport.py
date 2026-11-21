@@ -70,13 +70,13 @@ def run_gap_report(args: argparse.Namespace, parser: argparse.ArgumentParser) ->
             raise SystemExit(f"ERROR: {exc}") from None
         profiles = {k: v for k, v in profiles.items() if k == emulator}
 
-    tree = tree_scope(args.platform, args.target, args.platforms_dir, profiles)
+    tree = tree_scope(args.platform, args.target, args.platforms_dir, profiles, all_profiles)
     if not tree.profiles:
         refuse_empty_scope(args, emulator, tree)
         return
 
     db = load_database(args.db)
-    report = scope_gaps(tree, db, args.platforms_dir, args.platform)
+    report = scope_gaps(tree, db, args.platforms_dir, args.platform, all_profiles)
     launcher_reads, unproven = launcher_rows(
         tree.selected, args.platforms_dir, db, all_profiles, registry, emulator,
     )

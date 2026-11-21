@@ -78,12 +78,23 @@ def twin_build_names(config: dict) -> set[str]:
     return found
 
 
-def standalone_set(config: dict) -> set[str]:
+def core_dir_tags(config: dict) -> set[str]:
+    """The system directory a platform hands each core, tagged."""
+    return {
+        CORE_DIR_PREFIX + json.dumps([str(core), directory])
+        for directory, entry in (config.get("core_system_dirs") or {}).items()
+        for core in entry.get("cores") or []
+    }
+
+
+def standalone_set(config: dict, profiles: Mapping[str, dict]) -> set[str]:
     """The emulators a platform launches standalone, with its dual-mode ones.
 
     ``dual_mode_cores`` names those it offers both ways (Batocera lists
     libretro:dolphin and standalone dolphin for GameCube). They travel in the
-    same set, tagged, so every reader of standalone_cores sees them.
+    same set, tagged, so every reader of standalone_cores sees them. A
+    launcher record resting on a config file is proven against *profiles*,
+    the run's, as cross-reference proves it.
     """
     names = {str(c) for c in config.get("standalone_cores") or []}
     names |= {DUAL_MODE_PREFIX + str(c) for c in config.get("dual_mode_cores") or []}
@@ -100,15 +111,11 @@ def standalone_set(config: dict) -> set[str]:
     names |= {DUAL_MODE_PREFIX + n for n in twin_build_names(config)}
     # The system directory each core is handed travels the same way, so
     # platform_layouts places a core's files below it for every reader.
-    names |= {
-        CORE_DIR_PREFIX + json.dumps([str(core), directory])
-        for directory, entry in (config.get("core_system_dirs") or {}).items()
-        for core in entry.get("cores") or []
-    }
+    names |= core_dir_tags(config)
     if names - {n for n in names if n.startswith(CORE_DIR_PREFIX)}:
         from resolve.launchers import executed_files, handed_directories
 
-        handed = handed_directories(config)
+        handed = handed_directories(config, profiles)
         # The record's position travels too: a search list is read in order.
         names |= {
             HANDED_PREFIX + json.dumps(
@@ -144,7 +151,7 @@ def standalone_set(config: dict) -> set[str]:
     return names | content_folder_tags(config)
 
 
-def merged_standalone_set(configs: Iterable[dict]) -> set[str]:
+def merged_standalone_set(configs: Iterable[dict], profiles: Mapping[str, dict]) -> set[str]:
     """The standalone set of several platforms read as one tree.
 
     A per-core directory marker says which cores one platform hands a folder
@@ -155,7 +162,7 @@ def merged_standalone_set(configs: Iterable[dict]) -> set[str]:
     return {
         tag
         for config in configs
-        for tag in standalone_set(config)
+        for tag in standalone_set(config, profiles)
         if not tag.startswith((CORE_DIR_PREFIX, *CONTENT_TAG_PREFIXES))
     }
 

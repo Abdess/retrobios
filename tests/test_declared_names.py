@@ -39,7 +39,7 @@ class FlatDeclaredSet(unittest.TestCase):
             }}
             db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_crc32": {},
                                            "by_path_suffix": {}}}
-            declared, scope = global_report_scope(platform_configs(str(platforms), ["fx"]), db)
+            declared, scope = global_report_scope(platform_configs(str(platforms), ["fx"]), db, profiles)
             per_system = cross_reference(profiles, declared, db, set())
             flat = cross_reference(
                 profiles, declared, db, set(), all_declared=scope["all_declared"],

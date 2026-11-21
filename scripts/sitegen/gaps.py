@@ -346,18 +346,21 @@ PER_EMULATOR_STEM = "gaps-per-emulator"
 NOT_COLLECTED_STEM = "gaps-not-collected"
 
 
-def reading_platforms(emu_name: str, profile: dict, name: str,
+def reading_platforms(emu_name: str, profiles: dict[str, dict], name: str,
                       configs: dict[str, dict]) -> set[str]:
     """Of the platforms running an emulator (name -> config), those whose
     build of it reads the entry: BlastEm's cdbios.bin is read by the
-    standalone build only, and RetroBat hands that build other names."""
+    standalone build only, and RetroBat hands that build other names.
+    *profiles* is every profile of the run, the emulator's among them."""
     from resolve.standalone import platform_layouts, standalone_set
     from resolve.validation import filter_files_by_mode, unread_on
 
+    profile = profiles[emu_name]
     return {
         platform for platform, config in configs.items()
         if any(f.get("name") == name and not unread_on(f, platform)
-               for view, standalone in platform_layouts(emu_name, profile, standalone_set(config))
+               for view, standalone in platform_layouts(
+                   emu_name, profile, standalone_set(config, profiles))
                for f in filter_files_by_mode(view.get("files") or [], standalone))
     }
 
@@ -575,7 +578,7 @@ def _source_row(m: dict, profiles: dict, coverages: dict,
                 emu_to_platforms: dict[str, set[str]], placer: sitewanted.Placer | None) -> str:
     """The row of one file to source."""
     plats = sorted(set().union(
-        *(reading_platforms(key, profiles[key], m["name"], {
+        *(reading_platforms(key, profiles, m["name"], {
             p: coverages[p]["config"] for p in emu_to_platforms.get(key, set())
         }) for key in m["emu_keys"])
     ))

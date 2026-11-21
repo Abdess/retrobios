@@ -27,7 +27,6 @@ from model.profiles import lists_files, platform_builds, profile_names
 from resolve.content import name_match_size_ok
 from resolve.localfile import resolve_local_file
 from core.paths import comparable_destination, sanitize_pack_path
-from core.paths import REPO_ROOT
 
 # The kinds whose names say which file the launcher opens. A link of a named
 # file is one too: ROCKNIX links /storage/roms/bios/nds_bios_arm9.bin into
@@ -502,46 +501,27 @@ def config_evidence(
     return ConfigEvidence(tuple(cited or [choices]), tuple(missing), tuple(readers))
 
 
-_DEFAULT_PROFILES: dict[str, dict] | None = None
-
-
-def _profiles_or_repo(profiles: Mapping[str, dict] | None) -> Mapping[str, dict]:
-    """The profiles given, else this repository's, read once."""
-    global _DEFAULT_PROFILES
-    if profiles is not None:
-        return profiles
-    if _DEFAULT_PROFILES is None:
-
-        from model.profiles import load_emulator_profiles
-
-        _DEFAULT_PROFILES = load_emulator_profiles(
-            str(REPO_ROOT / "emulators")
-        )
-    return _DEFAULT_PROFILES
-
-
 def _cites_config(record: dict) -> bool:
     from resolve.launcherrefs import config_ref
 
     return bool(record.get("choices_from")) or bool(config_ref(str(record.get("source_ref") or "")))
 
 
-def bound_launchers(config: dict, profiles: Mapping[str, dict] | None = None) -> list[dict]:
+def bound_launchers(config: dict, profiles: Mapping[str, dict]) -> list[dict]:
     """The launcher records a platform's packs, manifests and reports consume.
 
     A record resting on a config file binds only when config_evidence holds
-    for it. The repository's profiles are read only when a record cites one.
+    for it against the run's profiles.
     """
     records = [r for r in config.get("launchers") or [] if isinstance(r, dict)]
     if not any(_cites_config(r) for r in records):
         return records
-    known = _profiles_or_repo(profiles)
     platform = str(config.get("_key") or "")
-    return [r for r in records if config_evidence(r, known, platform).proven]
+    return [r for r in records if config_evidence(r, profiles, platform).proven]
 
 
 def launcher_unproven(
-    configs: Mapping[str, dict], profiles: Mapping[str, dict] | None = None
+    configs: Mapping[str, dict], profiles: Mapping[str, dict]
 ) -> list[dict]:
     """The records resting on a config file whose evidence does not hold.
 
@@ -553,9 +533,8 @@ def launcher_unproven(
         records = [r for r in config.get("launchers") or [] if isinstance(r, dict)]
         if not any(_cites_config(r) for r in records):
             continue
-        known = _profiles_or_repo(profiles)
         for index, record in enumerate(records):
-            evidence = config_evidence(record, known, str(config.get("_key") or platform))
+            evidence = config_evidence(record, profiles, str(config.get("_key") or platform))
             if evidence.proven:
                 continue
             rows.append({
@@ -582,7 +561,7 @@ def _place_paths(name: str, directories: list[str] | None) -> tuple[str, ...]:
 
 
 def launcher_places(
-    config: dict, profiles: Mapping[str, dict] | None = None
+    config: dict, profiles: Mapping[str, dict]
 ) -> list[LauncherPlace]:
     """Every place a platform's launchers open a named file from."""
     base = str(config.get("base_destination") or "bios")
@@ -810,7 +789,7 @@ def _listed_directories(raw: str) -> list[str] | None:
 
 
 def handed_directories(
-    config: dict, profiles: Mapping[str, dict] | None = None
+    config: dict, profiles: Mapping[str, dict]
 ) -> list[HandedDirectory]:
     """Every whole directory a platform links or passes to a standalone build.
 

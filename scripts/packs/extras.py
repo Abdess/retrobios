@@ -1535,7 +1535,7 @@ def collect_emulator_extras(
         return extras
 
     relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
-    standalone_set = platform_standalone_set(config)
+    standalone_set = platform_standalone_set(config, profiles)
     by_name = db.get("indexes", {}).get("by_name", {})
 
     # Build set of filenames already covered (platform baseline + first pass extras)

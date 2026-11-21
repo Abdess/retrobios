@@ -806,7 +806,7 @@ def generate_platform_truth(
     # The layout rule verify and the pack builder apply: truth guessed its
     # own from the profile type where the platform names no standalone
     # emulator, and kept files the pack never carries.
-    standalone_set = platform_standalone_set(config)
+    standalone_set = platform_standalone_set(config, profiles)
 
     resolved = resolve_platform_cores(config, profiles, target_cores)
 

@@ -26,8 +26,12 @@ class PlatformScope:
 
 def platform_scope(
     platform: str, target: str | None, platforms_dir: str, profiles: dict[str, dict],
+    all_profiles: dict[str, dict],
 ) -> PlatformScope:
-    """The scope of a --platform run, narrowed to its --target cores."""
+    """The scope of a --platform run, narrowed to its --target cores.
+
+    *all_profiles* is every profile of the run, whatever --emulator keeps:
+    the launcher records are proven against them."""
     # A typo ended in a traceback where verify and slots name the closest
     # target, and is refused the way they refuse it.
     target_cores = target_scope(
@@ -40,7 +44,7 @@ def platform_scope(
     )
     return PlatformScope(
         {k: v for k, v in profiles.items() if k in relevant},
-        standalone_set(config),
+        standalone_set(config, all_profiles),
         config,
         relevant,
         run_anywhere,
@@ -60,7 +64,7 @@ class TreeScope:
 
 
 def target_platforms_scope(
-    target: str, platforms_dir: str, profiles: dict[str, dict],
+    target: str, platforms_dir: str, profiles: dict[str, dict], all_profiles: dict[str, dict],
 ) -> TreeScope:
     """--target without --platform: every platform that has the target, each
     with the cores it builds for it, the way verify and generate_pack read
@@ -75,28 +79,32 @@ def target_platforms_scope(
         relevant |= set(resolve_platform_cores(config, profiles, target_cores=cache.get(name)))
     return TreeScope(
         {k: v for k, v in profiles.items() if k in relevant},
-        merged_standalone_set(configs.values()),
+        merged_standalone_set(configs.values(), all_profiles),
         kept,
     )
 
 
 def tree_scope(
     platform: str | None, target: str | None, platforms_dir: str, profiles: dict[str, dict],
+    all_profiles: dict[str, dict],
 ) -> TreeScope:
     """The scope --platform, --target or neither asks for."""
     if platform:
-        scope = platform_scope(platform, target, platforms_dir, profiles)
+        scope = platform_scope(platform, target, platforms_dir, profiles, all_profiles)
         return TreeScope(scope.profiles, scope.standalone_cores, [platform], scope)
     if target:
-        return target_platforms_scope(target, platforms_dir, profiles)
+        return target_platforms_scope(target, platforms_dir, profiles, all_profiles)
     # The tree as every platform runs it: a profile some platform runs
     # standalone keeps its standalone entries. Laid out as libretro only,
     # eka2l1, dolphin and xenia-edge lost 133 files no platform declares.
     return TreeScope(
         profiles,
         merged_standalone_set(
-            load_platform_config(name, platforms_dir)
-            for name in list_registered_platforms(platforms_dir)
+            (
+                load_platform_config(name, platforms_dir)
+                for name in list_registered_platforms(platforms_dir)
+            ),
+            all_profiles,
         ),
         None,
     )

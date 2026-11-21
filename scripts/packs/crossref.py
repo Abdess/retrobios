@@ -66,7 +66,7 @@ def platform_configs(platforms_dir: str, platforms: list[str] | None = None) -> 
 
 
 def global_report_scope(
-    configs: list[dict], db: dict,
+    configs: list[dict], db: dict, profiles: dict[str, dict],
 ) -> tuple[dict[str, set[str]], ReportScope]:
     """What a gap report over *configs* compares against: the names each
     system declares, and the scope cross_reference reads.
@@ -101,7 +101,7 @@ def global_report_scope(
     ))
     return declared, {
         "all_declared": merged_platform_declarations(configs, db),
-        "standalone_cores": merged_standalone_set(configs),
+        "standalone_cores": merged_standalone_set(configs, profiles),
         "folded_slots": folded,
         "declared_contents": merged_platform_declared_contents(configs, db),
     }

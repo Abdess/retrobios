@@ -448,7 +448,7 @@ class TheWholeTreeKeepsCoresMinUILeavesOut(unittest.TestCase):
 
         minui = {"core_system_dirs": {"Bios/FC": {"cores": ["fceumm"]}}}
         retroarch = {}
-        merged = merged_standalone_set([minui, retroarch])
+        merged = merged_standalone_set([minui, retroarch], {})
         profile = {"type": "libretro", "files": [{"name": "cgrom.tmp"}]}
         layouts = platform_layouts("px68k", profile, merged)
         self.assertEqual(layouts, [(profile, False)])

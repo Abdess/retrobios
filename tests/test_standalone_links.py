@@ -36,6 +36,8 @@ from resolve.launchers import (
 )
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+# The real launcher records are proven against the real profiles.
+REPO_PROFILES = load_emulator_profiles(str(REPO_ROOT / "emulators"))
 
 
 def link(emulator: str, search_dir: str, passes_to: str, **fields: object) -> dict:
@@ -68,7 +70,7 @@ def config(*launchers: dict, base: str = "bios") -> dict:
 
 
 def standalone_view(cfg: dict) -> dict:
-    views = platform_layouts("emu", PROFILE, standalone_set(cfg))
+    views = platform_layouts("emu", PROFILE, standalone_set(cfg, {}))
     return next(view for view, standalone in views if standalone)
 
 
@@ -86,7 +88,7 @@ class HandedDirectories(unittest.TestCase):
     def test_retropie_variable_resolves_to_a_bios_folder(self) -> None:
         found = handed_directories(config(
             link("emu", "$biosdir/dc", "$home/.local/share/emu is a symlink to it"), base="BIOS",
-        ))
+        ), {})
         self.assertEqual([h.folder for h in found], ["dc"])
         self.assertIn("~/.local/share/emu", found[0].handles)
 
@@ -94,13 +96,13 @@ class HandedDirectories(unittest.TestCase):
         found = handed_directories(config(
             {**link("emu", "$biosdir", "$md_inst/<name>"), "names": ["boot.bin"]},
             {**link("emu", "$bios_path/gc/EU", "$XDG_DATA_HOME/emu/GC/EUR"), "slot": "EUR"},
-        ))
+        ), {})
         self.assertEqual(found, [])
 
     def test_directory_outside_the_tree_has_no_folder(self) -> None:
         found = handed_directories(config(
             passes("emu", "/storage/roms/dreamcast/data", "find_user_data_dir() returns it"),
-        ))
+        ), {})
         self.assertIsNone(found[0].folder)
 
 
@@ -111,7 +113,7 @@ class Root(unittest.TestCase):
 
     def bindings(self, *launchers: dict, base: str = "bios") -> dict[str, tuple[str, str]]:
         return standalone_bindings(
-            {"emu"}, PROFILE["standalone_directories"], handed_directories(config(*launchers, base=base))
+            {"emu"}, PROFILE["standalone_directories"], handed_directories(config(*launchers, base=base), {})
         )
 
     def test_link_of_the_data_directory_gives_its_folder(self) -> None:
@@ -159,7 +161,7 @@ class Root(unittest.TestCase):
 def bind(cfg: dict, declared: list[str], pools: dict[str, str] | None = None,
          systems: tuple[str, ...] = ()) -> dict[str, tuple[str, str]]:
     return standalone_bindings(
-        {"emu"}, declared, handed_directories(cfg), pools=pools, systems=systems
+        {"emu"}, declared, handed_directories(cfg, {}), pools=pools, systems=systems
     )
 
 
@@ -196,7 +198,7 @@ class SearchLists(unittest.TestCase):
         # RetroDECK writes XRoar's rompath as four directories.
         found = handed_directories(config(passes(
             "emu", "$roms_path/coco:$roms_path/dragon32:$bios_path", "xroar.conf rompath",
-        )))
+        )), {})
         self.assertEqual(
             [h.directory for h in found], ["$roms_path/coco", "$roms_path/dragon32", "$bios_path"]
         )
@@ -210,11 +212,11 @@ class SearchLists(unittest.TestCase):
         # MAME splits its search paths on semicolons (src/emu/fileio.cpp:53-58).
         found = handed_directories(config(passes(
             "emu", "<romDirname>;/userdata/bios/mame;/userdata/bios", "command line -rompath",
-        )))
+        )), {})
         self.assertEqual([h.folder for h in found], ["mame", ""])
         found = handed_directories(config(passes(
             "emu", "bios;<rom directory>", "command line -rp bios;<rom directory>",
-        )))
+        )), {})
         self.assertEqual([(h.folder, "-rp" in h.handles) for h in found], [("", True)])
 
     def test_a_list_holding_the_files_folder_keeps_them_there(self) -> None:
@@ -238,7 +240,7 @@ class SearchLists(unittest.TestCase):
         )
 
     def test_a_drive_letter_is_one_directory(self) -> None:
-        self.assertEqual(handed_directories(config(passes("emu", "C:/bios", "rompath"))), [])
+        self.assertEqual(handed_directories(config(passes("emu", "C:/bios", "rompath")), {}), [])
 
 
 class AboveTheDeclaredDirectory(unittest.TestCase):
@@ -282,7 +284,7 @@ class PerSystem(unittest.TestCase):
             "systems": {"coco": {"native_id": "trs80coco", "files": []}},
         }
         self.assertEqual(
-            [sorted(h.systems) for h in handed_directories(cfg)], [["coco"]]
+            [sorted(h.systems) for h in handed_directories(cfg, {})], [["coco"]]
         )
 
     def test_a_system_placeholder_gives_one_directory_per_system(self) -> None:
@@ -295,7 +297,7 @@ class PerSystem(unittest.TestCase):
             },
         }
         self.assertEqual(
-            [(h.folder, sorted(h.systems)) for h in handed_directories(cfg)],
+            [(h.folder, sorted(h.systems)) for h in handed_directories(cfg, {})],
             [("dragon", ["dragon64"]), ("trs80coco", ["coco"])],
         )
         self.assertEqual(bind(cfg, [], self.POOLS | {"-rompath": ""}, ("coco",)),
@@ -307,7 +309,7 @@ class PerSystem(unittest.TestCase):
             **config({**passes("emu", "bios/coco", "-rompath"), "systems": ["coco"]}),
             "systems": {"coco": {"files": [{"name": "coco3.rom", "native_system": "coco"}]}},
         }
-        index = system_file_index(standalone_set(cfg))
+        index = system_file_index(standalone_set(cfg, {}))
         self.assertEqual(
             entry_launch_systems({"name": "COCO3.ROM", "system": "coco3"}, index),
             frozenset({"coco3", "coco"}),
@@ -330,7 +332,7 @@ class SystemFamily(unittest.TestCase):
             "systems": {"coco": {"native_id": "trs80coco",
                                  "files": [{"name": "mc10.rom"}]}},
         }
-        ((view, _standalone),) = platform_layouts("emu", profile, standalone_set(cfg))
+        ((view, _standalone),) = platform_layouts("emu", profile, standalone_set(cfg, {}))
         self.assertEqual(
             [f.get("standalone_path") for f in view["files"]],
             ["trs80coco/mc10.rom", "trs80coco/alice.rom"],
@@ -354,7 +356,7 @@ class OfferedMachine(unittest.TestCase):
             ),
             "systems": {"coco": {"files": [{"name": "x.zip", "native_system": "coco"}]}},
         }
-        ((view, _standalone),) = platform_layouts("emu", profile, standalone_set(cfg))
+        ((view, _standalone),) = platform_layouts("emu", profile, standalone_set(cfg, {}))
         self.assertEqual(
             [f.get("standalone_path") for f in view["files"]], ["coco/coco3.rom", "dragon/mc10.rom"]
         )
@@ -380,7 +382,7 @@ class Layout(unittest.TestCase):
 
     def test_libretro_view_keeps_path(self) -> None:
         cfg = {**config(self.LINKED, base="BIOS"), "dual_mode_cores": ["emu"]}
-        views = platform_layouts("emu", PROFILE, standalone_set(cfg))
+        views = platform_layouts("emu", PROFILE, standalone_set(cfg, {}))
         libretro = next(view for view, standalone in views if not standalone)
         self.assertIs(libretro, PROFILE)
 
@@ -390,7 +392,7 @@ class Layout(unittest.TestCase):
         cfg = {**config(link("emu", "$biosdir/emu", "$home/.local/share/emu is a symlink to it"),
                         base="BIOS"), "dual_mode_cores": ["emu"]}
         views = dict((standalone, view) for view, standalone in
-                     platform_layouts("emu", PROFILE, standalone_set(cfg)))
+                     platform_layouts("emu", PROFILE, standalone_set(cfg, {})))
         self.assertEqual(
             [f["path"] for f in views[False]["files"]], ["dc/boot.bin", "dc/set.zip", "dc/shared.bin"]
         )
@@ -399,9 +401,9 @@ class Layout(unittest.TestCase):
         )
 
     def test_union_of_platforms_with_two_folders_keeps_the_profile_layout(self) -> None:
-        union = standalone_set(config(self.LINKED, base="BIOS")) | standalone_set(config(
+        union = standalone_set(config(self.LINKED, base="BIOS"), {}) | standalone_set(config(
             link("emu", "${biosPath}/emu/bios", "symlink ${biosPath}/emu/bios -> ${HOME}/.local/share/emu"),
-        ))
+        ), {})
         self.assertEqual(standalone_bindings_for("emu", PROFILE, union), {})
 
     def test_destination_function(self) -> None:
@@ -432,7 +434,7 @@ class FlycastOnEachPlatform(unittest.TestCase):
             with self.subTest(platform=platform):
                 cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
                 self.assertEqual(
-                    standalone_bindings_for("flycast", self.profile, standalone_set(cfg)),
+                    standalone_bindings_for("flycast", self.profile, standalone_set(cfg, REPO_PROFILES)),
                     {"": ("", folder)},
                 )
 
@@ -443,7 +445,7 @@ class FlycastOnEachPlatform(unittest.TestCase):
             with self.subTest(platform=platform):
                 cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
                 for view, standalone in platform_layouts(
-                    "flycast", self.profile, standalone_set(cfg)
+                    "flycast", self.profile, standalone_set(cfg, REPO_PROFILES)
                 ):
                     if not standalone:
                         continue
@@ -461,7 +463,7 @@ class FlycastOnEachPlatform(unittest.TestCase):
         self.assertIn("flycast", cfg.get("dual_mode_cores") or [])
         views = {
             standalone: view
-            for view, standalone in platform_layouts("flycast", self.profile, standalone_set(cfg))
+            for view, standalone in platform_layouts("flycast", self.profile, standalone_set(cfg, REPO_PROFILES))
         }
         self.assertEqual(set(views), {False, True})
         for entry in views[False]["files"]:
@@ -592,7 +594,7 @@ class OpenmsxOnEachPlatform(unittest.TestCase):
             with self.subTest(platform=platform):
                 cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
                 self.assertEqual(
-                    standalone_bindings_for("openmsx", self.profile, standalone_set(cfg)),
+                    standalone_bindings_for("openmsx", self.profile, standalone_set(cfg, REPO_PROFILES)),
                     expected,
                 )
 
@@ -601,7 +603,7 @@ class OpenmsxOnEachPlatform(unittest.TestCase):
             with self.subTest(platform=platform):
                 cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
                 (view, _standalone), = platform_layouts(
-                    "openmsx", self.profile, standalone_set(cfg)
+                    "openmsx", self.profile, standalone_set(cfg, REPO_PROFILES)
                 )
                 for entry in view["files"]:
                     self.assertNotIn("unplaced", entry)
@@ -636,7 +638,7 @@ class XroarOnEachPlatform(unittest.TestCase):
     def test_each_rom_lands_where_its_launch_reads_it(self) -> None:
         for platform, folders in self.EXPECTED.items():
             cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
-            (view, _standalone), = platform_layouts("xroar", self.profile, standalone_set(cfg))
+            (view, _standalone), = platform_layouts("xroar", self.profile, standalone_set(cfg, REPO_PROFILES))
             for entry in view["files"]:
                 with self.subTest(platform=platform, name=entry["name"]):
                     self.assertNotIn("unplaced", entry)
@@ -664,7 +666,7 @@ class AmiberryOnEachPlatform(unittest.TestCase):
             with self.subTest(platform=platform):
                 cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
                 self.assertEqual(
-                    standalone_bindings_for(name, self.profiles[name], standalone_set(cfg)),
+                    standalone_bindings_for(name, self.profiles[name], standalone_set(cfg, REPO_PROFILES)),
                     {"": ("", folder)},
                 )
 
@@ -672,7 +674,7 @@ class AmiberryOnEachPlatform(unittest.TestCase):
         for platform, (name, folder) in self.BOUND.items():
             profile = self.profiles[name]
             cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
-            views = platform_layouts(name, profile, standalone_set(cfg))
+            views = platform_layouts(name, profile, standalone_set(cfg, REPO_PROFILES))
             ((view, _standalone),) = [(v, s) for v, s in views if s]
             for own, entry in zip(profile["files"], view["files"]):
                 if own.get("mode") == "libretro":
@@ -690,10 +692,10 @@ class AmiberryOnEachPlatform(unittest.TestCase):
         profile = self.profiles[name]
         cfg = load_platform_config("retrobat", str(REPO_ROOT / "platforms"))
         self.assertEqual(
-            standalone_bindings_for(name, profile, standalone_set(cfg)),
+            standalone_bindings_for(name, profile, standalone_set(cfg, REPO_PROFILES)),
             {"": ("emulators", "amiberry/ROMs"), "WHDBoot": ("emulators", "amiberry/WHDBoot")},
         )
-        ((view, _standalone),) = platform_layouts(name, profile, standalone_set(cfg))
+        ((view, _standalone),) = platform_layouts(name, profile, standalone_set(cfg, REPO_PROFILES))
         for own, entry in zip(profile["files"], view["files"]):
             layout = own.get("standalone_path") or own.get("path") or own["name"]
             folder = "amiberry" if layout.startswith("WHDBoot/") else "amiberry/ROMs"
@@ -744,7 +746,7 @@ class AmiberryBuildEachPlatformShips(unittest.TestCase):
             cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
             if "amiberry" not in self.resolved(platform):
                 continue
-            layouts = platform_layouts("amiberry", self.profiles["amiberry"], standalone_set(cfg))
+            layouts = platform_layouts("amiberry", self.profiles["amiberry"], standalone_set(cfg, REPO_PROFILES))
             with self.subTest(platform=platform):
                 self.assertEqual([standalone for _view, standalone in layouts], [False])
 
@@ -772,10 +774,10 @@ class AmiberryBuildEachPlatformShips(unittest.TestCase):
         for name in ("amiberry-5.7.2", "amiberry-6.3.3"):
             profile = self.profiles[name]
             self.assertEqual(
-                standalone_bindings_for(name, profile, standalone_set(cfg)),
+                standalone_bindings_for(name, profile, standalone_set(cfg, REPO_PROFILES)),
                 {"kickstarts": ("", "amiga")},
             )
-            ((view, _standalone),) = platform_layouts(name, profile, standalone_set(cfg))
+            ((view, _standalone),) = platform_layouts(name, profile, standalone_set(cfg, REPO_PROFILES))
             for entry in view["files"]:
                 with self.subTest(name=name, file=entry["name"]):
                     if entry["path"].startswith("kickstarts/"):
@@ -791,10 +793,10 @@ class AmiberryBuildEachPlatformShips(unittest.TestCase):
         profile = self.profiles["amiberry-5.6.5"]
         cfg = load_platform_config("rocknix", str(REPO_ROOT / "platforms"))
         self.assertEqual(
-            standalone_bindings_for("amiberry-5.6.5", profile, standalone_set(cfg)),
+            standalone_bindings_for("amiberry-5.6.5", profile, standalone_set(cfg, REPO_PROFILES)),
             {"kickstarts": ("", "")},
         )
-        ((view, _standalone),) = platform_layouts("amiberry-5.6.5", profile, standalone_set(cfg))
+        ((view, _standalone),) = platform_layouts("amiberry-5.6.5", profile, standalone_set(cfg, REPO_PROFILES))
         for entry in view["files"]:
             with self.subTest(name=entry["name"]):
                 if entry["path"].startswith("kickstarts/"):

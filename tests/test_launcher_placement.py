@@ -203,8 +203,9 @@ class ALinkMovesTheDestination(unittest.TestCase):
         # Without the working directory the link's $md_inst is not the
         # directory the profile's paths are relative to.
         config = {"standalone_cores": ["kick"], "launchers": [LINK]}
-        profile = load_emulator_profiles(str(self.emulators))["kick"]
-        (view, standalone), = platform_layouts("kick", profile, standalone_set(config))
+        profiles = load_emulator_profiles(str(self.emulators))
+        profile = profiles["kick"]
+        (view, standalone), = platform_layouts("kick", profile, standalone_set(config, profiles))
         self.assertTrue(standalone)
         self.assertNotIn("standalone_path", view["files"][0])
 
@@ -213,9 +214,10 @@ class UAE4AllOnRetroPie(unittest.TestCase):
     """The real profile against the real launcher records."""
 
     def test_kickstarts_land_in_amiga(self) -> None:
-        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["uae4all"]
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        profile = profiles["uae4all"]
         config = load_platform_config("retropie", str(REPO_ROOT / "platforms"))
-        (view, standalone), = platform_layouts("uae4all", profile, standalone_set(config))
+        (view, standalone), = platform_layouts("uae4all", profile, standalone_set(config, profiles))
         self.assertTrue(standalone)
         for entry in view["files"]:
             if entry["path"].startswith("kickstarts/"):
@@ -687,9 +689,10 @@ class AetherSX2OnKnulli(unittest.TestCase):
     """The real profile against KNULLI's aethersx2Generator.py:219 record."""
 
     def test_the_bios_images_land_in_ps2(self) -> None:
-        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["aethersx2"]
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        profile = profiles["aethersx2"]
         config = load_platform_config("knulli", str(REPO_ROOT / "platforms"))
-        (view, standalone), = platform_layouts("aethersx2", profile, standalone_set(config))
+        (view, standalone), = platform_layouts("aethersx2", profile, standalone_set(config, profiles))
         self.assertTrue(standalone)
         for entry in view["files"]:
             path = entry.get("path") or ""
@@ -703,9 +706,10 @@ class Quasi88OnRetroPie(unittest.TestCase):
     """RetroPie writes `-romdir` $biosdir/pc88 into quasi88.ini (quasi88.sh:67)."""
 
     def test_the_roms_land_in_pc88(self) -> None:
-        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["quasi88kai"]
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        profile = profiles["quasi88kai"]
         config = load_platform_config("retropie", str(REPO_ROOT / "platforms"))
-        (view, standalone), = platform_layouts("quasi88kai", profile, standalone_set(config))
+        (view, standalone), = platform_layouts("quasi88kai", profile, standalone_set(config, profiles))
         self.assertTrue(standalone)
         paths = [e["path"] for e in view["files"]]
         self.assertTrue(paths and all(p.startswith("rom/") for p in paths))
@@ -732,9 +736,10 @@ class FlycastOnEmuELEC(unittest.TestCase):
         )
 
     def test_the_bios_lands_in_dc(self) -> None:
-        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["flycast"]
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        profile = profiles["flycast"]
         config = load_platform_config("emuelec", str(REPO_ROOT / "platforms"))
-        layouts = platform_layouts("flycast", profile, standalone_set(config))
+        layouts = platform_layouts("flycast", profile, standalone_set(config, profiles))
         (view,) = [v for v, standalone in layouts if standalone]
         self.assertTrue(view["files"])
         for entry in view["files"]:
@@ -742,9 +747,10 @@ class FlycastOnEmuELEC(unittest.TestCase):
 
 
 def standalone_view(emulator: str, platform: str) -> dict:
-    profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))[emulator]
+    profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+    profile = profiles[emulator]
     config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
-    (view,) = [v for v, standalone in platform_layouts(emulator, profile, standalone_set(config))
+    (view,) = [v for v, standalone in platform_layouts(emulator, profile, standalone_set(config, profiles))
                if standalone]
     return view
 
@@ -933,9 +939,10 @@ class LibretroMameSetsInMameBios(unittest.TestCase):
     def test_retrobat_lays_out_both_builds(self) -> None:
         # es_systems.cfg offers the libretro core mame and the standalone
         # mame64, two names of one profile.
-        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["mame"]
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        profile = profiles["mame"]
         config = load_platform_config("retrobat", str(REPO_ROOT / "platforms"))
-        builds = sorted(s for _v, s in platform_layouts("mame", profile, standalone_set(config)))
+        builds = sorted(s for _v, s in platform_layouts("mame", profile, standalone_set(config, profiles)))
         self.assertEqual(builds, [False, True])
 
 
@@ -1034,9 +1041,10 @@ class AdvanceMameOnEmuELEC(unittest.TestCase):
 
 
 def libretro_view(emulator: str, platform: str) -> dict:
-    profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))[emulator]
+    profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+    profile = profiles[emulator]
     config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
-    (view,) = [v for v, standalone in platform_layouts(emulator, profile, standalone_set(config))
+    (view,) = [v for v, standalone in platform_layouts(emulator, profile, standalone_set(config, profiles))
                if not standalone]
     return view
 
@@ -1227,7 +1235,7 @@ class AdvanceMameOnRetroPie(unittest.TestCase):
     def test_the_sets_go_to_the_first_folder_searched(self) -> None:
         config = load_platform_config("retropie", str(REPO_ROOT / "platforms"))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
-        tags = standalone_set(config)
+        tags = standalone_set(config, profiles)
         for emu in ("advmame", "advmame-1.4", "advmame-0.94"):
             with self.subTest(emu=emu):
                 placed = [

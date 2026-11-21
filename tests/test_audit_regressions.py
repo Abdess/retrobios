@@ -4420,7 +4420,8 @@ class OpenMsxRomsSitInItsSystemroms(unittest.TestCase):
         from scripts.model.platforms import load_platform_config
         from scripts.resolve.standalone import platform_layouts, standalone_set
 
-        profile = load_emulator_profiles(str(ROOT / "emulators"))["openmsx"]
+        profiles = load_emulator_profiles(str(ROOT / "emulators"))
+        profile = profiles["openmsx"]
         retrobat = yaml.safe_load((ROOT / "platforms" / "retrobat.yml").read_text())
         declared_dirs = {
             fe["destination"].rsplit("/", 1)[0].lower()
@@ -4430,7 +4431,7 @@ class OpenMsxRomsSitInItsSystemroms(unittest.TestCase):
         }
         self.assertEqual(declared_dirs, {"openmsx/share/systemroms"})
         config = load_platform_config("retrobat", str(ROOT / "platforms"))
-        ((view, _standalone),) = platform_layouts("openmsx", profile, standalone_set(config))
+        ((view, _standalone),) = platform_layouts("openmsx", profile, standalone_set(config, profiles))
         placed = {f["name"]: f for f in view["files"]}
         for entry in profile["files"]:
             with self.subTest(name=entry["name"]):

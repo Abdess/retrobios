@@ -67,7 +67,7 @@ def core_data_trees(
     if not data_registry:
         return []
     installed = installed_data_refs(platform_name)
-    handed = standalone_set(config)
+    handed = standalone_set(config, profiles)
     # Relative to base_destination, which the members are written under. A
     # platform with none writes its BIOS folder into every destination, and
     # the trees go there as the core extras do.

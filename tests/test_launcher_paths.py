@@ -88,7 +88,7 @@ class APatchRewritingAFolder(unittest.TestCase):
                   records(patched_paths({PATCH: PATCH_TEXT}.__getitem__))}
         found = standalone_bindings(
             {"citron"}, ["$XDG_DATA_HOME/citron", "CitronPath::KeysDir = keys"],
-            handed_directories(config),
+            handed_directories(config, {}),
         )
         self.assertEqual(found, {"keys": ("", "switch")})
 
@@ -114,7 +114,7 @@ class AFolderTheGeneratorEnters(unittest.TestCase):
         config = {"base_destination": "bios", "standalone_cores": ["shadps4"],
                   "launchers": records(working_directories(self.tree()))}
         found = standalone_bindings(
-            {"shadps4"}, ["getcwd/user", "$XDG_DATA_HOME/shadPS4"], handed_directories(config)
+            {"shadps4"}, ["getcwd/user", "$XDG_DATA_HOME/shadPS4"], handed_directories(config, {})
         )
         self.assertEqual(found, {"": ("outside", "")})
 
@@ -126,7 +126,7 @@ class AVariableADeclaredFolderIsSpelledFrom(unittest.TestCase):
                   "passes_to": "environment XDG_DATA_HOME", "source_ref": "x.py:1"}
         config = {"base_destination": "bios", "standalone_cores": ["emu"], "launchers": [record]}
         found = standalone_bindings(
-            {"emu"}, ["$XDG_DATA_HOME/emu"], handed_directories(config)
+            {"emu"}, ["$XDG_DATA_HOME/emu"], handed_directories(config, {})
         )
         self.assertEqual(found, {"": ("outside", "")})
 
@@ -136,7 +136,7 @@ class AVariableADeclaredFolderIsSpelledFrom(unittest.TestCase):
                   "passes_to": "environment XDG_DATA_HOME", "source_ref": "x.py:1"}
         config = {"base_destination": "bios", "standalone_cores": ["emu"], "launchers": [record]}
         found = standalone_bindings(
-            {"emu"}, ["$XDG_DATA_HOME/emu"], handed_directories(config)
+            {"emu"}, ["$XDG_DATA_HOME/emu"], handed_directories(config, {})
         )
         self.assertEqual(found, {"": ("", "data/emu")})
 
@@ -217,7 +217,7 @@ class APortableUserFolder(unittest.TestCase):
             "launchers": rl.portable_users(self.sources())[:1],
         }
         found = standalone_bindings(
-            {"citron"}, ["$XDG_DATA_HOME/citron", "PORTABLE_DIR"], handed_directories(config)
+            {"citron"}, ["$XDG_DATA_HOME/citron", "PORTABLE_DIR"], handed_directories(config, {})
         )
         self.assertEqual(found, {"": ("emulators", "citron/user")})
 
@@ -324,11 +324,14 @@ class AUserFolderInTheConfigsFolder(unittest.TestCase):
         from resolve.standalone import platform_layouts
         from resolve.standalone import standalone_set
 
-        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["shadps4"]
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        profile = profiles["shadps4"]
         # KNULLI's generator does the same, but no KNULLI board builds shadps4.
         for platform in ("batocera",):
             config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
-            ((view, _standalone),) = platform_layouts("shadps4", profile, standalone_set(config))
+            ((view, _standalone),) = platform_layouts(
+                "shadps4", profile, standalone_set(config, profiles)
+            )
             with self.subTest(platform=platform):
                 self.assertEqual(
                     {(f.get("root"), f["standalone_path"].rsplit("/", 1)[0]) for f in view["files"]},

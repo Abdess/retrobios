@@ -121,7 +121,7 @@ def _launcher_refs(config: dict) -> dict[str, list[str]]:
     # config file does not prove opens nothing: it is listed apart.
     source = list_source(str(config.get("source") or ""))
     found: dict[str, list[str]] = {}
-    for record in bound_launchers(config):
+    for record in bound_launchers(config, _site_profiles()):
         if not isinstance(record, dict) or not record.get("source_ref"):
             continue
         text = (f"{escape_tags(str(record.get('emulator', '')))} at "
@@ -145,7 +145,7 @@ def launcher_unproven_section(config: dict) -> list[str]:
     from resolve.launchers import launcher_unproven
     from sitegen.sources import launcher_ref_markdown, list_source
 
-    rows = launcher_unproven({str(config.get("_key") or ""): config})
+    rows = launcher_unproven({str(config.get("_key") or ""): config}, _site_profiles())
     if not rows:
         return []
     source = list_source(str(config.get("source") or ""))
