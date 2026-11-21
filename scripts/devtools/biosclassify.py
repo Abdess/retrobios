@@ -161,12 +161,6 @@ PATH_PREFIX_MAP = {
     "Sony - PlayStation/": ("Sony", "PlayStation"),
 }
 
-TOS_PATTERN_MAP = {
-    "tos": ("Atari", "ST"),
-}
-
-SKIP_LARGE_ROM_DIRS = {"roms/"}
-
 SKIP_FILES = {
     "README.md",
     ".gitignore",
@@ -251,10 +245,8 @@ def classify_file(filepath: str) -> tuple[str, str] | None:
     return _classify_by_name(name, filepath)
 
 
-def get_subpath(filepath: str, manufacturer: str, console: str) -> str:
+def get_subpath(filepath: str) -> str:
     """Get the sub-path within the console directory (for nested files like neocd/*)."""
-    name = os.path.basename(filepath)
-
     clean = filepath
     for prefix in ("bios/", "BIOS/"):
         if clean.startswith(prefix):
@@ -263,9 +255,6 @@ def get_subpath(filepath: str, manufacturer: str, console: str) -> str:
 
     for prefix in PATH_PREFIX_MAP:
         if clean.startswith(prefix):
-            remaining = clean[len(prefix) :]
-            if "/" in remaining:
-                return remaining
-            return remaining
+            return clean[len(prefix) :]
 
-    return name
+    return os.path.basename(filepath)

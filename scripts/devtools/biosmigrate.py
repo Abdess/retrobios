@@ -7,7 +7,7 @@ import shutil
 from pathlib import Path
 
 from acquire.fetch import LEGACY_BRANCHES, legacy_branch_blob, legacy_branch_files
-from core.hashing import compute_hashes
+from core.hashing import file_digest
 from devtools.biosclassify import classify_file, get_subpath
 
 SYSTEM_MAP = {
@@ -66,7 +66,7 @@ def sha1_blob(data: bytes) -> str:
     return hashlib.sha1(data).hexdigest()
 
 
-def extract_from_branches(target: Path, dry_run: bool, existing_hashes: set) -> int:
+def extract_from_branches(target: Path, dry_run: bool, existing_hashes: set[str]) -> int:
     """Extract BIOS files from all branches into the target structure."""
     extracted = 0
 
@@ -84,9 +84,8 @@ def extract_from_branches(target: Path, dry_run: bool, existing_hashes: set) -> 
                 continue
 
             manufacturer, console = classification
-            subpath = get_subpath(filepath, manufacturer, console)
             dest_dir = target / manufacturer / console
-            dest = dest_dir / subpath
+            dest = dest_dir / get_subpath(filepath)
 
             content = legacy_branch_blob(branch, filepath)
             if content is None:
@@ -97,37 +96,20 @@ def extract_from_branches(target: Path, dry_run: bool, existing_hashes: set) -> 
             if file_hash in existing_hashes:
                 continue
 
+            label = "NEW"
             if dest.exists():
-                existing_hash = compute_hashes(dest)["sha1"]
-                if existing_hash == file_hash:
+                if file_digest(dest) == file_hash:
                     existing_hashes.add(file_hash)
                     continue
-                variant_dir = dest_dir / ".variants"
-                variant_name = f"{dest.name}.{file_hash[:8]}"
-                dest = variant_dir / variant_name
-
+                dest = dest_dir / ".variants" / f"{dest.name}.{file_hash[:8]}"
                 if dest.exists():
                     continue
+                label = "VARIANT"
 
-                if dry_run:
-                    print(f"    VARIANT: {filepath} -> {dest.relative_to(target)}")
-                else:
-                    variant_dir.mkdir(parents=True, exist_ok=True)
-                    with open(dest, "wb") as f:
-                        f.write(content)
-                    print(f"    VARIANT: {filepath} -> {dest.relative_to(target)}")
-                existing_hashes.add(file_hash)
-                branch_extracted += 1
-                continue
-
-            if dry_run:
-                print(f"    NEW: {filepath} -> {dest.relative_to(target)}")
-            else:
+            if not dry_run:
                 dest.parent.mkdir(parents=True, exist_ok=True)
-                with open(dest, "wb") as f:
-                    f.write(content)
-                print(f"    NEW: {filepath} -> {dest.relative_to(target)}")
-
+                dest.write_bytes(content)
+            print(f"    {label}: {filepath} -> {dest.relative_to(target)}")
             existing_hashes.add(file_hash)
             branch_extracted += 1
 
@@ -137,12 +119,14 @@ def extract_from_branches(target: Path, dry_run: bool, existing_hashes: set) -> 
     return extracted
 
 
-def migrate_local(source: Path, target: Path, dry_run: bool) -> tuple:
+def migrate_local(
+    source: Path, target: Path, dry_run: bool,
+) -> tuple[int, int, list[tuple[Path, str]], set[str]]:
     """Migrate files from local flat structure to Manufacturer/Console hierarchy."""
     moved = 0
     skipped = 0
-    errors = []
-    existing_hashes = set()
+    errors: list[tuple[Path, str]] = []
+    existing_hashes: set[str] = set()
 
     for old_dir_name, (manufacturer, console) in sorted(SYSTEM_MAP.items()):
         old_path = source / old_dir_name
@@ -177,8 +161,7 @@ def migrate_local(source: Path, target: Path, dry_run: bool) -> tuple:
                     print(f"    ERROR: {f.name}: {e}")
                     continue
 
-            file_hash = compute_hashes(f)["sha1"]
-            existing_hashes.add(file_hash)
+            existing_hashes.add(file_digest(f))
             moved += 1
 
     return moved, skipped, errors, existing_hashes

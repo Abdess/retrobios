@@ -67,9 +67,8 @@ def main() -> None:
         print(f"\n{action} {branch_count} additional files from branches")
         moved += branch_count
 
-    if source.is_dir():
-        for name in unmapped_directories(source):
-            print(f"\nWARNING: Unmapped directory: {name}")
+    for name in unmapped_directories(source):
+        print(f"\nWARNING: Unmapped directory: {name}")
 
     print(f"\nTotal: {moved} files migrated, {len(existing_hashes)} unique hashes")
 
