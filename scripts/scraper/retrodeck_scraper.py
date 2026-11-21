@@ -448,11 +448,14 @@ class Scraper(BaseScraper):
             mf = d / "component_manifest.json"
             if not mf.exists():
                 continue
+            # Skipped with a warning, an unreadable manifest left its
+            # component's systems out of retrodeck.yml, exit code 0, where
+            # the remote read stops.
             try:
                 with open(mf) as f:
                     manifests.append((d.name, json.load(f)))
-            except (json.JSONDecodeError, OSError) as e:
-                print(f"  WARNING: {mf}: {e}", file=sys.stderr)
+            except json.JSONDecodeError as e:
+                raise ValueError(f"{mf}: not JSON: {e}") from e
         return manifests
 
     def component_file(self, path: str) -> str | None:

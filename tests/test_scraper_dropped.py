@@ -52,6 +52,14 @@ class RetrodeckConflicts(unittest.TestCase):
             scraper.fetch_requirements()
         self.assertEqual(scraper.dropped, [])
 
+    def test_an_unreadable_local_manifest_stops_the_scrape(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp) / "np2kai"
+            folder.mkdir()
+            (folder / "component_manifest.json").write_text("{")
+            with self.assertRaises(ValueError):
+                retrodeck_scraper.Scraper(manifests_dir=tmp).fetch_requirements()
+
 
 class RommUnmappedSlug(unittest.TestCase):
     def test_an_unmapped_slug_fails_the_scrape(self) -> None:
