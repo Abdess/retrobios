@@ -177,6 +177,9 @@ def _take_event(state: TuiState, event: dict) -> None:
     if _take_action_event(state, event):
         return
     kind = event.get("event")
+    if kind == "no_space":
+        state.no_space = (event["bytes_needed"], event["bytes_free"])
+        return
     if kind == "checking" and state.run in ("check", "install"):
         state.reading = (event["files_done"], event["files_total"])
     elif kind == "games_reading" and state.run in ("check", "install"):
@@ -315,6 +318,7 @@ def tui_receive(state: TuiState, message: tuple) -> list[tuple]:
     state.tail = [line for line in tail if not line.startswith("RetroBIOS ")]
     tail = state.tail
     state.full_drive = full_drive_words(state)
+    state.no_space = None
     if state.run in TUI_ACTION_RUNS:
         return _action_ended(state, code, tail)
     if state.run == "check":

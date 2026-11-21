@@ -37,7 +37,7 @@ KEY_TYPES: dict[str, dict] = {
     **dict.fromkeys((
         "files", "files_done", "files_total", "bytes", "bytes_done", "bytes_total",
         "bytes_local", "bytes_network", "size", "present", "missing", "wrong_hash",
-        "bytes_needed", "data_missing", "not_installable", "installed", "up_to_date",
+        "bytes_needed", "bytes_free", "data_missing", "not_installable", "installed", "up_to_date",
         "pending", "code", "games", "recognised", "not_games", "gone",
     ), _COUNT),
     **dict.fromkeys(("truncated", "ok", "interrupted", "required_only", "applied", "info",

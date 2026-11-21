@@ -286,6 +286,8 @@ class TuiState:
         # The run's stop for lack of space in words, read when it ended: the
         # result screen looked through the mounted drives on every frame.
         self.full_drive: str = ""
+        # Needed and free bytes, from the no_space event of the run going on.
+        self.no_space: tuple[int, int] | None = None
         self.log: str = ""
         self.exit_code: int | None = None
         # The RetroBIOS app on the card the BIOS folder is on: asked for

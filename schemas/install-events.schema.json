@@ -14,6 +14,7 @@
         "unsearched",
         "detect",
         "error",
+        "no_space",
         "scanned",
         "version",
         "board",
@@ -61,6 +62,9 @@
     },
     {
       "$ref": "#/$defs/error"
+    },
+    {
+      "$ref": "#/$defs/no_space"
     },
     {
       "$ref": "#/$defs/scanned"
@@ -268,6 +272,36 @@
         },
         "message": {
           "type": "string"
+        }
+      }
+    },
+    "no_space": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "platform",
+        "folder",
+        "bytes_needed",
+        "bytes_free"
+      ],
+      "properties": {
+        "event": {
+          "const": "no_space"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "folder": {
+          "type": "string"
+        },
+        "bytes_needed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bytes_free": {
+          "type": "integer",
+          "minimum": 0
         }
       }
     },

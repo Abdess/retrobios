@@ -2998,6 +2998,10 @@ class CardsSpaceAndConfirm(unittest.TestCase):
         state.dest, state.log = root / "MUOS" / "bios", "/tmp/retrobios-tui-x/install.log"
         state.stack.append("result")
         state.code, state.tail = 2, list(self.FULL_TAIL)
+        install._take_event(state, {"event": "no_space", "platform": "retroarch",
+                                    "folder": str(state.dest),
+                                    "bytes_needed": 1200 * 1024 * 1024,
+                                    "bytes_free": 300 * 1024 * 1024})
         with mock.patch.object(install, "_mounted_cards", return_value=[root]):
             state.full_drive = install.full_drive_words(state)
         title, lines = install.tui_outcome(state)
@@ -3008,6 +3012,21 @@ class CardsSpaceAndConfirm(unittest.TestCase):
         for raw in ("Checking existing files", "Downloading", "stopped with code", "Details:"):
             self.assertNotIn(raw, text)
         self.assertFalse(install.tui_keeps_log(state))
+
+    def test_a_reworded_space_line_leaves_the_stop_unchanged(self):
+        """The result read "Needed: X. Free: Y." from the run's stderr: the
+        numbers come from the no_space event, whatever the line says."""
+        state = checked_state()
+        state.dest = self.card({}) / "bios"
+        install._take_event(state, {"event": "no_space", "platform": "retroarch",
+                                    "folder": str(state.dest), "bytes_needed": 90010,
+                                    "bytes_free": 36 * 1024})
+        state.tail = ["Not enough room."]
+        with mock.patch.object(install, "_mounted_cards", return_value=[]):
+            words = install.full_drive_words(state)
+        self.assertEqual(words, "The drive is full: 87.9 KB needed, 36.0 KB free.")
+        state.no_space, state.tail = None, list(self.FULL_TAIL)
+        self.assertEqual(install.full_drive_words(state), "")
 
     def test_advice_never_names_the_interface_list(self):
         if hasattr(os, "geteuid") and os.geteuid() == 0:
@@ -9649,7 +9668,7 @@ class PacksWordingAndDocs(unittest.TestCase):
             press(state, "enter")
             view = " ".join(install.tui_view(state, 120, 40))
             state.stack = ["result"]
-            state.tail = ["Needed: 87.9 KB. Free: 36.0 KB."]
+            state.no_space = (90010, 36 * 1024)
             state.full_drive = install.full_drive_words(state)
             _title, lines = install.tui_outcome(state)
         self.assertEqual(state.card_bound, ("Onion", "BIOS"))

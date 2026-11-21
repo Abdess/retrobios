@@ -454,6 +454,20 @@ class TestFreeSpaceGuard(unittest.TestCase):
         self.assertIn("Free", out)
         self.assertIn("--dest", out)
 
+    def test_short_of_space_is_an_event_with_both_numbers(self):
+        """A --events reader got only end code 2, like any other stop."""
+        install.shutil.disk_usage = lambda _p: SimpleNamespace(free=1_000)
+        events = io.StringIO()
+        with unittest.mock.patch.object(install.EVENTS, "stream", events), \
+                contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+            install._check_free_space(self.root, 5_000, "batocera")
+        said = [json.loads(line) for line in events.getvalue().splitlines()]
+        self.assertEqual(said[0], {"event": "no_space", "platform": "batocera",
+                                   "folder": str(self.root), "bytes_needed": 5_000,
+                                   "bytes_free": 1_000})
+        self.assertEqual((said[1]["event"], said[1]["stage"], said[1]["reason"]),
+                         ("error", "space", "drive_full"))
+
     def test_probe_climbs_to_an_existing_ancestor(self):
         missing = self.root / "not" / "created" / "yet"
         out, code = self._run(free=1, needed=2, path=missing)

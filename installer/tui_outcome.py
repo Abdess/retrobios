@@ -1,7 +1,6 @@
 """The result screen: what an install, a pack or a More action did, in words."""
 from __future__ import annotations
 
-import re
 from pathlib import Path
 from typing import TYPE_CHECKING, NamedTuple
 
@@ -38,24 +37,17 @@ from installer.tui_routes import TUI_PAD_ROUTES
 if TYPE_CHECKING:
     from installer.tui_state import TuiState
 
-_SPACE_NEEDED = re.compile(r"Needed: (\S+ \S+)\. Free: (\S+ \S+)\.")
-
-
-def _space_stop(state: TuiState) -> re.Match | None:
-    """Needed and free, when the run stopped for lack of space."""
-    return next(filter(None, (_SPACE_NEEDED.search(line) for line in state.tail)), None)
-
-
 def full_drive_words(state: TuiState) -> str:
-    """The run's stop for lack of space, in words, "" for another stop: read
-    once, when the run ends."""
-    match = _space_stop(state)
-    if match is None:
+    """The run's stop for lack of space (its no_space event), in words, ""
+    for another stop: read once, when the run ends."""
+    if state.no_space is None:
         return ""
+    needed, free = state.no_space
     dest = (state.dest or Path(".")).absolute()
     card = any((mount == dest or mount in dest.parents) and card_system(mount)
                for mount in _mounted_cards())
-    return f"The {'card' if card else 'drive'} is full: {match[1]} needed, {match[2]} free."
+    return (f"The {'card' if card else 'drive'} is full: {format_size(needed)} needed, "
+            f"{format_size(free)} free.")
 
 
 def _tui_sources(state: TuiState, installed: int, missing: int, wrong: int = 0,
@@ -428,7 +420,7 @@ def tui_keeps_log(state: TuiState) -> bool:
         return True
     # A full card is said in words on the screen: its log adds nothing.
     return (bool(state.log) and state.code not in (0, 130, None)
-            and _space_stop(state) is None)
+            and not state.full_drive)
 
 
 def _removal_text(state: TuiState) -> list:

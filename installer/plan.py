@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from installer.datadirs import data_fetch_bytes
+from installer.events import EVENTS
 from installer.invocation import _INVOCATION
 from installer.narrowing import _filter_by_target
 from installer.offline import LOCAL, _offline_only, offline_named, offline_undo
@@ -14,7 +15,7 @@ from installer.outcome import EVERYTHING_IN_PLACE
 from installer.paths import shown_path
 from installer.plan_words import _sized
 from installer.platforms import OTHER_TITLE, entry_systems, system_title
-from installer.space import free_space
+from installer.space import space_shortfall
 from installer.tally import _bytes, parts_words, tally
 from installer.terminal import terminal_size
 from installer.text import _plural, cell_width, format_size
@@ -242,9 +243,15 @@ def _check_free_space(bios_path: Path, needed: int, plat: str = "", code: int = 
     the status a script reads as "nothing installed", 1 after an earlier
     platform of the run installed files.
     """
-    free = free_space(bios_path)
-    if free is None or free >= needed:
+    shortfall = space_shortfall(bios_path, needed)
+    if shortfall is None:
         return
+    free = shortfall[1]
+    EVENTS.emit("no_space", platform=plat, folder=str(bios_path), bytes_needed=needed,
+                bytes_free=free)
+    EVENTS.emit("error", stage="space", reason="drive_full", platform=plat,
+                message=f"Not enough space on the drive holding {bios_path}: "
+                        f"{format_size(needed)} needed, {format_size(free)} free.")
     print(f"\nNot enough space on the drive holding {bios_path}.", file=sys.stderr)
     print(f"  Needed: {format_size(needed)}. Free: {format_size(free)}.",
           file=sys.stderr)

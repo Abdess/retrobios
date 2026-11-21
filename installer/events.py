@@ -42,8 +42,14 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # targets (the board list a run cannot go on without, reason: the
     # manifest's codes, http for a refused answer) or pack (--from-pack,
     # reason: invalid, other_platform for a pack of another platform, or
-    # no_platform when none is named and the pack does not say).
+    # no_platform when none is named and the pack does not say) or space
+    # (reason: drive_full, the drive cannot hold the download, after
+    # no_space, before any file of the setup is written).
     "error": ("stage", "reason", "platform", "message"),
+    # Right before the error of stage space: the BIOS folder, and the bytes
+    # the run needs and the drive has free. A kind of its own, since schema
+    # 1 never adds a key to error.
+    "no_space": ("platform", "folder", "bytes_needed", "bytes_free"),
     # A folder named with --from, once read: the files it holds (counted
     # up to MAX_SCANNED_FILES, truncated past them), and the folders below
     # it on another drive, not entered.

@@ -26,3 +26,10 @@ def free_space(bios_path: Path) -> int | None:
         return shutil.disk_usage(_nearest_folder(bios_path)).free
     except OSError:
         return None
+
+
+def space_shortfall(bios_path: Path, needed: int) -> tuple[int, int] | None:
+    """Needed and free when the drive holding bios_path cannot hold needed
+    bytes, else None, also when its free space cannot be told."""
+    free = free_space(bios_path)
+    return None if free is None or free >= needed else (needed, free)
