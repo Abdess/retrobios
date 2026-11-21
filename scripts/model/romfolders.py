@@ -13,6 +13,7 @@ change to either reaches every setup without a rescrape.
 from __future__ import annotations
 
 import re
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -39,6 +40,20 @@ def split_refs(source_ref: str) -> list[tuple[str, str, str | None]]:
             raise ValueError(f"source_ref part {raw!r} is not '<source> <path>:<line>'")
         parts.append((match["key"], match["path"], match["lines"]))
     return parts
+
+
+def source_refs(doc: dict) -> Iterator[str]:
+    """Every source_ref a setup document carries, offers and searched_by included."""
+    yield doc["roms_root"]["source_ref"]
+    if doc.get("case_ref"):
+        yield doc["case_ref"]
+    for key in ("skip", "hidden", "media"):
+        yield from (rule["source_ref"] for rule in doc.get(key) or ())
+    for row in doc["folders"]:
+        yield row["source_ref"]
+        yield from (b["source_ref"] for b in (row.get("board_defaults") or {}).values())
+        for key in ("offers", "searched_by"):
+            yield from (item["source_ref"] for item in row.get(key) or () if item.get("source_ref"))
 
 
 def setup_paths(directory: Path = ROMFOLDERS_DIR) -> list[Path]:

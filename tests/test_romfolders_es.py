@@ -15,7 +15,7 @@ import json
 import unittest
 from pathlib import Path
 
-from model.romfolders import setup_paths, split_refs
+from model.romfolders import setup_paths, source_refs, split_refs
 from scraper.romfolders import (
     Fetcher,
     SourceError,
@@ -369,13 +369,7 @@ class CommittedSetups(unittest.TestCase):
                 doc = yaml_load(self.written(setup).read_text(encoding="utf-8"))
             if setup not in self.paths:
                 continue
-            refs = [doc["roms_root"]["source_ref"]]
-            for key in ("skip", "hidden", "media"):
-                refs += [rule["source_ref"] for rule in doc.get(key, [])]
-            for row in doc["folders"]:
-                refs.append(row["source_ref"])
-                refs += [b["source_ref"] for b in (row.get("board_defaults") or {}).values()]
-            for ref in refs:
+            for ref in source_refs(doc):
                 for key, _path, _lines in split_refs(ref):
                     with self.subTest(setup=setup, ref=ref):
                         self.assertIn(key, doc["sources"])

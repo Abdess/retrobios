@@ -13,7 +13,7 @@ import json
 import unittest
 from pathlib import Path
 
-from model.romfolders import split_refs
+from model.romfolders import source_refs, split_refs
 from model.safeparse import yaml_load
 from scraper.romfolders import SourceError, load_sources, scrape_setup
 from scraper.romfolders.__main__ import dump_setup
@@ -257,14 +257,7 @@ class CommittedSetupTests(unittest.TestCase):
     def test_every_ref_names_a_declared_source(self) -> None:
         for setup, doc in self.documents().items():
             declared = set(doc["sources"])
-            refs = [doc["roms_root"]["source_ref"]]
-            refs += [doc["case_ref"]] if doc.get("case_ref") else []
-            for block in ("skip", "hidden", "media"):
-                refs += [r["source_ref"] for r in doc.get(block, [])]
-            refs += [row["source_ref"] for row in doc["folders"]]
-            refs += [b["source_ref"] for row in doc["folders"]
-                     for b in (row.get("board_defaults") or {}).values()]
-            for source_ref in refs:
+            for source_ref in source_refs(doc):
                 for key, _, _ in split_refs(source_ref):
                     self.assertIn(key, declared, f"{setup}: {source_ref}")
 
