@@ -6,8 +6,9 @@ import contextlib
 import io
 
 from core.paths import DB_FILE, EMULATORS_DIR, PLATFORMS_DIR
-from orchestrate.compare import PACK_NOTES, comparison_inputs, set_difference_lines
+from orchestrate.compare import comparison_inputs, set_difference_lines
 from orchestrate.labels import STEP_LABELS, step_title
+from packs.archive import is_pack_note
 
 # How each pack_narrowings() dimension of a platform pack is compared by
 # check_narrowed_packs, or why it is not. A test reads the builder's
@@ -142,7 +143,7 @@ def check_narrowed_packs(
                 trees = set(record.trees) - credited
                 written = {
                     m for m in record.members
-                    if not PACK_NOTES.search(m) and m not in trees
+                    if not is_pack_note(m) and m not in trees
                 }
                 lines = set_difference_lines(name, credited, written)
                 if lines:

@@ -8,8 +8,9 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 from core.paths import DB_FILE, EMULATORS_DIR, PLATFORMS_DIR
-from orchestrate.compare import PACK_NOTES, comparison_inputs
+from orchestrate.compare import comparison_inputs
 from orchestrate.labels import STEP_LABELS, step_title
+from packs.archive import is_pack_note
 
 if TYPE_CHECKING:
     from packs.archive import PackRecord
@@ -23,10 +24,10 @@ def split_differences(
     A path in a part and not in the full pack, a path of the full pack in no
     part, and a path a part fills with other bytes than the full pack.
     """
-    full_members = {m for m in full.members if not PACK_NOTES.search(m)}
+    full_members = {m for m in full.members if not is_pack_note(m)}
     union = {
         m for record in parts.values() for m in record.members
-        if not PACK_NOTES.search(m)
+        if not is_pack_note(m)
     }
     lines = [f"in a part, not in the full pack: {m}" for m in sorted(union - full_members)]
     lines += [f"in the full pack, in no part: {m}" for m in sorted(full_members - union)]

@@ -1464,6 +1464,7 @@ class ANativeNameSelectsOneSetEverywhere(unittest.TestCase):
     def test_pack_verify_and_installer_agree(self):
         from model.platforms import load_platform_config
         from model.systems import resolve_system_arg
+        from packs.archive import is_pack_note
 
         for platform, native, system_id in self.CASES:
             with self.subTest(platform=platform, name=native):
@@ -1483,7 +1484,7 @@ class ANativeNameSelectsOneSetEverywhere(unittest.TestCase):
                 members = self._packed(platform, chosen)
                 written = {
                     name for name, size in members.items()
-                    if not self.compare.PACK_NOTES.search(name)
+                    if not is_pack_note(name)
                     and not (trees.get(name) == size and name not in credited)
                 }
                 self.assertTrue(written)

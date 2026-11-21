@@ -3,18 +3,9 @@
 from __future__ import annotations
 
 import os
-import re
 
 from core.paths import EMULATORS_DIR
 from model.registry import load_data_dir_registry
-from packs.paths import MEDIA_MARKER
-
-# Members the builder writes for the reader or the device rather than for a
-# core: the documents, and the empty marker an Android pack carries.
-PACK_NOTES = re.compile(
-    r"(^README\.txt$|^manifest\.json$|(^|/)(INSTRUCTIONS|RENAMED)_[^/]*\.txt$"
-    rf"|(^|/){re.escape(MEDIA_MARKER)}$)"
-)
 
 
 def tree_members(

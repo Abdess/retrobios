@@ -6,6 +6,7 @@ from pathlib import Path
 
 from core.paths import PLATFORMS_DIR
 from orchestrate import compare
+from packs.archive import is_pack_note
 from orchestrate.labels import STEP_LABELS, step_title
 from orchestrate.reports import (
     match_key,
@@ -138,7 +139,7 @@ def check_pack_destinations(
             written = {
                 info.filename for info in zf.infolist()
                 if not info.is_dir()
-                and not compare.PACK_NOTES.search(info.filename)
+                and not is_pack_note(info.filename)
                 and not (
                     trees.get(info.filename) == info.file_size
                     and info.filename not in credited

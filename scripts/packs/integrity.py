@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
 from core.artifacts import build_timestamp
+from packs.archive import PACK_DOCUMENTS, is_pack_note
 from packs.paths import MEDIA_MARKER, has_path_conflict
 from core.ziptools import build_zip_contents_index, is_archive_path, zip_members
 from core.ziptools import safe_member_parts
@@ -141,18 +142,6 @@ def _data_indexes(data_registry: dict | None) -> tuple[dict[str, list[str]], dic
     return _data_index, _data_path_index
 
 
-def _is_pack_note(name: str) -> bool:
-    """Whether a member is a note the builder composes, not a collected file."""
-    # The builder writes its notes beside the slot they explain
-    # (bios/INSTRUCTIONS_x.txt, games/keen6/INSTRUCTIONS_y.txt), so
-    # they are told by their own name, not by a root prefix.
-    base = name.rsplit("/", 1)[-1]
-    return base.startswith(("INSTRUCTIONS_", "RENAMED_")) or base == MEDIA_MARKER or name in (
-        "manifest.json",
-        "README.txt",
-    )
-
-
 def _member_digests(zf: zipfile.ZipFile, info: zipfile.ZipInfo) -> tuple[str, str, int]:
     """(sha1, md5, size) of a pack member."""
     with zf.open(info) as f:
@@ -241,7 +230,7 @@ def verify_pack(
 
     with zipfile.ZipFile(zip_path, "r") as zf:
         for info in zf.infolist():
-            if info.is_dir() or _is_pack_note(info.filename):
+            if info.is_dir() or is_pack_note(info.filename):
                 continue
             name = info.filename
             sha1, md5, size = _member_digests(zf, info)
@@ -512,7 +501,7 @@ def _structural_errors(zf: zipfile.ZipFile, zip_set: set) -> list[str]:
         for info in zf.infolist()
         if info.file_size == 0 and not info.is_dir()
         and "GraphicMods" not in info.filename
-        and info.filename not in ("manifest.json", "README.txt")
+        and info.filename not in PACK_DOCUMENTS
         and info.filename.rsplit("/", 1)[-1] != MEDIA_MARKER
     )
 
@@ -748,7 +737,7 @@ def _pack_view(zf: zipfile.ZipFile, config: dict, base_dest: str) -> _PackView:
     is_flat = bool(base_dest) and not any(
         n.startswith(base_dest + "/")
         for n in zip_set
-        if n not in ("README.txt", "manifest.json", MEDIA_MARKER) and not n.endswith("/")
+        if n not in (*PACK_DOCUMENTS, MEDIA_MARKER) and not n.endswith("/")
     )
     # Mirror the builder's path-conflict logic: a declaration whose path
     # collides file-vs-directory with a packed member was skipped by the

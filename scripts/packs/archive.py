@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from core.artifacts import atomic_scratch
 from core.hashing import compute_hashes
 from core.paths import comparable_destination, sanitize_pack_path
-from packs.paths import has_path_conflict, register_path, placement_block
+from packs.paths import MEDIA_MARKER, has_path_conflict, register_path, placement_block
 
 
 # The minimum ZIP timestamp, carried by every pack member so a pack is a
@@ -125,6 +125,20 @@ def writing_pack(zip_path: str) -> Iterator[zipfile.ZipFile]:
 
 # What the builder writes into a platform pack beside the files it carries.
 PACK_DOCUMENTS = ("README.txt", "manifest.json")
+
+
+def is_pack_note(name: str) -> bool:
+    """Whether a member is a note the builder composes, not a collected file."""
+    # The builder writes its notes beside the slot they explain
+    # (bios/INSTRUCTIONS_x.txt, games/keen6/INSTRUCTIONS_y.txt), so
+    # they are told by their own name, not by a root prefix. The empty
+    # marker an Android pack carries is written for the device.
+    base = name.rsplit("/", 1)[-1]
+    return (
+        base.startswith(("INSTRUCTIONS_", "RENAMED_"))
+        or base == MEDIA_MARKER
+        or name in PACK_DOCUMENTS
+    )
 
 
 @dataclass
