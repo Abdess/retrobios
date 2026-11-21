@@ -63,10 +63,10 @@ class ABuildbotNameSelectsItsProfile(unittest.TestCase):
         """Both refused pcfx, which verify --emulator accepts."""
         import argparse
 
-        import profile_sync
+        from profiling.selection import select_profiles
 
         args = argparse.Namespace(changed=False, added=False, emulator=["pcfx"])
-        self.assertEqual(list(profile_sync.select_profiles(self.PROFILES, args)), ["beetle_pcfx"])
+        self.assertEqual(list(select_profiles(self.PROFILES, args)), ["beetle_pcfx"])
         proc = subprocess.run(
             [sys.executable, "scripts/fileless_audit.py", "pcfxx", "--offline"],
             cwd=REPO_ROOT, capture_output=True, text=True, timeout=600, check=False,

@@ -34,6 +34,9 @@ from profiling import sourcepaths as profiling_sourcepaths
 from profiling import worktree as profiling_worktree
 from profiling import triage
 from profiling import versions
+from profiling import quota as profiling_quota
+from profiling import selection as profiling_selection
+from model import profiles as model_profiles
 from model import sourceref
 from profiling.reports import (
     EntryReport,
@@ -53,7 +56,8 @@ from profiling.yamledit import (
     insert_after_line,
     replace_field_line,
 )
-from profile_sync import build_parser, select_profiles
+from profile_sync import build_parser
+from profiling.selection import select_profiles
 from profiling.resolver import build_report
 from profiling.bump import bump_commit
 from profiling.citations import collect_citations, collect_tokens
@@ -5127,10 +5131,10 @@ class TestRateLimitEndsOneProfile(unittest.TestCase):
         saved = sys.argv
         try:
             sys.argv = ["profile_sync.py", "--all", "--json"]
-            with mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
-                    mock.patch.object(profile_sync, "select_profiles",
+            with mock.patch.object(model_profiles, "load_emulator_profiles", return_value={}), \
+                    mock.patch.object(profiling_selection, "select_profiles",
                                       return_value={"cemu": {}, "after": {}}), \
-                    mock.patch.object(profile_sync, "check_quota"), \
+                    mock.patch.object(profiling_quota, "check_quota"), \
                     mock.patch.object(profiling_run, "build_report", side_effect=build), \
                     contextlib.redirect_stdout(out), \
                     contextlib.redirect_stderr(err), \
@@ -5178,7 +5182,6 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
         # before writing them: the record kept the pins it had replaced.
         from unittest import mock
 
-        from model import profiles as model_profiles
         from model.profiles import emulator_profiles_cache
         from sitegen import sources
 
@@ -5261,10 +5264,10 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
         saved = sys.argv
         try:
             sys.argv = ["profile_sync.py", "--all", *argv]
-            with mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
-                    mock.patch.object(profile_sync, "select_profiles",
+            with mock.patch.object(model_profiles, "load_emulator_profiles", return_value={}), \
+                    mock.patch.object(profiling_selection, "select_profiles",
                                       return_value={"clean": {}, "drift": {}}), \
-                    mock.patch.object(profile_sync, "check_quota"), \
+                    mock.patch.object(profiling_quota, "check_quota"), \
                     mock.patch.object(profiling_run, "build_report",
                                       side_effect=lambda name, *a, **k: reports[name]), \
                     contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
@@ -5369,10 +5372,10 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
         saved = sys.argv
         try:
             sys.argv = ["profile_sync.py", "--all", "--changed-only", "--json"]
-            with mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
-                    mock.patch.object(profile_sync, "select_profiles",
+            with mock.patch.object(model_profiles, "load_emulator_profiles", return_value={}), \
+                    mock.patch.object(profiling_selection, "select_profiles",
                                       return_value={"clean": {}, "drift": {}}), \
-                    mock.patch.object(profile_sync, "check_quota"), \
+                    mock.patch.object(profiling_quota, "check_quota"), \
                     mock.patch.object(profiling_run, "build_report", side_effect=build), \
                     contextlib.redirect_stdout(out), \
                     contextlib.redirect_stderr(io.StringIO()), \
@@ -5800,16 +5803,16 @@ class TestSelectionNamesWhatMatchedNothing(unittest.TestCase):
 
     def test_a_misspelt_system_stops_and_suggests(self):
         with self.assertRaises(SystemExit) as caught:
-            profile_sync.select_profiles(self.PROFILES, self._args(system="atari-lynxx"))
+            select_profiles(self.PROFILES, self._args(system="atari-lynxx"))
         self.assertIn("atari-lynx", str(caught.exception.code))
 
     def test_a_misspelt_emulator_suggests(self):
         with self.assertRaises(SystemExit) as caught:
-            profile_sync.select_profiles(self.PROFILES, self._args(emulator="handyy"))
+            select_profiles(self.PROFILES, self._args(emulator="handyy"))
         self.assertIn("Close matches: handy", str(caught.exception.code))
 
     def test_a_matching_filter_selects(self):
-        selected = profile_sync.select_profiles(self.PROFILES, self._args(system="atari-lynx"))
+        selected = select_profiles(self.PROFILES, self._args(system="atari-lynx"))
         self.assertEqual(sorted(selected), ["handy", "mednafen_lynx"])
 
     def test_system_matches_as_the_listing_does(self):
@@ -5820,7 +5823,7 @@ class TestSelectionNamesWhatMatchedNothing(unittest.TestCase):
             "b": {"type": "libretro", "systems": ["saturn"]},
         }
         for spelling in ("saturn", "sega-saturn"):
-            selected = profile_sync.select_profiles(profiles, self._args(system=spelling))
+            selected = select_profiles(profiles, self._args(system=spelling))
             self.assertEqual(sorted(selected), ["a", "b"])
 
     def test_the_hint_counts_what_the_listing_prints(self):
@@ -5830,7 +5833,7 @@ class TestSelectionNamesWhatMatchedNothing(unittest.TestCase):
             "c": {"type": "libretro", "systems": ["atari-lynx"]},
         }
         with self.assertRaises(SystemExit) as caught:
-            profile_sync.select_profiles(profiles, self._args(system="nothing"))
+            select_profiles(profiles, self._args(system="nothing"))
         self.assertIn("Known: atari-lynx, sega-saturn.", str(caught.exception.code))
 
 
@@ -6168,7 +6171,7 @@ class AnOnlinePassSaysWhereItIs(unittest.TestCase):
         try:
             sys.argv = ["profile_sync.py", "--all", "--triage", *argv]
             with mock.patch.object(profiling_run, "_build_full_report", side_effect=build), \
-                    mock.patch.object(profile_sync, "check_quota"), \
+                    mock.patch.object(profiling_quota, "check_quota"), \
                     contextlib.redirect_stdout(out), contextlib.redirect_stderr(err), \
                     self.assertRaises(SystemExit) as caught:
                 profile_sync.main()
@@ -6318,7 +6321,7 @@ class TestBranchProfiles(unittest.TestCase):
         args = profile_sync.build_parser().parse_args(["--changed", "--base", "main"])
         profiles = {"kept": {}, "edited": {}, "new": {}, "draft": {}}
         self.assertEqual(
-            list(profile_sync.select_profiles(profiles, args)),
+            list(select_profiles(profiles, args)),
             ["draft", "edited", "new"],
         )
 
@@ -6336,7 +6339,7 @@ class TestBranchProfiles(unittest.TestCase):
         args = profile_sync.build_parser().parse_args(["--changed"])
         profiles = {"kept": {}, "edited": {}, "new": {}, "draft": {}}
         self.assertEqual(
-            list(profile_sync.select_profiles(profiles, args)),
+            list(select_profiles(profiles, args)),
             ["draft", "edited", "new"],
         )
 

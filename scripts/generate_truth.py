@@ -30,7 +30,7 @@ yaml = require_yaml()
 DEFAULT_OUTPUT_DIR = TRUTH_DIR
 
 
-def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         allow_abbrev=False,
         description="Generate ground-truth YAML from emulator profiles",
@@ -50,11 +50,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="hardware target filter",
     )
     add_repo_inputs(parser, "platforms", "emulators", "db")
-    return parser.parse_args(argv)
+    return parser
 
 
 def main(argv: list[str] | None = None) -> None:
-    args = parse_args(argv)
+    args = build_parser().parse_args(argv)
     require_directory(args.platforms_dir, "--platforms-dir")
 
     registry = load_platform_registry(args.platforms_dir, required=True)

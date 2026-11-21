@@ -636,6 +636,7 @@ class ProfileSummaryTests(unittest.TestCase):
         """--json with the detection flags was refused, so --profiles read an
         empty stdout and reported "unreadable report" on every run."""
         import profile_sync
+        from profiling.flagchecks import refuse_flag_combinations
 
         captured = []
 
@@ -647,7 +648,7 @@ class ProfileSummaryTests(unittest.TestCase):
             check_profiles(True, offline=True)
         (cmd,) = captured
         args = profile_sync.build_parser().parse_args(cmd[2:])
-        profile_sync._refuse_flag_combinations(args)
+        refuse_flag_combinations(args)
         self.assertTrue(args.as_json)
 
     def test_a_non_list_report_is_an_error_not_a_crash(self):
