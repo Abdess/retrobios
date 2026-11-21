@@ -318,7 +318,7 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
     if free is not None:
         lines.append(_detail(f"Free space: {format_size(free)}"))
         if space_needed(check) > free:
-            lines.append(space_words(space_needed(check), free, _on_its_card(state)))
+            lines += space_words(space_needed(check), free, _on_its_card(state))
     backup = _plan_backups(check, state, fig)
     misplaced = _tui_misplaced(state) if check is state.check else []
     if misplaced:

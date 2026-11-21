@@ -12,7 +12,7 @@ from installer.narrowing import _filter_by_target
 from installer.offline import LOCAL, _offline_only, offline_named, offline_undo
 from installer.outcome import EVERYTHING_IN_PLACE
 from installer.paths import shown_path
-from installer.plan_words import _sized
+from installer.plan_words import _sized, space_remedy
 from installer.platforms import OTHER_TITLE, entry_systems, system_title
 from installer.refusal import Refusal
 from installer.space import space_shortfall
@@ -251,19 +251,8 @@ def _check_free_space(bios_path: Path, needed: int, plat: str = "", code: int = 
                 bytes_free=free)
     lines = [f"\nNot enough space on the drive holding {bios_path}.",
              f"  Needed: {format_size(needed)}. Free: {format_size(free)}."]
-    if card:
-        # Its system reads this card alone: another drive, with RetroArch's
-        # list, was offered for an Onion card.
-        lines.append(f"  Free up {format_size(needed - free)} on the card, then run it "
-                     "again: its system reads its BIOS files there only.")
-    elif not plat:
-        lines.append(f"  Free up {format_size(needed - free)}, or use --dest to install "
-                     "to another drive.")
-    else:
-        # --dest alone used to mean RetroArch's list: the platform is named, so
-        # a Batocera install moved to a USB drive stays Batocera's.
-        lines.append(f"  Free up {format_size(needed - free)}, or install to another "
-                     f"drive:\n    {_INVOCATION.command(plat, '<folder on another drive>')}")
+    remedy = space_remedy(needed - free, plat, _INVOCATION, card=card, refused=True)
+    lines.append("  " + "\n    ".join(remedy))
     raise Refusal("space", "drive_full", plat, *lines, code=code,
                   message=f"Not enough space on the drive holding {bios_path}: "
                           f"{format_size(needed)} needed, {format_size(free)} free.")

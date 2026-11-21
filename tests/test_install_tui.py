@@ -7980,6 +7980,25 @@ class _LineModeFindings(_CardFixtures):
             lines = install.folder_warnings("retroarch", self.root, [], hint, True, True)
         self.assertEqual(lines, [install.read_only_words(self.root)])
 
+    def test_line_mode_names_the_way_to_another_drive(self):
+        """The line plan said "choose another folder", a choice the line menu
+        does not have, and the refusal after Enter named --dest: both name
+        the same command now."""
+        hint = install.Invocation()
+        with mock.patch.object(install, "_space_short", return_value=(5000, 1000)), \
+                mock.patch.object(install, "_folder_writable", return_value=True):
+            lines = install.folder_warnings("batocera", self.root, [], hint, True, False)
+        command = hint.command("batocera", "<folder on another drive>")
+        self.assertEqual(lines, ["Not enough free space: 4.9 KB needed. Free up 3.9 KB, "
+                                 "or install to another drive:", command])
+        with mock.patch.object(install.shutil, "disk_usage",
+                               return_value=mock.Mock(free=1000)), \
+                contextlib.redirect_stderr(io.StringIO()) as err, \
+                self.assertRaises(SystemExit):
+            reported(install._check_free_space, self.root, 5000, "batocera")
+        self.assertIn("  Free up 3.9 KB, or install to another drive:\n    " + command,
+                      err.getvalue())
+
     def test_the_plan_warns_on_the_space_the_run_refuses_on(self):
         """The screen held the files missing or wrong against the free space,
         the run those and the data trees: a plan without a warning stopped

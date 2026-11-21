@@ -183,7 +183,7 @@ def folder_warnings(plat: str, bios_path: Path, files: list[dict], hint: Invocat
         lines += cannot_write_words(bios_path, plat, hint, commands, card)
     short = _space_short(bios_path, files, trees)
     if short is not None:
-        lines.append(space_words(short[0], short[1], card))
+        lines += space_words(short[0], short[1], card, False, plat, hint, commands)
     return lines
 
 
@@ -205,14 +205,41 @@ def cannot_write_words(bios_path: Path, plat: str, hint: Invocation, commands: b
     return [f"{CANNOT_WRITE}: {another}."] + said
 
 
-def space_words(needed: int, free: int, card: bool) -> str:
-    """Not enough room, and what to do: on a card setup's own card, room is
-    made on the card, another folder being one its system does not read."""
+def space_remedy(short: int, plat: str, hint: Invocation | None, commands: bool = True,
+                 card: bool = False, screen: bool = False, refused: bool = False) -> list[str]:
+    """What makes room for a run its drive cannot hold, the one remedy of the
+    plan and of the run's refusal (refused): on a card setup's own card, room
+    made there, another folder being one its system does not read; on the
+    screen, its folder row. Line mode has no folder row, so it and the
+    refusal name --dest, as the command once the platform is named. A second
+    line is that command."""
     if card:
-        return (f"Not enough free space: {format_size(needed)} needed, "
-                f"{format_size(free)} free. Free some space on the card first.")
-    return (f"Not enough free space: {format_size(needed)} needed. Free some, or "
-            "choose another folder.")
+        # Its system reads this card alone: another drive, with RetroArch's
+        # list, was offered for an Onion card.
+        if refused:
+            return [f"Free up {format_size(short)} on the card, then run it again: its system "
+                    "reads its BIOS files there only."]
+        return ["Free some space on the card first."]
+    if screen:
+        return ["Free some, or choose another folder."]
+    if not commands:
+        return [f"Free up {format_size(short)}, or run it again and choose another folder."]
+    if not plat or hint is None:
+        return [f"Free up {format_size(short)}, or use --dest to install to another drive."]
+    # --dest alone used to mean RetroArch's list: the platform is named, so
+    # a Batocera install moved to a USB drive stays Batocera's.
+    return [f"Free up {format_size(short)}, or install to another drive:",
+            hint.command(plat, "<folder on another drive>")]
+
+
+def space_words(needed: int, free: int, card: bool, screen: bool = True, plat: str = "",
+                hint: Invocation | None = None, commands: bool = True) -> list[str]:
+    """Not enough room before the question, and what to do (space_remedy)."""
+    said = f"Not enough free space: {format_size(needed)} needed"
+    if card:
+        said += f", {format_size(free)} free"
+    remedy = space_remedy(needed - free, plat, hint, commands, card, screen)
+    return [f"{said}. {remedy[0]}"] + remedy[1:]
 
 
 def unlisted_saves_words(display: str) -> str:
