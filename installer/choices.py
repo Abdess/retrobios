@@ -182,6 +182,23 @@ def resolve_systems(values: list[str], manifest: dict | None, files: list[dict],
                            system_aliases(manifest), key_file_holders(files, omitted))
 
 
+def system_ids(names: Iterable[str], manifest: dict | None, files: list[dict],
+               omitted: list[dict]) -> dict[str, str]:
+    """Each of names that --system takes, with the system id it stands for:
+    a record keeps the psx typed at the install."""
+    known = available_choices(files, omitted)["systems"]
+    aliases, holders = system_aliases(manifest), key_file_holders(files, omitted)
+    ids: dict[str, str] = {}
+    for name in names:
+        try:
+            picked = resolve_choices([name], known, "system", aliases, holders)
+        except ValueError:
+            continue
+        if len(picked) == 1:
+            ids[name] = picked[0]
+    return ids
+
+
 def parse_selection(text: str, count: int, ordered: bool = False) -> list[int]:
     """Numbers typed at a prompt: `3`, `1,4`, `2-5`, or `all`, 1-based.
 

@@ -194,6 +194,8 @@ class TheNamesAnInstallTakes(unittest.TestCase):
             proc = repo.run("--remove", "--system", "psx", "--yes")
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
             self.assertEqual(sorted(repo.snapshot()), sorted(GBA_ONLY + ["shared.bin"]))
+            # The record no longer names psx, or the next update put it back.
+            self.assertEqual(repo.setup()["choice"], ["--system", "nintendo-gba"])
 
 
 class NeverTouched(unittest.TestCase):

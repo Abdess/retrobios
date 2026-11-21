@@ -10722,6 +10722,23 @@ def resolve_systems(values: list[str], manifest: dict | None, files: list[dict],
                            system_aliases(manifest), key_file_holders(files, omitted))
 
 
+def system_ids(names: Iterable[str], manifest: dict | None, files: list[dict],
+               omitted: list[dict]) -> dict[str, str]:
+    """Each of names that --system takes, with the system id it stands for:
+    a record keeps the psx typed at the install."""
+    known = available_choices(files, omitted)["systems"]
+    aliases, holders = system_aliases(manifest), key_file_holders(files, omitted)
+    ids: dict[str, str] = {}
+    for name in names:
+        try:
+            picked = resolve_choices([name], known, "system", aliases, holders)
+        except ValueError:
+            continue
+        if len(picked) == 1:
+            ids[name] = picked[0]
+    return ids
+
+
 def parse_selection(text: str, count: int, ordered: bool = False) -> list[int]:
     """Numbers typed at a prompt: `3`, `1,4`, `2-5`, or `all`, 1-based.
 
@@ -19735,14 +19752,15 @@ def _choice_names(options: list[tuple[str, str | None]], flag: str) -> list[str]
 
 
 def _choice_without(choice: list[str], flag: str, names: Collection[str],
-                    left: list[str]) -> list[str]:
+                    left: list[str], ids: Mapping[str, str] | None = None) -> list[str]:
     """A recorded choice once names of flag are taken out: those it named
     go, and a choice that named none gets the names left. A flag left with
-    no name is dropped."""
+    no name is dropped. ids gives a recorded name the id it stands for."""
     options = [option for option in record_options(choice) if option[0] != "--all-files"]
     gone = {name.casefold() for name in names}
+    same = ids or {}
     remaining = [name for name in (_choice_names(options, flag) or left)
-                 if name.casefold() not in gone]
+                 if same.get(name, name).casefold() not in gone]
     kept = [option for option in options if option[0] != flag]
     if remaining:
         kept.append((flag, ",".join(remaining)))
@@ -19762,6 +19780,7 @@ class _RemovalScope(NamedTuple):
     named_cores: list[str]
     others: dict[tuple[str, str], str]
     wanted: set[str]
+    system_ids: dict[str, str]
 
     def norm(self, dest: str) -> str:
         """dest as the drive compares it, folded where it folds case."""
@@ -19788,7 +19807,10 @@ def _removal_scope(
     wanted = {_drive_key(dest, fold) for dest in files}
     # What stays chosen once the removal is done, as an install names it:
     # the systems or cores the record named, else every one of the list.
-    named_systems = {name.casefold() for name in _choice_names(options, "--system")}
+    recorded_systems = _choice_names(options, "--system")
+    ids = system_ids(recorded_systems, manifest, list(manifest.get("files") or []),
+                     list(manifest.get("omitted_files") or []))
+    named_systems = {ids.get(name, name).casefold() for name in recorded_systems}
     staying_systems = {name for name in known["systems"] if not named_systems
                        or name.casefold() in named_systems} - chosen_systems
     named_cores = _choice_names(options, "--core")
@@ -19796,7 +19818,7 @@ def _removal_scope(
                      else set(known["cores"]) | set(manifest.get("core_names") or {})
                      ) - chosen_cores
     return _RemovalScope(fold, known, options, chosen_systems, chosen_cores,
-                         staying_systems, staying_cores, named_cores, others, wanted)
+                         staying_systems, staying_cores, named_cores, others, wanted, ids)
 
 
 def _removal_takes(scope: _RemovalScope, found: tuple, dest: str) -> bool:
@@ -19857,7 +19879,8 @@ def _removal_choice(scope: _RemovalScope, recorded: list[str], *, files: Collect
         return recorded
     if scope.chosen_systems:
         choice = _choice_without(recorded, "--system", scope.chosen_systems,
-                                 sorted(scope.staying_systems | scope.chosen_systems))
+                                 sorted(scope.staying_systems | scope.chosen_systems),
+                                 scope.system_ids)
         if not _choice_names(record_options(choice), "--system"):
             return None
         return choice
