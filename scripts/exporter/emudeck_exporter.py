@@ -18,7 +18,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from scraper.emudeck_scraper import FUNCTION_HASH_MAP, RE_FUNC, RE_LOCAL_HASHES
 
 from .base_exporter import BaseExporter
-from resolve.reconcile import NativeFile, NativeSystem, Report, hash_values
+from core.hashing import parse_hash_list
+from resolve.reconcile import NativeFile, NativeSystem, Report
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main"
@@ -80,7 +81,7 @@ class Exporter(BaseExporter[str]):
         adds nothing, and the truth's extra accepted revisions are not
         appended: either would grow an array other consumers read too.
         """
-        theirs = hash_values(fe.platform or {}, "md5")
+        theirs = parse_hash_list((fe.platform or {}).get("md5"))
         if not theirs:
             return []
         if "md5" in fe.corrections:
@@ -124,7 +125,7 @@ class Exporter(BaseExporter[str]):
             if system.native_id == system_id
             for fe in system.files
             if "md5" in fe.corrections
-            for value in hash_values(fe.platform or {}, "md5")
+            for value in parse_hash_list((fe.platform or {}).get("md5"))
         }
 
     @classmethod

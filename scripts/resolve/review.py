@@ -15,7 +15,7 @@ try:
 except ImportError:
     yaml = None
 
-from core.hashing import compute_hashes, parse_hash_list, parse_md5_list, stream_hashes
+from core.hashing import compute_hashes, parse_hash_list, stream_hashes
 from model.nodedup import in_nodedup_dir
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
@@ -179,7 +179,7 @@ def load_platform_hashes(platforms_dir: str, db: dict | None = None) -> dict:
         for system_id, system in config.get("systems", {}).items():
             for file_entry in system.get("files", []):
                 sha1s = parse_hash_list(file_entry.get("sha1"))
-                md5s = parse_md5_list(file_entry.get("md5"))
+                md5s = parse_hash_list(file_entry.get("md5"))
                 sha256s = parse_hash_list(file_entry.get("sha256"))
                 known["sha1"].update(sha1s)
                 known["md5"].update(md5s)

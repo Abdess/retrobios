@@ -28,7 +28,7 @@ from core.paths import REPO_ROOT
 from sitegen.install import release_pack_platforms
 from sitegen.lookup import (
     HASH_ALGORITHMS,
-    sorted_hash_values,
+    hash_pairs,
     data_directory_members,
     file_location_items,
     file_lookup_records,
@@ -48,23 +48,23 @@ def _accepted_hash_rows(platform_files: list[dict], emulator_items: list[dict]) 
     """One row per accepted hash value, for both layers, lookup-ready."""
     rows: list[dict] = []
     for row in platform_files:
-        for algorithm in HASH_ALGORITHMS:
-            rows.extend({
-                "layer": "platform", "owner": row["platform_id"],
-                "system": row["system"], "name": row["name"],
-                "path": row["destination"], "algorithm": algorithm, "value": value,
-            } for value in sorted_hash_values(row.get(f"{algorithm}_raw", row.get(algorithm))))
+        # A table row keeps the field as declared under <algorithm>_raw.
+        declared = {algo: row.get(f"{algo}_raw", row.get(algo)) for algo in HASH_ALGORITHMS}
+        rows.extend({
+            "layer": "platform", "owner": row["platform_id"],
+            "system": row["system"], "name": row["name"],
+            "path": row["destination"], "algorithm": algorithm, "value": value,
+        } for algorithm, value in hash_pairs(declared))
     for item in emulator_items:
         for entry in item["profile"].get("files", []) or []:
             if not isinstance(entry, dict):
                 continue
-            for algorithm in HASH_ALGORITHMS:
-                rows.extend({
-                    "layer": "emulator", "owner": item["id"],
-                    "system": _json_text(entry.get("system")),
-                    "name": entry.get("name", ""), "path": entry.get("path", "") or "",
-                    "algorithm": algorithm, "value": value,
-                } for value in sorted_hash_values(entry.get(algorithm)))
+            rows.extend({
+                "layer": "emulator", "owner": item["id"],
+                "system": _json_text(entry.get("system")),
+                "name": entry.get("name", ""), "path": entry.get("path", "") or "",
+                "algorithm": algorithm, "value": value,
+            } for algorithm, value in hash_pairs(entry))
             # Members of an archive: MAME and FBNeo hash the ROMs inside the
             # set, never the set. Left out, a loose nmk004.bin (crc32
             # 83b6f611) found no row while the site search found it.
@@ -72,13 +72,12 @@ def _accepted_hash_rows(platform_files: list[dict], emulator_items: list[dict]) 
             for member in entry.get("contents") or []:
                 if not isinstance(member, dict) or not member.get("name"):
                     continue
-                for algorithm in HASH_ALGORITHMS:
-                    rows.extend({
-                        "layer": "emulator", "owner": item["id"],
-                        "system": _json_text(entry.get("system")),
-                        "name": str(member["name"]), "path": f"{archive}/{member['name']}",
-                        "algorithm": algorithm, "value": value,
-                    } for value in sorted_hash_values(member.get(algorithm)))
+                rows.extend({
+                    "layer": "emulator", "owner": item["id"],
+                    "system": _json_text(entry.get("system")),
+                    "name": str(member["name"]), "path": f"{archive}/{member['name']}",
+                    "algorithm": algorithm, "value": value,
+                } for algorithm, value in hash_pairs(member))
     rows.sort(key=lambda r: (r["layer"], r["owner"], r["name"], r["algorithm"], r["value"]))
     return rows
 

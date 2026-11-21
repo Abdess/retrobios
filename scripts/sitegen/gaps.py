@@ -7,6 +7,7 @@ import html
 import re
 from dataclasses import dataclass
 
+from core.hashing import declared_hash_lists
 from core.text import series
 from model.platforms import native_layer
 from model.profiles import is_emulator
@@ -49,24 +50,6 @@ def _held_accepted(discrepancy: str, db: dict | None) -> str:
         if path:
             return path
     return ""
-
-
-_PROBLEM_HASHES = ("sha1", "md5", "sha256", "crc32")
-
-
-def _declared_hashes(entry: dict) -> dict[str, list[str]]:
-    """The hashes the platform declares for a reported file, by algorithm.
-
-    The untested table said "declared hash contradicted by the local file"
-    and named neither: the reader could not look for the dump RetroDECK asks
-    for, nor report the difference.
-    """
-    from core.hashing import parse_hash_list
-
-    return {
-        algo: parse_hash_list(entry.get(algo))
-        for algo in _PROBLEM_HASHES if parse_hash_list(entry.get(algo))
-    }
 
 
 def _declarations(cov: dict) -> dict[int, dict]:
@@ -422,7 +405,10 @@ def _problem_record(pname: str, cov: dict, d: dict, entry: dict) -> dict:
         "reason": d.get("reason", ""),
         "discrepancy": d.get("discrepancy", ""),
         "system": d.get("system", ""),
-        "declared": _declared_hashes(entry),
+        # The untested table said "declared hash contradicted by the local
+        # file" and named neither: the reader could not look for the dump
+        # RetroDECK asks for, nor report the difference.
+        "declared": declared_hash_lists(entry),
         "destination": str(entry.get("destination") or d.get("name", "")),
         "path": d.get("path") or "",
     }

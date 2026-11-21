@@ -13,7 +13,8 @@ import json
 from collections import OrderedDict
 
 from .base_exporter import BaseExporter
-from resolve.reconcile import NativeFile, NativeSystem, Report, hash_values
+from core.hashing import parse_hash_list
+from resolve.reconcile import NativeFile, NativeSystem, Report
 
 COMPONENTS_REPO = "RetroDECK/components"
 COMPONENTS_BRANCH = "main"
@@ -250,7 +251,7 @@ class Exporter(BaseExporter[str]):
             other_revision = (
                 keys
                 and seen_keys.get(keys[0], 0) > 1
-                and not set(hash_values(entry, "md5")) & set(hash_values(by_key[keys[0]], "md5"))
+                and not set(parse_hash_list(entry.get("md5"))) & set(parse_hash_list(by_key[keys[0]].get("md5")))
             )
             if other_revision or not keys:
                 merged.append(OrderedDict(entry))
@@ -302,7 +303,7 @@ class Exporter(BaseExporter[str]):
         for field in ("md5", "sha256"):
             if field in cls.carries() and field not in own:
                 combined.pop(field, None)
-        if set(hash_values(entry, "md5")) == set(hash_values(combined, "md5")):
+        if set(parse_hash_list(entry.get("md5"))) == set(parse_hash_list(combined.get("md5"))):
             # Their own spelling, and no key where they wrote none: an
             # equal empty set wrote "md5": null 39 times.
             if "md5" in entry:

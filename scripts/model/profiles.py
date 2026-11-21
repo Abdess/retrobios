@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 
 from core.cli import InputMissing, suggest_names
+from core.hashing import HASH_FIELDS
 from model.alternatives import derive_member_requirements
 from model.profilekinds import is_emulator as is_emulator
 from model.profilekinds import lists_files as lists_files
@@ -235,9 +236,6 @@ def load_emulator_profiles(
     return profiles
 
 
-_HASH_FIELDS = ("crc32", "md5", "sha1", "sha256")
-
-
 def _normalize_hash_fields(node: object) -> None:
     """Coerce hash values to str in place.
 
@@ -246,7 +244,7 @@ def _normalize_hash_fields(node: object) -> None:
     """
     if isinstance(node, dict):
         for key, val in node.items():
-            if key in _HASH_FIELDS:
+            if key in HASH_FIELDS:
                 if isinstance(val, int):
                     node[key] = str(val)
                 elif isinstance(val, list):

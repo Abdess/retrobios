@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from core.hashing import compute_hashes, md5sum, parse_md5_list
+from core.hashing import compute_hashes, md5sum, parse_hash_list
 from core.ziptools import check_inside_zip
 from resolve.nativemode import SIZE_AND_ANY_HASH, reads_file_contents
 from resolve.validation import (
@@ -142,7 +142,7 @@ def verify_entry_md5(
     # One parse for verify, the builder and the pack check: Recalbox writes
     # md5 in uppercase, and a copy that lowercased only comma lists judged
     # a single uppercase value differently from the others.
-    md5_list = parse_md5_list(expected_md5)
+    md5_list = parse_hash_list(expected_md5)
 
     if not local_path:
         return {**base, "status": Status.MISSING}

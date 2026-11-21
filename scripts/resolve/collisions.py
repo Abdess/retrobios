@@ -6,7 +6,7 @@ import os
 import zlib
 from dataclasses import dataclass, field
 
-from core.hashing import compute_hashes, declared_hashes, parse_md5_list
+from core.hashing import compute_hashes, declared_hashes, parse_hash_list
 from core.paths import comparable_destination
 from core.ziptools import check_inside_zip
 from resolve.localfile import resolve_local_file, variant_base_name
@@ -126,7 +126,7 @@ def accepted_by_all(path: str, entries: list[dict], db: dict) -> bool:
         return False
     for entry in entries:
         if entry.get("zipped_file"):
-            declared = parse_md5_list(entry.get("md5"))
+            declared = parse_hash_list(entry.get("md5"))
             if declared and not any(
                 check_inside_zip(path, entry["zipped_file"], m) == "ok" for m in declared
             ):

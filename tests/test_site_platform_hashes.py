@@ -51,6 +51,7 @@ class AnUntestedRowNamesBothHashes(unittest.TestCase):
     nor the one the collection holds."""
 
     def test_declared_and_held(self):
+        from core.hashing import declared_hash_lists
         from sitegen import gaps
 
         path = "bios/Nintendo/Nintendo DS/dsifirmware.bin"
@@ -59,7 +60,7 @@ class AnUntestedRowNamesBothHashes(unittest.TestCase):
         problem = {
             "platform": "RetroDECK", "name": "dsifirmware.bin", "status": "untested",
             "required": True, "reason": "declared hash contradicted by the local file",
-            "declared": gaps._declared_hashes(entry), "path": path,
+            "declared": declared_hash_lists(entry), "path": path,
         }
         db = {"files": {"f" * 40: {"path": path, "sha256": held}}}
         table = "\n".join(gaps._render_problem_files([problem], db=db))

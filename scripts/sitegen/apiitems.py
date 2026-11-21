@@ -10,7 +10,8 @@ from model.database import sha1_at
 from model.systemnames import system_name
 from model.profiles import is_emulator
 from sitegen.config import SITE_URL
-from sitegen.lookup import sorted_hash_values, site_path
+from core.hashing import parse_hash_list
+from sitegen.lookup import site_path
 from sitegen.render import card_anchor, console_href
 
 
@@ -45,8 +46,8 @@ def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
             ids = ([str(entry["system"])] if entry.get("system")
                    else [str(s) for s in entry.get("systems") or []] or
                    (own if len(own) == 1 else []))
-            found = {v for v in sorted_hash_values(entry.get("sha1")) if v in files}
-            for md5 in sorted_hash_values(entry.get("md5")):
+            found = {v for v in parse_hash_list(entry.get("sha1")) if v in files}
+            for md5 in parse_hash_list(entry.get("md5")):
                 match = by_md5.get(md5)
                 found.update([match] if isinstance(match, str) else match or [])
             for sys_id in ids:

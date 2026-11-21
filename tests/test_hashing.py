@@ -93,8 +93,18 @@ class TheSiteReadsAHashFieldTheResolversWay(unittest.TestCase):
             ("0xDEADBEEF", ["deadbeef"]), (12345678, ["12345678"]),
         ):
             with self.subTest(raw=raw):
-                self.assertEqual(lookup.sorted_hash_values(raw), expected)
-                self.assertEqual(lookup.sorted_hash_values(raw), sorted(hashing.parse_hash_list(raw)))
+                pairs = lookup.hash_pairs({"md5": raw})
+                self.assertEqual([value for _algo, value in pairs], expected)
+                self.assertEqual({algo for algo, _value in pairs}, {"md5"} if expected else set())
+
+    def test_algorithms_keep_the_order_given(self):
+        from sitegen import lookup
+
+        entry = {"crc32": "0xAB", "sha1": "b, a", "md5": ""}
+        self.assertEqual(lookup.hash_pairs(entry),
+                         [("sha1", "a"), ("sha1", "b"), ("crc32", "ab")])
+        self.assertEqual(lookup.hash_pairs(entry, ("crc32", "sha1")),
+                         [("crc32", "ab"), ("sha1", "a"), ("sha1", "b")])
 
 
 
@@ -105,6 +115,11 @@ class DeclaredHashes(unittest.TestCase):
         # A field holding only separators declares nothing.
         self.assertFalse(hashing.lists_hashes({"sha1": " , "}))
         self.assertTrue(hashing.lists_hashes({"crc32": "1234abcd"}))
+
+    def test_lists_keep_the_written_order(self):
+        entry = {"crc32": "0xAB", "md5": "B, a, b", "sha1": ""}
+        self.assertEqual(hashing.declared_hash_lists(entry), {"md5": ["b", "a"], "crc32": ["ab"]})
+        self.assertEqual(list(hashing.declared_hash_lists(entry, ("crc32", "md5"))), ["crc32", "md5"])
 
 
 if __name__ == "__main__":

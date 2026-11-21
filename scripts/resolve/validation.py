@@ -26,7 +26,7 @@ from resolve.archives import archive_members
 from model.profiles import CONTENT_CHECKS, entry_system_ids, lists_files
 from core.hashing import compute_hashes, parse_hash_list
 from core.paths import BIOS_DIR, sanitize_pack_path
-from core.hashing import lists_hashes, md5_composite, parse_md5_list
+from core.hashing import lists_hashes, md5_composite
 from resolve.nativemode import SIZE_AND_ANY_HASH, digest_algorithm, hash_mismatch_excludes_file
 from core.ziptools import check_inside_zip, check_inside_zip_data
 
@@ -791,7 +791,7 @@ def _platform_accepted(file_entry: dict, platform_digest: str) -> set[str]:
     """The values of the digest the frontend compares that the entry declares."""
     declared = file_entry.get(platform_digest) or ""
     if platform_digest == "md5":
-        return set(parse_md5_list(declared))
+        return set(parse_hash_list(declared))
     if isinstance(declared, str) and declared:
         return {declared.lower()}
     if isinstance(declared, list):
@@ -964,7 +964,7 @@ def digest_verdict(
             if file_entry.get(field)
         )
     if algorithm == "md5":
-        declared = parse_md5_list(file_entry.get("md5"))
+        declared = parse_hash_list(file_entry.get("md5"))
     else:
         value = file_entry.get(algorithm)
         values = value if isinstance(value, list) else [value]
@@ -1011,7 +1011,7 @@ def inner_rom_data_check(file_entry: dict, data: bytes) -> str:
 def _first_accepted_md5(file_entry: dict, check: Callable[[str], str]) -> str:
     # With no md5 declared, checkInsideZip still runs and needs the member.
     result = "not_in_zip"
-    for candidate in parse_md5_list(file_entry.get("md5")) or [""]:
+    for candidate in parse_hash_list(file_entry.get("md5")) or [""]:
         result = check(candidate)
         if result == "ok":
             break

@@ -23,11 +23,6 @@ from model.systems import norm_system_id
 from core.paths import REPO_ROOT
 
 
-def hash_values(entry: dict, field_name: str) -> list[str]:
-    """Return a hash field as a list, whatever shape it was written in."""
-    return parse_hash_list(entry.get(field_name))
-
-
 def checked_hashes(entry: dict | None) -> dict | None:
     """The truth entry with only the hashes its code checks.
 
@@ -57,8 +52,8 @@ def checked_hashes(entry: dict | None) -> dict | None:
         kinds = {str(k) for k in raw}
     else:
         kinds = {str(raw)}
-    checked = [f for f in HASH_FIELDS if f in kinds and hash_values(entry, f)]
-    if checked and all(len(set(hash_values(entry, f))) == 1 for f in checked):
+    checked = [f for f in HASH_FIELDS if f in kinds and parse_hash_list(entry.get(f))]
+    if checked and all(len(set(parse_hash_list(entry.get(f)))) == 1 for f in checked):
         return entry
     return {k: v for k, v in entry.items() if k not in HASH_FIELDS or k in kinds}
 
@@ -116,7 +111,7 @@ def is_placeholder(name: str) -> bool:
 
 
 def _field_sets(entry: dict | None) -> dict[str, set[str]]:
-    return {f: set(hash_values(entry or {}, f)) for f in HASH_FIELDS}
+    return {f: set(parse_hash_list((entry or {}).get(f))) for f in HASH_FIELDS}
 
 
 def single_size(value: int | str | list[int | str]) -> int | None:
@@ -206,9 +201,9 @@ class NativeFile:
         rejects a file will reject it whatever the platform declares.
         """
         if field_name == "md5" and self.composite_md5:
-            return hash_values(self.platform or {}, field_name)
-        truth_values = hash_values(self._checked_truth, field_name)
-        platform_values = hash_values(self.platform or {}, field_name)
+            return parse_hash_list((self.platform or {}).get(field_name))
+        truth_values = parse_hash_list(self._checked_truth.get(field_name))
+        platform_values = parse_hash_list((self.platform or {}).get(field_name))
         source = self._identity_source()
         if source == "platform":
             return platform_values
@@ -242,11 +237,11 @@ class NativeFile:
         is written when it names one value, which is then that dump's.
         """
         if field_name == "md5" and self.composite_md5:
-            values = hash_values(self.platform or {}, field_name)
+            values = parse_hash_list((self.platform or {}).get(field_name))
             return values[0] if values else ""
         source = self._identity_source()
-        truth_values = hash_values(self._checked_truth, field_name)
-        platform_values = hash_values(self.platform or {}, field_name)
+        truth_values = parse_hash_list(self._checked_truth.get(field_name))
+        platform_values = parse_hash_list((self.platform or {}).get(field_name))
         if source == "truth":
             return truth_values[0] if truth_values else ""
         if source == "platform" or not truth_values:
@@ -531,8 +526,8 @@ def _correct_matched(matched: NativeFile, truth_entry: dict, report: Report) -> 
             report.hashes_corrected.append(
                 f"{matched.native_system}/{matched.name} {field_name}"
             )
-        elif hash_values(checked, field_name) and not hash_values(
-            comparable(matched.platform), field_name
+        elif parse_hash_list(checked.get(field_name)) and not parse_hash_list(
+            comparable(matched.platform).get(field_name)
         ):
             matched.filled.append(field_name)
     t_req = truth_entry.get("required")

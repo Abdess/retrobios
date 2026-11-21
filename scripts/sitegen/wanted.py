@@ -26,7 +26,7 @@ from resolve.layout import runs_standalone
 from resolve.standalone import standalone_set
 from model.profiles import unique_emulator_profiles
 from packs.crossref import first_hash
-from core.hashing import cut_md5_owner, parse_hash_list
+from core.hashing import cut_md5_owner, declared_hash_lists, parse_hash_list
 from resolve.review import LARGE_FILE_ISSUE_URL, Placement, placement
 from resolve.validation import deliverable, filter_files_by_mode, installed_with_emulator
 from sitegen.config import UPLOAD_ROOT
@@ -53,7 +53,8 @@ def declared_hashes(entry: dict) -> dict[str, list[str]]:
     counts only where no stronger hash is declared, as in
     resolve_local_file.
     """
-    hashes = {algo: parse_hash_list(entry.get(algo)) for algo in ALGORITHMS}
+    declared = declared_hash_lists(entry, ALGORITHMS)
+    hashes = {algo: declared.get(algo, []) for algo in ALGORITHMS}
     if entry.get("zipped_file"):
         hashes["md5"] = []
     hashes["md5"] = [v for v in hashes["md5"] if 0 < len(v) <= 32]

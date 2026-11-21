@@ -18,9 +18,9 @@ from pathlib import Path
 
 from model.systems import norm_system_id
 from resolve.cores import resolve_platform_cores, unresolved_platform_cores
-from core.hashing import declared_hashes
+from core.hashing import declared_hashes, parse_hash_list
 from resolve.reconcile import (
-    HASH_FIELDS, NativeSystem, comparable, contradicts, entry_names, hash_values,
+    HASH_FIELDS, NativeSystem, comparable, contradicts, entry_names,
 )
 from resolve.launchers import record_names as launcher_names
 
@@ -32,10 +32,10 @@ def _tails(path: str) -> list[str]:
 
 
 def _entry_hashes(entry: dict) -> set[str]:
-    values = {v for f in HASH_FIELDS for v in hash_values(entry, f)}
+    values = {v for f in HASH_FIELDS for v in parse_hash_list(entry.get(f))}
     for member in entry.get("contents") or []:
         if isinstance(member, dict):
-            values |= {v for f in HASH_FIELDS for v in hash_values(member, f)}
+            values |= {v for f in HASH_FIELDS for v in parse_hash_list(member.get(f))}
     return values
 
 
@@ -47,7 +47,7 @@ def _declared_hashes(entry: dict) -> dict[str, set[str]]:
     """
     entry = comparable(entry)
     found = declared_hashes(entry)
-    if alt := set(hash_values(entry, "alt_md5")):
+    if alt := set(parse_hash_list(entry.get("alt_md5"))):
         found["md5"] = found.get("md5", set()) | alt
     return found
 
@@ -129,7 +129,7 @@ class ReadEvidence:
         if names & self.names or (tails and tails[-1] in self.names):
             return "name"
         hashes = {
-            v for f in (*HASH_FIELDS, "alt_md5") for v in hash_values(entry, f)
+            v for f in (*HASH_FIELDS, "alt_md5") for v in parse_hash_list(entry.get(f))
         }
         if hashes & self.hashes:
             return "hash"
@@ -183,7 +183,7 @@ class ProofIndex:
         tails = _tails(destination)
         last = {tails[-1]} if tails else set()
         hashes = {
-            v for f in (*HASH_FIELDS, "alt_md5") for v in hash_values(entry, f)
+            v for f in (*HASH_FIELDS, "alt_md5") for v in parse_hash_list(entry.get(f))
         }
         # "/" + d in "/" + path: d is a run of whole segments ending in "/",
         # so it is a run of the path's segments before the last one.

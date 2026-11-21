@@ -16,7 +16,7 @@ from core.paths import REPO_ROOT
 from sitegen.descriptions import EMULATOR_SNIPPETS, NOTHING_TO_FETCH, PAGE_DATA, TITLE_NOUNS, title_noun
 from sitegen.emulatorcards import snippet_noun
 from sitegen.install import comes_with_app
-from sitegen.lookup import data_member_digests, sorted_hash_values
+from sitegen.lookup import data_member_digests, hash_pairs
 from sitegen.render import card_anchor, system_page_map
 from sitegen.write import write_if_changed
 
@@ -197,8 +197,7 @@ def platform_structured_data(name: str, coverage: dict) -> dict:
             }
             identifiers = [
                 f"{field}:{value}"
-                for field in ("sha1", "md5", "crc32", "sha256")
-                for value in sorted_hash_values(entry.get(field))
+                for field, value in hash_pairs(entry, ("sha1", "md5", "crc32", "sha256"))
             ]
             if identifiers:
                 part["identifier"] = identifiers
@@ -369,11 +368,7 @@ def emulator_structured_data(profile: dict) -> dict:
             continue
         # One identifier per accepted value: "sha256:a,b,c,d" matched no
         # exact search (mesence's BS-X.bin).
-        identifiers = [
-            f"{field}:{value}"
-            for field in ("sha1", "sha256", "md5", "crc32")
-            for value in sorted_hash_values(f.get(field))
-        ]
+        identifiers = [f"{field}:{value}" for field, value in hash_pairs(f)]
         part: dict[str, object] = {
             "@type": "CreativeWork",
             "name": str(f.get("path") or f["name"]),
@@ -389,9 +384,7 @@ def emulator_structured_data(profile: dict) -> dict:
                 "@type": "CreativeWork",
                 "name": str(member.get("name", "")),
                 "identifier": [
-                    f"{field}:{value}"
-                    for field in ("sha1", "crc32")
-                    for value in sorted_hash_values(member.get(field))
+                    f"{field}:{value}" for field, value in hash_pairs(member, ("sha1", "crc32"))
                 ],
             }
             for member in f.get("contents") or []

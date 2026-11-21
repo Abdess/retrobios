@@ -74,7 +74,7 @@ from model import systemnames
 from model.registry import list_registered_platforms, list_release_pack_platforms
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
-from resolve.reconcile import HASH_FIELDS, hash_values
+from core.hashing import HASH_FIELDS, parse_hash_list
 from resolve.categories import EntryCategories
 from sitegen.sources import launcher_ref_markdown, list_source
 import check_platform_folder
@@ -91,10 +91,10 @@ DIST = REPO_ROOT / "website" / "dist"
 
 
 def _accepted(profile_entry: dict) -> set[str]:
-    values = {v for f in HASH_FIELDS for v in hash_values(profile_entry, f)}
+    values = {v for f in HASH_FIELDS for v in parse_hash_list(profile_entry.get(f))}
     for member in profile_entry.get("contents") or []:
         if isinstance(member, dict):
-            values |= {v for f in HASH_FIELDS for v in hash_values(member, f)}
+            values |= {v for f in HASH_FIELDS for v in parse_hash_list(member.get(f))}
     return values
 
 
@@ -125,11 +125,11 @@ class ReaderMatchedByHash(unittest.TestCase):
             cats = EntryCategories(config, self.profiles)
             for sys_id, system in (config.get("systems") or {}).items():
                 for entry in system.get("files") or []:
-                    md5s = set(hash_values(entry, "md5")) | set(hash_values(entry, "alt_md5"))
+                    md5s = set(parse_hash_list(entry.get("md5"))) | set(parse_hash_list(entry.get("alt_md5")))
                     if not md5s:
                         continue
                     # The same dump, named by whichever hash both sides state.
-                    declared = md5s | {v for f in HASH_FIELDS for v in hash_values(entry, f)}
+                    declared = md5s | {v for f in HASH_FIELDS for v in parse_hash_list(entry.get(f))}
                     found = cats.explain(entry, entry.get("destination") or entry["name"], sys_id)
                     for reader in found.get("read_by", []):
                         if reader["emulator"] == "launcher":

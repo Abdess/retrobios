@@ -6,7 +6,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from .base_exporter import BaseExporter
-from resolve.reconcile import HASH_FIELDS, NativeFile, hash_values, single_size
+from core.hashing import parse_hash_list
+from resolve.reconcile import HASH_FIELDS, NativeFile, single_size
 
 
 @dataclass
@@ -75,7 +76,7 @@ def _change(
 
 
 def _platform_value(entry: NativeFile, field_name: str) -> str | list[str]:
-    values = hash_values(entry.platform or {}, field_name)
+    values = parse_hash_list((entry.platform or {}).get(field_name))
     if (entry.platform or {}).get(f"{field_name}_list"):
         return values
     return ",".join(values)
@@ -157,7 +158,7 @@ def landed_changes(exporter: BaseExporter, systems: dict) -> LandedChanges:
                     listed is not None
                     and field_name not in entry.corrections
                     and field_name not in entry.filled
-                    and listed != hash_values(entry.platform, field_name)
+                    and listed != parse_hash_list(entry.platform.get(field_name))
                     and exporter.states(entry, field_name)
                 ):
                     records.append(_change(
@@ -196,7 +197,7 @@ def landed_changes(exporter: BaseExporter, systems: dict) -> LandedChanges:
                 _change("hash_cleared", entry, field_name,
                         _platform_value(entry, field_name), None)
                 for field_name in HASH_FIELDS
-                if hash_values(entry.platform, field_name)
+                if parse_hash_list(entry.platform.get(field_name))
                 and not entry.hashes(field_name)
                 and exporter.clears(entry, field_name)
             )

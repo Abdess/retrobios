@@ -9,7 +9,7 @@ import urllib.parse
 import zipfile
 from pathlib import Path
 
-from core.hashing import parse_hash_list
+from core.hashing import declared_hash_lists
 from model import siteinputs
 from model.collection import manufacturer_slug
 from model.registry import load_versions
@@ -26,13 +26,15 @@ from sitegen.write import write_if_changed
 HASH_ALGORITHMS = ("sha1", "sha256", "md5", "crc32")
 
 
-def sorted_hash_values(value: object) -> list[str]:
-    """Every accepted value of one hash field, lowercase.
+def hash_pairs(entry: dict, fields: tuple[str, ...] = HASH_ALGORITHMS) -> list[tuple[str, str]]:
+    """(algorithm, value) for every value an entry declares, lowercase, the
+    algorithms in the order given and the values sorted within each.
 
     A field holds one value, a list of accepted revisions, or (Recalbox) a
     comma-joined string: an exact lookup missed all but the first form.
     """
-    return sorted(parse_hash_list(value))
+    return [(algo, value) for algo, values in declared_hash_lists(entry, fields).items()
+            for value in sorted(values)]
 
 
 def site_path(markdown_target: str) -> str:
@@ -307,11 +309,10 @@ def retired_records(retired: dict[str, dict], files: dict, locations: list[dict]
         else:
             # The page its card was on: the reader lands among its neighbours.
             url = site_path(f"systems/{card_page(str(record.get('path', '')), sha1)}.md")
-        for algorithm in HASH_ALGORITHMS:
-            value = sha1 if algorithm == "sha1" else record.get(algorithm)
-            records.extend({"value": one, "algorithm": algorithm, "layer": "retired",
-                            "name": str(record.get("name", "")), "sha1": sha1,
-                            "url": url, **extra} for one in sorted_hash_values(value))
+        records.extend({"value": one, "algorithm": algorithm, "layer": "retired",
+                        "name": str(record.get("name", "")), "sha1": sha1,
+                        "url": url, **extra}
+                       for algorithm, one in hash_pairs({**record, "sha1": sha1}))
     return records
 
 
@@ -365,12 +366,11 @@ def _collection_lookup_records(
             continue
         parts = str(entry.get("path", "")).split("/")
         held_by = named.get((manufacturer_slug(parts[1]), parts[2])) if len(parts) > 3 else None
-        for algorithm in HASH_ALGORITHMS:
-            records.extend({
-                "value": value, "algorithm": algorithm, "layer": "collection",
-                "name": str(entry.get("name", "")), "sha1": sha1, "url": item["url"],
-                **({"system_name": held_by} if held_by else {}),
-            } for value in sorted_hash_values(entry.get(algorithm)))
+        records.extend({
+            "value": value, "algorithm": algorithm, "layer": "collection",
+            "name": str(entry.get("name", "")), "sha1": sha1, "url": item["url"],
+            **({"system_name": held_by} if held_by else {}),
+        } for algorithm, value in hash_pairs(entry))
         records += _archive_member_records(entry, sha1, item["url"])
     return records
 
@@ -388,13 +388,12 @@ def _platform_lookup_records(coverages: dict, consumers: FileConsumers | None) -
                 # no collection file by itself: the archive holding it is the one.
                 archive = (consumers.sha1_of(entry)
                            if consumers is not None and entry.get("zipped_file") else None)
-                for algorithm in HASH_ALGORITHMS:
-                    records.extend({
-                        "value": value, "algorithm": algorithm, "layer": "platform",
-                        "owner": key, "name": str(entry.get("name", "")), "url": url,
-                        **({"system_name": system_label} if system_label else {}),
-                        **({"sha1": archive} if archive else {}),
-                    } for value in sorted_hash_values(entry.get(algorithm)))
+                records.extend({
+                    "value": value, "algorithm": algorithm, "layer": "platform",
+                    "owner": key, "name": str(entry.get("name", "")), "url": url,
+                    **({"system_name": system_label} if system_label else {}),
+                    **({"sha1": archive} if archive else {}),
+                } for algorithm, value in hash_pairs(entry))
     return records
 
 
@@ -416,12 +415,11 @@ def _emulator_lookup_records(profiles: dict) -> list[dict]:
                 if isinstance(member, dict) and member.get("name")
             ]
             for name, holder in holders:
-                for algorithm in HASH_ALGORITHMS:
-                    records.extend({
-                        "value": value, "algorithm": algorithm, "layer": "emulator",
-                        "owner": key, "name": name, "url": url,
-                        **({"system_name": entry_label} if entry_label else {}),
-                    } for value in sorted_hash_values(holder.get(algorithm)))
+                records.extend({
+                    "value": value, "algorithm": algorithm, "layer": "emulator",
+                    "owner": key, "name": name, "url": url,
+                    **({"system_name": entry_label} if entry_label else {}),
+                } for algorithm, value in hash_pairs(holder))
     return records
 
 
@@ -503,12 +501,11 @@ def _read_by_name(records: list[dict], files: dict, consumers: FileConsumers) ->
             anchor = emulator_card_anchor(emulator, entries, index)
             url = site_path(f"emulators/{emulator_card_page(emulator, anchor)}.md#{anchor}")
             name = str(entries[index].get("name", ""))
-            for algorithm in HASH_ALGORITHMS:
-                added.extend({
-                    "value": value, "algorithm": algorithm, "layer": "emulator",
-                    "owner": emulator, "name": name, "url": url, "sha1": sha1,
-                    "declared": "name",
-                } for value in sorted_hash_values(entry.get(algorithm)))
+            added.extend({
+                "value": value, "algorithm": algorithm, "layer": "emulator",
+                "owner": emulator, "name": name, "url": url, "sha1": sha1,
+                "declared": "name",
+            } for algorithm, value in hash_pairs(entry))
     return added
 
 
@@ -539,11 +536,10 @@ def _held_under_every_hash(records: list[dict], files: dict, indexes: dict) -> l
         if sha1 not in files:
             continue
         record["sha1"] = sha1
-        for algorithm in HASH_ALGORITHMS:
-            copies.extend({**record, "value": value, "algorithm": algorithm,
-                           "declared": record["algorithm"]}
-                          for value in sorted_hash_values(files[sha1].get(algorithm))
-                          if value != record["value"])
+        copies.extend({**record, "value": value, "algorithm": algorithm,
+                       "declared": record["algorithm"]}
+                      for algorithm, value in hash_pairs(files[sha1])
+                      if value != record["value"])
     return copies
 
 

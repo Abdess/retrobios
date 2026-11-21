@@ -198,24 +198,21 @@ def parse_hash_list(raw: str | list | int | None) -> list[str]:
 HASH_FIELDS = ("sha1", "md5", "sha256", "crc32")
 
 
+def declared_hash_lists(entry: dict, fields: Iterable[str] = HASH_FIELDS) -> dict[str, list[str]]:
+    """Hash field -> the values an entry declares, in the order written, for
+    each field it declares, the fields in the order given."""
+    found = {f: parse_hash_list(entry.get(f)) for f in fields}
+    return {f: values for f, values in found.items() if values}
+
+
 def declared_hashes(entry: dict, fields: Iterable[str] = HASH_FIELDS) -> dict[str, set[str]]:
     """Hash field -> the values an entry declares, for each field it declares."""
-    found = {f: set(parse_hash_list(entry.get(f))) for f in fields}
-    return {f: values for f, values in found.items() if values}
+    return {f: set(values) for f, values in declared_hash_lists(entry, fields).items()}
 
 
 def lists_hashes(entry: dict) -> bool:
     """Whether a declaration says anything about content at all."""
     return bool(declared_hashes(entry))
-
-
-def parse_md5_list(raw: str | list | None) -> list[str]:
-    """Normalize an md5 field into a lowercase list.
-
-    Platform YAMLs carry Recalbox multi-hash as one comma-separated string,
-    emulator profiles carry a YAML list. Both reach here.
-    """
-    return parse_hash_list(raw)
 
 
 def parse_sha256sums(text: str) -> dict[str, str]:

@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
 
-from core.hashing import parse_hash_list, parse_md5_list, stream_hashes
+from core.hashing import parse_hash_list, stream_hashes
 from core.paths import BIOS_DIR, PLATFORMS_DIR, REPO_ROOT
 from model.alternatives import set_keys, set_requirements, settle_sets
 from model.database import get_mame_clone_map, sha1_at
@@ -630,7 +630,7 @@ def entry_source(f: dict, index: dict) -> str | None:
     # The declared content anywhere in bios/ comes before a data/ copy, as in
     # the resolver: the hash steps run before the data directories.
     held = (
-        any(index["by_md5"].get(v) for v in parse_md5_list(f.get("md5")))
+        any(index["by_md5"].get(v) for v in parse_hash_list(f.get("md5")))
         or any(v in db_files for v in values("sha1"))
         # rust_dos names its SC-55 ROMs by sha256 alone
         or any(v in index["by_sha256"] for v in values("sha256"))

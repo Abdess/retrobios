@@ -21,11 +21,12 @@ from xml.sax.saxutils import quoteattr
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from model.profiles import load_emulator_profiles
+from core.hashing import parse_hash_list
 from model.safeparse import parse_untrusted_xml
 
 from .base_exporter import BaseExporter
 from resolve.reconcile import (
-    NativeFile, NativeSystem, Report, by_destination, by_name, hash_values,
+    NativeFile, NativeSystem, Report, by_destination, by_name,
 )
 
 SOURCE_URL = (
@@ -83,7 +84,7 @@ def _stated(text: str) -> dict[str, str]:
         # Recalbox accepts any digest of the list (Bios.cpp:109-130): the
         # order is not content, and neogeo.zip's 24, reordered, were
         # written again.
-        attrs["md5"] = ",".join(sorted(hash_values(attrs, "md5")))
+        attrs["md5"] = ",".join(sorted(parse_hash_list(attrs.get("md5"))))
     return attrs
 
 

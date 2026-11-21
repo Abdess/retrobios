@@ -1937,10 +1937,9 @@ class RecalboxPatchesAttributesNotElements(unittest.TestCase):
         self.assertEqual(_stated('<bios path="a" md5="B,,a, " />')["md5"], "a,b")
 
     def test_retrodeck_compares_md5_lists_as_sets(self):
-        from resolve.reconcile import hash_values
+        from core.hashing import parse_hash_list
 
-        self.assertEqual(set(hash_values({"md5": ["A", "b"]}, "md5")),
-                         set(hash_values({"md5": "b, a"}, "md5")))
+        self.assertEqual(set(parse_hash_list(["A", "b"])), set(parse_hash_list("b, a")))
 
     def test_one_attribute_changes_in_place(self):
         from exporter.recalbox_exporter import patch_element

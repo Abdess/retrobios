@@ -18,8 +18,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from resolve.archives import contents_members, holds_required_members
 from resolve.standalone import platform_layouts, standalone_set
 from resolve.cores import resolve_platform_cores
-from resolve.reconcile import HASH_FIELDS, hash_values
-from core.hashing import lists_hashes
+from core.hashing import declared_hash_lists, lists_hashes
+from model.profiles import lists_files
 from resolve.collisions import accepted_by_all, find_collisions
 from resolve.content import size_fits
 from resolve.validation import opens_by_name, outside_gap_scope
@@ -58,11 +58,6 @@ def _reads(entry: dict, by_name: bool, local: str, db: dict) -> bool:
     return by_name and _size_fits(entry, local)
 
 
-def _hashes(entry: dict) -> dict[str, list[str]]:
-    found = {f: hash_values(entry, f) for f in HASH_FIELDS}
-    return {f: values for f, values in found.items() if values}
-
-
 def doubled_destinations(
     scraped: dict | None,
     profiles: dict[str, dict],
@@ -86,7 +81,7 @@ def doubled_destinations(
     named: dict[str, list[tuple[str, dict, dict, bool]]] = {}
     for key in sorted(resolve_platform_cores(scraped, profiles)):
         profile = profiles[key]
-        if profile.get("type") in ("launcher", "alias"):
+        if not lists_files(profile):
             continue
         for layout, is_standalone in platform_layouts(key, profile, standalone):
             for entry in layout.get("files") or []:
@@ -117,7 +112,7 @@ def doubled_destinations(
                 "system": entry.get("native_system") or "",
                 "component": entry.get("component") or "",
                 "name": entry.get("name", ""),
-                "hashes": _hashes(entry),
+                "hashes": declared_hash_lists(entry),
                 "file": local,
                 "readers": readers,
             })

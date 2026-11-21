@@ -10,7 +10,7 @@ from collections.abc import Iterator
 from dataclasses import dataclass
 from typing import Any
 
-from core.hashing import cut_md5_owner, md5_composite, parse_md5_list
+from core.hashing import cut_md5_owner, md5_composite, parse_hash_list
 from core.memo import DerivedView
 from core.ziptools import check_inside_zip
 from model.database import get_mame_clone_map
@@ -339,7 +339,7 @@ def held_record_for(file_entry: dict, db: dict) -> str | None:
     by_md5 = indexes.get("by_md5", {})
     md5_list = [
         (cut_md5_owner(value, by_md5) or value) if len(value) < 32 else value
-        for value in parse_md5_list(file_entry.get("md5"))
+        for value in parse_hash_list(file_entry.get("md5"))
     ]
     q = _lookup(
         file_entry, db, "", md5_list,
@@ -1026,7 +1026,7 @@ def resolve_local_file(
             file_entry, db, zip_contents, dest_hint,
             depth=_depth, data_dir_registry=data_dir_registry,
         )
-    md5_list = parse_md5_list(file_entry.get("md5"))
+    md5_list = parse_hash_list(file_entry.get("md5"))
     by_md5 = db.get("indexes", {}).get("by_md5", {})
     # A value cut short stands for the one held md5 it starts, and only
     # then (cut_md5_owner): the dump it names is still name-guarded below.

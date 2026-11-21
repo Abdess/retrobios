@@ -35,7 +35,7 @@ from unittest import mock
 from model import largefiles
 import yaml
 from core.ziptools import build_zip_contents_index, check_inside_zip, safe_extract_zip
-from core.hashing import compute_hashes, md5_composite, parse_md5_list
+from core.hashing import compute_hashes, md5_composite, parse_hash_list
 from model.declarations import expand_platform_declared_names
 from resolve.grouping import group_identical_platforms
 from model.profiles import load_emulator_profiles
@@ -1726,12 +1726,12 @@ class TestE2E(unittest.TestCase):
         self.assertIsNone(path)
         self.assertEqual(status, "not_found")
 
-    def test_106_parse_md5_list(self):
-        """parse_md5_list normalizes comma-separated MD5s."""
-        self.assertEqual(parse_md5_list(""), [])
-        self.assertEqual(parse_md5_list("ABC123"), ["abc123"])
-        self.assertEqual(parse_md5_list("abc, DEF , ghi"), ["abc", "def", "ghi"])
-        self.assertEqual(parse_md5_list(",,,"), [])
+    def test_106_parse_hash_list(self):
+        """parse_hash_list normalizes comma-separated MD5s."""
+        self.assertEqual(parse_hash_list(""), [])
+        self.assertEqual(parse_hash_list("ABC123"), ["abc123"])
+        self.assertEqual(parse_hash_list("abc, DEF , ghi"), ["abc", "def", "ghi"])
+        self.assertEqual(parse_hash_list(",,,"), [])
 
     def test_107filter_files_by_mode(self):
         """filter_files_by_mode filters standalone/libretro correctly."""

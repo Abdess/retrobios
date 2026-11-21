@@ -6,7 +6,7 @@ import os
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from core.hashing import lists_hashes, parse_md5_list
+from core.hashing import lists_hashes, parse_hash_list
 from model.declarations import declared_slot
 from model.profiles import entry_system_ids, lists_files
 from packs.gaps import gap_destination
@@ -336,7 +336,7 @@ def checked_by_path(mode: str, entry: dict, rule: str = "") -> bool:
     else:
         fields = (nativemode.digest_algorithm(mode) or "",)
     return not any(
-        parse_md5_list(entry.get(name)) if name == "md5" else entry.get(name)
+        parse_hash_list(entry.get(name)) if name == "md5" else entry.get(name)
         for name in fields
     )
 

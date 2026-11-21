@@ -12,7 +12,7 @@ import urllib.parse
 from pathlib import Path
 
 from core import upstream
-from core.hashing import parse_hash_list, parse_md5_list
+from core.hashing import parse_hash_list
 from core.paths import EMULATORS_DIR, PLATFORMS_DIR, REPO_ROOT
 from resolve.localfile import held_record_for
 from resolve.review import load_platform_hashes, load_profile_hashes, placement
@@ -293,7 +293,7 @@ def place_file(
 
     values = [
         *parse_hash_list(entry.get("sha1")),
-        *parse_md5_list(entry.get("md5")),
+        *parse_hash_list(entry.get("md5")),
         *parse_hash_list(entry.get("sha256")),
     ]
     spot = placement(
