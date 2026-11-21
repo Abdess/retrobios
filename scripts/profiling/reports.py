@@ -254,13 +254,34 @@ def _report_body(report: ProfileReport, changed_only: bool) -> list[str]:
     return lines
 
 
+def _detection_lines(report: ProfileReport) -> list[str]:
+    """--detect-new-files and --watch-hashes findings of one report."""
+    lines = []
+    if report.detection_skipped:
+        lines.append(f"  extras skipped: {report.detection_skipped}")
+    lines.extend(
+        f"  new file: {item['path']}:{item['line']}  {item['name']}"
+        for item in report.new_files or ()
+    )
+    lines.extend(
+        f"  new file: {path}: {elided} further matches not shown"
+        for path, elided in report.new_files_elided.items()
+    )
+    lines.extend(
+        f"  new {item['kind']}: {item['path']}  {item['value']}"
+        for item in report.new_hashes or ()
+    )
+    return lines
+
+
 def format_report(report: ProfileReport, changed_only: bool = False) -> str:
     """Human-readable report for one profile."""
     lines = _report_header(report)
     if report.skipped:
         lines.append(f"  skipped: {report.skipped}")
-        return "\n".join(lines)
-    return "\n".join(lines + _report_body(report, changed_only))
+    else:
+        lines.extend(_report_body(report, changed_only))
+    return "\n".join(lines + _detection_lines(report))
 
 
 def report_to_dict(report: ProfileReport) -> dict:

@@ -248,28 +248,16 @@ def detect_upstream_changes(
         report.new_hashes = new_hashes
 
 
-def _print_detection(report: ProfileReport) -> None:
-    if report.detection_skipped:
-        print(f"  extras skipped: {report.detection_skipped}")
-    for item in report.new_files or ():
-        print(f"  new file: {item['path']}:{item['line']}  {item['name']}")
-    for path, elided in report.new_files_elided.items():
-        print(f"  new file: {path}: {elided} further matches not shown")
-    for item in report.new_hashes or ():
-        print(f"  new {item['kind']}: {item['path']}  {item['value']}")
-
-
 def print_extras(
     args: argparse.Namespace, profile: dict, report: ProfileReport
 ) -> None:
-    """Optional per-profile sections beyond the ref report.
+    """--full-diff and --tree-diff, read from the forge after the ref report.
 
     The ref report mutes a forge that refuses, but the extras read the same
     forge again, so a refusal here is reported on the profile's own line
     instead of ending a pass over every profile. A quota signal still
     ends the profile.
     """
-    _print_detection(report)
     if not (args.full_diff or args.tree_diff) or not report.head:
         return
     repo = select_repo(profile)

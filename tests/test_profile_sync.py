@@ -22,7 +22,6 @@ import profile_sync
 from profiling import anchoring
 from profiling import bump
 from profiling import citations as profiling_citations
-from profiling import detection
 from profiling import proseedit
 from profiling import realign
 from profiling import rebase
@@ -2210,13 +2209,10 @@ class TestExtrasSurviveARefusingForge(unittest.TestCase):
         try:
             report = _sample_report()
             profiling_run._attach_detection(self._args(), self._profile(), report)
-            buffer = io.StringIO()
-            with contextlib.redirect_stdout(buffer):
-                detection.print_extras(self._args(), self._profile(), report)
         finally:
             upstream.fetch_file = original
         self.assertEqual(report.detection_skipped, "https://x/y: HTTP 403")
-        self.assertIn("extras skipped: https://x/y: HTTP 403", buffer.getvalue())
+        self.assertIn("extras skipped: https://x/y: HTTP 403", format_report(report))
 
     def test_detection_lands_on_the_report(self):
         """A name the pinned file already carried is listed, but only a name
@@ -5340,8 +5336,29 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("--full-diff", err)
 
-    def test_markdown_refuses_detection(self):
-        code, _, err = self._main("--markdown", "--detect-new-files")
+    def test_markdown_carries_detection(self):
+        """Detection lives on the report, and the markdown document embeds
+        each report's text: refusing the pair left the finding unwritten."""
+        from unittest import mock
+
+        def detect(args, profile, report):
+            report.new_files = [
+                {"path": "a.c", "line": 3, "name": "new.rom", "since_pin": True}
+            ]
+            report.new_hashes = [{"path": "a.c", "kind": "md5", "value": "0" * 32}]
+
+        with tempfile.TemporaryDirectory() as tmp, \
+                mock.patch.object(profiling_run, "_attach_detection", side_effect=detect):
+            code, _, err = self._main(
+                "--markdown", "--detect-new-files", "--watch-hashes", "--report-dir", tmp,
+            )
+            self.assertEqual(code, 0, err)
+            document = next(Path(tmp).glob("profile-sync-*.md")).read_text(encoding="utf-8")
+        self.assertIn("  new file: a.c:3  new.rom", document)
+        self.assertIn(f"  new md5: a.c  {'0' * 32}", document)
+
+    def test_rankings_refuse_detection(self):
+        code, _, err = self._main("--triage", "--detect-new-files")
         self.assertEqual(code, 1)
         self.assertIn("--detect-new-files", err)
 

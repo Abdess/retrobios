@@ -95,17 +95,15 @@ def refuse_flag_combinations(args: argparse.Namespace) -> None:
             ("--triage", args.triage),
         ) if on
     ]
-    # The version check lives on the report, so the outputs built from the
-    # report (text, --json, --markdown) carry it. A URL list and a ranking
-    # do not. Detection lives on the report too, and --json carries it for
-    # check_freshness. The markdown table has no column for it.
+    # The version check and detection live on the report, so the outputs
+    # built from the report (text, --json, --markdown) carry them. A URL
+    # list and a ranking do not.
     lists_only = args.fetch_plan or args.triage
-    off_json = lists_only or args.markdown
     extras = [
         flag for flag, on in (
             ("--check-version", args.check_version and lists_only),
-            ("--detect-new-files", args.detect_new_files and off_json),
-            ("--watch-hashes", args.watch_hashes and off_json),
+            ("--detect-new-files", args.detect_new_files and lists_only),
+            ("--watch-hashes", args.watch_hashes and lists_only),
             ("--full-diff", args.full_diff),
             ("--tree-diff", args.tree_diff),
         ) if on
