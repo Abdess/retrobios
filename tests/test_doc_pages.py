@@ -520,6 +520,22 @@ class CoreResolutionWrittenOnce(unittest.TestCase):
             self.assertIn(f"`{name}`", bullet)
 
 
+def _calls(source: str, opening: str) -> list[str]:
+    """The text of each call that starts with *opening*, to its closing parenthesis."""
+    calls = []
+    start = source.find(opening)
+    while start != -1:
+        depth, end = 0, start + len(opening) - 1
+        while end < len(source):
+            depth += {"(": 1, ")": -1}.get(source[end], 0)
+            if depth == 0:
+                break
+            end += 1
+        calls.append(source[start:end + 1])
+        start = source.find(opening, end)
+    return calls
+
+
 class ExitStatusTable(unittest.TestCase):
     """Code 2 was documented as 'every file failed' only, while argparse
     exits 2 on every refused option, and the 141 example named an option
@@ -530,6 +546,9 @@ class ExitStatusTable(unittest.TestCase):
         section = _section(_page("installer.md"), "Exit status")
         documented = {int(row[0].strip("`")) for row in _table_rows(section)}
         raised = {int(code) for code in re.findall(r"sys\.exit\((\d+)\)", source)}
+        # A refusal leaves with the code it carries (installer/refusal.py).
+        raised |= {int(code) for call in _calls(source, "raise Refusal(")
+                   for code in re.findall(r"\bcode=(\d+)", call)}
         # 0 is a run that returns, 2 the code argparse leaves with.
         self.assertEqual(documented, raised | {0, 2})
         self.assertIn("install.py: error:", section)
