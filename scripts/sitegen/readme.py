@@ -18,7 +18,7 @@ from core.artifacts import write_if_changed
 from core.cli import InputMissing
 from core.paths import DB_FILE, REPO_ROOT
 from core.sizes import size_text
-from core.upstream import forge_headers
+from core import upstream
 from installer_build.module import installer_module
 from model.composition import compute_composition, count_catalog_matched
 from model.declarations import declared_root
@@ -503,26 +503,27 @@ def _existing_contributor_block(readme_path: str = "README.md") -> list[str]:
 
 
 def fetch_contributors() -> list[dict]:
-    """Fetch contributors from GitHub API, exclude bots."""
-    import urllib.error
-    import urllib.request
-
-    url = f"https://api.github.com/repos/{REPO}/contributors"
-    headers = forge_headers(url, user_agent="retrobios-readme/1.0")
-    try:
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            data = json.loads(resp.read().decode())
-        owner = REPO.split("/")[0]
-        return [
-            c
-            for c in data
-            if not c.get("login", "").endswith("[bot]")
-            and c.get("type") == "User"
-            and c.get("login") != owner
-        ]
-    except (urllib.error.URLError, urllib.error.HTTPError):
+    """Contributors from the GitHub API, bots and the owner left out. Empty
+    when the API cannot be read, or under RETROBIOS_OFFLINE: the caller then
+    keeps the published list."""
+    if os.environ.get("RETROBIOS_OFFLINE"):
         return []
+    url = f"https://api.github.com/repos/{REPO}/contributors"
+    try:
+        body = upstream.fetch_body(url, accept_json=True, timeout=10, user_agent="retrobios-readme/1.0")
+        data = json.loads(body) if body is not None else []
+    except (upstream.UpstreamError, ValueError) as exc:
+        print(f"contributors: {exc}", file=sys.stderr)
+        return []
+    owner = REPO.split("/")[0]
+    return [
+        c
+        for c in data
+        if isinstance(c, dict)
+        and not c.get("login", "").endswith("[bot]")
+        and c.get("type") == "User"
+        and c.get("login") != owner
+    ]
 
 
 _CATALOG_LABELS = {"redump": "Redump", "no-intro": "No-Intro", "tosec": "TOSEC"}

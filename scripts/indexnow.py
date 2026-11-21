@@ -22,11 +22,10 @@ import argparse
 import json
 import os
 import sys
-import urllib.error
-import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
+from core import upstream
 from sitegen.agents import INDEXNOW_FILE, INDEXNOW_KEY, SITE
 
 HOST = "abdess.github.io"
@@ -38,14 +37,8 @@ USER_AGENT = "retrobios-indexnow"
 def live_digests(url: str = f"{SITE}digests.json") -> dict[str, str]:
     """The digests the live site serves. None yet (the first deploy that
     writes them) is an empty map: every page is new."""
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    try:
-        with urllib.request.urlopen(request, timeout=60) as response:
-            return json.loads(response.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        if exc.code == 404:
-            return {}
-        raise
+    body = upstream.fetch_body(url, timeout=60, user_agent=USER_AGENT)
+    return {} if body is None else json.loads(body.decode("utf-8"))
 
 
 def changed_urls(new: dict[str, str], old: dict[str, str]) -> list[str]:

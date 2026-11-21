@@ -291,7 +291,8 @@ class GoatCounterExport(unittest.TestCase):
         refusal = urllib.error.HTTPError("https://retrobios.goatcounter.com/api/v0/stats/hits", 429,
                                          "Too Many Requests", headers, io.BytesIO(b""))
         with mock.patch.object(insights.urllib.request, "urlopen", side_effect=refusal), \
-                mock.patch.object(insights.time, "sleep") as sleep, \
+                mock.patch.object(insights.upstream, "_sleep") as sleep, \
+                mock.patch.object(insights.upstream, "_exhausted_hosts", set()), \
                 self.assertRaisesRegex(SystemExit, "2356 s"):
             insights._get_json("https://retrobios.goatcounter.com/api/v0/stats/hits")
         sleep.assert_not_called()
@@ -304,9 +305,37 @@ class GoatCounterExport(unittest.TestCase):
         answer.__enter__.return_value.status = 200
         answer.__enter__.return_value.read.return_value = json.dumps({"ok": 1}).encode()
         with mock.patch.object(insights.urllib.request, "urlopen", side_effect=[refusal, answer]), \
-                mock.patch.object(insights.time, "sleep") as sleep:
+                mock.patch.object(insights.upstream, "_sleep") as sleep:
             self.assertEqual(insights._get_json("https://x/api"), {"ok": 1})
         sleep.assert_called_once_with(2)
+
+    def test_a_server_error_is_asked_again(self) -> None:
+        """A 502 from GoatCounter ended the run on the first try."""
+        refusal = urllib.error.HTTPError("https://x/api", 502, "Bad Gateway", email.message.Message(),
+                                         io.BytesIO(b""))
+        answer = mock.MagicMock()
+        answer.__enter__.return_value.status = 200
+        answer.__enter__.return_value.read.return_value = json.dumps({"ok": 1}).encode()
+        with mock.patch.object(insights.urllib.request, "urlopen", side_effect=[refusal, answer]), \
+                mock.patch.object(insights.upstream, "_sleep"):
+            self.assertEqual(insights._get_json("https://x/api"), {"ok": 1})
+
+    def test_github_headers_come_from_the_forge_helper(self) -> None:
+        seen: list[dict[str, str]] = []
+
+        def get_json(url: str, headers: dict[str, str] | None = None, body: dict | None = None):
+            seen.append(dict(headers or {}))
+            return [] if "releases" in url else {}
+
+        with mock.patch.object(insights, "github_token", return_value="SECRET"), \
+                mock.patch("core.github.github_token", return_value="SECRET"), \
+                mock.patch.object(insights, "_get_json", get_json):
+            insights.fetch_github()
+        self.assertTrue(seen)
+        for headers in seen:
+            self.assertEqual(headers["Authorization"], "Bearer SECRET")
+            self.assertEqual(headers["Accept"], "application/vnd.github+json")
+            self.assertEqual(headers["User-Agent"], insights.USER_AGENT)
 
 
 if __name__ == "__main__":

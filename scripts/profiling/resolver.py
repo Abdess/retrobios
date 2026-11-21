@@ -7,7 +7,7 @@ import itertools
 import posixpath
 import re
 import sys
-from collections.abc import Callable, Iterable, Sequence
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from dataclasses import dataclass, field, replace
 
 from core import upstream
@@ -406,11 +406,16 @@ class _Resolver:
             (self.context_for(v)[1] for v in self.views),
         )
 
-    def gitlinks_in_order(self) -> Iterable[Iterable[str]]:
-        return (
-            upstream.list_gitlinks(v.repo, v.pin, self.cache_dir, self.offline)
-            for v in self.views
-        )
+    def gitlinks_in_order(self) -> Iterator[Iterable[str]]:
+        """Submodule paths of each declared tree at its pin. A tree the
+        forge lists in part is said once and searched as far as it is
+        known: the parts it cannot place stay external, as before."""
+        for view in self.views:
+            try:
+                yield upstream.list_gitlinks(view.repo, view.pin, self.cache_dir, self.offline)
+            except upstream.TruncatedListingError as exc:
+                print(f"{self.name}: submodule paths unknown, {exc}", file=sys.stderr)
+                yield ()
 
     def _add_bare_name_matches(self, path: str, candidates: list[str]) -> None:
         # A bare filename, the way prose cites files. Resolved against the
@@ -589,9 +594,17 @@ class _Resolver:
             if found is None and "/" in wanted:
                 # A file of a submodule is read at the commit its gitlink
                 # pins in this revision, so a bump moves it with the port.
-                inner = upstream.through_gitlink(
-                    repo, sha, wanted, self.cache_dir, self.offline
-                )
+                try:
+                    inner = upstream.through_gitlink(
+                        repo, sha, wanted, self.cache_dir, self.offline
+                    )
+                except upstream.TruncatedListingError as exc:
+                    # The tree is listed in part: the path may sit in a
+                    # submodule nobody can see, which is no reason to mute
+                    # every other file of the repository.
+                    print(f"{self.name}: {wanted} not followed into a submodule, {exc}",
+                          file=sys.stderr)
+                    inner = None
                 if inner is not None:
                     found = upstream.fetch_file(*inner, self.cache_dir, self.offline)
             return found

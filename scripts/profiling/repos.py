@@ -165,6 +165,9 @@ def _follow_submodule(
     HEAD, the view reported changes the shipped core never had, and a bump
     would have moved upstream_commit past what it builds. The commit the
     port's HEAD points the submodule at is the upstream HEAD that matters.
+    A tree the forge lists in part raises TruncatedListingError: the
+    submodule may be in the lost part, and the upstream HEAD in its place
+    is the commit a bump must not move to.
     """
     source = next((v for v in views if v.field == "source"), None)
     behind = [v for v in views if v.field == "upstream" and v.pin != v.head]

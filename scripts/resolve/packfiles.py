@@ -7,17 +7,17 @@ and the offline switch that forbids reaching for the network."""
 from __future__ import annotations
 
 import contextlib
-import hashlib
+import http.client
 import os
 import re
 import urllib.error
-import urllib.request
 from collections.abc import Iterator
 from pathlib import Path
 
+from core import upstream
 from model.database import record_at, record_for_hash
 from model.largefiles import fetch_large_file
-from core.hashing import declared_hash_lists
+from core.hashing import declared_hash_lists, file_digest
 from resolve.content import declared_hash_verdict
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from core.paths import REPO_ROOT, declared_destination
@@ -58,8 +58,10 @@ def download_external(
     """Download a `storage: external` file, verify its hash, write dest_path.
 
     The run's network policy applies: under --offline nothing is fetched and
-    the entry stays missing, as verify reports it. The body is streamed to
-    dest_path and hashed on the way, and removed when the hash disagrees.
+    the entry stays missing, as verify reports it. core.upstream.download
+    streams the body to a scratch beside dest_path, retried on a transient
+    failure, and dest_path is written only once the scratch hashes to the
+    declared value.
     """
     url = file_entry.get("source_url")
     if not url:
@@ -75,21 +77,18 @@ def download_external(
         print(f"    WARNING: {name} is external and the run is offline, not fetched")
         return False
     algo, expected = declared[0], set(declared[1])
-    digest = hashlib.new(algo)
     Path(dest_path).parent.mkdir(parents=True, exist_ok=True)
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "retrobios-pack-gen/1.0"})
-        with urllib.request.urlopen(req, timeout=120) as resp, open(dest_path, "wb") as out:
-            for chunk in iter(lambda: resp.read(1 << 20), b""):
-                digest.update(chunk)
-                out.write(chunk)
-    except (urllib.error.URLError, OSError) as exc:
+        served = upstream.download(
+            url, dest_path, timeout=120, user_agent="retrobios-pack-gen/1.0",
+            accept=lambda scratch: file_digest(Path(scratch), algo) in expected,
+        )
+    except (urllib.error.URLError, OSError, http.client.HTTPException,
+            upstream.UpstreamError, ValueError) as exc:
         print(f"    WARNING: Failed to download {url}: {exc}")
-        Path(dest_path).unlink(missing_ok=True)
         return False
-    if digest.hexdigest() not in expected:
+    if served is None:
         print(f"    WARNING: {algo.upper()} mismatch for {name}")
-        Path(dest_path).unlink(missing_ok=True)
         return False
     return True
 

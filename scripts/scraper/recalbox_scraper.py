@@ -105,11 +105,29 @@ SYSTEM_SLUG_MAP = {
 }
 
 
-SYSTEMS_TREE_URL = (
+TREE_URL = (
     "https://gitlab.com/api/v4/projects/recalbox%2Frecalbox/repository/tree"
-    "?path=package/recalbox-romfs2/systems&ref={tag}&per_page=100&page={page}"
+    "?path={path}&ref={tag}&per_page={per_page}&page={page}"
 )
 SYSTEMS_DIR = "package/recalbox-romfs2/systems"
+
+
+def tree_listing(directory: str, tag: str) -> list[dict]:
+    """The entries of one directory of recalbox/recalbox at `tag`, read page
+    by page. RuntimeError past core.upstream's page cap: a listing cut
+    there would drop entries without a word."""
+    import json
+
+    entries: list[dict] = []
+    for page in range(1, upstream.MAX_TREE_PAGES + 1):
+        url = TREE_URL.format(
+            path=directory, tag=tag, per_page=upstream.TREE_PAGE_SIZE, page=page
+        )
+        listing = json.loads(fetch_bytes(url))
+        entries += [item for item in listing if isinstance(item, dict)]
+        if len(listing) < upstream.TREE_PAGE_SIZE:
+            return entries
+    raise RuntimeError(f"{directory} at {tag} outruns the page cap")
 # One raw read per system.ini made about 150 requests and GitLab throttled
 # the scrape past half an hour. GraphQL returns a batch of blobs at once.
 GRAPHQL_URL = "https://gitlab.com/api/graphql"
@@ -257,19 +275,10 @@ class Scraper(BaseScraper):
         An empty listing raises: written as is, it gave every board of the
         targets scraper an empty core list.
         """
-        import json
-
-        systems: list[str] = []
-        for page in range(1, upstream.MAX_TREE_PAGES + 1):
-            listing = json.loads(fetch_bytes(SYSTEMS_TREE_URL.format(tag=self.tag, page=page)))
-            systems += [
-                item["name"] for item in listing
-                if item.get("type") == "tree" and not item["name"].startswith(".")
-            ]
-            if len(listing) < upstream.TREE_PAGE_SIZE:
-                break
-        else:
-            raise RuntimeError(f"{SYSTEMS_DIR} at {self.tag} outruns the page cap")
+        systems = [
+            item["name"] for item in tree_listing(SYSTEMS_DIR, self.tag)
+            if item.get("type") == "tree" and not item["name"].startswith(".")
+        ]
         if not systems:
             raise RuntimeError(f"no Recalbox system found at {self.tag}")
         return systems

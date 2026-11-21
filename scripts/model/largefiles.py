@@ -31,6 +31,7 @@ LARGE_FILES_RELEASE = "large-files"
 LARGE_FILES_REPO = "Abdess/retrobios"
 RELEASE_DOWNLOAD = f"https://github.com/{LARGE_FILES_REPO}/releases/download/{LARGE_FILES_RELEASE}/"
 LARGE_FILES_CACHE = ".cache/large"
+USER_AGENT = "retrobios/1.0"
 # Verified revisions, hard-linked as <sha1>/<asset> beside the cache. A name
 # in the cache is replaced when the release serves new bytes under it, so a
 # path handed out by name could hold other bytes by the time the caller read
@@ -210,22 +211,20 @@ def restore_verified(source: str, path: str, sha1: str) -> bool:
             os.unlink(scratch)
 
 
+_FAILURES = (urllib.error.URLError, OSError, http.client.HTTPException, upstream.UpstreamError)
+
+
 def _download(name: str, tmp_path: str) -> bool:
-    """Stream the first release URL of *name* that answers into *tmp_path*."""
+    """Stream the first release URL of *name* that answers into *tmp_path*,
+    each through core.upstream.download (scratch, rename, retries)."""
     # Only a name no candidate answers is reported: a spaced name is
     # published dotted, and logging its first 404 read as a missing asset.
     failures: list[str] = []
     for candidate, url in _asset_urls(name):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "retrobios/1.0"})
-            with urllib.request.urlopen(req, timeout=300) as resp, open(tmp_path, "wb") as f:
-                while True:
-                    chunk = resp.read(65536)
-                    if not chunk:
-                        break
-                    f.write(chunk)
+            upstream.download(url, tmp_path, timeout=300, user_agent=USER_AGENT)
             return True
-        except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
+        except _FAILURES as exc:
             # A stalled or cut stream is a timeout or IncompleteRead, not
             # a URLError: it escaped this handler and left its scratch.
             failures.append(f"  large file {candidate}: {exc}")
@@ -432,7 +431,7 @@ def _served_digests() -> dict[str, str]:
         f"{LARGE_FILES_RELEASE}"
     )
     try:
-        body = upstream.fetch_body(url, accept_json=True, timeout=60, user_agent="retrobios/1.0")
+        body = upstream.fetch_body(url, accept_json=True, timeout=60, user_agent=USER_AGENT)
         release = json.loads(body) if body is not None else {}
     except (upstream.UpstreamError, ValueError) as exc:
         print(f"  large files release listing: {exc}", file=sys.stderr)
@@ -445,13 +444,14 @@ def _served_digests() -> dict[str, str]:
 def _served_size(name: str) -> int | None:
     """Size of the asset the release serves now, or None when unreadable."""
     for candidate, url in _asset_urls(name):
+        req = urllib.request.Request(
+            url, method="HEAD", headers=upstream.forge_headers(url, user_agent=USER_AGENT)
+        )
         try:
-            req = urllib.request.Request(
-                url, method="HEAD", headers={"User-Agent": "retrobios/1.0"}
+            length = upstream.open_retrying(
+                req, lambda resp: resp.headers.get("Content-Length"), 60
             )
-            with urllib.request.urlopen(req, timeout=60) as resp:
-                length = resp.headers.get("Content-Length")
-        except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
+        except _FAILURES as exc:
             print(f"  large file {candidate}: {exc}", file=sys.stderr)
             continue
         if length and length.isdigit():

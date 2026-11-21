@@ -19,6 +19,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
+from core import upstream
 from core.artifacts import write_text_atomic
 from core.github import github_token
 
@@ -28,14 +29,14 @@ SITE_PROPERTY = "https://abdess.github.io/retrobios/"
 GOATCOUNTER = "https://retrobios.goatcounter.com/api/v0"
 REPOSITORY = "Abdess/retrobios"
 SOURCES = ("gsc", "goatcounter", "github")
+USER_AGENT = "retrobios-site-insights"
 # GoatCounter builds an export in the background: it is asked for every
 # EXPORT_POLL seconds, EXPORT_TRIES times. It allows one export an hour.
 EXPORT_POLL = 5
 EXPORT_TRIES = 60
 # GoatCounter answers four requests a second and 500 per window, and says
-# when to come back: a short wait is waited, a long one ends the run.
-RATE_LIMIT_TRIES = 8
-RATE_LIMIT_LONGEST_WAIT = 60
+# when to come back in X-Rate-Limit-Reset. core.upstream.open_retrying waits
+# a short wait and gives up on a long one, which ends the run.
 
 # Expected click-through rate: the site's own rate at each rounded
 # position, positions past 20 pooled in LAST_BUCKET. A bucket under
@@ -67,25 +68,26 @@ class Query:
 # Reading the sources
 
 
+def _open(request: urllib.request.Request) -> tuple[int, bytes]:
+    """Status and body of a request, retried by core.upstream.open_retrying:
+    a dropped connection or a 5xx is asked again, a rate limit waited out."""
+    try:
+        return upstream.open_retrying(request, lambda response: (response.status, response.read()), 60)
+    except (urllib.error.HTTPError, upstream.RateLimitError) as error:
+        if isinstance(error, urllib.error.HTTPError) and error.code != 429:
+            raise
+        headers = error.headers if isinstance(error, urllib.error.HTTPError) else None
+        wait = upstream.requested_wait(headers)
+        delay = f" for {wait:.0f} s" if wait is not None else ""
+        raise SystemExit(f"{urllib.parse.urlsplit(request.full_url).hostname} refuses requests{delay} "
+                         "(rate limit); run again then, or --skip that source") from error
+
+
 def _fetch(url: str, headers: dict[str, str] | None = None, body: dict | None = None) -> tuple[int, bytes]:
     data = json.dumps(body).encode() if body is not None else None
-    request = urllib.request.Request(url, data=data, headers={
-        "User-Agent": "retrobios-site-insights", **({"Content-Type": "application/json"} if data else {}),
-        **(headers or {})})
-    for _ in range(RATE_LIMIT_TRIES - 1):
-        try:
-            with urllib.request.urlopen(request, timeout=60) as response:
-                return response.status, response.read()
-        except urllib.error.HTTPError as error:
-            if error.code != 429:
-                raise
-            wait = int(error.headers.get("X-Rate-Limit-Reset") or 1) + 1
-            if wait > RATE_LIMIT_LONGEST_WAIT:
-                raise SystemExit(f"{urllib.parse.urlsplit(url).hostname} refuses requests for "
-                                 f"{wait} s (rate limit); run again then, or --skip that source") from error
-            time.sleep(wait)
-    with urllib.request.urlopen(request, timeout=60) as response:
-        return response.status, response.read()
+    return _open(urllib.request.Request(url, data=data, headers={
+        "User-Agent": USER_AGENT, **({"Content-Type": "application/json"} if data else {}),
+        **(headers or {})}))
 
 
 def _get_json(url: str, headers: dict[str, str] | None = None, body: dict | None = None) -> dict | list:
@@ -112,9 +114,8 @@ def _google_token(key_file: Path) -> str:
                                    input=unsigned.encode(), capture_output=True, check=True).stdout
     body = urllib.parse.urlencode({"grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
                                    "assertion": f"{unsigned}.{b64(signature)}"}).encode()
-    request = urllib.request.Request(key["token_uri"], data=body)
-    with urllib.request.urlopen(request, timeout=60) as response:
-        return json.load(response)["access_token"]
+    request = urllib.request.Request(key["token_uri"], data=body, headers={"User-Agent": USER_AGENT})
+    return json.loads(_open(request)[1])["access_token"]
 
 
 def fetch_queries(start: dt.date, end: dt.date) -> list[Query]:
@@ -193,11 +194,12 @@ def fetch_goatcounter(start: dt.date, end: dt.date) -> dict:
 
 
 def fetch_github() -> dict:
-    token = github_token()
-    if not token:
+    # Traffic figures are only served to the owner: without a token there
+    # is nothing to read, not a smaller quota.
+    if not github_token():
         raise SystemExit("GitHub traffic needs a token: GITHUB_TOKEN, or gh auth login")
-    auth = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"}
     api = f"https://api.github.com/repos/{REPOSITORY}"
+    auth = upstream.forge_headers(api, "application/vnd.github+json", USER_AGENT)
     releases = _get_json(f"{api}/releases?per_page=10", auth)
     return {
         "views": _get_json(f"{api}/traffic/views", auth),

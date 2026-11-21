@@ -13,22 +13,17 @@ target list, a Pi 3 pack carried the firmware of emulators only x86_64 builds.
 
 from __future__ import annotations
 
-import json
 import re
 import sys
 from datetime import datetime, timezone
 
 
 from . import BaseTargetScraper, target_cli
-from ..base_scraper import fetch_bytes, fetch_text
-from ..recalbox_scraper import Scraper as PlatformScraper, board_cores
+from ..base_scraper import fetch_text
+from ..recalbox_scraper import Scraper as PlatformScraper, board_cores, tree_listing
 
 PLATFORM_NAME = "recalbox"
 
-CONFIGS_TREE_URL = (
-    "https://gitlab.com/api/v4/projects/recalbox%2Frecalbox/repository/tree"
-    "?path=configs&ref={tag}&per_page=100"
-)
 DEFCONFIG_URL = "https://gitlab.com/recalbox/recalbox/-/raw/{tag}/configs/{name}"
 _DEFCONFIG_RE = re.compile(r"^recalbox-(\w+)_defconfig$")
 _ENABLED_RE = re.compile(r"^(BR2_PACKAGE_\w+)=y\s*$", re.MULTILINE)
@@ -57,10 +52,9 @@ class Scraper(BaseTargetScraper):
     def fetch_targets(self) -> dict:
         tag = self.pinned_revision(PLATFORM_NAME)
         platform = PlatformScraper(tag)
-        listing = json.loads(fetch_bytes(CONFIGS_TREE_URL.format(tag=tag)))
         boards = {
             match.group(1): item["name"]
-            for item in listing
+            for item in tree_listing("configs", tag)
             if (match := _DEFCONFIG_RE.match(item.get("name", "")))
         }
         if not boards:

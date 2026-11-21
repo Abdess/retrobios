@@ -906,10 +906,12 @@ class FbneoFetchReadsOneRevision(unittest.TestCase):
     def tearDown(self):
         self._tmp.cleanup()
 
+    def _head(self, repo: str, branch: str | None = None) -> str:
+        self.calls.append(f"{repo}@{branch}")
+        return "c0ffee"
+
     def _api(self, url: str) -> object:
         self.calls.append(url)
-        if "/commits/" in url:
-            return {"sha": "c0ffee"}
         return [{
             "type": "file", "name": "Demo.dat",
             "sha": git_blob_sha(FBNEO_DAT),
@@ -927,6 +929,7 @@ class FbneoFetchReadsOneRevision(unittest.TestCase):
         from scripts.scraper import base_scraper
 
         with mock.patch.object(self.importer, "_api_json", self._api), \
+                mock.patch.object(self.importer, "fetch_branch_head", self._head), \
                 mock.patch.object(base_scraper, "download", self._download):
             yield
 
@@ -941,10 +944,15 @@ class FbneoFetchReadsOneRevision(unittest.TestCase):
             target, blobs = self.importer.fetch_pack("fbneo", "v1.0.0.02", self.dir)
         self.assertEqual(
             self.calls,
-            [f"{self.importer.FBNEO_API}/commits/v1.0.0.02",
+            ["libretro/FBNeo@v1.0.0.02",
              f"{self.importer.FBNEO_API}/contents/dats?ref=c0ffee"],
         )
         self.assertEqual(list(blobs), ["Demo.dat"])
+
+    def test_latest_reads_the_default_branch(self):
+        with self._patched():
+            self.importer.fetch_pack("fbneo", "latest", self.dir)
+        self.assertEqual(self.calls[0], "libretro/FBNeo@None")
 
     def test_a_revision_import_is_labelled_and_leaves_the_tip_blobs(self):
         import contextlib

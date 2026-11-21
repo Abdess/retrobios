@@ -334,6 +334,62 @@ class TestFetchRetry(unittest.TestCase):
             upstream.fetch_body("https://host/x")
         self.assertEqual((self.calls, self.slept), (1, []))
 
+    def test_goatcounter_reset_header_is_waited_with_a_second_more(self):
+        import email.message
+
+        headers = email.message.Message()
+        headers["X-Rate-Limit-Reset"] = "3"
+        self._serve([_http_error(429, headers), b"payload"])
+        self.assertEqual(upstream.fetch_body("https://host/x"), b"payload")
+        self.assertEqual(self.slept, [4.0])
+
+    def test_download_retries_a_cut_stream_and_writes_whole(self):
+        class Cut:
+            def read(self, size: int = -1) -> bytes:
+                raise http.client.IncompleteRead(b"par")
+
+        outcomes: list = [Cut(), _Body(b"payload")]
+
+        def opener(req, timeout=None):
+            body = outcomes.pop(0)
+            body.headers = {"Content-Disposition": "attachment"}
+            return contextlib.nullcontext(body)
+
+        urllib.request.urlopen = opener
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "file.bin"
+            served = upstream.download("https://host/file.bin", target)
+            self.assertEqual(target.read_bytes(), b"payload")
+            self.assertEqual(served["Content-Disposition"], "attachment")
+            self.assertEqual(os.listdir(tmp), ["file.bin"])
+        self.assertEqual(len(self.slept), 1)
+
+    def test_download_refused_by_its_check_writes_nothing(self):
+        def opener(req, timeout=None):
+            body = _Body(b"payload")
+            body.headers = {}
+            return contextlib.nullcontext(body)
+
+        urllib.request.urlopen = opener
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "file.bin"
+            target.write_bytes(b"old")
+            self.assertIsNone(upstream.download("https://host/f", target, accept=lambda _p: False))
+            self.assertEqual(target.read_bytes(), b"old")
+            self.assertEqual(os.listdir(tmp), ["file.bin"])
+
+    def test_download_past_the_cap_raises_and_leaves_nothing(self):
+        def opener(req, timeout=None):
+            body = _Body(b"x" * 10)
+            body.headers = {}
+            return contextlib.nullcontext(body)
+
+        urllib.request.urlopen = opener
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaises(ValueError):
+                upstream.download("https://host/f", Path(tmp) / "f", max_bytes=4)
+            self.assertEqual(os.listdir(tmp), [])
+
     def test_exhausted_github_quota_is_not_waited(self):
         import email.message
 
@@ -534,6 +590,17 @@ class TestRevisions(unittest.TestCase):
     def test_resolve_head_github(self):
         self.responses["/commits"] = [{"sha": "deadbeef"}]
         self.assertEqual(upstream.resolve_head(self.repo, self.dir), "deadbeef")
+
+    def test_resolve_head_without_a_cache_keeps_nothing(self):
+        """A scraper's branch head is asked each time and never cached."""
+        self.responses["/commits"] = [{"sha": "f00d"}]
+        self.assertEqual(upstream.resolve_head(self.repo, None, branch="main"), "f00d")
+        self.assertEqual(upstream.resolve_head(self.repo, None, branch="main"), "f00d")
+        self.assertEqual(len(self.calls), 2)
+        self.assertIn("sha=main", self.calls[0])
+        self.assertEqual(os.listdir(self.dir), [])
+        with self.assertRaises(upstream.NotCachedError):
+            upstream.resolve_head(self.repo, None, offline=True)
 
     def test_resolve_head_gitlab_uses_id(self):
         repo = parse_repo("https://gitlab.com/g/p")
@@ -868,6 +935,19 @@ class TestGitlabTree(unittest.TestCase):
         paths, truncated = upstream.list_tree(self.repo, "sha", self.dir)
         self.assertEqual(len(paths), upstream.TREE_PAGE_SIZE)
         self.assertTrue(truncated)
+
+    def test_gitlinks_of_a_truncated_listing_raise(self):
+        """A lost page read as "no submodule there"."""
+        self.pages[1] = [{"type": "commit", "path": "core", "id": "c" * 40}] + self._blobs(
+            *[f"f{i}.c" for i in range(upstream.TREE_PAGE_SIZE - 1)]
+        )
+        self.pages[2] = None
+        with self.assertRaises(upstream.TruncatedListingError):
+            upstream.list_gitlinks(self.repo, "sha", self.dir)
+
+    def test_gitlinks_of_a_whole_listing(self):
+        self.pages[1] = [{"type": "commit", "path": "core", "id": "c" * 40}]
+        self.assertEqual(upstream.list_gitlinks(self.repo, "sha", self.dir), {"core": "c" * 40})
 
 
 class TestGiteaCommitAt(unittest.TestCase):

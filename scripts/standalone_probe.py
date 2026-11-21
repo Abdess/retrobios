@@ -39,7 +39,6 @@ import sys
 import tempfile
 import threading
 import time
-import urllib.request
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -48,6 +47,7 @@ from typing import IO
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import core_probe as cp
+from core import upstream
 from core.statefile import now_iso
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -230,12 +230,10 @@ def parse_xwd(data: bytes) -> tuple[int, int, bytes]:
 # --------------------------------------------------------------------------
 
 def github_releases(repo: str) -> list[dict]:
-    from scraper.base_scraper import github_headers
+    from scraper.base_scraper import github_json
 
-    request = urllib.request.Request(f"https://api.github.com/repos/{repo}/releases",
-                                     headers=github_headers())
-    with urllib.request.urlopen(request, timeout=60) as response:
-        return json.load(response)
+    return github_json(f"https://api.github.com/repos/{repo}/releases",
+                       f"cannot list the releases of {repo}", timeout=60)
 
 
 def fetch(emu: Emulator, cache: Path = CACHE) -> dict:
@@ -246,8 +244,8 @@ def fetch(emu: Emulator, cache: Path = CACHE) -> dict:
     folder = cache / emu.name
     folder.mkdir(parents=True, exist_ok=True)
     partial = folder / f"{asset['name']}.part"
-    with urllib.request.urlopen(asset["url"], timeout=600) as response, partial.open("wb") as out:
-        shutil.copyfileobj(response, out)
+    # Whole or absent, retried on a cut stream (core.upstream.download).
+    upstream.download(asset["url"], partial, timeout=600)
     sha256 = cp.file_digest(partial, "sha256")
     target = folder / sha256 / asset["name"]
     target.parent.mkdir(parents=True, exist_ok=True)

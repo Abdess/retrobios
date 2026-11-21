@@ -5579,6 +5579,40 @@ class UpstreamVendoredAsASubmodule(unittest.TestCase):
         views = self._views({"src-pin": {"deps/zlib": "other"}, "src-head": {}})
         self.assertEqual(views[1].head, "nesbox-tip")
 
+    def test_a_truncated_port_tree_is_not_read_as_no_submodule(self):
+        """A partial listing kept nesbox's tip, the commit a bump must not
+        move upstream_commit to."""
+        views = [
+            profiling_repos.RepoView(object(), "src-pin", "src-head", "source_commit", "source"),
+            profiling_repos.RepoView(object(), "sub-old", "nesbox-tip", "upstream_commit", "upstream"),
+        ]
+        with mock.patch.object(
+            upstream, "list_gitlinks",
+            side_effect=upstream.TruncatedListingError("tree listing truncated"),
+        ), self.assertRaises(upstream.TruncatedListingError):
+            profiling_repos._follow_submodule(views, "cache", True)
+
+
+class TruncatedGitlinksInTheResolver(unittest.TestCase):
+    """A read-only report goes on past a partial listing, and says so."""
+
+    def test_the_lost_tree_yields_no_link_and_the_next_is_read(self):
+        from types import SimpleNamespace
+
+        views = [SimpleNamespace(repo="a", pin="p1"), SimpleNamespace(repo="b", pin="p2")]
+        state = SimpleNamespace(views=views, cache_dir="c", offline=True, name="demo")
+
+        def links(repo, sha, *_args):
+            if repo == "a":
+                raise upstream.TruncatedListingError("a@p1: tree listing truncated")
+            return {"sub": "s"}
+
+        with mock.patch.object(upstream, "list_gitlinks", side_effect=links), \
+                contextlib.redirect_stderr(io.StringIO()) as err:
+            found = [list(paths) for paths in resolver._Resolver.gitlinks_in_order(state)]
+        self.assertEqual(found, [[], ["sub"]])
+        self.assertIn("submodule paths unknown", err.getvalue())
+
 
 class AMirrorOutlivesAGoneSource(unittest.TestCase):
     """yuzu's source answers 451. select_views stopped on it and never read

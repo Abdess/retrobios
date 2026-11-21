@@ -720,6 +720,36 @@ class AProgressBarOnlyOnATerminal(unittest.TestCase):
         self.assertNotIn("\r", out.getvalue())
         self.assertEqual(out.getvalue().count("\n"), 1)
 
+    def test_a_cut_stream_is_fetched_again_from_the_start(self):
+        """One reset midway through a 2 GiB part failed the whole download."""
+        import http.client
+
+        from core import upstream
+
+        class Body(io.BytesIO):
+            headers = {"Content-Length": "6"}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+        class Cut(Body):
+            def read(self, size: int = -1) -> bytes:
+                raise http.client.IncompleteRead(b"pa")
+
+        answers = [Cut(b""), Body(b"packed")]
+        with tempfile.TemporaryDirectory() as directory, \
+                mock.patch.object(download.urllib.request, "urlopen",
+                                  lambda *a, **k: answers.pop(0)), \
+                mock.patch.object(upstream, "_sleep", lambda _s: None), \
+                contextlib.redirect_stdout(io.StringIO()):
+            target = Path(directory) / "a.zip"
+            download.download_file("https://example.com/a.zip", target, 6, "a.zip ")
+            self.assertEqual(target.read_bytes(), b"packed")
+        self.assertEqual(answers, [])
+
 
 class TheShellDownloaderSendsTheToken(unittest.TestCase):
     """download.py sent GITHUB_TOKEN to the API and download.sh did not, so

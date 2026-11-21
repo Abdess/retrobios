@@ -271,10 +271,39 @@ class AnEmptyRecalboxListingStopsTheTargets(unittest.TestCase):
 
         scraper = targets.Scraper()
         with mock.patch.object(scraper, "pinned_revision", lambda _name: "10.1.1"), \
-                mock.patch.object(targets, "fetch_bytes", fetch), \
                 mock.patch.object(recalbox_scraper, "fetch_bytes", fetch), \
                 self.assertRaisesRegex(RuntimeError, "no Recalbox system"):
             scraper.fetch_targets()
+
+    def test_the_configs_listing_is_read_past_its_first_page(self):
+        """configs/ was asked for one page of 100 entries: a defconfig past
+        it was a board the targets never listed."""
+        import json
+        from scraper import recalbox_scraper
+
+        asked: list[str] = []
+
+        def fetch(url, data=None, headers=None):
+            asked.append(url)
+            page = int(url.rsplit("page=", 1)[1])
+            if page == 1:
+                return json.dumps([{"name": f"other{i}"} for i in range(100)]).encode()
+            return b'[{"name": "recalbox-rpi5_64_defconfig"}]'
+
+        with mock.patch.object(recalbox_scraper, "fetch_bytes", fetch):
+            names = [item["name"] for item in recalbox_scraper.tree_listing("configs", "10.1.1")]
+        self.assertEqual(len(names), 101)
+        self.assertIn("recalbox-rpi5_64_defconfig", names)
+        self.assertTrue(all("path=configs" in url for url in asked))
+
+    def test_a_listing_past_the_page_cap_raises(self):
+        import json
+        from scraper import recalbox_scraper
+
+        full = json.dumps([{"name": "x"}] * 100).encode()
+        with mock.patch.object(recalbox_scraper, "fetch_bytes", lambda *a, **k: full), \
+                self.assertRaisesRegex(RuntimeError, "page cap"):
+            recalbox_scraper.tree_listing("configs", "10.1.1")
 
 
 class EveryNamedScraperExists(unittest.TestCase):
@@ -787,7 +816,11 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
                 return False
 
         def answer(request, timeout=None):
-            return Answer(json.dumps({"sha": sha}).encode())
+            # A branch head is the first entry of the commit listing
+            # (core.upstream.resolve_head), a release lookup one object.
+            commit = {"sha": sha}
+            listing = "/commits?" in request.full_url
+            return Answer(json.dumps([commit] if listing else commit).encode())
 
         branch_read = [s for s in self._registry_scrapers() if s not in self.TAG_PINNED]
         self.assertGreater(len(branch_read), 8)

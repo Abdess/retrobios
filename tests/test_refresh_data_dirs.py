@@ -38,6 +38,8 @@ def _zip_bytes(files: dict[str, bytes]) -> bytes:
 
 
 class _Response(io.BytesIO):
+    headers: dict[str, str] = {}
+
     def __enter__(self):
         return self
 
@@ -465,6 +467,17 @@ class TheRemoteCommitComesFromTheForgeClient(unittest.TestCase):
         )
         self.assertEqual((sha, len(seen)), ("b" * 40, 2))
         self.assertEqual(seen[0].get_header("Authorization"), "Bearer SECRET")
+
+    def test_the_answer_is_not_cached(self):
+        from core import upstream
+
+        with mock.patch.object(upstream, "write_cache") as write:
+            sha, _seen = self._resolve(
+                "https://github.com/o/n/archive/{version}.tar.gz", "master",
+                [[{"sha": "c" * 40}]],
+            )
+        self.assertEqual(sha, "c" * 40)
+        write.assert_not_called()
 
 
 if __name__ == "__main__":

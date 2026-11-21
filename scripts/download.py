@@ -18,6 +18,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import http.client
 import json
 import os
 import re
@@ -34,7 +35,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from core.hashing import compute_hashes, parse_sha256sums
 from core.paths import REPO_ROOT
 from core.sizes import size_text
-from core.upstream import forge_headers
+from core.upstream import UpstreamError, forge_headers, open_retrying
 from core.ziptools import safe_extract_zip
 from packs.parts import part_of
 from model.releaserecord import PACK_SUFFIX, RECORD, load_record, match_key, pack_label, recorded_pack
@@ -104,8 +105,7 @@ def get_latest_release() -> dict:
     req = urllib.request.Request(url, headers=headers)
 
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return json.loads(resp.read())
+        return json.loads(open_retrying(req, lambda resp: resp.read(), 30))
     except urllib.error.HTTPError as e:
         if e.code == 404:
             print("No releases found. The repository may not have any releases yet.")
@@ -182,8 +182,9 @@ def fetch_checksums(release: dict) -> dict[str, str]:
         req = urllib.request.Request(
             url, headers={"User-Agent": "retrobios-downloader/1.0"}
         )
-        with urllib.request.urlopen(req, timeout=60) as resp:
-            body = resp.read(MAX_CHECKSUMS_BYTES).decode("utf-8", "replace")
+        body = open_retrying(
+            req, lambda resp: resp.read(MAX_CHECKSUMS_BYTES), 60
+        ).decode("utf-8", "replace")
         # A file that is not sha256sum output refuses the download: read
         # leniently, a `*name` line matched nothing and the pack went
         # unchecked.
@@ -197,7 +198,12 @@ def fetch_checksums(release: dict) -> dict[str, str]:
 def download_file(
     url: str, dest: Path, expected_size: int = 0, label: str = ""
 ) -> None:
-    """Download a file with progress indication."""
+    """Download a file with progress indication.
+
+    core.upstream.open_retrying asks again after a dropped connection, a
+    stream cut midway or a 5xx, and waits out a rate limit: each attempt
+    writes `dest` from its first byte.
+    """
     url = _checked_url(url, "asset URL")
     req = urllib.request.Request(
         url, headers={"User-Agent": "retrobios-downloader/1.0"}
@@ -206,19 +212,15 @@ def download_file(
     # A redrawn bar only on a terminal: written to a log, 32,768 redraws of a
     # 2 GiB part made one line of nearly 3 MB.
     live = sys.stdout.isatty() and os.environ.get("TERM") != "dumb"
-    with urllib.request.urlopen(req, timeout=300) as resp:
+
+    def save(resp: http.client.HTTPResponse) -> int:
         total = int(resp.headers.get("Content-Length", expected_size))
         downloaded = 0
         shown = -1
-
         with open(dest, "wb") as f:
-            while True:
-                chunk = resp.read(65536)
-                if not chunk:
-                    break
+            while chunk := resp.read(65536):
                 f.write(chunk)
                 downloaded += len(chunk)
-
                 if total > 0 and live:
                     pct = downloaded * 100 // total
                     if pct != shown:
@@ -226,7 +228,9 @@ def download_file(
                         columns = shutil.get_terminal_size((80, 24)).columns
                         line = _progress_line(label, downloaded, total, columns)
                         print(f"\r\033[K{line}", end="", flush=True)
+        return downloaded
 
+    downloaded = open_retrying(req, save, 300)
     if live:
         print()
     else:
@@ -373,6 +377,8 @@ To check files already in place, use: python install.py --check
             urllib.error.URLError,
             urllib.error.HTTPError,
             OSError,
+            http.client.HTTPException,
+            UpstreamError,
             json.JSONDecodeError,
         ) as e:
             print(f"Error: {e}", file=sys.stderr)
@@ -384,7 +390,8 @@ To check files already in place, use: python install.py --check
 
     try:
         release = get_latest_release()
-    except (urllib.error.URLError, urllib.error.HTTPError, OSError) as e:
+    except (urllib.error.URLError, OSError, http.client.HTTPException, UpstreamError,
+            json.JSONDecodeError) as e:
         print(f"Error fetching release info: {e}", file=sys.stderr)
         sys.exit(1)
 

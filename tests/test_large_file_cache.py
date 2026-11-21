@@ -37,6 +37,9 @@ PAYLOAD_B = b"B" * (256 * 1024)
 # the CI test job sets RETROBIOS_OFFLINE to keep every other test off the
 # network, so it is cleared here.
 _ONLINE = mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""})
+# core.upstream retries a failed transfer after a pause: the pauses are
+# skipped, the retries are not.
+_NO_PAUSE = mock.patch.object(largefiles.upstream, "_sleep", lambda _s: None)
 
 # The names these tests fetch, registered as .gitignore registers an asset:
 # a bare name no registered path carries is never asked of the release.
@@ -58,14 +61,18 @@ def _test_registry(case: unittest.TestCase) -> None:
 
 def setUpModule():
     _ONLINE.start()
+    _NO_PAUSE.start()
 
 
 def tearDownModule():
+    _NO_PAUSE.stop()
     _ONLINE.stop()
 
 
 class _SlowResponse(io.BytesIO):
     """Serve a payload in chunks, yielding between them."""
+
+    headers: dict[str, str] = {}
 
     def __init__(self, data: bytes, barrier: threading.Barrier | None = None):
         super().__init__(data)
@@ -629,16 +636,18 @@ class ReleaseAssetNames(unittest.TestCase):
                 largefiles.fetch_large_file(
                     self.RTCW, dest_dir=cache, registered=self.REGISTERED
                 )
+                # A refused connection is retried: each asset is asked
+                # more than once, and only the assets asked matter here.
                 self.assertEqual(
-                    requested,
-                    [largefiles.urllib.parse.quote(expected[self.RTCW])],
+                    set(requested),
+                    {largefiles.urllib.parse.quote(expected[self.RTCW])},
                 )
                 requested.clear()
                 largefiles.fetch_large_file(
                     "pak0.pk3", dest_dir=cache, registered=self.REGISTERED
                 )
                 self.assertEqual(
-                    sorted(requested),
+                    sorted(set(requested)),
                     sorted(
                         largefiles.urllib.parse.quote(expected[p])
                         for p in (self.ET, self.RTCW)
@@ -666,6 +675,8 @@ class ReleaseAssetNames(unittest.TestCase):
 
 class _StalledResponse(io.BytesIO):
     """Serves one chunk, then the stream stalls."""
+
+    headers: dict[str, str] = {}
 
     def __init__(self):
         super().__init__(PAYLOAD_A)
@@ -701,6 +712,24 @@ class DownloadFailuresAndRevisions(unittest.TestCase):
         )
         self.assertIsNone(result)
         self.assertEqual(os.listdir(self.dir), [])
+
+    def test_a_transient_server_error_is_retried(self):
+        """One 503 from the release CDN dropped the asset from the build."""
+        answers: list = [urllib.error.HTTPError("u", 503, "busy", {}, None), _SlowResponse(PAYLOAD_A)]
+
+        def urlopen(*_args, **_kwargs):
+            answer = answers.pop(0)
+            if isinstance(answer, Exception):
+                raise answer
+            return answer
+
+        largefiles.urllib.request.urlopen = urlopen
+        result = largefiles.fetch_large_file(
+            "big.bin", self.dir, expected_md5=hashlib.md5(PAYLOAD_A).hexdigest(),
+            registered=TEST_REGISTERED,
+        )
+        self.assertIsNotNone(result)
+        self.assertEqual(answers, [])
 
     def test_another_revision_is_kept_not_evicted(self):
         cached = Path(self.dir, "PS3UPDAT.PUP")

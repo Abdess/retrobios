@@ -17,6 +17,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import urllib.error
 import zipfile
 import zlib
 from pathlib import Path
@@ -3408,6 +3409,27 @@ class ContributorsSurviveAFailedRequest(unittest.TestCase):
             text.count('<a href="https://github.com/'), 0,
             "the section is present but empty",
         )
+
+    def test_the_contributor_list_is_not_asked_offline(self):
+        from sitegen import readme
+
+        with mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": "1"}), \
+                mock.patch.object(readme.upstream, "fetch_body",
+                                  side_effect=AssertionError("network")):
+            self.assertEqual(readme.fetch_contributors(), [])
+
+    def test_contributors_are_read_through_the_retrying_client(self):
+        from sitegen import readme
+
+        answer = json.dumps([
+            {"login": "someone", "type": "User"},
+            {"login": "dependabot[bot]", "type": "Bot"},
+            {"login": readme.REPO.split("/")[0], "type": "User"},
+        ]).encode()
+        with mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
+                mock.patch.object(readme.upstream, "fetch_body", return_value=answer) as fetch:
+            self.assertEqual([c["login"] for c in readme.fetch_contributors()], ["someone"])
+        self.assertIn("/contributors", fetch.call_args.args[0])
 
 
 class APackNameFitsAFileName(unittest.TestCase):
@@ -7578,6 +7600,7 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
 
     def _response(self, body: bytes):
         stream = io.BytesIO(body)
+        stream.headers = {}
         response = mock.MagicMock()
         response.__enter__.return_value = stream
         response.__exit__.return_value = False
@@ -7587,7 +7610,7 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
         from resolve import packfiles as packresolve
 
         with tempfile.TemporaryDirectory() as tmp, \
-                mock.patch.object(packresolve.urllib.request, "urlopen") as urlopen, \
+                mock.patch("urllib.request.urlopen") as urlopen, \
                 contextlib.redirect_stdout(io.StringIO()):
             ok = packresolve.download_external(self.ENTRY, f"{tmp}/x", offline=True)
         self.assertFalse(ok)
@@ -7600,7 +7623,7 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
         packresolve.set_offline(True)
         try:
             with tempfile.TemporaryDirectory() as tmp, \
-                    mock.patch.object(packresolve.urllib.request, "urlopen") as urlopen, \
+                    mock.patch("urllib.request.urlopen") as urlopen, \
                     contextlib.redirect_stdout(io.StringIO()):
                 self.assertFalse(packresolve.download_external(self.ENTRY, f"{tmp}/x"))
             urlopen.assert_not_called()
@@ -7612,12 +7635,12 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "x"
-            with mock.patch.object(packresolve.urllib.request, "urlopen",
+            with mock.patch("urllib.request.urlopen",
                                    return_value=self._response(b"payload")):
                 self.assertTrue(packresolve.download_external(self.ENTRY, str(target), offline=False))
             self.assertEqual(target.read_bytes(), b"payload")
             target.unlink()
-            with mock.patch.object(packresolve.urllib.request, "urlopen",
+            with mock.patch("urllib.request.urlopen",
                                    return_value=self._response(b"other")), \
                     contextlib.redirect_stdout(io.StringIO()):
                 self.assertFalse(packresolve.download_external(self.ENTRY, str(target), offline=False))
@@ -7635,6 +7658,21 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
                                       return_value=self._response(b"payload")):
                 entry = {**self.ENTRY, "sha1": sha1}
                 self.assertTrue(packresolve.download_external(entry, f"{tmp}/x", offline=False))
+
+    def test_a_transient_failure_is_retried_and_no_scratch_remains(self):
+        """One 503 failed the external file for the whole build."""
+        from core import upstream
+        from resolve import packfiles as packresolve
+
+        refusal = urllib.error.HTTPError(self.ENTRY["source_url"], 503, "busy", {}, None)
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "x"
+            with mock.patch("urllib.request.urlopen",
+                            side_effect=[refusal, self._response(b"payload")]), \
+                    mock.patch.object(upstream, "_sleep", lambda _s: None):
+                self.assertTrue(packresolve.download_external(self.ENTRY, str(target), offline=False))
+            self.assertEqual(target.read_bytes(), b"payload")
+            self.assertEqual(os.listdir(tmp), ["x"])
 
     def test_scratch_files_stay_in_the_repository(self):
         source = script_source("generate_pack.py")

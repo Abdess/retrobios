@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import http.client
 import inspect
 import json
@@ -14,18 +15,21 @@ import urllib.request
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, NoReturn, TypeVar
+from typing import Any, Callable, Iterator, NoReturn, TypeVar
 
 from core.github import github_token
-from core.artifacts import copy_stream_atomic, write_text_atomic
+from core.artifacts import write_text_atomic
 from core.hashing import git_blob_sha
 from core.upstream import (
     MAX_RESPONSE_SIZE,
     RateLimitError,
     UpstreamError,
+    make_repo,
     open_retrying,
     read_limited,
+    resolve_head,
 )
+from core.upstream import download as upstream_download
 from core.upstream import forge_headers as upstream_headers
 from model.safeparse import require_yaml, yaml_load
 
@@ -174,6 +178,21 @@ def github_headers() -> dict[str, str]:
     return forge_headers(GITHUB_API, "application/vnd.github.v3+json")
 
 
+@contextlib.contextmanager
+def _fetch_errors(url: str) -> Iterator[None]:
+    """Raise what a request to `url` failed with as FetchError."""
+    try:
+        yield
+    except urllib.error.HTTPError as e:
+        raise FetchError(url, e, e.code) from e
+    except (urllib.error.URLError, http.client.HTTPException, OSError) as e:
+        raise FetchError(url, e) from e
+    except RateLimitError as e:
+        raise FetchError(url, e, 429) from e
+    except UpstreamError as e:
+        raise FetchError(url, e) from e
+
+
 def _open(
     request: urllib.request.Request,
     consume: Callable[[http.client.HTTPResponse], _T],
@@ -186,16 +205,8 @@ def _open(
     for name, value in forge_headers(url).items():
         if not request.has_header(name.capitalize()):
             request.add_header(name, value)
-    try:
+    with _fetch_errors(url):
         return open_retrying(request, consume, timeout)
-    except urllib.error.HTTPError as e:
-        raise FetchError(url, e, e.code) from e
-    except (urllib.error.URLError, http.client.HTTPException, OSError) as e:
-        raise FetchError(url, e) from e
-    except RateLimitError as e:
-        raise FetchError(url, e, 429) from e
-    except UpstreamError as e:
-        raise FetchError(url, e) from e
 
 
 def fetch_bytes(
@@ -245,19 +256,19 @@ def download(
     """Stream `url` into `destination`, whole or not at all, and return the
     response's Content-Disposition ("" when absent or when skipped).
 
-    The bytes go through a scratch file renamed into place, so a reader or
-    an interrupted run never sees half an archive. `skip_existing` keeps a
-    file already there without asking the server.
+    core.upstream.download does the work: a scratch file renamed into place,
+    so a reader or an interrupted run never sees half an archive.
+    `skip_existing` keeps a file already there without asking the server.
+    A failure raises FetchError.
     """
     if skip_existing and destination.is_file():
         return ""
     destination.parent.mkdir(parents=True, exist_ok=True)
-
-    def save(resp: http.client.HTTPResponse) -> str:
-        copy_stream_atomic(resp, str(destination))
-        return resp.headers.get("Content-Disposition", "") or ""
-
-    return _open(urllib.request.Request(url, headers=headers or {}), save, timeout)
+    with _fetch_errors(url):
+        served = upstream_download(
+            url, destination, headers=headers, timeout=timeout, user_agent=SCRAPER_AGENT
+        )
+    return (served.get("Content-Disposition", "") if served is not None else "") or ""
 
 
 class BlobMismatchError(ValueError):
@@ -499,18 +510,27 @@ class BaseScraper(ABC):
         ...
 
 
-def fetch_branch_head(repo: str, branch: str) -> str:
-    """The commit a branch of a GitHub repo points at right now.
+def fetch_branch_head(repo: str, branch: str | None = None) -> str:
+    """The commit a branch or tag of a GitHub repo points at right now, the
+    default branch when none is named.
 
     A platform read from a moving branch records this sha in its source URL,
     so the exporter later patches the revision the data was read from and
-    not whatever the branch has become. Raises like the release lookup.
+    not whatever the branch has become. core.upstream.resolve_head asks the
+    forge and keeps no copy: the sha lives in the scraper's output. Raises
+    RuntimeError like the release lookup.
     """
-    url = f"{GITHUB_API}/repos/{repo}/commits/{branch}"
-    commit = github_json(url, f"cannot read the head of {repo}@{branch}")
-    sha = commit.get("sha") if isinstance(commit, dict) else None
+    owner, _, name = repo.partition("/")
+    forge = make_repo("github.com", owner, name)
+    ref = f"{repo}@{branch or 'default branch'}"
+    if forge is None:
+        raise RuntimeError(f"{ref}: not a GitHub repository")
+    try:
+        sha = resolve_head(forge, None, branch=branch)
+    except (UpstreamError, ValueError) as e:
+        raise RuntimeError(f"cannot read the head of {ref}: {e}") from e
     if not isinstance(sha, str) or not re.fullmatch(r"[0-9a-f]{40}", sha):
-        raise RuntimeError(f"{repo}@{branch} answered no commit sha")
+        raise RuntimeError(f"{ref} answered no commit sha")
     return sha
 
 

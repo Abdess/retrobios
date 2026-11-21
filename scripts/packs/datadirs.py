@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import contextlib
+import http.client
 import json
 import logging
 import os
@@ -30,9 +31,14 @@ REQUEST_TIMEOUT = 30
 DOWNLOAD_TIMEOUT = 300
 # A mirror sometimes answers with a page that is not the archive: the
 # buildbot's ScummVM.zip failed CI once as "File is not a zip file" and
-# downloaded fine minutes later. Seconds to wait before each retry.
+# downloaded fine minutes later. Seconds to wait before each retry. The
+# transfer itself is retried by core.upstream.download: these waits cover
+# an archive that arrived whole and does not read.
 DOWNLOAD_RETRY_WAITS = (5, 20)
-_TRANSIENT = (urllib.error.URLError, OSError, tarfile.TarError, zipfile.BadZipFile, EOFError)
+_TRANSIENT = (
+    urllib.error.URLError, OSError, http.client.HTTPException,
+    tarfile.TarError, zipfile.BadZipFile, EOFError,
+)
 
 
 def cache_lock(
@@ -172,13 +178,14 @@ def revisioned(entry: dict) -> bool:
 
 
 def get_remote_sha(source_url: str, version: str) -> str | None:
-    """The commit a branch or tag of the source's repository points at now."""
+    """The commit a branch or tag of the source's repository points at now,
+    asked of the forge each time and kept nowhere but the versions file."""
     repo = upstream.parse_repo(source_url)
     if repo is None:
         log.warning("cannot parse repo from URL: %s", source_url)
         return None
     try:
-        return upstream.resolve_head(repo, upstream.CACHE_DIR, branch=version, fresh=True)
+        return upstream.resolve_head(repo, None, branch=version)
     except (upstream.UpstreamError, ValueError) as exc:
         log.warning("failed to fetch remote SHA for %s@%s: %s", repo.slug, version, exc)
         return None
@@ -223,13 +230,9 @@ def _download_and_extract(
         tarball_path = Path(tmpdir) / "archive.tar.gz"
         log.info("downloading %s", source_url)
 
-        req = urllib.request.Request(source_url, headers={"User-Agent": USER_AGENT})
-        with urllib.request.urlopen(req, timeout=DOWNLOAD_TIMEOUT) as resp, open(tarball_path, "wb") as f:
-            while True:
-                chunk = resp.read(65536)
-                if not chunk:
-                    break
-                f.write(chunk)
+        upstream.download(
+            source_url, tarball_path, timeout=DOWNLOAD_TIMEOUT, user_agent=USER_AGENT
+        )
         if measured is not None:
             measured(tarball_path.stat().st_size)
 
@@ -304,13 +307,9 @@ def _download_and_extract_zip(
         zip_path = Path(tmpdir) / "archive.zip"
         log.info("downloading %s", source_url)
 
-        req = urllib.request.Request(source_url, headers={"User-Agent": USER_AGENT})
-        with urllib.request.urlopen(req, timeout=DOWNLOAD_TIMEOUT) as resp, open(zip_path, "wb") as f:
-            while True:
-                chunk = resp.read(65536)
-                if not chunk:
-                    break
-                f.write(chunk)
+        upstream.download(
+            source_url, zip_path, timeout=DOWNLOAD_TIMEOUT, user_agent=USER_AGENT
+        )
         if measured is not None:
             measured(zip_path.stat().st_size)
 
@@ -352,13 +351,19 @@ def _download_and_extract_zip(
 def _measure_archive(source_url: str) -> int | None:
     """The size of the archive at source_url, read by streaming it: a
     tarball GitHub builds on request is sent without a Content-Length."""
-    req = urllib.request.Request(source_url, headers={"User-Agent": USER_AGENT})
-    size = 0
+    req = urllib.request.Request(
+        source_url, headers=upstream.forge_headers(source_url, user_agent=USER_AGENT)
+    )
+
+    def count(resp: http.client.HTTPResponse) -> int:
+        size = 0
+        while chunk := resp.read(65536):
+            size += len(chunk)
+        return size
+
     try:
-        with urllib.request.urlopen(req, timeout=DOWNLOAD_TIMEOUT) as resp:
-            while chunk := resp.read(65536):
-                size += len(chunk)
-    except _TRANSIENT as exc:
+        size = upstream.open_retrying(req, count, DOWNLOAD_TIMEOUT)
+    except (*_TRANSIENT, upstream.UpstreamError) as exc:
         log.warning("could not measure %s: %s", source_url, exc)
         return None
     return size or None
@@ -517,7 +522,9 @@ def _refresh_entry(
         try:
             file_count = fetch()
             break
-        except (NothingExtractedError, ValueError) as exc:
+        except (NothingExtractedError, ValueError, upstream.UpstreamError) as exc:
+            # A host gone or still rate limited after core.upstream's own
+            # waits answers the same way on the next try.
             log.warning("[%s] download failed: %s", key, exc)
             return None
         except _TRANSIENT as exc:

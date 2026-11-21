@@ -33,7 +33,6 @@ import argparse
 import hashlib
 import json
 import sys
-import urllib.parse
 import zipfile
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -51,6 +50,7 @@ from resolve.localfile import variant_base_name
 from .base_scraper import (
     BlobMismatchError,
     download,
+    fetch_branch_head,
     fetch_github_latest_version,
     fetch_verified_blob,
     github_json,
@@ -414,7 +414,8 @@ def mame_version(tag: str) -> str:
     if raw.isdigit() and len(raw) >= 4:
         return f"{raw[0]}.{raw[1:]}"
     return raw
-FBNEO_API = "https://api.github.com/repos/libretro/FBNeo"
+FBNEO_REPO = "libretro/FBNeo"
+FBNEO_API = f"https://api.github.com/repos/{FBNEO_REPO}"
 
 
 def _api_json(url: str) -> object:
@@ -451,11 +452,7 @@ def fetch_pack(
     # The revision is resolved to a commit first and everything is read at
     # that commit: a branch URL is served through a CDN cache, so the bytes
     # could predate the listing that named their blob.
-    ref = "HEAD" if tag == "latest" else urllib.parse.quote(tag, safe="")
-    commit = _api_json(f"{FBNEO_API}/commits/{ref}")
-    sha = commit.get("sha") if isinstance(commit, dict) else None
-    if not sha:
-        raise BlobMismatchError(f"libretro/FBNeo has no revision {tag}")
+    sha = fetch_branch_head(FBNEO_REPO, None if tag == "latest" else tag)
     listing = _api_json(f"{FBNEO_API}/contents/dats?ref={sha}")
     if not isinstance(listing, list):
         raise BlobMismatchError(f"libretro/FBNeo lists no dats at {sha}")
@@ -612,7 +609,7 @@ def main() -> int:
             pack, blobs = fetch_pack(
                 args.source, fetch_tag(args.source, args.fetch), Path(args.cache_dir)
             )
-        except BlobMismatchError as exc:
+        except (BlobMismatchError, ConnectionError, RuntimeError) as exc:
             print(f"ERROR: {exc}", file=sys.stderr)
             return 1
         print(f"  Recupere {pack}")

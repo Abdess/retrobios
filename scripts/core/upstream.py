@@ -24,9 +24,9 @@ import urllib.request
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Callable, Protocol, TypeVar
+from typing import Callable, Mapping, Protocol, TypeVar
 
-from core.artifacts import write_text_atomic
+from core.artifacts import atomic_scratch, write_text_atomic
 
 USER_AGENT = "retrobios-profile-sync/1.0"
 # Where fetched upstream files live, shared by every reader of this cache.
@@ -121,6 +121,12 @@ class NotCachedError(UpstreamError):
     Distinct from absence: returning None made profile_sync report a file
     that exists as GONE, "absent at HEAD, no rename found".
     """
+
+
+class TruncatedListingError(UpstreamError):
+    """A listing the forge served in part: a page that could not be read,
+    the page cap, or a tree GitHub cut short. What it holds is real, but an
+    absence from it proves nothing."""
 
 
 class GoneError(UpstreamError):
@@ -307,17 +313,36 @@ def _resolver_answers() -> bool:
     return True
 
 
+class _Headers(Protocol):
+    def get(self, name: str, /) -> str | None: ...
+
+
+def requested_wait(headers: _Headers | None) -> float | None:
+    """Seconds a 429 asks the client to wait, None when it names none.
+
+    Retry-After is the standard header. GoatCounter sends X-Rate-Limit-Reset
+    instead, the whole seconds left in its window, so one more second is
+    added: asked again on the second it names, the window is still closed.
+    """
+    if not headers:
+        return None
+    retry_after = (headers.get("Retry-After") or "").strip()
+    if retry_after.isdigit():
+        return float(retry_after)
+    reset = (headers.get("X-Rate-Limit-Reset") or "").strip()
+    return float(reset) + 1 if reset.isdigit() else None
+
+
 def _rate_limit_wait(exc: urllib.error.HTTPError, waited: int) -> float | None:
     """Seconds to wait before asking again, or None when waiting is futile.
 
     GitHub's exhausted quota (403) resets on the hour. A 429 names its wait
-    in Retry-After, which is followed up to a cap, else the fixed steps.
+    (requested_wait), which is followed up to a cap, else the fixed steps.
     """
     if exc.code != 429 or waited >= len(RATE_LIMIT_WAITS):
         return None
-    retry_after = (exc.headers.get("Retry-After") or "").strip() if exc.headers else ""
-    if retry_after.isdigit():
-        delay = float(retry_after)
+    delay = requested_wait(exc.headers)
+    if delay is not None:
         return delay if delay <= RATE_LIMIT_WAIT_CAP else None
     return RATE_LIMIT_WAITS[waited]
 
@@ -426,10 +451,63 @@ def remote_etag(url: str, timeout: float = 30) -> str | None:
         url, method="HEAD", headers=forge_headers(url, user_agent="retrobios/1.0")
     )
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return resp.headers.get("ETag") or resp.headers.get("Last-Modified") or ""
-    except (urllib.error.URLError, OSError):
+        return open_retrying(
+            req,
+            lambda resp: resp.headers.get("ETag") or resp.headers.get("Last-Modified") or "",
+            timeout,
+        )
+    except (urllib.error.URLError, http.client.HTTPException, OSError, UpstreamError):
         return None
+
+
+class _Refused(Exception):
+    """A finished download the caller's check turned down."""
+
+
+def download(
+    url: str,
+    destination: str | os.PathLike[str],
+    *,
+    headers: Mapping[str, str] | None = None,
+    timeout: float = 300,
+    max_bytes: int | None = None,
+    user_agent: str = USER_AGENT,
+    accept: Callable[[str], bool] | None = None,
+) -> http.client.HTTPMessage | None:
+    """Stream `url` into `destination`, whole or not at all, and return the
+    response headers.
+
+    The body goes to a unique scratch beside the destination, renamed into
+    place once complete, so a reader or an interrupted run never sees half a
+    file and two runs never interleave their bytes. Each attempt of
+    open_retrying starts the scratch over: a stream cut midway is retried
+    like a refused connection. `headers` add to or replace forge_headers().
+    A body past `max_bytes` raises ValueError. `accept` judges the finished
+    scratch by its path: refused, nothing is written and None is returned.
+    A failure raises as open_retrying raises it.
+    """
+    request = urllib.request.Request(
+        url, headers={**forge_headers(url, user_agent=user_agent), **(headers or {})}
+    )
+
+    def save(scratch: str, resp: http.client.HTTPResponse) -> http.client.HTTPMessage:
+        total = 0
+        with open(scratch, "wb") as out:
+            while chunk := resp.read(1 << 20):
+                total += len(chunk)
+                if max_bytes is not None and total > max_bytes:
+                    raise ValueError(f"{url}: response exceeds {max_bytes} byte limit")
+                out.write(chunk)
+        return resp.headers
+
+    try:
+        with atomic_scratch(destination) as scratch:
+            served = open_retrying(request, lambda resp: save(scratch, resp), timeout)
+            if accept is not None and not accept(scratch):
+                raise _Refused
+    except _Refused:
+        return None
+    return served
 
 
 def http_json(url: str) -> object | None:
@@ -611,21 +689,28 @@ def current_slug(repo: Repo, cache_dir: str, offline: bool = False) -> str | Non
 
 
 def resolve_head(
-    repo: Repo, cache_dir: str, offline: bool = False, branch: str | None = None,
+    repo: Repo, cache_dir: str | None, offline: bool = False, branch: str | None = None,
     fresh: bool = False,
 ) -> str | None:
-    """Sha of a branch tip, the default branch unless one is named.
+    """Sha of a branch tip, the default branch unless one is named. A tag
+    resolves too: every forge's commit listing starts from any ref.
 
     A libretro port often lives on a branch of a fork rather than on the
     default branch, so the code a profile documents can be absent from the
     tip the forge serves by default. ``fresh`` asks the forge again whatever
-    the cache holds.
+    the cache holds. A ``cache_dir`` of None asks the forge and keeps
+    nothing: a scraper records the sha it read in its own output, and an
+    answer it never reads back has no place in the profile cache.
 
     Offline, a tip the cache never stored raises NotCachedError: returning
     None read as a branch the forge does not have, and profile_sync dropped
     xenios-jp/XeniOS, judging its citations against the other repository.
     """
     url = _commits_url(repo, None, branch)
+    if cache_dir is None:
+        if offline:
+            raise NotCachedError(f"{repo.slug}: no cache to read offline")
+        return _first_sha(http_json(url))
     _require_cached(
         url, cache_dir, offline, f"{repo.slug}: tip of {branch or 'the default branch'}"
     )
@@ -1057,17 +1142,6 @@ def gitlab_tree_entries(
     return entries, True
 
 
-def _gitlab_tree(
-    repo: Repo, sha: str, cache_dir: str, offline: bool
-) -> tuple[list[str], bool]:
-    entries, truncated = gitlab_tree_entries(repo, sha, cache_dir, offline)
-    paths = [
-        entry["path"] for entry in entries
-        if entry.get("type") == "blob" and entry.get("path")
-    ]
-    return paths, truncated
-
-
 def cache_gitlab_directory(
     repo: Repo, sha: str, directory: str, cache_dir: str, offline: bool = False
 ) -> set[str] | None:
@@ -1149,18 +1223,19 @@ def _sparse_git_files(repo: Repo, sha: str, directory: str, cache_dir: str) -> d
         shutil.rmtree(work, ignore_errors=True)
 
 
-def list_tree(
-    repo: Repo, sha: str, cache_dir: str, offline: bool = False
-) -> tuple[list[str], bool]:
-    """Every blob path at one revision, and whether the forge truncated it."""
+def _tree_entries(
+    repo: Repo, sha: str, cache_dir: str, offline: bool
+) -> tuple[list[dict], bool] | None:
+    """Every entry of the tree at one revision, and whether the forge served
+    it in part. None when the forge serves no tree for it."""
     if repo.family == "gitlab":
-        return _gitlab_tree(repo, sha, cache_dir, offline)
+        return gitlab_tree_entries(repo, sha, cache_dir, offline)
     url = _tree_url(repo, sha)
     if url is None:
-        return [], True
+        return None
     payload = cached_api(url, cache_dir, offline)
     if not isinstance(payload, dict):
-        return [], True
+        return None
     entries = list(payload.get("tree") or [])
     truncated = bool(payload.get("truncated"))
     # Forgejo pages a recursive tree, 1000 entries at a time, and says how
@@ -1177,10 +1252,20 @@ def list_tree(
                 break
             entries.extend(more["tree"])
         truncated = len(entries) < total
+    return [entry for entry in entries if isinstance(entry, dict)], truncated
+
+
+def list_tree(
+    repo: Repo, sha: str, cache_dir: str, offline: bool = False
+) -> tuple[list[str], bool]:
+    """Every blob path at one revision, and whether the forge truncated it."""
+    listing = _tree_entries(repo, sha, cache_dir, offline)
+    if listing is None:
+        return [], True
+    entries, truncated = listing
     paths = [
-        entry["path"]
-        for entry in entries
-        if isinstance(entry, dict) and entry.get("type") == "blob" and entry.get("path")
+        entry["path"] for entry in entries
+        if entry.get("type") == "blob" and entry.get("path")
     ]
     return paths, truncated
 
@@ -1191,24 +1276,22 @@ def list_gitlinks(
     """Submodule path -> the commit it points at, at one revision.
 
     Read from the same tree listing as list_tree, so the call costs nothing
-    once the tree is cached.
+    once the tree is cached. A listing the forge served in part raises
+    TruncatedListingError: a partial answer read as "no submodule there",
+    and a port then lost the upstream commit its gitlink pins.
     """
-    if repo.family == "gitlab":
-        entries, _truncated = gitlab_tree_entries(repo, sha, cache_dir, offline)
-        return {
-            entry["path"]: entry["id"]
-            for entry in entries
-            if entry.get("type") == "commit" and entry.get("path") and entry.get("id")
-        }
-    tree_url = _tree_url(repo, sha)
-    payload = cached_api(tree_url, cache_dir, offline) if tree_url else None
-    if not isinstance(payload, dict):
+    listing = _tree_entries(repo, sha, cache_dir, offline)
+    if listing is None:
         return {}
+    entries, truncated = listing
+    if truncated:
+        raise TruncatedListingError(f"{repo.slug}@{sha[:8]}: tree listing truncated")
+    # GitLab names the target commit `id`, GitHub and Forgejo `sha`.
+    key = "id" if repo.family == "gitlab" else "sha"
     return {
-        entry["path"]: entry["sha"]
-        for entry in payload.get("tree") or []
-        if isinstance(entry, dict) and entry.get("type") == "commit"
-        and entry.get("path") and entry.get("sha")
+        entry["path"]: entry[key]
+        for entry in entries
+        if entry.get("type") == "commit" and entry.get("path") and entry.get(key)
     }
 
 
