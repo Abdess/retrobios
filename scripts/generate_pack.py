@@ -137,8 +137,8 @@ def _argument_conflicts(args: argparse.Namespace) -> list[tuple[bool, str]]:
 
 
 def _validate_args(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
-    """Validate argument combinations and mutual exclusion rules."""
-    _refuse_for_verify_packs(args, parser)
+    """Validate argument combinations and mutual exclusion rules. The
+    --verify-packs refusals ran before the quick-exit modes."""
     for refused, message in _argument_conflicts(args):
         if refused:
             parser.error(message)
