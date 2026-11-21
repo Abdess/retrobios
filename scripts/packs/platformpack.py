@@ -15,6 +15,7 @@ from model.registry import load_platform_registry
 from core.hashing import compute_hashes
 from core.options import reject_unknown
 from core.paths import EMULATORS_DIR, declared_destination, sanitize_pack_path
+from core.ziptools import is_archive_path
 from model.alternatives import core_file_spares
 from model.declarations import OUTER_ROOTS, declared_root
 from model.platforms import load_platform_config
@@ -778,9 +779,9 @@ class _PlatformPackBuild:
 
         extract = file_entry.get("extract", False)
         flat_dest = self._flat(full_dest)
-        if extract and local_path.endswith(".zip"):
+        if extract and is_archive_path(local_path):
             extract_zip_to_archive(local_path, flat_dest, self.zf)
-        elif local_path.endswith(".zip"):
+        elif is_archive_path(local_path):
             add_zip_to_pack(local_path, flat_dest, self.zf, file_entry)
         else:
             add_pack_member(self.zf, local_path, flat_dest)
@@ -876,7 +877,7 @@ class _PlatformPackBuild:
         within = plan.opts.within
         if within is not None and not same_bytes(local_path, within.get(flat_dest)):
             return
-        if local_path.endswith(".zip"):
+        if is_archive_path(local_path):
             add_zip_to_pack(local_path, flat_dest, self.zf, fe)
         else:
             add_pack_member(self.zf, local_path, flat_dest)

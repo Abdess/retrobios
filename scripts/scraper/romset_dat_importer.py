@@ -40,6 +40,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import IO
 
+from core.ziptools import is_archive_path, zip_members
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
@@ -116,14 +117,13 @@ def collection_archives(db: dict) -> tuple[set[str], ByMembers]:
     for entry in db.get("files", {}).values():
         path = Path(entry.get("path", ""))
         name = variant_base_name(path.name)
-        if not name.lower().endswith(".zip") or not path.is_file():
+        if not is_archive_path(path.name) or not path.is_file():
             continue
         try:
-            with zipfile.ZipFile(path) as archive:
-                held = [
-                    {"name": info.filename, "crc32": f"{info.CRC:08x}"}
-                    for info in archive.infolist() if not info.is_dir()
-                ]
+            held = [
+                {"name": member.name, "crc32": member.crc32}
+                for member in zip_members(path)
+            ]
         except (OSError, zipfile.BadZipFile) as exc:
             print(f"  UNREADABLE: {path}: {exc}", file=sys.stderr)
             continue

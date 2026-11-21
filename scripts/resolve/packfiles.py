@@ -21,7 +21,7 @@ from core.hashing import declared_hash_lists, file_digest
 from resolve.content import declared_hash_verdict
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from core.paths import REPO_ROOT, declared_destination
-from core.ziptools import readable_zip_member_crcs
+from core.ziptools import is_archive_path, readable_zip_member_crcs
 from resolve.validation import inner_rom_check
 # CLI-wide network policy.  Public helpers can override it explicitly, while
 # every CLI mode inherits --offline (including large-file release fallback).
@@ -425,7 +425,7 @@ def _archive_choice(
     # that answers one of them (adam_fdc.zip: a one-member MAME set
     # answered first, the eight-member set sat beside it).
     def accepted(path: str | None) -> int:
-        if not path or not path.endswith(".zip"):
+        if not path or not is_archive_path(path):
             return -1
         return sum(inner_rom_check(fe, path) == "ok" for fe in members)
 

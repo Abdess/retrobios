@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, TypedDict
 
 from core.artifacts import build_timestamp
 from packs.paths import MEDIA_MARKER, has_path_conflict
-from core.ziptools import build_zip_contents_index, is_archive_path
+from core.ziptools import build_zip_contents_index, is_archive_path, zip_members
 from core.ziptools import safe_member_parts
 from resolve.nativemode import digest_algorithm, platform_mode
 from resolve.validation import (
@@ -106,10 +106,6 @@ def _settle_untracked(
     return "untracked", file_name
 
 
-def _member_crcs(archive: zipfile.ZipFile) -> dict[str, int]:
-    return {i.filename: i.CRC for i in archive.infolist() if not i.is_dir()}
-
-
 def _same_members(pack: zipfile.ZipFile, name: str, source: str) -> bool:
     """Whether a ZIP inside the pack holds the members of a ZIP on disk.
 
@@ -118,9 +114,12 @@ def _same_members(pack: zipfile.ZipFile, name: str, source: str) -> bool:
     each carried their own copy.
     """
     try:
-        with zipfile.ZipFile(io.BytesIO(pack.read(name))) as packed, \
-                zipfile.ZipFile(source) as held:
-            return _member_crcs(packed) == _member_crcs(held)
+        held = {member.name: member.crc32 for member in zip_members(source)}
+        with zipfile.ZipFile(io.BytesIO(pack.read(name))) as packed:
+            return held == {
+                info.filename: format(info.CRC, "08x")
+                for info in packed.infolist() if not info.is_dir()
+            }
     except (zipfile.BadZipFile, OSError):
         return False
 
@@ -622,7 +621,7 @@ def _same_content(zf: zipfile.ZipFile, member: str, local: str) -> bool:
     with open(local, "rb") as handle:
         if zf.read(member) == handle.read():
             return True
-    return local.lower().endswith(".zip") and _same_members(zf, member, local)
+    return is_archive_path(local) and _same_members(zf, member, local)
 
 
 class PlatformCheckOptions(TypedDict, total=False):

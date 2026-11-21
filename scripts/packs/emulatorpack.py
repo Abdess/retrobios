@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING, TypedDict
 
 from core.options import reject_unknown
 from core.paths import REPO_ROOT
-from core.ziptools import build_zip_contents_index
+from core.ziptools import build_zip_contents_index, is_archive_path
 from model.alternatives import settle_sets, slot_set_keys
 from model.profiles import (
     ProfileSelectionError,
@@ -119,7 +119,7 @@ class _EmulatorPackBuild:
 
     def _add(self, local_path: str, dest: str, fe: dict | None) -> None:
         """Write a loose file or an archive at dest and count it."""
-        if fe is not None and local_path.endswith(".zip"):
+        if fe is not None and is_archive_path(local_path):
             add_zip_to_pack(local_path, dest, self.zf, fe)
         else:
             add_pack_member(self.zf, local_path, dest)

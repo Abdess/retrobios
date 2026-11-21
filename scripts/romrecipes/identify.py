@@ -9,6 +9,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from core.torrentzip import is_torrentzip
+from core.ziptools import zip_members
 from romrecipes.pins import container_entries
 from romrecipes.pool import AtomPool
 from romrecipes.romsets import Recipe
@@ -39,11 +40,7 @@ def identify_archive(
 def _member_list(path: Path) -> list[tuple[str, str]] | None:
     """Sorted (name, crc32) of an archive's members, from its directory."""
     try:
-        with zipfile.ZipFile(path) as archive:
-            return sorted(
-                (info.filename, format(info.CRC, "08x"))
-                for info in archive.infolist() if not info.is_dir()
-            )
+        return sorted((member.name, member.crc32) for member in zip_members(path))
     except (zipfile.BadZipFile, OSError) as exc:
         print(f"  UNREADABLE: {path}: {exc}", file=sys.stderr)
         return None
@@ -84,10 +81,10 @@ def _is_archive(path: Path) -> bool:
     ROM, not an archive. Recipes only describe archives.
     """
     try:
-        with zipfile.ZipFile(path):
-            return True
+        zip_members(path)
     except (OSError, zipfile.BadZipFile):
         return False
+    return True
 
 
 def _local_paths(archive: str, db: dict) -> list[Path]:

@@ -91,46 +91,51 @@ def _read_member_md5(source: str | io.BytesIO, folded: str, hashed: bool) -> str
         return "error"
 
 
-@functools.lru_cache(maxsize=4096)
-def _member_crcs(path: str, mtime: float) -> frozenset[str] | None:
-    try:
-        with zipfile.ZipFile(path) as archive:
-            return frozenset(
-                format(info.CRC, "08x") for info in archive.infolist() if not info.is_dir()
-            )
-    except (zipfile.BadZipFile, OSError):
-        return None
+@dataclass(frozen=True)
+class ZipMember:
+    """One file of an archive, as its central directory lists it."""
+
+    name: str
+    size: int
+    crc32: str
 
 
-@functools.lru_cache(maxsize=4096)
-def _member_names(path: str, mtime: float) -> frozenset[str]:
-    try:
-        with zipfile.ZipFile(path) as archive:
-            return frozenset(
-                info.filename.rsplit("/", 1)[-1].casefold()
-                for info in archive.infolist() if not info.is_dir()
-            )
-    except (zipfile.BadZipFile, OSError):
-        return frozenset()
+@functools.lru_cache(maxsize=8192)
+def _members(path: str, size: int, mtime_ns: int) -> tuple[ZipMember, ...]:
+    with zipfile.ZipFile(path) as archive:
+        return tuple(
+            ZipMember(info.filename, info.file_size, format(info.CRC, "08x"))
+            for info in archive.infolist() if not info.is_dir()
+        )
+
+
+def zip_members(path: str | os.PathLike[str]) -> tuple[ZipMember, ...]:
+    """Each file member of an archive, in directory order, read once.
+
+    Keyed by the archive's size and mtime, so a rewritten archive is read
+    again. Raises OSError or zipfile.BadZipFile for a file that is no
+    readable archive, so each caller reports it in its own words.
+    """
+    info = os.stat(path)
+    return _members(os.fspath(path), info.st_size, info.st_mtime_ns)
 
 
 def zip_member_names(path: str) -> frozenset[str]:
     """Casefolded base name of each member, read from the central directory."""
     try:
-        mtime = os.path.getmtime(path)
-    except OSError:
+        members = zip_members(path)
+    except (zipfile.BadZipFile, OSError):
         return frozenset()
-    return _member_names(path, mtime)
+    return frozenset(m.name.rsplit("/", 1)[-1].casefold() for m in members)
 
 
 def readable_zip_member_crcs(path: str) -> frozenset[str] | None:
     """CRC-32 of each member, read from the central directory, None when
     the file is no readable archive."""
     try:
-        mtime = os.path.getmtime(path)
-    except OSError:
+        return frozenset(m.crc32 for m in zip_members(path))
+    except (zipfile.BadZipFile, OSError):
         return None
-    return _member_crcs(path, mtime)
 
 
 def zip_member_crcs(path: str) -> frozenset[str]:
@@ -202,11 +207,17 @@ def build_zip_contents_index(
     """
     global _zip_contents_cache
 
+    # Primaries first, then the .variants/ copies (x.zip.1a2b3c4d): a copy
+    # answers only for a member no primary holds.
     zip_entries: list[tuple[str, str]] = []
+    variant_entries: list[tuple[str, str]] = []
     for sha1, entry in db.get("files", {}).items():
         path = entry["path"]
-        if path.endswith(".zip") and os.path.exists(path):
-            zip_entries.append((path, sha1))
+        if is_archive_path(path) and os.path.exists(path):
+            primary = path.lower().endswith(".zip")
+            (zip_entries if primary else variant_entries).append((path, sha1))
+    primaries = len(zip_entries)
+    zip_entries += variant_entries
 
     # The bound and the sha1 each path carries are part of the answer: a
     # second call with a smaller bound got members the first one admitted,
@@ -221,7 +232,7 @@ def build_zip_contents_index(
     cached = _read_member_cache(cache_path) if cache_path else {}
     added = False
     index: dict[str, str] = {}
-    for path, sha1 in zip_entries:
+    for position, (path, sha1) in enumerate(zip_entries):
         members = cached.get(sha1)
         if members is None:
             members = _members_md5(path)
@@ -230,8 +241,12 @@ def build_zip_contents_index(
             cached[sha1] = members
             added = True
         for md5, size in members:
-            if md5 is not None and size <= max_entry_size:
+            if md5 is None or size > max_entry_size:
+                continue
+            if position < primaries:
                 index[md5] = sha1
+            else:
+                index.setdefault(md5, sha1)
     if added and cache_path:
         _write_member_cache(cache_path, cached)
 

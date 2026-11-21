@@ -11,7 +11,7 @@ from pathlib import Path
 
 from core.hashing import parse_hash_list
 from core.paths import REPO_ROOT
-from core.ziptools import is_archive_path
+from core.ziptools import is_archive_path, zip_members
 from resolve.content import size_fits
 
 
@@ -136,12 +136,9 @@ def archive_members(db: dict) -> dict[tuple[str, int], list[tuple[str, str]]]:
         if not is_archive_path(path) or not os.path.exists(path):
             continue
         try:
-            with zipfile.ZipFile(path) as archive:
-                for info in archive.infolist():
-                    if info.is_dir():
-                        continue
-                    key = (f"{info.CRC:08x}", info.file_size)
-                    members.setdefault(key, []).append((path, info.filename))
+            for member in zip_members(path):
+                key = (member.crc32, member.size)
+                members.setdefault(key, []).append((path, member.name))
         except (zipfile.BadZipFile, OSError) as exc:
             print(f"  WARNING: {path}: {exc}", file=sys.stderr)
     return members

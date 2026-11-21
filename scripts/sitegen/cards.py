@@ -17,6 +17,7 @@ from packs.crossref import FileConsumers
 from romrecipes.romsets import dat_snapshots, usable_recipe
 from sitegen import markup, wanted as sitewanted
 from core.paths import REPO_ROOT
+from core.ziptools import zip_members
 from model.mamerelease import tag_version
 from sitegen.fields import search_excluded
 from sitegen.install import manifest_systems, platform_display
@@ -377,9 +378,7 @@ def _romset_line(f: dict) -> str:
     if not recipes or not path.is_file():
         return ""
     try:
-        with zipfile.ZipFile(path) as archive:
-            held = tuple(sorted((info.filename, f"{info.CRC:08x}")
-                                for info in archive.infolist() if not info.is_dir()))
+        held = tuple(sorted((member.name, member.crc32) for member in zip_members(path)))
     except (OSError, zipfile.BadZipFile) as exc:
         print(f"  WARNING: {path}: {exc}", file=sys.stderr)
         return ""

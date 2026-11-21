@@ -14,6 +14,7 @@ from typing import TYPE_CHECKING, TypedDict
 
 from core.hashing import parse_hash_list, stream_hashes
 from core.paths import BIOS_DIR, PLATFORMS_DIR, REPO_ROOT
+from core.ziptools import is_archive_path, zip_members
 from model.alternatives import set_keys, set_requirements, settle_sets
 from model.database import get_mame_clone_map, sha1_at
 from model.profiles import lists_files
@@ -158,10 +159,14 @@ def _zip_members(bios_root: str | Path) -> list[tuple[str, list[str]]]:
         return _zip_members_cache[key]
     found: list[tuple[str, list[str]]] = []
     root = Path(bios_root)
-    for zpath in root.rglob("*.zip") if root.is_dir() else ():
+    # .variants/ copies (x.zip.1a2b3c4d) are archives too.
+    archives = sorted(
+        p for p in (root.rglob("*") if root.is_dir() else ())
+        if is_archive_path(p.name) and p.is_file()
+    )
+    for zpath in archives:
         try:
-            with zipfile.ZipFile(zpath) as zf:
-                members = [m for m in zf.namelist() if not m.endswith("/")]
+            members = [member.name for member in zip_members(zpath)]
         except (zipfile.BadZipFile, OSError) as exc:
             print(f"  WARNING: unreadable archive {zpath}: {exc}", file=sys.stderr)
             continue
@@ -345,10 +350,13 @@ def _content_matches(location: tuple[str, str], declared: dict[str, set[str]]) -
     """Whether the file or member at *location* carries a declared hash."""
     path, member = location
     try:
+        if member and set(declared) == {"crc32"}:
+            return any(
+                held.name == member and held.crc32 in declared["crc32"]
+                for held in zip_members(path)
+            )
         if member:
             with zipfile.ZipFile(path) as zf:
-                if set(declared) == {"crc32"}:
-                    return f"{zf.getinfo(member).CRC:08x}" in declared["crc32"]
                 data = zf.read(member)
         else:
             data = Path(path).read_bytes()

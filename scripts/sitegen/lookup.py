@@ -19,6 +19,7 @@ from packs.crossref import FileConsumers
 from sitegen.cards import PROVENANCE_LABELS, emulator_card_anchor, emulator_file_anchors
 from sitegen.config import SITE_URL
 from core.paths import REPO_ROOT
+from core.ziptools import is_archive_path, zip_members
 from sitegen.render import card_anchor, code_span, slugify_anchor, card_page, emulator_card_page
 from sitegen.write import write_if_changed
 
@@ -326,19 +327,17 @@ def _archive_member_records(entry: dict, sha1: str, url: str,
     no record. The record leads to the archive's card and names it.
     """
     path = root / str(entry.get("path", ""))
-    if path.suffix.lower() != ".zip" or not path.is_file():
+    if not is_archive_path(path.name) or not path.is_file():
         return []
     try:
-        with zipfile.ZipFile(path) as archive:
-            members = [(info.filename, info.CRC) for info in archive.infolist()
-                       if not info.is_dir()]
+        members = zip_members(path)
     except (OSError, zipfile.BadZipFile) as exc:
         print(f"  WARNING: {path}: members unreadable ({exc})", file=sys.stderr)
         return []
-    return [{"value": f"{crc:08x}", "algorithm": "crc32", "layer": "archive-member",
-             "name": member.rsplit("/", 1)[-1], "archive": str(entry.get("name", "")),
+    return [{"value": member.crc32, "algorithm": "crc32", "layer": "archive-member",
+             "name": member.name.rsplit("/", 1)[-1], "archive": str(entry.get("name", "")),
              "sha1": sha1, "url": url}
-            for member, crc in members]
+            for member in members]
 
 
 def _collection_lookup_records(

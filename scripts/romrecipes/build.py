@@ -3,14 +3,13 @@
 from __future__ import annotations
 
 import os
-import zipfile
 from dataclasses import dataclass, field
 from pathlib import Path
 
 from core.hashing import compute_hashes
 from core.paths import REPO_ROOT
 from core.torrentzip import write_torrentzip, zlib_ng_version
-from core.ziptools import is_archive_path
+from core.ziptools import is_archive_path, zip_members
 from romrecipes.members import member_sha1, member_opener
 
 
@@ -74,12 +73,9 @@ class BuildResult:
 def _members_match(built: Path, members: list[dict]) -> str:
     """Empty when *built* holds exactly *members*, else what differs."""
     expected = sorted((m["name"], m["size"], m["crc32"], m["sha1"]) for m in members)
-    with zipfile.ZipFile(built) as archive:
-        names = [info.filename for info in archive.infolist() if not info.is_dir()]
-        sizes = {info.filename: info.file_size for info in archive.infolist()}
-        crcs = {info.filename: f"{info.CRC:08x}" for info in archive.infolist()}
     held = sorted(
-        (name, sizes[name], crcs[name], member_sha1(built, name)) for name in names
+        (member.name, member.size, member.crc32, member_sha1(built, member.name))
+        for member in zip_members(built)
     )
     if held == expected:
         return ""

@@ -18,7 +18,7 @@ import zipfile
 from collections import defaultdict
 from collections.abc import Callable, Iterable, Sequence
 
-from core.ziptools import is_archive_path
+from core.ziptools import is_archive_path, zip_members
 
 # A held file larger than this is not read: no chip image is near it.
 MAX_SOURCE_SIZE = 64 * 1024 * 1024
@@ -158,18 +158,17 @@ def _held_sources(db: dict) -> list[dict]:
         if not is_archive_path(path):
             continue
         try:
-            with zipfile.ZipFile(path) as zf:
-                infos = [i for i in zf.infolist() if not i.is_dir()]
+            members = zip_members(path)
         except (OSError, zipfile.BadZipFile):
             continue
         sources.extend(
             {
-                "path": f"{path}/{info.filename}", "archive": path,
-                "member": info.filename, "size": info.file_size,
-                "crc32": f"{info.CRC:08x}", "group": path,
+                "path": f"{path}/{member.name}", "archive": path,
+                "member": member.name, "size": member.size,
+                "crc32": member.crc32, "group": path,
             }
-            for info in infos
-            if 0 < info.file_size <= MAX_SOURCE_SIZE
+            for member in members
+            if 0 < member.size <= MAX_SOURCE_SIZE
         )
     return sources
 

@@ -10,7 +10,7 @@ from pathlib import Path
 
 from core.paths import REPO_ROOT
 from core.torrentzip import build_torrentzip
-from core.ziptools import is_archive_path
+from core.ziptools import is_archive_path, zip_members
 from romrecipes.romsets import Recipe
 
 
@@ -42,12 +42,8 @@ class AtomPool:
         archives = (p for p in bios_dir.rglob("*") if is_archive_path(p.name) and p.is_file())
         for archive in sorted(archives, key=lambda p: (".variants" in p.parts, p)):
             try:
-                with zipfile.ZipFile(archive) as handle:
-                    for info in handle.infolist():
-                        if not info.is_dir():
-                            self._index.setdefault(
-                                f"{info.CRC:08x}", (archive, info.filename)
-                            )
+                for member in zip_members(archive):
+                    self._index.setdefault(member.crc32, (archive, member.name))
             except (OSError, zipfile.BadZipFile) as exc:
                 self.unreadable.append(f"{archive}: {exc}")
         # Loose ROMs, by the crc32 the database already computed: nmk004.zip
