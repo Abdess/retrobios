@@ -2838,7 +2838,7 @@ class ReleaseAssetsMatchTheCollection(unittest.TestCase):
 
         from scripts import pipeline
 
-        def steps(*flags: str) -> list[str]:
+        def steps(*flags: str) -> tuple[list[str], str]:
             ran: list[str] = []
 
             def record(cmd, label):
@@ -4249,7 +4249,7 @@ class ACitationInsideASourceRefIsTracked(unittest.TestCase):
     zesarux cited src/cpu.h:545 inside an annotation, four lines off at its
     pin, and pce-emu joined two citations with ` + `: neither was anchored."""
 
-    def citations(self, ref: str) -> list[str]:
+    def citations(self, ref: str) -> list[tuple[str, str]]:
         from scripts.profiling.citations import collect_citations
 
         document = {"files": [{"name": "x.rom", "source_ref": ref}]}
@@ -7600,9 +7600,11 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
     ENTRY = {"name": "ext.bin", "source_url": "https://example.invalid/ext.bin",
              "sha1": hashlib.sha1(b"payload").hexdigest()}
 
+    class _Body(io.BytesIO):
+        headers: dict = {}
+
     def _response(self, body: bytes):
-        stream = io.BytesIO(body)
-        stream.headers = {}
+        stream = self._Body(body)
         response = mock.MagicMock()
         response.__enter__.return_value = stream
         response.__exit__.return_value = False

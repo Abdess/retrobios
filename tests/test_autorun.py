@@ -848,7 +848,7 @@ class BiosIntegrity(Scratch):
             "bios/Big/large.iso": b"\x99" * 2048,
         }
         (self.repo / ".gitignore").write_text("bios/Big/large.iso\n", encoding="utf-8")
-        self.db = {"files": {}}
+        self.db: dict[str, dict[str, dict[str, str]]] = {"files": {}}
         for rel, data in files.items():
             path = self.repo / rel
             path.parent.mkdir(parents=True, exist_ok=True)

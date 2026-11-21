@@ -182,6 +182,8 @@ def find_cycle(nodes: set[str], edges: dict[str, set[str]]) -> list[str] | None:
 
 
 class ImportLayers(unittest.TestCase):
+    graph: Graph
+
     @classmethod
     def setUpClass(cls) -> None:
         cls.graph = Graph()
