@@ -51,6 +51,7 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   sitegen/               the site and README generators: pages, navigation, data files
   probes/                real-condition runs: the campaign, the pack and region probes
   release/               the release record, its notes, the checks of its assets and the pack downloader
+  probes/                real-condition runs: the campaign, the pack, region and standalone probes
   installer_build/       install.py from installer/, its pins, launchers and PyPI package
   schemas/               the data contracts behind validate_schemas.py: schemas and semantic invariants
   devtools/              the commit message rules, the checks of a pull request, the test

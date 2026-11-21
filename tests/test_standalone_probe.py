@@ -12,6 +12,7 @@ from pathlib import Path
 
 import core_probe as cp
 import standalone_probe as sp
+from probes import appimage, standaloneemulators as emus, standalonerecord, standalonerun, xvfb
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -37,17 +38,17 @@ class AssetChoice(unittest.TestCase):
     ]
 
     def test_first_match_in_api_order_like_getreleaseurlgh(self) -> None:
-        asset = sp.select_asset(self.RELEASES, "AppImage", "x64.")
+        asset = appimage.select_asset(self.RELEASES, "AppImage", "x64.")
         self.assertEqual((asset["tag"], asset["name"], asset["url"]),
                          ("preview", "DuckStation-x64.AppImage", "u2"))
         self.assertTrue(asset["prerelease"])
 
     def test_no_match(self) -> None:
-        self.assertIsNone(sp.select_asset(self.RELEASES, "Qt.AppImage", ""))
+        self.assertIsNone(appimage.select_asset(self.RELEASES, "Qt.AppImage", ""))
 
     def test_every_emulator_names_its_installer_and_profile(self) -> None:
         profiles = {p.stem for p in (ROOT / "emulators").glob("*.yml")}
-        for name, emu in sp.EMULATORS.items():
+        for name, emu in emus.EMULATORS.items():
             self.assertEqual(name, emu.name)
             self.assertIn(name, profiles)
             self.assertIn("EmuDeck", emu.installer_ref)
@@ -60,18 +61,18 @@ class AppImage(unittest.TestCase):
         head[:5] = b"\x7fELF\x02"
         struct.pack_into("<Q", head, 0x28, 1000)
         struct.pack_into("<HH", head, 0x3A, 64, 30)
-        self.assertEqual(sp.appimage_offset(bytes(head)), 1000 + 64 * 30)
+        self.assertEqual(appimage.appimage_offset(bytes(head)), 1000 + 64 * 30)
 
     def test_not_elf(self) -> None:
         with self.assertRaises(cp.ProbeError):
-            sp.appimage_offset(b"hsqs" + bytes(60))
+            appimage.appimage_offset(b"hsqs" + bytes(60))
 
 
 class Framebuffer(unittest.TestCase):
     def test_reads_rgb_and_skips_colormap_and_padding(self) -> None:
         # Two pixels, BGRX: red then blue.
         pixels = bytes((0, 0, 255, 0, 255, 0, 0, 0))
-        width, height, rgb = sp.parse_xwd(xwd(2, 1, pixels, ncolors=3, pad=8))
+        width, height, rgb = xvfb.parse_xwd(xwd(2, 1, pixels, ncolors=3, pad=8))
         self.assertEqual((width, height), (2, 1))
         self.assertEqual(rgb, bytes((255, 0, 0, 0, 0, 255)))
 
@@ -79,33 +80,33 @@ class Framebuffer(unittest.TestCase):
         data = bytearray(xwd(1, 1, bytes(4)))
         struct.pack_into(">I", data, 44, 16)
         with self.assertRaises(cp.ProbeError):
-            sp.parse_xwd(bytes(data))
+            xvfb.parse_xwd(bytes(data))
 
     def test_truncated(self) -> None:
         with self.assertRaises(cp.ProbeError):
-            sp.parse_xwd(xwd(4, 4, bytes(64))[:-10])
+            xvfb.parse_xwd(xwd(4, 4, bytes(64))[:-10])
 
 
 class Settings(unittest.TestCase):
     def test_bios_folder_and_overrides(self) -> None:
-        emu = sp.EMULATORS["duckstation"]
-        sections = sp.emulator_settings(emu, Path("/b"), [("GPU.Renderer", "Vulkan"), ("New.Key", "1")])
+        emu = emus.EMULATORS["duckstation"]
+        sections = emus.emulator_settings(emu, Path("/b"), [("GPU.Renderer", "Vulkan"), ("New.Key", "1")])
         self.assertEqual(sections["BIOS"]["SearchDirectory"], "/b")
         self.assertEqual(sections["GPU"]["Renderer"], "Vulkan")
         self.assertEqual(sections["New"]["Key"], "1")
         self.assertEqual(emu.settings["GPU"]["Renderer"], "Software")
-        text = sp.ini_text(sections)
+        text = emus.ini_text(sections)
         self.assertIn("[BIOS]\nSearchDirectory = /b\n", text)
 
     def test_override_needs_a_section(self) -> None:
         with self.assertRaises(cp.ProbeError):
-            sp.emulator_settings(sp.EMULATORS["pcsx2"], Path("/b"), [("Renderer", "13")])
+            emus.emulator_settings(emus.EMULATORS["pcsx2"], Path("/b"), [("Renderer", "13")])
 
     def test_display_wrapper_passes_the_command_through(self) -> None:
-        argv = sp.with_display(["/emu", "--", "game.cue"], Path("/fb"))
+        argv = xvfb.with_display(["/emu", "--", "game.cue"], Path("/fb"))
         self.assertEqual(argv[:2], ["/bin/sh", "-c"])
         self.assertEqual(argv[3:], ["xvfb", "/fb", "/emu", "--", "game.cue"])
-        self.assertIn(f'Xvfb ":{sp.DISPLAY_NUMBER}"', argv[2])
+        self.assertIn(f'Xvfb ":{xvfb.DISPLAY_NUMBER}"', argv[2])
 
 
 class Oracle(unittest.TestCase):
@@ -119,20 +120,24 @@ class Oracle(unittest.TestCase):
                             "      duckstation:\n        frames:\n"
                             "          - {sha1: '" + "c" * 40 + "', stage: bios, shows: 'logo'}\n",
                             encoding="utf-8")
-            oracle = sp.emulator_oracle(sp.EMULATORS["duckstation"], path, "b" * 40)
+            oracle = standalonerun.emulator_oracle(emus.EMULATORS["duckstation"], path, "b" * 40)
         self.assertEqual(oracle["references"][0]["sha1"], "c" * 40)
         self.assertEqual(oracle["error_screens"][0]["shows"], "no BIOS")
         self.assertEqual(oracle["error_patterns"][0], "shared")
         self.assertIn(r"No\ BIOS\ image\ found\ for", oracle["error_patterns"])
         self.assertEqual(len(oracle["sha256"]), 64)
 
-    def test_without_the_file_the_oracle_names_the_script(self) -> None:
-        oracle = sp.emulator_oracle(sp.EMULATORS["pcsx2"], Path("/nonexistent/oracle.yml"), "0" * 40)
-        self.assertEqual(oracle["file"], sp.SCRIPT)
+    def test_without_the_file_the_oracle_names_the_patterns_module(self) -> None:
+        oracle = standalonerun.emulator_oracle(emus.EMULATORS["pcsx2"], Path("/nonexistent/oracle.yml"), "0" * 40)
+        self.assertEqual(oracle["file"], emus.PATTERNS_FILE)
         self.assertEqual(oracle["references"], [])
 
+    def test_the_named_files_are_the_ones_hashed(self) -> None:
+        self.assertEqual(ROOT / emus.PATTERNS_FILE, emus.PATTERNS_PATH)
+        self.assertEqual(standalonerecord.SCRIPT_PATH, Path(sp.__file__).resolve())
+
     def test_a_log_line_gives_bios_error_through_core_probe_judge(self) -> None:
-        oracle = sp.emulator_oracle(sp.EMULATORS["duckstation"], Path("/nonexistent"), "0" * 40)
+        oracle = standalonerun.emulator_oracle(emus.EMULATORS["duckstation"], Path("/nonexistent"), "0" * 40)
         rep = {"loaded": True, "observables": {"frame_hashes": [[0, "d" * 40]], "uniform_frames": []},
                "logs": [{"frame": 3, "level": "info", "text": "E: No BIOS image found for NTSC-J region."}]}
         verdict, evidence = cp.judge(rep, oracle)
@@ -151,7 +156,7 @@ class Oracle(unittest.TestCase):
         def variant(label: str, verdict: str) -> dict:
             return {"label": label, "flags": [], "verdict": verdict, "repetitions": [
                 {"loaded": True, "observables": {"verdict": verdict}}]}
-        result = sp.check_result([variant("absent", "bios_error"), variant("scph5501.bin", "boots")],
+        result = standalonerun.check_result([variant("absent", "bios_error"), variant("scph5501.bin", "boots")],
                                  "verdict")
         self.assertEqual(result["status"], "differs")
         self.assertEqual(result["verdicts"], {"absent": "bios_error", "scph5501.bin": "boots"})
@@ -187,14 +192,14 @@ class CommandLine(unittest.TestCase):
             args = sp.build_parser().parse_args(
                 ["check", "duckstation", "--content", content.name, "--vary", "a.bin=", "--vary", "b.bin=",
                  "--claim", "c", "--method", "m"])
-            self.assertIn("--vary must name the same DEST in every occurrence", sp.validate(args))
+            self.assertIn("--vary must name the same DEST in every occurrence", standalonerecord.validate(args))
 
     def test_unknown_observable(self) -> None:
         with tempfile.NamedTemporaryFile(suffix=".cue") as content:
             args = sp.build_parser().parse_args(
                 ["check", "pcsx2", "--content", content.name, "--vary", "a.bin=", "--observable", "fps",
                  "--claim", "c", "--method", "m"])
-            self.assertTrue(any("--observable fps" in p for p in sp.validate(args)))
+            self.assertTrue(any("--observable fps" in p for p in standalonerecord.validate(args)))
 
 
 if __name__ == "__main__":

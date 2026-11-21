@@ -31,8 +31,9 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     "acquire": frozenset({"packs"}),
     "collection": frozenset(),
     "packs": frozenset(),
-    # A campaign commits its findings the way the unattended jobs commit.
-    "probes": frozenset({"unattended"}),
+    # A campaign commits its findings the way the unattended jobs commit, and a
+    # standalone probe lists an emulator's releases through the one GitHub reader.
+    "probes": frozenset({"unattended", "scraper"}),
     "profiling": frozenset(),
     "romrecipes": frozenset(),
     # The site prints the recipe counts and the dump-catalog coverage report

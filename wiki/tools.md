@@ -1290,7 +1290,7 @@ python scripts/standalone_probe.py check pcsx2 \
 | Sandbox | The allowlist bubblewrap sandbox of `core_probe.py`: the unpacked emulator, the content folder and the staged BIOS folder read-only, the repetition's scratch folder the one writable path, no network. Xvfb runs inside it, on the sandbox's own `/tmp`, so the display is private to the run. `--require-sandbox` refuses to run without bubblewrap |
 | Screen | Xvfb keeps its screen as a file (`-fbdir`). The probe reads it every `--interval` seconds, `--samples` times, and hashes each sample's pixels. `--png-dir` writes each distinct sample as PNG for review |
 | Files | `strace -f` inside the sandbox: the files the emulator opened in the staged BIOS folder, and the ones it looked for there and did not find |
-| Verdict | `core_probe.judge` on each repetition, with the oracle of `tests/campaign/oracle.yml` looked up by the content's sha1 and the emulator's name, plus the emulator's own error strings this script lists (DuckStation's "No BIOS image found for", PCSX2's "Unable to auto locate a BIOS image"). An emulator that exits before the last sample is a crash |
+| Verdict | `core_probe.judge` on each repetition, with the oracle of `tests/campaign/oracle.yml` looked up by the content's sha1 and the emulator's name, plus the emulator's own error strings `probes/standaloneemulators.py` lists (DuckStation's "No BIOS image found for", PCSX2's "Unable to auto locate a BIOS image"). An emulator that exits before the last sample is a crash |
 
 `standalone_probe.py <mode> --help` lists the options. `--sha256` runs an
 older fetched asset than the newest. The ones it shares with `core_probe.py`
