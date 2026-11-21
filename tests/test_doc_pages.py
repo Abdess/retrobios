@@ -10,7 +10,7 @@ from __future__ import annotations
 import tests
 from tests import mdsections
 from tests.mdsections import FENCED
-from tests.sources import script_source
+from tests.sources import declared_options, script_source
 
 import ast
 import functools
@@ -1479,18 +1479,19 @@ def _parser_options() -> set[str]:
 
 def _script_options(name: str) -> set[str]:
     """The options a build script spells, in its file or a module beside it
-    that it imports."""
+    that it imports, and the shared ones its parser adds through core.cli."""
     path = next((p for p in (ROOT / "scripts" / name, ROOT / name) if p.is_file()), None)
     if path is None:
         return set()
-    text = path.read_text(encoding="utf-8")
+    own = text = path.read_text(encoding="utf-8")
     for module in re.findall(r"(?m)^(?:from|import) (\w+)", text):
         beside = path.parent / f"{module}.py"
         if beside.is_file() and beside != path:
             text += beside.read_text(encoding="utf-8")
     if path.suffix == ".sh":
         return set(OPTION.findall(text))
-    return set(re.findall(r"""["'](--[a-z][a-z0-9-]+)["'=]""", text)) | {"--help"}
+    spelled = set(re.findall(r"""["'](--[a-z][a-z0-9-]+)["'=]""", text)) | {"--help"}
+    return spelled | declared_options(own) if path.suffix == ".py" else spelled
 
 
 def _owner(command: str) -> str | None:
