@@ -105,19 +105,19 @@ files the emulator cores add. From `python scripts/verify.py --platform retrodec
 
 <!-- generated: verify-retrodeck -->
 ```
-RetroDECK: 2007/2008 OK, 1 untested [md5]
+RetroDECK: 2026/2027 OK, 1 untested [md5]
   UNTESTED (required): nintendo-ds/dsifirmware.bin: declared hash contradicted by the local file
   DISCREPANCY: nintendo-snes/sgb2.boot.rom: RetroDECK says OK but supersnes9x says size mismatch: got 524288, accepted [256]
     supersnes9x [size]
   Core files: 5044 in pack, 0 required missing, 34 optional missing (--verbose lists them)
   Bundled with their emulator, not collected: 34 (cg.dll, cg2.dll, cgGL.dll, libCg.so, libCgGL.so, libstdc++.so.5, libstdc++.so.6, 27 more, --verbose lists them)
-  Core files held but not packed: 397 (245 read in a folder the platform keeps outside the BIOS tree, 140 installed with its emulator, 8 read below a save folder per system and no system runs the core there, 4 a packed file occupies its directory)
+  Core files held but not packed: 390 (245 read in a folder the platform keeps outside the BIOS tree, 133 installed with its emulator, 8 read below a save folder per system and no system runs the core there, 4 a packed file occupies its directory)
   Game data: 5146 in pack, 51 missing (--verbose lists them)
   Game data held but not packed: 11 (installed with its emulator)
   Launcher records unproven: 3 (--verbose lists them)
   No external files: 82 cores (--verbose lists them)
-  Ground truth: 109/2008 files have emulator validation (5%)
-    441 platform-only (no emulator profile)
+  Ground truth: 110/2027 files have emulator validation (5%)
+    442 platform-only (no emulator profile)
 ```
 <!-- /generated: verify-retrodeck -->
 
