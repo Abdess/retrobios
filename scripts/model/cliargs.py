@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import os
 import re
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 
 try:
@@ -106,6 +107,76 @@ def selected_platforms(
     if parser is not None:
         parser.error("Specify --platform or --all")
     raise SystemExit("ERROR: specify --platform or --all")
+
+
+def comma_list(value: str) -> list[str]:
+    """The names of a comma-separated option, blanks dropped."""
+    return [name.strip() for name in value.split(",") if name.strip()]
+
+
+def requested_regions(value: str | None, parser: argparse.ArgumentParser) -> list[str]:
+    """--region as a priority list, best first; a bad value ends the run."""
+    if not value:
+        return []
+    from model import region
+
+    try:
+        return region.parse_requested(value)
+    except ValueError as exc:
+        parser.error(str(exc))
+
+
+# What each listing reads. Anything else given beside it, another listing
+# included, is refused: printing past a narrowing flag lets the user believe
+# it applied.
+LISTING_FLAGS: dict[str, set[str]] = {
+    "--list-platforms": set(),
+    "--list-emulators": set(),
+    "--list-systems": {"--platform"},
+    "--list-targets": {"--platform"},
+}
+
+
+def refuse_beside_mode(
+    modes: Sequence[tuple[str, object]],
+    given: set[str],
+    allowed: Mapping[str, set[str]],
+    parser: argparse.ArgumentParser,
+) -> str | None:
+    """The first mode requested, after refusing every other given flag it
+    does not read. A flag is applied or refused, never ignored."""
+    mode = next((name for name, on in modes if on), None)
+    if mode is not None:
+        for flag in sorted(given - allowed[mode] - {mode}):
+            parser.error(f"{flag} is incompatible with {mode}")
+    return mode
+
+
+def run_listing(
+    args: argparse.Namespace, parser: argparse.ArgumentParser, list_platforms: bool
+) -> bool:
+    """Print the listing the command line asks for. True when one ran."""
+    if list_platforms:
+        print_platform_listing(args.platforms_dir)
+    elif args.list_emulators:
+        list_emulator_profiles(args.emulators_dir)
+    elif args.list_systems and args.platform:
+        list_platform_system_ids(args.platform, args.platforms_dir)
+    elif args.list_systems:
+        list_system_ids(args.emulators_dir)
+    elif args.list_targets:
+        if not args.platform:
+            parser.error("--list-targets requires --platform")
+        from model.targets import list_available_targets, target_listing_line
+
+        targets = list_available_targets(args.platform, args.platforms_dir)
+        if not targets:
+            print(f"No targets configured for platform '{args.platform}'")
+        for t in targets:
+            print(target_listing_line(t))
+    else:
+        return False
+    return True
 
 
 def list_emulator_profiles(emulators_dir: str, skip_aliases: bool = True) -> None:

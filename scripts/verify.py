@@ -36,19 +36,18 @@ from core.cli import add_emulator_selection, add_repo_inputs
 from resolve.contentlayout import TARGET_KEY
 from model.targets import (
     canonical_target_name,
-    target_listing_line,
-    list_available_targets,
     target_scope,
 )
 from model.cliargs import (
+    LISTING_FLAGS,
+    comma_list,
     platform_arg,
+    refuse_beside_mode,
+    requested_regions,
+    run_listing,
     work_from_repo_root,
     require_platform,
     selected_platforms,
-    list_platform_system_ids,
-    list_emulator_profiles,
-    list_system_ids,
-    print_platform_listing,
 )
 from model.systems import resolve_system_arg
 from model.profiles import (
@@ -83,26 +82,14 @@ yaml = require_yaml()
 
 def _refuse_listing_narrowings(
     args: argparse.Namespace, parser: argparse.ArgumentParser
-) -> None:
-    """A listing mode reads --platform at most, anything else is refused.
-
-    Printing past a narrowing flag lets the user believe it applied
-    (generate_pack applies the same table).
-    """
-    listing = next(
-        (flag for flag, on in (
-            ("--list-platforms", args.list_platforms),
-            ("--list-emulators", args.list_emulators),
-            ("--list-systems", args.list_systems),
-            ("--list-targets", args.list_targets),
-        ) if on),
-        None,
-    )
-    if not listing:
-        return
-    reads_platform = listing not in ("--list-emulators", "--list-platforms")
-    for flag, on in (
-        ("--platform", args.platform and not reads_platform),
+) -> str | None:
+    """A listing reads --platform at most: anything else given beside it,
+    another listing included, is refused (generate_pack applies the same
+    table). The listing asked for, if any."""
+    listings = [(flag, getattr(args, flag[2:].replace("-", "_"))) for flag in LISTING_FLAGS]
+    given = {flag for flag, on in (
+        *listings,
+        ("--platform", args.platform),
         ("--all", args.all),
         ("--emulator", args.emulator),
         ("--system", args.system),
@@ -116,9 +103,8 @@ def _refuse_listing_narrowings(
         ("--offline", args.offline),
         ("--no-game-data", getattr(args, "no_game_data", False)),
         ("--required-only", args.required_only),
-    ):
-        if on:
-            parser.error(f"{flag} is incompatible with {listing}")
+    ) if on}
+    return refuse_beside_mode(listings, given, LISTING_FLAGS, parser)
 
 
 def _refuse_mode_flags(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
@@ -146,26 +132,6 @@ def _refuse_mode_flags(args: argparse.Namespace, parser: argparse.ArgumentParser
     ):
         if refused:
             parser.error(message)
-
-
-def _run_listing(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
-    if args.list_platforms:
-        print_platform_listing(args.platforms_dir)
-    elif args.list_emulators:
-        list_emulator_profiles(args.emulators_dir)
-    elif args.list_systems and args.platform:
-        list_platform_system_ids(args.platform, args.platforms_dir)
-    elif args.list_systems:
-        list_system_ids(args.emulators_dir)
-    else:
-        if not args.platform:
-            parser.error("--list-targets requires --platform")
-        targets = list_available_targets(args.platform, args.platforms_dir)
-        if not targets:
-            print(f"No targets configured for platform '{args.platform}'")
-            return
-        for t in targets:
-            print(target_listing_line(t))
 
 
 def main() -> None:
@@ -230,18 +196,6 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _requested_regions(args: argparse.Namespace, parser: argparse.ArgumentParser) -> list[str]:
-    requested_regions: list[str] = []
-    if getattr(args, "region", None):
-        from model import region
-
-        try:
-            requested_regions = region.parse_requested(args.region)
-        except ValueError as exc:
-            parser.error(str(exc))
-    return requested_regions
-
-
 def _check_mode(args: argparse.Namespace, parser: argparse.ArgumentParser) -> bool:
     """Refuse a request naming no mode or several, and say if it is the system mode."""
     # --system beside --platform narrows that platform, as in generate_pack.
@@ -274,7 +228,7 @@ def _platform_system_filter(
 
 
 def _run_emulator_mode(args: argparse.Namespace, db: dict, requested_regions: list[str]) -> None:
-    names = [n.strip() for n in args.emulator.split(",") if n.strip()]
+    names = comma_list(args.emulator)
     result = verify_emulator(
         names, args.emulators_dir, db, args.standalone,
         regions=requested_regions, platforms_dir=args.platforms_dir,
@@ -289,7 +243,7 @@ def _run_emulator_mode(args: argparse.Namespace, db: dict, requested_regions: li
 
 
 def _run_system_mode(args: argparse.Namespace, db: dict, requested_regions: list[str]) -> None:
-    system_ids = [s.strip() for s in args.system.split(",") if s.strip()]
+    system_ids = comma_list(args.system)
     result = verify_system(
         system_ids, args.emulators_dir, db, args.standalone,
         regions=requested_regions, platforms_dir=args.platforms_dir,
@@ -441,11 +395,10 @@ def _main(held: contextlib.ExitStack) -> None:
 
         packresolve.set_offline(True)
 
-    requested_regions = _requested_regions(args, parser)
+    regions = requested_regions(args.region, parser)
 
-    _refuse_listing_narrowings(args, parser)
-    if args.list_platforms or args.list_emulators or args.list_systems or args.list_targets:
-        _run_listing(args, parser)
+    if _refuse_listing_narrowings(args, parser):
+        run_listing(args, parser, args.list_platforms)
         return
 
     system_mode = _check_mode(args, parser)
@@ -458,15 +411,15 @@ def _main(held: contextlib.ExitStack) -> None:
     db = load_database(args.db)
 
     if args.emulator:
-        _run_emulator_mode(args, db, requested_regions)
+        _run_emulator_mode(args, db, regions)
         return
 
     if system_mode:
-        _run_system_mode(args, db, requested_regions)
+        _run_system_mode(args, db, regions)
         return
 
     # Platform mode (existing)
-    _run_platform_mode(args, parser, db, requested_regions, platform_systems)
+    _run_platform_mode(args, parser, db, regions, platform_systems)
 
 
 def _json_details(details: list[dict], verbose: bool) -> list[dict]:

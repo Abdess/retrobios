@@ -48,6 +48,8 @@ class VerifyRefusesWhatAModeDoesNotRead(unittest.TestCase):
         (("--emulator", "handy"), "--no-game-data"),
         (("--system", "atari-lynx"), "--no-game-data"),
         (("--list-systems",), "--no-game-data"),
+        # The second listing was dropped and the first printed with rc 0.
+        (("--list-emulators",), "--list-systems"),
     )
 
     def test_each_combination_is_refused(self):

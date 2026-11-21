@@ -34,16 +34,16 @@ from model.profiles import (
     load_emulator_profiles,
 )
 from model.cliargs import (
+    LISTING_FLAGS,
+    comma_list,
     platform_arg,
+    refuse_beside_mode,
+    requested_regions,
     require_platform,
-    list_emulator_profiles,
-    list_platform_system_ids,
-    print_platform_listing,
-    list_system_ids,
+    run_listing,
 )
 from core.cli import add_emulator_selection, add_repo_inputs, require_directory
 from model.targets import (
-    target_listing_line,
     target_scope,
 )
 from model.systems import (
@@ -74,7 +74,6 @@ from model.platforms import load_platform_config
 from model.safeparse import require_yaml
 from resolve import packfiles as packresolve
 from packs.datadirs import hold_data_dirs
-from model import region
 
 from packs.integrity import verify_pack_against_platform
 from resolve.packfiles import (
@@ -909,37 +908,25 @@ def _refuse_unapplied_flags(args: argparse.Namespace, parser: argparse.ArgumentP
     """
     # Parsed before the quick-exit modes: --verify-packs returns early and
     # still needs the region priority list to narrow its expectation.
-    args.regions = []
-    if args.region:
-        try:
-            args.regions = region.parse_requested(args.region)
-        except ValueError as exc:
-            parser.error(str(exc))
-        if args.manifest_targets:
-            parser.error("--region is incompatible with --manifest-targets")
+    args.regions = requested_regions(args.region, parser)
+    if args.region and args.manifest_targets:
+        parser.error("--region is incompatible with --manifest-targets")
     if args.one_per_slot and args.manifest_targets:
         parser.error("--one-per-slot is incompatible with --manifest-targets")
     _refuse_refresh_data(args, parser)
 
     _refuse_for_all_variants(args, parser)
-    mode = next(
+    refuse_beside_mode(
         (
-            name for name, on in (
-                ("--manifest-targets", args.manifest_targets),
-                ("--verify-packs", args.verify_packs and not args.all_variants),
-                ("--list-platforms", args.list),
-                ("--list-emulators", args.list_emulators),
-                ("--list-systems", args.list_systems),
-                ("--list-targets", args.list_targets),
-            ) if on
+            ("--manifest-targets", args.manifest_targets),
+            ("--verify-packs", args.verify_packs and not args.all_variants),
+            ("--list-platforms", args.list),
+            ("--list-emulators", args.list_emulators),
+            ("--list-systems", args.list_systems),
+            ("--list-targets", args.list_targets),
         ),
-        None,
+        _given_flags(args), QUICK_MODE_FLAGS, parser,
     )
-    if mode is None:
-        return
-    given = _given_flags(args)
-    for flag in sorted(given - QUICK_MODE_FLAGS[mode] - {mode}):
-        parser.error(f"{flag} is incompatible with {mode}")
 
 
 # What each mode that returns early reads. Anything else given beside it is
@@ -952,10 +939,7 @@ QUICK_MODE_FLAGS: dict[str, set[str]] = {
     },
     # One manifest per hardware target, from the target files themselves.
     "--manifest-targets": set(),
-    "--list-platforms": set(),
-    "--list-emulators": set(),
-    "--list-systems": {"--platform"},
-    "--list-targets": {"--platform"},
+    **LISTING_FLAGS,
 }
 
 
@@ -1147,31 +1131,7 @@ def _run_quick_mode(
                 os.path.join(args.platforms_dir, "targets"), args.output_dir
             )
         return True
-    if args.list:
-        print_platform_listing(args.platforms_dir)
-        return True
-    if args.list_emulators:
-        list_emulator_profiles(args.emulators_dir)
-        return True
-    if args.list_systems:
-        if args.platform:
-            list_platform_system_ids(args.platform, args.platforms_dir)
-        else:
-            list_system_ids(args.emulators_dir)
-        return True
-    if args.list_targets:
-        if not args.platform:
-            parser.error("--list-targets requires --platform")
-        from model.targets import list_available_targets
-
-        targets = list_available_targets(args.platform, args.platforms_dir)
-        if not targets:
-            print(f"No targets configured for platform '{args.platform}'")
-            return True
-        for t in targets:
-            print(target_listing_line(t))
-        return True
-    return False
+    return run_listing(args, parser, args.list)
 
 
 def _run_hash_mode(args: argparse.Namespace) -> None:
@@ -1224,7 +1184,7 @@ def _run_profile_mode(args: argparse.Namespace, db: dict, zip_contents: dict) ->
     """--emulator, or --system without a platform: the emulators' own layout."""
     # Emulator mode
     if args.emulator:
-        names = [n.strip() for n in args.emulator.split(",") if n.strip()]
+        names = comma_list(args.emulator)
         with _pack_output_lock(args.output_dir):
             built = generate_emulator_pack(
                 names,
@@ -1244,7 +1204,7 @@ def _run_profile_mode(args: argparse.Namespace, db: dict, zip_contents: dict) ->
         return
 
     # System mode (standalone, without platform context)
-    system_ids = [s.strip() for s in args.system.split(",") if s.strip()]
+    system_ids = comma_list(args.system)
     with _pack_output_lock(args.output_dir):
         built = generate_system_pack(
             system_ids,
