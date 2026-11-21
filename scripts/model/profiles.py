@@ -2,21 +2,16 @@
 
 from __future__ import annotations
 
-import importlib.util
 import os
 import sys
 from pathlib import Path
-
-try:
-    import yaml
-except ImportError:
-    yaml = None
 
 from core.cli import InputMissing, suggest_names
 from model.alternatives import derive_member_requirements
 from model.profilekinds import is_emulator as is_emulator
 from model.profilekinds import lists_files as lists_files
 from model.profilekinds import reads_own_files as reads_own_files
+from model.safeparse import require_yaml
 from model.sources import source_yaml_file
 from model.systems import norm_system_id, system_index
 from core.paths import REPO_ROOT
@@ -219,15 +214,9 @@ def load_emulator_profiles(
         }
         emulator_profiles_cache[cache_key] = profiles
         return profiles
-    if importlib.util.find_spec("yaml") is None:
-        # Every consumer reads {} as "this repo documents no emulator", which
-        # is what a broken install looks like from the outside: zero coverage,
-        # no gap, nothing to fix.
-        print(
-            "warning: pyyaml is not installed, no emulator profile was loaded",
-            file=sys.stderr,
-        )
-        return {}
+    # Read as {}, a missing PyYAML looked like a repo documenting no
+    # emulator: zero coverage, no gap, nothing to fix.
+    require_yaml()
     profiles = {}
     emu_path = Path(emulators_dir)
     if not emu_path.is_dir():

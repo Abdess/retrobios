@@ -178,5 +178,25 @@ class TheDownloaderRunsWithoutPyyaml(unittest.TestCase):
         self.assertEqual(completed.returncode, 0, completed.stderr[-1500:])
 
 
+class ProfilesWithoutPyyamlStopOnOneLine(unittest.TestCase):
+    """load_emulator_profiles warned and returned {} without PyYAML: every
+    caller then read a repository that documents no emulator, zero coverage
+    and nothing to fix, and exited 0."""
+
+    def test_the_loader_exits_with_the_shared_message(self):
+        root = Path(__file__).resolve().parents[1]
+        code = (
+            "import sys; sys.modules['yaml'] = None; sys.path.insert(0, 'scripts'); "
+            "from model.profiles import load_emulator_profiles; "
+            "load_emulator_profiles('emulators')"
+        )
+        completed = subprocess.run(
+            [sys.executable, "-I", "-c", code], cwd=root, capture_output=True,
+            text=True, timeout=120, check=False,
+        )
+        self.assertEqual(completed.returncode, 1, completed.stderr[-1500:])
+        self.assertEqual(completed.stderr.strip(), "Error: PyYAML required (pip install pyyaml)")
+
+
 if __name__ == "__main__":
     unittest.main()
