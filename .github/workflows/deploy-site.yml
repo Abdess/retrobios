@@ -156,6 +156,7 @@ on:
       - "scripts/sitegen/guides.py"
       - "scripts/sitegen/handheld.py"
       - "scripts/sitegen/home.py"
+      - "scripts/sitegen/indexnow.py"
       - "scripts/sitegen/install.py"
       - "scripts/sitegen/lookup.py"
       - "scripts/sitegen/markup.py"
