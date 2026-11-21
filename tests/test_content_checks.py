@@ -20,7 +20,7 @@ import unittest
 from pathlib import Path
 
 from model.profiles import emulator_profiles_cache, load_emulator_profiles
-from resolve.content import content_fits, size_fits, _masked_sha1_verdict
+from resolve.content import content_fits, size_fits, size_refusal, _masked_sha1_verdict
 from resolve.localfile import resolve_local_file
 from packs import extras as packextras
 from core.romdir import romdir_accepts, walk
@@ -207,6 +207,55 @@ class OtherContentTests(unittest.TestCase):
         self.assertTrue(size_fits(flash, 65536 * 3))
         self.assertFalse(size_fits(flash, 65536 + 1))
         self.assertFalse(size_fits(flash, 0))
+
+    def test_exact_sizes_and_window_are_alternatives(self):
+        # LinApple's sector image probe: a window plus two lone values
+        # (SectorDiskImage.cpp is_140k_image_size).
+        disk = {"size": [143360, 143403, 143488], "min_size": 143105,
+                "max_size": 143364, "validation": ["size"]}
+        for accepted in (143105, 143360, 143364, 143403, 143488):
+            self.assertTrue(size_fits(disk, accepted), accepted)
+        for refused in (143104, 143365, 143402, 143489):
+            self.assertFalse(size_fits(disk, refused), refused)
+        self.assertEqual(size_refusal(disk, 143400),
+                         "size too large: max 143364 or [143360,143403,143488], got 143400")
+        # A 1 MB dump inside MesenCE's 32 KB floor: the floor still decides.
+        bsx = {"size": 1048576, "min_size": 32768, "validation": ["size"]}
+        self.assertTrue(size_fits(bsx, 32768))
+        self.assertFalse(size_fits(bsx, 32767))
+
+    def test_core_refusal_names_the_sizes_and_the_window(self):
+        from resolve.validation import core_size_refusal
+
+        disk = {"size": [143360, 143403], "min_size": 143105, "max_size": 143364,
+                "validation": ["size"]}
+        flash = {"min_size": 65536, "size_multiple": 65536, "validation": ["size"]}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp, "file.bin")
+            path.write_bytes(b"\0" * 143400)
+            self.assertEqual(core_size_refusal(disk, str(path)),
+                             "143400 bytes, the core checks for [143360, 143403] "
+                             "or 143105 to 143364")
+            self.assertEqual(core_size_refusal(flash, str(path)),
+                             "143400 bytes, the core checks for 65536 to any in multiples of 65536")
+            path.write_bytes(b"\0" * 143200)
+            self.assertIsNone(core_size_refusal(disk, str(path)))
+
+    def test_profiles_with_a_size_and_a_window_take_the_window(self):
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        entries = {
+            (emu, f["name"]): f for emu, profile in profiles.items()
+            for f in profile.get("files", []) if isinstance(f, dict)
+        }
+        rom = entries[("linappleii", "Base64A.rom")]
+        self.assertTrue(size_fits(rom, 12288))  # load_custom_rom's floor
+        self.assertTrue(size_fits(rom, 65536))
+        self.assertFalse(size_fits(rom, 65537))
+        disk = entries[("linappleii", "Master.dsk")]
+        self.assertTrue(size_fits(disk, 143488))
+        self.assertFalse(size_fits(disk, 143400))
+        self.assertTrue(size_fits(entries[("zesarux", "ql_js.rom")], 16384))
+        self.assertTrue(size_fits(entries[("mesence", "BS-X.bin")], 32768))
 
 
 class ScannerVerifyManifestAgree(unittest.TestCase):

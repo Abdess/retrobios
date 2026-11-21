@@ -109,15 +109,16 @@ files:
     min_size: 143105
     max_size: 143364
     validation: [size]
-    size: 143360
+    size: [143360, 143403, 143488]
     md5: ee44560f34033efa3bb47b3e0aac1772
     sha1: 7b03befac4fbcef8c649048fa3ff5d095fd48dd3
     source_ref: "source src/core/Asset.cpp:20, 25-39, 97-112, source src/apple2/peripherals/disk/formats/SectorDiskImage.cpp:57-60, 71-74, source CMakeLists.txt:1325-1337"
     note: >
       asset_find_master_disk warns and returns false when no search path
       holds the file, and the emulator starts with an empty drive. The sector
-      image driver also takes 143403 and 143488 bytes. No hash or content
-      check is performed at run time. The hashes are those of res/Master.dsk,
+      image driver takes 143105 to 143364 bytes, 143403 or 143488, and reads
+      the first 143360 as the image. No hash or content check is performed
+      at run time. The hashes are those of res/Master.dsk,
       which a build test pins. LinApple and Batocera ship different images
       under this name, both 143360 bytes.
       Shipped in share/linapple/ of the v3.0-beta-3 archives and .deb.

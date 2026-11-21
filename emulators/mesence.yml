@@ -393,7 +393,7 @@ files:
     min_size: 32768
     validation: [size]
     sha256: "27cfdb99f7e4252bf3740d420147b63c4c88616883bc5e7fe43f2f30bf8c8cbb,a49827b45ff9ac9cf5b4658190e1428e59251bc82d8a63d8e9e0f71e439f008f,3ce321496edc5d77038de2034eb3fb354d7724afd0bc7fd0319f3eb5d57b984d,77d94d64d745014bf8b51280a4204056cdeb9d41ea30eae80dbc006675bebef8"
-    note: "BS-X application cartridge ROM, mandatory for .bs Satellaview files. Core accepts any file of 32 KB or more. The known dumps are 1 MB (Japan/English, with and without DRM)."
+    note: "BS-X application cartridge ROM, mandatory for .bs Satellaview files. Core accepts any file of 32 KB or more. The known dumps are 1 MB (Japan/English, with and without DRM), the only size the standalone firmware prompt imports (UI/Utilities/FirmwareHelper.cs:61-77)."
     source_ref: "source Core/SNES/BaseCartridge.cpp:60-64, source Core/Shared/FirmwareHelper.h:81-92, 172-188, upstream UI/Interop/FirmwareTypeExtensions.cs:23-31"
 
   - name: "SufamiTurbo.sfc"

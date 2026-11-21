@@ -389,7 +389,7 @@ def _card_place_details(f: dict, profile: dict, owner: str, data_href: str) -> l
 
 
 def _card_size_details(f: dict) -> list[str]:
-    """The size, with its bounds."""
+    """The exact sizes, then the window the code also accepts (size_refusal)."""
     size = f.get("size")
     fmin = f.get("min_size")
     fmax = f.get("max_size")
@@ -407,7 +407,7 @@ def _card_size_details(f: dict) -> list[str]:
         else:
             size_str = sized(size)
         if bounds:
-            size_str += f" ({', '.join(bounds)})"
+            size_str += f", or {', '.join(bounds)}"
         return [f"Size: {size_str}"]
     if bounds:
         return [f"Size: {', '.join(bounds)}"]

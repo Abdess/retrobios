@@ -35,7 +35,6 @@ import unittest
 from pathlib import Path
 import yaml
 import tempfile
-import importlib.util
 import json
 
 from model import guides
@@ -709,9 +708,7 @@ class DataFolderPrinted(unittest.TestCase):
 class InstallBlockWhereItWorks(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
-        cls.install = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(cls.install)
+        cls.install = sitegen_install.installer_module()
         cls.accepted: dict[str, set[str]] = {}
         for path in sorted((REPO_ROOT / "install").glob("*.json")):
             manifest = json.loads(path.read_text(encoding="utf-8"))
@@ -836,6 +833,15 @@ class SizesTheCodeComparesAreExact(unittest.TestCase):
         self.assertIn("Size: 42.3 MB (44,348,015 bytes)", page)
         self.assertIn("Size: 2.2 KB (2,304 bytes)", page)
         self.assertNotIn("44,356,548", page)
+
+    def test_exact_sizes_then_the_window_also_accepted(self):
+        profile = {"emulator": "x", "type": "standalone", "systems": ["apple-ii"], "files": [
+            {"name": "Master.dsk", "size": [143360, 143403], "min_size": 143105,
+             "max_size": 143364, "validation": ["size"]},
+        ]}
+        page = _page("x", profile)
+        self.assertIn("Size: 140.0 KB (143,360 bytes) / 140.0 KB (143,403 bytes), "
+                      "or min 139.8 KB (143,105 bytes), max 140.0 KB (143,364 bytes)", page)
 
 
 class ADataDirectoryNamesAFetchableOrigin(unittest.TestCase):

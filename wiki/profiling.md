@@ -616,7 +616,7 @@ look.
 | `systems` | the systems of the profile this file serves, when it serves several but not all (a MAME device set the machines of two systems load). Never written with `system` |
 | `archive` | ROM set the file lives inside, for arcade entries (e.g. `neogeo.zip`) |
 | `size` | expected size in bytes, or a list when the code accepts several exact sizes |
-| `min_size`, `max_size` | size range when the code accepts a range |
+| `min_size`, `max_size` | size range when the code accepts a range. Declared beside `size`, a file passes at one of the exact sizes or inside the range |
 | `size_multiple` | granule the size must be a whole number of, the bounds still applying (xemu maps any flash image of a positive multiple of 64 KiB) |
 | `md5`, `sha1`, `crc32`, `sha256` | expected hashes from source code |
 | `known_hash_adler32`, `adler32_byteswap` | expected Adler-32 hash (Dolphin's DSP ROMs). Pair with `adler32_byteswap` when the code hashes 16-bit byte-swapped data |

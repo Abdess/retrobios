@@ -221,28 +221,34 @@ def size_fits(file_entry: dict, candidate_size: int) -> bool:
 def size_refusal(file_entry: dict, candidate_size: int) -> str | None:
     """Why the entry's declared sizes turn a size away, or None.
 
-    ``size`` is an exact size or the list of sizes the code accepts, and it
-    outranks a ``min_size``/``max_size`` range. ``size_multiple`` is a
-    granule the size must be a whole number of, as xemu maps any flash
-    image whose size is a positive multiple of 64 KiB (hw/xbox/xbox.c).
-    Nothing declared fits all.
+    ``size`` is the exact size, or the list of sizes, the code accepts.
+    A ``min_size``/``max_size`` window declared beside it is accepted too:
+    LinApple's sector image probe takes 143105 to 143364 bytes plus two
+    lone values (SectorDiskImage.cpp), and a 1 MB BS-X dump sits inside the
+    32 KB floor MesenCE checks. ``size_multiple`` is a granule a size inside
+    the window must be a whole number of, as xemu maps any flash image whose
+    size is a positive multiple of 64 KiB (hw/xbox/xbox.c). Nothing declared
+    fits all.
     """
     declared = file_entry.get("size")
-    if declared is not None:
-        allowed = declared if isinstance(declared, list) else [declared]
-        if candidate_size in allowed:
+    allowed = [] if declared is None else declared if isinstance(declared, list) else [declared]
+    if candidate_size in allowed:
+        return None
+    low = file_entry.get("min_size")
+    high = file_entry.get("max_size")
+    multiple = file_entry.get("size_multiple")
+    if low is None and high is None and not multiple:
+        if not allowed:
             return None
         accepted = ",".join(str(s) for s in sorted(allowed))
         return f"size mismatch: got {candidate_size}, accepted [{accepted}]"
-    low = file_entry.get("min_size")
-    high = file_entry.get("max_size")
+    exact = f" or [{','.join(str(s) for s in sorted(allowed))}]" if allowed else ""
     if low is not None and candidate_size < low:
-        return f"size too small: min {low}, got {candidate_size}"
+        return f"size too small: min {low}{exact}, got {candidate_size}"
     if high is not None and candidate_size > high:
-        return f"size too large: max {high}, got {candidate_size}"
-    multiple = file_entry.get("size_multiple")
+        return f"size too large: max {high}{exact}, got {candidate_size}"
     if multiple and candidate_size % int(multiple):
-        return f"size mismatch: got {candidate_size}, accepted multiples of {multiple}"
+        return f"size mismatch: got {candidate_size}, accepted multiples of {multiple}{exact}"
     return None
 
 

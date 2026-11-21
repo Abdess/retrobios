@@ -472,32 +472,38 @@ def _archives_not_members(files: list[dict]) -> list[dict]:
     return out
 
 
-def _sizes(entry: dict) -> tuple[set[int] | None, int | None, int | None]:
-    """The sizes an entry admits: exact values, then a min and a max."""
+def _sizes(entry: dict) -> tuple[set[int], tuple[int, float] | None]:
+    """The sizes an entry admits: exact values, then its window or None.
+
+    An entry that declares no size at all admits every size, an unbounded
+    window. Exact sizes alone leave no window (size_refusal).
+    """
     raw = entry.get("size")
     values = raw if isinstance(raw, list) else [raw]
     exact = {int(v) for v in values if isinstance(v, int) and not isinstance(v, bool)}
     low, high = entry.get("min_size"), entry.get("max_size")
-    return (exact or None,
-            low if isinstance(low, int) else None,
-            high if isinstance(high, int) else None)
+    low = low if isinstance(low, int) else None
+    high = high if isinstance(high, int) else None
+    if low is None and high is None:
+        return exact, None if exact else (0, float("inf"))
+    return exact, (low or 0, float("inf") if high is None else high)
 
 
 def _sizes_clash(a: dict, b: dict) -> bool:
-    """No size both entries admit, lists and ranges included."""
-    exact_a, low_a, high_a = _sizes(a)
-    exact_b, low_b, high_b = _sizes(b)
+    """No size both entries admit, lists and windows included."""
+    exact_a, window_a = _sizes(a)
+    exact_b, window_b = _sizes(b)
 
-    def fits(value: int, low: int | None, high: int | None) -> bool:
-        return (low is None or value >= low) and (high is None or value <= high)
+    def inside(value: int, window: tuple[int, float] | None) -> bool:
+        return window is not None and window[0] <= value <= window[1]
 
-    if exact_a and exact_b:
-        return not exact_a & exact_b
-    if exact_a:
-        return not any(fits(v, low_b, high_b) for v in exact_a)
-    if exact_b:
-        return not any(fits(v, low_a, high_a) for v in exact_b)
-    return False
+    if exact_a & exact_b:
+        return False
+    if any(inside(v, window_b) for v in exact_a) or any(inside(v, window_a) for v in exact_b):
+        return False
+    if window_a and window_b:
+        return max(window_a[0], window_b[0]) > min(window_a[1], window_b[1])
+    return True
 
 
 def _identity(entry: dict, db: dict | None) -> dict:

@@ -285,10 +285,11 @@ same files.
 
 ### Size validation
 
-Three forms:
+Four forms:
 
 - **Exact size**: `size: 524288` with `validation: [size]`. File must be exactly this many bytes.
 - **Range**: `min_size: 40`, `max_size: 131076` with `validation: [size]`. File size must fall within bounds.
+- **Exact sizes and a range**: `size: [143360, 143403, 143488]`, `min_size: 143105`, `max_size: 143364` with `validation: [size]`. One of the exact sizes or a size within bounds passes, as LinApple's sector image probe reads a disk.
 - **Informational**: `size: 524288` without `validation: [size]`. The size is documented but the emulator does not check it at runtime.
 
 ### Complement to platform checks

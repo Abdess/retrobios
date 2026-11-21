@@ -1223,8 +1223,10 @@ def core_size_refusal(
     if sized:
         tests = sorted({check for entry in sized for check in declared_content_checks(entry)})
         return f"the core's {', '.join(tests)} test turns it away"
-    bounds = (
-        f"{file_entry['size']}" if file_entry.get("size") is not None
-        else f"{file_entry.get('min_size', 0)} to {file_entry.get('max_size', 'any')}"
-    )
-    return f"{size} bytes, the core checks for {bounds}"
+    declared = file_entry.get("size")
+    bounds = [] if declared is None else [str(declared)]
+    multiple = file_entry.get("size_multiple")
+    if multiple or any(file_entry.get(k) is not None for k in ("min_size", "max_size")):
+        window = f"{file_entry.get('min_size', 0)} to {file_entry.get('max_size', 'any')}"
+        bounds.append(f"{window} in multiples of {multiple}" if multiple else window)
+    return f"{size} bytes, the core checks for {' or '.join(bounds)}"
