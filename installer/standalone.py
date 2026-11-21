@@ -13,8 +13,8 @@ from installer.detect_frontends import launchbox_bios_dirs, launchbox_root
 from installer.download import download_files
 from installer.host_fs import NOT_WRITABLE, _closed_to_this_user, _exists, _is_dir, _replace_with_copy, _write_refused
 from installer.invocation import offline_requested
+from installer.lists import fetch_manifest
 from installer.local_check import check_local, unreachable_words
-from installer.network import fetch_manifest
 from installer.outcome import EVERYTHING_IN_PLACE, OutcomeDetails, _check_fetch_line, _report_outcome
 from installer.paths import _destination_path, _within
 from installer.plan import _check_free_space, _print_plan

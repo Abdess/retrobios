@@ -48,6 +48,7 @@ from installer.games import fallback_lines, read_games
 from installer.install_record import _RECORD_TAKEN, by_record, drop_recorded, record_menu_words
 from installer.invocation import _INVOCATION
 from installer.line_menu import MenuContext, _prompt_custom_selection
+from installer.lists import fetch_manifest, fetch_targets, local_targets
 from installer.manifest import GAME_DATA
 from installer.narrowing import (
     _chosen,
@@ -60,7 +61,6 @@ from installer.narrowing import (
     one_per_slot,
     truth_lists,
 )
-from installer.network import fetch_manifest, fetch_targets, local_targets
 from installer.offline import LOCAL
 from installer.pack import _pack_refused, pack_path
 from installer.paths import shown_path

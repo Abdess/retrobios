@@ -2230,7 +2230,7 @@ class TicksBarAndPaths(unittest.TestCase):
         started = time.monotonic()
         with mock.patch.object(install, "active_remote", return_value=install.Remote(
                 install.DEFAULT_RELEASE_REF, f"http://127.0.0.1:{port}", False)):
-            install._tui_fetch("retroarch", inbox, io.StringIO())
+            install._tui_fetch("retroarch", inbox)
         self.assertLess(time.monotonic() - started, 5)
         kind, plat, title, lines, code = inbox.get_nowait()
         self.assertEqual((kind, title, code), ("manifest_failed", "No connection", 1))
@@ -2254,7 +2254,7 @@ class TicksBarAndPaths(unittest.TestCase):
         with mock.patch.object(install, "_fetch_json", side_effect=missing), \
                 mock.patch.dict(os.environ, {"RETROBIOS_REF": "v2020.01.01",
                                              "RETROBIOS_BASE_URL": ""}):
-            install._tui_fetch("batocera", inbox, io.StringIO())
+            install._tui_fetch("batocera", inbox)
         _kind, _plat, title, lines, _code = inbox.get_nowait()
         self.assertEqual(title, "No file list")
         self.assertIn("RETROBIOS_REF=v2020.01.01 has no list for batocera", lines[1])
@@ -2267,7 +2267,7 @@ class TicksBarAndPaths(unittest.TestCase):
         words = install.network_words(error, today=install.datetime.date(1980, 1, 1))
         with mock.patch.object(install, "_fetch_json", side_effect=error), \
                 mock.patch.object(install, "network_words", return_value=words):
-            install._tui_fetch("retroarch", inbox, io.StringIO())
+            install._tui_fetch("retroarch", inbox)
         _kind, _plat, title, lines, _code = inbox.get_nowait()
         self.assertEqual(title, "The clock is wrong")
         self.assertIn("The clock reads 1980-01-01", lines[0])
@@ -3143,7 +3143,7 @@ class CardsSpaceAndConfirm(unittest.TestCase):
             for name in ("HTTPS_PROXY", "https_proxy", "ALL_PROXY", "all_proxy"):
                 if name not in (env or {}):
                     os.environ.pop(name, None)
-            install._tui_fetch("retroarch", inbox, io.StringIO())
+            install._tui_fetch("retroarch", inbox)
         _kind, _plat, title, lines, _code = inbox.get_nowait()
         return title, lines
 
@@ -4189,7 +4189,7 @@ class OfflineInTheInterface(unittest.TestCase):
         RETROBIOS_INSTALL_OFFLINE=1 and no --offline: nothing to remove."""
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             inbox = queue.Queue()
-            install._tui_fetch("retroarch", inbox, io.StringIO())
+            install._tui_fetch("retroarch", inbox)
             text = " ".join(inbox.get_nowait()[3])
             self.assertIn("(RETROBIOS_INSTALL_OFFLINE=1)", text)
             self.assertIn("with RETROBIOS_INSTALL_OFFLINE unset", text)
@@ -4200,7 +4200,7 @@ class OfflineInTheInterface(unittest.TestCase):
 
     def test_no_list_names_the_ways_that_work(self):
         inbox = queue.Queue()
-        install._tui_fetch("retroarch", inbox, io.StringIO())
+        install._tui_fetch("retroarch", inbox)
         kind, plat, title, lines, code = inbox.get_nowait()
         self.assertEqual((kind, title, code), ("manifest_failed",
                                                "No internet: offline mode", 1))
@@ -15169,7 +15169,7 @@ class CoresListAndFolderFailures(unittest.TestCase):
         inbox: queue.Queue = queue.Queue()
         install.LOCAL.reset()
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
-            install._tui_fetch("amberelec", inbox, io.StringIO())
+            install._tui_fetch("amberelec", inbox)
         message = inbox.get_nowait()
         self.assertIn("install/amberelec.json", " ".join(message[3]))
 
@@ -15301,12 +15301,12 @@ class GamesOnTheCard(unittest.TestCase):
     def test_the_fetch_looks_at_the_card_before_the_list_arrives(self):
         inbox: queue.Queue = queue.Queue()
 
-        def fetched(plat, held, log):
+        def fetched(plat, held):
             held.put(("manifest", plat, MANIFEST))
 
         with mock.patch.object(install, "_tui_fetch", side_effect=fetched), \
                 mock.patch.object(install, "games_probe", return_value=3) as probe:
-            install._tui_fetch_games("retroarch", inbox, io.StringIO(), SYSTEM_DIR, True)
+            install._tui_fetch_games("retroarch", inbox, SYSTEM_DIR, True)
         probe.assert_called_once_with("retroarch", SYSTEM_DIR, attempts=1)
         self.assertEqual(inbox.get()[0], "games_here")
         self.assertEqual(inbox.get()[0], "manifest")
@@ -16418,11 +16418,26 @@ class DeviceAndEmulatorReview(unittest.TestCase):
     def test_the_board_list_is_fetched_once_with_the_list_s_timeout(self):
         inbox: queue.Queue = queue.Queue()
         with mock.patch.object(install, "_fetch_json", return_value={}) as fetched, \
-                mock.patch.object(install, "local_targets", return_value=None):
-            install._tui_fetch_targets("retroarch", inbox, io.StringIO())
+                mock.patch.object(install, "held_targets", return_value=None):
+            install._tui_fetch_targets("retroarch", inbox)
         self.assertEqual(fetched.call_args.kwargs["attempts"], 1)
         self.assertEqual(fetched.call_args.kwargs["timeout"], install.TUI_FETCH_TIMEOUT)
         self.assertEqual(inbox.get_nowait(), ("targets", "retroarch", {}, ""))
+
+    def test_a_board_list_refused_is_said_in_the_screen_s_words(self):
+        """The screen showed the terminal line, "Error:" prefix and urllib
+        text included: "...: Error: failed to fetch targets for batocera:
+        HTTP Error 500: Internal Server Error"."""
+        inbox: queue.Queue = queue.Queue()
+        refused = install.urllib.error.HTTPError("u", 500, "Internal Server Error", {}, None)
+        with mock.patch.object(install, "_fetch_json", side_effect=refused), \
+                mock.patch.object(install, "held_targets", return_value=None), \
+                contextlib.redirect_stderr(io.StringIO()) as err:
+            install._tui_fetch_targets("batocera", inbox)
+        self.assertEqual(inbox.get_nowait(), (
+            "targets", "batocera", None,
+            "The board list could not be read: the server answered HTTP 500."))
+        self.assertEqual(err.getvalue(), "")
 
 if __name__ == "__main__":
     unittest.main()

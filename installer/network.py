@@ -13,23 +13,12 @@ import time
 import urllib.error
 import urllib.request
 from pathlib import Path
-from typing import Any, NoReturn
+from typing import Any
 
-from installer.events import EVENTS
-from installer.host_fs import _is_file, read_local_json
-from installer.manifest import _check_standalone_layouts, _validate_manifest, _validate_targets
-from installer.offline import LOCAL, _Offline, _network_allowed, offline_named, offline_undo, offline_words
-from installer.platforms import TARGET_PLATFORMS, display_name
+from installer.offline import _Offline, _network_allowed
 from installer.remote import (
     CONNECT_TIMEOUT,
-    DEFAULT_RELEASE_REF,
-    MAX_MANIFEST_BYTES,
     MAX_RETRIES,
-    MAX_STANDALONE_BYTES,
-    MAX_TARGETS_BYTES,
-    STANDALONE_DIR,
-    TROUBLESHOOTING_PAGE,
-    active_remote,
 )
 
 
@@ -73,25 +62,6 @@ def _read_limited_json(
         return json.loads(payload.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ValueError(f"invalid {label}: {exc}") from exc
-
-
-NETWORK_ADVICE = ("  Check the connection, and HTTPS_PROXY if this network needs a "
-                  "proxy, then run the same command again.\n"
-                  f"  More help: {TROUBLESHOOTING_PAGE}")
-
-
-def read_local_manifest(path: Path, plat: str) -> dict:
-    """A file list saved on disk, checked as a downloaded one is."""
-    try:
-        return _validate_manifest(read_local_json(path, MAX_MANIFEST_BYTES), plat)
-    except OSError as exc:
-        print(f"  Cannot read the file list {path}: {exc.strerror or exc}.", file=sys.stderr)
-        sys.exit(1)
-    except ValueError as exc:
-        EVENTS.emit("error", stage="manifest", reason="invalid", platform=plat,
-                    message=f"the file list is not valid: {exc}")
-        print(f"  The file list {path} is not valid for {plat}: {exc}", file=sys.stderr)
-        sys.exit(1)
 
 
 # The installer was written after this day. A clock that reads earlier is
@@ -319,216 +289,6 @@ def _fetch_json(
               f"({attempt + 1}/{tries}) in {delay:.0f} s.", file=sys.stderr)
         time.sleep(delay)
     raise AssertionError("unreachable")
-
-
-def _manifest_invalid(plat: str, url: str, exc: ValueError, overridden: bool) -> NoReturn:
-    """Stop on a file list that arrived and is not valid."""
-    words = f"the file list is not valid: {exc}"
-    if isinstance(exc.__cause__, (json.JSONDecodeError, UnicodeDecodeError)):
-        # The parser's "Expecting value: line 1 column 1" told no one
-        # anything, where the full screen names the usual cause.
-        words = ("what arrived is not a file list: a Wi-Fi sign-in page or a cut "
-                 "download looks like this")
-    EVENTS.emit("error", stage="manifest", reason="invalid", platform=plat,
-                message=words)
-    print(f"  For {display_name(plat)}, {words}.", file=sys.stderr)
-    if words.startswith("what arrived"):
-        for line in _address_lines(url, overridden):
-            print(line, file=sys.stderr)
-        print("  Check the connection (sign in to the Wi-Fi if it asks), then run the "
-              "same command again.", file=sys.stderr)
-    sys.exit(1)
-
-
-def missing_list_advice(plat: str, again: str) -> str:
-    """What to do when the revision asked for has no file list for plat:
-    the name was checked before any request, so the revision is the cause."""
-    ref = active_remote().ref
-    if ref != DEFAULT_RELEASE_REF:
-        return (f"RETROBIOS_REF={ref} has no list for {plat}: unset it, or pick a "
-                "newer tag from https://github.com/Abdess/retrobios/releases.")
-    return f"The repository may be moving its files: {again} in a few minutes."
-
-
-def _manifest_http_error(plat: str, url: str, exc: urllib.error.HTTPError,
-                         overridden: bool) -> NoReturn:
-    """Stop on a file list the server answered with an HTTP error."""
-    EVENTS.emit(
-        "error", stage="manifest", reason="not_found" if exc.code == 404 else "network",
-        platform=plat, message=f"the file list could not be fetched: HTTP {exc.code}",
-    )
-    if exc.code == 404 and overridden:
-        print(f"  No file list for {plat} there.", file=sys.stderr)
-        for line in _address_lines(url, overridden):
-            print(line, file=sys.stderr)
-        sys.exit(1)
-    if exc.code == 404:
-        # Asked once, a 4xx being final. The name was checked before any
-        # request, so the revision is what has no such list.
-        print(f"  No file list for {plat} at {active_remote().ref}.", file=sys.stderr)
-        print(f"  {missing_list_advice(plat, 'run the same command again')}",
-              file=sys.stderr)
-        sys.exit(1)
-    print(f"  Could not fetch the file list for {plat}: HTTP {exc.code}", file=sys.stderr)
-    for line in _address_lines(url, overridden):
-        print(line, file=sys.stderr)
-    print(NETWORK_ADVICE, file=sys.stderr)
-    sys.exit(1)
-
-
-def _manifest_unreachable(plat: str, url: str, exc: OSError, overridden: bool) -> NoReturn:
-    """Stop on a file list the network did not bring."""
-    code, words = network_words(exc)
-    EVENTS.emit("error", stage="manifest", reason=code, platform=plat,
-                message=words if code != "network"
-                else f"the file list could not be fetched: {words}")
-    if code == "offline":
-        print(f"  No file list for {plat}: {offline_words()}. Give --manifest FILE "
-              f"(a copy of install/{plat}.json) or --from-pack PACK, or run "
-              f"{offline_undo()}.", file=sys.stderr)
-        sys.exit(1)
-    if code != "network":
-        print(f"  Could not fetch the file list for {plat}.", file=sys.stderr)
-        print(f"  {words}.", file=sys.stderr)
-        sys.exit(1)
-    tries = getattr(exc, "attempts", MAX_RETRIES)
-    print(f"  Could not fetch the file list for {plat} after {tries} "
-          f"attempts: {words}", file=sys.stderr)
-    for line in _address_lines(url, overridden):
-        print(line, file=sys.stderr)
-    print(NETWORK_ADVICE, file=sys.stderr)
-    sys.exit(1)
-
-
-def fetch_manifest(plat: str) -> dict:
-    """Download platform manifest JSON, or read the one this run was given."""
-    if LOCAL.manifest is not None:
-        return read_local_manifest(LOCAL.manifest, plat)
-    if LOCAL.pack is not None:
-        try:
-            return _validate_manifest(LOCAL.pack.manifest(plat), plat)
-        except ValueError as exc:
-            print(f"  The file list in {LOCAL.pack.name} is not valid: {exc}",
-                  file=sys.stderr)
-            sys.exit(1)
-    remote = active_remote()
-    url = remote.manifest_url.format(platform=plat)
-    try:
-        return _validate_manifest(_fetch_json(url, MAX_MANIFEST_BYTES, "file list"), plat)
-    except ValueError as exc:
-        _manifest_invalid(plat, url, exc, remote.overridden)
-    except urllib.error.HTTPError as exc:
-        _manifest_http_error(plat, url, exc, remote.overridden)
-    except (urllib.error.URLError, OSError) as exc:
-        _manifest_unreachable(plat, url, exc, remote.overridden)
-
-
-def _pack_alone(plat: str) -> bool:
-    """A pack read without a file list for plat: one built before packs
-    carried their install list records the systems of its files only."""
-    return (LOCAL.pack is not None and LOCAL.manifest is None
-            and (LOCAL.pack.install_list or {}).get("platform") != plat)
-
-
-def local_targets(plat: str) -> "dict | None":
-    """The cores per board this run has without the network: the list the
-    pack carries, else targets/<platform>.json beside --manifest, where the
-    repository keeps it (install/targets/). None when there is neither."""
-    if LOCAL.pack is not None and LOCAL.pack.targets is not None \
-            and plat in LOCAL.pack.platforms():
-        return LOCAL.pack.targets
-    if LOCAL.manifest is None:
-        return None
-    beside = LOCAL.manifest.parent / "targets" / f"{plat}.json"
-    if not _is_file(beside):
-        return None
-    try:
-        return _validate_targets(read_local_json(beside, MAX_TARGETS_BYTES))
-    except OSError as exc:
-        # Read as absent, the offline run asked for the file already there.
-        print(f"  Error: the target list {beside} cannot be read: {exc.strerror or exc}",
-              file=sys.stderr)
-        sys.exit(1)
-    except ValueError as exc:
-        print(f"  Error: the target list {beside} is not valid: {exc}", file=sys.stderr)
-        sys.exit(1)
-
-
-def fetch_standalone(plat: str, manifest: dict) -> dict:
-    """What each standalone build reads, for --standalone only: the file
-    beside --manifest (standalone/<platform>.json, where the repository
-    keeps it), else downloaded as the list is. Missing, unreachable or
-    invalid, the run stops on one line, code 1."""
-    beside = (LOCAL.manifest.parent / STANDALONE_DIR / f"{plat}.json"
-              if LOCAL.manifest is not None else None)
-    url = active_remote().standalone_url.format(platform=plat)
-    where = str(beside) if beside is not None and _is_file(beside) else url
-    try:
-        if where != url:
-            data = read_local_json(Path(where), MAX_STANDALONE_BYTES)
-        else:
-            data = _fetch_json(url, MAX_STANDALONE_BYTES, "standalone layout")
-        return _check_standalone_layouts(data, manifest, plat)
-    except urllib.error.HTTPError as exc:
-        problem = f"HTTP {exc.code}"
-    except (urllib.error.URLError, OSError) as exc:
-        problem = (str(exc) if isinstance(exc, _Offline)
-                   else exc.strerror or str(exc) if where != url
-                   else network_words(exc)[1])
-    except ValueError as exc:
-        problem = f"not valid: {exc}"
-    EVENTS.emit("error", stage="manifest", reason="unavailable", platform=plat,
-                message=f"--standalone needs {where}: {problem}")
-    print(f"Error: --standalone needs {where}, which could not be read ({problem}).",
-          file=sys.stderr)
-    sys.exit(1)
-
-
-def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
-                  timeout: float | None = None) -> "dict | None":
-    """The target core list: the one this run has at hand, else downloaded.
-
-    Empty on 404, where the platform publishes no targets. None when the list
-    could not be read: a timeout says nothing about the platform, and
-    answering "no targets" for it sent users to the full pack. A run without
-    the network and with no list at hand is refused, code 2, before any
-    file is written.
-    """
-    held = local_targets(plat)
-    if held is not None:
-        return held
-    if LOCAL.offline and plat not in TARGET_PLATFORMS:
-        return {}
-    if LOCAL.offline:
-        source = (f"{LOCAL.pack.name} carries none" if LOCAL.pack is not None
-                  else f"{offline_named()} makes no request")
-        print(f"Error: --target needs the {display_name(plat)} board list ({source}). Put "
-              f"install/targets/{plat}.json beside the --manifest file, or go online.",
-              file=sys.stderr)
-        sys.exit(2)
-    remote = active_remote()
-    url = remote.targets_url.format(platform=plat)
-    try:
-        return _validate_targets(_fetch_json(url, MAX_TARGETS_BYTES, "target list",
-                                             attempts=attempts, timeout=timeout))
-    except urllib.error.HTTPError as exc:
-        if exc.code == 404:
-            return {}
-        print(f"  Error: failed to fetch targets for {plat}: {exc}", file=sys.stderr)
-        for line in _address_lines(url, remote.overridden):
-            print(line, file=sys.stderr)
-        print(NETWORK_ADVICE, file=sys.stderr)
-        return None
-    except ValueError as exc:
-        print(f"  Error: the target list for {plat} is not valid: {exc}", file=sys.stderr)
-        return None
-    except (urllib.error.URLError, OSError) as exc:
-        print(f"  Error: failed to fetch targets for {plat}: "
-              f"{network_words(exc)[1]}", file=sys.stderr)
-        for line in _address_lines(url, remote.overridden):
-            print(line, file=sys.stderr)
-        print(NETWORK_ADVICE, file=sys.stderr)
-        return None
 
 
 def _retry_delay(attempt: int, retry_after: str | None) -> float:

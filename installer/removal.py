@@ -35,10 +35,11 @@ from installer.install_record import (
     setup_record,
 )
 from installer.invocation import _INVOCATION, offline_requested
+from installer.lists import fetch_manifest
 from installer.local_check import _digest_file
 from installer.manifest import OTHER_SYSTEMS, _validate_manifest, entry_copies
 from installer.narrowing import designated_cores
-from installer.network import _fetch_json, fetch_manifest
+from installer.network import _fetch_json
 from installer.paths import shown_path, spelled
 from installer.platforms import display_name, entry_systems, normalize_platform, refuse_name, system_title
 from installer.remote import MAX_MANIFEST_BYTES, active_remote

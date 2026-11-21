@@ -609,14 +609,14 @@ class _TuiSession:
         kind, state, inbox = effect[0], self.state, self.inbox
         if kind == "fetch":
             threading.Thread(target=_tui_fetch_games,
-                             args=(effect[1], inbox, self.buffer, state.dest,
+                             args=(effect[1], inbox, state.dest,
                                    state.games_choice not in ("user", "cli", "record")),
                              daemon=True).start()
         elif kind == "app":
             threading.Thread(target=_tui_put_app, args=(effect[1], inbox),
                              daemon=True).start()
         elif kind == "targets":
-            threading.Thread(target=_tui_fetch_targets, args=(effect[1], inbox, self.buffer),
+            threading.Thread(target=_tui_fetch_targets, args=(effect[1], inbox),
                              daemon=True).start()
         elif kind == "pack":
             inbox.put(("pack_opened", effect[1],

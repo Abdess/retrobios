@@ -1,7 +1,6 @@
 """The work the screens hand off: child runs, fetches in this process, and their work folders."""
 from __future__ import annotations
 
-import io
 import json
 import os
 import queue
@@ -11,19 +10,13 @@ import subprocess
 import sys
 import tempfile
 import threading
-import urllib.error
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from installer.events import _event_exit_code
 from installer.games import games_probe
 from installer.handheld_app import put_app
-from installer.manifest import _validate_manifest
-from installer.network import _fetch_json, fetch_manifest, fetch_targets, missing_list_advice, network_words
-from installer.offline import LOCAL, offline_named, offline_undo
-from installer.platforms import display_name
-from installer.remote import MAX_MANIFEST_BYTES, active_remote
-from installer.tui_rows import TUI_OFFLINE_TITLE
+from installer.lists import ListFailure, load_manifest, load_targets
+from installer.tui_list_words import manifest_failure_screen, targets_failure_words
 
 if TYPE_CHECKING:
     from installer.handheld_app import CardApp
@@ -131,94 +124,35 @@ def _tui_put_app(card: CardApp, inbox: queue.Queue) -> None:
     inbox.put(("app", put_app(card)))
 
 
-def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
+def _tui_fetch(plat: str, inbox: queue.Queue) -> None:
     """The file list, fetched once in this process, or what went wrong."""
-    if LOCAL.manifest is not None or LOCAL.pack is not None:
-        mark = len(log.getvalue())
-        try:
-            inbox.put(("manifest", plat, fetch_manifest(plat)))
-        except SystemExit as exc:
-            inbox.put(("manifest_failed", plat, "", log.getvalue()[mark:].splitlines(),
-                       _event_exit_code(exc.code)))
-        return
-    remote = active_remote()
-    url = remote.manifest_url.format(platform=plat)
     try:
-        data = _fetch_json(url, MAX_MANIFEST_BYTES, "file list", attempts=1,
-                           timeout=TUI_FETCH_TIMEOUT)
-        inbox.put(("manifest", plat, _validate_manifest(data, plat)))
+        manifest = load_manifest(plat, attempts=1, timeout=TUI_FETCH_TIMEOUT)
+    except ListFailure as failure:
+        inbox.put(("manifest_failed", plat, *manifest_failure_screen(failure.problem)))
         return
-    except ValueError as exc:
-        title, lines = "The file list is not valid", [f"What arrived is not a file list: {exc}."]
-        if isinstance(exc.__cause__, (json.JSONDecodeError, UnicodeDecodeError)):
-            # The parser's "Expecting value: line 2 column 1" told no one anything.
-            lines = ["What arrived is not a file list: a Wi-Fi sign-in page or a cut "
-                     "download looks like this.", "Check the connection, then choose Try again."]
-    except urllib.error.HTTPError as exc:
-        title = "No file list"
-        lines = [f"There is no file list for {display_name(plat)} at this address."
-                 if exc.code == 404 else f"The server answered HTTP {exc.code}."]
-        if exc.code == 404 and not remote.overridden:
-            # Line mode named RETROBIOS_REF as the cause, the screen nothing.
-            lines.append(missing_list_advice(plat, "choose Try again"))
-    except (urllib.error.URLError, OSError) as exc:
-        code, words = network_words(exc)
-        if code == "offline":
-            # Asked for, not a failure: no Try again, and the two ways a
-            # run without the network gets its list.
-            inbox.put(("manifest_failed", plat, TUI_OFFLINE_TITLE, [
-                f"This run makes no network request ({offline_named()}), and the list "
-                "of BIOS files comes from the network.",
-                "Run the installer again with the list saved as a file "
-                f"(--manifest FILE, a copy of install/{plat}.json) or with a pack "
-                f"(--from-pack PACK), or {offline_undo()}."], 1))
-            return
-        title = {"clock": "The clock is wrong",
-                 "no_ca": "No trusted certificates",
-                 "no_ssl": "This Python cannot use HTTPS"}.get(code, "No connection")
-        # The screen's first row is Try again: "then run again" was a second way.
-        lines = [words[0].upper() + words[1:].replace(", then run again",
-                                                      ", then choose Try again") + "."]
-        if code == "network":
-            lines = [f"The list of BIOS files could not be downloaded: {words}.",
-                     "Check the Wi-Fi or the cable, then choose Try again.",
-                     # A handheld with no Wi-Fi has the pack as its way.
-                     "Or copy a pack to the card and run the installer with --from-pack "
-                     "PACK: no network is needed then."]
-            proxy = next((name for name in ("HTTPS_PROXY", "https_proxy", "ALL_PROXY",
-                                            "all_proxy") if os.environ.get(name)), "")
-            if proxy:
-                # Named, never shown: the value can hold a password.
-                lines.append(f"{proxy} is set, so the connection goes through a proxy: "
-                             "check that it answers.")
-    if remote.overridden:
-        lines.append(f"RETROBIOS_BASE_URL chose the address: {url}")
-    inbox.put(("manifest_failed", plat, title, lines, 1))
+    inbox.put(("manifest", plat, manifest))
 
 
-def _tui_fetch_targets(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
+def _tui_fetch_targets(plat: str, inbox: queue.Queue) -> None:
     """The platform's board list for Device, fetched in this process as a
     --target run reads it: the pack's or the list's beside --manifest, else
     the network's. None and why when it cannot be read."""
-    mark = len(log.getvalue())
     try:
         # One attempt and the list's own timeout, as the file list is
         # fetched here: Device says Reading while it waits.
-        targets = fetch_targets(plat, attempts=1, timeout=TUI_FETCH_TIMEOUT)
-    except SystemExit:
-        targets = None
-    said = [line.strip() for line in log.getvalue()[mark:].splitlines() if line.strip()]
-    problem = "" if targets is not None else (
-        f"The board list could not be read{': ' + said[0] if said else '.'}")
-    inbox.put(("targets", plat, targets, problem))
+        targets = load_targets(plat, attempts=1, timeout=TUI_FETCH_TIMEOUT)
+    except ListFailure as failure:
+        inbox.put(("targets", plat, None, targets_failure_words(failure.problem)))
+        return
+    inbox.put(("targets", plat, targets, ""))
 
 
-def _tui_fetch_games(plat: str, inbox: queue.Queue, log: io.StringIO, dest: Path | None,
-                     look: bool) -> None:
+def _tui_fetch_games(plat: str, inbox: queue.Queue, dest: Path | None, look: bool) -> None:
     """The file list, then, once it came, a look at the card for games
     (look), said before the list so that the check reads them."""
     held: queue.Queue = queue.Queue()
-    _tui_fetch(plat, held, log)
+    _tui_fetch(plat, held)
     message = held.get()
     if look and message[0] == "manifest" and dest is not None:
         # One attempt, as the list's own: a retry says so on stderr, under

@@ -7530,25 +7530,6 @@ def _read_limited_json(
         raise ValueError(f"invalid {label}: {exc}") from exc
 
 
-NETWORK_ADVICE = ("  Check the connection, and HTTPS_PROXY if this network needs a "
-                  "proxy, then run the same command again.\n"
-                  f"  More help: {TROUBLESHOOTING_PAGE}")
-
-
-def read_local_manifest(path: Path, plat: str) -> dict:
-    """A file list saved on disk, checked as a downloaded one is."""
-    try:
-        return _validate_manifest(read_local_json(path, MAX_MANIFEST_BYTES), plat)
-    except OSError as exc:
-        print(f"  Cannot read the file list {path}: {exc.strerror or exc}.", file=sys.stderr)
-        sys.exit(1)
-    except ValueError as exc:
-        EVENTS.emit("error", stage="manifest", reason="invalid", platform=plat,
-                    message=f"the file list is not valid: {exc}")
-        print(f"  The file list {path} is not valid for {plat}: {exc}", file=sys.stderr)
-        sys.exit(1)
-
-
 # The installer was written after this day. A clock that reads earlier is
 # wrong, and TLS then finds every certificate not yet valid: a handheld
 # with no clock battery boots on 1970 or 1980.
@@ -7774,216 +7755,6 @@ def _fetch_json(
               f"({attempt + 1}/{tries}) in {delay:.0f} s.", file=sys.stderr)
         time.sleep(delay)
     raise AssertionError("unreachable")
-
-
-def _manifest_invalid(plat: str, url: str, exc: ValueError, overridden: bool) -> NoReturn:
-    """Stop on a file list that arrived and is not valid."""
-    words = f"the file list is not valid: {exc}"
-    if isinstance(exc.__cause__, (json.JSONDecodeError, UnicodeDecodeError)):
-        # The parser's "Expecting value: line 1 column 1" told no one
-        # anything, where the full screen names the usual cause.
-        words = ("what arrived is not a file list: a Wi-Fi sign-in page or a cut "
-                 "download looks like this")
-    EVENTS.emit("error", stage="manifest", reason="invalid", platform=plat,
-                message=words)
-    print(f"  For {display_name(plat)}, {words}.", file=sys.stderr)
-    if words.startswith("what arrived"):
-        for line in _address_lines(url, overridden):
-            print(line, file=sys.stderr)
-        print("  Check the connection (sign in to the Wi-Fi if it asks), then run the "
-              "same command again.", file=sys.stderr)
-    sys.exit(1)
-
-
-def missing_list_advice(plat: str, again: str) -> str:
-    """What to do when the revision asked for has no file list for plat:
-    the name was checked before any request, so the revision is the cause."""
-    ref = active_remote().ref
-    if ref != DEFAULT_RELEASE_REF:
-        return (f"RETROBIOS_REF={ref} has no list for {plat}: unset it, or pick a "
-                "newer tag from https://github.com/Abdess/retrobios/releases.")
-    return f"The repository may be moving its files: {again} in a few minutes."
-
-
-def _manifest_http_error(plat: str, url: str, exc: urllib.error.HTTPError,
-                         overridden: bool) -> NoReturn:
-    """Stop on a file list the server answered with an HTTP error."""
-    EVENTS.emit(
-        "error", stage="manifest", reason="not_found" if exc.code == 404 else "network",
-        platform=plat, message=f"the file list could not be fetched: HTTP {exc.code}",
-    )
-    if exc.code == 404 and overridden:
-        print(f"  No file list for {plat} there.", file=sys.stderr)
-        for line in _address_lines(url, overridden):
-            print(line, file=sys.stderr)
-        sys.exit(1)
-    if exc.code == 404:
-        # Asked once, a 4xx being final. The name was checked before any
-        # request, so the revision is what has no such list.
-        print(f"  No file list for {plat} at {active_remote().ref}.", file=sys.stderr)
-        print(f"  {missing_list_advice(plat, 'run the same command again')}",
-              file=sys.stderr)
-        sys.exit(1)
-    print(f"  Could not fetch the file list for {plat}: HTTP {exc.code}", file=sys.stderr)
-    for line in _address_lines(url, overridden):
-        print(line, file=sys.stderr)
-    print(NETWORK_ADVICE, file=sys.stderr)
-    sys.exit(1)
-
-
-def _manifest_unreachable(plat: str, url: str, exc: OSError, overridden: bool) -> NoReturn:
-    """Stop on a file list the network did not bring."""
-    code, words = network_words(exc)
-    EVENTS.emit("error", stage="manifest", reason=code, platform=plat,
-                message=words if code != "network"
-                else f"the file list could not be fetched: {words}")
-    if code == "offline":
-        print(f"  No file list for {plat}: {offline_words()}. Give --manifest FILE "
-              f"(a copy of install/{plat}.json) or --from-pack PACK, or run "
-              f"{offline_undo()}.", file=sys.stderr)
-        sys.exit(1)
-    if code != "network":
-        print(f"  Could not fetch the file list for {plat}.", file=sys.stderr)
-        print(f"  {words}.", file=sys.stderr)
-        sys.exit(1)
-    tries = getattr(exc, "attempts", MAX_RETRIES)
-    print(f"  Could not fetch the file list for {plat} after {tries} "
-          f"attempts: {words}", file=sys.stderr)
-    for line in _address_lines(url, overridden):
-        print(line, file=sys.stderr)
-    print(NETWORK_ADVICE, file=sys.stderr)
-    sys.exit(1)
-
-
-def fetch_manifest(plat: str) -> dict:
-    """Download platform manifest JSON, or read the one this run was given."""
-    if LOCAL.manifest is not None:
-        return read_local_manifest(LOCAL.manifest, plat)
-    if LOCAL.pack is not None:
-        try:
-            return _validate_manifest(LOCAL.pack.manifest(plat), plat)
-        except ValueError as exc:
-            print(f"  The file list in {LOCAL.pack.name} is not valid: {exc}",
-                  file=sys.stderr)
-            sys.exit(1)
-    remote = active_remote()
-    url = remote.manifest_url.format(platform=plat)
-    try:
-        return _validate_manifest(_fetch_json(url, MAX_MANIFEST_BYTES, "file list"), plat)
-    except ValueError as exc:
-        _manifest_invalid(plat, url, exc, remote.overridden)
-    except urllib.error.HTTPError as exc:
-        _manifest_http_error(plat, url, exc, remote.overridden)
-    except (urllib.error.URLError, OSError) as exc:
-        _manifest_unreachable(plat, url, exc, remote.overridden)
-
-
-def _pack_alone(plat: str) -> bool:
-    """A pack read without a file list for plat: one built before packs
-    carried their install list records the systems of its files only."""
-    return (LOCAL.pack is not None and LOCAL.manifest is None
-            and (LOCAL.pack.install_list or {}).get("platform") != plat)
-
-
-def local_targets(plat: str) -> "dict | None":
-    """The cores per board this run has without the network: the list the
-    pack carries, else targets/<platform>.json beside --manifest, where the
-    repository keeps it (install/targets/). None when there is neither."""
-    if LOCAL.pack is not None and LOCAL.pack.targets is not None \
-            and plat in LOCAL.pack.platforms():
-        return LOCAL.pack.targets
-    if LOCAL.manifest is None:
-        return None
-    beside = LOCAL.manifest.parent / "targets" / f"{plat}.json"
-    if not _is_file(beside):
-        return None
-    try:
-        return _validate_targets(read_local_json(beside, MAX_TARGETS_BYTES))
-    except OSError as exc:
-        # Read as absent, the offline run asked for the file already there.
-        print(f"  Error: the target list {beside} cannot be read: {exc.strerror or exc}",
-              file=sys.stderr)
-        sys.exit(1)
-    except ValueError as exc:
-        print(f"  Error: the target list {beside} is not valid: {exc}", file=sys.stderr)
-        sys.exit(1)
-
-
-def fetch_standalone(plat: str, manifest: dict) -> dict:
-    """What each standalone build reads, for --standalone only: the file
-    beside --manifest (standalone/<platform>.json, where the repository
-    keeps it), else downloaded as the list is. Missing, unreachable or
-    invalid, the run stops on one line, code 1."""
-    beside = (LOCAL.manifest.parent / STANDALONE_DIR / f"{plat}.json"
-              if LOCAL.manifest is not None else None)
-    url = active_remote().standalone_url.format(platform=plat)
-    where = str(beside) if beside is not None and _is_file(beside) else url
-    try:
-        if where != url:
-            data = read_local_json(Path(where), MAX_STANDALONE_BYTES)
-        else:
-            data = _fetch_json(url, MAX_STANDALONE_BYTES, "standalone layout")
-        return _check_standalone_layouts(data, manifest, plat)
-    except urllib.error.HTTPError as exc:
-        problem = f"HTTP {exc.code}"
-    except (urllib.error.URLError, OSError) as exc:
-        problem = (str(exc) if isinstance(exc, _Offline)
-                   else exc.strerror or str(exc) if where != url
-                   else network_words(exc)[1])
-    except ValueError as exc:
-        problem = f"not valid: {exc}"
-    EVENTS.emit("error", stage="manifest", reason="unavailable", platform=plat,
-                message=f"--standalone needs {where}: {problem}")
-    print(f"Error: --standalone needs {where}, which could not be read ({problem}).",
-          file=sys.stderr)
-    sys.exit(1)
-
-
-def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
-                  timeout: float | None = None) -> "dict | None":
-    """The target core list: the one this run has at hand, else downloaded.
-
-    Empty on 404, where the platform publishes no targets. None when the list
-    could not be read: a timeout says nothing about the platform, and
-    answering "no targets" for it sent users to the full pack. A run without
-    the network and with no list at hand is refused, code 2, before any
-    file is written.
-    """
-    held = local_targets(plat)
-    if held is not None:
-        return held
-    if LOCAL.offline and plat not in TARGET_PLATFORMS:
-        return {}
-    if LOCAL.offline:
-        source = (f"{LOCAL.pack.name} carries none" if LOCAL.pack is not None
-                  else f"{offline_named()} makes no request")
-        print(f"Error: --target needs the {display_name(plat)} board list ({source}). Put "
-              f"install/targets/{plat}.json beside the --manifest file, or go online.",
-              file=sys.stderr)
-        sys.exit(2)
-    remote = active_remote()
-    url = remote.targets_url.format(platform=plat)
-    try:
-        return _validate_targets(_fetch_json(url, MAX_TARGETS_BYTES, "target list",
-                                             attempts=attempts, timeout=timeout))
-    except urllib.error.HTTPError as exc:
-        if exc.code == 404:
-            return {}
-        print(f"  Error: failed to fetch targets for {plat}: {exc}", file=sys.stderr)
-        for line in _address_lines(url, remote.overridden):
-            print(line, file=sys.stderr)
-        print(NETWORK_ADVICE, file=sys.stderr)
-        return None
-    except ValueError as exc:
-        print(f"  Error: the target list for {plat} is not valid: {exc}", file=sys.stderr)
-        return None
-    except (urllib.error.URLError, OSError) as exc:
-        print(f"  Error: failed to fetch targets for {plat}: "
-              f"{network_words(exc)[1]}", file=sys.stderr)
-        for line in _address_lines(url, remote.overridden):
-            print(line, file=sys.stderr)
-        print(NETWORK_ADVICE, file=sys.stderr)
-        return None
 
 
 def _retry_delay(attempt: int, retry_after: str | None) -> float:
@@ -8724,6 +8495,319 @@ def read_game(facts: GameFacts, system_id: str, system: SystemData, readers: set
     if not wanted:
         return
     _read_game_headers(facts, system, wanted, packed)
+
+
+# --- installer/lists.py ------------------------------------------------------
+
+NETWORK_ADVICE = ("  Check the connection, and HTTPS_PROXY if this network needs a "
+                  "proxy, then run the same command again.\n"
+                  f"  More help: {TROUBLESHOOTING_PAGE}")
+
+
+class ListProblem(NamedTuple):
+    """A list that could not be had, classified once: line mode prints it
+    and stops, the full screen draws it.
+
+    source is file or pack for a list this run was given (where names it),
+    network for one asked at the address where. code is unreadable or
+    invalid, http (status), offline, or the network_words code (network,
+    clock, no_ca, no_ssl), with words saying it. garbled is an answer that
+    is not JSON at all: a Wi-Fi sign-in page or a cut download. fatal is the
+    code line mode ends on, 0 when the run carries on without the list.
+    """
+
+    plat: str
+    code: str
+    words: str
+    source: str = "network"
+    where: str = ""
+    remote: Remote | None = None
+    status: int = 0
+    attempts: int = MAX_RETRIES
+    garbled: bool = False
+    fatal: int = 1
+
+    @property
+    def overridden(self) -> bool:
+        """Whether RETROBIOS_BASE_URL chose the address that failed."""
+        return self.remote is not None and self.remote.overridden
+
+    @property
+    def ref(self) -> str:
+        return self.remote.ref if self.remote is not None else DEFAULT_RELEASE_REF
+
+
+class ListFailure(Exception):
+    """A list that could not be had, its problem carried to who says it."""
+
+    def __init__(self, problem: ListProblem) -> None:
+        super().__init__(problem.words)
+        self.problem = problem
+
+
+def _download_failure(plat: str, url: str, remote: Remote, exc: Exception,
+                      fatal: int = 1) -> ListFailure:
+    """What a list asked at url gave instead of a valid document."""
+    if isinstance(exc, ValueError):
+        garbled = isinstance(exc.__cause__, (json.JSONDecodeError, UnicodeDecodeError))
+        return ListFailure(ListProblem(plat, "invalid", str(exc), where=url, remote=remote,
+                           garbled=garbled, fatal=fatal))
+    if isinstance(exc, urllib.error.HTTPError):
+        return ListFailure(ListProblem(plat, "http", str(exc), where=url, remote=remote,
+                           status=exc.code, fatal=fatal))
+    code, words = network_words(exc)
+    return ListFailure(ListProblem(plat, code, words, where=url, remote=remote, fatal=fatal,
+                       attempts=getattr(exc, "attempts", MAX_RETRIES)))
+
+
+def missing_list_advice(plat: str, again: str, ref: str) -> str:
+    """What to do when the revision asked for has no file list for plat:
+    the name was checked before any request, so the revision is the cause."""
+    if ref != DEFAULT_RELEASE_REF:
+        return (f"RETROBIOS_REF={ref} has no list for {plat}: unset it, or pick a "
+                "newer tag from https://github.com/Abdess/retrobios/releases.")
+    return f"The repository may be moving its files: {again} in a few minutes."
+
+
+def load_manifest(plat: str, attempts: int = MAX_RETRIES, timeout: float | None = None) -> dict:
+    """The file list of plat: the one this run was given, else downloaded.
+    ListFailure when it cannot be had."""
+    if LOCAL.manifest is not None:
+        path = str(LOCAL.manifest)
+        try:
+            return _validate_manifest(read_local_json(LOCAL.manifest, MAX_MANIFEST_BYTES), plat)
+        except OSError as exc:
+            raise ListFailure(ListProblem(plat, "unreadable", str(exc.strerror or exc),
+                              source="file", where=path)) from exc
+        except ValueError as exc:
+            raise ListFailure(ListProblem(plat, "invalid", str(exc), source="file", where=path)) from exc
+    if LOCAL.pack is not None:
+        try:
+            return _validate_manifest(LOCAL.pack.manifest(plat), plat)
+        except ValueError as exc:
+            raise ListFailure(ListProblem(plat, "invalid", str(exc), source="pack",
+                              where=LOCAL.pack.name)) from exc
+    remote = active_remote()
+    url = remote.manifest_url.format(platform=plat)
+    try:
+        return _validate_manifest(_fetch_json(url, MAX_MANIFEST_BYTES, "file list",
+                                              attempts=attempts, timeout=timeout), plat)
+    except (ValueError, OSError) as exc:
+        raise _download_failure(plat, url, remote, exc) from exc
+
+
+def invalid_list_words(failure: ListProblem) -> str:
+    """A file list that arrived and is not one, in line mode's words."""
+    if failure.garbled:
+        # The parser's "Expecting value: line 1 column 1" told no one
+        # anything, where the full screen names the usual cause.
+        return ("what arrived is not a file list: a Wi-Fi sign-in page or a cut "
+                "download looks like this")
+    return f"the file list is not valid: {failure.words}"
+
+
+def _manifest_event(failure: ListProblem) -> tuple[str, str] | None:
+    """The reason and message of the error event line mode writes, if any."""
+    code, words = failure.code, failure.words
+    if failure.source != "network":
+        return ("invalid", f"the file list is not valid: {words}") \
+            if failure.source == "file" and code == "invalid" else None
+    if code == "invalid":
+        return code, invalid_list_words(failure)
+    if code == "http":
+        return ("not_found" if failure.status == 404 else "network",
+                f"the file list could not be fetched: HTTP {failure.status}")
+    return code, words if code != "network" else f"the file list could not be fetched: {words}"
+
+
+def _manifest_local_lines(failure: ListProblem) -> list[str]:
+    where, words = failure.where, failure.words
+    if failure.source == "pack":
+        return [f"  The file list in {where} is not valid: {words}"]
+    if failure.code == "unreadable":
+        return [f"  Cannot read the file list {where}: {words}."]
+    return [f"  The file list {where} is not valid for {failure.plat}: {words}"]
+
+
+def manifest_failure_lines(failure: ListProblem) -> list[str]:
+    """What line mode prints of a file list it could not have."""
+    if failure.source != "network":
+        return _manifest_local_lines(failure)
+    plat, code, words = failure.plat, failure.code, failure.words
+    address = _address_lines(failure.where, failure.overridden)
+    if code == "invalid":
+        lines = [f"  For {display_name(plat)}, {invalid_list_words(failure)}."]
+        if failure.garbled:
+            lines += [*address, "  Check the connection (sign in to the Wi-Fi if it asks), "
+                      "then run the same command again."]
+        return lines
+    if code == "http" and failure.status == 404:
+        if failure.overridden:
+            return [f"  No file list for {plat} there.", *address]
+        # Asked once, a 4xx being final. The name was checked before any
+        # request, so the revision is what has no such list.
+        return [f"  No file list for {plat} at {failure.ref}.",
+                f"  {missing_list_advice(plat, 'run the same command again', failure.ref)}"]
+    if code == "http":
+        return [f"  Could not fetch the file list for {plat}: HTTP {failure.status}",
+                *address, NETWORK_ADVICE]
+    if code == "offline":
+        return [f"  No file list for {plat}: {offline_words()}. Give --manifest FILE "
+                f"(a copy of install/{plat}.json) or --from-pack PACK, or run "
+                f"{offline_undo()}."]
+    if code != "network":
+        return [f"  Could not fetch the file list for {plat}.", f"  {words}."]
+    return [f"  Could not fetch the file list for {plat} after {failure.attempts} "
+            f"attempts: {words}", *address, NETWORK_ADVICE]
+
+
+def fetch_manifest(plat: str) -> dict:
+    """The file list of plat, or the run stopped on what went wrong, code 1."""
+    try:
+        return load_manifest(plat)
+    except ListFailure as stopped:
+        failure = stopped.problem
+        event = _manifest_event(failure)
+        if event is not None:
+            EVENTS.emit("error", stage="manifest", reason=event[0], platform=plat,
+                        message=event[1])
+        _say(manifest_failure_lines(failure))
+        sys.exit(failure.fatal)
+
+
+def _say(lines: list[str]) -> None:
+    for line in lines:
+        print(line, file=sys.stderr)
+
+
+def _pack_alone(plat: str) -> bool:
+    """A pack read without a file list for plat: one built before packs
+    carried their install list records the systems of its files only."""
+    return (LOCAL.pack is not None and LOCAL.manifest is None
+            and (LOCAL.pack.install_list or {}).get("platform") != plat)
+
+
+def fetch_standalone(plat: str, manifest: dict) -> dict:
+    """What each standalone build reads, for --standalone only: the file
+    beside --manifest (standalone/<platform>.json, where the repository
+    keeps it), else downloaded as the list is. Missing, unreachable or
+    invalid, the run stops on one line, code 1."""
+    beside = (LOCAL.manifest.parent / STANDALONE_DIR / f"{plat}.json"
+              if LOCAL.manifest is not None else None)
+    url = active_remote().standalone_url.format(platform=plat)
+    where = str(beside) if beside is not None and _is_file(beside) else url
+    try:
+        if where != url:
+            data = read_local_json(Path(where), MAX_STANDALONE_BYTES)
+        else:
+            data = _fetch_json(url, MAX_STANDALONE_BYTES, "standalone layout")
+        return _check_standalone_layouts(data, manifest, plat)
+    except urllib.error.HTTPError as exc:
+        problem = f"HTTP {exc.code}"
+    except (urllib.error.URLError, OSError) as exc:
+        problem = (str(exc) if isinstance(exc, _Offline)
+                   else exc.strerror or str(exc) if where != url
+                   else network_words(exc)[1])
+    except ValueError as exc:
+        problem = f"not valid: {exc}"
+    EVENTS.emit("error", stage="manifest", reason="unavailable", platform=plat,
+                message=f"--standalone needs {where}: {problem}")
+    print(f"Error: --standalone needs {where}, which could not be read ({problem}).",
+          file=sys.stderr)
+    sys.exit(1)
+
+
+def held_targets(plat: str) -> dict | None:
+    """The cores per board this run has without the network: the list the
+    pack carries, else targets/<platform>.json beside --manifest, where the
+    repository keeps it (install/targets/). None when there is neither,
+    ListFailure, code 1, when the file beside --manifest cannot be used:
+    read as absent, the offline run asked for the file already there."""
+    if LOCAL.pack is not None and LOCAL.pack.targets is not None \
+            and plat in LOCAL.pack.platforms():
+        return LOCAL.pack.targets
+    if LOCAL.manifest is None:
+        return None
+    beside = LOCAL.manifest.parent / "targets" / f"{plat}.json"
+    if not _is_file(beside):
+        return None
+    try:
+        return _validate_targets(read_local_json(beside, MAX_TARGETS_BYTES))
+    except OSError as exc:
+        raise ListFailure(ListProblem(plat, "unreadable", str(exc.strerror or exc), source="file",
+                          where=str(beside))) from exc
+    except ValueError as exc:
+        raise ListFailure(ListProblem(plat, "invalid", str(exc), source="file", where=str(beside))) from exc
+
+
+def local_targets(plat: str) -> dict | None:
+    """held_targets, the run stopped on a file beside --manifest it cannot use."""
+    try:
+        return held_targets(plat)
+    except ListFailure as stopped:
+        _say(targets_failure_lines(stopped.problem))
+        sys.exit(stopped.problem.fatal)
+
+
+def load_targets(plat: str, attempts: int = MAX_RETRIES,
+                 timeout: float | None = None) -> dict:
+    """The target core list: the one this run has at hand, else downloaded.
+
+    Empty on 404, where the platform publishes no targets. ListFailure when
+    the list could not be read: a timeout says nothing about the platform,
+    and answering "no targets" for it sent users to the full pack. A run
+    without the network and with no list at hand fails with code 2, before
+    any file is written; a list the network did not bring lets the run go
+    on (fatal 0).
+    """
+    held = held_targets(plat)
+    if held is not None:
+        return held
+    if LOCAL.offline and plat not in TARGET_PLATFORMS:
+        return {}
+    if LOCAL.offline:
+        source = (f"{LOCAL.pack.name} carries none" if LOCAL.pack is not None
+                  else f"{offline_named()} makes no request")
+        raise ListFailure(ListProblem(plat, "offline", source, fatal=2))
+    remote = active_remote()
+    url = remote.targets_url.format(platform=plat)
+    try:
+        return _validate_targets(_fetch_json(url, MAX_TARGETS_BYTES, "target list",
+                                             attempts=attempts, timeout=timeout))
+    except urllib.error.HTTPError as exc:
+        if exc.code == 404:
+            return {}
+        raise _download_failure(plat, url, remote, exc, fatal=0) from exc
+    except (ValueError, OSError) as exc:
+        raise _download_failure(plat, url, remote, exc, fatal=0) from exc
+
+
+def targets_failure_lines(failure: ListProblem) -> list[str]:
+    """What line mode prints of a board list it could not have."""
+    plat, code, words, where = failure.plat, failure.code, failure.words, failure.where
+    if failure.source == "file":
+        state = "cannot be read" if code == "unreadable" else "is not valid"
+        return [f"  Error: the target list {where} {state}: {words}"]
+    if code == "offline":
+        return [f"Error: --target needs the {display_name(plat)} board list ({words}). Put "
+                f"install/targets/{plat}.json beside the --manifest file, or go online."]
+    if code == "invalid":
+        return [f"  Error: the target list for {plat} is not valid: {words}"]
+    return [f"  Error: failed to fetch targets for {plat}: {words}",
+            *_address_lines(where, failure.overridden), NETWORK_ADVICE]
+
+
+def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
+                  timeout: float | None = None) -> dict | None:
+    """load_targets in line mode: what went wrong said, None when the run
+    carries on without the list, the run stopped when it cannot."""
+    try:
+        return load_targets(plat, attempts, timeout)
+    except ListFailure as stopped:
+        _say(targets_failure_lines(stopped.problem))
+        if stopped.problem.fatal:
+            sys.exit(stopped.problem.fatal)
+        return None
 
 
 # --- installer/romm.py -------------------------------------------------------
@@ -25378,294 +25462,6 @@ def _action_rows(state: TuiState) -> list[TuiRow]:
 TUI_OFFLINE_TITLE = "No internet: offline mode"
 
 
-# --- installer/tui_engine.py -------------------------------------------------
-
-def _log_tail(path: Path, count: int = 12) -> list[str]:
-    """The last lines a child wrote for a person, which say why it stopped."""
-    try:
-        text = path.read_text(encoding="utf-8", errors="replace")
-    except OSError as exc:
-        return [f"The log {path} cannot be read: {exc.strerror or exc}"]
-    lines = [line.rstrip() for line in text.replace("\r", "\n").splitlines()]
-    # The banner says which installer ran, not what went wrong.
-    return [line for line in lines if line.strip() and not line.startswith("RetroBIOS ")
-            ][-count:]
-
-
-class _EngineRun:
-    """This installer run as a child with --events, read line by line."""
-
-    def __init__(
-        self, argv: list[str], log: Path, inbox: queue.Queue, run_id: int,
-        env: dict | None = None,
-    ) -> None:
-        self.log = log
-        # Its own session: a signal typed at the terminal reaches the
-        # interface alone, which forwards one Ctrl-C and waits for the summary.
-        options: dict = {} if os.name == "nt" else {"start_new_session": True}
-        if env is not None:
-            options["env"] = env
-        with open(log, "w", encoding="utf-8", errors="replace") as handle:
-            self.proc = subprocess.Popen(
-                argv, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=handle,
-                text=True, encoding="utf-8", errors="replace", **options,
-            )
-        threading.Thread(target=self._read, args=(inbox, run_id), daemon=True).start()
-
-    def _read(self, inbox: queue.Queue, run_id: int) -> None:
-        assert self.proc.stdout is not None
-        for line in self.proc.stdout:
-            line = line.strip()
-            if not line.startswith("{"):
-                continue
-            try:
-                event = json.loads(line)
-            except ValueError:
-                continue
-            if isinstance(event, dict):
-                inbox.put(("event", run_id, event))
-        code = self.proc.wait()
-        inbox.put(("ended", run_id, code, _log_tail(self.log)))
-
-    def running(self) -> bool:
-        return self.proc.poll() is None
-
-    def pause(self, stopped: bool) -> None:
-        """Stop the child where it is, or let it carry on. It runs in a
-        session of its own, which a Ctrl-Z stopping the terminal's process
-        group never reaches: an install went on writing for as long as the
-        screen was suspended."""
-        if os.name == "nt" or not self.running():
-            return
-        try:
-            os.killpg(self.proc.pid, signal.SIGSTOP if stopped
-                      else signal.SIGCONT)
-        except ProcessLookupError:
-            # It ended between the two calls: there is nothing to stop.
-            return
-
-    def interrupt(self, from_key: bool) -> None:
-        if not self.running():
-            return
-        if os.name != "nt":
-            self.proc.send_signal(signal.SIGINT)
-        elif from_key:
-            # The child shares the console: Ctrl-C read as a key reached no
-            # one, so it is sent to the console, this process ignoring it.
-            # typeshed declares CTRL_C_EVENT for win32 only.
-            ctrl_c: int = vars(signal)["CTRL_C_EVENT"]
-            os.kill(0, ctrl_c)
-
-    def stop(self, grace: float) -> None:
-        """End the child, letting it write its summary for up to grace seconds."""
-        if not self.running():
-            return
-        if grace:
-            self.interrupt(from_key=True)
-            try:
-                self.proc.wait(timeout=grace)
-                return
-            except subprocess.TimeoutExpired:
-                # It ignored Ctrl-C for that long: it is stopped outright.
-                self.proc.kill()
-        self.proc.kill()
-        self.proc.wait()
-
-
-# One try, for a screen with Try again on it: three tries of 30 s were 85 s
-# of a bare timer before the error said there was no network.
-TUI_FETCH_TIMEOUT = 15
-
-
-def _tui_put_app(card: CardApp, inbox: queue.Queue) -> None:
-    """The app put on the card in this process, what it did sent back."""
-    inbox.put(("app", put_app(card)))
-
-
-def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
-    """The file list, fetched once in this process, or what went wrong."""
-    if LOCAL.manifest is not None or LOCAL.pack is not None:
-        mark = len(log.getvalue())
-        try:
-            inbox.put(("manifest", plat, fetch_manifest(plat)))
-        except SystemExit as exc:
-            inbox.put(("manifest_failed", plat, "", log.getvalue()[mark:].splitlines(),
-                       _event_exit_code(exc.code)))
-        return
-    remote = active_remote()
-    url = remote.manifest_url.format(platform=plat)
-    try:
-        data = _fetch_json(url, MAX_MANIFEST_BYTES, "file list", attempts=1,
-                           timeout=TUI_FETCH_TIMEOUT)
-        inbox.put(("manifest", plat, _validate_manifest(data, plat)))
-        return
-    except ValueError as exc:
-        title, lines = "The file list is not valid", [f"What arrived is not a file list: {exc}."]
-        if isinstance(exc.__cause__, (json.JSONDecodeError, UnicodeDecodeError)):
-            # The parser's "Expecting value: line 2 column 1" told no one anything.
-            lines = ["What arrived is not a file list: a Wi-Fi sign-in page or a cut "
-                     "download looks like this.", "Check the connection, then choose Try again."]
-    except urllib.error.HTTPError as exc:
-        title = "No file list"
-        lines = [f"There is no file list for {display_name(plat)} at this address."
-                 if exc.code == 404 else f"The server answered HTTP {exc.code}."]
-        if exc.code == 404 and not remote.overridden:
-            # Line mode named RETROBIOS_REF as the cause, the screen nothing.
-            lines.append(missing_list_advice(plat, "choose Try again"))
-    except (urllib.error.URLError, OSError) as exc:
-        code, words = network_words(exc)
-        if code == "offline":
-            # Asked for, not a failure: no Try again, and the two ways a
-            # run without the network gets its list.
-            inbox.put(("manifest_failed", plat, TUI_OFFLINE_TITLE, [
-                f"This run makes no network request ({offline_named()}), and the list "
-                "of BIOS files comes from the network.",
-                "Run the installer again with the list saved as a file "
-                f"(--manifest FILE, a copy of install/{plat}.json) or with a pack "
-                f"(--from-pack PACK), or {offline_undo()}."], 1))
-            return
-        title = {"clock": "The clock is wrong",
-                 "no_ca": "No trusted certificates",
-                 "no_ssl": "This Python cannot use HTTPS"}.get(code, "No connection")
-        # The screen's first row is Try again: "then run again" was a second way.
-        lines = [words[0].upper() + words[1:].replace(", then run again",
-                                                      ", then choose Try again") + "."]
-        if code == "network":
-            lines = [f"The list of BIOS files could not be downloaded: {words}.",
-                     "Check the Wi-Fi or the cable, then choose Try again.",
-                     # A handheld with no Wi-Fi has the pack as its way.
-                     "Or copy a pack to the card and run the installer with --from-pack "
-                     "PACK: no network is needed then."]
-            proxy = next((name for name in ("HTTPS_PROXY", "https_proxy", "ALL_PROXY",
-                                            "all_proxy") if os.environ.get(name)), "")
-            if proxy:
-                # Named, never shown: the value can hold a password.
-                lines.append(f"{proxy} is set, so the connection goes through a proxy: "
-                             "check that it answers.")
-    if remote.overridden:
-        lines.append(f"RETROBIOS_BASE_URL chose the address: {url}")
-    inbox.put(("manifest_failed", plat, title, lines, 1))
-
-
-def _tui_fetch_targets(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
-    """The platform's board list for Device, fetched in this process as a
-    --target run reads it: the pack's or the list's beside --manifest, else
-    the network's. None and why when it cannot be read."""
-    mark = len(log.getvalue())
-    try:
-        # One attempt and the list's own timeout, as the file list is
-        # fetched here: Device says Reading while it waits.
-        targets = fetch_targets(plat, attempts=1, timeout=TUI_FETCH_TIMEOUT)
-    except SystemExit:
-        targets = None
-    said = [line.strip() for line in log.getvalue()[mark:].splitlines() if line.strip()]
-    problem = "" if targets is not None else (
-        f"The board list could not be read{': ' + said[0] if said else '.'}")
-    inbox.put(("targets", plat, targets, problem))
-
-
-def _tui_fetch_games(plat: str, inbox: queue.Queue, log: io.StringIO, dest: Path | None,
-                     look: bool) -> None:
-    """The file list, then, once it came, a look at the card for games
-    (look), said before the list so that the check reads them."""
-    held: queue.Queue = queue.Queue()
-    _tui_fetch(plat, held, log)
-    message = held.get()
-    if look and message[0] == "manifest" and dest is not None:
-        # One attempt, as the list's own: a retry says so on stderr, under
-        # the screen.
-        count = games_probe(plat, dest, attempts=1)
-        inbox.put(("games_here", plat, dest, count))
-    inbox.put(message)
-
-
-TUI_WORK_PREFIX = "retrobios-tui-"
-# The interface's process id, in its work folder: a folder whose process is
-# gone was left by a kill no handler sees (SIGKILL, a power cut).
-TUI_OWNER = "owner"
-# Written when a failed run's log is kept: it stays a week, then goes.
-TUI_KEPT = "kept"
-TUI_KEEP_SECONDS = 7 * 24 * 3600
-
-
-def _owner_alive(folder: Path) -> bool | None:
-    """Whether the run that made folder is still running, None when unknown."""
-    try:
-        pid = int((folder / TUI_OWNER).read_text(encoding="utf-8").strip())
-    except (OSError, ValueError):
-        return None
-    if os.name == "nt" or pid <= 0:
-        # os.kill(pid, 0) ends a process on Windows instead of asking, and
-        # 0 or a negative number names a process group, not the run.
-        return None
-    try:
-        os.kill(pid, 0)
-    except ProcessLookupError:
-        return False
-    except PermissionError:
-        return True
-    except (OSError, OverflowError):
-        # A number past what a pid holds is no process this run can ask.
-        return None
-    return True
-
-
-def _mark_kept(work: Path) -> None:
-    try:
-        (work / TUI_KEPT).write_text("", encoding="utf-8")
-    except OSError as exc:
-        # The log is still there, only its week is not counted.
-        print(f"The log folder {work} could not be marked: {exc}", file=sys.stderr)
-
-
-def _prune_work_folders(root: Path, now: float) -> list[Path]:
-    """Remove what earlier runs of the interface left in root: the folder of
-    a run killed outright, and a failed run's log after a week. A folder
-    whose run is still going, or unknown and recent, stays."""
-    removed: list[Path] = []
-    try:
-        folders = [path for path in root.glob(TUI_WORK_PREFIX + "*") if path.is_dir()]
-    except OSError:
-        return removed
-    for folder in folders:
-        try:
-            age = now - folder.stat().st_mtime
-            kept = (folder / TUI_KEPT).exists()
-        except OSError:
-            continue
-        alive = _owner_alive(folder)
-        if alive or ((alive is None or kept) and age < TUI_KEEP_SECONDS):
-            continue
-        shutil.rmtree(folder, ignore_errors=True)
-        removed.append(folder)
-    return removed
-
-
-def _tui_work_folder(handlers: dict[int, object]) -> Path | None:
-    """The run's own work folder, marked as this process's, or None (said)."""
-    try:
-        work = Path(tempfile.mkdtemp(prefix=TUI_WORK_PREFIX))
-    except OSError as exc:
-        _restore_handlers(handlers)
-        print(f"Error: no work folder could be made in {tempfile.gettempdir()}: {exc}. "
-              "Free some space there, or point TMPDIR (TEMP on Windows) at another "
-              "folder.", file=sys.stderr)
-        return None
-    try:
-        (work / TUI_OWNER).write_text(str(os.getpid()), encoding="utf-8")
-    except OSError as exc:
-        # A full temp disk: the folder has no owner, and a later run leaves
-        # it a week like any unknown one. The logs fail as they come.
-        print(f"The work folder {work} could not be marked as this run's: {exc}",
-              file=sys.stderr)
-    return work
-
-
-def _restore_handlers(handlers: dict) -> None:
-    for number, previous in handlers.items():
-        signal.signal(number, previous)
-
-
 # --- installer/tui_frame.py --------------------------------------------------
 
 def _bar_commits(state: TuiState, key: TuiKey) -> bool:
@@ -26233,6 +26029,315 @@ def _bar_click(state: TuiState, name: str) -> TuiKey | None:
     if route is not None and name not in _BAR_CLICKS:
         name = next((key for key, mine in route.bar.items() if mine == name), name)
     return _BAR_CLICKS.get(name)
+
+
+# --- installer/tui_list_words.py ---------------------------------------------
+
+_NETWORK_TITLES = {"clock": "The clock is wrong", "no_ca": "No trusted certificates",
+                   "no_ssl": "This Python cannot use HTTPS"}
+
+
+def _download_lines(failure: ListProblem) -> tuple[str, list[str]]:
+    """The title and lines of a file list the network did not bring."""
+    plat, code, words = failure.plat, failure.code, failure.words
+    if code == "invalid":
+        if failure.garbled:
+            # The parser's "Expecting value: line 2 column 1" told no one anything.
+            return "The file list is not valid", [
+                "What arrived is not a file list: a Wi-Fi sign-in page or a cut "
+                "download looks like this.", "Check the connection, then choose Try again."]
+        return "The file list is not valid", [f"What arrived is not a file list: {words}."]
+    if code == "http":
+        lines = [f"There is no file list for {display_name(plat)} at this address."
+                 if failure.status == 404 else f"The server answered HTTP {failure.status}."]
+        if failure.status == 404 and not failure.overridden:
+            lines.append(missing_list_advice(plat, "choose Try again", failure.ref))
+        return "No file list", lines
+    if code != "network":
+        # The screen's first row is Try again: "then run again" was a second way.
+        return _NETWORK_TITLES.get(code, "No connection"), [
+            words[0].upper() + words[1:].replace(", then run again",
+                                                  ", then choose Try again") + "."]
+    lines = [f"The list of BIOS files could not be downloaded: {words}.",
+             "Check the Wi-Fi or the cable, then choose Try again.",
+             # A handheld with no Wi-Fi has the pack as its way.
+             "Or copy a pack to the card and run the installer with --from-pack "
+             "PACK: no network is needed then."]
+    proxy = next((name for name in ("HTTPS_PROXY", "https_proxy", "ALL_PROXY",
+                                    "all_proxy") if os.environ.get(name)), "")
+    if proxy:
+        # Named, never shown: the value can hold a password.
+        lines.append(f"{proxy} is set, so the connection goes through a proxy: "
+                     "check that it answers.")
+    return "No connection", lines
+
+
+def manifest_failure_screen(failure: ListProblem) -> tuple[str, list[str], int]:
+    """The title, lines and exit code the screen shows for a file list it
+    could not have, from the failure line mode prints."""
+    plat = failure.plat
+    if failure.source != "network":
+        # A list given on disk or in a pack: line mode's words, as they are.
+        return "", manifest_failure_lines(failure), failure.fatal
+    if failure.code == "offline":
+        # Asked for, not a failure: no Try again, and the two ways a run
+        # without the network gets its list.
+        return TUI_OFFLINE_TITLE, [
+            f"This run makes no network request ({offline_named()}), and the list "
+            "of BIOS files comes from the network.",
+            "Run the installer again with the list saved as a file "
+            f"(--manifest FILE, a copy of install/{plat}.json) or with a pack "
+            f"(--from-pack PACK), or {offline_undo()}."], failure.fatal
+    title, lines = _download_lines(failure)
+    if failure.overridden:
+        lines.append(f"RETROBIOS_BASE_URL chose the address: {failure.where}")
+    return title, lines, failure.fatal
+
+
+def targets_failure_words(failure: ListProblem) -> str:
+    """The line Device shows for a board list it could not have."""
+    code, words, where = failure.code, failure.words, failure.where
+    if failure.source == "file":
+        state = "cannot be read" if code == "unreadable" else "is not valid"
+        cause = f"the list {where} {state}: {words}"
+    elif code == "offline":
+        cause = words
+    elif code == "invalid":
+        cause = f"it is not valid: {words}"
+    elif code == "http":
+        cause = f"the server answered HTTP {failure.status}"
+    else:
+        cause = words
+    return f"The board list could not be read: {cause}."
+
+
+# --- installer/tui_engine.py -------------------------------------------------
+
+def _log_tail(path: Path, count: int = 12) -> list[str]:
+    """The last lines a child wrote for a person, which say why it stopped."""
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError as exc:
+        return [f"The log {path} cannot be read: {exc.strerror or exc}"]
+    lines = [line.rstrip() for line in text.replace("\r", "\n").splitlines()]
+    # The banner says which installer ran, not what went wrong.
+    return [line for line in lines if line.strip() and not line.startswith("RetroBIOS ")
+            ][-count:]
+
+
+class _EngineRun:
+    """This installer run as a child with --events, read line by line."""
+
+    def __init__(
+        self, argv: list[str], log: Path, inbox: queue.Queue, run_id: int,
+        env: dict | None = None,
+    ) -> None:
+        self.log = log
+        # Its own session: a signal typed at the terminal reaches the
+        # interface alone, which forwards one Ctrl-C and waits for the summary.
+        options: dict = {} if os.name == "nt" else {"start_new_session": True}
+        if env is not None:
+            options["env"] = env
+        with open(log, "w", encoding="utf-8", errors="replace") as handle:
+            self.proc = subprocess.Popen(
+                argv, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=handle,
+                text=True, encoding="utf-8", errors="replace", **options,
+            )
+        threading.Thread(target=self._read, args=(inbox, run_id), daemon=True).start()
+
+    def _read(self, inbox: queue.Queue, run_id: int) -> None:
+        assert self.proc.stdout is not None
+        for line in self.proc.stdout:
+            line = line.strip()
+            if not line.startswith("{"):
+                continue
+            try:
+                event = json.loads(line)
+            except ValueError:
+                continue
+            if isinstance(event, dict):
+                inbox.put(("event", run_id, event))
+        code = self.proc.wait()
+        inbox.put(("ended", run_id, code, _log_tail(self.log)))
+
+    def running(self) -> bool:
+        return self.proc.poll() is None
+
+    def pause(self, stopped: bool) -> None:
+        """Stop the child where it is, or let it carry on. It runs in a
+        session of its own, which a Ctrl-Z stopping the terminal's process
+        group never reaches: an install went on writing for as long as the
+        screen was suspended."""
+        if os.name == "nt" or not self.running():
+            return
+        try:
+            os.killpg(self.proc.pid, signal.SIGSTOP if stopped
+                      else signal.SIGCONT)
+        except ProcessLookupError:
+            # It ended between the two calls: there is nothing to stop.
+            return
+
+    def interrupt(self, from_key: bool) -> None:
+        if not self.running():
+            return
+        if os.name != "nt":
+            self.proc.send_signal(signal.SIGINT)
+        elif from_key:
+            # The child shares the console: Ctrl-C read as a key reached no
+            # one, so it is sent to the console, this process ignoring it.
+            # typeshed declares CTRL_C_EVENT for win32 only.
+            ctrl_c: int = vars(signal)["CTRL_C_EVENT"]
+            os.kill(0, ctrl_c)
+
+    def stop(self, grace: float) -> None:
+        """End the child, letting it write its summary for up to grace seconds."""
+        if not self.running():
+            return
+        if grace:
+            self.interrupt(from_key=True)
+            try:
+                self.proc.wait(timeout=grace)
+                return
+            except subprocess.TimeoutExpired:
+                # It ignored Ctrl-C for that long: it is stopped outright.
+                self.proc.kill()
+        self.proc.kill()
+        self.proc.wait()
+
+
+# One try, for a screen with Try again on it: three tries of 30 s were 85 s
+# of a bare timer before the error said there was no network.
+TUI_FETCH_TIMEOUT = 15
+
+
+def _tui_put_app(card: CardApp, inbox: queue.Queue) -> None:
+    """The app put on the card in this process, what it did sent back."""
+    inbox.put(("app", put_app(card)))
+
+
+def _tui_fetch(plat: str, inbox: queue.Queue) -> None:
+    """The file list, fetched once in this process, or what went wrong."""
+    try:
+        manifest = load_manifest(plat, attempts=1, timeout=TUI_FETCH_TIMEOUT)
+    except ListFailure as failure:
+        inbox.put(("manifest_failed", plat, *manifest_failure_screen(failure.problem)))
+        return
+    inbox.put(("manifest", plat, manifest))
+
+
+def _tui_fetch_targets(plat: str, inbox: queue.Queue) -> None:
+    """The platform's board list for Device, fetched in this process as a
+    --target run reads it: the pack's or the list's beside --manifest, else
+    the network's. None and why when it cannot be read."""
+    try:
+        # One attempt and the list's own timeout, as the file list is
+        # fetched here: Device says Reading while it waits.
+        targets = load_targets(plat, attempts=1, timeout=TUI_FETCH_TIMEOUT)
+    except ListFailure as failure:
+        inbox.put(("targets", plat, None, targets_failure_words(failure.problem)))
+        return
+    inbox.put(("targets", plat, targets, ""))
+
+
+def _tui_fetch_games(plat: str, inbox: queue.Queue, dest: Path | None, look: bool) -> None:
+    """The file list, then, once it came, a look at the card for games
+    (look), said before the list so that the check reads them."""
+    held: queue.Queue = queue.Queue()
+    _tui_fetch(plat, held)
+    message = held.get()
+    if look and message[0] == "manifest" and dest is not None:
+        # One attempt, as the list's own: a retry says so on stderr, under
+        # the screen.
+        count = games_probe(plat, dest, attempts=1)
+        inbox.put(("games_here", plat, dest, count))
+    inbox.put(message)
+
+
+TUI_WORK_PREFIX = "retrobios-tui-"
+# The interface's process id, in its work folder: a folder whose process is
+# gone was left by a kill no handler sees (SIGKILL, a power cut).
+TUI_OWNER = "owner"
+# Written when a failed run's log is kept: it stays a week, then goes.
+TUI_KEPT = "kept"
+TUI_KEEP_SECONDS = 7 * 24 * 3600
+
+
+def _owner_alive(folder: Path) -> bool | None:
+    """Whether the run that made folder is still running, None when unknown."""
+    try:
+        pid = int((folder / TUI_OWNER).read_text(encoding="utf-8").strip())
+    except (OSError, ValueError):
+        return None
+    if os.name == "nt" or pid <= 0:
+        # os.kill(pid, 0) ends a process on Windows instead of asking, and
+        # 0 or a negative number names a process group, not the run.
+        return None
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    except (OSError, OverflowError):
+        # A number past what a pid holds is no process this run can ask.
+        return None
+    return True
+
+
+def _mark_kept(work: Path) -> None:
+    try:
+        (work / TUI_KEPT).write_text("", encoding="utf-8")
+    except OSError as exc:
+        # The log is still there, only its week is not counted.
+        print(f"The log folder {work} could not be marked: {exc}", file=sys.stderr)
+
+
+def _prune_work_folders(root: Path, now: float) -> list[Path]:
+    """Remove what earlier runs of the interface left in root: the folder of
+    a run killed outright, and a failed run's log after a week. A folder
+    whose run is still going, or unknown and recent, stays."""
+    removed: list[Path] = []
+    try:
+        folders = [path for path in root.glob(TUI_WORK_PREFIX + "*") if path.is_dir()]
+    except OSError:
+        return removed
+    for folder in folders:
+        try:
+            age = now - folder.stat().st_mtime
+            kept = (folder / TUI_KEPT).exists()
+        except OSError:
+            continue
+        alive = _owner_alive(folder)
+        if alive or ((alive is None or kept) and age < TUI_KEEP_SECONDS):
+            continue
+        shutil.rmtree(folder, ignore_errors=True)
+        removed.append(folder)
+    return removed
+
+
+def _tui_work_folder(handlers: dict[int, object]) -> Path | None:
+    """The run's own work folder, marked as this process's, or None (said)."""
+    try:
+        work = Path(tempfile.mkdtemp(prefix=TUI_WORK_PREFIX))
+    except OSError as exc:
+        _restore_handlers(handlers)
+        print(f"Error: no work folder could be made in {tempfile.gettempdir()}: {exc}. "
+              "Free some space there, or point TMPDIR (TEMP on Windows) at another "
+              "folder.", file=sys.stderr)
+        return None
+    try:
+        (work / TUI_OWNER).write_text(str(os.getpid()), encoding="utf-8")
+    except OSError as exc:
+        # A full temp disk: the folder has no owner, and a later run leaves
+        # it a week like any unknown one. The logs fail as they come.
+        print(f"The work folder {work} could not be marked as this run's: {exc}",
+              file=sys.stderr)
+    return work
+
+
+def _restore_handlers(handlers: dict) -> None:
+    for number, previous in handlers.items():
+        signal.signal(number, previous)
 
 
 # --- installer/tui_plan_view.py ----------------------------------------------
@@ -31205,14 +31310,14 @@ class _TuiSession:
         kind, state, inbox = effect[0], self.state, self.inbox
         if kind == "fetch":
             threading.Thread(target=_tui_fetch_games,
-                             args=(effect[1], inbox, self.buffer, state.dest,
+                             args=(effect[1], inbox, state.dest,
                                    state.games_choice not in ("user", "cli", "record")),
                              daemon=True).start()
         elif kind == "app":
             threading.Thread(target=_tui_put_app, args=(effect[1], inbox),
                              daemon=True).start()
         elif kind == "targets":
-            threading.Thread(target=_tui_fetch_targets, args=(effect[1], inbox, self.buffer),
+            threading.Thread(target=_tui_fetch_targets, args=(effect[1], inbox),
                              daemon=True).start()
         elif kind == "pack":
             inbox.put(("pack_opened", effect[1],

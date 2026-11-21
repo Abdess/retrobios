@@ -36,7 +36,7 @@ from installer.games import games_probe
 from installer.host_fs import _exists, _folder_writable, _is_dir, _nearest_folder, closed_folder
 from installer.install_record import RECORD_NARROWING, _RECORD_SAID, record_options, setup_record
 from installer.invocation import OFFLINE_VARIABLE, offline_requested
-from installer.network import local_targets
+from installer.lists import local_targets
 from installer.offline import LOCAL, OFFLINE_FLAG_VALUE
 from installer.pack import _listed
 from installer.pack_source import PackSource

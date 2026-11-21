@@ -8,9 +8,9 @@ from typing import TYPE_CHECKING
 
 from installer.console import detail
 from installer.install_record import drop_recorded
+from installer.lists import _pack_alone, fetch_standalone
 from installer.manifest import OTHER_SYSTEMS, entry_copies
 from installer.narrowing import _filter_by_target, designated_cores, narrow, narrow_to_cores, standalone_layout
-from installer.network import _pack_alone, fetch_standalone
 from installer.offline import LOCAL
 from installer.platforms import (
     SYSTEM_KEY_FILES,

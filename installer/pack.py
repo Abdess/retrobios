@@ -26,7 +26,7 @@ from installer.events import EVENTS
 from installer.filesystems import fat32_drive
 from installer.from_folders import plan_local_copies
 from installer.host_fs import DRIVE_FULL, _drive_full, _is_dir, _stop
-from installer.network import fetch_targets, local_targets
+from installer.lists import fetch_targets, local_targets
 from installer.offline import LOCAL
 from installer.pack_source import (
     _PART_FILE,

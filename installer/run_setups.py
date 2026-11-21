@@ -28,7 +28,7 @@ from installer.line_folder import (
     ask_platform_folder,
     share_words,
 )
-from installer.network import fetch_targets, local_targets
+from installer.lists import fetch_targets, local_targets
 from installer.offline import LOCAL
 from installer.pack import pack_path
 from installer.pack_source import pack_name_platforms
