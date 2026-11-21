@@ -9,12 +9,11 @@ index, published by scripts/generate_games_index.py.
 from __future__ import annotations
 
 import tests
+from tests import loopback
 
 import contextlib
-import functools
 import gzip
 import hashlib
-import http.server
 import io
 import json
 import os
@@ -22,11 +21,9 @@ import shutil
 import subprocess
 import sys
 import tempfile
-import threading
 import unittest
 import urllib.error
 import zipfile
-import zlib
 from pathlib import Path
 from unittest import mock
 
@@ -34,11 +31,6 @@ import install
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-
-
-
-def _crc(data: bytes) -> str:
-    return f"{zlib.crc32(data) & 0xFFFFFFFF:08x}"
 
 
 MD_EU = b"md europe game " * 64
@@ -120,9 +112,9 @@ SYSTEMS = {
     "sega-megadrive": {
         "identify": {"sources": [{"source": "no-intro", "dat": "MD"}],
                      "regions": [["europe"], ["japan"], ["north-america"]],
-                     "games": sorted([[_crc(MD_EU), len(MD_EU), 0, "Game (Europe)"],
-                                      [_crc(MD_JP), len(MD_JP), 1, "Game (Japan)"],
-                                      [_crc(MD_ZIPPED), len(MD_ZIPPED), 2, "Zipped (USA)"]]),
+                     "games": sorted([[loopback.crc(MD_EU), len(MD_EU), 0, "Game (Europe)"],
+                                      [loopback.crc(MD_JP), len(MD_JP), 1, "Game (Japan)"],
+                                      [loopback.crc(MD_ZIPPED), len(MD_ZIPPED), 2, "Zipped (USA)"]]),
                      "serials": {}},
         "headers": {"readers": {"md-country": {
             "location": {"offset": 0x1F0, "length": 3, "encoding": "ascii"},
@@ -478,7 +470,7 @@ class RegionMatrix(GamesTestCase):
         # The catalog matches the whole file: write the header into it first.
         path = self.card.roms / "MD" / "jp.md"
         data = path.read_bytes()
-        rows = [[_crc(data), len(data), 1, "Game (Japan)"]]
+        rows = [[loopback.crc(data), len(data), 1, "Game (Japan)"]]
         systems = json.loads(json.dumps(SYSTEMS))
         systems["sega-megadrive"]["identify"]["games"] = rows
         write_index(self.card.lists / "games", systems=systems)
@@ -898,12 +890,7 @@ class CommandLine(unittest.TestCase):
             payload = entry["dest"].encode().ljust(entry["size"], b".")[:entry["size"]]
             (root / entry["repo_path"]).write_bytes(payload)
         (root / "install" / "retroarch.json").write_text(json.dumps(listed))
-        handler = functools.partial(_Quiet, directory=str(root))
-        server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-        threading.Thread(target=server.serve_forever, daemon=True).start()
-        self.addCleanup(server.server_close)
-        self.addCleanup(server.shutdown)
-        base = f"http://127.0.0.1:{server.server_address[1]}"
+        base = loopback.serve(self, root)
         proc = run_cli(self.card, "--for-games", "--required-only", "--yes", offline=False,
                        base=base)
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
@@ -963,13 +950,7 @@ class ARunThatAsksNothing(unittest.TestCase):
             payload = entry["dest"].encode().ljust(entry["size"], b".")[:entry["size"]]
             (root / entry["repo_path"]).write_bytes(payload)
         (root / "install" / "retroarch.json").write_text(json.dumps(listed))
-        handler = functools.partial(_Quiet, directory=str(root))
-        server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-        threading.Thread(target=server.serve_forever, daemon=True).start()
-        self.addCleanup(server.server_close)
-        self.addCleanup(server.shutdown)
-        proc = run_cli(card, *options, offline=False,
-                       base=f"http://127.0.0.1:{server.server_address[1]}")
+        proc = run_cli(card, *options, offline=False, base=loopback.serve(self, root))
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         return sorted(p.relative_to(card.bios).as_posix()
                       for p in card.bios.rglob("*") if p.is_file()), proc.stdout
@@ -1016,11 +997,6 @@ class DataTreesFollowTheGamesCores(unittest.TestCase):
         self.assertEqual(install.select_data_directories(
             {"data_directories": [fbneo]}, [{"systems": ["nintendo-gba"]}], True, games=plan),
             [fbneo])
-
-
-class _Quiet(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, format, *args):
-        return
 
 
 class LineMenu(GamesTestCase):

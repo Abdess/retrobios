@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import tests
+from tests import loopback
 
 import contextlib
 import hashlib
@@ -40,12 +41,6 @@ TMP_ROOT = Path(tempfile.gettempdir())
 
 ROM_A = b"first rom payload"
 ROM_B = b"second rom payload"
-
-
-def _crc(data: bytes) -> str:
-    import zlib
-
-    return f"{zlib.crc32(data) & 0xFFFFFFFF:08x}"
 
 
 class RecipeCollection(unittest.TestCase):
@@ -95,14 +90,14 @@ class PoolAndBuild(unittest.TestCase):
         self.temp.cleanup()
 
     def test_atoms_are_addressed_by_crc32(self):
-        self.assertIn(_crc(ROM_A), self.pool)
-        self.assertEqual(self.pool.read(_crc(ROM_A)), ROM_A)
+        self.assertIn(loopback.crc(ROM_A), self.pool)
+        self.assertEqual(self.pool.read(loopback.crc(ROM_A)), ROM_A)
 
     def test_a_recipe_missing_an_atom_builds_nothing(self):
         self.assertIsNone(self.pool.build([("x.rom", "deadbeef")]))
 
     def test_build_is_torrentzip_and_reproducible(self):
-        recipe = [("a.rom", _crc(ROM_A)), ("b.rom", _crc(ROM_B))]
+        recipe = [("a.rom", loopback.crc(ROM_A)), ("b.rom", loopback.crc(ROM_B))]
         first = self.pool.build(recipe)
         self.assertEqual(first, build_torrentzip([("a.rom", ROM_A), ("b.rom", ROM_B)]))
         target = self.bios / "built.zip"
@@ -110,12 +105,12 @@ class PoolAndBuild(unittest.TestCase):
         self.assertTrue(is_torrentzip(target))
 
     def test_identify_names_the_recipe_that_rebuilds_the_archive(self):
-        recipe = [("a.rom", _crc(ROM_A)), ("b.rom", _crc(ROM_B))]
+        recipe = [("a.rom", loopback.crc(ROM_A)), ("b.rom", loopback.crc(ROM_B))]
         built = self.bios / "built.zip"
         built.write_bytes(self.pool.build(recipe))
         label = identify_archive(
             built,
-            {"v2": recipe, "v1": [("a.rom", _crc(ROM_A))]},
+            {"v2": recipe, "v1": [("a.rom", loopback.crc(ROM_A))]},
             self.pool,
         )
         self.assertEqual(label, "v2")
@@ -124,11 +119,11 @@ class PoolAndBuild(unittest.TestCase):
         other = self.bios / "other.zip"
         other.write_bytes(build_torrentzip([("z.rom", b"unrelated")]))
         self.assertIsNone(
-            identify_archive(other, {"v1": [("a.rom", _crc(ROM_A))]}, self.pool)
+            identify_archive(other, {"v1": [("a.rom", loopback.crc(ROM_A))]}, self.pool)
         )
 
     def test_reconstruct_finds_the_recipe_behind_a_pinned_md5(self):
-        recipe = [("a.rom", _crc(ROM_A))]
+        recipe = [("a.rom", loopback.crc(ROM_A))]
         target = hashlib.md5(self.pool.build(recipe)).hexdigest()
         found = reconstruct(target, {"v1": recipe}, self.pool)
         self.assertIsNotNone(found)
@@ -136,7 +131,7 @@ class PoolAndBuild(unittest.TestCase):
         self.assertEqual(hashlib.md5(found[1]).hexdigest(), target)
 
     def test_reconstruct_selects_the_recipe_with_every_member(self):
-        crc_a, crc_b = _crc(ROM_A), _crc(ROM_B)
+        crc_a, crc_b = loopback.crc(ROM_A), loopback.crc(ROM_B)
         wanted = hashlib.md5(
             build_torrentzip([("a.rom", ROM_A), ("b.rom", ROM_B)])
         ).hexdigest()
@@ -180,7 +175,7 @@ class ReportsOverAFixture(unittest.TestCase):
             archive.writestr("a.rom", ROM_A)
             archive.writestr("b.rom", ROM_B)
         self.pool = AtomPool(self.bios)
-        self.recipe = [("a.rom", _crc(ROM_A)), ("b.rom", _crc(ROM_B))]
+        self.recipe = [("a.rom", loopback.crc(ROM_A)), ("b.rom", loopback.crc(ROM_B))]
         self.set_path = self.bios / "set.zip"
         self.set_path.write_bytes(self.pool.build(self.recipe))
         # The pool must see the archive it will be asked to identify.
@@ -314,7 +309,7 @@ class DatRecipes(unittest.TestCase):
     """A DAT states, per set, the members one emulator version expects."""
 
     def _dat(self) -> str:
-        return DAT.format(crc_a=_crc(ROM_A), crc_b=_crc(ROM_B))
+        return DAT.format(crc_a=loopback.crc(ROM_A), crc_b=loopback.crc(ROM_B))
 
     def test_a_set_becomes_one_recipe_named_after_its_archive(self):
         entries = recipe_entries(parse_logiqx(self._dat()))
@@ -405,7 +400,7 @@ class ListXmlRecipes(unittest.TestCase):
         return lambda: io.BytesIO(text.encode("utf-8"))
 
     def _document(self) -> str:
-        return LISTXML.format(crc_a=_crc(ROM_A), crc_b=_crc(ROM_B))
+        return LISTXML.format(crc_a=loopback.crc(ROM_A), crc_b=loopback.crc(ROM_B))
 
     def test_a_child_inherits_its_parent_members(self):
         """A non-merged archive carries the parent set's ROMs as well."""
@@ -463,8 +458,8 @@ class ListXmlRecipes(unittest.TestCase):
         from scripts.scraper.romset_dat_importer import member_list
 
         child = [
-            {"name": "own.rom", "crc32": _crc(ROM_B)},
-            {"name": "shared.rom", "crc32": _crc(ROM_A)},
+            {"name": "own.rom", "crc32": loopback.crc(ROM_B)},
+            {"name": "shared.rom", "crc32": loopback.crc(ROM_A)},
         ]
         entries = listxml_entries(
             self._opener(self._document()), "MAME 0.289", {"other.zip"},
@@ -503,11 +498,11 @@ class ListXmlRecipes(unittest.TestCase):
         from scripts.scraper.romset_dat_importer import member_list
 
         members = [
-            {"name": "01", "crc32": _crc(ROM_A)},
-            {"name": "23", "crc32": _crc(ROM_B)},
+            {"name": "01", "crc32": loopback.crc(ROM_A)},
+            {"name": "23", "crc32": loopback.crc(ROM_B)},
         ]
         entries = recipe_entries(
-            parse_logiqx(DAT.format(crc_a=_crc(ROM_A), crc_b=_crc(ROM_B))),
+            parse_logiqx(DAT.format(crc_a=loopback.crc(ROM_A), crc_b=loopback.crc(ROM_B))),
             keep=set(), by_members={member_list(members): {"salora.zip"}},
         )
         self.assertEqual(
@@ -535,7 +530,7 @@ class ListXmlRecipes(unittest.TestCase):
         self.assertEqual(names, {"set.zip", "other.zip"})
         self.assertEqual(
             by_members,
-            {member_list([{"name": "a.rom", "crc32": _crc(ROM_A)}]): {"set.zip", "other.zip"}},
+            {member_list([{"name": "a.rom", "crc32": loopback.crc(ROM_A)}]): {"set.zip", "other.zip"}},
         )
 
     def test_a_missing_database_stops_both_importers(self):
@@ -555,16 +550,16 @@ class ListXmlRecipes(unittest.TestCase):
     def test_a_set_holding_a_missing_catalog_dump_is_kept(self):
         """fm7740sx carries three No-Intro dumps the collection lacks. No
         profile names it, so the missing report named no place to find them."""
-        targets = {(_crc(ROM_B), len(ROM_B)): {""}}
+        targets = {(loopback.crc(ROM_B), len(ROM_B)): {""}}
         entries = listxml_entries(
             self._opener(self._document()), "MAME 0.289", {"other.zip"}, targets
         )
         self.assertEqual([entry["name"] for entry in entries], ["childset.zip"])
 
     def test_a_catalog_sha1_must_agree(self):
-        member = {"crc32": _crc(ROM_B), "size": len(ROM_B), "sha1": "a" * 40}
-        self.assertFalse(holds_target([member], {(_crc(ROM_B), len(ROM_B)): {"b" * 40}}))
-        self.assertTrue(holds_target([member], {(_crc(ROM_B), len(ROM_B)): {"a" * 40}}))
+        member = {"crc32": loopback.crc(ROM_B), "size": len(ROM_B), "sha1": "a" * 40}
+        self.assertFalse(holds_target([member], {(loopback.crc(ROM_B), len(ROM_B)): {"b" * 40}}))
+        self.assertTrue(holds_target([member], {(loopback.crc(ROM_B), len(ROM_B)): {"a" * 40}}))
 
     def test_catalog_targets_leave_out_what_the_collection_holds(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -811,7 +806,7 @@ class BuildDigestsOutliveTheRun(unittest.TestCase):
             with zipfile.ZipFile(bios / "source.zip", "w") as archive:
                 archive.writestr("a.rom", ROM_A)
             cache = Path(tmp) / "digests.json"
-            recipe = [("a.rom", _crc(ROM_A))]
+            recipe = [("a.rom", loopback.crc(ROM_A))]
             first = AtomPool(bios, cache)
             digest = first.digest(recipe)
             blob = first.build(recipe)
@@ -890,7 +885,7 @@ FBNEO_DAT = (
     b'<?xml version="1.0"?>\n<datafile><header><name>FinalBurn Neo - Demo</name>'
     b"<version>1.0.0.03</version></header>"
     b'<game name="demobios"><description>Demo BIOS</description>'
-    b'<rom name="a.bin" size="17" crc="' + _crc(ROM_A).encode() + b'"/></game>'
+    b'<rom name="a.bin" size="17" crc="' + loopback.crc(ROM_A).encode() + b'"/></game>'
     b"</datafile>\n"
 )
 
@@ -981,12 +976,12 @@ class LooseRomsAreAtoms(unittest.TestCase):
             bios.mkdir()
             loose = bios / "nmk004.bin"
             loose.write_bytes(ROM_A)
-            db = {"files": {"x": {"path": str(loose), "crc32": _crc(ROM_A)}}}
-            self.assertNotIn(_crc(ROM_A), AtomPool(bios))
+            db = {"files": {"x": {"path": str(loose), "crc32": loopback.crc(ROM_A)}}}
+            self.assertNotIn(loopback.crc(ROM_A), AtomPool(bios))
             pool = AtomPool(bios, None, db)
-            self.assertIn(_crc(ROM_A), pool)
-            self.assertEqual(pool.read(_crc(ROM_A)), ROM_A)
-            self.assertIsNotNone(pool.build([("nmk004.bin", _crc(ROM_A))]))
+            self.assertIn(loopback.crc(ROM_A), pool)
+            self.assertEqual(pool.read(loopback.crc(ROM_A)), ROM_A)
+            self.assertIsNotNone(pool.build([("nmk004.bin", loopback.crc(ROM_A))]))
 
 
 if __name__ == "__main__":

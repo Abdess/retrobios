@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import tests
+from tests import loopback
 from tests import scratch_dir
 
 import argparse
@@ -1659,21 +1660,14 @@ class InstallerStaysOnPython38AndTheStdlib(unittest.TestCase):
             if os.environ.get("CI"):
                 self.fail("CI must provide python3.8 for the installer's floor")
             self.skipTest("no python3.8 on PATH, the static checks below still run")
-        handler = functools.partial(
-            http.server.SimpleHTTPRequestHandler, directory=str(REPO_ROOT)
-        )
-        handler.log_message = lambda *args: None
-        httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-        threading.Thread(target=httpd.serve_forever, daemon=True).start()
-        self.addCleanup(httpd.server_close)
-        self.addCleanup(httpd.shutdown)
+        base = loopback.serve(self, REPO_ROOT)
         home = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, home, True)
         env = {
             **os.environ,
             "HOME": str(home),
             "RETROBIOS_OS": "linux",
-            "RETROBIOS_BASE_URL": f"http://127.0.0.1:{httpd.server_address[1]}",
+            "RETROBIOS_BASE_URL": base,
         }
         dest = home / "system"
         base = [python38, "-I", "install.py", "--platform", "retroarch", "--no-input"]
@@ -2304,7 +2298,7 @@ class TestLaunchboxDetectionPowershell(unittest.TestCase):
             env = dict(os.environ)
             env.update(
                 USERPROFILE=str(userprofile),
-                APPDATA=str(str(scratch_dir(self))),
+                APPDATA=str(scratch_dir(self)),
                 RETROBIOS_BASE_URL=f"http://127.0.0.1:{httpd.server_address[1]}",
                 # A LaunchBox layout is a Windows layout: the runner is Linux.
                 RETROBIOS_OS="wsl",
@@ -3299,14 +3293,7 @@ class AnUnwritableFolderIsCodeTwo(unittest.TestCase):
     folder existing read-only ended with the documented 2."""
 
     def test_both_shapes_exit_two(self):
-        handler = functools.partial(
-            http.server.SimpleHTTPRequestHandler, directory=str(REPO_ROOT)
-        )
-        handler.log_message = lambda *args: None
-        httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-        threading.Thread(target=httpd.serve_forever, daemon=True).start()
-        self.addCleanup(httpd.server_close)
-        self.addCleanup(httpd.shutdown)
+        base = loopback.serve(self, REPO_ROOT)
         home = Path(tempfile.mkdtemp())
         locked = home / "locked"
         locked.mkdir()
@@ -3317,7 +3304,7 @@ class AnUnwritableFolderIsCodeTwo(unittest.TestCase):
             **os.environ,
             "HOME": str(home),
             "RETROBIOS_OS": "linux",
-            "RETROBIOS_BASE_URL": f"http://127.0.0.1:{httpd.server_address[1]}",
+            "RETROBIOS_BASE_URL": base,
         }
         for dest in (locked / "sub", locked):
             with self.subTest(dest=dest.name):
@@ -4698,19 +4685,12 @@ class ACheckNamesWhatTheCollectionLacks(unittest.TestCase):
         )
         if not lacking:
             self.skipTest("the Recalbox manifest omits no required caesar3 file")
-        handler = functools.partial(
-            http.server.SimpleHTTPRequestHandler, directory=str(REPO_ROOT)
-        )
-        handler.log_message = lambda *args: None
-        httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-        threading.Thread(target=httpd.serve_forever, daemon=True).start()
-        self.addCleanup(httpd.server_close)
-        self.addCleanup(httpd.shutdown)
+        base = loopback.serve(self, REPO_ROOT)
         home = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, home, True)
         env = {
             **os.environ, "HOME": str(home), "RETROBIOS_OS": "linux",
-            "RETROBIOS_BASE_URL": f"http://127.0.0.1:{httpd.server_address[1]}",
+            "RETROBIOS_BASE_URL": base,
         }
         proc = subprocess.run(
             [sys.executable, "-I", "install.py", "--platform", "recalbox",
@@ -5207,23 +5187,14 @@ class TheInstallerSaysWhatItFound(unittest.TestCase):
     the file list was fetched ended on a socket traceback."""
 
     def setUp(self):
-        import functools
-        import http.server
         import shutil
 
-        handler = functools.partial(
-            http.server.SimpleHTTPRequestHandler, directory=str(REPO_ROOT)
-        )
-        handler.log_message = lambda *args: None
-        httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-        threading.Thread(target=httpd.serve_forever, daemon=True).start()
-        self.addCleanup(httpd.server_close)
-        self.addCleanup(httpd.shutdown)
+        base = loopback.serve(self, REPO_ROOT)
         self.home = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.home, True)
         self.env = {
             **os.environ, "HOME": str(self.home), "RETROBIOS_OS": "linux",
-            "RETROBIOS_BASE_URL": f"http://127.0.0.1:{httpd.server_address[1]}",
+            "RETROBIOS_BASE_URL": base,
         }
 
     def _run(self, *extra: str) -> subprocess.CompletedProcess:
@@ -5346,18 +5317,11 @@ class _LoopbackRun:
     """install.py against the repository's own manifests over loopback."""
 
     def serve(self, test: unittest.TestCase) -> dict:
-        handler = functools.partial(
-            http.server.SimpleHTTPRequestHandler, directory=str(REPO_ROOT)
-        )
-        handler.log_message = lambda *args: None
-        httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-        threading.Thread(target=httpd.serve_forever, daemon=True).start()
-        test.addCleanup(httpd.server_close)
-        test.addCleanup(httpd.shutdown)
+        base = loopback.serve(test, REPO_ROOT)
         self.home = scratch_dir(test)
         return {
             **os.environ, "HOME": str(self.home), "RETROBIOS_OS": "linux",
-            "RETROBIOS_BASE_URL": f"http://127.0.0.1:{httpd.server_address[1]}",
+            "RETROBIOS_BASE_URL": base,
         }
 
 
@@ -6973,15 +6937,7 @@ class _SyntheticTree:
         (root / "install").mkdir()
         (root / "install" / "retroarch.json").write_text(json.dumps(manifest))
 
-        class Quiet(http.server.SimpleHTTPRequestHandler):
-            def log_message(self, *args) -> None:
-                return
-
-        handler = functools.partial(Quiet, directory=str(root))
-        httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-        threading.Thread(target=httpd.serve_forever, daemon=True).start()
-        test.addCleanup(httpd.server_close)
-        test.addCleanup(httpd.shutdown)
+        base = loopback.serve(test, root)
         self.home = scratch_dir(test)
         self.bios = self.home / "bios"
         self.bios.mkdir()
@@ -6989,7 +6945,7 @@ class _SyntheticTree:
         (self.bios / "b.bin").write_bytes(b"other bytes")
         return {
             **os.environ, "HOME": str(self.home), "RETROBIOS_OS": "linux",
-            "RETROBIOS_BASE_URL": f"http://127.0.0.1:{httpd.server_address[1]}",
+            "RETROBIOS_BASE_URL": base,
         }
 
 

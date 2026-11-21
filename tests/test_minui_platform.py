@@ -12,6 +12,7 @@ profiles, placed below that folder.
 from __future__ import annotations
 
 import tests
+from tests import loopback
 from tests.sources import script_source
 
 import contextlib
@@ -23,7 +24,6 @@ import shutil
 import tempfile
 import unittest
 import zipfile
-import zlib
 from pathlib import Path
 
 import yaml
@@ -160,10 +160,6 @@ class ScraperReadsThePaks(unittest.TestCase):
         )
 
 
-def _crc(data: bytes) -> str:
-    return format(zlib.crc32(data) & 0xFFFFFFFF, "08x")
-
-
 class PackPlacesCoreFilesUnderTheTag(unittest.TestCase):
     """The pack, the report and the manifest put a core's files in each
     folder the platform hands it, and nowhere else."""
@@ -219,7 +215,7 @@ class PackPlacesCoreFilesUnderTheTag(unittest.TestCase):
                 "cores": ["arcade_lib"], "archive_prefix": "arcadecore",
                 "files": [
                     {"name": "rom_a.bin", "archive": "arc.zip", "required": True,
-                     "crc32": _crc(self.member)},
+                     "crc32": loopback.crc(self.member)},
                 ],
             },
             "unlisted": {
@@ -242,7 +238,7 @@ class PackPlacesCoreFilesUnderTheTag(unittest.TestCase):
             "name": os.path.basename(relative),
             "sha1": hashlib.sha1(data).hexdigest(),
             "md5": hashlib.md5(data).hexdigest(),
-            "crc32": _crc(data),
+            "crc32": loopback.crc(data),
             "size": len(data),
         }
 

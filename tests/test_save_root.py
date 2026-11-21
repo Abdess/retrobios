@@ -12,10 +12,9 @@ directory the frontend's config names.
 from __future__ import annotations
 
 import tests
+from tests import loopback
 
-import functools
 import hashlib
-import http.server
 import importlib.util
 import json
 import os
@@ -23,7 +22,6 @@ import shutil
 import subprocess
 import sys
 import tempfile
-import threading
 import unittest
 import zipfile
 from pathlib import Path
@@ -698,26 +696,17 @@ class _Repository:
                     "base_destination": "system", "files": entries,
                     "save_directory": {"folder": "saves", "by_core": True}}
         (self.root / "install" / "retroarch.json").write_text(json.dumps(manifest))
-        handler = functools.partial(_Quiet, directory=str(self.root))
-        self.httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-        threading.Thread(target=self.httpd.serve_forever, daemon=True).start()
-        test.addCleanup(self.httpd.server_close)
-        test.addCleanup(self.httpd.shutdown)
+        self.base = loopback.serve(test, self.root)
 
     def run(self, *options: str) -> subprocess.CompletedProcess:
         env = dict(os.environ)
-        env["RETROBIOS_BASE_URL"] = f"http://127.0.0.1:{self.httpd.server_address[1]}"
+        env["RETROBIOS_BASE_URL"] = self.base
         return subprocess.run(
             [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "retroarch",
              "--yes", *options],
             env=env, capture_output=True, text=True, timeout=120, check=False,
             stdin=subprocess.DEVNULL,
         )
-
-
-class _Quiet(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, *args) -> None:
-        pass
 
 
 class TheInstallerWritesThem(unittest.TestCase):

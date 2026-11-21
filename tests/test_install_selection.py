@@ -10,6 +10,7 @@ to one answer.
 from __future__ import annotations
 
 import tests
+from tests import loopback
 from tests.sources import script_source
 
 import contextlib
@@ -520,11 +521,6 @@ class TheBoundaryChecksTheNewFields(unittest.TestCase):
                 install._validate_manifest(manifest, "retroarch")
 
 
-class _QuietHandler(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, format, *args):
-        return
-
-
 class FakeRepository:
     """A loopback copy of the repository: one manifest and its payloads."""
 
@@ -562,7 +558,7 @@ class FakeRepository:
             files.append(entry)
         manifest = {"manifest_version": 2, "platform": "retroarch", "files": files}
         (self.root / "install" / "retroarch.json").write_text(json.dumps(manifest))
-        handler = functools.partial(_QuietHandler, directory=str(self.root))
+        handler = functools.partial(loopback.Quiet, directory=str(self.root))
         self.httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
         threading.Thread(target=self.httpd.serve_forever, daemon=True).start()
         self.dest = self.root / "dest"

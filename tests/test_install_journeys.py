@@ -13,10 +13,9 @@ one that lengthens it has to say so here too.
 from __future__ import annotations
 
 import tests
+from tests import loopback
 
-import functools
 import hashlib
-import http.server
 import json
 import os
 import re
@@ -24,7 +23,6 @@ import shutil
 import subprocess
 import sys
 import tempfile
-import threading
 import time
 import unittest
 from pathlib import Path
@@ -120,20 +118,15 @@ _WITH_CARDS = (
 )
 
 
-class _Quiet(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, format, *args):
-        return
-
-
 class Repository:
     """The games fixture of test_install_games served on loopback: a
     RetroArch list, the same list for Batocera, the games index with a
     muOS setup, and every payload."""
 
     def __init__(self, test: unittest.TestCase) -> None:
-        # The screens print the card's path and the word budgets count it:
-        # the per-module scratch folder of run_tests.py is long enough to
-        # wrap it onto more lines.
+        # The screens print the card's path and the word budgets count the
+        # lines it wraps onto: the root stays where the budgets were set,
+        # not in the per-module scratch folder of run_tests.py.
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         test.addCleanup(shutil.rmtree, self.root, True)
@@ -147,16 +140,12 @@ class Repository:
         retroarch = dict(games.SETUP, roms_root={"path": None, "from_bios": None})
         games.write_index(self.site / "install" / "games", setup=retroarch,
                           more_setups={"muos": muos})
-        handler = functools.partial(_Quiet, directory=str(self.site))
-        server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-        threading.Thread(target=server.serve_forever, daemon=True).start()
-        test.addCleanup(server.server_close)
-        test.addCleanup(server.shutdown)
+        base = loopback.serve(test, self.site)
         self.home = self.root / "home"
         self.home.mkdir()
         self.env = {**os.environ, "TERM": "xterm", "HOME": str(self.home),
                     "RETROBIOS_OS": "linux", "XDG_CONFIG_HOME": str(self.home / ".config"),
-                    "RETROBIOS_BASE_URL": f"http://127.0.0.1:{server.server_address[1]}",
+                    "RETROBIOS_BASE_URL": base,
                     "RETROBIOS_CACHE": str(self.root / "cache")}
         for name in ("DISPLAY", "WAYLAND_DISPLAY", "SSH_CONNECTION", "SSH_TTY", "NO_COLOR",
                      install.TUI_PAD_ENV, install.OFFLINE_VARIABLE, *install._STEAM_MARKERS):

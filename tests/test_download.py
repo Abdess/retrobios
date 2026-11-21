@@ -10,6 +10,7 @@ checksum of each layout and the staging location.
 from __future__ import annotations
 
 import tests
+from tests import loopback
 from tests import scratch_dir
 
 import contextlib
@@ -21,7 +22,6 @@ import io
 import json
 import os
 import shutil
-import socket
 import subprocess
 import sys
 import tempfile
@@ -59,18 +59,6 @@ RELEASE_ASSETS = [
     "RetroDECK_0.10.9b_BIOS_Pack.zip.003",
     "SHA256SUMS.txt",
 ]
-
-
-def _closed_port() -> int:
-    """A loopback port nothing listens on, so connecting is refused at once."""
-    with socket.socket() as sock:
-        sock.bind(("127.0.0.1", 0))
-        return sock.getsockname()[1]
-
-
-class _QuietHandler(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, *args):  # keep the test output pristine
-        pass
 
 
 def _release(names, base="https://example.invalid", size=10):
@@ -361,7 +349,7 @@ class ReleaseServer:
 
         (self.root / "assets" / "SHA256SUMS.txt").write_text(sums)
 
-        handler = functools.partial(_QuietHandler, directory=str(self.root))
+        handler = functools.partial(loopback.Quiet, directory=str(self.root))
         self.httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
         self.base = f"http://127.0.0.1:{self.httpd.server_address[1]}"
 
@@ -521,7 +509,7 @@ class TestDownloadPython(DownloaderCase):
 
     def test_an_unreachable_release_endpoint_fails(self):
         env = self.env()
-        env["RETROBIOS_API"] = f"http://127.0.0.1:{_closed_port()}"
+        env["RETROBIOS_API"] = f"http://127.0.0.1:{loopback.closed_port()}"
         proc = subprocess.run(
             ["python3", str(REPO_ROOT / "scripts" / "download.py"), "--list"],
             env=env,

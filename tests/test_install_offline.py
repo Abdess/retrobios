@@ -10,6 +10,7 @@ installs again from disk, --from-pack, every file checked by its hash.
 from __future__ import annotations
 
 import tests
+from tests import loopback
 
 import contextlib
 import hashlib
@@ -17,7 +18,6 @@ import io
 import json
 import os
 import shutil
-import socket
 import subprocess
 import sys
 import tempfile
@@ -77,17 +77,11 @@ PAYLOAD = {"scph5501.bin": US, "scph5500.bin": JP, "gba_bios.bin": GBA,
            "pcsx/extra.bin": EXTRA}
 
 
-def _closed_port() -> int:
-    with socket.socket() as sock:
-        sock.bind(("127.0.0.1", 0))
-        return sock.getsockname()[1]
-
-
 def _offline_env() -> dict:
     """An environment where any request the installer makes is refused."""
     env = dict(os.environ)
-    env["RETROBIOS_BASE_URL"] = f"http://127.0.0.1:{_closed_port()}"
-    env["HTTPS_PROXY"] = env["HTTP_PROXY"] = f"http://127.0.0.1:{_closed_port()}"
+    env["RETROBIOS_BASE_URL"] = f"http://127.0.0.1:{loopback.closed_port()}"
+    env["HTTPS_PROXY"] = env["HTTP_PROXY"] = f"http://127.0.0.1:{loopback.closed_port()}"
     return env
 
 
@@ -326,13 +320,7 @@ def _pack(directory: Path, name: str, members: dict[str, bytes]) -> Path:
     return path
 
 
-def _noise(seed: str, size: int) -> bytes:
-    """Bytes deflate cannot shrink."""
-    return b"".join(hashlib.sha256(f"{seed}{n}".encode()).digest()
-                    for n in range(size // 32))
-
-
-BIG = {f"dir{n}/file{n}.bin": _noise(str(n), 2048) for n in range(4)}
+BIG = {f"dir{n}/file{n}.bin": loopback.noise(str(n), 2048) for n in range(4)}
 
 
 class SplitParts(Scratch):
@@ -720,11 +708,9 @@ class OfflineMakesNoRequest(Scratch):
     learn its platform, since nothing said "make no request"."""
 
     def _served(self, *options: str, env: dict | None = None):
-        from tests import test_install_selection
-
         hits: list[str] = []
         with FakeRepository() as repo, unittest.mock.patch.object(
-                test_install_selection._QuietHandler, "log_message",
+                loopback.Quiet, "log_message",
                 lambda handler, *args: hits.append(handler.path)):
             started = time.monotonic()
             proc = subprocess.run(
@@ -814,7 +800,6 @@ class ANetworkThatDroppedFailsFast(unittest.TestCase):
 
     def test_a_slow_answer_on_an_open_connection_still_arrives(self):
         import http.server
-        import threading
 
         delay = install.CONNECT_TIMEOUT + 1
 
@@ -830,13 +815,10 @@ class ANetworkThatDroppedFailsFast(unittest.TestCase):
             def log_message(self, *args):
                 return
 
-        server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Slow)
-        threading.Thread(target=server.serve_forever, daemon=True).start()
-        self.addCleanup(server.server_close)
-        self.addCleanup(server.shutdown)
+        base = loopback.serve(self, handler=Slow)
         install.install_bounded_opener()
         self.addCleanup(install.urllib.request.install_opener, None)
-        url = f"http://127.0.0.1:{server.server_address[1]}/list.json"
+        url = f"{base}/list.json"
         started = time.monotonic()
         self.assertEqual(install._fetch_json(url, 1024, "file list", attempts=1), {"ok": True})
         self.assertGreaterEqual(time.monotonic() - started, delay - 0.5)

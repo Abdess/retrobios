@@ -10,6 +10,7 @@ platform and compare each (dest, sha1) with what the installer keeps.
 from __future__ import annotations
 
 import tests
+from tests import loopback
 
 import contextlib
 import copy
@@ -628,24 +629,9 @@ class ExpertRuns(Lists):
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
 
     def test_a_layout_file_missing_from_the_server(self):
-        import http.server
-        import threading
-
         served = self.root / "served"
         (served / "install").mkdir(parents=True)
-
-        class Quiet(http.server.SimpleHTTPRequestHandler):
-            def __init__(self, *args, **kwargs):
-                super().__init__(*args, directory=str(served), **kwargs)
-
-            def log_message(self, *_args):
-                return
-
-        server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Quiet)
-        threading.Thread(target=server.serve_forever, daemon=True).start()
-        self.addCleanup(server.server_close)
-        self.addCleanup(server.shutdown)
-        base = f"http://127.0.0.1:{server.server_address[1]}"
+        base = loopback.serve(self, served)
         proc = self.run_install(LIST, "--dry-run", "--emulator", "duckstation", "--standalone",
                                 layouts={}, env={"RETROBIOS_BASE_URL": base})
         self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)

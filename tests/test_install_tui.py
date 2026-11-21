@@ -10,6 +10,7 @@ installs it).
 from __future__ import annotations
 
 import tests
+from tests import loopback
 from tests.sources import script_paths, script_source
 
 import argparse
@@ -43,7 +44,7 @@ from unittest import mock
 
 import install
 from tests.test_install_app import make_card
-from tests.test_install_selection import FakeRepository, _QuietHandler
+from tests.test_install_selection import FakeRepository
 from tests.netguard import module_guard
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -5023,7 +5024,7 @@ class Pty:
         return self.raw.split(b"\x1b[?1049l")[-1].decode("utf-8", "replace")
 
 
-class _SlowHandler(_QuietHandler):
+class _SlowHandler(loopback.Quiet):
     """Serves each file after a pause, so a test can stop a download midway."""
 
     def do_GET(self) -> None:
@@ -15302,13 +15303,9 @@ class GamesEndToEnd(unittest.TestCase):
             payload = entry["dest"].encode().ljust(entry["size"], b".")[:entry["size"]]
             (root / entry["repo_path"]).write_bytes(payload)
         (root / "install" / "retroarch.json").write_text(json.dumps(listed))
-        handler = functools.partial(_QuietHandler, directory=str(root))
-        server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-        threading.Thread(target=server.serve_forever, daemon=True).start()
-        self.addCleanup(server.server_close)
-        self.addCleanup(server.shutdown)
+        base = loopback.serve(self, root)
         env = {**os.environ, "TERM": "xterm", "HOME": str(card.root), "RETROBIOS_OS": "linux",
-               "RETROBIOS_BASE_URL": f"http://127.0.0.1:{server.server_address[1]}",
+               "RETROBIOS_BASE_URL": base,
                "RETROBIOS_CACHE": str(card.cache)}
         for name in ("DISPLAY", "WAYLAND_DISPLAY", "SSH_CONNECTION", "SSH_TTY", "NO_COLOR",
                      install.TUI_PAD_ENV, install.OFFLINE_VARIABLE, *install._STEAM_MARKERS):

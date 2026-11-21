@@ -7,6 +7,7 @@ plus recipes/archives.json, without a copy of that archive from elsewhere.
 from __future__ import annotations
 
 import tests
+from tests import loopback
 
 import hashlib
 import json
@@ -177,8 +178,8 @@ class Capture(Fixture):
     def test_dat_agreement_and_pins_are_recorded(self):
         key = romrecipes_capture.member_key(
             [{"name": n, "crc32": c} for n, c in (
-                ("a.rom", self._crc(ROM_A)), ("b.rom", self._crc(ROM_B)),
-                ("c.rom", self._crc(ROM_C)),
+                ("a.rom", loopback.crc(ROM_A)), ("b.rom", loopback.crc(ROM_B)),
+                ("c.rom", loopback.crc(ROM_C)),
             )]
         )
         md5 = hashlib.md5(self.exact_path.read_bytes()).hexdigest()
@@ -231,12 +232,6 @@ class Capture(Fixture):
         )
         pins = romrecipes_capture.container_pins(str(platforms), str(emulators))
         self.assertEqual(pins, {"a" * 32: {"platform:plain"}, "d" * 40: {"profile:core"}})
-
-    @staticmethod
-    def _crc(data: bytes) -> str:
-        import zlib
-
-        return f"{zlib.crc32(data) & 0xFFFFFFFF:08x}"
 
 
 class Build(Fixture):

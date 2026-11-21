@@ -10,19 +10,17 @@ full manifest.
 from __future__ import annotations
 
 import tests
+from tests import loopback
 from tests import scratch_dir
 
 import contextlib
-import functools
 import hashlib
-import http.server
 import io
 import json
 import os
 import subprocess
 import sys
 import tempfile
-import threading
 import unittest
 import zipfile
 from pathlib import Path
@@ -227,11 +225,6 @@ class PackNarrowing(_Fixture):
         self.assertEqual(held, FIRMWARE)
 
 
-class _Quiet(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, *args) -> None:
-        return
-
-
 class InstallerLeavesGameDataOut(unittest.TestCase):
     """The installer cut, in each mode, from a manifest served over loopback."""
 
@@ -263,16 +256,12 @@ class InstallerLeavesGameDataOut(unittest.TestCase):
             manifest["categorized"] = True
         (root / "install").mkdir()
         (root / "install" / "retroarch.json").write_text(json.dumps(manifest))
-        handler = functools.partial(_Quiet, directory=str(root))
-        httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-        threading.Thread(target=httpd.serve_forever, daemon=True).start()
-        self.addCleanup(httpd.server_close)
-        self.addCleanup(httpd.shutdown)
+        base = loopback.serve(self, root)
         home = scratch_dir(self)
         self.bios = home / "bios"
         self.bios.mkdir()
         self.env = {**os.environ, "HOME": str(home), "RETROBIOS_OS": "linux",
-                    "RETROBIOS_BASE_URL": f"http://127.0.0.1:{httpd.server_address[1]}"}
+                    "RETROBIOS_BASE_URL": base}
 
     def run_installer(self, *argv: str) -> subprocess.CompletedProcess:
         return subprocess.run(

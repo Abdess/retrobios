@@ -9,21 +9,18 @@ and a failure leaves no file behind.
 from __future__ import annotations
 
 import tests
+from tests import loopback
 
 import argparse
-import functools
 import hashlib
-import http.server
 import importlib.util
 import io
 import json
 import os
 import shutil
-import socket
 import subprocess
 import sys
 import tempfile
-import threading
 import unittest
 import zipfile
 import zlib
@@ -41,12 +38,6 @@ def _sha1(data: bytes) -> str:
     return hashlib.sha1(data).hexdigest()
 
 
-def _noise(seed: str, size: int) -> bytes:
-    """Bytes deflate cannot shrink."""
-    return b"".join(hashlib.sha256(f"{seed}{n}".encode()).digest()
-                    for n in range(size // 32))
-
-
 # dest: (bytes, systems, regions, cores). Two dests share one file: the
 # pack stores it once.
 PAYLOADS = {
@@ -58,19 +49,8 @@ PAYLOADS = {
 }
 TREE = {"Sys/GC/font.bin": b"font bytes", "Sys/Wii/setting.txt": b"setting"}
 # Files too large for one part of MIN_PART_BYTES together.
-BIG = {f"arcade/set{n}.zip": (_noise(str(n), 24 * 1024), ["arcade"], None, None)
+BIG = {f"arcade/set{n}.zip": (loopback.noise(str(n), 24 * 1024), ["arcade"], None, None)
        for n in range(5)}
-
-
-class _Quiet(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, format, *args):
-        return
-
-
-def _closed_port() -> int:
-    with socket.socket() as sock:
-        sock.bind(("127.0.0.1", 0))
-        return sock.getsockname()[1]
 
 
 class Repository(unittest.TestCase):
@@ -86,12 +66,7 @@ class Repository(unittest.TestCase):
         self.served = self.root / "served"
         (self.served / "install").mkdir(parents=True)
         (self.served / "bios").mkdir()
-        handler = functools.partial(_Quiet, directory=str(self.served))
-        self.httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-        threading.Thread(target=self.httpd.serve_forever, daemon=True).start()
-        self.addCleanup(self.httpd.server_close)
-        self.addCleanup(self.httpd.shutdown)
-        self.base = f"http://127.0.0.1:{self.httpd.server_address[1]}"
+        self.base = loopback.serve(self, self.served)
         self.out = self.root / "out"
         self.out.mkdir()
         self.write_list()
@@ -125,8 +100,8 @@ class Repository(unittest.TestCase):
         env.pop(install.OFFLINE_VARIABLE, None)
         env["RETROBIOS_BASE_URL"] = self.base
         if offline:
-            env["RETROBIOS_BASE_URL"] = f"http://127.0.0.1:{_closed_port()}"
-            env["HTTPS_PROXY"] = env["HTTP_PROXY"] = f"http://127.0.0.1:{_closed_port()}"
+            env["RETROBIOS_BASE_URL"] = f"http://127.0.0.1:{loopback.closed_port()}"
+            env["HTTPS_PROXY"] = env["HTTP_PROXY"] = f"http://127.0.0.1:{loopback.closed_port()}"
             env[install.OFFLINE_VARIABLE] = "1"
         return env
 
@@ -292,7 +267,7 @@ class Parts(Repository):
         self.assertTrue(all(".part" in path.name for path in self.packs()))
 
     def test_a_file_larger_than_a_part_is_refused_before_any_download(self):
-        self.payloads = {"big.bin": (_noise("x", 80 * 1024), ["arcade"], None, None)}
+        self.payloads = {"big.bin": (loopback.noise("x", 80 * 1024), ["arcade"], None, None)}
         self.write_list()
         proc = self.make("--split", "64K")
         self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
@@ -444,7 +419,7 @@ def _members(folder: Path, sizes: dict[str, int]) -> list:
     folder.mkdir(parents=True, exist_ok=True)
     members = []
     for name, size in sorted(sizes.items()):
-        data = _noise(name, size)
+        data = loopback.noise(name, size)
         source = folder / name.replace("/", "_")
         source.write_bytes(data)
         members.append(install.PackMember(name, _sha1(data), len(data), source))
