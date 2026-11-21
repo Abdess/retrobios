@@ -2254,6 +2254,23 @@ class TargetManifestRegressions(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "non-empty strings"):
                 generate_target_manifests(str(source), str(output))
 
+    def test_a_missing_targets_directory_fails_the_command(self):
+        """--manifest-targets printed the missing directory and exited 0
+        with nothing written: the pipeline step read that as done."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with self.assertRaisesRegex(FileNotFoundError, "No targets directory"):
+                generate_target_manifests(str(root / "absent"), str(root / "out"))
+            (root / "plat").mkdir()
+            run = subprocess.run(
+                [sys.executable, str(ROOT / "scripts" / "generate_pack.py"),
+                 "--manifest-targets", "--platforms-dir", str(root / "plat"),
+                 "--output-dir", str(root / "out")],
+                capture_output=True, text=True, cwd=ROOT, check=False,
+            )
+            self.assertEqual(run.returncode, 1, run.stderr)
+            self.assertIn("No targets directory at", run.stderr)
+
 
 class CheckoutCompletenessRegressions(unittest.TestCase):
     """Coverage is resolved against the disk, so the checkout must be whole.

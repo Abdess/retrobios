@@ -59,9 +59,16 @@ def _run_quick_mode(
         if holds_other_kind(args.output_dir, "targets"):
             sys.exit(1)
         with pack_output_lock(args.output_dir):
-            generate_target_manifests(
-                os.path.join(args.platforms_dir, "targets"), args.output_dir
-            )
+            try:
+                written = generate_target_manifests(
+                    os.path.join(args.platforms_dir, "targets"), args.output_dir
+                )
+            except FileNotFoundError as exc:
+                print(exc, file=sys.stderr)
+                sys.exit(1)
+        for name, count in written:
+            print(f"  {name}: {count} targets")
+        print(f"Generated {len(written)} target manifest(s) in {args.output_dir}")
         return True
     return run_listing(args, parser, args.list)
 

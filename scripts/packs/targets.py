@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import os
-import sys
 from pathlib import Path
 
 from core.artifacts import write_text_atomic
@@ -12,23 +11,22 @@ from model.sources import source_yaml_file
 from model.targets import load_target_config, target_aliases, target_overrides
 
 
-def generate_target_manifests(targets_dir: str, output_dir: str) -> None:
-    """Convert target YAMLs to installer JSON manifests."""
-    os.makedirs(output_dir, exist_ok=True)
+def generate_target_manifests(targets_dir: str, output_dir: str) -> list[tuple[str, int]]:
+    """Convert target YAMLs to installer JSON manifests: each platform
+    written, with its number of targets. A missing directory raises."""
     targets_path = Path(targets_dir)
     if not targets_path.is_dir():
-        print(f"No targets directory at {targets_dir}", file=sys.stderr)
-        return
-    count = 0
+        raise FileNotFoundError(f"No targets directory at {targets_dir}")
+    os.makedirs(output_dir, exist_ok=True)
+    written: list[tuple[str, int]] = []
     for yml_file in sorted(targets_path.glob("*.yml")):
         if yml_file.name.startswith("_"):
             continue
         result = target_list(yml_file)
         out_path = Path(output_dir) / f"{yml_file.stem}.json"
         write_text_atomic(out_path, json.dumps(result, indent=2, sort_keys=True) + "\n")
-        count += 1
-        print(f"  {yml_file.stem}: {len(result)} targets")
-    print(f"Generated {count} target manifest(s) in {output_dir}")
+        written.append((yml_file.stem, len(result)))
+    return written
 
 
 def target_list(yml_file: Path) -> dict[str, list[str] | dict | None]:
