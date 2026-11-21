@@ -46,6 +46,7 @@ from resolve.validation import (
     case_folded_slots,
     declaration_settles,
     inner_rom_check,
+    installed_everywhere,
     installed_with_emulator,
     outside_gap_scope,
     read_from_save_dir,
@@ -915,7 +916,8 @@ class _ProfileComparison:
             "name": fname,
             "path": effective_path,
             "required": f.get("required", False),
-            "bundled": installed_with_emulator(f, platform),
+            "bundled": (installed_with_emulator(f, platform) if platform
+                        else installed_everywhere(f)),
             "note": f.get("note", ""),
             "source_ref": f.get("source_ref", ""),
             "in_platform": False,

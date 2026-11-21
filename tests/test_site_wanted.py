@@ -656,7 +656,7 @@ class ThePublishedList(unittest.TestCase):
         """Each emulator a row names declares that file as firmware it does
         not install itself: pak0.pk3, game data for every profile, is gone."""
         from model.profiles import load_emulator_profiles
-        from resolve.validation import installed_with_emulator
+        from resolve.validation import installed_everywhere
 
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         self.assertNotIn("pak0.pk3", [e["n"] for e in self.data["entries"]])
@@ -669,7 +669,7 @@ class ThePublishedList(unittest.TestCase):
                             if isinstance(f, dict) and f.get("name") == entry["n"]]
                 with self.subTest(entry=entry["n"], emulator=key):
                     self.assertTrue([f for f in declared if f.get("category") != "game_data"
-                                     and not installed_with_emulator(f)])
+                                     and not installed_everywhere(f)])
 
     def test_every_link_lands_on_its_details(self):
         """Each name's link is a built page, and a card anchor is on it."""

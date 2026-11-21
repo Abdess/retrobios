@@ -28,7 +28,7 @@ from model.profiles import unique_emulator_profiles
 from packs.crossref import first_hash
 from core.hashing import cut_md5_owner, declared_hash_lists, parse_hash_list
 from resolve.review import LARGE_FILE_ISSUE_URL, Placement, placement
-from resolve.validation import deliverable, filter_files_by_mode, installed_with_emulator
+from resolve.validation import deliverable, filter_files_by_mode, installed_everywhere
 from sitegen.config import UPLOAD_ROOT
 
 ALGORITHMS = ("sha1", "sha256", "md5", "crc32")
@@ -231,7 +231,7 @@ def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> li
         for row, unsourceable in rows:
             for entry in gap_entries(profile, str(row.get("name", "")),
                                       str(row.get("identity") or ""), unsourceable):
-                if entry.get("category") == GAME_DATA or installed_with_emulator(entry):
+                if entry.get("category") == GAME_DATA or installed_everywhere(entry):
                     continue
                 system = entry.get("system") or (systems[0] if len(systems) == 1 else "")
                 found.append({

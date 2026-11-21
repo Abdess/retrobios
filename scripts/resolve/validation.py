@@ -764,6 +764,15 @@ def installed_with_emulator(entry: dict, platform: str = "") -> bool:
     return bool(entry.get("bundled")) and platform not in (entry.get("not_bundled_on") or [])
 
 
+def installed_everywhere(entry: dict) -> bool:
+    """Whether the emulator brings the entry on every setup, for a view that names none.
+
+    An entry a platform package leaves out (`not_bundled_on`) is a file that
+    setup's users still need: touchHLE panics without its fonts on ROCKNIX.
+    """
+    return bool(entry.get("bundled")) and not entry.get("not_bundled_on")
+
+
 def unread_on(entry: dict, platform: str) -> bool:
     """Whether this platform's launcher points the emulator at other files.
 

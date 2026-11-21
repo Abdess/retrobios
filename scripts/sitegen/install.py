@@ -18,7 +18,7 @@ from model.registry import list_release_pack_platforms
 from model.profiles import reads_own_files
 from resolve.layout import runs_standalone, standalone_layout_path
 from resolve.standalone import standalone_set
-from resolve.validation import installed_with_emulator
+from resolve.validation import installed_everywhere, installed_with_emulator
 from sitegen import markup
 from core.paths import REPO_ROOT
 from installer_build.module import installer_module
@@ -79,14 +79,14 @@ def _platform_display_in(platforms_dir: str, name: str) -> str:
 def comes_with_app(f: dict) -> bool:
     """The emulator installs the file in the build the entry describes, on every setup.
 
-    The rule verify and the pack read (``installed_with_emulator``), for a
-    page that names no setup. An entry a platform package leaves out
+    The rule the gap report and the wanted list read (``installed_everywhere``),
+    for a page that names no setup. An entry a platform package leaves out
     (``not_bundled_on``: Batocera's hcl installs the binary alone) is a file
     that setup's readers get, and the manifests serve it there. An entry
     narrowed by ``mode`` is that build's alone: the other build reads its
     own entry, or nothing.
     """
-    return installed_with_emulator(f) and not f.get("not_bundled_on")
+    return installed_everywhere(f)
 
 
 def install_commands(args: str = "", indent: str = "",

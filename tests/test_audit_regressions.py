@@ -5570,6 +5570,23 @@ class BundledFilesAreNotToSource(unittest.TestCase):
         self.assertFalse(installed_with_emulator(machines, "retroarch"))
         self.assertTrue(installed_with_emulator(hcl))
 
+    def test_a_view_naming_no_setup_keeps_what_one_package_leaves_out(self):
+        """touchHLE panics without its fonts on ROCKNIX: the emulator page,
+        the global gap report and the wanted list all still ask for them."""
+        from packs.crossref import cross_reference
+        from resolve.validation import installed_everywhere
+        from sitegen.install import comes_with_app
+
+        font = {"name": "LiberationMono-Regular.ttf", "bundled": True,
+                "not_bundled_on": ["rocknix"]}
+        self.assertFalse(installed_everywhere(font))
+        self.assertFalse(comes_with_app(font))
+        self.assertTrue(installed_everywhere({"name": "a.bin", "bundled": True}))
+        profiles = {"touchhle": {"emulator": "touchHLE", "type": "standalone",
+                                 "systems": ["apple-ios"], "files": [font]}}
+        report = cross_reference(profiles, {}, {"files": {}, "indexes": {}})
+        self.assertFalse(report["touchhle"]["gap_details"][0]["bundled"])
+
     def test_every_platform_named_is_registered(self):
         from model.registry import list_registered_platforms
         from model.profiles import load_emulator_profiles
