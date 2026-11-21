@@ -57,6 +57,26 @@ class ABuildbotNameSelectsItsProfile(unittest.TestCase):
             select_emulator_profiles(["pcsx3"], self.PROFILES)
         self.assertIn("Close match", str(caught.exception))
 
+    def test_profile_sync_and_fileless_audit_take_the_core_name(self):
+        """Both refused pcfx, which verify --emulator accepts."""
+        import argparse
+
+        import profile_sync
+
+        args = argparse.Namespace(changed=False, added=False, emulator=["pcfx"])
+        self.assertEqual(list(profile_sync.select_profiles(self.PROFILES, args)), ["beetle_pcfx"])
+        proc = subprocess.run(
+            [sys.executable, "scripts/fileless_audit.py", "pcfxx", "--offline"],
+            cwd=REPO_ROOT, capture_output=True, text=True, timeout=600, check=False,
+        )
+        self.assertNotEqual(proc.returncode, 0)
+        listed = subprocess.run(
+            [sys.executable, "scripts/verify.py", "--list-emulators"],
+            cwd=REPO_ROOT, capture_output=True, text=True, timeout=600, check=False,
+        ).stdout
+        count = len([line for line in listed.splitlines() if line.strip()])
+        self.assertIn(f"lists all {count}.", proc.stderr)
+
     def test_cross_reference_reports_the_resolved_profile(self):
         """cross_reference filtered on the typed name, found no profile under
         it and answered `pcfx is not run by None`."""

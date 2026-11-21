@@ -109,6 +109,35 @@ def entry_serves_systems(entry: dict, profile: dict, system_ids: list[str]) -> b
     return bool(wanted & {norm_system_id(sid) for sid in entry_system_ids(entry, profile)})
 
 
+def resolve_profile_name(
+    name: str, all_profiles: dict, hint_command: str = "--list-emulators"
+) -> str:
+    """The profile a name selects: its own key, else the one profile whose
+    cores: names it.
+
+    A buildbot name (pcfx, advmame) lives in a profile's cores:, and the
+    spelling hints sent pcfx to two PlayStation cores. The hints are drawn
+    from what --list-emulators shows.
+    """
+    if name in all_profiles:
+        return name
+    claimants = sorted(
+        key for key in upstream_profile_index(all_profiles).get(name, ())
+        if all_profiles[key].get("type") != "launcher" and all_profiles[key].get("role") != "test"
+    )
+    if len(claimants) == 1:
+        return claimants[0]
+    if claimants:
+        raise ProfileSelectionError(
+            f"{name} is a core name of {', '.join(claimants)}: "
+            f"use --emulator with one of them"
+        )
+    available = sorted(key for key, value in all_profiles.items() if is_emulator(value))
+    raise ProfileSelectionError(
+        f"emulator '{name}' not found\n" + suggest_names([name], available, hint_command)
+    )
+
+
 def select_emulator_profiles(
     requested: list[str],
     all_profiles: dict,
@@ -124,30 +153,7 @@ def select_emulator_profiles(
     """
     selected: list[tuple[str, dict]] = []
     for name in requested:
-        if name not in all_profiles:
-            # A buildbot name (pcfx, advmame) lives in a profile's cores:,
-            # and the spelling hints sent pcfx to two PlayStation cores.
-            claimants = sorted(
-                key for key in upstream_profile_index(all_profiles).get(name, ())
-                if all_profiles[key].get("type") != "launcher" and all_profiles[key].get("role") != "test"
-            )
-            if len(claimants) == 1:
-                name = claimants[0]
-            elif claimants:
-                raise ProfileSelectionError(
-                    f"{name} is a core name of {', '.join(claimants)}: "
-                    f"use --emulator with one of them"
-                )
-        if name not in all_profiles:
-            available = sorted(
-                key
-                for key, value in all_profiles.items()
-                if is_emulator(value)
-            )
-            raise ProfileSelectionError(
-                f"emulator '{name}' not found\n"
-                + suggest_names([name], available, "--list-emulators")
-            )
+        name = resolve_profile_name(name, all_profiles)
         profile = all_profiles[name]
         kind = profile.get("type", "libretro")
         if kind == "alias":

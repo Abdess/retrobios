@@ -25,10 +25,11 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 
 from core import upstream
-from core.cli import add_repo_inputs, require_directory, suggest_names
+from core.cli import add_repo_inputs, require_directory
 from profiling.citations import collect_citations
 from profiling.repos import select_views
 from model.sourceref import ref_role, split_source_ref
+from model.profiles import ProfileSelectionError, load_emulator_profiles, resolve_profile_name
 from model.safeparse import yaml_load
 
 # Ways a program asks for somewhere to read from.
@@ -123,15 +124,16 @@ def main() -> None:
         parser.error("name profiles or pass --all, not both")
     require_directory(args.emulators_dir, "--emulators-dir")
 
-    known = sorted(path.stem for path in Path(args.emulators_dir).glob("*.yml"))
-    unknown = [name for name in args.emulators if name not in known]
-    if unknown:
-        raise SystemExit(
-            "ERROR: unknown profile " + ", ".join(unknown) + ". "
-            + suggest_names(unknown, known, "python scripts/verify.py --list-emulators")
-        )
-    names = args.emulators
+    profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False) if args.emulators else {}
+    try:
+        names = [
+            resolve_profile_name(name, profiles, "python scripts/verify.py --list-emulators")
+            for name in args.emulators
+        ]
+    except ProfileSelectionError as exc:
+        raise SystemExit(f"ERROR: {exc}") from None
     if args.all:
+        known = sorted(path.stem for path in Path(args.emulators_dir).glob("*.yml"))
         names = []
         for name in known:
             with open(Path(args.emulators_dir) / f"{name}.yml", encoding="utf-8") as handle:

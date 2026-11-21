@@ -24,7 +24,7 @@ from core import upstream
 from profiling import version_basis
 from model.systems import norm_system_id, system_index
 from core.github import github_token
-from model.profiles import is_emulator, load_emulator_profiles
+from model.profiles import ProfileSelectionError, is_emulator, load_emulator_profiles, resolve_profile_name
 from core.cli import add_repo_inputs, suggest_names
 from profiling.bump import DEFAULT_CACHE, write_version
 from profiling.realign import realign_prose
@@ -308,19 +308,14 @@ def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
             print(f"the branch {verb} no profile against {base}", file=sys.stderr)
         return selected
     if args.emulator:
-        names = [args.emulator] if isinstance(args.emulator, str) else args.emulator
-        unknown = [name for name in names if name not in profiles]
-        if unknown:
-            # Suggested from what the listing it names shows: counted over the
-            # alias and test profiles too, "lists all 553" pointed at 530 lines.
-            listed = sorted(
-                name for name, profile in profiles.items()
-                if is_emulator(profile)
-            )
-            raise SystemExit(
-                f"ERROR: unknown profile {', '.join(unknown)}. "
-                + suggest_names(unknown, listed, "python scripts/verify.py --list-emulators")
-            )
+        requested = [args.emulator] if isinstance(args.emulator, str) else args.emulator
+        try:
+            names = [
+                resolve_profile_name(name, profiles, "python scripts/verify.py --list-emulators")
+                for name in requested
+            ]
+        except ProfileSelectionError as exc:
+            raise SystemExit(f"ERROR: {exc}") from None
         return {name: profiles[name] for name in dict.fromkeys(names)}
 
     # --system matches as verify.py --list-systems lists and --system selects:
