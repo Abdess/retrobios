@@ -36,6 +36,8 @@ COMMANDS = {
     ),
     "validate_pr.py": ("resolve/review.py", "core/gitclone.py"),
     "mame_ref_audit.py": ("profiling/mamerefs.py",),
+    "fileless_audit.py": ("profiling/fileless.py",),
+    "mame_ref_audit.py": ("profiling/mamerefs.py",),
     "refresh_data_dirs.py": ("packs/datadirs.py",),
     "split_pack.py": ("packs/parts.py",),
     "dedup.py": ("model/nodedup.py",),

@@ -20,86 +20,13 @@ from __future__ import annotations
 import argparse
 import os
 import sys
-from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 
 from core import upstream
 from core.cli import add_repo_inputs, require_directory
-from profiling.citations import collect_citations
-from profiling.repos import select_views
-from model.sourceref import ref_role, split_source_ref
 from model.profiles import ProfileSelectionError, load_emulator_profiles, resolve_profile_name
-from model.sources import source_yaml_file
-
-# Ways a program asks for somewhere to read from.
-SIGNALS = (
-    "RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY",
-    "GET_SYSTEM_DIRECTORY",
-    "system_directory",
-    "get_system_directory",
-)
-
-SOURCE_SUFFIX = (".c", ".cpp", ".cc", ".cxx", ".h", ".hpp", ".m", ".mm")
-
-
-def cited_paths(document: dict) -> list[str]:
-    """Source paths the profile points at, in document order, deduplicated."""
-    seen: list[str] = []
-    for citation in collect_citations(document):
-        for part in split_source_ref(citation.ref):
-            path = ref_role(part.path)[1]
-            if path.endswith(SOURCE_SUFFIX) and path not in seen:
-                seen.append(path)
-    return seen
-
-
-def audit(
-    name: str, emulators_dir: str, cache_dir: str, offline: bool
-) -> list[tuple[str, str]] | None:
-    """Signals found in the sources a fileless profile cites."""
-    document = source_yaml_file(os.path.join(emulators_dir, f"{name}.yml")) or {}
-    if document.get("files"):
-        return None
-    if document.get("type") == "alias":
-        # The same binary under another name: its files are its target's.
-        return None
-    if str(document.get("exclusion_note") or "").strip():
-        # Someone read this one and wrote down why nothing is declared. The
-        # check exists to find the profiles nobody has answered yet, and an
-        # answer that goes stale shows up as a drifting ref instead.
-        return None
-    if document.get("data_directories"):
-        # The load is declared, as a directory rather than a file. dinothawr
-        # reads system_dir/dinothawr/ and says so there. That is coverage, not
-        # an assertion waiting to age.
-        return None
-    views = select_views(document, cache_dir, offline)
-    if not views:
-        return []
-    hits: list[tuple[str, str]] = []
-    for path in cited_paths(document)[:40]:
-        for view in views:
-            lines = upstream.fetch_file(view.repo, view.pin, path, cache_dir, offline)
-            if lines is None:
-                continue
-            for signal in SIGNALS:
-                if any(signal in line for line in lines):
-                    hits.append((path, signal))
-                    break
-            break
-    return hits
-
-
-def _settled_before_reading(document: dict) -> bool:
-    """A profile answered without its sources: files, an exclusion note, or
-    a declared data directory (see audit)."""
-    return bool(
-        document.get("files")
-        or document.get("type") == "alias"
-        or str(document.get("exclusion_note") or "").strip()
-        or document.get("data_directories")
-    )
+from profiling.fileless import audit, unanswered_profiles
 
 
 def main() -> None:
@@ -132,13 +59,7 @@ def main() -> None:
     except ProfileSelectionError as exc:
         raise SystemExit(f"ERROR: {exc}") from None
     if args.all:
-        known = sorted(path.stem for path in Path(args.emulators_dir).glob("*.yml"))
-        names = []
-        for name in known:
-            if not _settled_before_reading(
-                source_yaml_file(Path(args.emulators_dir) / f"{name}.yml") or {}
-            ):
-                names.append(name)
+        names = unanswered_profiles(args.emulators_dir)
 
     flagged = unreachable = 0
     for name in names:

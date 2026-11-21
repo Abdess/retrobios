@@ -17,6 +17,7 @@ from pathlib import Path
 from unittest import mock
 
 import fileless_audit
+from profiling import fileless
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -40,29 +41,29 @@ class TestFilelessAudit(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.dir = self.tmp.name
         self._orig = (
-            fileless_audit.select_views,
-            fileless_audit.upstream.fetch_file,
-            fileless_audit.collect_citations,
+            fileless.select_views,
+            fileless.upstream.fetch_file,
+            fileless.collect_citations,
         )
 
         class View:
             repo = "repo"
             pin = "pinsha"
 
-        fileless_audit.select_views = lambda doc, cache, offline: [View()]
-        fileless_audit.collect_citations = lambda doc: [
+        fileless.select_views = lambda doc, cache, offline: [View()]
+        fileless.collect_citations = lambda doc: [
             type("C", (), {"ref": "libretro.c:10"})()
         ]
         self.source = ASKS
-        fileless_audit.upstream.fetch_file = (
+        fileless.upstream.fetch_file = (
             lambda repo, sha, path, cache, offline=False: self.source
         )
 
     def tearDown(self):
         (
-            fileless_audit.select_views,
-            fileless_audit.upstream.fetch_file,
-            fileless_audit.collect_citations,
+            fileless.select_views,
+            fileless.upstream.fetch_file,
+            fileless.collect_citations,
         ) = self._orig
         self.tmp.cleanup()
 
@@ -70,7 +71,7 @@ class TestFilelessAudit(unittest.TestCase):
         Path(self.dir, "p.yml").write_text(body, encoding="utf-8")
 
     def _run(self):
-        return fileless_audit.audit("p", self.dir, ".c", False)
+        return fileless.audit("p", self.dir, ".c", False)
 
     def test_a_fileless_profile_whose_source_asks_is_flagged(self):
         self._write(BASE)
@@ -128,7 +129,7 @@ class TestCommandLine(unittest.TestCase):
                 return audit(name)
             return []
 
-        with mock.patch.object(sys, "argv", ["fileless_audit.py", *argv,
+        with mock.patch.object(sys, "argv", ["fileless.py", *argv,
                                              "--emulators-dir", self.tmp.name]), \
                 mock.patch.object(fileless_audit, "audit", side_effect=fake), \
                 mock.patch("sys.stderr"), mock.patch("sys.stdout"), self.assertRaises(SystemExit) as caught:
@@ -146,7 +147,7 @@ class TestCommandLine(unittest.TestCase):
 
     def test_an_unreachable_source_fails_the_run(self):
         def unreachable(name):
-            raise fileless_audit.upstream.UpstreamError("HTTP 403")
+            raise fileless.upstream.UpstreamError("HTTP 403")
 
         code, _ = self._main("open", audit=unreachable)
         self.assertEqual(code, 1)
@@ -164,31 +165,31 @@ class TestCorpusIsAnswered(unittest.TestCase):
             self.skipTest("no upstream cache")
         from model.safeparse import yaml_load
 
-        fetch = fileless_audit.upstream.fetch_file
+        fetch = fileless.upstream.fetch_file
         read = []
 
         def counted(*args, **kwargs):
             # A cold path is unread here, not absent.
             try:
                 lines = fetch(*args, **kwargs)
-            except fileless_audit.upstream.NotCachedError:
+            except fileless.upstream.NotCachedError:
                 return None
             if lines is not None:
                 read.append(args[2])
             return lines
 
         flagged = []
-        with mock.patch.object(fileless_audit.upstream, "fetch_file", counted):
+        with mock.patch.object(fileless.upstream, "fetch_file", counted):
             for path in sorted((ROOT / "emulators").glob("*.yml")):
                 with path.open(encoding="utf-8") as handle:
                     document = yaml_load(handle) or {}
                 if document.get("files"):
                     continue
                 try:
-                    hits = fileless_audit.audit(
+                    hits = fileless.audit(
                         path.stem, str(ROOT / "emulators"), str(ROOT / ".cache"), True
                     )
-                except fileless_audit.upstream.NotCachedError:
+                except fileless.upstream.NotCachedError:
                     # A cold branch tip is unread too, not a branch gone.
                     continue
                 if hits:
