@@ -627,19 +627,18 @@ class RecalboxPerBoard(unittest.TestCase):
     )
 
     def test_a_board_gets_the_cores_its_defconfig_builds(self):
+        from scraper.recalbox_romfs import read_defconfig
         from scraper.recalbox_scraper import board_cores
-        from scraper.targets.recalbox_targets_scraper import (
-            defconfig_arch,
-            enabled_packages,
-        )
+        from scraper.targets.recalbox_targets_scraper import defconfig_arch
 
-        x86 = enabled_packages("BR2_x86_64=y\nBR2_PACKAGE_PCSX2=y\n"
-                               "BR2_PACKAGE_LIBRETRO_PCSX_REARMED=y\n"
-                               "BR2_PACKAGE_LIBRETRO_SWANSTATION=y\n# BR2_PACKAGE_X is not set\n")
+        x86 = read_defconfig("BR2_x86_64=y\nBR2_PACKAGE_PCSX2=y\n"
+                             "BR2_PACKAGE_LIBRETRO_PCSX_REARMED=y\n"
+                             "BR2_PACKAGE_LIBRETRO_SWANSTATION=y\n# BR2_PACKAGE_X is not set\n").enabled
+        self.assertNotIn("BR2_PACKAGE_X", x86)
         self.assertEqual(board_cores(self.SYSTEM_INI, "x86_64", x86),
                          {"pcsx2", "pcsx_rearmed", "swanstation"})
-        rpi3 = enabled_packages("BR2_arm=y\nBR2_PACKAGE_LIBRETRO_PCSX_REARMED_NEON=y\n"
-                                "BR2_PACKAGE_LIBRETRO_DUCKSTATION=y\n")
+        rpi3 = read_defconfig("BR2_arm=y\nBR2_PACKAGE_LIBRETRO_PCSX_REARMED_NEON=y\n"
+                              "BR2_PACKAGE_LIBRETRO_DUCKSTATION=y\n").enabled
         self.assertEqual(board_cores(self.SYSTEM_INI, "rpi3", rpi3),
                          {"pcsx_rearmed", "duckstation"})
         self.assertEqual(defconfig_arch("BR2_arm=y\n"), "armhf")
@@ -658,6 +657,20 @@ class RecalboxPerBoard(unittest.TestCase):
         enabled = {"BR2_PACKAGE_LIBRETRO_GAMBATTE", "BR2_PACKAGE_LIBRETRO_BSNES"}
         self.assertEqual(board_cores(ini, "x86_64", enabled), {"gambatte", "bsnes"})
         self.assertEqual(board_cores(ini, "rpi3", enabled), {"gambatte"})
+
+    def test_a_board_is_the_target_its_defconfig_names(self):
+        """romfs2 configin.py takes the board from the first
+        BR2_PACKAGE_RECALBOX_TARGET_ key, not from the file name, and the
+        target list and the rom folders read the same rule."""
+        from scraper.recalbox_romfs import defconfig_boards
+
+        found = defconfig_boards([
+            ("configs/recalbox-pi3_defconfig", "BR2_PACKAGE_RECALBOX_TARGET_RPI3=y\nBR2_arm=y\n"),
+            ("configs/other_defconfig", "BR2_x86_64=y\n"),
+        ])
+        self.assertEqual(list(found), ["rpi3"])
+        path, config = found["rpi3"]
+        self.assertEqual((path, config.enabled["BR2_arm"]), ("configs/recalbox-pi3_defconfig", 2))
 
 
 class RetroPieModuleFlags(unittest.TestCase):

@@ -34,6 +34,7 @@ from collections.abc import Iterator
 from model.safeparse import parse_untrusted_xml, yaml_load_upstream
 
 from ..retropie_modules import PLATFORM_FLAGS, module_enabled, module_fields
+from ..recalbox_romfs import Defconfig, defconfig_boards, read_system_ini
 from . import Fetcher, SourceError, register
 
 
@@ -762,30 +763,6 @@ def esde(spec: dict, fetcher: Fetcher) -> list[dict]:
 # Recalbox
 
 
-def _ini_sections(text: str) -> tuple[dict[str, dict[str, str]], dict[str, int]]:
-    sections: dict[str, dict[str, str]] = {}
-    lines: dict[str, int] = {}
-    current: dict[str, str] | None = None
-    name = ""
-    for number, raw in enumerate(text.splitlines(), 1):
-        line = raw.strip()
-        if not line or line.startswith((";", "#")):
-            continue
-        if line.startswith("[") and line.endswith("]"):
-            name = line[1:-1]
-            current = sections.setdefault(name, {})
-            lines.setdefault(name, number)
-        elif current is not None and "=" in line:
-            k, v = line.split("=", 1)
-            current[k.strip()] = v.strip().strip('"')
-            lines.setdefault(f"{name}/{k.strip()}", number)
-    return sections, lines
-
-
-# romfs2 systemholder.py reads core.0 to core.19.
-_RECALBOX_CORE_SLOTS = 20
-_RECALBOX_TARGET = "BR2_PACKAGE_RECALBOX_TARGET_"
-_ENABLED = re.compile(r"^(BR2_\w+)=y\s*$")
 # FolderData.cpp IsMatching: a list opening with files: holds whole file
 # names, each bounded by a space or an end of the list.
 _FILES_PREFIX = "files:"
@@ -801,37 +778,17 @@ def _recalbox_names(listed: str) -> list[str]:
     return [listed.strip()] if listed.strip() else []
 
 
-def _recalbox_boards(fetcher: Fetcher, key: str, configs_dir: str) -> dict[str, tuple[str, dict[str, int]]]:
-    """Each board's tag and the packages its defconfig enables, with their
-    lines. The tag is the lowercased BR2_PACKAGE_RECALBOX_TARGET_<tag>
-    (romfs2 configin.py), the suffix a system.ini key or section takes."""
+def _recalbox_boards(fetcher: Fetcher, key: str, configs_dir: str) -> dict[str, tuple[str, Defconfig]]:
+    """Each board and the defconfig that builds it, with the lines of the
+    packages it enables."""
     fetcher.cache_directory(key, configs_dir)
-    boards: dict[str, tuple[str, dict[str, int]]] = {}
-    for path in fetcher.entries(key, configs_dir):
-        if not path.endswith("_defconfig"):
-            continue
-        enabled: dict[str, int] = {}
-        for number, line in enumerate(fetcher.text(key, path).splitlines(), 1):
-            found = _ENABLED.match(line.strip())
-            if found:
-                enabled.setdefault(found.group(1), number)
-        tags = [name[len(_RECALBOX_TARGET):].lower() for name in enabled if name.startswith(_RECALBOX_TARGET)]
-        if tags:
-            boards[tags[0]] = (path, enabled)
-    if not boards:
+    found = defconfig_boards(
+        (path, fetcher.text(key, path))
+        for path in fetcher.entries(key, configs_dir) if path.endswith("_defconfig")
+    )
+    if not found:
         raise SourceError(f"{configs_dir}: no defconfig names a Recalbox target")
-    return boards
-
-
-def _recalbox_get(
-    sections: dict[str, dict[str, str]], lines: dict[str, int], section: str, key: str, board: str
-) -> tuple[str | None, int | None]:
-    """systemholder.py __get: the board's section, then the board's key,
-    then the plain key."""
-    for where, name in ((f"{section}.{board}", key), (section, f"{key}.{board}"), (section, key)):
-        if name in sections.get(where, {}):
-            return sections[where][name], lines.get(f"{where}/{name}")
-    return None, None
+    return found
 
 
 @register("recalbox")
@@ -853,7 +810,8 @@ def recalbox(spec: dict, fetcher: Fetcher) -> list[dict]:
         text = fetcher.optional_text(key, path)
         if text is None:
             continue
-        sections, lines = _ini_sections(text)
+        ini = read_system_ini(text)
+        sections, lines = ini.sections, ini.lines
         system = sections.get("system", {})
         folder = _strip_prefix(system.get("roms.folder", ""), ["%ROOT%/"])
         if not folder:
@@ -861,19 +819,17 @@ def recalbox(spec: dict, fetcher: Fetcher) -> list[dict]:
         picks: dict[str, dict] = {}
         extensions: set[str] = set()
         names: set[str] = set()
-        for board, (config_path, enabled) in sorted(boards.items()):
+        for board, (config_path, config) in sorted(boards.items()):
+            enabled = config.enabled
             cores = []
-            for slot in range(_RECALBOX_CORE_SLOTS):
-                section = f"core.{slot}"
-                if section not in sections and f"{section}.{board}" not in sections:
-                    continue
-                package, _ = _recalbox_get(sections, lines, section, "package", board)
+            for section in ini.slots(board):
+                package, _ = ini.get(section, "package", board)
                 if package not in enabled:
                     continue
-                priority, priority_line = _recalbox_get(sections, lines, section, "priority", board)
-                core, core_line = _recalbox_get(sections, lines, section, "core", board)
-                emulator, _ = _recalbox_get(sections, lines, section, "emulator", board)
-                exts, _ = _recalbox_get(sections, lines, section, "extensions", board)
+                priority, priority_line = ini.get(section, "priority", board)
+                core, core_line = ini.get(section, "core", board)
+                emulator, _ = ini.get(section, "emulator", board)
+                exts, _ = ini.get(section, "extensions", board)
                 listed = exts or ""
                 if listed.startswith(_FILES_PREFIX):
                     names.update(_recalbox_names(listed[len(_FILES_PREFIX):]))

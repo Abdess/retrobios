@@ -15,12 +15,15 @@ Recalbox verification logic:
 
 from __future__ import annotations
 
+from collections.abc import Container
+
 from core import upstream
 from model.safeparse import parse_untrusted_xml
 
 from .base_scraper import BaseScraper, BiosRequirement, fetch_bytes, systems_from_requirements
 from .recalbox_launchers import SOURCE_FILES as LAUNCHER_FILES
 from .recalbox_launchers import LauncherShapeError, extract_launchers
+from .recalbox_romfs import read_system_ini
 
 PLATFORM_NAME = "recalbox"
 
@@ -138,30 +141,6 @@ BLOBS_QUERY = (
 BLOBS_PER_QUERY = 50
 
 
-def _ini_sections(text: str) -> dict[str, dict[str, str]]:
-    """Sections and their key = value lines of one Recalbox system.ini.
-
-    Recalbox's .ini files are not strict INI (a value can run on a bare
-    line), so only sections and key = value lines are read.
-    """
-    import re
-
-    sections: dict[str, dict[str, str]] = {}
-    current: dict[str, str] | None = None
-    for raw in text.splitlines():
-        line = raw.strip()
-        if not line or line.startswith((";", "#")):
-            continue
-        header = re.fullmatch(r"\[([^\]]+)\]", line)
-        if header:
-            current = sections.setdefault(header.group(1).strip(), {})
-            continue
-        if current is not None and "=" in line:
-            key, value = line.split("=", 1)
-            current[key.strip()] = value.strip().strip('"')
-    return sections
-
-
 def _core_names(values: dict[str, str]) -> tuple[set[str], set[str]]:
     """(cores, standalone) one [core.N] section names."""
     emulator = values.get("emulator", "")
@@ -180,7 +159,7 @@ def system_ini_libretro(text: str) -> set[str]:
 
     return {
         values.get("core", "")
-        for section, values in _ini_sections(text).items()
+        for section, values in read_system_ini(text).sections.items()
         if re.fullmatch(r"core\.\d+(\.[\w-]+)?", section)
         and values.get("emulator") == "libretro" and values.get("core")
     }
@@ -193,7 +172,7 @@ def system_ini_name(text: str, folder: str) -> str:
     (projects/configgen/configgen/generators/libretro/libretroRetroarch.py
     savesFolder). The folder name stands in where the file names none.
     """
-    return _ini_sections(text).get("system", {}).get("name") or folder
+    return read_system_ini(text).sections.get("system", {}).get("name") or folder
 
 
 def libretro_systems(inis: dict[str, str]) -> dict[str, list[str]]:
@@ -221,7 +200,7 @@ def system_ini_cores(text: str) -> tuple[set[str], set[str]]:
 
     cores: set[str] = set()
     standalone: set[str] = set()
-    for section, values in _ini_sections(text).items():
+    for section, values in read_system_ini(text).sections.items():
         if not re.fullmatch(r"core\.\d+(\.[\w-]+)?", section):
             continue
         found, alone = _core_names(values)
@@ -230,11 +209,7 @@ def system_ini_cores(text: str) -> tuple[set[str], set[str]]:
     return cores, standalone
 
 
-# romfs2 systemholder.py reads core.0 to core.19.
-CORE_SLOTS = 20
-
-
-def board_cores(text: str, board: str, enabled: set[str]) -> set[str]:
+def board_cores(text: str, board: str, enabled: Container[str]) -> set[str]:
     """The cores of one system.ini a board's image builds.
 
     romfs2 builds each board's list as systemholder.py does: a slot exists
@@ -243,21 +218,12 @@ def board_cores(text: str, board: str, enabled: set[str]) -> set[str]:
     then plain, and a core is kept when the Buildroot package it names is
     enabled in the board's defconfig.
     """
-    sections = _ini_sections(text)
+    ini = read_system_ini(text)
     cores: set[str] = set()
-    for slot in range(CORE_SLOTS):
-        plain, own = f"core.{slot}", f"core.{slot}.{board}"
-        if plain not in sections and own not in sections:
-            continue
-
-        def read(key: str, plain: str = plain, own: str = own) -> str:
-            for where, name in ((own, key), (plain, f"{key}.{board}"), (plain, key)):
-                if name in sections.get(where, {}):
-                    return sections[where][name]
-            return ""
-
-        if read("package") in enabled:
-            cores |= _core_names({"emulator": read("emulator"), "core": read("core")})[0]
+    for slot in ini.slots(board):
+        if ini.get(slot, "package", board)[0] in enabled:
+            values = {key: ini.get(slot, key, board)[0] or "" for key in ("emulator", "core")}
+            cores |= _core_names(values)[0]
     return cores
 
 

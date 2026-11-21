@@ -1,8 +1,9 @@
 """Scraper for Recalbox per-board emulator availability.
 
 Sources (recalbox/recalbox on GitLab, at the tag platforms/recalbox.yml names):
-  - configs/recalbox-<board>_defconfig -- the Buildroot packages each image
-    enables, one `BR2_PACKAGE_<NAME>=y` line per emulator package
+  - configs/*_defconfig -- the board each image builds, its
+    `BR2_PACKAGE_RECALBOX_TARGET_<BOARD>=y` line, and the Buildroot packages
+    it enables, one `BR2_PACKAGE_<NAME>=y` line per emulator package
   - package/recalbox-romfs2/systems/<system>/system.ini -- the cores of each
     system, each `[core.N]` naming the package that builds it, with board
     overrides (`package.<board>`, `[core.N.<board>]`)
@@ -20,18 +21,12 @@ from datetime import datetime, timezone
 
 from . import BaseTargetScraper, target_cli
 from ..base_scraper import fetch_text
+from ..recalbox_romfs import defconfig_boards
 from ..recalbox_scraper import Scraper as PlatformScraper, board_cores, tree_listing
 
 PLATFORM_NAME = "recalbox"
 
 DEFCONFIG_URL = "https://gitlab.com/recalbox/recalbox/-/raw/{tag}/configs/{name}"
-_DEFCONFIG_RE = re.compile(r"^recalbox-(\w+)_defconfig$")
-_ENABLED_RE = re.compile(r"^(BR2_PACKAGE_\w+)=y\s*$", re.MULTILINE)
-
-
-def enabled_packages(defconfig: str) -> set[str]:
-    """The Buildroot packages a defconfig turns on."""
-    return set(_ENABLED_RE.findall(defconfig))
 
 
 def defconfig_arch(defconfig: str) -> str:
@@ -52,24 +47,23 @@ class Scraper(BaseTargetScraper):
     def fetch_targets(self) -> dict:
         tag = self.pinned_revision(PLATFORM_NAME)
         platform = PlatformScraper(tag)
-        boards = {
-            match.group(1): item["name"]
+        defconfigs = {
+            item["name"]: fetch_text(DEFCONFIG_URL.format(tag=tag, name=item["name"]))
             for item in tree_listing("configs", tag)
-            if (match := _DEFCONFIG_RE.match(item.get("name", "")))
+            if item.get("name", "").endswith("_defconfig")
         }
-        if not boards:
-            raise RuntimeError(f"no recalbox-*_defconfig in configs/ at {tag}")
+        built = defconfig_boards(defconfigs.items())
+        if not built:
+            raise RuntimeError(f"no defconfig in configs/ at {tag} names a Recalbox target")
 
         inis = platform._system_inis(platform.system_folders())
 
         targets: dict[str, dict] = {}
-        for board, name in sorted(boards.items()):
-            defconfig = fetch_text(DEFCONFIG_URL.format(tag=tag, name=name))
-            enabled = enabled_packages(defconfig)
+        for board, (name, config) in sorted(built.items()):
             cores: set[str] = set()
             for text in inis:
-                cores |= board_cores(text, board, enabled)
-            arch = defconfig_arch(defconfig)
+                cores |= board_cores(text, board, config.enabled)
+            arch = defconfig_arch(defconfigs[name])
             targets[board] = {"architecture": arch, "cores": sorted(cores)}
             print(f"  {board} ({arch}): {len(cores)} cores", file=sys.stderr)
 
