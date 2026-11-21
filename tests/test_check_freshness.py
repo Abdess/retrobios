@@ -21,6 +21,7 @@ from pathlib import Path
 
 from core import upstream
 from core.cli import InputMissing
+from exporter.native import ExportResult
 from exporter.originals import SOURCES_INDEX
 from freshness.catalogs import (
     NO_INTRO_MIRROR,
@@ -188,16 +189,15 @@ class PublishedExportTests(unittest.TestCase):
         self.published = Path(self._tmp.name)
         (self.published / "plat").mkdir()
         (self.published / "plat" / "list.txt").write_text("a", encoding="utf-8")
-        (self.published / "plat.json").write_text("{}", encoding="utf-8")
+        (self.published / "plat.json").write_text("{}\n", encoding="utf-8")
 
     def _state(self, written: str, ok: bool = True) -> str:
-        def fake(platform, _cls, _truth, output, *_rest):
-            (output / platform).mkdir(parents=True)
-            (output / platform / "list.txt").write_text(written, encoding="utf-8")
-            (output / f"{platform}.json").write_text("{}", encoding="utf-8")
-            return ok, [] if ok else ["the platform's own file is required"]
+        def fake(platform, *_rest):
+            if not ok:
+                return ExportResult(platform, False, ["the platform's own file is required"])
+            return ExportResult(platform, True, [], {"list.txt": written}, report={})
 
-        with mock.patch("freshness.native.export_platform", fake):
+        with mock.patch("freshness.native.build_export", fake):
             return published_export_state(
                 "plat", object, Path("t"), Path("p"), Path("c"), self.published
             )

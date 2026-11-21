@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import functools
 import json
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import yaml
@@ -149,6 +150,28 @@ def doubled_in(scraped: dict | None, platforms_dir: str) -> list[dict]:
     )
 
 
+@dataclass(frozen=True)
+class ExportResult:
+    """One platform's export as computed: its files and report, or why it stops."""
+
+    platform: str
+    ok: bool
+    messages: list[str]
+    produced: dict[str, str | bytes] = field(default_factory=dict)
+    modes: dict[str, int] = field(default_factory=dict)
+    report: dict | None = None
+
+    def tree(self) -> dict[str, bytes]:
+        """The bytes write_export puts under the output directory, by path."""
+        tree = {
+            f"{self.platform}/{relative}": _as_bytes(content)
+            for relative, content in self.produced.items()
+        }
+        if self.report is not None:
+            tree[f"{self.platform}.json"] = report_text(self.report).encode("utf-8")
+        return tree
+
+
 def export_platform(
     platform: str,
     exporter_class: type,
@@ -159,21 +182,53 @@ def export_platform(
     allow_fetch: bool,
 ) -> tuple[bool, list[str]]:
     """Write one platform's corrected file. Returns (ok, messages)."""
+    result = build_export(
+        platform, exporter_class, truth_dir, platforms_dir, upstream_dir, allow_fetch,
+    )
+    write_export(result, output_dir)
+    return result.ok, result.messages
+
+
+def write_export(result: ExportResult, output_dir: Path) -> None:
+    """Put a computed export under output_dir: its files, then its report.
+
+    A failed export writes nothing, so the published one stays.
+    """
+    if not result.ok or result.report is None:
+        return
+    platform_dir = output_dir / result.platform
+    _remove_stale(platform_dir, set(result.produced))
+    _write_produced(platform_dir, result.produced, result.modes)
+    write_report(output_dir / f"{result.platform}.json", result.report)
+
+
+def build_export(
+    platform: str,
+    exporter_class: type,
+    truth_dir: Path,
+    platforms_dir: str,
+    upstream_dir: Path,
+    allow_fetch: bool,
+) -> ExportResult:
+    """One platform's corrected file and its report, nothing written."""
     try:
         truth, scraped = load_inputs(platform, truth_dir, platforms_dir)
     except StaleTruth as exc:
-        return False, [str(exc)]
+        return ExportResult(platform, False, [str(exc)])
     if truth is None:
         # Without a truth the export is the platform's file copied back, and
         # it replaced the corrected one in exports/ on a fresh clone.
-        return False, [
+        return ExportResult(platform, False, [
             f"{truth_dir / f'{platform}.yml'} is absent: run "
             f"python scripts/generate_truth.py --platform {platform}"
-        ]
+        ])
 
     systems, report = build_native_model(truth, scraped)
     if not systems:
-        return False, ["nothing to write: neither the platform nor the truth has data"]
+        return ExportResult(
+            platform, False,
+            ["nothing to write: neither the platform nor the truth has data"],
+        )
 
     profiles = _profiles()
     exporter: BaseExporter = exporter_class(profiles)
@@ -181,11 +236,7 @@ def export_platform(
         exporter, systems, report, scraped, upstream_dir, allow_fetch,
     )
     if stopped:
-        return False, stopped
-
-    platform_dir = output_dir / platform
-    _remove_stale(platform_dir, set(produced))
-    _write_produced(platform_dir, produced, exporter.file_modes())
+        return ExportResult(platform, False, stopped)
 
     changes = landed_changes(exporter, systems)
     applied, filled = changes.applied, changes.filled
@@ -209,7 +260,7 @@ def export_platform(
     doubled = doubled_in(scraped, platforms_dir)
     messages = _export_messages(summary, unwritten, candidates, doubled, withheld, changes)
 
-    write_report(output_dir / f"{platform}.json", {
+    return ExportResult(platform, True, messages, produced, exporter.file_modes(), {
         "platform": platform,
         "originals": wanted_sources(exporter, systems, scraped),
         "files": sorted(produced),
@@ -234,7 +285,6 @@ def export_platform(
         "doubled": doubled,
         "invalid": issues,
     })
-    return True, messages
 
 
 def _produce(
@@ -386,9 +436,17 @@ def _write_produced(
     for relative, content in produced.items():
         path = root / relative
         path.parent.mkdir(parents=True, exist_ok=True)
-        data = content if isinstance(content, bytes) else content.encode("utf-8")
-        write_bytes_atomic(str(path), data)
+        write_bytes_atomic(str(path), _as_bytes(content))
         path.chmod(modes.get(relative, 0o644))
+
+
+def _as_bytes(content: str | bytes) -> bytes:
+    return content if isinstance(content, bytes) else content.encode("utf-8")
+
+
+def report_text(report: dict) -> str:
+    """The JSON text a report is written as."""
+    return json.dumps(report, indent=2) + "\n"
 
 
 def write_report(path: Path, report: dict) -> None:
@@ -400,4 +458,4 @@ def write_report(path: Path, report: dict) -> None:
     output directory itself may not exist yet.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
-    write_if_changed(str(path), json.dumps(report, indent=2) + "\n")
+    write_if_changed(str(path), report_text(report))

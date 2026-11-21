@@ -17,7 +17,7 @@ from pathlib import Path
 
 from exporter import native
 from exporter.landed import landed_changes
-from exporter.native import current_truth, export_platform, write_report
+from exporter.native import build_export, current_truth, write_report
 from model.profiles import load_emulator_profiles
 from sitegen.exports import generate_exports_page, load_export_reports
 
@@ -56,8 +56,8 @@ class ExportReportIsWrittenAndRead(unittest.TestCase):
 
     def test_export_keeps_every_change_not_the_printed_five(self):
         source = (ROOT / "scripts" / "exporter" / "native.py").read_text(encoding="utf-8")
-        body = source[source.index("def export_platform("):source.index("def write_report(")]
-        call = body[body.index("write_report("):]
+        body = source[source.index("def build_export("):source.index("def write_report(")]
+        call = body[body.index("ExportResult(platform, True"):]
         for key, value in (
             ("hashes_updated", "applied"), ("hashes_filled", "filled"),
             ("sizes_updated", "resized"), ("sizes_removed", "unsized"),
@@ -223,12 +223,14 @@ class TheRunReportStatesWhatTheFileCarries(unittest.TestCase):
                 mock.patch.object(native, "unpinned", return_value=[]), \
                 mock.patch.object(native, "removal_candidates", return_value=[]), \
                 mock.patch.object(native, "doubled_in", return_value=[doubled]):
-            ok, messages = export_platform(
-                "plat", Plain, Path(scratch), Path(scratch) / "out",
-                str(ROOT / "platforms"), Path(scratch) / "cache", False,
+            result = build_export(
+                "plat", Plain, Path(scratch), str(ROOT / "platforms"),
+                Path(scratch) / "cache", False,
             )
-            self.assertTrue(ok, messages)
-            report = json.loads((Path(scratch) / "out" / "plat.json").read_text())
+        messages = result.messages
+        self.assertTrue(result.ok, messages)
+        report = result.report
+        assert report is not None
         self.assertEqual(report["doubled"], [doubled])
         self.assertIn(
             "1 destination declared twice for two files, listed in the report", messages
@@ -469,7 +471,7 @@ class ThePageShowsEachValueBeforeAndAfter(unittest.TestCase):
 
     def test_the_report_carries_every_change(self):
         source = (ROOT / "scripts" / "exporter" / "native.py").read_text(encoding="utf-8")
-        body = source[source.index("def export_platform("):source.index("def write_report(")]
+        body = source[source.index("def build_export("):source.index("def write_report(")]
         self.assertIn('"changes": changes.records,', body)
 
 
@@ -578,7 +580,7 @@ class RemovalCandidatesNeedAReadingNoCoreAnswers(unittest.TestCase):
 
     def test_the_report_carries_the_list(self):
         source = (ROOT / "scripts" / "exporter" / "native.py").read_text(encoding="utf-8")
-        body = source[source.index("def export_platform("):source.index("def write_report(")]
+        body = source[source.index("def build_export("):source.index("def write_report(")]
         self.assertIn('"removal_candidates": candidates,', body)
 
 
@@ -675,7 +677,7 @@ class ADestinationDeclaredTwiceIsNamed(unittest.TestCase):
 
     def test_the_run_counts_it_and_the_report_carries_it(self):
         source = (ROOT / "scripts" / "exporter" / "native.py").read_text(encoding="utf-8")
-        body = source[source.index("def export_platform("):source.index("def write_report(")]
+        body = source[source.index("def build_export("):source.index("def write_report(")]
         self.assertIn('"doubled": doubled,', body)
         self.assertIn("declared twice for two files", body)
 

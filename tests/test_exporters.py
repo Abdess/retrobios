@@ -1618,7 +1618,7 @@ class AnExportLeavesNoStaleFile(unittest.TestCase):
 
     def test_the_export_clears_before_it_writes(self):
         source = (REPO_ROOT / "scripts" / "exporter" / "native.py").read_text()
-        body = source[source.index("def export_platform("):]
+        body = source[source.index("def write_export("):]
         self.assertLess(body.index("_remove_stale("), body.index("_write_produced("))
 
 

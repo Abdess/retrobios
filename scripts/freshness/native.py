@@ -5,12 +5,11 @@ from __future__ import annotations
 import contextlib
 import io
 import sys
-import tempfile
 from collections.abc import Iterator
 from pathlib import Path
 
 from exporter import discover_exporters
-from exporter.native import StaleTruth, export_platform, load_inputs
+from exporter.native import StaleTruth, build_export, load_inputs
 from exporter.originals import SOURCES_INDEX, SourcesIndexUnreadable, load_sources, source_key, wanted_sources
 from model.platforms import inheritance_chain
 from model.registry import list_registered_platforms
@@ -73,18 +72,14 @@ def published_export_state(
     that moves a hash leaves the published file behind until someone runs
     the export again, and this is what says so.
     """
-    scratch_root = Path("tmp")
-    scratch_root.mkdir(exist_ok=True)
-    with tempfile.TemporaryDirectory(dir=scratch_root) as scratch:
-        with contextlib.redirect_stdout(io.StringIO()):
-            ok, messages = export_platform(
-                platform, exporter_class, truth_dir, Path(scratch),
-                str(platforms_dir), cache_dir, False,
-            )
-        if not ok:
-            return f"the export fails: {messages[0] if messages else 'no message'}"
-        if _export_tree(Path(scratch), platform) != _export_tree(published, platform):
-            return f"{published.as_posix()}/{platform} is not what the export writes now"
+    with contextlib.redirect_stdout(io.StringIO()):
+        result = build_export(
+            platform, exporter_class, truth_dir, str(platforms_dir), cache_dir, False,
+        )
+    if not result.ok:
+        return f"the export fails: {result.messages[0] if result.messages else 'no message'}"
+    if result.tree() != _export_tree(published, platform):
+        return f"{published.as_posix()}/{platform} is not what the export writes now"
     return ""
 
 
