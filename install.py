@@ -2080,13 +2080,12 @@ def _typed_folder(raw: str) -> Path:
 
     Explorer's "Copy as path" puts quotes around it, and users quote a path
     with spaces: kept, they sent the files into a folder named `"` under
-    the current directory, and the run said Done.
+    the current directory, and the run said Done. A half-selected copy
+    quotes one end only.
     """
-    text = raw.strip()
-    if len(text) >= 2 and text[0] == text[-1] and text[0] in "'\"":
-        text = text[1:-1].strip()
+    text = raw.strip().strip("\"'").strip()
     # Under WSL, D: and D:\ are the Windows drive the screen calls D:.
-    return _host_path(os.path.expandvars(os.path.expanduser(text)))
+    return _host_path(os.path.expanduser(os.path.expandvars(text)))
 
 
 def _ask(prompt: str) -> str:
@@ -28906,11 +28905,9 @@ def _open_folder_screen(state: TuiState, default: Path | None,
 
 def typed_path(text: str) -> Path | None:
     """A folder typed or pasted: quotes off, ~ and variables expanded."""
-    # Explorer's "Copy as path" quotes both ends, a half-selected copy one.
-    text = text.strip().strip("\"'").strip()
-    if not text:
+    if not text.strip().strip("\"'").strip():
         return None
-    return _host_path(os.path.expanduser(os.path.expandvars(text)))
+    return _typed_folder(text)
 
 
 def _tui_folder_facts(state: TuiState) -> dict:

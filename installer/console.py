@@ -19,13 +19,12 @@ def _typed_folder(raw: str) -> Path:
 
     Explorer's "Copy as path" puts quotes around it, and users quote a path
     with spaces: kept, they sent the files into a folder named `"` under
-    the current directory, and the run said Done.
+    the current directory, and the run said Done. A half-selected copy
+    quotes one end only.
     """
-    text = raw.strip()
-    if len(text) >= 2 and text[0] == text[-1] and text[0] in "'\"":
-        text = text[1:-1].strip()
+    text = raw.strip().strip("\"'").strip()
     # Under WSL, D: and D:\ are the Windows drive the screen calls D:.
-    return _host_path(os.path.expandvars(os.path.expanduser(text)))
+    return _host_path(os.path.expanduser(os.path.expandvars(text)))
 
 
 def _ask(prompt: str) -> str:

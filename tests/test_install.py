@@ -2218,7 +2218,9 @@ class TestManualPlatformPrompt(unittest.TestCase):
         folder named `"` under the current directory, and the run said Done."""
         root = Path(_tempdir(self))
         for typed in (f'"{root}/My Card/bios"', f"'{root}/My Card/bios'",
-                      f'  "{root}/My Card/bios"  '):
+                      f'  "{root}/My Card/bios"  ',
+                      # A half-selected copy: line mode kept the quote.
+                      f'"{root}/My Card/bios'):
             answers = iter(["1", typed])
             with self.subTest(typed=typed), \
                     unittest.mock.patch("builtins.input",

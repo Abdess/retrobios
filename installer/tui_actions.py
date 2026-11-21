@@ -19,7 +19,7 @@ from installer.cards import (
     card_system,
 )
 from installer.choices import emulator_names
-from installer.console import QUIT_CODE
+from installer.console import QUIT_CODE, _typed_folder
 from installer.cores import CORE_PLATFORMS, core_dirs, installed_cores
 from installer.destination import (
     _card_is,
@@ -33,7 +33,7 @@ from installer.destination import (
 from installer.detect_os import _DETECTED_OS, _FROM_CARD, detected_os, detected_shown
 from installer.embedded import CARD_PLATFORMS, _a
 from installer.games import games_probe
-from installer.host_fs import _exists, _folder_writable, _host_path, _is_dir, _nearest_folder, closed_folder
+from installer.host_fs import _exists, _folder_writable, _is_dir, _nearest_folder, closed_folder
 from installer.install_record import RECORD_NARROWING, _RECORD_SAID, record_options, setup_record
 from installer.invocation import OFFLINE_VARIABLE, offline_requested
 from installer.network import local_targets
@@ -732,11 +732,9 @@ def _open_folder_screen(state: TuiState, default: Path | None,
 
 def typed_path(text: str) -> Path | None:
     """A folder typed or pasted: quotes off, ~ and variables expanded."""
-    # Explorer's "Copy as path" quotes both ends, a half-selected copy one.
-    text = text.strip().strip("\"'").strip()
-    if not text:
+    if not text.strip().strip("\"'").strip():
         return None
-    return _host_path(os.path.expanduser(os.path.expandvars(text)))
+    return _typed_folder(text)
 
 
 def _tui_folder_facts(state: TuiState) -> dict:
