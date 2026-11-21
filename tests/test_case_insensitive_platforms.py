@@ -47,7 +47,7 @@ class ThePackReadmeNamesTheSpellingsItLeavesOut(unittest.TestCase):
         from model.platforms import _platform_config_cache
         from model.profiles import emulator_profiles_cache
         import generate_db
-        tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
         os.chdir(tmp.name)

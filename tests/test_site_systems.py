@@ -33,6 +33,7 @@ from __future__ import annotations
 import tests
 
 import re
+import tempfile
 import types
 import unittest
 from pathlib import Path
@@ -374,7 +375,7 @@ class TheBuiltSonyPage(unittest.TestCase):
         self.assertNotRegex(self.text, r'<h2 id="playstation[^"]*"><img[^>]*>\s')
 
 
-TMP = REPO_ROOT / "tmp"
+TMP = Path(tempfile.gettempdir())
 
 
 def _file_at(name: str, char: str, path: str) -> dict:
@@ -520,7 +521,6 @@ class ArcadeSetsAreNamedWhereverFiled(unittest.TestCase):
 
 class CardsSayWhichReleaseTheSetMatches(unittest.TestCase):
     def setUp(self) -> None:
-        TMP.mkdir(exist_ok=True)
         self.path = TMP / "r3_systems_set.zip"
         with zipfile.ZipFile(self.path, "w") as archive:
             archive.writestr("sp-s2.sp1", b"bios")

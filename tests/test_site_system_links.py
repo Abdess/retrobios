@@ -134,7 +134,7 @@ class ACopyIsOnItsOwnFoldersPage(unittest.TestCase):
     def test_every_folder_holding_a_copy_lists_it(self):
         import tempfile
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             for rel in ("Arcade/FBNeo/sl31253.rom", "Fairchild/Channel F/sl31253.bin"):
                 (Path(tmp) / rel).parent.mkdir(parents=True, exist_ok=True)
                 (Path(tmp) / rel).write_bytes(b"x")
@@ -203,7 +203,7 @@ class ACopyFiledByEmulatorDoesNotMoveAMachine(unittest.TestCase):
     def test_the_copy_under_the_declared_name_places_the_system(self):
         import tempfile
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             db = self._db(tmp)
             files = [{"name": "disksys.rom", "sha1": "d" * 40}]
             self.assertEqual(
@@ -221,7 +221,7 @@ class ACopyFiledByEmulatorDoesNotMoveAMachine(unittest.TestCase):
     def test_an_id_that_spells_a_folder_links_to_it(self):
         import tempfile
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             db = self._db(tmp)
             manufacturers = collection.group_by_manufacturer(db)
             config = {"systems": {"nintendo-nes": {"files": [

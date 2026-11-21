@@ -29,7 +29,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 class SplitPartsCoverTheExtras(unittest.TestCase):
     def test_an_extra_of_an_undeclared_system_has_a_part(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "platforms").mkdir()
             (root / "emulators").mkdir()
@@ -86,7 +86,7 @@ class SplitPartsHoldWhatTheFullPackHolds(unittest.TestCase):
     """
 
     def _build(self, platform: dict, profiles: dict[str, dict], blobs: dict[str, bytes]):
-        tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         root = Path(tmp.name)
         (root / "platforms").mkdir()

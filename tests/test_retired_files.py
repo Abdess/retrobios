@@ -54,7 +54,7 @@ class WhatLeftIsRecorded(unittest.TestCase):
         self.assertEqual(model_retired.merge(again, {}, self.old), {})
 
     def test_generate_db_writes_it_beside_the_database(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             database = Path(tmp) / "database.json"
             path = model_retired.retired_path(database)
             self.assertEqual(path, Path(tmp) / "retired.json")

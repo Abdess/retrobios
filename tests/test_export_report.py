@@ -39,7 +39,7 @@ def _report(platform: str, files: list[str], **changes: object) -> dict:
 
 class ExportReportIsWrittenAndRead(unittest.TestCase):
     def test_report_round_trips_through_the_page_loader(self):
-        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as scratch:
+        with tempfile.TemporaryDirectory() as scratch:
             report = _report("recalbox", ["es_bios.xml"])
             write_report(Path(scratch) / "recalbox.json", report)
             (Path(scratch) / "recalbox").mkdir()
@@ -48,7 +48,7 @@ class ExportReportIsWrittenAndRead(unittest.TestCase):
     def test_a_report_goes_into_a_directory_not_yet_made(self):
         """RetroPie with nothing left to correct writes no file, so its
         output directory was never made and the report crashed --all."""
-        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as scratch:
+        with tempfile.TemporaryDirectory() as scratch:
             target = Path(scratch) / "fresh" / "retropie.json"
             write_report(target, _report("retropie", []))
             self.assertTrue(target.exists())
@@ -216,7 +216,7 @@ class TheRunReportStatesWhatTheFileCarries(unittest.TestCase):
              "md5": "a" * 32},
         ]}}}
         doubled = {"destination": "a.bin", "declarations": []}
-        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as scratch, \
+        with tempfile.TemporaryDirectory() as scratch, \
                 mock.patch.object(native, "load_inputs",
                                   return_value=(truth, scraped)), \
                 mock.patch.object(native, "unpinned", return_value=[]), \
@@ -589,7 +589,7 @@ class ADestinationDeclaredTwiceIsNamed(unittest.TestCase):
     def setUp(self):
         import hashlib
 
-        self._tmp = tempfile.TemporaryDirectory(dir=ROOT / "tmp")
+        self._tmp = tempfile.TemporaryDirectory()
         root = Path(self._tmp.name)
         files, by_md5, by_name = {}, {}, {}
         self.md5 = {}

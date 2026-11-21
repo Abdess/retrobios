@@ -11,6 +11,7 @@ the pad reaching the console, a compositor covering it) is not exercised.
 from __future__ import annotations
 
 import tests
+from tests import scratch_dir
 
 import contextlib
 import hashlib
@@ -24,7 +25,6 @@ import signal
 import struct
 import subprocess
 import sys
-import tempfile
 import termios
 import time
 import unittest
@@ -72,14 +72,6 @@ INTERFACE_KEYS = {
 }
 # gptokeyb's char_to_keycode (PortsMaster/gptokeyb src/util.cpp) names.
 GPTOKEYB_NAMES = set(SEQUENCES) | {"backspace", '\\"'}
-
-
-def _tempdir(test: unittest.TestCase) -> Path:
-    scratch = REPO_ROOT / "tmp"
-    scratch.mkdir(exist_ok=True)
-    path = Path(tempfile.mkdtemp(dir=str(scratch)))
-    test.addCleanup(shutil.rmtree, path, True)
-    return path
 
 
 def read_gptk(path: Path) -> dict[str, list[str]]:
@@ -282,7 +274,7 @@ class TheArchives(unittest.TestCase):
     }
 
     def setUp(self):
-        self.out = _tempdir(self)
+        self.out = scratch_dir(self)
 
     def test_every_release_archive_is_built(self):
         self.assertEqual(set(port.ARCHIVES), set(self.LAYOUT))
@@ -364,7 +356,7 @@ class TheArchives(unittest.TestCase):
                 self.assertEqual(zf.read(f"{folder}/packs.txt").decode(), expected)
 
     def test_an_unpinned_installer_is_refused(self):
-        root = _tempdir(self)
+        root = scratch_dir(self)
         for name in ("install.py", "install.sh", "LICENSE", "NOTICE"):
             shutil.copy(REPO_ROOT / name, root / name)
         shutil.copytree(PORTS, root / "ports")
@@ -694,7 +686,7 @@ class Device:
 
     def __init__(self, test: unittest.TestCase, **env: str):
         self.test = test
-        self.root = _tempdir(test)
+        self.root = scratch_dir(test)
         self.state = self.root / "state"
         self.state.mkdir()
         # Registered before every other cleanup, so it runs after them.
@@ -1568,7 +1560,9 @@ class TheBatoceraPort(unittest.TestCase):
         socket_dir.mkdir()
         import socket as _socket
         sock = _socket.socket(_socket.AF_UNIX)
-        sock.bind(str(socket_dir / "X0"))
+        # A socket address holds 108 bytes, fewer than a scratch folder can.
+        with contextlib.chdir(socket_dir):
+            sock.bind("X0")
         self.addCleanup(sock.close)
         cookie = device.root / "Xauthority"
         cookie.write_text("")

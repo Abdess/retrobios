@@ -1592,7 +1592,7 @@ class Helpers(unittest.TestCase):
         from scraper import retrobat_scraper as rs
 
         pin = "ca486005f598551600d04a33b3156a5d764368d6"
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as scratch:
+        with tempfile.TemporaryDirectory() as scratch:
             yml = Path(scratch) / "retrobat.yml"
             yml.write_text(
                 "source: https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/"

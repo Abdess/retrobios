@@ -27,7 +27,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 class UncachedDataDirectoryNotice(unittest.TestCase):
     def setUp(self):
-        self._tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self._tmp = tempfile.TemporaryDirectory()
         self._cwd = os.getcwd()
         os.chdir(self._tmp.name)
         Path("emulators").mkdir()

@@ -46,7 +46,7 @@ _config_dir: Path | None = None
 
 def setUpModule() -> None:
     global _config_dir
-    _config_dir = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp" / "tests"))
+    _config_dir = Path(tempfile.mkdtemp())
     config = _config_dir / "gitconfig"
     config.write_text(
         "[user]\n\tname = Test\n\temail = test@example.invalid\n"
@@ -97,7 +97,7 @@ class FakeHost(runner.Host):
 
 class Scratch(unittest.TestCase):
     def setUp(self) -> None:
-        self.tmp = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp" / "tests"))
+        self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.tmp, True)
 
     def context(self, jobs: dict, **kwargs) -> runner.Context:

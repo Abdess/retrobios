@@ -22,7 +22,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _pack(*options: str) -> tuple[subprocess.CompletedProcess, list[str]]:
-    with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out:
+    with tempfile.TemporaryDirectory() as out:
         proc = subprocess.run(
             [sys.executable, "scripts/generate_pack.py", *options, "--offline",
              "--output-dir", out],
@@ -41,7 +41,6 @@ class TheEmulatorContextIsChecked(unittest.TestCase):
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
             raise unittest.SkipTest("database.json is not built")
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
 
     def test_an_unknown_emulator_is_refused(self):
@@ -79,7 +78,7 @@ class SystemAndEmulatorPacksKeepTheirNames(unittest.TestCase):
         import generate_db
         from packs import emulatorpack
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "bios").mkdir()
             (root / "emulators").mkdir()

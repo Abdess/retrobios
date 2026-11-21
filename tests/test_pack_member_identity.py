@@ -32,7 +32,7 @@ class MembersMustBeKnown(unittest.TestCase):
         with zipfile.ZipFile(inner, "w") as zf:
             zf.writestr("rom.bin", known)
         db = {"files": {}, "indexes": {"by_md5": {md5: "s"}, "by_name": {}}}
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             pack = Path(tmp) / "P_BIOS_Pack.zip"
             with zipfile.ZipFile(pack, "w") as zf:
                 zf.writestr("clone.zip", inner.getvalue())
@@ -50,7 +50,7 @@ class DataMembersAreCheckedByContent(unittest.TestCase):
 
     def test_same_size_other_bytes_is_an_error(self):
         good = b"A" * 64
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp) / "cache"
             (cache / "Sys").mkdir(parents=True)
             (cache / "Sys" / "font.bin").write_bytes(good)

@@ -47,8 +47,7 @@ class _Response(io.BytesIO):
 
 class RefreshConcurrency(unittest.TestCase):
     def setUp(self):
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        self.tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
         self.cache = self.root / "data" / "pak"
@@ -218,7 +217,7 @@ class PackWalkHoldsTheCache(unittest.TestCase):
         import fcntl
 
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp) / "data" / "sdlpal"
             cache.mkdir(parents=True)
             (cache / "a.mkf").write_bytes(b"a")
@@ -242,7 +241,7 @@ class EmulatorPackHoldsTheCache(unittest.TestCase):
 
         from packs.datatrees import pack_data_tree
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp) / "data" / "scummvm"
             cache.mkdir(parents=True)
             (cache / "a.dat").write_bytes(b"a")
@@ -328,8 +327,7 @@ class TheManifestCarriesTheArchiveSize(unittest.TestCase):
     def test_recorded_size_is_written_and_an_unrecorded_one_left_out(self):
         from packs.datatrees import manifest_data_directories
 
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             data = Path(tmp) / "data"
             for ref in ("pak", "old"):
                 (data / ref).mkdir(parents=True)
@@ -358,8 +356,7 @@ class ASourceThatMovesIsPinnedOrFollowed(unittest.TestCase):
     def _listed(self, registry: dict, versions: dict) -> dict[str, dict]:
         from packs.datatrees import manifest_data_directories
 
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             data = Path(tmp) / "data"
             for ref, entry in registry.items():
                 (data / ref).mkdir(parents=True)
@@ -390,8 +387,7 @@ class ASourceThatMovesIsPinnedOrFollowed(unittest.TestCase):
         self.assertIs(listed["unrecorded"]["rolling"], True)
 
     def test_a_branch_is_fetched_at_the_commit_it_records(self):
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             versions = str(Path(tmp) / ".versions.json")
             entry = {"source_type": "zip", "version": "master", "strip_components": 1,
                      "source_url": "https://github.com/o/r/archive/{version}.zip",

@@ -197,7 +197,7 @@ class CheckModeExitCode(unittest.TestCase):
     def test_the_exit_code_follows_conformance(self):
         import subprocess
 
-        with tempfile.TemporaryDirectory(dir=os.path.join(REPO_ROOT, "tmp")) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             plain = os.path.join(directory, "plain.zip")
             with zipfile.ZipFile(plain, "w") as zf:
                 zf.writestr("a.bin", b"rom")

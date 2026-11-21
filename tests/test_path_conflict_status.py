@@ -233,7 +233,7 @@ class AlternativesAgreeWithThePack(unittest.TestCase):
     discrepancy, but verify took the worst status and said missing."""
 
     def setUp(self):
-        self._tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self._tmp = tempfile.TemporaryDirectory()
         self.root = Path(self._tmp.name)
         bios = self.root / "bios"
         self.emulators = self.root / "emulators"
@@ -291,7 +291,7 @@ class AMaskedArchiveIsMissing(unittest.TestCase):
     def setUp(self):
         import zipfile
 
-        self._tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self._tmp = tempfile.TemporaryDirectory()
         self.root = Path(self._tmp.name)
         self.emulators = self.root / "emulators"
         files = {}

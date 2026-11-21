@@ -6823,9 +6823,7 @@ class OneOfASearchList(unittest.TestCase):
         from model.profiles import emulator_profiles_cache
 
         emulator_profiles_cache.clear()
-        repo = Path(__file__).resolve().parent.parent
-        (repo / "tmp").mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=repo / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         previous = os.getcwd()
         os.chdir(self.root)
@@ -7090,9 +7088,7 @@ class AnArchiveIsAMemberOfASet(unittest.TestCase):
         from model.profiles import emulator_profiles_cache
 
         emulator_profiles_cache.clear()
-        repo = Path(__file__).resolve().parent.parent
-        (repo / "tmp").mkdir(exist_ok=True)
-        root = Path(tempfile.mkdtemp(dir=repo / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         previous = os.getcwd()
         os.chdir(root)

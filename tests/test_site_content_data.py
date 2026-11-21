@@ -43,7 +43,7 @@ def _guides_text() -> str:
 class GuidesLiveInYaml(unittest.TestCase):
 
     def _load(self, text: str, registry: dict | None = None) -> dict:
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "_guides.yml"
             path.write_text(text, encoding="utf-8")
             return load_guides(path, registry if registry is not None else _registry())
@@ -171,7 +171,7 @@ class NavFromFrontMatter(unittest.TestCase):
         self.assertEqual(tabs["Reference"][0], "wiki/index.md")
 
     def test_a_new_page_lands_in_its_tab_at_its_order(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             wiki = _wiki_copy(tmp)
             (wiki / "save-files.md").write_text(
                 "---\nlevel: start\norder: 45\n---\n\n# Save files\n\nText.\n",
@@ -183,7 +183,7 @@ class NavFromFrontMatter(unittest.TestCase):
         self.assertIn({"Save files": "wiki/save-files.md"}, start)
 
     def test_a_page_without_a_level_fails_by_name(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             wiki = _wiki_copy(tmp)
             (wiki / "orphan.md").write_text("# Orphan\n\nText.\n", encoding="utf-8")
             with self.assertRaisesRegex(sitegen_nav.NavError,
@@ -191,7 +191,7 @@ class NavFromFrontMatter(unittest.TestCase):
                 self._nav(wiki)
 
     def test_a_page_without_an_order_fails_by_name(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             wiki = _wiki_copy(tmp)
             (wiki / "orphan.md").write_text(
                 "---\nlevel: reference\n---\n\n# Orphan\n", encoding="utf-8")
@@ -202,7 +202,7 @@ class NavFromFrontMatter(unittest.TestCase):
                 self._nav(wiki)
 
     def test_two_pages_on_one_place_fail_naming_both(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             wiki = _wiki_copy(tmp)
             (wiki / "twin.md").write_text(
                 "---\nlevel: contribute\norder: 20\n---\n\n# Twin\n", encoding="utf-8")
@@ -211,7 +211,7 @@ class NavFromFrontMatter(unittest.TestCase):
                 self._nav(wiki)
 
     def test_nav_false_keeps_a_page_out(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             wiki = _wiki_copy(tmp)
             (wiki / "hidden.md").write_text(
                 "---\nlevel: start\nnav: false\n---\n\n# Hidden\n", encoding="utf-8")

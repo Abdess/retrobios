@@ -132,8 +132,7 @@ class Workspace(unittest.TestCase):
     """A tree with three records under measurements/ and one profile."""
 
     def setUp(self) -> None:
-        (REPO_ROOT / "tmp" / "tests").mkdir(parents=True, exist_ok=True)
-        self.tmp = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp" / "tests"))
+        self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.tmp, True)
         self.tree = self.tmp / "tree"
         self.tree.mkdir()
@@ -473,7 +472,7 @@ class SitePages(unittest.TestCase):
         """The Data page said each per-emulator database is "linked from its
         page". An emulator page shows the proof lines, which link the record
         lines and never the database."""
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as scratch:
+        with tempfile.TemporaryDirectory() as scratch:
             path = Path(scratch) / "m.sqlite"
             connection = sqlite3.connect(path)
             connection.execute("CREATE TABLE meta (key TEXT)")

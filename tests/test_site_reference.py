@@ -472,7 +472,7 @@ class BuiltBatoceraPage(unittest.TestCase):
 PUBLIC = REPO_ROOT / "website" / "public"
 API = PUBLIC / "api" / "v1"
 SITE = "https://abdess.github.io/retrobios/"
-TMP = REPO_ROOT / "tmp"
+TMP = Path(tempfile.gettempdir())
 
 
 def _built(path: Path) -> Path:
@@ -571,7 +571,7 @@ class AFolderCheckAgreesWithTheVerifier(unittest.TestCase):
         return contract, root
 
     def test_each_rule_on_a_sample_folder(self):
-        with tempfile.TemporaryDirectory(dir=TMP) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             contract, root = self._folder(Path(tmp))
             platforms = Path(tmp) / "platforms"
             platforms.mkdir()
@@ -592,7 +592,7 @@ class AFolderCheckAgreesWithTheVerifier(unittest.TestCase):
         the collection."""
         text = _built(PUBLIC / "downloads" / "platform-files.csv").read_text(encoding="utf-8")
         rows = [row for row in csv.DictReader(io.StringIO(text)) if row["platform_id"] == "batocera"]
-        with tempfile.TemporaryDirectory(dir=TMP) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             for row in rows:
                 source = REPO_ROOT / row["collection_path"] if row["collection_path"] else None
@@ -1052,7 +1052,7 @@ class TheFolderCheckReadsEmuDecksWhitelist(unittest.TestCase):
              "md5": hashlib.md5(good).hexdigest()},
             {"name": "sony-playstation:" + "0" * 32, "destination": "", "md5": "0" * 32},
         ]}}}
-        with tempfile.TemporaryDirectory(dir=TMP) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp) / "bios"
             (root / "sub").mkdir(parents=True)
             for name, data in files.items():
@@ -1378,8 +1378,7 @@ class OneAnswerOnReleasePacks(unittest.TestCase):
         self.assertEqual(found, _released())
 
     def test_the_picker_file_is_the_advertised_record(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" if (REPO_ROOT / "tmp").is_dir()
-                                         else None) as folder:
+        with tempfile.TemporaryDirectory() as folder:
             publish.write_release_advertised(Path(folder))
             written = json.loads((Path(folder) / "release-advertised.json").read_text())
         self.assertEqual(written, releaserecord.load_advertised())

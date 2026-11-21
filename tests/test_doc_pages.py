@@ -2098,7 +2098,7 @@ class LandingAChangeNamesTheCommitRules(unittest.TestCase):
         import tempfile
 
         block = re.search(r"```bash\n(.*?)```", self._landing(), re.S).group(1)
-        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as scratch:
+        with tempfile.TemporaryDirectory() as scratch:
             clone = Path(scratch)
             (clone / ".git" / "hooks").mkdir(parents=True)
             (clone / "scripts").mkdir()

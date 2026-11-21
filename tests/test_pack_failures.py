@@ -32,8 +32,7 @@ class FailedPlatformFailsTheRun(unittest.TestCase):
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
         self.addCleanup(os.chdir, previous)
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        self.tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
 
     def _args(self) -> argparse.Namespace:

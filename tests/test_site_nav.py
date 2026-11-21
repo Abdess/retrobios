@@ -255,8 +255,7 @@ class ReferenceGrouped(unittest.TestCase):
         self.assertEqual(reference[0], "wiki/index.md")
 
     def test_a_wiki_page_joins_a_group_from_its_front_matter(self):
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             wiki = Path(tmp)
             (wiki / "index.md").write_text("---\nlevel: reference\norder: 0\n---\n# Reference\n")
             (wiki / "modes.md").write_text(

@@ -686,7 +686,7 @@ class _StalledResponse(io.BytesIO):
 
 class DownloadFailuresAndRevisions(unittest.TestCase):
     def setUp(self):
-        self.dir = tempfile.mkdtemp(dir=REPO_ROOT / "tmp")
+        self.dir = tempfile.mkdtemp()
         self._urlopen = largefiles.urllib.request.urlopen
         self.addCleanup(setattr, largefiles.urllib.request, "urlopen", self._urlopen)
 
@@ -794,7 +794,7 @@ class ASameSizeReuploadIsSeen(unittest.TestCase):
     --clobber: judged by size, the stale cache copy was kept for good."""
 
     def setUp(self):
-        self.dir = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.dir = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.dir, True)
         self.cached = self.dir / "dsi_nand.bin"
         self.cached.write_bytes(b"OLD NAND")
@@ -875,7 +875,7 @@ class AVerifiedPathKeepsItsBytes(unittest.TestCase):
 
     def setUp(self):
         _test_registry(self)
-        self.dir = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.dir = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.dir, True)
         (self.dir / "asset.bin").write_bytes(PAYLOAD_A)
         self.served = {"asset.bin": hashlib.sha256(PAYLOAD_B).hexdigest()}

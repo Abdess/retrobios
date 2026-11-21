@@ -26,7 +26,7 @@ class FlatDeclaredSet(unittest.TestCase):
         SYSTEM_ALIASES joined them."""
         import tempfile
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             platforms = Path(tmp)
             (platforms / "fx.yml").write_text(
                 "platform: Fx\nverification_mode: existence\nsystems:\n"

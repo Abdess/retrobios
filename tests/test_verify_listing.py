@@ -140,7 +140,7 @@ class ExistenceReportsWhatThePackReports(unittest.TestCase):
 
         from packs import verdicts
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "aes.zip"
             path.write_bytes(b"local dump")
             entry = {"name": "aes.zip", "md5": "9d2ff2333e23910cf56f7f785609d36a"}

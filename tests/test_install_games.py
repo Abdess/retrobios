@@ -35,8 +35,6 @@ import install
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-TMP_ROOT = REPO_ROOT / "tmp" / "tests"
-TMP_ROOT.mkdir(parents=True, exist_ok=True)
 
 
 def _crc(data: bytes) -> str:
@@ -299,7 +297,7 @@ class Card:
     a saved file list."""
 
     def __init__(self) -> None:
-        self.root = Path(tempfile.mkdtemp(dir=TMP_ROOT))
+        self.root = Path(tempfile.mkdtemp())
         self.bios = self.root / "card" / "BIOS"
         self.roms = self.root / "card" / "Roms"
         self.bios.mkdir(parents=True)
@@ -398,7 +396,7 @@ class Identification(GamesTestCase):
         self.assertEqual(plan.not_games, 1)
 
     def test_a_folder_of_whole_names_holds_only_those_files(self):
-        root = Path(tempfile.mkdtemp(dir=TMP_ROOT))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         for name in ("C3.EXE", "c3.eng", "readme.txt"):
             (root / name).write_bytes(b"x")
@@ -1079,7 +1077,7 @@ class Published(unittest.TestCase):
     def test_a_card_reads_with_the_published_index(self):
         if not (REPO_ROOT / "install" / "games" / "index.json").exists():
             self.skipTest("install/games/ not generated")
-        root = Path(tempfile.mkdtemp(dir=TMP_ROOT))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         bios = root / "userdata" / "bios"
         bios.mkdir(parents=True)

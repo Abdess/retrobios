@@ -841,7 +841,7 @@ class WritersPutTheValuesOnDisk(unittest.TestCase):
     fixtures use the layout the profiles use (entries indented two)."""
 
     def setUp(self):
-        self.dir = Path(tempfile.mkdtemp(dir=Path(__file__).resolve().parents[1] / "tmp"))
+        self.dir = Path(tempfile.mkdtemp())
         self.addCleanup(lambda: __import__("shutil").rmtree(self.dir, True))
 
     def test_fbneo_writes_a_changed_crc32(self):

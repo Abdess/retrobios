@@ -187,7 +187,7 @@ class TheArchiveHoldingTheCoreMembers(unittest.TestCase):
     start a Neo Geo CD game."""
 
     def setUp(self):
-        directory = tempfile.mkdtemp(dir=REPO_ROOT / "tmp")
+        directory = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, directory, True)
         root = Path(directory)
         self.roms = {"neocd.bin": b"bios" * 8, "000-lo.lo": b"zoom" * 8}
@@ -358,7 +358,7 @@ class AnArchiveHashedByItsMembers(unittest.TestCase):
     archive's name: Recalbox cannot open it and reports the BIOS red."""
 
     def setUp(self):
-        directory = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        directory = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, directory, True)
         rom = b"bios" * 8
         raw = directory / "bios/neocd.bin"
@@ -408,7 +408,7 @@ class AnArchiveRankedByWhatItHolds(unittest.TestCase):
     unrelated duplicate was deleted and the index order flipped."""
 
     def setUp(self):
-        directory = tempfile.mkdtemp(dir=REPO_ROOT / "tmp")
+        directory = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, directory, True)
         self.root = Path(directory)
         self.roms = {f"epr-213{n}.ic27": bytes([n]) * 16 for n in (29, 30, 31, 32)}
@@ -529,8 +529,7 @@ class ALooseEntryNamingItsArchive(unittest.TestCase):
         from packs.emulatorcheck import verify_emulator
 
         emulator_profiles_cache.clear()
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         previous = os.getcwd()
         os.chdir(root)
@@ -579,8 +578,7 @@ class AnotherEmulatorsOwnSet(unittest.TestCase):
     copy."""
 
     def setUp(self):
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         previous = os.getcwd()
         os.chdir(root)

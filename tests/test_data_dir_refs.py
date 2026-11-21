@@ -36,7 +36,7 @@ class EachSourceIsParsedOnce(unittest.TestCase):
             import validate_schemas
         except ImportError as exc:
             self.skipTest(f"validate_schemas needs jsonschema: {exc}")
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "emulators").mkdir()
             (root / "platforms").mkdir()

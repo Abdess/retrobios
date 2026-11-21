@@ -30,7 +30,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 class CoreDirectories(unittest.TestCase):
     def setUp(self):
-        self.tmp = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(lambda: __import__("shutil").rmtree(self.tmp, ignore_errors=True))
 
     def test_the_config_detection_read_names_the_cores(self):
@@ -193,7 +193,7 @@ class ACoreTheListDoesNotKnow(unittest.TestCase):
     """A core newer than the list (parallel_dc, issue 87) loses nothing its .info declares."""
 
     def setUp(self):
-        self.tmp = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.tmp, True)
 
     def test_only_names_no_profile_answers_for(self):
@@ -456,7 +456,7 @@ class APlatformFileSettledByCoresAndSystems(unittest.TestCase):
         the event and a --declared-only check give the same answer."""
         import hashlib
 
-        tmp = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, tmp, True)
         payloads = {letter: letter.encode() * 3 for letter in "abc"}
         manifest = self.manifest()
@@ -516,7 +516,7 @@ class APlatformFileSettledByCoresAndSystems(unittest.TestCase):
 
 class RefusedBeforeAnyInstall(unittest.TestCase):
     def test_a_platform_shipping_its_cores_stops_the_run_first(self):
-        tmp = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, tmp, True)
         detected = [("retroarch", tmp / "system"), ("batocera", tmp / "bios")]
         (tmp / "retroarch.cfg").write_text("")
@@ -551,7 +551,7 @@ class AnUnknownTargetStopsTheRunFirst(unittest.TestCase):
     the run ended without a summary."""
 
     def test_nothing_is_fetched_when_one_platform_lacks_the_target(self):
-        tmp = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, tmp, True)
         detected = [("emudeck", tmp / "bios"), ("retroarch", tmp / "system")]
         lists = {"emudeck": {"steamos": {"cores": []}}, "retroarch": {"x86_64": {"cores": []}}}

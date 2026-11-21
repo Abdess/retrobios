@@ -8,6 +8,7 @@ ZIPs, which surfaces as BadZipFile far from its cause.
 from __future__ import annotations
 
 import tests
+from tests import scratch_dir
 
 import os
 import subprocess
@@ -31,22 +32,9 @@ from unittest import mock
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
-def _tempdir(test: unittest.TestCase) -> str:
-    """A scratch directory under the repository's tmp/, removed after the test.
-
-    The system temp directory is a RAM disk here, and directories left by
-    every run piled up on it.
-    """
-    scratch = REPO_ROOT / "tmp"
-    scratch.mkdir(exist_ok=True)
-    path = tempfile.mkdtemp(dir=str(scratch))
-    test.addCleanup(shutil.rmtree, path, True)
-    return path
-
-
 class ArtifactLockTest(unittest.TestCase):
     def setUp(self):
-        self.dir = _tempdir(self)
+        self.dir = str(scratch_dir(self))
 
     def test_writer_excludes_writer(self):
         with artifact_lock(self.dir), self.assertRaises(ArtifactLockBusy), artifact_lock(self.dir):
@@ -96,7 +84,7 @@ class ArtifactLockTest(unittest.TestCase):
             pass
 
     def test_separate_directories_do_not_contend(self):
-        other = _tempdir(self)
+        other = str(scratch_dir(self))
         with artifact_lock(self.dir), artifact_lock(other):
             pass
 
@@ -110,7 +98,7 @@ class PackLockCliTest(unittest.TestCase):
     """generate_pack and pipeline must refuse a directory held elsewhere."""
 
     def setUp(self):
-        self.dir = _tempdir(self)
+        self.dir = str(scratch_dir(self))
 
     def _run(self, argv: list[str]) -> subprocess.CompletedProcess:
         # In a copy: a pipeline that missed the lock regenerated
@@ -235,7 +223,7 @@ class PipelineHoldsItsFixedOutputs(unittest.TestCase):
     install/, README.md and docs/: only the output directory was locked."""
 
     def test_a_second_pipeline_is_refused_whatever_its_output_dir(self):
-        scratch = _tempdir(self)
+        scratch = str(scratch_dir(self))
         checkout = scratch_checkout()
         with hold_repository_outputs(str(checkout)):
             proc = subprocess.run(
@@ -260,7 +248,7 @@ class TheSuiteTakesTheRepositoryHoldInItsScratch(unittest.TestCase):
     a generator writing database.json, failed on the busy lock."""
 
     def test_the_hold_is_taken_where_the_variable_says(self):
-        scratch = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        scratch = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, scratch, True)
         moved = scratch / "repository-lock"
         with mock.patch.dict(os.environ, {artifacts.REPOSITORY_LOCK_ENV: str(moved)}), \
@@ -273,7 +261,7 @@ class TheSuiteTakesTheRepositoryHoldInItsScratch(unittest.TestCase):
                 pass
 
     def test_another_directory_keeps_its_own_lock(self):
-        out = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        out = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, out, True)
         with mock.patch.dict(os.environ, {artifacts.REPOSITORY_LOCK_ENV: str(out / "x")}), \
                 artifacts.artifact_lock(str(out)):
@@ -324,14 +312,14 @@ class StandaloneWritersHonourTheRepositoryHold(unittest.TestCase):
     def test_a_step_the_pipeline_spawns_passes(self):
         """A pipeline holds the root and its --output-dir, and its steps
         write both: the environment names the two, os.pathsep apart."""
-        self.scratch = _tempdir(self)
+        self.scratch = str(scratch_dir(self))
         with hold_repository_outputs(str(REPO_ROOT)), publish_hold(str(REPO_ROOT)), \
                 hold_artifact_lock(self.scratch):
             proc = self._child(str(REPO_ROOT / "install" / "games"), dict(os.environ))
         self.assertEqual(proc.returncode, 0, proc.stderr)
 
     def test_a_scratch_output_takes_nothing(self):
-        self.scratch = _tempdir(self)
+        self.scratch = str(scratch_dir(self))
         env = {k: v for k, v in os.environ.items() if k != "RETROBIOS_HELD_ARTIFACT_DIR"}
         with hold_repository_outputs(str(REPO_ROOT)):
             proc = self._child(os.path.join(self.scratch, "database.json"), env)
@@ -344,7 +332,7 @@ class HeldLockTest(unittest.TestCase):
     check reported every platform SKIP and passed."""
 
     def setUp(self):
-        self.dir = _tempdir(self)
+        self.dir = str(scratch_dir(self))
 
     def _child_locks(self, env: dict) -> subprocess.CompletedProcess:
         code = (
@@ -396,7 +384,7 @@ class SiteGenerationHoldsDocs(unittest.TestCase):
     the same tree. That run then died on os.replace or lost pages."""
 
     def test_a_second_run_is_refused_before_it_writes(self):
-        docs = _tempdir(self)
+        docs = str(scratch_dir(self))
         marker = Path(docs) / "platforms" / ".retroarch.md.k2j3.tmp"
         marker.parent.mkdir()
         marker.write_text("scratch of another run")

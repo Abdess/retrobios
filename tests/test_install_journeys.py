@@ -131,6 +131,9 @@ class Repository:
     muOS setup, and every payload."""
 
     def __init__(self, test: unittest.TestCase) -> None:
+        # The screens print the card's path and the word budgets count it:
+        # the per-module scratch folder of run_tests.py is long enough to
+        # wrap it onto more lines.
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         test.addCleanup(shutil.rmtree, self.root, True)

@@ -14,8 +14,6 @@ from pathlib import Path
 from sitegen.validate import validate_site
 
 ROOT = Path(__file__).resolve().parent.parent
-TMP_ROOT = ROOT / "tmp" / "tests"
-TMP_ROOT.mkdir(parents=True, exist_ok=True)
 
 
 def _page(title: str, description: str, body: str = "") -> str:
@@ -108,7 +106,7 @@ class PlatformDetails(unittest.TestCase):
 
 class RenderedSiteValidation(unittest.TestCase):
     def setUp(self) -> None:
-        self.temp = tempfile.TemporaryDirectory(dir=TMP_ROOT)
+        self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
         self.site = self.root / "site"
         self.site.mkdir()
@@ -188,7 +186,7 @@ class TheSiteStaysWithinItsBudgets(unittest.TestCase):
     validate_site now holds the gains, each limit with its reason."""
 
     def setUp(self) -> None:
-        self.temp = tempfile.TemporaryDirectory(dir=TMP_ROOT)
+        self.temp = tempfile.TemporaryDirectory()
         self.site = Path(self.temp.name) / "site"
         self.site.mkdir()
         self.config = "/retrobios/"

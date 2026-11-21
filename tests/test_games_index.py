@@ -20,8 +20,6 @@ import generate_games_index as gi
 from model.romfolders import SystemResolver, load_setups
 
 ROOT = Path(__file__).resolve().parent.parent
-TMP_ROOT = ROOT / "tmp" / "tests"
-TMP_ROOT.mkdir(parents=True, exist_ok=True)
 
 SETUP = """\
 setup: fixture
@@ -72,7 +70,7 @@ ARCADE = {"profile": "mame", "bios": {"neogeo": ["mslug"]}}
 
 class GamesIndexFixture(unittest.TestCase):
     def setUp(self) -> None:
-        self.tmp = Path(tempfile.mkdtemp(dir=TMP_ROOT))
+        self.tmp = Path(tempfile.mkdtemp())
         (self.tmp / "romfolders").mkdir()
         (self.tmp / "romfolders" / "fixture.yml").write_text(SETUP, encoding="utf-8")
         (self.tmp / "install").mkdir()

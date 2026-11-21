@@ -160,7 +160,7 @@ class ParsingTests(unittest.TestCase):
 
     def test_elf_comment(self) -> None:
         self.assertIsInstance(core_probe.elf_comment(Path(sys.executable).resolve()), list)
-        with tempfile.NamedTemporaryFile(dir=REPO_ROOT / "tmp" / "tests") as handle:
+        with tempfile.NamedTemporaryFile() as handle:
             handle.write(b"not an elf")
             handle.flush()
             self.assertEqual(core_probe.elf_comment(Path(handle.name)), [])
@@ -178,7 +178,7 @@ class ParsingTests(unittest.TestCase):
         self.assertFalse(core_probe.uniform_frame(b"\x00\x00\x00\x00\x00\x00\x00\x01", 4))
 
     def test_cue_tracks(self) -> None:
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             cue = Path(tmp, "d.cue")
             cue.write_text('FILE "a b.bin" BINARY\n  TRACK 01 MODE2/2352\nFILE c.bin BINARY\n',
                            encoding="utf-8")
@@ -477,7 +477,7 @@ class FakeCoreTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.tmp = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp" / "tests"))
+        cls.tmp = Path(tempfile.mkdtemp())
         source = cls.tmp / "fake.c"
         source.write_text(FAKE_CORE, encoding="utf-8")
         cls.core = cls.tmp / "fake_libretro.so"
@@ -739,7 +739,7 @@ class Sandbox(unittest.TestCase):
     def setUp(self) -> None:
         if not core_probe.sandbox_argv([])[0]:
             self.skipTest("no working bwrap on this host")
-        self.tmp = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp" / "tests"))
+        self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.tmp, True)
         self.out = self.tmp / "out"
         self.inputs = self.tmp / "inputs"

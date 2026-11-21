@@ -35,8 +35,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 class ACoreFileFillsAFreeDeclaration(unittest.TestCase):
     def setUp(self):
         emulator_profiles_cache.clear()
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         bios = self.root / "bios" / "Maker" / "Console"
         bios.mkdir(parents=True)
@@ -105,7 +104,7 @@ class AFileDeclaredUnderAnotherName(unittest.TestCase):
 
     def test_the_report_lists_what_the_builder_packs(self):
         emulator_profiles_cache.clear()
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         bios = root / "bios" / "Apple" / "IIgs"
         bios.mkdir(parents=True)
@@ -155,7 +154,7 @@ class AMissingDataDirectoryFailsTheRun(unittest.TestCase):
         from packs import datatrees
         from packs import platformpack
 
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         (root / "platforms").mkdir()
         (root / "emulators").mkdir()
@@ -197,7 +196,7 @@ class AFileNobodyHoldsIsAnOmission(unittest.TestCase):
         from packs.manifest import generate_manifest
 
         emulator_profiles_cache.clear()
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         for folder in ("platforms", "emulators", "bios"):
             (root / folder).mkdir()
@@ -238,7 +237,7 @@ class AMemberNameIsNotALooseFile(unittest.TestCase):
         from packs import crossref
 
         emulator_profiles_cache.clear()
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         (root / "platforms").mkdir()
         (root / "emulators").mkdir()
@@ -272,7 +271,7 @@ class TwoDeclarationsOfOnePath(unittest.TestCase):
 
     def _run(self, first: str, second: str, spelling: str):
         emulator_profiles_cache.clear()
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         bios = root / "bios" / "Maker" / "Console"
         bios.mkdir(parents=True)
@@ -323,7 +322,7 @@ class ANamelessWhitelistEntry(unittest.TestCase):
 
     def test_the_pack_counts_what_verify_counts(self):
         emulator_profiles_cache.clear()
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         bios = root / "bios" / "Sony" / "PlayStation"
         bios.mkdir(parents=True)

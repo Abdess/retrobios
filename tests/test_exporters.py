@@ -617,7 +617,7 @@ class ExporterRegistry(unittest.TestCase):
 
         import export_native
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as directory:
+        with tempfile.TemporaryDirectory() as directory:
             platforms = Path(directory)
             (platforms / "_registry.yml").write_text(
                 "platforms:\n  cardonly:\n    native_list: none\n  unwritten: {}\n",
@@ -690,7 +690,7 @@ class ExporterRegistry(unittest.TestCase):
     def test_an_export_without_its_original_writes_nothing(self):
         from exporter.native import export_platform
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             output = Path(tmp) / "out"
             ok, messages = export_platform(
                 "retroarch", discover_exporters()["retroarch"],
@@ -1583,7 +1583,7 @@ class AnExportIsWrittenAsItsBytes(unittest.TestCase):
 
         from exporter.native import _write_produced
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             _write_produced(root, {
                 "FirmwareDatabase.cs": "a\r\nb\r\n",
@@ -1612,7 +1612,7 @@ class AnExportWithoutTruthIsRefused(unittest.TestCase):
         from exporter.native import export_platform
 
         exporter = discover_exporters()["batocera"]
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             output = Path(tmp) / "out"
             published = output / "batocera" / "batocera-systems"
             published.parent.mkdir(parents=True)
@@ -1643,7 +1643,7 @@ class AnInvalidExportIsNotWritten(unittest.TestCase):
             self.skipTest("upstream cache not populated")
         exporter = discover_exporters()["romm"]
         config = native_layer(load_platform_config("romm", str(REPO_ROOT / "platforms")))
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             output = Path(tmp) / "out"
             published = output / "romm" / "known_bios_files.json"
             published.parent.mkdir(parents=True)
@@ -2020,7 +2020,7 @@ class MisterDatabaseComesBackAsWritten(unittest.TestCase):
     def test_bytes_are_written_untouched(self):
         from exporter.native import _write_produced
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             _write_produced(Path(tmp), {"a.zip": b"PK\x03\x04\xff"}, {})
             self.assertEqual((Path(tmp) / "a.zip").read_bytes(), b"PK\x03\x04\xff")
 

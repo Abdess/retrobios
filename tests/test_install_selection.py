@@ -540,7 +540,7 @@ class FakeRepository:
         self.selection = selection
 
     def __enter__(self) -> FakeRepository:
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         (self.root / "install").mkdir()
         (self.root / "bios").mkdir()
         files = []
@@ -889,7 +889,7 @@ class InstallMatchesASystemPack(unittest.TestCase):
     def _packed(self, systems, regions) -> set[str]:
         import zipfile
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out:
+        with tempfile.TemporaryDirectory() as out:
             zip_path = platformpack.generate_pack(
                 self.PLATFORM, str(REPO_ROOT / "platforms"), self.db,
                 str(REPO_ROOT / "bios"), out,
@@ -929,7 +929,7 @@ class DataTreesFollowTheSystemsTheyServe(InstallMatchesASystemPack):
         from model.registry import load_data_dir_registry
 
         # The trees come from the registry the manifest reads by itself.
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out:
+        with tempfile.TemporaryDirectory() as out:
             zip_path = platformpack.generate_pack(
                 self.PLATFORM, str(REPO_ROOT / "platforms"), self.db,
                 str(REPO_ROOT / "bios"), out,
@@ -1056,7 +1056,7 @@ class AHeldFileTheInstallerCannotFetch(unittest.TestCase):
         from model.platforms import _platform_config_cache
         from model.profiles import emulator_profiles_cache
         import generate_db
-        tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
         os.chdir(tmp.name)
@@ -1137,7 +1137,7 @@ class AStandaloneLayoutBelowTheBiosFolder(unittest.TestCase):
         from model.platforms import _platform_config_cache
         from model.profiles import emulator_profiles_cache
         import generate_db
-        tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
         os.chdir(tmp.name)
@@ -1220,7 +1220,7 @@ class AnExtraBesideItsDeclarationBelowTheBiosFolder(unittest.TestCase):
         from model.platforms import _platform_config_cache
         from model.profiles import emulator_profiles_cache
         import generate_db
-        tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
         os.chdir(tmp.name)
@@ -1434,7 +1434,7 @@ class ANativeNameSelectsOneSetEverywhere(unittest.TestCase):
         import io
         import zipfile
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out, \
+        with tempfile.TemporaryDirectory() as out, \
                 contextlib.redirect_stdout(io.StringIO()):
             zip_path = platformpack.generate_pack(
                 platform, str(REPO_ROOT / "platforms"), self.db,

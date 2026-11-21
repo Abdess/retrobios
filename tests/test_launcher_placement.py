@@ -47,8 +47,7 @@ LINK = {
 class ALinkMovesTheDestination(unittest.TestCase):
     def setUp(self) -> None:
         emulator_profiles_cache.clear()
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         bios = self.root / "bios" / "Commodore" / "Amiga"
         bios.mkdir(parents=True)
@@ -306,8 +305,7 @@ class AProgramRunFromItsFolder(unittest.TestCase):
 
     def setUp(self) -> None:
         emulator_profiles_cache.clear()
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         bios = self.root / "bios" / "Maker" / "Prog"
         bios.mkdir(parents=True)
@@ -573,8 +571,7 @@ class ASettingSetsTheBiosFolder(unittest.TestCase):
 
     def setUp(self) -> None:
         emulator_profiles_cache.clear()
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         files, by_md5, by_name = {}, {}, {}
         for folder, name, data in (

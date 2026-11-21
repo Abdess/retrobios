@@ -21,8 +21,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class AllReadsTheGivenDirectory(unittest.TestCase):
     def test_only_the_directory_platforms(self):
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             plat = Path(tmp)
             (plat / "_registry.yml").write_text(
                 "platforms:\n  solo:\n    config: solo.yml\n"

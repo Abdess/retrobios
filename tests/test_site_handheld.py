@@ -45,9 +45,7 @@ def _pages() -> dict[str, str]:
 
 class TheSiteServesTheLaunchers(unittest.TestCase):
     def setUp(self):
-        scratch = REPO_ROOT / "tmp"
-        scratch.mkdir(exist_ok=True)
-        self.tmp = Path(tempfile.mkdtemp(dir=scratch, prefix="site-handheld-"))
+        self.tmp = Path(tempfile.mkdtemp(prefix="site-handheld-"))
         self.addCleanup(shutil.rmtree, self.tmp, True)
 
     def test_the_written_archives_are_the_ones_build_port_writes(self):

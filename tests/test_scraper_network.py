@@ -35,7 +35,6 @@ from scraper.base_scraper import (
 )
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-TMP_ROOT = REPO_ROOT / "tmp"
 SHA = "0123456789abcdef0123456789abcdef01234567"
 
 
@@ -143,7 +142,7 @@ class SourceRevisionReadsEveryShape(unittest.TestCase):
             self.assertEqual(scraped_revision(Path(tmp, "absent.yml")), "")
 
     def test_a_platform_without_a_revision_raises(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp, "p.yml")
             path.write_text("source: https://github.com/emulatorjs/emulatorjs\n")
             with self.assertRaises(RuntimeError):
@@ -232,7 +231,7 @@ class GitHubAnswers(unittest.TestCase):
 
 class Downloads(unittest.TestCase):
     def test_written_whole_with_its_disposition(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp, "sub", "a.zip")
             with mock.patch("urllib.request.urlopen", _answer(503, b"payload")), \
                     mock.patch("time.sleep"):
@@ -242,7 +241,7 @@ class Downloads(unittest.TestCase):
             self.assertEqual(sorted(p.name for p in target.parent.iterdir()), ["a.zip"])
 
     def test_a_failure_leaves_nothing(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp, "a.zip")
             with mock.patch("urllib.request.urlopen", _answer(403)), \
                     self.assertRaises(FetchError):
@@ -250,7 +249,7 @@ class Downloads(unittest.TestCase):
             self.assertEqual(list(Path(tmp).iterdir()), [])
 
     def test_an_existing_file_is_kept_when_asked(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp, "a.zip")
             target.write_bytes(b"cached")
             with mock.patch("urllib.request.urlopen", _answer(403)):

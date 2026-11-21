@@ -36,8 +36,7 @@ def _entry(profile: str, name: str) -> dict:
 
 class FontFormatsAreSeparateFiles(unittest.TestCase):
     def setUp(self):
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         self.addCleanup(os.chdir, os.getcwd())
         os.chdir(self.root)

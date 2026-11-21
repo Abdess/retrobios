@@ -95,7 +95,7 @@ class AMistypedTargetGetsTheClosestName(unittest.TestCase):
     """`--target swich` printed every target and alias on two lines."""
 
     def test_did_you_mean(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             targets = Path(tmp) / "targets"
             targets.mkdir()
             names = [f"board-{n}" for n in range(30)] + ["nintendo-switch"]
@@ -144,7 +144,7 @@ class ADamagedProfileNamesItself(unittest.TestCase):
     faulty file named near its end."""
 
     def test_one_line_names_the_file_and_line(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as folder:
+        with tempfile.TemporaryDirectory() as folder:
             profiles = Path(folder)
             (profiles / "handy.yml").write_text(
                 (REPO_ROOT / "emulators" / "handy.yml").read_text(encoding="utf-8"),
@@ -252,7 +252,7 @@ class ReadOnlyToolsRunFromAnyFolder(unittest.TestCase):
     )
 
     def test_each_reads_the_repository_from_a_subfolder(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as folder:
+        with tempfile.TemporaryDirectory() as folder:
             for command in self.COMMANDS:
                 with self.subTest(command=command[0]):
                     proc = subprocess.run(
@@ -266,7 +266,7 @@ class ReadOnlyToolsRunFromAnyFolder(unittest.TestCase):
                     self.assertEqual(os.listdir(folder), [])
 
     def test_a_typed_path_is_read_from_where_it_was_typed(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as folder:
+        with tempfile.TemporaryDirectory() as folder:
             proc = subprocess.run(
                 [sys.executable, str(REPO_ROOT / "scripts" / "slots.py"),
                  "--db", "nosuch.json"],
@@ -371,7 +371,7 @@ class AnOfflineRunWithNoCacheStopsFirst(unittest.TestCase):
         return argparse.Namespace(**{"offline": True, "skip_packs": False, **flags})
 
     def test_refused_before_any_step(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp) / "cache"
             (Path(tmp) / "_data_dirs.yml").write_text(
                 f"data_directories:\n  a:\n    local_cache: {cache}\n"
@@ -405,7 +405,7 @@ class AnOfflineExportWithNoOriginalsStopsFirst(unittest.TestCase):
 
         patched = sorted(n for n, e in discover_exporters().items() if e.needs_original())
         self.assertIn("batocera", patched)
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             parser = mock.Mock()
             pipeline._refuse_offline_export_without_originals(parser, self._args(), tmp)
             message = parser.error.call_args.args[0]
@@ -988,7 +988,7 @@ class CitedCommandsRunWhenPasted(unittest.TestCase):
         self.assertEqual(offenders, [])
 
     def test_the_target_hint_is_a_whole_command(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             targets = Path(tmp) / "targets"
             targets.mkdir()
             (targets / "p.yml").write_text("targets:\n  switch:\n    cores: [a]\n")

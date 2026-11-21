@@ -25,8 +25,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class ForeignTreeNames(unittest.TestCase):
     def setUp(self):
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         # The collection's paths are relative to the repository root.
         self.addCleanup(os.chdir, os.getcwd())

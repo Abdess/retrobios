@@ -1012,7 +1012,7 @@ class EmulatorModeKeepsAHeldFile(unittest.TestCase):
         import shutil
         import tempfile
 
-        root = Path(tempfile.mkdtemp(dir=Path(__file__).resolve().parents[1] / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         held = root / "scph5501.bin"
         held.write_bytes(b"us bios")
@@ -1315,9 +1315,7 @@ class ARefusedRegionalFileHoldsNoSlot(unittest.TestCase):
         from packs.emulatorcheck import verify_emulator
 
         emulator_profiles_cache.clear()
-        repo = Path(__file__).resolve().parents[1]
-        (repo / "tmp").mkdir(exist_ok=True)
-        root = Path(tempfile.mkdtemp(dir=repo / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         previous = os.getcwd()
         os.chdir(root)

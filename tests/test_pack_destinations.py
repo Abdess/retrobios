@@ -32,8 +32,7 @@ class _Fixture(unittest.TestCase):
         from model.profiles import emulator_profiles_cache
 
         emulator_profiles_cache.clear()
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         self.bios = self.root / "bios"
         self.platforms = self.root / "platforms"
@@ -244,8 +243,7 @@ class ThePipelineComparesPaths(unittest.TestCase):
     def test_a_swap_at_equal_counts_fails(self):
         import pipeline
 
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         zip_path = root / "Plat_BIOS_Pack.zip"
         with zipfile.ZipFile(zip_path, "w") as zf:

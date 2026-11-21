@@ -172,8 +172,7 @@ class BatoceraExportRoundTrip(unittest.TestCase):
 
 class VerifyAcceptsAnyListedMd5(unittest.TestCase):
     def setUp(self) -> None:
-        scratch = REPO_ROOT / "tmp"
-        self.tmp = tempfile.TemporaryDirectory(dir=scratch if scratch.is_dir() else None)
+        self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
 
@@ -398,8 +397,7 @@ class SeveralAcceptedMd5BecomeAList(unittest.TestCase):
         exec(compile(produced, "batocera-systems", "exec"), namespace)
         item = namespace["systems"]["psx"]["biosFiles"][0]
         self.assertEqual(item["md5"], [C, SECOND])
-        scratch = REPO_ROOT / "tmp"
-        with tempfile.TemporaryDirectory(dir=scratch if scratch.is_dir() else None) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             (Path(tmp) / "bios").mkdir()
             systems = {"psx": {"name": "PSX", "biosFiles": [item]}}
             for payload, missing in (

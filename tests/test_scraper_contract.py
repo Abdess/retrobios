@@ -994,7 +994,7 @@ class ImportingAScraperFetchesNothing(unittest.TestCase):
         self.assertEqual(self._offenders(REPO_ROOT, "scripts.scraper"), "")
 
     def test_a_swallowed_import_time_fetch_is_caught(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as directory:
+        with tempfile.TemporaryDirectory() as directory:
             package = Path(directory) / "planted"
             package.mkdir()
             (package / "__init__.py").write_text("")
@@ -1013,7 +1013,7 @@ class ImportingAScraperFetchesNothing(unittest.TestCase):
             )
 
     def test_an_import_time_fetch_is_caught(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as directory:
+        with tempfile.TemporaryDirectory() as directory:
             package = Path(directory) / "planted"
             package.mkdir()
             (package / "__init__.py").write_text("")

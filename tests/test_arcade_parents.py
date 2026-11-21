@@ -15,8 +15,6 @@ from scripts.scraper import arcade_parent_importer as api
 from scripts.scraper import listxml
 
 ROOT = Path(__file__).resolve().parent.parent
-TMP_ROOT = ROOT / "tmp" / "tests"
-TMP_ROOT.mkdir(parents=True, exist_ok=True)
 FIXTURES = ROOT / "tests" / "fixtures" / "arcade_parents"
 COMMITTED = ROOT / "games" / "arcade"
 
@@ -114,7 +112,7 @@ class OfflineImport(unittest.TestCase):
     """import_profile reads the cache only, and two runs write the same bytes."""
 
     def setUp(self) -> None:
-        self.temp = tempfile.TemporaryDirectory(dir=TMP_ROOT)
+        self.temp = tempfile.TemporaryDirectory()
         self.cache = Path(self.temp.name)
         dat = self.cache / "repo" / "libretro" / "mame2010-libretro" / COMMIT / "metadata"
         dat.mkdir(parents=True)
@@ -256,7 +254,7 @@ class DriverSource(unittest.TestCase):
     the DATs those repositories carry contradict it."""
 
     def setUp(self) -> None:
-        self.temp = tempfile.TemporaryDirectory(dir=TMP_ROOT)
+        self.temp = tempfile.TemporaryDirectory()
         self.cache = Path(self.temp.name)
         slug = "libretro/mame2003-libretro"
         tarball = self.cache / "src" / slug / f"{COMMIT}.tar.gz"
@@ -417,7 +415,7 @@ class CommittedIndex(unittest.TestCase):
         import validate_schemas
 
         self.assertEqual(validate_schemas._arcade_pin_errors(), [])
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "games" / "arcade").mkdir(parents=True)
             (root / "emulators").mkdir()

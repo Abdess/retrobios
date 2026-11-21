@@ -88,8 +88,7 @@ class ServedCopies(unittest.TestCase):
             self.assertEqual(sitebootstrap.build_commit(REPO_ROOT), self.commit)
 
     def test_the_copies_land_at_the_root_of_the_public_folder(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" if (REPO_ROOT / "tmp").is_dir()
-                                         else None) as scratch:
+        with tempfile.TemporaryDirectory() as scratch:
             public = Path(scratch) / "public"
             written = sitebootstrap.write_bootstraps(public, REPO_ROOT, self.commit)
             self.assertEqual(sorted(p.name for p in written), ["i", "i.ps1"])
@@ -117,8 +116,7 @@ class ServedCopies(unittest.TestCase):
     def test_a_stale_pin_stops_the_build(self):
         """A pin that is not the installer's was served,
         and refused every install until the next good deploy."""
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" if (REPO_ROOT / "tmp").is_dir()
-                                         else None) as scratch:
+        with tempfile.TemporaryDirectory() as scratch:
             root = Path(scratch)
             for source in ("install.sh", "install.ps1"):
                 (root / source).write_text((REPO_ROOT / source).read_text(encoding="utf-8"),
@@ -143,8 +141,7 @@ class ServedCopies(unittest.TestCase):
         self.assertLess(check, upload)
 
     def test_a_bootstrap_without_its_address_line_stops_the_build(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" if (REPO_ROOT / "tmp").is_dir()
-                                         else None) as scratch:
+        with tempfile.TemporaryDirectory() as scratch:
             root = Path(scratch)
             (root / "install.sh").write_text("#!/bin/sh\n", encoding="utf-8")
             with self.assertRaises(ValueError):

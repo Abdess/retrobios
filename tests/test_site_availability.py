@@ -78,7 +78,7 @@ class AHeldEntrySaysWhere(unittest.TestCase):
         from sitegen import emulatorcards
         from packs.crossref import FileConsumers, held_copy
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             data, bios = Path(tmp) / "data", Path(tmp) / "bios"
             (data / "dolphin-sys" / "GC").mkdir(parents=True)
             (data / "dolphin-sys" / "GC" / "font_western.bin").write_bytes(b"font")

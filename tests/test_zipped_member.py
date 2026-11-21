@@ -24,7 +24,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 class ZippedMemberIsChecked(unittest.TestCase):
     def test_an_archive_without_the_member_is_not_shipped(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "platforms").mkdir()
             archive = root / "bios" / "trs80.zip"
@@ -101,7 +101,7 @@ class TheMemberIndexIsCachedByContent(unittest.TestCase):
 
         from core import ziptools
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             archive = Path(tmp) / "set.zip"
             with zipfile.ZipFile(archive, "w") as zf:
                 zf.writestr("small.rom", b"a" * 16)

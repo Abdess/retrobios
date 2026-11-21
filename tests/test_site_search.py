@@ -199,7 +199,7 @@ class PartPages(unittest.TestCase):
             "---\n\n# MAME files, part 3 of 8\n\nPart of [MAME](mame.md). "
             "This part holds 196 entries, `a.zip` to `b.zip`.\n"
         )
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "emulators" / "mame-files-3.md"
             path.parent.mkdir()
             path.write_text(page, encoding="utf-8")

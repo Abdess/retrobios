@@ -25,7 +25,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class AChildLeavesItsParentAlone(unittest.TestCase):
     def setUp(self):
-        self.dir = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.dir = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.dir, True)
         self.addCleanup(_platform_config_cache.clear)
         self.addCleanup(_shared_yml_cache.clear)

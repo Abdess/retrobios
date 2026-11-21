@@ -33,7 +33,7 @@ def _profile(name: str, **fields) -> dict:
 
 class DataDirectoryReaders(unittest.TestCase):
     def setUp(self):
-        self._tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self._tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self._tmp.cleanup)
         root = Path(self._tmp.name)
         for tree, content in (("lrps2", TREE_COPY), ("resources", TREE_COPY)):

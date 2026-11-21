@@ -75,7 +75,7 @@ class GapReportSources(unittest.TestCase):
         self.assertIn("0 missing (need to be sourced)", text)
 
     def test_a_directory_does_not_stand_for_a_file(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             (Path(tmp) / "bios" / "cpcemu" / "ROM").mkdir(parents=True)
             names = build_supplemental_index(str(Path(tmp) / "data"), str(Path(tmp) / "bios"))
         self.assertIsNone(entry_source({"name": "ROM"}, _index(data_names=names)))

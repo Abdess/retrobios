@@ -32,7 +32,7 @@ class AliasesNeedAnUnambiguousName(unittest.TestCase):
     def _aliases(self, files: dict) -> dict:
         stub = types.ModuleType("scraper.coreinfo_scraper")
         stub.Scraper = _NoCoreInfo
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
             os.chdir(tmp)
             try:
@@ -91,7 +91,7 @@ class NoNetworkInTheBuild(unittest.TestCase):
         self.assertNotIn("urllib.request", source)
 
     def test_hash_proven_entry_registers_its_own_name(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
             os.chdir(tmp)
             try:
@@ -109,7 +109,7 @@ class NoNetworkInTheBuild(unittest.TestCase):
 class AcceptedRevisionLists(unittest.TestCase):
     def test_a_list_of_sha1_names_every_held_revision(self):
         """A profile accepting several revisions writes sha1 as a list."""
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
             os.chdir(tmp)
             try:
@@ -130,7 +130,7 @@ class AcceptedRevisionLists(unittest.TestCase):
 class CrossNamingStaysInItsProfile(unittest.TestCase):
     def test_an_alias_naming_a_sibling_entry_is_not_indexed(self):
         """dosbox-x aliases MT32_CONTROL.ROM and CM32L_CONTROL.ROM to each other."""
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
             os.chdir(tmp)
             try:
@@ -160,9 +160,7 @@ class AnUnreadableSourceStopsTheRun(unittest.TestCase):
 
         import generate_db
 
-        tmp_root = Path(__file__).resolve().parents[1] / "tmp"
-        tmp_root.mkdir(exist_ok=True)
-        root = Path(tempfile.mkdtemp(dir=tmp_root))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         previous = os.getcwd()
         os.chdir(root)
@@ -181,7 +179,7 @@ class DrasticNamesTheDSDumps(unittest.TestCase):
     its own three names."""
 
     def _aliases(self, files: dict) -> dict:
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
             os.chdir(tmp)
             try:
@@ -226,7 +224,7 @@ class AliasesFollowContentNotPrimaryCopy(unittest.TestCase):
     def _aliases(self, primary: str, copy: str) -> dict:
         files = {"s": {"name": primary, "path": f"bios/N64DD/{primary}", "md5": "m"}}
         copies = {"s": [{"name": copy, "path": f"bios/N64DD/{copy}"}]}
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
             os.chdir(tmp)
             try:
@@ -253,7 +251,7 @@ class AliasesFollowContentNotPrimaryCopy(unittest.TestCase):
             "b": {"name": "Satellaview_BS-X.sfc", "path": "bios/SNES/x.sfc", "md5": "m2"},
         }
         copies = {"b": [{"name": "BS-X.bin", "path": "bios/Satellaview/BS-X.bin"}]}
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
             os.chdir(tmp)
             try:
@@ -283,7 +281,7 @@ class TheSmsBiosKeepsItsNames(unittest.TestCase):
             "kiosk": {"name": "bios_U.sms", "path": "bios/Sega/MS/.variants/bios_U.sms.ee2c29ba",
                       "md5": "mk"},
         }
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
             os.chdir(tmp)
             try:
@@ -303,7 +301,7 @@ class TheSmsBiosKeepsItsNames(unittest.TestCase):
             "v13": {"name": "SMS_us_1.3.sms", "path": "bios/Sega/MS/SMS_us_1.3.sms", "md5": "m13"},
             "other": {"name": "bios_U.sms", "path": "bios/Sega/MS/bios_U.sms", "md5": "mo"},
         }
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
             os.chdir(tmp)
             try:
@@ -319,7 +317,7 @@ class TheSmsBiosKeepsItsNames(unittest.TestCase):
         self.assertEqual(aliases, {})
 
     def test_a_copy_under_its_machine_is_the_path_over_an_emulator_tree(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             bios = Path(tmp) / "bios"
             for rel in ("Other/zesarux/sms.rom", "Sega/Master System/SMS_us_1.3.sms"):
                 (bios / rel).parent.mkdir(parents=True, exist_ok=True)

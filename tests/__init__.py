@@ -13,8 +13,10 @@ temporary directory instead of naming the missing parent.
 from __future__ import annotations
 
 import os
+import shutil
 import sys
 import tempfile
+import unittest
 from pathlib import Path
 
 os.environ.setdefault("RETROBIOS_OFFLINE", "1")
@@ -53,3 +55,11 @@ os.environ["GIT_CEILING_DIRECTORIES"] = str(_SCRATCH)
 # The installer's cache (the games index, what reading a card found) is the
 # suite's own: a run never reads nor fills the one of the person running it.
 os.environ.setdefault("RETROBIOS_CACHE", str(_SCRATCH / "cache"))
+
+
+def scratch_dir(test: unittest.TestCase) -> Path:
+    """A fresh directory under this module's scratch folder, removed after
+    the test."""
+    path = Path(tempfile.mkdtemp())
+    test.addCleanup(shutil.rmtree, path, True)
+    return path

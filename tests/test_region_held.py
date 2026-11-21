@@ -24,8 +24,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class ARefusedDumpHoldsNothing(unittest.TestCase):
     def test_held_follows_the_frontend(self):
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         previous = os.getcwd()
         os.chdir(root)

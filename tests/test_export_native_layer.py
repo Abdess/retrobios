@@ -77,7 +77,7 @@ class TheTruthDiffReadsTheSameLayer(unittest.TestCase):
         import json
         import subprocess
 
-        with tempfile.TemporaryDirectory(dir=str(REPO_ROOT / "tmp")) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "demo.yml").write_text(
                 "platform: Demo\nsystems:\n"

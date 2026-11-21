@@ -40,8 +40,6 @@ from scripts.packs.targets import generate_target_manifests
 
 HAS_JSONSCHEMA = jsonschema is not None
 ROOT = Path(__file__).resolve().parent.parent
-TMP_ROOT = ROOT / "tmp" / "tests"
-TMP_ROOT.mkdir(parents=True, exist_ok=True)
 
 
 class ReadmeRegressions(unittest.TestCase):
@@ -233,7 +231,7 @@ class AModuleRunAloneHasItsScratchDirectory(unittest.TestCase):
     fresh clone raised FileNotFoundError. The test package creates it."""
 
     def test_importing_the_package_creates_tmp(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             clone = Path(directory)
             (clone / "tests").mkdir()
             (clone / "tests" / "__init__.py").write_bytes(
@@ -628,7 +626,7 @@ class APackIsSwappedInWhole(unittest.TestCase):
         import tempfile
 
         (ROOT / "tmp").mkdir(exist_ok=True)
-        directory = Path(tempfile.mkdtemp(dir=ROOT / "tmp"))
+        directory = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, directory, True)
         return directory
 
@@ -835,7 +833,7 @@ class ADamagedArchiveIsNotPacked(unittest.TestCase):
 
         from packs.archive import DamagedArchiveError, add_zip_to_pack
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             source = Path(directory) / "set.zip"
             with zipfile.ZipFile(source, "w", zipfile.ZIP_STORED) as zf:
                 zf.writestr("rom.bin", b"A" * 64)
@@ -861,7 +859,7 @@ class APackedArchiveKeepsItsBytes(unittest.TestCase):
 
         from packs.archive import add_zip_to_pack
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             source = Path(directory) / "set.zip"
             with zipfile.ZipFile(source, "w", zipfile.ZIP_DEFLATED) as zf:
                 zf.writestr(zipfile.ZipInfo("rom.bin", (1999, 1, 2, 3, 4, 5)), b"rom" * 40)
@@ -949,7 +947,7 @@ class AutoFetchReadsListsAndPlacesWithoutClobbering(unittest.TestCase):
     def test_the_review_folder_is_used_and_nothing_is_overwritten(self):
         from scripts.acquire import fetch as acquire_fetch
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             bios = Path(directory)
             for folder in ("Nintendo/SNES", "Nintendo/N64", "Nintendo/Nintendo 64DD"):
                 (bios / folder).mkdir(parents=True)
@@ -1427,7 +1425,7 @@ class ResolverRegressions(unittest.TestCase):
         }
 
     def test_hash_identity_wins_over_wrong_destination_hint(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             wrong = root / "wrong" / "firmware.bin"
             correct = root / "correct" / "firmware.bin"
@@ -1449,7 +1447,7 @@ class ResolverRegressions(unittest.TestCase):
             self.assertEqual(status, "sha1_exact")
 
     def test_name_cannot_mask_a_declared_hash_mismatch(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "firmware.bin"
             path.write_bytes(b"wrong")
             db = self._database({"firmware.bin": path})
@@ -1480,7 +1478,7 @@ class OneBaselineVerdict(unittest.TestCase):
         from scripts.resolve.validation import baseline_verdict
 
         entry = {"name": "dragon32.zip", "zipped_file": "d32.rom", "md5": ""}
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             path = self._archive(Path(directory), "other.rom")
             status, refusal = baseline_verdict(entry, path, "name_exact", "md5")
             self.assertEqual(refusal, "d32.rom not found inside ZIP")
@@ -1499,7 +1497,7 @@ class OneBaselineVerdict(unittest.TestCase):
         from scripts.packs.integrity import _intentional_hash_exclusion
 
         entry = {"name": "dragon32.zip", "zipped_file": "d32.rom", "md5": ""}
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             path = self._archive(Path(directory), "other.rom")
             sha1 = hashlib.sha1(Path(path).read_bytes()).hexdigest()
             db = {"files": {sha1: {"path": path, "name": "dragon32.zip", "sha1": sha1}},
@@ -1521,7 +1519,7 @@ class OneBaselineVerdict(unittest.TestCase):
         from scripts.core.hashing import md5_composite
         from scripts.resolve.validation import baseline_verdict, digest_verdict
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             loose = Path(directory) / "abc.bin"
             loose.write_bytes(b"abc")
             md5 = hashlib.md5(b"abc").hexdigest()
@@ -1551,7 +1549,7 @@ class OneBaselineVerdict(unittest.TestCase):
         from scripts.core.hashing import md5_composite
         from scripts.resolve.validation import digest_verdict
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             archive = self._archive(Path(directory), "rom.bin")
             raw = hashlib.md5(Path(archive).read_bytes()).hexdigest()
             members = md5_composite(archive)
@@ -1615,7 +1613,7 @@ class OneBaselineVerdict(unittest.TestCase):
         from resolve import packfiles as packresolve
         from scripts.packs.coverage import _resolve_for_platform
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             cached = Path(directory) / "BIG.PUP"
             cached.write_bytes(b"large firmware")
             sha1 = hashlib.sha1(cached.read_bytes()).hexdigest()
@@ -1635,7 +1633,7 @@ class OneBaselineVerdict(unittest.TestCase):
 
 class PackExclusionRegressions(unittest.TestCase):
     def test_slug_platform_core_requirement_uses_the_generated_destination(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             platforms = root / "platforms"
             platforms.mkdir()
@@ -1763,7 +1761,7 @@ class PackExclusionRegressions(unittest.TestCase):
 
     def test_hash_platform_accounts_for_an_unsafe_exclusion(self):
         """A platform that reads the bytes would reject the local payload."""
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             database, platforms = self._mismatch_fixture(root, "md5")
             pack = root / "pack.zip"
@@ -1787,7 +1785,7 @@ class PackExclusionRegressions(unittest.TestCase):
         An upstream hash the local dump contradicts must not remove a file the
         frontend would have loaded, so its absence stays a conformance error.
         """
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             database, platforms = self._mismatch_fixture(root, "existence")
             pack = root / "pack.zip"
@@ -1806,7 +1804,7 @@ class PackExclusionRegressions(unittest.TestCase):
             self.assertEqual(result[8], 0)
 
     def test_unexplained_missing_file_still_fails_conformance(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             platforms = root / "platforms"
             platforms.mkdir()
@@ -1927,7 +1925,7 @@ class RegionRegressions(unittest.TestCase):
         identified by its path (Dolphin's three IPL.bin) was never checked."""
         import hashlib
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             previous = os.getcwd()
             os.chdir(directory)
             self.addCleanup(os.chdir, previous)
@@ -1960,7 +1958,7 @@ class ArchiveSecurityRegressions(unittest.TestCase):
         return directory / name
 
     def test_member_count_limit_is_enforced(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             archive = self._zip_path(root)
             with zipfile.ZipFile(archive, "w") as handle:
@@ -1973,7 +1971,7 @@ class ArchiveSecurityRegressions(unittest.TestCase):
         """Every member came out 0600, the mode of its temporary file: the
         pico8 and vox launchers the RetroDECK pack keeps 0755 lost their
         execute bit once download.py extracted them."""
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             archive = self._zip_path(root)
             program = zipfile.ZipInfo("pico8")
@@ -1994,7 +1992,7 @@ class ArchiveSecurityRegressions(unittest.TestCase):
             self.assertEqual((root / "out" / "bios.bin").stat().st_mode & 0o777, 0o644)
 
     def test_symlink_member_is_rejected(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             archive = self._zip_path(root)
             link = zipfile.ZipInfo("link")
@@ -2011,7 +2009,7 @@ class ArchiveSecurityRegressions(unittest.TestCase):
         download.py feeds third-party archives to this function, so a legal
         Windows path must extract into a subdirectory instead of failing.
         """
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             archive = self._zip_path(root)
             with zipfile.ZipFile(archive, "w") as handle:
@@ -2021,7 +2019,7 @@ class ArchiveSecurityRegressions(unittest.TestCase):
             self.assertEqual((out / "sub" / "rom.bin").read_bytes(), b"payload")
 
     def test_windows_separator_cannot_smuggle_traversal(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             archive = self._zip_path(root)
             with zipfile.ZipFile(archive, "w") as handle:
@@ -2031,7 +2029,7 @@ class ArchiveSecurityRegressions(unittest.TestCase):
 
     def test_high_ratio_method_is_bounded_by_size_not_ratio(self):
         """bzip2 legitimately exceeds the DEFLATE ceiling."""
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             archive = self._zip_path(root)
             with zipfile.ZipFile(archive, "w", zipfile.ZIP_BZIP2) as handle:
@@ -2041,7 +2039,7 @@ class ArchiveSecurityRegressions(unittest.TestCase):
             self.assertEqual((out / "zeros.bin").stat().st_size, 4_000_000)
 
     def test_compression_ratio_limit_is_enforced(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             archive = self._zip_path(root)
             with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as handle:
@@ -2165,7 +2163,7 @@ class InstallerBoundaryRegressions(unittest.TestCase):
         """
         import validate_schemas
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             dist = Path(directory)
             broken = {
                 "schema_version": 1,
@@ -2207,7 +2205,7 @@ class InstallerBoundaryRegressions(unittest.TestCase):
             document, scope.pack_systems(install_list, targets))
         self.assertIn("install_list", document)
         self.assertIn("targets", document)
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             dist = Path(directory)
             with zipfile.ZipFile(dist / "Pack.zip", "w") as archive:
                 archive.writestr("manifest.json", json.dumps(document))
@@ -2241,7 +2239,7 @@ class InstallerBoundaryRegressions(unittest.TestCase):
 
 class TargetManifestRegressions(unittest.TestCase):
     def test_yaml_scalar_core_is_rejected_instead_of_leaking_to_json(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             source = root / "source"
             output = root / "output"
@@ -2281,7 +2279,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
     def test_restore_matches_assets_by_content_not_by_name(self):
         from scripts.release.restore import restore
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             cache = root / "cache"
             cache.mkdir()
@@ -2316,7 +2314,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
 
         from scripts.release.restore import gitignored_paths
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             missing = str(Path(directory) / "absent")
             with self.assertRaises(FileNotFoundError):
                 gitignored_paths(missing)
@@ -2335,7 +2333,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
         database pins to the old ones."""
         from scripts.release import restore as release_restore
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             cache = root / "cache"
             cache.mkdir()
@@ -2370,7 +2368,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
     def test_restore_leaves_tracked_paths_alone(self):
         from scripts.release.restore import restore
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             cache = root / "cache"
             cache.mkdir()
@@ -2398,7 +2396,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
         gitignored file absent: the early return ran before the check."""
         from scripts.release.restore import restore
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / ".gitignore").write_text("bios/big.bin\n", encoding="utf-8")
             (root / "database.json").write_text(
@@ -2473,7 +2471,7 @@ class ManifestVersionIsThePlatformsOwn(unittest.TestCase):
 
     def test_an_unversioned_child_has_no_version(self):
         from scripts.model.platforms import load_platform_config
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             Path(tmp, "parent.yml").write_text("platform: P\nversion: '2.0'\nsystems: {}\n")
             Path(tmp, "child.yml").write_text("inherits: parent\nplatform: C\n")
             self.assertNotIn("version", load_platform_config("child", tmp))
@@ -2687,7 +2685,7 @@ class ReleaseAssetCriterion(unittest.TestCase):
     def test_a_large_committed_file_is_served_by_the_repository(self):
         from scripts.packs import manifestentry
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = self._repo(directory, "bios/elsewhere.bin")
             big = Path(root, "bios", "big.avi")
             big.parent.mkdir()
@@ -2704,7 +2702,7 @@ class ReleaseAssetCriterion(unittest.TestCase):
         # name while the manifest gave install.py the spaced one, a 404.
         from scripts.packs import manifestentry
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = self._repo(directory, "bios/MAME/MAME 0.174 Arcade XML.dat")
             target = Path(root, "bios", "MAME", "MAME 0.174 Arcade XML.dat")
             target.parent.mkdir(parents=True)
@@ -2721,7 +2719,7 @@ class ReleaseAssetCriterion(unittest.TestCase):
     def test_a_gitignored_file_is_served_by_the_release_whatever_its_size(self):
         from scripts.packs import manifestentry
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = self._repo(directory, "bios/small.zip")
             small = Path(root, "bios", "small.zip")
             small.parent.mkdir()
@@ -2882,7 +2880,7 @@ class OneRefreshPerOnlineRun(unittest.TestCase):
 
         # A scratch output directory: step 4 purges the ZIPs of the one it
         # is given, and this run must never touch dist/.
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as out, \
+        with tempfile.TemporaryDirectory() as out, \
                 mock.patch.object(pipeline, "run", record), \
                 mock.patch.object(
                     sys, "argv", ["pipeline.py", "--skip-docs", "--output-dir", out]
@@ -3210,7 +3208,7 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
     """
 
     def test_naming_a_platform_with_no_pack_is_not_a_pass(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             named = subprocess.run(
                 [sys.executable, "scripts/generate_pack.py", "--platform",
                  "retroarch", "--verify-packs", "--output-dir", directory],
@@ -3236,7 +3234,7 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
     def test_an_unsatisfiable_declared_path_is_reported(self):
         from scripts.release.restore import restore
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             cache = root / "cache"
             cache.mkdir()
@@ -3487,7 +3485,7 @@ class ARegionDroppedExtraBlocksNothing(unittest.TestCase):
 
         from scripts.packs import extras as packextras
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             other = Path(directory) / "FOO.ROM"
             other.write_bytes(b"other bytes")
             first = Path(directory) / "foo.rom"
@@ -3541,7 +3539,7 @@ class AnotherEmulatorsTreeProvesNothing(unittest.TestCase):
     def test_neither_the_full_tail_nor_the_name_lands_in_a_foreign_tree(self):
         from scripts.resolve.localfile import resolve_local_file
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             # The collection's layout, read relative to its root.
             previous = os.getcwd()
@@ -3628,7 +3626,7 @@ class ANameWithItsDirectoryIsTheDestination(unittest.TestCase):
 
         from scripts.resolve.localfile import resolve_local_file
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             previous = os.getcwd()
             os.chdir(root)
@@ -3661,7 +3659,7 @@ class AnUnreadableDatabaseStopsTheScan(unittest.TestCase):
 
         from scripts import generate_db
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "database.json"
             path.write_text("<<<<<<< HEAD\n{}\n")
             with mock.patch.object(generate_db, "_load_gitignored_large_files",
@@ -3684,7 +3682,7 @@ class TheZipIndexCacheKnowsItsInputs(unittest.TestCase):
     def test_the_bound_and_the_sha1_are_part_of_the_key(self):
         from scripts.core import ziptools
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "a.zip"
             with zipfile.ZipFile(path, "w") as archive:
                 archive.writestr("big.bin", b"x" * 4096)
@@ -3715,7 +3713,7 @@ class GeneratedModelsAreWrittenWhole(unittest.TestCase):
     def test_an_unreadable_clone_map_stops_the_run(self):
         from scripts import dedup
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             bios = root / "bios"
             # A device clone: two archive names, the same ROMs, in MAME's tree.
@@ -3740,7 +3738,7 @@ class APackNoteBesideItsSlotIsANote(unittest.TestCase):
     def test_a_nested_note_is_not_hashed_against_the_collection(self):
         from scripts.packs.integrity import verify_pack
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "Pack.zip"
             with zipfile.ZipFile(path, "w") as archive:
                 archive.writestr("games/keen6/INSTRUCTIONS_egagraph.ck6.txt", "File needed")
@@ -3811,7 +3809,7 @@ class TheDatabaseCacheIsWrittenWhole(unittest.TestCase):
 
         from scripts import generate_db
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             path = os.path.join(directory, "cache", "db_cache.json")
             generate_db.save_cache(path, {"a": 1})
             with mock.patch.object(json, "dumps", side_effect=TypeError("miscomputed")), \
@@ -3929,7 +3927,7 @@ class HashMergeBackupsAreNotSources(unittest.TestCase):
         except ImportError as exc:
             self.skipTest(f"validate_schemas needs jsonschema: {exc}")
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             (Path(directory) / "mame.old.yml").write_text("emulator: [\n")
             self.assertEqual(
                 _validate_yaml_directory(Path(directory), "emulator.schema.json"), []
@@ -3953,7 +3951,7 @@ class AnUnreadableArchiveIsSaidOutLoud(unittest.TestCase):
     def test_the_resolver_names_the_archive(self):
         from resolve import localfile
 
-        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             broken = Path(tmp) / "neogeo.zip"
             broken.write_bytes(b"PK\x03\x04 truncated")
             sha1 = hashlib.sha1(broken.read_bytes()).hexdigest()
@@ -4043,7 +4041,7 @@ class ADataDirectoryIsWalkedOnce(unittest.TestCase):
     def test_two_lookups_share_one_walk_and_keep_its_order(self):
         from resolve.datadirs import forget_data_dir_index, resolve_in_data_dirs
 
-        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp) / "cache"
             (cache / "a").mkdir(parents=True)
             (cache / "b").mkdir()
@@ -4104,7 +4102,7 @@ class AnAcceptedVersionIsNoCoreDiscrepancy(unittest.TestCase):
     def test_a_sibling_version_matches(self):
         from scripts.packs.platformpack import _matches_an_alternative
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             held = Path(tmp) / "NWINTER.GRP"
             held.write_bytes(b"demo")
             profile = json.loads(json.dumps(self.PROFILE))
@@ -4115,7 +4113,7 @@ class AnAcceptedVersionIsNoCoreDiscrepancy(unittest.TestCase):
     def test_a_copy_no_entry_declares_still_disagrees(self):
         from scripts.packs.platformpack import _matches_an_alternative
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             held = Path(tmp) / "NWINTER.GRP"
             held.write_bytes(b"other")
             profile = json.loads(json.dumps(self.PROFILE))
@@ -4134,7 +4132,7 @@ class ADataDirectoryCopyPassesTheNameChecks(unittest.TestCase):
     was returned without either check."""
 
     def setUp(self):
-        self.tmp = Path(tempfile.mkdtemp(dir=TMP_ROOT))
+        self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(lambda: __import__("shutil").rmtree(self.tmp, True))
         cache = self.tmp / "cache"
         cache.mkdir()
@@ -4164,7 +4162,7 @@ class AMameCloneNameIsANameStep(unittest.TestCase):
     parent set."""
 
     def setUp(self):
-        self.tmp = Path(tempfile.mkdtemp(dir=TMP_ROOT))
+        self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(lambda: __import__("shutil").rmtree(self.tmp, True))
         bios = self.tmp / "bios" / "Arcade"
         bios.mkdir(parents=True)
@@ -4307,7 +4305,7 @@ class VerifyStrictAppliesInEveryMode(unittest.TestCase):
     def setUpClass(cls):
         if not (ROOT / "database.json").exists():
             raise unittest.SkipTest("database.json is not built")
-        cls.dir = Path(tempfile.mkdtemp(dir=TMP_ROOT))
+        cls.dir = Path(tempfile.mkdtemp())
         (cls.dir / "fakeemu.yml").write_text(
             "emulator: FakeEmu\ntype: libretro\nsystems: [zz-console]\nfiles:\n"
             "  - name: does_not_exist_strict.bin\n    required: true\n"
@@ -4377,7 +4375,7 @@ class ASameNamedMemberIsNotTheFile(unittest.TestCase):
     def test_a_declared_hash_decides_a_member_or_data_hit(self):
         from scripts.packs import crossref
 
-        tmp = Path(tempfile.mkdtemp(dir=TMP_ROOT))
+        tmp = Path(tempfile.mkdtemp())
         self.addCleanup(lambda: __import__("shutil").rmtree(tmp, True))
         (tmp / "data").mkdir()
         (tmp / "data" / "font.ttf").write_bytes(b"DATA FONT")
@@ -4404,7 +4402,7 @@ class AnEmptyTargetIsNotEveryCore(unittest.TestCase):
         from scripts.model.targets import load_target_config
         from scripts.packs.targets import generate_target_manifests
 
-        tmp = Path(tempfile.mkdtemp(dir=TMP_ROOT))
+        tmp = Path(tempfile.mkdtemp())
         self.addCleanup(lambda: __import__("shutil").rmtree(tmp, True))
         targets = tmp / "platforms" / "targets"
         targets.mkdir(parents=True)
@@ -4431,7 +4429,7 @@ class ADataDirectoryIsHeldWhileRead(unittest.TestCase):
     died on FileNotFoundError, or shipped bytes nobody had verified."""
 
     def setUp(self):
-        self.tmp = Path(tempfile.mkdtemp(dir=TMP_ROOT))
+        self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(lambda: __import__("shutil").rmtree(self.tmp, True))
 
     def test_the_index_follows_a_swapped_tree(self):
@@ -4509,8 +4507,8 @@ class EachRootReadsItsOwnRegistry(unittest.TestCase):
     def test_two_roots_in_one_process(self):
         from scripts.packs import manifestentry
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as a, \
-                tempfile.TemporaryDirectory(dir=TMP_ROOT) as b:
+        with tempfile.TemporaryDirectory() as a, \
+                tempfile.TemporaryDirectory() as b:
             Path(a, ".gitignore").write_text("bios/one.bin\n")
             Path(b, ".gitignore").write_text("bios/two.bin\n")
             self.assertTrue(manifestentry._is_release_asset(str(Path(a, "bios/one.bin")), a))
@@ -5013,7 +5011,7 @@ class AManifestHashesAFileOnce(unittest.TestCase):
     def test_verified_hashes_are_reused(self):
         from scripts.packs import manifestentry
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp, "a.bin")
             path.write_bytes(b"abc")
             sha1 = hashlib.sha1(b"abc").hexdigest()
@@ -5041,7 +5039,7 @@ class AZipMemberIsHashedOnce(unittest.TestCase):
     def test_repeated_questions_read_the_archive_once(self):
         from scripts.core import ziptools
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             archive = Path(tmp, "set.zip")
             with zipfile.ZipFile(archive, "w") as zf:
                 zf.writestr("ROM.bin", b"abc")
@@ -5088,7 +5086,7 @@ class TargetListsReadThePinnedRelease(unittest.TestCase):
     def test_the_revision_comes_from_the_platform_yaml(self):
         from scripts.scraper.targets import BaseTargetScraper
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             for name, source, tag in (
                 ("a", "https://raw.githubusercontent.com/o/r/batocera-43.1/x/y", "batocera-43.1"),
                 ("b", "https://gitlab.com/recalbox/recalbox/-/raw/10.1.1/a/b.xml", "10.1.1"),
@@ -5167,7 +5165,7 @@ class ATreeNobodyHoldsIsMissingNotAnAsset(unittest.TestCase):
                     (None, "not_found"),
                 )
         self.assertIsNone(largefiles.fetch_large_file("caesar3/", offline=True))
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             Path(tmp, "sub").mkdir()
             self.assertIsNone(largefiles._fetch_asset("sub", tmp, "", "", offline=True))
 
@@ -5521,7 +5519,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
 
         from model.profiles import installed_data_refs
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             Path(tmp, "dolphin.yml").write_text(_yaml.safe_dump({
                 "emulator": "Dolphin", "type": "libretro", "files": [],
                 "data_directories": [{"ref": "dolphin-sys", "installed_on": ["lakka"]}]}))
@@ -5865,7 +5863,7 @@ class SitemapDatesComeFromThePage(unittest.TestCase):
         saved = dict(sitegen_descriptions.PAGE_DATA)
         self.addCleanup(lambda: (sitegen_descriptions.PAGE_DATA.clear(),
                                  sitegen_descriptions.PAGE_DATA.update(saved)))
-        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             docs = Path(tmp)
             (docs / "emulators").mkdir()
             (docs / "emulators" / "dated.md").write_text("# Dated\n\nA page with its own date.\n")
@@ -6007,7 +6005,7 @@ class ZippedFileMd5IsParsedOnce(unittest.TestCase):
         from scripts.resolve.validation import inner_rom_check
         from scripts.packs.verdicts import verify_entry_md5
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             archive = Path(directory, "x.zip")
             with zf_mod.ZipFile(archive, "w") as zf:
                 zf.writestr("rom.bin", b"rom")
@@ -6140,7 +6138,7 @@ class AProfilePathIsTheEmulatorsNotOurs(unittest.TestCase):
         except ImportError as exc:
             self.skipTest(f"validate_schemas needs jsonschema: {exc}")
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             emulators = Path(directory) / "emulators"
             emulators.mkdir()
             (emulators / "x.yml").write_text(
@@ -6229,7 +6227,7 @@ class ANamedPackThatIsAbsentFails(unittest.TestCase):
     "SKIP" and exited 1: a skip label on a failure, and no next step."""
 
     def test_the_line_says_fail_and_how_to_build(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             result = subprocess.run(
                 [sys.executable, "scripts/generate_pack.py", "--platform", "retroarch",
                  "--verify-packs", "--output-dir", directory],
@@ -6243,7 +6241,7 @@ class ANamedPackThatIsAbsentFails(unittest.TestCase):
     def test_all_with_no_pack_is_a_failure(self):
         """--all on a mistyped or purged directory skipped every platform
         and exited 0, a passed integrity check that checked nothing."""
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             result = subprocess.run(
                 [sys.executable, "scripts/generate_pack.py", "--all",
                  "--verify-packs", "--output-dir", directory],
@@ -6383,7 +6381,7 @@ class TheRepairCommandWritesTheFileNamed(unittest.TestCase):
     def test_the_command_names_the_path(self):
         from scripts.model.database import DatabaseUnreadable, load_database
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             target = str(Path(directory) / "nosuch.json")
             with self.assertRaises(DatabaseUnreadable) as caught:
                 load_database(target)
@@ -6398,7 +6396,7 @@ class TheRepairCommandWritesTheFileNamed(unittest.TestCase):
         collection into a second file named after the typo."""
         from scripts.model.database import DatabaseUnreadable, load_database
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             (Path(directory) / "database.json").write_text("{}")
             typo = Path(directory) / "databse.json"
             with self.assertRaises(DatabaseUnreadable) as caught:
@@ -6420,7 +6418,7 @@ class VerifyPacksRefusesWhatItCannotDo(unittest.TestCase):
             ["--verify-packs", "--platform", "retroarch", "--one-per-slot"],
         )
         for extra in cases:
-            with self.subTest(args=extra), tempfile.TemporaryDirectory(dir=TMP_ROOT) as out:
+            with self.subTest(args=extra), tempfile.TemporaryDirectory() as out:
                 result = subprocess.run(
                     [sys.executable, "scripts/generate_pack.py", *extra, "--output-dir", out],
                     cwd=ROOT, capture_output=True, text=True, timeout=300,
@@ -6716,7 +6714,7 @@ class ThePackCheckAppliesTheFrontendRule(unittest.TestCase):
             "sha1": hashlib.sha1(payload).hexdigest(),
             "size": len(payload),
         }
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             pack = Path(tmp) / "p.zip"
             with zipfile.ZipFile(pack, "w") as zf:
                 zf.writestr("bios/x.bin", payload)
@@ -6735,7 +6733,7 @@ class ABrokenRegistryIsNotAnEmptyOne(unittest.TestCase):
     def test_both_raise(self):
         from scripts.model.registry import list_registered_platforms
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(FileNotFoundError):
                 list_registered_platforms(tmp)
             Path(tmp, "_registry.yml").write_text(
@@ -7103,7 +7101,7 @@ class WhatOnlyAnInstallProvidesIsListed(unittest.TestCase):
 
         import bundled_only
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp, \
+        with tempfile.TemporaryDirectory() as tmp, \
                 mock.patch.object(bundled_only, "list_registered_platforms", return_value=[]):
             def entry(sha1, name):
                 path = Path(tmp, name)
@@ -7137,7 +7135,7 @@ class WhatOnlyAnInstallProvidesIsListed(unittest.TestCase):
 
         import bundled_only
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             for name in ("dir1/a.bmp", "dir2/a.bmp", "dir2/b.bmp"):
                 Path(tmp, name).parent.mkdir(exist_ok=True)
                 Path(tmp, name).write_bytes(b"same" if "a.bmp" in name else b"diff")
@@ -7213,7 +7211,7 @@ class RequiredOnlyReachesDataDirectories(unittest.TestCase):
         from scripts.packs import datatrees
         from scripts.packs.archive import Placed
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             for key in ("needed", "optional"):
                 Path(tmp, key).mkdir()
                 Path(tmp, key, f"{key}.bin").write_bytes(b"x")
@@ -7288,7 +7286,7 @@ class InstallerJsonKindsNeverOverwriteEachOther(unittest.TestCase):
     file every installer downloads, with a target table, exit 0."""
 
     def _run(self, *flags: str, held: str) -> tuple:
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp, "retroarch.json")
             before = (ROOT / held).read_text(encoding="utf-8")
             target.write_text(before, encoding="utf-8")
@@ -7327,7 +7325,7 @@ class PlatformSystemTypoGetsTheClosestNames(unittest.TestCase):
         from scripts.packs import platformpack
 
         out = io.StringIO()
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp, \
+        with tempfile.TemporaryDirectory() as tmp, \
                 contextlib.redirect_stdout(out):
             result = platformpack.generate_pack(
                 "retroarch", str(ROOT / "platforms"), {"files": {}, "indexes": {}},
@@ -7362,7 +7360,7 @@ class HashInputNamesWhatItAccepts(unittest.TestCase):
             with self.subTest(raw=raw), self.assertRaises(ValueError) as ctx:
                 parse_hash_input(raw)
             self.assertIn("SHA-256 (64)", str(ctx.exception))
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             listing = Path(tmp, "hashes.txt")
             listing.write_text("# list\n490f666e1afb15b7362b406ed1cea246  a.bin\nb.bin\n")
             with self.assertRaises(ValueError) as ctx:
@@ -7465,7 +7463,7 @@ class ToolsRunFromAnyDirectory(unittest.TestCase):
                 self.assertIn("sony-playstation", proc.stdout)
 
     def test_a_typed_path_is_read_from_where_it_was_typed(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             proc = self._run(
                 Path(tmp), str(ROOT / "scripts" / "generate_pack.py"),
                 "--manifest-targets", "--output-dir", "lists",
@@ -7658,7 +7656,7 @@ class AnUnknownSystemIsRefusedBeforeAnyWork(unittest.TestCase):
     output lock and refreshed every data directory, then ended on a WARNING."""
 
     def test_refused_before_the_lock_and_the_refresh(self):
-        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             out = Path(tmp) / "never"
             with mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}):
                 proc = subprocess.run(

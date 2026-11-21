@@ -93,9 +93,7 @@ def _offline_env() -> dict:
 
 class Scratch(unittest.TestCase):
     def setUp(self):
-        scratch = REPO_ROOT / "tmp"
-        scratch.mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=scratch))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         self.dest = self.root / "system"
         self.list = self.root / "retroarch.json"

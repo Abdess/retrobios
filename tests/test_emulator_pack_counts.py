@@ -40,11 +40,8 @@ class PackAndReportAgree(unittest.TestCase):
     def test_each_emulator_pack_counts_as_verify_does(self):
         if not (REPO_ROOT / "database.json").is_file():
             self.skipTest("database.json is not built")
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         for emulator in CASES:
-            with self.subTest(emulator=emulator), tempfile.TemporaryDirectory(
-                dir=REPO_ROOT / "tmp"
-            ) as out:
+            with self.subTest(emulator=emulator), tempfile.TemporaryDirectory() as out:
                 pack = subprocess.run(
                     [sys.executable, "scripts/generate_pack.py", "--emulator", emulator,
                      "--offline", "--output-dir", out],
@@ -85,8 +82,7 @@ class APlaceholderIsAnsweredByEvidence(unittest.TestCase):
         from packs.emulatorcheck import verify_emulator
 
         emulator_profiles_cache.clear()
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         previous = os.getcwd()
         os.chdir(root)

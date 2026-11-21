@@ -31,7 +31,7 @@ LINKED = ("bios", "data")
 @cache
 def scratch_checkout() -> Path:
     """The copy, built once per test process and removed at its exit."""
-    root = Path(tempfile.mkdtemp(prefix="checkout-", dir=REPO_ROOT / "tmp" / "tests"))
+    root = Path(tempfile.mkdtemp(prefix="checkout-"))
     # A detached worktree with nothing checked out: the scripts that read
     # HEAD (the site's bootstrap pin) find this commit.
     subprocess.run(

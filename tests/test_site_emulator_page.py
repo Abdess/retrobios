@@ -171,7 +171,7 @@ class WhatASearchSnippetSays(unittest.TestCase):
         import json
         import tempfile
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             page = Path(tmp) / "emulators" / "idtech4a++.md"
             page.parent.mkdir()
             page.write_text("# idTech4A++\n\nSome text long enough to be a description.\n")

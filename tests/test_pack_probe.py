@@ -19,6 +19,7 @@ import json
 import os
 import re
 import shutil
+import tempfile
 import unittest
 import zipfile
 from pathlib import Path
@@ -32,7 +33,7 @@ from model.profiles import load_emulator_profiles
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-TMP = REPO_ROOT / "tmp" / "tests" / "pack_probe"
+TMP = Path(tempfile.gettempdir()) / "pack_probe"
 
 SATURN = {
     "type": "libretro",

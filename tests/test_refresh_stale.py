@@ -197,8 +197,7 @@ class Running(unittest.TestCase):
             self.assertEqual(order.read_text().split(), ["parent", "child"])
 
     def test_the_report_prints_verify_after_a_rescrape(self):
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as directory:
+        with tempfile.TemporaryDirectory() as directory:
             log = Path(directory) / "x.log"
             log.write_text(
                 "$ python -m scripts.scraper.x_scraper\nscraped\n"
@@ -243,7 +242,7 @@ class SavedFindings(unittest.TestCase):
     nightly job checks every area once and refreshes only some."""
 
     def test_rows_outside_the_asked_areas_are_left_out(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
+        with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "freshness.json"
             path.write_text(
                 '[{"area": "data", "subject": "dolphin-sys", "status": "STALE"},'
@@ -259,7 +258,7 @@ class SavedFindings(unittest.TestCase):
         import json
         import subprocess
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
+        with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "freshness.json"
             path.write_text(json.dumps([
                 finding("catalogs", "mame recipes"), finding("coreinfo", "anybor"),
@@ -286,7 +285,7 @@ class SavedFindings(unittest.TestCase):
         self.assertEqual((jobs, [f["subject"] for f in surfaced]), ([], ["muos"]))
 
     def test_a_report_that_is_not_a_list_is_refused(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
+        with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "freshness.json"
             path.write_text('{"area": "data"}', encoding="utf-8")
             with self.assertRaises(RuntimeError):

@@ -22,7 +22,7 @@ class RequiredOnlyArchives(unittest.TestCase):
     def test_optional_archives_stay_out(self):
         if not (REPO_ROOT / "database.json").is_file():
             self.skipTest("database.json not built")
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             result = subprocess.run(
                 [sys.executable, "scripts/generate_pack.py", "--emulator", "geolith",
                  "--required-only", "--offline", "--output-dir", tmp],

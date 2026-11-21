@@ -383,8 +383,7 @@ class DataDirectoryPagesStayOutOfSearch(unittest.TestCase):
 class AnElementBudget(unittest.TestCase):
     def test_validate_site_reports_a_crowded_page(self):
         self.assertEqual(validate.MAX_PAGE_ELEMENTS, 10_000)
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             page = Path(tmp) / "crowded" / "index.html"
             page.parent.mkdir()
             page.write_text("<html><body>" + "<i></i>" * 10_001

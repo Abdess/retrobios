@@ -9,6 +9,7 @@ route of the port, and the other launchers, are in test_handheld_launchers.
 from __future__ import annotations
 
 import tests
+from tests import scratch_dir
 
 import hashlib
 import importlib.util
@@ -19,7 +20,6 @@ import re
 import shutil
 import subprocess
 import sys
-import tempfile
 import unittest
 import zipfile
 from pathlib import Path
@@ -39,14 +39,6 @@ rbevents = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(rbevents)
 
 SCRIPTS = [PORT / "RetroBIOS.sh", PORT / "retrobios" / "screens.txt"]
-
-
-def _tempdir(test: unittest.TestCase) -> Path:
-    scratch = REPO_ROOT / "tmp"
-    scratch.mkdir(exist_ok=True)
-    path = Path(tempfile.mkdtemp(dir=str(scratch)))
-    test.addCleanup(shutil.rmtree, path, True)
-    return path
 
 
 class EveryScriptParses(unittest.TestCase):
@@ -78,7 +70,7 @@ class EveryScriptParses(unittest.TestCase):
 
 class ThePortArchive(unittest.TestCase):
     def setUp(self):
-        self.out = _tempdir(self)
+        self.out = scratch_dir(self)
 
     def _build(self, name: str = "RetroBIOS.zip") -> Path:
         return installer_build_port.build_port(self.out / name)
@@ -154,7 +146,7 @@ class LauncherIndex(unittest.TestCase):
     def test_the_list_refuses_an_installer_the_bootstraps_do_not_pin(self):
         from installer_build import launcherindex
 
-        root = _tempdir(self)
+        root = scratch_dir(self)
         shutil.copyfile(REPO_ROOT / "install.py", root / "install.py")
         (root / "install.sh").write_text('DEFAULT_INSTALL_SHA256="' + "0" * 64 + '"\n')
         with self.assertRaises(ValueError):
@@ -331,7 +323,7 @@ class TheScreens(unittest.TestCase):
     """Which screens the port shows, scenario by scenario."""
 
     def run_port(self, scenario: str, answers: list[str], before=None, **env: str) -> list[tuple]:
-        work = _tempdir(self)
+        work = scratch_dir(self)
         (work / "install.py").write_text(FAKE_INSTALL)
         (work / "driver.sh").write_text(DRIVER)
         (work / "answers").write_text("".join(f"{a}\n" for a in answers))
@@ -526,7 +518,7 @@ class TheScreens(unittest.TestCase):
 
     def run_old(self, arch: str, **env: str) -> list[tuple]:
         """A python3 on PATH that is 3.7.3, ahead of every other."""
-        holder = _tempdir(self)
+        holder = scratch_dir(self)
         fake = holder / "python3"
         fake.write_text('#!/bin/sh\n[ "$1" = "--version" ] && echo "Python 3.7.3"\nexit 1\n')
         fake.chmod(0o755)

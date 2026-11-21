@@ -91,8 +91,7 @@ class TheBuilderNamesByTheCanonicalTarget(unittest.TestCase):
     def test_an_alias_writes_the_canonical_manifest(self):
         if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not built")
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out:
+        with tempfile.TemporaryDirectory() as out:
             proc = subprocess.run(
                 [sys.executable, "scripts/generate_pack.py", "--platform", "retroarch",
                  "--target", "nx", "--manifest", "--offline", "--output-dir", out],

@@ -9,6 +9,7 @@ menu) is not exercised.
 from __future__ import annotations
 
 import tests
+from tests import scratch_dir
 
 import hashlib
 import io
@@ -17,7 +18,6 @@ import shutil
 import stat
 import subprocess
 import sys
-import tempfile
 import unittest
 import zipfile
 from pathlib import Path
@@ -110,16 +110,9 @@ class AppRepository(FakeRepository):
             timeout=120, check=False, stdin=subprocess.DEVNULL)
 
 
-def _tempdir(test: unittest.TestCase) -> Path:
-    (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-    path = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
-    test.addCleanup(shutil.rmtree, path, True)
-    return path
-
-
 class Placement(unittest.TestCase):
     def test_each_card_and_where_its_app_goes(self):
-        root = _tempdir(self)
+        root = scratch_dir(self)
         expected = {"muOS": "ARCHIVE", "KNULLI": "roms/ports", "ROCKNIX": ".config/modules"}
         for system, folder in expected.items():
             with self.subTest(system=system):
@@ -131,7 +124,7 @@ class Placement(unittest.TestCase):
                 self.assertEqual(card.why, "")
 
     def test_a_bios_folder_inside_the_card_finds_its_root(self):
-        root = _tempdir(self)
+        root = scratch_dir(self)
         bios = make_card(root / "sd1", "muOS")
         bios.mkdir(parents=True, exist_ok=True)
         self.assertEqual(install.card_app(bios).root, root / "sd1")
@@ -139,7 +132,7 @@ class Placement(unittest.TestCase):
         self.assertIsNone(install.card_app(root / "sd1"))
 
     def test_cards_without_a_launcher_say_why(self):
-        root = _tempdir(self)
+        root = scratch_dir(self)
         for system, words in (("Onion", "has no Python"), ("MinUI", "has no Python"),
                               ("spruceOS", "no RetroBIOS app for spruceOS")):
             with self.subTest(system=system):
@@ -148,7 +141,7 @@ class Placement(unittest.TestCase):
                 self.assertIn(words, card.why)
 
     def test_a_folder_on_no_card(self):
-        self.assertIsNone(install.card_app(_tempdir(self) / "bios"))
+        self.assertIsNone(install.card_app(scratch_dir(self) / "bios"))
 
     def test_the_table_names_systems_detection_names(self):
         names = {rule.name for rule in install._card_rules()}
@@ -215,7 +208,7 @@ class TheList(unittest.TestCase):
                    for entry in launcher["members"]]
         data = install.app_archive(members)
         from installer_build import port
-        built = _tempdir(self) / port.MUOS_APP
+        built = scratch_dir(self) / port.MUOS_APP
         port.build_archive(port.MUOS_APP, built)
         with zipfile.ZipFile(built) as release, zipfile.ZipFile(io.BytesIO(data)) as ours:
             self.assertEqual(release.namelist(), ours.namelist())
@@ -332,7 +325,7 @@ class TheQuestion(unittest.TestCase):
     """Line mode at a terminal asks once, and only yes puts the app."""
 
     def run_finish(self, answer: str, system: str = "muOS", **given) -> list:
-        root = _tempdir(self)
+        root = scratch_dir(self)
         bios = make_card(root / "card", system)
         args = mock.Mock(add_app=False, yes=False)
         for key, value in given.items():
@@ -385,7 +378,7 @@ class TheOption(unittest.TestCase):
         cls.repo.__exit__(None, None, None)
 
     def test_refused_where_it_cannot_apply(self):
-        root = _tempdir(self)
+        root = scratch_dir(self)
         pack = root / "RetroArch_BIOS_Pack.zip"
         zipfile.ZipFile(pack, "w").close()
         for options, words in (
@@ -405,7 +398,7 @@ class TheOption(unittest.TestCase):
                 self.assertIn(words, proc.stderr)
 
     def test_refused_for_a_folder_on_no_card_or_no_launcher(self):
-        root = _tempdir(self)
+        root = scratch_dir(self)
         for system, words in ((None, "is not on a card this installer recognises"),
                               ("Onion", "Onion has no Python"),
                               ("spruceOS", "no RetroBIOS app for spruceOS yet")):
@@ -424,7 +417,7 @@ class TheOption(unittest.TestCase):
                 self.assertFalse([e for e in events if e["event"] == "download"])
 
     def test_applied_after_the_install_and_reported(self):
-        root = _tempdir(self)
+        root = scratch_dir(self)
         for system in ("muOS", "KNULLI"):
             with self.subTest(system=system):
                 bios = make_card(root / system, system)
@@ -449,7 +442,7 @@ class TheOption(unittest.TestCase):
                 self.assertEqual((again.returncode, app["ok"], app["written"]), (0, True, []))
 
     def test_not_added_when_the_install_does_not_finish(self):
-        root = _tempdir(self)
+        root = scratch_dir(self)
         make_card(root / "card", "muOS")
         # A BIOS folder that is a file: every download fails.
         (root / "card" / "MUOS" / "bios").rmdir()

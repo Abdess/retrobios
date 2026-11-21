@@ -27,9 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 class SiteReferenceContracts(unittest.TestCase):
     def setUp(self) -> None:
-        scratch = ROOT / "tmp" / "tests"
-        scratch.mkdir(parents=True, exist_ok=True)
-        self.temp = tempfile.TemporaryDirectory(dir=scratch)
+        self.temp = tempfile.TemporaryDirectory()
         self.docs = Path(self.temp.name) / "docs"
         self.docs.mkdir()
 
@@ -713,7 +711,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
 
         body = b"approved inis\n"
         sha1 = hashlib.sha1(body).hexdigest()
-        with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             member = Path(tmp, "data", "dolphin-sys", "ApprovedInis.json")
             member.parent.mkdir(parents=True)
             member.write_bytes(body)
@@ -771,7 +769,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
         self.assertEqual(found[("emulator", "duckstation", "crc32", "11223344")]["name"], "m.rom")
         self.assertNotIn(("emulator", "an-alias", "md5", md5), found)
 
-        with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             shards = lookup.write_lookup_shards(Path(tmp), records, "2026-01-01T00:00:00Z")
             folder = Path(tmp) / "lookup"
             names = sorted(path.name for path in folder.glob("*.json"))
@@ -796,7 +794,7 @@ class AnArchiveMemberIsFoundByItsCrc(unittest.TestCase):
 
         from sitegen import lookup
 
-        with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             archive = root / "bios" / "Arcade" / "Arcade" / "a500.zip"
             archive.parent.mkdir(parents=True)
@@ -930,7 +928,7 @@ class ACardNamesThePacksThatInstallIt(unittest.TestCase):
         from packs.crossref import FileConsumers
         from sitegen.cards import _installed_places
 
-        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             Path(tmp, "retrobat.json").write_text(_json.dumps({
                 "platform": "retrobat",
                 "files": [{"dest": "scph5501.bin", "sha1": "b" * 40,
@@ -1062,7 +1060,7 @@ class ADataDirectoryFileCanBeLookedUp(unittest.TestCase):
 
         from sitegen.lookup import data_directory_members, file_location_items
 
-        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             Path(tmp, "retroarch.json").write_text(_json.dumps({"data_directories": [
                 {"ref": "dolphin-sys", "files": {"GC/font.bin": {"sha1": "c" * 40, "size": 3}}},
             ]}))
@@ -1267,7 +1265,7 @@ class EveryPageLinksItsOwnData(unittest.TestCase):
 
         item = dataexports.system_export_item("sony", "Sony", {"PlayStation": [entry]})
         self.assertEqual(item["consoles"]["PlayStation"][0]["sha1"], "a" * 40)
-        with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "sony.json"
             dataexports.write_single_item(path, "systems", item, "2026-10-21T00:00:00Z")
             document = json.loads(path.read_text())

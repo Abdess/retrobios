@@ -15,8 +15,6 @@ from model.region import REGIONS
 from scripts.scraper import game_dat_importer as importer
 
 ROOT = Path(__file__).resolve().parent.parent
-TMP_ROOT = ROOT / "tmp" / "tests"
-TMP_ROOT.mkdir(parents=True, exist_ok=True)
 FIXTURES = ROOT / "tests" / "fixtures" / "game_dats"
 
 try:
@@ -56,7 +54,7 @@ class RegionTags(unittest.TestCase):
 
 class FixtureImport(unittest.TestCase):
     def setUp(self) -> None:
-        self.temp = tempfile.TemporaryDirectory(dir=TMP_ROOT)
+        self.temp = tempfile.TemporaryDirectory()
         self.out = Path(self.temp.name)
 
     def tearDown(self) -> None:
@@ -193,7 +191,7 @@ class CommittedCatalogs(unittest.TestCase):
             self.assertEqual(importer.dump_catalog(doc), path.read_text())
 
     def test_fixture_output_matches_the_schema(self) -> None:
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             out = Path(directory)
             for source in ("no-intro", "redump"):
                 self.assertEqual(run_import(source, out).returncode, 0)

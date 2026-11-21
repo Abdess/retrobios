@@ -28,7 +28,7 @@ PAYLOAD = b"romm firmware"
 
 class SizeAndAnyHash(unittest.TestCase):
     def setUp(self):
-        scratch = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        scratch = tempfile.TemporaryDirectory()
         self.addCleanup(scratch.cleanup)
         self.path = str(Path(scratch.name) / "fw.bin")
         Path(self.path).write_bytes(PAYLOAD)

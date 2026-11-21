@@ -22,7 +22,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class AgnosticSubstitute(unittest.TestCase):
     def test_only_the_platform_cores_answer(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             held = Path(tmp) / "ps2" / "scph39001.bin"
             held.parent.mkdir()
             held.write_bytes(b"x" * 16)

@@ -26,7 +26,7 @@ class FinalizeByExactName(unittest.TestCase):
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
         self.addCleanup(os.chdir, previous)
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             with zipfile.ZipFile(Path(tmp) / "MiSTer_FPGA_Custom_BIOS_Pack.zip", "w") as zf:
                 zf.writestr("README.txt", "custom")
             ok = verify_and_finalize_packs(tmp, {"files": {}, "indexes": {}})
@@ -42,7 +42,7 @@ class APackFromAnotherRunIsLeftAlone(unittest.TestCase):
         import json
         import subprocess
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             def build(platform: str) -> str:
                 proc = subprocess.run(
                     [sys.executable, "scripts/generate_pack.py", "--platform", platform,

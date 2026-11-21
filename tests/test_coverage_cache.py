@@ -24,7 +24,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 class CoverageCache(unittest.TestCase):
     def setUp(self) -> None:
-        self.work = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp" / "tests"))
+        self.work = Path(tempfile.mkdtemp())
         self.platforms = self.work / "platforms"
         self.platforms.mkdir()
         (self.platforms / "alpha.yml").write_text("platform: Alpha\n")

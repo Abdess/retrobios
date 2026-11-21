@@ -24,8 +24,6 @@ from romrecipes import ledger
 from core.torrentzip import build_torrentzip
 
 ROOT = Path(__file__).resolve().parent.parent
-TMP_ROOT = ROOT / "tmp" / "tests"
-TMP_ROOT.mkdir(parents=True, exist_ok=True)
 
 ROM_A = b"first rom payload" * 50
 ROM_B = b"second rom payload" * 40
@@ -112,7 +110,7 @@ class Fixture(unittest.TestCase):
     """A small collection: a loose ROM, a TorrentZip set, a plain ZIP."""
 
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(dir=TMP_ROOT)
+        self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
         bios = self.root / "bios"
         bios.mkdir()

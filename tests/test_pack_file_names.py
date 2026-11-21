@@ -27,7 +27,7 @@ class PackFileNames(unittest.TestCase):
         self.assertEqual(file_name_part('a\\b:c*d?"e<f>g|h', "_"), "a-b-c-d--e-f-g-h")
 
     def test_an_emulator_named_with_a_slash_writes_its_pack(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             emulators = Path(tmp) / "emulators"
             out = Path(tmp) / "out"
             emulators.mkdir()
@@ -56,7 +56,7 @@ class SystemPackLeavesTheEmulatorPack(unittest.TestCase):
     def test_both_packs_stay(self):
         import subprocess
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             for mode in (["--emulator", "emuscv"], ["--system", "scv"]):
                 subprocess.run(
                     [sys.executable, "scripts/generate_pack.py", *mode, "--offline",

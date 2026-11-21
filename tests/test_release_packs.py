@@ -34,7 +34,6 @@ from model import releaserecord
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 PLATFORMS = str(REPO_ROOT / "platforms")
-TMP_ROOT = REPO_ROOT / "tmp"
 SITE = "https://abdess.github.io/retrobios/"
 # The owner's choice of 2026-10-23, from the download counts of v2026.10.10.
 RELEASED = {"retroarch", "emudeck", "retrobat", "batocera", "romm", "misterfpga"}
@@ -68,7 +67,7 @@ class TheFieldIsTheList(unittest.TestCase):
         )
 
     def test_only_marked_platforms_are_listed(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             platforms_dir = _write_registry(Path(tmp), {
                 "big": {"release_pack": True},
                 "small": {},
@@ -132,7 +131,7 @@ class TheBuildReadsTheField(unittest.TestCase):
         def capture(args, groups, *rest, **kw):
             built.extend(name for group, _rep in groups for name in group)
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as out, \
+        with tempfile.TemporaryDirectory() as out, \
                 contextlib.chdir(REPO_ROOT), \
                 mock.patch.object(generate_pack, "_run_platform_packs", capture), \
                 mock.patch.object(generate_pack, "_run_manifest_mode", capture), \
@@ -205,7 +204,7 @@ class APlatformWithoutAPackFailsNoCheck(unittest.TestCase):
     def test_verify_packs_sweeps_the_release_packs_only(self):
         import subprocess
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             proc = subprocess.run(
                 [sys.executable, "scripts/generate_pack.py", "--all", "--verify-packs",
                  "--output-dir", directory],
@@ -452,7 +451,7 @@ class TheReleaseNotesThankPeople(unittest.TestCase):
         import release_notes
         from release import notes
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             (tmp / "whats-new.md").write_text("### What changed\n\n- x\n", encoding="utf-8")
             (tmp / "thanks.md").write_text("- **Code and data**: @habib256.\n",
@@ -562,7 +561,7 @@ class TheSiteCheckResolvesEveryGetPage(unittest.TestCase):
             "platforms": ["romm"], "assets": ["RomM_BIOS_Pack.zip"],
             "files": 1, "extracted_size": 1, "download_size": 1}}}
         download = validate.RELEASE_DOWNLOAD
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             record_path = root / "release.json"
             record_path.write_text(json.dumps(record), encoding="utf-8")

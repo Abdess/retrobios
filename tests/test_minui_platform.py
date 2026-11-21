@@ -172,7 +172,7 @@ class PackPlacesCoreFilesUnderTheTag(unittest.TestCase):
         from model.profiles import emulator_profiles_cache
 
         emulator_profiles_cache.clear()
-        self.root = tempfile.mkdtemp(dir=REPO_ROOT / "tmp" / "tests")
+        self.root = tempfile.mkdtemp()
         self.bios = os.path.join(self.root, "bios")
         self.platforms = os.path.join(self.root, "platforms")
         self.emulators = os.path.join(self.root, "emulators")
@@ -385,7 +385,7 @@ class InstallerReadsTheCard(unittest.TestCase):
     """install.py runs on the computer the card is mounted on."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp" / "tests"))
+        self.root = Path(tempfile.mkdtemp())
         (self.root / ".system").mkdir()
 
     def tearDown(self):

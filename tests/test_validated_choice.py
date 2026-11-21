@@ -24,7 +24,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 class ValidatedChoice(unittest.TestCase):
     def test_a_rejected_file_gives_way_to_an_accepted_variant(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             wrong = Path(tmp) / "ps2" / "ROM2.BIN"
             right = Path(tmp) / "galaksija" / "ROM2.BIN"
             wrong.parent.mkdir()
@@ -68,7 +68,7 @@ class ValidatedChoice(unittest.TestCase):
         }
         index = build_validation_index(profiles)
         owners = destination_owners(profiles)
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             rom = Path(tmp) / "cpc6128.rom"
             rom.write_bytes(b"c" * 32768)
             db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}}}
@@ -201,7 +201,7 @@ class EachReaderJudgesWithItsOwnRules(unittest.TestCase):
             "cemu": {"files": [{"name": "otp.bin", "path": "Cemu/otp.bin",
                                 "size": 1024, "validation": ["size"]}]},
         })
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             wiiu = Path(tmp) / "otp.bin"
             wiiu.write_bytes(b"w" * 1024)
             self.assertIsNone(check_file_validation(str(wiiu), "otp.bin", index, tmp, {"cemu"}))
@@ -214,7 +214,7 @@ class EachReaderJudgesWithItsOwnRules(unittest.TestCase):
             {"name": "SW.GRP", "size": 100, "validation": ["size"]},
             {"name": "SW.GRP", "size": 200, "validation": ["size"]},
         ]}})
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             grp = Path(tmp) / "SW.GRP"
             grp.write_bytes(b"s" * 200)
             self.assertIsNone(check_file_validation(str(grp), "SW.GRP", index, tmp, {"raze"}))
@@ -272,7 +272,7 @@ class AWarningRejectsNothing(unittest.TestCase):
         return short, good, db, index
 
     def test_the_core_runs_a_file_that_only_warns(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             short, _good, db, index = self._setup(tmp, held_good=False)
             chosen, disagreement = validated_choice(
                 {"name": "OS12.rom"}, str(short), db, index, tmp, None, emulators={"beebem"}
@@ -280,7 +280,7 @@ class AWarningRejectsNothing(unittest.TestCase):
             self.assertEqual((chosen, disagreement), (str(short), None))
 
     def test_a_file_passing_the_warned_check_is_preferred(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             short, good, db, index = self._setup(tmp, held_good=True)
             chosen, disagreement = validated_choice(
                 {"name": "OS12.rom"}, str(short), db, index, tmp, None, emulators={"beebem"}
@@ -290,7 +290,7 @@ class AWarningRejectsNothing(unittest.TestCase):
     def test_the_merged_view_rejects_nothing_for_it(self):
         from resolve.validation import check_file_validation
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             short, _good, _db, index = self._setup(tmp, held_good=False)
             self.assertIsNone(check_file_validation(str(short), "OS12.rom", index, tmp))
 
@@ -346,7 +346,7 @@ class AVersionTakenWithoutACheck(unittest.TestCase):
         from resolve.validation import check_file_validation
 
         index = build_validation_index({"raze": self.RAZE})
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             self.assertIsNone(check_file_validation(
                 self._file(tmp), "BLOOD.RFF", index, emulators={"raze"}
             ))
@@ -355,7 +355,7 @@ class AVersionTakenWithoutACheck(unittest.TestCase):
         from packs import platformpack
 
         fe = {"name": "BLOOD.RFF", "source_profile": "raze", "source_path": "BLOOD.RFF"}
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             self.assertTrue(platformpack._matches_an_alternative(
                 fe, self._file(tmp), {"raze": self.RAZE}
             ))
@@ -365,7 +365,7 @@ class AVersionTakenWithoutACheck(unittest.TestCase):
 
         checked = {"files": self.RAZE["files"][:2]}
         index = build_validation_index({"raze": checked})
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             reason, emulators = check_file_validation(
                 self._file(tmp), "BLOOD.RFF", index, emulators={"raze"}
             )

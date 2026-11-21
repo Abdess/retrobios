@@ -47,7 +47,6 @@ from model import measurements as mr
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-TMP = REPO_ROOT / "tmp" / "tests"
 
 PROFILE = """\
 emulator: Fake
@@ -391,8 +390,7 @@ def screen(base: int) -> str:
 
 class Workspace(unittest.TestCase):
     def setUp(self) -> None:
-        TMP.mkdir(parents=True, exist_ok=True)
-        self.tmp = Path(tempfile.mkdtemp(dir=TMP))
+        self.tmp = Path(tempfile.mkdtemp())
         self.root = self.tmp / "repo"
         (self.root / "emulators").mkdir(parents=True)
         subprocess.run(["git", "init", "-q", str(self.root)], check=True)
@@ -556,7 +554,7 @@ class ChildEnvironment(unittest.TestCase):
         host = FakeHost()
         host.run = lambda argv, **kw: (seen.append(kw.get("env")),
                                        subprocess.CompletedProcess([], 0, '{"id": "x"}', ""))[1]
-        with tempfile.TemporaryDirectory(dir=TMP) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             paths = probes_host.Paths(root=Path(tmp), home=Path(tmp) / "h", content=Path(tmp) / "c",
                                    db=Path(tmp) / "db.json", content_file=probes_host.CONTENT_FILE)
             c = probes_campaign.Campaign(paths, probes_host.Settings(echo=False), host, lock_path=Path(tmp) / "l")
@@ -615,8 +613,7 @@ class BuildIsolation(unittest.TestCase):
     SUB = "https://example.invalid/team/sub.git"
 
     def setUp(self) -> None:
-        TMP.mkdir(parents=True, exist_ok=True)
-        self.tmp = Path(tempfile.mkdtemp(dir=TMP))
+        self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.tmp, True)
         self.pwned = self.tmp / "PWNED"
         sub = self.repo("sub", {"sub.c": "int x;\n"})
@@ -722,8 +719,7 @@ class BuildIsolation(unittest.TestCase):
 
 class BuiltCore(unittest.TestCase):
     def setUp(self) -> None:
-        TMP.mkdir(parents=True, exist_ok=True)
-        self.tree = Path(tempfile.mkdtemp(dir=TMP))
+        self.tree = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.tree, True)
         self.secret = self.tree.parent / f"{self.tree.name}-host-file"
         self.secret.write_text("host secret")
@@ -1068,8 +1064,7 @@ class FakeCorePasses(Workspace):
         _prefix, isolation = core_probe.sandbox_argv([Path(tempfile.gettempdir())])
         if isolation != core_probe.SANDBOX:
             raise unittest.SkipTest(f"no sandbox here ({isolation}): install bubblewrap")
-        TMP.mkdir(parents=True, exist_ok=True)
-        cls.build = Path(tempfile.mkdtemp(dir=TMP))
+        cls.build = Path(tempfile.mkdtemp())
         source = cls.build / "fake.c"
         source.write_text(FAKE_CORE, encoding="utf-8")
         # The core sees no variable of the host, so its behaviour is compiled in.

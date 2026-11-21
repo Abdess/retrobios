@@ -10,6 +10,7 @@ full manifest.
 from __future__ import annotations
 
 import tests
+from tests import scratch_dir
 
 import contextlib
 import functools
@@ -239,13 +240,8 @@ class InstallerLeavesGameDataOut(unittest.TestCase):
         "bios/game.wad": (b"wad" * 10, "game_data"),
     }
 
-    def _tempdir(self) -> Path:
-        handle = tempfile.TemporaryDirectory()
-        self.addCleanup(handle.cleanup)
-        return Path(handle.name)
-
     def serve(self, categorized: bool = True) -> None:
-        root = self._tempdir()
+        root = scratch_dir(self)
         files = []
         for path, (data, category) in self.FILES.items():
             (root / path).parent.mkdir(parents=True, exist_ok=True)
@@ -272,7 +268,7 @@ class InstallerLeavesGameDataOut(unittest.TestCase):
         threading.Thread(target=httpd.serve_forever, daemon=True).start()
         self.addCleanup(httpd.server_close)
         self.addCleanup(httpd.shutdown)
-        home = self._tempdir()
+        home = scratch_dir(self)
         self.bios = home / "bios"
         self.bios.mkdir()
         self.env = {**os.environ, "HOME": str(home), "RETROBIOS_OS": "linux",

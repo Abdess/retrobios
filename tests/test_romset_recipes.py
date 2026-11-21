@@ -36,8 +36,7 @@ from core.hashing import git_blob_sha
 from core.torrentzip import build_torrentzip, is_torrentzip
 
 ROOT = Path(__file__).resolve().parent.parent
-TMP_ROOT = ROOT / "tmp" / "tests"
-TMP_ROOT.mkdir(parents=True, exist_ok=True)
+TMP_ROOT = Path(tempfile.gettempdir())
 
 ROM_A = b"first rom payload"
 ROM_B = b"second rom payload"
@@ -85,7 +84,7 @@ class RecipeCollection(unittest.TestCase):
 
 class PoolAndBuild(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(dir=TMP_ROOT)
+        self.temp = tempfile.TemporaryDirectory()
         self.bios = Path(self.temp.name)
         with zipfile.ZipFile(self.bios / "source.zip", "w") as archive:
             archive.writestr("a.rom", ROM_A)
@@ -172,7 +171,7 @@ class ReportsOverAFixture(unittest.TestCase):
     """A whole run over a synthetic collection, database and platform."""
 
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(dir=TMP_ROOT)
+        self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
         self.bios = self.root / "bios"
         self.bios.mkdir()
@@ -334,7 +333,7 @@ class DatRecipes(unittest.TestCase):
         self.assertEqual(entries, [])
 
     def test_snapshot_round_trips_into_usable_recipes(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             snapshot = root / "romset-recipes.json"
             entries = recipe_entries(parse_logiqx(self._dat()))
@@ -520,7 +519,7 @@ class ListXmlRecipes(unittest.TestCase):
         """A .variants/ copy stands for the name its tag is cut from."""
         from scripts.scraper.romset_dat_importer import collection_archives, member_list
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as temp:
+        with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             plain, variant = root / "set.zip", root / "other.zip.1a2b3c4d"
             for path in (plain, variant):
@@ -568,7 +567,7 @@ class ListXmlRecipes(unittest.TestCase):
         self.assertTrue(holds_target([member], {(_crc(ROM_B), len(ROM_B)): {"a" * 40}}))
 
     def test_catalog_targets_leave_out_what_the_collection_holds(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "prov").mkdir()
             (root / "prov" / "tosec.json").write_text(json.dumps({"source": "tosec", "entries": [
@@ -588,7 +587,7 @@ class ListXmlRecipes(unittest.TestCase):
             "description": "",
             "members": [{"name": "a", "crc32": "1"}],
         }
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             output = str(Path(directory) / "fbneo.json")
             merge_snapshot(output, "fbneo", {"FBNeo - X": "1.0"}, [entry], {"X.dat": "aaa"})
             with open(output, encoding="utf-8") as handle:
@@ -619,7 +618,7 @@ class ListXmlRecipes(unittest.TestCase):
 
     def test_versions_accumulate_instead_of_replacing_each_other(self):
         """A platform pins the archive of whichever version it was built on."""
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             output = str(Path(directory) / "romset-recipes.json")
             merge_snapshot(
                 output,
@@ -773,7 +772,7 @@ class IdentificationReadsTheDirectoryFirst(unittest.TestCase):
 
         rom = b"rom bytes"
         crc = format(zlib.crc32(rom), "08x")
-        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             archive = Path(tmp) / "set.zip"
             archive.write_bytes(build_torrentzip([("a.rom", rom)]))
 
@@ -806,7 +805,7 @@ class BuildDigestsOutliveTheRun(unittest.TestCase):
 
         from unittest import mock
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             bios = Path(tmp) / "bios"
             bios.mkdir()
             with zipfile.ZipFile(bios / "source.zip", "w") as archive:
@@ -855,7 +854,7 @@ class AnOversizedDatIsNamed(unittest.TestCase):
 
         from scripts.scraper.listxml import iter_dat_documents
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             pack = Path(directory) / "pack.zip"
             with zipfile.ZipFile(pack, "w") as archive:
                 archive.writestr("big.dat", b"x" * 64)
@@ -904,7 +903,7 @@ class FbneoFetchReadsOneRevision(unittest.TestCase):
         from scripts.scraper import romset_dat_importer as importer
 
         self.importer = importer
-        self._tmp = tempfile.TemporaryDirectory(dir=TMP_ROOT)
+        self._tmp = tempfile.TemporaryDirectory()
         self.dir = Path(self._tmp.name)
         self.calls: list[str] = []
         self.served = FBNEO_DAT
@@ -977,7 +976,7 @@ class LooseRomsAreAtoms(unittest.TestCase):
     its one ROM sat loose in bios/Arcade/FBNeo/nmk004.bin."""
 
     def test_a_loose_file_completes_a_recipe(self):
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             bios = Path(directory) / "bios"
             bios.mkdir()
             loose = bios / "nmk004.bin"

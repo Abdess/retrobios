@@ -643,7 +643,7 @@ class TheReleaseNotesReadTheRecord(unittest.TestCase):
                 "- Every hash comes from the emulator's source, never from a forum list.\n"
                 "- So a game never stops on a missing file."),
             ["forum", "never stops"])
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             whats_new = Path(tmp) / "whats-new.md"
             whats_new.write_text("- Hashes never from a forum list\n", encoding="utf-8")
             record = Path(tmp) / "release.json"
@@ -671,7 +671,7 @@ class CoreCopiesKeepTheirCategory(unittest.TestCase):
     def test_a_copy_counts_as_its_entry_says(self):
         from packs.extras import collect_emulator_extras, hidden_extras
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             held = Path(tmp) / "x.dat"
             held.write_bytes(b"data")
             sha1 = hashlib.sha1(b"data").hexdigest()

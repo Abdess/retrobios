@@ -35,7 +35,7 @@ class APrimaryUnderAnotherCasing(unittest.TestCase):
         import shutil
         import tempfile
 
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         self.files: dict = {}
         self.by_name: dict = {}

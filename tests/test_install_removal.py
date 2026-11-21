@@ -356,7 +356,7 @@ class ACraftedRecord(unittest.TestCase):
     the BIOS folder, through a link, or anything but a regular file."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         self.folder = self.root / "bios"
         self.folder.mkdir()
@@ -418,7 +418,7 @@ class AFoldingDrive(unittest.TestCase):
     another setup are compared folded there."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         self.folder = self.root / "bios"
         self.folder.mkdir()
@@ -472,7 +472,7 @@ class ReviewOfTheRemoval(unittest.TestCase):
     """What a review of the first version found, each held by a test."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         self.folder = self.root / "bios"
         self.folder.mkdir()
@@ -747,7 +747,7 @@ class MisplacedCopies(unittest.TestCase):
                     self.assertIn(words, proc.stderr)
 
     def test_a_place_a_list_reads_or_a_setup_names_stays(self):
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         folder = root / "bios"
         folder.mkdir()
@@ -787,7 +787,7 @@ class MisplacedCopies(unittest.TestCase):
     def test_a_card_whose_folder_is_the_roms_root_keeps_its_games(self):
         """EmuELEC installs into /storage/roms: ports/doom/doom2.wad is the
         user's game, bios/old/doom2.wad a copy in the wrong place."""
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         folder = root / "roms"
         wad = b"doom ii"

@@ -266,7 +266,7 @@ class ManifestInjectionIsAtomic(unittest.TestCase):
 
         from scripts.packs import finalize
 
-        with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp") as d:
+        with tempfile.TemporaryDirectory() as d:
             pack = Path(d) / "Pack.zip"
             with zipfile.ZipFile(pack, "w", zipfile.ZIP_DEFLATED) as zf:
                 for i in range(20):

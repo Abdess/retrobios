@@ -81,9 +81,7 @@ class Repository(unittest.TestCase):
     tree = TREE
 
     def setUp(self):
-        scratch = REPO_ROOT / "tmp"
-        scratch.mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=scratch))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         self.served = self.root / "served"
         (self.served / "install").mkdir(parents=True)
@@ -462,9 +460,7 @@ class TheSwapIsWhole(unittest.TestCase):
     failure puts the earlier set back, a cleanup that fails keeps the pack."""
 
     def setUp(self):
-        scratch = REPO_ROOT / "tmp"
-        scratch.mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=scratch))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         self.out = self.root / "out"
         self.out.mkdir()

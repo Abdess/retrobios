@@ -72,7 +72,7 @@ class NamesAFatCardCannotHold(unittest.TestCase):
     card each write failed with EINVAL, on every run."""
 
     def test_the_probe_reads_einval_as_a_refusal(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             refused = OSError(errno.EINVAL, "Invalid argument")
             closed = PermissionError(errno.EACCES, "Permission denied")
             with mock.patch.object(install.os, "name", "posix"):
@@ -88,7 +88,7 @@ class NamesAFatCardCannotHold(unittest.TestCase):
             self.assertFalse(install.holds_fat_refused_names(Path(".")))
 
     def _install(self, holds: bool) -> tuple[str, list[str]]:
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         old, dest = root / "old", root / "dest"
         old.mkdir()

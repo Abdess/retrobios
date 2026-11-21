@@ -92,7 +92,7 @@ class RealListParity(unittest.TestCase):
                 contextlib.redirect_stderr(io.StringIO()):
             platformpack.generate_pack(
                 plat, str(REPO_ROOT / "platforms"), self.db, str(REPO_ROOT / "bios"),
-                str(REPO_ROOT / "tmp"), emulators_dir=str(REPO_ROOT / "emulators"),
+                tempfile.gettempdir(), emulators_dir=str(REPO_ROOT / "emulators"),
                 zip_contents=self.zip_contents, emu_profiles=self.profiles,
                 offline=True, record=record, **options)
         prefix = f"{base}/" if base else ""
@@ -191,7 +191,7 @@ class RealListParity(unittest.TestCase):
                             contextlib.redirect_stderr(io.StringIO()):
                         emulatorpack.generate_emulator_pack(
                             [profile], str(REPO_ROOT / "emulators"), self.db,
-                            str(REPO_ROOT / "bios"), str(REPO_ROOT / "tmp"),
+                            str(REPO_ROOT / "bios"), tempfile.gettempdir(),
                             standalone=True, zip_contents=self.zip_contents,
                             offline=True, record=record)
                         files, omitted = install._narrow_to_emulators(
@@ -337,7 +337,7 @@ class Lists(unittest.TestCase):
     """A list written for the runs below, in tmp/."""
 
     def setUp(self):
-        scratch = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        scratch = tempfile.TemporaryDirectory()
         self.addCleanup(scratch.cleanup)
         self.root = Path(scratch.name)
         self.dest = self.root / "bios"
@@ -596,7 +596,7 @@ class ExpertRuns(Lists):
         except ImportError as exc:
             self.skipTest(f"validate_schemas needs jsonschema: {exc}")
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as root:
+        with tempfile.TemporaryDirectory() as root:
             (Path(root) / "install" / "standalone").mkdir(parents=True)
             (Path(root) / "install" / "retroarch.json").write_text(
                 json.dumps({**LIST, "truth_files": None}), encoding="utf-8")

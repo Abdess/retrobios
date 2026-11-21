@@ -148,7 +148,7 @@ class TheNativeIndexKeepsEveryPlatform(unittest.TestCase):
 
         from exporter.originals import SOURCES_INDEX, fetch
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             index = root / SOURCES_INDEX
 
@@ -338,7 +338,7 @@ class ATerminatedBuildLeavesNoScratch(unittest.TestCase):
 
         if not hasattr(signal, "SIGTERM") or os.name != "posix":
             self.skipTest("POSIX signals")
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             pack = Path(tmp) / "Demo_BIOS_Pack.zip"
             child = subprocess.Popen(
                 [sys.executable, "-c", self.CHILD, str(pack)], cwd=REPO_ROOT,

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import tests
+from tests import scratch_dir
 
 import argparse
 import contextlib
@@ -45,19 +46,6 @@ PIN_ADVICE = "install.py changed: python scripts/pin_installer.py rewrites both 
 # No connection off the loopback and no card of the host reaches a test:
 # the module fails at its end otherwise.
 setUpModule, tearDownModule = module_guard("test_install")
-
-
-def _tempdir(test: unittest.TestCase) -> str:
-    """A scratch directory under the repository's tmp/, removed after the test.
-
-    The system temp directory is a RAM disk here, and directories left by
-    every run piled up on it.
-    """
-    scratch = REPO_ROOT / "tmp"
-    scratch.mkdir(exist_ok=True)
-    path = tempfile.mkdtemp(dir=str(scratch))
-    test.addCleanup(shutil.rmtree, path, True)
-    return path
 
 
 def _parenthesized_withs(tokens: list) -> list[str]:
@@ -424,7 +412,7 @@ class TestFreeSpaceGuard(unittest.TestCase):
     """The run refuses before writing when the volume cannot hold it."""
 
     def setUp(self):
-        self.root = Path(_tempdir(self))
+        self.root = scratch_dir(self)
         self.real = install.shutil.disk_usage
 
     def tearDown(self):
@@ -565,11 +553,11 @@ class AMissingDestIsSaid(unittest.TestCase):
         return out.getvalue(), code
 
     def test_an_existing_folder_says_nothing(self):
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         self.assertEqual(self._call(root, True), ("", None))
 
     def test_a_deep_missing_path_is_asked_and_no_is_the_default(self):
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         dest = root / "retroarh" / "system"
         out, code = self._call(dest, True, "")
         self.assertEqual(code, 2)
@@ -584,7 +572,7 @@ class AMissingDestIsSaid(unittest.TestCase):
         self.assertFalse((root / "a").exists())
 
     def test_one_missing_level_or_no_terminal_is_said_not_asked(self):
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         # A "no" that was asked would stop the run with 2. Said with
         # --verbose: the folder is made, and the run names it.
         install.OUTPUT.verbose = False
@@ -614,7 +602,7 @@ class ADestThatIsAFileIsNamed(unittest.TestCase):
             stdin=subprocess.DEVNULL)
 
     def test_the_file_is_named_and_sudo_is_not_offered(self):
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         (root / "scph5501.bin").write_bytes(b"x")
         for dest, words in (
             (root / "scph5501.bin", f"{root / 'scph5501.bin'} is a file, not a folder"),
@@ -642,7 +630,7 @@ class SaveFilesAListHoldsNoneOfAreNotPromised(unittest.TestCase):
     def test_the_reason_is_said_and_no_option_is_offered(self):
         manifest = json.loads((REPO_ROOT / "install" / "retropie.json").read_text())
         self.assertIsNone(manifest.get("save_directory"))
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         env = dict(os.environ, RETROBIOS_OS="linux")
         for extra in ([], ["--save-dir", str(root / "saves")]):
             with self.subTest(extra=extra):
@@ -749,7 +737,7 @@ class TestAndroidDetection(unittest.TestCase):
         self.assertEqual(install.detect_os(), "android")
 
     def test_default_directory_found_without_a_config(self):
-        storage = Path(_tempdir(self))
+        storage = scratch_dir(self)
         (storage / "RetroArch" / "system").mkdir(parents=True)
         os.environ["EXTERNAL_STORAGE"] = str(storage)
         self.assertEqual(
@@ -759,7 +747,7 @@ class TestAndroidDetection(unittest.TestCase):
         shutil.rmtree(storage)
 
     def test_config_default_resolves_against_the_retroarch_root(self):
-        storage = Path(_tempdir(self))
+        storage = scratch_dir(self)
         files = storage / "Android" / "data" / "com.retroarch.aarch64" / "files"
         files.mkdir(parents=True)
         (files / "retroarch.cfg").write_text(
@@ -773,7 +761,7 @@ class TestAndroidDetection(unittest.TestCase):
         shutil.rmtree(storage)
 
     def test_custom_system_directory_wins(self):
-        storage = Path(_tempdir(self))
+        storage = scratch_dir(self)
         files = storage / "Android" / "data" / "com.retroarch" / "files"
         files.mkdir(parents=True)
         custom = storage / "Emulation" / "bios"
@@ -783,13 +771,13 @@ class TestAndroidDetection(unittest.TestCase):
         shutil.rmtree(storage)
 
     def test_nothing_found_on_a_bare_device(self):
-        storage = Path(_tempdir(self))
+        storage = scratch_dir(self)
         os.environ["EXTERNAL_STORAGE"] = str(storage)
         self.assertEqual(install._detect_android(), [])
         shutil.rmtree(storage)
 
     def test_detect_platforms_routes_android(self):
-        storage = Path(_tempdir(self))
+        storage = scratch_dir(self)
         (storage / "RetroArch" / "system").mkdir(parents=True)
         os.environ["EXTERNAL_STORAGE"] = str(storage)
         self.assertEqual(
@@ -803,7 +791,7 @@ class TestAndroidDetection(unittest.TestCase):
         self.assertIn("/storage/emulated/0/RetroArch/system", hint)
 
     def test_named_platform_falls_back_to_shared_storage(self):
-        storage = Path(_tempdir(self))
+        storage = scratch_dir(self)
         os.environ["EXTERNAL_STORAGE"] = str(storage)
         self.assertEqual(
             install._default_dest("android", "retroarch"),
@@ -825,7 +813,7 @@ class TestLaunchboxDetection(unittest.TestCase):
     """LaunchBox references its emulators in Data/Emulators.xml."""
 
     def _make_launchbox(self, app_path: str, title: str = "Retroarch"):
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         data = root / "LaunchBox" / "Data"
         data.mkdir(parents=True)
         xml = data / "Emulators.xml"
@@ -850,7 +838,7 @@ class TestLaunchboxDetection(unittest.TestCase):
         )
 
     def test_absolute_application_path(self):
-        emu_dir = Path(_tempdir(self)) / "RetroArch"
+        emu_dir = scratch_dir(self) / "RetroArch"
         emu_dir.mkdir(parents=True)
         root, xml = self._make_launchbox(str(emu_dir / "retroarch.exe"))
         self.assertEqual(
@@ -866,7 +854,7 @@ class TestLaunchboxDetection(unittest.TestCase):
         self.assertIsNone(install._launchbox_retroarch_system_dir(xml))
 
     def test_stale_entry_before_installed_one(self):
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         data = root / "LaunchBox" / "Data"
         data.mkdir(parents=True)
         ra_dir = root / "LaunchBox" / "Emulators" / "RetroArch"
@@ -893,7 +881,7 @@ class TestLaunchboxDetection(unittest.TestCase):
         self.assertIsNone(
             install._launchbox_retroarch_system_dir(Path("/nonexistent/Emulators.xml"))
         )
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         bad = root / "Emulators.xml"
         bad.write_text("not xml at all <<<")
         self.assertIsNone(install._launchbox_retroarch_system_dir(bad))
@@ -903,7 +891,7 @@ class TestRetroarchPathExpansion(unittest.TestCase):
     """RetroArch abbreviates paths with '~' and ':' in its config."""
 
     def _cfg(self, value: str) -> Path:
-        app_dir = Path(_tempdir(self))
+        app_dir = scratch_dir(self)
         (app_dir / "retroarch.cfg").write_text(f'system_directory = "{value}"\n')
         return app_dir
 
@@ -930,7 +918,7 @@ class TestRetroarchPathExpansion(unittest.TestCase):
 
     def test_application_dir_overrides_config_dir(self):
         app_dir = self._cfg(":\\system")
-        elsewhere = Path(_tempdir(self))
+        elsewhere = scratch_dir(self)
         self.assertEqual(
             install._parse_retroarch_system_dir(
                 app_dir / "retroarch.cfg", elsewhere
@@ -939,7 +927,7 @@ class TestRetroarchPathExpansion(unittest.TestCase):
         )
 
     def test_absolute_path_untouched(self):
-        target = Path(_tempdir(self)) / "bios"
+        target = scratch_dir(self) / "bios"
         app_dir = self._cfg(str(target))
         self.assertEqual(
             install._parse_retroarch_system_dir(app_dir / "retroarch.cfg"), target
@@ -958,7 +946,7 @@ class TestLaunchboxRoot(unittest.TestCase):
 
     def test_shortcut_target_is_read(self):
         # Byte layout of the shortcut a real install writes
-        lnk = Path(_tempdir(self)) / "LaunchBox.lnk"
+        lnk = scratch_dir(self) / "LaunchBox.lnk"
         lnk.write_bytes(
             b"L\x00\x00\x00\x01\x14\x02\x00\x00\x00\x00\x00\xc0\x00\x00\x00"
             b"\x00\x00\x00\x46" + b"\x00" * 8
@@ -971,15 +959,15 @@ class TestLaunchboxRoot(unittest.TestCase):
         )
 
     def test_shortcut_without_target_is_ignored(self):
-        lnk = Path(_tempdir(self)) / "LaunchBox.lnk"
+        lnk = scratch_dir(self) / "LaunchBox.lnk"
         lnk.write_bytes(b"L\x00\x00\x00 no target here ")
         self.assertIsNone(install._lnk_target(lnk, "LaunchBox.exe"))
 
     def test_shortcut_pointing_elsewhere_falls_back(self):
         # A stale shortcut must not win over a real installation
-        userprofile = Path(_tempdir(self))
+        userprofile = scratch_dir(self)
         root = self._make_root(userprofile / "LaunchBox")
-        appdata = Path(_tempdir(self))
+        appdata = scratch_dir(self)
         lnk_dir = (
             appdata / "Microsoft" / "Windows" / "Start Menu" / "Programs" / "LaunchBox"
         )
@@ -992,9 +980,9 @@ class TestLaunchboxRoot(unittest.TestCase):
             self.assertEqual(install.launchbox_root("windows"), root)
 
     def test_falls_back_to_userprofile(self):
-        userprofile = Path(_tempdir(self))
+        userprofile = scratch_dir(self)
         root = self._make_root(userprofile / "LaunchBox")
-        env = {"APPDATA": str(Path(_tempdir(self))), "USERPROFILE": str(userprofile)}
+        env = {"APPDATA": str(scratch_dir(self)), "USERPROFILE": str(userprofile)}
         with unittest.mock.patch.dict(os.environ, env):
             self.assertEqual(install.launchbox_root("windows"), root)
 
@@ -1003,8 +991,8 @@ class TestLaunchboxRoot(unittest.TestCase):
 
     def test_nothing_installed(self):
         env = {
-            "APPDATA": str(Path(_tempdir(self))),
-            "USERPROFILE": str(Path(_tempdir(self))),
+            "APPDATA": str(scratch_dir(self)),
+            "USERPROFILE": str(scratch_dir(self)),
         }
         with unittest.mock.patch.dict(os.environ, env):
             self.assertIsNone(install.launchbox_root("windows"))
@@ -1014,7 +1002,7 @@ class TestLaunchboxBiosDirs(unittest.TestCase):
     """LaunchBox computes where each emulator it manages keeps its BIOS."""
 
     def _make(self, entries: list[tuple[str, str]]) -> Path:
-        root = Path(_tempdir(self)) / "LaunchBox"
+        root = scratch_dir(self) / "LaunchBox"
         (root / "Data").mkdir(parents=True)
         body = "".join(
             "  <Emulator>\n"
@@ -1042,7 +1030,7 @@ class TestLaunchboxBiosDirs(unittest.TestCase):
     def test_pcsx2_portable_absolute_bios(self):
         root = self._make([("PCSX2", "Emulators\\PCSX2\\pcsx2.exe")])
         emu = root / "Emulators" / "PCSX2"
-        elsewhere = Path(_tempdir(self)) / "ps2bios"
+        elsewhere = scratch_dir(self) / "ps2bios"
         (emu / "portable.ini").write_text("")
         (emu / "inis").mkdir()
         (emu / "inis" / "PCSX2.ini").write_text(f"Bios = {elsewhere}\n")
@@ -1064,7 +1052,7 @@ class TestLaunchboxBiosDirs(unittest.TestCase):
 
     def test_pcsx2_without_config_uses_documents(self):
         root = self._make([("PCSX2", "Emulators\\PCSX2\\pcsx2.exe")])
-        userprofile = Path(_tempdir(self))
+        userprofile = scratch_dir(self)
         with unittest.mock.patch.dict(os.environ, {"USERPROFILE": str(userprofile)}):
             self.assertEqual(
                 install.launchbox_bios_dirs(root)["pcsx2"],
@@ -1074,13 +1062,13 @@ class TestLaunchboxBiosDirs(unittest.TestCase):
     def test_xemu_defaults_to_bios_folder(self):
         root = self._make([("Xemu", "Emulators\\Xemu\\xemu.exe")])
         emu = root / "Emulators" / "Xemu"
-        with unittest.mock.patch.dict(os.environ, {"APPDATA": str(Path(_tempdir(self)))}):
+        with unittest.mock.patch.dict(os.environ, {"APPDATA": str(scratch_dir(self))}):
             self.assertEqual(install.launchbox_bios_dirs(root)["xemu"], emu / "bios")
 
     def test_xemu_honours_configured_bootrom(self):
         root = self._make([("Xemu", "Emulators\\Xemu\\xemu.exe")])
         emu = root / "Emulators" / "Xemu"
-        configured = Path(_tempdir(self)) / "xbox"
+        configured = scratch_dir(self) / "xbox"
         configured.mkdir()
         (configured / "mcpx_1.0.bin").write_text("x")
         (emu / "xemu.toml").write_text(
@@ -1105,7 +1093,7 @@ class TestLaunchboxBiosDirs(unittest.TestCase):
         self.assertEqual(install.launchbox_bios_dirs(root), {})
 
     def test_doctype_is_rejected(self):
-        root = Path(_tempdir(self)) / "LaunchBox"
+        root = scratch_dir(self) / "LaunchBox"
         (root / "Data").mkdir(parents=True)
         (root / "Data" / "Emulators.xml").write_text(
             "<!DOCTYPE LaunchBox [<!ENTITY a 'x'>]>\n<LaunchBox></LaunchBox>\n"
@@ -1133,9 +1121,9 @@ class TestStandaloneCopiesExtraDirs(unittest.TestCase):
         }
 
     def test_pattern_entry_copies_into_extra_dir(self):
-        bios = Path(_tempdir(self))
+        bios = scratch_dir(self)
         (bios / "ps2-0230a.bin").write_text("rom")
-        extra = Path(_tempdir(self)) / "bios"
+        extra = scratch_dir(self) / "bios"
         extra.mkdir()
         copied, _, _ = install.do_standalone_copies(
             self._manifest(), bios, "windows", {"pcsx2": extra}
@@ -1144,10 +1132,10 @@ class TestStandaloneCopiesExtraDirs(unittest.TestCase):
         self.assertTrue((extra / "ps2-0230a.bin").exists())
 
     def test_file_entry_keeps_its_subdirectory(self):
-        bios = Path(_tempdir(self))
+        bios = scratch_dir(self)
         (bios / "GC" / "USA").mkdir(parents=True)
         (bios / "GC" / "USA" / "IPL.bin").write_text("ipl")
-        user = Path(_tempdir(self)) / "User"
+        user = scratch_dir(self) / "User"
         (user / "GC" / "USA").mkdir(parents=True)
         copied, _, _ = install.do_standalone_copies(
             self._manifest(), bios, "windows", {"dolphin": user}
@@ -1156,7 +1144,7 @@ class TestStandaloneCopiesExtraDirs(unittest.TestCase):
         self.assertTrue((user / "GC" / "USA" / "IPL.bin").exists())
 
     def test_no_extra_dirs_is_unchanged(self):
-        bios = Path(_tempdir(self))
+        bios = scratch_dir(self)
         (bios / "ps2-0230a.bin").write_text("rom")
         self.assertEqual(
             install.do_standalone_copies(self._manifest(), bios, "windows"), (0, 0, 0)
@@ -1171,9 +1159,9 @@ class StandaloneFolderClosedToThisUser(unittest.TestCase):
     after the install, and the run stopped with code 1."""
 
     def setUp(self) -> None:
-        self.bios = Path(_tempdir(self))
+        self.bios = scratch_dir(self)
         (self.bios / "IPL.bin").write_text("ipl")
-        self.app = Path(_tempdir(self)) / "org.dolphinemu.dolphinemu"
+        self.app = scratch_dir(self) / "org.dolphinemu.dolphinemu"
         (self.app / "files" / "GC" / "USA").mkdir(parents=True)
         self.app.chmod(0)
         self.addCleanup(self.app.chmod, 0o755)
@@ -1207,9 +1195,9 @@ class StandaloneCopiesReadWhereThePackPutTheFile(unittest.TestCase):
     the registry's path, found nothing and copied nothing to Azahar."""
 
     def _copy(self, entry: dict) -> tuple[Path, tuple[int, int, int]]:
-        bios = Path(_tempdir(self))
+        bios = scratch_dir(self)
         (bios / "aes_keys.txt").write_text("keys")
-        sysdata = Path(_tempdir(self)) / "sysdata"
+        sysdata = scratch_dir(self) / "sysdata"
         sysdata.mkdir()
         manifest = {"standalone_copies": [
             {**entry, "emulator": "azahar", "targets": {"linux": [str(sysdata)]}},
@@ -1458,7 +1446,7 @@ class DetectionFollowsTheRegistry(unittest.TestCase):
             )
 
     def _home(self) -> Path:
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         patcher = unittest.mock.patch.dict(os.environ, {"HOME": str(home), "USERPROFILE": str(home)})
         patcher.start()
         self.addCleanup(patcher.stop)
@@ -1563,7 +1551,7 @@ class RetroArchIsFoundWhereWindowsInstallsPutIt(unittest.TestCase):
         return folder
 
     def test_program_files_win64(self):
-        program_files = Path(_tempdir(self))
+        program_files = scratch_dir(self)
         self._env(program_files)
         found = self._exe(program_files / "RetroArch-Win64")
         self.assertIn(found, install._windows_retroarch_dirs())
@@ -1571,17 +1559,17 @@ class RetroArchIsFoundWhereWindowsInstallsPutIt(unittest.TestCase):
     def test_a_scoop_install(self):
         # `scoop install retroarch` puts it under ~/scoop/apps/retroarch/current,
         # which none of the searched folders covered.
-        program_files = Path(_tempdir(self))
+        program_files = scratch_dir(self)
         self._env(program_files)
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         found = self._exe(home / "scoop" / "apps" / "retroarch" / "current")
         with unittest.mock.patch.dict(os.environ, {"USERPROFILE": str(home)}):
             os.environ.pop("SCOOP", None)
             self.assertIn(found, install._windows_retroarch_dirs())
 
     def test_a_steam_library_on_another_drive(self):
-        program_files = Path(_tempdir(self))
-        library = Path(_tempdir(self))
+        program_files = scratch_dir(self)
+        library = scratch_dir(self)
         steamapps = program_files / "Steam" / "steamapps"
         steamapps.mkdir(parents=True)
         (steamapps / "libraryfolders.vdf").write_text(
@@ -1592,7 +1580,7 @@ class RetroArchIsFoundWhereWindowsInstallsPutIt(unittest.TestCase):
         self.assertIn(found, install._windows_retroarch_dirs())
 
     def test_an_installed_es_de(self):
-        program_files = Path(_tempdir(self))
+        program_files = scratch_dir(self)
         self._env(program_files)
         found = self._exe(program_files / "ES-DE" / "Emulators" / "RetroArch-Win64")
         self.assertIn(found, install._windows_retroarch_dirs())
@@ -1679,8 +1667,7 @@ class InstallerStaysOnPython38AndTheStdlib(unittest.TestCase):
         threading.Thread(target=httpd.serve_forever, daemon=True).start()
         self.addCleanup(httpd.server_close)
         self.addCleanup(httpd.shutdown)
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        home = Path(tempfile.mkdtemp(dir=str(REPO_ROOT / "tmp")))
+        home = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, home, True)
         env = {
             **os.environ,
@@ -1927,7 +1914,7 @@ class TestLocalCheckHashing(unittest.TestCase):
     """A file is read once, not once per declared digest."""
 
     def test_both_digests_come_from_one_read(self):
-        tmp = Path(_tempdir(self))
+        tmp = scratch_dir(self)
         payload = b"BIOS PAYLOAD"
         (tmp / "boot.bin").write_bytes(payload)
         entry = {
@@ -1952,7 +1939,7 @@ class TestLocalCheckHashing(unittest.TestCase):
         self.assertEqual(calls, [("sha1", "sha256")], "file must be read once")
 
     def test_a_wrong_digest_still_lands_in_mismatched(self):
-        tmp = Path(_tempdir(self))
+        tmp = scratch_dir(self)
         (tmp / "boot.bin").write_bytes(b"BIOS PAYLOAD")
         entry = {
             "dest": "boot.bin",
@@ -2026,10 +2013,10 @@ class TestStandaloneCopyTargetsAreUntrusted(unittest.TestCase):
         """A link at the name was skipped in silence and counted as "dir
         not found" while the folder existed: the emulator kept whatever the
         link pointed at. The link now gives way to the file."""
-        bios = Path(_tempdir(self))
+        bios = scratch_dir(self)
         (bios / "boot.bin").write_text("rom")
-        target = Path(_tempdir(self))
-        outside = Path(_tempdir(self)) / "secret"
+        target = scratch_dir(self)
+        outside = scratch_dir(self) / "secret"
         outside.write_text("untouched")
         (target / "boot.bin").symlink_to(outside)
 
@@ -2055,8 +2042,8 @@ class TestDestinationFollowsUserLinks(unittest.TestCase):
     """
 
     def test_symlinked_directory_under_root_is_followed(self):
-        bios = Path(_tempdir(self))
-        elsewhere = Path(_tempdir(self)) / "sys_modules"
+        bios = scratch_dir(self)
+        elsewhere = scratch_dir(self) / "sys_modules"
         elsewhere.mkdir()
         (bios / "shadps4").mkdir()
         (bios / "shadps4" / "sys_modules").symlink_to(elsewhere)
@@ -2067,8 +2054,8 @@ class TestDestinationFollowsUserLinks(unittest.TestCase):
         self.assertEqual(dest.resolve().parent, elsewhere.resolve())
 
     def test_check_local_survives_a_linked_directory(self):
-        bios = Path(_tempdir(self))
-        elsewhere = Path(_tempdir(self)) / "sys_modules"
+        bios = scratch_dir(self)
+        elsewhere = scratch_dir(self) / "sys_modules"
         elsewhere.mkdir()
         (bios / "shadps4").mkdir()
         (bios / "shadps4" / "sys_modules").symlink_to(elsewhere)
@@ -2080,7 +2067,7 @@ class TestDestinationFollowsUserLinks(unittest.TestCase):
         self.assertEqual((up_to_date, mismatched), ([], []))
 
     def test_climbing_is_still_refused(self):
-        bios = Path(_tempdir(self))
+        bios = scratch_dir(self)
         with self.assertRaises(ValueError):
             install._destination_path(bios, "../outside.bin")
         with self.assertRaises(ValueError):
@@ -2129,7 +2116,7 @@ class TestManualPlatformPrompt(unittest.TestCase):
     drives and home, and failed with a card in the reader."""
 
     def setUp(self):
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         for patcher in (unittest.mock.patch.object(install, "_mounted_cards", return_value=[]),
                         unittest.mock.patch.object(install, "_mount_points",
                                                    return_value=frozenset()),
@@ -2179,7 +2166,7 @@ class TestManualPlatformPrompt(unittest.TestCase):
     def test_lakka_on_a_computer_asks_for_its_card(self):
         """/storage/system, a folder only the Lakka machine has, was taken
         on a computer: Lakka keeps its BIOS on its card's STORAGE part."""
-        card = Path(_tempdir(self))
+        card = scratch_dir(self)
         (card / ".config" / "retroarch").mkdir(parents=True)
         (card / ".config" / "retroarch" / "retroarch.cfg").write_text(
             'system_directory = "/tmp/system"\n')
@@ -2216,7 +2203,7 @@ class TestManualPlatformPrompt(unittest.TestCase):
     def test_quotes_around_a_typed_folder_are_dropped(self):
         """Explorer's "Copy as path" quotes the folder: the files went into a
         folder named `"` under the current directory, and the run said Done."""
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         for typed in (f'"{root}/My Card/bios"', f"'{root}/My Card/bios'",
                       f'  "{root}/My Card/bios"  ',
                       # A half-selected copy: line mode kept the quote.
@@ -2243,7 +2230,7 @@ class TestManualPlatformPrompt(unittest.TestCase):
     def test_a_default_folder_not_there_is_not_found(self):
         """With nothing installed, Enter printed "Found RetroArch at" a
         folder that did not exist."""
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         answers = iter(["1", ""])
         out = io.StringIO()
         with unittest.mock.patch.object(install, "_default_dest",
@@ -2274,7 +2261,7 @@ class TestSteamRetroarchDetection(unittest.TestCase):
     """The Steam build is a portable install under the default library."""
 
     def test_steam_library_is_found_on_windows(self):
-        program_files = Path(_tempdir(self))
+        program_files = scratch_dir(self)
         ra_dir = program_files / "Steam" / "steamapps" / "common" / "RetroArch"
         ra_dir.mkdir(parents=True)
         (ra_dir / "retroarch.cfg").write_text('system_directory = ":\\system"\n')
@@ -2288,7 +2275,7 @@ class TestLaunchboxDetectionPowershell(unittest.TestCase):
     """install.ps1 must resolve LaunchBox's portable RetroArch on its own."""
 
     def _run(self, entries: str, seed=None, manifest: dict | None = None):
-        userprofile = Path(_tempdir(self))
+        userprofile = scratch_dir(self)
         ra_dir = userprofile / "LaunchBox" / "Emulators" / "RetroArch"
         ra_dir.mkdir(parents=True)
         data = userprofile / "LaunchBox" / "Data"
@@ -2301,7 +2288,7 @@ class TestLaunchboxDetectionPowershell(unittest.TestCase):
         )
         if seed is not None:
             seed(userprofile)
-        serve_root = Path(_tempdir(self))
+        serve_root = scratch_dir(self)
         (serve_root / "install").mkdir()
         payload = dict(manifest if manifest is not None else {"files": []})
         payload.setdefault("manifest_version", 2)
@@ -2317,7 +2304,7 @@ class TestLaunchboxDetectionPowershell(unittest.TestCase):
             env = dict(os.environ)
             env.update(
                 USERPROFILE=str(userprofile),
-                APPDATA=str(_tempdir(self)),
+                APPDATA=str(str(scratch_dir(self))),
                 RETROBIOS_BASE_URL=f"http://127.0.0.1:{httpd.server_address[1]}",
                 # A LaunchBox layout is a Windows layout: the runner is Linux.
                 RETROBIOS_OS="wsl",
@@ -2439,7 +2426,7 @@ class TestDetectFrontends(unittest.TestCase):
     """Frontends have no BIOS directory of their own but hint at the setup."""
 
     def test_esde_from_home_directory(self):
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         (home / "ES-DE").mkdir()
         old = os.environ.pop("ESDE_APPDATA_DIR", None)
         try:
@@ -2449,8 +2436,8 @@ class TestDetectFrontends(unittest.TestCase):
                 os.environ["ESDE_APPDATA_DIR"] = old
 
     def test_esde_from_env_dir(self):
-        home = Path(_tempdir(self))
-        appdata = Path(_tempdir(self))
+        home = scratch_dir(self)
+        appdata = scratch_dir(self)
         os.environ["ESDE_APPDATA_DIR"] = str(appdata)
         try:
             self.assertIn("esde", install.detect_frontends("linux", home=home))
@@ -2458,7 +2445,7 @@ class TestDetectFrontends(unittest.TestCase):
             del os.environ["ESDE_APPDATA_DIR"]
 
     def test_nothing_detected(self):
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         old = os.environ.pop("ESDE_APPDATA_DIR", None)
         try:
             self.assertEqual(install.detect_frontends("linux", home=home), [])
@@ -2527,7 +2514,7 @@ class TestAvailablePlatforms(unittest.TestCase):
         files with two syntaxes, and the failing test named no command."""
         from installer_build import pins
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             for name in ("install.py", "install.sh", "install.ps1"):
                 shutil.copy2(REPO_ROOT / name, root / name)
@@ -2565,9 +2552,7 @@ class TestAvailablePlatforms(unittest.TestCase):
                 pins.pinned_sha256("install.sh", root)
 
     def test_shell_one_liner_downloads_verifies_and_forwards_arguments(self):
-        scratch = REPO_ROOT / "tmp" / "tests"
-        scratch.mkdir(parents=True, exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             # A piped script must not trust a same-named file in the caller's
             # working directory. Only a real local install.sh may use its peer.
@@ -2620,9 +2605,7 @@ class TestAvailablePlatforms(unittest.TestCase):
         """BusyBox wget, the only one in the RomM image, refuses
         --https-only: with no curl the one-liner always failed and blamed
         the network."""
-        scratch = REPO_ROOT / "tmp" / "tests"
-        scratch.mkdir(parents=True, exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             fake_bin = root / "bin"
             fake_bin.mkdir()
@@ -2662,9 +2645,7 @@ class TestAvailablePlatforms(unittest.TestCase):
     def test_ctrl_c_during_the_download_ends_with_130(self):
         """Ctrl+C while install.py downloaded: the trap cleaned up and the
         script went on to blame the network, with code 1."""
-        scratch = REPO_ROOT / "tmp" / "tests"
-        scratch.mkdir(parents=True, exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             fake_bin = root / "bin"
             fake_bin.mkdir()
@@ -2708,7 +2689,7 @@ class TestAvailablePlatforms(unittest.TestCase):
         """Buster keeps python3 at 3.7: the user installs python3.8 as the
         advice says, and the bootstrap, trying python3 and python alone,
         gave the same advice again."""
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         shutil.copy(REPO_ROOT / "install.sh", root / "install.sh")
         (root / "install.py").write_text("import sys\nprint('ran', sys.version_info >= (3, 8))\n")
         fake_bin = root / "bin"
@@ -2735,9 +2716,7 @@ class TestAvailablePlatforms(unittest.TestCase):
     def test_a_failed_download_says_so_in_one_message(self):
         """Offline, the one-liner printed curl's progress table and
         "curl: (6) ...", then exited 6, a code the table does not list."""
-        scratch = REPO_ROOT / "tmp" / "tests"
-        scratch.mkdir(parents=True, exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             fake_bin = root / "bin"
             fake_bin.mkdir()
@@ -2771,9 +2750,7 @@ class TestAvailablePlatforms(unittest.TestCase):
     def test_piped_one_liner_hands_the_terminal_to_the_installer(self):
         """curl | sh gives the installer the script as stdin, so isatty()
         was false and every question it asks was skipped on Linux and Mac."""
-        scratch = REPO_ROOT / "tmp" / "tests"
-        scratch.mkdir(parents=True, exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             probe = root / "probe.py"
             probe.write_text(
@@ -2953,7 +2930,7 @@ class RetroArchWhereItReallyLives(unittest.TestCase):
     Application Support/RetroArch/config, the system folder in Documents."""
 
     def _exe_dir(self) -> tuple[Path, dict]:
-        program_files = Path(_tempdir(self))
+        program_files = scratch_dir(self)
         exe_dir = program_files / "RetroArch"
         exe_dir.mkdir()
         (exe_dir / "retroarch.exe").write_bytes(b"MZ")
@@ -2967,7 +2944,7 @@ class RetroArchWhereItReallyLives(unittest.TestCase):
 
     def test_windows_appdata_config_at_default_names_the_exe_folder(self):
         exe_dir, env = self._exe_dir()
-        appdata = Path(_tempdir(self))
+        appdata = scratch_dir(self)
         (appdata / "RetroArch").mkdir()
         (appdata / "RetroArch" / "retroarch.cfg").write_text('system_directory = "default"\n')
         env["APPDATA"] = str(appdata)
@@ -2983,7 +2960,7 @@ class RetroArchWhereItReallyLives(unittest.TestCase):
         self.assertIn(("retroarch", Path("D:\\bios")), found)
 
     def test_macos_config_folder_and_documents_default(self):
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         support = home / "Library" / "Application Support" / "RetroArch"
         (support / "config").mkdir(parents=True)
         (support / "config" / "retroarch.cfg").write_text('system_directory = "default"\n')
@@ -3003,8 +2980,8 @@ class LinuxRetroArchFollowsXdgConfigHome(unittest.TestCase):
     with its own XDG layout detected nothing."""
 
     def _env(self) -> tuple[Path, Path]:
-        home = Path(_tempdir(self))
-        xdg = Path(_tempdir(self))
+        home = scratch_dir(self)
+        xdg = scratch_dir(self)
         patcher = unittest.mock.patch.dict(os.environ, {"HOME": str(home)}, clear=True)
         patcher.start()
         self.addCleanup(patcher.stop)
@@ -3047,7 +3024,7 @@ class NoPythonNamesThisSystemsCommand(unittest.TestCase):
     macOS has no apt."""
 
     def _run(self, extra_env: dict, uname: str = "Linux") -> subprocess.CompletedProcess:
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         fake_bin = root / "bin"
         fake_bin.mkdir()
         for tool in ("sed", "tr", "dirname", "cat"):
@@ -3083,7 +3060,7 @@ class ABootstrapPythonCanDoHttps(unittest.TestCase):
     was chosen over a full python, and every download then failed."""
 
     def _bin(self) -> tuple[Path, Path]:
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         fake_bin = root / "bin"
         fake_bin.mkdir()
         for tool in ("sed", "tr", "dirname", "cat", "awk", "uname"):
@@ -3142,7 +3119,7 @@ class WindowsWithoutPythonIsOfferedWinget(unittest.TestCase):
     and 11, could do it from the bootstrap."""
 
     def _folder(self) -> tuple[Path, Path]:
-        folder = Path(_tempdir(self))
+        folder = scratch_dir(self)
         shutil.copy(REPO_ROOT / "install.ps1", folder / "install.ps1")
         (folder / "install.py").write_text("print('installer ran')\n")
         fake_bin = folder / "bin"
@@ -3187,7 +3164,7 @@ class TermuxStorageIsSetUpByTheBootstrap(unittest.TestCase):
     start the whole run over: the bootstrap runs it and waits for ~/storage."""
 
     def _run(self, storage_exists: bool) -> tuple[subprocess.CompletedProcess, Path]:
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         shutil.copy(REPO_ROOT / "install.sh", root / "install.sh")
         (root / "install.py").write_text("print('installer ran')\n")
         home = root / "home"
@@ -3233,7 +3210,7 @@ class APyLauncherWithoutARuntimeIsPassed(unittest.TestCase):
     offered a second install or gave up."""
 
     def test_python_on_path_runs_the_installer(self):
-        folder = Path(_tempdir(self))
+        folder = scratch_dir(self)
         shutil.copy(REPO_ROOT / "install.ps1", folder / "install.ps1")
         (folder / "install.py").write_text("print('installer ran')\n")
         fake_bin = folder / "bin"
@@ -3255,7 +3232,7 @@ class APowerShellDownloadThatNeverAnswersEnds(unittest.TestCase):
     connection and never answers, the window waited forever with no line."""
 
     def test_a_silent_server_ends_on_the_network_advice(self):
-        folder = Path(_tempdir(self))
+        folder = scratch_dir(self)
         shutil.copy(REPO_ROOT / "install.ps1", folder / "install.ps1")
         with socket.socket() as listener:
             listener.bind(("127.0.0.1", 0))
@@ -3278,7 +3255,7 @@ class ThePowerShellWrapperPassesTheStatusOn(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which("pwsh"), "needs PowerShell")
     def test_the_installer_code_comes_back_unchanged(self):
-        folder = Path(_tempdir(self))
+        folder = scratch_dir(self)
         shutil.copy(REPO_ROOT / "install.ps1", folder / "install.ps1")
         for code in (0, 1, 2, 130):
             with self.subTest(code=code):
@@ -3299,7 +3276,7 @@ class ThePowerShellWrapperPassesEveryArgument(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which("pwsh"), "needs PowerShell")
     def test_short_flags_reach_the_installer(self):
-        folder = Path(_tempdir(self))
+        folder = scratch_dir(self)
         shutil.copy(REPO_ROOT / "install.ps1", folder / "install.ps1")
         (folder / "install.py").write_text(
             "import json, sys\nprint(json.dumps(sys.argv[1:]))\n"
@@ -3330,8 +3307,7 @@ class AnUnwritableFolderIsCodeTwo(unittest.TestCase):
         threading.Thread(target=httpd.serve_forever, daemon=True).start()
         self.addCleanup(httpd.server_close)
         self.addCleanup(httpd.shutdown)
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        home = Path(tempfile.mkdtemp(dir=str(REPO_ROOT / "tmp")))
+        home = Path(tempfile.mkdtemp())
         locked = home / "locked"
         locked.mkdir()
         locked.chmod(0o555)
@@ -3404,7 +3380,7 @@ class CaseVariants(unittest.TestCase):
         }
 
     def test_a_kept_case_directory_is_detected(self):
-        directory = Path(_tempdir(self)) / "not" / "yet"
+        directory = scratch_dir(self) / "not" / "yet"
         self.assertTrue(install.keeps_case(directory))
         self.assertEqual(list(Path(directory.parents[1]).iterdir()), [])
 
@@ -3456,7 +3432,7 @@ class AnUnreadableRetroDeckConfigIsSaid(unittest.TestCase):
     def test_the_fallback_is_announced(self):
         import contextlib
 
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         conf = home / ".var" / "app" / "net.retrodeck.retrodeck" / "config" / "retrodeck"
         conf.mkdir(parents=True)
         (conf / "retrodeck.json").write_text("{truncated")
@@ -3476,7 +3452,7 @@ class RetroDeckFoldersMovedOneByOne(unittest.TestCase):
     files went to <home>/bios, a folder RetroDECK no longer reads."""
 
     def _detect(self, paths: dict) -> tuple[Path, list]:
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         conf = home / ".var/app/net.retrodeck.retrodeck/config/retrodeck"
         conf.mkdir(parents=True)
         (conf / "retrodeck.json").write_text(json.dumps({"paths": paths}))
@@ -3491,7 +3467,7 @@ class RetroDeckFoldersMovedOneByOne(unittest.TestCase):
         return home, [found, dests, label]
 
     def test_a_moved_bios_folder_is_followed(self):
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         sd = home / "sd"
         root, (found, dests, label) = self._detect({
             "rd_home_path": "", "bios_path": str(sd / "bios"), "roms_path": str(sd / "roms"),
@@ -3504,7 +3480,7 @@ class RetroDeckFoldersMovedOneByOne(unittest.TestCase):
         self.assertIn(f"bios/ at {sd / 'bios'}", label)
 
     def test_folders_in_place_change_nothing(self):
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         rd_home = home / "rd"
         _root, (found, dests, label) = self._detect({
             "rd_home_path": str(rd_home), "bios_path": str(rd_home / "bios"),
@@ -3537,7 +3513,7 @@ class AndroidRetroArchFolderFollowsItsBuild(unittest.TestCase):
     SITE_CODE = 1745000000
 
     def _run(self, make):
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         app_data, storage = root / "data", root / "storage"
         app_data.mkdir()
         storage.mkdir()
@@ -3641,7 +3617,7 @@ class AndroidRetroArchFolderFollowsItsBuild(unittest.TestCase):
 
     def test_detection_prints_the_retroarch_line(self):
         err = io.StringIO()
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         (root / "data" / "com.retroarch").mkdir(parents=True)
         with unittest.mock.patch.object(install, "ANDROID_APP_DATA", root / "data"), \
                 unittest.mock.patch.dict(os.environ, {"EXTERNAL_STORAGE": str(root / "s")}), \
@@ -3656,7 +3632,7 @@ class AndroidEmulatorsOutOfReachAreSaid(unittest.TestCase):
     were skipped without a word."""
 
     def _lines(self, make) -> list[str]:
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         app_data, storage = root / "data", root / "storage"
         app_data.mkdir()
         make(app_data, storage)
@@ -3707,7 +3683,7 @@ class ACardPreparedOnAComputerGetsItsBoard(unittest.TestCase):
     only without --dest, which the full-screen interface always gives."""
 
     def setUp(self):
-        self.root = Path(_tempdir(self))
+        self.root = scratch_dir(self)
         self.boot = self.root / "BATOCERA"
         (self.boot / "boot").mkdir(parents=True)
         (self.boot / "boot" / "batocera.board").write_text("bcm2711\n")
@@ -3824,7 +3800,7 @@ class APlatformWithoutTargetsSaysSoOffline(unittest.TestCase):
         self.assertEqual(install.TARGET_PLATFORMS, published)
 
     def test_offline_says_there_are_no_targets(self):
-        dest = Path(_tempdir(self))
+        dest = scratch_dir(self)
         for extra in ([], ["--manifest", str(REPO_ROOT / "install" / "misterfpga.json")]):
             with self.subTest(manifest=bool(extra)):
                 proc = subprocess.run(
@@ -3843,7 +3819,7 @@ class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
     every board's files (8.6 GiB where bcm2711 needs 5.5)."""
 
     def test_each_source_is_read(self):
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         arch = root / "batocera.arch"
         arch.write_text("bcm2711")
         with unittest.mock.patch.dict(install._BOARD_SOURCES, {"batocera": ("file", str(arch))}):
@@ -3856,7 +3832,7 @@ class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
     def test_retropie_names_its_pi_as_get_platform_does(self):
         """A RetroPie Pi 4 installed every target's files, 8.4 GiB where
         rpi4 needs 4.0: nothing read the Pi model."""
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         (root / "proc" / "device-tree").mkdir(parents=True)
         cpuinfo = root / "proc" / "cpuinfo"
         tree = root / "proc" / "device-tree" / "compatible"
@@ -4015,12 +3991,12 @@ class BizHawkIsFoundWhereItReads(unittest.TestCase):
     forced --platform bizhawk wrote where EmuHawk never reads."""
 
     def test_the_data_home_variable(self):
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         with unittest.mock.patch.dict(os.environ, {"BIZHAWK_DATA_HOME": str(home)}):
             self.assertEqual(install._bizhawk_unix_firmware(), home / "Firmware")
 
     def test_the_nix_data_home(self):
-        xdg = Path(_tempdir(self))
+        xdg = scratch_dir(self)
         (xdg / "emuhawk-monort-2.11.1").mkdir()
         env = {"XDG_DATA_HOME": str(xdg), "BIZHAWK_DATA_HOME": ""}
         with unittest.mock.patch.dict(os.environ, env):
@@ -4039,7 +4015,7 @@ class RetroArchUwpIsFound(unittest.TestCase):
     package's LocalState, but no rule looked under %LOCALAPPDATA%\\Packages."""
 
     def _state(self) -> Path:
-        local = Path(_tempdir(self))
+        local = scratch_dir(self)
         state = local / "Packages" / f"{install.RETROARCH_UWP_ID}_abc123" / "LocalState"
         state.mkdir(parents=True)
         patcher = unittest.mock.patch.dict(os.environ, {"LOCALAPPDATA": str(local)})
@@ -4057,7 +4033,7 @@ class RetroArchUwpIsFound(unittest.TestCase):
         self.assertEqual(install._retroarch_uwp_system_dir(), state / "bios")
 
     def test_nothing_installed(self):
-        with unittest.mock.patch.dict(os.environ, {"LOCALAPPDATA": _tempdir(self)}):
+        with unittest.mock.patch.dict(os.environ, {"LOCALAPPDATA": str(scratch_dir(self))}):
             self.assertIsNone(install._retroarch_uwp_system_dir())
 
 
@@ -4161,7 +4137,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
     def test_the_archive_is_drawn_and_counted(self):
         """82 MB of archives came with no progress line, and the run ended
         on "310.5 KB downloaded", the BIOS files alone."""
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         body = self._zip(work).read_bytes()
         attempts: list[int] = []
 
@@ -4202,7 +4178,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         """A data archive cut at 90% was deleted and fetched again from
         zero, on the retry and on the next run, while the run said that
         nothing was lost."""
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         body = self._zip(work).read_bytes()
         keep = work / ".dolphin-sys.archive.part"
         requests: list[dict] = []
@@ -4251,7 +4227,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         self.assertEqual(requests[-1]["If-range"], '"v1"')
 
     def test_a_changed_archive_is_fetched_whole(self):
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         body = self._zip(work).read_bytes()
         keep = work / ".dolphin-sys.archive.part"
         keep.write_bytes(b"older revision")
@@ -4274,7 +4250,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         self.assertEqual(path.read_bytes(), body)
 
     def test_a_tree_read_whole_leaves_no_archive(self):
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         archive = self._zip(work)
         bios = work / "system"
         bios.mkdir()
@@ -4292,7 +4268,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         """Two runs into one BIOS folder shared .dolphin-sys.archive.part: the
         one that finished first deleted the archive the other was still
         writing, and the other truncated the one being read."""
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         archive = self._zip(work)
         bios = work / "system"
         root = bios / "dolphin-emu"
@@ -4317,7 +4293,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         self.assertTrue((root / ".dolphin-sys.archive.lock").exists())
 
     def test_a_lone_run_keeps_its_archive_beside_the_tree(self):
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         archive = self._zip(work)
         bios = work / "system"
         kept: list = []
@@ -4385,7 +4361,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
             self.assertEqual(install.data_fetch_bytes(entry, needed), 7)
 
     def test_verified_members_land_the_rest_are_said(self):
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         archive = self._zip(work)
         bios = work / "system"
         bios.mkdir()
@@ -4416,7 +4392,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         """The buildbot rebuilt PPSSPP.zip and 49 of its 169 files were
         refused on every install: a nightly source holds no other bytes.
         RetroArch's own downloader writes what the buildbot serves."""
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         bios = work / "system"
         bios.mkdir()
         entry = {**self._entry(), "rolling": True}
@@ -4434,7 +4410,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
     def test_a_rolling_file_an_earlier_run_wrote_is_in_place(self):
         """Its bytes are not the list's, they are what the source served and
         the record names: the next run neither fetches nor rewrites it."""
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         bios = work / "system"
         bios.mkdir()
         entry = {**self._entry(), "rolling": True}
@@ -4454,7 +4430,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         """No hash to hold a followed member to: its ZIP CRC-32 still is."""
         import zipfile
 
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         archive = self._zip(work)
         body = bytearray(archive.read_bytes())
         at = body.index(b"new bytes upstream")
@@ -4472,7 +4448,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
 
     def test_a_pack_rebuilds_a_rolling_tree_as_listed(self):
         """From a pack, the pack's copy is the tree: nothing newer exists."""
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         bios = work / "system"
         bios.mkdir()
 
@@ -4488,7 +4464,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
     def test_a_rolling_member_past_its_cap_is_not_written(self):
         """A followed member is read to the size its archive declares: a
         source serving gigabytes where the list has 3 bytes fills no drive."""
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         entry = {**self._entry(), "rolling": True}
         served: list[int] = []
 
@@ -4526,7 +4502,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
                 buffer[:] = b"x" * len(buffer)
                 return len(buffer)
 
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         entry = self._entry()
         entry["files"] = {"Sys/GC/font.bin": {"sha1": "1" * 40, "size": 4}}
 
@@ -4546,7 +4522,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         traceback, and a failed write left its .part beside the tree."""
         import zlib
 
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         entry = self._entry()
         entry["files"] = {"Sys/GC/font.bin": {"sha1": "1" * 40, "size": 4}}
         for error in (zlib.error("invalid stored block lengths"), EOFError(),
@@ -4572,7 +4548,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
                 self.assertEqual([p.name for p in work.rglob("*.part")], [])
 
     def test_offline_keeps_its_reason(self):
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         with unittest.mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             counts = install.install_data_directory(self._entry(), work)
         self.assertIsInstance(counts["error"], install.OfflineReason)
@@ -4581,7 +4557,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         import io as _io
         import tarfile
 
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         archive = work / "src.tar.gz"
         with tarfile.open(archive, "w:gz") as tf:
             data = b"index"
@@ -4645,7 +4621,7 @@ class AChunkedCutIsADownloadFailure(unittest.TestCase):
         with unittest.mock.patch.object(install.urllib.request, "urlopen",
                                         lambda *a, **k: Cut()), \
                 unittest.mock.patch.object(install, "_retry_delay", return_value=0):
-            dest, ok, reason = install._download_one(entry, Path(_tempdir(self)))
+            dest, ok, reason = install._download_one(entry, scratch_dir(self))
         self.assertFalse(ok)
         self.assertEqual(reason, "the connection was cut")
         self.assertIsInstance(reason, install.NetworkReason)
@@ -4730,8 +4706,7 @@ class ACheckNamesWhatTheCollectionLacks(unittest.TestCase):
         threading.Thread(target=httpd.serve_forever, daemon=True).start()
         self.addCleanup(httpd.server_close)
         self.addCleanup(httpd.shutdown)
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        home = Path(tempfile.mkdtemp(dir=str(REPO_ROOT / "tmp")))
+        home = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, home, True)
         env = {
             **os.environ, "HOME": str(home), "RETROBIOS_OS": "linux",
@@ -4760,9 +4735,9 @@ class ARefusedStandaloneCopyIsNamed(unittest.TestCase):
 
         if os.name == "nt" or os.geteuid() == 0:
             self.skipTest("a read-only folder needs POSIX modes and a non-root user")
-        bios = Path(_tempdir(self))
+        bios = scratch_dir(self)
         (bios / "scph5501.bin").write_bytes(b"x")
-        target = Path(_tempdir(self)) / "pcsx2-bios"
+        target = scratch_dir(self) / "pcsx2-bios"
         target.mkdir()
         target.chmod(0o500)
         self.addCleanup(target.chmod, 0o700)
@@ -4794,7 +4769,7 @@ class AFullDriveIsSaidAsOne(unittest.TestCase):
     on the source, and the run ended on `Run the same command again`."""
 
     def test_the_tree_reports_the_drive(self):
-        work = Path(_tempdir(self))
+        work = scratch_dir(self)
         entry = {"ref": "fbneo-cheats", "dest": "fbneo/cheats", "type": "zip",
                  "url": "https://example.invalid/c.zip", "systems": ["arcade"],
                  "files": {"1941r1.ini": {"sha1": "1" * 40, "size": 4}}}
@@ -4821,7 +4796,7 @@ class AFullDriveIsSaidAsOne(unittest.TestCase):
         self.assertEqual(counts["error"], install.DRIVE_FULL)
 
     def test_the_end_names_space_not_a_retry(self):
-        bios = Path(_tempdir(self))
+        bios = scratch_dir(self)
         out = io.StringIO()
         with contextlib.redirect_stdout(out), self.assertRaises(SystemExit) as ended:
             install._report_outcome([bios], 7, 0, 1, 0, False,
@@ -4832,7 +4807,7 @@ class AFullDriveIsSaidAsOne(unittest.TestCase):
         self.assertNotIn("retry only those", text)
 
     def test_a_bios_file_on_a_full_drive_is_not_retried(self):
-        bios = Path(_tempdir(self))
+        bios = scratch_dir(self)
         attempts: list = []
 
         def urlopen(*_args, **_kwargs):
@@ -4933,7 +4908,7 @@ class WindowsSeenFromWsl(unittest.TestCase):
     ~/bios inside the distribution, where RetroBat reads nothing."""
 
     def setUp(self):
-        self.root = Path(_tempdir(self))
+        self.root = scratch_dir(self)
         patcher = unittest.mock.patch.dict(install._WSL, {"active": True, "root": str(self.root)})
         patcher.start()
         self.addCleanup(patcher.stop)
@@ -4957,7 +4932,7 @@ class WindowsSeenFromWsl(unittest.TestCase):
         exe_dir = self.root / "c" / "RetroArch-Win64"
         exe_dir.mkdir(parents=True)
         (exe_dir / "retroarch.exe").write_bytes(b"MZ")
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         cleared = {name: "" for name in (*install._WINDOWS_VARIABLES, "SCOOP", "SCOOP_GLOBAL",
                                          "ProgramData")}
         with unittest.mock.patch.dict(os.environ, {**cleared, "HOME": str(home)}), \
@@ -4997,7 +4972,7 @@ class WindowsSeenFromWsl(unittest.TestCase):
         common.mkdir(parents=True)
         (common / "retroarch.exe").write_bytes(b"MZ")
         (common / "retroarch.cfg").write_text('system_directory = "default"\n')
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         cleared = {name: "" for name in (*install._WINDOWS_VARIABLES, "SCOOP", "SCOOP_GLOBAL",
                                          "ProgramData")}
         asked: list = []
@@ -5025,7 +5000,7 @@ class WindowsSeenFromWsl(unittest.TestCase):
             raise subprocess.TimeoutExpired(argv, kwargs.get("timeout", 10))
 
         cleared = {name: "" for name in install._WINDOWS_VARIABLES}
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         err = io.StringIO()
         with unittest.mock.patch.dict(os.environ, {**cleared, "HOME": str(home)}), \
                 unittest.mock.patch.object(install.subprocess, "run", slow), \
@@ -5052,9 +5027,9 @@ class StandaloneCopiesUnderTheirOwnName(unittest.TestCase):
     emulator reads."""
 
     def test_the_copy_takes_the_emulator_name(self):
-        bios = Path(_tempdir(self))
+        bios = scratch_dir(self)
         (bios / "xbox_eeprom.bin").write_bytes(b"eeprom")
-        folder = Path(_tempdir(self))
+        folder = scratch_dir(self)
         manifest = {"standalone_copies": [
             {"file": "xbox_eeprom.bin", "as": "eeprom.bin", "targets": {"linux": [str(folder)]}}]}
         install._validate_manifest({**self._published(), **manifest}, "emudeck")
@@ -5077,7 +5052,7 @@ class StandaloneCopiesUnderTheirOwnName(unittest.TestCase):
                     {"file": "x.bin", "as": name, "targets": {}}]}, "emudeck")
 
     def test_cemu_alone_is_found_from_the_published_list(self):
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         (home / ".local" / "share" / "Cemu").mkdir(parents=True)
         manifest = json.loads((REPO_ROOT / "install" / "retroarch.json").read_text())
         with unittest.mock.patch.dict(os.environ, {"HOME": str(home)}):
@@ -5159,19 +5134,19 @@ class RetroArchAppImageIsPortable(unittest.TestCase):
         return base
 
     def test_the_unpacked_archive_is_found(self):
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         base = self._unpack(home)
         self.assertIn(("retroarch", base / "system"), self._detect(home))
 
     def test_its_config_is_read_with_its_own_home(self):
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         base = self._unpack(home)
         (base / "retroarch.cfg").write_text('system_directory = "~/bios"\n')
         portable = base.parent.parent
         self.assertIn(("retroarch", portable / "bios"), self._detect(home))
 
     def test_a_config_folder_beside_it_wins(self):
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         base = self._unpack(home)
         config = base.parent.parent.with_name("RetroArch-Linux-x86_64.AppImage.config")
         (config / "retroarch").mkdir(parents=True)
@@ -5180,7 +5155,7 @@ class RetroArchAppImageIsPortable(unittest.TestCase):
         self.assertNotIn(("retroarch", base / "system"), found)
 
     def test_a_folder_without_its_appimage_is_left(self):
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         base = self._unpack(home)
         (base.parent.parent.with_name("RetroArch-Linux-x86_64.AppImage")).unlink()
         self.assertNotIn(("retroarch", base / "system"), self._detect(home))
@@ -5192,7 +5167,7 @@ class SteamRetroArchOnMacIsPortable(unittest.TestCase):
     the installer took ~/Documents/RetroArch/system."""
 
     def test_the_steam_bundle_moves_the_base(self):
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         support = home / "Library" / "Application Support"
         with unittest.mock.patch.dict(os.environ, {"HOME": str(home)}), \
                 unittest.mock.patch.object(Path, "home", return_value=home):
@@ -5244,8 +5219,7 @@ class TheInstallerSaysWhatItFound(unittest.TestCase):
         threading.Thread(target=httpd.serve_forever, daemon=True).start()
         self.addCleanup(httpd.server_close)
         self.addCleanup(httpd.shutdown)
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        self.home = Path(tempfile.mkdtemp(dir=str(REPO_ROOT / "tmp")))
+        self.home = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.home, True)
         self.env = {
             **os.environ, "HOME": str(self.home), "RETROBIOS_OS": "linux",
@@ -5380,7 +5354,7 @@ class _LoopbackRun:
         threading.Thread(target=httpd.serve_forever, daemon=True).start()
         test.addCleanup(httpd.server_close)
         test.addCleanup(httpd.shutdown)
-        self.home = Path(_tempdir(test))
+        self.home = scratch_dir(test)
         return {
             **os.environ, "HOME": str(self.home), "RETROBIOS_OS": "linux",
             "RETROBIOS_BASE_URL": f"http://127.0.0.1:{httpd.server_address[1]}",
@@ -5443,7 +5417,7 @@ class AMissingPackNamesTheOptionAndThePacksBeside(unittest.TestCase):
     not the pack sitting next to the name typed."""
 
     def test_the_pack_beside_is_named(self):
-        folder = Path(_tempdir(self))
+        folder = scratch_dir(self)
         (folder / "RetroArch_BIOS_Pack.zip").write_bytes(b"")
         with self.assertRaises(ValueError) as raised:
             install.PackSource._resolve([folder / "RetroArch_BIOS_Pak.zip"])
@@ -5474,7 +5448,7 @@ class AnUnknownNameIsAnEvent(unittest.TestCase):
         env = {key: value for key, value in os.environ.items()
                if key != "RETROBIOS_BASE_URL"}
         env[install.OFFLINE_VARIABLE] = "1"
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as dest:
+        with tempfile.TemporaryDirectory() as dest:
             proc = subprocess.run(
                 [sys.executable, str(REPO_ROOT / "install.py"), "--dest", dest,
                  "--check", "--events", "--no-input", *argv],
@@ -5666,7 +5640,7 @@ class HintsGiveTheUsersOwnCommandBack(unittest.TestCase):
     def test_a_listing_hint_keeps_the_listing(self):
         """--list-systems with nothing detected was answered with a full
         install command: the listing flag gone, a --dest added."""
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         env = {**os.environ, "HOME": str(home), "RETROBIOS_OS": "linux",
                "RETROBIOS_BOOTSTRAP": ""}
         for flag in ("--list-systems", "--list-cores", "--list-emulators", "--list-targets"):
@@ -5708,13 +5682,11 @@ class HintsGiveTheUsersOwnCommandBack(unittest.TestCase):
         with unittest.mock.patch.object(install.shutil, "disk_usage",
                                         return_value=SimpleNamespace(free=1)), \
                 contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
-            install._check_free_space(Path(_tempdir(self)), 10, "batocera")
+            install._check_free_space(scratch_dir(self), 10, "batocera")
         self.assertIn("--platform batocera --dest <folder on another drive>", err.getvalue())
 
     def test_the_one_liner_tells_the_installer_how_it_was_started(self):
-        scratch = REPO_ROOT / "tmp" / "tests"
-        scratch.mkdir(parents=True, exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             probe = root / "probe.py"
             probe.write_text("import os\nprint('bootstrap:', os.environ.get('RETROBIOS_BOOTSTRAP'))\n")
@@ -5761,9 +5733,7 @@ class AnOverrideIsNamedWhenItIsTheCause(unittest.TestCase):
         self.assertIn("RETROBIOS_BASE_URL is set", text)
 
     def test_a_pinned_fingerprint_is_named(self):
-        scratch = REPO_ROOT / "tmp" / "tests"
-        scratch.mkdir(parents=True, exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             fake_bin = root / "bin"
             fake_bin.mkdir()
@@ -5824,7 +5794,7 @@ class AQuestionLeftWithCtrlDOrCtrlCIsAStop(unittest.TestCase):
         import pty
         import time
 
-        home = Path(_tempdir(self))
+        home = scratch_dir(self)
         master, slave = pty.openpty()
         # Its output on the terminal too: piped, nothing is asked, and the
         # test skipped on every machine.
@@ -6074,7 +6044,7 @@ class DestAloneFollowsWhatIsFoundHere(unittest.TestCase):
     def test_a_card_system_chosen_checks_the_folder(self):
         """The menu offered no card system, and one
         chosen now reads --dest as --platform does."""
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         answers = iter(["Onion", "retroarch"])
         out = io.StringIO()
         with unittest.mock.patch.object(install, "detect_platforms", return_value=[]), \
@@ -6157,7 +6127,7 @@ class ACompletePartialIsHandedOffOnWindows(unittest.TestCase):
             return install._download_one(dict(self.ENTRY), tmp)
 
     def test_the_other_runs_copy_is_left_whole(self):
-        tmp = Path(_tempdir(self))
+        tmp = scratch_dir(self)
         (tmp / ".big.bin.part").write_bytes(self.PAYLOAD)
         seen: list[int] = []
         self.assertEqual(self._run(tmp, seen), ("big.bin", True, ""))
@@ -6168,7 +6138,7 @@ class ACompletePartialIsHandedOffOnWindows(unittest.TestCase):
         self.assertFalse((tmp / ".big.bin.part").exists())
 
     def test_the_rename_waits_for_the_other_run_to_let_go(self):
-        tmp = Path(_tempdir(self))
+        tmp = scratch_dir(self)
         source = tmp / "copy"
         source.write_bytes(b"x")
         real_replace = os.replace
@@ -6187,7 +6157,7 @@ class ACompletePartialIsHandedOffOnWindows(unittest.TestCase):
         self.assertEqual((tmp / "dest").read_bytes(), b"x")
 
     def test_a_copy_the_other_run_placed_counts_once_verified(self):
-        tmp = Path(_tempdir(self))
+        tmp = scratch_dir(self)
         dest = tmp / "dest"
         dest.write_bytes(self.PAYLOAD)
         expected = {"sha256": self.ENTRY["sha256"]}
@@ -6319,7 +6289,7 @@ class ANetworkFailureNamesTheNetwork(unittest.TestCase):
                  "sha256": "0" * 64}
         with unittest.mock.patch.object(install.urllib.request, "urlopen", urlopen), \
                 unittest.mock.patch.object(install, "_retry_delay", return_value=0):
-            _dest, ok, reason = install._download_one(entry, Path(_tempdir(self)))
+            _dest, ok, reason = install._download_one(entry, scratch_dir(self))
         self.assertFalse(ok)
         return reason
 
@@ -6425,7 +6395,7 @@ class RetroBatIsFoundWhereItSaysItIs(unittest.TestCase):
         self.assertEqual(set(install._REGISTRY_RULES), rules)
 
     def test_the_registry_folder_wins_over_the_default(self):
-        folder = Path(_tempdir(self))
+        folder = scratch_dir(self)
         with unittest.mock.patch.object(install, "_read_registry",
                                         return_value=str(folder) + "\\"):
             found: list = []
@@ -6433,7 +6403,7 @@ class RetroBatIsFoundWhereItSaysItIs(unittest.TestCase):
         self.assertEqual(found, [("retrobat", folder / "bios")])
 
     def test_a_folder_since_removed_is_passed_over(self):
-        gone = Path(_tempdir(self)) / "moved"
+        gone = scratch_dir(self) / "moved"
         with unittest.mock.patch.object(install, "_read_registry", return_value=str(gone)):
             found: list = []
             install._detect_by_registry("windows", found)
@@ -6461,7 +6431,7 @@ class EmuDeckWindowsIsFoundAsItsScriptsFindIt(unittest.TestCase):
     forced --platform emudeck wrote into %USERPROFILE%\\Emulation\\bios."""
 
     def _env(self) -> tuple[Path, Path]:
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         appdata, profile = root / "appdata", root / "profile"
         patcher = unittest.mock.patch.dict(
             os.environ, {"APPDATA": str(appdata), "USERPROFILE": str(profile)})
@@ -6511,7 +6481,7 @@ class EmuDeckWindowsIsFoundAsItsScriptsFindIt(unittest.TestCase):
 def _device(test: unittest.TestCase, files: dict[str, str],
             release: str = "", home: str = "/root") -> Path:
     """A fake root holding these files, read by the embedded rules."""
-    root = Path(_tempdir(test))
+    root = scratch_dir(test)
     if release:
         files = {**files, "/etc/os-release": release}
     for name, text in files.items():
@@ -6837,7 +6807,7 @@ class BatoceraAndKnulliByWhatTheirBuildsWrite(unittest.TestCase):
     def test_a_knulli_board_narrows_to_its_target(self):
         """KNULLI publishes a core list per board since 2026-11-05, and an
         H700 handheld still took every board's files (9.3 GB for 4.5)."""
-        arch = Path(_tempdir(self)) / "knulli.arch"
+        arch = scratch_dir(self) / "knulli.arch"
         targets = json.loads((REPO_ROOT / "install" / "targets" / "knulli.json")
                              .read_text(encoding="utf-8"))
         for written, board in (("h700", "h700"), ("rk3568", "rk3566"), ("unknown", None)):
@@ -6851,7 +6821,7 @@ class BatoceraAndKnulliByWhatTheirBuildsWrite(unittest.TestCase):
     def test_a_batocera_zen3_board_narrows_to_its_target(self):
         """batocera.arch says x86-64-v3 on a zen3 image, which no target
         list names: the run installed the files of every board."""
-        arch = Path(_tempdir(self)) / "batocera.arch"
+        arch = scratch_dir(self) / "batocera.arch"
         arch.write_text("x86-64-v3")
         with unittest.mock.patch.dict(install._BOARD_SOURCES,
                                       {"batocera": ("file", str(arch))}):
@@ -6891,7 +6861,7 @@ class RomMFirmwareFollowsItsTemplate(unittest.TestCase):
     )
 
     def _romm(self, config: str | None) -> Path:
-        base = Path(_tempdir(self))
+        base = scratch_dir(self)
         library = base / "library"
         (library / "psx" / "roms").mkdir(parents=True)
         if config is not None:
@@ -6937,7 +6907,7 @@ class RomMFirmwareFollowsItsTemplate(unittest.TestCase):
         err = io.StringIO()
         with unittest.mock.patch.object(install, "detect_os", return_value="linux"), \
                 unittest.mock.patch("sys.argv", [
-                    "install.py", "--platform", "batocera", "--dest", _tempdir(self),
+                    "install.py", "--platform", "batocera", "--dest", str(scratch_dir(self)),
                     "--romm-firmware", "{platform}/bios", "--no-input"]), \
                 contextlib.redirect_stdout(io.StringIO()), \
                 contextlib.redirect_stderr(err), self.assertRaises(SystemExit) as caught:
@@ -6981,7 +6951,7 @@ class _SyntheticTree:
     }
 
     def serve_tree(self, test: unittest.TestCase) -> dict:
-        root = Path(_tempdir(test))
+        root = scratch_dir(test)
         files = []
         for path, data in self.FILES.items():
             (root / path).parent.mkdir(parents=True, exist_ok=True)
@@ -7012,7 +6982,7 @@ class _SyntheticTree:
         threading.Thread(target=httpd.serve_forever, daemon=True).start()
         test.addCleanup(httpd.server_close)
         test.addCleanup(httpd.shutdown)
-        self.home = Path(_tempdir(test))
+        self.home = scratch_dir(test)
         self.bios = self.home / "bios"
         self.bios.mkdir()
         (self.bios / "a.bin").write_bytes(self.FILES["bios/A/a.bin"])
@@ -7263,7 +7233,7 @@ class TheEventSchemaFileIsEventKeys(unittest.TestCase):
     def test_the_check_command_fails_on_a_stale_file(self):
         import generate_event_schema as generator
 
-        scratch = Path(_tempdir(self)) / "events.schema.json"
+        scratch = scratch_dir(self) / "events.schema.json"
         scratch.write_text("{}\n", encoding="utf-8")
         with contextlib.redirect_stdout(io.StringIO()), \
                 contextlib.redirect_stderr(io.StringIO()):
@@ -7285,7 +7255,7 @@ class TheInstallerPageIsWrittenFromTheCode(unittest.TestCase):
 
         self.generator = generate_installer_doc
         self.doc = installerdoc
-        self.scratch = Path(_tempdir(self)) / "installer.md"
+        self.scratch = scratch_dir(self) / "installer.md"
         self.scratch.write_text(self.PAGE.read_text(encoding="utf-8"), encoding="utf-8")
 
     def run_generator(self, *argv: str) -> tuple[int, str]:
@@ -7388,7 +7358,7 @@ class AStrippedPythonIsNamed(unittest.TestCase):
                 self.assertIn(f"built without its {hidden} module", proc.stderr)
 
     def test_no_ssl_is_said_once_not_retried(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as dest:
+        with tempfile.TemporaryDirectory() as dest:
             proc = self._run("ssl", "--platform", "retroarch", "--dest", dest,
                              "--check", "--no-input")
         self.assertEqual(proc.returncode, 1)
@@ -7454,7 +7424,7 @@ class NetworkFailuresInPlainWords(unittest.TestCase):
         self.assertIn("SSL_CERT_FILE", text)
 
     def test_a_certificate_list_is_looked_for_where_openssl_and_systems_keep_it(self):
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         bundle = root / "cert.pem"
         paths = SimpleNamespace(cafile=str(root / "none.pem"), capath=str(root / "none"),
                                 openssl_cafile=str(root / "no.pem"),
@@ -7470,10 +7440,10 @@ class NetworkFailuresInPlainWords(unittest.TestCase):
 
     def test_a_file_list_out_of_reach_by_name_says_so(self):
         env = {**os.environ, "RETROBIOS_BASE_URL": "https://retrobios-nohost.invalid",
-               "HOME": _tempdir(self)}
+               "HOME": str(scratch_dir(self))}
         proc = subprocess.run(
             [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "retroarch",
-             "--dest", _tempdir(self), "--check"],
+             "--dest", str(scratch_dir(self)), "--check"],
             env=env, capture_output=True, text=True, timeout=120, check=False,
             stdin=subprocess.DEVNULL,
         )
@@ -7494,7 +7464,7 @@ class AFileYouHadIsKept(unittest.TestCase):
     def setUp(self):
         install.KEPT.reset()
         self.addCleanup(install.KEPT.reset)
-        self.home = Path(_tempdir(self))
+        self.home = scratch_dir(self)
         self.bios = self.home / "system"
         self.bios.mkdir()
 
@@ -7837,7 +7807,7 @@ class TheListVersionIsComparedWithTheSystems(unittest.TestCase):
                 self.assertIsNone(self.note("recalbox", "10.1.1"))
 
     def test_retrobat_reads_the_folder_beside_its_bios_folder(self):
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         version = root / "system" / "version.info"
         version.parent.mkdir()
         version.write_text("8.3.1.1-stable-win64")
@@ -7884,7 +7854,7 @@ class TheListVersionIsComparedWithTheSystems(unittest.TestCase):
                                 "size": 4}]}
         scope.annotate_pack_systems(pack_list, scope.pack_systems(install_list))
         self.assertEqual(pack_list["list_version"], "43.1")
-        pack = Path(_tempdir(self)) / "Batocera_43.1_BIOS_Pack.zip"
+        pack = scratch_dir(self) / "Batocera_43.1_BIOS_Pack.zip"
         with zipfile.ZipFile(pack, "w") as archive:
             archive.writestr("manifest.json", json.dumps(pack_list))
             archive.writestr("a.bin", data)
@@ -7913,7 +7883,7 @@ class TheListVersionIsSaidBeforeAndAfter(unittest.TestCase):
     DATA = b"retrobat bios" * 8
 
     def setUp(self):
-        self.root = Path(_tempdir(self))
+        self.root = scratch_dir(self)
         (self.root / "system").mkdir()
         (self.root / "system" / "version.info").write_text("8.2.0-stable-win64")
         self.bios = self.root / "bios"

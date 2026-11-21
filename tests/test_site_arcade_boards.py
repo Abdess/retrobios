@@ -224,9 +224,7 @@ class BoardRules(unittest.TestCase):
     board, a machine's own set is no board, contents: rejects a homonym."""
 
     def setUp(self) -> None:
-        tmp_root = REPO_ROOT / "tmp"
-        tmp_root.mkdir(exist_ok=True)
-        self._tmp = tempfile.TemporaryDirectory(dir=tmp_root)
+        self._tmp = tempfile.TemporaryDirectory()
         self.root = Path(self._tmp.name)
         systemnames.set_console_sections({("Arcade", "MAME"), ("SNK", "Neo Geo")})
 

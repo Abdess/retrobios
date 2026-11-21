@@ -20,7 +20,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class DeclaredSizeOrders(unittest.TestCase):
     def test_the_fitting_size_comes_first(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             big = Path(tmp) / "a" / "pcm.rom"
             small = Path(tmp) / "b" / "pcm.rom"
             for path, size in ((big, 1024), (small, 512)):

@@ -40,7 +40,7 @@ def _held(files: dict, by_name: dict, path: str, payload: bytes) -> str:
 
 class CoreFilesAsTheBuilderPlacesThem(unittest.TestCase):
     def setUp(self):
-        tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
         os.chdir(tmp.name)
@@ -96,7 +96,7 @@ class ARefusedPinLeavesItsPathToTheCore(unittest.TestCase):
     core file the pack carries there was never compared."""
 
     def setUp(self):
-        tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
         os.chdir(tmp.name)
@@ -152,7 +152,7 @@ class NarrowedPacksAgainstTheirOwnList(unittest.TestCase):
         from model.platforms import _platform_config_cache
         from model.profiles import load_emulator_profiles, emulator_profiles_cache
         import generate_db
-        tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
         os.chdir(tmp.name)

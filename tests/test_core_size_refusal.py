@@ -65,7 +65,7 @@ class _Collection(unittest.TestCase):
     payload = b""
 
     def setUp(self):
-        self._tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self._tmp = tempfile.TemporaryDirectory()
         self._cwd = os.getcwd()
         os.chdir(self._tmp.name)
         for d in ("emulators", "platforms", "bios/Apple"):

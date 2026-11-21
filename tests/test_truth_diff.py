@@ -35,7 +35,7 @@ class ATargetedModelIsItsOwnArtifact(unittest.TestCase):
 
     def test_a_target_writes_beside_the_full_model(self):
         repo = pathlib.Path(__file__).resolve().parent.parent
-        with tempfile.TemporaryDirectory(dir=str(repo / "tmp")) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             for extra in ([], ["--target", "browser"]):
                 proc = subprocess.run(
                     [sys.executable, "scripts/generate_truth.py", "--platform",
@@ -58,7 +58,7 @@ class ATargetedModelIsItsOwnArtifact(unittest.TestCase):
         """bizhawk --target switch printed "skipped", then Done., exit 0,
         and wrote no model: the diff after it failed instead."""
         repo = pathlib.Path(__file__).resolve().parent.parent
-        with tempfile.TemporaryDirectory(dir=str(repo / "tmp")) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             proc = subprocess.run(
                 [sys.executable, "scripts/generate_truth.py", "--platform", "bizhawk",
                  "--target", "switch", "--output-dir", directory],
@@ -75,7 +75,7 @@ class ADiffThatComparedNothingFails(unittest.TestCase):
 
     def test_an_empty_truth_directory_is_an_error(self):
         repo = pathlib.Path(__file__).resolve().parent.parent
-        with tempfile.TemporaryDirectory(dir=str(repo / "tmp")) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             for selection in (["--all"], ["--platform", "retroarch"]):
                 proc = subprocess.run(
                     [sys.executable, "scripts/diff_truth.py", *selection,

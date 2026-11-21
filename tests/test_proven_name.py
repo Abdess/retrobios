@@ -83,8 +83,7 @@ class ProvenNameIndex(unittest.TestCase):
 
 class HashlessEntryTakesTheProvenDump(unittest.TestCase):
     def test_resolver_reads_the_index(self):
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         previous = os.getcwd()
         os.chdir(root)

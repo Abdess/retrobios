@@ -40,7 +40,7 @@ class PickerMatchesInstaller(unittest.TestCase):
     def setUp(self):
         from sitegen import starlight as sitestarlight
 
-        self.folder = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" if (REPO_ROOT / "tmp").is_dir() else None)
+        self.folder = tempfile.TemporaryDirectory()
         self.out = Path(self.folder.name)
         self.count = sitestarlight.picker_data(REPO_ROOT / "install", self.out,
                                                 {"sony-playstation": "Sony PlayStation"})

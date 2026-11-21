@@ -24,7 +24,7 @@ class HashesAreReadOncePerContent(unittest.TestCase):
     per platform and entry, in one process."""
 
     def setUp(self):
-        self.dir = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.dir = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.dir, True)
         self.file = self.dir / "rom.bin"
         self.file.write_bytes(b"a" * 64)
@@ -52,7 +52,7 @@ class OneDigestLoopForFilesAndStreams(unittest.TestCase):
     DATA = bytes(range(256)) * 600  # over two 64 KiB reads
 
     def setUp(self):
-        self.dir = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.dir = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.dir, True)
         self.file = self.dir / "rom.bin"
         self.file.write_bytes(self.DATA)

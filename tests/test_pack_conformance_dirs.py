@@ -25,8 +25,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class ConformanceUsesTheRunDirectories(unittest.TestCase):
     def setUp(self):
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        self.tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
 
     def _args(self, split: bool) -> argparse.Namespace:

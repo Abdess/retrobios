@@ -179,9 +179,7 @@ class OneFileThroughTheBrowser(unittest.TestCase):
 
         from resolve import review
 
-        scratch = REPO_ROOT / "tmp" / "tests"
-        scratch.mkdir(parents=True, exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             (Path(directory) / "bios").mkdir()
             (Path(directory) / "bios" / "boot.rom").write_bytes(b"boot")
             from core.hashing import compute_hashes

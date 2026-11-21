@@ -720,7 +720,7 @@ class Flow(unittest.TestCase):
         self.assertIsNone(install.typed_path('""'))
 
     def test_the_browser_lists_folders_and_goes_up(self):
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         for name in ("system", ".config", "Bios"):
             (root / name).mkdir()
@@ -748,7 +748,7 @@ class Flow(unittest.TestCase):
         """With no usual folder the browser opens at HOME, on Use this
         folder: A five times installed the BIOS files into ~. At HOME or a
         drive's root, A goes into the first folder instead."""
-        home = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        home = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, home, True)
         (home / "Games").mkdir()
         state = install.TuiState(os_type="linux", home=home)
@@ -765,7 +765,7 @@ class Flow(unittest.TestCase):
             self.assertNotEqual(state.browse_rows[state.focus["browse"]].action, "use")
 
     def test_cards_are_listed_first(self):
-        card = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        card = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, card, True)
         (card / ".system").mkdir()
         (card / ".system" / "version.txt").write_text("NextUI-20250101\n")
@@ -775,7 +775,7 @@ class Flow(unittest.TestCase):
         self.assertEqual(rows[2].label, f"{card} (NextUI card)")
 
     def test_a_mounted_card_is_a_setup_of_its_own(self):
-        card = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        card = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, card, True)
         (card / ".system").mkdir()
         (card / ".system" / "version.txt").write_text("MinUI-20250101\n")
@@ -1856,7 +1856,7 @@ class ControlCharacters(unittest.TestCase):
         self.assertIn("?[2Jevil.bin", "\n".join(lines))
 
     def test_a_folder_name_in_the_browser(self):
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         (root / "x\x1b]52;c;x\x07").mkdir()
         state = fresh_state()
@@ -2092,7 +2092,7 @@ class CleanupSurvivesABrokenTerminal(unittest.TestCase):
             CleanupSurvivesABrokenTerminal.Tty.broken = True
 
         self.addCleanup(setattr, CleanupSurvivesABrokenTerminal.Tty, "broken", False)
-        work = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        work = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, work, True)
         with mock.patch.object(install._TuiTerminal, "draw", breaking_draw), \
                 mock.patch.object(install.tempfile, "mkdtemp", return_value=str(work)), \
@@ -2283,7 +2283,7 @@ class TicksBarAndPaths(unittest.TestCase):
                           "  50 files failed, all for one reason: folder not writable."])
 
     def test_folder_inside_a_card_offers_its_root(self):
-        card = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        card = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, card, True)
         (card / ".system").mkdir()
         (card / ".system" / "version.txt").write_text("MinUI-20250101\n")
@@ -2329,7 +2329,7 @@ class TicksBarAndPaths(unittest.TestCase):
         self.assertEqual(self.focused(state).action, "other")
         self.assertIn("Every folder of this path would be made",
                       " ".join(install.tui_view(state, 120, 40)))
-        near = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        near = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, near, True)
         install._choose(state, "retroarch", near / "bios")
         self.assertEqual(self.focused(state).action, "create")
@@ -2466,7 +2466,7 @@ class WorkFolders(unittest.TestCase):
             return [Key("enter")]
 
     def run_to(self, code: int) -> tuple:
-        work = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        work = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, work, True)
         state = checked_state()
         state.stack.append("result")
@@ -2547,7 +2547,7 @@ class WorkFolders(unittest.TestCase):
                 entered = []
                 WorkFolders.Terminal.state_to = lambda _t: None
                 out = io.StringIO()
-                work = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+                work = Path(tempfile.mkdtemp())
                 self.addCleanup(shutil.rmtree, work, True)
                 with mock.patch.object(install, "_TuiTerminal", self.Terminal), \
                         mock.patch.object(install.tempfile, "mkdtemp", return_value=str(work)), \
@@ -2585,7 +2585,7 @@ class CopyFromAnOldCard(unittest.TestCase):
             install.tui_receive(state, ("ended", state.run_id, 1, []))
 
     def test_the_plan_offers_it_and_the_browser_adds_the_folder(self):
-        old = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        old = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, old, True)
         (old / "bios").mkdir()
         (old / "backup.zip").write_bytes(b"PK")
@@ -2730,7 +2730,7 @@ class CardsSpaceAndConfirm(unittest.TestCase):
     }
 
     def card(self, files: dict) -> Path:
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         for name, text in files.items():
             path = root / name
@@ -3266,7 +3266,7 @@ class CardsSpaceAndConfirm(unittest.TestCase):
     def test_work_folders_left_behind_are_pruned(self):
         import subprocess
 
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         gone = subprocess.Popen([sys.executable, "-c", "pass"])
         gone.wait()
@@ -3362,7 +3362,7 @@ class IdleExit(unittest.TestCase):
                 return []
 
         out = io.StringIO()
-        work = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        work = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, work, True)
         with mock.patch.object(install, "_TuiTerminal", Quiet), \
                 mock.patch.object(install.tempfile, "mkdtemp", return_value=str(work)), \
@@ -3492,7 +3492,7 @@ class TheSaveFolderHasARow(unittest.TestCase):
         self.assertEqual((row.label, row.right),
                          (f"Save folder: {install._short_path(place.directory, HOME)}",
                           "--save-dir"))
-        saves = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        saves = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, saves, True)
         state.stack = ["setup", "plan", "options"]
         install._option(state, "savedir", 0)
@@ -3517,7 +3517,7 @@ class ACardSystemNamedOnAComputer(unittest.TestCase):
     ONION = {".tmp_update/onionVersion/version.txt": "4.3.1\n"}
 
     def card(self, files: dict) -> Path:
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         for name, text in files.items():
             (root / name).parent.mkdir(parents=True, exist_ok=True)
@@ -3534,7 +3534,7 @@ class ACardSystemNamedOnAComputer(unittest.TestCase):
         self.assertIsNone(install.card_bound("batocera", "batocera"))
 
     def test_without_questions_the_run_names_the_card_and_writes_nothing(self):
-        home = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        home = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, home, True)
         system = home / ".config" / "retroarch" / "system"
         system.mkdir(parents=True)
@@ -4592,7 +4592,7 @@ class AFolderThisUserCannotOpen(unittest.TestCase):
     typed on the folder screen it ended on a crash log."""
 
     def setUp(self):
-        base = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        base = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, base, True)
         self.lock = base / "lock"
         self.lock.mkdir()
@@ -4710,9 +4710,9 @@ class AGoesIntoASubfolder(unittest.TestCase):
     the BIOS files at its root) or .cache."""
 
     def setUp(self):
-        self.home = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.home = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.home, True)
-        self.card = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.card = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.card, True)
         self.state = install.TuiState(os_type="linux", home=self.home)
         self.state.platform = "retroarch"
@@ -4879,7 +4879,7 @@ class WindowsHasNoPosixModules(unittest.TestCase):
             kill.assert_called_once_with(0, install.signal.CTRL_C_EVENT)
 
     def test_work_folder_owner_and_partial_lock(self):
-        work = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        work = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, work, True)
         (work / install.TUI_OWNER).write_text(str(os.getpid()), encoding="utf-8")
         with SimulatedWindows() as windows:
@@ -4897,7 +4897,7 @@ class WindowsHasNoPosixModules(unittest.TestCase):
             console.broken = True
             real_draw(terminal, lines, cols)
 
-        work = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        work = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, work, True)
         with SimulatedWindows() as windows, \
                 mock.patch.object(install._TuiTerminal, "draw", breaking_draw), \
@@ -5088,8 +5088,7 @@ def _app_card(test: unittest.TestCase, system: str) -> tuple[Path, Path]:
     """A card of system in the repository's tmp/, its root and BIOS folder."""
     from tests.test_install_app import make_card
 
-    (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-    root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+    root = Path(tempfile.mkdtemp())
     test.addCleanup(shutil.rmtree, root, True)
     return root / "card", make_card(root / "card", system)
 
@@ -5242,7 +5241,6 @@ class EndToEnd(unittest.TestCase):
     """The real install.py --tui, keys in and screens out."""
 
     def repo(self, cls=FakeRepository, **options) -> FakeRepository:
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         repo = cls(**options)
         repo.__enter__()
         self.addCleanup(repo.__exit__, None, None, None)
@@ -5828,8 +5826,7 @@ def _terminfo_folder(test: unittest.TestCase) -> Path:
     """A $TERMINFO with a glass terminal, a VT52, two ANSI terminals of 8
     colours, one in the extended format, and two ANSI terminals without
     colour: one naming 2, one naming none (vt100)."""
-    (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-    folder = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+    folder = Path(tempfile.mkdtemp())
     test.addCleanup(shutil.rmtree, folder, True)
     ansi = "\x1b[%i%p1%d;%p2%dH"
     for name, cup, extended, colours in (
@@ -6334,7 +6331,7 @@ class CopyFromStartsInDownloads(unittest.TestCase):
     browser opened at HOME, under every mounted drive."""
 
     def test_a_zip_in_downloads_opens_there(self):
-        home = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        home = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, home, True)
         (home / "Downloads").mkdir()
         state = checked_state()
@@ -6372,7 +6369,7 @@ class AFocusesNoSystemFolder(unittest.TestCase):
     the recycle bin, which Use this folder then took as the BIOS folder."""
 
     def setUp(self):
-        self.home = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.home = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.home, True)
         self.state = install.TuiState(os_type="linux", home=self.home)
         self.state.platform = "retroarch"
@@ -6464,7 +6461,7 @@ class EveryCardSetupGoesToItsCard(unittest.TestCase):
     way in, goes to its card."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         self.setups = install.card_setups()
 
@@ -6686,7 +6683,7 @@ class ConfirmRefusalsAndCardRows(unittest.TestCase):
     """Confirm before an install, refusals said in full, and card rows."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
 
     def onion(self, name: str = "ONION") -> Path:
@@ -6968,7 +6965,7 @@ class OneCardReading(unittest.TestCase):
     of a card's root, said the same on the screen and in line mode."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         patcher = mock.patch.dict(install._DETECTED_OS, {})
         patcher.start()
@@ -7228,7 +7225,7 @@ class WhatEachScreenOffers(unittest.TestCase):
     """What each screen offers and says."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
 
     def setups(self, pad: str = "keys") -> install.TuiState:
@@ -7953,7 +7950,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
     platform and folder on both, A or Enter taking what each offers first."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         for patcher in (mock.patch.dict(install._DETECTED_OS, {}),
                         mock.patch.dict(os.environ, {"HOME": str(self.root / "home"),
@@ -9218,7 +9215,7 @@ class PacksWordingAndDocs(unittest.TestCase):
     LineModeAndScreenDecideAlike."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         install.LOCAL.reset()
         self.addCleanup(install.LOCAL.reset)
@@ -9670,7 +9667,7 @@ class CardFoldersAndNarrowBars(unittest.TestCase):
     them."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         patcher = mock.patch.dict(install._DETECTED_OS, {})
         patcher.start()
@@ -9855,7 +9852,7 @@ class CardBoundaries(unittest.TestCase):
     seen, a folder named MUOS taken for a card, ismount unprobed."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
 
     def choice(self, folder: Path, points=frozenset()) -> install.CardChoice:
@@ -9909,7 +9906,7 @@ class LineModeDecisions(unittest.TestCase):
     no Enter default, a folder question with no way out)."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         for patcher in (mock.patch.dict(install._DETECTED_OS, {}),
                         mock.patch.dict(os.environ, {"HOME": str(self.root / "home"),
@@ -10093,7 +10090,7 @@ class ScreenRowsAndFilters(unittest.TestCase):
     """Rows, filters and help as the screens draw them."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         patcher = mock.patch.dict(install._DETECTED_OS, {})
         patcher.start()
@@ -10246,7 +10243,7 @@ class ScreenRowsAndFilters(unittest.TestCase):
         """Cut after "copied,". On the CI runner /home
         held three folders, and the list cut the hint: it is kept whole,
         the list scrolling, from a folder of this test's own."""
-        home = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        home = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, home, True)
         for name in ("linuxbrew", "packer", "runner"):
             (home / name).mkdir()
@@ -10372,8 +10369,7 @@ class EdgesTheMutantsFound(unittest.TestCase):
                           Path("/mnt/g/RetroArch/cores")))
 
     def card(self, system: str) -> Path:
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         make_card(root / "card", system)
         return root / "card"
@@ -10420,8 +10416,7 @@ class CardNamesAndHelp(_CardFixtures, unittest.TestCase):
     docs answer, line mode's parity being in LineModeAndScreenDecideAlike."""
 
     def setUp(self):
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         install.LOCAL.reset()
         self.addCleanup(install.LOCAL.reset)
@@ -10662,8 +10657,7 @@ class TheAndroidResultReadsWhole(unittest.TestCase):
     and the game data line named no folder."""
 
     def setUp(self):
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         for patcher in (mock.patch.dict(install._SPELLED, {}, clear=True),):
             patcher.start()
@@ -11332,8 +11326,7 @@ class TapsGameDataAndExitCodes(_CardFixtures, unittest.TestCase):
     parity being in LineModeAndScreenDecideAlike."""
 
     def setUp(self):
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         install.LOCAL.reset()
         self.addCleanup(install.LOCAL.reset)
@@ -12481,7 +12474,7 @@ class TheUsageNamesTheInstaller(unittest.TestCase):
     the name install.ps1 gives its copy."""
 
     def test_a_copy_under_a_temporary_name_says_install_py(self):
-        scratch = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        scratch = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, scratch, True)
         copy = scratch / "retrobios-install-33826e0b-37cc-4ad3-a6c4-6ed168e3fe9e.py"
         shutil.copyfile(REPO_ROOT / "install.py", copy)
@@ -13642,7 +13635,7 @@ class EachDataTreeReadOnce(unittest.TestCase):
     on an SD card through a reader."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         self.dest = self.root / "bios"
         bios = b"bios bytes"
@@ -15979,7 +15972,7 @@ class DeviceAndEmulatorScreens(unittest.TestCase):
             self.assertNotIn(("--offline", None), install.tui_flags(state))
 
     def test_from_a_pack_opens_the_browser_on_zips_and_reads_the_pack(self):
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         (root / "Downloads").mkdir()
         pack = root / "Downloads" / "RetroArch_BIOS_Pack.zip"
@@ -16009,7 +16002,7 @@ class DeviceAndEmulatorScreens(unittest.TestCase):
         self.assertIn(("--from-pack", str(pack)), install.tui_flags(state))
 
     def test_open_tui_pack_refuses_another_platforms_pack(self):
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         pack = root / "Batocera_BIOS_Pack.zip"
         with zipfile.ZipFile(pack, "w") as archive:
@@ -16071,7 +16064,7 @@ class ScreenChoicesInstallWhatTheirFlagInstalls(unittest.TestCase):
         patcher = mock.patch.object(install, "_mounted_cards", return_value=[])
         patcher.start()
         self.addCleanup(patcher.stop)
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         self.listed, self.copies = _parity_list(self.root)
         self.manifest = json.loads(self.listed.read_text())
@@ -16294,7 +16287,7 @@ class DeviceAndEmulatorReview(unittest.TestCase):
         self.assertEqual(state.packs, [])
 
     def test_open_tui_pack_leaves_the_run_s_pack_alone(self):
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         pack = root / "RetroArch_BIOS_Pack.zip"
         with zipfile.ZipFile(pack, "w") as archive:
@@ -16310,7 +16303,7 @@ class DeviceAndEmulatorReview(unittest.TestCase):
         self.assertIs(install.LOCAL.pack, previous)
 
     def test_a_zip_that_is_no_pack_is_closed(self):
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         notpack = root / "photos.zip"
         with zipfile.ZipFile(notpack, "w") as archive:

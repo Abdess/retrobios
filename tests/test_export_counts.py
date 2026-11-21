@@ -930,7 +930,7 @@ class AStaleTruthIsRefused(unittest.TestCase):
         from exporter.native import load_inputs, StaleTruth
 
         root = Path(__file__).resolve().parents[1]
-        truth_dir = Path(tempfile.mkdtemp(dir=root / "tmp"))
+        truth_dir = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, truth_dir, True)
         (truth_dir / "retropie.yml").write_text("platform: retropie\nsystems: {}\n")
         with self.assertRaises(StaleTruth):

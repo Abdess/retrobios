@@ -27,7 +27,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class TheAcceptedChecksumWins(unittest.TestCase):
     def setUp(self):
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         self.old = root / "bios/Sys/GC/dsp_rom.bin"
         self.good = root / "bios/.variants/dsp_rom.bin.good"
@@ -73,7 +73,7 @@ class TheTwoRomsFormAPairTheCodeTakes(unittest.TestCase):
     plus official coef, which its known_roms table refuses."""
 
     def setUp(self):
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         held = {
             ("dsp_rom.bin", root / "bios/Sys/GC/dsp_rom.bin"): b"\x01\x02" * 8,

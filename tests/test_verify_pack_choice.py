@@ -33,7 +33,7 @@ class VerifyPackChoice(unittest.TestCase):
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
         self.addCleanup(os.chdir, previous)
-        self.tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.out = Path(self.tmp.name)
         self.db = self.out / "db.json"
@@ -182,7 +182,7 @@ class GroupRenameKeepsSystemTag(unittest.TestCase):
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
         self.addCleanup(os.chdir, previous)
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             def fake_generate(*a, pack_name=None, **kw):
                 # The group's name is handed in: nothing is renamed afterwards.
                 built = Path(tmp) / (

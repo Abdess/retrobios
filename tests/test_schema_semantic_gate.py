@@ -147,9 +147,7 @@ class WithoutJsonschema(unittest.TestCase):
         import os
         import subprocess
 
-        scratch = REPO_ROOT / "tmp" / "tests"
-        scratch.mkdir(parents=True, exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             stub = Path(directory) / "jsonschema"
             stub.mkdir()
             (stub / "__init__.py").write_text(

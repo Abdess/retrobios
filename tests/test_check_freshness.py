@@ -670,7 +670,7 @@ class RepositoryWiringTests(unittest.TestCase):
         import tempfile
         from pathlib import Path as _Path
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             targets = _Path(tmp) / "targets"
             targets.mkdir()
             (targets / "solo.yml").write_text(
@@ -688,7 +688,7 @@ class RepositoryWiringTests(unittest.TestCase):
         scraped = sorted(cf._target_scrapers())
         self.assertTrue(scraped)
         platform = scraped[0]
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             targets = _Path(tmp) / "targets"
             targets.mkdir()
             (targets / f"{platform}.yml").write_text(

@@ -183,7 +183,7 @@ class AnUnfetchedUpstreamIsFetched(unittest.TestCase):
         subprocess.run(["git", *args], cwd=cwd, check=True, capture_output=True, text=True)
 
     def test_the_branch_file_is_found(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             project = root / "Abdess" / "retrobios.git"
             fork = root / "fork.git"

@@ -37,7 +37,7 @@ def _site(root: Path, words: str = "Words of the page.") -> Path:
 
 class BuildStamp(unittest.TestCase):
     def setUp(self):
-        self.tmp = tempfile.TemporaryDirectory(dir=ROOT / "tmp")
+        self.tmp = tempfile.TemporaryDirectory()
         self.dist = _site(Path(self.tmp.name))
         pagemarkdown.convert_site(self.dist, STAMP)
 
@@ -63,7 +63,7 @@ class BuildStamp(unittest.TestCase):
 
     def test_digests_ignore_the_build_line(self):
         first = json.loads((self.dist / "digests.json").read_text(encoding="utf-8"))
-        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as other:
+        with tempfile.TemporaryDirectory() as other:
             dist = _site(Path(other))
             pagemarkdown.convert_site(dist, {"commit": "f" * 40, "date": "2026-11-10T00:00:00Z"})
             second = json.loads((dist / "digests.json").read_text(encoding="utf-8"))
@@ -83,7 +83,7 @@ class IndexNowList(unittest.TestCase):
     def test_the_key_is_served_where_the_request_says(self):
         body = indexnow.payload(["https://abdess.github.io/retrobios/"])
         self.assertEqual(body["keyLocation"], "https://abdess.github.io/retrobios/indexnow.txt")
-        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as public:
+        with tempfile.TemporaryDirectory() as public:
             written: dict[str, str] = {}
             siteagents.write(Path(public), [], lambda path, text: written.__setitem__(path, text))
             self.assertEqual(written[str(Path(public) / "indexnow.txt")].strip(), body["key"])

@@ -200,9 +200,7 @@ class AnEmptyExtractionKeepsTheCache(unittest.TestCase):
     directory, recorded the version and reported success."""
 
     def setUp(self):
-        scratch = Path(__file__).resolve().parent.parent / "tmp"
-        scratch.mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(dir=scratch))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         self.cache = self.root / "cache"
         self.cache.mkdir()
@@ -241,7 +239,7 @@ class TheVersionIsReadBeforeTheDownload(unittest.TestCase):
     def test_a_build_published_during_the_download(self):
         from packs import datadirs
 
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         state = {"downloaded": False}
 
@@ -266,7 +264,7 @@ class ABadResponseIsTriedAgain(unittest.TestCase):
     failed the whole data step on it, and the next download was fine."""
 
     def setUp(self) -> None:
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         self.versions = str(root / "versions.json")
         self.entry = {"source_type": "zip", "source_url": "https://example.invalid/S.zip",

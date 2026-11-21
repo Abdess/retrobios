@@ -41,7 +41,7 @@ class SystemPackMatchesVerify(unittest.TestCase):
     def setUp(self):
         if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
-        self.out = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.out = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.out, True)
 
     def test_the_same_files_are_missing(self):

@@ -186,7 +186,7 @@ class EveryPageHasALevel(unittest.TestCase):
                 self.assertIn(f"{level}: '{label}'", component)
 
     def test_the_decoration_keeps_an_authored_level(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             page = Path(tmp) / "wiki" / "faq.md"
             page.parent.mkdir()
             page.write_text("---\nlevel: start\n---\n\n# FAQ\n\nQuestions people ask first.\n")

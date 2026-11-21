@@ -36,7 +36,7 @@ def _wanted(data: bytes) -> dict:
 
 class HeldDumpsAnswerCatalogEntries(unittest.TestCase):
     def setUp(self):
-        self.tmp = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.tmp, True)
 
     def test_combine_agrees_with_zlib(self):
@@ -74,7 +74,7 @@ class ARomsetMemberIsASource(unittest.TestCase):
     def test_members_derive_and_concatenate(self):
         import zipfile
 
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         chip, low, high = os.urandom(64), os.urandom(32), os.urandom(32)
         archive = root / "set.zip"
@@ -111,7 +111,7 @@ class OneContentIsTransformedOnce(unittest.TestCase):
     def test_a_repeated_chip_is_transformed_once_and_keeps_its_first_path(self):
         import zipfile
 
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         chip = os.urandom(64)
         files = {}

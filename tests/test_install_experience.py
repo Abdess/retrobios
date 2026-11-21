@@ -514,7 +514,7 @@ class AStoppedRunCountsWhatLanded(unittest.TestCase):
         self.addCleanup(httpd.server_close)
         self.addCleanup(httpd.shutdown)
         self.addCleanup(_HeldHandler.release.set)
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             dest = Path(tmp) / "bios"
             env = dict(os.environ,
                        RETROBIOS_BASE_URL=f"http://127.0.0.1:{httpd.server_address[1]}")
@@ -760,7 +760,7 @@ class ASettingsFileThisUserCannotRead(unittest.TestCase):
     word on the file, where the same refusal on retroarch.cfg is said."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         install._DETECTION_REFUSED.clear()
         self.addCleanup(install._DETECTION_REFUSED.clear)
@@ -789,7 +789,7 @@ class AConfigThatFailsToRead(unittest.TestCase):
     refusal was said. Absence itself stays silent."""
 
     def setUp(self):
-        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.root, True)
         install._DETECTION_REFUSED.clear()
         self.addCleanup(install._DETECTION_REFUSED.clear)
@@ -860,7 +860,7 @@ class ARefusalTheProbeDoesNotRaise(unittest.TestCase):
     @unittest.skipIf(os.name == "nt" or os.geteuid() == 0,
                      "a folder without search permission is POSIX")
     def test_a_quiet_false_is_still_told_from_absence(self):
-        base = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        base = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, base, True)
         closed = base / "closed"
         closed.mkdir()
@@ -940,7 +940,7 @@ class RetroDeckBiosFolderNamedAsDest(unittest.TestCase):
     BIOS folder, put every file under bios/bios, which RetroDECK never reads."""
 
     def test_the_files_go_below_the_retrodeck_folder(self):
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         (root / "bios").mkdir()
         choice = install.card_choice("retrodeck", "retrodeck", root / "bios")
@@ -949,7 +949,7 @@ class RetroDeckBiosFolderNamedAsDest(unittest.TestCase):
         self.assertFalse(choice.refused)
 
     def test_the_retrodeck_folder_itself_is_kept(self):
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         (root / "bios").mkdir()
         choice = install.card_choice("retrodeck", "retrodeck", root)
@@ -1042,7 +1042,7 @@ class OutputToAFileAsksNothing(unittest.TestCase):
         with open(read, "rb") as reader, open(write, "w") as writer:
             self.assertEqual(install._output_kind(writer), "pipe")
             del reader
-        with tempfile.TemporaryFile("w", dir=REPO_ROOT / "tmp") as handle:
+        with tempfile.TemporaryFile("w") as handle:
             self.assertEqual(install._output_kind(handle), "file")
 
 
@@ -1128,7 +1128,7 @@ class SmallWordings(unittest.TestCase):
         self.assertNotIn("Install for:", out.getvalue())
 
     def test_nothing_detected_is_said(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as home:
+        with tempfile.TemporaryDirectory() as home:
             env = dict(os.environ, HOME=home, USERPROFILE=home, XDG_CONFIG_HOME=home,
                        RETROBIOS_OS="linux")
             proc = subprocess.run(
@@ -1203,7 +1203,7 @@ class AClosedFolderBehindALink(unittest.TestCase):
     that loops was named by its open parent."""
 
     def setUp(self):
-        self.base = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.base = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.base, True)
         self.home = self.base / "home"
         self.home.mkdir()
@@ -1243,7 +1243,7 @@ class TheQuietConfigReadSaysNothing(unittest.TestCase):
     the human output never showed."""
 
     def test_no_event_and_no_line(self):
-        base = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        base = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, base, True)
         closed = base / "home" / ".config" / "EmuDeck"
         closed.mkdir(parents=True)
@@ -1320,7 +1320,7 @@ class NotFoundWithAClosedFolder(unittest.TestCase):
                                   if e["event"] == "error"], [("detect", "not_found")])
 
     def test_the_manual_prompt_says_why_there_is_no_default(self):
-        home = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        home = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, home, True)
         asked = []
         install._DETECTION_REFUSED[:] = [(home / ".config" / "EmuDeck", "Permission denied")]

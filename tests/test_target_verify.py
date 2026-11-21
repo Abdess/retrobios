@@ -149,7 +149,7 @@ class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
                 asked.append(kw["system_filter"])
             return
 
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out, \
+        with tempfile.TemporaryDirectory() as out, \
                 mock.patch.object(platformpack, "generate_pack", record), \
                 mock.patch.object(platformpack, "collect_emulator_extras", return_value=[]), \
                 mock.patch.object(manifest, "collect_emulator_extras", return_value=[]):
@@ -225,7 +225,7 @@ class TheSplitDirectoryReadsThePackStem(unittest.TestCase):
         from packs import platformpack as packs_platformpack
 
         config = {"platform": "Foo: Bar", "version": "release/1.22", "systems": {}}
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out, \
+        with tempfile.TemporaryDirectory() as out, \
                 mock.patch.object(packs_platformpack, "load_platform_config", return_value=config), \
                 mock.patch.object(naming, "load_platform_config", return_value=config), \
                 mock.patch.object(manifest, "load_platform_config", return_value=config), \

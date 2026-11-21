@@ -118,7 +118,7 @@ class AMistypedPlatformIsNamed(unittest.TestCase):
     }
 
     def test_every_cli_names_the_platform_it_meant(self):
-        scratch = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        scratch = tempfile.TemporaryDirectory()
         self.addCleanup(scratch.cleanup)
         out = Path(scratch.name) / "packs"
         writers = {
@@ -220,7 +220,7 @@ class AMissingDatabaseIsNamed(unittest.TestCase):
         )
 
     def test_every_script_names_the_missing_file(self):
-        scratch = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        scratch = tempfile.TemporaryDirectory()
         self.addCleanup(scratch.cleanup)
         out = str(Path(scratch.name) / "out")
         for script in self._taking_db():
@@ -249,7 +249,7 @@ class AMissingBiosDirIsRefused(unittest.TestCase):
     }
 
     def test_every_script_taking_a_bios_dir_refuses_a_missing_one(self):
-        scratch = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        scratch = tempfile.TemporaryDirectory()
         self.addCleanup(scratch.cleanup)
         out = str(Path(scratch.name) / "out")
         taking = sorted(
@@ -306,7 +306,7 @@ class AMissingProfileDirIsRefused(unittest.TestCase):
     }
 
     def test_every_script_taking_an_emulators_dir_refuses_a_missing_one(self):
-        scratch = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        scratch = tempfile.TemporaryDirectory()
         self.addCleanup(scratch.cleanup)
         root = Path(scratch.name)
         (root / "cache").mkdir()
@@ -364,7 +364,7 @@ class AMissingPlatformsDirIsRefused(unittest.TestCase):
     }
 
     def test_every_script_taking_a_platforms_dir_refuses_a_missing_one(self):
-        scratch = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        scratch = tempfile.TemporaryDirectory()
         self.addCleanup(scratch.cleanup)
         root = Path(scratch.name)
         (root / "empty.dat").write_bytes(b"")
@@ -423,7 +423,7 @@ class AMissingInputFileIsNamed(unittest.TestCase):
         self.assertIn(message, proc.stderr)
 
     def test_a_missing_hash_list_is_named(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             self._refused(
                 ["scripts/generate_pack.py", "--platform", "batocera", "--from-md5-file",
                  "nosuch.txt", "--offline", "--output-dir", tmp],
@@ -513,7 +513,7 @@ class StrictVerifyFailsOnACriticalMiss(unittest.TestCase):
     the pipeline printed "verify OK" over a pack the frontend rejects."""
 
     def test_strict_exits_nonzero_and_plain_does_not(self):
-        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "plat").mkdir()
             (root / "emu").mkdir()
@@ -632,8 +632,7 @@ class ASystemPackHoldsThatSystem(unittest.TestCase):
         from packs.emulatorcheck import verify_system
 
         emulator_profiles_cache.clear()
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         previous = os.getcwd()
         os.chdir(root)
@@ -686,8 +685,7 @@ class ATreeHoldsAPathForAnotherProfile(unittest.TestCase):
         from packs.emulatorcheck import verify_emulator
 
         emulator_profiles_cache.clear()
-        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
-        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         previous = os.getcwd()
         os.chdir(root)

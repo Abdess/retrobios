@@ -41,7 +41,7 @@ class _Inputs(unittest.TestCase):
 
 class TheGivenDatabase(_Inputs):
     def setUp(self) -> None:
-        tmp = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp" if (REPO_ROOT / "tmp").is_dir() else None))
+        tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, tmp)
         self.db = tmp / "database.json"
         self.db.write_text(json.dumps({"files": {SHA1: {"path": "bios/X/only-here.bin"}}}))
@@ -58,7 +58,7 @@ class TheGivenDatabase(_Inputs):
 
 class TheGivenProfilesAndPlatforms(_Inputs):
     def setUp(self) -> None:
-        tmp = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp" if (REPO_ROOT / "tmp").is_dir() else None))
+        tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, tmp)
         self.emulators = tmp / "emulators"
         self.emulators.mkdir()
@@ -103,7 +103,7 @@ class TheCollectionDoesNotDependOnTheWorkingDirectory(unittest.TestCase):
         db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
         here = sitecollection.collection_paths(db)
         places = sitecollection.copy_places(db)
-        elsewhere = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp" if (REPO_ROOT / "tmp").is_dir() else None))
+        elsewhere = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, elsewhere)
         cwd = os.getcwd()
         os.chdir(elsewhere)
