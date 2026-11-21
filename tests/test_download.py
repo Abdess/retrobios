@@ -340,8 +340,8 @@ class ReleaseServer:
         self.httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
         self.base = f"http://127.0.0.1:{self.httpd.server_address[1]}"
 
-        index = self.root / "repos" / "Abdess" / "retrobios" / "releases"
-        index.mkdir(parents=True)
+        releases = self.root / "repos" / "Abdess" / "retrobios" / "releases"
+        releases.mkdir(parents=True)
         assets = [
             {
                 "name": name,
@@ -350,7 +350,7 @@ class ReleaseServer:
             }
             for name in self.names + ["SHA256SUMS.txt"]
         ]
-        self.index = index / "latest"
+        self.index = releases / "latest"
         self.index.write_text(json.dumps({"assets": assets}))
         threading.Thread(target=self.httpd.serve_forever, daemon=True).start()
 
@@ -721,7 +721,7 @@ class AProgressBarOnlyOnATerminal(unittest.TestCase):
                 return False
 
         class Cut(Body):
-            def read(self, size: int = -1) -> bytes:
+            def read(self, size: int | None = -1) -> bytes:
                 raise http.client.IncompleteRead(b"pa")
 
         answers = [Cut(b""), Body(b"packed")]

@@ -365,7 +365,7 @@ class ProfilesStateFactsAboutOtherProjects(unittest.TestCase):
 
 class NoClauseSemicolons(unittest.TestCase):
     def _check(self, files: list[Path], extract) -> None:
-        offenders = []
+        offenders: list[str] = []
         for path in files:
             text = path.read_text(encoding="utf-8")
             offenders.extend(

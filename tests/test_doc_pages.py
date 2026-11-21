@@ -41,7 +41,7 @@ _section = functools.partial(mdsections.section, stop=6)
 
 
 def _table_rows(text: str) -> list[list[str]]:
-    rows = []
+    rows: list[list[str]] = []
     rows.extend(
         [cell.strip() for cell in line.strip().strip("|").split(" | ")]
         for line in text.splitlines()
@@ -79,8 +79,9 @@ class TestSkeletonReadsTheResultShape(unittest.TestCase):
 
 def _generated(text: str, name: str) -> str:
     """The body scripts/generate_installer_doc.py writes between the markers."""
-    return re.search(rf"(?s)<!-- generated: {name} -->\n(.*?)<!-- /generated: {name} -->",
-                     text).group(1)
+    body = re.search(rf"(?s)<!-- generated: {name} -->\n(.*?)<!-- /generated: {name} -->", text)
+    assert body is not None, f"no generated: {name} markers"
+    return body.group(1)
 
 
 class InstallerOutputExample(unittest.TestCase):
@@ -162,6 +163,7 @@ class InstallerOutputExample(unittest.TestCase):
         split = re.search(r"(\d+) BIOS files \(([\d.]+) ([KMG]B)\)(?:,| and) (\d+) game data "
                           r"files \(([\d.]+) ([KMG]B)\)", text)
         self.assertIsNotNone(split, "a categorized list says its BIOS files and game data")
+        assert split is not None
         bios, bios_size, bios_unit, games, game_size, game_unit = split.groups()
         # The data files in the one total, the third kind.
         data = re.search(r"and (\d+) data files \(([\d.]+) ([KMG]B)\)", text)
@@ -279,7 +281,7 @@ class RequirementFieldsTable(unittest.TestCase):
     the native dict, the fields that make a platform YAML reversible, were
     named nowhere a scraper author reads first."""
 
-    def test_every_field_and_native_key_is_listed(self):
+    def test_every_field_and_native_key_is_listed(self) -> None:
         from dataclasses import fields
 
         from scraper.base_scraper import BiosRequirement
@@ -585,7 +587,7 @@ class ToolsRunOnTheStatedFloor(unittest.TestCase):
         return isinstance(node, ast.Name) and node.id in self.TYPES
 
     def _runtime_unions(self, tree: ast.AST) -> list[int]:
-        annotations = set()
+        annotations: set[int] = set()
         for node in ast.walk(tree):
             for field in ("annotation", "returns"):
                 value = getattr(node, field, None)
@@ -1518,8 +1520,8 @@ def stale_options(text: str, default: str | None) -> list[str]:
     commands = []
     for block in FENCED.findall(text):
         commands += [line for line in block.splitlines()[1:-1] if not line.lstrip().startswith("#")]
-    page_scripts = {_owner(command) for command in commands} - {None}
-    stale = []
+    page_scripts = {owner for command in commands if (owner := _owner(command))}
+    stale: list[str] = []
     for line in commands:
         for part in re.split(r"\s+&&\s+|;\s+|\|\s+(?!sh\b)", line):
             if not part or part.lstrip().startswith(FOREIGN_COMMANDS):
@@ -1565,7 +1567,7 @@ def _literals() -> str:
     texts = []
     for node in ast.walk(ast.parse((ROOT / "install.py").read_text(encoding="utf-8"))):
         if isinstance(node, ast.JoinedStr):
-            texts.append("".join(value.value if isinstance(value, ast.Constant) else "\x01"
+            texts.append("".join(str(value.value) if isinstance(value, ast.Constant) else "\x01"
                                  for value in node.values))
         elif isinstance(node, ast.Constant) and isinstance(node.value, str):
             texts.append(node.value)
