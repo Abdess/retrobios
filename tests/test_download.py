@@ -33,6 +33,7 @@ from pathlib import Path
 from unittest import mock
 
 from packs import parts as packs_parts
+from release import packfetch, packgroups, transfer
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 _spec = importlib.util.spec_from_file_location(
@@ -84,12 +85,12 @@ class TestPackGrouping(unittest.TestCase):
         self.assertIn("EmuDeck", out.getvalue())
 
     def test_whole_pack_has_one_part(self):
-        packs = download.group_packs(_release(["EmuDeck_2.3.8_BIOS_Pack.zip"]))
+        packs = packgroups.group_packs(_release(["EmuDeck_2.3.8_BIOS_Pack.zip"]))
         self.assertEqual([p.name for p in packs], ["EmuDeck_2.3.8_BIOS_Pack.zip"])
         self.assertEqual(len(packs[0].parts), 1)
 
     def test_volumes_group_into_one_pack(self):
-        packs = download.group_packs(
+        packs = packgroups.group_packs(
             _release(
                 [
                     "Batocera_43.1_BIOS_Pack.zip.001",
@@ -107,7 +108,7 @@ class TestPackGrouping(unittest.TestCase):
         )
 
     def test_pack_size_is_the_sum_of_its_volumes(self):
-        packs = download.group_packs(
+        packs = packgroups.group_packs(
             _release(
                 [
                     "Batocera_43.1_BIOS_Pack.zip.001",
@@ -119,7 +120,7 @@ class TestPackGrouping(unittest.TestCase):
         self.assertEqual(packs[0].size, 14)
 
     def test_volumes_order_numerically_not_lexically(self):
-        packs = download.group_packs(
+        packs = packgroups.group_packs(
             _release(
                 [
                     "Big_BIOS_Pack.zip.010",
@@ -134,7 +135,7 @@ class TestPackGrouping(unittest.TestCase):
         )
 
     def test_zip_parts_group_into_one_pack(self):
-        packs = download.group_packs(
+        packs = packgroups.group_packs(
             _release(
                 [
                     "Batocera_43.1_BIOS_Pack.part2of2.zip",
@@ -160,7 +161,7 @@ class TestPackGrouping(unittest.TestCase):
 
     def test_zip_parts_order_numerically_not_lexically(self):
         names = [f"Big_BIOS_Pack.part{n}of12.zip" for n in (10, 9, 1)]
-        pack = download.group_packs(_release(names))[0]
+        pack = packgroups.group_packs(_release(names))[0]
         self.assertEqual(
             [part["name"] for part in pack.parts],
             [f"Big_BIOS_Pack.part{n}of12.zip" for n in (1, 9, 10)],
@@ -168,34 +169,34 @@ class TestPackGrouping(unittest.TestCase):
         self.assertEqual(pack.expected_parts, 12)
 
     def test_byte_range_volumes_are_joined(self):
-        pack = download.group_packs(
+        pack = packgroups.group_packs(
             _release(["Old_BIOS_Pack.zip.001", "Old_BIOS_Pack.zip.002"])
         )[0]
         self.assertTrue(pack.joined)
 
     def test_other_assets_are_not_packs(self):
-        packs = download.group_packs(_release(["SHA256SUMS.txt", "database.json"]))
+        packs = packgroups.group_packs(_release(["SHA256SUMS.txt", "database.json"]))
         self.assertEqual(packs, [])
 
     def test_list_platforms_names_split_packs(self):
-        names = download.list_platforms(_release(RELEASE_ASSETS))
+        names = packgroups.list_platforms(_release(RELEASE_ASSETS))
         self.assertIn("Batocera 43.1", names)
         self.assertIn("RetroDECK 0.10.9b", names)
         self.assertEqual(len(names), 5)
 
     def test_find_pack_resolves_a_split_platform(self):
-        pack = download.find_pack(_release(RELEASE_ASSETS), "batocera")
+        pack = packgroups.find_pack(_release(RELEASE_ASSETS), "batocera")
         self.assertIsNotNone(pack)
         self.assertEqual(pack.name, "Batocera_43.1_BIOS_Pack.zip")
         self.assertEqual(len(pack.parts), 2)
 
     def test_find_pack_maps_retroarch_to_the_lakka_asset(self):
-        pack = download.find_pack(_release(RELEASE_ASSETS), "retroarch")
+        pack = packgroups.find_pack(_release(RELEASE_ASSETS), "retroarch")
         self.assertEqual(pack.name, "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip")
 
     def test_find_pack_prefers_the_full_pack_to_a_target_pack(self):
         names = ["RetroArch_v1.22.2_AndroidArm64V8A_BIOS_Pack.zip", "RetroArch_v1.22.2_BIOS_Pack.zip"]
-        pack = download.find_pack(_release(names), "retroarch")
+        pack = packgroups.find_pack(_release(names), "retroarch")
         self.assertEqual(pack.name, "RetroArch_v1.22.2_BIOS_Pack.zip")
 
     def test_find_pack_reads_the_record_of_this_release(self):
@@ -205,20 +206,20 @@ class TestPackGrouping(unittest.TestCase):
         }}
         release = {**_release(["RetroArch_Lakka_v1.22.2_BIOS_Pack.zip",
                                "RetroArch_v1.22.2_BIOS_Pack.zip"]), "tag_name": "v1"}
-        with mock.patch.object(download, "load_record", return_value=record):
-            self.assertEqual(download.find_pack(release, "lakka").name,
+        with mock.patch.object(packgroups, "load_record", return_value=record):
+            self.assertEqual(packgroups.find_pack(release, "lakka").name,
                              "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip")
-            self.assertIsNone(download.find_pack(release, "batocera"))
-        with mock.patch.object(download, "load_record", return_value={**record, "tag": "v0"}):
-            self.assertEqual(download.find_pack(release, "lakka").name,
+            self.assertIsNone(packgroups.find_pack(release, "batocera"))
+        with mock.patch.object(packgroups, "load_record", return_value={**record, "tag": "v0"}):
+            self.assertEqual(packgroups.find_pack(release, "lakka").name,
                              "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip")
 
     def test_find_pack_returns_none_for_an_unknown_platform(self):
-        self.assertIsNone(download.find_pack(_release(RELEASE_ASSETS), "nintendo"))
+        self.assertIsNone(packgroups.find_pack(_release(RELEASE_ASSETS), "nintendo"))
 
     def test_find_pack_resolves_a_platform_id_that_drops_separators(self):
         # The platform is `misterfpga` everywhere else, but the asset is MiSTer_FPGA.
-        pack = download.find_pack(
+        pack = packgroups.find_pack(
             _release(RELEASE_ASSETS + ["MiSTer_FPGA_2026-08-29_BIOS_Pack.zip"]),
             "misterfpga",
         )
@@ -243,7 +244,7 @@ class TestJoinVolumes(unittest.TestCase):
         self.assertGreater(len(parts), 1)
 
         joined = tmp / "joined.zip"
-        download.join_volumes(parts, joined)
+        packfetch.join_volumes(parts, joined)
 
         self.assertEqual(joined.read_bytes(), raw)
         with zipfile.ZipFile(joined) as zf:
@@ -255,21 +256,17 @@ class TestProgressLineWidth(unittest.TestCase):
     redraw wrapped and left a line behind."""
 
     def test_the_line_fits_every_width(self):
-        from download import _progress_line
-
         for columns in (20, 40, 80, 120, 200):
             for done in (0, 1_000_000_000, 2_000_000_000):
                 with self.subTest(columns=columns, done=done):
-                    line = _progress_line("part 1/2 ", done, 2_000_000_000, columns)
+                    line = transfer.progress_line("part 1/2 ", done, 2_000_000_000, columns)
                     self.assertLess(len(line), columns)
                     self.assertIn("%", line)
 
     def test_the_figures_read_like_the_site(self):
         """The bar counted decimal megabytes (8,127 MB) where --info and the
         site gave the same pack as 7.6 GB."""
-        from download import _progress_line
-
-        line = _progress_line("", 1024**3, 8_127_352_876, 200)
+        line = transfer.progress_line("", 1024**3, 8_127_352_876, 200)
         self.assertTrue(line.endswith(" 13% (1.0 GB/7.6 GB)"), line)
 
 
@@ -281,16 +278,16 @@ class TestStagingIsolation(unittest.TestCase):
         self.addCleanup(shutil.rmtree, self.dest, True)
 
     def test_two_runs_stage_in_separate_directories(self):
-        first = download.make_staging(self.dest)
-        second = download.make_staging(self.dest)
+        first = packfetch.make_staging(self.dest)
+        second = packfetch.make_staging(self.dest)
         self.assertNotEqual(first, second)
         for staging in (first, second):
             self.assertEqual(staging.parent, self.dest)
-            self.assertTrue(staging.name.startswith(download.STAGING_PREFIX))
+            self.assertTrue(staging.name.startswith(packfetch.STAGING_PREFIX))
 
     def test_one_run_cleaning_up_leaves_the_other_transfer_alone(self):
-        finished = download.make_staging(self.dest)
-        in_flight = download.make_staging(self.dest)
+        finished = packfetch.make_staging(self.dest)
+        in_flight = packfetch.make_staging(self.dest)
         (in_flight / "Batocera_BIOS_Pack.zip").write_bytes(b"still downloading")
 
         # What main() does in its finally clause once a pack is extracted.
@@ -699,8 +696,6 @@ class AProgressBarOnlyOnATerminal(unittest.TestCase):
         from pathlib import Path as _Path
         from unittest import mock
 
-        import download
-
         class Body(_io.BytesIO):
             headers = {"Content-Length": str(200_000)}
 
@@ -712,10 +707,10 @@ class AProgressBarOnlyOnATerminal(unittest.TestCase):
 
         out = _io.StringIO()
         with _tempfile.TemporaryDirectory() as directory, \
-                mock.patch.object(download.urllib.request, "urlopen",
+                mock.patch.object(transfer.urllib.request, "urlopen",
                                   lambda *a, **k: Body(b"x" * 200_000)), \
                 contextlib.redirect_stdout(out):
-            download.download_file("https://example.com/a.zip",
+            transfer.download_file("https://example.com/a.zip",
                                    _Path(directory) / "a.zip", 200_000, "a.zip ")
         self.assertNotIn("\r", out.getvalue())
         self.assertEqual(out.getvalue().count("\n"), 1)
@@ -741,12 +736,12 @@ class AProgressBarOnlyOnATerminal(unittest.TestCase):
 
         answers = [Cut(b""), Body(b"packed")]
         with tempfile.TemporaryDirectory() as directory, \
-                mock.patch.object(download.urllib.request, "urlopen",
+                mock.patch.object(transfer.urllib.request, "urlopen",
                                   lambda *a, **k: answers.pop(0)), \
                 mock.patch.object(upstream, "_sleep", lambda _s: None), \
                 contextlib.redirect_stdout(io.StringIO()):
             target = Path(directory) / "a.zip"
-            download.download_file("https://example.com/a.zip", target, 6, "a.zip ")
+            transfer.download_file("https://example.com/a.zip", target, 6, "a.zip ")
             self.assertEqual(target.read_bytes(), b"packed")
         self.assertEqual(answers, [])
 

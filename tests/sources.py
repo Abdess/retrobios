@@ -52,6 +52,9 @@ COMMANDS = {
     "check_release_assets.py": ("release/assets.py",),
     "sync_release_assets.py": ("release/sync.py",),
     "restore_large_files.py": ("release/restore.py",),
+    "download.py": (
+        "release/latest.py", "release/packgroups.py", "release/transfer.py", "release/packfetch.py",
+    ),
     "build_installer.py": ("installer_build/amalgamate.py",),
     "pin_installer.py": ("installer_build/pins.py",),
     "build_port.py": ("installer_build/port.py",),

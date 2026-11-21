@@ -50,7 +50,7 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   exporter/              native format exporters (batocera, recalbox, emudeck...)
   sitegen/               the site and README generators: pages, navigation, data files
   probes/                real-condition runs: the campaign, the pack and region probes
-  release/               the release record, its notes and the checks of its assets
+  release/               the release record, its notes, the checks of its assets and the pack downloader
   installer_build/       install.py from installer/, its pins, launchers and PyPI package
   devtools/              the commit message rules and the checks of a pull request
   schemas/               the data contracts behind validate_schemas.py: schemas and semantic invariants
