@@ -17,22 +17,12 @@ from core.options import reject_unknown
 from model.registry import list_registered_platforms
 from model.targets import load_target_config
 from packs.archive import write_generated_member
-from packs.integrity import verify_pack, verify_pack_against_platform
-from packs.naming import expected_pack_names, narrows_contents, pack_archives
+from packs.integrity import check_pack_conformance, verify_pack
+from packs.naming import expected_pack_names, pack_archives
 from packs.scope import annotate_pack_systems
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack
-
-
-def baseline_shortfall(excluded: int, absent: int) -> list[str]:
-    """Why a verified pack holds fewer baseline files than the platform declares."""
-    parts = []
-    if excluded:
-        parts.append(f"{excluded} unsafe excluded")
-    if absent:
-        parts.append(f"{absent} not in the collection")
-    return parts
 
 
 # Post-generation pack verification + manifest
@@ -94,6 +84,7 @@ class FinalizeOptions(TypedDict, total=False):
     no_game_data: bool
     pack_systems_by_name: dict[str, dict] | None
     built: Iterable[str] | None
+    variants: tuple[tuple[str, bool], ...]
 
 
 @dataclass(frozen=True)
@@ -109,23 +100,14 @@ class _FinalizeSettings:
     no_game_data: bool = False
     pack_systems_by_name: dict[str, dict] | None = None
     built: Iterable[str] | None = None
+    variants: tuple[tuple[str, bool], ...] = (("full", False),)
 
 
 def _conforms(zip_path: str, pname: str, db: dict, opts: _FinalizeSettings) -> bool:
     """Stage 2 for one platform of a pack: extract and verify against its
-    config. Prints the platform's line and its errors."""
-    (
-        p_ok,
-        _total,
-        _matched,
-        p_errors,
-        bl_checked,
-        bl_present,
-        core_checked,
-        core_present,
-        bl_excluded,
-        bl_absent,
-    ) = verify_pack_against_platform(
+    config, under the variant the pack was built as. Prints the platform's
+    line and its errors."""
+    result = check_pack_conformance(
         zip_path,
         pname,
         opts.platforms_dir,
@@ -136,19 +118,20 @@ def _conforms(zip_path: str, pname: str, db: dict, opts: _FinalizeSettings) -> b
         target_cores=_target_cores_for(pname, opts.target_name, opts.platforms_dir),
         no_game_data=opts.no_game_data,
     )
-    status = "OK" if p_ok else "FAILED"
-    exclusion_note = "".join(
-        f", {part}" for part in baseline_shortfall(bl_excluded, bl_absent)
-    )
+    if result is None:
+        # One BIOS per slot: the slot choice is not replayed.
+        return True
+    status = "OK" if result.ok else "FAILED"
+    exclusion_note = "".join(f", {part}" for part in result.shortfall)
     print(
-        f"  platform {pname}: {bl_present}/{bl_checked} baseline present"
+        f"  platform {pname}: {result.baseline_present}/{result.baseline_checked} baseline present"
         f"{exclusion_note}, "
-        f"{core_present}/{core_checked} cores present, {status}"
+        f"{result.core_present}/{result.core_checked} cores present, {status}"
     )
-    if not p_ok:
-        for err in p_errors:
+    if not result.ok:
+        for err in result.errors:
             print(f"    {err}")
-    return p_ok
+    return result.ok
 
 
 def verify_and_finalize_packs(
@@ -165,6 +148,9 @@ def verify_and_finalize_packs(
     and get a manifest. A pack another run left in the directory was
     reopened, recompressed and given a manifest without its pack_systems,
     which made the installer refuse to narrow it. None takes every pack.
+
+    ``variants`` lists the (source, required_only) combinations the run
+    built, so each narrowed pack is checked as --verify-packs checks it.
 
     Two-stage verification:
     1. Hash check against database.json (integrity)
@@ -183,7 +169,7 @@ def verify_and_finalize_packs(
     registered = list_registered_platforms(opts.platforms_dir)
     expected = expected_pack_names(
         registered, opts.platforms_dir, opts.regions, opts.target_name,
-        no_game_data=opts.no_game_data,
+        opts.variants, no_game_data=opts.no_game_data,
     )
     packs = pack_archives(output_dir)
     if opts.built is not None:
@@ -214,11 +200,10 @@ def verify_and_finalize_packs(
         annotate_pack_systems(manifest, (opts.pack_systems_by_name or {}).get(name))
         inject_manifest(zip_path, manifest)
 
-        # Stage 2: platform conformance (extract + verify)
-        # Skipped for filtered/split/custom packs (intentionally partial)
+        # Stage 2: platform conformance (extract + verify), each variant
+        # held to its own expectation. Skipped for split and system packs
+        # (intentionally partial).
         if opts.skip_conformance:
-            continue
-        if narrows_contents(name):
             continue
         for pname in pack_to_platform.get(name, []):
             if not _conforms(zip_path, pname, db, opts):

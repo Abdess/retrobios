@@ -234,6 +234,7 @@ def finalize_platform_packs(
         regions=getattr(args, "regions", None),
         target_name=args.target,
         no_game_data=getattr(args, "no_game_data", False),
+        variants=run_variants(args),
     )
     if args.split:
         for entry in os.listdir(args.output_dir):

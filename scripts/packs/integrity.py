@@ -32,6 +32,7 @@ from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
 import os
 from packs.extras import platform_region_groups
+from packs.naming import pack_variant
 from packs.paths import flat_arcname
 from resolve.nativemode import reads_file_contents
 from resolve import regions as resolve_regions
@@ -596,16 +597,21 @@ def _same_content(zf: zipfile.ZipFile, member: str, local: str) -> bool:
     return is_archive_path(local) and _same_members(zf, member, local)
 
 
-class PlatformCheckOptions(TypedDict, total=False):
-    """The keyword options of verify_pack_against_platform."""
+class ConformanceOptions(TypedDict, total=False):
+    """The keyword options of check_pack_conformance."""
 
     emulators_dir: str
     emu_profiles: dict | None
     regions: list[str] | None
     data_registry: dict | None
+    no_game_data: bool
+
+
+class PlatformCheckOptions(ConformanceOptions, total=False):
+    """The keyword options of verify_pack_against_platform."""
+
     source: str
     required_only: bool
-    no_game_data: bool
 
 
 @dataclass(frozen=True)
@@ -1006,3 +1012,60 @@ def verify_pack_against_platform(
         baseline.excluded,
         baseline.absent,
     )
+
+
+def baseline_shortfall(excluded: int, absent: int) -> list[str]:
+    """Why a verified pack holds fewer baseline files than the platform declares."""
+    parts = []
+    if excluded:
+        parts.append(f"{excluded} unsafe excluded")
+    if absent:
+        parts.append(f"{absent} not in the collection")
+    return parts
+
+
+@dataclass(frozen=True)
+class PackConformance:
+    """A pack checked against one platform, as verify_pack_against_platform returns it."""
+
+    ok: bool
+    checked: int
+    present: int
+    errors: list[str]
+    baseline_checked: int
+    baseline_present: int
+    core_checked: int
+    core_present: int
+    baseline_excluded: int
+    baseline_absent: int
+
+    @property
+    def shortfall(self) -> list[str]:
+        """Why the baseline holds fewer files than the platform declares."""
+        return baseline_shortfall(self.baseline_excluded, self.baseline_absent)
+
+
+def check_pack_conformance(
+    zip_path: str,
+    platform_name: str,
+    platforms_dir: str,
+    db: dict | None = None,
+    *,
+    target_cores: set[str] | None = None,
+    **options: Unpack[ConformanceOptions],
+) -> PackConformance | None:
+    """A pack checked against its platform under the variant its name says.
+
+    The build and --verify-packs both read this, so a pack gets one verdict:
+    a required-only, platform-only or truth pack is held to its own
+    expectation, never skipped by one and failed by the other. None for a
+    one-per-slot pack, whose slot choice the check does not replay.
+    """
+    variant = pack_variant(os.path.basename(zip_path))
+    if variant is None:
+        return None
+    source, required_only = variant
+    return PackConformance(*verify_pack_against_platform(
+        zip_path, platform_name, platforms_dir, db,
+        target_cores=target_cores, source=source, required_only=required_only, **options,
+    ))

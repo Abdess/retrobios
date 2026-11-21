@@ -6374,13 +6374,13 @@ struct BurnDriver BurnDrvneogeo = {
         held every targeted pack to the platform's whole system list and
         core set, so a correct build exited non-zero on hundreds of files it
         was never asked to carry. Region was already passed to the check, and
-        target has to travel the same way, which is why the pack is not in
-        the skip list.
+        target has to travel the same way, which is why the pack is checked
+        as a full pack.
         """
         import inspect
 
         from packs import integrity as packverify
-        from packs.naming import narrows_contents, pack_narrowings
+        from packs.naming import pack_narrowings, pack_variant
 
         source = inspect.getsource(packverify.verify_pack_against_platform)
         self.assertIn(
@@ -6402,9 +6402,9 @@ struct BurnDriver BurnDrvneogeo = {
         # And the pack must not be skipped instead: skipping checks nothing.
         for target in ("nintendo-switch", "switch", "rpi4"):
             tag = pack_narrowings("full", None, target, False, False)[0][0]
-            self.assertFalse(
-                narrows_contents(f"Platform_1.0{tag}_BIOS_Pack.zip"),
-                f"a pack built for {target} would skip conformance entirely",
+            self.assertEqual(
+                pack_variant(f"Platform_1.0{tag}_BIOS_Pack.zip"), ("full", False),
+                f"a pack built for {target} would be checked as a narrowed variant",
             )
 
     def test_standalone_mode_names_itself(self):
@@ -6661,23 +6661,23 @@ struct BurnDriver BurnDrvneogeo = {
         )
         self.assertEqual(len(result), len(annotated))
 
-    def test_narrowed_variants_skip_conformance(self):
-        from packs.naming import narrows_contents
+    def test_narrowed_variants_are_checked_as_built(self):
+        from packs.naming import pack_variant
 
-        for narrowed in (
-            "EmuDeck_2.3.8_Required_BIOS_Pack.zip",
-            "EmuDeck_2.3.8_Platform_BIOS_Pack.zip",
-            "EmuDeck_2.3.8_Truth_Required_BIOS_Pack.zip",
-            "EmuDeck_2.3.8_NorthAmerica_Required_BIOS_Pack.zip",
+        for narrowed, variant in (
+            ("EmuDeck_2.3.8_Required_BIOS_Pack.zip", ("full", True)),
+            ("EmuDeck_2.3.8_Platform_BIOS_Pack.zip", ("platform", False)),
+            ("EmuDeck_2.3.8_Truth_Required_BIOS_Pack.zip", ("truth", True)),
+            ("EmuDeck_2.3.8_NorthAmerica_Required_BIOS_Pack.zip", ("full", True)),
         ):
-            self.assertTrue(narrows_contents(narrowed), narrowed)
+            self.assertEqual(pack_variant(narrowed), variant, narrowed)
 
         for full in (
             "EmuDeck_2.3.8_BIOS_Pack.zip",
             "EmuDeck_2.3.8_NorthAmerica_BIOS_Pack.zip",
             "RetroArch_v1.22.2_Switch_BIOS_Pack.zip",
         ):
-            self.assertFalse(narrows_contents(full), full)
+            self.assertEqual(pack_variant(full), ("full", False), full)
 
     def test_target_tag_formats_hardware_names(self):
         from packs.naming import _target_tag

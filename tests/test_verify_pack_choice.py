@@ -15,6 +15,7 @@ import json
 import os
 import tempfile
 import unittest
+from packs import integrity
 from packs import naming
 from packs import packcheck
 from packs import variants
@@ -70,7 +71,7 @@ class VerifyPackChoice(unittest.TestCase):
 
         self.variants: list[tuple[str, bool]] = []
 
-        with mock.patch.object(packcheck, "verify_pack_against_platform", record):
+        with mock.patch.object(integrity, "verify_pack_against_platform", record):
             self.ok = packcheck.run_verify_packs(args)
         return checked
 
@@ -143,7 +144,7 @@ class VerifyPackChoice(unittest.TestCase):
         self._touch(pack)
         out, err = io.StringIO(), io.StringIO()
         failed = (False, 0, 0, ["x: missing"], 1, 0, 1, 1, 0, 0)
-        with mock.patch.object(packcheck, "verify_pack_against_platform",
+        with mock.patch.object(integrity, "verify_pack_against_platform",
                                return_value=failed), \
                 contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
             self.assertFalse(packcheck.run_verify_packs(self._args()))

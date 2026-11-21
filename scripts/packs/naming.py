@@ -261,48 +261,13 @@ def expected_pack_names(
     return names
 
 
-def _content_narrowing_tags() -> tuple[str, ...]:
-    """Tags naming a pack that holds fewer files than the platform declares.
-
-    Read from the name builder rather than retyped, so the two cannot drift.
-    Region and target are absent on purpose: both are handed to the check
-    itself, which narrows its expectation instead of skipping it.
-    """
-    # (source, one_per_slot, required_only), one dimension at a time.
-    dimensions = (
-        ("platform", False, False),
-        ("truth", False, False),
-        ("full", True, False),
-        ("full", False, True),
-    )
-    tags: list[str] = []
-    for source, one_per_slot, required_only in dimensions:
-        tags.extend(
-            tag
-            for tag, _label in pack_narrowings(source, None, None, one_per_slot, required_only)
-        )
-    return tuple(tags)
-
-
-_CONTENT_NARROWING_TAGS = _content_narrowing_tags()
-
-
-def narrows_contents(pack_name: str) -> bool:
-    """True when a pack holds fewer files than the platform declares.
-
-    A source-restricted or required-only build is narrower by design, so the
-    full platform expectation does not apply to it and conformance is skipped.
-    Region is not listed: the region filter is passed to the check itself, and
-    a hardware target is passed the same way.
-    """
-    return any(f"{tag}_" in pack_name for tag in _CONTENT_NARROWING_TAGS)
-
-
 def pack_variant(pack_name: str) -> tuple[str, bool] | None:
     """The (source, required_only) a pack was built as, read from its name.
 
     None for a one-per-slot pack, whose slot choice the check does not
-    replay. The tags come from the name builder, as for narrows_contents.
+    replay. The tags come from the name builder rather than retyped, so the
+    two cannot drift. Region and target are not variants: both are handed to
+    the check itself, which narrows its expectation instead of skipping it.
     """
     def tagged(**dimension: object) -> bool:
         tags = [

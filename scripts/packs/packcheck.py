@@ -12,9 +12,8 @@ from model.database import load_database
 from model.profiles import load_emulator_profiles
 from model.registry import list_release_pack_platforms, load_data_dir_registry
 from model.targets import target_scope
-from packs.finalize import baseline_shortfall
-from packs.integrity import verify_pack_against_platform
-from packs.naming import expected_pack_names, pack_variant
+from packs.integrity import check_pack_conformance
+from packs.naming import expected_pack_names
 from packs.variants import ALL_VARIANTS
 
 
@@ -56,16 +55,7 @@ def _check_pack(
     tc: set[str] | None,
 ) -> list[str] | None:
     """Check one pack and print its line. Its errors, or None when it passed."""
-    variant = pack_variant(pack_name)
-    if variant is None:
-        # One BIOS per slot: the slot choice is not replayed here.
-        print(
-            f"  {platform_name} [{pack_name}]: hashes checked during the build; "
-            "one per slot by design, so not compared to the platform's full list"
-        )
-        return None
-    source, required_only = variant
-    result = verify_pack_against_platform(
+    result = check_pack_conformance(
         zip_path,
         platform_name,
         check.platforms_dir,
@@ -75,28 +65,31 @@ def _check_pack(
         regions=check.regions,
         data_registry=check.data_registry,
         target_cores=tc,
-        source=source,
-        required_only=required_only,
         no_game_data=check.no_game_data,
     )
-    (ok, _checked, _present, errors, bl_checked, bl_present,
-     core_checked, core_present, bl_excluded, bl_absent) = result
+    if result is None:
+        # One BIOS per slot: the slot choice is not replayed here.
+        print(
+            f"  {platform_name} [{pack_name}]: hashes checked during the build; "
+            "one per slot by design, so not compared to the platform's full list"
+        )
+        return None
     # These explain a baseline short of its total: a dump whose hash
     # the frontend refuses is left out on purpose, and a file the
     # collection does not hold cannot be packed (verify reports it).
-    shortfall = ", ".join(baseline_shortfall(bl_excluded, bl_absent))
+    shortfall = ", ".join(result.shortfall)
     excluded = f" ({shortfall})" if shortfall else ""
     counts = (
-        f"{bl_present}/{bl_checked} baseline{excluded}, "
-        f"{core_present}/{core_checked} cores"
+        f"{result.baseline_present}/{result.baseline_checked} baseline{excluded}, "
+        f"{result.core_present}/{result.core_checked} cores"
     )
-    if ok:
+    if result.ok:
         print(f"  {platform_name} [{pack_name}]: OK ({counts})")
         return None
-    print(f"  {platform_name} [{pack_name}]: FAIL ({counts}, {len(errors)} errors)")
-    for err in errors:
+    print(f"  {platform_name} [{pack_name}]: FAIL ({counts}, {len(result.errors)} errors)")
+    for err in result.errors:
         print(f"    {err}")
-    return errors
+    return result.errors
 
 
 def run_verify_packs(args: argparse.Namespace) -> bool:

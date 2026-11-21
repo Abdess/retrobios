@@ -75,7 +75,6 @@ class ConformanceUsesTheRunDirectories(unittest.TestCase):
                 ), \
                 mock.patch.object(packs_finalize, "inject_manifest"), \
                 mock.patch.object(packs_finalize, "_target_cores_for", return_value=None), \
-                mock.patch.object(packs_finalize, "verify_pack_against_platform", record), \
                 mock.patch.object(packverify, "verify_pack_against_platform", record):
             packs_finalize.verify_and_finalize_packs(
                 str(out), {"files": {}, "indexes": {}},
@@ -83,6 +82,56 @@ class ConformanceUsesTheRunDirectories(unittest.TestCase):
                 emulators_dir="fixture-emulators",
             )
         self.assertEqual(seen.get("emulators_dir"), "fixture-emulators")
+
+
+class TheBuildChecksEachVariantAsVerifyPacksDoes(unittest.TestCase):
+    """The build skipped conformance on every narrowed pack while
+    --verify-packs held the same pack to its own expectation, so one pack
+    had two verdicts."""
+
+    def test_a_narrowed_pack_is_checked_under_its_variant(self):
+        seen: list[tuple] = []
+
+        def record(zip_path, platform_name, *args, **kwargs):
+            seen.append((Path(zip_path).name, kwargs.get("source"), kwargs.get("required_only")))
+            return True, 0, 0, [], 0, 0, 0, 0, 0, 0
+
+        names = ["Fix_BIOS_Pack.zip", "Fix_Required_BIOS_Pack.zip", "Fix_Truth_BIOS_Pack.zip"]
+        with tempfile.TemporaryDirectory() as tmp, \
+                mock.patch.object(packs_finalize, "list_registered_platforms", return_value=["fix"]), \
+                mock.patch.object(packs_finalize, "expected_pack_names",
+                                  return_value={"fix": set(names)}), \
+                mock.patch.object(packs_finalize, "pack_archives", return_value=names), \
+                mock.patch.object(
+                    packs_finalize, "verify_pack",
+                    return_value=(True, {"summary": {
+                        "verified": 0, "total_files": 0, "untracked": 0, "errors": 0,
+                    }, "errors": []}),
+                ), \
+                mock.patch.object(packs_finalize, "inject_manifest"), \
+                mock.patch.object(packs_finalize, "_target_cores_for", return_value=None), \
+                mock.patch.object(packverify, "verify_pack_against_platform", record):
+            packs_finalize.verify_and_finalize_packs(
+                tmp, {"files": {}, "indexes": {}}, platforms_dir="fixture-platforms",
+            )
+        self.assertEqual(seen, [
+            ("Fix_BIOS_Pack.zip", "full", False),
+            ("Fix_Required_BIOS_Pack.zip", "full", True),
+            ("Fix_Truth_BIOS_Pack.zip", "truth", False),
+        ])
+
+    def test_the_run_names_the_variants_it_built(self):
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(
+            platformrun, "verify_and_finalize_packs", return_value=True
+        ) as finalize:
+            args = argparse.Namespace(
+                all_variants=True, source="full", required_only=False,
+                platforms_dir="p", target=None, split=False, emulators_dir="e",
+                regions=[], one_per_slot=False, offline=True, bios_dir="bios",
+                output_dir=tmp, verify_packs=False,
+            )
+            platformrun.run_platform_packs(args, [], {}, {}, {}, {}, {}, None)
+        self.assertEqual(len(finalize.call_args.kwargs["variants"]), 6)
 
 
 if __name__ == "__main__":

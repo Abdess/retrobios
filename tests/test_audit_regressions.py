@@ -4941,8 +4941,8 @@ class VerifyPacksSaysWhatItExcluded(unittest.TestCase):
         source = script_source("generate_pack.py")
         body = source[source.index("def _check_pack"):]
         body = body[:body.index("\ndef ")]
-        self.assertIn("bl_excluded, bl_absent) = result", body)
-        self.assertIn("baseline_shortfall(bl_excluded, bl_absent)", body)
+        self.assertIn("result.shortfall", body)
+        self.assertIn("for err in result.errors", body)
         shortfall = source[source.index("def baseline_shortfall"):]
         self.assertIn("unsafe excluded", shortfall[:shortfall.index("\ndef ")])
         self.assertNotIn("errors[:5]", body)
