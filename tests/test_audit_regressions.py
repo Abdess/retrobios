@@ -5589,12 +5589,27 @@ class GapsPageCountsOneWay(unittest.TestCase):
                       "`bios/quasi88/N88_KNJ1.ROM` |", text)
 
     def test_the_destination_is_the_list_entrys(self):
-        from scripts.sitegen.gaps import _declared_destination
+        """AmberELEC declares hardwareconfig.xml under eighteen MSX folders:
+        each missing one is shown under its own, not under the first."""
+        from scripts.sitegen.gaps import _verify_tally
         from model.platforms import load_platform_config
 
         config = load_platform_config("amberelec", str(ROOT / "platforms"))
-        detail = {"name": "N88_KNJ1.ROM", "system": "nec-pc-88"}
-        self.assertEqual(_declared_destination(config, detail), "bios/quasi88/N88_KNJ1.ROM")
+        details, wanted = [], []
+        for system, data in (config.get("systems") or {}).items():
+            for entry in data.get("files") or []:
+                missing = entry["name"] in ("hardwareconfig.xml", "N88_KNJ1.ROM")
+                details.append({"name": entry["name"], "system": system,
+                                "status": "missing" if missing else "ok"})
+                if missing:
+                    wanted.append(str(entry.get("destination") or entry["name"]))
+        coverage = {"platform": "AmberELEC", "config": config, "details": details,
+                    "verified": 0, "untested": 0, "missing": len(wanted), "total": len(details)}
+        tally = _verify_tally({"amberelec": coverage})
+        shown = [p["destination"] for p in tally.problems]
+        self.assertEqual(shown, wanted)
+        self.assertGreater(len(set(shown)), 2)
+        self.assertIn("bios/quasi88/N88_KNJ1.ROM", shown)
 
     def test_verify_marks_the_settled_entry(self):
         from packs import coverage as packs_coverage

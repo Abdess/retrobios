@@ -136,7 +136,7 @@ def _directory(entry: dict) -> str:
     return where.rsplit("/", 1)[0] + "/" if "/" in where else ""
 
 
-def _paired(files: list, details: list[dict]) -> Iterable[tuple[dict, dict]]:
+def paired_declarations(files: list, details: list[dict]) -> Iterable[tuple[dict, dict]]:
     """Each verify detail of a system with the declaration it scores.
 
     verify scores the declarations of a system in order, one detail each,
@@ -204,7 +204,7 @@ def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> li
             by_system.setdefault(detail.get("system", ""), []).append(detail)
         for system, details in sorted(by_system.items()):
             files = (systems.get(system) or {}).get("files") or []
-            for detail, entry in _paired(files, details):
+            for detail, entry in paired_declarations(files, details):
                 if detail.get("settled_by") or detail.get("status") not in ("missing", "untested"):
                     continue
                 if detail.get("category") == GAME_DATA or _brought_by_readers(

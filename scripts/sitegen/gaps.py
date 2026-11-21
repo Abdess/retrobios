@@ -54,7 +54,7 @@ def _held_accepted(discrepancy: str, db: dict | None) -> str:
 _PROBLEM_HASHES = ("sha1", "md5", "sha256", "crc32")
 
 
-def _declared_hashes(config: dict, detail: dict) -> dict[str, list[str]]:
+def _declared_hashes(entry: dict) -> dict[str, list[str]]:
     """The hashes the platform declares for a reported file, by algorithm.
 
     The untested table said "declared hash contradicted by the local file"
@@ -63,24 +63,27 @@ def _declared_hashes(config: dict, detail: dict) -> dict[str, list[str]]:
     """
     from core.hashing import parse_hash_list
 
-    system = (config.get("systems") or {}).get(detail.get("system", "")) or {}
-    for entry in system.get("files") or []:
-        if isinstance(entry, dict) and entry.get("name") == detail.get("name"):
-            return {
-                algo: parse_hash_list(entry.get(algo))
-                for algo in _PROBLEM_HASHES if parse_hash_list(entry.get(algo))
-            }
-    return {}
+    return {
+        algo: parse_hash_list(entry.get(algo))
+        for algo in _PROBLEM_HASHES if parse_hash_list(entry.get(algo))
+    }
 
 
-def _declared_destination(config: dict, detail: dict) -> str:
-    """Where the platform's list puts a reported file, its name when the
-    entry names no folder."""
-    system = (config.get("systems") or {}).get(detail.get("system", "")) or {}
-    for entry in system.get("files") or []:
-        if isinstance(entry, dict) and entry.get("name") == detail.get("name"):
-            return str(entry.get("destination") or detail.get("name", ""))
-    return str(detail.get("name", ""))
+def _declarations(cov: dict) -> dict[int, dict]:
+    """Each verify detail of a platform, by id, with the declaration it
+    scores (wanted.paired_declarations): AmberELEC declares
+    hardwareconfig.xml under eighteen folders, and a match by name gave
+    every missing one the first folder."""
+    systems = (cov.get("config") or {}).get("systems") or {}
+    by_system: dict[str, list[dict]] = {}
+    for detail in cov.get("details", []):
+        by_system.setdefault(detail.get("system", ""), []).append(detail)
+    return {
+        id(detail): entry
+        for system, details in by_system.items()
+        for detail, entry in sitewanted.paired_declarations(
+            (systems.get(system) or {}).get("files") or [], details)
+    }
 
 
 def short_hash(value: str) -> str:
@@ -405,9 +408,10 @@ def _by_platform_name(coverages: dict) -> list[tuple[str, dict]]:
     return sorted(coverages.items(), key=lambda x: x[1]["platform"])
 
 
-def _problem_record(pname: str, cov: dict, d: dict) -> dict:
+def _problem_record(pname: str, cov: dict, d: dict, entry: dict) -> dict:
     """A detail of a platform's verify result that is not ok, as the
-    problem tables read it."""
+    problem tables read it, with the declaration it scores: the place the
+    list puts it, its name when the entry names no folder."""
     return {
         "platform": cov["platform"],
         "platform_key": pname,
@@ -418,8 +422,8 @@ def _problem_record(pname: str, cov: dict, d: dict) -> dict:
         "reason": d.get("reason", ""),
         "discrepancy": d.get("discrepancy", ""),
         "system": d.get("system", ""),
-        "declared": _declared_hashes(cov.get("config") or {}, d),
-        "destination": _declared_destination(cov.get("config") or {}, d),
+        "declared": _declared_hashes(entry),
+        "destination": str(entry.get("destination") or d.get("name", "")),
         "path": d.get("path") or "",
     }
 
@@ -435,6 +439,7 @@ def _verify_tally(coverages: dict) -> _VerifyTally:
         for category, count in (cov.get("missing_not_firmware") or {}).items():
             tally.not_firmware[category] = tally.not_firmware.get(category, 0) + count
 
+        declarations = _declarations(cov)
         for d in cov["details"]:
             if d.get("settled_by") and d["status"] != "ok":
                 # Its path holds another declaration's file: the headline,
@@ -446,7 +451,7 @@ def _verify_tally(coverages: dict) -> _VerifyTally:
                 })
                 continue
             if d["status"] != "ok" or d.get("discrepancy"):
-                tally.problems.append(_problem_record(pname, cov, d))
+                tally.problems.append(_problem_record(pname, cov, d, declarations.get(id(d), {})))
     return tally
 
 

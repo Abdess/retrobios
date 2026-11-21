@@ -55,13 +55,11 @@ class AnUntestedRowNamesBothHashes(unittest.TestCase):
 
         path = "bios/Nintendo/Nintendo DS/dsifirmware.bin"
         declared, held = "1" * 64, "2" * 64
-        config = {"systems": {"nintendo-ds": {"files": [
-            {"name": "dsifirmware.bin", "sha256": declared}]}}}
-        detail = {"name": "dsifirmware.bin", "system": "nintendo-ds"}
+        entry = {"name": "dsifirmware.bin", "sha256": declared}
         problem = {
             "platform": "RetroDECK", "name": "dsifirmware.bin", "status": "untested",
             "required": True, "reason": "declared hash contradicted by the local file",
-            "declared": gaps._declared_hashes(config, detail), "path": path,
+            "declared": gaps._declared_hashes(entry), "path": path,
         }
         db = {"files": {"f" * 40: {"path": path, "sha256": held}}}
         table = "\n".join(gaps._render_problem_files([problem], db=db))
