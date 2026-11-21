@@ -32,6 +32,7 @@ it has not been generated.
 from __future__ import annotations
 
 import tests
+from tests import sitepages
 from tests.sources import script_source
 
 import csv
@@ -978,14 +979,6 @@ class SourceLinksGoWhereTheFileIs(unittest.TestCase):
 DOCS = REPO_ROOT / "website" / "src" / "content" / "docs"
 
 
-def _page(stem: str) -> str:
-    for suffix in (".md", ".mdx"):
-        path = DOCS / f"{stem}{suffix}"
-        if path.is_file():
-            return path.read_text(encoding="utf-8")
-    raise unittest.SkipTest(f"{stem} not generated")
-
-
 class LookupRecordsUnderEveryHash(unittest.TestCase):
     """8.1: a platform listing a file by MD5 is found by its SHA1 too."""
 
@@ -1274,7 +1267,8 @@ class NoEmptyCoreTable(unittest.TestCase):
         _built(DOCS / "cross-reference.md")
         for name in ("misterfpga", "bizhawk"):
             self.assertFalse((DOCS / f"cross-reference-{name}.md").exists())
-            self.assertIn(platformpage.OWN_LIST_ONLY, _page(f"platforms/{name}"))
+            page = sitepages.page(f"platforms/{name}.md").read_text(encoding="utf-8")
+            self.assertIn(platformpage.OWN_LIST_ONLY, page)
         redirects = json.loads((REPO_ROOT / "website" / "src" / "generated" /
                                 "redirects.json").read_text())
         self.assertEqual(redirects.get("/cross-reference-misterfpga/"), "/platforms/misterfpga/")

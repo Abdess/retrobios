@@ -14,11 +14,13 @@ platform has a permanent page at get/<platform>/ instead.
 from __future__ import annotations
 
 import tests
+from tests import sitepages
 from tests.sources import script_source
 
 import contextlib
 import io
 import json
+import re
 import sys
 import tempfile
 import unittest
@@ -270,13 +272,14 @@ class EverySurfaceSaysWhy(unittest.TestCase):
         self.assertNotIn("yet", block)
 
     def test_a_built_setup_page_has_the_line(self):
-        page = REPO_ROOT / "website" / "src" / "content" / "docs" / "platforms" / "knulli.md"
-        if not page.is_file():
-            self.skipTest("the site is not generated")
-        text = page.read_text(encoding="utf-8")
+        sitepages.require()
+        page = sitepages.page("platforms/knulli.md").read_text(encoding="utf-8")
+        # The glossary wraps the first ZIP of the page in an <abbr>.
+        text = re.sub(r"<abbr[^>]*>(.*?)</abbr>", r"\1", page)
         self.assertIn("No ZIP for KNULLI. The command installs every file and checks it.", text)
-        install = text.index("## Install")
-        self.assertLess(install, text.index("No ZIP for KNULLI"))
+        install = re.search(r"(?m)^## (?:Install|.+ \{ #install \})$", text)
+        self.assertIsNotNone(install)
+        self.assertLess(install.start(), text.index("No ZIP for KNULLI"))
 
     def test_get_your_files_explains_the_rows(self):
         page = _which_pack()

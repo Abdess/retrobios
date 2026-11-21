@@ -28,6 +28,7 @@ Linux, Windows and Android commands, for MAME4droid an Android-only app.
 from __future__ import annotations
 
 import tests
+from tests import sitepages
 
 import re
 import unittest
@@ -566,11 +567,7 @@ def _profiles_with_data_root() -> dict[str, dict]:
 
 
 def _built_page(name: str) -> str:
-    for suffix in (".mdx", ".md"):
-        path = EMULATORS / f"{name}{suffix}"
-        if path.exists():
-            return path.read_text(encoding="utf-8")
-    return ""
+    return sitepages.page(f"emulators/{name}.md").read_text(encoding="utf-8")
 
 
 def _generated() -> bool:
@@ -816,8 +813,6 @@ class AnEmulatorPageNamesItsSetups(unittest.TestCase):
         self.assertEqual(emulatorcards.emulator_setups(coverages, profiles)["handy"], ["a", "b"])
 
     def test_the_page_names_them(self):
-        from tests import sitepages
-
         sitepages.require()
         text = sitepages.page("emulators/handy.md").read_text(encoding="utf-8")
         row = next(line for line in text.splitlines() if line.startswith("| Run by |"))
