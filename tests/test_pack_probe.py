@@ -355,6 +355,26 @@ class Lock(unittest.TestCase):
         self.assertFalse(try_lock())
 
 
+class LoadThreshold(unittest.TestCase):
+    """pack_probe waits for the load core_probe records under, and the campaign
+    passes the same value: all three read core_probe.default_max_load."""
+
+    def test_wait_and_campaign_follow_core_probe(self) -> None:
+        from unittest import mock
+
+        import core_probe
+        from probes import host
+
+        with mock.patch.object(os, "cpu_count", return_value=12):
+            threshold = core_probe.default_max_load()
+            self.assertEqual(host.Host(cpu_count=12).max_load, threshold)
+            with mock.patch.object(os, "getloadavg", return_value=(threshold, 0.0, 0.0)):
+                packprobe.wait_idle(limit=0, poll=0)
+            with mock.patch.object(os, "getloadavg", return_value=(threshold + 0.5, 0.0, 0.0)), \
+                    self.assertRaisesRegex(packprobe.ProbeFailure, f"above {threshold} "):
+                packprobe.wait_idle(limit=0, poll=0)
+
+
 class RecordsNameNoLocalPath(unittest.TestCase):
     """A record is read on other machines: the probe's scratch folders are
     written as the options that named them."""

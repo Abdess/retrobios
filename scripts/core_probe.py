@@ -1587,8 +1587,13 @@ def probe(args: argparse.Namespace) -> int:
         return _probe(args)
 
 
+def default_max_load(cpus: int | None = None) -> float:
+    """The load above which a run records nothing without --max-load: a quarter of the CPUs."""
+    return (cpus if cpus is not None else os.cpu_count() or 1) / 4
+
+
 def _probe(args: argparse.Namespace) -> int:
-    max_load = args.max_load if args.max_load is not None else (os.cpu_count() or 1) / 4
+    max_load = args.max_load if args.max_load is not None else default_max_load()
     load_before = load_average()
     if args.record and load_before and load_before[0] > max_load:
         print(f"ERROR: load average {load_before[0]} exceeds {max_load}: the machine is busy, "

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import os
 import re
 import shutil
 import subprocess
@@ -101,7 +100,7 @@ def measure(args: argparse.Namespace, emu: Emulator) -> dict:
         meta, tree = installed(emu, args.sha256)
     except (cp.ProbeError, OSError, subprocess.SubprocessError) as exc:
         raise RunFailed(exc) from exc
-    max_load = args.max_load if args.max_load is not None else (os.cpu_count() or 1) / 4
+    max_load = args.max_load if args.max_load is not None else cp.default_max_load()
     load_before = cp.load_average()
     if args.record and load_before and load_before[0] > max_load:
         raise Busy(f"load average {load_before[0]} exceeds {max_load}: the machine is busy, "

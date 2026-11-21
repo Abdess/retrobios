@@ -125,7 +125,7 @@ class Host:
 
     @property
     def max_load(self) -> float:
-        return self.cpu_count / 4
+        return core_probe.default_max_load(self.cpu_count)
 
 
 def parse_budget(text: str) -> float:

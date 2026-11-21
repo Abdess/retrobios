@@ -13,8 +13,8 @@ from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
-from core_probe import (EXIT_BUSY, PROBE_LOCK_ENV, PROBE_LOCK_HELD_ENV, VERDICTS, head_commit, host_probe_lock,
-                        probe_lock_path)
+from core_probe import (EXIT_BUSY, PROBE_LOCK_ENV, PROBE_LOCK_HELD_ENV, VERDICTS, default_max_load, head_commit,
+                        host_probe_lock, probe_lock_path)
 from core.paths import REPO_ROOT
 from core.statefile import now_iso
 from model import measurements as mr
@@ -256,9 +256,9 @@ def content_folder(content: Content, fetch: bool) -> Path:
 # --------------------------------------------------------------------------
 
 def wait_idle(limit: float = IDLE_WAIT, poll: float = 30.0) -> None:
-    """Wait for the load core_probe records under, a quarter of the CPUs.
+    """Wait for the load core_probe records under (core_probe.default_max_load).
     Extracting a pack loads the host itself for a minute or two."""
-    threshold = (os.cpu_count() or 1) / 4
+    threshold = default_max_load()
     waited = 0.0
     while os.getloadavg()[0] > threshold:
         if waited >= limit:
