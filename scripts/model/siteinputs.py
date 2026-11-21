@@ -19,6 +19,8 @@ class SiteInputs:
     db: Path = REPO_ROOT / "database.json"
     emulators: Path = REPO_ROOT / "emulators"
     platforms: Path = REPO_ROOT / "platforms"
+    # The install manifests; None places them beside the database.
+    manifests: Path | None = None
 
 
 _current = [SiteInputs()]
@@ -41,3 +43,14 @@ def bios_dir(db: dict) -> Path:
     """
     named = Path(str(db.get("bios_dir") or "bios"))
     return named if named.is_absolute() else current().db.parent / named
+
+
+def collection_path(rel: str) -> Path:
+    """A path database.json names, under the database's own folder."""
+    return current().db.parent / rel
+
+
+def manifests_dir() -> Path:
+    """The install manifests built from the collection the inputs name."""
+    inputs = current()
+    return inputs.manifests or inputs.db.parent / "install"

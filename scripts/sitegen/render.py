@@ -456,7 +456,7 @@ def _entry_archives(entry: dict, files: dict, by_name: dict) -> set[str]:
             if sha1 not in files:
                 continue
             if crcs:
-                held = zip_member_crcs(str(REPO_ROOT / files[sha1]["path"]))
+                held = zip_member_crcs(str(siteinputs.collection_path(files[sha1]["path"])))
                 # An archive the build cannot read keeps its name.
                 if held and not held & crcs:
                     continue

@@ -55,6 +55,38 @@ class TheGivenDatabase(_Inputs):
         self.use(db=self.db)
         self.assertEqual(platformfiles._collection_sha1("bios/X/only-here.bin"), SHA1)
 
+    def test_collection_paths_and_manifests_sit_beside_the_given_database(self) -> None:
+        self.use(db=self.db)
+        self.assertEqual(siteinputs.collection_path("bios/X/only-here.bin"),
+                         self.db.parent / "bios" / "X" / "only-here.bin")
+        self.assertEqual(siteinputs.manifests_dir(), self.db.parent / "install")
+        self.use(db=self.db, manifests=Path("/elsewhere/install"))
+        self.assertEqual(siteinputs.manifests_dir(), Path("/elsewhere/install"))
+
+    def test_the_platform_links_follow_the_given_manifests(self) -> None:
+        self.use(db=self.db)
+        self.assertNotIn("install manifest", platformfiles.platform_data_links("retroarch"))
+        (self.db.parent / "install").mkdir()
+        (self.db.parent / "install" / "retroarch.json").write_text("{}")
+        self.assertIn("install manifest", platformfiles.platform_data_links("retroarch"))
+
+    def test_board_election_opens_the_given_collection_archive(self) -> None:
+        import zipfile
+
+        from sitegen import render
+
+        archive = self.db.parent / "bios" / "X" / "board.zip"
+        archive.parent.mkdir(parents=True)
+        with zipfile.ZipFile(archive, "w") as zf:
+            zf.writestr("a.rom", b"given")
+        crc = f"{zipfile.ZipFile(archive).getinfo('a.rom').CRC:08x}"
+        files = {SHA1: {"path": "bios/X/board.zip"}}
+        entry = {"name": "board.zip", "contents": [{"crc32": crc}]}
+        self.use(db=self.db)
+        self.assertEqual(render._entry_archives(entry, files, {"board.zip": [SHA1]}), {SHA1})
+        other = {"name": "board.zip", "contents": [{"crc32": "deadbeef"}]}
+        self.assertEqual(render._entry_archives(other, files, {"board.zip": [SHA1]}), set())
+
 
 class TheGivenProfilesAndPlatforms(_Inputs):
     def setUp(self) -> None:
@@ -155,6 +187,19 @@ class NoPageModuleReadsTheRepositoryInputs(unittest.TestCase):
                         for arg in node.args
                         if isinstance(arg, ast.Constant) and arg.value in self.INPUTS
                     )
+        self.assertEqual(found, [])
+
+    def test_no_page_module_reads_the_repository_manifests(self) -> None:
+        modules = [SCRIPTS / "sitegen" / f"{name}.py"
+                   for name in ("render", "platformfiles", "whichpack", "structured")]
+        found = [
+            f"{module.name}:{node.lineno}"
+            for module in modules
+            for node in ast.walk(ast.parse(module.read_text(encoding="utf-8")))
+            if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div)
+            and getattr(node.left, "id", "") == "REPO_ROOT"
+            and isinstance(node.right, ast.Constant) and node.right.value == "install"
+        ]
         self.assertEqual(found, [])
 
     def test_generate_installs_the_inputs_first(self) -> None:

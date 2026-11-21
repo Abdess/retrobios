@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from model import releaserecord
-from core.paths import REPO_ROOT
 from core.sizes import size_text
 from core.ziptools import build_zip_contents_index
 from model import siteinputs
@@ -37,7 +36,7 @@ def build_file_consumers(db: dict, coverages: dict, profiles: dict) -> FileConsu
     consumers = FileConsumers(db, build_zip_contents_index(db))
     consumers.add_platforms({name: cov["config"] for name, cov in coverages.items()})
     consumers.add_emulators(profiles)
-    consumers.add_manifests(REPO_ROOT / "install")
+    consumers.add_manifests(siteinputs.manifests_dir())
     return consumers
 
 

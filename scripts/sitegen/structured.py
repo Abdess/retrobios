@@ -7,12 +7,12 @@ import re
 import urllib.parse
 from pathlib import Path
 
+from model import siteinputs
 from model.collection import collection_paths
 from model.systemnames import system_name
 from sitegen import starlight as sitestarlight
 from sitegen.cards import emulator_file_anchors
 from sitegen.config import REPO_URL, SITE_NAME, SITE_URL
-from core.paths import REPO_ROOT
 from sitegen.descriptions import EMULATOR_SNIPPETS, NOTHING_TO_FETCH, PAGE_DATA, TITLE_NOUNS, title_noun
 from sitegen.emulatorcards import snippet_noun
 from sitegen.install import comes_with_app
@@ -56,7 +56,7 @@ def write_platform_dats(folder: Path, db: dict, members: dict, generated_at: str
     folder.mkdir(parents=True, exist_ok=True)
     digests = data_member_digests(members)
     written = []
-    for source in sorted((REPO_ROOT / "install").glob("*.json")):
+    for source in sorted(siteinputs.manifests_dir().glob("*.json")):
         manifest = json.loads(source.read_text(encoding="utf-8"))
         path = folder / f"{source.stem}.dat"
         write_if_changed(str(path), platform_dat(manifest, db, digests, generated_at))

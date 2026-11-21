@@ -15,7 +15,6 @@ from model.profiles import is_emulator, upstream_profile_index
 from model.systemnames import system_name
 from sitegen import entries as siteentries, markup
 from sitegen.config import REPO_URL, date_line
-from core.paths import REPO_ROOT
 from core.sizes import size_text
 from sitegen.fields import hash_spans, search_excluded
 from sitegen.parts import (
@@ -478,7 +477,7 @@ def platform_data_links(name: str) -> str:
         f"[YAML]({REPO_URL}/blob/main/platforms/{name}.yml)",
         f"[JSON](../api/v1/platforms/{name}.json)",
     ]
-    if (REPO_ROOT / "install" / f"{name}.json").is_file():
+    if (siteinputs.manifests_dir() / f"{name}.json").is_file():
         # The site's own copy, byte for byte (publish_manifests).
         links.append(f"[install manifest](../api/v1/manifests/{name}.json)")
         # The installed BIOS folder for clrmamepro and RomVault.
@@ -622,7 +621,7 @@ def core_folders_section(name: str, config: dict) -> list[str]:
     folders come from its launch scripts, the files from its install manifest.
     """
     folders = config.get("core_system_dirs") or {}
-    manifest = REPO_ROOT / "install" / f"{name}.json"
+    manifest = siteinputs.manifests_dir() / f"{name}.json"
     files = json.loads(manifest.read_text())["files"] if manifest.is_file() else []
     lines = [
         "### Core folders",
