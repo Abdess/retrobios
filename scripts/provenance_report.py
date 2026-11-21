@@ -35,29 +35,9 @@ from acquire.provenance import (
     build_report,
     distinct_missing,
     dump_identity,
+    print_missing,
     profile_needs,
 )
-
-
-def _print_missing(entry: dict, derived: dict[str, dict]) -> None:
-    """One missing dump, with what derives it, reads it and holds it."""
-    label = entry.get("description") or entry["name"]
-    source = derived.get(entry.get("sha1", ""))
-    if source:
-        print(f"    DERIVABLE {entry['name']} ({label}): {source['transform']} "
-              f"of {' + '.join(source['from'])}")
-    else:
-        print(f"    MISSING {entry['name']} ({label}) sha1={entry.get('sha1')}")
-    for need in entry.get("needed_by", []):
-        print(f"      needed by {need['emulator']} as {need['name']} "
-              f"({'required' if need['required'] else 'optional'}, "
-              f"matched by {need['by']})")
-    for hit in entry.get("romsets", []):
-        versions = hit["dats"][0] if len(hit["dats"]) == 1 else (
-            f"{hit['dats'][0]} to {hit['dats'][-1]}"
-        )
-        print(f"      in {hit['source']} {hit['archive']} as "
-              f"{hit['member']} ({versions})")
 
 
 def main() -> int:
@@ -140,7 +120,7 @@ def main() -> int:
         if args.missing:
             # A dump an emulator reads comes first: it fills a hole in a pack.
             for entry in sorted(data["missing"], key=lambda e: not e.get("needed_by")):
-                _print_missing(entry, derived)
+                print_missing(entry, derived)
 
     total_missing = distinct_missing(report)
     if total_missing:

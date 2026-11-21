@@ -7187,15 +7187,15 @@ class TheEventSchemaFileIsEventKeys(unittest.TestCase):
             generator.build_schema()
 
     def test_the_check_command_fails_on_a_stale_file(self):
-        import generate_event_schema as generator
+        import generate_event_schema as command
 
         scratch = scratch_dir(self) / "events.schema.json"
         scratch.write_text("{}\n", encoding="utf-8")
         with contextlib.redirect_stdout(io.StringIO()), \
                 contextlib.redirect_stderr(io.StringIO()):
-            self.assertEqual(generator.main(["--check", "--output", str(scratch)]), 1)
-            self.assertEqual(generator.main(["--output", str(scratch)]), 0)
-            self.assertEqual(generator.main(["--check", "--output", str(scratch)]), 0)
+            self.assertEqual(command.main(["--check", "--output", str(scratch)]), 1)
+            self.assertEqual(command.main(["--output", str(scratch)]), 0)
+            self.assertEqual(command.main(["--check", "--output", str(scratch)]), 0)
 
 
 class TheInstallerPageIsWrittenFromTheCode(unittest.TestCase):

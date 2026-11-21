@@ -36,12 +36,9 @@ from devtools.testrunner import (
     rerun_crashed,
     run_all,
     save_durations,
+    say,
     weight,
 )
-
-
-def say(line: str) -> None:
-    print(line, flush=True)
 
 
 def main() -> int:

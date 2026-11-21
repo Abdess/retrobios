@@ -20,7 +20,6 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
-import refresh_data_dirs as rdd
 from packs import datadirs
 from model.registry import load_data_dir_registry, load_versions
 from packs.archive import Placed
@@ -313,11 +312,11 @@ class DryRunReport(unittest.TestCase):
 
     def test_a_run_ends_on_its_counts(self):
         self.assertEqual(
-            rdd.summarize({"a": True, "b": False, "c": False}, dry_run=True),
+            datadirs.summarize({"a": True, "b": False, "c": False}, dry_run=True),
             "3 entries: 1 would refresh, 2 up to date",
         )
         self.assertEqual(
-            rdd.summarize({"a": True, "b": None}, dry_run=False),
+            datadirs.summarize({"a": True, "b": None}, dry_run=False),
             "2 entries: 1 refreshed, 0 up to date, 1 failed",
         )
 

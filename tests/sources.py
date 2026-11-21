@@ -40,6 +40,8 @@ COMMANDS = {
     ),
     "refresh_data_dirs.py": ("packs/datadirs.py",),
     "split_pack.py": ("packs/parts.py",),
+    "retired_files.py": ("model/retired.py", "collection/retiredhistory.py"),
+    "region_audit.py": ("resolve/regionaudit.py",),
     "dedup.py": (
         "model/nodedup.py", "collection/dedup.py", "collection/duplicates.py",
         "collection/clonemap.py",
@@ -78,6 +80,8 @@ COMMANDS = {
     "validate_site.py": ("sitegen/validate.py",),
     "site_insights.py": ("sitegen/insights.py",),
     "generate_readme.py": ("sitegen/readme.py",),
+    "indexnow.py": ("sitegen/indexnow.py",),
+    "generate_report_excerpt.py": ("sitegen/reportexcerpt.py",),
     "romset_recipes.py": (
         "romrecipes/romsets.py", "romrecipes/pool.py", "romrecipes/pins.py",
         "romrecipes/identify.py", "romrecipes/ledger.py", "romrecipes/members.py",

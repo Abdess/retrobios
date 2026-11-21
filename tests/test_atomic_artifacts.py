@@ -289,7 +289,6 @@ class RestoreSkipsDownloadsInProgress(unittest.TestCase):
     """A scratch file another run is still writing is neither hashed nor read."""
 
     def test_a_scratch_promoted_mid_scan_does_not_stop_the_restore(self) -> None:
-        import restore_large_files
         from release import restore
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -307,8 +306,7 @@ class RestoreSkipsDownloadsInProgress(unittest.TestCase):
                     os.replace(scratch, cache / "big.bin")
                 return found
 
-            with mock.patch.object(restore_large_files.os.path, "isfile",
-                                   side_effect=check_then_promote):
+            with mock.patch.object(os.path, "isfile", side_effect=check_then_promote):
                 index = restore.index_cache(str(cache))
             self.assertNotIn(str(scratch), index.values())
             self.assertIn(str(cache / "done.bin"), index.values())

@@ -20,17 +20,7 @@ from model.cliargs import platform_arg, require_platform
 
 from model.registry import data_dir_registry_at
 from core.paths import DATA_DIRS_FILE
-from packs.datadirs import log, refresh_all, refresh_entry
-
-
-def summarize(outcomes: dict[str, bool | None], dry_run: bool) -> str:
-    """One closing line: how many entries changed, were current, failed."""
-    refreshed = sum(1 for o in outcomes.values() if o is True)
-    current = sum(1 for o in outcomes.values() if o is False)
-    failed = sum(1 for o in outcomes.values() if o is None)
-    verb = "would refresh" if dry_run else "refreshed"
-    line = f"{len(outcomes)} entries: {refreshed} {verb}, {current} up to date"
-    return f"{line}, {failed} failed" if failed else line
+from packs.datadirs import log, refresh_all, refresh_entry, summarize
 
 
 def main() -> None:

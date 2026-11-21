@@ -7,7 +7,7 @@ import tests
 
 import unittest
 
-import generate_report_excerpt
+from sitegen import reportexcerpt
 
 RUN = [
     "RetroDECK: 9/10 OK, 1 untested [md5]",
@@ -26,12 +26,12 @@ RUN = [
 
 class TheExcerptIsTheRun(unittest.TestCase):
     def test_one_entry_of_each_shape_then_every_count(self):
-        self.assertEqual(generate_report_excerpt.excerpt(RUN), [
+        self.assertEqual(reportexcerpt.excerpt(RUN), [
             RUN[0], RUN[1], RUN[3], RUN[4], RUN[7], RUN[8], RUN[9], RUN[10]])
 
     def test_the_page_carries_the_block(self):
-        text = generate_report_excerpt.PAGE.read_text(encoding="utf-8")
-        self.assertIsNotNone(generate_report_excerpt.BLOCK.search(text))
+        text = reportexcerpt.PAGE.read_text(encoding="utf-8")
+        self.assertIsNotNone(reportexcerpt.BLOCK.search(text))
 
 
 if __name__ == "__main__":

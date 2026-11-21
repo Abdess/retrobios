@@ -13,8 +13,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import indexnow
 from sitegen import agents as siteagents
+from sitegen import indexnow
 from sitegen import pagemarkdown
 
 ROOT = Path(__file__).resolve().parent.parent

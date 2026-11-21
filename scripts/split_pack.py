@@ -20,20 +20,12 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import re
 import sys
 import zipfile
 from pathlib import Path
 
 from core.artifacts import ArtifactLockBusy, artifact_lock
-from packs.parts import ASSET_LIMIT, split_directory, split_pack
-
-
-def _size(text: str) -> int:
-    match = re.fullmatch(r"(\d+)([KMG]?)", text.strip().upper())
-    if not match:
-        raise argparse.ArgumentTypeError(f"not a size: {text}")
-    return int(match[1]) * 1024 ** " KMG".index(match[2] or " ")
+from packs.parts import ASSET_LIMIT, parse_size, split_directory, split_pack
 
 
 def main() -> int:
@@ -43,7 +35,7 @@ def main() -> int:
     )
     parser.add_argument("target", type=Path, help="a pack, or a directory of packs")
     parser.add_argument(
-        "--max-size", type=_size, default=ASSET_LIMIT, metavar="SIZE",
+        "--max-size", type=parse_size, default=ASSET_LIMIT, metavar="SIZE",
         help="a part stays under this many bytes (K, M, G suffixes, default 2G)",
     )
     args = parser.parse_args()

@@ -577,3 +577,13 @@ def refresh_all(
 
         forget_data_dir_index()
     return results
+
+
+def summarize(outcomes: dict[str, bool | None], dry_run: bool) -> str:
+    """One closing line: how many entries changed, were current, failed."""
+    refreshed = sum(1 for o in outcomes.values() if o is True)
+    current = sum(1 for o in outcomes.values() if o is False)
+    failed = sum(1 for o in outcomes.values() if o is None)
+    verb = "would refresh" if dry_run else "refreshed"
+    line = f"{len(outcomes)} entries: {refreshed} {verb}, {current} up to date"
+    return f"{line}, {failed} failed" if failed else line

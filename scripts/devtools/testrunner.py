@@ -141,3 +141,7 @@ def failure_excerpt(log: Path) -> list[str]:
     if len(shown) > FAILURE_LINES:
         lines.append(f"... {len(shown) - FAILURE_LINES} more lines in the log")
     return lines
+
+
+def say(line: str) -> None:
+    print(line, flush=True)

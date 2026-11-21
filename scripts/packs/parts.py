@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import io
 import re
 import struct
@@ -304,3 +305,11 @@ def split_directory(directory: Path, limit: int = ASSET_LIMIT) -> list[Path]:
     for path in sorted(Path(directory).glob(f"*{PACK_SUFFIX}")):
         published.extend(split_pack(path, limit))
     return published
+
+
+def parse_size(text: str) -> int:
+    """A byte count written with an optional K, M or G suffix."""
+    match = re.fullmatch(r"(\d+)([KMG]?)", text.strip().upper())
+    if not match:
+        raise argparse.ArgumentTypeError(f"not a size: {text}")
+    return int(match[1]) * 1024 ** " KMG".index(match[2] or " ")
