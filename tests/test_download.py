@@ -17,13 +17,11 @@ import contextlib
 import functools
 import hashlib
 import http.server
-import importlib.util
 import io
 import json
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
 import threading
 import time
@@ -33,17 +31,9 @@ from pathlib import Path
 from unittest import mock
 
 from packs import parts as packs_parts
-from release import packfetch, packgroups, transfer
+from release import packfetch, packgroups, packinfo, transfer
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-_spec = importlib.util.spec_from_file_location(
-    "download", REPO_ROOT / "scripts" / "download.py"
-)
-download = importlib.util.module_from_spec(_spec)
-# Registered before execution: a dataclass resolves its annotations through
-# sys.modules and cannot be built from a module that is not there yet.
-sys.modules["download"] = download
-_spec.loader.exec_module(download)
 
 SHELL = REPO_ROOT / "scripts" / "download.sh"
 
@@ -80,7 +70,7 @@ class TestPackGrouping(unittest.TestCase):
         """--info printed "not found" and exited 0."""
         release = _release(["EmuDeck_2.3.8_BIOS_Pack.zip"])
         with contextlib.redirect_stdout(io.StringIO()) as out, self.assertRaises(SystemExit) as caught:
-            download.show_info("emudek", release)
+            packinfo.show_info("emudek", release)
         self.assertEqual(caught.exception.code, 1)
         self.assertIn("EmuDeck", out.getvalue())
 

@@ -1980,14 +1980,12 @@ class NoTextClaimsAScheduledScrape(unittest.TestCase):
     `schedule:`."""
 
     def test_no_text_ties_the_registry_to_automation(self):
-        import list_platforms
-
         texts = {
             "adding-a-platform.md": (WIKI / "adding-a-platform.md").read_text(encoding="utf-8"),
             "generate_readme": script_source("generate_readme.py"),
             "generate_site": script_source("generate_site.py"),
             "generate_pack": script_source("generate_pack.py"),
-            "list_platforms": inspect.getsource(list_platforms),
+            "list_platforms": script_source("list_platforms.py"),
             "_guides.yml": (ROOT / "platforms" / "_guides.yml").read_text(encoding="utf-8"),
         }
         for name, text in texts.items():

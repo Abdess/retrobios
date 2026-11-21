@@ -82,7 +82,7 @@ COMMANDS = {
         "romrecipes/romsets.py", "romrecipes/pool.py", "romrecipes/pins.py",
         "romrecipes/identify.py", "romrecipes/ledger.py", "romrecipes/members.py",
         "romrecipes/capture.py", "romrecipes/build.py", "romrecipes/survey.py",
-        "romrecipes/text.py",
+        "romrecipes/text.py", "romrecipes/runs.py",
     ),
     "provenance_report.py": ("acquire/provenance.py",),
     "auto_fetch.py": ("acquire/fetch.py",),
@@ -116,7 +116,7 @@ COMMANDS = {
     "generate_db.py": (
         "collection/scan.py", "collection/hashcache.py", "collection/releaseassets.py",
         "collection/declared.py", "collection/aliases.py", "collection/indexes.py",
-        "collection/record.py",
+        "collection/record.py", "collection/run.py",
     ),
     "bios_integrity.py": ("collection/integrity.py", "collection/gitrestore.py"),
     "game_rules.py": (
@@ -126,10 +126,11 @@ COMMANDS = {
     "generate_games_index.py": (
         "games/inputs.py", "games/profileindex.py", "games/fallback.py", "games/folders.py",
         "games/setups.py", "games/systems.py", "games/arcadesets.py", "games/render.py",
-        "games/coverage.py", "games/changes.py", "games/publish.py",
+        "games/coverage.py", "games/changes.py", "games/publish.py", "games/run.py",
     ),
     "download.py": (
         "release/latest.py", "release/packgroups.py", "release/transfer.py", "release/packfetch.py",
+        "release/packinfo.py",
     ),
     "cleanup_disk.py": ("devtools/diskcleanup.py",),
     "migrate.py": ("devtools/biosclassify.py", "devtools/biosmigrate.py"),

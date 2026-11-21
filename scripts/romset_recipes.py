@@ -51,55 +51,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from core.cli import add_repo_inputs, require_directory
-from core.torrentzip import zlib_ng_version
 from model.database import load_database
-from romrecipes.build import AtomIndex, BuildTally, build_records, build_targets
-from romrecipes.capture import ZlibNgError, capture_ledger
-from romrecipes.ledger import ARCHIVES_FILE, load_ledger
+from romrecipes.ledger import ARCHIVES_FILE
+from romrecipes.runs import run_build, run_capture
 from romrecipes.survey import survey, survey_modes
-from romrecipes.text import print_build_result, print_build_totals, print_capture, print_survey
-
-
-def run_capture(args: argparse.Namespace, db: dict) -> int:
-    """Write recipes/archives.json for every archive the database lists."""
-    try:
-        run = capture_ledger(
-            Path(args.archives), db, args.emulators_dir, args.dat_recipes, args.platforms_dir,
-        )
-    except ZlibNgError as exc:
-        print(f"ERROR: {exc}", file=sys.stderr)
-        return 2
-    print_capture(run, args.archives)
-    return 1 if run.failed else 0
-
-
-def run_build(args: argparse.Namespace, db: dict) -> int:
-    """Build one archive, or all of them, from the members the collection holds."""
-    if not args.output_dir:
-        print("ERROR: --build and --build-all need --output-dir", file=sys.stderr)
-        return 2
-    ledger = load_ledger(Path(args.archives))
-    records = build_targets(ledger, None if args.build_all else args.build)
-    if not records and not args.build_all:
-        print(f"ERROR: no archive recipe named {args.build}", file=sys.stderr)
-        return 2
-    ng = zlib_ng_version()
-    if ng:
-        print(
-            f"  zlib-ng {ng} in use: TorrentZip bytes are stock zlib's output, so no "
-            "build is claimed exact here; exact recipes are checked by their members"
-        )
-    root = Path(args.bios_dir).resolve().parent
-    atoms = AtomIndex.from_collection(ledger, db, root)
-    tally = BuildTally()
-    for result in build_records(records, atoms, Path(args.output_dir), root, args.discard):
-        tally.add(result)
-        print_build_result(result)
-    print_build_totals(tally, len(records))
-    if tally.counts["failed"]:
-        print("ERROR: a build did not match its recipe and was not kept", file=sys.stderr)
-        return 1
-    return 1 if tally.counts["impossible"] else 0
+from romrecipes.text import print_survey
 
 
 def build_parser() -> argparse.ArgumentParser:

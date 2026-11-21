@@ -38,11 +38,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from core.artifacts import repository_output_lock
 from core.cli import run_cli
-from games.changes import describe_change
-from games.coverage import floor_failures, print_coverage
 from games.inputs import OUTPUT
-from games.publish import pending, write
-from games.render import render
+from games.run import index
 
 
 def main() -> int:
@@ -54,34 +51,9 @@ def main() -> int:
     parser.add_argument("--quiet", action="store_true", help="print only failures")
     args = parser.parse_args()
     if args.check:
-        return _index(args)
+        return index(args)
     with repository_output_lock(str(args.output_dir)):
-        return _index(args)
-
-
-def _index(args: argparse.Namespace) -> int:
-    files, coverage = render(args.output_dir)
-    if not (args.quiet or args.check):
-        print_coverage(coverage, files)
-    failures = floor_failures(coverage)
-    for failure in failures:
-        print(f"FLOOR {failure}", file=sys.stderr)
-    changed, stale = pending(files, args.output_dir)
-    if args.check:
-        for path in changed:
-            print(f"STALE {path}", file=sys.stderr)
-            current = path.read_text(encoding="utf-8") if path.exists() else None
-            for line in describe_change(current, files[path]):
-                print(f"  {line}", file=sys.stderr)
-        for path in stale:
-            print(f"STALE {path}", file=sys.stderr)
-            print("  no longer generated", file=sys.stderr)
-        if changed or stale:
-            print("Run python scripts/generate_games_index.py to write them.", file=sys.stderr)
-        return 1 if changed or stale or failures else 0
-    write(files, changed, stale)
-    print(f"{len(changed)} written, {len(stale)} removed")
-    return 1 if failures else 0
+        return index(args)
 
 
 if __name__ == "__main__":

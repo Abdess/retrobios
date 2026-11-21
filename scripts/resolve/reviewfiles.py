@@ -11,6 +11,8 @@ from typing import TYPE_CHECKING
 from core.gitclone import compare_base, git_lines
 
 if TYPE_CHECKING:
+    import argparse
+
     from resolve.review import ValidationResult
 
 
@@ -63,6 +65,26 @@ def expand_folders(paths: list[str]) -> list[str]:
         )
         out.extend(found or [path])
     return out
+
+
+def files_to_validate(args: argparse.Namespace, parser: argparse.ArgumentParser) -> list[str]:
+    """The files named on the command line, or the changed ones."""
+    if args.changed and args.files:
+        # Named files were dropped for the git diff, and the run reported
+        # "No changed BIOS files detected" about files it never looked at.
+        parser.error("--changed reads the git diff: name files or pass --changed, not both")
+    if not args.changed:
+        if not args.files:
+            parser.error("No files specified. Use --changed or provide file paths.")
+        return expand_folders(args.files)
+    try:
+        files = get_changed_files()
+    except (RuntimeError, OSError) as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        sys.exit(2)
+    if not files and not args.json:
+        print("No changed BIOS files detected")
+    return files
 
 
 def place(results: list[ValidationResult]) -> list[str]:

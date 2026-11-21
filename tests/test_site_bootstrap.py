@@ -175,7 +175,7 @@ class DocumentedCommands(unittest.TestCase):
             "wiki/tools.md": [install_command("sh"), install_command("powershell")],
             "website/src/components/FilePicker.astro": [f"'curl -fsSL {INSTALL_SH} | sh -s --'"],
             "scripts/download.sh": [f"curl -fsSL {INSTALL_SH} | sh -s -- --platform <name>"],
-            "scripts/download.py": [f"curl -fsSL {INSTALL_SH} | sh -s -- --platform <name>"],
+            "scripts/release/packinfo.py": [f"curl -fsSL {INSTALL_SH} | sh -s -- --platform <name>"],
         }
         for rel, commands in sources.items():
             text = (REPO_ROOT / rel).read_text(encoding="utf-8")

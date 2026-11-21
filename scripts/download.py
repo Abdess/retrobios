@@ -27,37 +27,12 @@ import urllib.error
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from core.sizes import size_text
-from core.text import count_text
 from core.upstream import UpstreamError
 from core.ziptools import safe_extract_zip
 from release.latest import get_latest_release
 from release.packfetch import fetch_checksums, fetch_pack, make_staging
 from release.packgroups import find_pack, list_platforms
-
-# A release publishes packs for the setups most people download. The others
-# are served file by file by the installer.
-NO_PACK_HINT = (
-    "A setup without a pack is served by the installer:\n"
-    "  curl -fsSL https://abdess.github.io/retrobios/i | sh -s -- --platform <name>"
-)
-
-
-def show_info(platform: str, release: dict) -> None:
-    """Show pack information for a platform."""
-    pack = find_pack(release, platform)
-    if not pack:
-        print(f"Platform '{platform}' not found in release.")
-        print("Available:", ", ".join(list_platforms(release)))
-        print(NO_PACK_HINT)
-        sys.exit(1)
-
-    print(f"  Platform: {pack.platform}")
-    print(f"  File: {pack.name}")
-    print(f"  Parts: {count_text(len(pack.parts), 'part')}")
-    print(f"  Size: {pack.size:,} bytes ({size_text(pack.size)})")
-    for part in pack.parts:
-        print(f"    {part['name']} ({part.get('size', 0):,} bytes)")
+from release.packinfo import exit_without_pack, show_info
 
 
 def main() -> None:
@@ -121,10 +96,7 @@ To check files already in place, use: python install.py --check
 
     pack = find_pack(release, args.platform)
     if not pack:
-        print(f"Platform '{args.platform}' not found in release.")
-        print("Available:", ", ".join(list_platforms(release)))
-        print(NO_PACK_HINT)
-        sys.exit(1)
+        exit_without_pack(args.platform, release)
 
     dest = Path(os.path.expanduser(args.dest))
     dest.mkdir(parents=True, exist_ok=True)

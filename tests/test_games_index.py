@@ -18,6 +18,7 @@ from pathlib import Path
 
 import generate_games_index as gi
 import games.fallback as fallback
+import games.run as games_run
 import games.setups as setup_docs
 from games.changes import describe_change
 from games.coverage import FLOORS, floor_failures
@@ -213,7 +214,7 @@ class CheckSaysWhatDiffers(unittest.TestCase):
             coverage: dict = {"setups": {}, "systems": {}, "arcade": []}
             stdout, stderr = io.StringIO(), io.StringIO()
             argv = ["generate_games_index.py", "--check", "--output-dir", tmp]
-            with mock.patch.object(gi, "render", return_value=(files, coverage)), \
+            with mock.patch.object(games_run, "render", return_value=(files, coverage)), \
                     mock.patch.object(sys, "argv", argv), \
                     contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
                 code = gi.main()

@@ -18,11 +18,6 @@ from core.paths import PLATFORMS_DIR
 from model.registry import list_registered_platforms
 
 
-def list_platforms() -> list[str]:
-    """Every registered platform."""
-    return list_registered_platforms(PLATFORMS_DIR)
-
-
 def main() -> None:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="List available platforms")
     args = parser.parse_args()
@@ -30,7 +25,7 @@ def main() -> None:
 
     work_from_repo_root(args, parser, [])
 
-    platforms = list_platforms()
+    platforms = list_registered_platforms(PLATFORMS_DIR)
 
     if not platforms:
         print("No platform configs found", file=sys.stderr)
