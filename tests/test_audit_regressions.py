@@ -5511,11 +5511,11 @@ class BundledFilesAreNotToSource(unittest.TestCase):
 
     def test_verify_does_not_count_it_missing(self):
         from packs import verifysummary
-        from packs import report as packs_report
+        from packs import shares as packs_shares
 
         entry = {"name": "n64.psh", "required": True, "in_repo": False,
                  "category": "bios", "in_pack": True, "bundled": True}
-        self.assertEqual(packs_report.core_required_missing([entry]), [])
+        self.assertEqual(packs_shares.core_required_missing([entry]), [])
         summary = verifysummary.overall_summary(
             [({"severity_counts": {}, "undeclared_files": [entry]}, ["ROCKNIX"])]
         )

@@ -14,6 +14,7 @@ from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
 from model.registry import VERSIONS_FILE
 from packs.coverage import verify_platform
+from packs.shares import core_shares
 from packs.verdicts import blocking_missing
 from resolve.cores import resolve_platform_cores
 from sitegen.install import display_name
@@ -47,13 +48,11 @@ def compute_coverage(
     # a hash platform) is held, not packed.
     present = ok + untested - len(result.get("excluded_files", []))
     pct = (present / total * 100) if total > 0 else 0
-    undeclared = result.get("undeclared_files", [])
-    # Held is not packed: a file the platform has no folder for, or one below
-    # a folder it lists flat, stays out of the pack the fraction describes.
-    core_present = sum(
-        1 for u in undeclared if u.get("in_repo") and u.get("in_pack", True)
-    )
-    core_missing = len(undeclared) - core_present
+    # verify's own count of what the cores add: one file per pack path, held
+    # but unplaced and installed-with-the-emulator files apart. Recounting
+    # the gap entries here said 7956 packed and 419 missing for RetroArch,
+    # where verify says 7977 and 66.
+    shares = core_shares(result)
     # Files a profile marks unsourceable never reach the undeclared list, so
     # the gap they represent has to be counted back in.
     profiles = load_emulator_profiles(emulators_dir)
@@ -62,10 +61,6 @@ def compute_coverage(
         for emu in resolve_platform_cores(config, profiles)
         for f in (profiles.get(emu) or {}).get("files", []) or []
         if f.get("unsourceable")
-    }
-    core_unsourceable = len(unsourceable_names)
-    missing_names = unsourceable_names | {
-        u.get("name", "") for u in undeclared if not u.get("in_repo")
     }
     return {
         "platform": display_name(config, platform_name),
@@ -79,13 +74,10 @@ def compute_coverage(
         },
         "present": present,
         "percentage": pct,
-        "core_present": core_present,
-        "core_missing": core_missing,
-        "core_unsourceable": core_unsourceable,
-        "missing_names": missing_names,
-        "unsourceable_names": unsourceable_names,
-        "pack_files": present + core_present,
-        "total_missing": missing + core_missing,
+        "core_present": shares.packed,
+        "core_missing": shares.missing,
+        "core_unplaced": shares.held_unplaced,
+        "core_unsourceable": len(unsourceable_names),
         "mode": config.get("verification_mode", "existence"),
         # The gaps page badge: verify's count, never refiltered from details.
         "required_missing": blocking_missing(
@@ -103,7 +95,7 @@ def compute_coverage(
 # stores it here and the second reads it back, instead of verifying every
 # platform twice (about a minute of the site build).
 COVERAGE_CACHE_DIR = REPO_ROOT / "tmp" / "coverage-cache"
-_COVERAGE_CACHE_FORMAT = "4"
+_COVERAGE_CACHE_FORMAT = "5"
 
 
 def _coverage_inputs(db_path: Path, platforms_dir: str, emulators_dir: str) -> str:

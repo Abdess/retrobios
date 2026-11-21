@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from core.text import count_text
-from packs.report import NOT_FIRMWARE, core_required_missing, discrepancy_keys, split_undeclared
+from packs.report import NOT_FIRMWARE, discrepancy_keys
+from packs.shares import core_required_missing, split_undeclared
 from packs.verdicts import Severity
 
 

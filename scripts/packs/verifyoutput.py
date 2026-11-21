@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from packs.report import pack_shares
+from packs.shares import pack_shares
 from packs.verdicts import Severity, Status
 
 

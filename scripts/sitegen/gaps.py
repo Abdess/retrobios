@@ -435,8 +435,11 @@ def _pack_content_rows(coverages: dict) -> list[str]:
     rows = []
     for pname, cov in _by_platform_name(coverages):
         display = cov["platform"]
+        # A file held but not placed is needed and not in the pack, yet not
+        # missing. One installed with its emulator is not needed from us.
         core_total = (
-            cov["core_present"] + cov["core_missing"] + cov["core_unsourceable"]
+            cov["core_present"] + cov["core_missing"] + cov["core_unplaced"]
+            + cov["core_unsourceable"]
         )
         rows.append(
             f"| [{display}](platforms/{pname}.md) "

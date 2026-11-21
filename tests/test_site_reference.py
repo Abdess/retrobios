@@ -301,7 +301,8 @@ class PlatformReferenceInWords(unittest.TestCase):
         details = [{"name": "f.bin", "status": "ok", "system": "sony-playstation"}]
         cov = {"platform": "RomM", "details": details, "total": 1, "verified": 1,
                "present": 1, "missing": 0, "untested": 0, "mode": "md5",
-               "core_present": 0, "core_missing": 0, "core_unsourceable": 0,
+               "core_present": 0, "core_missing": 0, "core_unplaced": 0,
+               "core_unsourceable": 0,
                "config": {"hash_type": "md5", "hash_rule": "size_and_any_hash",
                           "systems": {"sony-playstation": {"files": [{"name": "f.bin"}]}},
                           "source": "https://github.com/o/r/tree/" + "a" * 40}}

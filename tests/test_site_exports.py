@@ -95,6 +95,7 @@ class SiteReferenceContracts(unittest.TestCase):
                 "missing": 0,
                 "core_present": 1,
                 "core_missing": 0,
+                "core_unplaced": 0,
                 "core_unsourceable": 0,
                 "details": [],
             }

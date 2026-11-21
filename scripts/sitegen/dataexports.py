@@ -192,7 +192,7 @@ def _platform_export_rows(
                 field: coverage.get(field, 0)
                 for field in (
                     "total", "present", "verified", "untested", "missing",
-                    "core_present", "core_missing", "core_unsourceable",
+                    "core_present", "core_missing", "core_unplaced", "core_unsourceable",
                 )
             },
             "contract": contract,

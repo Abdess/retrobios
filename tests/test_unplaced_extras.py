@@ -103,7 +103,24 @@ class SlugPlatform(unittest.TestCase):
             "slugs", "platforms", self.db, emulators_dir="emulators"
         )
         self.assertEqual(coverage["core_present"], 0)
-        self.assertEqual(coverage["core_missing"], 1)
+        # Held, so not missing: verify prints it apart, and so does the site.
+        self.assertEqual((coverage["core_missing"], coverage["core_unplaced"]), (0, 1))
+
+    def test_the_site_reads_verify_counts(self):
+        # Recounted from the gap entries, the site said 7956 packed and 419
+        # missing for RetroArch where verify said 7977 and 66.
+        from packs.shares import core_shares
+        from sitegen.coverage import compute_coverage
+
+        report = verify_platform(self.config, self.db, "emulators", self.profiles)
+        shares = core_shares(report)
+        coverage = compute_coverage(
+            "slugs", "platforms", self.db, emulators_dir="emulators"
+        )
+        self.assertEqual(
+            (coverage["core_present"], coverage["core_missing"], coverage["core_unplaced"]),
+            (shares.packed, shares.missing, shares.held_unplaced),
+        )
 
     def test_the_manifest_says_why_it_is_absent(self):
         manifest = packs_manifest.generate_manifest(
