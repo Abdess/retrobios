@@ -15,77 +15,20 @@ Usage:
 
 from __future__ import annotations
 
-from core.paths import TRUTH_DIR
 import argparse
+import contextlib
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from core.cli import add_repo_inputs
-from model.cliargs import platform_arg, selected_platforms
-from model.registry import load_data_dir_registry, load_platform_registry
-from exporter import discover_exporters
-from exporter.native import export_platform, refresh_cache
+from core.paths import TRUTH_DIR
 from exporter.originals import DEFAULT_CACHE
-
-
-def run(
-    platforms: list[str],
-    truth_dir: str,
-    output_dir: str,
-    platforms_dir: str,
-    upstream_dir: str,
-    allow_fetch: bool,
-    refresh_only: bool = False,
-) -> int:
-    exporters = discover_exporters()
-    registry = load_platform_registry(platforms_dir)
-    failures = 0
-    skipped: list[str] = []
-
-    for platform in sorted(platforms):
-        exporter_class = exporters.get(platform)
-        if not exporter_class and (registry.get(platform) or {}).get("native_list") == "none":
-            # The platform's code names no BIOS file: there is no list of its
-            # own to hand back corrected.
-            print(f"  SKIP {platform}: names no BIOS file of its own (native_list: none)")
-            continue
-        if not exporter_class:
-            skipped.append(platform)
-            print(f"  SKIP {platform}: no exporter")
-            continue
-
-        if refresh_only:
-            ok, messages = refresh_cache(
-                platform,
-                exporter_class,
-                Path(truth_dir),
-                platforms_dir,
-                Path(upstream_dir),
-            )
-        else:
-            ok, messages = export_platform(
-                platform,
-                exporter_class,
-                Path(truth_dir),
-                Path(output_dir),
-                platforms_dir,
-                Path(upstream_dir),
-                allow_fetch,
-            )
-        label = "OK  " if ok else "FAIL"
-        print(f"  {label} {platform}")
-        for message in messages:
-            print(f"       {message}")
-        if not ok:
-            failures += 1
-
-    if skipped:
-        print(f"\n{len(skipped)} platform(s) without an exporter: {', '.join(skipped)}")
-        failures += len(skipped)
-
-    return 1 if failures else 0
+from exporter.runner import run
+from model.cliargs import platform_arg, selected_platforms
+from model.registry import load_data_dir_registry
+from packs.datadirs import hold_data_dirs
 
 
 def main() -> None:
@@ -126,19 +69,12 @@ def main() -> None:
 
     platforms = selected_platforms(args)
 
-    if not args.refresh_cache:
-        import contextlib
-
-        from packs.datadirs import hold_data_dirs
-
-        # Removal candidates are proved against data/: a refresh swapping a
-        # tree mid-walk listed entries only that tree holds as removable.
-        # The process exit releases the hold.
-        held = contextlib.ExitStack()
-        hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
-
-    sys.exit(
-        run(
+    with contextlib.ExitStack() as held:
+        if not args.refresh_cache:
+            # Removal candidates are proved against data/: a refresh swapping
+            # a tree mid-walk listed entries only that tree holds as removable.
+            hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
+        code = run(
             platforms,
             args.truth_dir,
             args.output_dir,
@@ -147,7 +83,7 @@ def main() -> None:
             args.fetch,
             args.refresh_cache,
         )
-    )
+    sys.exit(code)
 
 
 if __name__ == "__main__":

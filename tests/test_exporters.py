@@ -616,7 +616,7 @@ class ExporterRegistry(unittest.TestCase):
         to export. A platform with no exporter and no such mark still fails."""
         import contextlib
 
-        import export_native
+        from exporter import runner
 
         with tempfile.TemporaryDirectory() as directory:
             platforms = Path(directory)
@@ -624,9 +624,9 @@ class ExporterRegistry(unittest.TestCase):
                 "platforms:\n  cardonly:\n    native_list: none\n  unwritten: {}\n",
                 encoding="utf-8")
             with contextlib.redirect_stdout(io.StringIO()) as out:
-                self.assertEqual(export_native.run(
+                self.assertEqual(runner.run(
                     ["cardonly"], directory, directory, str(platforms), directory, False), 0)
-                self.assertEqual(export_native.run(
+                self.assertEqual(runner.run(
                     ["unwritten"], directory, directory, str(platforms), directory, False), 1)
             self.assertIn("SKIP cardonly: names no BIOS file of its own", out.getvalue())
 
