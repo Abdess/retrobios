@@ -6,6 +6,7 @@ import json
 import threading
 from typing import TextIO
 
+from installer.invocation import listings_given
 from installer.text import _CONTROLS
 
 EVENT_KEYS: dict[str, tuple[str, ...]] = {
@@ -220,8 +221,7 @@ def _event_mode(args: argparse.Namespace) -> str:
         return "check"
     if args.dry_run:
         return "dry-run"
-    if (args.list_platforms or args.list_targets or args.list_systems
-            or args.list_cores or args.list_emulators):
+    if listings_given(args):
         return "list"
     return "install"
 

@@ -9,6 +9,7 @@ import sys
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, NamedTuple, TextIO
 
+from installer.invocation import LISTING_FLAGS
 from installer.terminal import TUI_MIN_COLS, TUI_MIN_ROWS, _enable_ansi, terminal_few_colours, terminal_without_ansi
 from installer.text import screen_text
 
@@ -194,9 +195,8 @@ def _tui_flag_blocker(args: argparse.Namespace) -> str:
     """The option of a run without questions, said as the reason."""
     for flag, given in (
         ("--check", args.check), ("--dry-run", args.dry_run),
-        ("--list-platforms", args.list_platforms), ("--list-targets", args.list_targets),
-        ("--list-systems", args.list_systems), ("--list-cores", args.list_cores),
-        ("--list-emulators", args.list_emulators), ("--events", args.events),
+        *((flag, getattr(args, attr)) for flag, attr in LISTING_FLAGS),
+        ("--events", args.events),
         ("--quiet", args.quiet), ("--yes", args.yes), ("--no-input", args.no_input),
         ("--restore", args.restore is not None),
         ("--pack", getattr(args, "pack", None) is not None),

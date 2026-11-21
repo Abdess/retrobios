@@ -35,6 +35,18 @@ _COMMAND_ORDER = (
 )
 
 
+# The options that print a list and install nothing, in the order a run
+# names them.
+LISTING_FLAGS = (("--list-platforms", "list_platforms"), ("--list-targets", "list_targets"),
+                 ("--list-systems", "list_systems"), ("--list-cores", "list_cores"),
+                 ("--list-emulators", "list_emulators"))
+
+
+def listings_given(args: argparse.Namespace) -> list[str]:
+    """The listing options of a run, as typed."""
+    return [flag for flag, attr in LISTING_FLAGS if getattr(args, attr)]
+
+
 def _command_rank(option: tuple[str, str | None]) -> int:
     flag = option[0]
     return _COMMAND_ORDER.index(flag) if flag in _COMMAND_ORDER else len(_COMMAND_ORDER)

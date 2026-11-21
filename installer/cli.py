@@ -18,7 +18,14 @@ from installer.from_folders import _open_local_sources
 from installer.handheld_app import app_not_added
 from installer.host_fs import _is_dir, _writing
 from installer.install_record import restore_kept
-from installer.invocation import OFFLINE_VARIABLE, _INVOCATION, installer_id, offline_requested
+from installer.invocation import (
+    LISTING_FLAGS,
+    OFFLINE_VARIABLE,
+    _INVOCATION,
+    installer_id,
+    listings_given,
+    offline_requested,
+)
 from installer.narrowing import FIND_KINDS
 from installer.network import _RAW_ERRORS, install_bounded_opener
 from installer.offline import LOCAL, OFFLINE_FLAG_VALUE, offline_named
@@ -34,8 +41,7 @@ def _check_expert(parser: argparse.ArgumentParser, args: argparse.Namespace) -> 
     """--one-per-slot, --standalone, --source truth and --find, applied or
     refused, never ignored. Each is held equal to the pack builder's own
     option, so a choice the builder refuses beside it is refused here."""
-    listing = (args.list_platforms or args.list_targets or args.list_systems
-               or args.list_cores or args.list_emulators)
+    listing = bool(listings_given(args))
     truth = args.source == "truth"
     refusals = (
         (args.json and not args.find, "--json applies to --find"),
@@ -130,8 +136,7 @@ def _main_check_values(parser: argparse.ArgumentParser, args: argparse.Namespace
         ):
             parser.error(f"{option} needs at least one name")
     if args.quiet and (
-        args.check or args.dry_run or args.list_platforms or args.list_targets
-        or args.list_systems or args.list_cores or args.list_emulators
+        args.check or args.dry_run or listings_given(args)
     ):
         parser.error("--quiet applies to an install, not to --check, --dry-run or a listing")
     if args.tui and args.plain:
@@ -141,9 +146,7 @@ def _main_check_values(parser: argparse.ArgumentParser, args: argparse.Namespace
     if args.required_only and args.for_games is None:
         parser.error("--required-only applies to --for-games: the list alone does not "
                      "say which files a game cannot start without")
-    if args.for_games is not None and (
-            args.list_platforms or args.list_targets or args.list_systems
-            or args.list_cores or args.list_emulators):
+    if args.for_games is not None and listings_given(args):
         parser.error("--for-games narrows an install, not a listing")
 
 
@@ -152,10 +155,7 @@ def _main_check_listings(parser: argparse.ArgumentParser, args: argparse.Namespa
     # Applied or refused, never ignored: a run prints one list, and the
     # narrowing options apply to --list-systems and --list-cores only, past
     # --target and --installed-cores, which --list-emulators also reads.
-    listings = [flag for flag, given in (
-        ("--list-platforms", args.list_platforms), ("--list-targets", args.list_targets),
-        ("--list-systems", args.list_systems), ("--list-cores", args.list_cores),
-        ("--list-emulators", args.list_emulators)) if given]
+    listings = listings_given(args)
     if len(listings) > 1:
         parser.error(f"{listings[0]} and {listings[1]} each print a list: run them "
                      "one at a time")
@@ -205,8 +205,7 @@ def _main_check_add_app(parser: argparse.ArgumentParser, args: argparse.Namespac
             (args.check or args.dry_run,
              "--add-app writes the RetroBIOS app on the card, which --check and "
              "--dry-run do not"),
-            (args.list_platforms or args.list_targets or args.list_systems
-             or args.list_cores or args.list_emulators,
+            (listings_given(args),
              "--add-app writes the RetroBIOS app on the card, which a listing does not"),
             (args.from_pack, "--add-app downloads the RetroBIOS app, and --from-pack "
              "makes no network request"),
@@ -239,10 +238,7 @@ def _main_check_offline(parser: argparse.ArgumentParser, args: argparse.Namespac
 
 def _main_check_sources(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
     """Refuse a source of files given with a listing that reads none."""
-    if getattr(args, "from") and (
-        args.list_platforms or args.list_targets or args.list_systems
-        or args.list_cores or args.list_emulators
-    ):
+    if getattr(args, "from") and listings_given(args):
         parser.error("--from copies files into the BIOS folder, which a listing "
                      "does not write")
     if (args.from_pack or args.manifest) and args.list_platforms:
@@ -401,9 +397,8 @@ def _check_pack(parser: argparse.ArgumentParser, args: argparse.Namespace) -> No
         ("--installed-cores", args.installed_cores), ("--cores-dir", args.cores_dir),
         ("--save-dir", args.save_dir), ("--standalone-copies", args.standalone_copies),
         ("--add-app", args.add_app), ("--romm-firmware", args.romm_firmware is not None),
-        ("--tui", args.tui), ("--list-platforms", args.list_platforms),
-        ("--list-targets", args.list_targets), ("--list-systems", args.list_systems),
-        ("--list-cores", args.list_cores), ("--list-emulators", args.list_emulators),
+        ("--tui", args.tui),
+        *((flag, getattr(args, attr)) for flag, attr in LISTING_FLAGS),
     ):
         if given:
             parser.error(f"--pack writes a pack ZIP, and {flag} reads or writes the "
