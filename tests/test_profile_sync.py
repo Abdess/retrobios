@@ -5999,7 +5999,45 @@ class AnOffForgeProfileWatchesItsReleasePage(unittest.TestCase):
         }}
         with mock.patch.object(upstream, "fetch_page",
                                return_value="<p>Altirra 4.50 released</p>"):
-            self.assertEqual(versions.page_version(profile, "cache", False), "4.50")
+            self.assertEqual(versions.page_version(profile, "cache", False), ("4.50", None))
+
+    def test_an_unread_page_says_why(self):
+        """A fetch error, an uncached page, a 404 and a pattern miss all
+        came back None, the error only printed: the JSON could not tell a
+        moved release page from a profile without one."""
+        from unittest import mock
+
+        profile = {"emulator": "Altirra", "version_source": {
+            "url": "https://example.test/altirra", "pattern": r"Altirra (\d+\.\d+) released",
+        }}
+        answers = [
+            (upstream.NotCachedError("cold"), "not cached offline"),
+            (None, "page absent"),
+            ("<p>nothing here</p>", "pattern not found"),
+            (upstream.UpstreamError("HTTP 500"), "https://example.test/altirra: HTTP 500"),
+        ]
+        for answer, reason in answers:
+            effect = {"side_effect": answer} if isinstance(answer, Exception) else {"return_value": answer}
+            with self.subTest(reason=reason), \
+                    mock.patch.object(upstream, "fetch_page", **effect), \
+                    mock.patch("sys.stderr") as stderr:
+                self.assertEqual(versions.page_version(profile, "cache", True), (None, reason))
+                stderr.write.assert_not_called()
+
+    def test_an_uncached_page_offline_is_not_an_absent_one(self):
+        with tempfile.TemporaryDirectory() as cache, self.assertRaises(upstream.NotCachedError):
+            upstream.fetch_page("https://example.invalid/never-cached", cache, True)
+
+    def test_the_reason_reaches_the_json_and_the_text(self):
+        report = ProfileReport(name="altirra", entries=[], counts={}, skipped="unsupported host: x",
+                               declared_version="4.40", page_version_unread="page absent",
+                               version_unread="tag ancestry unread: refused")
+        payload = report_to_dict(report)
+        self.assertEqual(payload["page_version_unread"], "page absent")
+        self.assertEqual(payload["version_unread"], "tag ancestry unread: refused")
+        text = format_report(report)
+        self.assertIn("announced unreadable (page absent)", text)
+        self.assertIn("tag ancestry unread: refused", text)
 
 
 class ARecaleKeepsTheRepositoryWord(unittest.TestCase):

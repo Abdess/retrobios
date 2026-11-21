@@ -268,7 +268,8 @@ def _attach_version(
     """Record core_version against the forge's latest tag and release.
 
     Kept on the report rather than printed, so --json carries it as the text
-    report does. A forge that refuses is named on the profile's own line.
+    report does. A forge that refuses is named on the profile's own line
+    (version_unread).
     """
     repo = select_repo(profile) if report.head else None
     if repo is None:
@@ -278,7 +279,7 @@ def _attach_version(
     except upstream.RateLimitError:
         raise
     except upstream.UpstreamError as exc:
-        print(f"{report.name}: version check skipped: {exc}", file=sys.stderr)
+        report.version_unread = f"version check skipped: {exc}"
         return
     relation = None
     passed = None
@@ -295,7 +296,7 @@ def _attach_version(
     except upstream.RateLimitError:
         raise
     except upstream.UpstreamError as exc:
-        print(f"{report.name}: tag ancestry unread: {exc}", file=sys.stderr)
+        report.version_unread = f"tag ancestry unread: {exc}"
         newer = None
     report.version_warning = version_warning(version, report.pin, relation, passed) or (
         f"{'release' if version.latest_release else 'tag'} {newer} is newer than core_version {version.declared} and the pin: "
@@ -425,7 +426,9 @@ def _build_full_report(
         report.stale_prose = _read_stale_prose(name, profile_path, args, failed)
     if args.check_version and profile.get("version_source"):
         report.declared_version = str(profile.get("core_version") or "") or None
-        report.page_version = page_version(profile, args.cache_dir, args.offline)
+        report.page_version, report.page_version_unread = page_version(
+            profile, args.cache_dir, args.offline
+        )
         report.no_genuine_copy = str(
             profile["version_source"].get("no_genuine_copy") or "") or None
     if args.check_version:

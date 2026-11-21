@@ -906,6 +906,17 @@ class AReleasePageMakesAProfileStale(unittest.TestCase):
         self.assertEqual(found["altirra"], STALE)
         self.assertEqual(found["mednafen"], OK)
 
+    def test_an_unread_release_page_is_unknown_not_skipped(self):
+        """An unreadable page read like a profile with no version_source:
+        SKIPPED by nature, and a moved or dead feed went unseen."""
+
+        rows = [{"name": "altirra", "skipped": "unsupported host: virtualdub.org",
+                 "declared_version": "4.40", "page_version": None,
+                 "page_version_unread": "page absent"}]
+        (overall, row) = summarize_profile_sync(rows)
+        self.assertEqual(row.status, UNKNOWN)
+        self.assertEqual(row.detail, "version page unread: page absent")
+
     def test_a_release_with_no_genuine_copy_waits_for_the_next(self):
         """FPse 13.0 exists only as rebuilt copies: the profile stays on 12.1
         and flagging it on every run said nothing new. 13.1 would."""

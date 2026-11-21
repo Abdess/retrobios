@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import re
-import sys
 from dataclasses import dataclass
 
 from core import upstream
@@ -40,23 +39,31 @@ def check_version(
     )
 
 
-def page_version(profile: dict, cache_dir: str, offline: bool) -> str | None:
+def page_version(
+    profile: dict, cache_dir: str, offline: bool
+) -> tuple[str | None, str | None]:
     """The latest version a profile's version_source page announces.
 
     Forty-odd profiles live off any forge: profile_sync could only say
     "unsupported host", and a new Altirra or mednafen release went unseen.
+    Returns (version, None) or (None, why the page gave no version): a page
+    not cached offline, absent, refused, or one the pattern no longer finds.
+    One None for all four read like a profile with no version_source.
     """
     source = profile.get("version_source") or {}
     url, pattern = str(source.get("url") or ""), str(source.get("pattern") or "")
     if not url or not pattern:
-        return None
+        return None, "version_source names no url or pattern"
     try:
         text = upstream.fetch_page(url, cache_dir, offline)
+    except upstream.NotCachedError:
+        return None, "not cached offline"
     except upstream.UpstreamError as exc:
-        print(f"{profile.get('emulator', '?')}: {url}: {exc}", file=sys.stderr)
-        return None
-    match = re.search(pattern, text or "")
-    return match.group(1) if match else None
+        return None, f"{url}: {exc}"
+    if text is None:
+        return None, "page absent"
+    match = re.search(pattern, text)
+    return (match.group(1), None) if match else (None, "pattern not found")
 
 
 def version_warning(

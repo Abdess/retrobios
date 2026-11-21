@@ -623,6 +623,8 @@ def fetch_page(url: str, cache_dir: str, offline: bool) -> str | None:
 
     A project published outside a forge (Altirra, mednafen, ePSXe) says its
     version on a download page: that page is the only release feed there is.
+    None is a page the site answers absent. Offline, a page the cache never
+    stored raises NotCachedError, as every other read of this module does.
     """
     key = hashlib.sha256(url.encode()).hexdigest()
     target = Path(cache_dir) / "_pages" / f"{key}.txt"
@@ -632,7 +634,7 @@ def fetch_page(url: str, cache_dir: str, offline: bool) -> str | None:
             raw = target.read_text(encoding="utf-8")
             return None if raw == ABSENT else raw
     if offline:
-        return None
+        raise NotCachedError(f"{url} is not in the offline cache")
     text = http_text(url)
     write_cache(target, ABSENT if text is None else text)
     return text

@@ -60,6 +60,10 @@ class ProfileReport:
     # (version_source): the version read there, beside the one declared.
     declared_version: str | None = None
     page_version: str | None = None
+    # Why the page gave no version: not cached offline, absent, refused, or
+    # the pattern no longer matches. A feed that moved is not a profile
+    # without one, and check_freshness reads the difference here.
+    page_version_unread: str | None = None
     # An announced version searched for and found only rebuilt or re-signed.
     no_genuine_copy: str | None = None
     # What realign_prose has to settle before a recale or a bump can run:
@@ -71,6 +75,9 @@ class ProfileReport:
     # release, kept on the report so every output carries it.
     version: VersionReport | None = None
     version_warning: str | None = None
+    # A forge that refused the version check or the tag ancestry read, kept
+    # here so --json carries it as the text report does.
+    version_unread: str | None = None
     # --detect-new-files and --watch-hashes, kept on the report so --json
     # carries them to check_freshness. None when not asked. A new file is
     # {path, line, name, since_pin}: since_pin when the pinned revision of
@@ -213,6 +220,7 @@ def _report_header(report: ProfileReport) -> list[str]:
         lines.append(
             f"  version page: declared {report.declared_version or '-'}, "
             f"announced {report.page_version or 'unreadable'}"
+            + (f" ({report.page_version_unread})" if report.page_version_unread else "")
             + (" (no genuine copy found)"
                if report.page_version and report.page_version == report.no_genuine_copy
                else "")
@@ -224,6 +232,8 @@ def _report_header(report: ProfileReport) -> list[str]:
             f"latest tag {version.latest_tag}, "
             f"latest release {version.latest_release} ({version.release_date})"
         )
+    if report.version_unread:
+        lines.append(f"  {report.version_unread}")
     if report.version_warning:
         lines.append(f"  {report.version_warning}")
     return lines

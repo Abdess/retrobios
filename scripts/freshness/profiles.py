@@ -113,6 +113,13 @@ def summarize_profile_sync(report: object) -> list[Finding]:
             findings.append(Finding("profiles", name, status, local=declared,
                                     remote=announced, detail=detail))
             continue
+        if row.get("skipped") and row.get("page_version_unread"):
+            # The release page is the only feed this profile has: unread, a
+            # new release cannot be told from none, so the row is unknown.
+            findings.append(Finding("profiles", name, UNKNOWN,
+                                    local=str(row.get("declared_version") or ""),
+                                    detail=f"version page unread: {row['page_version_unread']}"))
+            continue
         if row.get("skipped"):
             # A skip profile_sync counts as a defect (no repository answers,
             # no resolvable pin) is unknown. One that is the profile's nature
