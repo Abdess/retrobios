@@ -34,23 +34,6 @@ def _core_scope_note(config: dict, profiles: dict) -> str:
     return f" (all libretro, plus {count_text(others, 'other core')})"
 
 
-def gap_sources(data: dict) -> dict[str, int]:
-    """Where each undeclared file of one emulator comes from.
-
-    A file the emulator's own package installs is not one to find. The
-    report's gap_missing counts it, and the gaps page announced 1,356 files
-    to source where 609 are, with a red badge on emulators that have none.
-    """
-    counts = {"bios": 0, "data": 0, "large_file": 0, "bundled": 0, "missing": 0}
-    for gap in data.get("gap_details") or []:
-        source = gap.get("source", "")
-        if source == "missing" and gap.get("bundled"):
-            source = "bundled"
-        if source in counts:
-            counts[source] += 1
-    return counts
-
-
 def _xref_upstream(profile: dict) -> str:
     """The project a core comes from: its upstream, else its own source."""
     raw = profile.get("upstream") or profile.get("source", "")

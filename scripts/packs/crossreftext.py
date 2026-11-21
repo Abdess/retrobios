@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from core.text import count_text
-from packs.crossref import profile_breakdown
+from packs.crossref import gap_source_counts, profile_breakdown
 
 
 def print_launcher_unproven(rows: list[dict]) -> None:
@@ -84,15 +84,9 @@ def print_report(
         if gaps == 0 and not show_clean:
             continue
 
-        # Counted once, for the heading and the total alike: a file installed
-        # with its emulator is neither one to source nor one the pack brings,
-        # held or not (validation.deliverable leaves it out of every pack).
-        bundled_gaps = [g for g in data["gap_details"] if g.get("bundled")]
-        emulator_bundled = len(bundled_gaps)
-        counts = {key: data.get(f"gap_{key}", 0) for key in totals}
-        for g in bundled_gaps:
-            counts[g.get("source", "missing")] -= 1
-        counts["bundled"] = emulator_bundled
+        # Counted once, for the heading and the total alike.
+        counts = gap_source_counts(data)
+        emulator_bundled = counts["bundled"]
         parts = [f"{count} {key}" for key, count in counts.items() if count]
         status = ", ".join(parts) if parts else "OK"
 

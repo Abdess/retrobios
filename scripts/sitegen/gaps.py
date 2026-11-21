@@ -13,12 +13,12 @@ from core.text import series
 from model.database import sha1_at
 from model.platforms import native_layer
 from model.profiles import is_emulator
+from packs.crossref import gap_source_counts
 from resolve.cores import resolve_platform_cores
 from resolve.nativemode import check_label
 from sitegen import markup, wanted as sitewanted
 from sitegen.cards import PROVENANCE_LABELS, fetch_url
 from sitegen.config import date_line
-from sitegen.crossref import gap_sources
 from sitegen.dataexports import build_emulator_gap_report
 from sitegen.emulatorsindex import content_check_ceiling
 from sitegen.parts import list_pages
@@ -667,7 +667,7 @@ def _undeclared_gaps(report_all: dict) -> tuple[dict[str, int], int, list[tuple[
         if data["gaps"] == 0:
             continue
         total_undeclared += data["gaps"]
-        for key, count in gap_sources(data).items():
+        for key, count in gap_source_counts(data).items():
             src_totals[key] += count
         emulator_gaps.append((emu_name, data))
     return src_totals, total_undeclared, emulator_gaps
@@ -678,7 +678,7 @@ def _complement_rows(emulator_gaps: list[tuple[str, dict]]) -> list[str]:
     rows = []
     for emu_name, data in sorted(emulator_gaps, key=lambda x: -x[1]["gaps"]):
         display = data["emulator"]
-        sources = gap_sources(data)
+        sources = gap_source_counts(data)
         to_source = sources["missing"]
         missing_str = (
             f'<span class="rb-badge rb-badge-danger">{to_source}</span>'

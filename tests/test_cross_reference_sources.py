@@ -154,6 +154,18 @@ class PlatformScopedEntries(unittest.TestCase):
         self.assertIn("0 available", text)
         self.assertIn("1 missing (need to be sourced)", text)
 
+    def test_the_page_and_the_text_count_sources_alike(self):
+        """The gaps page kept a held bundled file under bios where the text
+        report counted it bundled: 410 files in different columns."""
+        from sitegen import gaps
+
+        report = cross_reference(self.PROFILES, {}, self.DB, platform="plat")
+        totals, _total, _rows = gaps._undeclared_gaps(report)
+        self.assertEqual(totals["bundled"], 1)
+        self.assertEqual(totals["bios"], 0)
+        self.assertEqual(totals["missing"], 1)
+        self.assertNotIn("gap_sources", script_source("generate_site.py"))
+
     def test_the_report_reads_the_shared_rules(self):
         """One rule, one function: a local `bool(f.get("bundled"))` answered
         differently from verify for every installed_on/not_bundled_on entry."""

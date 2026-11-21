@@ -716,6 +716,24 @@ SET_ASIDE = {
 }
 
 
+GAP_SOURCES = ("bios", "data", "large_file", "missing", "bundled")
+
+
+def gap_source_counts(data: dict) -> dict[str, int]:
+    """Where each undeclared file of one emulator comes from.
+
+    A file installed with its emulator is neither one to source nor one the
+    pack brings, held or not (validation.deliverable leaves it out of every
+    pack): it counts as bundled whatever its source.
+    """
+    counts = dict.fromkeys(GAP_SOURCES, 0)
+    for gap in data.get("gap_details") or []:
+        source = "bundled" if gap.get("bundled") else gap.get("source", "missing")
+        if source in counts:
+            counts[source] += 1
+    return counts
+
+
 def profile_breakdown(data: dict) -> str:
     """Where each entry of a profile went, adding up to its file count.
 
