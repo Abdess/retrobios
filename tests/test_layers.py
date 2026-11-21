@@ -39,8 +39,8 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     "romrecipes": frozenset(),
     # The site prints the recipe counts and the dump-catalog coverage report
     # those two packages compute, serves the handheld launchers and prints the
-    # CI checks.
-    "sitegen": frozenset({"acquire", "packs", "romrecipes", "installer_build", "devtools"}),
+    # CI checks. The logo copier downloads through the scrapers' fetch_bytes.
+    "sitegen": frozenset({"acquire", "packs", "romrecipes", "installer_build", "devtools", "scraper"}),
     # The record names its packs as the pack builder does.
     "release": frozenset({"packs"}),
     # The launcher archives are written by the pack member writer.

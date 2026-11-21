@@ -721,7 +721,7 @@ class LogosAtTheirDisplaySize(unittest.TestCase):
                 if path.suffix == ".webp":
                     self.assertEqual(_webp_size(path.read_bytes()), (LOGO_PIXELS, LOGO_PIXELS))
         self.assertEqual(sorted(p.name for p in LOGOS.glob("*.png")), [])
-        script = _read(REPO_ROOT / "scripts" / "fetch_site_images.py")
+        script = script_source("fetch_site_images.py")
         self.assertIn(f"LOGO_SIZE = {LOGO_PIXELS}", script)
         self.assertIn('square_image(\n                data, LOGO_SIZE, "WEBP"', script)
 
@@ -1069,7 +1069,7 @@ class LogosAtTheirWeight(unittest.TestCase):
                     self.assertLessEqual(max(width, height), 80)
 
     def test_the_fetcher_writes_them_so(self):
-        script = _read(REPO_ROOT / "scripts" / "fetch_site_images.py")
+        script = script_source("fetch_site_images.py")
         self.assertIn('minify_svg(shrink_embedded(safe_svg(data, url)))', script)
 
 

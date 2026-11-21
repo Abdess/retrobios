@@ -121,6 +121,9 @@ COMMANDS = {
         "schemas/romfolders.py", "schemas/games.py", "schemas/run.py",
     ),
     "site_insights.py": ("sitegen/insights.py",),
+    "fetch_site_images.py": ("sitegen/imagefetch.py", "sitegen/imagenormalize.py"),
+    "make_site_icons.py": ("sitegen/brand.py", "sitegen/chromium.py"),
+    "make_og_cards.py": ("sitegen/ogcards.py", "sitegen/chromium.py"),
     "generate_readme.py": ("sitegen/readme.py",),
     "make_demo.py": (
         "sitegen/demovariants.py", "sitegen/democard.py", "sitegen/demosession.py",

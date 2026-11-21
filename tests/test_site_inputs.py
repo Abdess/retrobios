@@ -121,9 +121,10 @@ class TheCollectionDoesNotDependOnTheWorkingDirectory(unittest.TestCase):
         self.assertEqual(siteinputs.bios_dir({"bios_dir": "/abs/bios"}), Path("/abs/bios"))
 
     def test_the_image_tools_do_not_load_the_page_generator(self) -> None:
-        for module in ("make_og_cards.py", "fetch_site_images.py", "sitegen/render.py"):
-            with self.subTest(module=module):
-                source = (REPO_ROOT / "scripts" / module).read_text(encoding="utf-8")
+        tools = ("make_og_cards.py", "fetch_site_images.py", "make_site_icons.py")
+        for path in (*(p for tool in tools for p in script_paths(tool)), SCRIPTS / "sitegen" / "render.py"):
+            with self.subTest(module=path.name):
+                source = path.read_text(encoding="utf-8")
                 self.assertNotIn("from generate_site import", source)
 
 

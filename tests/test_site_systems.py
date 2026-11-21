@@ -54,7 +54,8 @@ from sitegen import systemsindex
 from sitegen import render as siterender
 from model import systemnames
 from packs.crossref import FileConsumers
-import make_og_cards
+from sitegen import ogcards
+from sitegen.diagrams import wrap
 from core.anchors import toc_slug
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -585,15 +586,15 @@ class ArcadeIsItsOwnGroup(unittest.TestCase):
 class EachManufacturerHasItsCard(unittest.TestCase):
     def test_a_tagline_holds_three_lines_and_counts_the_rest(self) -> None:
         names = [f"Console number {n}" for n in range(40)]
-        text = make_og_cards.consoles_tagline(names)
+        text = ogcards.consoles_tagline(names)
         self.assertRegex(text, r" and \d+ more$")
-        lines = make_og_cards.wrap(text, make_og_cards.TAGLINE_WIDTH, make_og_cards.TAGLINE_SIZE)
-        self.assertLessEqual(len(lines), make_og_cards.TAGLINE_LINES)
-        self.assertEqual(make_og_cards.consoles_tagline(["Saturn", "Dreamcast"]),
+        lines = wrap(text, ogcards.TAGLINE_WIDTH, ogcards.TAGLINE_SIZE)
+        self.assertLessEqual(len(lines), ogcards.TAGLINE_LINES)
+        self.assertEqual(ogcards.consoles_tagline(["Saturn", "Dreamcast"]),
                          "BIOS files for Dreamcast and Saturn")
 
     def test_every_manufacturer_page_has_a_committed_card(self) -> None:
-        cards = make_og_cards.system_cards()
+        cards = ogcards.system_cards()
         missing = [key for key in cards
                    if not (REPO_ROOT / "docs_assets" / "og" / f"{key}.png").is_file()]
         self.assertEqual(missing, [], "run python scripts/make_og_cards.py --only systems")
