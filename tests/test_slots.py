@@ -968,8 +968,8 @@ class ARecordIsFoundByItsPathOnce(unittest.TestCase):
         files = Counted({"a" * 40: {"path": "bios/x.bin"}, "b" * 40: {"path": "bios/y.bin"}})
         db = {"files": files}
         for _ in range(50):
-            self.assertEqual(resolve_collisions._record_at("bios/y.bin", db)["path"], "bios/y.bin")
-        self.assertIsNone(resolve_collisions._record_at("bios/z.bin", db))
+            self.assertEqual(resolve_collisions.record_at(db, "bios/y.bin")["path"], "bios/y.bin")
+        self.assertIsNone(resolve_collisions.record_at(db, "bios/z.bin"))
         self.assertEqual(Counted.walks, 1)
 
 
