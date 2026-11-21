@@ -12,6 +12,7 @@ from model.composition import count_catalog_matched
 from model.platforms import load_platform_config
 from model.profiles import unique_emulator_profiles
 from sitegen.config import RELEASE_URL, REPO_URL
+from sitegen.install import display_name
 
 
 def compute_stats(db: dict, coverages: dict, profiles: dict) -> dict:
@@ -84,7 +85,7 @@ def release_line(platform_name: str, record: dict) -> list[str]:
         pack_name, _pack_platforms(platform_name, record, pack_name)
     )
     if page_version and pack_version and page_version.lstrip("v") != pack_version.lstrip("v"):
-        display = config.get("platform", platform_name)
+        display = display_name(config, platform_name)
         lines.append(f"This pack was built for {display} {pack_version}. The command "
                      f"installs the files for {display} {page_version}.")
     return lines
@@ -115,7 +116,7 @@ def setup_version(platform_name: str, record: dict | None = None) -> str:
     ) or str(config.get("version") or "")
     if not version:
         return ""
-    return f"{config.get('platform', platform_name)} {version.removeprefix('v')}"
+    return f"{display_name(config, platform_name)} {version.removeprefix('v')}"
 
 
 def version_line(platform_name: str, record: dict, named: bool = False,

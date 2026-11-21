@@ -9,11 +9,11 @@ from pathlib import Path
 
 from model import siteinputs
 from model.registry import load_platform_registry
-from model.safeparse import yaml_load
 from sitegen import markup, measurements as sitemeasurements
 from sitegen.config import RELEASE_URL, REPO_URL, SITE_URL
 from core.paths import REPO_ROOT
 from core.sizes import size_text
+from sitegen.install import platform_display
 from sitegen.render import escape_tags
 
 
@@ -122,9 +122,7 @@ def _platforms_without_a_list(platforms_dir: Path | None = None) -> list[str]:
     for key, entry in sorted(load_platform_registry(str(platforms_dir)).items()):
         if entry.get("native_list") != "none":
             continue
-        config = platforms_dir / str(entry.get("config") or f"{key}.yml")
-        data = yaml_load(config.read_text(encoding="utf-8")) if config.is_file() else {}
-        names.append(str((data or {}).get("platform") or key))
+        names.append(platform_display(key, str(platforms_dir)))
     return names
 
 

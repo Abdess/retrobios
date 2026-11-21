@@ -8,10 +8,10 @@ from core.paths import PLATFORMS_DIR
 from core.sizes import size_text
 from model.composition import compute_composition
 from model.guides import DEVICE_GROUPS, GROUP_TILES, GUIDES, Guide, TRUST_ITEMS, setup_count
-from model.platforms import load_platform_config
 from model.profiles import unique_emulator_profiles
 from model.registry import load_platform_registry
 from sitegen import markup
+from sitegen.install import platform_display
 from sitegen.readme import demo_description, demo_facts
 
 
@@ -93,8 +93,7 @@ def generate_home(
     Explore index, one tab further. No date and no "next" box: the hero
     buttons say where to go."""
     registry = registry or load_platform_registry(platforms_dir)
-    display = {key: load_platform_config(key, platforms_dir).get("platform", key)
-               for key in registry}
+    display = {key: platform_display(key, platforms_dir) for key in registry}
     named = [n for n in ("RetroArch", "Batocera", "EmuDeck") if n in display.values()]
     others = setup_count() - len(named)
     works_with = ", ".join(named) + (f" and {others} more" if others else "")

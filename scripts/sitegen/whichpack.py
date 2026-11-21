@@ -25,7 +25,7 @@ from sitegen.config import RELEASE_URL
 from sitegen.guidepage import NO_ZIP_FAQ, devices_meta, first_screen_words, get_page_link
 from sitegen.guides import fence, terminal_tabs, trust_box
 from sitegen.home import group_keys, next_block, runs_on_text, setup_picker
-from sitegen.install import installer_module, has_release_pack
+from sitegen.install import installer_module, has_release_pack, platform_display
 from sitegen.readme import NO_PACK, download_links
 
 
@@ -198,8 +198,7 @@ def generate_which_pack() -> str:
     second time and made the page 11,800 px tall on a phone."""
     registry = load_platform_registry(str(siteinputs.current().platforms))
     record = releaserecord.load_advertised()
-    display = {key: load_platform_config(key, str(siteinputs.current().platforms)).get("platform", key)
-               for key in registry}
+    display = {key: platform_display(key) for key in registry}
     all_tabs = ("windows", "macos", "linux", "steamdeck", "android")
     # The quick install box also runs on a game system: its tab shows the
     # handheld recording (sitesteps).

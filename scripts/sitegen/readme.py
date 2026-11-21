@@ -30,6 +30,7 @@ from model.systems import system_index
 from packs.coverage import verify_platform
 from resolve.cores import resolve_platform_cores
 from resolve.review import LARGE_FILE_ISSUE_URL
+from sitegen.install import display_name, platform_display
 
 
 # The repository's profiles wherever the script is run from: a bare
@@ -81,7 +82,7 @@ def compute_coverage(
         u.get("name", "") for u in undeclared if not u.get("in_repo")
     }
     return {
-        "platform": config.get("platform", platform_name),
+        "platform": display_name(config, platform_name),
         "total": total,
         "verified": ok,
         "untested": untested,
@@ -313,7 +314,7 @@ def extract_targets(platforms_dir: str) -> list[tuple[str, str]]:
     from one place. Sorted by display name.
     """
     rows = [
-        (load_platform_config(key, platforms_dir).get("platform", key), entry["extract_to"])
+        (platform_display(key, platforms_dir), entry["extract_to"])
         for key, entry in load_platform_registry(platforms_dir).items()
         if entry.get("extract_to")
     ]
@@ -345,7 +346,7 @@ def extract_notes(platforms_dir: str, released_only: bool = False) -> list[str]:
         if released_only and registry[key].get("release_pack") is not True:
             continue
         config = load_platform_config(key, platforms_dir)
-        display = config.get("platform", key)
+        display = display_name(config, key)
         if config.get("base_destination") == "" and display in folders:
             notes.append(
                 f"The {display} pack holds its own `{own_root(config)}/` folder."

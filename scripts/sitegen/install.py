@@ -54,19 +54,23 @@ def manifest_systems(platform: str) -> frozenset[str]:
     )
 
 
-_platform_names: dict[str, str] = {}
+def display_name(config: dict, name: str) -> str:
+    """The `platform:` a loaded platform config writes, else its key."""
+    return str(config.get("platform") or name)
 
 
-def platform_display(name: str) -> str:
+def platform_display(name: str, platforms_dir: str | None = None) -> str:
     """A setup's name as its platform file writes it: Batocera, not batocera."""
-    display = _platform_names.get(name)
-    if display is None:
-        try:
-            config = load_platform_config(name, str(siteinputs.current().platforms))
-        except FileNotFoundError:
-            config = {}
-        display = _platform_names[name] = str(config.get("platform") or name)
-    return display
+    return _platform_display_in(platforms_dir or str(siteinputs.current().platforms), name)
+
+
+@functools.cache
+def _platform_display_in(platforms_dir: str, name: str) -> str:
+    try:
+        config = load_platform_config(name, platforms_dir)
+    except FileNotFoundError:
+        config = {}
+    return display_name(config, name)
 
 
 def comes_with_app(f: dict) -> bool:

@@ -16,7 +16,6 @@ from model.guides import (
     TERMINALS,
     detected_systems as _detected_systems,
 )
-from model.platforms import load_platform_config
 from model.registry import load_platform_registry
 from resolve.nativemode import digest_algorithm
 from installer_build.handhelds import GROUP_PAGE
@@ -25,7 +24,7 @@ from core.paths import REPO_ROOT
 from core.sizes import size_text
 from sitegen.guides import platform_args, terminal_tabs
 from sitegen.home import next_block
-from sitegen.install import installer_module, has_release_pack
+from sitegen.install import installer_module, has_release_pack, platform_display
 from sitegen.readme import download_links, extract_notes
 from sitegen.versions import release_line, setup_version, version_line
 
@@ -83,8 +82,7 @@ def pack_buttons(platform_name: str, label: str = "Pack", prefix: str = "../",
     frontend user asks. A setup with no release pack gets the line that
     says so, and why."""
     if not has_release_pack(platform_name):
-        display = display or load_platform_config(platform_name, str(siteinputs.current().platforms)).get(
-            "platform", platform_name)
+        display = display or platform_display(platform_name)
         return f"{no_zip_line(display)} [Why no ZIP?]({prefix}{NO_ZIP_FAQ})"
     record = releaserecord.load_advertised()
     buttons = download_links(
@@ -433,7 +431,7 @@ def generate_handheld_guide(guide: HandheldGuide) -> str:
     A handheld owner starts from the device name. The systems were named
     only in a closed note, with a path seen from inside the device."""
     uses = GUIDES[guide.uses]
-    display = load_platform_config(guide.uses, str(siteinputs.current().platforms)).get("platform", guide.uses)
+    display = platform_display(guide.uses)
     args = {"windows": f"--platform {guide.uses} --dest E:\\BIOS",
             "macos": f"--platform {guide.uses} --dest /path/to/card/BIOS",
             "linux": f"--platform {guide.uses} --dest /path/to/card/BIOS"}

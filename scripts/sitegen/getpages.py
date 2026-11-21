@@ -25,7 +25,7 @@ from sitegen.guidepage import (
     no_zip_line,
 )
 from sitegen.home import next_block
-from sitegen.install import has_release_pack
+from sitegen.install import display_name, has_release_pack, platform_display
 from sitegen.parts import parent_front_matter
 from sitegen.readme import asset_links
 from sitegen.versions import release_line, version_line
@@ -93,7 +93,7 @@ def generate_get_page(platform_name: str) -> str:
     or the command when no release publishes one. The release process
     never touches it: committing release.json rebuilds it."""
     config = load_platform_config(platform_name, str(siteinputs.current().platforms))
-    display = config.get("platform", platform_name)
+    display = display_name(config, platform_name)
     record = releaserecord.load_advertised()
     pack = releaserecord.pack_for(platform_name, record)
     released = has_release_pack(platform_name)
@@ -163,7 +163,7 @@ def generate_get_index() -> str:
             continue
         lines += [f"## {label}", ""]
         for name in names:
-            display = load_platform_config(name, str(siteinputs.current().platforms)).get("platform", name)
+            display = platform_display(name)
             lines.append(f"- [{get_page_title(name, display)}]({name}.md)")
         # The handheld app sits with the group whose tile leads to the
         # handheld guide.

@@ -423,12 +423,13 @@ def platform_modes() -> dict[str, tuple[str, str, str | None]]:
 @cache
 def _platform_modes_in(platforms_dir: str) -> dict[str, tuple[str, str, str | None]]:
     from model.platforms import load_platform_config
+    from sitegen.install import display_name
 
     out: dict[str, tuple[str, str, str | None]] = {}
     for name in _setups_in(platforms_dir):
         config = load_platform_config(name, platforms_dir)
         rule = _registry_in(platforms_dir).get(name, {}).get("hash_rule") or config.get("hash_rule")
-        out[name] = (config.get("platform", name), config.get("verification_mode", ""), rule)
+        out[name] = (display_name(config, name), config.get("verification_mode", ""), rule)
     return out
 
 
