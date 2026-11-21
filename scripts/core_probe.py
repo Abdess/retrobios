@@ -90,6 +90,8 @@ PRINTF_SPEC = re.compile(r"%(?P<flags>[-+ #0]*)(?P<width>\*|\d+)?(?:\.(?P<prec>\
 PROBE_LOCK_ENV = "RETROBIOS_PROBE_LOCK"
 PROBE_LOCK_HELD_ENV = "RETROBIOS_PROBE_LOCK_HELD"
 DEFAULT_PROBE_LOCK = Path.home() / ".local" / "state" / "retrobios" / "probe.lock"
+# The exit status of a run refused on a busy host: nothing was recorded.
+EXIT_BUSY = 3
 
 
 def probe_lock_path() -> Path:
@@ -1585,7 +1587,7 @@ def _probe(args: argparse.Namespace) -> int:
     if args.record and load_before and load_before[0] > max_load:
         print(f"ERROR: load average {load_before[0]} exceeds {max_load}: the machine is busy, "
               f"nothing recorded (raise --max-load to override)", file=sys.stderr)
-        return 3
+        return EXIT_BUSY
     repetitions = args.repeat
     base = {dest: Path(src) for dest, src in args.system_file}
     args.oracle_data, oracle_identity = load_oracle(Path(args.oracle) if args.oracle else DEFAULT_ORACLE)

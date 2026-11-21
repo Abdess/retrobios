@@ -88,6 +88,27 @@ def run_group(argv: Sequence[str], *, timeout: float | None = None, check: bool 
     return result
 
 
+BUSY_POLL = 15
+
+
+def run_when_idle(argv: Sequence[str], max_wait: float, *, timeout: float | None = None,
+                  env: dict[str, str] | None = None,
+                  clock: Callable[[], float] = time.monotonic,
+                  pause: Callable[[float], None] = time.sleep,
+                  runner: Callable[..., subprocess.CompletedProcess] = run_group,
+                  ) -> subprocess.CompletedProcess:
+    """core_probe, run again while it refuses a busy host: every BUSY_POLL
+    seconds until max_wait seconds have passed. The load threshold stays
+    core_probe's own, and a timeout kills the run's whole process group."""
+    started = clock()
+    while True:
+        proc = runner(list(argv), cwd=REPO_ROOT, capture_output=True, text=True, timeout=timeout,
+                      **({"env": env} if env is not None else {}))
+        if proc.returncode != core_probe.EXIT_BUSY or clock() - started >= max_wait:
+            return proc
+        pause(BUSY_POLL)
+
+
 @dataclass
 class Host:
     """What the campaign reads from the machine and the network, replaced in tests."""

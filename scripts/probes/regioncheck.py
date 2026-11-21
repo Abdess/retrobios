@@ -8,7 +8,6 @@ import re
 import subprocess
 import sys
 import tempfile
-import time
 from collections.abc import Callable, Iterable
 from pathlib import Path
 
@@ -18,7 +17,7 @@ from core_probe import BUILTIN
 from probes.content import Content, load_content, load_file
 from probes.cores import cached_nightly
 from probes.entries import entry_dest, held_file, regions_of
-from probes.host import CONTENT_FILE
+from probes.host import CONTENT_FILE, run_when_idle
 from resolve.validation import read_by_build
 
 
@@ -216,26 +215,6 @@ def local_resolver() -> Callable[[dict], Path | None]:
     return lambda entry: held_file(entry, db, REPO_ROOT)
 
 
-BUSY = 3  # core_probe's exit status when it refuses to record on a busy host
-POLL_S = 15
-
-
-def probe_when_idle(argv: list[str], max_wait: float,
-                    clock: Callable[[], float] = time.monotonic,
-                    pause: Callable[[float], None] = time.sleep,
-                    runner: Callable[..., subprocess.CompletedProcess] = subprocess.run
-                    ) -> subprocess.CompletedProcess:
-    """core_probe, run again while it refuses a busy host, as the campaign
-    does: every POLL_S seconds until max_wait seconds have passed. The load
-    threshold stays core_probe's own."""
-    started = clock()
-    while True:
-        proc = runner(argv, cwd=REPO_ROOT, capture_output=True, text=True)
-        if proc.returncode != BUSY or clock() - started >= max_wait:
-            return proc
-        pause(POLL_S)
-
-
 def run(args: argparse.Namespace) -> int:
     from model.profiles import load_emulator_profiles
 
@@ -268,7 +247,7 @@ def run(args: argparse.Namespace) -> int:
                     argv += ["--core-artifact", url]
                 for dest, src in sorted(variants[label].items()):
                     argv += ["--system-file", f"{dest}={src}"]
-                proc = probe_when_idle(argv, args.max_load_wait)
+                proc = run_when_idle(argv, args.max_load_wait, timeout=args.timeout * 2 + 120)
                 status = "recorded" if proc.returncode == 0 else f"exit {proc.returncode}"
                 print(json.dumps({"game": game.name, "variant": label, "status": status,
                                   "error": proc.stderr.strip()[-400:] if proc.returncode else None}),

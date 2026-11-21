@@ -237,7 +237,7 @@ class Campaign:
                     return ProbeResult(DONE, record=json.loads(proc.stdout), log=str(log))
                 except ValueError:
                     return ProbeResult(FAILED, reason="core_probe printed no record", log=str(log))
-            if proc.returncode == 3:
+            if proc.returncode == core_probe.EXIT_BUSY:
                 # Refused on a busy host: wait for it to settle and run it again.
                 busy += 1
                 if busy >= CRASH_ATTEMPTS:

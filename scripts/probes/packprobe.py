@@ -3,20 +3,19 @@
 from __future__ import annotations
 
 import argparse
-import contextlib
-import fcntl
 import json
 import os
 import shutil
 import subprocess
 import sys
 import time
-from collections.abc import Iterable, Iterator, Sequence
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
 from unattended import worktree
-from core_probe import PROBE_LOCK_ENV, PROBE_LOCK_HELD_ENV, VERDICTS, probe_lock_path
+from core_probe import (EXIT_BUSY, PROBE_LOCK_ENV, PROBE_LOCK_HELD_ENV, VERDICTS, host_probe_lock,
+                        probe_lock_path)
 from core.paths import REPO_ROOT
 from core.statefile import now_iso
 from model import measurements as mr
@@ -27,7 +26,7 @@ from model.targets import load_target_config
 from probes.content import Content, load_content, load_file, verify_identity
 from probes.cores import buildbot_listing, cached_nightly
 from probes.entries import entry_dest
-from probes.host import CONTENT_FILE, PROBE_TIMEOUT, Unavailable, child_env
+from probes.host import CONTENT_FILE, PROBE_TIMEOUT, Unavailable, child_env, run_group, run_when_idle
 from probes.packlayout import (
     Layout,
     ProbeFailure,
@@ -50,8 +49,6 @@ CORE_CACHE = MAIN / ".cache" / "pack-probe" / "cores"
 
 MAX_ROUNDS = 6
 IDLE_WAIT = 1800
-PROBE_LOCK = probe_lock_path()
-EXIT_BUSY = 3
 
 # The hardware target each platform is probed for: the one whose libretro
 # cores are the buildbot's x86_64 Linux builds, or the platform's only one.
@@ -278,20 +275,6 @@ def wait_idle(limit: float = IDLE_WAIT, poll: float = 30.0) -> None:
         waited += poll
 
 
-@contextlib.contextmanager
-def probe_lock(path: Path | None = None) -> Iterator[None]:
-    """The host's probe lock, for one run: one probe at a time on the host,
-    released between runs so a pass never holds it for its whole length."""
-    path = path or PROBE_LOCK
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("a") as handle:
-        fcntl.flock(handle, fcntl.LOCK_EX)
-        try:
-            yield
-        finally:
-            fcntl.flock(handle, fcntl.LOCK_UN)
-
-
 def core_probe(argv: list[str], staged: set[str], layout: Layout, work: Path) -> tuple[int, dict | None, str]:
     """core_probe.py run under the probe lock, the system files passed in an
     argument file."""
@@ -300,13 +283,13 @@ def core_probe(argv: list[str], staged: set[str], layout: Layout, work: Path) ->
     argfile.write_text("".join(f"--system-file\n{rel}={layout.root / rel}\n" for rel in sorted(staged)),
                        encoding="utf-8")
     command = [sys.executable, str(REPO_ROOT / "scripts" / "core_probe.py"), *argv, f"@{argfile}"]
-    with probe_lock():
+    with host_probe_lock():
         if "--record" in argv:
             wait_idle()
         # core_probe takes the same lock unless told its caller holds it.
-        proc = subprocess.run(command, capture_output=True, text=True, check=False, cwd=REPO_ROOT,
-                              timeout=PROBE_TIMEOUT * 2 + 120,
-                              env={**os.environ, PROBE_LOCK_HELD_ENV: "1", PROBE_LOCK_ENV: str(PROBE_LOCK)})
+        proc = run_when_idle(command, IDLE_WAIT, timeout=PROBE_TIMEOUT * 2 + 120, runner=run_group,
+                             env={**os.environ, PROBE_LOCK_HELD_ENV: "1",
+                                  PROBE_LOCK_ENV: str(probe_lock_path())})
     record = None
     if proc.returncode == 0:
         try:

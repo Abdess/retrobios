@@ -8,7 +8,8 @@ import tests
 import unittest
 from pathlib import Path
 
-from probes import regioncheck
+from core_probe import EXIT_BUSY
+from probes import host, regioncheck
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -74,16 +75,16 @@ class BusyHost(unittest.TestCase):
         def pause(seconds: float) -> None:
             now[0] += seconds
 
-        proc = regioncheck.probe_when_idle(["probe"], max_wait, clock=lambda: now[0], pause=pause, runner=runner)
+        proc = host.run_when_idle(["probe"], max_wait, clock=lambda: now[0], pause=pause, runner=runner)
         return proc.returncode, len(calls)
 
     def test_a_refused_run_is_tried_again_once_the_host_settles(self) -> None:
-        self.assertEqual(self._run([regioncheck.BUSY, regioncheck.BUSY, 0], 600), (0, 3))
+        self.assertEqual(self._run([EXIT_BUSY, EXIT_BUSY, 0], 600), (0, 3))
 
     def test_it_gives_up_after_the_wait(self) -> None:
-        code, calls = self._run([regioncheck.BUSY], 60)
-        self.assertEqual(code, regioncheck.BUSY)
-        self.assertEqual(calls, 60 // regioncheck.POLL_S + 1)
+        code, calls = self._run([EXIT_BUSY], 60)
+        self.assertEqual(code, EXIT_BUSY)
+        self.assertEqual(calls, 60 // host.BUSY_POLL + 1)
 
     def test_another_failure_is_not_retried(self) -> None:
         self.assertEqual(self._run([1, 0], 600), (1, 1))

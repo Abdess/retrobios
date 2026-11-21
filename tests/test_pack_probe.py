@@ -16,6 +16,7 @@ import tests
 import contextlib
 import io
 import json
+import os
 import re
 import shutil
 import unittest
@@ -283,8 +284,9 @@ class Lock(unittest.TestCase):
             return subprocess.CompletedProcess(command, 2, "", "refused")
 
         lay = layout({"a.bin": 1})
-        with unittest.mock.patch.object(packprobe, "PROBE_LOCK", lock), \
-                unittest.mock.patch.object(packprobe.subprocess, "run", fake_run):
+        env = {"RETROBIOS_PROBE_LOCK": str(lock), "RETROBIOS_PROBE_LOCK_HELD": ""}
+        with unittest.mock.patch.dict(os.environ, env), \
+                unittest.mock.patch.object(packprobe, "run_group", fake_run):
             for _ in range(2):
                 self.assertEqual(packprobe.core_probe(["run"], {"a.bin"}, lay, work), (2, None, "refused"))
         self.assertEqual(held, [True, True])
@@ -314,8 +316,9 @@ class RecordsNameNoLocalPath(unittest.TestCase):
         def fake_run(command, **kwargs):
             return subprocess.CompletedProcess(command, 1, "", f'  File "{script}", line 9\n')
 
-        with unittest.mock.patch.object(packprobe, "PROBE_LOCK", work / "probe.lock"), \
-                unittest.mock.patch.object(packprobe.subprocess, "run", fake_run):
+        env = {"RETROBIOS_PROBE_LOCK": str(work / "probe.lock"), "RETROBIOS_PROBE_LOCK_HELD": ""}
+        with unittest.mock.patch.dict(os.environ, env), \
+                unittest.mock.patch.object(packprobe, "run_group", fake_run):
             code, record, error = packprobe.core_probe(["run"], set(), layout({}), work)
         self.assertEqual((code, record), (1, None))
         self.assertEqual(error, 'File "<repo>/scripts/core_probe.py", line 9')
