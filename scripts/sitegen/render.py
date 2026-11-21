@@ -109,7 +109,7 @@ def prime_system_icons(names: set[str]) -> None:
 def system_icon_markdown(manufacturer: str, console_name: str) -> str:
     """Icon image for a system heading, empty when the site holds none.
 
-    The link names the upstream file: ``sitediagrams.localize_images``
+    The link names the upstream file: ``sitegen.diagrams.localize_images``
     points it at the local copy, whose source is recorded beside it.
     """
     name = console_icon_name(manufacturer, console_name)

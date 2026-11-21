@@ -4,8 +4,8 @@ Two things per tab, both drawn from data:
 
 - The steps that differ by system, opening a terminal and pasting the line,
   as a drawing: one card per step, a pictogram and a short caption, drawn
-  with sitediagrams' primitives and shown as its SVG files, one per layout
-  and theme (sitediagrams.pictures). The text steps above it
+  with sitegen.diagrams' primitives and shown as its SVG files, one per layout
+  and theme (sitegen.diagrams.pictures). The text steps above it
   (platforms/_guides.yml, terminals) are the one text source: the images
   are alt="", so the page reads the steps once. The files say the same in
   their title and desc, for one opened on its own. The pictograms are
@@ -250,7 +250,7 @@ def stem(tab: str) -> str:
 
 
 def steps_files() -> dict[str, str]:
-    """Every tab's drawing files, by name under sitediagrams.DIAGRAM_DIR."""
+    """Every tab's drawing files, by name under sitegen.diagrams.DIAGRAM_DIR."""
     return {name: text for tab in STEPS for name, text in diagram_files(stem(tab), _layouts(tab)).items()}
 
 

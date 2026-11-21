@@ -330,7 +330,7 @@ def _content_issues(page: Page, rel: str) -> list[str]:
     if page.empty_headers:
         messages.append(f"{page.empty_headers} table header cell(s) without text")
     if page.placeholders:
-        # scripts/sitediagrams.py knows no diagram of this name.
+        # scripts/sitegen/diagrams.py knows no diagram of this name.
         messages.append(f"image placeholders left unresolved: {page.placeholders[:3]}")
     if page.unrendered:
         # Bold that reached the reader as asterisks: a block indented
