@@ -67,6 +67,19 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
 # beside the standard library exists, and its records name and hash this file.
 SELF_CONTAINED = frozenset({"core_probe"})
 
+# Commands copied and run alone, outside a checkout: the file is all the user
+# has, so its checks stay in it. check_platform_folder.py reads the site's
+# public API from a card or a folder anywhere.
+STANDALONE_COMMANDS = frozenset({"check_platform_folder"})
+
+# What a command defines: its entry point and the parser that reads its
+# options. Everything else, option checks and run modes included, lives in a
+# package, where the tests reach it.
+COMMAND_DEFINITIONS = frozenset({"main", "build_parser"})
+
+# "download.sh" names a file beside a command, not an attribute of it.
+FILE_SUFFIXES = frozenset({"py", "sh", "ps1", "json", "txt", "yml", "md"})
+
 
 def module_name(path: Path) -> str:
     parts = list(path.relative_to(SCRIPTS).with_suffix("").parts)
@@ -255,6 +268,66 @@ class ImportLayers(unittest.TestCase):
         found = sorted(f"{src} imports {dst}" for src, dst in self.graph.edges()
                        if not is_package_module(dst) and dst not in SELF_CONTAINED)
         self.assertEqual(found, [], "a top-level module became a library: move its code into a package")
+
+
+
+def commands() -> dict[str, Path]:
+    return {path.stem: path for path in sorted(SCRIPTS.glob("*.py"))
+            if path.stem != "__init__" and path.stem not in SELF_CONTAINED | STANDALONE_COMMANDS
+            and tracked(path)}
+
+
+def tracked(path: Path) -> bool:
+    """Files kept out of git by the owner (.git/info/exclude) are not the repository's."""
+    import subprocess
+    result = subprocess.run(["git", "ls-files", "--error-unmatch", str(path)], cwd=SCRIPTS.parent,
+                            capture_output=True, check=False)
+    return result.returncode == 0
+
+
+class ThinCommands(unittest.TestCase):
+    """A command reads its options and calls a package. Code left in a command
+    can only be tested by importing the command, and a command imported by its
+    tests grows: check_freshness.py had reached 80 definitions."""
+
+    def test_a_command_defines_its_entry_point_and_parser_only(self):
+        found = []
+        for name, path in commands().items():
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+            found += [f"{name}.{node.name}" for node in tree.body
+                      if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+                      and node.name not in COMMAND_DEFINITIONS]
+        self.assertEqual(found, [], "move it into the package the command calls")
+
+    def test_tests_reach_a_command_through_its_entry_point_only(self):
+        names = set(commands())
+        found = []
+        for path in sorted(Path(__file__).parent.rglob("*.py")):
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+            bound: dict[str, str] = {}
+            for node in ast.walk(tree):
+                if isinstance(node, ast.ImportFrom) and not node.level and node.module:
+                    module = node.module.removeprefix("scripts.")
+                    if module in names:
+                        found += [f"{path.name}: {module}.{a.name}" for a in node.names
+                                  if a.name not in COMMAND_DEFINITIONS]
+                elif isinstance(node, ast.Import):
+                    for alias in node.names:
+                        module = alias.name.removeprefix("scripts.")
+                        if module in names:
+                            bound[alias.asname or alias.name] = module
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Constant) and isinstance(node.value, str):
+                    # mock.patch("verify.load_database") reaches into the command too.
+                    module, _, attr = node.value.partition(".")
+                    if (module in names and attr.isidentifier() and attr not in FILE_SUFFIXES
+                            and attr not in COMMAND_DEFINITIONS):
+                        found.append(f"{path.name}: {node.value}")
+                if (isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name)
+                        and node.value.id in bound and node.attr not in COMMAND_DEFINITIONS
+                        and not node.attr.startswith("__")):
+                    found.append(f"{path.name}: {bound[node.value.id]}.{node.attr}")
+        self.assertEqual(sorted(set(found)), [], "import it from the package that holds it")
 
 
 if __name__ == "__main__":
