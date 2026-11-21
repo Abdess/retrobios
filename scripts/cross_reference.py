@@ -24,7 +24,6 @@ from model.cliargs import platform_arg, list_emulator_profiles, require_platform
 from model.profiles import ProfileSelectionError, load_emulator_profiles, select_emulator_profiles
 from model.database import load_database
 from model.registry import list_registered_platforms, load_data_dir_registry
-from model.declarations import merged_platform_declared_contents
 from model.platforms import load_platform_config
 from model.safeparse import require_yaml
 from resolve.standalone import standalone_set
@@ -37,10 +36,9 @@ from resolve.launchers import (
 from packs.crossref import (
     build_supplemental_index,
     cross_reference,
-    declared_names,
-    folded_declared_slots,
+    global_report_scope,
     launcher_reads_not_held,
-    load_platform_files,
+    platform_configs,
     profile_breakdown,
 )
 
@@ -351,21 +349,13 @@ def main() -> None:
         return
 
     selected = [args.platform] if args.platform else None
-    declared, plat_data_dirs = load_platform_files(args.platforms_dir, selected)
     db = load_database(args.db)
+    declared, global_scope = global_report_scope(
+        platform_configs(args.platforms_dir, selected), db)
+    global_scope["standalone_cores"] = standalone_cores
     data_names = build_supplemental_index()
     report = cross_reference(
-        profiles, declared, db, plat_data_dirs, data_names,
-        all_declared=declared_names(args.platforms_dir, selected, db),
-        standalone_cores=standalone_cores,
-        folded_slots=folded_declared_slots(args.platforms_dir, selected, db),
-        declared_contents=merged_platform_declared_contents(
-            [
-                load_platform_config(name, args.platforms_dir)
-                for name in selected or list_registered_platforms(args.platforms_dir)
-            ],
-            db,
-        ),
+        profiles, declared, db, data_names, **global_scope,
         platform=(
             platform_scope.config.get("_key", args.platform) if platform_scope else ""
         ),

@@ -13,7 +13,7 @@ import tests
 import unittest
 from pathlib import Path
 
-from packs.crossref import cross_reference, declared_names, load_platform_files
+from packs.crossref import cross_reference, global_report_scope, platform_configs
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -39,11 +39,10 @@ class FlatDeclaredSet(unittest.TestCase):
             }}
             db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_crc32": {},
                                            "by_path_suffix": {}}}
-            declared, data_dirs = load_platform_files(str(platforms), ["fx"])
-            per_system = cross_reference(profiles, declared, db, data_dirs, set())
+            declared, scope = global_report_scope(platform_configs(str(platforms), ["fx"]), db)
+            per_system = cross_reference(profiles, declared, db, set())
             flat = cross_reference(
-                profiles, declared, db, data_dirs, set(),
-                all_declared=declared_names(str(platforms), ["fx"], db),
+                profiles, declared, db, set(), all_declared=scope["all_declared"],
             )
         self.assertEqual([g["name"] for g in per_system["sgbcore"]["gap_details"]],
                          ["sgb.boot.rom"])
@@ -62,7 +61,7 @@ class AnAliasIsADeclaration(unittest.TestCase):
         db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_crc32": {},
                                         "by_path_suffix": {}}}
         report = cross_reference(
-            profiles, {}, db, {}, {"by_name": {}},
+            profiles, {}, db, {"by_name": {}},
             all_declared={"kick40060.CD32"},
         )
         self.assertEqual(report["amiberry"]["gap_details"], [])

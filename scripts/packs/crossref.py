@@ -56,75 +56,54 @@ if TYPE_CHECKING:
     from typing_extensions import Unpack
 
 
-def load_platform_files(
-    platforms_dir: str,
-    platforms: list[str] | None = None,
-) -> tuple[dict[str, set[str]], dict[str, set[str]]]:
-    """Collect declared filenames + data_directories per system.
+def platform_configs(platforms_dir: str, platforms: list[str] | None = None) -> list[dict]:
+    """The configs of *platforms*, otherwise of every registered platform."""
+    return [
+        load_platform_config(platform_name, platforms_dir)
+        for platform_name in platforms or list_registered_platforms(platforms_dir)
+    ]
 
-    Restricted to *platforms* when given, otherwise every registered platform.
-    Keyed by the normalized system ID: a profile writes `sega-megacd` where
-    RetroArch writes `sega-mega-cd`, and an exact match called 924 declared
-    files undeclared.
+
+def global_report_scope(
+    configs: list[dict], db: dict,
+) -> tuple[dict[str, set[str]], ReportScope]:
+    """What a gap report over *configs* compares against: the names each
+    system declares, and the scope cross_reference reads.
+
+    The declared names are keyed by the normalized system ID: a profile
+    writes `sega-megacd` where RetroArch writes `sega-mega-cd`, and an exact
+    match called 924 declared files undeclared. `all_declared` is every name
+    with each declaration's size and slot: judged per normalized system id,
+    646 entries whose exact name a platform declares (bk and elektronika-bk,
+    nintendo-sgb and nintendo-super-game-boy) were counted undeclared.
+    `folded_slots` holds the slots a case-folding filesystem fills under any
+    spelling (RetroBat's 32X_G_BIOS.BIN is BlastEm's 32X_G_BIOS.bin), and
+    `declared_contents` the members of a declared archive. The command line
+    and the site's gap page read this one scope.
     """
+    from model.declarations import (
+        merged_platform_declarations,
+        merged_platform_declared_contents,
+        platform_declarations,
+    )
+    from resolve.standalone import merged_standalone_set
+
     declared: dict[str, set[str]] = {}
-    platform_data_dirs: dict[str, set[str]] = {}
-    for platform_name in platforms or list_registered_platforms(
-        platforms_dir
-    ):
-        config = load_platform_config(platform_name, platforms_dir)
+    for config in configs:
         for sys_id, system in config.get("systems", {}).items():
             for fe in system.get("files", []):
                 name = fe.get("name", "")
                 if name:
                     declared.setdefault(norm_system_id(sys_id), set()).add(name)
-            for dd in system.get("data_directories", []):
-                ref = dd.get("ref", "")
-                if ref:
-                    platform_data_dirs.setdefault(norm_system_id(sys_id), set()).add(ref)
-    return declared, platform_data_dirs
-
-
-def declared_names(
-    platforms_dir: str, platforms: list[str] | None, db: dict
-) -> dict[str, list[tuple[int | None, str]]]:
-    """Every name the platforms declare, with each declaration's size and slot.
-
-    The report judged "undeclared" per normalized system id, which does not
-    bring bk and elektronika-bk, or nintendo-sgb and nintendo-super-game-boy,
-    together: 646 entries whose exact name a platform declares were counted
-    undeclared, while verify and the site read one flat index.
-    """
-    from model.declarations import merged_platform_declarations
-
-    return merged_platform_declarations(
-        [
-            load_platform_config(platform_name, platforms_dir)
-            for platform_name in platforms or list_registered_platforms(
-                platforms_dir
-            )
-        ],
-        db,
-    )
-
-
-def folded_declared_slots(
-    platforms_dir: str, platforms: list[str] | None, db: dict
-) -> frozenset[str]:
-    """The slots platforms whose filesystem folds case fill, any spelling.
-
-    RetroBat's 32X_G_BIOS.BIN is the file BlastEm opens as 32X_G_BIOS.bin,
-    and the exact-case name test called it undeclared.
-    """
-    from model.declarations import platform_declarations
-
-    slots: set[str] = set()
-    for platform_name in platforms or list_registered_platforms(
-        platforms_dir
-    ):
-        config = load_platform_config(platform_name, platforms_dir)
-        slots |= case_folded_slots(config, platform_declarations(config, db))
-    return frozenset(slots)
+    folded: frozenset[str] = frozenset().union(*(
+        case_folded_slots(config, platform_declarations(config, db)) for config in configs
+    ))
+    return declared, {
+        "all_declared": merged_platform_declarations(configs, db),
+        "standalone_cores": merged_standalone_set(configs),
+        "folded_slots": folded,
+        "declared_contents": merged_platform_declared_contents(configs, db),
+    }
 
 
 def build_supplemental_index(
@@ -1387,7 +1366,6 @@ def cross_reference(
     profiles: dict[str, dict],
     declared: dict[str, set[str]],
     db: dict,
-    platform_data_dirs: dict[str, set[str]] | None = None,
     data_names: set[str] | None = None,
     **scope: Unpack[ReportScope],
 ) -> dict:
@@ -1415,7 +1393,6 @@ def cross_reference(
     platform = scope.get("platform", "")
     launcher_layer = scope.get("launcher_layer")
     declared_contents = scope.get("declared_contents")
-    platform_data_dirs = platform_data_dirs or {}
     report: dict[str, dict] = {}
 
     index = {

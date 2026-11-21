@@ -430,18 +430,19 @@ class LauncherLayerTest(unittest.TestCase):
         """cross_reference --platform batocera listed duckstation's
         scph1002a.bin as packed while the PAL slot was filled by the
         launcher's scph5502.bin, which verify and the builder both knew."""
-        from packs.crossref import cross_reference, declared_names, load_platform_files
+        from packs.crossref import cross_reference, global_report_scope, platform_configs
         from resolve.launchers import declared_destinations
 
         selected = ["launchertest"]
-        declared, data_dirs = load_platform_files(self.platforms_dir, selected)
+        declared, scope = global_report_scope(
+            platform_configs(self.platforms_dir, selected), self.db)
         layer = LauncherLayer(
             self.config, self.profiles, self.profiles, self.db,
             declared_destinations(self.config),
         )
         report = cross_reference(
-            self.profiles, declared, self.db, data_dirs, set(),
-            all_declared=declared_names(self.platforms_dir, selected, self.db),
+            self.profiles, declared, self.db, set(),
+            all_declared=scope["all_declared"],
             standalone_cores={"psxemu", "fixemu"},
             platform="launchertest", launcher_layer=layer,
         )

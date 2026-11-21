@@ -5792,7 +5792,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_226_cross_reference_platform_filter(self):
         """--platform restricts declarations to that platform alone."""
-        from packs.crossref import load_platform_files
+        from packs.crossref import global_report_scope, platform_configs
 
         with tempfile.TemporaryDirectory() as tmpdir:
             plat_dir = os.path.join(tmpdir, "platforms")
@@ -5816,10 +5816,11 @@ struct BurnDriver BurnDrvneogeo = {
 
             # Keyed by the normalized system ID, as profiles spell systems
             # differently from platforms.
-            everything, _ = load_platform_files(plat_dir)
+            db = {"files": {}, "indexes": {}}
+            everything, _ = global_report_scope(platform_configs(plat_dir), db)
             self.assertEqual(everything["sharedsystem"], {"a.bin", "b.bin"})
 
-            only_alpha, _ = load_platform_files(plat_dir, ["alpha"])
+            only_alpha, _ = global_report_scope(platform_configs(plat_dir, ["alpha"]), db)
             self.assertEqual(only_alpha["sharedsystem"], {"a.bin"})
 
 

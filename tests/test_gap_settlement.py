@@ -100,9 +100,11 @@ class TheRunningBuildPlacesTheGap(unittest.TestCase):
 
 class EveryGapReportFoldsCase(unittest.TestCase):
     """The command line passed folded_slots and the site did not, so the
-    gaps page listed RetroBat files the CLI report settled."""
+    gaps page listed RetroBat files the CLI report settled; later the CLI
+    passed declared_contents and the site did not, 20 gaps apart. Both
+    take their scope from packs.crossref.global_report_scope."""
 
-    def test_each_cross_reference_call_passes_the_folded_slots(self):
+    def test_each_cross_reference_call_reads_the_shared_scope(self):
         import ast
 
         for script in ("cross_reference.py", "generate_site.py"):
@@ -114,8 +116,9 @@ class EveryGapReportFoldsCase(unittest.TestCase):
             ]
             with self.subTest(script=script):
                 self.assertTrue(calls)
+                self.assertIn("global_report_scope(", source)
                 for call in calls:
-                    self.assertIn("folded_slots", {kw.arg for kw in call.keywords})
+                    self.assertIn(None, {kw.arg for kw in call.keywords})
 
 
 if __name__ == "__main__":

@@ -249,47 +249,16 @@ def build_emulator_gap_report(
     The gap analysis page and the published gaps export must not compute this
     twice and drift. Both read this one report.
     """
-    from model.systems import norm_system_id
-    from model.declarations import merged_platform_declarations
-    from packs.crossref import cross_reference as run_cross_reference
+    from packs.crossref import cross_reference as run_cross_reference, global_report_scope
 
-    # Enriched with alias resolution, with each declaration's size and slot:
-    # a name alone settled DOSBox's 32 KiB SC-55 ROM1.BIN on Galaksija's.
-    all_declared = merged_platform_declarations(
-        [cov["config"] for cov in coverages.values()], db
-    )
-    declared: dict[str, set[str]] = {}
-    for cov in coverages.values():
-        config = cov["config"]
-        for sys_id, system in config.get("systems", {}).items():
-            for fe in system.get("files", []):
-                fname = fe.get("name", "")
-                if fname:
-                    declared.setdefault(norm_system_id(sys_id), set()).add(fname)
-
+    declared, scope = global_report_scope(
+        [cov["config"] for cov in coverages.values()], db)
     unique_profiles = {
         k: v
         for k, v in profiles.items()
         if is_emulator(v)
     }
-    from resolve.standalone import merged_standalone_set
-    from model.declarations import platform_declarations
-    from resolve.validation import case_folded_slots
-
-    # The command line passes these too: without them a RetroBat file named
-    # 32X_G_BIOS.BIN read as missing for a core opening 32X_G_BIOS.bin.
-    folded = frozenset().union(*(
-        case_folded_slots(cov["config"], platform_declarations(cov["config"], db))
-        for cov in coverages.values()
-    ))
-    return run_cross_reference(
-        unique_profiles, declared, db,
-        data_names=data_names, all_declared=all_declared,
-        standalone_cores=merged_standalone_set(
-            cov["config"] for cov in coverages.values()
-        ),
-        folded_slots=folded,
-    )
+    return run_cross_reference(unique_profiles, declared, db, data_names=data_names, **scope)
 
 
 def _gap_export_rows(
