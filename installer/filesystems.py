@@ -120,6 +120,20 @@ def hide_from_media_scanner(folder: Path) -> bool:
     return True
 
 
+def read_mountinfo() -> str | None:
+    """/proc/self/mountinfo, None where it cannot be read."""
+    try:
+        return Path("/proc/self/mountinfo").read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return None
+
+
+def mount_point(field: str) -> str:
+    """Field 5 of a mountinfo line, its space, tab, newline and backslash
+    written as octal escapes (proc(5))."""
+    return re.sub(r"\\([0-7]{3})", lambda m: chr(int(m.group(1), 8)), field)
+
+
 def mountinfo_types(text: str) -> list[tuple[str, str]]:
     """(mount point, file system type) of each line of /proc/self/mountinfo:
     the point is field 5, its space, tab and backslash written as octal
@@ -129,7 +143,7 @@ def mountinfo_types(text: str) -> list[tuple[str, str]]:
         head, _sep, tail = line.partition(" - ")
         fields = head.split(" ")
         if len(fields) > 4 and tail:
-            point = re.sub(r"\\([0-7]{3})", lambda m: chr(int(m.group(1), 8)), fields[4])
+            point = mount_point(fields[4])
             mounts.append((point, tail.split(" ")[0]))
     return mounts
 
@@ -180,7 +194,7 @@ def fat32_drive(folder: Path) -> bool:
             listing = subprocess.run(["/sbin/mount"], capture_output=True, text=True,
                                      timeout=5, check=False).stdout
             return fat_mounted(target, mount_list_types(listing))
-        text = Path("/proc/self/mountinfo").read_text(encoding="utf-8", errors="replace")
+        text = read_mountinfo()
     except (OSError, subprocess.SubprocessError):
         return False
-    return fat_mounted(target, mountinfo_types(text))
+    return text is not None and fat_mounted(target, mountinfo_types(text))

@@ -7,6 +7,7 @@ from pathlib import Path, PurePosixPath
 from typing import NamedTuple
 
 from installer.embedded import CARD_PLATFORMS, _CARD_RULES, _EMBEDDED_RULES, _STANDIN_MANIFESTS, _OsRule, _a, _built_on
+from installer.filesystems import mount_point, read_mountinfo
 from installer.host_fs import _WSL, _exists, _is_dir, _is_file, _probed
 from installer.paths import shown_path
 from installer.platforms import AVAILABLE_PLATFORMS, _name_key, display_name
@@ -70,11 +71,8 @@ def _drive_not_removable(mount: Path) -> bool:
         except (AttributeError, OSError):
             return False
         return kind in _NOT_REMOVABLE_TYPES
-    try:
-        text = Path("/proc/self/mountinfo").read_text(encoding="utf-8", errors="replace")
-    except OSError:
-        return False
-    return _fixed_partition(mount, text, Path("/sys"))
+    text = read_mountinfo()
+    return text is not None and _fixed_partition(mount, text, Path("/sys"))
 
 
 def _fixed_partition(mount: Path, mountinfo: str, sys_root: Path) -> bool:
@@ -86,7 +84,7 @@ def _fixed_partition(mount: Path, mountinfo: str, sys_root: Path) -> bool:
         fields = line.split(" ")
         if len(fields) < 5:
             continue
-        point = re.sub(r"\\([0-7]{3})", lambda m: chr(int(m.group(1), 8)), fields[4])
+        point = mount_point(fields[4])
         if point != str(mount):
             continue
         # Field 4 is the folder of the filesystem mounted there: "/" for a
@@ -479,13 +477,10 @@ def _mount_points() -> frozenset:
     """Every mount point this process sees, from /proc/self/mountinfo where
     it exists: os.path.ismount compares devices, and misses a bind mount
     from the same filesystem (a stick bound inside a muOS card's mount)."""
-    try:
-        text = Path("/proc/self/mountinfo").read_text(encoding="utf-8", errors="replace")
-    except OSError:
+    text = read_mountinfo()
+    if text is None:
         return frozenset()
-    # Field 5 is the mount point, with space, tab, newline and backslash
-    # written as octal escapes (proc(5)).
-    return frozenset(re.sub(r"\\([0-7]{3})", lambda m: chr(int(m.group(1), 8)), fields[4])
+    return frozenset(mount_point(fields[4])
                      for fields in (line.split(" ") for line in text.splitlines())
                      if len(fields) > 4)
 
