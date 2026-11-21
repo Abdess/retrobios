@@ -456,7 +456,7 @@ class AProgramRunFromItsFolder(unittest.TestCase):
         install._check_relative_directories(manifest)
         files = list(manifest["files"])
         card = self.root / "card" / "roms" / "bios"
-        kept, left = install.place_relative_entries(files, card, manifest, "romsplat", say=False)
+        kept, left = install.place_relative_entries(files, card, manifest)
         self.assertEqual((len(kept), left), (2, []))
         self.assertEqual(
             install._entry_path(card, kept[0]),
@@ -464,7 +464,7 @@ class AProgramRunFromItsFolder(unittest.TestCase):
             if install._entry_path(card, kept[0]).is_absolute() else card.parent / kept[0]["dest"],
         )
         other = self.root / "elsewhere"
-        kept, left = install.place_relative_entries(files, other, manifest, "romsplat", say=False)
+        kept, left = install.place_relative_entries(files, other, manifest)
         self.assertEqual(kept, [])
         self.assertEqual({o["reason"] for o in left}, {"no_roms_directory"})
         with self.assertRaises(ValueError):
@@ -473,7 +473,7 @@ class AProgramRunFromItsFolder(unittest.TestCase):
         beside = {**manifest, "roms_directory": {"bios_folder": "bios", "from_bios": "../roms"}}
         install._check_relative_directories(beside)
         disk = self.root / "userdata" / "bios"
-        install.place_relative_entries(files, disk, beside, "romsplat", say=False)
+        install.place_relative_entries(files, disk, beside)
         self.assertEqual(install._entry_place(disk, kept_entry := files[0])[0],
                          self.root / "userdata" / "roms")
         self.assertEqual(kept_entry["root"], "roms")
@@ -503,21 +503,21 @@ class AProgramRunFromItsFolder(unittest.TestCase):
         bios = home / "bios"
         bios.mkdir(parents=True)
         # Not the platform's folder: no launcher config beside it.
-        kept, left = install.place_emulator_entries(files, bios, manifest, "emuplat", say=False)
+        kept, left = install.place_emulator_entries(files, bios, manifest)
         self.assertEqual((kept, {o["reason"] for o in left}), ([], {"no_emulators_directory"}))
         (home / "frontend").mkdir()
         (home / "frontend" / "launcher.cfg").write_text("other=x\n")
-        kept, left = install.place_emulator_entries(files, bios, manifest, "emuplat", say=False)
+        kept, left = install.place_emulator_entries(files, bios, manifest)
         self.assertEqual((len(kept), left), (2, []))
         entry = next(f for f in kept if f["dest"] == "prog/prog")
         self.assertEqual(install._entry_place(bios, entry), (home / "emulators" / "prog", "prog"))
         # The first searched place that exists wins.
         (home / "frontend" / "prog").mkdir()
-        install.place_emulator_entries(files, bios, manifest, "emuplat", say=False)
+        install.place_emulator_entries(files, bios, manifest)
         self.assertEqual(install._entry_place(bios, entry)[0], home / "frontend" / "prog")
         # A key the launcher config sets moves the folder: left out.
         (home / "frontend" / "launcher.cfg").write_text("prog=D:\\Prog\n")
-        kept, left = install.place_emulator_entries(files, bios, manifest, "emuplat", say=False)
+        kept, left = install.place_emulator_entries(files, bios, manifest)
         self.assertEqual((kept, len(left)), ([], 2))
 
 

@@ -346,13 +346,13 @@ class AUserFolderInTheConfigsFolder(unittest.TestCase):
         install._check_relative_directories(manifest)
         files = [{"dest": "shadps4/user/sys_modules/libSceNgs2.sprx", "root": "configs"}]
         bios = Path("/userdata/bios")
-        kept, left = install.place_relative_entries(files, bios, manifest, "x", say=False)
+        kept, left = install.place_relative_entries(files, bios, manifest)
         self.assertEqual((len(kept), left), (1, []))
         self.assertEqual(
             install._entry_place(bios, kept[0])[0], Path("/userdata/system/configs")
         )
         kept, left = install.place_relative_entries(
-            files, Path("/elsewhere/firmware"), manifest, "x", say=False)
+            files, Path("/elsewhere/firmware"), manifest)
         self.assertEqual((kept, [o["reason"] for o in left]), ([], ["no_configs_directory"]))
         for value in ("../C:x", "../../../x", "../system/../x"):
             with self.subTest(from_bios=value), self.assertRaises(ValueError):

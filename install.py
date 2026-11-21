@@ -6304,14 +6304,14 @@ def save_directory_for(
 
 def place_save_entries(
     files: list[dict], bios_path: Path, manifest: dict, override: Path | None,
-    display: str, say: bool = True,
+    display: str,
 ) -> tuple[list[dict], list[dict]]:
     """Find the save directory for the entries read below it.
 
     Returns the files to install and, when the save directory is unknown,
-    the entries left out as omissions, said once with the reason. Without
-    say nothing is printed or sent: the run says it (say_saves) once a
-    choice of systems has kept the files it counts.
+    the entries left out as omissions. Nothing is printed or sent: the run
+    says it (say_saves) once a choice of systems has kept the files it
+    counts.
     """
     saved = [entry for entry in files if entry.get("root") == "save"]
     if not saved:
@@ -6327,15 +6327,8 @@ def place_save_entries(
         if place.by_core:
             where += f"{os.sep}<core>"
         _SAVE_WHERE[bios_path] = where
-        if say:
-            print(f"  {saves_line(display, len(saved), where)}")
-            EVENTS.emit("saves", platform=str(manifest.get("platform", "")),
-                        files=len(saved), folder=where)
         return files, []
     _SAVE_WHY[bios_path] = place
-    if say:
-        print(f"  {_plural(len(saved), 'file')} read from {display}'s save directory "
-              f"left out: {place}.")
     kept = [entry for entry in files if entry.get("root") != "save"]
     unplaced = [
         {"dest": entry["dest"], "name": PurePosixPath(entry["dest"]).name,
@@ -6349,7 +6342,7 @@ def place_save_entries(
 
 
 def place_relative_entries(
-    files: list[dict], bios_path: Path, manifest: dict, display: str, say: bool = True,
+    files: list[dict], bios_path: Path, manifest: dict,
 ) -> tuple[list[dict], list[dict]]:
     """Find the roms and configs folders for the entries read below them.
 
@@ -6357,7 +6350,8 @@ def place_relative_entries(
     source places them (ROCKNIX's /storage/roms holds bios/, Batocera's
     configs folder is ../system/configs): a BIOS folder of the platform's
     name puts the root there. Any other is a folder this run cannot relate
-    to the root, and the entries are left out with the reason.
+    to the root, and the entries are left out, the reason kept for
+    say_unplaced.
     """
     unplaced: list[dict] = []
     for root in RELATIVE_ROOTS:
@@ -6372,9 +6366,8 @@ def place_relative_entries(
         if folder is not None:
             _RELATIVE_DIRS[(bios_path, root)] = folder
             continue
-        if say:
-            print(f"  {_plural(len(below), 'file')} read from {display}'s {root} folder left "
-                  f"out: {bios_path} is not its {layout.get('bios_folder') or 'BIOS'} folder.")
+        _UNPLACED_WHY[(bios_path, root)] = (
+            f"{bios_path} is not its {layout.get('bios_folder') or 'BIOS'} folder")
         files = [entry for entry in files if entry.get("root") != root]
         unplaced += [
             {"dest": entry["dest"], "name": PurePosixPath(entry["dest"]).name,
@@ -6386,7 +6379,7 @@ def place_relative_entries(
 
 
 def place_emulator_entries(
-    files: list[dict], bios_path: Path, manifest: dict, display: str, say: bool = True,
+    files: list[dict], bios_path: Path, manifest: dict,
 ) -> tuple[list[dict], list[dict]]:
     """Find the emulator folder each entry a launcher runs from one goes to.
 
@@ -6394,9 +6387,9 @@ def place_emulator_entries(
     launcher config (RetroBat's bios beside emulationstation): a BIOS
     folder of that name whose parent holds the config is the platform's.
     A key the config sets moves the folder somewhere this run does not
-    follow, so its files are left out. Otherwise the folder is the first of
-    the searched places that exists, the default one when none does, as the
-    launcher searches them.
+    follow, so its files are left out, the reason kept for say_unplaced.
+    Otherwise the folder is the first of the searched places that exists,
+    the default one when none does, as the launcher searches them.
     """
     inside = [entry for entry in files if entry.get("root") == "emulators"]
     if not inside:
@@ -6441,13 +6434,30 @@ def place_emulator_entries(
             "reason": "no_emulators_directory", "cores": entry.get("cores"),
             "root": "emulators",
         })
-    if unplaced and say:
-        why = (f"{config} sets their folder" if matches
-               else f"{bios_path} is not the {layout.get('bios_folder') or 'BIOS'} folder "
-                    f"beside {layout.get('config') or 'its config'}")
-        print(f"  {_plural(len(unplaced), 'file')} read from {display}'s emulator folders "
-              f"left out: {why}.")
+    if unplaced:
+        _UNPLACED_WHY[(bios_path, "emulators")] = (
+            f"{config} sets their folder" if matches
+            else f"{bios_path} is not the {layout.get('bios_folder') or 'BIOS'} folder "
+                 f"beside {layout.get('config') or 'its config'}")
     return kept, unplaced
+
+
+# Per BIOS folder and root, why the files read below a roms, configs or
+# emulators folder are left out: said once a choice keeps the ones counted.
+_UNPLACED_WHY: dict[tuple[Path, str], str] = {}
+_UNPLACED_FOLDERS = {"roms": "roms folder", "configs": "configs folder",
+                     "emulators": "emulator folders"}
+
+
+def say_unplaced(omitted: list[dict], bios_path: Path, display: str) -> None:
+    """The roms, configs and emulator folder lines, over the entries a
+    narrowed run still counts: --system panasonic-3do said 1918 files read
+    from EmuDeck's roms folder were left out, 6 of them the 3DO's."""
+    for root, folder in _UNPLACED_FOLDERS.items():
+        left = sum(1 for entry in omitted if entry.get("reason") == f"no_{root}_directory")
+        why = _UNPLACED_WHY.get((bios_path, root))
+        if left and why is not None:
+            print(f"  {_plural(left, 'file')} read from {display}'s {folder} left out: {why}.")
 
 
 # Per BIOS folder, where its save files go in words, or why that is not
@@ -22193,17 +22203,15 @@ def _pass_version_and_saves(run: _InstallRun, p: _PlatformPass) -> None:
 
     # Before the menu: it offered 23 files, then 22 were checked, the
     # one read from an unknown save directory left out. Said once the
-    # choice is made, over the files it keeps (say_saves).
+    # choice is made, over the files it keeps (say_saves, say_unplaced).
     p.display = display = display_name(plat_name, manifest)
     if not run.packing:
         # A pack keeps every root's files: the device installing it
         # places them.
         files, unplaced = place_save_entries(
-            p.files, bios_path, manifest, run.args.save_dir, display, say=False)
-        files, beyond = place_relative_entries(
-            files, bios_path, manifest, display, say=not run.listing)
-        p.files, elsewhere = place_emulator_entries(
-            files, bios_path, manifest, display, say=not run.listing)
+            p.files, bios_path, manifest, run.args.save_dir, display)
+        files, beyond = place_relative_entries(files, bios_path, manifest)
+        p.files, elsewhere = place_emulator_entries(files, bios_path, manifest)
         p.unplaced = [*unplaced, *beyond, *elsewhere]
     if not manifest.get("save_directory") and not run.packing:
         # Its own list leaves these files out: naming the folder with
@@ -22433,6 +22441,8 @@ def _pass_unplaced(run: _InstallRun, p: _PlatformPass) -> bool:
     if not run.packing:
         say_saves(p.plat_name, p.files, p.omitted_files + p.unplaced, p.bios_path, p.display,
                   p.menu)
+        if not run.listing:
+            say_unplaced(p.unplaced, p.bios_path, p.display)
 
     if args.list_systems or args.list_cores:
         _print_choices(p.plat_name, p.files, p.omitted_files, args.list_systems, p.manifest)

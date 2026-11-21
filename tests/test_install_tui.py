@@ -4520,7 +4520,8 @@ class LineModeOffline(unittest.TestCase):
         place = install.SavePlace(Path("/saves"), False)
         with mock.patch.object(install, "save_directory_for", return_value=place), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
-            install.place_save_entries(files, Path("/bios"), {}, None, "RetroArch")
+            kept, left = install.place_save_entries(files, Path("/bios"), {}, None, "RetroArch")
+            install.say_saves("retroarch", kept, left, Path("/bios"), "RetroArch", False)
         self.assertIn("1 file read from RetroArch's save directory goes to /saves",
                       out.getvalue())
 
@@ -9996,14 +9997,14 @@ class CardFoldersAndNarrowBars(unittest.TestCase):
 
     def test_a_save_directory_left_out_has_one_wording(self):
         files = [{"dest": "keys.txt", "root": "save", "sha1": "0" * 40, "size": 1}]
-        with contextlib.redirect_stdout(io.StringIO()) as out:
-            install.place_save_entries(files, self.root / "BIOS",
-                                       {"platform": "retroarch", "save_directory": {
-                                           "folder": "saves", "by_core": False},
-                                        "base_destination": "system"},
-                                       None, "RetroArch")
+        kept, left = install.place_save_entries(files, self.root / "BIOS",
+                                                {"platform": "retroarch", "save_directory": {
+                                                    "folder": "saves", "by_core": False},
+                                                 "base_destination": "system"},
+                                                None, "RetroArch")
         self.assertIn("left out: its place is not known. Name it with --save-dir.",
-                      out.getvalue())
+                      "\n".join(install.save_lines(kept, left, self.root / "BIOS",
+                                                   "RetroArch")))
 
 
 class CardBoundaries(unittest.TestCase):

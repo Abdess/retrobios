@@ -1332,8 +1332,22 @@ class OuterRootsAreUntrusted(unittest.TestCase):
 
     def test_a_list_without_a_roms_root_leaves_the_files_out(self):
         files = [{"dest": "pico-8/pico8_64", "root": "roms", "cores": ["x"]}]
-        kept, left = install.place_relative_entries(files, Path("/card/roms/bios"), {}, "x", say=False)
+        kept, left = install.place_relative_entries(files, Path("/card/roms/bios"), {})
         self.assertEqual((kept, [o["reason"] for o in left]), ([], ["no_roms_directory"]))
+
+    def test_roms_left_out_are_counted_after_the_choice(self):
+        # --system panasonic-3do said 1918 EmuDeck roms files were left out, 6 of them its.
+        files = [{"dest": f"{system}/x{n}.bin", "root": "roms", "systems": [system]}
+                 for system, count in (("panasonic-3do", 1), ("sony-psx", 3)) for n in range(count)]
+        bios = Path("/card/notbios")
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            kept, left = install.place_relative_entries(files, bios, {})
+        self.assertEqual((kept, len(left), out.getvalue()), ([], 4, ""))
+        chosen = install.narrow([], left, ["panasonic-3do"], [], [])[1]
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            install.say_unplaced(chosen, bios, "EmuDeck")
+        self.assertEqual(out.getvalue(), "  1 file read from EmuDeck's roms folder left out: "
+                                         f"{bios} is not its BIOS folder.\n")
 
     def test_unsafe_emulator_folders_are_refused(self):
         for field in ("searched", "default", "config"):
@@ -1387,11 +1401,9 @@ class OuterRootsAreUntrusted(unittest.TestCase):
             for dest in ("../x/prog", "C:/prog", "prog\\..\\..\\x/a"):
                 with self.subTest(dest=dest), self.assertRaises(ValueError):
                     install.place_emulator_entries(
-                        [{"dest": dest, "root": "emulators"}], home / "bios", manifest, "x",
-                        say=False)
+                        [{"dest": dest, "root": "emulators"}], home / "bios", manifest)
             kept, left = install.place_emulator_entries(
-                [{"dest": "prog/prog.exe", "root": "emulators"}], home / "bios", manifest, "x",
-                say=False)
+                [{"dest": "prog/prog.exe", "root": "emulators"}], home / "bios", manifest)
             self.assertEqual((len(kept), left), (1, []))
             folder, rest = install._entry_place(home / "bios", kept[0])
             self.assertEqual((folder, rest), (home / "emulators" / "prog", "prog.exe"))

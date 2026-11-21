@@ -43,6 +43,7 @@ from installer.frontend_folders import (
     place_relative_entries,
     place_save_entries,
     say_saves,
+    say_unplaced,
 )
 from installer.games import fallback_lines, read_games
 from installer.install_record import _RECORD_TAKEN, by_record, drop_recorded, record_menu_words
@@ -490,17 +491,15 @@ def _pass_version_and_saves(run: _InstallRun, p: _PlatformPass) -> None:
 
     # Before the menu: it offered 23 files, then 22 were checked, the
     # one read from an unknown save directory left out. Said once the
-    # choice is made, over the files it keeps (say_saves).
+    # choice is made, over the files it keeps (say_saves, say_unplaced).
     p.display = display = display_name(plat_name, manifest)
     if not run.packing:
         # A pack keeps every root's files: the device installing it
         # places them.
         files, unplaced = place_save_entries(
-            p.files, bios_path, manifest, run.args.save_dir, display, say=False)
-        files, beyond = place_relative_entries(
-            files, bios_path, manifest, display, say=not run.listing)
-        p.files, elsewhere = place_emulator_entries(
-            files, bios_path, manifest, display, say=not run.listing)
+            p.files, bios_path, manifest, run.args.save_dir, display)
+        files, beyond = place_relative_entries(files, bios_path, manifest)
+        p.files, elsewhere = place_emulator_entries(files, bios_path, manifest)
         p.unplaced = [*unplaced, *beyond, *elsewhere]
     if not manifest.get("save_directory") and not run.packing:
         # Its own list leaves these files out: naming the folder with
@@ -730,6 +729,8 @@ def _pass_unplaced(run: _InstallRun, p: _PlatformPass) -> bool:
     if not run.packing:
         say_saves(p.plat_name, p.files, p.omitted_files + p.unplaced, p.bios_path, p.display,
                   p.menu)
+        if not run.listing:
+            say_unplaced(p.unplaced, p.bios_path, p.display)
 
     if args.list_systems or args.list_cores:
         _print_choices(p.plat_name, p.files, p.omitted_files, args.list_systems, p.manifest)
