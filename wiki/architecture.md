@@ -44,6 +44,7 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   collection/            the scan of bios/ into database.json: digests, aliases, indexes
   romrecipes/            romset identification, rebuilt pinned archives, each archive's recipe
   acquire/               catalog coverage and the searches for a missing file
+  games/                 the games-on-card rules and the index the installer reads for them
   scraper/               upstream scrapers (libretro, batocera, recalbox...)
   scraper/targets/       hardware target scrapers (one *_targets_scraper.py per platform)
   exporter/              native format exporters (batocera, recalbox, emudeck...)

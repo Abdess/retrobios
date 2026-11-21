@@ -17,6 +17,14 @@ import unittest
 from pathlib import Path
 
 import generate_games_index as gi
+from games import fallback
+from games import setups as setup_docs
+from games.changes import describe_change
+from games.coverage import FLOORS, floor_failures
+from games.folders import arcade_profiles, emulator_profile, resolve_folder
+from games.inputs import Inputs
+from games.profileindex import Profiles
+from games.render import render
 from model.romfolders import SystemResolver, load_setups
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -80,7 +88,7 @@ class GamesIndexFixture(unittest.TestCase):
         (catalogs / "sony-playstation.json").write_text(json.dumps(CATALOG), encoding="utf-8")
         (self.tmp / "games" / "arcade").mkdir()
         (self.tmp / "games" / "arcade" / "mame.json").write_text(json.dumps(ARCADE), encoding="utf-8")
-        self.inputs = gi.Inputs(
+        self.inputs = Inputs(
             games=self.tmp / "games",
             romfolders=self.tmp / "romfolders",
             install=self.tmp / "install",
@@ -88,15 +96,15 @@ class GamesIndexFixture(unittest.TestCase):
             platforms=str(ROOT / "platforms"),
         )
         # The fixture platform has no YAML of its own.
-        original = gi._platform_required
-        gi._platform_required = lambda platform, platforms_dir: {}
-        self.addCleanup(setattr, gi, "_platform_required", original)
+        original = setup_docs.platform_required
+        setup_docs.platform_required = lambda platform, platforms_dir: {}
+        self.addCleanup(setattr, setup_docs, "platform_required", original)
 
     def tearDown(self) -> None:
         shutil.rmtree(self.tmp, ignore_errors=True)
 
     def render(self) -> tuple[dict[Path, str], dict]:
-        return gi.render(self.tmp / "out", self.inputs)
+        return render(self.tmp / "out", self.inputs)
 
     def doc(self, files: dict[Path, str], rel: str) -> dict:
         return json.loads(files[self.tmp / "out" / rel])
@@ -170,7 +178,7 @@ class GamesIndexFixture(unittest.TestCase):
 
     def test_floor_names_what_fell_short(self) -> None:
         _, coverage = self.render()
-        failures = gi.floor_failures(coverage)
+        failures = floor_failures(coverage)
         self.assertTrue(any("catalog" in f for f in failures))
 
 
@@ -183,14 +191,14 @@ class CheckSaysWhatDiffers(unittest.TestCase):
         old = json.dumps({"files": [["a.bin", 1, "bios"]], "version": 1})
         new = json.dumps({"files": [["a.bin", 1, "bios"], ["ide12.rom", 16384, "bios"]],
                           "version": 1})
-        lines = gi.describe_change(old, new)
+        lines = describe_change(old, new)
         self.assertEqual(len(lines), 1)
         self.assertIn("1 added", lines[0])
         self.assertIn("ide12.rom", lines[0])
 
     def test_new_and_unreadable_documents(self) -> None:
-        self.assertEqual(gi.describe_change(None, "{}"), ["not written yet"])
-        self.assertIn("not valid JSON", gi.describe_change("{", "{}")[0])
+        self.assertEqual(describe_change(None, "{}"), ["not written yet"])
+        self.assertIn("not valid JSON", describe_change("{", "{}")[0])
 
     def test_check_names_the_command_and_skips_coverage(self) -> None:
         import contextlib
@@ -239,15 +247,15 @@ class CommittedData(unittest.TestCase):
 
         resolver = SystemResolver.from_repo(str(ROOT / "emulators"), str(ROOT / "platforms"))
         cores = ProfileResolver.from_repo(str(ROOT / "emulators"))
-        profiles = gi.Profiles(load_emulator_profiles(str(ROOT / "emulators")), resolver)
+        profiles = Profiles(load_emulator_profiles(str(ROOT / "emulators")), resolver)
         total = unresolved = 0
         for doc in setups.values():
             for row in doc["folders"]:
                 total += 1
                 profile = cores.resolve(row.get("core"))
-                if not gi.resolve_folder(row, doc["platform"], profile, resolver, profiles).systems:
+                if not resolve_folder(row, doc["platform"], profile, resolver, profiles).systems:
                     unresolved += 1
-        self.assertGreaterEqual((total - unresolved) / total, gi.FLOORS["folders_resolved_share"])
+        self.assertGreaterEqual((total - unresolved) / total, FLOORS["folders_resolved_share"])
 
     def test_a_folder_holds_a_machine_its_core_runs(self) -> None:
         """muOS names its GBA folder gameboyadvance first: it resolved to
@@ -264,8 +272,8 @@ class CommittedData(unittest.TestCase):
         resolver = SystemResolver.from_repo(str(ROOT / "emulators"), str(ROOT / "platforms"))
         cores = ProfileResolver.from_repo(str(ROOT / "emulators"))
         loaded = load_emulator_profiles(str(ROOT / "emulators"))
-        profiles = gi.Profiles(loaded, resolver)
-        arcade = gi._arcade_profiles(ROOT / "games" / "arcade")
+        profiles = Profiles(loaded, resolver)
+        arcade = arcade_profiles(ROOT / "games" / "arcade")
         apart = []
         for key, doc in sorted(setups.items()):
             for row in doc["folders"]:
@@ -274,7 +282,7 @@ class CommittedData(unittest.TestCase):
                     continue
                 runs = {sid for s in loaded[profile].get("systems") or []
                         for sid in resolver.equivalents(str(s))}
-                systems = gi.resolve_folder(row, doc["platform"], profile, resolver,
+                systems = resolve_folder(row, doc["platform"], profile, resolver,
                                             profiles, arcade).systems
                 if runs and systems and not runs & set(systems):
                     apart.append(f"{key}/{row['folder']} {systems} by {profile}")
@@ -283,7 +291,7 @@ class CommittedData(unittest.TestCase):
                     if row["folder"] == "nintendogameboyadvance")
         self.assertIn("gameboyadvance", folder_names(muos))
         self.assertEqual(
-            gi.resolve_folder(muos, "retroarch", "mgba", resolver, profiles, arcade).systems,
+            resolve_folder(muos, "retroarch", "mgba", resolver, profiles, arcade).systems,
             ["nintendo-gba"])
 
     def test_an_unrecognised_gba_game_on_muos_gets_the_gba_bios(self) -> None:
@@ -302,11 +310,11 @@ class CommittedData(unittest.TestCase):
         from model.profiles import load_emulator_profiles
 
         resolver = SystemResolver.from_repo(str(ROOT / "emulators"), str(ROOT / "platforms"))
-        profiles = gi.Profiles(load_emulator_profiles(str(ROOT / "emulators")), resolver)
-        thomson = gi.resolve_folder({"folder": "thomson"}, "recalbox", "theodore", resolver, profiles)
+        profiles = Profiles(load_emulator_profiles(str(ROOT / "emulators")), resolver)
+        thomson = resolve_folder({"folder": "thomson"}, "recalbox", "theodore", resolver, profiles)
         self.assertIn("thomson-to8", thomson.systems)
         self.assertEqual(thomson.basis, "systems of theodore")
-        lcd = gi.resolve_folder({"folder": "lcdgames"}, "batocera", "mame", resolver, profiles, {"mame"})
+        lcd = resolve_folder({"folder": "lcdgames"}, "batocera", "mame", resolver, profiles, {"mame"})
         self.assertEqual(lcd.systems, [])
 
 
@@ -347,11 +355,11 @@ class EveryCoreResolvesOrIsExplained(unittest.TestCase):
 
         self.resolver = SystemResolver.from_repo(str(ROOT / "emulators"), str(ROOT / "platforms"))
         self.cores = ProfileResolver.from_repo(str(ROOT / "emulators"))
-        self.profiles = gi.Profiles(load_emulator_profiles(str(ROOT / "emulators")), self.resolver)
+        self.profiles = Profiles(load_emulator_profiles(str(ROOT / "emulators")), self.resolver)
 
     def profile(self, row: dict, platform: str) -> str | None:
         return (self.cores.resolve(row.get("core"))
-                or gi.emulator_profile(row, platform, self.cores, self.resolver, self.profiles))
+                or emulator_profile(row, platform, self.cores, self.resolver, self.profiles))
 
     def test_either_separator_resolves(self) -> None:
         self.assertEqual(self.cores.resolve("flycast_xtreme"), "flycast2021")
@@ -391,11 +399,11 @@ class OneNarrowingPerCoreList(unittest.TestCase):
 
         manifest = {"files": [{"dest": "dir/SCPH5501.BIN"}, {"dest": "b.rom"}]}
         cache: dict = {}
-        with mock.patch.object(gi.install, "narrow",
+        with mock.patch.object(fallback.install, "narrow",
                                return_value=(manifest["files"], [])) as narrow:
             for _system in ("sony-playstation", "sony-playstation-2"):
-                rows = gi._narrowed(manifest, ["core"], cache)
-            gi._narrowed(manifest, ["other"], cache)
+                rows = fallback.narrowed(manifest, ["core"], cache)
+            fallback.narrowed(manifest, ["other"], cache)
         self.assertEqual(narrow.call_count, 2)
         self.assertEqual([base for _entry, base in rows], ["scph5501.bin", "b.rom"])
 

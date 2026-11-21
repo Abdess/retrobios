@@ -1,1 +1,1 @@
-"""Game catalogs, game rules and the published games index."""
+"""Games on a card: the region and extra-file rules, and the index the installer reads for them."""

@@ -126,7 +126,7 @@ class ScriptsNeedOnlyPyyaml(unittest.TestCase):
             p.name for p in scripts.iterdir() if p.is_dir()
         } | {"scripts", "__future__"}
         # install.py is the repository's own single file, stdlib only (its
-        # tests hold it to that): generate_games_index reads its narrowing.
+        # tests hold it to that): games.fallback reads its narrowing.
         local.add("install")
         found = [
             f"{path.relative_to(scripts)}: {name}"

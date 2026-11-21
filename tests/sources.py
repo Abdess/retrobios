@@ -130,6 +130,13 @@ COMMANDS = {
         "orchestrate/build.py", "orchestrate/checks.py", "orchestrate/docs.py",
         "orchestrate/reports.py", "orchestrate/compare.py", "orchestrate/consistency.py",
         "orchestrate/emulatorpacks.py", "orchestrate/narrowed.py", "orchestrate/splitcheck.py",
+    "game_rules.py": (
+        "games/inputs.py", "games/profileindex.py", "games/headerreaders.py", "games/rulecheck.py",
+        "games/rulesummary.py",
+    "generate_games_index.py": (
+        "games/inputs.py", "games/profileindex.py", "games/fallback.py", "games/folders.py",
+        "games/setups.py", "games/systems.py", "games/arcadesets.py", "games/render.py",
+        "games/coverage.py", "games/changes.py", "games/publish.py",
 }
 
 

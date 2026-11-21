@@ -15,7 +15,9 @@ import json
 import unittest
 from pathlib import Path
 
-import game_rules
+from games.inputs import EXTRAS_FILE, HEADERS_FILE, REGIONS_FILE, load_yaml
+from games.rulecheck import check
+from games.rulesummary import summary
 from model.profiles import load_emulator_profiles
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -46,11 +48,11 @@ def _schema_validator(name: str):
 class FixtureChecks(unittest.TestCase):
     def setUp(self) -> None:
         self.profiles = load_emulator_profiles(str(FIXTURES / "emulators"))
-        self.regions = game_rules.load_yaml(FIXTURES / "regions.yml")
-        self.extras = game_rules.load_yaml(FIXTURES / "extras.yml")
+        self.regions = load_yaml(FIXTURES / "regions.yml")
+        self.extras = load_yaml(FIXTURES / "extras.yml")
 
     def errors(self, regions=None, extras=None) -> list[str]:
-        return game_rules.check(
+        return check(
             regions if regions is not None else self.regions,
             extras if extras is not None else self.extras,
             self.profiles,
@@ -115,8 +117,8 @@ class FixtureChecks(unittest.TestCase):
     def header_errors(self, header: dict) -> list[str]:
         extras = copy.deepcopy(self.extras)
         extras["extras"][0]["trigger"] = {"header": header}
-        headers = game_rules.load_yaml(FIXTURES / "headers.yml")
-        return game_rules.check(self.regions, extras, self.profiles, headers)
+        headers = load_yaml(FIXTURES / "headers.yml")
+        return check(self.regions, extras, self.profiles, headers)
 
     def test_header_trigger_takes_a_label_the_reader_returns(self) -> None:
         self.assertEqual(self.header_errors({"reader": "fds-image", "values": ["fds"]}), [])
@@ -139,8 +141,8 @@ class FixtureChecks(unittest.TestCase):
         self.assertTrue(any("has no field area" in e for e in errors))
 
     def test_summary_is_stable(self) -> None:
-        first = game_rules.summary(self.regions, self.extras)
-        second = game_rules.summary(copy.deepcopy(self.regions), copy.deepcopy(self.extras))
+        first = summary(self.regions, self.extras)
+        second = summary(copy.deepcopy(self.regions), copy.deepcopy(self.extras))
         self.assertEqual(json.dumps(first, sort_keys=True), json.dumps(second, sort_keys=True))
         self.assertEqual(first["case_entries"][0]["case"], "psx-override-bios")
 
@@ -150,17 +152,17 @@ class FixtureSchemas(unittest.TestCase):
         for name, schema in (("regions.yml", "game-regions.schema.json"),
                              ("extras.yml", "game-extras.schema.json")):
             errors = list(_schema_validator(schema).iter_errors(
-                game_rules.load_yaml(FIXTURES / name)))
+                load_yaml(FIXTURES / name)))
             self.assertEqual(errors, [], name)
 
     def test_schema_refuses_an_option_case_without_its_option(self) -> None:
-        regions = game_rules.load_yaml(FIXTURES / "regions.yml")
+        regions = load_yaml(FIXTURES / "regions.yml")
         keep = regions["systems"]["sony-playstation"]["psxcore"]["keep_all_regions"][0]
         del keep["option"]
         self.assertTrue(list(_schema_validator("game-regions.schema.json").iter_errors(regions)))
 
     def test_schema_refuses_two_triggers(self) -> None:
-        extras = game_rules.load_yaml(FIXTURES / "extras.yml")
+        extras = load_yaml(FIXTURES / "extras.yml")
         extras["extras"][0]["trigger"]["every_game"] = True
         self.assertTrue(list(_schema_validator("game-extras.schema.json").iter_errors(extras)))
 
@@ -170,13 +172,13 @@ class RepositoryRules(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.regions = game_rules.load_yaml(REPO_ROOT / game_rules.REGIONS_FILE)
-        cls.extras = game_rules.load_yaml(REPO_ROOT / game_rules.EXTRAS_FILE)
+        cls.regions = load_yaml(REPO_ROOT / REGIONS_FILE)
+        cls.extras = load_yaml(REPO_ROOT / EXTRAS_FILE)
 
     def test_every_rule_is_backed_by_its_profile(self) -> None:
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
-        headers = game_rules.load_yaml(REPO_ROOT / game_rules.HEADERS_FILE)
-        self.assertEqual(game_rules.check(self.regions, self.extras, profiles, headers), [])
+        headers = load_yaml(REPO_ROOT / HEADERS_FILE)
+        self.assertEqual(check(self.regions, self.extras, profiles, headers), [])
 
     def test_files_match_the_schemas(self) -> None:
         self.assertEqual(list(_schema_validator("game-regions.schema.json").iter_errors(self.regions)), [])
@@ -184,7 +186,7 @@ class RepositoryRules(unittest.TestCase):
 
     def test_the_fourteen_cases_are_encoded_and_used(self) -> None:
         self.assertEqual(set(self.regions["cases"]), EXPECTED_CASES)
-        used = {row["case"] for row in game_rules.summary(self.regions, self.extras)["case_entries"]}
+        used = {row["case"] for row in summary(self.regions, self.extras)["case_entries"]}
         self.assertEqual(used, EXPECTED_CASES)
 
     def test_region_free_files_never_carry_a_region(self) -> None:
