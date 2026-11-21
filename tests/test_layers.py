@@ -19,7 +19,8 @@ SCRIPTS = Path(__file__).resolve().parent.parent / "scripts"
 
 PACKAGE_LAYERS = {"core": 0, "model": 1, "resolve": 2, "packs": 3, "scraper": 3, "exporter": 3,
                   "probes": 3, "profiling": 3, "sitegen": 3, "romrecipes": 3, "acquire": 3,
-                  "release": 3, "installer_build": 3, "devtools": 3, "unattended": 3}
+                  "release": 3, "installer_build": 3, "devtools": 3, "unattended": 3,
+                  "freshness": 3, "orchestrate": 3, "schemas": 3, "collection": 3, "games": 3}
 LIBRARY_LAYER = 3
 COMMAND_LAYER = 4
 
@@ -42,6 +43,11 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     # The launcher archives are written by the pack member writer.
     "installer_build": frozenset({"packs"}),
     "devtools": frozenset(),
+    "freshness": frozenset(),
+    "orchestrate": frozenset(),
+    "schemas": frozenset(),
+    "collection": frozenset(),
+    "games": frozenset(),
     # A job's commit subjects are checked against the repository's commit rules.
     "unattended": frozenset({"devtools"}),
 }
