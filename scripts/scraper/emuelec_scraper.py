@@ -27,13 +27,13 @@ Verification (batocera-systems at the release tag):
 from __future__ import annotations
 
 from model.sourcerevision import required_revision
+from model.targets import not_cores
 from .base_scraper import fetch_github_latest_version, fetch_text
 from .batocera_scraper import (
     SYSTEM_SLUG_MAP as BATOCERA_SLUGS,
 )
 from .batocera_scraper import (
     CheckBiosScraper,
-    _not_cores,
 )
 from .emuelec_launchers import extract_launchers
 from .es_emulators import (
@@ -112,11 +112,11 @@ class Scraper(CheckBiosScraper):
             json_systems(fetch_text(ES_SYSTEMS_TEMPLATE.format(ref=self.tag))),
             port_engines(fetch_text(PORTS_TEMPLATE.format(ref=self.tag))),
         )
-        not_cores = _not_cores(PLATFORM_NAME)
-        cores, standalone, dual = es_cores(es_systems, RUNNERS, BUILDS_OF, not_cores)
+        dropped = not_cores(PLATFORM_NAME)
+        cores, standalone, dual = es_cores(es_systems, RUNNERS, BUILDS_OF, dropped)
         # Each system keeps the list es_systems.json gives it: it says whose
         # files a platform entry asks for. What runs is what an image carries.
-        attach_system_cores(systems, system_cores(es_systems, RUNNERS, not_cores))
+        attach_system_cores(systems, system_cores(es_systems, RUNNERS, dropped))
         built = self._built()
         unbuilt = {n for n in cores if n not in built}
         cores, standalone, dual = ([n for n in names if n in built] for names in (cores, standalone, dual))

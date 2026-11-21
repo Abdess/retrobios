@@ -268,6 +268,7 @@ class OnlyWhatABoardBuildsIsRun(unittest.TestCase):
 
     def test_only_what_a_board_builds_or_the_user_supplies_is_run(self):
         from scraper import batocera_scraper as bs
+        from scraper.es_systems import es_systems_by_system
 
         # A board selects kodi's package and buildroot's mpv. Citron is
         # listed by es_systems, so the symbol of a folder of that name does
@@ -281,7 +282,7 @@ class OnlyWhatABoardBuildsIsRun(unittest.TestCase):
         self.assertEqual(sorted(standalone), ["kodi", "lexaloffle", "mpv", "vox_official"])
         # Each system keeps the list es_systems.yml writes (whose files its
         # entries ask for), less a default no package builds.
-        by_system = bs.es_systems_by_system(self.ES, self.DEFAULTS, set(), built)
+        by_system = es_systems_by_system(self.ES, self.DEFAULTS, set(), built)
         self.assertEqual(by_system["switch"], ["citron"])
         self.assertEqual(by_system["voxatron"], ["lexaloffle", "vox_official"])
         self.assertEqual(by_system["gba"], ["mgba"])

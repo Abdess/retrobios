@@ -27,6 +27,8 @@ where it is older or its own.
 
 from __future__ import annotations
 
+from model.targets import not_cores
+
 from .base_scraper import (
     fetch_github_latest_version,
     fetch_text,
@@ -38,15 +40,13 @@ from .batocera_scraper import (
 )
 from .batocera_scraper import (
     CheckBiosScraper,
-    _not_cores,
     boards_build,
     configgen_cores,
-    es_systems_by_system,
-    es_systems_libretro_systems,
     installable_cores,
     records_run,
 )
 from .es_emulators import attach_system_cores
+from .es_systems import es_systems_by_system, es_systems_libretro_systems
 from .targets.knulli_targets_scraper import Scraper as BoardTargets
 from .batocera_configgen import configs_root
 from .knulli_launchers import BATOCERA_SUBMODULE, extract_launchers
@@ -92,7 +92,7 @@ class Scraper(CheckBiosScraper):
         # KNULLI's own.
         defaults = fetch_text(CONFIGGEN_DEFAULTS_TEMPLATE.format(ref=self.tag))
         es_systems = fetch_text(ES_SYSTEMS_TEMPLATE.format(ref=self.tag))
-        dropped = _not_cores("batocera") | _not_cores(PLATFORM_NAME)
+        dropped = not_cores("batocera") | not_cores(PLATFORM_NAME)
         # The batocera.linux commit KNULLI's batocera submodule pins at the tag.
         revision = submodule_commit(REPO, BATOCERA_SUBMODULE, self.tag)
         launchers = extract_launchers(

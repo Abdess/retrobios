@@ -34,7 +34,7 @@ from typing import NamedTuple
 
 from . import BaseTargetScraper, target_cli
 from ..base_scraper import fetch_text, github_json
-from ..batocera_scraper import _not_cores
+from model.targets import not_cores
 from ..emuelec_systems import (
     BUILDS_OF,
     ES_SYSTEMS_TEMPLATE,
@@ -567,7 +567,7 @@ def device_cores(
             ):
                 installed.update(install.cores)
     offered, _standalone, _dual = es_cores(
-        systems, RUNNERS, BUILDS_OF, _not_cores(PLATFORM_NAME)
+        systems, RUNNERS, BUILDS_OF, not_cores(PLATFORM_NAME)
     )
     return sorted(installed & set(offered))
 
@@ -575,7 +575,7 @@ def device_cores(
 def check_names(systems: SystemEmulators) -> None:
     """Every ES core name is installed by a package read or known unbuilt."""
     offered, _standalone, _dual = es_cores(
-        systems, RUNNERS, BUILDS_OF, _not_cores(PLATFORM_NAME)
+        systems, RUNNERS, BUILDS_OF, not_cores(PLATFORM_NAME)
     )
     provided = {core for installs in PROVIDERS.values() for i in installs for core in i.cores}
     unread = sorted(set(offered) - provided - set(UNBUILT))

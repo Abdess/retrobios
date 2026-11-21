@@ -24,7 +24,7 @@ from datetime import datetime, timezone
 from . import BaseTargetScraper, target_cli
 from ..amberelec_scraper import BUILDS_OF, ES_SYSTEMS_TEMPLATE, RUNNERS
 from ..base_scraper import fetch_text
-from ..batocera_scraper import _not_cores
+from model.targets import not_cores
 from ..es_emulators import es_cores, xml_systems
 
 PLATFORM_NAME = "amberelec"
@@ -91,7 +91,7 @@ def device_cores(es_systems: str, extra: list[str], keeps_extra: bool) -> list[s
     """Every core and standalone emulator one device's es_systems.cfg offers."""
     text = es_systems if keeps_extra else without_cores(es_systems, extra)
     cores, _standalone, _dual = es_cores(
-        xml_systems(text), RUNNERS, BUILDS_OF, _not_cores(PLATFORM_NAME)
+        xml_systems(text), RUNNERS, BUILDS_OF, not_cores(PLATFORM_NAME)
     )
     return sorted(set(cores))
 

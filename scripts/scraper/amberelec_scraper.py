@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import re
 
+from model.targets import not_cores
 from .amberelec_launchers import extract_launchers
 from .base_scraper import fetch_text, github_json
 from .batocera_scraper import (
@@ -39,7 +40,6 @@ from .batocera_scraper import (
 )
 from .batocera_scraper import (
     CheckBiosScraper,
-    _not_cores,
 )
 from .es_emulators import attach_system_cores, es_cores, system_cores, xml_systems
 
@@ -114,9 +114,9 @@ class Scraper(CheckBiosScraper):
         # es_systems.cfg gives each <system> its <emulators> in menu order
         # (atarist, lines 267-288: retroarch's hatari, then HATARISA).
         es_systems = xml_systems(fetch_text(ES_SYSTEMS_TEMPLATE.format(ref=self.commit)))
-        not_cores = _not_cores(PLATFORM_NAME)
-        cores, standalone, dual = es_cores(es_systems, RUNNERS, BUILDS_OF, not_cores)
-        attach_system_cores(systems, system_cores(es_systems, RUNNERS, not_cores))
+        dropped = not_cores(PLATFORM_NAME)
+        cores, standalone, dual = es_cores(es_systems, RUNNERS, BUILDS_OF, dropped)
+        attach_system_cores(systems, system_cores(es_systems, RUNNERS, dropped))
         return {
             "platform": "AmberELEC",
             "version": self.tag,

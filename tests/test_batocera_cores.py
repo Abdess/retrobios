@@ -34,7 +34,7 @@ amiga500:
 
 class ThePlatformListsEveryOfferedCore(unittest.TestCase):
     def test_libretro_cores_and_standalone_emulators(self):
-        from scripts.scraper.batocera_scraper import es_systems_emulators
+        from scripts.scraper.es_systems import es_systems_emulators
 
         cores, standalone = es_systems_emulators(ES_SYSTEMS)
         self.assertEqual(
@@ -43,9 +43,9 @@ class ThePlatformListsEveryOfferedCore(unittest.TestCase):
         self.assertEqual(standalone, {"dosbox", "amiberry", "A500"})
 
     def test_the_overrides_drop_the_machine_selectors(self):
-        from scripts.scraper.batocera_scraper import _not_cores
+        from model.targets import not_cores
 
-        self.assertIn("A500", _not_cores())
+        self.assertIn("A500", not_cores("batocera"))
 
     def test_the_registry_leaves_the_list_to_the_scraper(self):
         import yaml
@@ -60,7 +60,7 @@ class OneWalkReadsEsSystems(unittest.TestCase):
     """The scraper and the target scraper read es_systems.yml through one walk."""
 
     def test_every_core_in_file_order(self):
-        from scripts.scraper.batocera_scraper import es_systems_entries
+        from scripts.scraper.es_systems import es_systems_entries
 
         rows = [(s, e, c) for s, e, c, _spec in es_systems_entries(ES_SYSTEMS)]
         self.assertEqual(rows, [
@@ -71,13 +71,13 @@ class OneWalkReadsEsSystems(unittest.TestCase):
         ])
 
     def test_an_emulator_without_core_is_yielded_once(self):
-        from scripts.scraper.batocera_scraper import es_systems_entries
+        from scripts.scraper.es_systems import es_systems_entries
 
         text = "x:\n  emulators:\n    vice:\n      archs_include: [x86_64]\n"
         self.assertEqual(list(es_systems_entries(text)), [("x", "vice", None, None)])
 
     def test_a_file_that_is_not_a_mapping_is_refused(self):
-        from scripts.scraper.batocera_scraper import es_systems_entries
+        from scripts.scraper.es_systems import es_systems_entries
         from scripts.scraper.targets.batocera_targets_scraper import _parse_es_systems
 
         with self.assertRaises(ValueError):
@@ -102,7 +102,7 @@ class AnEmulatorLaunchedBothWaysGetsBothLayouts(unittest.TestCase):
     dolphin-emu/Sys/GC/ files: no IPL, no DSP ROM."""
 
     def test_the_scraper_names_dual_mode_emulators(self):
-        from scripts.scraper.batocera_scraper import es_systems_emulators, es_systems_libretro
+        from scripts.scraper.es_systems import es_systems_emulators, es_systems_libretro
 
         text = ES_SYSTEMS + (
             "gamecube:\n  emulators:\n    libretro:\n      dolphin: { requireAnyOf: [X] }\n"

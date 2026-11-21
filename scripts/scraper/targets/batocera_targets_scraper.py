@@ -23,6 +23,7 @@ from datetime import datetime, timezone
 
 from . import BaseTargetScraper, target_cli
 from ..base_scraper import fetch_present, fetch_text, github_json, github_tree, submodule_commit
+from ..es_systems import es_systems_entries
 
 PLATFORM_NAME = "batocera"
 
@@ -256,9 +257,6 @@ def _parse_es_systems(text: str) -> dict[str, list[str]]:
     machines under their name, and the package that builds a machine builds
     the emulator.
     """
-    # Imported here: batocera_scraper imports this module at load time.
-    from ..batocera_scraper import es_systems_entries
-
     package_to_emulators: dict[str, list[str]] = {}
     for _system, emulator, core, spec in es_systems_entries(text):
         require = spec.get("requireAnyOf", []) if spec else None

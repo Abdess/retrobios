@@ -787,7 +787,7 @@ class TheScrapersReadTheSystemLists(unittest.TestCase):
     """libretro_systems, read from each platform's own system list."""
 
     def test_batocera_and_knulli_es_systems_yml(self):
-        from scripts.scraper.batocera_scraper import es_systems_libretro_systems
+        from scripts.scraper.es_systems import es_systems_libretro_systems
 
         text = (
             "gamecube:\n  emulators:\n    dolphin:\n      dolphin: { requireAnyOf: [A] }\n"

@@ -7,7 +7,7 @@ import re
 import sys
 from pathlib import Path
 
-from core.paths import PLATFORMS_DIR
+from core.paths import PLATFORMS_DIR, REPO_ROOT
 from core.cli import SourceUnreadable, suggest_names
 from model.sources import source_yaml_file
 
@@ -29,6 +29,16 @@ def platform_overrides(all_overrides: dict, platform: str) -> dict:
 def target_overrides(platform: str, targets_dir: str | os.PathLike[str]) -> dict:
     """One platform's per-target entries, read from its targets directory."""
     return platform_overrides(read_target_overrides(targets_dir), platform)
+
+
+def not_cores(
+    platform: str, targets_dir: str | os.PathLike[str] = REPO_ROOT / PLATFORMS_DIR / "targets",
+) -> set[str]:
+    """Names a platform's system list files under an emulator that are not
+    emulators (machine selectors, video plugins, launchers): its
+    `_default.remove_cores` overrides."""
+    default = target_overrides(platform, targets_dir).get("_default") or {}
+    return {str(name) for name in default.get("remove_cores") or []}
 
 
 def target_aliases(overrides: dict, target: str) -> list[str]:
