@@ -54,6 +54,7 @@ on:
       - "scripts/model/nodedup.py"
       - "scripts/model/platforms.py"
       - "scripts/model/profiles.py"
+      - "scripts/model/profilekinds.py"
       - "scripts/model/region.py"
       - "scripts/model/registry.py"
       - "scripts/model/releaserecord.py"

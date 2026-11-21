@@ -14,6 +14,9 @@ except ImportError:
 
 from core.cli import InputMissing, suggest_names
 from model.alternatives import derive_member_requirements
+from model.profilekinds import is_emulator as is_emulator
+from model.profilekinds import lists_files as lists_files
+from model.profilekinds import reads_own_files as reads_own_files
 from model.sources import source_yaml_file
 from model.systems import norm_system_id, system_index
 from core.paths import REPO_ROOT
@@ -25,27 +28,6 @@ CONTENT_CHECKS = frozenset({"romdir", "masked_sha1"})
 
 
 emulator_profiles_cache: dict[tuple[str, bool], dict[str, dict]] = {}
-
-
-# A launcher hands the game to another emulator and an alias is another
-# profile's build under a second name: neither declares files of its own.
-FILELESS_TYPES = frozenset({"launcher", "alias"})
-
-
-def lists_files(profile: dict) -> bool:
-    """Whether a profile declares the files its emulator reads."""
-    return profile.get("type") not in FILELESS_TYPES
-
-
-def is_emulator(profile: dict) -> bool:
-    """Whether a profile counts as an emulator of its own, neither an alias
-    nor a test core."""
-    return profile.get("type") != "alias" and profile.get("role") != "test"
-
-
-def reads_own_files(profile: dict) -> bool:
-    """Whether a profile lists the files its emulator reads and is not a test core."""
-    return lists_files(profile) and profile.get("role") != "test"
 
 
 class ProfileSelectionError(ValueError):

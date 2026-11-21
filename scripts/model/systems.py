@@ -7,6 +7,7 @@ import re
 
 from core.cli import suggest_names
 from model.platforms import native_layer
+from model.profilekinds import reads_own_files
 
 
 MANUFACTURER_PREFIXES = (
@@ -332,7 +333,7 @@ def system_index(profiles: dict) -> dict[str, tuple[str, set[str]]]:
     """
     index: dict[str, tuple[str, set[str]]] = {}
     for name, p in sorted(profiles.items()):
-        if p.get("type") in ("alias", "launcher") or p.get("role") == "test":
+        if not reads_own_files(p):
             continue
         for sys_id in p.get("systems", []):
             key = norm_system_id(sys_id)

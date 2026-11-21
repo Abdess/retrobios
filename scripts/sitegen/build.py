@@ -20,7 +20,7 @@ from model.composition import compute_composition
 from model.database import load_database
 from model.dumpcatalog import load_provenance_snapshots
 from model.guides import HANDHELD_GUIDE
-from model.profiles import is_emulator, load_emulator_profiles
+from model.profiles import is_emulator, lists_files, load_emulator_profiles
 from model.registry import list_registered_platforms, load_platform_registry
 from model.systemnames import program_names, set_console_sections, system_name
 from packs.crossref import FileConsumers
@@ -433,7 +433,7 @@ def _write_emulator_page(run: _SiteRun, name: str, profile: dict) -> None:
     # A frozen copy answers after the emulator: a frozen_snapshot, and a
     # profile pinned to the revision one platform builds (pin_frozen).
     # Reicast and Flycast 2021 LE answered "dc bios missing" before Flycast.
-    if (profile.get("type") in ("launcher", "alias")
+    if (not lists_files(profile)
             or profile.get("core_classification") in ("launcher", "alias", "frozen_snapshot")
             or profile.get("pin_frozen")):
         SEARCH_DEMOTED.add(f"emulators/{name}.md")
