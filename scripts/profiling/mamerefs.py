@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 from core import upstream
 from model.sources import source_yaml_file
+from profiling.citations import collect_citations
 from scraper.clex import blank_comments
 from scraper.mame_parser import MACHINE_MACROS
 
@@ -51,9 +52,13 @@ def audit(
     sources: dict[tuple[str, str], list[str] | None] = {}
     findings: list[Finding] = []
     agreed = unjudged = 0
-    for entry in document.get("files", []) or []:
+    files = {id(entry) for entry in document.get("files", []) or []}
+    for citation in collect_citations(document):
+        entry = citation.entry
+        if citation.kind != "ref" or entry is None or id(entry) not in files:
+            continue
         entry_name = str(entry.get("name", ""))
-        match = DRIVER_REF.match(str(entry.get("source_ref") or ""))
+        match = DRIVER_REF.match(citation.ref)
         if not (entry_name.endswith(".zip") and match):
             continue
         role, path, cited = match.group(1) or "", match.group(2), int(match.group(3))
