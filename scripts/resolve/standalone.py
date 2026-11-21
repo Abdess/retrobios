@@ -7,7 +7,7 @@ import json
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 
-from model.profiles import load_emulator_profiles, profile_names
+from model.profiles import profile_names
 from model.systems import norm_system_id
 from resolve.contentlayout import content_folder_tags, content_layout
 from resolve.layout import (
@@ -31,19 +31,16 @@ from resolve.layout import (
     system_dir_view,
     system_file_index,
 )
-from core.paths import REPO_ROOT
 
 
-def own_build_tags(config: dict, standalone: set[str]) -> set[str]:
-    """The standalone names the platform's own builds answer to, tagged.
-
-    Read from the profiles of this repository, the ones every pack, manifest
-    and report is built from.
-    """
+def own_build_tags(
+    config: dict, standalone: set[str], profiles: Mapping[str, dict]
+) -> set[str]:
+    """The standalone names the platform's own builds answer to, tagged,
+    read from the run's profiles."""
     platform = str(config.get("_key") or "")
     if not platform or not standalone:
         return set()
-    profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
     return {
         OWN_BUILD_PREFIX + json.dumps([n, key, p.get("source")])
         for key, p in profiles.items()
@@ -52,7 +49,7 @@ def own_build_tags(config: dict, standalone: set[str]) -> set[str]:
     }
 
 
-def twin_build_names(config: dict) -> set[str]:
+def twin_build_names(config: dict, profiles: Mapping[str, dict]) -> set[str]:
     """The libretro core names of emulators a platform also runs standalone
     under another name.
 
@@ -66,7 +63,6 @@ def twin_build_names(config: dict) -> set[str]:
     ) else set()
     if not standalone or not libretro:
         return set()
-    profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
     found: set[str] = set()
     for key, profile in profiles.items():
         kind = str(profile.get("type", ""))
@@ -94,7 +90,8 @@ def standalone_set(config: dict, profiles: Mapping[str, dict]) -> set[str]:
     libretro:dolphin and standalone dolphin for GameCube). They travel in the
     same set, tagged, so every reader of standalone_cores sees them. A
     launcher record resting on a config file is proven against *profiles*,
-    the run's, as cross-reference proves it.
+    the run's, as cross-reference proves it, and the platform's own and twin
+    builds are read from them.
     """
     names = {str(c) for c in config.get("standalone_cores") or []}
     names |= {DUAL_MODE_PREFIX + str(c) for c in config.get("dual_mode_cores") or []}
@@ -107,8 +104,8 @@ def standalone_set(config: dict, profiles: Mapping[str, dict]) -> set[str]:
         for c in set(map(str, config.get("installable_cores") or []))
         & set(map(str, config.get("standalone_cores") or []))
     }
-    names |= own_build_tags(config, names)
-    names |= {DUAL_MODE_PREFIX + n for n in twin_build_names(config)}
+    names |= own_build_tags(config, names, profiles)
+    names |= {DUAL_MODE_PREFIX + n for n in twin_build_names(config, profiles)}
     # The system directory each core is handed travels the same way, so
     # platform_layouts places a core's files below it for every reader.
     names |= core_dir_tags(config)
