@@ -562,27 +562,9 @@ def _print_json(reqs: list[BiosRequirement]) -> None:
 
 def _generic_config(reqs: list[BiosRequirement]) -> dict:
     """Generic fallback: just systems from requirements."""
-    config: dict = {"systems": {}}
-    for req in reqs:
-        sys_id = req.system
-        if sys_id not in config["systems"]:
-            sys_entry: dict = {"files": []}
-            if req.native_id:
-                sys_entry["native_id"] = req.native_id
-            config["systems"][sys_id] = sys_entry
-        entry = {
-            "name": req.name,
-            "destination": req.destination or req.name,
-            "required": req.required,
-        }
-        if req.sha1:
-            entry["sha1"] = req.sha1
-        if req.md5:
-            entry["md5"] = req.md5
-        if req.zipped_file:
-            entry["zipped_file"] = req.zipped_file
-        config["systems"][sys_id]["files"].append(entry)
-    return config
+    return {"systems": systems_from_requirements(
+        reqs, lambda req: {"native_id": req.native_id} if req.native_id else {},
+    )}
 
 
 def _keep_existing(config: dict, output_path: Path) -> None:

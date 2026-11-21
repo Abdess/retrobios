@@ -51,7 +51,7 @@ from .base_scraper import (
     github_tree,
     json_object,
     md5_field,
-    requirement_entry,
+    systems_from_requirements,
 )
 from .retrodeck_launchers import extract_launchers
 
@@ -526,10 +526,7 @@ class Scraper(BaseScraper):
             }
         )
 
-        systems: dict[str, dict] = {}
-        for req in reqs:
-            sys_entry = systems.setdefault(req.system, {"files": []})
-            sys_entry["files"].append(requirement_entry(req))
+        systems = systems_from_requirements(reqs)
 
         version = fetch_github_latest_version("RetroDECK/RetroDECK")
         # The ROM folders each libretro core runs for: its save folders.

@@ -31,6 +31,7 @@ from .base_scraper import (
     BiosRequirement,
     fetch_github_latest_version,
     fetch_text,
+    _print_dry_run,
     github_tree,
 )
 
@@ -331,17 +332,7 @@ def main() -> None:
                 print(f"  {r.system}: {r.destination} {opt}")
         return
 
-    from collections import defaultdict
-
-    by_system = defaultdict(list)
-    for r in reqs:
-        by_system[r.system].append(r)
-
-    print(f"Total: {len(reqs)} unique firmware paths across {len(by_system)} systems")
-    for sys_name, files in sorted(by_system.items()):
-        req_count = sum(1 for f in files if f.required)
-        opt_count = sum(1 for f in files if not f.required)
-        print(f"  {sys_name}: {req_count} required, {opt_count} optional")
+    _print_dry_run(reqs)
 
 
 if __name__ == "__main__":

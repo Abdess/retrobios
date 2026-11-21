@@ -112,6 +112,20 @@ class CompareWithConfig(unittest.TestCase):
         self.assertEqual([r.name for r in changes.removed], ["a.bin"])
 
 
+class GenericConfigWritesFullEntries(unittest.TestCase):
+    def test_fallback_serializes_like_every_scraper(self):
+        from scraper.base_scraper import _generic_config, requirement_entry
+
+        req = BiosRequirement(
+            name="a.bin", system="sys", md5="ABCDEF", size=4, native_id="nat",
+        )
+        self.assertEqual(
+            _generic_config([req]),
+            {"systems": {"sys": {"files": [requirement_entry(req)], "native_id": "nat"}}},
+        )
+        self.assertEqual(requirement_entry(req)["md5"], "abcdef")
+
+
 class TestConnection(unittest.TestCase):
     def test_reachable_source_reports_true(self):
         self.assertTrue(_StubScraper([]).test_connection())

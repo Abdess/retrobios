@@ -32,7 +32,7 @@ from .base_scraper import (
     fetch_branch_head,
     fetch_bytes,
     json_object,
-    requirement_entry,
+    systems_from_requirements,
 )
 
 PLATFORM_NAME = "misterfpga"
@@ -117,6 +117,14 @@ def system_of(path: str) -> str:
     return remainder.split("/", 1)[0]
 
 
+def _system_fields(req: BiosRequirement) -> dict:
+    _, display, repo = SYSTEM_MAP.get(req.native_id or "", (req.system, req.system, ""))
+    fields: dict = {"native_id": req.native_id, "name": display}
+    if repo:
+        fields["docs"] = f"https://github.com/MiSTer-devel/{repo}"
+    return fields
+
+
 class Scraper(BaseScraper):
     """Scraper for the MiSTer BiosDB database."""
 
@@ -174,26 +182,7 @@ class Scraper(BaseScraper):
     def generate_platform_yaml(self) -> dict:
         """Build the MiSTer FPGA platform configuration."""
         data = json.loads(self._fetch_raw())
-        systems: dict[str, dict] = {}
-
-        for req in self.fetch_requirements():
-            _, display, repo = SYSTEM_MAP.get(
-                req.native_id or "", (req.system, req.system, "")
-            )
-            entry = systems.setdefault(
-                req.system,
-                {
-                    "files": [],
-                    "native_id": req.native_id,
-                    "name": display,
-                    "docs": f"https://github.com/MiSTer-devel/{repo}" if repo else "",
-                },
-            )
-            entry["files"].append(requirement_entry(req))
-
-        for entry in systems.values():
-            if not entry["docs"]:
-                del entry["docs"]
+        systems = systems_from_requirements(self.fetch_requirements(), _system_fields)
 
         # The BiosDB has no release: the date it was built is the only
         # version the list carries, and the manifest needs one.
