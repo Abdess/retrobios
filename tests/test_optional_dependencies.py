@@ -65,8 +65,8 @@ class SuiteWithoutJsonschema(unittest.TestCase):
 # is committed under docs_assets/ and the build only reads it, so the build
 # keeps to the standard library and pyyaml.
 MAINTENANCE_TOOLS = {
-    "imagenormalize.py": "PIL",
-    "chromium.py": "playwright",
+    "sitegen/imagenormalize.py": "PIL",
+    "sitegen/chromium.py": "playwright",
 }
 
 
