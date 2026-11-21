@@ -3850,11 +3850,13 @@ class AnArchiveShipsWholeUnderARegion(unittest.TestCase):
     required changed, while the emulator pack ships the archive whole."""
 
     def test_verify_filters_loose_files_only(self):
-        source = script_source("verify.py")
-        self.assertIn(
-            'if fe.get("archive")\n                or resolve_destination(fe, standalone) not in region_drops',
-            source,
+        loose_only = (
+            'if fe.get("archive")\n                or resolve_destination(fe, selection.standalone)'
+            ' not in selection.region_drops'
         )
+        # The pack and the report read the same selection.
+        self.assertIn(loose_only, script_source("verify.py"))
+        self.assertIn(loose_only, script_source("generate_pack.py"))
 
 
 class APathConflictKeepsTheMainVerdict(unittest.TestCase):

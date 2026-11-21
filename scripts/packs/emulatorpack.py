@@ -19,7 +19,6 @@ from core.ziptools import build_zip_contents_index, is_archive_path
 from model.alternatives import settle_sets, slot_set_keys
 from model.profiles import (
     ProfileSelectionError,
-    entry_serves_systems,
     load_emulator_profiles,
     no_profile_for_systems,
     profiles_for_systems,
@@ -37,14 +36,12 @@ from packs.archive import (
     writing_pack,
 )
 from packs.datatrees import pack_data_tree
-from packs.extras import emulator_region_drops, emulator_required_spares, expand_agnostic_entries
+from packs.emulatorentries import EmulatorSelection, emulator_pack_entries
+from packs.extras import emulator_region_drops
 from packs.naming import (
     MAX_PACK_NAME_BYTES, bounded_join, file_name_part, pack_narrowings, system_display_name,
 )
-from packs.paths import archive_destination, resolve_destination
 from resolve import packfiles as packresolve
-from resolve.archives import archive_entry, archive_is_optional
-from resolve.directories import expand_directory_entries
 from resolve.packfiles import download_external, resolve_file
 from resolve.validation import (
     build_validation_index,
@@ -132,18 +129,12 @@ class _EmulatorPackBuild:
 
     def pack_profile(self, emu_name: str, profile: dict) -> None:
         pack_structure = profile.get("pack_structure")
-        files = expand_agnostic_entries(
-            expand_directory_entries(
-                deliverable(profile.get("files", []), self.standalone),
-                self.db,
-                self.standalone,
-            ),
-            emu_name, profile, self.db, self.standalone, self.all_profiles,
-        )
-        if self.system_ids:
-            files = [
-                fe for fe in files if entry_serves_systems(fe, profile, self.system_ids)
-            ]
+        carried = emulator_pack_entries(emu_name, profile, EmulatorSelection(
+            self.db, self.standalone, self.all_profiles, self.validation_index,
+            self.zip_contents, self.data_registry, system_ids=self.system_ids,
+            required_only=self.required_only, region_drops=self.region_drops,
+        ))
+        files = carried.entries
         if not files and not profile.get("data_directories"):
             self.progress(f"  No files needed for {profile.get('emulator', emu_name)}")
 
@@ -151,26 +142,13 @@ class _EmulatorPackBuild:
         # profile is read: a member another member fills is not missing,
         # and a set nobody holds is reported once (alternatives.py). An
         # archive unit is a member like a loose file.
-        outcomes: list[_Outcome] = []
-        spares = emulator_required_spares(
-            emu_name, profile, files, self.standalone, self.region_drops, self.db,
-            self.validation_index, self.zip_contents, data_registry=self.data_registry,
-        ) if self.required_only else set()
-
-        # Pack archives as units
-        archive_prefix = profile.get("archive_prefix", "")
-        for archive_name in sorted({fe["archive"] for fe in files if fe.get("archive")}):
-            archive_dest = archive_destination(
-                archive_name, archive_prefix, pack_structure, self.standalone
+        outcomes: list[_Outcome] = [
+            self._pack_archive(own_entry, archive_name, archive_dest)
+            for archive_name, own_entry, archive_dest in sorted(
+                carried.archives, key=lambda unit: unit[0]
             )
-            own_entry = archive_entry(archive_name, files)
-            if self.required_only and archive_is_optional(own_entry, archive_name, files):
-                continue
-            if archive_dest in spares:
-                continue
-            outcomes.append(self._pack_archive(own_entry, archive_name, archive_dest))
-
-        for dest, alternatives in self._slots(files, spares).items():
+        ]
+        for dest, alternatives in carried.slots.items():
             outcome = self._pack_slot(emu_name, files, dest, alternatives)
             if outcome is not None:
                 outcomes.append(outcome)
@@ -214,26 +192,6 @@ class _EmulatorPackBuild:
         return ([own_entry], False, functools.partial(
             self.report_missing, archive_name, archive_dest
         ))
-
-    def _slots(self, files: list[dict], spares: set) -> dict[str, list[dict]]:
-        # Pack individual files (skip archive members). The entries of one
-        # profile on one destination are the releases the code accepts
-        # there (raze's seven SW.GRP): the first one the core accepts
-        # fills the slot, as verify --emulator credits it, and the slot
-        # has one outcome however many alternatives it lists.
-        slots: dict[str, list[dict]] = {}
-        for fe in files:
-            if self.required_only and fe.get("required") is False:
-                continue
-            if fe.get("archive"):
-                continue
-            dest = resolve_destination(fe, self.standalone)
-            if not dest or dest in spares:
-                continue
-            if self.region_drops and dest in self.region_drops:
-                continue
-            slots.setdefault(dest, []).append(fe)
-        return slots
 
     def _write_instructions(self, provided: dict, dest: str) -> None:
         # Instructions, not a file: written beside the slot the

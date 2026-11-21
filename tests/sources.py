@@ -22,12 +22,14 @@ COMMANDS = {
         "packs/manifest.py", "packs/finalize.py", "packs/outputdir.py", "packs/variants.py",
         "packs/manifestrun.py", "packs/packcheck.py", "packs/runscope.py", "packs/platformrun.py",
         "packs/packoptions.py", "packs/packmodes.py", "packs/packcounts.py",
+        "packs/emulatorentries.py", "packs/integrity.py",
     ),
     "verify.py": (
         "packs/verdicts.py", "packs/gaps.py", "packs/coverage.py", "packs/emulatorcheck.py",
         "packs/report.py", "packs/shares.py", "packs/verifyplatforms.py", "packs/verifysummary.py",
         "packs/verifyoutput.py", "packs/strictgate.py", "packs/verifyoptions.py",
         "packs/verifyprint.py", "packs/runscope.py", "packs/verifyrun.py",
+        "packs/emulatorentries.py",
     ),
     "cross_reference.py": (
         "packs/crossref.py", "packs/crossrefscope.py", "packs/crossrefrun.py",

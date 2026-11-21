@@ -14,7 +14,6 @@ from model.alternatives import set_requirements, settle_sets, slot_set_keys
 from model.database import sha1_at
 from model.profiles import (
     ProfileSelectionError,
-    entry_serves_systems,
     load_emulator_profiles,
     no_profile_for_systems,
     profiles_for_systems,
@@ -22,6 +21,7 @@ from model.profiles import (
 )
 from model.registry import load_data_dir_registry
 from packs.archive import Placed
+from packs.emulatorentries import EmulatorPackEntries, EmulatorSelection, emulator_pack_entries
 from packs.verdicts import (
     RELEASE_ASSET_PENDING,
     Severity,
@@ -31,8 +31,6 @@ from packs.verdicts import (
     emulator_severity,
     storage_verdict,
 )
-from resolve.archives import archive_entry, archive_is_optional
-from resolve.directories import expand_directory_entries
 from resolve.validation import (
     build_validation_index,
     build_ground_truth,
@@ -97,54 +95,6 @@ _SLOT_PREFERENCE: tuple[Callable[[tuple], bool], ...] = (
     and a[0].get("reason") == _HASH_CONTRADICTED,
     lambda a: a[0]["status"] != Status.MISSING,
 )
-
-
-def _emulator_files(
-    emu_name: str,
-    profile: dict,
-    db: dict,
-    standalone: bool,
-    all_profiles: dict,
-    system_ids: list[str] | None,
-    required_only: bool,
-    region_drops: set[str],
-) -> list[dict]:
-    """The entries of a profile the emulator pack carries."""
-    from packs.extras import expand_agnostic_entries
-    from packs.paths import resolve_destination
-
-    files = expand_agnostic_entries(
-        expand_directory_entries(
-            deliverable(profile.get("files", []), standalone),
-            db,
-            standalone,
-        ),
-        emu_name, profile, db, standalone, all_profiles,
-    )
-    if system_ids:
-        files = [fe for fe in files if entry_serves_systems(fe, profile, system_ids)]
-    if required_only:
-        optional_archives = {
-            fe["archive"] for fe in files
-            if fe.get("archive")
-            and archive_is_optional(archive_entry(fe["archive"], files), fe["archive"], files)
-        }
-        files = [
-            fe for fe in files
-            if fe.get("archive") not in optional_archives
-            and (fe.get("archive") or fe.get("required") is not False)
-        ]
-    if region_drops:
-        # Loose files only, as the emulator pack: an archive ships whole,
-        # and dropping kronos' regional stvbios.zip members rebuilt the
-        # archive here from 4 of its 14 members and changed its required.
-        files = [
-            fe
-            for fe in files
-            if fe.get("archive")
-                or resolve_destination(fe, standalone) not in region_drops
-        ]
-    return files
 
 
 def _archive_result(
@@ -287,12 +237,12 @@ class _EmulatorPack:
             self.data_dir_notices.append(ref)
 
     def verify_profile(
-        self, emu_name: str, profile: dict, files: list[dict], spares: set[str],
+        self, emu_name: str, profile: dict, carried: EmulatorPackEntries,
     ) -> None:
         """Verify one profile's entries and add them to the report."""
         self.note_data_dirs(profile)
 
-        if not files:
+        if not carried.carries_entries:
             self.details.append(
                 {
                     "name": f"({emu_name})",
@@ -309,34 +259,17 @@ class _EmulatorPack:
         # Each destination's outcome, settled by set once the profile is
         # read: an archive unit is a member like a loose file (Kronos reads
         # kronos/stvbios.zip, else stvbios.zip).
-        placed_results = self._archive_results(emu_name, profile, files, spares)
-        self._place_loose(emu_name, self._loose_results(emu_name, files), placed_results)
+        placed_results = self._archive_results(emu_name, carried)
+        self._place_loose(emu_name, self._loose_results(emu_name, carried), placed_results)
         self._settle(emu_name, profile, placed_results)
         self.occupy_trees(emu_name, profile)
 
-    def _archive_results(
-        self, emu_name: str, profile: dict, files: list[dict], spares: set[str],
-    ) -> list[PlacedResult]:
+    def _archive_results(self, emu_name: str, carried: EmulatorPackEntries) -> list[PlacedResult]:
         # Verify archives as units (e.g., neogeo.zip, aes.zip)
-        from packs.paths import archive_destination
         from resolve.packfiles import resolve_file
 
         placed_results: list[PlacedResult] = []
-        seen_archives: set[str] = set()
-        for file_entry in files:
-            archive = file_entry.get("archive")
-            if not archive or archive in seen_archives:
-                continue
-            seen_archives.add(archive)
-            own_entry = archive_entry(archive, files)
-            # Where the pack puts it: an archive_prefix or pack_structure
-            # moves it, and a loose same-named entry is another file.
-            dest = archive_destination(
-                archive, profile.get("archive_prefix", ""),
-                profile.get("pack_structure"), self.standalone,
-            )
-            if dest in spares:
-                continue
+        for archive, own_entry, dest in carried.archives:
             local_path, resolve_status = self.pending(own_entry, *resolve_file(
                 own_entry,
                 self.db,
@@ -345,12 +278,10 @@ class _EmulatorPack:
                 data_dir_registry=self.data_registry,
                 offline=True,
             ))
-            required = any(
-                f.get("archive") == archive and f.get("required", True)
-                for f in files
-            )
+            members = [f for f in carried.entries if f.get("archive") == archive]
+            required = any(f.get("required", True) for f in members)
             result = _archive_result(archive, required, local_path, resolve_status)
-            result["system"] = file_entry.get("system", "")
+            result["system"] = members[0].get("system", "")
             result["hle_fallback"] = False
             result["ground_truth"] = build_ground_truth(archive, self.validation_index)
             result["destination"] = dest
@@ -372,9 +303,8 @@ class _EmulatorPack:
         return placed_results
 
     def _loose_results(
-        self, emu_name: str, files: list[dict],
+        self, emu_name: str, carried: EmulatorPackEntries,
     ) -> dict[str, list[tuple[dict, bool, bool, dict]]]:
-        from packs.paths import resolve_destination
         from resolve.packfiles import resolve_file
 
         # Results of this emulator, by destination. Several entries of one
@@ -383,38 +313,31 @@ class _EmulatorPack:
         # holding one of them fills the slot, and the others are not gaps.
         emu_results: dict[str, list[tuple[dict, bool, bool, dict]]] = {}
 
-        for file_entry in files:
-            # Skip archive members (verified as archive units above)
-            if file_entry.get("archive"):
-                continue
+        for dest, alternatives in carried.slots.items():
+            for file_entry in alternatives:
+                # The emulator pack's resolution, release assets included.
+                local_path, resolve_status = self.pending(file_entry, *resolve_file(
+                    {**with_archive_members(file_entry, carried.entries), "source_profile": emu_name},
+                    self.db,
+                    BIOS_DIR,
+                    self.zip_contents,
+                    dest_hint=file_entry.get("path", ""),
+                    data_dir_registry=self.data_registry,
+                    offline=True,
+                ))
+                if resolve_status in ("not_found", "user_provided", "external"):
+                    local_path = None
+                name = file_entry.get("name", "")
+                required = file_entry.get("required", True)
+                hle = file_entry.get("hle_fallback", False)
 
-            dest_hint = file_entry.get("path", "")
-            # The emulator pack's resolution, release assets included.
-            local_path, resolve_status = self.pending(file_entry, *resolve_file(
-                {**with_archive_members(file_entry, files), "source_profile": emu_name},
-                self.db,
-                BIOS_DIR,
-                self.zip_contents,
-                dest_hint=dest_hint,
-                data_dir_registry=self.data_registry,
-                offline=True,
-            ))
-            if resolve_status in ("not_found", "user_provided", "external"):
-                local_path = None
-            name = file_entry.get("name", "")
-            required = file_entry.get("required", True)
-            hle = file_entry.get("hle_fallback", False)
-
-            result = self._loose_result(
-                file_entry, name, required, local_path, resolve_status, emu_name,
-            )
-            result["system"] = file_entry.get("system", "")
-            result["hle_fallback"] = hle
-            result["ground_truth"] = build_ground_truth(name, self.validation_index)
-            # The slot the emulator pack places this entry in: standalone_path
-            # under --standalone, the sanitised path.
-            dest = resolve_destination(file_entry, self.standalone) or name
-            emu_results.setdefault(dest, []).append((result, required, hle, file_entry))
+                result = self._loose_result(
+                    file_entry, name, required, local_path, resolve_status, emu_name,
+                )
+                result["system"] = file_entry.get("system", "")
+                result["hle_fallback"] = hle
+                result["ground_truth"] = build_ground_truth(name, self.validation_index)
+                emu_results.setdefault(dest, []).append((result, required, hle, file_entry))
         return emu_results
 
     def _loose_result(
@@ -619,8 +542,6 @@ def verify_emulator(
     file or tree marked ``required: false`` is left out, and an archive when
     it and every member it carries are optional, as the builder leaves them.
     """
-    from packs.paths import resolve_destination
-
     # Also load aliases for redirect messages
     all_profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
 
@@ -653,24 +574,12 @@ def verify_emulator(
             zip_contents=zip_contents, data_registry=data_registry,
         )
 
+    selection = EmulatorSelection(
+        db, standalone, all_profiles, validation_index, zip_contents, data_registry,
+        system_ids=system_ids, required_only=required_only, region_drops=region_drops,
+    )
     for emu_name, profile in sorted(selected):
-        files = _emulator_files(
-            emu_name, profile, db, standalone, all_profiles, system_ids,
-            required_only, region_drops,
-        )
-        spares: set[str] = set()
-        if required_only:
-            from packs.extras import emulator_required_spares
-
-            spares = emulator_required_spares(
-                emu_name, profile, files, standalone, region_drops, db,
-                validation_index, zip_contents, data_registry=data_registry,
-            )
-            files = [
-                fe for fe in files
-                if fe.get("archive") or resolve_destination(fe, standalone) not in spares
-            ]
-        pack.verify_profile(emu_name, profile, files, spares)
+        pack.verify_profile(emu_name, profile, emulator_pack_entries(emu_name, profile, selection))
 
     counts = {
         Severity.OK: 0,
