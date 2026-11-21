@@ -335,6 +335,24 @@ class Events(unittest.TestCase):
                     ["event", *install.EVENT_KEYS[event["event"]]]))
 
 
+    def test_a_list_given_as_a_file_keeps_stdout_to_events(self):
+        """The list's platform was said on stdout before start: a reader
+        of the stream got a first line that is not JSON."""
+        with SharedRepository() as repo:
+            repo.install_both()
+            listed = repo.root / "install" / "retroarch.json"
+            # The command without --platform: the list names it.
+            python, script = repo.command()[:2]
+            proc = subprocess.run(
+                [python, script, "--dest", str(repo.dest), "--remove", "--dry-run",
+                 "--events", "--manifest", str(listed)],
+                env=repo.env(), capture_output=True, text=True, timeout=60, check=False,
+                stdin=subprocess.DEVNULL)
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            kinds = [json.loads(line)["event"] for line in proc.stdout.splitlines()]
+            self.assertEqual(kinds, ["start", "removal_plan", "end"])
+            self.assertIn("File list:", proc.stderr)
+
 class DeleteABackup(unittest.TestCase):
     def test_only_a_backup_folder_and_only_with_a_yes(self):
         with SharedRepository() as repo:

@@ -349,8 +349,7 @@ def _main_run() -> None:
     _main_check_offline(parser, args)
     install_bounded_opener()
     if args.remove or args.backups:
-        _open_local_sources(args)
-        _run_action(args, run_removal if args.remove else run_backups)
+        _run_action(args, _with_local_sources(run_removal if args.remove else run_backups))
     _main_check_sources(parser, args)
     _main_dispatch(args)
 
@@ -429,6 +428,17 @@ def _check_pack(parser: argparse.ArgumentParser, args: argparse.Namespace) -> No
         parser.error(f"--pack names a folder, or a file whose name ends with "
                      f"{PACK_NAME_END} (--from-pack and the parts of a pack read that "
                      f"name): {name}")
+
+
+def _with_local_sources(action: Callable[[argparse.Namespace], int],
+                        ) -> Callable[[argparse.Namespace], int]:
+    """action, the list and the pack it was given opened first. Opened
+    before the action, they said the list's platform on stdout ahead of
+    start, the first line of --events no JSON."""
+    def opened(args: argparse.Namespace) -> int:
+        _open_local_sources(args)
+        return action(args)
+    return opened
 
 
 def _run_action(args: argparse.Namespace,
