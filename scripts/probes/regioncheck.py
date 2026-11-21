@@ -14,14 +14,13 @@ from pathlib import Path
 from core.paths import DB_FILE, REPO_ROOT
 from model.profiles import entry_system_ids
 from core_probe import BUILTIN
-from probes.content import Content, load_content, load_file
+from probes.content import Content, content_root, load_content, load_file, ready_folder
 from probes.cores import cached_nightly
 from probes.entries import entry_dest, held_file, regions_of
-from probes.host import CONTENT_FILE, run_when_idle
+from probes.host import CONTENT_FILE, Unavailable, main_cache, run_when_idle
 from resolve.validation import read_by_build
 
 
-CORES = REPO_ROOT / ".cache" / "region" / "cores"
 VARIANTS = ("full", "own", "others", "pack")
 SUBJECT = re.compile(r"^region-(?P<core>[a-z0-9_]+)-(?P<game>[a-z0-9-]+)-(?P<variant>full|own|others|pack)$")
 # The territory a test game names, as generate_pack --region takes it.
@@ -186,7 +185,7 @@ def sentence(game_region: str, result: dict) -> str:
 def nightly_core(core: str) -> tuple[Path, str]:
     """The buildbot nightly of a core, downloaded again when the buildbot
     replaced it, and its URL."""
-    record = cached_nightly(core, CORES / core)
+    record = cached_nightly(core, main_cache() / "region" / "cores" / core)
     return Path(record["path"]), record["url"]
 
 
@@ -230,8 +229,14 @@ def run(args: argparse.Namespace) -> int:
     core, url = (Path(args.core), args.core_artifact) if args.core else nightly_core(args.core_name)
     local = local_resolver()
     failures = 0
+    root = Path(args.content_dir) if args.content_dir else content_root()
     for game in games:
-        load = load_file(Path(args.content_dir) / game.romfetch_system / game.name, game.load)
+        try:
+            load = load_file(ready_folder(game, root)[0], game.load)
+        except Unavailable as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            failures += 1
+            continue
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as scratch:
             variants = plan_variants(entries, game.region, local)
             variants["pack"] = pack_files(args.emulator, game.region, Path(scratch))

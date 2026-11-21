@@ -13,7 +13,6 @@ from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
-from unattended import worktree
 from core_probe import (EXIT_BUSY, PROBE_LOCK_ENV, PROBE_LOCK_HELD_ENV, VERDICTS, head_commit, host_probe_lock,
                         probe_lock_path)
 from core.paths import REPO_ROOT
@@ -23,10 +22,10 @@ from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
 from model.systems import norm_system_id
 from model.targets import load_target_config
-from probes.content import Content, fetch_content, find_romfetch, load_content, load_file, verify_identity
+from probes.content import Content, content_root, fetch_content, find_romfetch, load_content, load_file, ready_folder
 from probes.cores import buildbot_listing, cached_nightly
 from probes.entries import entry_dest
-from probes.host import CONTENT_FILE, PROBE_TIMEOUT, Unavailable, run_group, run_when_idle
+from probes.host import CONTENT_FILE, PROBE_TIMEOUT, Unavailable, main_cache, run_group, run_when_idle
 from probes.packlayout import (
     Layout,
     ProbeFailure,
@@ -41,10 +40,7 @@ from resolve.standalone import standalone_set
 from resolve.validation import filter_files_by_mode
 
 
-MAIN = worktree.main_checkout()
 PACK_CONTENT_FILE = REPO_ROOT / "tests" / "campaign" / "pack_content.yml"
-CONTENT_DIR = MAIN / ".cache" / "test-content"
-CORE_CACHE = MAIN / ".cache" / "pack-probe" / "cores"
 
 
 MAX_ROUNDS = 6
@@ -230,7 +226,7 @@ def map_run(layout: Layout, staged: set[str], rep: dict, profile: dict) -> tuple
 def fetch_core(name: str, refresh: bool = False) -> dict:
     """The buildbot nightly of a core, kept with where and when it came from.
     refresh asks the buildbot whether a newer build replaced it."""
-    return cached_nightly(name, CORE_CACHE / name, check=refresh)
+    return cached_nightly(name, main_cache() / "pack-probe" / "cores" / name, check=refresh)
 
 
 def load_contents(files: Sequence[Path]) -> dict[str, list[Content]]:
@@ -244,14 +240,15 @@ def load_contents(files: Sequence[Path]) -> dict[str, list[Content]]:
 
 def content_folder(content: Content, fetch: bool) -> Path:
     """The game's folder, fetched through romfetch when absent and asked to."""
-    folder = CONTENT_DIR / content.romfetch_system / content.name
-    if not (folder / "identity.json").is_file() and fetch:
+    root = content_root()
+
+    def get(wanted: Content) -> None:
         romfetch = find_romfetch()
         if not romfetch:
             raise Unavailable("romfetch not found")
-        fetch_content(content, CONTENT_DIR, romfetch)
-    verify_identity(folder)
-    return folder
+        fetch_content(wanted, root, romfetch)
+
+    return ready_folder(content, root, get if fetch else None)[0]
 
 
 # --------------------------------------------------------------------------

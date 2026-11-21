@@ -67,6 +67,19 @@ def layout(files: dict[str, int], entries: dict[str, str | None] | None = None) 
                      sizes=dict(files))
 
 
+class ImportDoesNoIO(unittest.TestCase):
+    def test_import_runs_no_git(self) -> None:
+        """The main checkout is looked up when a run needs it, never on import:
+        without git on PATH the module still imports."""
+        import subprocess
+        import sys
+
+        env = {**os.environ, "PATH": "/nonexistent"}
+        proc = subprocess.run([sys.executable, "-c", "import probes.packprobe, probes.regioncheck"],
+                              cwd=REPO_ROOT / "scripts", env=env, capture_output=True, text=True, check=False)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+
+
 class CoreChoice(unittest.TestCase):
     def test_system_ids_compare_normalised(self) -> None:
         config = {"systems": {"megacd": {}, "psx": {}}}

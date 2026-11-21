@@ -18,7 +18,7 @@ import yaml
 
 from core.hashing import file_digest
 from core.statefile import now_iso
-from probes.host import NETWORK_DELAYS, Unavailable, child_env, run_group
+from probes.host import NETWORK_DELAYS, Unavailable, child_env, main_cache, run_group
 
 if TYPE_CHECKING:
     from probes.campaign import Campaign
@@ -101,6 +101,25 @@ def verify_identity(folder: Path) -> dict:
     return identity
 
 
+def content_root() -> Path:
+    """Where romfetch keeps the test games: the main checkout's .cache/test-content."""
+    return main_cache() / "test-content"
+
+
+def content_folder(root: Path, content: Content) -> Path:
+    return root / content.romfetch_system / content.name
+
+
+def ready_folder(content: Content, root: Path,
+                 fetch: Callable[[Content], None] | None = None) -> tuple[Path, dict]:
+    """The game's folder and its identity, fetched first when absent and a
+    fetch is given. Unavailable unless every file matches its identity."""
+    folder = content_folder(root, content)
+    if fetch is not None and not (folder / "identity.json").is_file():
+        fetch(content)
+    return folder, verify_identity(folder)
+
+
 def folder_size(folder: Path) -> int:
     return sum(p.stat().st_size for p in folder.rglob("*") if p.is_file())
 
@@ -155,7 +174,7 @@ class ContentStore:
         self.verified: set[str] = set()
 
     def folder(self, content: Content) -> Path:
-        return self.c.paths.content / content.romfetch_system / content.name
+        return content_folder(self.c.paths.content, content)
 
     def hold(self, content: Content, user: str) -> None:
         self.refs.setdefault(content.key, set()).add(user)
@@ -170,7 +189,7 @@ class ContentStore:
             self.fetch(content)
             entry["fetched_by_campaign"] = True
         if content.key not in self.verified:
-            identity = verify_identity(folder)
+            _, identity = ready_folder(content, self.c.paths.content)
             entry["identity"] = {"catalog": identity.get("catalog"), "dat": identity.get("dat"),
                                  "entry": identity.get("entry")}
             self.verified.add(content.key)

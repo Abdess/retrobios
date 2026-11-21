@@ -40,7 +40,6 @@ if sys.version_info < (3, 9):
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from core.paths import REPO_ROOT
 from probes.regioncheck import VARIANTS, collect, run
 
 
@@ -53,7 +52,7 @@ def main(argv: list[str] | None = None) -> int:
     go.add_argument("--core-name", help="buildbot core name, e.g. mednafen_psx (downloads the nightly)")
     go.add_argument("--core", help="a core .so to use instead of the nightly")
     go.add_argument("--core-artifact", help="where --core was downloaded from")
-    go.add_argument("--content-dir", default=str(REPO_ROOT / ".cache" / "test-content"),
+    go.add_argument("--content-dir",
                     help="where romfetch keeps the test games (default: .cache/test-content)")
     go.add_argument("--variants", nargs="*", choices=VARIANTS, help="a subset of the four runs")
     go.add_argument("--timeout", type=int, default=900, help="seconds per run")

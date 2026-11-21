@@ -184,9 +184,14 @@ class Paths:
 
     @classmethod
     def default(cls) -> Paths:
-        main = worktree.main_checkout()
-        return cls(root=REPO_ROOT, home=main / ".cache" / "campaign",
-                   content=main / ".cache" / "test-content", db=REPO_ROOT / DB_FILE)
+        cache = main_cache()
+        return cls(root=REPO_ROOT, home=cache / "campaign",
+                   content=cache / "test-content", db=REPO_ROOT / DB_FILE)
+
+
+def main_cache() -> Path:
+    """The main checkout's .cache, which a linked worktree never holds."""
+    return worktree.main_checkout() / ".cache"
 
 
 ROMFETCH_PASSED = ("XDG_CONFIG_HOME", "XDG_CACHE_HOME", "XDG_DATA_HOME")

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import tests
 
+import dataclasses
 import unittest
 from pathlib import Path
 
@@ -175,6 +176,68 @@ class Outcome(unittest.TestCase):
     def test_no_own_run(self) -> None:
         self.assertEqual(regioncheck.sentence("japan", regioncheck.outcome({}, self.ENTRIES, "japan")),
                          "The Japanese game has no run with its own BIOS yet.")
+
+
+class ContentChecked(unittest.TestCase):
+    """A game whose files no longer match romfetch's identity never runs: the
+    record would blame the BIOS for a defect in the content."""
+
+    def setUp(self) -> None:
+        import shutil
+        import tempfile
+
+        (ROOT / "tmp").mkdir(exist_ok=True)
+        self.root = Path(tempfile.mkdtemp(dir=ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, self.root)
+        game = regioncheck.load_content(regioncheck.CONTENT_FILE)["sony-playstation"][0]
+        self.game = dataclasses.replace(game, load="game.bin")
+
+    def write_game(self, data: bytes) -> None:
+        import hashlib
+        import json
+
+        folder = self.root / self.game.romfetch_system / self.game.name
+        folder.mkdir(parents=True)
+        (folder / "game.bin").write_bytes(data)
+        (folder / "identity.json").write_text(json.dumps({"status": "verified", "files": [
+            {"name": "game.bin", "size": 4, "sha1": hashlib.sha1(b"good").hexdigest()}]}), encoding="utf-8")
+
+    def run_region(self) -> tuple[int, list]:
+        import argparse
+        from unittest import mock
+
+        args = argparse.Namespace(emulator="beetle_psx", system="sony-playstation", core="core.so",
+                                  core_artifact=None, content_dir=str(self.root), variants=None,
+                                  timeout=1, max_load_wait=1)
+        with mock.patch("model.profiles.load_emulator_profiles", return_value={"beetle_psx": PROFILE}), \
+                mock.patch.object(regioncheck, "load_content",
+                                  return_value={"sony-playstation": [self.game]}), \
+                mock.patch.object(regioncheck, "local_resolver", return_value=lambda e: None), \
+                mock.patch.object(regioncheck, "pack_files", return_value={}), \
+                mock.patch.object(regioncheck, "run_when_idle") as runs:
+            runs.return_value.returncode = 0
+            code = regioncheck.run(args)
+        return code, runs.call_args_list
+
+    def test_altered_game_is_refused(self) -> None:
+        self.write_game(b"bad!")
+        code, runs = self.run_region()
+        self.assertEqual((code, runs), (1, []))
+
+    def test_verified_game_runs(self) -> None:
+        self.write_game(b"good")
+        code, runs = self.run_region()
+        self.assertEqual(code, 0)
+        self.assertEqual(len(runs), len(regioncheck.VARIANTS))
+
+    def test_default_content_and_cores_are_the_main_checkout_cache(self) -> None:
+        """A linked worktree holds no .cache: the default reads the main checkout's."""
+        from probes import content
+        from unattended import worktree
+
+        cache = worktree.main_checkout() / ".cache"
+        self.assertEqual(content.content_root(), cache / "test-content")
+        self.assertEqual(host.Paths.default().content, content.content_root())
 
 
 class ContentList(unittest.TestCase):
