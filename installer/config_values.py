@@ -22,6 +22,21 @@ def _expand_retroarch_path(value: str, app_dir: Path, home: Path | None = None) 
     return _host_path(os.path.expandvars(os.path.expanduser(value)))
 
 
+def _retroarch_cfg_value(cfg_path: Path, key: str) -> str | None:
+    """The value of key in retroarch.cfg without its quotes, None when the
+    config is unreadable, said like a closed folder, or does not set it."""
+    try:
+        lines = cfg_path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError as exc:
+        _note_refused(cfg_path, exc)
+        return None
+    for line in lines:
+        name, sep, value = line.partition("=")
+        if sep and name.strip() == key:
+            return value.strip().strip('"').strip("'")
+    return None
+
+
 def _retroarch_cfg_dir(
     cfg_path: Path, key: str, app_dir: Path, default: str, home: Path | None = None
 ) -> Path | None:
@@ -33,20 +48,12 @@ def _retroarch_cfg_dir(
     closed folder: a retroarch.cfg a `sudo retroarch` left to root hid the
     setup without a word.
     """
-    try:
-        lines = cfg_path.read_text(encoding="utf-8", errors="replace").splitlines()
-    except OSError as exc:
-        _note_refused(cfg_path, exc)
+    value = _retroarch_cfg_value(cfg_path, key)
+    if value is None:
         return None
-    for line in lines:
-        line = line.strip()
-        name, sep, value = line.partition("=")
-        if sep and name.strip() == key:
-            value = value.strip().strip('"').strip("'")
-            if not value or value == "default":
-                return app_dir / default
-            return _expand_retroarch_path(value, app_dir, home)
-    return None
+    if not value or value == "default":
+        return app_dir / default
+    return _expand_retroarch_path(value, app_dir, home)
 
 
 # System directory -> the retroarch.cfg it was read from and the directory

@@ -1893,6 +1893,21 @@ def _expand_retroarch_path(value: str, app_dir: Path, home: Path | None = None) 
     return _host_path(os.path.expandvars(os.path.expanduser(value)))
 
 
+def _retroarch_cfg_value(cfg_path: Path, key: str) -> str | None:
+    """The value of key in retroarch.cfg without its quotes, None when the
+    config is unreadable, said like a closed folder, or does not set it."""
+    try:
+        lines = cfg_path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError as exc:
+        _note_refused(cfg_path, exc)
+        return None
+    for line in lines:
+        name, sep, value = line.partition("=")
+        if sep and name.strip() == key:
+            return value.strip().strip('"').strip("'")
+    return None
+
+
 def _retroarch_cfg_dir(
     cfg_path: Path, key: str, app_dir: Path, default: str, home: Path | None = None
 ) -> Path | None:
@@ -1904,20 +1919,12 @@ def _retroarch_cfg_dir(
     closed folder: a retroarch.cfg a `sudo retroarch` left to root hid the
     setup without a word.
     """
-    try:
-        lines = cfg_path.read_text(encoding="utf-8", errors="replace").splitlines()
-    except OSError as exc:
-        _note_refused(cfg_path, exc)
+    value = _retroarch_cfg_value(cfg_path, key)
+    if value is None:
         return None
-    for line in lines:
-        line = line.strip()
-        name, sep, value = line.partition("=")
-        if sep and name.strip() == key:
-            value = value.strip().strip('"').strip("'")
-            if not value or value == "default":
-                return app_dir / default
-            return _expand_retroarch_path(value, app_dir, home)
-    return None
+    if not value or value == "default":
+        return app_dir / default
+    return _expand_retroarch_path(value, app_dir, home)
 
 
 # System directory -> the retroarch.cfg it was read from and the directory
@@ -5120,19 +5127,6 @@ _ANDROID_RETROARCH_PLAY_IDS = ("com.retroarch", "com.retroarch.aarch64")
 _ANDROID_PLAY_VERSION_CEILING = 1609632000
 
 
-def _android_cfg_value(cfg: Path, key: str) -> str | None:
-    """A value of an Android retroarch.cfg, None when unreadable or unset."""
-    try:
-        lines = cfg.read_text(encoding="utf-8", errors="replace").splitlines()
-    except OSError:
-        return None
-    for line in lines:
-        name, sep, value = line.partition("=")
-        if sep and name.strip() == key:
-            return value.strip().strip('"').strip("'")
-    return None
-
-
 @contextlib.contextmanager
 def _refusals_expected() -> Iterator[None]:
     """Probes whose refusal is the answer, not a folder to report: another
@@ -5158,7 +5152,7 @@ def _android_play_build(package: str, storage: Path, cfgs: tuple[Path, ...]) -> 
     if package not in _ANDROID_RETROARCH_PLAY_IDS:
         return False
     for cfg in cfgs:
-        code = _android_cfg_value(cfg, "bundle_assets_extract_version_current")
+        code = _retroarch_cfg_value(cfg, "bundle_assets_extract_version_current")
         if code and code.isdigit() and int(code) > 0:
             return int(code) < _ANDROID_PLAY_VERSION_CEILING
     if _is_dir(storage / "Android" / "data" / package / "files" / "RetroArch"):
@@ -5209,7 +5203,7 @@ def _android_retroarch_builds() -> list[tuple[Path | None, str]]:
                 ANDROID_APP_DATA / package / "files" / "retroarch.cfg")
         play = _android_play_build(package, storage, cfgs)
         play_root, shared_root = external / "RetroArch", storage / "RetroArch"
-        named = next(filter(None, (_android_cfg_value(cfg, "system_directory")
+        named = next(filter(None, (_retroarch_cfg_value(cfg, "system_directory")
                                    for cfg in cfgs)), "default")
         if play is None and named == "default":
             builds.append((None,
@@ -5861,18 +5855,9 @@ def _retroarch_uwp_system_dir() -> Path | None:
     if not states:
         return None
     state = states[0]
-    cfg = state / "retroarch.cfg"
-    try:
-        for line in cfg.read_text(encoding="utf-8", errors="replace").splitlines():
-            name, sep, value = line.strip().partition("=")
-            if sep and name.strip() == "system_directory":
-                value = value.strip().strip('"').strip("'")
-                if value.startswith("~"):
-                    return state / value[1:].lstrip("\\/")
-                break
-    except OSError:
-        return state / "system"
-    return _retroarch_cfg_dir(cfg, "system_directory", state, "system") or state / "system"
+    return (_retroarch_cfg_dir(state / "retroarch.cfg", "system_directory", state, "system",
+                               home=state)
+            or state / "system")
 
 
 def _bizhawk_unix_firmware() -> Path | None:
@@ -6234,10 +6219,10 @@ def save_directory_for(
     if found is not None:
         cfg_path, app_dir = found
         for key in ("savefiles_in_content_dir", "sort_savefiles_by_content_enable"):
-            if _cfg_true(_android_cfg_value(cfg_path, key)):
+            if _cfg_true(_retroarch_cfg_value(cfg_path, key)):
                 return (f"RetroArch keeps saves beside each game ({key} in {cfg_path}): "
                         "name the folder with --save-dir")
-        sort = _android_cfg_value(cfg_path, "sort_savefiles_enable")
+        sort = _retroarch_cfg_value(cfg_path, "sort_savefiles_enable")
         if sort is not None:
             by_core = _cfg_true(sort)
         if override is not None:
@@ -6503,6 +6488,15 @@ _FIXED_CORE_DIRS = {
 }
 
 
+def _config_beside(bios_path: Path) -> tuple[Path, Path] | None:
+    """The retroarch.cfg detection read for bios_path and the directory ':'
+    expands to, else a portable one beside the system directory."""
+    found = _retroarch_config_for(bios_path)
+    if found is None and _is_file(bios_path.parent / "retroarch.cfg"):
+        found = (bios_path.parent / "retroarch.cfg", bios_path.parent)
+    return found
+
+
 def core_dirs(plat: str, bios_path: Path) -> list[Path]:
     """The directories the RetroArch writing to bios_path loads cores from.
 
@@ -6512,9 +6506,7 @@ def core_dirs(plat: str, bios_path: Path) -> list[Path]:
     directory is the portable layout. Unset, the setting is cores/ under
     RetroArch's own directory.
     """
-    found = _retroarch_config_for(bios_path)
-    if found is None and _is_file(bios_path.parent / "retroarch.cfg"):
-        found = (bios_path.parent / "retroarch.cfg", bios_path.parent)
+    found = _config_beside(bios_path)
     dirs: list[Path] = []
     if found is not None:
         cfg, app_dir = found
@@ -6559,9 +6551,7 @@ def info_dirs(plat: str, bios_path: Path, searched: list[Path]) -> list[Path]:
     then the cores folders: Linux builds and Lakka keep each .info beside
     its core.
     """
-    found = _retroarch_config_for(bios_path)
-    if found is None and _is_file(bios_path.parent / "retroarch.cfg"):
-        found = (bios_path.parent / "retroarch.cfg", bios_path.parent)
+    found = _config_beside(bios_path)
     dirs: list[Path] = []
     if found is not None:
         cfg, app_dir = found

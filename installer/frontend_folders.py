@@ -8,9 +8,15 @@ import re
 import sys
 from pathlib import Path, PurePosixPath
 
-from installer.config_values import _RETROARCH_CONFIGS, _cfg_true, _config_keys, _retroarch_cfg_dir
+from installer.config_values import (
+    _RETROARCH_CONFIGS,
+    _cfg_true,
+    _config_keys,
+    _retroarch_cfg_dir,
+    _retroarch_cfg_value,
+)
 from installer.console import detail
-from installer.detect_frontends import _android_cfg_value, detect_platforms
+from installer.detect_frontends import detect_platforms
 from installer.detect_os import detect_os
 from installer.events import EVENTS
 from installer.host_fs import _SETUP_SEARCH, _is_dir
@@ -118,10 +124,10 @@ def save_directory_for(
     if found is not None:
         cfg_path, app_dir = found
         for key in ("savefiles_in_content_dir", "sort_savefiles_by_content_enable"):
-            if _cfg_true(_android_cfg_value(cfg_path, key)):
+            if _cfg_true(_retroarch_cfg_value(cfg_path, key)):
                 return (f"RetroArch keeps saves beside each game ({key} in {cfg_path}): "
                         "name the folder with --save-dir")
-        sort = _android_cfg_value(cfg_path, "sort_savefiles_enable")
+        sort = _retroarch_cfg_value(cfg_path, "sort_savefiles_enable")
         if sort is not None:
             by_core = _cfg_true(sort)
         if override is not None:

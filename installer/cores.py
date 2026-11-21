@@ -30,6 +30,15 @@ _FIXED_CORE_DIRS = {
 }
 
 
+def _config_beside(bios_path: Path) -> tuple[Path, Path] | None:
+    """The retroarch.cfg detection read for bios_path and the directory ':'
+    expands to, else a portable one beside the system directory."""
+    found = _retroarch_config_for(bios_path)
+    if found is None and _is_file(bios_path.parent / "retroarch.cfg"):
+        found = (bios_path.parent / "retroarch.cfg", bios_path.parent)
+    return found
+
+
 def core_dirs(plat: str, bios_path: Path) -> list[Path]:
     """The directories the RetroArch writing to bios_path loads cores from.
 
@@ -39,9 +48,7 @@ def core_dirs(plat: str, bios_path: Path) -> list[Path]:
     directory is the portable layout. Unset, the setting is cores/ under
     RetroArch's own directory.
     """
-    found = _retroarch_config_for(bios_path)
-    if found is None and _is_file(bios_path.parent / "retroarch.cfg"):
-        found = (bios_path.parent / "retroarch.cfg", bios_path.parent)
+    found = _config_beside(bios_path)
     dirs: list[Path] = []
     if found is not None:
         cfg, app_dir = found
@@ -86,9 +93,7 @@ def info_dirs(plat: str, bios_path: Path, searched: list[Path]) -> list[Path]:
     then the cores folders: Linux builds and Lakka keep each .info beside
     its core.
     """
-    found = _retroarch_config_for(bios_path)
-    if found is None and _is_file(bios_path.parent / "retroarch.cfg"):
-        found = (bios_path.parent / "retroarch.cfg", bios_path.parent)
+    found = _config_beside(bios_path)
     dirs: list[Path] = []
     if found is not None:
         cfg, app_dir = found

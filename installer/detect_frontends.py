@@ -16,6 +16,7 @@ from installer.config_values import (
     _parse_ps1_var,
     _parse_retroarch_system_dir,
     _retroarch_cfg_dir,
+    _retroarch_cfg_value,
 )
 from installer.detect_os import (
     _detect_embedded,
@@ -178,19 +179,6 @@ _ANDROID_RETROARCH_PLAY_IDS = ("com.retroarch", "com.retroarch.aarch64")
 _ANDROID_PLAY_VERSION_CEILING = 1609632000
 
 
-def _android_cfg_value(cfg: Path, key: str) -> str | None:
-    """A value of an Android retroarch.cfg, None when unreadable or unset."""
-    try:
-        lines = cfg.read_text(encoding="utf-8", errors="replace").splitlines()
-    except OSError:
-        return None
-    for line in lines:
-        name, sep, value = line.partition("=")
-        if sep and name.strip() == key:
-            return value.strip().strip('"').strip("'")
-    return None
-
-
 @contextlib.contextmanager
 def _refusals_expected() -> Iterator[None]:
     """Probes whose refusal is the answer, not a folder to report: another
@@ -216,7 +204,7 @@ def _android_play_build(package: str, storage: Path, cfgs: tuple[Path, ...]) -> 
     if package not in _ANDROID_RETROARCH_PLAY_IDS:
         return False
     for cfg in cfgs:
-        code = _android_cfg_value(cfg, "bundle_assets_extract_version_current")
+        code = _retroarch_cfg_value(cfg, "bundle_assets_extract_version_current")
         if code and code.isdigit() and int(code) > 0:
             return int(code) < _ANDROID_PLAY_VERSION_CEILING
     if _is_dir(storage / "Android" / "data" / package / "files" / "RetroArch"):
@@ -267,7 +255,7 @@ def _android_retroarch_builds() -> list[tuple[Path | None, str]]:
                 ANDROID_APP_DATA / package / "files" / "retroarch.cfg")
         play = _android_play_build(package, storage, cfgs)
         play_root, shared_root = external / "RetroArch", storage / "RetroArch"
-        named = next(filter(None, (_android_cfg_value(cfg, "system_directory")
+        named = next(filter(None, (_retroarch_cfg_value(cfg, "system_directory")
                                    for cfg in cfgs)), "default")
         if play is None and named == "default":
             builds.append((None,
@@ -919,18 +907,9 @@ def _retroarch_uwp_system_dir() -> Path | None:
     if not states:
         return None
     state = states[0]
-    cfg = state / "retroarch.cfg"
-    try:
-        for line in cfg.read_text(encoding="utf-8", errors="replace").splitlines():
-            name, sep, value = line.strip().partition("=")
-            if sep and name.strip() == "system_directory":
-                value = value.strip().strip('"').strip("'")
-                if value.startswith("~"):
-                    return state / value[1:].lstrip("\\/")
-                break
-    except OSError:
-        return state / "system"
-    return _retroarch_cfg_dir(cfg, "system_directory", state, "system") or state / "system"
+    return (_retroarch_cfg_dir(state / "retroarch.cfg", "system_directory", state, "system",
+                               home=state)
+            or state / "system")
 
 
 def _bizhawk_unix_firmware() -> Path | None:
