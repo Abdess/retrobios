@@ -742,6 +742,15 @@ class InstallBlockWhereItWorks(unittest.TestCase):
         command, setups, oses = sitegen_install.emulator_install_route("cxbx-reloaded", _profile("cxbx-reloaded"))
         self.assertEqual(oses, ("windows",))
 
+    def test_a_setup_whose_package_leaves_the_files_out_gets_the_command(self) -> None:
+        # hcl's release bundles every file, Batocera's package does not, and
+        # install/batocera.json serves its 667 files: the page said they all
+        # came with the app and printed no command.
+        profile = _profile("hcl")
+        command, setups, _oses = sitegen_install.emulator_install_route("hcl", profile)
+        self.assertEqual((command, setups), ("hcl", ["batocera"]))
+        self.assertFalse(any(sitegen_install.comes_with_app(f) for f in profile["files"]))
+
     def test_a_lone_app_is_named_with_the_setup_that_launches_it(self) -> None:
         text = "\n".join(sitegen_install.install_block("ryujinx", _profile("ryujinx")))
         self.assertRegex(text, r"With [^:]*EmuDeck[^:]*: the installer finds")

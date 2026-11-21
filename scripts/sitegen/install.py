@@ -17,6 +17,7 @@ from model.registry import list_release_pack_platforms
 from model.profiles import reads_own_files
 from resolve.layout import runs_standalone, standalone_layout_path
 from resolve.standalone import standalone_set
+from resolve.validation import installed_with_emulator
 from sitegen import markup
 from core.paths import REPO_ROOT
 from installer_build.module import installer_module
@@ -75,15 +76,16 @@ def _platform_display_in(platforms_dir: str, name: str) -> str:
 
 
 def comes_with_app(f: dict) -> bool:
-    """The emulator installs the file in the build the entry describes.
+    """The emulator installs the file in the build the entry describes, on every setup.
 
-    The rule verify and the pack read (``installed_with_emulator``). An entry
+    The rule verify and the pack read (``installed_with_emulator``), for a
+    page that names no setup. An entry a platform package leaves out
+    (``not_bundled_on``: Batocera's hcl installs the binary alone) is a file
+    that setup's readers get, and the manifests serve it there. An entry
     narrowed by ``mode`` is that build's alone: the other build reads its
     own entry, or nothing.
     """
-    from resolve.validation import installed_with_emulator
-
-    return installed_with_emulator(f)
+    return installed_with_emulator(f) and not f.get("not_bundled_on")
 
 
 def install_commands(args: str = "", indent: str = "",
@@ -144,12 +146,15 @@ def emulator_install_route(name: str, profile: dict) -> tuple[str, list[str], tu
     """
     if not reads_own_files(profile):
         return "", [], ()
-    if not [f for f in profile.get("files") or [] if isinstance(f, dict) and not comes_with_app(f)]:
-        return "", [], ()
+    files = [f for f in profile.get("files") or [] if isinstance(f, dict)]
     standalone = profile.get("type") == "standalone"
     accepted: dict[str, set[str]] = {}
     for platform, names in _published_emulator_names().items():
         if platform not in GUIDES:
+            continue
+        # Decided per setup, as the manifest decides it: Batocera's hcl
+        # package leaves out the 667 files every other setup's install brings.
+        if all(installed_with_emulator(f, platform) for f in files):
             continue
         if standalone and not runs_standalone(name, profile, _standalone_cores(platform)):
             continue
