@@ -1,12 +1,12 @@
 """The offline mode and the local sources a run reads in place of the network."""
 from __future__ import annotations
 
-import json
 import os
 import weakref
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from installer.host_fs import read_local_json
 from installer.invocation import OFFLINE_VARIABLE, offline_requested
 from installer.platforms import AVAILABLE_PLATFORMS
 from installer.remote import MAX_MANIFEST_BYTES
@@ -107,9 +107,8 @@ def _network_allowed(what: str) -> None:
 def local_manifest_platform(path: Path) -> str | None:
     """The platform a saved file list names, None when it names none."""
     try:
-        with open(path, "rb") as handle:
-            data = json.loads(handle.read(MAX_MANIFEST_BYTES).decode("utf-8"))
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        data = read_local_json(path, MAX_MANIFEST_BYTES)
+    except (OSError, ValueError):
         return None
     plat = data.get("platform") if isinstance(data, dict) else None
     return plat if plat in AVAILABLE_PLATFORMS else None

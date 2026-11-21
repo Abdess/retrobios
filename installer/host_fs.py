@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import errno
+import json
 import os
 import re
 import shutil
@@ -237,6 +238,19 @@ def _replace_with_copy(src: Path, dest: Path) -> None:
         if os.path.lexists(scratch):
             os.unlink(scratch)
         raise
+
+
+def read_local_json(path: Path, limit: int) -> object:
+    """A JSON file of limit bytes at most. OSError when it cannot be read,
+    ValueError saying why when it is too large or not JSON."""
+    with open(path, "rb") as handle:
+        raw = handle.read(limit + 1)
+    if len(raw) > limit:
+        raise ValueError(f"it exceeds {limit} bytes")
+    try:
+        return json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"not JSON ({exc})") from exc
 
 
 def write_atomically(path: Path, data: bytes) -> None:

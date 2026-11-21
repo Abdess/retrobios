@@ -1154,5 +1154,46 @@ class OfflineAndPackLeaveOut(Scratch):
         self.assertIn("Enter) install what is found in", out.getvalue())
 
 
+
+class LocalFilesSayWhyTheyCannotBeUsed(unittest.TestCase):
+    """An oversized layout beside --manifest was "not valid: Expecting
+    value", and an unreadable target list read as absent, so the offline
+    run asked for the file already there."""
+
+    def setUp(self):
+        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, self.root, True)
+        listing = self.root / "retroarch.json"
+        listing.write_text("{}")
+        patcher = unittest.mock.patch.object(install.LOCAL, "manifest", listing)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def _said(self, call) -> str:
+        with contextlib.redirect_stderr(io.StringIO()) as err, \
+                self.assertRaises(SystemExit) as stop:
+            call()
+        self.assertEqual(stop.exception.code, 1)
+        return err.getvalue()
+
+    def test_an_oversized_standalone_layout(self):
+        (self.root / "standalone").mkdir()
+        (self.root / "standalone" / "retroarch.json").write_bytes(
+            b" " * (install.MAX_STANDALONE_BYTES + 1))
+        said = self._said(lambda: install.fetch_standalone("retroarch", {}))
+        self.assertIn(f"it exceeds {install.MAX_STANDALONE_BYTES} bytes", said)
+
+    @unittest.skipIf(os.name == "nt" or (hasattr(os, "geteuid") and os.geteuid() == 0),
+                     "a mode of 000 closes the file to this user on POSIX only")
+    def test_an_unreadable_target_list(self):
+        (self.root / "targets").mkdir()
+        boards = self.root / "targets" / "retroarch.json"
+        boards.write_text("{}")
+        boards.chmod(0)
+        self.addCleanup(boards.chmod, 0o644)
+        said = self._said(lambda: install.local_targets("retroarch"))
+        self.assertIn(f"the target list {boards} cannot be read", said)
+
+
 if __name__ == "__main__":
     unittest.main()

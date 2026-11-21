@@ -1827,6 +1827,19 @@ def _replace_with_copy(src: Path, dest: Path) -> None:
         raise
 
 
+def read_local_json(path: Path, limit: int) -> object:
+    """A JSON file of limit bytes at most. OSError when it cannot be read,
+    ValueError saying why when it is too large or not JSON."""
+    with open(path, "rb") as handle:
+        raw = handle.read(limit + 1)
+    if len(raw) > limit:
+        raise ValueError(f"it exceeds {limit} bytes")
+    try:
+        return json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"not JSON ({exc})") from exc
+
+
 def write_atomically(path: Path, data: bytes) -> None:
     """Write data at path through a scratch file beside it, removed when the
     write fails; a scratch that cannot be removed is named in the error."""
@@ -7379,9 +7392,8 @@ def _network_allowed(what: str) -> None:
 def local_manifest_platform(path: Path) -> str | None:
     """The platform a saved file list names, None when it names none."""
     try:
-        with open(path, "rb") as handle:
-            data = json.loads(handle.read(MAX_MANIFEST_BYTES).decode("utf-8"))
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        data = read_local_json(path, MAX_MANIFEST_BYTES)
+    except (OSError, ValueError):
         return None
     plat = data.get("platform") if isinstance(data, dict) else None
     return plat if plat in AVAILABLE_PLATFORMS else None
@@ -7444,19 +7456,10 @@ NETWORK_ADVICE = ("  Check the connection, and HTTPS_PROXY if this network needs
 def read_local_manifest(path: Path, plat: str) -> dict:
     """A file list saved on disk, checked as a downloaded one is."""
     try:
-        with open(path, "rb") as handle:
-            raw = handle.read(MAX_MANIFEST_BYTES + 1)
+        return _validate_manifest(read_local_json(path, MAX_MANIFEST_BYTES), plat)
     except OSError as exc:
         print(f"  Cannot read the file list {path}: {exc.strerror or exc}.", file=sys.stderr)
         sys.exit(1)
-    try:
-        if len(raw) > MAX_MANIFEST_BYTES:
-            raise ValueError(f"it exceeds {MAX_MANIFEST_BYTES} bytes")
-        try:
-            data = json.loads(raw.decode("utf-8"))
-        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-            raise ValueError(f"not JSON ({exc})") from exc
-        return _validate_manifest(data, plat)
     except ValueError as exc:
         EVENTS.emit("error", stage="manifest", reason="invalid", platform=plat,
                     message=f"the file list is not valid: {exc}")
@@ -7807,12 +7810,16 @@ def local_targets(plat: str) -> "dict | None":
     if LOCAL.manifest is None:
         return None
     beside = LOCAL.manifest.parent / "targets" / f"{plat}.json"
-    raw = _read_capped(beside, MAX_TARGETS_BYTES)
-    if raw is None:
+    if not _is_file(beside):
         return None
     try:
-        return _validate_targets(json.loads(raw.decode("utf-8")))
-    except (UnicodeDecodeError, ValueError) as exc:
+        return _validate_targets(read_local_json(beside, MAX_TARGETS_BYTES))
+    except OSError as exc:
+        # Read as absent, the offline run asked for the file already there.
+        print(f"  Error: the target list {beside} cannot be read: {exc.strerror or exc}",
+              file=sys.stderr)
+        sys.exit(1)
+    except ValueError as exc:
         print(f"  Error: the target list {beside} is not valid: {exc}", file=sys.stderr)
         sys.exit(1)
 
@@ -7828,16 +7835,17 @@ def fetch_standalone(plat: str, manifest: dict) -> dict:
     where = str(beside) if beside is not None and _is_file(beside) else url
     try:
         if where != url:
-            raw = _read_capped(Path(where), MAX_STANDALONE_BYTES)
-            data = json.loads((raw or b"").decode("utf-8"))
+            data = read_local_json(Path(where), MAX_STANDALONE_BYTES)
         else:
             data = _fetch_json(url, MAX_STANDALONE_BYTES, "standalone layout")
         return _check_standalone_layouts(data, manifest, plat)
     except urllib.error.HTTPError as exc:
         problem = f"HTTP {exc.code}"
     except (urllib.error.URLError, OSError) as exc:
-        problem = str(exc) if isinstance(exc, _Offline) else network_words(exc)[1]
-    except (UnicodeDecodeError, ValueError) as exc:
+        problem = (str(exc) if isinstance(exc, _Offline)
+                   else exc.strerror or str(exc) if where != url
+                   else network_words(exc)[1])
+    except ValueError as exc:
         problem = f"not valid: {exc}"
     EVENTS.emit("error", stage="manifest", reason="unavailable", platform=plat,
                 message=f"--standalone needs {where}: {problem}")
