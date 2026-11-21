@@ -738,7 +738,7 @@ class TheMissingReportNamesItsTargets(unittest.TestCase):
         import contextlib
         import io
 
-        import romset_recipes
+        from romrecipes.text import print_missing
 
         gap = {
             "constructible": [],
@@ -749,7 +749,7 @@ class TheMissingReportNamesItsTargets(unittest.TestCase):
         }
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            romset_recipes.print_missing(gap)
+            print_missing(gap)
         text = out.getvalue()
         self.assertIn("NOT REPRODUCIBLE: neogeo.zip (2 pinned: aaaaaaaa, bbbbbbbb)", text)
         self.assertIn("NOT REPRODUCIBLE: aes.zip (1 pinned: cccccccc)", text)
@@ -824,19 +824,11 @@ class WriteRunsTheReportItWrites(unittest.TestCase):
     --write saves come from the missing-pins report, which did not run."""
 
     def test_write_implies_missing(self):
-        import argparse
+        from romrecipes.survey import survey_modes
 
-        import romset_recipes
-
-        args = argparse.Namespace(identify=True, missing=False, write=True)
-        romset_recipes._resolve_modes(args)
-        self.assertEqual((args.identify, args.missing), (True, True))
-        default = argparse.Namespace(identify=False, missing=False, write=False)
-        romset_recipes._resolve_modes(default)
-        self.assertEqual((default.identify, default.missing), (True, True))
-        alone = argparse.Namespace(identify=True, missing=False, write=False)
-        romset_recipes._resolve_modes(alone)
-        self.assertEqual((alone.identify, alone.missing), (True, False))
+        self.assertEqual(survey_modes(True, False, True), (True, True))
+        self.assertEqual(survey_modes(False, False, False), (True, True))
+        self.assertEqual(survey_modes(True, False, False), (True, False))
 
 
 

@@ -7,12 +7,13 @@ import zipfile
 from collections import defaultdict
 from collections.abc import Callable, Iterable
 from concurrent.futures import ProcessPoolExecutor
+from dataclasses import dataclass
 from pathlib import Path
 from typing import BinaryIO
 
 from core.hashing import parse_hash_list
 from core.torrentzip import has_torrentzip_comment, write_torrentzip, zlib_ng_version
-from romrecipes.ledger import database_archives
+from romrecipes.ledger import database_archives, load_ledger, write_ledger
 from romrecipes.members import member_sha1, member_opener
 from romrecipes.pins import container_entries
 from romrecipes.romsets import collect_recipes, load_dat_recipes
@@ -209,3 +210,37 @@ class ZlibNgError(RuntimeError):
             "stock zlib's level-9 output, so an exact rebuild cannot be proven "
             "or claimed here. Run under a Python linked against stock zlib."
         )
+
+
+@dataclass
+class CaptureRun:
+    """The records a capture wrote, the archives it could not read, and whether the file changed."""
+
+    records: dict[str, dict]
+    failed: dict[str, str]
+    changed: bool
+
+    def counts(self) -> dict[str, int]:
+        """Records by rebuild class, those agreeing with another recipe, those pinned as bytes."""
+        by_class: dict[str, int] = defaultdict(int)
+        for record in self.records.values():
+            by_class[record["rebuild"]] += 1
+        return {
+            "exact": by_class["exact"],
+            "canonical": by_class["canonical"],
+            "agreed": sum(1 for record in self.records.values() if len(record["sources"]) > 1),
+            "pinned": sum(1 for record in self.records.values() if record.get("bytes_pinned")),
+        }
+
+
+def capture_ledger(
+    archives: Path, db: dict, emulators_dir: str, dat_recipes: str, platforms_dir: str,
+) -> CaptureRun:
+    """Capture every archive of *db* against the ledger at *archives* and write it back."""
+    records, failed = capture(
+        db,
+        load_ledger(archives),
+        recipe_index(emulators_dir, dat_recipes),
+        container_pins(platforms_dir, emulators_dir),
+    )
+    return CaptureRun(records, failed, write_ledger(records, archives))

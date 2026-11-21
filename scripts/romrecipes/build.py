@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import os
+from collections import defaultdict
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -165,3 +167,42 @@ def select(ledger: dict[str, dict], wanted: str, root: Path = REPO_ROOT) -> list
     if key in ledger:
         return [ledger[key]]
     return [record for path, record in sorted(ledger.items()) if Path(path).name == wanted]
+
+
+def build_targets(ledger: dict[str, dict], wanted: str | None) -> list[dict]:
+    """Every record in path order when *wanted* is None, else those it names."""
+    if wanted is None:
+        return [ledger[path] for path in sorted(ledger)]
+    return select(ledger, wanted)
+
+
+def build_records(
+    records: list[dict],
+    atoms: AtomIndex,
+    output_dir: Path,
+    root: Path,
+    discard: bool = False,
+) -> Iterator[BuildResult]:
+    """Build each record in turn; with *discard* a verified build is deleted once seen."""
+    for record in records:
+        result = build_archive(record, atoms, output_dir, root)
+        yield result
+        if discard and result.status in ("exact", "canonical"):
+            Path(result.output).unlink()
+
+
+@dataclass
+class BuildTally:
+    """A build run counted by status, with the archives that read their own members."""
+
+    counts: dict[str, int] = field(default_factory=lambda: defaultdict(int))
+    own: list[tuple[str, int]] = field(default_factory=list)
+
+    def add(self, result: BuildResult) -> None:
+        self.counts[result.status] += 1
+        if result.own_members:
+            self.own.append((result.path, result.own_members))
+
+    @property
+    def own_members(self) -> int:
+        return sum(n for _p, n in self.own)

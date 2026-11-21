@@ -130,6 +130,7 @@ COMMANDS = {
     "romset_recipes.py": (
         "romrecipes/romsets.py", "romrecipes/pool.py", "romrecipes/pins.py", "romrecipes/identify.py",
         "romrecipes/ledger.py", "romrecipes/members.py", "romrecipes/capture.py", "romrecipes/build.py",
+        "romrecipes/survey.py", "romrecipes/text.py",
     ),
     "provenance_report.py": ("acquire/provenance.py",),
     "auto_fetch.py": ("acquire/fetch.py",),
