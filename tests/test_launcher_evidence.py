@@ -17,6 +17,9 @@ import yaml
 
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
+from resolve.categories import EntryCategories
+from resolve.layout import HANDED_PREFIX
+from resolve.standalone import standalone_set
 from resolve.launchers import (
     bound_launchers,
     config_evidence,
@@ -204,6 +207,26 @@ class Gate(unittest.TestCase):
         self.assertEqual((row["platform"], row["index"], row["emulator"]), ("rocknix", 1, "duck"))
         self.assertEqual(row["config"], ["duck/config/settings.ini:4"])
         self.assertEqual(len(bound_launchers(config, {"duck": profile(config_reads=[])})), 1)
+
+    def test_the_layout_is_proven_against_the_profiles_given(self) -> None:
+        """The pack's tag set and cross_reference judge with the same profiles:
+        an --emulators-dir whose profile lacks config_reads hands nothing."""
+        config = {**self.config(record()), "standalone_cores": ["duck"]}
+        handed = [t for t in standalone_set(config, {"duck": profile()}) if t.startswith(HANDED_PREFIX)]
+        self.assertEqual(len(handed), 1)
+        self.assertFalse([t for t in standalone_set(config, {"duck": profile(config_reads=[])})
+                          if t.startswith(HANDED_PREFIX)])
+
+    def test_an_unproven_record_proves_no_read(self) -> None:
+        named = record(kind="fixed_name", names=["tos.img"], passes_to="settings.ini [BIOS] PathPAL")
+        config = {**self.config(named), "cores": ["duck"], "standalone_cores": ["duck"],
+                  "systems": {"atari-st": {"files": [{"name": "tos.img", "destination": "tos.img"}]}}}
+        entry = {"name": "tos.img"}
+        proven = EntryCategories(config, {"duck": profile()}).explain(entry, "tos.img", "atari-st")
+        self.assertEqual([r["proof"] for r in proven["read_by"]], ["launcher"])
+        unproven = EntryCategories(config, {"duck": profile(config_reads=[])}).explain(
+            entry, "tos.img", "atari-st")
+        self.assertNotIn("read_by", unproven)
 
 
 class StartScripts(unittest.TestCase):

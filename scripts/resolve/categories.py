@@ -22,7 +22,7 @@ from core.hashing import declared_hashes, parse_hash_list
 from resolve.reconcile import (
     HASH_FIELDS, NativeSystem, comparable, contradicts, entry_names,
 )
-from resolve.launchers import record_names as launcher_names
+from resolve.launchers import bound_launchers, record_names as launcher_names
 
 
 def _tails(path: str) -> list[str]:
@@ -252,7 +252,8 @@ def removal_candidates(
     evidence = ReadEvidence()
     for key in sorted(examined):
         evidence.add_profile(profiles[key], data_registry or {})
-    evidence.add_launchers(scraped.get("launchers") or [])
+    # A record a config file does not prove opens nothing (launcher_unproven).
+    evidence.add_launchers(bound_launchers(scraped, profiles))
 
     system_of = {
         id(file_entry): sys_key
@@ -351,7 +352,7 @@ class EntryCategories:
                 )
                 self._readers.append((kind, key, evidence))
         self._launchers = ReadEvidence()
-        self._launchers.add_launchers(config.get("launchers") or [])
+        self._launchers.add_launchers(bound_launchers(config, profiles))
         self._proofs = ProofIndex([evidence for _kind, _key, evidence in self._readers]
                                   + [self._launchers])
         self._by_system: dict[str, list[str]] = {}
