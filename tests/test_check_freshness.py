@@ -140,17 +140,17 @@ class NativeCacheTests(unittest.TestCase):
     def test_a_repeated_inherits_key_is_refused(self):
         """refresh_stale read inherits: with yaml.safe_load, which kept the
         second of two keys the platform loader refuses."""
-        import refresh_stale
         from core.cli import SourceUnreadable
+        from freshness import staleplan
 
         platforms = self.cache / "platforms"
         platforms.mkdir()
         (platforms / "child.yml").write_text(
             "inherits: a\ninherits: b\n", encoding="utf-8"
         )
-        with mock.patch.object(refresh_stale, "REPO_ROOT", self.cache), \
+        with mock.patch.object(staleplan, "REPO_ROOT", self.cache), \
                 self.assertRaisesRegex(SourceUnreadable, "duplicate key 'inherits'"):
-            refresh_stale._platform_parents({"child": {}})
+            staleplan.platform_parents({"child": {}})
 
     def test_every_registered_platform_with_an_exporter_gets_a_row(self):
         rows = check_native(REPO_ROOT / "platforms", self.cache, self.cache / "truth")

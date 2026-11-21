@@ -651,11 +651,11 @@ class SitePages(unittest.TestCase):
 
 class Freshness(unittest.TestCase):
     def test_no_measurements_area(self) -> None:
-        import refresh_stale
         from freshness.findings import AREAS
+        from freshness.stalejob import AUTO_AREAS
 
         self.assertNotIn("measurements", AREAS)
-        self.assertNotIn("measurements", refresh_stale.AUTO_AREAS)
+        self.assertNotIn("measurements", AUTO_AREAS)
 
 
 if __name__ == "__main__":

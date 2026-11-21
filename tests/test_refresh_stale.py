@@ -19,7 +19,12 @@ from unittest import mock
 
 import yaml
 
-import refresh_stale as rs
+from freshness import stalefindings
+from freshness.stalefindings import load_findings
+from freshness.stalejob import AUTO_AREAS, MANUAL_AREAS, Job, JobResult
+from freshness.staleplan import plan_jobs
+from freshness.stalereport import render
+from freshness.stalerun import run_job, run_jobs
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -36,7 +41,7 @@ def finding(area: str, subject: str, status: str = "STALE") -> dict:
 
 class Planning(unittest.TestCase):
     def _plan(self, *findings: dict, parents: dict | None = None):
-        return rs.plan_jobs(list(findings), REGISTRY, parents or {})
+        return plan_jobs(list(findings), REGISTRY, parents or {})
 
     def test_a_stale_platform_is_rescraped_then_its_original_is_refreshed(self):
         jobs, surfaced, _ = self._plan(finding("platforms", "retrobat"))
@@ -59,7 +64,7 @@ class Planning(unittest.TestCase):
     def test_a_scraper_reading_its_pin_is_moved_by_rescrape_args(self):
         registry = dict(REGISTRY, retrobat={"scraper": "retrobat",
                                             "rescrape_args": ["--revision", "master"]})
-        jobs, _, _ = rs.plan_jobs([finding("platforms", "retrobat")], registry, {})
+        jobs, _, _ = plan_jobs([finding("platforms", "retrobat")], registry, {})
         self.assertEqual(jobs[0].command[-2:], ["--revision", "master"])
         with (REPO_ROOT / "platforms" / "_registry.yml").open(encoding="utf-8") as fh:
             real = yaml.safe_load(fh)["platforms"]["retrobat"]
@@ -71,7 +76,7 @@ class Planning(unittest.TestCase):
         registry = dict(REGISTRY, retroarch={"scraper": "libretro"},
                         retropie={"scraper": "retropie"})
         parents = {"retropie": "retroarch", "lakka": "retroarch"}
-        jobs, _, _ = rs.plan_jobs(
+        jobs, _, _ = plan_jobs(
             [finding("platforms", "retroarch"), finding("platforms", "retropie"),
              finding("platforms", "retrobat")],
             registry, parents,
@@ -190,9 +195,9 @@ class Running(unittest.TestCase):
                 code = f"open({str(order)!r}, 'a').write({subject!r} + chr(10))"
                 if subject == "parent":
                     code = "import time; time.sleep(0.5); " + code
-                return rs.Job(area, subject, [sys.executable, "-c", code],
+                return Job(area, subject, [sys.executable, "-c", code],
                               Path(directory) / f"{subject}.log", (), frozenset(after))
-            rs.run_jobs([job("native", "child", ["parent"]),
+            run_jobs([job("native", "child", ["parent"]),
                          job("platforms", "parent")], {}, 4)
             self.assertEqual(order.read_text().split(), ["parent", "child"])
 
@@ -204,13 +209,13 @@ class Running(unittest.TestCase):
                 "$ python scripts/verify.py --platform x\n"
                 "X: 10/12 OK, 2 missing [md5]\n"
             )
-            job = rs.Job("platforms", "x", ["true"], log)
-            text = rs.render([rs.JobResult(job, 0, 1.0, "")], [], [])
+            job = Job("platforms", "x", ["true"], log)
+            text = render([JobResult(job, 0, 1.0, "")], [], [])
         self.assertIn("X: 10/12 OK, 2 missing [md5]", text)
         self.assertIn("python scripts/verify.py --platform x", text)
 
-    def _job(self, directory: str, command: list[str], then=()) -> rs.Job:
-        return rs.Job("platforms", "x", command, Path(directory) / "x.log", then)
+    def _job(self, directory: str, command: list[str], then=()) -> Job:
+        return Job("platforms", "x", command, Path(directory) / "x.log", then)
 
     def test_a_follow_up_runs_after_a_success(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -220,7 +225,7 @@ class Running(unittest.TestCase):
                 [sys.executable, "-c", "pass"],
                 ((sys.executable, "-c", f"open({str(marker)!r}, 'w').close()"),),
             )
-            result = rs.run_job(job, {})
+            result = run_job(job, {})
             self.assertEqual(result.returncode, 0)
             self.assertTrue(marker.exists())
 
@@ -232,7 +237,7 @@ class Running(unittest.TestCase):
                 [sys.executable, "-c", "raise SystemExit(3)"],
                 ((sys.executable, "-c", f"open({str(marker)!r}, 'w').close()"),),
             )
-            result = rs.run_job(job, {})
+            result = run_job(job, {})
             self.assertEqual(result.returncode, 3)
             self.assertFalse(marker.exists())
 
@@ -249,7 +254,7 @@ class SavedFindings(unittest.TestCase):
                 ' {"area": "platforms", "subject": "batocera", "status": "STALE"}]',
                 encoding="utf-8",
             )
-            findings = rs.load_findings(path, ("data", "catalogs"))
+            findings = load_findings(path, ("data", "catalogs"))
             self.assertEqual([f["subject"] for f in findings], ["dolphin-sys"])
 
     def test_dry_run_json_prints_the_plan_as_json(self):
@@ -280,8 +285,8 @@ class SavedFindings(unittest.TestCase):
         romfolders was refused."""
         from freshness.findings import AREAS
 
-        self.assertEqual(set(AREAS), set(rs.AUTO_AREAS + rs.MANUAL_AREAS))
-        jobs, surfaced, _ = rs.plan_jobs([finding("romfolders", "muos")], REGISTRY, {})
+        self.assertEqual(set(AREAS), set(AUTO_AREAS + MANUAL_AREAS))
+        jobs, surfaced, _ = plan_jobs([finding("romfolders", "muos")], REGISTRY, {})
         self.assertEqual((jobs, [f["subject"] for f in surfaced]), ([], ["muos"]))
 
     def test_a_report_that_is_not_a_list_is_refused(self):
@@ -289,7 +294,7 @@ class SavedFindings(unittest.TestCase):
             path = Path(directory) / "freshness.json"
             path.write_text('{"area": "data"}', encoding="utf-8")
             with self.assertRaises(RuntimeError):
-                rs.load_findings(path, ("data",))
+                load_findings(path, ("data",))
 
 
 class AFailedCheckIsNamed(unittest.TestCase):
@@ -299,8 +304,8 @@ class AFailedCheckIsNamed(unittest.TestCase):
 
     def _run(self, raises: Exception | None = None, **result):
         proc = subprocess.CompletedProcess([], **result) if result else None
-        with mock.patch.object(rs.subprocess, "run", side_effect=raises, return_value=proc):
-            return rs._run_check_freshness(("coreinfo",), [])
+        with mock.patch.object(stalefindings.subprocess, "run", side_effect=raises, return_value=proc):
+            return stalefindings.run_check_freshness(("coreinfo",), [])
 
     def test_a_crash_shows_its_stderr(self):
         with self.assertRaises(RuntimeError) as raised:

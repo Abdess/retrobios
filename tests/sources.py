@@ -47,6 +47,10 @@ COMMANDS = {
     "commit_rules.py": ("devtools/commitrules.py",),
     "pr_checks.py": ("devtools/prchecks.py",),
     "check_buildbot_system.py": ("scraper/buildbot_system.py",),
+    "refresh_stale.py": (
+        "freshness/stalejob.py", "freshness/stalefindings.py", "freshness/stalecommands.py",
+        "freshness/staleplan.py", "freshness/stalerun.py", "freshness/stalereport.py",
+    ),
     "generate_site.py": (
         "sitegen/config.py",
         "sitegen/emulatorsindex.py",
