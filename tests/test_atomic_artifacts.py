@@ -49,6 +49,20 @@ class WholeOrNothing(unittest.TestCase):
             artifacts.copy_file_atomic(str(source), str(target))
         self.assertEqual(os.listdir(target.parent), [])
 
+    def test_state_files_share_no_scratch_and_leave_none(self):
+        """save_state wrote through a fixed <name>.tmp: state.json and
+        state.yaml shared one scratch, and an interrupted write left it."""
+        from core.statefile import save_state
+
+        target = self.dir / "state.json"
+        (self.dir / "state.tmp").write_text("other writer")
+        save_state(target, {"a": 1})
+        self.assertEqual(target.read_text(), '{\n  "a": 1\n}\n')
+        self.assertEqual((self.dir / "state.tmp").read_text(), "other writer")
+        with mock.patch("os.replace", side_effect=OSError("cut")), self.assertRaises(OSError):
+            save_state(target, {"a": 2})
+        self.assertEqual(sorted(os.listdir(self.dir)), ["state.json", "state.tmp"])
+
 
 class EveryWriterGoesThroughIt(unittest.TestCase):
     def test_manifests_record_and_restore_use_the_atomic_helpers(self):
@@ -232,11 +246,7 @@ class ScratchFilesGetThePlainMode(unittest.TestCase):
             self.assertIn("manifest.json", zf.namelist())
 
     def test_every_renamed_scratch_gets_the_mode(self):
-        """A function that renames a mkstemp file into place sets its mode.
-
-        copy_file_atomic is the one exception: copy2 gives the scratch the
-        source file's own mode.
-        """
+        """A function that renames a mkstemp file into place sets its mode."""
         import ast
 
         def name_of(node: ast.AST) -> str | None:
@@ -251,8 +261,6 @@ class ScratchFilesGetThePlainMode(unittest.TestCase):
             tree = ast.parse(path.read_text(encoding="utf-8"))
             for func in ast.walk(tree):
                 if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                    continue
-                if func.name == "copy_file_atomic":
                     continue
                 scratches: set[str] = set()
                 for node in ast.walk(func):

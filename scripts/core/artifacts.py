@@ -101,22 +101,30 @@ def set_plain_mode(path: str | os.PathLike) -> None:
     os.chmod(path, plain_file_mode())
 
 
-def write_text_atomic(path: str, content: str) -> None:
-    """Write a whole file or nothing.
+@contextlib.contextmanager
+def atomic_scratch(
+    path: str | os.PathLike, suffix: str = ".tmp", plain_mode: bool = True
+) -> Iterator[str]:
+    """A unique scratch file beside path, renamed onto it once filled.
 
     Truncate-then-write leaves a half-written artifact behind an interrupt:
     a partial database.json, manifest or README.md is committed-looking and
-    silently wrong. The scratch file sits beside the target so the rename
-    stays on one filesystem, which is what makes it atomic.
+    silently wrong. A fixed scratch name let two runs interleave their bytes
+    in one file of the right size, which the rename then promoted. The
+    scratch sits beside the target so the rename stays on one filesystem,
+    which is what makes it atomic. plain_mode=False keeps the mode the
+    filler gave the scratch (a copy2 of the source).
     """
+    path = os.fspath(path)
     directory = os.path.dirname(os.path.abspath(path))
     handle, scratch = tempfile.mkstemp(
-        dir=directory, prefix=f".{os.path.basename(path)}.", suffix=".tmp"
+        dir=directory, prefix=f".{os.path.basename(path)}.", suffix=suffix
     )
+    os.close(handle)
     try:
-        with os.fdopen(handle, "w", encoding="utf-8") as f:
-            f.write(content)
-        set_plain_mode(scratch)
+        yield scratch
+        if plain_mode:
+            set_plain_mode(scratch)
         os.replace(scratch, path)
     except BaseException:
         with contextlib.suppress(OSError):
@@ -124,21 +132,16 @@ def write_text_atomic(path: str, content: str) -> None:
         raise
 
 
-def write_bytes_atomic(path: str, content: bytes) -> None:
-    """Write a whole binary file or nothing, as write_text_atomic does."""
-    directory = os.path.dirname(os.path.abspath(path))
-    handle, scratch = tempfile.mkstemp(
-        dir=directory, prefix=f".{os.path.basename(path)}.", suffix=".tmp"
-    )
-    try:
-        with os.fdopen(handle, "wb") as f:
-            f.write(content)
-        set_plain_mode(scratch)
-        os.replace(scratch, path)
-    except BaseException:
-        with contextlib.suppress(OSError):
-            os.unlink(scratch)
-        raise
+def write_text_atomic(path: str | os.PathLike, content: str) -> None:
+    """Write a whole file or nothing."""
+    with atomic_scratch(path) as scratch, open(scratch, "w", encoding="utf-8") as f:
+        f.write(content)
+
+
+def write_bytes_atomic(path: str | os.PathLike, content: bytes) -> None:
+    """Write a whole binary file or nothing."""
+    with atomic_scratch(path) as scratch, open(scratch, "wb") as f:
+        f.write(content)
 
 
 @contextlib.contextmanager
@@ -167,40 +170,16 @@ def copy_file_atomic(source: str, path: str) -> None:
     """Copy a file into place whole or not at all, metadata included."""
     import shutil
 
-    directory = os.path.dirname(os.path.abspath(path))
-    handle, scratch = tempfile.mkstemp(
-        dir=directory, prefix=f".{os.path.basename(path)}.", suffix=".tmp"
-    )
-    os.close(handle)
-    try:
+    with atomic_scratch(path, plain_mode=False) as scratch:
         shutil.copy2(source, scratch)
-        os.replace(scratch, path)
-    except BaseException:
-        with contextlib.suppress(OSError):
-            os.unlink(scratch)
-        raise
 
 
 def copy_stream_atomic(stream: BinaryIO, path: str) -> None:
-    """Stream a download into place whole or not at all.
-
-    A fixed scratch name let two runs interleave their bytes in one file of
-    the right size, which the rename then promoted."""
+    """Stream a download into place whole or not at all."""
     import shutil
 
-    directory = os.path.dirname(os.path.abspath(path))
-    handle, scratch = tempfile.mkstemp(
-        dir=directory, prefix=f".{os.path.basename(path)}.", suffix=".tmp"
-    )
-    try:
-        with os.fdopen(handle, "wb") as f:
-            shutil.copyfileobj(stream, f)
-        set_plain_mode(scratch)
-        os.replace(scratch, path)
-    except BaseException:
-        with contextlib.suppress(OSError):
-            os.unlink(scratch)
-        raise
+    with atomic_scratch(path) as scratch, open(scratch, "wb") as f:
+        shutil.copyfileobj(stream, f)
 
 
 def _strip_timestamps(text: str) -> str:

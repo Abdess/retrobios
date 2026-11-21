@@ -15,7 +15,7 @@ import sys
 import tempfile
 import zipfile
 
-from core.artifacts import process_umask, set_plain_mode
+from core.artifacts import process_umask, write_text_atomic
 from core.hashing import MAX_HASHED_MEMBER, md5sum
 from core.paths import REPO_ROOT
 
@@ -141,17 +141,11 @@ def _read_member_cache(path: str) -> dict[str, list[list]]:
 def _write_member_cache(path: str, data: dict[str, list[list]]) -> None:
     import json
 
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    fd, scratch = tempfile.mkstemp(dir=os.path.dirname(path), suffix=".tmp")
     try:
-        with os.fdopen(fd, "w", encoding="utf-8") as fh:
-            json.dump(data, fh, separators=(",", ":"))
-        set_plain_mode(scratch)
-        os.replace(scratch, path)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        write_text_atomic(path, json.dumps(data, separators=(",", ":")))
     except OSError as exc:
         print(f"warning: could not write {path}: {exc}", file=sys.stderr)
-        if os.path.exists(scratch):
-            os.unlink(scratch)
 
 
 def _members_md5(path: str) -> list[list] | None:

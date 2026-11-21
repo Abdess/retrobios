@@ -6,15 +6,13 @@ import json
 import os
 import shutil
 import sys
-import tempfile
 import zipfile
 from collections.abc import Iterable
 from dataclasses import dataclass
-from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
 
 from core.paths import EMULATORS_DIR, PLATFORMS_DIR
-from core.artifacts import set_plain_mode
+from core.artifacts import atomic_scratch
 from core.options import reject_unknown
 from model.registry import list_registered_platforms
 from model.targets import load_target_config
@@ -53,12 +51,7 @@ def inject_manifest(zip_path: str, manifest: dict) -> None:
     with zipfile.ZipFile(zip_path, "r") as zf:
         has_manifest = "manifest.json" in zf.namelist()
 
-    directory = os.path.dirname(zip_path) or "."
-    fd, scratch = tempfile.mkstemp(
-        prefix=f".{os.path.basename(zip_path)}.", suffix=".partial", dir=directory
-    )
-    os.close(fd)
-    try:
+    with atomic_scratch(zip_path, suffix=".partial") as scratch:
         if not has_manifest:
             # Append to a copy. Append mode defaults to ZIP_STORED, which
             # would leave the manifest uncompressed and give the same pack
@@ -74,11 +67,6 @@ def inject_manifest(zip_path: str, manifest: dict) -> None:
                         continue
                     dst.writestr(item, src.read(item.filename))
                 write_generated_member(dst, "manifest.json", manifest_json)
-        set_plain_mode(scratch)
-        os.replace(scratch, zip_path)
-    except BaseException:
-        Path(scratch).unlink(missing_ok=True)
-        raise
 
 
 def _target_cores_for(

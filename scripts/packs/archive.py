@@ -5,13 +5,11 @@ from __future__ import annotations
 import contextlib
 import os
 import shutil
-import tempfile
 import zipfile
 from collections.abc import Iterator
 from dataclasses import dataclass, field
-from pathlib import Path
 
-from core.artifacts import set_plain_mode
+from core.artifacts import atomic_scratch
 from core.hashing import compute_hashes
 from core.paths import comparable_destination, sanitize_pack_path
 from packs.paths import has_path_conflict, register_path, placement_block
@@ -120,19 +118,9 @@ def writing_pack(zip_path: str) -> Iterator[zipfile.ZipFile]:
     readable ZIP holding part of the files, which the run then checked and
     summed as the pack.
     """
-    directory = os.path.dirname(zip_path) or "."
-    fd, scratch = tempfile.mkstemp(
-        prefix=f".{os.path.basename(zip_path)}.", suffix=".partial", dir=directory
-    )
-    os.close(fd)
-    try:
-        with zipfile.ZipFile(scratch, "w", zipfile.ZIP_DEFLATED) as zf:
-            yield zf
-        set_plain_mode(scratch)
-        os.replace(scratch, zip_path)
-    except BaseException:
-        Path(scratch).unlink(missing_ok=True)
-        raise
+    with atomic_scratch(zip_path, suffix=".partial") as scratch, \
+            zipfile.ZipFile(scratch, "w", zipfile.ZIP_DEFLATED) as zf:
+        yield zf
 
 
 # What the builder writes into a platform pack beside the files it carries.
