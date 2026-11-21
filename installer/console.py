@@ -273,3 +273,35 @@ def _confirm(prompt: str) -> bool:
 def _answer_yes(prompt: str) -> bool:
     """Yes only to y or yes: a removal is never the default answer."""
     return _ask(prompt).strip().lower() in ("y", "yes")
+
+
+class ReadCounter:
+    """Files read so far, as event_kind events and on the live line: the
+    program driving the installer gets the count the terminal gets."""
+
+    def __init__(self, total: int, term: Terminal | None, event_kind: str,
+                 noun: str = "") -> None:
+        self.total = total
+        self.event_kind = event_kind
+        self.noun = noun
+        self.done = 0
+        self.evented = 0.0
+        self.drawn = 0.0
+        live = term is not None and term.live and not term.quiet
+        self.stream = term.stream if live and term is not None else None
+
+    def step(self, final: bool = False) -> None:
+        now = time.monotonic()
+        if EVENTS.on and (final or now - self.evented >= EVENT_PROGRESS_INTERVAL):
+            self.evented = now
+            EVENTS.emit(self.event_kind, files_done=self.done, files_total=self.total)
+        if self.stream is not None and (final or now - self.drawn >= 0.1):
+            self.drawn = now
+            print(f"\r  read {self.done}/{self.total}{self.noun}", end="", file=self.stream,
+                  flush=True)
+
+    def end(self) -> None:
+        if self.total:
+            self.step(final=True)
+            if self.stream is not None:
+                print("\r\033[K", end="", file=self.stream, flush=True)

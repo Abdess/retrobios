@@ -3,11 +3,10 @@ from __future__ import annotations
 
 import concurrent.futures
 import hashlib
-import time
 from pathlib import Path
 from typing import IO, TYPE_CHECKING
 
-from installer.events import EVENTS, EVENT_PROGRESS_INTERVAL
+from installer.console import ReadCounter
 from installer.host_fs import _held
 from installer.paths import _entry_path
 
@@ -152,26 +151,16 @@ def check_local(
             verdicts = pool.map(
                 lambda item: (item[0], _classify_local(item[0], item[1])), present
             )
-            shown = term if term is not None and term.live and not term.quiet else None
-            last = evented = 0.0
-            for done, (entry, verdict) in enumerate(verdicts, 1):
+            # A screen with a bare timer over 6 GB on an SD card read as hung.
+            counter = ReadCounter(len(present), term, "checking")
+            for entry, verdict in verdicts:
                 if verdict == "up_to_date":
                     up_to_date.append(entry)
                 else:
                     mismatched.append(entry)
-                now = time.monotonic()
-                # The program driving the installer gets the count the
-                # terminal gets: a screen with a bare timer over 6 GB on an
-                # SD card read as hung.
-                if EVENTS.on and (now - evented >= EVENT_PROGRESS_INTERVAL
-                                  or done == len(present)):
-                    evented = now
-                    EVENTS.emit("checking", files_done=done, files_total=len(present))
-                if shown is not None and (now - last >= 0.1 or done == len(present)):
-                    last = now
-                    print(f"\r  read {done}/{len(present)}", end="", file=shown.stream,
-                          flush=True)
-            if shown is not None:
-                print("\r\033[K", end="", file=shown.stream, flush=True)
+                counter.done += 1
+                if counter.done < counter.total:
+                    counter.step()
+            counter.end()
 
     return to_download, up_to_date, mismatched

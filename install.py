@@ -2336,6 +2336,38 @@ def _answer_yes(prompt: str) -> bool:
     return _ask(prompt).strip().lower() in ("y", "yes")
 
 
+class ReadCounter:
+    """Files read so far, as event_kind events and on the live line: the
+    program driving the installer gets the count the terminal gets."""
+
+    def __init__(self, total: int, term: Terminal | None, event_kind: str,
+                 noun: str = "") -> None:
+        self.total = total
+        self.event_kind = event_kind
+        self.noun = noun
+        self.done = 0
+        self.evented = 0.0
+        self.drawn = 0.0
+        live = term is not None and term.live and not term.quiet
+        self.stream = term.stream if live and term is not None else None
+
+    def step(self, final: bool = False) -> None:
+        now = time.monotonic()
+        if EVENTS.on and (final or now - self.evented >= EVENT_PROGRESS_INTERVAL):
+            self.evented = now
+            EVENTS.emit(self.event_kind, files_done=self.done, files_total=self.total)
+        if self.stream is not None and (final or now - self.drawn >= 0.1):
+            self.drawn = now
+            print(f"\r  read {self.done}/{self.total}{self.noun}", end="", file=self.stream,
+                  flush=True)
+
+    def end(self) -> None:
+        if self.total:
+            self.step(final=True)
+            if self.stream is not None:
+                print("\r\033[K", end="", file=self.stream, flush=True)
+
+
 # --- installer/paths.py ------------------------------------------------------
 
 def _path_characters(value: object, field: str, colons: bool = True) -> str:
@@ -2951,27 +2983,17 @@ def check_local(
             verdicts = pool.map(
                 lambda item: (item[0], _classify_local(item[0], item[1])), present
             )
-            shown = term if term is not None and term.live and not term.quiet else None
-            last = evented = 0.0
-            for done, (entry, verdict) in enumerate(verdicts, 1):
+            # A screen with a bare timer over 6 GB on an SD card read as hung.
+            counter = ReadCounter(len(present), term, "checking")
+            for entry, verdict in verdicts:
                 if verdict == "up_to_date":
                     up_to_date.append(entry)
                 else:
                     mismatched.append(entry)
-                now = time.monotonic()
-                # The program driving the installer gets the count the
-                # terminal gets: a screen with a bare timer over 6 GB on an
-                # SD card read as hung.
-                if EVENTS.on and (now - evented >= EVENT_PROGRESS_INTERVAL
-                                  or done == len(present)):
-                    evented = now
-                    EVENTS.emit("checking", files_done=done, files_total=len(present))
-                if shown is not None and (now - last >= 0.1 or done == len(present)):
-                    last = now
-                    print(f"\r  read {done}/{len(present)}", end="", file=shown.stream,
-                          flush=True)
-            if shown is not None:
-                print("\r\033[K", end="", file=shown.stream, flush=True)
+                counter.done += 1
+                if counter.done < counter.total:
+                    counter.step()
+            counter.end()
 
     return to_download, up_to_date, mismatched
 
@@ -18024,7 +18046,8 @@ def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None =
     docs = _GamesDocs(data, network)
     cache_root = cache_folder()
     cache = _ScanCache(cache_root / GAMES_SCAN_FILE if cache_root is not None else None)
-    progress = _GamesProgress(sum(len(games) for _folder, games in found), term)
+    progress = ReadCounter(sum(len(games) for _folder, games in found), term, "games_reading",
+                           " games")
     read = [(game_folder, _read_folder_games(plan, game_folder, games, docs, cache, progress))
             for game_folder, games in found]
     progress.end()
@@ -18119,34 +18142,6 @@ class _GamesDocs:
         return self.arcades[name] or None
 
 
-class _GamesProgress:
-    """The games read so far, as events and on the live line."""
-
-    def __init__(self, total: int, term: Terminal | None) -> None:
-        self.total = total
-        self.done = 0
-        self.evented = 0.0
-        self.drawn = 0.0
-        live = term is not None and term.live and not term.quiet
-        self.stream = term.stream if live and term is not None else None
-
-    def step(self, final: bool = False) -> None:
-        now = time.monotonic()
-        if EVENTS.on and (final or now - self.evented >= EVENT_PROGRESS_INTERVAL):
-            self.evented = now
-            EVENTS.emit("games_reading", files_done=self.done, files_total=self.total)
-        if self.stream is not None and (final or now - self.drawn >= 0.1):
-            self.drawn = now
-            print(f"\r  read {self.done}/{self.total} games", end="", file=self.stream,
-                  flush=True)
-
-    def end(self) -> None:
-        if self.total:
-            self.step(final=True)
-            if self.stream is not None:
-                print("\r\033[K", end="", file=self.stream, flush=True)
-
-
 def _folder_readers(row_systems: list[str], profiles: list[str | None],
                     docs: _GamesDocs) -> set[str]:
     """The cores of a folder's profiles that read its first system."""
@@ -18173,7 +18168,7 @@ def _count_game(plan: GamesPlan, game_folder: GameFolder, row_systems: list[str]
 
 def _read_folder_games(plan: GamesPlan, game_folder: GameFolder, games: list[Path],
                        docs: _GamesDocs, cache: _ScanCache,
-                       progress: _GamesProgress) -> list[GameFacts]:
+                       progress: ReadCounter) -> list[GameFacts]:
     """Read the games of one folder: the ones that are not support sets."""
     row = game_folder.row
     row_systems = [str(s) for s in row.get("systems") or []]

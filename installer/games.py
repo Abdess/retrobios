@@ -8,17 +8,16 @@ import json
 import os
 import re
 import sys
-import time
 import urllib.error
 from collections.abc import Callable, Collection, Iterable
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 from installer.cards import games_part
-from installer.console import detail, fold_line
+from installer.console import ReadCounter, detail, fold_line
 from installer.destination import card_root_above
 from installer.detect_os import detect_os, detected_os
-from installer.events import EVENTS, EVENT_PROGRESS_INTERVAL
+from installer.events import EVENTS
 from installer.game_files import (
     ARCADE_SUFFIXES,
     GAMES_SCAN_FILE,
@@ -478,7 +477,8 @@ def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None =
     docs = _GamesDocs(data, network)
     cache_root = cache_folder()
     cache = _ScanCache(cache_root / GAMES_SCAN_FILE if cache_root is not None else None)
-    progress = _GamesProgress(sum(len(games) for _folder, games in found), term)
+    progress = ReadCounter(sum(len(games) for _folder, games in found), term, "games_reading",
+                           " games")
     read = [(game_folder, _read_folder_games(plan, game_folder, games, docs, cache, progress))
             for game_folder, games in found]
     progress.end()
@@ -573,34 +573,6 @@ class _GamesDocs:
         return self.arcades[name] or None
 
 
-class _GamesProgress:
-    """The games read so far, as events and on the live line."""
-
-    def __init__(self, total: int, term: Terminal | None) -> None:
-        self.total = total
-        self.done = 0
-        self.evented = 0.0
-        self.drawn = 0.0
-        live = term is not None and term.live and not term.quiet
-        self.stream = term.stream if live and term is not None else None
-
-    def step(self, final: bool = False) -> None:
-        now = time.monotonic()
-        if EVENTS.on and (final or now - self.evented >= EVENT_PROGRESS_INTERVAL):
-            self.evented = now
-            EVENTS.emit("games_reading", files_done=self.done, files_total=self.total)
-        if self.stream is not None and (final or now - self.drawn >= 0.1):
-            self.drawn = now
-            print(f"\r  read {self.done}/{self.total} games", end="", file=self.stream,
-                  flush=True)
-
-    def end(self) -> None:
-        if self.total:
-            self.step(final=True)
-            if self.stream is not None:
-                print("\r\033[K", end="", file=self.stream, flush=True)
-
-
 def _folder_readers(row_systems: list[str], profiles: list[str | None],
                     docs: _GamesDocs) -> set[str]:
     """The cores of a folder's profiles that read its first system."""
@@ -627,7 +599,7 @@ def _count_game(plan: GamesPlan, game_folder: GameFolder, row_systems: list[str]
 
 def _read_folder_games(plan: GamesPlan, game_folder: GameFolder, games: list[Path],
                        docs: _GamesDocs, cache: _ScanCache,
-                       progress: _GamesProgress) -> list[GameFacts]:
+                       progress: ReadCounter) -> list[GameFacts]:
     """Read the games of one folder: the ones that are not support sets."""
     row = game_folder.row
     row_systems = [str(s) for s in row.get("systems") or []]
