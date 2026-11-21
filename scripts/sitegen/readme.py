@@ -16,9 +16,9 @@ from devtools import prchecks
 from model import releaserecord
 from core.artifacts import write_if_changed
 from core.cli import InputMissing
-from core.github import github_token
 from core.paths import DB_FILE, PLATFORMS_DIR, REPO_ROOT
 from core.sizes import size_text
+from core.upstream import forge_headers
 from model.composition import compute_composition, count_catalog_matched
 from model.declarations import declared_root
 from model.guides import PACKAGE_COMMAND, install_command
@@ -513,10 +513,7 @@ def fetch_contributors() -> list[dict]:
     import urllib.request
 
     url = f"https://api.github.com/repos/{REPO}/contributors"
-    headers = {"User-Agent": "retrobios-readme/1.0"}
-    token = github_token()
-    if token:
-        headers["Authorization"] = f"token {token}"
+    headers = forge_headers(url, user_agent="retrobios-readme/1.0")
     try:
         req = urllib.request.Request(url, headers=headers)
         with urllib.request.urlopen(req, timeout=10) as resp:

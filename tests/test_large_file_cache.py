@@ -92,6 +92,10 @@ class LargeFileCacheTest(unittest.TestCase):
         _test_registry(self)
         self.dir = tempfile.mkdtemp()
         self._urlopen = largefiles.urllib.request.urlopen
+        # No release digests: a replaced asset is told by its size.
+        digests = mock.patch.object(largefiles, "_digests_cache", {})
+        digests.start()
+        self.addCleanup(digests.stop)
 
     def tearDown(self):
         largefiles.urllib.request.urlopen = self._urlopen
@@ -907,6 +911,28 @@ class AVerifiedPathKeepsItsBytes(unittest.TestCase):
             [p.name for p in (self.dir / largefiles.VERIFIED_STORE).iterdir()],
             [hashlib.sha1(PAYLOAD_B).hexdigest()],
         )
+
+
+class AFailedReleaseListingIsAskedAgain(unittest.TestCase):
+    """One dropped connection on the release listing was kept as {} for the
+    run, and every asset fell back to its Content-Length."""
+
+    def test_the_listing_is_read_again_after_a_failure(self):
+        from core import upstream
+
+        release = {"assets": [{"name": "a.zip", "digest": "sha256:ABC"}]}
+        answers = [upstream.UpstreamError("reset"), json.dumps(release).encode()]
+
+        def fetch_body(*_args, **_kwargs):
+            answer = answers.pop(0)
+            if isinstance(answer, Exception):
+                raise answer
+            return answer
+
+        with mock.patch.object(largefiles, "_digests_cache", None), \
+                mock.patch.object(upstream, "fetch_body", fetch_body):
+            self.assertEqual(largefiles._served_digests(), {})
+            self.assertEqual(largefiles._served_digests(), {"a.zip": "abc"})
 
 
 if __name__ == "__main__":

@@ -33,6 +33,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 from core.hashing import compute_hashes, parse_sha256sums
 from core.paths import REPO_ROOT
+from core.upstream import forge_headers
 from core.ziptools import safe_extract_zip
 from packs.parts import part_of
 from model.releaserecord import PACK_SUFFIX, RECORD, load_record, match_key, pack_label, recorded_pack
@@ -96,15 +97,9 @@ NO_PACK_HINT = (
 def get_latest_release() -> dict:
     """Fetch latest release info from GitHub API."""
     url = f"{API}/repos/{REPO}/releases/latest"
-    headers = {
-        "User-Agent": "retrobios-downloader/1.0",
-        "Accept": "application/vnd.github.v3+json",
-    }
     # The anonymous quota is 60 calls an hour per address. The token goes to
     # GitHub's API only: RETROBIOS_API can name any host.
-    token = os.environ.get("GITHUB_TOKEN")
-    if token and urllib.parse.urlsplit(url).hostname == "api.github.com":
-        headers["Authorization"] = f"Bearer {token}"
+    headers = forge_headers(url, "application/vnd.github.v3+json", "retrobios-downloader/1.0")
     req = urllib.request.Request(url, headers=headers)
 
     try:

@@ -21,6 +21,7 @@ from collections import Counter
 from collections.abc import Iterable
 from pathlib import Path
 
+from core import upstream
 from core.artifacts import set_plain_mode
 from core.hashing import compute_hashes, file_digest, parse_hash_list
 from core.paths import REPO_ROOT
@@ -411,7 +412,9 @@ _digests_cache: dict[str, str] | None = None
 
 def _served_digests() -> dict[str, str]:
     """sha256 of each asset the release serves, by asset name, empty when
-    the API cannot be read."""
+    the API cannot be read. A failed listing is not kept: one dropped
+    connection made every asset fall back to its Content-Length for the
+    rest of the run."""
     global _digests_cache
     if _digests_cache is not None:
         return _digests_cache
@@ -419,21 +422,13 @@ def _served_digests() -> dict[str, str]:
         f"https://api.github.com/repos/{LARGE_FILES_REPO}/releases/tags/"
         f"{LARGE_FILES_RELEASE}"
     )
-    headers = {"User-Agent": "retrobios/1.0", "Accept": "application/vnd.github+json"}
-    from core.github import github_token
-
-    token = github_token()
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    digests: dict[str, str] = {}
     try:
-        with urllib.request.urlopen(
-            urllib.request.Request(url, headers=headers), timeout=60
-        ) as resp:
-            release = json.load(resp)
-    except (urllib.error.URLError, OSError, http.client.HTTPException, ValueError) as exc:
+        body = upstream.fetch_body(url, accept_json=True, timeout=60, user_agent="retrobios/1.0")
+        release = json.loads(body) if body is not None else {}
+    except (upstream.UpstreamError, ValueError) as exc:
         print(f"  large files release listing: {exc}", file=sys.stderr)
-        release = {}
+        return {}
+    digests: dict[str, str] = {}
     for asset in release.get("assets") or []:
         digest = str(asset.get("digest") or "")
         if digest.startswith("sha256:"):

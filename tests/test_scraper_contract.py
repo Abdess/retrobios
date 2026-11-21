@@ -821,12 +821,15 @@ class EveryGitHubApiCallerSendsTheToken(unittest.TestCase):
             if "api.github.com" in (source := path.read_text(encoding="utf-8"))
             # arcade_parent_importer names API URLs and sends them through
             # romset_dat_importer._api_json, which holds the token, and the
-            # scrapers through base_scraper.github_json.
+            # scrapers through base_scraper.github_json, the rest through
+            # core.upstream.fetch_body or forge_headers.
             and ("Request(" in source or "urlopen(" in source or path.suffix == ".sh")
             and "GITHUB_TOKEN" not in source
             and "github_headers(" not in source
             and "github_json(" not in source
             and "github_token(" not in source
+            and "forge_headers(" not in source
+            and "fetch_body(" not in source
         )
         self.assertEqual(silent, [])
 
@@ -855,6 +858,7 @@ class EveryGitHubApiCallerSendsTheToken(unittest.TestCase):
                     and "github_headers(" not in body
                     and "github_token(" not in body
                     and "GITHUB_TOKEN" not in body
+                    and "forge_headers(" not in body
                 ):
                     silent.append(f"{path.relative_to(scripts)}:{node.name}")
         self.assertEqual(silent, [])
