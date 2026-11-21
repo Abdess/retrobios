@@ -324,7 +324,7 @@ class PathPriority(unittest.TestCase):
 
 class TheNoDedupListIsPinned(unittest.TestCase):
     """Every directory the dedup must leave alone, with the reason written
-    beside it in dedup.py. Only RPG Maker and ScummVM were tested, so a merge
+    beside it in model/nodedup.py. Only RPG Maker and ScummVM were tested, so a merge
     that dropped c64-emu would have the name step serve the C128 keymap to
     three machines again, with the suite green."""
 
