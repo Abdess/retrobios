@@ -162,6 +162,25 @@ class Oracle(unittest.TestCase):
         self.assertEqual(result["verdicts"], {"absent": "bios_error", "scph5501.bin": "boots"})
 
 
+class Frontend(unittest.TestCase):
+    def test_a_modified_module_marks_the_record(self) -> None:
+        from unittest import mock
+
+        clean = {"script": standalonerecord.SCRIPT, "commit": "0" * 40, "script_modified": False,
+                 "script_sha256": "1" * 64}
+        changed = mock.Mock(stdout=" M scripts/probes/xvfb.py\n")
+        with mock.patch.object(cp, "frontend_identity", return_value=dict(clean)), \
+                mock.patch.object(standalonerecord.subprocess, "run", return_value=changed) as run:
+            self.assertTrue(standalonerecord.frontend_identity()["script_modified"])
+        self.assertEqual(run.call_args.args[0][4:], list(standalonerecord.CODE_FILES))
+
+    def test_the_code_files_are_the_modules_of_the_command(self) -> None:
+        from tests.sources import script_paths
+
+        self.assertEqual({ROOT / name for name in standalonerecord.CODE_FILES},
+                         set(script_paths("standalone_probe.py")))
+
+
 class HostLock(unittest.TestCase):
     def test_a_run_holds_the_probe_lock_for_itself(self) -> None:
         import contextlib

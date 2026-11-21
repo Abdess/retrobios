@@ -7,6 +7,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -23,6 +24,11 @@ RECORD_VERSION = 4
 OBSERVABLES = ("verdict", "screens", "frame_hashes", "uniform_frames")
 SCRIPT = "scripts/standalone_probe.py"
 SCRIPT_PATH = REPO_ROOT / SCRIPT
+# The files that hold the code of a run: a record from a checkout where one
+# of them differs from the commit says so.
+CODE_FILES = (SCRIPT, "scripts/probes/standaloneemulators.py", "scripts/probes/appimage.py",
+              "scripts/probes/xvfb.py", "scripts/probes/standalonerun.py",
+              "scripts/probes/standalonerecord.py")
 
 
 class RunFailed(Exception):
@@ -32,6 +38,22 @@ class RunFailed(Exception):
 
 class Busy(Exception):
     """The host's load is past the threshold a recorded run accepts."""
+
+
+def frontend_identity() -> dict:
+    """core_probe's frontend identity of the command, modified when any file
+    that holds the run's code differs from the commit."""
+    identity = cp.frontend_identity(SCRIPT_PATH, SCRIPT)
+    if identity["script_modified"] is False:
+        try:
+            status = subprocess.run(["git", "status", "--porcelain", "--", *CODE_FILES], cwd=REPO_ROOT,
+                                    capture_output=True, text=True, check=True).stdout
+        except (OSError, subprocess.CalledProcessError) as exc:
+            print(f"WARNING: frontend state unknown, git failed: {exc}", file=sys.stderr)
+            identity["script_modified"] = None
+        else:
+            identity["script_modified"] = bool(status.strip())
+    return identity
 
 
 def _variants(args: argparse.Namespace) -> list[cp.Variant]:
@@ -99,7 +121,7 @@ def measure(args: argparse.Namespace, emu: Emulator) -> dict:
         "core": {"file": meta["name"], "sha256": meta["sha256"], "repo": f"https://github.com/{meta['repo']}",
                  "commit": None, "build_command": None, "compiler": None, "library_name": emu.name,
                  "library_version": meta["tag"], "artifact": meta["url"]},
-        "frontend": cp.frontend_identity(SCRIPT_PATH, SCRIPT),
+        "frontend": frontend_identity(),
         "host": {**cp.host_identity(), "load_before": load_before, "load_after": load_after,
                  "max_load": max_load},
         "inputs": {
