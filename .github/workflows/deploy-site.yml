@@ -50,6 +50,7 @@ on:
       - "scripts/model/dumpcatalog.py"
       - "scripts/model/guides.py"
       - "scripts/model/largefiles.py"
+      - "scripts/model/mamerelease.py"
       - "scripts/model/measurements.py"
       - "scripts/model/nodedup.py"
       - "scripts/model/platforms.py"

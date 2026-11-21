@@ -53,7 +53,8 @@ from .mame_devices import (
     source_path,
 )
 from .listxml import open_listxml
-from .romset_dat_importer import fetch_pack, mame_tag, mame_version
+from model.mamerelease import mame_tag, mame_version
+from .romset_dat_importer import fetch_pack
 from .sparse_clone import fresh_cache, remove_clone, sparse_clone
 from .mame_parser import parse_mame_source_tree
 from core.paths import EMULATORS_DIR, PLATFORMS_DIR, REPO_ROOT

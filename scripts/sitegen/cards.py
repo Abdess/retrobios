@@ -17,6 +17,7 @@ from packs.crossref import FileConsumers
 from romrecipes.romsets import dat_snapshots, usable_recipe
 from sitegen import markup, wanted as sitewanted
 from core.paths import REPO_ROOT
+from model.mamerelease import tag_version
 from sitegen.fields import search_excluded
 from sitegen.install import manifest_systems, platform_display
 from sitegen.render import (
@@ -307,8 +308,11 @@ Release = tuple[int, str]
 
 def _release_name(source: str, label: str, versions: dict) -> str:
     """"MAME mame0220" as "0.220", an FBNeo DAT title as its version."""
-    match = re.fullmatch(r"MAME mame(\d)(\d+)", label) if source == "mame" else None
-    return f"{match[1]}.{match[2]}" if match else str(versions.get(label) or label)
+    if source == "mame" and label.startswith("MAME mame"):
+        version = tag_version(label.removeprefix("MAME "))
+        if version:
+            return version
+    return str(versions.get(label) or label)
 
 
 @functools.lru_cache(maxsize=1)

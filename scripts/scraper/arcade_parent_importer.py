@@ -59,7 +59,8 @@ from core.upstream import parse_repo
 from .base_scraper import BlobMismatchError, download, fetch_verified_blob
 from .clex import DriverSourceError, blank_comments, call_args, call_span
 from .listxml import Opener, attrs, iter_elements, open_listxml, rom_members
-from .romset_dat_importer import MAME_LISTXML_URL, _api_json, fetch_pack, mame_tag
+from model.mamerelease import mame_tag
+from .romset_dat_importer import MAME_LISTXML_URL, _api_json, fetch_pack
 
 SCHEMA_VERSION = 1
 DEFAULT_OUTPUT = Path("games") / "arcade"
