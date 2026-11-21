@@ -20,7 +20,6 @@ from sitegen import markup
 from sitegen.cards import (
     ROMSET_FAQ,
     SEARCH_SKIPPED,
-    SHORT_HASH,
     card_title,
     listed_words,
     places_markdown,
@@ -41,7 +40,9 @@ from sitegen.install import (
     standalone_place,
 )
 from sitegen.render import (
+    SHORT_HASH,
     WIKI_SRC_DIR,
+    card_anchor,
     code_span,
     count_text,
     escape_tags,
@@ -513,7 +514,7 @@ def _card_copy_line(
         page = card_page(held, sha1)
         return [
             f"Collection copy: [{code_span(held)}]"
-            f"(../systems/{urllib.parse.quote(page)}.md#sha1-{sha1[:12]})"
+            f"(../systems/{urllib.parse.quote(page)}.md#{card_anchor(sha1)})"
         ]
     if in_repo and not any(d.startswith("Collection copies:") for d in details):
         copy = held_copy(f)
@@ -798,7 +799,7 @@ def _held_copy_line(copy: tuple[str, str], consumers: FileConsumers) -> str:
         zsha1 = consumers.sha1_at(path)
         if zsha1 and len(parts) >= 3 and parts[0] == "bios":
             page = urllib.parse.quote(card_page(path, zsha1))
-            archive = f"[{archive}](../systems/{page}.md#sha1-{zsha1[:12]})"
+            archive = f"[{archive}](../systems/{page}.md#{card_anchor(zsha1)})"
         return f"Collection copy: member {code_span(member)} of {archive}"
     if parts[0] == "data" and len(parts) >= 2:
         ref, inside = parts[1], "/".join(parts[2:])

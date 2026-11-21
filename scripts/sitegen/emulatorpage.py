@@ -47,6 +47,7 @@ from sitegen.install import (
 from sitegen.lookup import data_directory_origin, data_tree_pages
 from sitegen.render import (
     admonition_body,
+    card_anchor,
     code_span,
     count_text,
     escape_tags,
@@ -238,7 +239,7 @@ def _data_member_table(members: dict[str, dict], names: list[str], anchors: set[
         sha1 = str(info.get("sha1", ""))
         # One id per page: two members can hold the same bytes (every empty
         # file), and Dolphin's trees share Sys.
-        anchor = f"sha1-{sha1[:12]}"
+        anchor = card_anchor(sha1)
         span = "" if anchor in anchors else f'<span id="{anchor}"></span>'
         anchors.add(anchor)
         table.append(f"| {span}{code_span(member)} | {size_text(int(info.get('size', 0)))} | {code_span(sha1)} |")
@@ -518,7 +519,7 @@ def _collection_card_href(entry: dict, consumers: FileConsumers | None, owner: s
     held = consumers.path_of(sha1) if sha1 else ""
     if not held.startswith("bios/"):
         return ""
-    return f"../systems/{urllib.parse.quote(card_page(held, sha1))}.md#sha1-{sha1[:12]}"
+    return f"../systems/{urllib.parse.quote(card_page(held, sha1))}.md#{card_anchor(sha1)}"
 
 
 def _any_name_folder(profile: dict, entry: dict) -> str:

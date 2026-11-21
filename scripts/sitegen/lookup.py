@@ -19,7 +19,7 @@ from packs.crossref import FileConsumers
 from sitegen.cards import PROVENANCE_LABELS, emulator_card_anchor, emulator_file_anchors
 from sitegen.config import SITE_URL
 from core.paths import REPO_ROOT
-from sitegen.render import code_span, slugify_anchor, card_page, emulator_card_page
+from sitegen.render import card_anchor, code_span, slugify_anchor, card_page, emulator_card_page
 from sitegen.write import write_if_changed
 
 
@@ -206,7 +206,7 @@ def file_location_items(
         if len(parts) < 3 or parts[0] != "bios":
             continue
         page = card_page(entry.get("path", ""), sha1)
-        items.append({"sha1": sha1, "url": site_path(f"systems/{page}.md#sha1-{sha1[:12]}")})
+        items.append({"sha1": sha1, "url": site_path(f"systems/{page}.md#{card_anchor(sha1)}")})
     # A data directory's files are listed on the page of an emulator reading
     # the tree: 2,534 hashes the packs ship were found nowhere on the site.
     owners = _data_member_owners(profiles or {})
@@ -223,7 +223,7 @@ def file_location_items(
                 known.add(sha1)
                 page = page_of.get(member, owners[ref])
                 items.append({"sha1": sha1,
-                              "url": site_path(f"emulators/{page}.md#sha1-{sha1[:12]}")})
+                              "url": site_path(f"emulators/{page}.md#{card_anchor(sha1)}")})
     return sorted(items, key=lambda item: item["sha1"])
 
 

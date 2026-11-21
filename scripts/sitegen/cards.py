@@ -18,7 +18,9 @@ from sitegen import markup, wanted as sitewanted
 from core.paths import REPO_ROOT
 from sitegen.fields import search_excluded
 from sitegen.install import manifest_systems, platform_display
-from sitegen.render import code_span, count_text, system_page_map, emulator_card_page
+from sitegen.render import (
+    SHORT_HASH, card_anchor, code_span, count_text, emulator_card_page, system_page_map,
+)
 
 
 def emulator_file_anchors(files: list[dict]) -> list[str]:
@@ -452,7 +454,7 @@ def system_file_card(
     emus = sorted(consumers.emulators.get(sha1_full, ()))
     installed = _installed_places(sha1_full, consumers, set(plats))
 
-    anchor = f"sha1-{sha1_full[:12]}" if sha1_full != "unknown" else ""
+    anchor = card_anchor(sha1_full) if sha1_full != "unknown" else ""
     # A copy filed under two consoles of one maker is listed twice on its
     # page: the first card holds the anchor, as an id names one element.
     if anchored is not None:
@@ -559,9 +561,6 @@ _CARD_HASHES = ("SHA1", "MD5", "CRC32", "SHA256")
 # The words a card's fold names its other facts by.
 _CARD_MORE_WORDS = {"Romset": "romset", "Collection path": "collection path",
                     "Catalogued": "catalogues"}
-# A hash shown short, in a card, a platform row or an emulator table: as long
-# as the card's own address (sha1-<12 hex>), one length across the site.
-SHORT_HASH = 12
 
 
 def listed_words(words: list[str]) -> str:

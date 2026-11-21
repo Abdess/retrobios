@@ -11,7 +11,7 @@ from model.systemnames import system_name
 from model.profiles import is_emulator
 from sitegen.config import SITE_URL
 from sitegen.lookup import sorted_hash_values, site_path
-from sitegen.render import console_href
+from sitegen.render import card_anchor, console_href
 
 
 def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
@@ -84,7 +84,7 @@ def _first_file_place(
         parts = str(files[sha1].get("path", "")).split("/")
         if len(parts) >= 3 and parts[0] == "bios":
             page = card_page("/".join(parts), sha1)
-            return parts[1], site_path(f"systems/{page}.md#sha1-{sha1[:12]}")
+            return parts[1], site_path(f"systems/{page}.md#{card_anchor(sha1)}")
     for key in sorted(profiles):
         profile = profiles[key]
         if is_emulator(profile) and sys_id in (profile.get("systems") or []):

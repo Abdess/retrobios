@@ -169,6 +169,16 @@ class StructuredBlocks(unittest.TestCase):
         self.assertIn("end.", page)
 
 
+class CardAnchorsKeepTheirPublishedForm(unittest.TestCase):
+    """files/?sha1= and #sha1-<12> addresses are published: the id written
+    and the pattern that reads it back are one format."""
+
+    def test_the_anchor_reads_back(self):
+        sha1 = "0123456789abcdef0123456789abcdef01234567"
+        self.assertEqual(siterender.card_anchor(sha1), "sha1-0123456789ab")
+        self.assertTrue(siterender.CARD_ANCHOR.fullmatch(siterender.card_anchor(sha1)))
+
+
 class FileCardsLinkTheReadingEntry(unittest.TestCase):
     def test_an_emulator_link_lands_on_its_entry(self):
         """The platform links landed on their section, the emulator links on

@@ -27,7 +27,7 @@ from sitegen.consolecards import (
 from sitegen.descriptions import said_as_list
 from sitegen.emulatorcards import region_words
 from sitegen.install import comes_with_app
-from sitegen.render import code_span, count_text, console_anchor
+from sitegen.render import card_anchor, code_span, count_text, console_anchor
 
 
 class _StartGroup:
@@ -386,7 +386,7 @@ def _link_held_names(line: str, sha1s: dict[str, str], held: set[str]) -> str:
     the Apple II line named eight files and none was a way to get one."""
     def link(match: re.Match) -> str:
         sha1 = sha1s.get(match[1], "")
-        return f"[{match[0]}](#sha1-{sha1[:12]})" if sha1 in held else match[0]
+        return f"[{match[0]}](#{card_anchor(sha1)})" if sha1 in held else match[0]
     # A name inside a link already (a "Keep it zipped" archive) stays as
     # is, and so does the name a file is read under, "(as `d2fdc.zip`)".
     return re.sub(r"(?<!\[)(?<!\(as )`([^`]*)`(?!\]\()", link, line)

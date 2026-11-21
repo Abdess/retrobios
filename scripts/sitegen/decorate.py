@@ -16,7 +16,7 @@ from sitegen.config import SITE_NAME, SITE_URL, yaml
 from core.paths import REPO_ROOT
 from sitegen.descriptions import PAGE_DATA, page_browser_title, page_description, page_title
 from sitegen.diagrams import prepare_page, unresolved_images
-from sitegen.render import WIKI_SRC_DIR
+from sitegen.render import CARD_ANCHOR, WIKI_SRC_DIR, card_anchor
 from sitegen.write import undecorated, write_decorated
 
 
@@ -113,20 +113,20 @@ def front_matter(markdown: str) -> dict:
 
 @functools.cache
 def _sha1_by_prefix(db_path: str) -> dict[str, str]:
-    return {sha1[:12]: sha1 for sha1 in load_database(db_path)["files"]}
+    return {card_anchor(sha1): sha1 for sha1 in load_database(db_path)["files"]}
 
 
 def _cards_elsewhere(markdown: str) -> str:
     """A start line links each file to its card. A console split over part
     pages keeps its cards on the parts, so a card this page does not hold
     is reached by its permanent link instead."""
-    links = set(re.findall(r"\]\(#(sha1-[0-9a-f]{12})\)", markdown))
+    links = set(re.findall(rf"\]\(#({CARD_ANCHOR.pattern})\)", markdown))
     away = {ident for ident in links if f'id="{ident}"' not in markdown}
     if not away:
         return markdown
     by_prefix = _sha1_by_prefix(str(siteinputs.current().db))
     for ident in away:
-        full = by_prefix[ident.removeprefix("sha1-")]
+        full = by_prefix[ident]
         markdown = markdown.replace(f"](#{ident})", f"]({markup.site_href(f'files/?sha1={full}')})")
     return markdown
 

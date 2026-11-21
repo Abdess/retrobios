@@ -46,6 +46,19 @@ def code_span(value: object) -> str:
     return "`" + str(value).replace("`", "'") + "`"
 
 
+# A hash shown short, in a card, a platform row or an emulator table: as long
+# as the card's own address (sha1-<12 hex>), one length across the site.
+SHORT_HASH = 12
+# A file card's permanent id: published, linked from outside, and read back
+# by the site's lookup (model/retired.py keeps a retired one answering).
+CARD_ANCHOR = re.compile(rf"sha1-[0-9a-f]{{{SHORT_HASH}}}")
+
+
+def card_anchor(sha1: str) -> str:
+    """The id of the card a file's sha1 heads: sha1-<first 12 hex>."""
+    return f"sha1-{sha1[:SHORT_HASH]}"
+
+
 def count_text(number: int, noun: str, plural: str = "") -> str:
     """A count and its noun, singular for one: the site printed "1 files" 234 times."""
     return f"{number:,} {noun if number == 1 else plural or noun + 's'}"

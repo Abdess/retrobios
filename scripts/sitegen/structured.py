@@ -17,7 +17,7 @@ from sitegen.descriptions import EMULATOR_SNIPPETS, NOTHING_TO_FETCH, PAGE_DATA,
 from sitegen.emulatorcards import snippet_noun
 from sitegen.install import comes_with_app
 from sitegen.lookup import data_member_digests, sorted_hash_values
-from sitegen.render import system_page_map
+from sitegen.render import card_anchor, system_page_map
 from sitegen.write import write_if_changed
 
 
@@ -142,7 +142,7 @@ def system_structured_data(slug: str, consoles: dict[str, list]) -> dict:
             sha1 = str(entry.get("sha1") or "")
             part: dict = {"@type": "CreativeWork", "name": str(entry.get("name", ""))}
             if sha1:
-                part["url"] = urllib.parse.urljoin(SITE_URL, f"systems/{slug}/#sha1-{sha1[:12]}")
+                part["url"] = urllib.parse.urljoin(SITE_URL, f"systems/{slug}/#{card_anchor(sha1)}")
             identifiers = [
                 f"{field}:{str(entry[field]).lower()}"
                 for field in ("sha1", "md5", "crc32", "sha256") if entry.get(field)

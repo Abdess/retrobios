@@ -14,7 +14,6 @@ from model.database import load_database, sha1_at
 from model.profiles import is_emulator, upstream_profile_index
 from model.systemnames import system_name
 from sitegen import entries as siteentries, markup
-from sitegen.cards import SHORT_HASH
 from sitegen.config import REPO_URL, date_line
 from core.paths import REPO_ROOT
 from core.sizes import size_text
@@ -32,6 +31,8 @@ from sitegen.parts import (
     part_stems,
 )
 from sitegen.render import (
+    SHORT_HASH,
+    card_anchor,
     code_span,
     count_text,
     emulator_link,
@@ -104,7 +105,7 @@ def _served_line(f: dict, declared_sha1: str = "") -> str:
         return f"{label}: {code_span(path)}"
     # The card of that copy: every hash, provenance and the download.
     page = urllib.parse.quote(card_page(path, sha1))
-    link = f"{label}: [{code_span(path)}](../systems/{page}.md#sha1-{sha1[:12]})"
+    link = f"{label}: [{code_span(path)}](../systems/{page}.md#{card_anchor(sha1)})"
     declared = {value.strip().lower() for value in declared_sha1.split(",")}
     return link if sha1 in declared else f"{link} (sha1 `{sha1[:8]}`)"
 
