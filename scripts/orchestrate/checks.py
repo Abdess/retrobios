@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
 
 from core.paths import PLATFORMS_DIR
 from model.registry import list_release_pack_platforms
@@ -46,10 +47,13 @@ def check_steps(
     # built only a reduced one (--source platform or truth) has nothing to
     # compare it with, and says so instead of failing on an empty parse.
     full_pack_built = args.source == "full" or args.all_variants
-    if pack_counts_file and not full_pack_built:
+    # A build that wrote no record (skipped, or stopped before its counts)
+    # has nothing to compare: step 4 already reports its own failure.
+    packs_recorded = bool(pack_counts_file) and Path(pack_counts_file).stat().st_size > 0
+    if packs_recorded and not full_pack_built:
         skip_notice("consistency", "no full pack built")
         results["consistency"] = SKIPPED
-    elif pack_counts_file:
+    elif packs_recorded:
         ok = check_consistency(
             destinations_file, pack_counts_file,
             set(list_release_pack_platforms(PLATFORMS_DIR)),

@@ -1276,6 +1276,21 @@ class PipelineRegressions(unittest.TestCase):
             self.assertFalse(consistency.compare_counts(verify, packs))
         self.assertIn("Batocera: pack with no verify result", out.getvalue())
 
+    def test_a_build_that_recorded_nothing_skips_step_five(self):
+        """An empty counts file is a build that stopped before its record:
+        step 4 already fails, and step 5 has nothing to compare."""
+        import argparse
+
+        args = argparse.Namespace(source="full", all_variants=False, skip_packs=True)
+        with tempfile.TemporaryDirectory() as root:
+            empty = os.path.join(root, "counts.json")
+            Path(empty).write_text("")
+            step_results: dict = {}
+            with contextlib.redirect_stdout(io.StringIO()):
+                checks.check_steps(args, step_results, pack_counts_file=empty,
+                                   destinations_file=empty)
+        self.assertIs(step_results["consistency"], results.SKIPPED)
+
     def test_only_the_full_variant_is_recorded(self):
         """--all-variants built six packs under one label, and the last won."""
         source = script_source("generate_pack.py")
