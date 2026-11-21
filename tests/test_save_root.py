@@ -839,7 +839,8 @@ class TheScrapersReadTheSystemLists(unittest.TestCase):
             "<command label=\"Azahar (Standalone)\">%EMULATOR_AZAHAR% %ROM%</command>"
             "<command label=\"Citra\">%EMULATOR_RETROARCH% -L "
             "%CORE_RETROARCH%/citra_libretro.so %ROM%</command>"
-            "<!-- <command>%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/x_libretro.so</command> -->"
+            "<!-- <command>%EMULATOR_RETROARCH% --verbose -L "
+            "%CORE_RETROARCH%/x_libretro.so</command> -->"
             "</system></systemList>"
         )
         self.assertEqual(es_systems_libretro_systems(text), {"citra": ["n3ds"]})

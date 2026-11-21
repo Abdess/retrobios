@@ -546,7 +546,7 @@ _RA_CORE = re.compile(r"%CORE_RETROARCH%[/\\]([\w.+-]+?)_libretro")
 _EMULATOR = re.compile(r"%EMULATOR_([A-Za-z0-9_-]+)%")
 
 
-def _command_core(command: str) -> tuple[str | None, str | None]:
+def command_core(command: str) -> tuple[str | None, str | None]:
     match = _RA_CORE.search(command)
     if match:
         return "retroarch", match.group(1)
@@ -557,7 +557,7 @@ def _command_core(command: str) -> tuple[str | None, str | None]:
     return None, None
 
 
-def _esde_systems(text: str, path: str) -> Iterator[tuple[str, str, list[str], list[tuple[str, str]]]]:
+def esde_systems(text: str, path: str) -> Iterator[tuple[str, str, list[str], list[tuple[str, str]]]]:
     root = parse_untrusted_xml(_lenient_xml(text), path)
     for system in root.iter("system"):
         name = (system.findtext("name") or "").strip()
@@ -695,7 +695,7 @@ def esde(spec: dict, fetcher: Fetcher) -> list[dict]:
         text = _lenient_xml(fetcher.text(key, path))
         lines = _first_lines(text, r"<name>([^<]+)</name>")
         command_lines = _command_lines(text)
-        for name, rom_path, extensions, commands in _esde_systems(text, path):
+        for name, rom_path, extensions, commands in esde_systems(text, path):
             folder = _strip_prefix(rom_path, ["%ROMPATH%/", "%ROMPATH%\\"])
             if not name or not folder:
                 continue
@@ -731,11 +731,11 @@ def esde(spec: dict, fetcher: Fetcher) -> list[dict]:
                 chosen = match
             else:
                 note = f"alternative emulator '{label}' names no command of this system"
-        emulator, core = _command_core(chosen[1])
+        emulator, core = command_core(chosen[1])
         offers = _offers([
             {"emulator": e, "core": c, "source_ref": _ref(key_, path_, line)}
             for _label, command, line, key_, path_ in system["placed"]
-            for e, c in [_command_core(command)] if e
+            for e, c in [command_core(command)] if e
         ], core, emulator)
         extensions = system["extensions"]
         if "." in extensions:

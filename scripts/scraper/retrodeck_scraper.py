@@ -54,6 +54,7 @@ from .base_scraper import (
     systems_from_requirements,
 )
 from .retrodeck_launchers import extract_launchers
+from .romfolders.es import command_core, esde_systems
 
 PLATFORM_NAME = "retrodeck"
 COMPONENTS_REPO = "RetroDECK/components"
@@ -67,7 +68,6 @@ ES_DE_SYSTEMS_URL = (
     "https://raw.githubusercontent.com/" + ES_DE_REPO
     + "/{rev}/resources/systems/linux/es_systems.xml"
 )
-_RETROARCH_CORE = re.compile(r"%CORE_RETROARCH%/([\w.+-]+?)_libretro\.so")
 
 
 def es_systems_libretro_systems(text: str) -> dict[str, list[str]]:
@@ -77,20 +77,17 @@ def es_systems_libretro_systems(text: str) -> dict[str, list[str]]:
     (retroarch/rd_assets/rd_config/retroarch.cfg, sort_savefiles_by_content_enable
     and sort_savefiles_enable): a core is handed saves/<folder holding the
     ROM>, the system's <path> folder below %ROMPATH%. A commented-out
-    command is no element and counts for nothing.
+    command counts for nothing.
     """
-    from model.safeparse import parse_untrusted_xml
-
     found: dict[str, set[str]] = {}
-    for system in parse_untrusted_xml(text, "es_systems.xml").iter("system"):
-        path = (system.findtext("path") or "").strip().replace("\\", "/")
-        folder = path.rstrip("/").rsplit("/", 1)[-1]
+    for _name, path, _extensions, commands in esde_systems(text, "es_systems.xml"):
+        folder = path.replace("\\", "/").rstrip("/").rsplit("/", 1)[-1]
         if not folder or folder.startswith("%"):
             continue
-        for command in system.iter("command"):
-            match = _RETROARCH_CORE.search(command.text or "")
-            if match:
-                found.setdefault(match.group(1), set()).add(folder)
+        for _label, command in commands:
+            emulator, core = command_core(command)
+            if emulator == "retroarch" and core:
+                found.setdefault(core, set()).add(folder)
     return {core: sorted(folders) for core, folders in sorted(found.items())}
 
 
