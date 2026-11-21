@@ -143,7 +143,7 @@ def standalone_set(config: dict, profiles: Mapping[str, dict]) -> set[str]:
         }
         names |= {
             EXECUTED_PREFIX + json.dumps([run.emulator, run.name, run.place, run.source_ref])
-            for run in executed_files(config)
+            for run in executed_files(config, profiles)
         }
     return names | content_folder_tags(config)
 

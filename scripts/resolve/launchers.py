@@ -953,11 +953,11 @@ class ExecutedFile:
     source_ref: str
 
 
-def executed_files(config: dict) -> list[ExecutedFile]:
-    """Every file a platform's launchers execute, from records passing it to exec."""
+def executed_files(config: dict, profiles: Mapping[str, dict]) -> list[ExecutedFile]:
+    """Every file a platform's launchers execute, from bound records passing it to exec."""
     base = str(config.get("base_destination") or "bios")
     found: list[ExecutedFile] = []
-    for record in config.get("launchers") or []:
+    for record in bound_launchers(config, profiles):
         if record.get("kind") not in ("fixed_name", "names_searched"):
             continue
         if str(record.get("passes_to") or "").strip() != "exec":

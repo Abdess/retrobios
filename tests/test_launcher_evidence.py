@@ -18,7 +18,7 @@ import yaml
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
 from resolve.categories import EntryCategories
-from resolve.layout import HANDED_PREFIX
+from resolve.layout import EXECUTED_PREFIX, HANDED_PREFIX
 from resolve.standalone import standalone_set
 from resolve.launchers import (
     bound_launchers,
@@ -216,6 +216,19 @@ class Gate(unittest.TestCase):
         self.assertEqual(len(handed), 1)
         self.assertFalse([t for t in standalone_set(config, {"duck": profile(config_reads=[])})
                           if t.startswith(HANDED_PREFIX)])
+
+    def test_an_unproven_record_executes_nothing(self) -> None:
+        code = {"emulator": "duck", "kind": "fixed_name", "names": ["run.sh"], "passes_to": "exec",
+                "search_dir": "/storage/roms/bios", "source_ref": "start.sh:3"}
+        cited = {**code, "source_ref": "duck/config/settings.ini:4, start.sh:3"}
+
+        def executed(launcher: dict) -> list[str]:
+            config = {**self.config(launcher), "standalone_cores": ["duck"]}
+            return [t for t in standalone_set(config, {"duck": profile()})
+                    if t.startswith(EXECUTED_PREFIX)]
+
+        self.assertEqual(len(executed(code)), 1)
+        self.assertEqual(executed(cited), [])
 
     def test_an_unproven_record_proves_no_read(self) -> None:
         named = record(kind="fixed_name", names=["tos.img"], passes_to="settings.ini [BIOS] PathPAL")
