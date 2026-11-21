@@ -161,6 +161,51 @@ class AStalledOrLimitedSourceIsNoAnswer(unittest.TestCase):
         self.assertEqual(len(asked), 2)
 
 
+class ArchiveOrgAnswersByHash(unittest.TestCase):
+    """The platform search asked archive.org for the first item and then
+    downloaded the platform's name from it: an item storing the dump under
+    another path was a 404, and the file went to the issue asking the public
+    for it while --sha1 found it."""
+
+    def setUp(self):
+        fetch._UNANSWERED.clear()
+        self.addCleanup(fetch._UNANSWERED.clear)
+
+    def _archive(self):
+        import json
+
+        return _serving({
+            "https://archive.org/advancedsearch.php": json.dumps(
+                {"response": {"docs": [{"identifier": "psx-bios"}]}}).encode(),
+            "https://archive.org/metadata/psx-bios/files": json.dumps(
+                {"result": [{"name": "readme.txt", "sha1": "0" * 40},
+                            {"name": "bios/SCPH1001.BIN", "sha1": SHA1}]}).encode(),
+            "https://archive.org/download/psx-bios/bios/SCPH1001.BIN": PAYLOAD,
+        })
+
+    def test_the_member_is_found_by_its_sha1_whatever_its_name(self):
+        urlopen, asked = self._archive()
+        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+            data = fetch.step4_search_archive_org(
+                {"name": "scph1001.bin", "sha1": SHA1.upper()})
+        self.assertEqual(data, PAYLOAD)
+        self.assertNotIn("https://archive.org/download/psx-bios/scph1001.bin", asked)
+
+    def test_the_platform_search_and_the_sha1_search_agree(self):
+        urlopen, _asked = self._archive()
+        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+            by_platform = fetch.step4_search_archive_org({"name": "scph1001.bin", "sha1": SHA1})
+            by_sha1 = fetch.archive_org_by_sha1(SHA1)
+        self.assertEqual((by_platform, by_sha1), (PAYLOAD, PAYLOAD))
+
+    def test_a_declared_md5_still_has_to_hold(self):
+        urlopen, _asked = self._archive()
+        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+            data = fetch.step4_search_archive_org(
+                {"name": "scph1001.bin", "sha1": SHA1, "md5": "f" * 32})
+        self.assertIsNone(data)
+
+
 class OptionalDatabase(unittest.TestCase):
     """auto_fetch --sha1 read a mistyped --db as an empty collection and asked
     Software Heritage for a file already held."""

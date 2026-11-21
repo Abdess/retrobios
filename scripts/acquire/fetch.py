@@ -242,8 +242,34 @@ def step3b_software_heritage(entry: dict) -> bytes | None:
     return None
 
 
+def archive_org_by_sha1(sha1: str) -> bytes | None:
+    """The first archive.org file whose metadata names sha1, read and checked.
+
+    The member is chosen by its recorded sha1, never by its name: an item
+    may store the dump under any path (bios/SCPH1001.BIN for scph1001.bin).
+    """
+    search = ("https://archive.org/advancedsearch.php?q="
+              f"{urllib.parse.quote(f'sha1:{sha1}')}&fl[]=identifier&output=json&rows=5")
+    docs = _get_json(search).get("response", {}).get("docs", [])
+    for doc in docs:
+        identifier = doc.get("identifier")
+        if not identifier:
+            continue
+        files = _get_json(f"https://archive.org/metadata/{identifier}/files").get("result", [])
+        for item in files:
+            if str(item.get("sha1", "")).lower() != sha1:
+                continue
+            url = (f"https://archive.org/download/{identifier}/"
+                   f"{urllib.parse.quote(item['name'])}")
+            data = _get(url, timeout=60)
+            if data is not None and hashlib.sha1(data).hexdigest() == sha1:
+                return data
+    return None
+
+
 def step4_search_archive_org(entry: dict) -> bytes | None:
-    """Search archive.org firmware collections by direct download."""
+    """Search archive.org firmware collections by direct download, then
+    every item by each accepted sha1."""
     name = entry["name"]
 
     for collection_id in ARCHIVE_ORG_COLLECTIONS:
@@ -252,21 +278,8 @@ def step4_search_archive_org(entry: dict) -> bytes | None:
             if data is not None and verify_content(data, entry):
                 return data
 
-    sha1s = sorted(parse_hash_list(entry.get("sha1")))
-    if not sha1s:
-        return None
-    # Each accepted revision is a query of its own: archive.org matches one.
-    sha1 = " OR ".join(f"sha1:{value}" for value in sha1s)
-
-    search_url = (
-        "https://archive.org/advancedsearch.php?q="
-        f"{urllib.parse.quote(sha1)}&output=json&rows=1"
-    )
-
-    docs = _get_json(search_url).get("response", {}).get("docs", [])
-    identifier = docs[0].get("identifier") if docs else None
-    if identifier:
-        data = _get(f"https://archive.org/download/{identifier}/{name}")
+    for sha1 in sorted(parse_hash_list(entry.get("sha1"))):
+        data = archive_org_by_sha1(sha1)
         if data is not None and verify_content(data, entry):
             return data
     return None
@@ -435,7 +448,7 @@ def lookup_sha1s(sha1s: list[str], db: dict, dry_run: bool = False) -> int:
         data = step3b_software_heritage(entry)
         where = "Software Heritage"
         if data is None:
-            data, where = _archive_org_by_sha1(sha1), "archive.org"
+            data, where = archive_org_by_sha1(sha1), "archive.org"
         if data is None:
             note = f", {len(_UNANSWERED)} source(s) did not answer" if _UNANSWERED else ""
             print(f"  {sha1}: not found{note}")
@@ -446,25 +459,6 @@ def lookup_sha1s(sha1s: list[str], db: dict, dry_run: bool = False) -> int:
         out.write_bytes(data)
         print(f"  {sha1}: found in {where}, {len(data)} bytes, saved to {out}")
     return 1 if missing else 0
-
-
-def _archive_org_by_sha1(sha1: str) -> bytes | None:
-    """The first archive.org file whose metadata names sha1, read and checked."""
-    search = ("https://archive.org/advancedsearch.php?q="
-              f"{urllib.parse.quote(f'sha1:{sha1}')}&fl[]=identifier&output=json&rows=5")
-    docs = _get_json(search).get("response", {}).get("docs", [])
-    for doc in docs:
-        identifier = doc.get("identifier")
-        files = _get_json(f"https://archive.org/metadata/{identifier}/files").get("result", [])
-        for item in files:
-            if str(item.get("sha1", "")).lower() != sha1:
-                continue
-            url = (f"https://archive.org/download/{identifier}/"
-                   f"{urllib.parse.quote(item['name'])}")
-            data = _get(url, timeout=60)
-            if data is not None and hashlib.sha1(data).hexdigest() == sha1:
-                return data
-    return None
 
 
 CONTRIBUTING_URL = "https://github.com/Abdess/retrobios/blob/main/CONTRIBUTING.md"
