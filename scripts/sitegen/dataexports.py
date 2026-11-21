@@ -18,11 +18,9 @@ from core.artifacts import json_text as _json_text
 from core.hashing import file_digest
 from model import retired as model_retired
 from model.database import sha1_at
-from model.dumpcatalog import load_provenance_snapshots
 from model.platforms import PLATFORMS_DIR_KEY
 from model.profiles import is_emulator
 from packs.crossref import FileConsumers, SupplementalIndex
-from acquire.provenance import build_report
 from sitegen.apiitems import core_index_items, system_index_items
 from sitegen.config import DATA_LICENSE, REPO_URL, build_commit
 from core.paths import REPO_ROOT
@@ -35,7 +33,7 @@ from sitegen.lookup import (
     file_lookup_records,
     write_lookup_shards,
 )
-from sitegen.provenance import load_derivable
+from sitegen.provenance import WantedDumps
 from sitegen.publish import publish_manifests
 from sitegen.structured import write_platform_dats, collection_dat
 from sitegen.write import record_written, write_if_changed
@@ -627,15 +625,11 @@ def source_commit() -> str:
 WANTED_FIELDS = ("catalog", "dat", "name", "description", "size", "crc32", "md5", "sha1")
 
 
-def _provenance_wanted_rows(db: dict) -> list[dict]:
-    """The Wanted list of the provenance page, as rows. A dump the
-    collection already produces (derivable.json) is not wanted."""
-    derivable = load_derivable()
+def _provenance_wanted_rows(dumps: WantedDumps | None) -> list[dict]:
+    """The Wanted list of the provenance page, as rows."""
     rows: list[dict] = []
-    for catalog, data in build_report(db, load_provenance_snapshots()).items():
+    for catalog, data in (dumps.wanted if dumps else {}).items():
         for entry in data["missing"]:
-            if (entry.get("sha1") or "").lower() in derivable:
-                continue
             rows.extend({
                 "catalog": catalog, "dat": dat,
                 **{f: _json_text(entry.get(f)) for f in WANTED_FIELDS[2:]},
@@ -652,8 +646,12 @@ def generate_data_exports(
     stats: dict,
     gap_report: dict | None = None,
     consumers: FileConsumers | None = None,
+    dumps: WantedDumps | None = None,
 ) -> list[dict]:
-    """Create versioned static API, CSV and SQLite metadata snapshots."""
+    """Create versioned static API, CSV and SQLite metadata snapshots.
+
+    ``dumps`` is the provenance page's own wanted list, so its CSV holds
+    the rows the page shows."""
     api = docs / "api" / "v1"
     downloads = docs / "downloads"
     schemas_dest = api / "schemas"
@@ -672,7 +670,7 @@ def generate_data_exports(
 
     members = data_directory_members()
     locations = file_location_items(db, profiles, members)
-    wanted = _provenance_wanted_rows(db)
+    wanted = _provenance_wanted_rows(dumps)
     envelopes = {
         "platforms.json": ("platforms", platform_items),
         "emulators.json": ("emulators", emulator_items),

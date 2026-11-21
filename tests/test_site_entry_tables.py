@@ -198,7 +198,8 @@ class TheWantedListIsOneFilteredTable(unittest.TestCase):
         }}
         moved: dict[str, str] = {}
         self.main = provenance.generate_provenance_page(
-            {"files": {}}, report, {"a" * 40: {"from": ["bios/x.bin"], "transform": "half"}}, moved)
+            {"files": {}}, provenance.wanted_dumps(
+                report, {"a" * 40: {"from": ["bios/x.bin"], "transform": "half"}}), moved)
         self.page = moved["provenance-redump"]
 
     def test_the_counts_come_first(self):

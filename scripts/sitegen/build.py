@@ -90,7 +90,7 @@ from sitegen.places import system_pages_from_data
 from sitegen.platformfiles import EXPORTED
 from sitegen.platformindex import SETUP_TABLE_PAGE, generate_platform_index, with_setup_table
 from sitegen.platformpage import own_list_only, generate_platform_page
-from sitegen.provenance import generate_provenance_page, load_derivable
+from sitegen.provenance import WantedDumps, generate_provenance_page, load_derivable, wanted_dumps
 from sitegen.publish import write_release_advertised
 from sitegen.readme import platform_coverages
 from sitegen.reference import (
@@ -312,11 +312,12 @@ def _write_measurements(run: _SiteRun) -> sitemeasurements.Built:
     return measured
 
 
-def _write_data_exports(run: _SiteRun, stats: dict) -> None:
+def _write_data_exports(run: _SiteRun, stats: dict, dumps: WantedDumps) -> None:
     """The static API, the bulk exports and the data page."""
     print("Generating static API and bulk data exports...")
     exports = generate_data_exports(
-        run.public, run.db, run.coverages, run.profiles, stats, run.gap_report, run.consumers
+        run.public, run.db, run.coverages, run.profiles, stats, run.gap_report, run.consumers,
+        dumps,
     )
     write_release_advertised(Path(run.args.site_dir) / "src" / "generated")
     write_if_changed(str(run.docs / "data.md"),
@@ -501,14 +502,14 @@ def _write_gap_pages(run: _SiteRun, provenance_report: dict) -> None:
         len(wanted["entries"]), sum(1 for entry in wanted["entries"] if "h" in entry)))
 
 
-def _write_reference_pages(run: _SiteRun, export_reports: list[dict]) -> None:
+def _write_reference_pages(
+    run: _SiteRun, export_reports: list[dict], dumps: WantedDumps,
+) -> None:
     """The cross-reference, gaps, wanted, updated files and provenance pages."""
     docs = run.docs
     _write_cross_reference(run)
 
-    provenance_report = build_report(
-        run.db, load_provenance_snapshots(), needs=profile_needs(run.profiles, run.db))
-    _write_gap_pages(run, provenance_report)
+    _write_gap_pages(run, dumps.catalogs)
 
     print("Generating updated platform files page...")
     write_if_changed(
@@ -524,7 +525,7 @@ def _write_reference_pages(run: _SiteRun, export_reports: list[dict]) -> None:
     write_if_changed(
         str(docs / "provenance.md"),
         tables_out_of_search(
-            generate_provenance_page(run.db, provenance_report, load_derivable(), provenance_pages)
+            generate_provenance_page(run.db, dumps, provenance_pages)
         ) + reference_next(),
     )
     for stem, page in provenance_pages.items():
@@ -654,6 +655,12 @@ def generate_site(args: argparse.Namespace) -> None:
     # Computed once: the gap analysis page and the published gaps export must
     # report the same files.
     run.gap_report = build_emulator_gap_report(profiles, coverages, db, run.suppl_names)
+    # Built once, the derivable dumps taken out once: the provenance page and
+    # the CSV it links to must list the same dumps.
+    dumps = wanted_dumps(
+        build_report(db, load_provenance_snapshots(), needs=profile_needs(profiles, db)),
+        load_derivable(),
+    )
 
     # The test each emulator page builds for itself: the parts a page is
     # cut into weigh the status its rows show.
@@ -671,14 +678,14 @@ def generate_site(args: argparse.Namespace) -> None:
     _write_system_pages(run)
 
     measured = _write_measurements(run)
-    _write_data_exports(run, stats)
+    _write_data_exports(run, stats, dumps)
 
     export_reports = load_export_reports()
     EXPORTED.update(report["platform"] for report in export_reports)
 
     published_parts = _write_platform_pages(run)
     _write_emulator_pages(run)
-    _write_reference_pages(run, export_reports)
+    _write_reference_pages(run, export_reports, dumps)
     _write_wiki_pages(run, measured)
     _write_guide_pages(run)
     _write_navigation(run, published_parts)

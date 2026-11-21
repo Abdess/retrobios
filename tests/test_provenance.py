@@ -16,7 +16,7 @@ from scripts.model.dumpcatalog import (
     load_provenance_snapshots,
     write_provenance_snapshot,
 )
-from scripts.sitegen.provenance import generate_provenance_page
+from scripts.sitegen.provenance import generate_provenance_page, wanted_dumps
 from scripts.acquire.provenance import build_report
 from scripts.scraper.dat_pack_importer import _bios_entries, import_pack
 from scripts.scraper.logiqx_parser import parse_logiqx, validate_logiqx_format
@@ -480,7 +480,7 @@ class TestProvenancePage(unittest.TestCase):
                 "entries": _snapshot_entries() + (extra_entries or []),
             }
         }
-        return generate_provenance_page(db, build_report(db, snapshots))
+        return generate_provenance_page(db, wanted_dumps(build_report(db, snapshots), {}))
 
     def test_page_states_match_count_and_boundary(self):
         page = self._page()
@@ -539,7 +539,8 @@ class TestProvenancePage(unittest.TestCase):
             "md5": "8dd7d5296a650fac7319bce665a6a53c"}}}
         snapshots = {"redump": {"source": "redump", "imported_at": "", "dats": {},
                                 "entries": _snapshot_entries() + extra}}
-        page = generate_provenance_page(db, build_report(db, snapshots, {}, romsets))
+        page = generate_provenance_page(
+            db, wanted_dumps(build_report(db, snapshots, {}, romsets), {}))
         row = next(line for line in page.split("\n") if "carried.bin" in line)
         self.assertIn("Ships in MAME `set.zip` as `c.rom`.", row)
 
@@ -682,7 +683,7 @@ class TheWantedPageAsksOnlyForWhatCannotBeMade(unittest.TestCase):
     already produces (a Kickstart's odd bytes, a character ROM's halves)."""
 
     def test_a_derivable_dump_moves_out_of_the_wanted_list(self):
-        from scripts.sitegen import provenance as sitegen_provenance
+        from scripts.sitegen import dataexports, provenance as sitegen_provenance
 
         report = {"tosec": {
             "imported_at": "2026-01-01", "dats": {}, "total": 2, "matched": 0,
@@ -694,7 +695,13 @@ class TheWantedPageAsksOnlyForWhatCannotBeMade(unittest.TestCase):
         }}
         derivable = {"a" * 40: {"from": ["bios/Commodore/Amiga/a1200.rom"],
                                 "transform": "byte swap"}}
-        page = sitegen_provenance.generate_provenance_page({"files": {}}, report, derivable)
+        dumps = sitegen_provenance.wanted_dumps(report, derivable)
+        page = sitegen_provenance.generate_provenance_page({"files": {}}, dumps)
+        # The report stays whole: the coverage table and the gaps page
+        # count every missing dump.
+        self.assertEqual(len(report["tosec"]["missing"]), 2)
+        rows = dataexports._provenance_wanted_rows(dumps)
+        self.assertEqual([row["name"] for row in rows], ["lost.rom"])
         wanted, _, derived = page.partition("## Derivable")
         self.assertIn("**1** dumps a catalog", wanted)
         self.assertNotIn("kick31.rom", wanted)

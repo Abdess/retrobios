@@ -83,6 +83,8 @@ from sitegen import sources
 from model import releaserecord
 from core import upstream
 from packs.verdicts import Severity, blocking_missing, compute_severity
+from acquire.provenance import build_report
+from model.dumpcatalog import load_provenance_snapshots
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -440,7 +442,8 @@ class ExportsComplete(unittest.TestCase):
                             .read_text(encoding="utf-8"))
         self.assertIn("commit", schema["properties"])
         db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
-        rows = dataexports._provenance_wanted_rows(db)
+        rows = dataexports._provenance_wanted_rows(provenance.wanted_dumps(
+            build_report(db, load_provenance_snapshots()), provenance.load_derivable()))
         self.assertTrue(rows)
         self.assertTrue(all(r["catalog"] and r["name"] for r in rows))
         text = dataexports._csv_document(list(dataexports.WANTED_FIELDS), rows)

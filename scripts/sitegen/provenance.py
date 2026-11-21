@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import html
 import json
+from dataclasses import dataclass
 from datetime import datetime
 
 from model.composition import compute_composition, count_catalog_matched
@@ -26,6 +27,18 @@ def _prov_title(data: dict) -> str:
     """Tooltip text for a provenance badge."""
     parts = [data.get("dat", ""), data.get("description", "")]
     return ": ".join(p for p in parts if p).replace('"', "&quot;")
+
+
+@dataclass(frozen=True)
+class WantedDumps:
+    """A provenance report and what of it is wanted: its missing dumps less
+    those the collection derives (derivable.json)."""
+
+    catalogs: dict
+    wanted: dict[str, dict]
+    derived: dict[str, dict]
+    derived_by_source: dict[str, int]
+    derivable: dict[str, dict]
 
 
 def load_derivable(path: str = "derivable.json") -> dict[str, dict]:
@@ -51,13 +64,13 @@ def _date_in_words(stamp: str) -> str:
 
 
 def generate_provenance_page(
-    db: dict, report: dict, derivable: dict[str, dict] | None = None,
-    moved: dict[str, str] | None = None,
+    db: dict, dumps: WantedDumps, moved: dict[str, str] | None = None,
 ) -> str:
     """Page explaining the verified dump badges and listing catalog gaps.
 
     With ``moved``, each catalog's wanted list goes to a page of its own,
     keyed by stem: the three lists made a 694 KB page."""
+    report = dumps.catalogs
     matched_files = count_catalog_matched(db)
     total_files = compute_composition(db)["systems"]["files"]
     # When each catalog was read: a 76-day-old snapshot showed no age.
@@ -155,11 +168,9 @@ def generate_provenance_page(
             ]
         )
 
-    derivable = derivable or {}
-    derived_entries, derived_by_source = _split_derivable(report, derivable)
-    total_missing = distinct_missing(report)
+    total_missing = distinct_missing(dumps.wanted)
     # The three counts below added up to more than the total above it.
-    listed = sum(len(data["missing"]) for data in report.values())
+    listed = sum(len(data["missing"]) for data in dumps.wanted.values())
     overlap = (
         f" A dump two catalogs describe is listed under each, so the lists "
         f"hold {listed:,} rows."
@@ -181,36 +192,39 @@ def generate_provenance_page(
         ]
     )
 
-    for source, data in report.items():
+    for source, data in dumps.wanted.items():
         if data["missing"]:
-            lines.extend(_wanted_section(source, data, derived_by_source.get(source, 0), moved))
+            lines.extend(_wanted_section(source, data, dumps.derived_by_source.get(source, 0),
+                                         moved))
 
-    lines.extend(_derivable_section(derived_entries, derivable))
+    lines.extend(_derivable_section(dumps.derived, dumps.derivable))
 
     lines.extend(["", date_line()])
     return "\n".join(lines) + "\n"
 
 
-def _split_derivable(report: dict, derivable: dict[str, dict]) -> tuple[dict[str, dict], dict[str, int]]:
+def wanted_dumps(report: dict, derivable: dict[str, dict]) -> WantedDumps:
     """Take out of each catalog's missing dumps those the collection already
     produces, by sha1, with how many each catalog lost.
 
     A dump the collection already produces (the odd bytes of a Kickstart,
     the halves of a character ROM) is no acquisition target: the page asked
-    the public for 79 of them."""
-    derived_entries: dict[str, dict] = {}
+    the public for 79 of them. The report is left as it is: the coverage
+    table and the gaps page count every missing dump."""
+    derived: dict[str, dict] = {}
     derived_by_source: dict[str, int] = {}
+    wanted: dict[str, dict] = {}
     for source, data in report.items():
         kept = []
         for entry in data["missing"]:
             sha1 = (entry.get("sha1") or "").lower()
             if sha1 in derivable:
-                derived_entries.setdefault(sha1, entry)
+                derived.setdefault(sha1, entry)
                 derived_by_source[source] = derived_by_source.get(source, 0) + 1
             else:
                 kept.append(entry)
-        data["missing"] = kept
-    return derived_entries, derived_by_source
+        wanted[source] = {**data, "missing": kept}
+    return WantedDumps(report, wanted, derived, derived_by_source, derivable)
 
 
 def _wanted_dat_table(entries: list) -> list[str]:
