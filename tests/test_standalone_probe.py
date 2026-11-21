@@ -144,7 +144,7 @@ class Oracle(unittest.TestCase):
         self.assertEqual((verdict, evidence["rule"]), ("bios_error", "error_pattern"))
 
     def test_an_early_exit_is_a_crash_and_a_black_tail_a_hang(self) -> None:
-        oracle = {"references": [], "error_patterns": [], "error_screens": []}
+        oracle: dict[str, list] = {"references": [], "error_patterns": [], "error_screens": []}
         rep = {"loaded": False, "exit": {"status": 1, "signal": None}, "observables": {}, "logs": []}
         self.assertEqual(cp.judge(rep, oracle)[0], "crash")
         black = "e" * 40
