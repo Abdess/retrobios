@@ -20511,6 +20511,11 @@ class Removal(NamedTuple):
     systems: list
 
 
+def _drive_key(dest: str, fold: bool) -> str:
+    """dest as the drive compares it, folded where it folds case."""
+    return dest.casefold() if fold else dest
+
+
 def _entry_sha1s(entry: dict) -> set[str]:
     return {str(copy.get("sha1")) for copy in entry_copies(entry)
             if copy.get("sha1")}
@@ -20533,7 +20538,7 @@ def _served(manifest: dict, fold: bool) -> dict[tuple[str, str], tuple]:
     served: dict[tuple[str, str], tuple] = {}
     for entry in [*(manifest.get("files") or []), *(manifest.get("case_variants") or [])]:
         dest = str(entry.get("dest"))
-        place = (str(entry.get("root") or ""), dest.casefold() if fold else dest)
+        place = (str(entry.get("root") or ""), _drive_key(dest, fold))
         sha1s, systems, readers, own = served.get(place, (set(), [], set(), False))
         mine = _entry_readers(entry)
         served[place] = (sha1s | _entry_sha1s(entry),
@@ -20542,7 +20547,7 @@ def _served(manifest: dict, fold: bool) -> dict[tuple[str, str], tuple]:
     for tree in manifest.get("data_directories") or []:
         for rel, meta in (tree.get("files") or {}).items():
             dest = f"{tree['dest']}/{rel}" if tree.get("dest") else rel
-            served[("data", dest.casefold() if fold else dest)] = (
+            served[("data", _drive_key(dest, fold))] = (
                 {str(meta.get("sha1"))}, list(tree.get("systems") or []), set(), True)
     return served
 
@@ -20583,7 +20588,7 @@ class _RemovalScope(NamedTuple):
 
     def norm(self, dest: str) -> str:
         """dest as the drive compares it, folded where it folds case."""
-        return dest.casefold() if self.fold else dest
+        return _drive_key(dest, self.fold)
 
 
 def _removal_scope(
@@ -20593,9 +20598,6 @@ def _removal_scope(
 ) -> _RemovalScope:
     """The scope of a removal of plat's setup from record."""
 
-    def norm(dest: str) -> str:
-        return dest.casefold() if fold else dest
-
     setup = record["setups"][plat]
     known = available_choices(list(manifest.get("files") or []),
                               list(manifest.get("omitted_files") or []))
@@ -20603,10 +20605,10 @@ def _removal_scope(
     chosen_systems = set(systems)
     chosen_cores = designated_cores(manifest, [*cores, *emulators]) if (
         cores or emulators) else set()
-    others = {(str(item.get("root") or ""), norm(item["dest"])): name
+    others = {(str(item.get("root") or ""), _drive_key(item["dest"], fold)): name
               for name, other in record["setups"].items() if name != plat
               for item in other.get("files") or []}
-    wanted = {norm(dest) for dest in files}
+    wanted = {_drive_key(dest, fold) for dest in files}
     # What stays chosen once the removal is done, as an install names it:
     # the systems or cores the record named, else every one of the list.
     named_systems = {name.casefold() for name in _choice_names(options, "--system")}
@@ -20749,22 +20751,19 @@ def _misplaced_known(record: dict, manifests: list[dict], fold: bool
     """The places any list of manifests reads or any setup recorded, whether
     a list places files at the top, and the game data dests."""
 
-    def norm(dest: str) -> str:
-        return dest.casefold() if fold else dest
-
     known: set[str] = set()
     top_placed = False
     # Game data sits in folders a frontend lists as games: DOOM2.WAD beside
     # doom2.wad is a game entry of its own there, never a copy.
-    games = {norm(str(entry.get("dest", ""))) for manifest in manifests
+    games = {_drive_key(str(entry.get("dest", "")), fold) for manifest in manifests
              for entry in manifest.get("files") or [] if entry.get("category") == "game_data"}
     for manifest in manifests:
         for root, dest in _served(manifest, fold):
             known.add(dest)
             top_placed = top_placed or (root == "" and "/" not in dest)
-        known |= {norm(str(entry.get("dest", "")))
+        known |= {_drive_key(str(entry.get("dest", "")), fold)
                   for entry in manifest.get("omitted_files") or []}
-    known |= {norm(str(item["dest"])) for setup in record["setups"].values()
+    known |= {_drive_key(str(item["dest"]), fold) for setup in record["setups"].values()
               for item in setup.get("files") or []}
     return known, top_placed, games
 
@@ -20824,9 +20823,6 @@ def plan_misplaced_removal(
     folder = Path(os.path.abspath(folder))
     fold = not keeps_case(folder)
 
-    def norm(dest: str) -> str:
-        return dest.casefold() if fold else dest
-
     known, top_placed, games = _misplaced_known(record, manifests, fold)
     placed: dict[int, list[dict]] = {}
     # The folders read: each one the installer placed a file in, and the
@@ -20836,7 +20832,7 @@ def plan_misplaced_removal(
         if str(item.get("root") or "") == "" and isinstance(item.get("size"), int):
             placed.setdefault(item["size"], []).append(item)
             parent = _parent_of(str(item["dest"]))
-            folders.setdefault(norm(parent), parent)
+            folders.setdefault(_drive_key(parent, fold), parent)
     proven: dict[str, tuple[str, os.stat_result, Path] | None] = {}
 
     def in_place(item: dict) -> tuple[str, os.stat_result, Path] | None:
@@ -20854,7 +20850,7 @@ def plan_misplaced_removal(
         """Whether rel is a known place, or ends with one that names a
         folder: saves/n3ds/Azahar/sysdata/keys.txt is the save folder's
         n3ds/Azahar/sysdata/keys.txt. A bare name is no such end."""
-        parts = norm(rel).split("/")
+        parts = _drive_key(rel, fold).split("/")
         return "/".join(parts) in known or any(
             "/".join(parts[index:]) in known for index in range(1, len(parts) - 1))
 
@@ -20870,7 +20866,7 @@ def plan_misplaced_removal(
             path, info, sha1 = candidate
             found = [(other, hit) for other in placed[info.st_size] if other["sha1"] == sha1
                      for hit in [in_place(other)] if hit is not None]
-            if any(norm(str(other["dest"])) in games for other, _hit in found):
+            if any(_drive_key(str(other["dest"]), fold) in games for other, _hit in found):
                 continue
             if any((hit[1].st_dev, hit[1].st_ino) == (info.st_dev, info.st_ino)
                    for _other, hit in found):
@@ -20884,7 +20880,7 @@ def plan_misplaced_removal(
                     if PurePosixPath(str(other["dest"])).name.casefold()
                     == entry.name.casefold()
                     and ((not rel_dir and top_placed)
-                         or norm(_parent_of(str(other["dest"]))) == norm(rel_dir))]
+                         or _drive_key(_parent_of(str(other["dest"])), fold) == _drive_key(rel_dir, fold))]
             if not near:
                 continue
             remove.append({"dest": rel, "root": "", "sha1": sha1, "size": info.st_size,
@@ -20899,7 +20895,7 @@ def plan_misplaced_removal(
 def _left_by_hand(folder: Path, record: dict, fold: bool) -> list[str]:
     """The files in folder that no setup of its record names: placed by the
     user or another program, never touched, counted in the summary."""
-    named = {(item["dest"].casefold() if fold else item["dest"])
+    named = {_drive_key(item["dest"], fold)
              for setup in record["setups"].values() for item in setup.get("files") or []
              if str(item.get("root") or "") in ("", "data")}
     found = []
@@ -20907,7 +20903,7 @@ def _left_by_hand(folder: Path, record: dict, fold: bool) -> list[str]:
         dirs[:] = sorted(name for name in dirs if name != BACKUP_DIR)
         for name in sorted(names):
             rel = (Path(base) / name).relative_to(folder).as_posix()
-            if (rel.casefold() if fold else rel) not in named and name != ".nomedia":
+            if _drive_key(rel, fold) not in named and name != ".nomedia":
                 found.append(rel)
     return found
 
