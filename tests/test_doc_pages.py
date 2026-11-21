@@ -1032,7 +1032,7 @@ def unknown_commands(text: str) -> list[str]:
             wrong.extend(
                 f"{name} {option}"
                 for option in re.findall(r"(?<![\w-])(--[a-z][a-z0-9-]*)", command)
-                if f'"{option}"' not in source
+                if f'"{option}"' not in source and option not in declared_options(source)
             )
     return sorted(set(wrong))
 
