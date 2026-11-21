@@ -584,6 +584,15 @@ class ListXmlRecipes(unittest.TestCase):
             with open(output, encoding="utf-8") as handle:
                 self.assertEqual(json.load(handle)["upstream"], {"blobs": {"X.dat": "bbb"}})
 
+    def test_mame_tags_and_versions(self):
+        from scripts.scraper.romset_dat_importer import mame_tag, mame_version
+
+        self.assertEqual(mame_tag("0.289"), "mame0289")
+        self.assertEqual(mame_tag("0.78"), "mame0078")
+        self.assertEqual(mame_version("mame0289"), "0.289")
+        self.assertEqual(mame_version("mame78"), "78")
+        self.assertEqual(mame_version("master"), "master")
+
     def test_git_blob_sha_matches_git(self):
         # The values git hash-object gives for the empty blob and for "hi".
         self.assertEqual(git_blob_sha(b""), "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391")

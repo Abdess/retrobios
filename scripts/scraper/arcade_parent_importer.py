@@ -59,7 +59,7 @@ from core.upstream import parse_repo
 from .base_scraper import BlobMismatchError, download, fetch_verified_blob
 from .clex import DriverSourceError, blank_comments, call_args, call_span
 from .listxml import Opener, attrs, iter_elements, open_listxml, rom_members
-from .romset_dat_importer import MAME_LISTXML_URL, _api_json, fetch_pack
+from .romset_dat_importer import MAME_LISTXML_URL, _api_json, fetch_pack, mame_tag
 
 SCHEMA_VERSION = 1
 DEFAULT_OUTPUT = Path("games") / "arcade"
@@ -950,7 +950,7 @@ def import_profile(
     source: dict[str, object]
     openers: list[Opener]
     if kind == "listxml":
-        tag = "mame" + str(data["core_version"]).replace(".", "").zfill(4)
+        tag = mame_tag(str(data["core_version"]))
         if offline:
             pack = cache_dir / f"{tag}lx.zip"
             if not pack.is_file():

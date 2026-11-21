@@ -28,7 +28,7 @@ from model.safeparse import yaml_load
 
 from core import upstream
 
-from .base_scraper import download, fetch_github_latest_version
+from .base_scraper import fetch_github_latest_version
 from ._hash_merge import (
     _build_contents,
     _build_source_ref,
@@ -53,6 +53,7 @@ from .mame_devices import (
     source_path,
 )
 from .listxml import open_listxml
+from .romset_dat_importer import fetch_pack, mame_tag, mame_version
 from .sparse_clone import fresh_cache, remove_clone, sparse_clone
 from .mame_parser import parse_mame_source_tree
 from core.paths import EMULATORS_DIR, PLATFORMS_DIR, REPO_ROOT
@@ -105,15 +106,7 @@ def _get_version() -> str:
     version.cpp is generated at build time, not in the repo. A failed lookup
     raises: "unknown" was cached for a day and written as core_version.
     """
-    return _parse_version_tag(fetch_github_latest_version(MAME_REPO))
-
-
-def _parse_version_tag(tag: str) -> str:
-    prefix = "mame"
-    raw = tag.removeprefix(prefix) if tag.startswith(prefix) else tag
-    if raw.isdigit() and len(raw) >= 4:
-        return f"{raw[0]}.{raw[1:]}"
-    return raw
+    return mame_version(fetch_github_latest_version(MAME_REPO))
 
 
 # Profile discovery
@@ -219,7 +212,7 @@ def _fetch_hashes(force: bool) -> dict[str, Any]:
         tag = fetch_github_latest_version(MAME_REPO)
         commit = _sparse_clone(tag)
         bios_sets = parse_mame_source_tree(str(_CLONE_DIR))
-        version = _parse_version_tag(tag)
+        version = mame_version(tag)
         if not bios_sets:
             # An empty read was cached for a day and every profile entry
             # came out "out of scope", so nothing was refreshed and the
@@ -308,12 +301,7 @@ def fetch_release_listxml(version: str) -> Path:
 
     0.289 is the tag mame0289 and the asset mame0289lx.zip.
     """
-    from .romset_dat_importer import MAME_LISTXML_URL
-
-    tag = "mame" + version.replace(".", "")
-    listxml = REPO_ROOT / ".cache" / "dats" / f"{tag}lx.zip"
-    download(MAME_LISTXML_URL.format(tag=tag), listxml, skip_existing=True)
-    return listxml
+    return fetch_pack("mame", mame_tag(version), REPO_ROOT / ".cache" / "dats")[0]
 
 
 def release_profile(
@@ -334,8 +322,7 @@ def release_profile(
     are the release's own, and so is a set the release runs without: recel is
     undumped at 0.258 and dumped later.
     """
-    version = release.removeprefix("mame")
-    version = f"{version[0]}.{version[1:]}" if version.isdigit() else version
+    version = mame_version(release)
     known = {
         str(f.get("name")): f for f in reference.get("files") or []
         if f.get("category") == "bios_zip"
@@ -449,7 +436,7 @@ def _merge_devices(args: argparse.Namespace) -> None:
     profile = yaml_load(text) or {}
     with open_listxml(args.listxml) as stream:
         tag, devices, machines = scan_release(stream)
-    version = _parse_version_tag(tag)
+    version = mame_version(tag)
     if str(profile.get("core_version")) != version:
         raise RuntimeError(
             f"{args.listxml} is MAME {version}, mame.yml is pinned on "

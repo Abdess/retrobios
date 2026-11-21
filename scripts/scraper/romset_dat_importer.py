@@ -398,6 +398,22 @@ MAME_LISTXML_URL = (
     "https://github.com/mamedev/mame/releases/download/{tag}/{tag}lx.zip"
 )
 MAME_REPO = "mamedev/mame"
+
+
+def mame_tag(version: str) -> str:
+    """The mamedev/mame release tag of a version: 0.289 is mame0289."""
+    return "mame" + version.replace(".", "").zfill(4)
+
+
+def mame_version(tag: str) -> str:
+    """The version a mamedev/mame release tag names: mame0289 is 0.289.
+
+    Anything else (a branch, a commit) is returned as it is.
+    """
+    raw = tag.removeprefix("mame")
+    if raw.isdigit() and len(raw) >= 4:
+        return f"{raw[0]}.{raw[1:]}"
+    return raw
 FBNEO_API = "https://api.github.com/repos/libretro/FBNeo"
 
 
