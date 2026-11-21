@@ -26,6 +26,7 @@ from model.composition import GAME_DATA_TOPS, composition_tier
 from model.profiles import load_emulator_profiles
 from model import largefiles
 from release import assets as release_assets
+from tests.sources import script_source
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -413,87 +414,90 @@ class PreservedLargeFileEntries(unittest.TestCase):
     bytes.
     """
 
+    REGISTERED = {"bios/Sony/PS3/FW.PUP"}
+
+    def setUp(self):
+        from collection import releaseassets
+
+        self.releaseassets = releaseassets
+
+    def _kept(self, existing: dict, files: dict) -> dict:
+        return self.releaseassets.surviving_entries(
+            {"files": existing}, files, self.REGISTERED
+        )
+
+    def test_stale_entry_for_a_rescanned_path_is_dropped(self):
+        existing = {
+            "a" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"},
+            "b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"},
+        }
+        # The scan found the current revision at that path.
+        files = {"a" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
+        self.assertEqual(self._kept(existing, files), {})
+
+    def test_absent_large_file_is_still_preserved(self):
+        existing = {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
+        self.assertEqual(list(self._kept(existing, {})), ["b" * 40])
+
+    def test_a_file_sharing_only_the_name_is_not_preserved(self):
+        existing = {"c" * 40: {"name": "FW.PUP", "path": "bios/Sony/PSP/FW.PUP"}}
+        self.assertEqual(self._kept(existing, {}), {})
+
+    def test_a_second_revision_under_a_rescanned_path_is_dropped(self):
+        existing = {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
+        files = {"a" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
+        self.assertEqual(self._kept(existing, files), {})
+
+
+class RestoredReleaseAssets(unittest.TestCase):
+    """A kept entry's asset goes back to its registered path, whole or not at all."""
+
     def setUp(self):
         from collection import releaseassets
 
         self.releaseassets = releaseassets
         self._tmp = tempfile.TemporaryDirectory()
         self.tmp = Path(self._tmp.name)
-        self._cwd = os.getcwd()
-        os.chdir(self.tmp)
-        (self.tmp / ".gitignore").write_text("bios/Sony/PS3/FW.PUP\n")
+        self.cache = self.tmp / "cache" / "FW.PUP"
+        self.cache.parent.mkdir()
+        self.target = self.tmp / "bios/Sony/PS3/FW.PUP"
+        self.sha1 = hashlib.sha1(b"firmware").hexdigest()
         self._real_fetch = largefiles.fetch_large_file
-        releaseassets.__dict__.pop("fetch_large_file", None)
+        self.asked: list[dict] = []
+
+        def fetch(*_a, **kwargs):
+            self.asked.append(kwargs)
+            return str(self.cache)
+
+        largefiles.fetch_large_file = fetch
 
     def tearDown(self):
-        os.chdir(self._cwd)
         largefiles.fetch_large_file = self._real_fetch
         self._tmp.cleanup()
 
-    def _write_db(self, entries: dict) -> str:
-        path = str(self.tmp / "database.json")
-        Path(path).write_text(json.dumps({"files": entries}))
-        return path
-
-    def test_stale_entry_for_a_rescanned_path_is_dropped(self):
-        largefiles.fetch_large_file = lambda *_a, **_k: None
-        db_path = self._write_db(
-            {
-                "a" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"},
-                "b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"},
-            }
+    def _restore(self, *, offline: bool = False) -> None:
+        entries = {self.sha1: {"name": "FW.PUP", "path": str(self.target)}}
+        self.releaseassets.restore_release_assets(
+            entries, {str(self.target)}, offline=offline
         )
-        # The scan found the current revision at that path.
-        files = {"a" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
-        count = self.releaseassets.preserve_large_file_entries(files, db_path)
-        self.assertEqual(count, 0)
-        self.assertEqual(list(files), ["a" * 40])
-
-    def test_absent_large_file_is_still_preserved(self):
-        largefiles.fetch_large_file = lambda *_a, **_k: None
-        db_path = self._write_db(
-            {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
-        )
-        files: dict = {}
-        count = self.releaseassets.preserve_large_file_entries(files, db_path)
-        self.assertEqual(count, 1)
-        self.assertIn("b" * 40, files)
 
     def test_a_fetched_asset_returns_to_its_registered_path(self):
-        cache = self.tmp / "cache" / "FW.PUP"
-        cache.parent.mkdir()
-        cache.write_bytes(b"firmware")
-        largefiles.fetch_large_file = lambda *_a, **_k: str(cache)
-        sha1 = hashlib.sha1(b"firmware").hexdigest()
-        db_path = self._write_db(
-            {sha1: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
-        )
-        files: dict = {}
-        count = self.releaseassets.preserve_large_file_entries(files, db_path)
-        self.assertEqual(count, 1)
-        self.assertEqual(files[sha1]["path"], "bios/Sony/PS3/FW.PUP")
-        self.assertEqual((self.tmp / "bios/Sony/PS3/FW.PUP").read_bytes(), b"firmware")
+        self.cache.write_bytes(b"firmware")
+        self._restore()
+        self.assertEqual(self.target.read_bytes(), b"firmware")
+
+    def test_offline_is_passed_to_the_fetch(self):
+        self.cache.write_bytes(b"firmware")
+        self._restore(offline=True)
+        self.assertEqual([kwargs["offline"] for kwargs in self.asked], [True])
 
     def test_a_cached_copy_with_other_bytes_is_not_restored(self):
-        cache = self.tmp / "cache" / "FW.PUP"
-        cache.parent.mkdir()
-        cache.write_bytes(b"replaced")
-        largefiles.fetch_large_file = lambda *_a, **_k: str(cache)
-        sha1 = hashlib.sha1(b"firmware").hexdigest()
-        db_path = self._write_db(
-            {sha1: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
-        )
-        self.releaseassets.preserve_large_file_entries({}, db_path)
-        self.assertEqual(list((self.tmp / "bios/Sony/PS3").iterdir()), [])
+        self.cache.write_bytes(b"replaced")
+        self._restore()
+        self.assertEqual(list(self.target.parent.iterdir()), [])
 
     def test_an_interrupted_restore_leaves_no_file_behind(self):
-        cache = self.tmp / "cache" / "FW.PUP"
-        cache.parent.mkdir()
-        cache.write_bytes(b"firmware")
-        largefiles.fetch_large_file = lambda *_a, **_k: str(cache)
-        db_path = self._write_db(
-            {hashlib.sha1(b"firmware").hexdigest(): {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
-        )
+        self.cache.write_bytes(b"firmware")
 
         def interrupted(_src, dst, *_a, **_k):
             Path(dst).write_bytes(b"firm")
@@ -501,31 +505,21 @@ class PreservedLargeFileEntries(unittest.TestCase):
 
         with mock.patch.object(largefiles.shutil, "copy2", interrupted), \
                 self.assertRaises(KeyboardInterrupt):
-            self.releaseassets.preserve_large_file_entries({}, db_path)
-        directory = self.tmp / "bios/Sony/PS3"
-        self.assertEqual(list(directory.iterdir()), [])
+            self._restore()
+        self.assertEqual(list(self.target.parent.iterdir()), [])
 
-    def test_a_file_sharing_only_the_name_is_not_preserved(self):
-        largefiles.fetch_large_file = lambda *_a, **_k: "/cache/large/FW.PUP"
-        db_path = self._write_db(
-            {"c" * 40: {"name": "FW.PUP", "path": "bios/Sony/PSP/FW.PUP"}}
-        )
-        files: dict = {}
-        self.assertEqual(
-            self.releaseassets.preserve_large_file_entries(files, db_path), 0
-        )
-        self.assertEqual(files, {})
 
-    def test_a_second_revision_under_a_rescanned_path_is_dropped(self):
-        largefiles.fetch_large_file = lambda *_a, **_k: "/cache/large/FW.PUP"
-        db_path = self._write_db(
-            {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
-        )
-        files = {"a" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
-        self.assertEqual(
-            self.releaseassets.preserve_large_file_entries(files, db_path), 0
-        )
-        self.assertEqual(list(files), ["a" * 40])
+class TheOfflinePipelineDownloadsNoAsset(unittest.TestCase):
+    """generate_db had no --offline: pipeline --offline step 1 downloaded a
+    registered asset missing from .cache/large/ to restore it."""
+
+    def test_the_database_step_passes_offline(self):
+        source = script_source("pipeline.py")
+        self.assertIn('db_cmd.append("--offline")', source)
+
+    def test_generate_db_hands_offline_to_the_restore(self):
+        source = script_source("generate_db.py")
+        self.assertIn("offline=args.offline", source)
 
 
 class ReleaseAssetNames(unittest.TestCase):

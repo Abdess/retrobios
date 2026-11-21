@@ -11,14 +11,38 @@ from collection.declared import declarations
 from collection.hashcache import CACHE_FILE, load_cache, save_cache
 from collection.indexes import database_indexes
 from collection.record import database_record, record_retired, write_database
-from collection.releaseassets import preserve_large_file_entries
+from collection.releaseassets import (
+    DatabaseUnreadable,
+    load_gitignored_large_files,
+    read_database,
+    restore_release_assets,
+    surviving_entries,
+)
 from collection.scan import scan_bios_dir
 from model import retired
 from model.dumpcatalog import annotate_provenance, load_provenance_snapshots
 
+# Database entries name paths relative to the working directory, and so does
+# the registry of release assets beside them.
+GITIGNORE = Path(".gitignore")
+
+
+def preserve_release_assets(files: dict, db_path: str, *, offline: bool) -> int:
+    """Keep the entries of release assets the scan missed, their files restored, and count them."""
+    registered = load_gitignored_large_files(GITIGNORE)
+    if not registered:
+        return 0
+    existing_db = read_database(db_path)
+    if existing_db is None:
+        return 0
+    kept = surviving_entries(existing_db, files, registered)
+    restore_release_assets(kept, registered, offline=offline)
+    files.update(kept)
+    return len(kept)
+
 
 def generate(args: argparse.Namespace) -> int:
-    """Scan bios/ and write the database, 1 when a declared source cannot be read."""
+    """Scan bios/ and write the database, 1 when a declared source or the old database cannot be read."""
     bios_dir = Path(args.bios_dir)
 
     # A forced run rehashes every file but keeps the previous digests to
@@ -32,7 +56,11 @@ def generate(args: argparse.Namespace) -> int:
         print("Warning: No BIOS files found", file=sys.stderr)
 
     # Preserve entries for large files stored as release assets (.gitignore)
-    preserved = preserve_large_file_entries(files, args.output)
+    try:
+        preserved = preserve_release_assets(files, args.output, offline=args.offline)
+    except DatabaseUnreadable as exc:
+        print(exc, file=sys.stderr)
+        return 1
     if preserved:
         print(f"  Preserved {preserved} large file entries from existing database")
 

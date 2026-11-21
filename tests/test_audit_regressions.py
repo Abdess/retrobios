@@ -3710,23 +3710,46 @@ class AnUnreadableDatabaseStopsTheScan(unittest.TestCase):
     manifests."""
 
     def test_a_corrupt_database_is_not_an_empty_one(self):
-        from unittest import mock
-
         from collection import releaseassets
 
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "database.json"
             path.write_text("<<<<<<< HEAD\n{}\n")
-            with mock.patch.object(releaseassets, "load_gitignored_large_files",
-                                   return_value={"bios/big.bin"}):
-                with self.assertRaises(SystemExit):
-                    releaseassets.preserve_large_file_entries({}, str(path))
-                self.assertEqual(
-                    releaseassets.preserve_large_file_entries(
-                        {}, str(Path(directory) / "absent.json")
-                    ),
-                    0,
-                )
+            with self.assertRaises(releaseassets.DatabaseUnreadable) as caught:
+                releaseassets.read_database(str(path))
+            self.assertIn("is not valid JSON", str(caught.exception))
+            self.assertIsNone(
+                releaseassets.read_database(str(Path(directory) / "absent.json"))
+            )
+
+    def test_the_build_exits_1_on_it(self):
+        import argparse
+        import io
+        from contextlib import redirect_stderr, redirect_stdout
+        from unittest import mock
+
+        from collection import run
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "bios").mkdir()
+            output = root / "database.json"
+            output.write_text("<<<<<<< HEAD\n{}\n")
+            args = argparse.Namespace(
+                bios_dir=str(root / "bios"), force=True, output=str(output),
+                offline=True, platforms_dir=str(root), emulators_dir=str(root),
+                provenance_dir=str(root),
+            )
+            err = io.StringIO()
+            with mock.patch.object(run, "load_gitignored_large_files",
+                                   return_value={"bios/big.bin"}), \
+                    mock.patch.object(run, "load_cache", return_value={}), \
+                    mock.patch.object(run, "save_cache") as saved, \
+                    redirect_stdout(io.StringIO()), redirect_stderr(err):
+                self.assertEqual(run.generate(args), 1)
+            self.assertIn("is not valid JSON", err.getvalue())
+            saved.assert_not_called()
+            self.assertTrue(output.read_text().startswith("<<<<<<<"))
 
 
 class TheZipIndexCacheKnowsItsInputs(unittest.TestCase):

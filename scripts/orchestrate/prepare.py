@@ -12,7 +12,7 @@ from orchestrate.labels import STEP_LABELS, skip_notice
 from orchestrate.results import SKIPPED
 
 
-def database_steps(results: dict) -> bool:
+def database_steps(args: argparse.Namespace, results: dict) -> bool:
     """Steps 0 to 1c: schemas, database, dump catalogs, romset recipes."""
     all_ok = True
     # Step 0: the schema check PR validation runs. Without it a profile with
@@ -35,19 +35,20 @@ def database_steps(results: dict) -> bool:
         results["validate_schemas"] = ok
         all_ok = all_ok and ok
 
-    # Step 1: Generate database
-    ok, _ = runner.run(
-        [
-            sys.executable,
-            "scripts/generate_db.py",
-            "--force",
-            "--bios-dir",
-            "bios",
-            "--output",
-            "database.json",
-        ],
-        STEP_LABELS["generate_db"],
-    )
+    # Step 1: Generate database. Offline, a release asset missing from
+    # .cache/large/ is not downloaded to restore it.
+    db_cmd = [
+        sys.executable,
+        "scripts/generate_db.py",
+        "--force",
+        "--bios-dir",
+        "bios",
+        "--output",
+        "database.json",
+    ]
+    if args.offline:
+        db_cmd.append("--offline")
+    ok, _ = runner.run(db_cmd, STEP_LABELS["generate_db"])
     results["generate_db"] = ok
     if not ok:
         print("\nDatabase generation failed, aborting.")

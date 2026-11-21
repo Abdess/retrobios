@@ -40,6 +40,11 @@ def main() -> int:
         default=DEFAULT_PROVENANCE_DIR,
         help="Directory with dump-catalog snapshots",
     )
+    parser.add_argument(
+        "--offline",
+        action="store_true",
+        help="Restore release assets from the local cache only, never download",
+    )
     args = parser.parse_args()
     require_directory(args.bios_dir)
     with repository_output_lock(args.output):

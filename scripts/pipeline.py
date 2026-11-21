@@ -147,7 +147,7 @@ def main() -> None:
     total_start = time.monotonic()
     results = StepResults(total_start)
 
-    all_ok = database_steps(results)
+    all_ok = database_steps(args, results)
     all_ok = refresh_steps(args, results) and all_ok
     all_ok = truth_steps(args, results) and all_ok
     ok, verify_output, destinations_file = verify_steps(args, results, held)

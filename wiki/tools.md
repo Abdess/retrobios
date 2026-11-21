@@ -140,7 +140,8 @@ alone, run `python scripts/check_buildbot_system.py`.
 
 Scan `bios/` and build `database.json` with multi-indexed lookups.
 Large files in `.gitignore` are preserved from the existing database
-and downloaded from GitHub release assets if not cached locally.
+and downloaded from GitHub release assets if not cached locally
+(`--offline` restores them from the cache only, as the offline pipeline does).
 
 ```bash
 python scripts/generate_db.py --force --bios-dir bios --output database.json
@@ -1428,7 +1429,7 @@ Further options, by script:
 | `download.py` | `--list`, `--info <platform>` shows a pack's file name, size and parts without downloading |
 | `export_native.py` | `--truth-dir`, `--upstream-dir` (where the platforms' own files are cached) |
 | `find_pinned_revision.py` | `--repo URL --path FILE --md5 HASH`, `--write PATH`, `--cache-dir` |
-| `generate_db.py` | `--provenance-dir` (dump-catalog snapshots joined into the database) |
+| `generate_db.py` | `--provenance-dir` (dump-catalog snapshots joined into the database), `--offline` (release assets restored from `.cache/large/` only, never downloaded) |
 | `generate_site.py` | `--site-dir` (the Starlight project, `website/` by default), `--docs-dir` (the pages, `src/content/docs` of that project by default) |
 | `mame_ref_audit.py` | `--write` points each stale ref at the line declaring its set, `--offline`, `--cache-dir` |
 | `migrate.py` | `--dry-run`, `--include-branches` also reads BIOS files from every remote branch |
