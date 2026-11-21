@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections import Counter
 
+from core.text import count_text
 from packs.verdicts import Severity, Status
 from resolve.categories import BIOS
 from resolve.nativemode import reads_file_contents
@@ -205,7 +206,7 @@ def _print_undeclared_entry(
     name = u["path"] if u["name"] in repeated and u.get("path") else u["name"]
     arc_count = u.get("archive_file_count")
     if arc_count:
-        name_label = f"{name} ({arc_count} file{'s' if arc_count != 1 else ''})"
+        name_label = f"{name} ({count_text(arc_count, 'file')})"
     else:
         name_label = name
     if u.get("alternatives") and not u.get("in_repo"):

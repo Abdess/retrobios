@@ -8,6 +8,8 @@ Usage:
     python scripts/cross_reference.py
     python scripts/cross_reference.py --emulator dolphin
     python scripts/cross_reference.py --json
+    python scripts/cross_reference.py --platform retroarch --target switch
+    python scripts/cross_reference.py --all --target switch
 """
 
 from __future__ import annotations
@@ -20,6 +22,7 @@ from dataclasses import dataclass
 
 sys.path.insert(0, os.path.dirname(__file__))
 from core.cli import add_repo_inputs
+from core.text import count_text
 from model.cliargs import platform_arg, list_emulator_profiles, require_platform
 from model.profiles import ProfileSelectionError, load_emulator_profiles, select_emulator_profiles
 from model.database import load_database
@@ -60,8 +63,7 @@ def print_launcher_unproven(rows: list[dict]) -> None:
     if not rows:
         return
     platforms = sorted({r["platform"] for r in rows})
-    noun = "platform" if len(platforms) == 1 else "platforms"
-    print(f"\nLauncher records unproven: {len(rows)} across {len(platforms)} {noun}")
+    print(f"\nLauncher records unproven: {len(rows)} across {count_text(len(platforms), 'platform')}")
     for platform in platforms:
         print(f"\n{platform}")
         for row in (r for r in rows if r["platform"] == platform):
@@ -79,13 +81,13 @@ def print_launcher_reads(rows: list[dict]) -> None:
     unsourceable = [r for r in rows if r.get("unsourceable")]
     rows = [r for r in rows if not r.get("unsourceable")]
     platforms = sorted({r["platform"] for r in rows})
-    noun = "platform" if len(platforms) == 1 else "platforms"
-    print(f"\nLauncher reads, not held: {len(rows)} names across {len(platforms)} {noun}")
+    print(f"\nLauncher reads, not held: {count_text(len(rows), 'name')} "
+          f"across {count_text(len(platforms), 'platform')}")
     for platform in platforms:
         print(f"\n{platform}")
         for row in (r for r in rows if r["platform"] == platform):
             first = row["readers"][0]
-            more = f" (+{len(row['readers']) - 1} records)" if len(row["readers"]) > 1 else ""
+            more = f" (+{count_text(len(row['readers']) - 1, 'record')})" if len(row["readers"]) > 1 else ""
             casing = f", held as {row['held_as']}" if row.get("held_as") else ""
             print(
                 f"    {row['name']} [{', '.join(row['emulators'])}, {first['kind']}, "
@@ -94,10 +96,9 @@ def print_launcher_reads(rows: list[dict]) -> None:
     if not unsourceable:
         return
     platforms = sorted({r["platform"] for r in unsourceable})
-    noun = "platform" if len(platforms) == 1 else "platforms"
     print(
-        f"\nLauncher reads, unsourceable: {len(unsourceable)} names "
-        f"across {len(platforms)} {noun}"
+        f"\nLauncher reads, unsourceable: {count_text(len(unsourceable), 'name')} "
+        f"across {count_text(len(platforms), 'platform')}"
     )
     for row in unsourceable:
         print(
@@ -187,7 +188,15 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--platform", "-p", type=platform_arg, help="Restrict analysis to one platform's cores"
     )
-    parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
+    parser.add_argument(
+        "--all", action="store_true",
+        help="Analyze the emulators every platform runs (the default without --platform)",
+    )
+    parser.add_argument(
+        "--target", "-t",
+        help="Hardware target (e.g., switch, rpi4): with --platform, the cores built "
+        "for it there, otherwise the cores each platform with the target builds for it",
+    )
     parser.add_argument("--json", action="store_true", help="JSON output")
     parser.add_argument(
         "--list-emulators", action="store_true", help="List available emulators"
@@ -227,6 +236,86 @@ def _platform_scope(args: argparse.Namespace, profiles: dict[str, dict]) -> _Pla
         relevant,
         run_anywhere,
     )
+
+
+@dataclass(frozen=True)
+class _TreeScope:
+    """What a run compares: the profiles, the platforms whose lists and
+    launchers they are measured against (None for every platform), and the
+    standalone layout of those platforms."""
+
+    profiles: dict[str, dict]
+    standalone_cores: set[str]
+    selected: list[str] | None
+    platform: _PlatformScope | None = None
+
+
+def _target_platforms_scope(args: argparse.Namespace, profiles: dict[str, dict]) -> _TreeScope:
+    """--target without --platform: every platform that has the target, each
+    with the cores it builds for it, the way verify and generate_pack read
+    --all --target. A target no platform has ends the run."""
+    from model.targets import target_scope
+    from resolve.cores import resolve_platform_cores
+    from resolve.standalone import merged_standalone_set
+
+    cache, kept = target_scope(
+        list_registered_platforms(args.platforms_dir), args.target, args.platforms_dir,
+        is_all=True,
+    )
+    configs = {name: load_platform_config(name, args.platforms_dir) for name in kept}
+    relevant: set[str] = set()
+    for name, config in configs.items():
+        relevant |= set(resolve_platform_cores(config, profiles, target_cores=cache.get(name)))
+    return _TreeScope(
+        {k: v for k, v in profiles.items() if k in relevant},
+        merged_standalone_set(configs.values()),
+        kept,
+    )
+
+
+def _tree_scope(args: argparse.Namespace, profiles: dict[str, dict]) -> _TreeScope:
+    """The scope --platform, --target or neither asks for."""
+    if args.platform:
+        scope = _platform_scope(args, profiles)
+        return _TreeScope(scope.profiles, scope.standalone_cores, [args.platform], scope)
+    if args.target:
+        return _target_platforms_scope(args, profiles)
+    # The tree as every platform runs it: a profile some platform runs
+    # standalone keeps its standalone entries. Laid out as libretro only,
+    # eka2l1, dolphin and xenia-edge lost 133 files no platform declares.
+    from resolve.standalone import merged_standalone_set
+
+    return _TreeScope(
+        profiles,
+        merged_standalone_set(
+            load_platform_config(name, args.platforms_dir)
+            for name in list_registered_platforms(args.platforms_dir)
+        ),
+        None,
+    )
+
+
+def _refuse_empty_scope(args: argparse.Namespace, emulator: str | None, tree: _TreeScope) -> None:
+    """Why the scope holds no profile, said before ending the run."""
+    platform_scope = tree.platform
+    if (emulator and args.target and platform_scope is not None
+            and emulator in platform_scope.run_anywhere):
+        raise SystemExit(
+            f"ERROR: {emulator} is not built for {args.platform}'s "
+            f"{args.target} target; {args.platform} runs it elsewhere "
+            f"(drop --target to see its files)"
+        )
+    if emulator and args.platform:
+        raise SystemExit(f"ERROR: {emulator} is not run by {args.platform}")
+    if emulator:
+        raise SystemExit(
+            f"ERROR: no platform with the {args.target} target builds {emulator} "
+            f"for it (drop --target to see its files)"
+        )
+    if args.target and not args.platform:
+        print(f"No platform runs a profiled emulator on {args.target}.", file=sys.stderr)
+    else:
+        print(f"{args.platform or 'The tree'} runs no profiled emulator.", file=sys.stderr)
 
 
 def _launcher_rows(
@@ -274,12 +363,14 @@ def main() -> None:
     if args.list_emulators:
         ignored = [flag for flag, on in (
             ("--emulator", args.emulator), ("--platform", args.platform),
-            ("--target", args.target), ("--json", args.json),
+            ("--all", args.all), ("--target", args.target), ("--json", args.json),
         ) if on]
         if ignored:
             parser.error(f"--list-emulators does not apply {', '.join(ignored)}")
         list_emulator_profiles(args.emulators_dir)
         return
+    if args.platform and args.all:
+        parser.error("--platform and --all are mutually exclusive")
     if args.platform:
         require_platform(args.platform, args.platforms_dir)
 
@@ -308,44 +399,18 @@ def main() -> None:
             raise SystemExit(f"ERROR: {exc}") from None
         profiles = {k: v for k, v in profiles.items() if k == emulator}
 
-    if args.target and not args.platform:
-        parser.error("--target requires --platform")
-
-    platform_scope: _PlatformScope | None = None
-    standalone_cores: set[str] = set()
-    if args.platform:
-        platform_scope = _platform_scope(args, profiles)
-        profiles = platform_scope.profiles
-        standalone_cores = platform_scope.standalone_cores
-    else:
-        # The tree as every platform runs it: a profile some platform runs
-        # standalone keeps its standalone entries. Laid out as libretro only,
-        # eka2l1, dolphin and xenia-edge lost 133 files no platform declares.
-        from resolve.standalone import merged_standalone_set
-
-        standalone_cores = merged_standalone_set(
-            load_platform_config(name, args.platforms_dir)
-            for name in list_registered_platforms(args.platforms_dir)
-        )
-
+    tree = _tree_scope(args, profiles)
+    profiles = tree.profiles
+    platform_scope = tree.platform
     if not profiles:
-        if (emulator and args.target and platform_scope is not None
-                and emulator in platform_scope.run_anywhere):
-            raise SystemExit(
-                f"ERROR: {emulator} is not built for {args.platform}'s "
-                f"{args.target} target; {args.platform} runs it elsewhere "
-                f"(drop --target to see its files)"
-            )
-        if emulator:
-            raise SystemExit(f"ERROR: {emulator} is not run by {args.platform}")
-        print(f"{args.platform or 'The tree'} runs no profiled emulator.", file=sys.stderr)
+        _refuse_empty_scope(args, emulator, tree)
         return
 
-    selected = [args.platform] if args.platform else None
+    selected = tree.selected
     db = load_database(args.db)
     declared, global_scope = global_report_scope(
         platform_configs(args.platforms_dir, selected), db)
-    global_scope["standalone_cores"] = standalone_cores
+    global_scope["standalone_cores"] = tree.standalone_cores
     data_names = build_supplemental_index()
     report = cross_reference(
         profiles, declared, db, data_names, **global_scope,
@@ -373,6 +438,8 @@ def main() -> None:
         scope = emulator
     elif args.platform:
         scope = f"the emulators {args.platform} runs"
+    elif args.target:
+        scope = f"the emulators built for {args.target}"
     else:
         scope = "all emulators"
     print_report(report, scope, show_clean=bool(args.emulator))

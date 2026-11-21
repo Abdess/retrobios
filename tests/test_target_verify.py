@@ -213,6 +213,59 @@ class APlatformWithoutTheSystemIsOutOfScope(unittest.TestCase):
         self.assertNotIn("misterfpga", report)
 
 
+class CrossReferenceReadsTheTargetAcrossPlatforms(unittest.TestCase):
+    """cross_reference refused --target without --platform, where verify and
+    generate_pack read --all --target as every platform with the target,
+    each narrowed to the cores it builds for it."""
+
+    def test_the_scope_is_the_union_of_each_platforms_target_cores(self):
+        import argparse
+
+        import cross_reference
+        from model.platforms import load_platform_config
+        from model.profiles import load_emulator_profiles
+        from model.registry import list_registered_platforms
+        from resolve.cores import resolve_platform_cores
+
+        platforms_dir = str(REPO_ROOT / "platforms")
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        args = argparse.Namespace(platform=None, target="switch", platforms_dir=platforms_dir)
+        with contextlib.redirect_stderr(io.StringIO()):
+            tree = cross_reference._tree_scope(args, profiles)
+            cache, kept = build_target_cores_cache(
+                list_registered_platforms(platforms_dir), "switch", platforms_dir, is_all=True,
+            )
+        self.assertEqual(tree.selected, kept)
+        self.assertIsNone(tree.platform)
+        expected: set[str] = set()
+        for name in kept:
+            expected |= set(resolve_platform_cores(
+                load_platform_config(name, platforms_dir), profiles, target_cores=cache[name],
+            ))
+        self.assertEqual(set(tree.profiles), expected)
+        self.assertLess(len(tree.profiles), len(profiles))
+
+    def test_the_command_line(self):
+        import json
+        import subprocess
+
+        def run(*argv: str) -> subprocess.CompletedProcess:
+            return subprocess.run(
+                [sys.executable, "scripts/cross_reference.py", *argv],
+                cwd=REPO_ROOT, capture_output=True, text=True, check=False, timeout=600,
+            )
+
+        proc = run("--all", "--target", "switch", "--emulator", "snes9x", "--json")
+        self.assertEqual(proc.returncode, 0, proc.stderr[-500:])
+        self.assertIn("snes9x", json.loads(proc.stdout))
+        proc = run("--target", "switch", "--emulator", "xemu")
+        self.assertEqual(proc.returncode, 1, proc.stderr[-500:])
+        self.assertIn("no platform with the switch target builds xemu", proc.stderr)
+        proc = run("--all", "--target", "swtich")
+        self.assertEqual(proc.returncode, 1, proc.stderr[-500:])
+        self.assertIn("Close matches: switch", proc.stderr)
+
+
 class TheSplitDirectoryReadsThePackStem(unittest.TestCase):
     """The split prefix was assembled by hand: a version 'release/1.22' made
     'RetroArch_release/1.22_Split', a nested directory the check never

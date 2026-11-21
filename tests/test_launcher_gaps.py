@@ -208,7 +208,7 @@ class LauncherGapTest(unittest.TestCase):
             print_launcher_reads(list(self._rows().values()))
         text = out.getvalue()
         self.assertIn("Launcher reads, not held: 3 names", text)
-        self.assertIn("Launcher reads, unsourceable: 1 names across 1 platform", text)
+        self.assertIn("Launcher reads, unsourceable: 1 name across 1 platform", text)
         self.assertIn("gaptest: user.sf2 [setemu, gen/setemu.py:1]: user supplied, no canonical file",
                       text)
         held_part = text.split("Launcher reads, unsourceable")[0]

@@ -884,7 +884,7 @@ def _version_said(value: object, basis: dict, profile: dict, mode: str = "") -> 
         distance = int(basis.get("distance") or 0)
         if not distance:
             return f"{value}, the tag at this revision"
-        return f"{value}, {distance} commit{'s' if distance != 1 else ''} after tag {shown(basis.get('tag'))}"
+        return f"{value}, {count_text(distance, 'commit')} after tag {shown(basis.get('tag'))}"
     if kind == "package":
         return f"{value}, read from {basis.get('artifact')}"
     if kind == "unverified":

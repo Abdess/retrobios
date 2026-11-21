@@ -321,7 +321,11 @@ python scripts/cross_reference.py --emulator dolphin  # single
 python scripts/cross_reference.py --emulator dolphin --json  # JSON output
 python scripts/cross_reference.py --platform batocera        # single platform
 python scripts/cross_reference.py --platform retroarch --target switch
+python scripts/cross_reference.py --all --target switch    # every platform with the target
 ```
+
+Without `--platform`, `--target` keeps each platform that has the target,
+narrowed to the cores it builds for it, as `verify.py --all --target` does.
 
 ### truth.py, generate_truth.py, diff_truth.py
 
