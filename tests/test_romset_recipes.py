@@ -512,12 +512,26 @@ class ListXmlRecipes(unittest.TestCase):
             db.write_text(json.dumps({"files": {
                 str(i): {"path": str(path)} for i, path in enumerate((plain, variant, loose))
             }}), encoding="utf-8")
-            names, by_members = collection_archives(str(db))
+            names, by_members = collection_archives(json.loads(db.read_text(encoding="utf-8")))
         self.assertEqual(names, {"set.zip", "other.zip"})
         self.assertEqual(
             by_members,
             {member_list([{"name": "a.rom", "crc32": _crc(ROM_A)}]): {"set.zip", "other.zip"}},
         )
+
+    def test_a_missing_database_stops_both_importers(self):
+        """A mistyped --db ended on a traceback in one importer and passed
+        the other's absent-set check without reading anything."""
+        from argparse import Namespace
+
+        from model.database import DatabaseUnreadable
+        from scripts.scraper import arcade_parent_importer, romset_dat_importer
+
+        args = Namespace(all=False, db=str(TMP_ROOT / "nosuch.json"))
+        with self.assertRaises(DatabaseUnreadable):
+            romset_dat_importer._selection(args)
+        with self.assertRaises(DatabaseUnreadable):
+            arcade_parent_importer.collection_names(args.db)
 
     def test_a_set_holding_a_missing_catalog_dump_is_kept(self):
         """fm7740sx carries three No-Intro dumps the collection lacks. No
@@ -541,8 +555,7 @@ class ListXmlRecipes(unittest.TestCase):
                 {"name": "held.rom", "crc32": "1", "size": 4, "sha1": "a" * 40},
                 {"name": "lacked.rom", "crc32": "2", "size": 4, "sha1": "b" * 40},
             ]}))
-            (root / "db.json").write_text(json.dumps({"files": {"a" * 40: {}}}))
-            targets = catalog_targets(str(root / "prov"), str(root / "db.json"))
+            targets = catalog_targets(str(root / "prov"), {"files": {"a" * 40: {}}})
         self.assertEqual(targets, {("00000002", 4): {"b" * 40}})
 
     def test_upstream_blobs_are_recorded_and_replaced(self):

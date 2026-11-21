@@ -53,7 +53,7 @@ from typing import IO
 from model.database import load_database
 from core.artifacts import write_if_changed
 from model.profiles import load_emulator_profiles
-from core.cli import run_cli
+from core.cli import add_repo_inputs, run_cli
 from core.hashing import compute_hashes
 from core.upstream import parse_repo
 from .base_scraper import download
@@ -1113,10 +1113,8 @@ def declared_archives(profile: dict) -> set[str]:
     return names
 
 
-def collection_names(database: Path) -> set[str]:
-    if not database.is_file():
-        return set()
-    db = load_database(str(database))
+def collection_names(database: str) -> set[str]:
+    db = load_database(database)
     return {n.lower() for n in db.get("indexes", {}).get("by_name", {})}
 
 
@@ -1134,10 +1132,7 @@ def main() -> int:
     which.add_argument("--profile", action="append", choices=sorted(PROFILES),
                        help="profile to import (repeatable)")
     which.add_argument("--all", action="store_true", help="every profile with an arcade source")
-    parser.add_argument("--emulators-dir", default="emulators",
-                        help="profiles whose BIOS sets are read (default emulators)")
-    parser.add_argument("--db", default="database.json",
-                        help="collection index, to name BIOS sets the collection lacks")
+    add_repo_inputs(parser, "emulators", "db")
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT,
                         help=f"where the parent maps are written (default {DEFAULT_OUTPUT})")
     parser.add_argument("--cache-dir", type=Path, default=DEFAULT_CACHE,
@@ -1147,7 +1142,7 @@ def main() -> int:
     args = parser.parse_args()
 
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
-    names = collection_names(Path(args.db))
+    names = collection_names(args.db)
     failed = False
     for profile in sorted(PROFILES) if args.all else args.profile:
         if profile not in profiles:
@@ -1167,7 +1162,7 @@ def main() -> int:
         roots = bios_roots(doc)
         declared = declared_archives(profiles[profile])
         undeclared = [r for r in roots if f"{r}.zip" not in declared]
-        absent = [r for r in roots if names and f"{r}.zip" not in names]
+        absent = [r for r in roots if f"{r}.zip" not in names]
         print(
             f"{profile}: {counts['games']} games, {counts['games_with_bios']} with a BIOS set, "
             f"{counts['bios_roots_used']} BIOS sets used, "

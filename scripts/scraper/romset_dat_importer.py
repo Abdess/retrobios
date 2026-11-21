@@ -32,7 +32,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import re
 import sys
 import urllib.parse
 import zipfile
@@ -46,7 +45,9 @@ from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
 from core.cli import add_repo_inputs, run_cli
+from model.database import load_database
 from model.dumpcatalog import build_snapshot, load_provenance_snapshots, write_snapshot
+from resolve.localfile import variant_base_name
 from .base_scraper import download, fetch_github_latest_version, github_json
 from .listxml import Opener, iter_elements, open_listxml, rom_members, xml_members
 from .logiqx_parser import LogiqxDat, parse_logiqx
@@ -84,9 +85,6 @@ Targets = dict[tuple[str, int], set[str]]
 MemberList = tuple[tuple[str, str], ...]
 ByMembers = dict[MemberList, set[str]]
 
-_VARIANT_TAG = re.compile(r"\.[0-9a-f]{8}$")
-
-
 def member_list(members: list[dict]) -> MemberList:
     """Sorted (name, crc32) of a recipe, the key an archive is matched on."""
     return tuple(
@@ -94,7 +92,7 @@ def member_list(members: list[dict]) -> MemberList:
     )
 
 
-def collection_archives(db_path: str) -> tuple[set[str], ByMembers]:
+def collection_archives(db: dict) -> tuple[set[str], ByMembers]:
     """Names and member lists of every archive the collection holds.
 
     A set the collection keeps under another name is still that set:
@@ -102,13 +100,11 @@ def collection_archives(db_path: str) -> tuple[set[str], ByMembers]:
     ``votrsc01a``. Matched by name alone, neither ever entered the snapshot.
     A ``.variants/`` copy stands for the name its tag is cut from.
     """
-    with open(db_path, encoding="utf-8") as handle:
-        files = json.load(handle).get("files", {})
     names: set[str] = set()
     by_members: ByMembers = {}
-    for entry in files.values():
+    for entry in db.get("files", {}).values():
         path = Path(entry.get("path", ""))
-        name = _VARIANT_TAG.sub("", path.name)
+        name = variant_base_name(path.name)
         if not name.lower().endswith(".zip") or not path.is_file():
             continue
         try:
@@ -160,15 +156,14 @@ def named_entries(
     ]
 
 
-def catalog_targets(provenance_dir: str, db_path: str) -> Targets:
+def catalog_targets(provenance_dir: str, db: dict) -> Targets:
     """(crc32, size) -> sha1 of each dump-catalog entry the collection lacks.
 
     fm7740sx carries DICROM.rom, EXTSUB.rom and KANJI2.rom, which No-Intro
     lists and the collection misses: filtered on archive names alone, the
     snapshot never held the set and the missing report named no source.
     """
-    with open(db_path, encoding="utf-8") as handle:
-        held = set(json.load(handle).get("files", {}))
+    held = set(db.get("files", {}))
     targets: Targets = {}
     for snapshot in load_provenance_snapshots(provenance_dir).values():
         for entry in snapshot.get("entries", []):
@@ -540,7 +535,7 @@ def _parser() -> argparse.ArgumentParser:
         "--output", default="",
         help="snapshot to write (default: recipes/<source>.json)",
     )
-    add_repo_inputs(parser, "emulators", "platforms")
+    add_repo_inputs(parser, "emulators", "platforms", "db")
     parser.add_argument(
         "--all", action="store_true", help="keep every set, not only referenced ones"
     )
@@ -548,10 +543,6 @@ def _parser() -> argparse.ArgumentParser:
         "--provenance-dir", default="provenance",
         help="dump catalogs whose missing entries keep the sets holding them "
              "(default: %(default)s)",
-    )
-    parser.add_argument(
-        "--db", default="database.json",
-        help="collection database the catalogs are compared with (default: %(default)s)",
     )
     parser.add_argument(
         "--dry-run", action="store_true",
@@ -572,9 +563,10 @@ class _Selection:
 def _selection(args: argparse.Namespace) -> _Selection:
     if args.all:
         return _Selection()
-    held, by_members = collection_archives(args.db)
+    db = load_database(args.db)
+    held, by_members = collection_archives(db)
     keep = relevant_archives(args.emulators_dir, args.platforms_dir) | held
-    targets = catalog_targets(args.provenance_dir, args.db)
+    targets = catalog_targets(args.provenance_dir, db)
     return _Selection(keep, targets, by_members)
 
 
