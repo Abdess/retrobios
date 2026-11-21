@@ -91,6 +91,13 @@ TRUTH = {
     },
 }
 
+# The profiles that name the runners: beetle_psx answers to the buildbot's
+# mednafen_psx, duckstation has a standalone build.
+PROFILES = {
+    "beetle_psx": {"type": "libretro", "cores": ["mednafen_psx"]},
+    "duckstation": {"type": "standalone + libretro"},
+}
+
 SCRAPED = {
     # The cores the platform runs, by its own names: an addition is written
     # with the runner that wants it.
@@ -2443,7 +2450,7 @@ class BatoceraExport(unittest.TestCase):
                 },
             }
         }
-        systems, report = build_native_model(truth, SCRAPED)
+        systems, report = build_native_model(truth, SCRAPED, PROFILES)
         (foreign,) = systems["nintendo-snes"].files
         self.assertTrue(foreign.foreign_system)
         own = next(fe for fe in systems["psx"].files if fe.name == "scph7001.bin")
@@ -2956,7 +2963,7 @@ class AnAdditionCarriesItsRunner(unittest.TestCase):
             {"name": "b.bin", "md5": "2" * 32, "_cores": ["duckstation"]},
             {"name": "c.bin", "md5": "3" * 32, "_cores": ["no-such-core"]},
         ]}}}
-        systems, _ = build_native_model(truth, scraped)
+        systems, _ = build_native_model(truth, scraped, PROFILES)
         runners = {fe.name: fe.runners for fe in systems["psx"].files}
         self.assertEqual(runners["a.bin"], [(False, "mednafen_psx")])
         self.assertEqual(runners["b.bin"], [(True, "duckstation")])

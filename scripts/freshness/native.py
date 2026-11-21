@@ -8,7 +8,7 @@ from collections.abc import Iterator
 from pathlib import Path
 
 from exporter import discover_exporters
-from exporter.native import StaleTruth, build_export, load_inputs
+from exporter.native import StaleTruth, build_export, export_profiles, load_inputs
 from exporter.originals import SOURCES_INDEX, SourcesIndexUnreadable, load_sources, source_key, wanted_sources
 from model.platforms import inheritance_chain
 from model.registry import list_registered_platforms
@@ -119,6 +119,7 @@ def check_native(
     except SourcesIndexUnreadable as exc:
         return [Finding("native", index.name, ERROR, detail=str(exc))]
     findings: list[Finding] = []
+    profiles = export_profiles()
     for name in list_registered_platforms(str(platforms_dir)):
         exporter_class = exporters.get(name)
         if not exporter_class:
@@ -129,7 +130,7 @@ def check_native(
             except StaleTruth as exc:
                 findings.append(Finding("native", name, STALE, detail=str(exc)))
                 continue
-            systems, _ = build_native_model(truth or {}, scraped)
+            systems, _ = build_native_model(truth or {}, scraped, profiles)
             wanted = wanted_sources(exporter_class(), systems, scraped)
             reason = native_cache_state(
                 wanted, cache_dir / name, recorded, index, _transcribed_at(platforms_dir, name)

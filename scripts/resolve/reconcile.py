@@ -13,14 +13,15 @@ grouping is rebuilt from the per-file native_system the scrapers record.
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
-
+from types import MappingProxyType
 
 from core.hashing import HASH_FIELDS, declared_hashes, parse_hash_list
 from model.profiles import profile_names
 from model.systems import norm_system_id
-from core.paths import REPO_ROOT
+
+_NO_PROFILES: Mapping[str, dict] = MappingProxyType({})
 
 
 def checked_hashes(entry: dict | None) -> dict | None:
@@ -715,9 +716,12 @@ class _TruthPass:
 def build_native_model(
     truth: dict,
     scraped: dict | None,
+    profiles: Mapping[str, dict] = _NO_PROFILES,
 ) -> tuple[dict[str, NativeSystem], Report]:
     """Rebuild the platform's systems, corrected by the truth.
 
+    `profiles` are the emulator profiles the truth was built from: they
+    name the platform's runner of each addition, and none means no runner.
     Returns the systems keyed by native id, in the platform's own order
     first and truth-only additions after, plus what changed.
     """
@@ -740,11 +744,13 @@ def build_native_model(
         tail = [fe for fe in system.files if fe.platform is None]
         system.files = head + search_order(tail)
 
-    _attach_runners(systems, scraped)
+    _attach_runners(systems, scraped, profiles)
     return systems, report
 
 
-def _attach_runners(systems: dict[str, NativeSystem], scraped: dict | None) -> None:
+def _attach_runners(
+    systems: dict[str, NativeSystem], scraped: dict | None, profiles: Mapping[str, dict]
+) -> None:
     """Name the cores behind each addition the way the platform names them.
 
     The platform lists its cores by its own names (Batocera's
@@ -756,7 +762,6 @@ def _attach_runners(systems: dict[str, NativeSystem], scraped: dict | None) -> N
     """
     if not scraped:
         return
-    from model.profiles import load_emulator_profiles
     from resolve.layout import runs_standalone
     from resolve.standalone import standalone_set
 
@@ -765,7 +770,6 @@ def _attach_runners(systems: dict[str, NativeSystem], scraped: dict | None) -> N
     standalone = {str(c) for c in scraped.get("standalone_cores") or []}
     # The build decision reads the tagged set (own builds, twins), as the
     # pack does. The runner's name is looked up among the plain names.
-    profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
     layout_set = standalone_set(scraped, profiles)
     for system in systems.values():
         for fe in system.files:

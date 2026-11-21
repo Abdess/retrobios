@@ -13,6 +13,7 @@ from pathlib import Path
 import yaml
 
 from core.artifacts import write_bytes_atomic, write_if_changed
+from core.paths import EMULATORS_DIR
 from core.text import count_text
 from core.ziptools import build_zip_contents_index
 from .base_exporter import BaseExporter
@@ -60,12 +61,12 @@ def _truth_sources(platforms_dir: str) -> tuple[dict, dict, dict | None]:
     """Registry, profiles and database, as generate_truth reads them."""
     registry = load_platform_registry(platforms_dir)
     db = load_database(TRUTH_DB) if Path(TRUTH_DB).exists() else None
-    return registry, _profiles(), db
+    return registry, export_profiles(), db
 
 
-def _profiles() -> dict[str, dict]:
+def export_profiles() -> dict[str, dict]:
     """The emulator profiles the truth and the exporters read."""
-    return load_emulator_profiles("emulators")
+    return load_emulator_profiles(EMULATORS_DIR)
 
 
 def current_truth(platform: str, config: dict, platforms_dir: str) -> dict:
@@ -118,8 +119,9 @@ def refresh_cache(
         truth, scraped = load_inputs(platform, truth_dir, platforms_dir)
     except StaleTruth as exc:
         return False, [str(exc)]
-    systems, _ = build_native_model(truth or {}, scraped)
-    exporter: BaseExporter = exporter_class(_profiles())
+    profiles = export_profiles()
+    systems, _ = build_native_model(truth or {}, scraped, profiles)
+    exporter: BaseExporter = exporter_class(profiles)
     wanted = wanted_sources(exporter, systems, scraped)
     off_pin = unpinned(wanted, scraped)
     if off_pin:
@@ -145,7 +147,7 @@ def doubled_in(scraped: dict | None, platforms_dir: str) -> list[dict]:
         return []
     db, zip_contents = _collection(TRUTH_DB)
     return doubled_destinations(
-        scraped, _profiles(), db, zip_contents,
+        scraped, export_profiles(), db, zip_contents,
         load_data_dir_registry(platforms_dir),
     )
 
@@ -223,14 +225,14 @@ def build_export(
             f"python scripts/generate_truth.py --platform {platform}"
         ])
 
-    systems, report = build_native_model(truth, scraped)
+    profiles = export_profiles()
+    systems, report = build_native_model(truth, scraped, profiles)
     if not systems:
         return ExportResult(
             platform, False,
             ["nothing to write: neither the platform nor the truth has data"],
         )
 
-    profiles = _profiles()
     exporter: BaseExporter = exporter_class(profiles)
     produced, issues, stopped = _produce(
         exporter, systems, report, scraped, upstream_dir, allow_fetch,
