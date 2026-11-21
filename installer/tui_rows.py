@@ -74,7 +74,7 @@ from installer.tui_commands import (
 )
 from installer.tui_folder_scan import FolderScan
 from installer.tui_paint import _short_path
-from installer.tui_state import TUI_MAX_WIDTH, TuiRow, _matches
+from installer.tui_state import TUI_MAX_WIDTH, TuiRow, _matches, tui_offline_only
 
 if TYPE_CHECKING:
     from installer.tui_state import TuiState
@@ -242,11 +242,6 @@ def _core_screen_rows(state: TuiState) -> list[TuiRow]:
     return rows + _CHECKLIST_END
 
 
-def _tui_offline_only(state: TuiState) -> bool:
-    """Without the internet and without a pack: what is not here cannot come."""
-    return state.offline and LOCAL.pack is None
-
-
 def _confirm_screen_rows(state: TuiState) -> list[TuiRow]:
     """The rows of the confirm screen."""
     if state.running or state.dry is None:
@@ -255,7 +250,7 @@ def _confirm_screen_rows(state: TuiState) -> list[TuiRow]:
         # Counted again, every file is in place: Install wrote nothing
         # and said Done.
         return [TuiRow("close", "Close"), TuiRow("back", "Back")]
-    if _tui_offline_only(state) and not _dry_copies(state):
+    if tui_offline_only(state) and not _dry_copies(state):
         # The plan's rule: Install would only fail every file.
         return [TuiRow("back", "Back")]
     return [TuiRow("install", "Install"), TuiRow("back", "Back")]
@@ -330,7 +325,7 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
     label = (f"{TUI_INSTALL_ROW} {format_size(size)}" if size >= CONFIRM_FROM_BYTES
              else TUI_INSTALL_ROW)
     rows = [TuiRow("install", label)]
-    if _tui_offline_only(state) and not _plan_copies(state, check):
+    if tui_offline_only(state) and not _plan_copies(state, check):
         # Nothing here to copy, and the network refused: Install would
         # only fail every file, in this folder or another.
         rows = []

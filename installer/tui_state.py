@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, NamedTuple
 
 from installer.invocation import offline_requested
+from installer.offline import LOCAL
 
 if TYPE_CHECKING:
     from installer.handheld_app import CardApp
@@ -374,3 +375,10 @@ class TuiState:
     @property
     def screen(self) -> str:
         return self.stack[-1]
+
+
+def tui_offline_only(state: TuiState) -> bool:
+    """Without the internet and without a pack: what is not here cannot
+    come. The screens ask state.offline, never the environment, which only
+    carries the choice to the runs."""
+    return state.offline and LOCAL.pack is None

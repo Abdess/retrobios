@@ -2988,8 +2988,7 @@ class CardsSpaceAndConfirm(unittest.TestCase):
         only fail every file."""
         state = checked_state({"free": 1024, "writable": False, "cores": []})
         state.offline = True
-        with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
-            labels = [row.label for row in install.tui_rows(state)]
+        labels = [row.label for row in install.tui_rows(state)]
         self.assertEqual(labels[0], "Choose another folder")
         self.assertNotIn("Install anyway", labels)
         self.assertFalse(any(label.startswith("Install") for label in labels), labels)
@@ -7062,6 +7061,7 @@ class ConfirmRefusalsAndCardRows(unittest.TestCase):
         """"3 downloaded" under "3 need the internet";
         the data files read as if on hand."""
         state = checked_state()
+        state.offline = True
         state.found = [{"event": "found", "platform": "retroarch", "dest": FILES[0]["dest"],
                         "folder": "/media/old", "path": "/media/old/x", "member": "",
                         "reason": ""}]
@@ -7489,6 +7489,7 @@ class WhatEachScreenOffers(unittest.TestCase):
     @in_full
     def test_offline_plan_names_the_folder_already_copied_from(self):
         state = checked_state()
+        state.offline = True
         state.from_folders = [self.root / "from1"]
         state.found = [found("gba_bios.bin", str(self.root / "from1"))]
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
@@ -9684,8 +9685,7 @@ class PacksWordingAndDocs(unittest.TestCase):
         state.stack.append("confirm")
         state.dry = dict(CHECK)
         state.offline = True
-        with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
-            self.assertIn("Nothing to install", install.tui_view(state, 80, 24)[0])
+        self.assertIn("Nothing to install", install.tui_view(state, 80, 24)[0])
 
     def test_another_folder_for_a_card_setup_asks_for_its_card(self):
         """A full Onion card offered another folder for
@@ -9990,6 +9990,7 @@ class CardFoldersAndNarrowBars(unittest.TestCase):
         old = self.root / "USBSTICK"
         old.mkdir()
         state = checked_state()
+        state.offline = True
         state.from_folders = [old]
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: install.OFFLINE_FLAG_VALUE}):
             lines = [str(line) for line in install._plan_lines(state.check, state.dest,
@@ -10769,9 +10770,9 @@ class CardNamesAndHelp(_CardFixtures, unittest.TestCase):
         state = _installed_state(Path("/x/system"))
         state.summary.update(installed=6, pending=16, failed=[])
         state.from_folders = [Path("/media/me/OLD")]
-        with mock.patch.object(install, "_offline_only", return_value=True), \
-                mock.patch.object(install, "_tui_sources",
-                                  return_value="6 files copied from OLD, 16 still missing."):
+        state.offline = True
+        with mock.patch.object(install, "_tui_sources",
+                               return_value="6 files copied from OLD, 16 still missing."):
             _title, lines = install.tui_outcome(state)
         self.assertEqual(lines[0], "6 files copied from OLD, 16 still missing.")
         self.assertIn("They are not in", lines[1])
@@ -11998,6 +11999,7 @@ class TapsGameDataAndExitCodes(_CardFixtures, unittest.TestCase):
         old.finished = [("scph5500.bin", True, ""), ("gba_bios.bin", True, "")]
         old.local_dests = {"scph5500.bin": ("/media/OLD", ""), "gba_bios.bin": ("/media/OLD", "")}
         old.summary = {**old.summary, "installed": 2, "pending": 3}
+        old.offline = True
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             _title, lines = install.tui_outcome(old)
         self.assertIn("Installed: 2 BIOS files.", lines)
@@ -12523,6 +12525,7 @@ class OneChoicePerRun(unittest.TestCase):
     def test_the_old_card_result_splits_what_is_missing(self):
         """"16 still missing" where 6 were game data."""
         state = _game_state()
+        state.offline = True
         state.from_folders = [Path("/media/OLD")]
         state.local_dests = {"gba_bios.bin": ("/media/OLD", "")}
         state.finished = [("gba_bios.bin", True, "")]
@@ -13201,6 +13204,7 @@ class ChoiceStateInBothModes(unittest.TestCase):
         """Offline, one system ticked, the plan counted
         every file of the list beside "For your 1 of 3 systems"."""
         state = checked_state()
+        state.offline = True
         folder = str(self.root / "from1")
         state.from_folders = [self.root / "from1"]
         state.found = [found("gba_bios.bin", folder)]
@@ -14195,6 +14199,7 @@ class TheFromPlanSaysItsKinds(unittest.TestCase):
     def test_the_kinds_and_the_definition_stay(self):
         audit = OneChoicePerRun()
         state = audit.game_plan()
+        state.offline = True
         folder = "/media/moi/packx"
         state.from_folders = [Path(folder)]
         state.found = [found(event["dest"], folder) for event in state.files
@@ -14461,6 +14466,7 @@ class ProvenCardsAndCounts(unittest.TestCase):
         self.assertEqual(install._plural(1, "wrong copy"), "1 wrong copy")
         self.assertEqual(install._plural(2, "day"), "2 days")
         state = checked_state()
+        state.offline = True
         folder = "/media/OLD"
         state.from_folders = [Path(folder)]
         state.found = [found(dest, folder) for dest in ("scph5500.bin", "pcsx/extra.bin",
@@ -15205,6 +15211,7 @@ class CoresListAndFolderFailures(unittest.TestCase):
         """Offline, the plan said a wrong copy no folder
         holds "is replaced"."""
         state = checked_state()
+        state.offline = True
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             text = self.text(state, 100, 30)
         self.assertIn("1 wrong copy", text)
@@ -15268,6 +15275,7 @@ class CoresListAndFolderFailures(unittest.TestCase):
     def test_offline_choice_of_systems_is_never_about_0_files(self):
         """"About 0 files, 0 B, for 10 of 11 systems"."""
         state = checked_state()
+        state.offline = True
         state.ticked = {"sony-playstation"}
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             text = self.text(state, 100, 30)

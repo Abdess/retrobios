@@ -14196,6 +14196,13 @@ class TuiState:
         return self.stack[-1]
 
 
+def tui_offline_only(state: TuiState) -> bool:
+    """Without the internet and without a pack: what is not here cannot
+    come. The screens ask state.offline, never the environment, which only
+    carries the choice to the runs."""
+    return state.offline and LOCAL.pack is None
+
+
 # --- installer/setups.py -----------------------------------------------------
 
 def _card_word(system: tuple[str, Path, str]) -> str:
@@ -24536,7 +24543,7 @@ def _tui_estimating(state: TuiState) -> bool:
     check itself."""
     if not (_choice_line(state) and state.systems and state.check is not None):
         return False
-    if _offline_only():
+    if tui_offline_only(state):
         # Offline the estimate is of the ticks alone: a folder to copy from
         # is counted by the check it starts.
         def ticked(flags: list) -> list:
@@ -24867,7 +24874,7 @@ def _ticked_estimate(state: TuiState) -> tuple[int, int]:
     data files in them, or offline what the folders copied from hold: the
     plan's headline and its Install row both say it. One system ticked,
     the headline said 82.2 MB and Install 6.6 GB, the whole list's size."""
-    if _offline_only():
+    if tui_offline_only(state):
         held = _ticked_held(state)
         return len(held), sum(event["size"] for event in held)
     chosen = _ticked_files(state)
@@ -25108,11 +25115,6 @@ def _core_screen_rows(state: TuiState) -> list[TuiRow]:
     return rows + _CHECKLIST_END
 
 
-def _tui_offline_only(state: TuiState) -> bool:
-    """Without the internet and without a pack: what is not here cannot come."""
-    return state.offline and LOCAL.pack is None
-
-
 def _confirm_screen_rows(state: TuiState) -> list[TuiRow]:
     """The rows of the confirm screen."""
     if state.running or state.dry is None:
@@ -25121,7 +25123,7 @@ def _confirm_screen_rows(state: TuiState) -> list[TuiRow]:
         # Counted again, every file is in place: Install wrote nothing
         # and said Done.
         return [TuiRow("close", "Close"), TuiRow("back", "Back")]
-    if _tui_offline_only(state) and not _dry_copies(state):
+    if tui_offline_only(state) and not _dry_copies(state):
         # The plan's rule: Install would only fail every file.
         return [TuiRow("back", "Back")]
     return [TuiRow("install", "Install"), TuiRow("back", "Back")]
@@ -25196,7 +25198,7 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
     label = (f"{TUI_INSTALL_ROW} {format_size(size)}" if size >= CONFIRM_FROM_BYTES
              else TUI_INSTALL_ROW)
     rows = [TuiRow("install", label)]
-    if _tui_offline_only(state) and not _plan_copies(state, check):
+    if tui_offline_only(state) and not _plan_copies(state, check):
         # Nothing here to copy, and the network refused: Install would
         # only fail every file, in this folder or another.
         rows = []
@@ -26584,7 +26586,7 @@ def _plan_figures(check: dict, state: TuiState) -> _PlanFigures:
     fetch_bytes = fetched - (check.get("data_bytes", 0) if data else 0)
     elsewhere = (_tui_found_elsewhere(state, set(copied) if dry else None)
                  if check is state.check or dry else {})
-    offline = _offline_only()
+    offline = tui_offline_only(state)
     # The data files are files to fetch like the others: one count and one
     # size, the kinds apart on the line under the folder. "8358 files and
     # 2636 data files" read as two kinds of one thing.
@@ -26906,7 +26908,7 @@ def _estimated_head(state: TuiState, check: dict, lines: list, data: int) -> lis
     count, size = _ticked_estimate(state)
     lines[0] = _styled(f"About {_plural(count, 'file')}, {format_size(size)}"
                        f", for {len(state.ticked)} of {len(state.systems)} systems", "title")
-    if _offline_only():
+    if tui_offline_only(state):
         # Offline, what the folders copied from hold of the systems
         # ticked: the plan counted the whole list beside "For your 1 of
         # 11 systems".
@@ -26991,7 +26993,7 @@ def _plan_kinds(state: TuiState, check: dict, estimating: bool, data: int,
     # above it: inserted second, it pushed the folder off a 40x12 plan.
     kinds_of = (_ticked_files(state) if estimating else
                 [event for event in state.files if event["state"] != "present"])
-    found = (_tui_found_elsewhere(state) if not estimating and _offline_only()
+    found = (_tui_found_elsewhere(state) if not estimating and tui_offline_only(state)
              and state.check is check else {})
     if found:
         # Some were found in a folder: the kinds split those the headline
@@ -27312,7 +27314,7 @@ def _outcome_counts(state: TuiState) -> _OutcomeCounts:
     offline_failed = [failure for failure in failed if _offline_failure(failure["reason"])]
     failed = [failure for failure in failed if not _offline_failure(failure["reason"])]
     left = len(offline_failed) + (max(0, summary.get("pending", 0) - len(failed))
-                                  if _offline_only() and not offline_failed else 0)
+                                  if tui_offline_only(state) and not offline_failed else 0)
     up_to_date = summary.get("up_to_date", 0)
     total = (state.download or {}).get("files", 0)
     space = "" if summary else state.full_drive

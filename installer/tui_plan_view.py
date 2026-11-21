@@ -9,7 +9,7 @@ from installer.from_folders import MAX_SCANNED_FILES
 from installer.frontend_folders import save_where_words
 from installer.install_record import record_changes, record_says
 from installer.manifest import GAME_DATA, OTHER_SYSTEMS
-from installer.offline import LOCAL, _offline_only, offline_named, offline_undo
+from installer.offline import LOCAL, offline_named, offline_undo
 from installer.outcome import EVERYTHING_IN_PLACE, _offline_remedy, write_remedy
 from installer.pack_source import pack_lacks_words
 from installer.paths import shown_path
@@ -57,6 +57,7 @@ from installer.tui_frame import _compose, _text_lines
 from installer.tui_paint import _FOLDER_LABEL, _command_line, _detail, _details, _is_detail, _short_path, _styled
 from installer.tui_routes import TUI_PAD_ROUTES
 from installer.tui_rows import _plan_rows, tui_rows
+from installer.tui_state import tui_offline_only
 
 if TYPE_CHECKING:
     from installer.tui_paint import TuiLine
@@ -116,7 +117,7 @@ def _plan_figures(check: dict, state: TuiState) -> _PlanFigures:
     fetch_bytes = fetched - (check.get("data_bytes", 0) if data else 0)
     elsewhere = (_tui_found_elsewhere(state, set(copied) if dry else None)
                  if check is state.check or dry else {})
-    offline = _offline_only()
+    offline = tui_offline_only(state)
     # The data files are files to fetch like the others: one count and one
     # size, the kinds apart on the line under the folder. "8358 files and
     # 2636 data files" read as two kinds of one thing.
@@ -438,7 +439,7 @@ def _estimated_head(state: TuiState, check: dict, lines: list, data: int) -> lis
     count, size = _ticked_estimate(state)
     lines[0] = _styled(f"About {_plural(count, 'file')}, {format_size(size)}"
                        f", for {len(state.ticked)} of {len(state.systems)} systems", "title")
-    if _offline_only():
+    if tui_offline_only(state):
         # Offline, what the folders copied from hold of the systems
         # ticked: the plan counted the whole list beside "For your 1 of
         # 11 systems".
@@ -523,7 +524,7 @@ def _plan_kinds(state: TuiState, check: dict, estimating: bool, data: int,
     # above it: inserted second, it pushed the folder off a 40x12 plan.
     kinds_of = (_ticked_files(state) if estimating else
                 [event for event in state.files if event["state"] != "present"])
-    found = (_tui_found_elsewhere(state) if not estimating and _offline_only()
+    found = (_tui_found_elsewhere(state) if not estimating and tui_offline_only(state)
              and state.check is check else {})
     if found:
         # Some were found in a folder: the kinds split those the headline

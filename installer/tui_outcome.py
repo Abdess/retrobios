@@ -11,7 +11,7 @@ from installer.from_folders import sources_line
 from installer.handheld_app import NO_PYTHON_CARDS, app_lines, no_python_words
 from installer.host_fs import NOT_WRITABLE
 from installer.invocation import Invocation
-from installer.offline import LOCAL, _offline_only, offline_named
+from installer.offline import LOCAL, offline_named
 from installer.outcome import (
     EVERYTHING_IN_PLACE,
     NEXT_ON_CARD,
@@ -33,6 +33,7 @@ from installer.tui_commands import _removing_misplaced, _tui_card, _tui_installe
 from installer.tui_paint import _FOLDER_LABEL, _command_line, _detail, _details, _short_path, _styled
 from installer.tui_plan_view import _commands, _saves_lines, _unavailable_brief, _unavailable_lines, _unplaced_lines
 from installer.tui_routes import TUI_PAD_ROUTES
+from installer.tui_state import tui_offline_only
 
 if TYPE_CHECKING:
     from installer.tui_state import TuiState
@@ -97,7 +98,7 @@ def _outcome_counts(state: TuiState) -> _OutcomeCounts:
     offline_failed = [failure for failure in failed if _offline_failure(failure["reason"])]
     failed = [failure for failure in failed if not _offline_failure(failure["reason"])]
     left = len(offline_failed) + (max(0, summary.get("pending", 0) - len(failed))
-                                  if _offline_only() and not offline_failed else 0)
+                                  if tui_offline_only(state) and not offline_failed else 0)
     up_to_date = summary.get("up_to_date", 0)
     total = (state.download or {}).get("files", 0)
     space = "" if summary else state.full_drive

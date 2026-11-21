@@ -15,7 +15,7 @@ from installer.frontend_folders import save_directory_for, save_where_words
 from installer.games import GAMES_REASONS
 from installer.manifest import OTHER_SYSTEMS, entry_copies
 from installer.narrowing import narrow
-from installer.offline import LOCAL, _offline_only
+from installer.offline import LOCAL
 from installer.pack_source import pack_holds_trees, pack_lacks
 from installer.paths import SavePlace, spelled
 from installer.plan_words import NO_CORE_FILES, _core_sized, emptied_words
@@ -26,6 +26,7 @@ from installer.tally import tally
 from installer.text import _names_and, _plural, agree
 from installer.tui_commands import _core_base, _tui_system_flags, _tui_systems_chosen, tui_flags, tui_run_files
 from installer.tui_paint import _detail, _short_path
+from installer.tui_state import tui_offline_only
 
 if TYPE_CHECKING:
     from installer.tally import Tally
@@ -219,7 +220,7 @@ def _tui_estimating(state: TuiState) -> bool:
     check itself."""
     if not (_choice_line(state) and state.systems and state.check is not None):
         return False
-    if _offline_only():
+    if tui_offline_only(state):
         # Offline the estimate is of the ticks alone: a folder to copy from
         # is counted by the check it starts.
         def ticked(flags: list) -> list:
@@ -550,7 +551,7 @@ def _ticked_estimate(state: TuiState) -> tuple[int, int]:
     data files in them, or offline what the folders copied from hold: the
     plan's headline and its Install row both say it. One system ticked,
     the headline said 82.2 MB and Install 6.6 GB, the whole list's size."""
-    if _offline_only():
+    if tui_offline_only(state):
         held = _ticked_held(state)
         return len(held), sum(event["size"] for event in held)
     chosen = _ticked_files(state)
