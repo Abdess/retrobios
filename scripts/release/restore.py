@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-import sys
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from model.largefiles import registered_paths, restore_verified
@@ -36,41 +36,35 @@ def index_cache(cache_dir: str) -> dict[str, str]:
     return index
 
 
-def restore(
-    cache_dir: str, db_path: str, gitignore: str
-) -> tuple[int, list[str]]:
+@dataclass
+class Restored:
+    """What a restore wrote, what it could not supply, and whether a cache was there."""
+
+    restored: list[str] = field(default_factory=list)
+    unsatisfied: list[str] = field(default_factory=list)
+    cache_found: bool = True
+
+
+def restore(cache_dir: str, db_path: str, gitignore: str, *, root: Path) -> Restored:
+    """Write each gitignored, absent database path under root from the cache."""
     ignored = gitignored_paths(gitignore)
+    result = Restored()
     # No cache is not nothing to do: the paths it would have supplied are
     # still missing, and the check below is the one that must say so.
     if os.path.isdir(cache_dir):
         index = index_cache(cache_dir)
     else:
-        print(f"No cache at {cache_dir}")
+        result.cache_found = False
         index = {}
     db = load_database(db_path)
-    restored = 0
-    unsatisfied: list[str] = []
     for sha1, entry in db.get("files", {}).items():
         path = entry.get("path", "")
-        if path not in ignored or os.path.exists(path):
+        target = root / path
+        if path not in ignored or target.exists():
             continue
         source = index.get(sha1)
-        if not source:
-            unsatisfied.append(path)
+        if not source or not restore_verified(source, str(target), sha1):
+            result.unsatisfied.append(path)
             continue
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        if not restore_verified(source, path, sha1):
-            unsatisfied.append(path)
-            continue
-        print(f"Restored: {path}")
-        restored += 1
-    print(f"Total: {restored} files restored")
-    if unsatisfied:
-        # Every consumer downstream resolves against the disk, so a path the
-        # cache cannot supply is not a smaller restore: it drops entries from
-        # the manifest and inflates the missing count the README publishes.
-        print(f"Unsatisfied: {len(unsatisfied)} declared paths the cache "
-              "cannot supply", file=sys.stderr)
-        for path in sorted(unsatisfied)[:10]:
-            print(f"  {path}", file=sys.stderr)
-    return restored, unsatisfied
+        result.restored.append(path)
+    return result

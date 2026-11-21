@@ -2294,21 +2294,20 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
                 json.dumps({"files": {sha1: {"path": "bios/Sony/big.pup"}}}),
                 encoding="utf-8",
             )
-            cwd = os.getcwd()
-            os.chdir(root)
-            try:
-                restored, unsatisfied = restore(
-                    str(cache), "database.json", ".gitignore"
-                )
-                self.assertEqual((restored, unsatisfied), (1, []))
-                self.assertEqual((root / "bios/Sony/big.pup").read_bytes(), payload)
-                # A path already in the checkout is never overwritten.
-                restored, unsatisfied = restore(
-                    str(cache), "database.json", ".gitignore"
-                )
-                self.assertEqual((restored, unsatisfied), (0, []))
-            finally:
-                os.chdir(cwd)
+            result = restore(
+                str(cache), str(root / "database.json"), str(root / ".gitignore"),
+                root=root,
+            )
+            self.assertEqual(
+                (result.restored, result.unsatisfied), (["bios/Sony/big.pup"], [])
+            )
+            self.assertEqual((root / "bios/Sony/big.pup").read_bytes(), payload)
+            # A path already in the checkout is never overwritten.
+            result = restore(
+                str(cache), str(root / "database.json"), str(root / ".gitignore"),
+                root=root,
+            )
+            self.assertEqual((result.restored, result.unsatisfied), ([], []))
 
     def test_restore_without_its_registry_fails(self):
         """A mistyped --gitignore read as an empty registry: nothing to
@@ -2355,18 +2354,16 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
                 (cache / "asset.bin").write_bytes(b"re-uploaded bytes")
                 return index
 
-            cwd = os.getcwd()
-            os.chdir(root)
-            try:
-                with mock.patch.object(release_restore, "index_cache", index_then_replace):
-                    restored, unsatisfied = release_restore.restore(
-                        str(cache), "database.json", ".gitignore"
-                    )
-                self.assertEqual((restored, unsatisfied), (0, ["bios/Sony/big.pup"]))
-                self.assertFalse((root / "bios/Sony/big.pup").exists())
-                self.assertEqual(os.listdir(root / "bios/Sony"), [])
-            finally:
-                os.chdir(cwd)
+            with mock.patch.object(release_restore, "index_cache", index_then_replace):
+                result = release_restore.restore(
+                    str(cache), str(root / "database.json"),
+                    str(root / ".gitignore"), root=root,
+                )
+            self.assertEqual(
+                (result.restored, result.unsatisfied), ([], ["bios/Sony/big.pup"])
+            )
+            self.assertFalse((root / "bios/Sony/big.pup").exists())
+            self.assertEqual(os.listdir(root / "bios/Sony"), [])
 
     def test_restore_leaves_tracked_paths_alone(self):
         from scripts.release.restore import restore
@@ -2383,16 +2380,12 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
                 json.dumps({"files": {sha1: {"path": "bios/tracked.bin"}}}),
                 encoding="utf-8",
             )
-            cwd = os.getcwd()
-            os.chdir(root)
-            try:
-                restored, unsatisfied = restore(
-                    str(cache), "database.json", ".gitignore"
-                )
-                self.assertEqual((restored, unsatisfied), (0, []))
-                self.assertFalse((root / "bios/tracked.bin").exists())
-            finally:
-                os.chdir(cwd)
+            result = restore(
+                str(cache), str(root / "database.json"), str(root / ".gitignore"),
+                root=root,
+            )
+            self.assertEqual((result.restored, result.unsatisfied), ([], []))
+            self.assertFalse((root / "bios/tracked.bin").exists())
 
     def test_restore_without_a_cache_names_what_is_missing(self):
         """A job that skipped `mkdir .cache/large` exited 0 with every
@@ -2406,15 +2399,59 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
                 json.dumps({"files": {"a" * 40: {"path": "bios/big.bin"}}}),
                 encoding="utf-8",
             )
-            cwd = os.getcwd()
-            os.chdir(root)
-            try:
-                self.assertEqual(
-                    restore("no-cache", "database.json", ".gitignore"),
-                    (0, ["bios/big.bin"]),
-                )
-            finally:
-                os.chdir(cwd)
+            result = restore(
+                str(root / "no-cache"), str(root / "database.json"),
+                str(root / ".gitignore"), root=root,
+            )
+            self.assertEqual(
+                (result.restored, result.unsatisfied, result.cache_found),
+                ([], ["bios/big.bin"], False),
+            )
+
+    def test_restore_command_prints_the_report(self):
+        """The command, not the library, says what was restored and what the
+        cache could not supply, relative to the directory it runs in."""
+        import subprocess
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            cache = root / "cache"
+            cache.mkdir()
+            payload = b"firmware bytes"
+            (cache / "asset.bin").write_bytes(payload)
+            sha1 = hashlib.sha1(payload).hexdigest()
+            (root / ".gitignore").write_text(
+                "bios/big.bin\nbios/absent.bin\n", encoding="utf-8"
+            )
+            (root / "database.json").write_text(
+                json.dumps({"files": {
+                    sha1: {"path": "bios/big.bin"},
+                    "a" * 40: {"path": "bios/absent.bin"},
+                }}),
+                encoding="utf-8",
+            )
+            command = [sys.executable, str(ROOT / "scripts" / "restore_large_files.py")]
+            proc = subprocess.run(
+                [*command, "--cache", "cache"],
+                capture_output=True, text=True, cwd=str(root), timeout=120,
+                check=False,
+            )
+            self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+            self.assertEqual(
+                proc.stdout, "Restored: bios/big.bin\nTotal: 1 files restored\n"
+            )
+            self.assertEqual(
+                proc.stderr,
+                "Unsatisfied: 1 declared paths the cache cannot supply\n"
+                "  bios/absent.bin\n",
+            )
+            self.assertEqual((root / "bios/big.bin").read_bytes(), payload)
+            without_cache = subprocess.run(
+                [*command, "--cache", "no-cache"],
+                capture_output=True, text=True, cwd=str(root), timeout=120,
+                check=False,
+            )
+            self.assertTrue(without_cache.stdout.startswith("No cache at no-cache\n"))
 
 
 def _git_paths(*args: str, stdin: list[str] | None = None) -> set[str] | None:
@@ -3244,16 +3281,12 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
                 json.dumps({"files": {"a" * 40: {"path": "bios/absent.bin"}}}),
                 encoding="utf-8",
             )
-            cwd = os.getcwd()
-            os.chdir(root)
-            try:
-                restored, unsatisfied = restore(
-                    str(cache), "database.json", ".gitignore"
-                )
-            finally:
-                os.chdir(cwd)
-            self.assertEqual(restored, 0)
-            self.assertEqual(unsatisfied, ["bios/absent.bin"])
+            result = restore(
+                str(cache), str(root / "database.json"), str(root / ".gitignore"),
+                root=root,
+            )
+            self.assertEqual(result.restored, [])
+            self.assertEqual(result.unsatisfied, ["bios/absent.bin"])
 
     def test_an_unreachable_buildbot_is_not_a_fresh_verdict(self):
         """Every HEAD unanswered printed "16 unknown" and exited 0, so the

@@ -18,6 +18,8 @@ from __future__ import annotations
 
 import argparse
 import os
+import sys
+from pathlib import Path
 
 from core.cli import add_repo_inputs
 from release.restore import restore
@@ -37,8 +39,20 @@ def main() -> None:
     args = parser.parse_args()
     if not os.path.isfile(args.gitignore):
         parser.error(f"no file at {args.gitignore}: it lists the release assets")
-    _restored, unsatisfied = restore(args.cache, args.db, args.gitignore)
-    if unsatisfied:
+    result = restore(args.cache, args.db, args.gitignore, root=Path.cwd())
+    if not result.cache_found:
+        print(f"No cache at {args.cache}")
+    for path in result.restored:
+        print(f"Restored: {path}")
+    print(f"Total: {len(result.restored)} files restored")
+    if result.unsatisfied:
+        # Every consumer downstream resolves against the disk, so a path the
+        # cache cannot supply is not a smaller restore: it drops entries from
+        # the manifest and inflates the missing count the README publishes.
+        print(f"Unsatisfied: {len(result.unsatisfied)} declared paths the cache "
+              "cannot supply", file=sys.stderr)
+        for path in sorted(result.unsatisfied)[:10]:
+            print(f"  {path}", file=sys.stderr)
         raise SystemExit(1)
 
 
