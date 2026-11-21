@@ -433,17 +433,19 @@ class TheScraperClonesTheReleaseItLabels(unittest.TestCase):
 
         from scripts.scraper import mame_hash_scraper as scraper
 
+        from scripts.scraper import sparse_clone
+
         calls: list[list[str]] = []
+
+        def git(args: list[str], cwd: object = None) -> str:
+            calls.append(args)
+            return "c" * 40 + "\n" if args[0] == "rev-parse" else ""
+
         with mock.patch.object(scraper, "fetch_github_latest_version", return_value="mame0289"), \
-                mock.patch.object(scraper, "_run_git",
-                                  side_effect=lambda args, cwd=None: calls.append(args)), \
+                mock.patch.object(sparse_clone, "_git", side_effect=git), \
                 mock.patch.object(scraper, "parse_mame_source_tree",
                                   return_value={"neogeo": {"roms": []}}), \
-                mock.patch.object(scraper, "_get_commit", return_value="c" * 40), \
-                mock.patch.object(scraper, "_write_cache"), \
-                mock.patch.object(scraper, "_cleanup"), \
-                mock.patch.object(scraper, "_load_cache", return_value={}), \
-                mock.patch.object(scraper, "_is_stale", return_value=True):
+                mock.patch.object(scraper, "_write_cache"):
             data = scraper._fetch_hashes(force=True)
         clone = next(args for args in calls if args[0] == "clone")
         self.assertEqual(clone[clone.index("--branch") + 1], "mame0289")
@@ -806,22 +808,29 @@ class TestDerivativeVersion(unittest.TestCase):
 
 
 class AnUnreadableCloneStopsTheScrape(unittest.TestCase):
-    """_get_commit swallowed a failed rev-parse and returned "": cached for a
-    day, the merge then advanced core_version and the refs while
+    """A failed rev-parse was swallowed and returned "": cached for a day,
+    the merge then advanced core_version and the refs while
     upstream_commit stayed on the previous release."""
 
     def test_no_empty_commit_reaches_the_cache(self):
         import subprocess
         from unittest import mock
 
-        from scripts.scraper import mame_hash_scraper as scraper
+        from scripts.scraper import sparse_clone
 
+        dest = Path(tempfile.gettempdir()) / "retrobios-no-clone"
         failing = subprocess.CalledProcessError(128, ["git", "rev-parse", "HEAD"])
-        with mock.patch.object(scraper, "_run_git", side_effect=failing), self.assertRaises(RuntimeError):
-            scraper._get_commit()
-        empty = subprocess.CompletedProcess(["git"], 0, stdout="\n", stderr="")
-        with mock.patch.object(scraper, "_run_git", return_value=empty), self.assertRaises(RuntimeError):
-            scraper._get_commit()
+
+        def git_failing(args: list[str], cwd: object = None) -> str:
+            if args[0] == "rev-parse":
+                raise failing
+            return ""
+
+        for git in (git_failing, lambda args, cwd=None: "\n" if args[0] == "rev-parse" else ""):
+            with mock.patch.object(sparse_clone, "_git", side_effect=git), \
+                    mock.patch.object(sparse_clone, "remove_clone"), \
+                    self.assertRaises(RuntimeError):
+                sparse_clone.sparse_clone("https://x/y.git", dest, ["src"])
 
 
 

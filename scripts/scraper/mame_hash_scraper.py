@@ -12,8 +12,6 @@ import json
 import os
 import logging
 import re
-import shutil
-import subprocess
 import sys
 from collections import Counter
 from datetime import datetime, timezone
@@ -55,8 +53,9 @@ from .mame_devices import (
     source_path,
 )
 from .listxml import open_listxml
+from .sparse_clone import fresh_cache, remove_clone, sparse_clone
 from .mame_parser import parse_mame_source_tree
-from core.paths import REPO_ROOT
+from core.paths import EMULATORS_DIR, PLATFORMS_DIR, REPO_ROOT
 
 log = logging.getLogger(__name__)
 
@@ -64,8 +63,8 @@ _CACHE_PATH = REPO_ROOT / "data" / "mame-hashes.json"
 # One clone per process: a fixed tmp/mame was removed and recloned at another
 # release by a second run while the first was still parsing it.
 _CLONE_DIR = REPO_ROOT / "tmp" / f"mame-{os.getpid()}"
-_EMULATORS_DIR = REPO_ROOT / "emulators"
-_PLATFORMS_DIR = REPO_ROOT / "platforms"
+_EMULATORS_DIR = REPO_ROOT / EMULATORS_DIR
+_PLATFORMS_DIR = REPO_ROOT / PLATFORMS_DIR
 _FLOPPY_SOURCE = "src/devices/imagedev/floppy.cpp"
 # Where a device set goes when only machines no seed places load it: MAME
 # starts such a machine from its set name, as an arcade folder passes one.
@@ -76,30 +75,6 @@ _STALE_HOURS = 24
 
 
 # Cache
-
-
-def _load_cache() -> dict[str, Any] | None:
-    if not _CACHE_PATH.exists():
-        return None
-    try:
-        with open(_CACHE_PATH, encoding="utf-8") as f:
-            return json.load(f)
-    except (json.JSONDecodeError, OSError):
-        return None
-
-
-def _is_stale(cache: dict[str, Any] | None) -> bool:
-    if cache is None or not cache.get("bios_sets"):
-        return True
-    fetched_at = cache.get("fetched_at")
-    if not fetched_at:
-        return True
-    try:
-        ts = datetime.fromisoformat(fetched_at)
-        age = datetime.now(timezone.utc) - ts
-        return age.total_seconds() > _STALE_HOURS * 3600
-    except (ValueError, TypeError):
-        return True
 
 
 def _write_cache(data: dict[str, Any]) -> None:
@@ -113,47 +88,15 @@ def _write_cache(data: dict[str, Any]) -> None:
 # Git operations
 
 
-def _run_git(
-    args: list[str], cwd: Path | None = None
-) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
-        ["git", *args],
-        cwd=cwd,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-
-
-def _sparse_clone(tag: str) -> None:
-    """Clone the release the data will be labelled with, not master.
+def _sparse_clone(tag: str) -> str:
+    """Clone the release the data will be labelled with, not master, and
+    return its commit.
 
     The version comes from the latest release. Cloning master gave line
     numbers and hashes of a later revision under that release's label, and
     the profiles cited lines no declared revision holds.
     """
-    if _CLONE_DIR.exists():
-        shutil.rmtree(_CLONE_DIR)
-    _CLONE_DIR.parent.mkdir(parents=True, exist_ok=True)
-
-    log.info("sparse cloning mamedev/mame %s into %s", tag, _CLONE_DIR)
-    _run_git(
-        [
-            "clone",
-            "--depth",
-            "1",
-            "--branch",
-            tag,
-            "--filter=blob:none",
-            "--sparse",
-            _REPO_URL,
-            str(_CLONE_DIR),
-        ]
-    )
-    _run_git(
-        ["sparse-checkout", "set", "src/mame", "src/devices"],
-        cwd=_CLONE_DIR,
-    )
+    return sparse_clone(_REPO_URL, _CLONE_DIR, ["src/mame", "src/devices"], tag)
 
 
 def _get_version() -> str:
@@ -171,31 +114,6 @@ def _parse_version_tag(tag: str) -> str:
     if raw.isdigit() and len(raw) >= 4:
         return f"{raw[0]}.{raw[1:]}"
     return raw
-
-
-def _get_commit() -> str:
-    """The commit the clone holds, or an error: never an empty pin.
-
-    Returned empty, it was cached for a day and the merge advanced
-    core_version and the refs to the new release while upstream_commit
-    stayed on the old one, a profile describing two revisions at once.
-    """
-    try:
-        result = _run_git(["rev-parse", "HEAD"], cwd=_CLONE_DIR)
-    except subprocess.CalledProcessError as exc:
-        raise RuntimeError(
-            f"cannot read the commit of the MAME clone in {_CLONE_DIR}: {exc}"
-        ) from exc
-    commit = result.stdout.strip()
-    if not commit:
-        raise RuntimeError(f"the MAME clone in {_CLONE_DIR} names no commit")
-    return commit
-
-
-def _cleanup() -> None:
-    if _CLONE_DIR.exists():
-        log.info("cleaning up %s", _CLONE_DIR)
-        shutil.rmtree(_CLONE_DIR)
 
 
 # Profile discovery
@@ -292,18 +210,17 @@ def _format_diff(
 
 
 def _fetch_hashes(force: bool) -> dict[str, Any]:
-    cache = _load_cache()
-    if not force and cache is not None and not _is_stale(cache):
+    cache = None if force else fresh_cache(_CACHE_PATH, _STALE_HOURS)
+    if cache is not None:
         log.info("using cached data from %s", cache.get("fetched_at", ""))
         return cache
 
     try:
         tag = fetch_github_latest_version(MAME_REPO)
-        _sparse_clone(tag)
+        commit = _sparse_clone(tag)
         bios_sets = parse_mame_source_tree(str(_CLONE_DIR))
         version = _parse_version_tag(tag)
-        commit = _get_commit()
-        if not bios_sets or not commit:
+        if not bios_sets:
             # An empty read was cached for a day and every profile entry
             # came out "out of scope", so nothing was refreshed and the
             # pipeline step reported OK.
@@ -319,7 +236,7 @@ def _fetch_hashes(force: bool) -> dict[str, Any]:
         _write_cache(data)
         return data
     finally:
-        _cleanup()
+        remove_clone(_CLONE_DIR)
 
 
 def _run(args: argparse.Namespace) -> None:
@@ -483,12 +400,11 @@ _QUOTE_REF = re.compile(r'^(\s*source_ref: )([^"\'\n].*)$', re.MULTILINE)
 def _write_release(args: argparse.Namespace) -> None:
     """Write the profile of one MAME release, read from its own tag."""
     try:
-        _sparse_clone(args.release)
+        commit = _sparse_clone(args.release)
         bios_sets = parse_mame_source_tree(str(_CLONE_DIR))
-        commit = _get_commit()
     finally:
-        _cleanup()
-    if not bios_sets or not commit:
+        remove_clone(_CLONE_DIR)
+    if not bios_sets:
         raise RuntimeError(f"no BIOS root set read at {args.release}")
     reference = yaml_load((_EMULATORS_DIR / "mame.yml").read_text(encoding="utf-8"))
     profile = release_profile(

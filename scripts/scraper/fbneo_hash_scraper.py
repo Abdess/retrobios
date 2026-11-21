@@ -12,77 +12,31 @@ import json
 import logging
 import os
 import re
-import shutil
-import subprocess
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 import yaml
 
+from core import paths
+from core.paths import REPO_ROOT
 from model.profiles import source_yaml_paths
 from core.artifacts import write_text_atomic
 from model.safeparse import yaml_load
 
 from scripts.scraper._hash_merge import compute_diff, merge_fbneo_profile
 from scripts.scraper.fbneo_parser import parse_fbneo_source_tree
+from scripts.scraper.sparse_clone import fresh_cache, remove_clone, sparse_clone
 
 log = logging.getLogger(__name__)
 
 REPO_URL = "https://github.com/finalburnneo/FBNeo.git"
-REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 # One clone per process, for the reason mame_hash_scraper gives.
 CLONE_DIR = REPO_ROOT / "tmp" / f"fbneo-{os.getpid()}"
 CACHE_PATH = REPO_ROOT / "data" / "fbneo-hashes.json"
-EMULATORS_DIR = REPO_ROOT / "emulators"
+EMULATORS_DIR = REPO_ROOT / paths.EMULATORS_DIR
 STALE_HOURS = 24
-
-
-def _is_cache_fresh() -> bool:
-    """Check if the JSON cache exists and is less than 24 hours old."""
-    if not CACHE_PATH.exists():
-        return False
-    try:
-        data = json.loads(CACHE_PATH.read_text(encoding="utf-8"))
-        if not data.get("bios_sets"):
-            return False
-        fetched_at = datetime.fromisoformat(data["fetched_at"])
-        return datetime.now(timezone.utc) - fetched_at < timedelta(hours=STALE_HOURS)
-    except (json.JSONDecodeError, KeyError, ValueError):
-        return False
-
-
-def _sparse_clone() -> None:
-    """Sparse clone FBNeo repo: src/burn/drv, and in cone mode src/burn/version.h."""
-    if CLONE_DIR.exists():
-        shutil.rmtree(CLONE_DIR)
-
-    CLONE_DIR.parent.mkdir(parents=True, exist_ok=True)
-
-    subprocess.run(
-        [
-            "git",
-            "clone",
-            "--depth",
-            "1",
-            "--filter=blob:none",
-            "--sparse",
-            REPO_URL,
-            str(CLONE_DIR),
-        ],
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-
-    subprocess.run(
-        ["git", "sparse-checkout", "set", "src/burn/drv"],
-        cwd=CLONE_DIR,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
 
 
 # src/burn/version.h, as the libretro core prints it: "v%x.%x.%x.%02x" of
@@ -103,42 +57,29 @@ def version_from_header(text: str) -> str:
     return f"v{major}.{minor}.{beta}.{alpha:02d}"
 
 
-def _extract_version() -> tuple[str, str]:
-    """The version the cloned source states, and its commit."""
+def _extract_version() -> str:
+    """The version the cloned source states."""
     header = CLONE_DIR / "src" / "burn" / "version.h"
-    version = version_from_header(header.read_text(encoding="utf-8", errors="replace"))
-    sha_result = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
-        cwd=CLONE_DIR,
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    return version, sha_result.stdout.strip()
-
-
-def _cleanup() -> None:
-    """Remove the sparse clone directory."""
-    if CLONE_DIR.exists():
-        shutil.rmtree(CLONE_DIR)
+    return version_from_header(header.read_text(encoding="utf-8", errors="replace"))
 
 
 def fetch_and_cache(force: bool = False) -> dict[str, Any]:
     """Clone, parse, and write JSON cache. Returns the cache dict."""
-    if not force and _is_cache_fresh():
+    fresh = None if force else fresh_cache(CACHE_PATH, STALE_HOURS)
+    if fresh is not None:
         log.info("cache fresh, skipping clone (use --force to override)")
-        return json.loads(CACHE_PATH.read_text(encoding="utf-8"))
+        return fresh
 
     try:
-        log.info("sparse cloning %s", REPO_URL)
-        _sparse_clone()
+        # src/burn/drv, and in cone mode src/burn/version.h.
+        commit = sparse_clone(REPO_URL, CLONE_DIR, ["src/burn/drv"])
 
         log.info("extracting version")
-        version, commit = _extract_version()
+        version = _extract_version()
 
         log.info("parsing source tree")
         bios_sets = parse_fbneo_source_tree(str(CLONE_DIR))
-        if not bios_sets or not commit:
+        if not bios_sets:
             # An empty read was cached for a day and merged nothing, and
             # the pipeline step reported OK.
             raise RuntimeError(f"no BIOS set read at FBNeo {version} ({commit[:12]})")
@@ -159,7 +100,7 @@ def fetch_and_cache(force: bool = False) -> dict[str, Any]:
 
         return cache
     finally:
-        _cleanup()
+        remove_clone(CLONE_DIR)
 
 
 def _find_fbneo_profiles() -> list[Path]:

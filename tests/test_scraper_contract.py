@@ -1137,18 +1137,11 @@ class HashScraperRefusesAnEmptyRead(unittest.TestCase):
             cache = Path(tmp) / "mame-hashes.json"
             with mock.patch.object(m, "_CACHE_PATH", cache), \
                     mock.patch.object(m, "fetch_github_latest_version", return_value="mame0289"), \
-                    mock.patch.object(m, "_sparse_clone"), \
-                    mock.patch.object(m, "_cleanup"), \
-                    mock.patch.object(m, "_get_commit", return_value="abc"), \
+                    mock.patch.object(m, "_sparse_clone", return_value="abc"), \
                     mock.patch.object(m, "parse_mame_source_tree", return_value={}), self.assertRaises(RuntimeError):
                 m._fetch_hashes(force=True)
             self.assertFalse(cache.exists())
 
-    def test_mame_does_not_serve_an_empty_cache(self):
-        from scraper import mame_hash_scraper as m
-
-        self.assertTrue(m._is_stale(self._fresh({})))
-        self.assertFalse(m._is_stale(self._fresh({"neogeo": {}})))
 
     def test_fbneo_raises_and_writes_no_cache(self):
         from scraper import fbneo_hash_scraper as f
@@ -1156,23 +1149,28 @@ class HashScraperRefusesAnEmptyRead(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp) / "fbneo-hashes.json"
             with mock.patch.object(f, "CACHE_PATH", cache), \
-                    mock.patch.object(f, "_sparse_clone"), \
-                    mock.patch.object(f, "_cleanup"), \
-                    mock.patch.object(f, "_extract_version", return_value=("v1.0.0.03", "abc")), \
+                    mock.patch.object(f, "sparse_clone", return_value="abc"), \
+                    mock.patch.object(f, "_extract_version", return_value="v1.0.0.03"), \
                     mock.patch.object(f, "parse_fbneo_source_tree", return_value={}), self.assertRaises(RuntimeError):
                 f.fetch_and_cache(force=True)
             self.assertFalse(cache.exists())
 
-    def test_fbneo_does_not_serve_an_empty_cache(self):
-        from scraper import fbneo_hash_scraper as f
+    def test_an_empty_or_unreadable_cache_is_not_served(self):
+        from scraper.sparse_clone import fresh_cache
 
         with tempfile.TemporaryDirectory() as tmp:
-            cache = Path(tmp) / "fbneo-hashes.json"
-            with mock.patch.object(f, "CACHE_PATH", cache):
-                cache.write_text(json.dumps(self._fresh({})))
-                self.assertFalse(f._is_cache_fresh())
-                cache.write_text(json.dumps(self._fresh({"neogeo": {}})))
-                self.assertTrue(f._is_cache_fresh())
+            cache = Path(tmp) / "hashes.json"
+            self.assertIsNone(fresh_cache(cache))
+            cache.write_text(json.dumps(self._fresh({})))
+            self.assertIsNone(fresh_cache(cache))
+            cache.write_text(json.dumps(self._fresh({"neogeo": {}})))
+            self.assertEqual(fresh_cache(cache)["commit"], "abc")
+            # A timestamp without a time zone crashed the FBNeo reader.
+            cache.write_text(json.dumps({"fetched_at": "2026-11-20T00:00:00",
+                                         "bios_sets": {"neogeo": {}}}))
+            self.assertIsNone(fresh_cache(cache))
+            cache.write_text("{")
+            self.assertIsNone(fresh_cache(cache))
 
 
 
