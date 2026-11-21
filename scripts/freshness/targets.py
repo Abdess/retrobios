@@ -103,7 +103,7 @@ def check_targets(
             out.extend(_unresolved_findings(platform, missing))
             return out
         try:
-            fresh, error = scrape_into_copy("targets", platform, path, workdir)
+            fresh, error, _dropped = scrape_into_copy("targets", platform, path, workdir)
         except subprocess.TimeoutExpired:
             return [Finding("targets", platform, ERROR, detail="scraper timed out")]
         if error:

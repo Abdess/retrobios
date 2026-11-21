@@ -9,16 +9,18 @@ from pathlib import Path
 
 from core.paths import REPO_ROOT
 from freshness.scrapers import rescrape_command
+from scraper.base_scraper import DROPPED_PREFIX
 
 
 def scrape_into_copy(
     area: str, name: str, source: Path, workdir: Path,
     registry: Mapping[str, Mapping] | None = None, timeout: int = 900,
-) -> tuple[Path, str | None]:
+) -> tuple[Path, str | None, list[str]]:
     """Run a scraper's own write path on a throwaway copy of *source*.
 
     The CLI merges into the file it writes, so the copy carries every field
     the scraper preserves and the diff shows only what the scrape changes.
+    The third value lists the upstream entries the scraper left out.
     """
     target = workdir / source.name
     command = rescrape_command(area, name, target, registry)
@@ -35,5 +37,10 @@ def scrape_into_copy(
     )
     if proc.returncode != 0:
         tail = (proc.stderr or proc.stdout).strip().splitlines()[-1:]
-        return target, tail[0] if tail else f"exit {proc.returncode}"
-    return target, None
+        return target, tail[0] if tail else f"exit {proc.returncode}", []
+    dropped = [
+        line.removeprefix(DROPPED_PREFIX)
+        for line in (proc.stderr or "").splitlines()
+        if line.startswith(DROPPED_PREFIX)
+    ]
+    return target, None, dropped

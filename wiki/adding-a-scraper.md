@@ -140,7 +140,6 @@ Based on the RomM scraper pattern (JSON source, flat structure):
 from __future__ import annotations
 
 import json
-import sys
 
 try:
     from .base_scraper import BaseScraper, BiosRequirement
@@ -168,10 +167,11 @@ class Scraper(BaseScraper):
 
         data = json.loads(raw)
         requirements = []
+        unmapped = set()
         for entry in data:
             system = SLUG_MAP.get(entry["platform"])
             if not system:
-                print(f"Warning: unmapped '{entry['platform']}'", file=sys.stderr)
+                unmapped.add(entry["platform"])
                 continue
             requirements.append(BiosRequirement(
                 name=entry["filename"],
@@ -182,6 +182,8 @@ class Scraper(BaseScraper):
                 destination=entry["filename"],
                 required=entry.get("required", True),
             ))
+        if unmapped:
+            raise ValueError(f"unmapped platform {', '.join(sorted(unmapped))}")
         return requirements
 
     def validate_format(self, raw_data: str) -> bool:

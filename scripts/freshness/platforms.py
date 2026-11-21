@@ -44,7 +44,7 @@ def check_platforms(platforms_dir: Path, workdir: Path, jobs: int) -> list[Findi
     def run(row: tuple[str, str, Path]) -> Finding:
         name, _module, path = row
         try:
-            fresh, error = scrape_into_copy("platforms", name, path, workdir, registry)
+            fresh, error, dropped = scrape_into_copy("platforms", name, path, workdir, registry)
         except subprocess.TimeoutExpired:
             return Finding("platforms", name, ERROR, detail="scraper timed out")
         if error:
@@ -52,14 +52,19 @@ def check_platforms(platforms_dir: Path, workdir: Path, jobs: int) -> list[Findi
         old = source_yaml_file(path) or {}
         new = source_yaml_file(fresh) or {}
         diff = diff_platform(old, new)
-        status = STALE if diff.changed else OK
+        # An entry the scraper left out is in no diff: upstream declares a
+        # file the platform file does not transcribe.
+        status = STALE if diff.changed else UNKNOWN if dropped else OK
+        detail = diff.summary()
+        if dropped:
+            detail = f"{detail}; {len(dropped)} upstream entries not transcribed ({dropped[0]})"
         return Finding(
             "platforms",
             name,
             status,
             local=str(old.get("version", "")),
             remote=str(new.get("version", "")),
-            detail=diff.summary(),
+            detail=detail,
         )
 
     with ThreadPoolExecutor(max_workers=jobs) as pool:

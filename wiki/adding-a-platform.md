@@ -117,7 +117,10 @@ SLUG_MAP: dict[str, str] = {
 }
 ```
 
-Warn on unmapped slugs so new systems are surfaced during scraping.
+An unmapped slug fails the scrape: skipped, its files would leave the platform
+file while the run still exits 0. An entry the platform file cannot carry goes
+in `self.dropped` with its reason, and `check_freshness.py` reports the
+platform UNKNOWN while one is left out.
 
 ### generate_platform_yaml (optional)
 

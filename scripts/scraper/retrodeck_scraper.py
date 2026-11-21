@@ -363,9 +363,11 @@ def _entry_requirement(entry: dict, comp_key: str, default_system: object) -> Bi
     )
 
 
-def _warn_md5_conflict(
+def _md5_conflict(
     requirements: list[BiosRequirement], key: tuple[str, str], req: BiosRequirement
-) -> None:
+) -> str | None:
+    """Why *req* is left out: an earlier component declares the same file
+    with another MD5. None for a plain repeat."""
     existing = next(
         (
             r
@@ -376,11 +378,11 @@ def _warn_md5_conflict(
     )
     md5 = req.md5
     if existing and md5 and existing.md5 and md5 != existing.md5:
-        print(
-            f"  WARNING: {req.name} ({req.system}): MD5 conflict "
-            f"({existing.md5[:12]}... vs {md5[:12]}...)",
-            file=sys.stderr,
+        return (
+            f"{req.name} ({req.system}): MD5 conflict "
+            f"({existing.md5[:12]}... vs {md5[:12]}... in {req.native['component']})"
         )
+    return None
 
 
 class Scraper(BaseScraper):
@@ -493,7 +495,9 @@ class Scraper(BaseScraper):
                         continue
                     key = (req.system, req.name.lower())
                     if key in seen:
-                        _warn_md5_conflict(requirements, key, req)
+                        conflict = _md5_conflict(requirements, key, req)
+                        if conflict:
+                            self.dropped.append(conflict)
                         continue
                     seen.add(key)
                     requirements.append(req)

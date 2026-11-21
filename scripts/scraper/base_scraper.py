@@ -148,6 +148,11 @@ def requirement_entry(req: BiosRequirement) -> dict:
     return entry
 
 
+# The stderr line a scraper CLI writes for each upstream entry the platform
+# file does not carry. The freshness rescrape reads them on exit 0, where the
+# diff of the rewritten file cannot show an entry that was never written.
+DROPPED_PREFIX = "dropped: "
+
 SCRAPER_AGENT = "retrobios-scraper/1.0"
 GITHUB_API = "https://api.github.com"
 
@@ -403,6 +408,8 @@ class BaseScraper(ABC):
 
     def __init__(self, url: str = "") -> None:
         self.url = url
+        # Upstream entries left out of the platform file, each with its reason.
+        self.dropped: list[str] = []
         self._raw_data: str | None = None
         self._json_data: dict | None = None
 
@@ -688,6 +695,8 @@ def scraper_cli(
         exit_on_scrape_error(RuntimeError(
             f"{scraper_class.__module__}: upstream returned no BIOS entry"
         ))
+    for reason in scraper.dropped:
+        print(f"{DROPPED_PREFIX}{reason}", file=sys.stderr)
 
     if args.dry_run:
         _print_dry_run(reqs)

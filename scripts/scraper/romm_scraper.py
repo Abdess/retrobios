@@ -23,7 +23,6 @@ Slugs are IGDB-style platform identifiers.
 from __future__ import annotations
 
 import re
-import sys
 
 from .base_scraper import (
     BaseScraper,
@@ -174,6 +173,7 @@ class Scraper(BaseScraper):
 
         data = self._fetch_json()
         requirements: list[BiosRequirement] = []
+        unmapped: set[str] = set()
 
         for key, entry in data.items():
             if ":" not in key:
@@ -182,7 +182,7 @@ class Scraper(BaseScraper):
             igdb_slug, filename = key.split(":", 1)
             system = SLUG_MAP.get(igdb_slug)
             if not system:
-                print(f"Warning: unmapped IGDB slug '{igdb_slug}'", file=sys.stderr)
+                unmapped.add(igdb_slug)
                 continue
 
             sha1 = (entry.get("sha1") or "").strip() or None
@@ -211,6 +211,10 @@ class Scraper(BaseScraper):
                 for slug in (igdb_slug, *mirrors)
             )
 
+        # Skipped, the slug's files left romm.yml with exit 0 and the
+        # rescrape diff showed nothing for entries never written.
+        if unmapped:
+            raise ValueError(f"unmapped IGDB slug {', '.join(sorted(unmapped))}: add it to SLUG_MAP")
         return requirements
 
     def validate_format(self, raw_data: str) -> bool:
