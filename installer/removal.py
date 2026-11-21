@@ -42,6 +42,7 @@ from installer.narrowing import designated_cores
 from installer.network import _fetch_json
 from installer.paths import shown_path, spelled
 from installer.platforms import display_name, entry_systems, normalize_platform, refuse_name, system_title
+from installer.refusal import Refusal
 from installer.remote import MAX_MANIFEST_BYTES, active_remote
 from installer.safe_replace import (
     BACKUP_DIR,
@@ -628,8 +629,9 @@ def _record_after_removal(removal: Removal, removed: list[dict]) -> str:
     return _update_record(removal.folder, removal.plat, change)
 
 
-def _named_files(values: Iterable[Path], folder: Path) -> list[str] | None:
-    """The --file values as dests below folder, None for one outside it."""
+def _named_files(values: Iterable[Path], folder: Path) -> tuple[list[str], str]:
+    """The --file values as dests below folder, and why nothing is removed
+    when one is outside it, else ""."""
     files = []
     for value in values:
         given = Path(os.path.expanduser(str(value)))
@@ -637,16 +639,17 @@ def _named_files(values: Iterable[Path], folder: Path) -> list[str] | None:
             try:
                 given = Path(os.path.abspath(given)).relative_to(folder)
             except ValueError:
-                print(f"Error: {value} is not inside {shown_path(folder)}: --file names a "
-                      "file of the BIOS folder.", file=sys.stderr)
-                return None
+                return [], (f"Error: {value} is not inside {shown_path(folder)}: --file "
+                            "names a file of the BIOS folder.")
         files.append(PurePosixPath(*given.parts).as_posix())
-    return files
+    return files, ""
 
 
 def _removal_refused(plat: str, folder: Path, message: str, backup: bool) -> int:
     """A removal that touches nothing: the reason said and sent, exit 2."""
     print(message, file=sys.stderr)
+    if message.startswith("Error: "):
+        message = message[len("Error: "):]
     EVENTS.emit("removal_plan", platform=plat, folder=str(folder), files=0, bytes=0,
                 systems=[], dests=[], kept=[], gone=0, backup=backup,
                 message=message)
@@ -724,16 +727,16 @@ def _print_removal_plan(args: argparse.Namespace, removal: Removal, by_hand: lis
                 print(f"  {rel}")
 
 
-def _removal_answer(args: argparse.Namespace) -> int | None:
+def _removal_answer(args: argparse.Namespace, plat: str) -> int | None:
     """The exit code when the plan stops before removing, None to go on."""
     if args.dry_run:
         print("Nothing was removed (--dry-run).")
         return 0
     if not args.yes:
         if args.no_input or not sys.stdin.isatty():
-            print("Error: removing files needs a yes: add --yes to remove them without "
-                  "a question, or --dry-run to list them.", file=sys.stderr)
-            return 2
+            raise Refusal("option", "needs_yes", plat,
+                          "Error: removing files needs a yes: add --yes to remove them "
+                          "without a question, or --dry-run to list them.", code=2)
         question = ("Move them to a backup? [y/N] " if args.backup
                     else "Remove them for good? [y/N] ")
         if not _answer_yes(question):
@@ -801,9 +804,9 @@ def run_removal(args: argparse.Namespace) -> int:
             manifest, every, omitted)), "emulator") if args.emulator else []
     except ValueError as exc:
         refuse_name(plat, f"Error: {plat}: {exc}")
-    files = _named_files(args.file or [], folder)
-    if files is None:
-        return 2
+    files, outside = _named_files(args.file or [], folder)
+    if outside:
+        return _removal_refused(plat, folder, outside, bool(args.backup))
     misplaced = bool(getattr(args, "misplaced", False))
     if misplaced:
         others, message = _misplaced_others(plat, folder, read.dropped, read.data["setups"])
@@ -830,7 +833,7 @@ def run_removal(args: argparse.Namespace) -> int:
     if not removal.remove:
         # The record keeps what it says until a removal is confirmed.
         return 2
-    stop = _removal_answer(args)
+    stop = _removal_answer(args, plat)
     if stop is not None:
         return stop
     KEPT.reset()
@@ -914,9 +917,9 @@ def run_delete_backup(args: argparse.Namespace) -> int:
     0 done, 1 a file failed, 2 refused or declined."""
     run = Path(os.path.abspath(os.path.expanduser(str(args.delete_backup))))
     if not _is_backup_run(run):
-        print(f"Error: {run} is not a folder the installer kept files in.", file=sys.stderr)
-        print("  Name one of the dated folders --backups lists.", file=sys.stderr)
-        return 2
+        raise Refusal("backup", "not_a_backup", "",
+                      f"Error: {run} is not a folder the installer kept files in.",
+                      "  Name one of the dated folders --backups lists.", code=2)
     files = _backup_files(run)
     size = sum(path.stat().st_size for path in files)
     date = _backup_date(run)
@@ -928,9 +931,9 @@ def run_delete_backup(args: argparse.Namespace) -> int:
         return 0
     if not args.yes:
         if args.no_input or not sys.stdin.isatty():
-            print("Error: deleting a backup needs a yes: add --yes to delete it without "
-                  "a question.", file=sys.stderr)
-            return 2
+            raise Refusal("option", "needs_yes", "",
+                          "Error: deleting a backup needs a yes: add --yes to delete it "
+                          "without a question.", code=2)
         if not _answer_yes("Delete it for good? [y/N] "):
             print("Nothing was deleted.")
             return QUIT_CODE
@@ -985,20 +988,18 @@ def _action_setup(args: argparse.Namespace) -> tuple[str, Path]:
         setups = sorted((load_record(folder).data or {}).get("setups") or {})
         if len(setups) == 1:
             return setups[0], folder
-        print(f"Error: name the setup of {shown_path(folder)} with --platform"
-              + (f": {', '.join(setups)}." if setups else "."), file=sys.stderr)
-        sys.exit(2)
+        raise Refusal("detect", "conflict" if setups else "not_found", "",
+                      f"Error: name the setup of {shown_path(folder)} with --platform"
+                      + (f": {', '.join(setups)}." if setups else "."), code=2)
     found = [(name, path) for name, path in detect_platforms(detect_os())
              if not plat or name == plat]
     if len(found) == 1:
         return found[0][0], Path(os.path.abspath(found[0][1]))
     if not found:
-        print("Error: no setup found here: name its BIOS folder with --dest"
-              + ("." if plat else " and its setup with --platform."), file=sys.stderr)
-    else:
-        print("Error: several setups found here: name one with --platform and --dest.",
-              file=sys.stderr)
-        for name, path in found:
-            print(f"  --platform {name} --dest {_INVOCATION.word(str(path))}",
-                  file=sys.stderr)
-    sys.exit(2)
+        raise Refusal("detect", "not_found", plat,
+                      "Error: no setup found here: name its BIOS folder with --dest"
+                      + ("." if plat else " and its setup with --platform."), code=2)
+    raise Refusal("detect", "conflict", plat,
+                  "Error: several setups found here: name one with --platform and --dest.",
+                  *(f"  --platform {name} --dest {_INVOCATION.word(str(path))}"
+                    for name, path in found), code=2)

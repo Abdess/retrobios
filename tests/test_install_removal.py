@@ -298,6 +298,25 @@ class WithoutARecord(unittest.TestCase):
 
 
 class Events(unittest.TestCase):
+    def test_a_removal_refused_says_why(self):
+        """--file outside the folder and a removal with no yes ended on code
+        2 with the reason on stderr only: a script read end and nothing else."""
+        with SharedRepository() as repo:
+            repo.install_both()
+            outside = repo.run("--remove", "--file", str(repo.root / "x.bin"), "--events")
+            said = repo.events(outside)
+            self.assertEqual(([event["event"] for event in said], outside.returncode),
+                             (["start", "removal_plan", "end"], 2))
+            self.assertEqual(said[1]["files"], 0)
+            self.assertIn("is not inside", said[1]["message"])
+            self.assertIn("Error: ", outside.stderr)
+            unanswered = repo.run("--remove", "--system", "nintendo-gba", "--events")
+            said = repo.events(unanswered)
+            self.assertEqual(([event["event"] for event in said], unanswered.returncode),
+                             (["start", "removal_plan", "error", "end"], 2))
+            self.assertEqual((said[2]["stage"], said[2]["reason"]), ("option", "needs_yes"))
+            self.assertIn("removing files needs a yes", unanswered.stderr)
+
     def test_every_new_kind(self):
         with SharedRepository() as repo:
             repo.install_both()
