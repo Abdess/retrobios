@@ -26,7 +26,8 @@ from core.sizes import size_text
 from sitegen.guides import platform_args, terminal_tabs
 from sitegen.home import next_block
 from sitegen.install import installer_module, has_release_pack, platform_display
-from sitegen.readme import download_links, extract_notes
+from sitegen.extraction import extract_notes
+from sitegen.releasepacks import download_links
 from sitegen.versions import release_line, setup_version, version_line
 
 

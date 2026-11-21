@@ -37,7 +37,7 @@ from packs import datatrees
 from packs import manifest as packs_manifest
 from packs import platformpack
 from sitegen import readme as sitegen_readme
-from sitegen import home
+from sitegen import home, releasepacks
 import release_notes
 from release import notes
 from release import record as release_record
@@ -382,18 +382,18 @@ class TheTableDescribesTheRelease(unittest.TestCase):
     def test_a_platform_reads_the_pack_that_serves_it(self):
         for platform in ("retroarch", "lakka"):
             self.assertEqual(
-                sitegen_readme.release_totals(platform, RECORD),
+                releasepacks.release_totals(platform, RECORD),
                 (4525, 5882727352),
             )
         self.assertEqual(
-            sitegen_readme.release_totals("misterfpga", RECORD), (74, 17000000)
+            releasepacks.release_totals("misterfpga", RECORD), (74, 17000000)
         )
 
     def test_a_platform_the_release_does_not_carry_has_no_figure(self):
         self.assertEqual(
-            sitegen_readme.release_totals("vita3k", RECORD), (None, None)
+            releasepacks.release_totals("vita3k", RECORD), (None, None)
         )
-        self.assertEqual(sitegen_readme.release_totals("retroarch", {}), (None, None))
+        self.assertEqual(releasepacks.release_totals("retroarch", {}), (None, None))
 
     def test_the_download_table_gives_the_file_count_of_each_pack(self):
         rows = sitegen_readme.download_table(
@@ -412,7 +412,7 @@ class TheTableDescribesTheRelease(unittest.TestCase):
             self.skipTest("no release.json")
         record = json.loads(record_path.read_text(encoding="utf-8"))
         readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
-        files, _size = sitegen_readme.release_totals("retroarch", record)
+        files, _size = releasepacks.release_totals("retroarch", record)
         self.assertTrue(f"| RetroArch | {files:,} |" in readme)
 
 
@@ -549,7 +549,7 @@ class RefusedFilesAreNotPresent(unittest.TestCase):
 
         from model.platforms import _platform_config_cache
         from collection.indexes import build_indexes
-        from sitegen import readme as sitegen_readme
+        from sitegen.coverage import compute_coverage
 
         with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
@@ -582,7 +582,7 @@ class RefusedFilesAreNotPresent(unittest.TestCase):
             )
             _platform_config_cache.clear()
             self.addCleanup(_platform_config_cache.clear)
-            coverage = sitegen_readme.compute_coverage(
+            coverage = compute_coverage(
                 "hashy", "platforms", db, emulators_dir="emulators"
             )
         self.assertEqual((coverage["present"], coverage["total"]), (1, 2))

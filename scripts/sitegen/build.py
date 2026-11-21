@@ -92,7 +92,7 @@ from sitegen.platformindex import SETUP_TABLE_PAGE, generate_platform_index, wit
 from sitegen.platformpage import own_list_only, generate_platform_page
 from sitegen.provenance import WantedDumps, generate_provenance_page, load_derivable, wanted_dumps
 from sitegen.publish import write_release_advertised
-from sitegen.readme import platform_coverages
+from sitegen.coverage import platform_coverages
 from sitegen.reference import (
     generate_contributing,
     generate_not_found,

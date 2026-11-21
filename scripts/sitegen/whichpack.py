@@ -26,7 +26,7 @@ from sitegen.guidepage import NO_ZIP_FAQ, devices_meta, first_screen_words, get_
 from sitegen.guides import fence, terminal_tabs, trust_box
 from sitegen.home import group_keys, next_block, runs_on_text, setup_picker
 from sitegen.install import installer_module, platform_display
-from sitegen.readme import NO_PACK, download_links, release_state
+from sitegen.releasepacks import NO_PACK, download_links, release_state
 
 
 # Build cross-reference indexes

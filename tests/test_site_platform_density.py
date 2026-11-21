@@ -190,7 +190,7 @@ class NothingIsLost(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         from model.database import load_database
-        from sitegen.readme import compute_coverage
+        from sitegen.coverage import compute_coverage
 
         db = load_database(str(REPO_ROOT / "database.json"))
         cls.pages = {}

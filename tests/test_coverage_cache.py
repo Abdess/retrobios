@@ -17,7 +17,7 @@ from pathlib import Path
 from unittest import mock
 
 from core import cli
-from sitegen import readme
+from sitegen import coverage
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -34,8 +34,8 @@ class CoverageCache(unittest.TestCase):
         self.db.write_text("{}")
         self.calls: list[str] = []
         patches = [
-            mock.patch.object(readme, "COVERAGE_CACHE_DIR", self.work / "cache"),
-            mock.patch.object(readme, "compute_coverage", self._compute),
+            mock.patch.object(coverage, "COVERAGE_CACHE_DIR", self.work / "cache"),
+            mock.patch.object(coverage, "compute_coverage", self._compute),
         ]
         for patch in patches:
             patch.start()
@@ -53,7 +53,7 @@ class CoverageCache(unittest.TestCase):
         return {"platform": name.title(), "missing_names": {"a.bin"}}
 
     def _run(self, names=("beta", "alpha")) -> dict:
-        return readme.platform_coverages(
+        return coverage.platform_coverages(
             list(names), str(self.platforms), {}, {},
             emulators_dir=str(self.emulators), db_path=str(self.db),
         )
@@ -122,8 +122,8 @@ class CoverageCache(unittest.TestCase):
         def missing(*_args, **_kwargs):
             raise cli.InputMissing("no emulator profile directory at nosuch")
 
-        with mock.patch.object(readme, "compute_coverage", missing), \
-                mock.patch.object(readme, "_coverage_inputs", return_value="other"), \
+        with mock.patch.object(coverage, "compute_coverage", missing), \
+                mock.patch.object(coverage, "_coverage_inputs", return_value="other"), \
                 self.assertRaises(cli.InputMissing):
             self._run()
         self.assertEqual(sorted((self.work / "cache").glob("*.pickle")), kept)

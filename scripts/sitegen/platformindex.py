@@ -8,7 +8,7 @@ from resolve.nativemode import check_label
 from sitegen import markup
 from sitegen.guidepage import NO_ZIP_FAQ
 from sitegen.home import group_members
-from sitegen.readme import release_state, release_totals
+from sitegen.releasepacks import release_state, release_totals
 
 
 # Platform pages

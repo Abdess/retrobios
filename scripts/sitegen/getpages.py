@@ -27,7 +27,7 @@ from sitegen.guidepage import (
 from sitegen.home import next_block
 from sitegen.install import display_name, has_release_pack, platform_display
 from sitegen.parts import parent_front_matter
-from sitegen.readme import asset_links
+from sitegen.releasepacks import asset_links
 from sitegen.versions import release_line, version_line
 
 

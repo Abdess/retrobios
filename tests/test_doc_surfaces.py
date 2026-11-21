@@ -21,14 +21,8 @@ from pathlib import Path
 
 from core.sizes import size_text
 from model import releaserecord
-from sitegen.readme import (
-    SITE_URL,
-    asset_links,
-    contributing_text,
-    download_links,
-    download_table,
-    release_state,
-)
+from sitegen.readme import SITE_URL, contributing_text, download_table
+from sitegen.releasepacks import asset_links, download_links, release_state
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
