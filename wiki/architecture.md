@@ -505,7 +505,7 @@ those it imports:
 | What a run keeps | `narrowing`, `choices`, `romm`, `install_record`, `game_files`, `games`, `tally` |
 | Line mode | `destination`, `line_folder`, `line_menu`, `plan_words`, `plan`, `outcome` |
 | Runs and actions | `arguments`, `run_setups`, `run_files`, `run`, `pack`, `removal`, `handheld_app`, `cli` |
-| Full screen | `tui_state`, `tui_routes`, `tui_commands`, `tui_keys`, `tui_paint`, `tui_choice`, `tui_rows`, `tui_frame`, `tui_plan_view`, `tui_outcome`, `tui_screens`, `tui_actions`, `tui_input`, `tui_receive`, `tui_engine`, `tui_session` |
+| Full screen | `tui_state`, `tui_routes`, `tui_commands`, `tui_keys`, `tui_paint`, `tui_choice`, `tui_folder_scan`, `tui_rows`, `tui_frame`, `tui_plan_view`, `tui_outcome`, `tui_screens`, `tui_actions`, `tui_input`, `tui_receive`, `tui_engine`, `tui_session` |
 
 ## Tests
 

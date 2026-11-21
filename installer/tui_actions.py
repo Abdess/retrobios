@@ -62,6 +62,7 @@ from installer.tui_choice import (
     tui_choices,
 )
 from installer.tui_commands import _tui_card, tui_flags, tui_pack_dir, tui_record_kept
+from installer.tui_folder_scan import card_mounts, scan_folder
 from installer.tui_paint import _CHECK_FIELDS, _short_path, _styled
 from installer.tui_rows import (
     TUI_TICK_ROWS,
@@ -546,6 +547,7 @@ def _choose(state: TuiState, plat: str, dest: Path, proposed: bool = False) -> l
         # default beside it is one it does not, offered as "reads its BIOS
         # files from" and filled with Enter.
         state.folder_default, state.folder_kind = None, "closed"
+        state.folder_scan = scan_folder(state)
         return _push(state, "folder")
     card = card_system(dest)
     if card and card[0] == plat and card[1] != dest:
@@ -656,6 +658,7 @@ def _choose_card(state: TuiState, folder: Path) -> list[tuple]:
         if state.stack and state.screen in ("folder", "browse", "path"):
             return []
         state.folder_default, state.folder_kind = None, "usual"
+        state.folder_scan = scan_folder(state)
         return _push(state, "folder")
     return _take_card(state, choice, folder)
 
@@ -713,12 +716,9 @@ def _open_folder_screen(state: TuiState, default: Path | None,
               else "")
     if system and not state.card_bound and card_bound(system, state.platform):
         state.card_bound = card_bound(system, state.platform)
-    # The cards are looked for when the screen opens and on Look again: a
+    # The drives are looked for when the screen opens and on Look again: a
     # card inserted meanwhile moved the rows under the focus.
-    state.cards = None
-    bound = _tui_card_bound(state)
-    if bound:
-        state.cards = mounted_cards_of(bound[0], state.platform)
+    state.folder_scan = scan_folder(state)
     refused = kind == "chosen" and (state.facts.get("writable") is False
                                     or _short_of_space(state, state.check or {}))
     # A folder just refused as full or read-only: Browse, not Use this
@@ -810,9 +810,10 @@ def _rescan_cards(state: TuiState) -> list[tuple]:
     """Look again for the cards of the setup chosen."""
     bound = _tui_card_bound(state)
     assert bound is not None
-    state.cards = mounted_cards_of(bound[0], state.platform)
+    state.folder_scan = scan_folder(state)
+    mounts = card_mounts(state.folder_scan)
     cards = [index for index, item in enumerate(tui_rows(state))
-             if item.action == "card" and item.value in state.cards]
+             if item.action == "card" and item.value in mounts]
     state.focus["folder"] = cards[0] if cards else state.focus.get("folder", 0)
     state.status = ("" if cards else f"Still no {bound[0]} card "
                     "is mounted.")

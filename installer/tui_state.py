@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, NamedTuple
 
 if TYPE_CHECKING:
     from installer.handheld_app import CardApp
+    from installer.tui_folder_scan import FolderScan
     from installer.tui_input import TuiHits
 
 
@@ -128,8 +129,9 @@ class TuiState:
         # help and the bar say how to tap only then.
         self.mouse: bool = False
         self.list_top: dict = {}
-        # The mounted cards of that system, as last looked for.
-        self.cards: list | None = None
+        # The drives the folder screen lists, as last looked for: read when
+        # it opens and on Look again, never by a frame.
+        self.folder_scan: FolderScan | None = None
         # (width and text, lines) of the last pager wrapped.
         self.pager_cache: tuple | None = None
         self.path_text: str = ""

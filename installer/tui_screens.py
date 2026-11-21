@@ -10,7 +10,7 @@ from installer.cards import _GAMES_PART_CARDS, card_setup, setup_bios_folder
 from installer.destination import card_where
 from installer.detect_os import detected_shown
 from installer.embedded import CARD_PLATFORMS, _a
-from installer.line_folder import drives_left_out, share_words, side_name, unproven_words
+from installer.line_folder import share_words, side_name
 from installer.manifest import OTHER_SYSTEMS
 from installer.offline import LOCAL
 from installer.outcome import _SHORT_DEFINITIONS
@@ -208,7 +208,7 @@ def _view_folder(state: TuiState, width: int, height: int) -> tuple:
         before = [f"No usual {name} folder here: browse for it or type it."]
     notes: list = []
     if not bound and state.folder_kind != "share":
-        notes = [note for note in (drives_left_out(state.platform), unproven_words()) if note]
+        notes = list(state.folder_scan.notes) if state.folder_scan else []
     body = _fitted_compose(state, width, height, before, notes,
                            tui_rows(state), _status_after(state), state.refused)
     return (title, body, ("A/Enter Choose", "B/Esc Back", "? Help"))

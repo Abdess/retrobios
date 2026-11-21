@@ -3819,6 +3819,24 @@ class ACardSystemNamedOnAComputer(unittest.TestCase):
         self.assertEqual(effects, [("fetch", "retroarch")])
         self.assertEqual(state.dest, device)
 
+    def test_a_stick_inserted_moves_no_row_until_look_again(self):
+        """A blank stick mounted while the folder screen was open moved the
+        rows on the next frame, and Enter on Look again opened the browser."""
+        stick = self.card({"README.txt": ""})
+        state = install.TuiState(os_type="linux", home=HOME)
+        state.platform, state.card_bound = "knulli", ("KNULLI", "bios")
+        with mock.patch.object(install, "_mounted_cards", return_value=[]):
+            install._open_folder_screen(state, None)
+        before = [row.label for row in install.tui_rows(state)]
+        state.focus["folder"] = before.index("Look again")
+        with mock.patch.object(install, "_mounted_cards", return_value=[stick]) as scan:
+            install.tui_view(state, 80, 24)
+            self.assertEqual([row.label for row in install.tui_rows(state)], before)
+            self.assertEqual(scan.call_count, 0)
+            install.tui_update(state, Key("enter"))
+        self.assertEqual(state.screen, "folder")
+        self.assertIn(stick, [row.value for row in install.tui_rows(state)])
+
 
 class TheSetupFilterKnowsDevices(unittest.TestCase):
     """The filter found nothing for steam deck, r36s,
@@ -8151,6 +8169,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         state.folder_default, state.folder_kind = SYSTEM_DIR, "usual"
         with mock.patch.object(install, "_mounted_cards", return_value=mounts), \
                 mock.patch.object(install, "_mount_points", return_value=frozenset()):
+            state.folder_scan = install.scan_folder(state)
             rows = install.tui_rows(state)
             screen = " ".join(install.tui_view(state, 120, 40))
             state.focus["folder"] = next(index for index, row in enumerate(rows)
@@ -8862,7 +8881,8 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         state.platform, state.stack = "retroarch", ["folder"]
         state.folder_default, state.folder_kind = SYSTEM_DIR, "usual"
         with mock.patch.object(install, "_mounted_cards", return_value=mounts):
-            rows = install.tui_rows(state)
+            state.folder_scan = install.scan_folder(state)
+        rows = install.tui_rows(state)
         self.assertEqual([row.value for row in rows if row.action == "drive"],
                          [stick / "bios"])
 
@@ -11772,7 +11792,8 @@ class TapsGameDataAndExitCodes(_CardFixtures, unittest.TestCase):
         state.platform, state.stack = "retroarch", ["folder"]
         state.folder_default, state.folder_kind = SYSTEM_DIR, "usual"
         with mock.patch.object(install, "_mounted_cards", return_value=[]):
-            rows = install.tui_rows(state)
+            state.folder_scan = install.scan_folder(state)
+        rows = install.tui_rows(state)
         self.assertIn(sides[0][1], [row.value for row in rows if row.action == "drive"])
 
     @in_full
@@ -12386,7 +12407,8 @@ class OneChoicePerRun(unittest.TestCase):
         state.folder_default, state.folder_kind = SYSTEM_DIR, "usual"
         with mock.patch.object(install, "_mounted_cards", return_value=[]), \
                 mock.patch.object(install, "_is_dir", return_value=False):
-            text = "\n".join(install.tui_view(state, 100, 30))
+            state.folder_scan = install.scan_folder(state)
+        text = "\n".join(install.tui_view(state, 100, 30))
         self.assertIn("Linux RetroArch usually reads its BIOS files from:", text)
         self.assertIn("(does not exist yet)", text)
 

@@ -6,15 +6,13 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from installer.cards import _doubt_kinds, _mount_name, _mounted_cards, share_doubt
+from installer.cards import _doubt_kinds, _mount_name, _mounted_cards
 from installer.choices import recorded_axes
 from installer.cores import CORE_PLATFORMS
-from installer.destination import _card_what, blank_cards_of, doubt_cards, mounted_cards_of
+from installer.destination import _card_what
 from installer.handheld_app import APP_OFFER, APP_OFFER_SHORT
-from installer.host_fs import _is_dir
 from installer.install_record import record_day
 from installer.invocation import offline_requested
-from installer.line_folder import _said_with, folder_drives, share_targets
 from installer.manifest import GAME_DATA
 from installer.offline import LOCAL, _offline_only
 from installer.plan import CONFIRM_FROM_BYTES
@@ -75,6 +73,7 @@ from installer.tui_commands import (
     tui_flags,
     tui_record_kept,
 )
+from installer.tui_folder_scan import FolderScan
 from installer.tui_paint import _short_path
 from installer.tui_state import TUI_MAX_WIDTH, TuiRow, _matches
 
@@ -126,27 +125,20 @@ def _setup_screen_rows(state: TuiState) -> list[TuiRow]:
     return rows + [TuiRow("another", "Another setup or folder")]
 
 
-def _card_screen_rows(state: TuiState, rows: list[TuiRow],
-                      bound: tuple[str, str]) -> list[TuiRow]:
+def _card_screen_rows(state: TuiState, rows: list[TuiRow], scan: FolderScan) -> list[TuiRow]:
     """The folder rows of a setup that runs from a card."""
     # Only the cards whose own files say they run the system: A on the
     # first mount wrote Onion's layout on a muOS card.
-    mounts = (state.cards if state.cards is not None
-              else mounted_cards_of(bound[0], state.platform))
-    cards = [TuiRow("card", f"{_mount_name(mount)} ({_card_what(mount)})", value=mount)
-             for mount in mounts]
+    cards = [TuiRow("card", f"{_mount_name(mount)} ({what})", value=mount)
+             for mount, what in scan.cards]
     # A drive this system and another both fit is its card, as --dest
     # takes it: "No KNULLI card is mounted" sat beside it.
-    doubtful = [mount for mount in doubt_cards(state.platform) if mount not in mounts]
-    cards += [TuiRow("card", f"{_mount_name(mount)} (could be "
-                     f"{_doubt_kinds(share_doubt(mount)[0])})", value=mount)
-              for mount in doubtful]
-    mounts = [*mounts, *doubtful]
+    cards += [TuiRow("card", f"{_mount_name(mount)} (could be {kinds})", value=mount)
+              for mount, kinds in scan.doubtful]
     # On the device itself its folder is found, and no card is looked for.
     here = state.folder_default is not None and state.folder_kind == "found"
-    blank = [] if here else [
-        TuiRow("card", f"{_mount_name(mount)} ({_card_what(mount)})", value=mount)
-        for mount in blank_cards_of(bound[0], state.platform) if mount not in mounts]
+    blank = [] if here else [TuiRow("card", f"{_mount_name(mount)} ({what})", value=mount)
+                             for mount, what in scan.blank]
     rescan = [] if cards or here else [TuiRow("rescan", "Look again")]
     if blank:
         # A blank drive is listed for a system that fills its card when
@@ -158,15 +150,14 @@ def _card_screen_rows(state: TuiState, rows: list[TuiRow],
 
 
 def _folder_screen_rows(state: TuiState) -> list[TuiRow]:
-    """The rows of the BIOS folder question."""
+    """The rows of the BIOS folder question, from the drives last looked for."""
     rows = [TuiRow("default", "Use this folder")] if state.folder_default else []
-    bound = _tui_card_bound(state)
+    scan = state.folder_scan or FolderScan()
     if state.folder_kind == "share":
         # The drives mounted here first, each one's bios folder: the
         # share drive of a Batocera card or disk in a reader.
-        rows += [TuiRow("share", label, value=folder)
-                 for label, folder in share_targets(state.platform)]
-    if not bound:
+        rows += [TuiRow("share", label, value=folder) for label, folder in scan.shares]
+    if not _tui_card_bound(state):
         # The drives mounted here, as line mode numbers them at the same
         # question, each by the BIOS folder its system reads, after the
         # Windows side's usual folder under WSL.
@@ -175,14 +166,10 @@ def _folder_screen_rows(state: TuiState) -> list[TuiRow]:
         # Every row whose folder is missing says so, in both modes: the
         # Windows row alone did.
         drives = [] if state.folder_kind == "share" else [
-            TuiRow("drive", label if _is_dir(folder) else _said_with(label,
-                                                                     "does not exist yet"),
-                   value=folder)
-            for label, folder in folder_drives(state.os_type, state.platform,
-                                               state.folder_kind == "usual")]
+            TuiRow("drive", label, value=folder) for label, folder in scan.drives]
         return rows + [TuiRow("browse", "Browse for a folder"),
                        TuiRow("type", "Type a path")] + drives
-    return _card_screen_rows(state, rows, bound)
+    return _card_screen_rows(state, rows, scan)
 
 
 def _browse_screen_rows(state: TuiState) -> list[TuiRow]:
