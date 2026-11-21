@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Collection
 
-from installer.manifest import FILE_GROUP, OTHER_SYSTEMS, _COPY_FIELDS
+from installer.manifest import FILE_GROUP, OTHER_SYSTEMS, _COPY_FIELDS, entry_copies
 from installer.paths import _entry_key
 from installer.platforms import entry_systems
 from installer.regions import WORLD_REGION, _region_rank
@@ -467,7 +467,7 @@ def standalone_entries(manifest: dict, layouts: dict, profile: str) -> list[dict
     copies = {
         copy["sha1"]: copy
         for entry in [*manifest.get("files", []), *(manifest.get("truth_files") or [])]
-        for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]
+        for copy in entry_copies(entry)
         if copy.get("sha1") and (copy.get("repo_path") or copy.get("release_asset"))
     }
     result: list[dict] = []
@@ -513,7 +513,7 @@ def find_by_hash(files: list[dict], value: str) -> tuple[str, list[dict], bool]:
     recorded = False
     seen: set[tuple[str, str]] = set()
     for entry in files:
-        for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]:
+        for copy in entry_copies(entry):
             if kind in copy:
                 recorded = True
             if str(copy.get(kind, "")).lower() != value:

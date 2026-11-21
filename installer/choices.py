@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 
 from installer.console import detail
 from installer.install_record import drop_recorded
-from installer.manifest import OTHER_SYSTEMS
+from installer.manifest import OTHER_SYSTEMS, entry_copies
 from installer.narrowing import _filter_by_target, designated_cores, narrow, narrow_to_cores, standalone_layout
 from installer.network import _pack_alone, fetch_standalone
 from installer.offline import LOCAL
@@ -46,7 +46,7 @@ def recorded_axes(files: list[dict], omitted: Iterable[dict] = ()) -> frozenset:
     # pack built with it does.
     axes = {"regions", *(["systems"] if systems else [])}
     if any(copy.get("cores") for entry in files
-           for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]):
+           for copy in entry_copies(entry)):
         axes.add("cores")
     return frozenset(axes)
 
@@ -64,7 +64,7 @@ def available_choices(files: list[dict], omitted: list[dict]) -> dict[str, list[
         ordered.append(OTHER_SYSTEMS)
     cores = {
         c for f in files
-        for copy in [f, *f.get("alternatives", []), *f.get("slot_choices", [])]
+        for copy in entry_copies(f)
         for c in (copy.get("cores") or [])
     }
     regions = {

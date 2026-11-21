@@ -12,6 +12,7 @@ from installer.frontend_folders import _retroarch_config_for
 from installer.host_fs import _is_file, closed_folder
 from installer.invocation import _INVOCATION
 from installer.local_check import closed_folder_words
+from installer.manifest import entry_copies
 from installer.platforms import display_name
 from installer.text import _plural, screen_text
 
@@ -133,9 +134,8 @@ def known_core_names(manifest: dict) -> set[str]:
     for cores in (manifest.get("system_cores") or {}).values():
         names.update(cores)
     for entry in [*manifest.get("files", []), *manifest.get("omitted_files", [])]:
-        names.update(entry.get("cores") or [])
-        for alternative in entry.get("alternatives", []):
-            names.update(alternative.get("cores") or [])
+        for copy in entry_copies(entry):
+            names.update(copy.get("cores") or [])
     return names
 
 

@@ -13,7 +13,7 @@ from installer.destination import dest_drive, on_its_card, shown_bios_folder
 from installer.embedded import CARD_PLATFORMS
 from installer.frontend_folders import save_directory_for, save_where_words
 from installer.games import GAMES_REASONS
-from installer.manifest import OTHER_SYSTEMS
+from installer.manifest import OTHER_SYSTEMS, entry_copies
 from installer.narrowing import narrow
 from installer.offline import LOCAL, _offline_only
 from installer.pack_source import pack_holds_trees, pack_lacks
@@ -92,7 +92,7 @@ def tui_core_sizes(state: TuiState) -> dict[str, str]:
     extra = [entry for entry in kept if entry.get("cores") is not None]
     by_core: dict[str, list[dict]] = {}
     for entry in extra:
-        for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]:
+        for copy in entry_copies(entry):
             for core in copy.get("cores") or []:
                 listed = by_core.setdefault(core, [])
                 if not listed or listed[-1] is not entry:

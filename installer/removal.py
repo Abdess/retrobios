@@ -36,7 +36,7 @@ from installer.install_record import (
 )
 from installer.invocation import _INVOCATION, offline_requested
 from installer.local_check import _digest_file
-from installer.manifest import OTHER_SYSTEMS, _validate_manifest
+from installer.manifest import OTHER_SYSTEMS, _validate_manifest, entry_copies
 from installer.narrowing import designated_cores
 from installer.network import _fetch_json, fetch_manifest
 from installer.paths import shown_path, spelled
@@ -89,8 +89,7 @@ class Removal(NamedTuple):
 
 
 def _entry_sha1s(entry: dict) -> set[str]:
-    return {str(copy.get("sha1")) for copy in [entry, *(entry.get("alternatives") or []),
-                                               *(entry.get("slot_choices") or [])]
+    return {str(copy.get("sha1")) for copy in entry_copies(entry)
             if copy.get("sha1")}
 
 
@@ -98,8 +97,7 @@ def _entry_readers(entry: dict) -> set[str] | None:
     """The cores that read an entry, None for a file of the platform's own list."""
     if entry.get("cores") is None:
         return None
-    return {core for copy in [entry, *(entry.get("alternatives") or []),
-                              *(entry.get("slot_choices") or [])]
+    return {core for copy in entry_copies(entry)
             for core in copy.get("cores") or ()}
 
 

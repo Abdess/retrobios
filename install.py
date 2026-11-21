@@ -3077,6 +3077,11 @@ SELECTION_FIELDS = ("systems", "regions", "region_groups", "region_system_groups
 OTHER_SYSTEMS = "other"
 
 
+def entry_copies(entry: dict) -> list[dict]:
+    """An entry and every copy another core reads at its place."""
+    return [entry, *(entry.get("alternatives") or []), *(entry.get("slot_choices") or [])]
+
+
 def _check_root(entry: dict, dest: str, omitted: bool = False) -> None:
     """root is absent or save, emulator only on a file left out (a path in
     the emulator's own folder, outside the BIOS tree), and core_folder one
@@ -3469,7 +3474,7 @@ def _check_standalone_layouts(data: object, manifest: dict, plat: str) -> dict:
     sizes = {
         copy["sha1"]: copy.get("size", 0)
         for entry in [*manifest.get("files", []), *(manifest.get("truth_files") or [])]
-        for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]
+        for copy in entry_copies(entry)
         if isinstance(copy, dict) and copy.get("sha1")
         and (copy.get("repo_path") or copy.get("release_asset"))
     }
@@ -6665,9 +6670,8 @@ def known_core_names(manifest: dict) -> set[str]:
     for cores in (manifest.get("system_cores") or {}).values():
         names.update(cores)
     for entry in [*manifest.get("files", []), *manifest.get("omitted_files", [])]:
-        names.update(entry.get("cores") or [])
-        for alternative in entry.get("alternatives", []):
-            names.update(alternative.get("cores") or [])
+        for copy in entry_copies(entry):
+            names.update(copy.get("cores") or [])
     return names
 
 
@@ -7211,7 +7215,7 @@ def standalone_entries(manifest: dict, layouts: dict, profile: str) -> list[dict
     copies = {
         copy["sha1"]: copy
         for entry in [*manifest.get("files", []), *(manifest.get("truth_files") or [])]
-        for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]
+        for copy in entry_copies(entry)
         if copy.get("sha1") and (copy.get("repo_path") or copy.get("release_asset"))
     }
     result: list[dict] = []
@@ -7257,7 +7261,7 @@ def find_by_hash(files: list[dict], value: str) -> tuple[str, list[dict], bool]:
     recorded = False
     seen: set[tuple[str, str]] = set()
     for entry in files:
-        for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]:
+        for copy in entry_copies(entry):
             if kind in copy:
                 recorded = True
             if str(copy.get(kind, "")).lower() != value:
@@ -10299,7 +10303,7 @@ def recorded_axes(files: list[dict], omitted: Iterable[dict] = ()) -> frozenset:
     # pack built with it does.
     axes = {"regions", *(["systems"] if systems else [])}
     if any(copy.get("cores") for entry in files
-           for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]):
+           for copy in entry_copies(entry)):
         axes.add("cores")
     return frozenset(axes)
 
@@ -10317,7 +10321,7 @@ def available_choices(files: list[dict], omitted: list[dict]) -> dict[str, list[
         ordered.append(OTHER_SYSTEMS)
     cores = {
         c for f in files
-        for copy in [f, *f.get("alternatives", []), *f.get("slot_choices", [])]
+        for copy in entry_copies(f)
         for c in (copy.get("cores") or [])
     }
     regions = {
@@ -12354,8 +12358,7 @@ def _read_from_folder(label: str) -> FolderIndex:
 def _copies(entry: dict) -> list[dict]:
     """Every copy the list knows for an entry: its own, other cores', the
     platform's declared one."""
-    return [entry, *entry.get("alternatives", []), *entry.get("slot_choices", []),
-            *entry.get("declared_choices", [])]
+    return [*entry_copies(entry), *entry.get("declared_choices", [])]
 
 
 # id(manifest) -> (manifest, the cores its entries name), read once per list.
@@ -20510,8 +20513,7 @@ class Removal(NamedTuple):
 
 
 def _entry_sha1s(entry: dict) -> set[str]:
-    return {str(copy.get("sha1")) for copy in [entry, *(entry.get("alternatives") or []),
-                                               *(entry.get("slot_choices") or [])]
+    return {str(copy.get("sha1")) for copy in entry_copies(entry)
             if copy.get("sha1")}
 
 
@@ -20519,8 +20521,7 @@ def _entry_readers(entry: dict) -> set[str] | None:
     """The cores that read an entry, None for a file of the platform's own list."""
     if entry.get("cores") is None:
         return None
-    return {core for copy in [entry, *(entry.get("alternatives") or []),
-                              *(entry.get("slot_choices") or [])]
+    return {core for copy in entry_copies(entry)
             for core in copy.get("cores") or ()}
 
 
@@ -24027,7 +24028,7 @@ def tui_core_sizes(state: TuiState) -> dict[str, str]:
     extra = [entry for entry in kept if entry.get("cores") is not None]
     by_core: dict[str, list[dict]] = {}
     for entry in extra:
-        for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]:
+        for copy in entry_copies(entry):
             for core in copy.get("cores") or []:
                 listed = by_core.setdefault(core, [])
                 if not listed or listed[-1] is not entry:

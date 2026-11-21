@@ -46,6 +46,11 @@ SELECTION_FIELDS = ("systems", "regions", "region_groups", "region_system_groups
 OTHER_SYSTEMS = "other"
 
 
+def entry_copies(entry: dict) -> list[dict]:
+    """An entry and every copy another core reads at its place."""
+    return [entry, *(entry.get("alternatives") or []), *(entry.get("slot_choices") or [])]
+
+
 def _check_root(entry: dict, dest: str, omitted: bool = False) -> None:
     """root is absent or save, emulator only on a file left out (a path in
     the emulator's own folder, outside the BIOS tree), and core_folder one
@@ -438,7 +443,7 @@ def _check_standalone_layouts(data: object, manifest: dict, plat: str) -> dict:
     sizes = {
         copy["sha1"]: copy.get("size", 0)
         for entry in [*manifest.get("files", []), *(manifest.get("truth_files") or [])]
-        for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]
+        for copy in entry_copies(entry)
         if isinstance(copy, dict) and copy.get("sha1")
         and (copy.get("repo_path") or copy.get("release_asset"))
     }

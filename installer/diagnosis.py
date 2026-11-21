@@ -16,7 +16,7 @@ from installer.from_folders import (
     _place_reason,
 )
 from installer.host_fs import _is_file
-from installer.manifest import GAME_DATA
+from installer.manifest import GAME_DATA, entry_copies
 from installer.paths import _entry_path, shown_path
 from installer.platforms import entry_systems
 from installer.regions import WORLD_REGION
@@ -29,8 +29,7 @@ if TYPE_CHECKING:
 def _copies(entry: dict) -> list[dict]:
     """Every copy the list knows for an entry: its own, other cores', the
     platform's declared one."""
-    return [entry, *entry.get("alternatives", []), *entry.get("slot_choices", []),
-            *entry.get("declared_choices", [])]
+    return [*entry_copies(entry), *entry.get("declared_choices", [])]
 
 
 # id(manifest) -> (manifest, the cores its entries name), read once per list.

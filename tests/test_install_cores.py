@@ -203,6 +203,13 @@ class ACoreTheListDoesNotKnow(unittest.TestCase):
             ["parallel_dc"],
         )
 
+    def test_a_core_named_by_a_slot_choice_is_known(self):
+        listing = {**MANIFEST, "files": [*MANIFEST["files"], {
+            "dest": "dc/dc_boot.bin", "cores": None, "systems": ["sega-dreamcast"],
+            "slot_choices": [{"sha1": "0" * 40, "cores": ["flycast"]}]}]}
+        self.assertEqual(install.unknown_cores(listing, ["flycast", "parallel_dc"]),
+                         ["parallel_dc"])
+
     def test_the_info_paths_retroarch_reads(self):
         (self.tmp / "parallel_dc_libretro.info").write_text(
             'firmware_count = 3\n'
