@@ -31,6 +31,7 @@ from probes.cores import Core, Cores
 from probes.entries import (
     entry_dest,
     held_file,
+    held_variants,
     is_bios,
     profile_digest,
     region_matches,
@@ -178,18 +179,8 @@ class Campaign:
         return held_file(entry, self.db, self.paths.root)
 
     def variant_files(self, entry: dict, primary: Path) -> list[Path]:
-        """The .variants/ copies of an entry's file the collection holds."""
-        names = [entry["name"], *(entry.get("aliases") or ())]
-        out = []
-        index = self.db.get("indexes", {}).get("by_name", {})
-        for name in names:
-            for sha1 in index.get(name, ()):
-                path = (self.db["files"].get(sha1) or {}).get("path", "")
-                if "/.variants/" in path:
-                    local = self.paths.root / path
-                    if local.is_file() and local.resolve() != primary.resolve() and local not in out:
-                        out.append(local)
-        return out
+        """The .variants/ copies standing in for an entry's primary."""
+        return held_variants(entry, self.db, self.paths.root, primary)
 
     # -- guards ---------------------------------------------------------------
 

@@ -359,6 +359,52 @@ def held_record_for(file_entry: dict, db: dict) -> str | None:
     )
 
 
+def variant_copies(
+    file_entry: dict, db: dict, primary: str, dest_hint: str = ""
+) -> list[str]:
+    """The .variants/ copies that stand in for the primary an entry resolved to.
+
+    A primary's alternates are filed in its own directory's .variants/ under
+    its file name or one the entry answers to: the same name under another
+    system (the PC-98 font.rom beside QUASI88's PC-88 one) is another file.
+    A copy passes the shape the entry's code checks and, when the entry
+    declares hashes, agrees with every one of them, as the resolver requires.
+    """
+    q = _lookup(
+        file_entry, db, _entry_hint(file_entry, dest_hint), [
+            (cut_md5_owner(value, db.get("indexes", {}).get("by_md5", {})) or value)
+            if len(value) < 32 else value
+            for value in parse_hash_list(file_entry.get("md5"))
+        ],
+        composite_only=file_entry.get("zip_digest") == "composite",
+    )
+    primary = os.path.normpath(primary)
+    folder = os.path.dirname(primary)
+    # A primary that is itself a .variants/ copy shares that directory.
+    home = folder if os.path.basename(folder) == ".variants" else os.path.join(folder, ".variants")
+    primary_name = variant_base_name(os.path.basename(primary))
+    names = [primary_name, *(n for n in q.names_to_try if n != primary_name)]
+    hashed = bool(
+        q.sha1_candidates or q.sha256_candidates or q.crc_candidates
+        or (q.md5_list and not q.zipped_file)
+    )
+    out: list[str] = []
+    for name in names:
+        for match_sha1 in q.by_name.get(name, ()):
+            path = q.files_db.get(match_sha1, {}).get("path", "")
+            if (
+                os.path.dirname(os.path.normpath(path)) == home
+                and os.path.normpath(path) != primary
+                and variant_base_name(os.path.basename(path)) in names
+                and (not hashed or _record_match_status(q, match_sha1))
+                and _name_size_ok(q, match_sha1)
+                and os.path.exists(path)
+                and path not in out
+            ):
+                out.append(path)
+    return out
+
+
 def _held_record(q: _Lookup, match_sha1: str) -> Resolution | None:
     """The record's path and evidence, when it satisfies the entry and is on disk."""
     path = q.files_db[match_sha1]["path"]

@@ -35,6 +35,18 @@ def held_file(entry: dict, db: dict, root: Path) -> Path | None:
     return local if local.is_file() else None
 
 
+def held_variants(entry: dict, db: dict, root: Path, primary: Path) -> list[Path]:
+    """The .variants/ copies standing in for the primary held_file chose, in
+    the checkout at root."""
+    from resolve.localfile import variant_copies
+
+    hint = entry.get("path") if isinstance(entry.get("path"), str) else ""
+    stored = primary.relative_to(root) if primary.is_relative_to(root) else primary
+    with working_directory(root):
+        paths = variant_copies(entry, db, str(stored), dest_hint=hint or "")
+    return [path if path.is_absolute() else root / path for path in map(Path, paths)]
+
+
 def entry_dest(entry: dict) -> str:
     """Where the core reads the entry, relative to its system directory."""
     path = entry.get("path")
