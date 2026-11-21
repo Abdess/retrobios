@@ -49,4 +49,13 @@ notes: |
   #if !defined(M64P_PLUGIN_API), and the Makefile defines that macro.
   ref: custom/mupen64plus-rsp-cxd4/module.c:358-380, Makefile:378
 
+exclusion_note: >
+  The system directory is asked for, and everything read under its
+  Mupen64plus/ folder is written by the core or by the user: mupen64plus.ini,
+  rewritten from the compiled-in ROM database on every init, an optional
+  GLideN64.custom.ini, and hi-res texture packs with the caches built from
+  them. Nothing in it is a file to obtain (custom/mupen64plus-core/api/config.c:1288-1300,
+  libretro/libretro.c:369-395, custom/GLideN64/mupenplus/Config_mupenplus.cpp:33-47,
+  GLideN64/src/GLideNHQ/TxHiResCache.cpp:99-114).
+
 files: []

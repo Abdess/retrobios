@@ -29,4 +29,11 @@ notes: |
   ref: src/adapters/libretro/libretro_entry.c:330-345, src/adapters/libretro/libretro_entry.c:418-421,
        src/api/anygm.h:318-326, src/content/container/content_router.c:2027-2050
 
+exclusion_note: >
+  The system directory is asked for, and the only file read from it is
+  AnyGM.ini, written by the user and optional. Saves and the extraction cache
+  go under it only when the frontend names no save directory. Nothing in it
+  is a file to obtain (src/adapters/libretro/libretro_entry.c:330-351,
+  src/content/container/content_router.c:2027-2052).
+
 files: []
