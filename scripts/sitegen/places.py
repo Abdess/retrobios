@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from model.collection import copy_places, manufacturer_slug
-from model.systemnames import console_index, spelled_section
+from model.systemnames import console_index, section_pairs_of, spelled_section
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from resolve.ownership import BUCKET_FOLDERS, names_manufacturer
 
@@ -179,7 +179,7 @@ def system_pages_from_data(
     # Map system_id -> (manufacturer, console) via platform file entries
     index = _FolderIndex(
         db, name_consoles,
-        console_index((mfr, console) for mfr, consoles in manufacturers.items() for console in consoles),
+        console_index(section_pairs_of(manufacturers)),
         _copies_by_path(db),
     )
     pages: dict[str, tuple[str, str]] = {}

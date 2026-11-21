@@ -40,6 +40,25 @@ def program_names(profiles: dict[str, dict]) -> set[str]:
     return names
 
 
+def section_pairs_of(sections: dict[str, dict] | set[tuple[str, str]]) -> set[tuple[str, str]]:
+    """Every (manufacturer, console) section the system pages carry.
+
+    ``sections`` maps each manufacturer to its consoles or is a set of
+    pairs. A reviewed parent under a maker the pages carry is a section even
+    with no folder of its own: the Atom's sets sit under bios/Arcade, and
+    the system pages file them under Acorn
+    (sitegen.systempages.arcade_board_sections).
+    """
+    pairs = (
+        {(mfr, console) for mfr, consoles in sections.items() for console in consoles}
+        if isinstance(sections, dict) else set(sections)
+    )
+    makers = {mfr for mfr, _console in pairs}
+    pairs |= {parent for parent in SYSTEM_PARENTS.values()
+              if parent[0] in makers and parent[0] not in PROGRAM_TOPS}
+    return pairs
+
+
 def set_console_sections(
     sections: dict[str, dict] | set[tuple[str, str]],
     programs: set[str] | frozenset[str] = frozenset(),
@@ -50,16 +69,7 @@ def set_console_sections(
     group them, or is a set of (manufacturer, console) pairs. ``programs``
     are the emulator names, which never name a system.
     """
-    pairs = (
-        {(mfr, console) for mfr, consoles in sections.items() for console in consoles}
-        if isinstance(sections, dict) else set(sections)
-    )
-    # A reviewed parent under a maker the pages carry is a section even with
-    # no folder of its own: the Atom's sets sit under bios/Arcade, and the
-    # system pages file them under Acorn (sitegen.systempages.arcade_board_sections).
-    makers = {mfr for mfr, _console in pairs}
-    pairs |= {parent for parent in SYSTEM_PARENTS.values()
-              if parent[0] in makers and parent[0] not in PROGRAM_TOPS}
+    pairs = section_pairs_of(sections)
     from core.anchors import unique_anchor, toc_slug
 
     _console_sections.clear()

@@ -286,6 +286,55 @@ class SystemEmulatorsWhenNoIdMatches(unittest.TestCase):
         )
 
 
+@unittest.skipUnless((REPO_ROOT / "database.json").is_file(), "database absent")
+class PagesFollowOwnSection(unittest.TestCase):
+    """The site places a system page by the section own_section names.
+
+    The two kept their own index: Atari and Camputers both file a Lynx, and
+    the Atom, a reviewed parent with no folder of its own, was placed on
+    the BBC Micro section while every link named its Atom section.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        from model.database import load_database
+        from model.platforms import load_platform_config
+        from model.profiles import load_emulator_profiles
+        from model.registry import list_registered_platforms
+
+        db = load_database(str(REPO_ROOT / "database.json"))
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False)
+        manufacturers = collection.group_by_manufacturer(db)
+        systemnames.set_console_sections(manufacturers, systemnames.program_names(profiles))
+        platforms = REPO_ROOT / "platforms"
+        coverages = {
+            name: {"config": load_platform_config(name, str(platforms))}
+            for name in list_registered_platforms(str(platforms))
+        }
+        cls.pages = places.system_pages_from_data(manufacturers, coverages, db, profiles)
+        ids = {str(sid) for profile in profiles.values() for sid in profile.get("systems") or []}
+        for coverage in coverages.values():
+            ids |= {str(sid) for sid in coverage["config"].get("systems") or {}}
+        cls.ids = sorted(ids | set(cls.pages))
+
+    def test_every_own_section_is_the_page(self):
+        for sys_id in self.ids:
+            own = systemnames.own_section(sys_id)
+            if own is None:
+                continue
+            with self.subTest(system=sys_id):
+                self.assertEqual(
+                    self.pages.get(sys_id), (collection.manufacturer_slug(own[0]), own[1]))
+
+    def test_named_cases(self):
+        self.assertEqual(self.pages.get("atari-lynx"), ("atari", "Lynx"))
+        self.assertEqual(self.pages.get("atom"), ("acorn", "Atom"))
+        # A program's folder places its page, though it is no system's own.
+        self.assertIsNone(systemnames.own_section("scummvm"))
+        self.assertEqual(self.pages.get("scummvm"), ("scummvm", "ScummVM"))
+        self.assertEqual(self.pages.get("solarus"), ("game-engines", "Solarus"))
+
+
 DOCS = REPO_ROOT / "website" / "src" / "content" / "docs"
 
 
