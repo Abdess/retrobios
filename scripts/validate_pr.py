@@ -27,8 +27,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 from model.database import load_optional_database
 from core.cli import add_repo_inputs, require_directory
 from resolve.review import load_platform_hashes, load_profile_hashes, validate_file
-from resolve.reviewfiles import files_to_validate, place
-from resolve.reviewreport import json_rows, markdown_report, text_lines
+from devtools.reviewfiles import ChangedFilesUnreadable, SelectionError, files_to_validate, place
+from devtools.reviewreport import json_rows, markdown_report, text_lines
 
 
 def main() -> None:
@@ -63,8 +63,16 @@ def main() -> None:
         args.files = [os.path.abspath(f) for f in args.files]
     work_from_repo_root(args, parser, ["db", "platforms_dir", "emulators_dir"])
 
-    files = files_to_validate(args, parser)
+    try:
+        files = files_to_validate(args.files, args.changed)
+    except SelectionError as exc:
+        parser.error(str(exc))
+    except ChangedFilesUnreadable as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        sys.exit(2)
     if not files:
+        if args.changed and not args.json:
+            print("No changed BIOS files detected")
         if args.json:
             print("[]")
         return

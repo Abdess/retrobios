@@ -54,8 +54,9 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   release/               the release record, its notes, the checks of its assets and the pack downloader
   installer_build/       install.py from installer/, its pins, launchers and PyPI package
   schemas/               the data contracts behind validate_schemas.py: schemas and semantic invariants
-  devtools/              the commit message rules, the checks of a pull request, the test
-                         runner, the disk cleanup and the bios/ migration
+  devtools/              the commit message rules, the checks of a pull request, the BIOS
+                         review's files and report (validate_pr.py), the test runner,
+                         the disk cleanup and the bios/ migration
   unattended/            the job registry, worktree, CI breaker and units behind autorun.py
   freshness/             each transcribed layer against its upstream (check_freshness.py) and the
                          refresh of each stale row (refresh_stale.py)

@@ -58,7 +58,7 @@ class GitThatCannotAnswer(unittest.TestCase):
             proc = subprocess.run(
                 [sys.executable, "-c", (
                     f"import sys; sys.path.insert(0, {str(REPO_ROOT / 'scripts')!r}); "
-                    "from resolve import reviewfiles; print(reviewfiles.get_changed_files())"
+                    "from devtools import reviewfiles; print(reviewfiles.get_changed_files())"
                 )],
                 cwd=tmp, capture_output=True, text=True, timeout=60, check=False,
             )
@@ -88,14 +88,14 @@ class AProjectMainThatCannotBeFetched(unittest.TestCase):
                 cli.run_cli(worktree.project_base)
             self.assertEqual(ended.exception.code, 1)
             self.assertEqual(err.getvalue(), "ERROR: no main\n")
-            from resolve import reviewfiles
+            from devtools import reviewfiles
             with self.assertRaises(RuntimeError):
                 reviewfiles.get_changed_files()
 
     def test_both_tools_compare_against_the_same_line(self):
         from core import gitclone
         from profiling import worktree
-        from resolve import reviewfiles
+        from devtools import reviewfiles
 
         diffs: list[tuple[str, ...]] = []
 
@@ -130,7 +130,7 @@ class ChangesNotYetCommittedAreRead(unittest.TestCase):
             proc = subprocess.run(
                 [sys.executable, "-c", (
                     f"import sys; sys.path.insert(0, {str(REPO_ROOT / 'scripts')!r}); "
-                    "from resolve import reviewfiles; print(reviewfiles.get_changed_files())"
+                    "from devtools import reviewfiles; print(reviewfiles.get_changed_files())"
                 )],
                 cwd=tmp, capture_output=True, text=True, timeout=60, check=False,
             )
@@ -153,7 +153,7 @@ class AForkPushedToItsOwnMain(unittest.TestCase):
         return subprocess.run(
             [sys.executable, "-c", (
                 f"import sys; sys.path.insert(0, {str(REPO_ROOT / 'scripts')!r}); "
-                "from resolve import reviewfiles; from core import gitclone; "
+                "from devtools import reviewfiles; from core import gitclone; "
                 f"gitclone.PROJECT_URLS = ({project!r},); "
                 "print(reviewfiles.get_changed_files())"
             )],

@@ -20,7 +20,7 @@ from pathlib import Path
 
 import yaml
 
-from resolve import reviewfiles
+from devtools import reviewfiles
 from core import gitclone
 from resolve import review
 

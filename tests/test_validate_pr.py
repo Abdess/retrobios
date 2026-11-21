@@ -16,7 +16,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from resolve import reviewfiles
+from devtools import reviewfiles
 from resolve import review
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

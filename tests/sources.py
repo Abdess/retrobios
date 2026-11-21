@@ -38,7 +38,7 @@ COMMANDS = {
     ),
     "slots.py": ("packs/slots.py", "resolve/collisions.py", "packs/slotscan.py", "packs/slotreport.py"),
     "validate_pr.py": (
-        "resolve/review.py", "resolve/reviewfiles.py", "resolve/reviewreport.py",
+        "resolve/review.py", "devtools/reviewfiles.py", "devtools/reviewreport.py",
         "core/gitclone.py",
     ),
     "refresh_data_dirs.py": ("packs/datadirs.py", "packs/datadirextract.py"),
