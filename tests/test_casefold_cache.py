@@ -54,9 +54,9 @@ class APrimaryUnderAnotherCasing(unittest.TestCase):
         self.by_name.setdefault(name, []).append(sha1)
 
     def _resolve(self, name: str) -> str:
-        from resolve.localfile import _casefold_index_cache, resolve_local_file
+        from resolve.localfile import _casefold_name_index, resolve_local_file
 
-        _casefold_index_cache.clear()
+        _casefold_name_index.clear()
         db = {"files": self.files, "indexes": {"by_name": self.by_name, "by_md5": {},
                                                "by_path_suffix": {}, "by_crc32": {}}}
         path, _status = resolve_local_file({"name": name}, db)

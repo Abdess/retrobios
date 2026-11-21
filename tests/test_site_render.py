@@ -560,8 +560,7 @@ class TheArcadeCacheHoldsItsDatabase(unittest.TestCase):
         return {"files": {}, "indexes": {"by_path_suffix": {"Arcade/x.zip": [sha1]}}}
 
     def test_a_new_database_at_a_reused_address_is_read_again(self):
-        saved = siterender._suffix_cache[0]
-        self.addCleanup(siterender._suffix_cache.__setitem__, 0, saved)
+        self.addCleanup(siterender._arcade_suffixes.clear)
         first = self._db("a" * 40)
         self.assertTrue(siterender._in_arcade("a" * 40, first))
         address = id(first)

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 
+from core.memo import DerivedView
 from model.collection import manufacturer_slug
 
 
@@ -33,26 +34,21 @@ def maker_of_relative(relative: str) -> str | None:
     return parts[0] if len(parts) >= 2 else None
 
 
-# One slot, keyed like the casefold view: the files dict, its size, the folders.
-_maker_folders_cache: list[tuple[dict, int, frozenset[str]]] = []
-
-
-def _maker_folders(db: dict) -> frozenset[str]:
-    """Every maker folder the collection files a copy under."""
-    files_db = db.get("files", {})
-    if _maker_folders_cache:
-        source, size, folders = _maker_folders_cache[0]
-        if source is files_db and size == len(files_db):
-            return folders
-    bios_dir = str(db.get("bios_dir") or "bios")
-    folders = frozenset(
+def _filed_maker_folders(files_db: dict, bios_dir: str) -> frozenset[str]:
+    return frozenset(
         folder
         for entry in files_db.values()
         if (folder := maker_folder(str(entry.get("path", "")), bios_dir))
         and folder not in BUCKET_FOLDERS
     )
-    _maker_folders_cache[:] = [(files_db, len(files_db), folders)]
-    return folders
+
+
+_maker_folders_view = DerivedView(_filed_maker_folders)
+
+
+def _maker_folders(db: dict) -> frozenset[str]:
+    """Every maker folder the collection files a copy under."""
+    return _maker_folders_view(db.get("files", {}), str(db.get("bios_dir") or "bios"))
 
 
 def system_makers(file_entry: dict, db: dict) -> frozenset[str]:

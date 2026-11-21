@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from core.hashing import cut_md5_owner, md5_composite, parse_md5_list
+from core.memo import DerivedView
 from core.ziptools import check_inside_zip
 from model.database import get_mame_clone_map
 from model.profiles import CONTENT_CHECKS
@@ -41,24 +42,15 @@ from resolve.ownership import (
 )
 
 
-# One slot: the dict it was built from, its size then, and the folded view.
-# Keyed by id() alone, a database freed and replaced by another at the same
-# address got the old index back, and the case-insensitive step answered from
-# a collection that no longer existed.
-_casefold_index_cache: list[tuple[dict, int, dict[str, list[str]]]] = []
-
-
-def _casefold_name_index(by_name: dict) -> dict[str, list[str]]:
-    """Build (and cache) a casefolded view of the by_name index."""
-    if _casefold_index_cache:
-        source, size, cached = _casefold_index_cache[0]
-        if source is by_name and size == len(by_name):
-            return cached
+def _fold_names(by_name: dict) -> dict[str, list[str]]:
+    """A casefolded view of the by_name index."""
     folded: dict[str, list[str]] = {}
     for name, sha1s in by_name.items():
         folded.setdefault(name.casefold(), []).extend(sha1s)
-    _casefold_index_cache[:] = [(by_name, len(by_name), folded)]
     return folded
+
+
+_casefold_name_index = DerivedView(_fold_names)
 
 
 HASH_EXACT_RESOLUTION_STATUSES = frozenset(

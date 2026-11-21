@@ -9,6 +9,7 @@ from collections.abc import Callable
 from model.database import load_database
 from model import siteinputs
 from sitegen import markup
+from core.memo import DerivedView
 from core.paths import REPO_ROOT
 from model.collection import PROGRAM_TOPS, card_moves, manufacturer_slug
 from model.systemnames import (
@@ -361,22 +362,19 @@ def _in_arcade(sha1: str, db: dict) -> bool:
     return sha1 in _arcade_suffix_sha1s(db)
 
 
-_suffix_cache: list[tuple[dict, frozenset[str]] | None] = [None]
+def _arcade_tails(by_path_suffix: dict) -> frozenset[str]:
+    return frozenset(
+        sha1s[0]
+        for tail, sha1s in by_path_suffix.items()
+        if tail.startswith("Arcade/") and len(sha1s) == 1
+    )
+
+
+_arcade_suffixes = DerivedView(_arcade_tails)
 
 
 def _arcade_suffix_sha1s(db: dict) -> frozenset[str]:
-    # Holding the database itself, never id(db): a database freed and
-    # replaced at the same address answered with the first one's set.
-    cached = _suffix_cache[0]
-    if cached is not None and cached[0] is db:
-        return cached[1]
-    found = frozenset(
-        sha1s[0]
-        for tail, sha1s in db.get("indexes", {}).get("by_path_suffix", {}).items()
-        if tail.startswith("Arcade/") and len(sha1s) == 1
-    )
-    _suffix_cache[0] = (db, found)
-    return found
+    return _arcade_suffixes(db.get("indexes", {}).get("by_path_suffix", {}))
 
 
 def _build_boards() -> None:

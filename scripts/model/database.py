@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 
 from core.cli import InputMissing
+from core.memo import DerivedView
 from core.paths import REPO_ROOT
 
 
@@ -48,24 +49,21 @@ def load_database(db_path: str) -> dict:
         ) from None
 
 
-# One slot: the files dict, its size, and path -> (sha1, record) built from it.
-_PATH_INDEX: list[tuple[dict, int, dict[str, tuple[str, dict]]]] = []
-
-
-def _path_index(db: dict) -> dict[str, tuple[str, dict]]:
-    """Normalized path -> (sha1, record), built once per database."""
-    files = db.get("files", {})
-    if _PATH_INDEX:
-        cached, size, index = _PATH_INDEX[0]
-        if cached is files and size == len(files):
-            return index
-    index = {
+def _index_paths(files: dict) -> dict[str, tuple[str, dict]]:
+    """Normalized path -> (sha1, record)."""
+    return {
         os.path.normpath(record["path"]): (sha1, record)
         for sha1, record in files.items()
         if record.get("path")
     }
-    _PATH_INDEX[:] = [(files, len(files), index)]
-    return index
+
+
+_path_view = DerivedView(_index_paths)
+
+
+def _path_index(db: dict) -> dict[str, tuple[str, dict]]:
+    """Normalized path -> (sha1, record), built once per database."""
+    return _path_view(db.get("files", {}))
 
 
 def record_at(db: dict, path: str | None) -> dict | None:

@@ -119,22 +119,12 @@ def _declared_hashes(entry: dict, field_name: str) -> set[str]:
     return set(parse_hash_list(entry.get(field_name)))
 
 
-def _record_at(path: str, db: dict) -> dict | None:
-    """The database record stored at path, from an index built once per db.
-
-    A scan of db['files'] on every call was O(calls x 19 000 files) on the
-    path verify --all and slots.py both take. The index is the pack
-    resolver's, so one run holds one copy of it.
-    """
-    return record_at(db, path)
-
-
 def content_sha1(path: str, db: dict) -> str | None:
     """The sha1 of the file at path, from the database or read from disk.
 
     A data directory cache is not in the database, so its files are hashed.
     """
-    record = _record_at(path, db)
+    record = record_at(db, path)
     if record is not None:
         return record.get("sha1")
     if not os.path.isfile(path):
@@ -144,7 +134,7 @@ def content_sha1(path: str, db: dict) -> str | None:
 
 def accepted_by_all(path: str, entries: list[dict], db: dict) -> bool:
     """Whether every declaration's own hashes accept the file at path."""
-    record = _record_at(path, db)
+    record = record_at(db, path)
     if record is None:
         return False
     for entry in entries:
