@@ -294,24 +294,17 @@ def lookup_hashes(
         entry = files_db[sha1]
         name = entry.get("name", "?")
         md5 = entry.get("md5", "?")
-        paths = entry.get("paths") or []
-        aliases = entry.get("aliases") or []
+        path = entry.get("path", "")
 
         print(f"\n{hash_type.upper()}: {hash_val}")
         print(f"  SHA1: {sha1}")
         print(f"  MD5:  {md5}")
         print(f"  Name: {name}")
-        if paths:
-            print(f"  Path: {paths[0]}")
-        if aliases:
-            print(f"  Aliases: {aliases}")
+        if path:
+            print(f"  Path: {path}")
 
         # Check if file exists in repo (by path or by resolve_local_file)
-        in_repo = False
-        if paths:
-            primary = os.path.join(bios_dir, paths[0])
-            if os.path.exists(primary):
-                in_repo = True
+        in_repo = bool(path) and os.path.exists(path)
         if not in_repo:
             try:
                 fe_check = {"name": name, "sha1": sha1, "md5": md5}

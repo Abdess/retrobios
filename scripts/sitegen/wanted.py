@@ -336,8 +336,7 @@ class Placer:
         self.platform_hashes = platform_hashes
         self.profile_hashes = profile_hashes
         self.paths = {
-            path for record in db.get("files", {}).values()
-            for path in [record.get("path"), *(record.get("paths") or [])] if path
+            record["path"] for record in db.get("files", {}).values() if record.get("path")
         }
 
     def place(self, hashes: dict[str, list[str]], name: str, systems: Iterable[str] = (),

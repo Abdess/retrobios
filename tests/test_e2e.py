@@ -2675,8 +2675,7 @@ class TestE2E(unittest.TestCase):
                     "md5": "md5abc",
                     "sha1": "sha1abc",
                     "sha256": "sha256abc",
-                    "paths": ["Mfr/Console/test.bin"],
-                    "aliases": ["alt.bin"],
+                    "path": "bios/Mfr/Console/test.bin",
                 },
             },
             "indexes": {
@@ -2690,7 +2689,9 @@ class TestE2E(unittest.TestCase):
         output = buf.getvalue()
         self.assertIn("test.bin", output)
         self.assertIn("sha1abc", output)
-        self.assertIn("alt.bin", output)
+        # The record's path, the one field the schema gives it; a read of
+        # "paths" printed nothing.
+        self.assertIn("Path: bios/Mfr/Console/test.bin", output)
         self.assertEqual(missing, 0)
 
     def test_141_lookup_hashes_not_found(self):

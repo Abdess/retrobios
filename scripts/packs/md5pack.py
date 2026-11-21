@@ -38,10 +38,10 @@ def _entry_for_file(candidates: list[dict], held: dict) -> dict:
             if held.get(key)
         ):
             return fe
-    held_paths = [str(held.get("path", ""))] + [str(p) for p in held.get("paths") or []]
+    held_path = str(held.get("path", "")).lower()
     for fe in candidates:
         tail = str(fe.get("path") or fe.get("destination") or "").lower()
-        if tail and any(path.lower().endswith("/" + tail) for path in held_paths):
+        if tail and held_path.endswith("/" + tail):
             return fe
     return candidates[-1]
 
@@ -151,15 +151,11 @@ def _md5_pack_name(
 def _md5_destination(entry: dict, layout: _Md5Layout, opts: _Md5Settings) -> str:
     """Where a held file goes in a hash-selected pack."""
     name = entry.get("name", "")
-    aliases = entry.get("aliases") or []
-    paths = entry.get("paths") or []
 
     dest = name
     matched_fe = None
-    for lookup_name in [name] + aliases:
-        if lookup_name.lower() in layout.index:
-            matched_fe = _entry_for_file(layout.index[lookup_name.lower()], entry)
-            break
+    if name.lower() in layout.index:
+        matched_fe = _entry_for_file(layout.index[name.lower()], entry)
 
     if matched_fe:
         if opts.emulator_name:
@@ -168,8 +164,6 @@ def _md5_destination(entry: dict, layout: _Md5Layout, opts: _Md5Settings) -> str
             dest = resolve_destination(matched_fe, opts.standalone)
         else:
             dest = matched_fe.get("destination", matched_fe.get("name", name))
-    elif paths:
-        dest = paths[0]
 
     if layout.base_dest and not dest.startswith(layout.base_dest):
         return f"{layout.base_dest}/{dest}"

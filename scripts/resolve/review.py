@@ -458,11 +458,8 @@ def _check_duplicate(result: ValidationResult, db: dict, relative: str) -> None:
         result.add_check(True, "Not a duplicate in database")
         return
     existing = db["files"][result.sha1]
-    held_at = {
-        os.path.normpath(p)
-        for p in [existing.get("path"), *(existing.get("paths") or [])] if p
-    }
-    if os.path.normpath(relative) in held_at:
+    held_at = existing.get("path")
+    if held_at and os.path.normpath(relative) == os.path.normpath(held_at):
         # The file the database was built from, not a copy of it: a
         # PR that regenerated database.json was told each new file
         # duplicated itself.
@@ -859,8 +856,7 @@ def _held_directories(db: dict | None) -> frozenset[str]:
         _HELD_DIRECTORIES[key] = frozenset(
             path.rsplit("/", 1)[0] + "/"
             for record in (db or {}).get("files", {}).values()
-            for path in [record.get("path"), *(record.get("paths") or [])]
-            if path and "/" in path and "/.variants/" not in path
+            if "/" in (path := record.get("path") or "") and "/.variants/" not in path
         )
     return _HELD_DIRECTORIES[key]
 
