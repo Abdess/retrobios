@@ -13,13 +13,35 @@ from pathlib import Path
 
 from core import upstream
 from core.hashing import parse_hash_list, parse_md5_list
-from core.paths import EMULATORS_DIR, PLATFORMS_DIR
+from core.paths import EMULATORS_DIR, PLATFORMS_DIR, REPO_ROOT
 from resolve.localfile import held_record_for
 from resolve.review import load_platform_hashes, load_profile_hashes, placement
 
 MAX_DOWNLOAD = 100 * 1024 * 1024  # 100MB per file
 
 LEGACY_BRANCHES = ["libretro", "RetroArch", "RetroPie", "Recalbox", "batocera", "Other"]
+
+
+def legacy_branch_files(branch: str) -> list[str] | None:
+    """Every path origin/<branch> holds, None when the remote has no such branch."""
+    ref = f"origin/{branch}"
+    try:
+        subprocess.run(["git", "rev-parse", "--verify", ref], capture_output=True, check=True,
+                       cwd=REPO_ROOT)
+    except subprocess.CalledProcessError:
+        return None
+    result = subprocess.run(["git", "ls-tree", "-r", "--name-only", ref], capture_output=True,
+                            text=True, check=False, cwd=REPO_ROOT)
+    return [path for path in result.stdout.split("\n") if path]
+
+
+def legacy_branch_blob(branch: str, path: str) -> bytes | None:
+    """The bytes origin/<branch> holds at a path, None when git cannot show them."""
+    try:
+        return subprocess.run(["git", "show", f"origin/{branch}:{path}"], capture_output=True,
+                              check=True, cwd=REPO_ROOT).stdout
+    except subprocess.CalledProcessError:
+        return None
 
 PUBLIC_REPOS = [
     # archtaurus/RetroPieBIOS - most complete verified collection
@@ -152,35 +174,11 @@ def step2_scan_branches(entry: dict) -> bytes | None:
     name = entry["name"]
 
     for branch in LEGACY_BRANCHES:
-        ref = f"origin/{branch}"
-        try:
-            subprocess.run(
-                ["git", "rev-parse", "--verify", ref],
-                capture_output=True,
-                check=True,
-            )
-        except subprocess.CalledProcessError:
-            continue
-
-        result = subprocess.run(
-            ["git", "ls-tree", "-r", "--name-only", ref],
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-
-        for filepath in result.stdout.strip().split("\n"):
+        for filepath in legacy_branch_files(branch) or ():
             if os.path.basename(filepath) == name:
-                try:
-                    blob = subprocess.run(
-                        ["git", "show", f"{ref}:{filepath}"],
-                        capture_output=True,
-                        check=True,
-                    )
-                    if verify_content(blob.stdout, entry):
-                        return blob.stdout
-                except subprocess.CalledProcessError:
-                    continue
+                content = legacy_branch_blob(branch, filepath)
+                if content is not None and verify_content(content, entry):
+                    return content
 
     return None
 

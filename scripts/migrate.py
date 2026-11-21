@@ -15,11 +15,11 @@ import argparse
 import hashlib
 import os
 import shutil
-import subprocess
 import sys
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
+from acquire.fetch import LEGACY_BRANCHES, legacy_branch_blob, legacy_branch_files
 from core.hashing import compute_hashes
 
 SYSTEM_MAP = {
@@ -235,8 +235,6 @@ TOS_PATTERN_MAP = {
 
 SKIP_LARGE_ROM_DIRS = {"roms/"}
 
-BRANCHES = ["RetroArch", "RetroPie", "Recalbox", "batocera", "Other"]
-
 SKIP_FILES = {
     "README.md",
     ".gitignore",
@@ -350,21 +348,11 @@ def extract_from_branches(target: Path, dry_run: bool, existing_hashes: set) -> 
     """Extract BIOS files from all branches into the target structure."""
     extracted = 0
 
-    for branch in BRANCHES:
-        ref = f"origin/{branch}"
-
-        try:
-            subprocess.run(
-                ["git", "rev-parse", "--verify", ref], capture_output=True, check=True
-            )
-        except subprocess.CalledProcessError:
+    for branch in LEGACY_BRANCHES:
+        files = legacy_branch_files(branch)
+        if files is None:
             print(f"  Branch {branch} not found, skipping")
             continue
-
-        result = subprocess.run(
-            ["git", "ls-tree", "-r", "--name-only", ref], capture_output=True, text=True, check=False
-        )
-        files = result.stdout.strip().split("\n")
         print(f"\n  Branch '{branch}': {len(files)} files")
 
         branch_extracted = 0
@@ -378,14 +366,8 @@ def extract_from_branches(target: Path, dry_run: bool, existing_hashes: set) -> 
             dest_dir = target / manufacturer / console
             dest = dest_dir / subpath
 
-            try:
-                blob = subprocess.run(
-                    ["git", "show", f"{ref}:{filepath}"],
-                    capture_output=True,
-                    check=True,
-                )
-                content = blob.stdout
-            except subprocess.CalledProcessError:
+            content = legacy_branch_blob(branch, filepath)
+            if content is None:
                 continue
 
             file_hash = sha1_blob(content)
