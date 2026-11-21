@@ -28,7 +28,7 @@ SCRIPT_PATH = REPO_ROOT / SCRIPT
 # of them differs from the commit says so.
 CODE_FILES = (SCRIPT, "scripts/probes/standaloneemulators.py", "scripts/probes/appimage.py",
               "scripts/probes/xvfb.py", "scripts/probes/standalonerun.py",
-              "scripts/probes/standalonerecord.py")
+              "scripts/probes/standalonerecord.py", "scripts/probes/standalonemodes.py")
 
 
 class RunFailed(Exception):

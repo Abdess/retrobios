@@ -141,11 +141,11 @@ COMMANDS = {
     "campaign.py": (
         "probes/campaign.py", "probes/host.py", "probes/content.py", "probes/cores.py",
         "probes/rules.py", "probes/state.py", "probes/gate.py", "probes/reports.py",
-        "probes/profileedit.py",
+        "probes/profileedit.py", "probes/entries.py", "probes/campaignmodes.py",
     ),
     "standalone_probe.py": (
         "probes/standaloneemulators.py", "probes/appimage.py", "probes/xvfb.py",
-        "probes/standalonerun.py", "probes/standalonerecord.py",
+        "probes/standalonerun.py", "probes/standalonerecord.py", "probes/standalonemodes.py",
     ),
     "profile_sync.py": (
         "profiling/citations.py", "profiling/anchoring.py", "profiling/repos.py",

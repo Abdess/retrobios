@@ -12,7 +12,7 @@ from pathlib import Path
 
 import core_probe as cp
 import standalone_probe as sp
-from probes import appimage, standaloneemulators as emus, standalonerecord, standalonerun, xvfb
+from probes import appimage, standaloneemulators as emus, standalonemodes, standalonerecord, standalonerun, xvfb
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -199,9 +199,10 @@ class HostLock(unittest.TestCase):
             return 0
 
         with tempfile.NamedTemporaryFile(suffix=".cue") as content, \
-                mock.patch.object(sp.cp, "host_probe_lock", lock), mock.patch.object(sp, "_probe", body):
+                mock.patch.object(standalonemodes.cp, "host_probe_lock", lock), \
+                mock.patch.object(standalonemodes, "_probe", body):
             args = sp.build_parser().parse_args(["run", "duckstation", "--content", content.name])
-            self.assertEqual(sp.probe(args), 0)
+            self.assertEqual(standalonemodes.probe(args), 0)
         self.assertEqual(events, ["take", "run", "free"])
 
 
