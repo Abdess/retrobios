@@ -3,6 +3,10 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from pathlib import Path
+
+from model.profiles import load_emulator_profiles
+from model.systemnames import ConsoleSections, collection_sections, system_name_in
 
 
 def platform_list_version(config: dict, platform: str) -> str:
@@ -22,8 +26,26 @@ def platform_list_version(config: dict, platform: str) -> str:
     return version
 
 
-def system_titles(*entry_lists: Iterable[dict]) -> dict[str, str]:
-    """The name a person reads for each system the entries carry.
+# The last collection's sections: one --all run titles every platform from
+# the same database.
+_last_sections: list[tuple[dict, str, str, ConsoleSections]] = []
+
+
+def pack_sections(db: dict, bios_dir: str, emulators_dir: str) -> ConsoleSections:
+    """The console sections of the collection a pack is built from."""
+    for held, held_bios, held_emulators, sections in _last_sections:
+        if held is db and (held_bios, held_emulators) == (bios_dir, emulators_dir):
+            return sections
+    sections = collection_sections(
+        db, load_emulator_profiles(emulators_dir, skip_aliases=False), Path(bios_dir),
+    )
+    _last_sections[:] = [(db, bios_dir, emulators_dir, sections)]
+    return sections
+
+
+def system_titles(sections: ConsoleSections, *entry_lists: Iterable[dict]) -> dict[str, str]:
+    """The name a person reads for each system the entries carry, among
+    the collection's ``sections`` (pack_sections).
 
     Batocera names PlayStation `psx` and the installer showed
     `sony-playstation (psx)`: neither is what a beginner looks for. The
@@ -32,8 +54,6 @@ def system_titles(*entry_lists: Iterable[dict]) -> dict[str, str]:
     and the installer shows its id: the site build refuses such a system,
     so only a test fixture reaches here with one.
     """
-    from model.systemnames import system_name
-
     ids = {
         sys_id
         for entries in entry_lists for entry in entries
@@ -42,7 +62,7 @@ def system_titles(*entry_lists: Iterable[dict]) -> dict[str, str]:
     titles: dict[str, str] = {}
     for sys_id in sorted(ids):
         try:
-            titles[sys_id] = system_name(sys_id)
+            titles[sys_id] = system_name_in(sys_id, sections)
         except KeyError:
             continue
     return titles

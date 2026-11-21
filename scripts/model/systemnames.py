@@ -2,10 +2,18 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
+from collections.abc import Set as AbstractSet
+from dataclasses import dataclass
+from pathlib import Path
 
 from model import siteinputs
-from model.collection import SECTION_LABELS, PROGRAM_TOPS, manufacturer_slug
+from model.collection import (
+    SECTION_LABELS,
+    PROGRAM_TOPS,
+    group_by_manufacturer,
+    manufacturer_slug,
+)
 
 
 # (manufacturer slug, console) -> the id of the console's heading. Two
@@ -26,6 +34,42 @@ sections_by_name: dict[str, set[tuple[str, str]]] = {}
 # Emulator and engine names. A heading spelled like one (Game Engines >
 # Solarus, ZC > ZC210) files that program's copies and names no system.
 known_program_names: set[str] = set()
+
+
+@dataclass(frozen=True)
+class ConsoleSections:
+    """The console sections a collection files, by normalized id, and the
+    program names (casefolded) whose headings name no system."""
+    index: Mapping[str, set[tuple[str, str]]]
+    programs: AbstractSet[str]
+
+
+# The sections the site installed (set_console_sections): the same objects,
+# filled in place.
+_installed = ConsoleSections(_console_sections, known_program_names)
+
+
+def console_sections(
+    sections: dict[str, dict] | set[tuple[str, str]],
+    programs: Iterable[str] = (),
+) -> ConsoleSections:
+    """The sections ``sections`` carries, as set_console_sections reads
+    them, without installing anything."""
+    return ConsoleSections(
+        console_index(section_pairs_of(sections)),
+        frozenset(name.casefold() for name in programs),
+    )
+
+
+def collection_sections(
+    db: dict, profiles: dict[str, dict], bios_dir: Path,
+) -> ConsoleSections:
+    """The console sections of a collection: its database, the bios folder
+    it describes and every emulator profile, aliases included."""
+    return console_sections(
+        group_by_manufacturer(db, bios_dir=bios_dir, profiles=profiles),
+        program_names(profiles),
+    )
 
 
 def program_names(profiles: dict[str, dict]) -> set[str]:
@@ -103,7 +147,6 @@ def ensure_console_sections() -> None:
     them, so a page rendered on its own names systems as the site does."""
     if _sections_installed[0]:
         return
-    from model.collection import group_by_manufacturer
     from model.database import load_database
     from model.profiles import load_emulator_profiles
 
@@ -130,7 +173,7 @@ def console_index(pairs: Iterable[tuple[str, str]]) -> dict[str, set[tuple[str, 
 
 
 def spelled_section(
-    sys_id: str, index: dict[str, set[tuple[str, str]]],
+    sys_id: str, index: Mapping[str, set[tuple[str, str]]],
 ) -> tuple[str, str] | None:
     """The one section of ``index`` the id spells, or None.
 
@@ -149,13 +192,19 @@ def spelled_section(
 
 
 def own_section(sys_id: str) -> tuple[str, str] | None:
-    """The console section that is this id's own, or None.
+    """The console section that is this id's own among the sections the
+    site installed, or None (own_section_in)."""
+    ensure_console_sections()
+    return own_section_in(sys_id, _installed)
+
+
+def own_section_in(sys_id: str, sections: ConsoleSections) -> tuple[str, str] | None:
+    """The console section of ``sections`` that is this id's own, or None.
 
     The section the id spells (spelled_section), unless it files a
     program's copies.
     """
-    ensure_console_sections()
-    section = spelled_section(sys_id, _console_sections)
+    section = spelled_section(sys_id, sections.index)
     if section is None:
         return None
     mfr, console = section
@@ -164,7 +213,7 @@ def own_section(sys_id: str) -> tuple[str, str] | None:
     if (
         mfr in PROGRAM_TOPS
         or console.casefold() == mfr.casefold()
-        or heading_name(mfr, console).casefold() in known_program_names
+        or heading_name(mfr, console).casefold() in sections.programs
     ):
         return None
     return mfr, console
@@ -183,9 +232,16 @@ def heading_name(mfr: str, console: str) -> str:
 
 
 def system_name(sys_id: str) -> str:
-    """The display name of a system id, the only one a page prints."""
+    """The display name of a system id, the only one a page prints, among
+    the sections the site installed (system_name_in)."""
+    ensure_console_sections()
+    return system_name_in(sys_id, _installed)
+
+
+def system_name_in(sys_id: str, sections: ConsoleSections) -> str:
+    """The display name of a system id among ``sections``."""
     sys_id = str(sys_id)
-    section = own_section(sys_id)
+    section = own_section_in(sys_id, sections)
     if section is not None:
         return heading_name(*section)
     name = SYSTEM_NAMES.get(sys_id)

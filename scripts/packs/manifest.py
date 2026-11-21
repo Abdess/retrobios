@@ -53,7 +53,7 @@ from packs.manifestentry import (
 )
 from packs.manifestselect import SelectionIndex
 from packs.paths import save_layout
-from packs.scope import platform_list_version, system_titles
+from packs.scope import pack_sections, platform_list_version, system_titles
 from packs.standalone import standalone_copies, standalone_layouts
 from resolve.contentlayout import TARGET_KEY
 from resolve.cores import filter_systems_by_target, resolve_platform_cores as _platform_cores
@@ -550,7 +550,10 @@ class _ManifestBuild:
             # The names the platform itself gives its systems (Batocera's psx),
             # which --system accepts beside the ids.
             "system_names": platform_system_names(config, list(pack_systems)),
-            "system_titles": system_titles(manifest_files, omitted.values()),
+            "system_titles": system_titles(
+                pack_sections(self.db, self.bios_dir, opts.emulators_dir),
+                manifest_files, omitted.values(),
+            ),
             "files": manifest_files,
         }
         if self.data_directories:

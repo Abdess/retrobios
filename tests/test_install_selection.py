@@ -1370,16 +1370,37 @@ class ThePlatformsOwnSystemNamesAreAccepted(unittest.TestCase):
                       source)
 
     def test_every_listed_system_gets_the_title_the_site_prints(self):
-        from packs.scope import system_titles
+        from model.database import load_database
+        from packs.scope import pack_sections, system_titles
 
+        sections = pack_sections(
+            load_database(str(REPO_ROOT / "database.json")), str(REPO_ROOT / "bios"),
+            str(REPO_ROOT / "emulators"),
+        )
         files = [{"dest": "a.bin", "systems": ["sony-playstation", "nintendo-gba"]}]
         omitted = [{"dest": "b.bin", "systems": ["3do"]}]
-        self.assertEqual(system_titles(files, omitted), {
+        self.assertEqual(system_titles(sections, files, omitted), {
             "3do": "3DO",
             "nintendo-gba": "Nintendo Game Boy Advance",
             "sony-playstation": "Sony PlayStation",
         })
-        self.assertEqual(system_titles([{"dest": "c.bin", "systems": ["sys-a"]}]), {})
+        self.assertEqual(system_titles(sections, [{"dest": "c.bin", "systems": ["sys-a"]}]), {})
+
+    def test_the_titles_come_from_the_collection_given(self):
+        # A manifest built from --db and --emulators-dir titled its systems
+        # from the repository's collection, read inside the name lookup.
+        from unittest import mock
+
+        from model import systemnames
+        from packs.scope import system_titles
+
+        sections = systemnames.console_sections({("Acme", "Widget")})
+        with mock.patch.object(systemnames, "ensure_console_sections",
+                               side_effect=AssertionError("site inputs read")):
+            self.assertEqual(
+                system_titles(sections, [{"dest": "a.bin", "systems": ["acme-widget"]}]),
+                {"acme-widget": "Acme Widget"},
+            )
 
     def test_a_native_name_narrows_and_lists(self):
         with FakeRepository() as repo:

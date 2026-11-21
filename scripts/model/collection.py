@@ -10,21 +10,26 @@ from __future__ import annotations
 
 import functools
 from dataclasses import dataclass
+from pathlib import Path
 
 from model import siteinputs
 from model.composition import GAME_DATA_TOPS
 from model.profiles import is_emulator, load_emulator_profiles
 
 
-def copy_places(db: dict) -> dict[str, set[tuple[str, str, str]]]:
+def copy_places(
+    db: dict, bios_dir: Path | None = None,
+) -> dict[str, set[tuple[str, str, str]]]:
     """sha1 -> every (manufacturer, console, file name) holding a copy.
 
     The database keeps one path per content, deduplication having left one
     copy. by_path_suffix still records the other folders a copy is filed in,
-    under the name that folder gives it.
+    under the name that folder gives it. ``bios_dir`` is the database's bios
+    folder, the site's inputs place it when not given.
     """
     files = db.get("files", {})
-    bios_dir = siteinputs.bios_dir(db)
+    if bios_dir is None:
+        bios_dir = siteinputs.bios_dir(db)
     places: dict[str, set[tuple[str, str, str]]] = {}
     for sha1, entry in files.items():
         parts = str(entry.get("path", "")).split("/")
@@ -65,24 +70,32 @@ def collection_paths(db: dict) -> dict[str, set[str]]:
     return paths
 
 
-def group_by_manufacturer(db: dict) -> dict[str, dict[str, list]]:
+def group_by_manufacturer(
+    db: dict,
+    bios_dir: Path | None = None,
+    profiles: dict[str, dict] | None = None,
+) -> dict[str, dict[str, list]]:
     """Group files by manufacturer -> console -> files.
 
     The database keeps one path per content, and a copy filed elsewhere was
     on no page of its own: the Channel F BIOS sat under Arcade > FBNeo only,
     and Fairchild had no system page. Every folder holding a copy lists it,
     read from the full paths by_path_suffix records. The game engines'
-    files are grouped by engine (_engine_sections).
+    files are grouped by engine (_engine_sections). ``bios_dir`` and
+    ``profiles`` (aliases included) default to the site's inputs.
     """
     files = db.get("files", {})
     manufacturers: dict[str, dict[str, list]] = {}
-    for sha1, where in copy_places(db).items():
+    for sha1, where in copy_places(db, bios_dir).items():
         for manufacturer, console in sorted({(m, c) for m, c, _ in where}):
             manufacturers.setdefault(manufacturer, {}).setdefault(console, []).append(files[sha1])
-    return _engine_sections(manufacturers)
+    return _engine_sections(manufacturers, profiles)
 
 
-def _engine_sections(manufacturers: dict[str, dict[str, list]]) -> dict[str, dict[str, list]]:
+def _engine_sections(
+    manufacturers: dict[str, dict[str, list]],
+    all_profiles: dict[str, dict] | None = None,
+) -> dict[str, dict[str, list]]:
     """A game engine's files in one section headed with the engine's name.
 
     The Systems index listed ".variants", "scummvm.zip" and "wildmidi.cfg"
@@ -94,7 +107,9 @@ def _engine_sections(manufacturers: dict[str, dict[str, list]]) -> dict[str, dic
     the engine's name (SECTION_LABELS), its address unchanged.
     """
 
-    profiles = {key: profile for key, profile in profiles_on_disk().items()
+    if all_profiles is None:
+        all_profiles = profiles_on_disk()
+    profiles = {key: profile for key, profile in all_profiles.items()
                 if is_emulator(profile)}
     engines = _Engines(profiles, _file_readers(profiles))
     out: dict[str, dict[str, list]] = {}
