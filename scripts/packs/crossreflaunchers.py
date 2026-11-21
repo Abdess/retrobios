@@ -23,24 +23,18 @@ def launcher_rows(
 ) -> tuple[list[dict], list[dict]]:
     """The names a launcher reads that the collection lacks, and the
     launcher records nothing proves."""
+    configs = {
+        name: load_platform_config(name, platforms_dir)
+        for name in (selected or list_registered_platforms(platforms_dir))
+    }
     # Counted apart from the profile gaps: a name only a launcher reads is
     # reported, not yet judged.
     launcher_reads = launcher_reads_not_held(
-        {
-            name: load_platform_config(name, platforms_dir)
-            for name in (selected or list_registered_platforms(platforms_dir))
-        },
-        db, all_profiles, registry, emulator or "",
+        configs, db, all_profiles, registry, emulator or "",
     )
 
     unproven = [
-        row for row in launcher_unproven(
-            {
-                name: load_platform_config(name, platforms_dir)
-                for name in (selected or list_registered_platforms(platforms_dir))
-            },
-            all_profiles,
-        )
+        row for row in launcher_unproven(configs, all_profiles)
         if not emulator or any(
             emulator in LauncherLayer._profiles_named(part, all_profiles, set(all_profiles))
             for part in row["emulator"].split(", ")
