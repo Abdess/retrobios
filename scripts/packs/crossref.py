@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING, TypedDict
 from core.hashing import parse_hash_list, parse_md5_list, stream_hashes
 from core.paths import BIOS_DIR, PLATFORMS_DIR, REPO_ROOT
 from model.alternatives import set_keys, set_requirements, settle_sets
-from model.database import get_mame_clone_map
+from model.database import get_mame_clone_map, sha1_at
 from model.profiles import lists_files
 from model.declarations import OUTER_ROOTS
 from model.platforms import load_platform_config
@@ -450,12 +450,6 @@ class FileConsumers:
                 str(REPO_ROOT / PLATFORMS_DIR)
             )
         )
-        self._sha1_by_path = {
-            path: sha1
-            for sha1, entry in db.get("files", {}).items()
-            for path in {entry.get("path", ""), *entry.get("paths", [])}
-            if path
-        }
         self.platforms: dict[str, set[str]] = {}
         # Under which of its systems each platform declares a file, so a
         # link can land on that section rather than the page top.
@@ -495,7 +489,7 @@ class FileConsumers:
             entry.get("zipped_file") and inner_rom_check(entry, path) == "ok"
         ):
             return None
-        return self._sha1_by_path.get(path)
+        return sha1_at(self._db, path)
 
     def add_platforms(self, configs: dict[str, dict]) -> None:
         for name, config in configs.items():
@@ -537,7 +531,7 @@ class FileConsumers:
 
     def sha1_at(self, path: str) -> str | None:
         """The file the database records at a collection path."""
-        return self._sha1_by_path.get(path)
+        return sha1_at(self._db, path)
 
     def path_of(self, sha1: str) -> str:
         """The collection path the database records for a file."""

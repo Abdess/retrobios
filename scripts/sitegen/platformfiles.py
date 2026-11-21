@@ -10,6 +10,7 @@ import urllib.parse
 
 from model import siteinputs
 from model.collection import profiles_in, profiles_on_disk
+from model.database import load_database, sha1_at
 from model.profiles import upstream_profile_index
 from model.systemnames import system_name
 from sitegen import entries as siteentries, markup
@@ -38,16 +39,14 @@ from sitegen.render import (
 )
 
 
-def _collection_sha1_by_path() -> dict[str, str]:
-    """The sha1 of each file the collection holds, by its path."""
-    return _sha1_by_path_in(str(siteinputs.current().db))
+def _collection_sha1(path: str) -> str:
+    """The sha1 of the file the collection holds at a path."""
+    return sha1_at(_collection_db(str(siteinputs.current().db)), path) or ""
 
 
 @functools.cache
-def _sha1_by_path_in(db_path: str) -> dict[str, str]:
-    with open(db_path, encoding="utf-8") as handle:
-        files = json.load(handle).get("files", {})
-    return {str(entry.get("path", "")): sha1 for sha1, entry in files.items()}
+def _collection_db(db_path: str) -> dict:
+    return load_database(db_path)
 
 
 def _system_heading_link(sys_id: str, prefix: str = "") -> str:
@@ -96,7 +95,7 @@ def _served_line(f: dict, declared_sha1: str = "") -> str:
     if not path:
         # A slot the pack fills from a release asset or leaves to the user.
         return ""
-    sha1 = _collection_sha1_by_path().get(path, "")
+    sha1 = _collection_sha1(path)
     label = "Served by" if f.get("status") == "ok" else "Held, not the declared hash"
     parts = path.split("/")
     if not sha1 or len(parts) < 3 or parts[0] != "bios":

@@ -6,14 +6,11 @@ import urllib.parse
 from collections.abc import Callable
 
 from model.collection import group_by_manufacturer, manufacturer_slug
+from model.database import sha1_at
 from model.systemnames import system_name
 from sitegen.config import SITE_URL
 from sitegen.lookup import sorted_hash_values, site_path
 from sitegen.render import console_href
-
-
-def sha1_index_by_path(db: dict | None) -> dict[str, str]:
-    return {str(e.get("path", "")): sha1 for sha1, e in ((db or {}).get("files") or {}).items()}
 
 
 def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
@@ -28,14 +25,13 @@ def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
     """
     from sitegen.render import card_page, system_ids, system_section
 
-    sha1_by_path = sha1_index_by_path(db)
     files = db.get("files") or {}
     by_md5 = (db.get("indexes") or {}).get("by_md5") or {}
     held: dict[str, set[str]] = {}
     for coverage in coverages.values():
         for detail in coverage.get("details") or []:
             path = str(detail.get("path") or "")
-            sha1 = sha1_by_path.get(path) if detail.get("status") != "missing" else None
+            sha1 = sha1_at(db, path) if detail.get("status") != "missing" else None
             if sha1:
                 held.setdefault(str(detail.get("system", "")), set()).add(sha1)
     for profile in profiles.values():

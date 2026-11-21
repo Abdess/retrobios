@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from core.hashing import file_digest
+from model.database import sha1_at
 from model.largefiles import LARGE_FILES_RELEASE, LARGE_FILES_REPO, asset_names, registered_paths
 from release.assets import compare, expected_assets, expected_digests, fetch_release
 
@@ -27,14 +28,6 @@ class Upload:
     reason: str = ""
 
 
-def database_sha1(db: dict) -> dict[str, str]:
-    return {
-        entry["path"]: str(entry.get("sha1") or key).lower()
-        for key, entry in db.get("files", {}).items()
-        if entry.get("path")
-    }
-
-
 def plan_uploads(
     root: Path,
     db: dict,
@@ -45,7 +38,6 @@ def plan_uploads(
     """Each out-of-date asset, cleared for upload or refused with its reason."""
     names = asset_names([*registered_paths(gitignore_text),
                          *expected_assets(db, gitignore_text)])
-    recorded = database_sha1(db)
     plans = []
     for kind, path, _size, _published in findings:
         if kind not in OUT_OF_DATE:
@@ -58,10 +50,10 @@ def plan_uploads(
         if first != second:
             plans.append(Upload(path, names[path], kind, "refused",
                                 f"two reads disagree ({first[:12]} != {second[:12]})"))
-        elif first != recorded.get(path):
+        elif first != sha1_at(db, path):
             plans.append(Upload(path, names[path], kind, "refused",
                                 f"sha1 {first[:12]} is not the database's "
-                                f"{str(recorded.get(path))[:12]}"))
+                                f"{str(sha1_at(db, path))[:12]}"))
         else:
             plans.append(Upload(path, names[path], kind, "upload"))
     return plans

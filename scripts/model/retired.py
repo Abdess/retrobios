@@ -21,6 +21,7 @@ from pathlib import Path
 
 from core.artifacts import write_if_changed
 from core.paths import REPO_ROOT
+from model.database import sha1_at
 
 
 RETIRED_FILE = REPO_ROOT / "retired.json"
@@ -34,14 +35,15 @@ def retired_path(database: str | Path) -> Path:
     return Path(database).with_name("retired.json")
 
 
-def _successor(entry: dict, by_path: dict[str, str],
+def _successor(entry: dict, new: dict,
                by_name: dict[str, list[tuple[str, str]]]) -> str | None:
     """The sha1 the new database holds at the entry's path, else under its
     name in the same folder, else the one file of that name: a2diskiing.zip
     was rebuilt from its recipe and filed under Apple II the same day."""
     path = str(entry.get("path", ""))
-    if path in by_path:
-        return by_path[path]
+    held = sha1_at(new, path)
+    if held:
+        return held
     named = by_name.get(str(entry.get("name", "")), [])
     folder = path.rsplit("/", 1)[0]
     beside = [sha1 for sha1, other in named if other.rsplit("/", 1)[0] == folder]
@@ -55,7 +57,6 @@ def retired_between(old: dict, new: dict, day: str) -> dict[str, dict]:
     """sha1 -> record, for each file of *old* that *new* no longer holds."""
     old_files = old.get("files") or {}
     new_files = new.get("files") or {}
-    by_path = {str(e.get("path", "")): sha1 for sha1, e in new_files.items()}
     by_name: dict[str, list[tuple[str, str]]] = {}
     for sha1, e in new_files.items():
         by_name.setdefault(str(e.get("name", "")), []).append((sha1, str(e.get("path", ""))))
@@ -64,7 +65,7 @@ def retired_between(old: dict, new: dict, day: str) -> dict[str, dict]:
         entry = old_files[sha1]
         record = {key: entry[key] for key in KEPT_FIELDS if entry.get(key) not in (None, "")}
         record["left"] = day
-        successor = _successor(entry, by_path, by_name)
+        successor = _successor(entry, new, by_name)
         if successor:
             record["successor"] = successor
         records[sha1] = record

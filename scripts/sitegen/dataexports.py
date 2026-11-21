@@ -16,10 +16,11 @@ from pathlib import Path
 from core.artifacts import json_text as _json_text
 from core.hashing import file_digest
 from model import retired as model_retired
+from model.database import sha1_at
 from model.dumpcatalog import load_provenance_snapshots
 from packs.crossref import FileConsumers
 from acquire.provenance import build_report
-from sitegen.apiitems import sha1_index_by_path, core_index_items, system_index_items
+from sitegen.apiitems import core_index_items, system_index_items
 from sitegen.config import DATA_LICENSE, REPO_URL, build_commit, data_timestamp
 from core.paths import REPO_ROOT
 from sitegen.install import release_pack_platforms
@@ -91,7 +92,7 @@ def _csv_document(fieldnames: list[str], rows: list[dict]) -> str:
 
 
 def _verify_outcomes(
-    coverage: dict, sha1_by_path: dict[str, str]
+    coverage: dict, db: dict
 ) -> Callable[[str, str], dict]:
     """For each declared entry, in declaration order: what verify found.
 
@@ -114,7 +115,7 @@ def _verify_outcomes(
             "status": detail.get("status", ""),
             "category": detail.get("category", ""),
             "collection_path": path,
-            "resolved_sha1": sha1_by_path.get(path, "") if path else "",
+            "resolved_sha1": sha1_at(db, path) or "",
         }
     return outcome
 
@@ -180,10 +181,9 @@ def _platform_export_rows(
     """Normalized platform summaries and one row per declared file."""
     items: list[dict] = []
     file_rows: list[dict] = []
-    sha1_by_path = sha1_index_by_path(db)
     for key, coverage in sorted(coverages.items()):
         config = coverage["config"]
-        outcome = _verify_outcomes(coverage, sha1_by_path)
+        outcome = _verify_outcomes(coverage, db or {})
         contract, registry = _split_contract(config)
         items.append({
             "id": key,
@@ -302,7 +302,7 @@ def _gap_export_rows(
     A `layer` column keeps the two apart instead of publishing only one.
     """
     rows: list[dict] = []
-    sha1_by_path = sha1_index_by_path(db)
+    db = db or {}
     for key, coverage in sorted(coverages.items()):
         for detail in coverage.get("details", []):
             if detail.get("status") == "ok" and not detail.get("discrepancy"):
@@ -311,7 +311,7 @@ def _gap_export_rows(
             rows.append({
                 "category": detail.get("category", "bios"),
                 "collection_path": path,
-                "resolved_sha1": sha1_by_path.get(path, "") if path else "",
+                "resolved_sha1": sha1_at(db, path) or "",
                 "layer": "platform",
                 "platform_id": key,
                 "platform": coverage["platform"],

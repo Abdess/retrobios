@@ -53,7 +53,7 @@ class TheGivenDatabase(_Inputs):
 
     def test_paths_are_read_from_the_given_collection(self) -> None:
         self.use(db=self.db)
-        self.assertEqual(platformfiles._collection_sha1_by_path(), {"bios/X/only-here.bin": SHA1})
+        self.assertEqual(platformfiles._collection_sha1("bios/X/only-here.bin"), SHA1)
 
 
 class TheGivenProfilesAndPlatforms(_Inputs):

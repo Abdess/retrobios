@@ -52,6 +52,7 @@ import zipfile
 import runpy
 import urllib.error
 
+from model import siteinputs
 from sitegen import apiitems
 from sitegen import cards
 from sitegen import config as sitegen_config
@@ -227,8 +228,9 @@ class EvidenceLinksItsSource(unittest.TestCase):
 class EachEntryNamesItsFile(unittest.TestCase):
     def test_served_held_and_missing(self):
         path, digest = next(
-            (p, d) for p, d in platformfiles._collection_sha1_by_path().items()
-            if p.startswith("bios/") and p.count("/") >= 3)
+            (entry["path"], d)
+            for d, entry in platformfiles._collection_db(str(siteinputs.current().db))["files"].items()
+            if entry["path"].startswith("bios/") and entry["path"].count("/") >= 3)
         served = platformfiles._served_line({"status": "ok", "path": path})
         self.assertRegex(served, rf"\]\(\.\./systems/[^)]+\.md#sha1-{digest[:12]}\)")
         self.assertTrue(served.startswith("Served by: "))
@@ -386,7 +388,7 @@ class UpstreamsGrouped(unittest.TestCase):
 
 class ExportsComplete(unittest.TestCase):
     def test_gap_rows_once_with_their_outcome(self):
-        path = next(iter(platformfiles._collection_sha1_by_path()))
+        path = next(iter(platformfiles._collection_db(str(siteinputs.current().db))["files"].values()))["path"]
         detail = {"name": "x.bin", "system": "s", "status": "untested", "path": path,
                   "category": "bios"}
         coverages = {"p": {"platform": "P", "details": [
@@ -397,8 +399,16 @@ class ExportsComplete(unittest.TestCase):
         self.assertEqual([r["name"] for r in rows], ["h.xml", "x.bin"])
         held = rows[1]
         self.assertEqual(held["collection_path"], path)
-        self.assertEqual(held["resolved_sha1"], platformfiles._collection_sha1_by_path()[path])
+        self.assertEqual(held["resolved_sha1"], platformfiles._collection_sha1(path))
         self.assertEqual(held["category"], "bios")
+
+    def test_a_path_spelled_another_way_keeps_its_sha1(self):
+        """The export matched the raw string: bios/./x lost its sha1."""
+        db = {"files": {"a" * 40: {"path": "bios/X/x.bin"}}}
+        coverages = {"p": {"platform": "P", "details": [
+            {"name": "x.bin", "system": "s", "status": "untested", "path": "bios/./X/x.bin"}]}}
+        rows = dataexports._gap_export_rows(coverages, {}, db)
+        self.assertEqual(rows[0]["resolved_sha1"], "a" * 40)
 
     def test_platform_rows_carry_status_and_file(self):
         db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
