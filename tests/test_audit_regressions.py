@@ -6769,11 +6769,27 @@ class AutoFetchProvesEveryHashItIsGiven(unittest.TestCase):
     def test_a_held_sha256_is_found_in_the_database(self):
         from scripts.acquire import fetch as acquire_fetch
 
-        db = {"files": {"s": {"path": "bios/x/dsi.bin", "size": 3}},
+        db = {"files": {"s": {"path": "bios/x/dsi.bin", "size": 3, "sha256": "f" * 64}},
               "indexes": {"by_sha256": {"f" * 64: "s"}}}
         self.assertEqual(
             acquire_fetch.step1_crossref_db({"sha256": "F" * 64}, db), "bios/x/dsi.bin"
         )
+
+    def test_a_held_file_a_declared_hash_contradicts_is_still_searched(self):
+        """auto_fetch printed "Found in database" for a crc32 or md5 hit whose
+        sha1 the entry contradicts, a file verify calls missing."""
+        from scripts.acquire import fetch as acquire_fetch
+
+        held = {"path": "bios/x/a.bin", "sha1": "c" * 40, "md5": "d" * 32,
+                "crc32": "deadbeef", "size": 4}
+        db = {"files": {"c" * 40: held},
+              "indexes": {"by_crc32": {"deadbeef": "c" * 40}, "by_md5": {"d" * 32: "c" * 40}}}
+        find = acquire_fetch.step1_crossref_db
+        self.assertIsNone(find({"sha1": "a" * 40, "crc32": "deadbeef", "size": 4}, db))
+        self.assertIsNone(find({"sha1": "a" * 40, "md5": "d" * 32}, db))
+        self.assertIsNone(find({"crc32": "deadbeef", "size": 5}, db))
+        self.assertEqual(find({"crc32": "deadbeef", "size": 4}, db), "bios/x/a.bin")
+        self.assertEqual(find({"md5": "d" * 29}, db), "bios/x/a.bin")
 
     def test_an_entry_without_a_hash_is_not_searched(self):
         from unittest import mock
@@ -7294,6 +7310,18 @@ class HashInputNamesWhatItAccepts(unittest.TestCase):
         )
         self.assertEqual(sha1_for_hash("sha256", entry["sha256"], db), sha1)
         self.assertEqual(sha1_for_hash("md5", entry["md5"][:29], db), sha1)
+
+    def test_the_truth_anchors_a_sha256_only_entry(self):
+        """rust_dos and ares name files by sha256 alone: the truth left their
+        md5 empty, so md5 platforms never received them."""
+        from scripts.resolve.truth import _enrich_hashes
+
+        db = {"files": {"s" * 40: {"sha1": "s" * 40, "md5": "m" * 32, "sha256": "f" * 64,
+                                   "crc32": "0badf00d", "size": 16}},
+              "indexes": {"by_sha256": {"f" * 64: "s" * 40}}}
+        entry = {"name": "5200.rom", "sha256": "F" * 64}
+        _enrich_hashes(entry, db)
+        self.assertEqual((entry["md5"], entry["sha1"], entry["size"]), ("m" * 32, "s" * 40, 16))
 
 
 class ErrorsGoToStderr(unittest.TestCase):

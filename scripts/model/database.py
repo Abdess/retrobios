@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 
 from core.cli import InputMissing
+from core.hashing import cut_md5_owner
 from core.memo import DerivedView
 from core.paths import REPO_ROOT
 
@@ -80,6 +81,31 @@ def sha1_at(db: dict, path: str | None) -> str | None:
         return None
     found = _path_index(db).get(os.path.normpath(path))
     return found[0] if found else None
+
+
+_HASH_INDEXES = {"md5": "by_md5", "crc32": "by_crc32", "sha256": "by_sha256"}
+
+
+def record_for_hash(db: dict, kind: str, value: object) -> str | None:
+    """The sha1 the database keys the file one hash value names under.
+
+    A cut md5 (Batocera writes 29 characters) names the one held md5 it
+    starts, as cut_md5_owner reads it.
+    """
+    if not (value and isinstance(value, str)):
+        return None
+    files = db.get("files", {})
+    value = value.strip().lower()
+    if kind == "sha1":
+        return value if value in files else None
+    index = db.get("indexes", {}).get(_HASH_INDEXES[kind], {})
+    found = index.get(value)
+    if found is None and kind == "md5":
+        owner = cut_md5_owner(value, index)
+        found = index.get(owner) if owner else None
+    if isinstance(found, list):
+        found = found[0] if found else None
+    return found if found in files else None
 
 
 _mame_clone_map_cache: dict[str, dict[str, str]] = {}

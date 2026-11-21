@@ -18,6 +18,7 @@ from resolve.standalone import platform_layouts, standalone_set as platform_stan
 from resolve.cores import resolve_platform_cores
 from resolve.reconcile import contradicts, shares_hash
 from model.alternatives import groups_of
+from model.database import record_for_hash
 from core.hashing import HASH_FIELDS, compute_hashes, declared_hashes, lists_hashes, parse_hash_list
 from resolve.validation import (
     filter_files_by_mode,
@@ -42,51 +43,31 @@ def _serialize_source_ref(sr: object) -> str:
     return str(sr)
 
 
-def _indexed_record(value: object, index: dict, files_db: dict) -> dict | None:
-    """The database record a hash index points a single hash value to."""
-    if not (value and isinstance(value, str)):
-        return None
-    ref = index.get(value.lower())
-    if not ref:
-        return None
-    ref_sha1 = ref if isinstance(ref, str) else (ref[0] if ref else None)
-    if not ref_sha1:
-        return None
-    return files_db.get(ref_sha1)
-
-
 def _enrich_hashes(entry: dict, db: dict) -> None:
     """Fill the hashes a profile omits from the record its own hash names.
 
-    The record is found by sha1, then md5, then crc32 with the size when the
-    profile gives one. Never by name: a file in bios/ under the same name may
-    not be the bytes the source code expects. An entry listing several
-    accepted values for a hash is left as is.
+    The record is found by sha1, sha256, then md5, then crc32 with the size
+    when the profile gives one. Never by name: a file in bios/ under the same
+    name may not be the bytes the source code expects. An entry listing
+    several accepted values for a hash is left as is.
     """
-    for h in ("sha1", "md5", "crc32"):
-        if isinstance(entry.get(h), list):
-            return
+    if any(isinstance(entry.get(h), list) for h in HASH_FIELDS):
+        return
 
     files_db = db.get("files", {})
-    indexes = db.get("indexes", {})
-
     record = None
+    # rust_dos names its SC-55 ROMs by sha256 alone, ares 5200.rom too.
+    for kind in ("sha1", "sha256", "md5"):
+        sha1 = record_for_hash(db, kind, entry.get(kind))
+        if sha1:
+            record = files_db[sha1]
+            break
 
-    # Anchor 1: SHA1 (strongest)
-    sha1 = entry.get("sha1")
-    if sha1 and isinstance(sha1, str):
-        record = files_db.get(sha1)
-
-    # Anchor 2: MD5 (strong)
+    # CRC32 (32-bit, collisions theoretically possible): the size must
+    # match when the profile has one.
     if record is None:
-        record = _indexed_record(entry.get("md5"), indexes.get("by_md5", {}), files_db)
-
-    # Anchor 3: CRC32 (32-bit, collisions theoretically possible).
-    # Require size match when profile has a size to guard against collisions.
-    if record is None:
-        candidate = _indexed_record(
-            entry.get("crc32"), indexes.get("by_crc32", {}), files_db,
-        )
+        sha1 = record_for_hash(db, "crc32", entry.get("crc32"))
+        candidate = files_db[sha1] if sha1 else None
         if candidate is not None:
             profile_size = entry.get("size")
             if not profile_size or candidate.get("size") == profile_size:

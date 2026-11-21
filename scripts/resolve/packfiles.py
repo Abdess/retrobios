@@ -13,9 +13,9 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-from model.database import record_at
+from model.database import record_at, record_for_hash
 from model.largefiles import fetch_large_file
-from core.hashing import HASH_FIELDS, cut_md5_owner, parse_hash_list
+from core.hashing import HASH_FIELDS, parse_hash_list
 from resolve.content import declared_hash_verdict
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from core.paths import REPO_ROOT, declared_destination
@@ -253,24 +253,7 @@ def parse_hash_file(path: str) -> list[tuple[str, str]]:
 
 def sha1_for_hash(hash_type: str, hash_val: str, db: dict) -> str | None:
     """The database key a looked-up hash names, or None."""
-    files_db = db.get("files", {})
-    indexes = db.get("indexes", {})
-    sha1: str | None
-    if hash_type == "sha1":
-        sha1 = hash_val
-    elif hash_type == "crc32":
-        sha1 = indexes.get("by_crc32", {}).get(hash_val)
-    elif hash_type == "md5":
-        by_md5 = indexes.get("by_md5", {})
-        sha1 = by_md5.get(hash_val)
-        if sha1 is None:
-            owner = cut_md5_owner(hash_val, by_md5)
-            sha1 = by_md5.get(owner) if owner else None
-    else:
-        sha1 = next(
-            (k for k, e in files_db.items() if e.get("sha256") == hash_val), None
-        )
-    return sha1 if sha1 in files_db else None
+    return record_for_hash(db, hash_type, hash_val)
 
 def lookup_hashes(
     hashes: list[tuple[str, str]],

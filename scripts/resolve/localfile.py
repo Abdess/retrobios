@@ -327,6 +327,38 @@ def _record_match_status(q: _Lookup, match_sha1: str) -> str | None:
     return statuses[0] if statuses else None
 
 
+def held_record_for(file_entry: dict, db: dict) -> str | None:
+    """The sha1 of a record every declared hash agrees with, from the database.
+
+    The resolver's hash steps without the disk check, for a caller asking
+    whether the collection holds the content: sha1, sha256, md5 (a cut one
+    standing for the held md5 it starts), then crc32 only without a stronger
+    hash, bounded by the declared size.
+    """
+    indexes = db.get("indexes", {})
+    by_md5 = indexes.get("by_md5", {})
+    md5_list = [
+        (cut_md5_owner(value, by_md5) or value) if len(value) < 32 else value
+        for value in parse_md5_list(file_entry.get("md5"))
+    ]
+    q = _lookup(
+        file_entry, db, "", md5_list,
+        composite_only=file_entry.get("zip_digest") == "composite",
+    )
+    candidates = [
+        *q.sha1_candidates,
+        *(indexes.get("by_sha256", {}).get(v) for v in q.sha256_candidates),
+    ]
+    if not (q.zipped_file or q.composite_only):
+        candidates += [by_md5.get(v) for v in md5_list]
+    if not (q.sha1_candidates or q.sha256_candidates or q.md5_list or q.zipped_file):
+        candidates += [indexes.get("by_crc32", {}).get(v) for v in q.crc_candidates]
+    return next(
+        (c for c in candidates if c and c in q.files_db and _record_match_status(q, c)),
+        None,
+    )
+
+
 def _held_record(q: _Lookup, match_sha1: str) -> Resolution | None:
     """The record's path and evidence, when it satisfies the entry and is on disk."""
     path = q.files_db[match_sha1]["path"]

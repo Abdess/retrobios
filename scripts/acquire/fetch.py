@@ -13,6 +13,7 @@ from pathlib import Path
 
 from core import upstream
 from core.hashing import parse_hash_list
+from resolve.localfile import held_record_for
 
 MAX_DOWNLOAD = 100 * 1024 * 1024  # 100MB per file
 
@@ -103,17 +104,6 @@ def find_missing(config: dict, db: dict) -> list[dict]:
     return missing
 
 
-def _crc32s(entry: dict) -> set[str]:
-    return {value.zfill(8) for value in parse_hash_list(entry.get("crc32"))}
-
-
-def _size(entry: dict) -> int | None:
-    try:
-        return int(entry["size"]) if entry.get("size") is not None else None
-    except (TypeError, ValueError):
-        return None
-
-
 CRYPTO_HASHES = (
     ("sha256", hashlib.sha256),
     ("sha1", hashlib.sha1),
@@ -149,26 +139,10 @@ def verify_content(data: bytes, expected: dict) -> bool:
 
 
 def step1_crossref_db(entry: dict, db: dict) -> str | None:
-    """Check if file exists under different name/path in database."""
-    files = db.get("files", {})
-    for sha1 in sorted(parse_hash_list(entry.get("sha1"))):
-        if sha1 in files:
-            return files[sha1]["path"]
-    indexes = db.get("indexes", {})
-    for field, index in (("sha256", "by_sha256"), ("md5", "by_md5")):
-        by_hash = indexes.get(index, {})
-        for value in sorted(parse_hash_list(entry.get(field))):
-            sha1_match = by_hash.get(value)
-            if sha1_match and sha1_match in files:
-                return files[sha1_match]["path"]
-    size = _size(entry)
-    if size is not None:
-        by_crc32 = indexes.get("by_crc32", {})
-        for crc in sorted(_crc32s(entry)):
-            sha1_match = by_crc32.get(crc)
-            if sha1_match in files and files[sha1_match].get("size") == size:
-                return files[sha1_match]["path"]
-    return None
+    """Where the collection holds the declared content, read as the resolver
+    reads it: a held file a declared hash contradicts is still searched for."""
+    sha1 = held_record_for(entry, db)
+    return db["files"][sha1]["path"] if sha1 else None
 
 
 def step2_scan_branches(entry: dict) -> bytes | None:
