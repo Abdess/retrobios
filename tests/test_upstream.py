@@ -6,6 +6,7 @@ import tests
 
 import contextlib
 import http.client
+import io
 import os
 import tempfile
 import socket
@@ -26,10 +27,10 @@ def _no_network(url: str):
 
 class _Body:
     def __init__(self, payload: bytes):
-        self._payload = payload
+        self._stream = io.BytesIO(payload)
 
-    def read(self) -> bytes:
-        return self._payload
+    def read(self, size: int = -1) -> bytes:
+        return self._stream.read(size)
 
 
 def _http_error(code: int, headers=None) -> urllib.error.HTTPError:
@@ -168,43 +169,43 @@ class TestTokenScope(unittest.TestCase):
             os.environ["GITHUB_TOKEN"] = self._orig
 
     def test_sent_to_github_api(self):
-        h = upstream._headers("https://api.github.com/repos/o/n/commits")
+        h = upstream.forge_headers("https://api.github.com/repos/o/n/commits")
         self.assertEqual(h["Authorization"], "Bearer gho_secret")
 
     def test_sent_to_github_raw(self):
-        h = upstream._headers("https://raw.githubusercontent.com/o/n/sha/a.c")
+        h = upstream.forge_headers("https://raw.githubusercontent.com/o/n/sha/a.c")
         self.assertIn("Authorization", h)
 
     def test_withheld_from_codeberg(self):
-        h = upstream._headers("https://codeberg.org/api/v1/repos/o/n/commits")
+        h = upstream.forge_headers("https://codeberg.org/api/v1/repos/o/n/commits")
         self.assertNotIn("Authorization", h)
 
     def test_withheld_from_gitlab(self):
-        h = upstream._headers("https://gitlab.com/api/v4/projects/x/repository/commits")
+        h = upstream.forge_headers("https://gitlab.com/api/v4/projects/x/repository/commits")
         self.assertNotIn("Authorization", h)
 
     def test_withheld_from_forgejo_instances(self):
         for host in ("git.citron-emu.org", "git.eden-emu.dev", "git.ryujinx.app"):
-            h = upstream._headers(f"https://{host}/api/v1/repos/o/n/commits")
+            h = upstream.forge_headers(f"https://{host}/api/v1/repos/o/n/commits")
             self.assertNotIn("Authorization", h, host)
 
     def test_withheld_from_a_lookalike_host(self):
-        h = upstream._headers("https://github.com.evil.example/repos/o/n")
+        h = upstream.forge_headers("https://github.com.evil.example/repos/o/n")
         self.assertNotIn("Authorization", h)
 
     def test_withheld_from_a_url_that_only_names_the_api(self):
-        h = upstream._headers("https://evil.example/x?next=https://api.github.com/")
+        h = upstream.forge_headers("https://evil.example/x?next=https://api.github.com/")
         self.assertNotIn("Authorization", h)
 
     def test_withheld_from_the_web_host(self):
         # A release download on github.com redirects to asset storage, and
         # urllib carries the header across the redirect.
-        h = upstream._headers("https://github.com/o/n/releases/download/v1/a.zip")
+        h = upstream.forge_headers("https://github.com/o/n/releases/download/v1/a.zip")
         self.assertNotIn("Authorization", h)
 
     def test_absent_token_adds_no_header(self):
         os.environ.pop("GITHUB_TOKEN", None)
-        h = upstream._headers("https://api.github.com/repos/o/n")
+        h = upstream.forge_headers("https://api.github.com/repos/o/n")
         self.assertNotIn("Authorization", h)
 
 

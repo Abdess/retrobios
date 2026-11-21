@@ -24,6 +24,7 @@ import urllib.request
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
+from typing import Callable, Protocol, TypeVar
 
 from core.artifacts import write_text_atomic
 
@@ -32,6 +33,8 @@ USER_AGENT = "retrobios-profile-sync/1.0"
 CACHE_DIR = ".cache/upstream"
 ABSENT = "\0absent\0"
 GITHUB_COMPARE_CAP = 300
+# A body read whole into memory is capped at this many bytes.
+MAX_RESPONSE_SIZE = 50 * 1024 * 1024
 RETRIES = 3
 RETRY_BACKOFF = (0.5, 2.0)
 # A 429 is waited out, as base_scraper does: git.libretro.com answers it
@@ -93,6 +96,7 @@ _HOSTS: dict[str, tuple[str, str, str]] = {
 }
 
 
+_T = TypeVar("_T")
 _sleep = time.sleep
 # Hosts still refusing after every wait. Asking them again in the same pass
 # only spends the waits again, while the other forges keep answering.
@@ -246,10 +250,6 @@ def forge_headers(
     return headers
 
 
-def _headers(url: str, accept_json: bool = False) -> dict[str, str]:
-    return forge_headers(url, "application/json" if accept_json else None)
-
-
 def _http_failure(url: str, exc: urllib.error.HTTPError) -> UpstreamError:
     """Classify an HTTP error. Only a real quota signal is fatal.
 
@@ -322,48 +322,95 @@ def _rate_limit_wait(exc: urllib.error.HTTPError, waited: int) -> float | None:
     return RATE_LIMIT_WAITS[waited]
 
 
-def fetch_body(url: str, accept_json: bool = False) -> bytes | None:
-    """Body of a GET, or None on 404.
+class _Readable(Protocol):
+    def read(self, size: int = ..., /) -> bytes: ...
+
+
+def read_limited(resp: _Readable, max_bytes: int = MAX_RESPONSE_SIZE) -> bytes:
+    """Read a response whole, ValueError past `max_bytes`."""
+    chunks: list[bytes] = []
+    total = 0
+    while True:
+        chunk = resp.read(65536)
+        if not chunk:
+            break
+        total += len(chunk)
+        if total > max_bytes:
+            raise ValueError(f"Response exceeds {max_bytes} byte limit")
+        chunks.append(chunk)
+    return b"".join(chunks)
+
+
+def open_retrying(
+    request: urllib.request.Request,
+    consume: Callable[[http.client.HTTPResponse], _T],
+    timeout: float = 30,
+) -> _T:
+    """Open `request` and hand the response to `consume`.
 
     A pass over every profile issues thousands of requests, so a dropped
     connection or a transient 5xx is a certainty rather than an accident.
     Those are retried, a definitive answer from the forge is not. A rate
     limit is waited out, and a host that outlasts the waits is not asked
-    again in this process.
+    again in this process. What ends the attempts is raised as urllib gave
+    it, except a host that does not resolve (GoneError) and a host muted
+    earlier (RateLimitError).
     """
+    url = request.full_url
     host = urllib.parse.urlsplit(url).hostname or ""
     if host in _exhausted_hosts:
         raise RateLimitError(f"{url}: {host} rate limited earlier in this run", host)
-    failure: UpstreamError | None = None
     attempt = 0
     waited = 0
     while True:
-        req = urllib.request.Request(url, headers=_headers(url, accept_json))
         try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                return resp.read()
+            with urllib.request.urlopen(request, timeout=timeout) as resp:
+                return consume(resp)
         except urllib.error.HTTPError as exc:
-            if exc.code == 404:
-                return None
-            failure = _http_failure(url, exc)
-            if isinstance(failure, RateLimitError):
+            if isinstance(_http_failure(url, exc), RateLimitError):
                 delay = _rate_limit_wait(exc, waited)
                 if delay is None:
                     _exhausted_hosts.add(host)
-                    raise failure from exc
+                    raise
                 waited += 1
                 _sleep(delay)
                 continue
             if exc.code < 500:
-                raise failure from exc
+                raise
+            failure: BaseException = exc
         except (urllib.error.URLError, http.client.HTTPException, OSError) as exc:
             if _host_is_unresolvable(exc):
                 raise GoneError(f"{url}: host does not resolve") from exc
-            failure = UpstreamError(f"{url}: {exc}")
+            failure = exc
         attempt += 1
         if attempt >= RETRIES:
             raise failure
         _sleep(RETRY_BACKOFF[attempt - 1])
+
+
+def fetch_body(
+    url: str,
+    accept_json: bool = False,
+    *,
+    timeout: float = 30,
+    max_bytes: int = MAX_RESPONSE_SIZE,
+    user_agent: str = USER_AGENT,
+) -> bytes | None:
+    """Body of a GET, or None on 404, retried as open_retrying does.
+
+    A failure raises UpstreamError (RateLimitError, GoneError), a body over
+    `max_bytes` ValueError.
+    """
+    accept = "application/json" if accept_json else None
+    req = urllib.request.Request(url, headers=forge_headers(url, accept, user_agent))
+    try:
+        return open_retrying(req, lambda resp: read_limited(resp, max_bytes), timeout)
+    except urllib.error.HTTPError as exc:
+        if exc.code == 404:
+            return None
+        raise _http_failure(url, exc) from exc
+    except (urllib.error.URLError, http.client.HTTPException, OSError) as exc:
+        raise UpstreamError(f"{url}: {exc}") from exc
 
 
 def http_text(url: str) -> str | None:
@@ -681,7 +728,7 @@ def _github_graphql(
     token = github_token()
     if offline or not token:
         return None
-    headers = _headers(GITHUB_GRAPHQL, accept_json=True)
+    headers = forge_headers(GITHUB_GRAPHQL, "application/json")
     headers["Content-Type"] = "application/json"
     req = urllib.request.Request(
         GITHUB_GRAPHQL, data=body.encode(), headers=headers, method="POST"

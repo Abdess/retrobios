@@ -8,17 +8,23 @@ import inspect
 import json
 import re
 import sys
-import time
 import urllib.error
 import urllib.request
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, NoReturn, Protocol, TypeVar
+from typing import Any, Callable, NoReturn, TypeVar
 
 from core.github import github_token
 from core.artifacts import copy_stream_atomic, write_text_atomic
+from core.upstream import (
+    MAX_RESPONSE_SIZE,
+    RateLimitError,
+    UpstreamError,
+    open_retrying,
+    read_limited,
+)
 from core.upstream import forge_headers as upstream_headers
 from model.safeparse import require_yaml, yaml_load
 
@@ -81,9 +87,6 @@ class ChangeSet:
         return ", ".join(parts) if parts else "no changes"
 
 
-MAX_RESPONSE_SIZE = 50 * 1024 * 1024  # 50 MB
-
-
 def md5_field(raw: object) -> tuple[list[str], bool]:
     """The md5 values a batocera-systems item declares, and whether it
     writes them as a list.
@@ -139,30 +142,8 @@ def requirement_entry(req: BiosRequirement) -> dict:
     return entry
 
 
-class _Readable(Protocol):
-    def read(self, size: int = ..., /) -> bytes: ...
-
-
-def _read_limited(resp: _Readable, max_bytes: int = MAX_RESPONSE_SIZE) -> bytes:
-    """Read an HTTP response with a size limit to prevent OOM."""
-    chunks: list[bytes] = []
-    total = 0
-    while True:
-        chunk = resp.read(65536)
-        if not chunk:
-            break
-        total += len(chunk)
-        if total > max_bytes:
-            raise ValueError(f"Response exceeds {max_bytes} byte limit")
-        chunks.append(chunk)
-    return b"".join(chunks)
-
-
 SCRAPER_AGENT = "retrobios-scraper/1.0"
 GITHUB_API = "https://api.github.com"
-
-# Statuses a forge answers when it asks the client to slow down.
-_RETRYABLE = frozenset({429, 502, 503, 504})
 
 _T = TypeVar("_T")
 
@@ -196,37 +177,29 @@ def _open(
     request: urllib.request.Request,
     consume: Callable[[http.client.HTTPResponse], _T],
     timeout: float,
-    attempts: int = 5,
-    sleep: Callable[[float], None] | None = None,
 ) -> _T:
-    """Open `request` and hand the response to `consume`, waiting out a rate
-    limit: the wait is the server's Retry-After when it gives one, else 2,
-    4, 8, 16 s. A header the request does not set comes from
-    forge_headers()."""
+    """Open `request` and hand the response to `consume`, retried as
+    core.upstream.open_retrying does. A header the request does not set
+    comes from forge_headers(). A failure raises FetchError."""
     url = request.full_url
     for name, value in forge_headers(url).items():
         if not request.has_header(name.capitalize()):
             request.add_header(name, value)
-    for attempt in range(attempts):
-        try:
-            with urllib.request.urlopen(request, timeout=timeout) as resp:
-                return consume(resp)
-        except urllib.error.HTTPError as e:
-            if e.code not in _RETRYABLE or attempt == attempts - 1:
-                raise FetchError(url, e, e.code) from e
-            retry_after = e.headers.get("Retry-After", "") if e.headers else ""
-            delay = float(retry_after) if retry_after.isdigit() else 2.0 ** (attempt + 1)
-            (sleep or time.sleep)(min(delay, 120.0))
-        except (urllib.error.URLError, http.client.HTTPException, TimeoutError) as e:
-            raise FetchError(url, e) from e
-    raise AssertionError("unreachable")
+    try:
+        return open_retrying(request, consume, timeout)
+    except urllib.error.HTTPError as e:
+        raise FetchError(url, e, e.code) from e
+    except (urllib.error.URLError, http.client.HTTPException, OSError) as e:
+        raise FetchError(url, e) from e
+    except RateLimitError as e:
+        raise FetchError(url, e, 429) from e
+    except UpstreamError as e:
+        raise FetchError(url, e) from e
 
 
 def fetch_bytes(
     url: str,
     headers: dict[str, str] | None = None,
-    attempts: int = 5,
-    sleep: Callable[[float], None] | None = None,
     data: bytes | None = None,
     timeout: float = 30,
     max_bytes: int = MAX_RESPONSE_SIZE,
@@ -239,7 +212,7 @@ def fetch_bytes(
     add to or replace forge_headers(url).
     """
     request = urllib.request.Request(url, data=data, headers=headers or {})
-    return _open(request, lambda resp: _read_limited(resp, max_bytes), timeout, attempts, sleep)
+    return _open(request, lambda resp: read_limited(resp, max_bytes), timeout)
 
 
 def fetch_text(url: str, headers: dict[str, str] | None = None) -> str:

@@ -915,7 +915,7 @@ class TheGitHubTokenComesFromGh(unittest.TestCase):
 
         with self._gh():
             self.assertEqual(
-                upstream._headers("https://api.github.com/repos/o/n")["Authorization"],
+                upstream.forge_headers("https://api.github.com/repos/o/n")["Authorization"],
                 "Bearer gho_fromgh",
             )
         os.environ.pop("GITHUB_TOKEN")
@@ -930,7 +930,7 @@ class TheGitHubTokenComesFromGh(unittest.TestCase):
         from core import upstream
 
         with self._gh() as run:
-            headers = upstream._headers("https://gitlab.com/api/v4/projects/1")
+            headers = upstream.forge_headers("https://gitlab.com/api/v4/projects/1")
         self.assertNotIn("Authorization", headers)
         run.assert_not_called()
 

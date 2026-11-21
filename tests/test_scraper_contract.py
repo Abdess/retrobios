@@ -142,12 +142,22 @@ class RateLimitedForge(unittest.TestCase):
             headers["Retry-After"] = retry_after
         return urllib.error.HTTPError("u", 429, "Too Many Requests", headers, io.BytesIO())
 
+    def setUp(self):
+        from core import upstream
+
+        self.waits: list[float] = []
+        patcher = mock.patch.object(upstream, "_sleep", self.waits.append)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        upstream._exhausted_hosts.clear()
+        self.addCleanup(upstream._exhausted_hosts.clear)
+
     def test_a_rate_limit_is_waited_out(self):
         import io
 
+        from core import upstream
         from scraper.base_scraper import fetch_bytes
 
-        waits: list[float] = []
         answers = [self._limited("7"), self._limited(None), io.BytesIO(b"ok")]
 
         def urlopen(_request, timeout):
@@ -157,25 +167,47 @@ class RateLimitedForge(unittest.TestCase):
             return answer
 
         with mock.patch("urllib.request.urlopen", urlopen):
-            self.assertEqual(fetch_bytes("https://x", sleep=waits.append), b"ok")
-        self.assertEqual(waits, [7.0, 4.0])
+            self.assertEqual(fetch_bytes("https://x"), b"ok")
+        self.assertEqual(self.waits, [7.0, upstream.RATE_LIMIT_WAITS[1]])
 
     def test_a_lasting_limit_or_a_missing_file_fails(self):
-        from scraper.base_scraper import fetch_bytes
+        from scraper.base_scraper import FetchError, fetch_bytes
 
         def limited(_request, timeout):
             raise self._limited(None)
 
-        with mock.patch("urllib.request.urlopen", limited), self.assertRaises(ConnectionError):
-            fetch_bytes("https://x", attempts=3, sleep=lambda _s: None)
+        with mock.patch("urllib.request.urlopen", limited), self.assertRaises(FetchError) as caught:
+            fetch_bytes("https://x")
+        self.assertEqual(caught.exception.status, 429)
 
         def gone(_request, timeout):
             raise urllib.error.HTTPError("u", 404, "Not Found", None, None)
 
-        waits: list[float] = []
-        with mock.patch("urllib.request.urlopen", gone), self.assertRaises(ConnectionError):
-            fetch_bytes("https://x", sleep=waits.append)
-        self.assertEqual(waits, [])
+        self.waits.clear()
+        with mock.patch("urllib.request.urlopen", gone), self.assertRaises(FetchError) as caught:
+            fetch_bytes("https://y")
+        self.assertEqual((caught.exception.status, self.waits), (404, []))
+
+    def test_a_server_error_or_a_dropped_connection_is_retried(self):
+        """A scrape stopped on the first 500 or reset, where profile_sync
+        retried the same forge."""
+        import http.client
+        import io
+
+        from scraper.base_scraper import fetch_bytes
+
+        answers = [urllib.error.HTTPError("u", 500, "Error", None, None),
+                   http.client.RemoteDisconnected("closed"), io.BytesIO(b"ok")]
+
+        def urlopen(_request, timeout):
+            answer = answers.pop(0)
+            if isinstance(answer, Exception):
+                raise answer
+            return answer
+
+        with mock.patch("urllib.request.urlopen", urlopen):
+            self.assertEqual(fetch_bytes("https://x"), b"ok")
+        self.assertEqual(len(self.waits), 2)
 
 
 class RecalboxReadsItsSystemsInBatches(unittest.TestCase):
