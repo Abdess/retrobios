@@ -47,21 +47,21 @@ def _serving(payloads: dict[str, bytes]):
 class SoftwareHeritageAnswersByContent(unittest.TestCase):
     def test_the_bytes_it_serves_are_kept_when_the_hash_holds(self):
         urlopen, asked = _serving({f"{fetch.SOFTWARE_HERITAGE}/sha1:{SHA1}/raw/": PAYLOAD})
-        with mock.patch.object(fetch.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
             data = fetch.step3b_software_heritage({"name": "D8039HLC.rom", "sha1": SHA1})
         self.assertEqual(data, PAYLOAD)
         self.assertEqual(asked, [f"{fetch.SOFTWARE_HERITAGE}/sha1:{SHA1}/raw/"])
 
     def test_other_bytes_under_the_hash_are_refused(self):
         urlopen, _asked = _serving({fetch.SOFTWARE_HERITAGE: b"something else"})
-        with mock.patch.object(fetch.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
             data = fetch.step3b_software_heritage({"name": "x", "sha1": SHA1})
         self.assertIsNone(data)
 
     def test_an_absent_file_is_not_counted_as_a_source_that_did_not_answer(self):
         urlopen, _asked = _serving({})
         fetch._UNANSWERED.clear()
-        with mock.patch.object(fetch.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
             self.assertIsNone(fetch.step3b_software_heritage({"name": "x", "sha1": SHA1}))
         self.assertEqual(fetch._UNANSWERED, [])
 
@@ -75,7 +75,7 @@ class LookupBySha1(unittest.TestCase):
 
     def test_a_found_file_goes_to_tmp_acquire_never_to_bios(self):
         urlopen, _asked = _serving({f"{fetch.SOFTWARE_HERITAGE}/sha1:{SHA1}/raw/": PAYLOAD})
-        with mock.patch.object(fetch.urllib.request, "urlopen", urlopen), \
+        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
             code = fetch.lookup_sha1s([SHA1.upper()], {"files": {}})
         self.assertEqual(code, 0)
@@ -86,7 +86,7 @@ class LookupBySha1(unittest.TestCase):
     def test_a_held_file_is_named_and_not_fetched(self):
         urlopen, asked = _serving({})
         db = {"files": {SHA1: {"path": "bios/Commodore/Amiga/x.rom"}}}
-        with mock.patch.object(fetch.urllib.request, "urlopen", urlopen), \
+        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
             code = fetch.lookup_sha1s([SHA1], db)
         self.assertEqual((code, asked), (0, []))
@@ -94,13 +94,71 @@ class LookupBySha1(unittest.TestCase):
 
     def test_nothing_found_and_a_malformed_hash_end_with_one(self):
         urlopen, _asked = _serving({})
-        with mock.patch.object(fetch.urllib.request, "urlopen", urlopen), \
+        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen), \
                 contextlib.redirect_stdout(io.StringIO()) as out, \
                 contextlib.redirect_stderr(io.StringIO()) as err:
             code = fetch.lookup_sha1s([SHA1, "not-a-hash"], {"files": {}})
         self.assertEqual(code, 1)
         self.assertIn(f"{SHA1}: not found", out.getvalue())
         self.assertIn("not-a-hash: not a sha1", err.getvalue())
+
+
+class AStalledOrLimitedSourceIsNoAnswer(unittest.TestCase):
+    """A timeout during the read is a TimeoutError, not a URLError: it
+    escaped every handler and ended the search for every remaining file.
+    A 429 from Software Heritage was recorded unanswered at once."""
+
+    def setUp(self):
+        from core import upstream
+
+        patcher = mock.patch.object(upstream, "_sleep", lambda _s: None)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        upstream._exhausted_hosts.clear()
+        self.addCleanup(upstream._exhausted_hosts.clear)
+        fetch._UNANSWERED.clear()
+        self.addCleanup(fetch._UNANSWERED.clear)
+
+    def test_a_stalled_read_is_recorded_and_the_search_goes_on(self):
+        class _Stalled(_Answer):
+            def read(self, *_args):
+                raise TimeoutError("timed out")
+
+        def urlopen(request, timeout=None):
+            return _Stalled()
+
+        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+            self.assertIsNone(fetch.step3_search_public_repos({"name": "x.bin", "sha1": SHA1}))
+        self.assertEqual(len(fetch._UNANSWERED), len(fetch.PUBLIC_REPOS))
+
+    def test_a_rate_limit_is_waited_out(self):
+        answers = [urllib.error.HTTPError("u", 429, "Too Many Requests", {}, None), PAYLOAD]
+
+        def urlopen(request, timeout=None):
+            answer = answers.pop(0)
+            if isinstance(answer, Exception):
+                raise answer
+            return _Answer(answer)
+
+        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+            data = fetch.step3b_software_heritage({"name": "x", "sha1": SHA1})
+        self.assertEqual((data, fetch._UNANSWERED), (PAYLOAD, []))
+
+    def test_the_destination_is_tried_when_the_name_is_too_large(self):
+        asked: list[str] = []
+
+        def urlopen(request, timeout=None):
+            asked.append(request.full_url)
+            if request.full_url.endswith("/sub/x.bin"):
+                return _Answer(PAYLOAD)
+            return _Answer(b"0" * 64)
+
+        with mock.patch.object(fetch, "MAX_DOWNLOAD", 32), \
+                mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+            data = fetch.step3_search_public_repos(
+                {"name": "x.bin", "destination": "sub/x.bin", "sha1": SHA1})
+        self.assertEqual(data, PAYLOAD)
+        self.assertEqual(len(asked), 2)
 
 
 if __name__ == "__main__":

@@ -3,17 +3,15 @@
 from __future__ import annotations
 
 import hashlib
-import http.client
 import json
 import os
 import re
 import subprocess
 import sys
-import urllib.error
 import urllib.parse
-import urllib.request
 from pathlib import Path
 
+from core import upstream
 from core.hashing import parse_hash_list
 
 MAX_DOWNLOAD = 100 * 1024 * 1024  # 100MB per file
@@ -150,16 +148,6 @@ def verify_content(data: bytes, expected: dict) -> bool:
     )
 
 
-def _read_limited(
-    resp: http.client.HTTPResponse, limit: int = MAX_DOWNLOAD
-) -> bytes | None:
-    """Read response up to limit bytes. Returns None if exceeded."""
-    data = resp.read(limit + 1)
-    if len(data) > limit:
-        return None
-    return data
-
-
 def step1_crossref_db(entry: dict, db: dict) -> str | None:
     """Check if file exists under different name/path in database."""
     files = db.get("files", {})
@@ -227,10 +215,32 @@ def step2_scan_branches(entry: dict) -> bytes | None:
 _UNANSWERED: list[str] = []
 
 
-def _unanswered(url: str, exc: Exception) -> None:
-    if isinstance(exc, urllib.error.HTTPError) and exc.code == 404:
-        return
-    _UNANSWERED.append(f"{url}: {exc}")
+def _get(url: str, timeout: float = 30) -> bytes | None:
+    """Body of a GET, None when there is none to check: a 404 and a body
+    over MAX_DOWNLOAD are answers, any other failure is recorded in
+    _UNANSWERED once the retries of core.upstream are spent."""
+    try:
+        return upstream.fetch_body(
+            url, timeout=timeout, max_bytes=MAX_DOWNLOAD, user_agent="retrobios-fetch/1.0"
+        )
+    except upstream.UpstreamError as exc:
+        _UNANSWERED.append(f"{url}: {exc}")
+    except ValueError:
+        pass
+    return None
+
+
+def _get_json(url: str) -> dict:
+    """A JSON object from a GET, {} when there is none."""
+    body = _get(url)
+    if body is None:
+        return {}
+    try:
+        payload = json.loads(body)
+    except json.JSONDecodeError as exc:
+        _UNANSWERED.append(f"{url}: {exc}")
+        return {}
+    return payload if isinstance(payload, dict) else {}
 
 
 def step3_search_public_repos(entry: dict) -> bytes | None:
@@ -238,38 +248,12 @@ def step3_search_public_repos(entry: dict) -> bytes | None:
     name = entry["name"]
     destination = entry.get("destination", name)
 
+    names = [name, destination] if "/" in destination else [name]
     for url_template in PUBLIC_REPOS:
-        url = url_template.format(name=name)
-        try:
-            req = urllib.request.Request(
-                url, headers={"User-Agent": "retrobios-fetch/1.0"}
-            )
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                data = _read_limited(resp)
-                if data is None:
-                    continue
-                if verify_content(data, entry):
-                    return data
-        except urllib.error.URLError as exc:
-            _unanswered(url, exc)
-            continue
-
-        if "/" in destination:
-            url = url_template.format(name=destination)
-            try:
-                req = urllib.request.Request(
-                    url, headers={"User-Agent": "retrobios-fetch/1.0"}
-                )
-                with urllib.request.urlopen(req, timeout=30) as resp:
-                    data = _read_limited(resp)
-                    if data is None:
-                        continue
-                    if verify_content(data, entry):
-                        return data
-            except urllib.error.URLError as exc:
-                _unanswered(url, exc)
-                continue
-
+        for candidate in names:
+            data = _get(url_template.format(name=candidate))
+            if data is not None and verify_content(data, entry):
+                return data
     return None
 
 
@@ -278,16 +262,7 @@ def step3b_software_heritage(entry: dict) -> bytes | None:
     sha256: its archive answers by content, whatever the file was named."""
     for field in ("sha1", "sha256"):
         for value in sorted(parse_hash_list(entry.get(field))):
-            url = f"{SOFTWARE_HERITAGE}/{field}:{value}/raw/"
-            try:
-                req = urllib.request.Request(
-                    url, headers={"User-Agent": "retrobios-fetch/1.0"}
-                )
-                with urllib.request.urlopen(req, timeout=60) as resp:
-                    data = _read_limited(resp)
-            except urllib.error.URLError as exc:
-                _unanswered(url, exc)
-                continue
+            data = _get(f"{SOFTWARE_HERITAGE}/{field}:{value}/raw/", timeout=60)
             if data is not None and verify_content(data, entry):
                 return data
     return None
@@ -299,20 +274,9 @@ def step4_search_archive_org(entry: dict) -> bytes | None:
 
     for collection_id in ARCHIVE_ORG_COLLECTIONS:
         for path in [name, f"system/{name}", f"bios/{name}"]:
-            url = f"https://archive.org/download/{collection_id}/{path}"
-            try:
-                req = urllib.request.Request(
-                    url, headers={"User-Agent": "retrobios-fetch/1.0"}
-                )
-                with urllib.request.urlopen(req, timeout=30) as resp:
-                    data = _read_limited(resp)
-                    if data is None:
-                        continue
-                    if verify_content(data, entry):
-                        return data
-            except urllib.error.URLError as exc:
-                _unanswered(url, exc)
-                continue
+            data = _get(f"https://archive.org/download/{collection_id}/{path}")
+            if data is not None and verify_content(data, entry):
+                return data
 
     sha1s = sorted(parse_hash_list(entry.get("sha1")))
     if not sha1s:
@@ -325,30 +289,12 @@ def step4_search_archive_org(entry: dict) -> bytes | None:
         f"{urllib.parse.quote(sha1)}&output=json&rows=1"
     )
 
-    try:
-        req = urllib.request.Request(
-            search_url, headers={"User-Agent": "retrobios-fetch/1.0"}
-        )
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            result = json.loads(resp.read())
-            docs = result.get("response", {}).get("docs", [])
-            if docs:
-                identifier = docs[0].get("identifier")
-                if identifier:
-                    dl_url = f"https://archive.org/download/{identifier}/{name}"
-                    try:
-                        req2 = urllib.request.Request(
-                            dl_url, headers={"User-Agent": "retrobios-fetch/1.0"}
-                        )
-                        with urllib.request.urlopen(req2, timeout=30) as resp2:
-                            data = _read_limited(resp2)
-                            if data is not None and verify_content(data, entry):
-                                return data
-                    except urllib.error.URLError as exc:
-                        _unanswered(dl_url, exc)
-    except (urllib.error.URLError, json.JSONDecodeError) as exc:
-        _unanswered(search_url, exc)
-
+    docs = _get_json(search_url).get("response", {}).get("docs", [])
+    identifier = docs[0].get("identifier") if docs else None
+    if identifier:
+        data = _get(f"https://archive.org/download/{identifier}/{name}")
+        if data is not None and verify_content(data, entry):
+            return data
     return None
 
 
@@ -505,35 +451,16 @@ def _archive_org_by_sha1(sha1: str) -> bytes | None:
     """The first archive.org file whose metadata names sha1, read and checked."""
     search = ("https://archive.org/advancedsearch.php?q="
               f"{urllib.parse.quote(f'sha1:{sha1}')}&fl[]=identifier&output=json&rows=5")
-    try:
-        with urllib.request.urlopen(urllib.request.Request(
-                search, headers={"User-Agent": "retrobios-fetch/1.0"}), timeout=30) as resp:
-            docs = json.loads(resp.read()).get("response", {}).get("docs", [])
-    except (urllib.error.URLError, json.JSONDecodeError) as exc:
-        _unanswered(search, exc)
-        return None
+    docs = _get_json(search).get("response", {}).get("docs", [])
     for doc in docs:
         identifier = doc.get("identifier")
-        meta = f"https://archive.org/metadata/{identifier}/files"
-        try:
-            with urllib.request.urlopen(urllib.request.Request(
-                    meta, headers={"User-Agent": "retrobios-fetch/1.0"}), timeout=30) as resp:
-                files = json.loads(resp.read()).get("result", [])
-        except (urllib.error.URLError, json.JSONDecodeError) as exc:
-            _unanswered(meta, exc)
-            continue
+        files = _get_json(f"https://archive.org/metadata/{identifier}/files").get("result", [])
         for item in files:
             if str(item.get("sha1", "")).lower() != sha1:
                 continue
             url = (f"https://archive.org/download/{identifier}/"
                    f"{urllib.parse.quote(item['name'])}")
-            try:
-                with urllib.request.urlopen(urllib.request.Request(
-                        url, headers={"User-Agent": "retrobios-fetch/1.0"}), timeout=60) as resp:
-                    data = _read_limited(resp)
-            except urllib.error.URLError as exc:
-                _unanswered(url, exc)
-                continue
+            data = _get(url, timeout=60)
             if data is not None and hashlib.sha1(data).hexdigest() == sha1:
                 return data
     return None

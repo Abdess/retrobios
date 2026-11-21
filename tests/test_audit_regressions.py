@@ -6694,6 +6694,7 @@ class AnUnansweredSearchIsNotANotFound(unittest.TestCase):
         entry = {"name": "nowhere.bin", "system": "test-system", "sha1": "0" * 40}
         db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}}}
         with mock.patch("urllib.request.urlopen", refuse), \
+                mock.patch.object(acquire_fetch.upstream, "_sleep", lambda _s: None), \
                 mock.patch.object(acquire_fetch, "step2_scan_branches", lambda e: None), \
                 contextlib.redirect_stdout(io.StringIO()):
             return acquire_fetch.fetch_missing([entry], db, "bios")
