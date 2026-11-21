@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import threading
 from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import NamedTuple
 
@@ -143,22 +144,23 @@ def _safe_target_dir(value: object, field: str) -> str:
     return value
 
 
-# A platform whose folders move one by one: root -> {folder under the root:
-# where it is now}. RetroDECK's per-folder move (RetroDECK 7786a849,
-# functions/api_data_processing.sh:913-935) records each new place in
-# retrodeck.json paths.<folder>_path (config/retrodeck/retrodeck.json:3-23),
-# and its manifest places files under bios/ and roms/ of the home folder.
-_MOVED_FOLDERS: dict[Path, dict[str, Path]] = {}
+# RetroDECK's settings folder below the home folder: retrodeck.json since the
+# cfg-to-json migration, which renames the old retrodeck.cfg to retrodeck.bak
+# (global.sh:149-153).
+RETRODECK_CONFIG = Path(".var") / "app" / "net.retrodeck.retrodeck" / "config" / "retrodeck"
 
 
-def _record_moved_folders(root: Path, retrodeck_json: Path) -> None:
-    """Each RetroDECK folder that is no longer <home>/<name>."""
+def _retrodeck_paths(retrodeck_json: Path) -> dict | None:
+    """The paths table of retrodeck.json, None when it cannot be read."""
     try:
         paths = json.loads(retrodeck_json.read_text(encoding="utf-8", errors="replace"))["paths"]
     except (OSError, ValueError, KeyError, TypeError):
-        return
-    if not isinstance(paths, dict):
-        return
+        return None
+    return paths if isinstance(paths, dict) else None
+
+
+def _moved_in(root: Path, paths: dict) -> dict[str, Path]:
+    """Each RetroDECK folder that is no longer <home>/<name>."""
     moved = {}
     for key, value in paths.items():
         name = key[:-len("_path")] if key.endswith("_path") else ""
@@ -166,8 +168,60 @@ def _record_moved_folders(root: Path, retrodeck_json: Path) -> None:
             place = Path(value.strip())
             if place != root / name:
                 moved[name] = place
-    if moved:
-        _MOVED_FOLDERS[root] = moved
+    return moved
+
+
+class MovedFolders:
+    """A platform whose folders move one by one: root -> {folder under the
+    root: where it is now}.
+
+    RetroDECK's per-folder move (RetroDECK 7786a849,
+    functions/api_data_processing.sh:913-935) records each new place in
+    retrodeck.json paths.<folder>_path (config/retrodeck/retrodeck.json:3-23),
+    and its manifest places files under bios/ and roms/ of the home folder.
+    A root is looked up on first use, so a run given --dest that never
+    detects places files where a detecting run does; detection only fills
+    the cache ahead.
+    """
+
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self._by_root: dict[Path, dict[str, Path]] = {}
+
+    def reset(self) -> None:
+        with self._lock:
+            self._by_root.clear()
+
+    def record(self, root: Path, retrodeck_json: Path) -> None:
+        """root's moved folders, as retrodeck_json lists them."""
+        paths = _retrodeck_paths(retrodeck_json)
+        with self._lock:
+            self._by_root[root] = _moved_in(root, paths) if paths is not None else {}
+
+    def of(self, root: Path) -> dict[str, Path]:
+        """root's moved folders: none unless root is RetroDECK's home folder."""
+        with self._lock:
+            known = self._by_root.get(root)
+        if known is not None:
+            return known
+        moved = self._look_up(root)
+        with self._lock:
+            return self._by_root.setdefault(root, moved)
+
+    @staticmethod
+    def _look_up(root: Path) -> dict[str, Path]:
+        home = Path.home()
+        paths = _retrodeck_paths(home / RETRODECK_CONFIG / "retrodeck.json")
+        if paths is None:
+            return {}
+        rd_home = paths.get("rd_home_path")
+        rd_root = Path(rd_home) if isinstance(rd_home, str) and rd_home else home / "retrodeck"
+        if os.path.abspath(rd_root) != os.path.abspath(root):
+            return {}
+        return _moved_in(root, paths)
+
+
+MOVED = MovedFolders()
 
 
 # Resolved folder -> the same folder as the run names it: /sdcard is a link
@@ -212,7 +266,7 @@ def _destination_path(root: Path, value: object) -> Path:
     emulator reads it.
     """
     relative = _safe_relative_path(value, "dest")
-    moved = _MOVED_FOLDERS.get(root, {})
+    moved = MOVED.of(root)
     if len(relative.parts) > 1 and relative.parts[0] in moved:
         return moved[relative.parts[0]].resolve() / Path(*relative.parts[1:])
     return _note_spelling(root) / Path(*relative.parts)

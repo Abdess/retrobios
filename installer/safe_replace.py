@@ -29,7 +29,7 @@ from installer.host_fs import (
 )
 from installer.invocation import _INVOCATION
 from installer.local_check import _digest_file, expected_hashes
-from installer.paths import _MOVED_FOLDERS, _entry_path, _entry_place, _note_spelling, _safe_relative_path, spelled
+from installer.paths import MOVED, _entry_path, _entry_place, _note_spelling, _safe_relative_path, spelled
 from installer.text import _plural, format_size
 
 if TYPE_CHECKING:
@@ -262,7 +262,7 @@ def _kept_slot(root: Path, value: object) -> tuple[Path, PurePosixPath]:
     it, as _destination_path places it: a RetroDECK folder moved elsewhere
     is its own folder."""
     relative = _safe_relative_path(value, "dest")
-    moved = _MOVED_FOLDERS.get(root, {})
+    moved = MOVED.of(root)
     if len(relative.parts) > 1 and relative.parts[0] in moved:
         return moved[relative.parts[0]].resolve(), PurePosixPath(*relative.parts[1:])
     return _note_spelling(root), relative

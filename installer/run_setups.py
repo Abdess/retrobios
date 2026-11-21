@@ -30,6 +30,7 @@ from installer.lists import ListFailure, load_targets
 from installer.offline import LOCAL
 from installer.pack import pack_path
 from installer.pack_source import pack_name_platforms
+from installer.paths import MOVED
 from installer.platforms import AVAILABLE_PLATFORMS, _NO_BIOS_FOLDER, display_name, normalize_platform
 from installer.refusal import Refusal
 from installer.run_files import _output_kind, needed_targets
@@ -109,6 +110,7 @@ class _InstallRun:
 def _start_install(args: argparse.Namespace, real_stdout: TextIO) -> _InstallRun:
     """The run's options completed, its terminal and its local sources opened."""
     KEPT.reset()
+    MOVED.reset()
     # A namespace built by a caller that predates --for-games has neither.
     args.for_games = getattr(args, "for_games", None)
     args.required_only = getattr(args, "required_only", False)

@@ -26,7 +26,7 @@ from installer.detect_os import (
     _unix_retroarch_base,
 )
 from installer.host_fs import _SETUP_SEARCH, _exists, _host_path, _is_dir, _is_file, _note_refused
-from installer.paths import _record_moved_folders, shown_path
+from installer.paths import MOVED, RETRODECK_CONFIG, shown_path
 from installer.platforms import display_name
 from installer.text import _CONTROLS
 
@@ -683,9 +683,7 @@ def _detect_emudeck_unix(found: list[tuple[str, Path]]) -> None:
 
 def _detect_retrodeck(home: Path, found: list[tuple[str, Path]]) -> None:
     """Add RetroDECK's home folder."""
-    # RetroDECK: retrodeck.json since the cfg-to-json migration, which
-    # renames the old retrodeck.cfg to retrodeck.bak (global.sh:149-153)
-    retrodeck_conf_dir = home / ".var" / "app" / "net.retrodeck.retrodeck" / "config" / "retrodeck"
+    retrodeck_conf_dir = home / RETRODECK_CONFIG
     retrodeck_json = retrodeck_conf_dir / "retrodeck.json"
     retrodeck_cfg = retrodeck_conf_dir / "retrodeck.cfg"
     if _exists(retrodeck_json):
@@ -698,7 +696,7 @@ def _detect_retrodeck(home: Path, found: list[tuple[str, Path]]) -> None:
                 f"{retrodeck_json}: assuming {home / 'retrodeck'}",
             )
         rd_root = Path(rd_home) if rd_home else home / "retrodeck"
-        _record_moved_folders(rd_root, retrodeck_json)
+        MOVED.record(rd_root, retrodeck_json)
         found.append(("retrodeck", rd_root))
     elif _exists(retrodeck_cfg):
         rd_home = _parse_bash_var(retrodeck_cfg, "rdhome")

@@ -25,7 +25,7 @@ from installer.host_fs import (
     _is_file,
     refused_words,
 )
-from installer.paths import _MOVED_FOLDERS, shown_path
+from installer.paths import MOVED, shown_path
 from installer.platforms import display_name
 from installer.text import screen_text
 
@@ -363,7 +363,7 @@ def found_label(plat: str, path: Path) -> str:
     name = detected_shown(plat, path)
     shown = display_name(plat)
     moved = "".join(f", {folder}/ at {place}"
-                    for folder, place in sorted(_MOVED_FOLDERS.get(path, {}).items())
+                    for folder, place in sorted(MOVED.of(path).items())
                     if folder in ("bios", "roms"))
     folder = shown_path(setup_bios_folder(plat, path))
     if not name or name == shown:

@@ -3549,7 +3549,7 @@ class RetroDeckFoldersMovedOneByOne(unittest.TestCase):
         (conf / "retrodeck.json").write_text(json.dumps({"paths": paths}))
         with unittest.mock.patch.object(install.Path, "home", return_value=home), \
                 unittest.mock.patch.object(install, "_detect_embedded", return_value=[]), \
-                unittest.mock.patch.dict(install._MOVED_FOLDERS, clear=True), \
+                unittest.mock.patch.object(install.MOVED, "_by_root", {}), \
                 contextlib.redirect_stderr(io.StringIO()):
             found = install.detect_platforms("linux")
             dests = {name: install._destination_path(home / "retrodeck", f"{name}/a.bin")
@@ -3578,6 +3578,23 @@ class RetroDeckFoldersMovedOneByOne(unittest.TestCase):
         })
         self.assertIn(("retrodeck", rd_home), found)
         self.assertNotIn("bios/ at", label)
+
+    def test_a_run_that_never_detects_follows_the_move(self):
+        """--platform retrodeck --dest D never detects, and the full-screen
+        interface passes --dest to every child run: the files went to
+        <home>/bios before a detection had filled the moved folders."""
+        home = scratch_dir(self)
+        sd = home / "sd"
+        conf = home / ".var/app/net.retrodeck.retrodeck/config/retrodeck"
+        conf.mkdir(parents=True)
+        (conf / "retrodeck.json").write_text(json.dumps({"paths": {
+            "rd_home_path": "", "bios_path": str(sd / "bios")}}))
+        with unittest.mock.patch.object(install.Path, "home", return_value=home), \
+                unittest.mock.patch.object(install.MOVED, "_by_root", {}):
+            dest = install._destination_path(home / "retrodeck", "bios/a.bin")
+            other = install._destination_path(home / "elsewhere", "bios/a.bin")
+        self.assertEqual(dest, (sd / "bios").resolve() / "a.bin")
+        self.assertEqual(other, (home / "elsewhere").resolve() / "bios" / "a.bin")
 
 
 class AndroidCitationsNameTheRelease(unittest.TestCase):

@@ -2655,22 +2655,23 @@ def _safe_target_dir(value: object, field: str) -> str:
     return value
 
 
-# A platform whose folders move one by one: root -> {folder under the root:
-# where it is now}. RetroDECK's per-folder move (RetroDECK 7786a849,
-# functions/api_data_processing.sh:913-935) records each new place in
-# retrodeck.json paths.<folder>_path (config/retrodeck/retrodeck.json:3-23),
-# and its manifest places files under bios/ and roms/ of the home folder.
-_MOVED_FOLDERS: dict[Path, dict[str, Path]] = {}
+# RetroDECK's settings folder below the home folder: retrodeck.json since the
+# cfg-to-json migration, which renames the old retrodeck.cfg to retrodeck.bak
+# (global.sh:149-153).
+RETRODECK_CONFIG = Path(".var") / "app" / "net.retrodeck.retrodeck" / "config" / "retrodeck"
 
 
-def _record_moved_folders(root: Path, retrodeck_json: Path) -> None:
-    """Each RetroDECK folder that is no longer <home>/<name>."""
+def _retrodeck_paths(retrodeck_json: Path) -> dict | None:
+    """The paths table of retrodeck.json, None when it cannot be read."""
     try:
         paths = json.loads(retrodeck_json.read_text(encoding="utf-8", errors="replace"))["paths"]
     except (OSError, ValueError, KeyError, TypeError):
-        return
-    if not isinstance(paths, dict):
-        return
+        return None
+    return paths if isinstance(paths, dict) else None
+
+
+def _moved_in(root: Path, paths: dict) -> dict[str, Path]:
+    """Each RetroDECK folder that is no longer <home>/<name>."""
     moved = {}
     for key, value in paths.items():
         name = key[:-len("_path")] if key.endswith("_path") else ""
@@ -2678,8 +2679,60 @@ def _record_moved_folders(root: Path, retrodeck_json: Path) -> None:
             place = Path(value.strip())
             if place != root / name:
                 moved[name] = place
-    if moved:
-        _MOVED_FOLDERS[root] = moved
+    return moved
+
+
+class MovedFolders:
+    """A platform whose folders move one by one: root -> {folder under the
+    root: where it is now}.
+
+    RetroDECK's per-folder move (RetroDECK 7786a849,
+    functions/api_data_processing.sh:913-935) records each new place in
+    retrodeck.json paths.<folder>_path (config/retrodeck/retrodeck.json:3-23),
+    and its manifest places files under bios/ and roms/ of the home folder.
+    A root is looked up on first use, so a run given --dest that never
+    detects places files where a detecting run does; detection only fills
+    the cache ahead.
+    """
+
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self._by_root: dict[Path, dict[str, Path]] = {}
+
+    def reset(self) -> None:
+        with self._lock:
+            self._by_root.clear()
+
+    def record(self, root: Path, retrodeck_json: Path) -> None:
+        """root's moved folders, as retrodeck_json lists them."""
+        paths = _retrodeck_paths(retrodeck_json)
+        with self._lock:
+            self._by_root[root] = _moved_in(root, paths) if paths is not None else {}
+
+    def of(self, root: Path) -> dict[str, Path]:
+        """root's moved folders: none unless root is RetroDECK's home folder."""
+        with self._lock:
+            known = self._by_root.get(root)
+        if known is not None:
+            return known
+        moved = self._look_up(root)
+        with self._lock:
+            return self._by_root.setdefault(root, moved)
+
+    @staticmethod
+    def _look_up(root: Path) -> dict[str, Path]:
+        home = Path.home()
+        paths = _retrodeck_paths(home / RETRODECK_CONFIG / "retrodeck.json")
+        if paths is None:
+            return {}
+        rd_home = paths.get("rd_home_path")
+        rd_root = Path(rd_home) if isinstance(rd_home, str) and rd_home else home / "retrodeck"
+        if os.path.abspath(rd_root) != os.path.abspath(root):
+            return {}
+        return _moved_in(root, paths)
+
+
+MOVED = MovedFolders()
 
 
 # Resolved folder -> the same folder as the run names it: /sdcard is a link
@@ -2724,7 +2777,7 @@ def _destination_path(root: Path, value: object) -> Path:
     emulator reads it.
     """
     relative = _safe_relative_path(value, "dest")
-    moved = _MOVED_FOLDERS.get(root, {})
+    moved = MOVED.of(root)
     if len(relative.parts) > 1 and relative.parts[0] in moved:
         return moved[relative.parts[0]].resolve() / Path(*relative.parts[1:])
     return _note_spelling(root) / Path(*relative.parts)
@@ -4989,7 +5042,7 @@ def found_label(plat: str, path: Path) -> str:
     name = detected_shown(plat, path)
     shown = display_name(plat)
     moved = "".join(f", {folder}/ at {place}"
-                    for folder, place in sorted(_MOVED_FOLDERS.get(path, {}).items())
+                    for folder, place in sorted(MOVED.of(path).items())
                     if folder in ("bios", "roms"))
     folder = shown_path(setup_bios_folder(plat, path))
     if not name or name == shown:
@@ -5714,9 +5767,7 @@ def _detect_emudeck_unix(found: list[tuple[str, Path]]) -> None:
 
 def _detect_retrodeck(home: Path, found: list[tuple[str, Path]]) -> None:
     """Add RetroDECK's home folder."""
-    # RetroDECK: retrodeck.json since the cfg-to-json migration, which
-    # renames the old retrodeck.cfg to retrodeck.bak (global.sh:149-153)
-    retrodeck_conf_dir = home / ".var" / "app" / "net.retrodeck.retrodeck" / "config" / "retrodeck"
+    retrodeck_conf_dir = home / RETRODECK_CONFIG
     retrodeck_json = retrodeck_conf_dir / "retrodeck.json"
     retrodeck_cfg = retrodeck_conf_dir / "retrodeck.cfg"
     if _exists(retrodeck_json):
@@ -5729,7 +5780,7 @@ def _detect_retrodeck(home: Path, found: list[tuple[str, Path]]) -> None:
                 f"{retrodeck_json}: assuming {home / 'retrodeck'}",
             )
         rd_root = Path(rd_home) if rd_home else home / "retrodeck"
-        _record_moved_folders(rd_root, retrodeck_json)
+        MOVED.record(rd_root, retrodeck_json)
         found.append(("retrodeck", rd_root))
     elif _exists(retrodeck_cfg):
         rd_home = _parse_bash_var(retrodeck_cfg, "rdhome")
@@ -9329,7 +9380,7 @@ def _kept_slot(root: Path, value: object) -> tuple[Path, PurePosixPath]:
     it, as _destination_path places it: a RetroDECK folder moved elsewhere
     is its own folder."""
     relative = _safe_relative_path(value, "dest")
-    moved = _MOVED_FOLDERS.get(root, {})
+    moved = MOVED.of(root)
     if len(relative.parts) > 1 and relative.parts[0] in moved:
         return moved[relative.parts[0]].resolve(), PurePosixPath(*relative.parts[1:])
     return _note_spelling(root), relative
@@ -22952,6 +23003,7 @@ class _InstallRun:
 def _start_install(args: argparse.Namespace, real_stdout: TextIO) -> _InstallRun:
     """The run's options completed, its terminal and its local sources opened."""
     KEPT.reset()
+    MOVED.reset()
     # A namespace built by a caller that predates --for-games has neither.
     args.for_games = getattr(args, "for_games", None)
     args.required_only = getattr(args, "required_only", False)
