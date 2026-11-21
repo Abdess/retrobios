@@ -946,8 +946,8 @@ class TheGitHubTokenComesFromGh(unittest.TestCase):
         run.assert_not_called()
 
     def test_every_api_caller_reads_it(self):
-        import profile_sync
         from core import upstream
+        from profiling.quota import check_quota
         from scraper import base_scraper
 
         with self._gh():
@@ -961,7 +961,7 @@ class TheGitHubTokenComesFromGh(unittest.TestCase):
                              "Bearer gho_fromgh")
         os.environ.pop("GITHUB_TOKEN")
         with self._gh(), contextlib.redirect_stderr(io.StringIO()):
-            profile_sync._check_quota(606, offline=False)
+            check_quota(606, offline=False)
 
     def test_another_forge_never_triggers_gh(self):
         from core import upstream

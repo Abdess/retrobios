@@ -30,6 +30,8 @@ from profiling import reports as profiling_reports
 from profiling import repos as profiling_repos
 from profiling import resolver
 from profiling import run as profiling_run
+from profiling import sourcepaths as profiling_sourcepaths
+from profiling import worktree as profiling_worktree
 from profiling import triage
 from profiling import versions
 from model import sourceref
@@ -5128,7 +5130,7 @@ class TestRateLimitEndsOneProfile(unittest.TestCase):
             with mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
                     mock.patch.object(profile_sync, "select_profiles",
                                       return_value={"cemu": {}, "after": {}}), \
-                    mock.patch.object(profile_sync, "_check_quota"), \
+                    mock.patch.object(profile_sync, "check_quota"), \
                     mock.patch.object(profiling_run, "build_report", side_effect=build), \
                     contextlib.redirect_stdout(out), \
                     contextlib.redirect_stderr(err), \
@@ -5157,16 +5159,16 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
 
         with mock.patch.object(sources, "build_source_paths", return_value=({}, [])) as built, \
                 mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
-                mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
+                mock.patch.object(profiling_sourcepaths, "load_emulator_profiles", return_value={}), \
                 mock.patch.object(sources, "write_if_changed") as written, \
                 contextlib.redirect_stderr(io.StringIO()):
             profiling_run.WRITTEN_PROFILES.clear()
-            profile_sync._refresh_source_paths(self._args())
+            profiling_sourcepaths.refresh_source_paths(self._args())
             self.assertFalse(built.called)
             profiling_run.WRITTEN_PROFILES.add("x")
-            profile_sync._refresh_source_paths(self._args(dry_run=True))
+            profiling_sourcepaths.refresh_source_paths(self._args(dry_run=True))
             self.assertFalse(built.called)
-            profile_sync._refresh_source_paths(self._args())
+            profiling_sourcepaths.refresh_source_paths(self._args())
             self.assertTrue(built.called and written.called)
             profiling_run.WRITTEN_PROFILES.clear()
 
@@ -5194,7 +5196,7 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
                     contextlib.redirect_stdout(io.StringIO()):
                 profiling_run.WRITTEN_PROFILES.add("p")
                 self.addCleanup(profiling_run.WRITTEN_PROFILES.clear)
-                profile_sync._refresh_source_paths(self._args(emulators_dir=tmp))
+                profiling_sourcepaths.refresh_source_paths(self._args(emulators_dir=tmp))
             self.assertEqual(built.call_args[0][0]["p"]["source_commit"], "new")
 
     def test_the_record_waits_for_a_run_holding_the_repository(self):
@@ -5210,11 +5212,11 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
         with mock.patch.object(sources, "repository_output_lock", return_value=busy) as lock, \
                 mock.patch.object(sources, "build_source_paths") as built, \
                 mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
-                mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
+                mock.patch.object(profiling_sourcepaths, "load_emulator_profiles", return_value={}), \
                 contextlib.redirect_stderr(io.StringIO()) as err:
             profiling_run.WRITTEN_PROFILES.add("x")
             self.addCleanup(profiling_run.WRITTEN_PROFILES.clear)
-            profile_sync._refresh_source_paths(self._args())
+            profiling_sourcepaths.refresh_source_paths(self._args())
         lock.assert_called_once_with(str(sources.SOURCE_PATHS))
         self.assertFalse(built.called)
         self.assertIn("sitesources.py --fetch", err.getvalue())
@@ -5262,7 +5264,7 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
             with mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
                     mock.patch.object(profile_sync, "select_profiles",
                                       return_value={"clean": {}, "drift": {}}), \
-                    mock.patch.object(profile_sync, "_check_quota"), \
+                    mock.patch.object(profile_sync, "check_quota"), \
                     mock.patch.object(profiling_run, "build_report",
                                       side_effect=lambda name, *a, **k: reports[name]), \
                     contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
@@ -5370,7 +5372,7 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
             with mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
                     mock.patch.object(profile_sync, "select_profiles",
                                       return_value={"clean": {}, "drift": {}}), \
-                    mock.patch.object(profile_sync, "_check_quota"), \
+                    mock.patch.object(profile_sync, "check_quota"), \
                     mock.patch.object(profiling_run, "build_report", side_effect=build), \
                     contextlib.redirect_stdout(out), \
                     contextlib.redirect_stderr(io.StringIO()), \
@@ -5510,7 +5512,7 @@ class TestEmulatorsDirStatus(unittest.TestCase):
         with tempfile.TemporaryDirectory() as root:
             self._git("init", "-q", cwd=root)
             Path(root, "a.yml").write_text("emulator: a\n")
-            self.assertTrue(profile_sync.emulators_dir_is_dirty(root))
+            self.assertTrue(profiling_worktree.emulators_dir_is_dirty(root))
 
     def test_only_the_selected_profiles_count(self):
         # A loop of --emulator X --rebase-refs refused every profile after
@@ -5522,8 +5524,8 @@ class TestEmulatorsDirStatus(unittest.TestCase):
             self._git("add", "a.yml", "b.yml", cwd=root)
             self._git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "p", cwd=root)
             Path(root, "a.yml").write_text("emulator: a2\n")
-            self.assertTrue(profile_sync.emulators_dir_is_dirty(root, ["a"]))
-            self.assertFalse(profile_sync.emulators_dir_is_dirty(root, ["b"]))
+            self.assertTrue(profiling_worktree.emulators_dir_is_dirty(root, ["a"]))
+            self.assertFalse(profiling_worktree.emulators_dir_is_dirty(root, ["b"]))
 
     def test_the_refusal_names_the_changed_profile(self):
         """One profile changed by another session among ~375 refused the
@@ -5535,11 +5537,11 @@ class TestEmulatorsDirStatus(unittest.TestCase):
             self._git("add", "a.yml", "b.yml", "c.yml", cwd=root)
             self._git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "p", cwd=root)
             Path(root, "b.yml").write_text("emulator: b2\n")
-            self.assertEqual(profile_sync.emulators_dir_is_dirty(root, ["a", "b", "c"]),
+            self.assertEqual(profiling_worktree.emulators_dir_is_dirty(root, ["a", "b", "c"]),
                              ["b.yml"])
             err = io.StringIO()
             with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
-                profile_sync._refuse_dirty_tree(root, ["a", "b", "c"])
+                profiling_worktree.refuse_dirty_tree(root, ["a", "b", "c"])
         self.assertIn("b.yml has uncommitted changes", err.getvalue())
         self.assertNotIn("a.yml", err.getvalue())
 
@@ -5547,7 +5549,7 @@ class TestEmulatorsDirStatus(unittest.TestCase):
         with tempfile.TemporaryDirectory() as root, mock.patch.dict(
             os.environ, {"GIT_CEILING_DIRECTORIES": str(Path(root).parent)}
         ), self.assertRaises(RuntimeError):
-            profile_sync.emulators_dir_is_dirty(root)
+            profiling_worktree.emulators_dir_is_dirty(root)
 
 
 class UpstreamVendoredAsASubmodule(unittest.TestCase):
@@ -6166,7 +6168,7 @@ class AnOnlinePassSaysWhereItIs(unittest.TestCase):
         try:
             sys.argv = ["profile_sync.py", "--all", "--triage", *argv]
             with mock.patch.object(profiling_run, "_build_full_report", side_effect=build), \
-                    mock.patch.object(profile_sync, "_check_quota"), \
+                    mock.patch.object(profile_sync, "check_quota"), \
                     contextlib.redirect_stdout(out), contextlib.redirect_stderr(err), \
                     self.assertRaises(SystemExit) as caught:
                 profile_sync.main()
@@ -6295,13 +6297,13 @@ class TestBranchProfiles(unittest.TestCase):
 
     def test_changed_takes_added_edited_and_uncommitted(self):
         self.assertEqual(
-            profile_sync.branch_profiles("emulators", "main", added_only=False),
+            profiling_worktree.branch_profiles("emulators", "main", added_only=False),
             ["draft", "edited", "new"],
         )
 
     def test_added_leaves_edited_profiles_out(self):
         self.assertEqual(
-            profile_sync.branch_profiles("emulators", "main", added_only=True),
+            profiling_worktree.branch_profiles("emulators", "main", added_only=True),
             ["draft", "new"],
         )
 
@@ -6309,7 +6311,7 @@ class TestBranchProfiles(unittest.TestCase):
         """`--base upstream/main` with upstream added and never fetched
         stopped on git's "Not a valid object name" and no next step."""
         with self.assertRaises(SystemExit) as raised:
-            profile_sync.branch_profiles("emulators", "upstream/main", added_only=True)
+            profiling_worktree.branch_profiles("emulators", "upstream/main", added_only=True)
         self.assertIn("git fetch upstream", str(raised.exception))
 
     def test_the_flag_selects_those_profiles(self):

@@ -9,83 +9,23 @@ recalable from what needs the code read again.
 from __future__ import annotations
 
 import argparse
-import json
 import os
-import subprocess
 import sys
-from collections import Counter
-from dataclasses import asdict
-from pathlib import Path
 
 
 sys.path.insert(0, os.path.dirname(__file__))
 
 from core import upstream
-from profiling import version_basis
 from model.systems import norm_system_id, system_index
-from core.github import github_token
 from model.profiles import ProfileSelectionError, is_emulator, load_emulator_profiles, resolve_profile_name
 from core.cli import add_repo_inputs, suggest_names
-from profiling.bump import DEFAULT_CACHE, write_version
-from profiling.realign import realign_prose
-from profiling.reports import ProfileReport
-from profiling.run import WRITTEN_PROFILES, emit_reports, read_one_profile
-from profiling.triage import PROGRESS_SECONDS, Progress, print_interrupted
-from profiling.yamledit import YamlWriteError
-
-ANON_QUOTA = 60
-
-
-def _refuse_dirty_tree(emulators_dir: str, names: list[str]) -> None:
-    """Writes need a clean copy of each profile they touch to roll back to.
-
-    Only the selected profiles count: a pass writing one profile after
-    another used to refuse every profile after the first it wrote.
-    """
-    try:
-        dirty = emulators_dir_is_dirty(emulators_dir, names)
-    except RuntimeError as e:
-        print(f"{e}. Pass --force to write anyway.", file=sys.stderr)
-        raise SystemExit(1) from e
-    if dirty:
-        # Another session may own the change, so the refusal names the files:
-        # --force writes over them.
-        one = len(dirty) == 1
-        print(
-            f"{', '.join(dirty)} {'has' if one else 'have'} uncommitted changes: "
-            f"commit {'it' if one else 'them'} or pass --force, which writes over "
-            f"{'it' if one else 'them'}.",
-            file=sys.stderr,
-        )
-        raise SystemExit(1)
-
-
-def emulators_dir_is_dirty(emulators_dir: str, names: list[str] | None = None) -> list[str]:
-    """The files of the profile directory that carry uncommitted changes.
-
-    Paths read as the status prints them, from the repository root.
-
-    ``names`` narrows the question to those profiles. Git is asked from
-    inside the directory, so a profile tree that lives in another
-    repository answers for itself. A directory git cannot read is never
-    reported clean: the writes have nothing to roll back to.
-    """
-    paths = [f"{name}.yml" for name in names] if names is not None else ["."]
-    result = subprocess.run(
-        ["git", "-C", emulators_dir, "status", "--porcelain", "--", *paths],
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    if result.returncode:
-        raise RuntimeError(
-            f"cannot read the git status of {emulators_dir}: {result.stderr.strip()}"
-        )
-    return sorted(
-        line[3:].split(" -> ")[-1].strip('"')
-        for line in result.stdout.splitlines()
-        if line.strip()
-    )
+from profiling.bump import DEFAULT_CACHE
+from profiling.quota import check_quota
+from profiling.realignpass import run_realign
+from profiling.run import emit_reports, read_selected
+from profiling.sourcepaths import refresh_source_paths
+from profiling.versioncheck import run_versions
+from profiling.worktree import branch_profiles, project_base, refuse_dirty_tree
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -239,57 +179,6 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _git_lines(args: list[str]) -> list[str]:
-    from core.gitclone import GitRefused, required_git_lines
-
-    try:
-        return required_git_lines(*args)
-    except GitRefused as exc:
-        raise SystemExit(f"ERROR: {exc}") from exc
-
-
-def branch_profiles(emulators_dir: str, base: str, added_only: bool) -> list[str]:
-    """Names of the profiles the branch adds (or edits) against ``base``.
-
-    The diff starts at the merge base, so commits main gained since the
-    branch point are not counted, and ends at the working tree, so a
-    profile not yet committed is checked too. A rename reads as an addition.
-    """
-    if subprocess.run(["git", "rev-parse", "--verify", "--quiet", base],
-                      capture_output=True, check=False).returncode:
-        remote = base.split("/", 1)[0] if "/" in base else "upstream"
-        raise SystemExit(f"ERROR: {base} is not in this clone: run git fetch {remote} first")
-    merge_base = _git_lines(["merge-base", base, "HEAD"])[0]
-    paths = _git_lines([
-        "diff", "--name-only", "--no-renames",
-        "--diff-filter=A" if added_only else "--diff-filter=AM",
-        merge_base, "--", emulators_dir,
-    ])
-    paths += _git_lines([
-        "ls-files", "--others", "--exclude-standard", "--full-name",
-        "--", emulators_dir,
-    ])
-    top = Path(_git_lines(["rev-parse", "--show-toplevel"])[0])
-    root = Path(emulators_dir).resolve()
-    return sorted({
-        full.stem
-        for path in paths
-        if (full := (top / path).resolve()).suffix == ".yml" and full.parent == root
-    })
-
-
-def project_base() -> str:
-    """The project's main line, the base --changed compares with by default.
-
-    In a fork's clone origin/main is the fork: once the branch is pushed it
-    is HEAD, and --changed --strict found nothing and passed while the PR's
-    CI then failed. validate_pr.py resolves the same line the same way.
-    """
-    from core.gitclone import compare_base
-
-    return compare_base() or "HEAD"
-
-
 def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
     """Profiles matching the selection flags."""
     if args.changed or args.added:
@@ -350,20 +239,6 @@ def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
             hint = f" Types: {', '.join(kinds)}."
         raise SystemExit(f"ERROR: no profile matches {filters or 'the selection'}.{hint}")
     return selected
-
-
-def _check_quota(count: int, offline: bool) -> None:
-    """Refuse a run the anonymous quota cannot carry to completion."""
-    if offline or github_token():
-        return
-    if count * 5 > ANON_QUOTA:
-        print(
-            f"{count} profiles need roughly {count * 5} API calls, the anonymous "
-            f"quota is {ANON_QUOTA} per hour. Log in with `gh auth login`, set "
-            "GITHUB_TOKEN, or use --offline.",
-            file=sys.stderr,
-        )
-        raise SystemExit(1)
 
 
 def _refuse_flag_combinations(args: argparse.Namespace) -> None:
@@ -487,56 +362,6 @@ def _version_selection(args: argparse.Namespace, profiles: dict) -> dict:
     return select_profiles(profiles, args)
 
 
-def format_reading(name: str, reading: version_basis.Reading) -> str:
-    mode = f"[{reading.mode}] " if reading.mode else ""
-    kind = f"{reading.kind} " if reading.kind else ""
-    if reading.status == version_basis.DRIFT:
-        said = f"declared {reading.declared}, code {reading.read}"
-    elif reading.status == version_basis.MATCH:
-        said = str(reading.read)
-    else:
-        said = f"declared {reading.declared}"
-    return f"{name}: {mode}{reading.status} {said} ({kind}{reading.where})"
-
-
-def run_versions(args: argparse.Namespace, profiles: dict) -> None:
-    """--verify-version and --set-version: core_version against the code."""
-    selected = _version_selection(args, profiles)
-    if args.set_version and not args.dry_run and not args.force:
-        _refuse_dirty_tree(args.emulators_dir, list(selected))
-    counts: Counter = Counter()
-    rows = []
-    failed = False
-    for name, profile in selected.items():
-        readings = version_basis.check(
-            profile, args.cache_dir, args.offline, profiles, recompute=args.set_version
-        )
-        for reading in readings:
-            counts[reading.status] += 1
-            rows.append({"profile": name, **asdict(reading)})
-            if not args.as_json and (not args.changed_only or reading.status != version_basis.MATCH):
-                print(format_reading(name, reading))
-        if args.set_version:
-            path = Path(args.emulators_dir) / f"{name}.yml"
-            if args.dry_run:
-                continue
-            try:
-                if write_version(path, readings):
-                    print(f"{name}: core_version written")
-            except YamlWriteError as exc:
-                print(f"{name}: write refused: {exc}", file=sys.stderr)
-                failed = True
-        elif any(r.status in version_basis.FAILING for r in readings):
-            failed = True
-    if args.as_json:
-        print(json.dumps(rows, indent=2))
-    else:
-        print(", ".join(f"{count} {status}" for status, count in sorted(counts.items())),
-              file=sys.stderr)
-    if failed:
-        raise SystemExit(1)
-
-
 def main() -> None:
     """Build one report per selected profile, then apply writes and output."""
     args = build_parser().parse_args()
@@ -547,44 +372,23 @@ def main() -> None:
         upstream.MOVING_TTL = 0
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
     if args.verify_version or args.set_version:
-        run_versions(args, profiles)
+        run_versions(args, profiles, _version_selection(args, profiles))
         return
     selected = select_profiles(profiles, args)
-    _check_quota(len(selected), args.offline)
+    check_quota(len(selected), args.offline)
 
     writes = (
         args.backfill_commits or args.rebase_refs or args.bump_commit
         or args.realign_prose or args.attribute_refs
     )
     if writes and not args.dry_run and not args.force:
-        _refuse_dirty_tree(args.emulators_dir, list(selected))
+        refuse_dirty_tree(args.emulators_dir, list(selected))
 
     if args.realign_prose:
-        _run_realign(args, selected)
+        run_realign(args, selected)
         return
 
-    # A profile that could not be compared or written is not a profile with
-    # nothing to review: it stays in every output and fails the run.
-    failed: set[str] = set()
-    reports: list[ProfileReport] = []
-    quiet = args.offline or len(selected) < 2
-    if not quiet:
-        print(
-            f"reading {len(selected)} profiles against their forges, a line every "
-            f"{PROGRESS_SECONDS} s. --offline answers from the cache alone.",
-            file=sys.stderr, flush=True,
-        )
-    progress = Progress(len(selected), "read", quiet)
-    complete = True
-    try:
-        for name, profile in selected.items():
-            progress.step(len(reports), name)
-            read_one_profile(args, name, profile, reports, failed, writes)
-    except KeyboardInterrupt:
-        # What was read is still worth printing: a ranking of 200 profiles
-        # beats none after 15 minutes.
-        print_interrupted(len(reports), len(selected), "the output covers those read")
-        complete = False
+    reports, failed, complete = read_selected(args, selected, writes)
 
     # --changed-only narrows every output, not the text report alone: the
     # documented `--all --changed-only --json` listed every profile.
@@ -593,75 +397,13 @@ def main() -> None:
         if not args.changed_only or report.needs_review() or report.name in failed
     ]
     complete = emit_reports(args, selected, reports, shown) is not False and complete
-    _refresh_source_paths(args)
+    refresh_source_paths(args)
     if not complete:
         raise SystemExit(130)
     if failed or (args.strict and any(
         report.needs_review() or report.uncheckable() for report in reports
     )):
         raise SystemExit(1)
-
-
-def _run_realign(args: argparse.Namespace, selected: dict) -> None:
-    """--realign-prose over the selected profiles, exit 1 when one failed."""
-    failed: set[str] = set()
-    for name in selected:
-        profile_path = Path(args.emulators_dir) / f"{name}.yml"
-        if not profile_path.is_file():
-            continue
-        try:
-            before = profile_path.read_bytes()
-            for line in realign_prose(
-                profile_path, args.cache_dir, args.offline, args.dry_run
-            ):
-                print(f"{name}: {line}")
-            if profile_path.read_bytes() != before:
-                WRITTEN_PROFILES.add(name)
-        except upstream.UpstreamError as exc:
-            print(f"{name}: {exc}", file=sys.stderr)
-            failed.add(name)
-        except YamlWriteError as exc:
-            print(f"{name}: write refused: {exc}", file=sys.stderr)
-            failed.add(name)
-    _refresh_source_paths(args)
-    if failed:
-        raise SystemExit(1)
-
-
-def _refresh_source_paths(args: argparse.Namespace) -> None:
-    """Rebuild the site's record of cited source paths after a write.
-
-    Each bump left website/src/data/source-paths.json behind its pins, and
-    the site's freshness test stayed red until someone ran sitesources.py
-    --fetch by hand. A run that writes nothing, or makes no request, leaves
-    it alone.
-    """
-    if not WRITTEN_PROFILES or args.dry_run or args.offline or os.environ.get("RETROBIOS_OFFLINE"):
-        return
-    from model.profiles import emulator_profiles_cache
-    from sitegen import sources
-    from core.artifacts import ArtifactLockBusy
-
-    # The run loaded the profiles before writing them, and the loader caches
-    # by directory: read again, the record described the pins just replaced
-    # (linapple, then ten profiles in one advance).
-    emulator_profiles_cache.clear()
-    profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
-    try:
-        held, unread = sources.refresh_record(profiles, [sources.TREE_CACHE], fetch=True)
-    except ArtifactLockBusy as exc:
-        # The profiles are written: only the record waits for the other run.
-        print(
-            f"source paths not refreshed ({exc}): run python scripts/sitesources.py "
-            "--fetch once it finishes",
-            file=sys.stderr,
-        )
-        return
-    print(
-        f"source paths: {sum(map(len, held.values()))} in {len(held)} trees, "
-        f"{len(unread)} trees not cached: {sources.SOURCE_PATHS}",
-        file=sys.stderr,
-    )
 
 
 if __name__ == "__main__":

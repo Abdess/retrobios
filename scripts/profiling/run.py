@@ -25,7 +25,7 @@ from profiling.reports import (
 )
 from profiling.repos import select_repo
 from profiling.resolver import build_report
-from profiling.triage import print_triage
+from profiling.triage import PROGRESS_SECONDS, Progress, print_interrupted, print_triage
 from profiling.versions import (
     newer_release,
     latest_passed_release,
@@ -340,6 +340,36 @@ def read_one_profile(
             # profile must not end the pass for the others.
             print(f"{name}: not written: {exc}", file=sys.stderr)
             failed.add(name)
+
+
+def read_selected(
+    args: argparse.Namespace, selected: dict, writes: bool
+) -> tuple[list[ProfileReport], set[str], bool]:
+    """Every selected profile's pass: the reports, the profiles that failed,
+    and whether the pass ran to its end."""
+    # A profile that could not be compared or written is not a profile with
+    # nothing to review: it stays in every output and fails the run.
+    failed: set[str] = set()
+    reports: list[ProfileReport] = []
+    quiet = args.offline or len(selected) < 2
+    if not quiet:
+        print(
+            f"reading {len(selected)} profiles against their forges, a line every "
+            f"{PROGRESS_SECONDS} s. --offline answers from the cache alone.",
+            file=sys.stderr, flush=True,
+        )
+    progress = Progress(len(selected), "read", quiet)
+    complete = True
+    try:
+        for name, profile in selected.items():
+            progress.step(len(reports), name)
+            read_one_profile(args, name, profile, reports, failed, writes)
+    except KeyboardInterrupt:
+        # What was read is still worth printing: a ranking of 200 profiles
+        # beats none after 15 minutes.
+        print_interrupted(len(reports), len(selected), "the output covers those read")
+        complete = False
+    return reports, failed, complete
 
 
 # Profiles this run wrote. Their new pins name trees the site's record of

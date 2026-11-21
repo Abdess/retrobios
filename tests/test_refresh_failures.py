@@ -74,8 +74,8 @@ class AProjectMainThatCannotBeFetched(unittest.TestCase):
         import contextlib
         import io
 
-        import profile_sync
         from core import cli, gitclone
+        from profiling import worktree
 
         def unreachable() -> None:
             raise gitclone.MainLineUnreachable("no main")
@@ -83,7 +83,7 @@ class AProjectMainThatCannotBeFetched(unittest.TestCase):
         with mock.patch.object(gitclone, "project_main_line", side_effect=unreachable):
             err = io.StringIO()
             with contextlib.redirect_stderr(err), self.assertRaises(SystemExit) as ended:
-                cli.run_cli(profile_sync.project_base)
+                cli.run_cli(worktree.project_base)
             self.assertEqual(ended.exception.code, 1)
             self.assertEqual(err.getvalue(), "ERROR: no main\n")
             import validate_pr
@@ -91,9 +91,9 @@ class AProjectMainThatCannotBeFetched(unittest.TestCase):
                 validate_pr.get_changed_files()
 
     def test_both_tools_compare_against_the_same_line(self):
-        import profile_sync
         import validate_pr
         from core import gitclone
+        from profiling import worktree
 
         diffs: list[tuple[str, ...]] = []
 
@@ -106,7 +106,7 @@ class AProjectMainThatCannotBeFetched(unittest.TestCase):
         with mock.patch.object(gitclone, "project_main_line", return_value=None), \
                 mock.patch.object(gitclone, "git_lines", side_effect=lines), \
                 mock.patch.object(validate_pr, "git_lines", side_effect=lines):
-            self.assertEqual(profile_sync.project_base(), "origin/main")
+            self.assertEqual(worktree.project_base(), "origin/main")
             validate_pr.get_changed_files()
         self.assertIn(("diff", "--name-only", "origin/main...HEAD"), diffs)
 

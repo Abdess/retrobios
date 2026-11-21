@@ -160,6 +160,14 @@ COMMANDS = {
     "standalone_probe.py": (
         "probes/standaloneemulators.py", "probes/appimage.py", "probes/xvfb.py", "probes/standalonerun.py",
         "probes/standalonerecord.py",
+    "profile_sync.py": (
+        "profiling/citations.py", "profiling/anchoring.py", "profiling/repos.py",
+        "profiling/resolver.py", "profiling/reports.py", "profiling/versions.py",
+        "profiling/version_basis.py", "profiling/detection.py", "profiling/triage.py",
+        "profiling/yamledit.py", "profiling/proseedit.py", "profiling/rebase.py",
+        "profiling/bump.py", "profiling/realign.py", "profiling/run.py",
+        "profiling/worktree.py", "profiling/quota.py", "profiling/sourcepaths.py",
+        "profiling/realignpass.py", "profiling/versioncheck.py",
 }
 
 
