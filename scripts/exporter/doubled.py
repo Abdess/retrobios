@@ -19,6 +19,7 @@ from resolve.archives import contents_members, holds_required_members
 from resolve.standalone import platform_layouts, standalone_set
 from resolve.cores import resolve_platform_cores
 from core.hashing import declared_hash_lists, lists_hashes
+from model.declarations import declared_components
 from model.profiles import lists_files
 from resolve.collisions import accepted_by_all, find_collisions
 from resolve.content import size_fits
@@ -110,7 +111,7 @@ def doubled_destinations(
                     readers.append(reader)
             declarations.append({
                 "system": entry.get("native_system") or "",
-                "component": entry.get("component") or "",
+                "component": ", ".join(declared_components(entry.get("component"))),
                 "name": entry.get("name", ""),
                 "hashes": declared_hash_lists(entry),
                 "file": local,

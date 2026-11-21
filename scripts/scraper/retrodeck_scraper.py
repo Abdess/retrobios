@@ -42,6 +42,7 @@ if not __package__:
     __package__ = "scraper"
 
 from core.hashing import parse_hash_list
+from model.declarations import declared_components
 
 from .base_scraper import (
     BaseScraper,
@@ -375,7 +376,10 @@ def _repeat_key(req: BiosRequirement) -> tuple[object, ...]:
     their hashes are two verdicts on the file (decocass.zip for MAME and for
     FBNeo, the three 64DD_IPL.bin revisions), and two spellings are two files
     on its Linux filesystem (MSX.ROM and MSX.rom). Only the same name at the
-    same place with the same hashes repeats a declaration.
+    same place with the same hashes, under the same native system and with
+    the same requirement, repeats a declaration: its components are then
+    one entry's list (_add_component), and what an export writes back to
+    one component's line it writes to the others unchanged.
     """
     return (
         req.system,
@@ -383,7 +387,23 @@ def _repeat_key(req: BiosRequirement) -> tuple[object, ...]:
         req.destination,
         frozenset(parse_hash_list(req.md5)),
         req.sha256 or "",
+        req.native_id,
+        req.required,
+        req.native.get("required_label", ""),
     )
+
+
+def _add_component(req: BiosRequirement, component: str) -> None:
+    """List one more component whose manifest repeats *req*.
+
+    One component stays a string, as the platform file wrote it before
+    several could declare one entry: the PS1 BIOS that duckstation and
+    retroarch both list is one entry naming both.
+    """
+    listed = declared_components(req.native.get("component"))
+    if component not in listed:
+        listed.append(component)
+    req.native["component"] = listed[0] if len(listed) == 1 else listed
 
 
 class Scraper(BaseScraper):
@@ -482,7 +502,7 @@ class Scraper(BaseScraper):
         manifests = self._get_manifests()
 
         requirements: list[BiosRequirement] = []
-        seen: set[tuple[object, ...]] = set()
+        seen: dict[tuple[object, ...], BiosRequirement] = {}
 
         for _comp_name, manifest in manifests:
             for comp_key, comp_val in manifest.items():
@@ -499,8 +519,9 @@ class Scraper(BaseScraper):
                         continue
                     key = _repeat_key(req)
                     if key in seen:
+                        _add_component(seen[key], comp_key)
                         continue
-                    seen.add(key)
+                    seen[key] = req
                     requirements.append(req)
 
         return requirements

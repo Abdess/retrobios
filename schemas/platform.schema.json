@@ -618,8 +618,20 @@
           "description": "RetroDECK: the requirement wording, which is free text"
         },
         "component": {
-          "type": "string",
-          "description": "RetroDECK: the component whose manifest declares this file"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 2,
+              "uniqueItems": true
+            }
+          ],
+          "description": "RetroDECK: the component whose manifest declares this file, or the components whose manifests each declare it with the same hashes and requirement"
         },
         "alt_paths": {
           "type": "array",

@@ -14,6 +14,7 @@ from collections import OrderedDict
 
 from .base_exporter import BaseExporter
 from core.hashing import parse_hash_list
+from model.declarations import declared_components
 from resolve.reconcile import NativeFile, NativeSystem, Report
 
 COMPONENTS_REPO = "RetroDECK/components"
@@ -78,6 +79,12 @@ def _pick(
     return free[0] if free else None
 
 
+def _components(fe: NativeFile) -> list[str]:
+    """The manifests an entry is written back to: every component that
+    declares it, an addition's own once placed."""
+    return declared_components(fe.native("component", ""))
+
+
 class Exporter(BaseExporter[str]):
     """Write RetroDECK's component manifests, corrected."""
 
@@ -101,7 +108,7 @@ class Exporter(BaseExporter[str]):
 
     def writable(self, fe: NativeFile, require: str = "") -> bool:
         """An addition lands only in a manifest it can be placed in."""
-        if fe.platform is None and not fe.native("component", ""):
+        if fe.platform is None and not _components(fe):
             return False
         return super().writable(fe, require)
 
@@ -141,9 +148,10 @@ class Exporter(BaseExporter[str]):
         """
         for system in systems.values():
             components = {
-                str(fe.native("component", ""))
+                component
                 for fe in system.files
-                if fe.platform is not None and fe.native("component", "")
+                if fe.platform is not None
+                for component in _components(fe)
             }
             if len(components) != 1:
                 continue
@@ -161,13 +169,10 @@ class Exporter(BaseExporter[str]):
 
     def components(self, systems: dict[str, NativeSystem]) -> list[str]:
         """Components the corrected data touches."""
-        found: set[str] = set()
-        for system in systems.values():
-            for fe in system.files:
-                component = str(fe.native("component", ""))
-                if component:
-                    found.add(component)
-        return sorted(found)
+        return sorted(
+            {component for system in systems.values() for fe in system.files
+             for component in _components(fe)}
+        )
 
     @staticmethod
     def _entry(fe: NativeFile) -> OrderedDict:
@@ -204,11 +209,12 @@ class Exporter(BaseExporter[str]):
     def _by_component(
         self, systems: dict[str, NativeSystem]
     ) -> dict[str, list[NativeFile]]:
+        """Each component's entries. An entry several manifests repeat with
+        the same hashes and requirement is written back to each of them."""
         grouped: dict[str, list[NativeFile]] = {}
         for system in systems.values():
             for fe in system.files:
-                component = str(fe.native("component", ""))
-                if component:
+                for component in _components(fe):
                     grouped.setdefault(component, []).append(fe)
         return grouped
 

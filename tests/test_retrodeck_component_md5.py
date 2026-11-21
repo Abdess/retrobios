@@ -25,7 +25,8 @@ from collections import OrderedDict
 from pathlib import Path
 
 from exporter import discover_exporters
-from packs.coverage import verify_platform
+from model.declarations import declared_components
+from packs.coverage import _twin_unmet, verify_platform
 from resolve.reconcile import build_native_model
 from scraper.base_scraper import systems_from_requirements
 from scripts.scraper import retrodeck_scraper
@@ -43,6 +44,8 @@ MANIFESTS: dict[str, dict] = {
     "mame": {"mame": {"name": "MAME", "system": "mame", "bios": [
         {"filename": "decocass.zip", "system": "mame", "md5": md5(MAME_DECO),
          "required": "Required"},
+        {"filename": "cchip.zip", "system": "mame", "md5": "e" * 32,
+         "required": "Required"},
     ]}},
     "retroarch": {"retroarch": {"name": "RetroArch", "cores": {"bios": [
         {"filename": "decocass.zip", "system": "fbneo", "md5": md5(FBNEO_DECO),
@@ -54,9 +57,15 @@ MANIFESTS: dict[str, dict] = {
         {"filename": "MSX.rom", "system": "msx", "md5": "a" * 32},
         {"filename": "scph5501.bin", "system": "psx", "md5": "c" * 32,
          "required": "Required"},
+        {"filename": "scph1001.bin", "system": "psx", "md5": "f" * 32,
+         "required": "Optional"},
+        {"filename": "cchip.zip", "system": "fbneo", "md5": "e" * 32,
+         "required": "Required"},
     ]}}},
     "duckstation": {"duckstation": {"name": "DuckStation", "system": "psx", "bios": [
         {"filename": "scph5501.bin", "system": "psx", "md5": "c" * 32,
+         "required": "Required"},
+        {"filename": "scph1001.bin", "system": "psx", "md5": "f" * 32,
          "required": "Required"},
     ]}},
 }
@@ -103,8 +112,27 @@ class ScrapeKeepsEveryDeclaration(unittest.TestCase):
             {"bios/MSX.ROM", "bios/MSX.rom"},
         )
 
-    def test_a_plain_repeat_is_one_entry(self) -> None:
-        self.assertEqual(self._md5s("scph5501.bin"), ["c" * 32])
+    def test_a_plain_repeat_is_one_entry_naming_each_component(self) -> None:
+        (entry,) = [r for r in self.reqs if r.name == "scph5501.bin"]
+        self.assertEqual(entry.native["component"], ["duckstation", "retroarch"])
+
+    def test_one_component_stays_a_string(self) -> None:
+        (entry,) = [r for r in self.reqs if r.name == "MSX.rom"]
+        self.assertEqual(entry.native["component"], "retroarch")
+
+    def test_another_native_system_or_requirement_is_its_own_entry(self) -> None:
+        """An export corrects a line by its native system and writes the
+        requirement back: MAME's cchip.zip and FBNeo's, DuckStation's
+        required scph1001.bin and RetroArch's optional one, stay apart."""
+        self.assertEqual(
+            [(r.native_id, r.native["component"]) for r in self.reqs if r.name == "cchip.zip"],
+            [("mame", "mame"), ("fbneo", "retroarch")],
+        )
+        self.assertEqual(
+            [(r.required, r.native["component"]) for r in self.reqs
+             if r.name == "scph1001.bin"],
+            [(True, "duckstation"), (False, "retroarch")],
+        )
 
 
 class VerifyJudgesEachDeclaration(unittest.TestCase):
@@ -167,6 +195,19 @@ class VerifyJudgesEachDeclaration(unittest.TestCase):
             self.assertIn(f"file (md5 {md5(IPL[0])})", detail["discrepancy"])
 
 
+class TwinMessageNamesComponents(unittest.TestCase):
+    def test_a_component_list_is_written_out(self) -> None:
+        from packs import verdicts
+
+        result = {"name": "x.bin", "status": verdicts.Status.UNTESTED}
+        self.assertTrue(_twin_unmet(
+            result, "psx", {"name": "x.bin", "md5": "a" * 32, "component": "retroarch"},
+            "psx", "bios/x.bin", {"name": "x.bin", "component": ["duckstation", "retroarch"]},
+        ))
+        self.assertIn("psx (duckstation, retroarch) file", result["discrepancy"])
+        self.assertIn("psx (retroarch) declaration", result["discrepancy"])
+
+
 class ExportWritesEachComponentsOwnMd5(unittest.TestCase):
     def setUp(self) -> None:
         self.root = Path(tempfile.mkdtemp())
@@ -198,18 +239,34 @@ class ExportWritesEachComponentsOwnMd5(unittest.TestCase):
         rendered: dict[str, set] = {}
         for system in systems.values():
             for fe in system.files:
-                component = str(fe.native("component"))
-                rendered.setdefault(component, set()).add(key(self.exporter._entry(fe)))
+                for component in declared_components(fe.native("component")):
+                    rendered.setdefault(component, set()).add(
+                        key(self.exporter._entry(fe)))
         for component, manifest in MANIFESTS.items():
             value = manifest[component]
             declared = value["bios"] if "bios" in value else value["cores"]["bios"]
-            expected = {key(e) for e in declared}
-            if component == "retroarch":
-                # A repeat of duckstation's scph5501.bin, the same name, path
-                # and md5: transcribed once, under the first component read.
-                expected.discard(("scph5501.bin", "psx", ("c" * 32,)))
             with self.subTest(component=component):
-                self.assertEqual(rendered[component], expected)
+                self.assertEqual(rendered[component], {key(e) for e in declared})
+
+    def test_a_correction_reaches_every_component_declaring_the_entry(self) -> None:
+        """duckstation and retroarch list scph5501.bin with one md5, one
+        entry here: a second accepted dump is written to both manifests.
+        Filed under duckstation alone, retroarch's line kept the old list."""
+        extra = "9" * 32
+        truth = {"systems": {"sony-playstation": {"files": [
+            {"name": "scph5501.bin", "path": "scph5501.bin", "md5": f"{'c' * 32},{extra}",
+             "required": True, "_cores": ["duckstation"]},
+        ]}}}
+        systems, report = build_native_model(truth, self.scraped)
+        produced = self.exporter.render(systems, report, self.originals, self.scraped)
+        for component in ("duckstation", "retroarch"):
+            with self.subTest(component=component):
+                (entry,) = [e for e in self._bios(produced, component)
+                            if e["filename"] == "scph5501.bin"]
+                self.assertEqual(entry["md5"], ["c" * 32, extra])
+        self.assertEqual(self.exporter.components(systems),
+                         ["duckstation", "mame", "retroarch"])
+        self.assertEqual(self.exporter.validate(systems, produced), [])
 
     def test_a_correction_lands_on_its_own_revision(self) -> None:
         """The truth accepts a second dump for the dev 64DD IPL: that entry
@@ -267,6 +324,8 @@ class PlatformFileCarriesTheDeclarations(unittest.TestCase):
         self.assertEqual(len(md5s("64DD_IPL.bin")), 3)
         self.assertEqual(md5s("MSX.rom"),
                          {"364a1a579fe5cb8dba54519bcfcdac0d,aa95aea2563cd5ec0a0919b44cc17d47"})
+        (scph5501,) = [f for f in files if f["name"] == "scph5501.bin"]
+        self.assertEqual(scph5501["component"], ["duckstation", "retroarch"])
 
 
 if __name__ == "__main__":

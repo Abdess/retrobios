@@ -22,6 +22,17 @@ def declared_slot(entry: dict, prefix: str = "") -> str:
     return slot
 
 
+def declared_components(value: object) -> list[str]:
+    """RetroDECK: the components whose manifests declare one entry.
+
+    One is written as a string, several as a list: duckstation's and
+    retroarch's manifests both list scph5501.bin with one md5.
+    """
+    if isinstance(value, list):
+        return [str(item) for item in value if item]
+    return [str(value)] if value else []
+
+
 def platform_declarations(
     config: dict, db: dict, *, enrich: bool = True
 ) -> dict[str, list[tuple[int | None, str]]]:

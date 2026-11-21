@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, TypedDict
 from core.paths import BIOS_DIR, EMULATORS_DIR, declared_destination
 from core.ziptools import build_zip_contents_index
 from model.alternatives import core_file_spares
-from model.declarations import OUTER_ROOTS, platform_declarations
+from model.declarations import OUTER_ROOTS, declared_components, platform_declarations
 from model.profiles import lists_files, load_emulator_profiles
 from model.systems import select_systems
 from packs import slots
@@ -252,7 +252,9 @@ def _expects(entry: dict) -> str:
 
 def _side(sys_id: str, entry: dict) -> str:
     """One declaration named by the platform's own system, or its component."""
-    native = entry.get("native_system") or entry.get("component")
+    native = entry.get("native_system") or ", ".join(
+        declared_components(entry.get("component"))
+    )
     return f"{sys_id} ({native})" if native else sys_id
 
 

@@ -70,7 +70,9 @@ systems:
       required: true
       md5: a860e8c0b6d573d191e4ec7db1b1e4f6
       native_system: gba
-      component: dolphin
+      component:
+      - dolphin
+      - retroarch
       description: Game Boy Advance BIOS
       required_label: Optional, for boot logo
   sony-playstation:
@@ -80,7 +82,9 @@ systems:
       required: true
       md5: c53ca5908936d412331790f4426c6c33
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation BIOS extracted from PSP - Japan
       required_label: At least one BIOS file required
     - name: scph5500.bin
@@ -88,7 +92,9 @@ systems:
       required: true
       md5: 8dd7d5296a650fac7319bce665a6a53c
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation BIOS - SCPH-5500 - Japan
       required_label: At least one BIOS file required
     - name: scph5501.bin
@@ -96,7 +102,9 @@ systems:
       required: true
       md5: 490f666e1afb15b7362b406ed1cea246
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation BIOS - SCPH-5501  - USA
       required_label: At least one BIOS file required
     - name: scph5502.bin
@@ -104,7 +112,9 @@ systems:
       required: true
       md5: 32736f17079d0b2b7024407c39bd3050
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: "PlayStation BIOS - SCPH-5502 - Europe)"
       required_label: At least one BIOS file required
     - name: scph7001.bin
@@ -112,7 +122,9 @@ systems:
       required: true
       md5: 1e68c231d0896b7eadcad1d7d8e76129
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation BIOS - SCPH-7001 - Japan
       required_label: At least one BIOS file required
     - name: scph7002.bin
@@ -120,7 +132,9 @@ systems:
       required: true
       md5: b9d9a0286c33dc6b7237bb13cd46fdee
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: "PlayStation BIOS - SCPH-7002 - USA)"
       required_label: At least one BIOS file required
     - name: scph7003.bin
@@ -128,7 +142,9 @@ systems:
       required: true
       md5: 490f666e1afb15b7362b406ed1cea246
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation BIOS - SCPH-7003 - Europe
       required_label: At least one BIOS file required
     - name: scph7502.bin
@@ -136,7 +152,9 @@ systems:
       required: true
       md5: b9d9a0286c33dc6b7237bb13cd46fdee
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation BIOS - SCPH-7502 - Europe
       required_label: At least one BIOS file required
     - name: "scph9002(7502).bin"
@@ -144,7 +162,9 @@ systems:
       required: true
       md5: b9d9a0286c33dc6b7237bb13cd46fdee
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation BIOS - SCPH-9002 - Europe
       required_label: At least one BIOS file required
     - name: ps1_rom.bin
@@ -152,7 +172,9 @@ systems:
       required: true
       md5: 81bbe60ba7a3d1cea1d48c14cbcc647b
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: Generic PlayStation BIOS from the Playstation 3
       required_label: At least one BIOS file required
     - name: scph1000.bin
@@ -160,7 +182,9 @@ systems:
       required: true
       md5: 239665b1a3dade1b5a52c06338011044
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation 1 BIOS - USA
       required_label: At least one BIOS file required
     - name: scph1001.bin
@@ -168,7 +192,9 @@ systems:
       required: true
       md5: 924e392ed05558ffdb115408c263dccf
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation 1 BIOS - EUROPE
       required_label: At least one BIOS file required
     - name: scph1002.bin
@@ -176,7 +202,9 @@ systems:
       required: true
       md5: 54847e693405ffeb0359c6287434cbef
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation 1 BIOS - JAPAN
       required_label: At least one BIOS file required
     - name: scph100.bin
@@ -184,7 +212,9 @@ systems:
       required: true
       md5: 8abc1b549a4a80954addc48ef02c4521
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation 1 BIOS
       required_label: At least one BIOS file required
     - name: scph101.bin
@@ -192,7 +222,9 @@ systems:
       required: true
       md5: 6e3735ff4c7dc899ee98981385f6f3d0
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation 1 BIOS - USA
       required_label: At least one BIOS file required
     - name: scph102A.bin
@@ -200,7 +232,9 @@ systems:
       required: true
       md5: b10f5e0e3d9eb60e5159690680b1e774
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation 1 BIOS - EUROPE
       required_label: At least one BIOS file required
     - name: scph102B.bin
@@ -208,7 +242,9 @@ systems:
       required: true
       md5: de93caec13d1a141a40a79f5c86168d6
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation 1 BIOS - JAPAN
       required_label: At least one BIOS file required
     - name: scph102C.bin
@@ -216,7 +252,9 @@ systems:
       required: true
       md5: de93caec13d1a141a40a79f5c86168d6
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation 1 BIOS
       required_label: At least one BIOS file required
     - name: scph3000.bin
@@ -224,7 +262,9 @@ systems:
       required: true
       md5: 849515939161e62f6b866f6853006780
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation 1 BIOS
       required_label: At least one BIOS file required
     - name: scph3500.bin
@@ -232,7 +272,9 @@ systems:
       required: true
       md5: cba733ceeff5aef5c32254f1d617fa62
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation 1 BIOS
       required_label: At least one BIOS file required
     - name: scph5000.bin
@@ -240,7 +282,9 @@ systems:
       required: true
       md5: eb201d2d98251a598af467d4347bb62f
       native_system: psx
-      component: duckstation
+      component:
+      - duckstation
+      - retroarch
       description: PlayStation 1 BIOS
       required_label: At least one BIOS file required
   arcade:
@@ -12118,6 +12162,30 @@ systems:
       component: retroarch
       description: DECO Cassette System BIOS
       required_label: Required
+    - name: isgsm.zip
+      destination: bios/isgsm.zip
+      required: true
+      md5: 4a56d56e2219c5e2b006b66a4263c01c
+      native_system: fbneo
+      component: retroarch
+      description: ISG Selection Master Type 2006 System BIOS
+      required_label: Required
+    - name: midssio.zip
+      destination: bios/midssio.zip
+      required: true
+      md5: 5904b0de768d1d506e766aa7e18994c1
+      native_system: fbneo
+      component: retroarch
+      description: Midway SSIO sound board internal ROM
+      required_label: Required
+    - name: nmk004.zip
+      destination: bios/nmk004.zip
+      required: true
+      md5: bfacf1a68792d5348f93cf724d2f1dda
+      native_system: fbneo
+      component: retroarch
+      description: NMK004 internal ROM
+      required_label: Required
     - name: pgm.zip
       destination: bios/pgm.zip
       required: true
@@ -12141,6 +12209,14 @@ systems:
       native_system: fbneo
       component: retroarch
       description: YM2608 FM synthesis chip ROM
+      required_label: Required
+    - name: cchip.zip
+      destination: bios/cchip.zip
+      required: true
+      md5: df6f8a3d83c028a5cb9f2f2be60773f3
+      native_system: fbneo
+      component: retroarch
+      description: C-Chip internal ROM
       required_label: Required
     - name: bubsys.zip
       destination: bios/bubsys.zip
@@ -12220,7 +12296,9 @@ systems:
       required: true
       md5: df692a80a5b1bc90728bc3dfc76cd948
       native_system: nds
-      component: melonds
+      component:
+      - melonds
+      - retroarch
       description: Nintendo DS ARM7 BIOS
       required_label: Required
     - name: bios9.bin
@@ -12228,7 +12306,9 @@ systems:
       required: true
       md5: a392174eb3e572fed6447e956bde4b25
       native_system: nds
-      component: melonds
+      component:
+      - melonds
+      - retroarch
       description: Nintendo DS ARM9 BIOS
       required_label: Required
     - name: firmware.bin
@@ -12236,7 +12316,9 @@ systems:
       required: true
       md5: e45033d9b0fa6b0de071292bba7c9d13
       native_system: nds
-      component: melonds
+      component:
+      - melonds
+      - retroarch
       description: Nintendo DS firmware
       required_label: Required
     - name: biosdsi7.bin
@@ -12244,7 +12326,9 @@ systems:
       required: true
       sha256: 2946281e730e71f7cafdb125f5cb60fed944ca5d610ee1e082c441b602b5f4e2
       native_system: nds
-      component: melonds
+      component:
+      - melonds
+      - retroarch
       description: Nintendo DSi ARM7 BIOS
       required_label: Required
     - name: biosdsi9.bin
@@ -12252,7 +12336,9 @@ systems:
       required: true
       sha256: 47538922a8e8a8e79b922ff1203863ef5c40d9c54656a8d2c89c56ece52029ce
       native_system: nds
-      component: melonds
+      component:
+      - melonds
+      - retroarch
       description: Nintendo DSi ARM9 BIOS
       required_label: Required
     - name: dsifirmware.bin
@@ -12260,7 +12346,9 @@ systems:
       required: true
       sha256: 11a150e3729bdde3ae8f5e7fc8be67d8bfbc548a1d2e523da58aa826ca0ffa99
       native_system: nds
-      component: melonds
+      component:
+      - melonds
+      - retroarch
       description: Nintendo DSi firmware
       required_label: Required
   sony-playstation-2:
@@ -12270,7 +12358,9 @@ systems:
       required: true
       md5: acf4730ceb38ac9d8c7d8e21f2614600
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - Japan
       required_label: At least one BIOS file required
     - name: ps2-0101j-20000217.bin
@@ -12278,7 +12368,9 @@ systems:
       required: true
       md5: b1459d7446c69e3e97e6ace3ae23dd1c
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - Japan
       required_label: At least one BIOS file required
     - name: ps2-0120j-20001027-185015.bin
@@ -12286,7 +12378,9 @@ systems:
       required: true
       md5: f63bc530bd7ad7c026fcd6f7bd0d9525
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - Japan
       required_label: At least one BIOS file required
     - name: ps2-0120j-20001027-191435.bin
@@ -12294,7 +12388,9 @@ systems:
       required: true
       md5: cee06bd68c333fc5768244eae77e4495
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - Japan
       required_label: At least one BIOS file required
     - name: ps2-0150j-20010118.bin
@@ -12302,7 +12398,9 @@ systems:
       required: true
       md5: 815ac991d8bc3b364696bead3457de7d
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - Japan
       required_label: At least one BIOS file required
     - name: ps2-0160j-20010427.bin
@@ -12310,7 +12408,9 @@ systems:
       required: true
       md5: ab55cceea548303c22c72570cfd4dd71
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - Japan
       required_label: At least one BIOS file required
     - name: ps2-0170j-20030206.bin
@@ -12318,7 +12418,9 @@ systems:
       required: true
       md5: 312ad4816c232a9606e56f946bc0678a
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - Japan
       required_label: At least one BIOS file required
     - name: ps2-0200j-20040614.bin
@@ -12326,7 +12428,9 @@ systems:
       required: true
       md5: 0eee5d1c779aa50e94edd168b4ebf42e
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - Japan
       required_label: At least one BIOS file required
     - name: ps2-0210j-20040917.bin
@@ -12334,7 +12438,9 @@ systems:
       required: true
       md5: 1ad977bb539fc9448a08ab276a836bbc
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - Japan
       required_label: At least one BIOS file required
     - name: ps2-0110a-20000727.bin
@@ -12342,7 +12448,9 @@ systems:
       required: true
       md5: a20c97c02210f16678ca3010127caf36
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - USA
       required_label: At least one BIOS file required
     - name: ps2-0120a-20000902.bin
@@ -12350,7 +12458,9 @@ systems:
       required: true
       md5: 8db2fbbac7413bf3e7154c1e0715e565
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - USA
       required_label: At least one BIOS file required
     - name: ps2-0150a-20001228.bin
@@ -12358,7 +12468,9 @@ systems:
       required: true
       md5: 8accc3c49ac45f5ae2c5db0adc854633
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - USA
       required_label: At least one BIOS file required
     - name: ps2-0160a-20010427.bin
@@ -12366,7 +12478,9 @@ systems:
       required: true
       md5: b107b5710042abe887c0f6175f6e94bb
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - USA
       required_label: At least one BIOS file required
     - name: ps2-0160a-20011004.bin
@@ -12374,7 +12488,9 @@ systems:
       required: true
       md5: 7200a03d51cacc4c14fcdfdbc4898431
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - USA
       required_label: At least one BIOS file required
     - name: ps2-0160a-20020207.bin
@@ -12382,7 +12498,9 @@ systems:
       required: true
       md5: d5ce2c7d119f563ce04bc04dbc3a323e
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - USA
       required_label: At least one BIOS file required
     - name: ps2-0170a-20030325.bin
@@ -12390,7 +12508,9 @@ systems:
       required: true
       md5: 8aa12ce243210128c5074552d3b86251
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - USA
       required_label: At least one BIOS file required
     - name: ps2-0190a-20030623.bin
@@ -12398,7 +12518,9 @@ systems:
       required: true
       md5: 35461cecaa51712b300b2d6798825048
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - USA
       required_label: At least one BIOS file required
     - name: ps2-0200a-20040614.bin
@@ -12406,7 +12528,9 @@ systems:
       required: true
       md5: d333558cc14561c1fdc334c75d5f37b7
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - USA
       required_label: At least one BIOS file required
     - name: ps2-0220a-20050620.bin
@@ -12414,7 +12538,9 @@ systems:
       required: true
       md5: 929a14baca1776b00869f983aa6e14d2
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - USA
       required_label: At least one BIOS file required
     - name: ps2-0220a-20060210.bin
@@ -12422,7 +12548,9 @@ systems:
       required: true
       md5: cb801b7920a7d536ba07b6534d2433ca
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - USA
       required_label: At least one BIOS file required
     - name: ps2-0220a-20060905.bin
@@ -12430,7 +12558,9 @@ systems:
       required: true
       md5: 40c11c063b3b9409aa5e4058e984e30c
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - USA
       required_label: At least one BIOS file required
     - name: ps2-0230a-20080220.bin
@@ -12438,7 +12568,9 @@ systems:
       required: true
       md5: 21038400dc633070a78ad53090c53017
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - USA
       required_label: At least one BIOS file required
     - name: ps2-0120e-20000902.bin
@@ -12446,7 +12578,9 @@ systems:
       required: true
       md5: b7fa11e87d51752a98b38e3e691cbf17
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - EUROPE
       required_label: At least one BIOS file required
     - name: ps2-0150e-20001228.bin
@@ -12454,7 +12588,9 @@ systems:
       required: true
       md5: 838544f12de9b0abc90811279ee223c8
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - EUROPE
       required_label: At least one BIOS file required
     - name: ps2-0160e-20010704.bin
@@ -12462,7 +12598,9 @@ systems:
       required: true
       md5: 491209dd815ceee9de02dbbc408c06d6
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - EUROPE
       required_label: At least one BIOS file required
     - name: ps2-0160e-20011004.bin
@@ -12470,7 +12608,9 @@ systems:
       required: true
       md5: 8359638e857c8bc18c3c18ac17d9cc3c
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - EUROPE
       required_label: At least one BIOS file required
     - name: ps2-0160e-20020319.bin
@@ -12478,7 +12618,9 @@ systems:
       required: true
       md5: 0d2228e6fd4fb639c9c39d077a9ec10c
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - EUROPE
       required_label: At least one BIOS file required
     - name: ps2-0170e-20030227.bin
@@ -12486,7 +12628,9 @@ systems:
       required: true
       md5: 6e69920fa6eef8522a1d688a11e41bc6
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - EUROPE
       required_label: At least one BIOS file required
     - name: ps2-0190e-20030623.bin
@@ -12494,7 +12638,9 @@ systems:
       required: true
       md5: bd6415094e1ce9e05daabe85de807666
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - EUROPE
       required_label: At least one BIOS file required
     - name: ps2-0200e-20040614.bin
@@ -12502,7 +12648,9 @@ systems:
       required: true
       md5: dc752f160044f2ed5fc1f4964db2a095
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - EUROPE
       required_label: At least one BIOS file required
     - name: ps2-0220e-20050620.bin
@@ -12510,7 +12658,9 @@ systems:
       required: true
       md5: 573f7d4a430c32b3cc0fd0c41e104bbd
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - EUROPE
       required_label: At least one BIOS file required
     - name: ps2-0220e-20060210.bin
@@ -12518,7 +12668,9 @@ systems:
       required: true
       md5: af60e6d1a939019d55e5b330d24b1c25
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - EUROPE
       required_label: At least one BIOS file required
     - name: ps2-0220e-20060905.bin
@@ -12526,7 +12678,9 @@ systems:
       required: true
       md5: 80bbb237a6af9c611df43b16b930b683
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - EUROPE
       required_label: At least one BIOS file required
     - name: ps2-0230e-20080220.bin
@@ -12534,7 +12688,9 @@ systems:
       required: true
       md5: dc69f0643a3030aaa4797501b483d6c4
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - EUROPE
       required_label: At least one BIOS file required
     - name: ps2-0160h-20010730.bin
@@ -12542,7 +12698,9 @@ systems:
       required: true
       md5: 352d2ff9b3f68be7e6fa7e6dd8389346
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - HONG KONG
       required_label: At least one BIOS file required
     - name: ps2-0160h-20020426.bin
@@ -12550,7 +12708,9 @@ systems:
       required: true
       md5: 315a4003535dfda689752cb25f24785c
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - HONG KONG
       required_label: At least one BIOS file required
     - name: ps2-0190h-20030623.bin
@@ -12558,7 +12718,9 @@ systems:
       required: true
       md5: 07b562a3f0c4b9a55834df9bbc9bd0c3
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - HONG KONG
       required_label: At least one BIOS file required
     - name: ps2-0200h-20040614.bin
@@ -12566,7 +12728,9 @@ systems:
       required: true
       md5: 3e3e030c0f600442fa05b94f87a1e238
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - HONG KONG
       required_label: At least one BIOS file required
     - name: ps2-0220h-20060905.bin
@@ -12574,7 +12738,9 @@ systems:
       required: true
       md5: c37bce95d32b2be480f87dd32704e664
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - HONG KONG
       required_label: At least one BIOS file required
     - name: ps2-0220h-20060210.bin
@@ -12582,7 +12748,9 @@ systems:
       required: true
       md5: 549a66d0c698635ca9fa3ab012da7129
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - HONG KONG
       required_label: At least one BIOS file required
     - name: ps2-0190c-20030623.bin
@@ -12590,7 +12758,9 @@ systems:
       required: true
       md5: 1b6e631b536247756287b916f9396872
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - CHINA
       required_label: At least one BIOS file required
     - name: ps2-0190r-20030623.bin
@@ -12598,7 +12768,9 @@ systems:
       required: true
       md5: 0c13357c01a25a886db2356bbe73d9f0
       native_system: ps2
-      component: pcsx2
+      component:
+      - pcsx2
+      - retroarch
       description: PlayStation 2 BIOS - RUSSIA
       required_label: At least one BIOS file required
   pico8:
@@ -12607,21 +12779,27 @@ systems:
       destination: bios/pico-8/pico8
       required: true
       native_system: pico8
-      component: pico-8
+      component:
+      - pico-8
+      - retroarch
       description: PICO-8 executable
       required_label: Required
     - name: pico8.dat
       destination: bios/pico-8/pico8.dat
       required: true
       native_system: pico8
-      component: pico-8
+      component:
+      - pico-8
+      - retroarch
       description: PICO-8 system data file
       required_label: Required
     - name: pico8_dyn
       destination: bios/pico-8/pico8_dyn
       required: true
       native_system: pico8
-      component: pico-8
+      component:
+      - pico-8
+      - retroarch
       description: Dynamic library for PICO-8
       required_label: Required
   sony-psp:
@@ -12802,6 +12980,14 @@ systems:
       native_system: amiga
       component: retroarch
       description: Kickstart 40060 Combined Amiga CD32 ROM
+    - name: kick34005.A500
+      destination: bios/kick34005.A500
+      required: true
+      md5: 82a21c1890cae844b3df741f2762d48d
+      native_system: amiga
+      component: retroarch
+      description: Kickstart 3.4 ROM for Amiga 500
+      required_label: Required
     - name: AmigaVision.rom
       destination: bios/AmigaVision.rom
       required: true
@@ -12810,6 +12996,22 @@ systems:
       component: retroarch
       description: Kickstart 4.0 ROM for AmigaVision.
       required_label: Yes, for AmigaVision
+    - name: kick40063.A600
+      destination: bios/kick40063.A600
+      required: true
+      md5: e40a5dfb3d017ba8779faba30cbd1c8e
+      native_system: amiga
+      component: retroarch
+      description: Kickstart 4.0 ROM for Amiga 600
+      required_label: Required
+    - name: kick40068.A1200
+      destination: bios/kick40068.A1200
+      required: true
+      md5: 646773759326fbac3b2311fd8c8793ee
+      native_system: amiga
+      component: retroarch
+      description: Kickstart 4.0 ROM for Amiga 1200
+      required_label: Required
   atari-400-800:
     files:
     - name: ROM_OS_A_NTSC
@@ -13009,6 +13211,14 @@ systems:
       native_system: atari5200
       component: retroarch
       description: BIOS for late 2-port Atari 5200.
+    - name: 5200.rom
+      destination: bios/5200.rom
+      required: true
+      md5: 281f20ea4320404ec820fb7ec0693b38
+      native_system: atari5200
+      component: retroarch
+      description: Atari 5200 console BIOS
+      required_label: Required
     - name: ATARIXL.ROM
       destination: bios/ATARIXL.ROM
       required: true
@@ -14377,6 +14587,13 @@ systems:
       native_system: pc9800
       component: retroarch
       description: Main BIOS for PC-9800
+    - name: FONT.ROM
+      destination: bios/FONT.ROM
+      required: false
+      md5: 2af6179d7de4893ea0b705c00e9a98d6
+      native_system: pc9800
+      component: retroarch
+      description: Font ROM for PC-9800
     - name: SOUND.ROM
       destination: bios/SOUND.ROM
       required: false
