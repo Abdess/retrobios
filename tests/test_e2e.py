@@ -6735,7 +6735,7 @@ struct BurnDriver BurnDrvneogeo = {
     @staticmethod
     def _gap_db(repo_name: str, sha1: str, crc32: str) -> dict:
         return {
-            "files": {sha1: {"path": f"bios/{repo_name}", "size": 8192}},
+            "files": {sha1: {"path": f"bios/{repo_name}", "size": 8192, "crc32": crc32}},
             "indexes": {
                 "by_name": {repo_name: [sha1]},
                 "by_md5": {},

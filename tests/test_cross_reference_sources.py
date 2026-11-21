@@ -34,7 +34,8 @@ def _index(**over) -> dict:
 class GapReportSources(unittest.TestCase):
     def test_a_sha256_alone_finds_the_file(self):
         entry = {"name": "wave1.bin", "sha256": "AB" * 32}
-        self.assertEqual(entry_source(entry, _index(by_sha256={"ab" * 32: "s"})), "bios")
+        index = _index(by_sha256={"ab" * 32: "s"}, db_files={"s": {"sha256": "ab" * 32}})
+        self.assertEqual(entry_source(entry, index), "bios")
 
     def test_a_name_never_wins_over_a_declared_hash(self):
         """zquestclassic pins ending.mid by sha1, the collection holds only

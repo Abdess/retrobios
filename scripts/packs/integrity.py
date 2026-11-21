@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, TypedDict
 
 from core.artifacts import build_timestamp
 from packs.paths import MEDIA_MARKER, has_path_conflict
-from core.ziptools import build_zip_contents_index
+from core.ziptools import build_zip_contents_index, is_archive_path
 from core.ziptools import safe_member_parts
 from resolve.nativemode import digest_algorithm, platform_mode
 from resolve.validation import (
@@ -22,7 +22,8 @@ from resolve.nativemode import hash_mismatch_excludes_file
 import sys
 from resolve.cores import filter_systems_by_target
 from core.hashing import (
-    compute_hashes, file_digest, md5_composite_of, md5sum, parse_hash_list, stream_hashes,
+    compute_hashes, file_digest, md5_composite, md5_composite_of, md5sum, parse_hash_list,
+    stream_hashes,
 )
 from core.options import reject_unknown
 import io
@@ -34,6 +35,7 @@ from packs.paths import flat_arcname
 from resolve.nativemode import reads_file_contents
 from resolve import regions as resolve_regions
 from packs import slots
+from resolve.localfile import held_record_for
 from resolve.packfiles import resolve_declaration, resolve_file
 from resolve.categories import BIOS, EntryCategories
 from resolve.gamedata import without_game_data
@@ -386,28 +388,32 @@ def _check_member_hash(
 def _repo_satisfies_declaration(
     entries: list[dict], db: dict, mode: str
 ) -> bool:
-    """Check whether any repo file matches one of the declared hashes.
+    """Check whether any repo file matches one of the declarations.
 
     Used to separate pack divergence (a matching file exists but was not
     packed) from data coverage gaps (no repo file matches the upstream
-    declaration): only the former is a pack generation error.
+    declaration): only the former is a pack generation error. A held file
+    is the resolver's: every declared hash agrees with it, and a zipped_file
+    md5 names a member of a held archive, not a loose file. The verdict
+    compares whole digests as the frontend does, so a cut md5 names a held
+    file without being satisfied by it.
     """
-    from core.hashing import md5_composite
-
     files_db = db.get("files", {})
-    by_md5 = db.get("indexes", {}).get("by_md5", {})
     by_name = db.get("indexes", {}).get("by_name", {})
 
     for fe in entries:
+        if fe.get("zipped_file"):
+            if _repo_holds_member(fe, db):
+                return True
+            continue
         hashes = parse_hash_list(fe.get(mode))
         if not hashes:
             continue
-        for h in hashes:
-            if mode == "sha1":
-                entry = files_db.get(h)
-            else:
-                entry = files_db.get(by_md5.get(h, ""))
-            if entry and os.path.exists(entry.get("path", "")):
+        held_sha1 = held_record_for(fe, db)
+        if held_sha1 is not None:
+            held = files_db[held_sha1]
+            digest = held_sha1 if mode == "sha1" else str(held.get(mode, ""))
+            if digest.lower() in hashes and os.path.exists(held.get("path", "")):
                 return True
         if mode == "md5":
             hash_set = set(hashes)
@@ -416,7 +422,7 @@ def _repo_satisfies_declaration(
                 if not entry:
                     continue
                 path = entry.get("path", "")
-                if not path.endswith(".zip") or not os.path.exists(path):
+                if not is_archive_path(path) or not os.path.exists(path):
                     continue
                 try:
                     if md5_composite(path).lower() in hash_set:
@@ -430,7 +436,7 @@ def _repo_holds_member(file_entry: dict, db: dict) -> bool:
     files_db = db.get("files", {})
     for sha1 in db.get("indexes", {}).get("by_name", {}).get(file_entry.get("name", ""), []):
         path = (files_db.get(sha1) or {}).get("path", "")
-        if not path.endswith(".zip") or not os.path.exists(path):
+        if not is_archive_path(path) or not os.path.exists(path):
             continue
         if inner_rom_check(file_entry, path) == "ok":
             return True

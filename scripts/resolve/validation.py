@@ -23,6 +23,7 @@ from resolve.content import (
     size_refusal,
 )
 from resolve.archives import archive_members
+from model.database import records_for_hash
 from model.profiles import CONTENT_CHECKS, entry_system_ids, lists_files
 from core.hashing import compute_hashes, parse_hash_list
 from core.paths import BIOS_DIR, sanitize_pack_path
@@ -799,23 +800,18 @@ def _platform_accepted(file_entry: dict, platform_digest: str) -> set[str]:
     return set()
 
 
-def _variant_candidates(expected: dict, indexes: dict, fname: str) -> Iterator[str]:
-    """The sha1 of each held file that may stand for a name, best evidence first."""
+def _variant_candidates(expected: dict, db: dict, fname: str) -> Iterator[str]:
+    """The sha1 of each held file that may stand for a name, best evidence first.
+
+    Any one accepted value names a candidate: the index merges what several
+    emulators accept, and their own checks then judge each file.
+    """
     # Sorted: the index holds sets, whose order follows the per-process
     # string hash, and the first passing candidate is the one shipped.
-    for hash_type, index_key in (
-        ("sha1", None), ("md5", "by_md5"), ("crc32", "by_crc32"), ("sha256", "by_sha256"),
-    ):
+    for hash_type in ("sha1", "md5", "crc32", "sha256"):
         for value in sorted(expected.get(hash_type) or []):
-            if index_key is None:
-                yield value
-                continue
-            found = indexes.get(index_key, {}).get(value)
-            if isinstance(found, str):
-                yield found
-            elif isinstance(found, list):
-                yield from found
-    yield from indexes.get("by_name", {}).get(fname, [])
+            yield from records_for_hash(db, hash_type, value)
+    yield from db.get("indexes", {}).get("by_name", {}).get(fname, [])
 
 
 def find_validated_variant(
@@ -848,11 +844,10 @@ def find_validated_variant(
         accepted = _platform_accepted(file_entry, platform_digest)
 
     files_db = db.get("files", {})
-    indexes = db.get("indexes", {})
     current_real = os.path.realpath(current_path)
     seen: set[str] = set()
 
-    for sha1 in _variant_candidates(validation_index[fname], indexes, fname):
+    for sha1 in _variant_candidates(validation_index[fname], db, fname):
         entry = files_db.get(sha1) or {}
         path = entry.get("path", "")
         if not path or not os.path.exists(path):

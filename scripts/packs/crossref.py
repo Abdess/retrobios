@@ -38,7 +38,7 @@ from resolve.launchers import (
     suffixed_stem,
 )
 from resolve.layout import system_dir_path
-from resolve.localfile import resolve_local_file
+from resolve.localfile import held_record_for, resolve_local_file
 from resolve.ownership import foreign_tree, owner_tokens
 from resolve.standalone import platform_layouts
 from resolve.validation import (
@@ -624,19 +624,14 @@ def entry_source(f: dict, index: dict) -> str | None:
             return source
         found = found or source
 
-    def values(field: str) -> list[str]:
-        return parse_hash_list(f.get(field))
-
     # The declared content anywhere in bios/ comes before a data/ copy, as in
-    # the resolver: the hash steps run before the data directories.
-    held = (
-        any(index["by_md5"].get(v) for v in parse_hash_list(f.get("md5")))
-        or any(v in db_files for v in values("sha1"))
-        # rust_dos names its SC-55 ROMs by sha256 alone
-        or any(v in index["by_sha256"] for v in values("sha256"))
-        or any(index["by_crc32"].get(v) for v in values("crc32"))
-    )
-    return "bios" if held else found
+    # the resolver: the hash steps run before the data directories, and the
+    # held record is the one every declared hash agrees with.
+    held = held_record_for(f, {
+        "files": db_files,
+        "indexes": {key: index[key] for key in ("by_md5", "by_sha256", "by_crc32")},
+    })
+    return "bios" if held is not None else found
 
 
 def _resolve_archive_source(

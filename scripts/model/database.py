@@ -97,26 +97,33 @@ def sha1_at(db: dict, path: str | None) -> str | None:
 _HASH_INDEXES = {"md5": "by_md5", "crc32": "by_crc32", "sha256": "by_sha256"}
 
 
-def record_for_hash(db: dict, kind: str, value: object) -> str | None:
-    """The sha1 the database keys the file one hash value names under.
+def records_for_hash(db: dict, kind: str, value: object) -> list[str]:
+    """The sha1 of every held record one hash value names, index order kept.
 
     A cut md5 (Batocera writes 29 characters) names the one held md5 it
-    starts, as cut_md5_owner reads it.
+    starts, as cut_md5_owner reads it. An index value that is a list names
+    several records, all returned.
     """
     if not (value and isinstance(value, str)):
-        return None
+        return []
     files = db.get("files", {})
     value = value.strip().lower()
     if kind == "sha1":
-        return value if value in files else None
+        return [value] if value in files else []
     index = db.get("indexes", {}).get(_HASH_INDEXES[kind], {})
     found = index.get(value)
     if found is None and kind == "md5":
         owner = cut_md5_owner(value, index)
         found = index.get(owner) if owner else None
-    if isinstance(found, list):
-        found = found[0] if found else None
-    return found if found in files else None
+    if found is None:
+        return []
+    named = [found] if isinstance(found, str) else list(found)
+    return [sha1 for sha1 in named if sha1 in files]
+
+
+def record_for_hash(db: dict, kind: str, value: object) -> str | None:
+    """The sha1 of the first held record one hash value names."""
+    return next(iter(records_for_hash(db, kind, value)), None)
 
 
 _mame_clone_map_cache: dict[str, dict[str, str]] = {}
