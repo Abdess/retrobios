@@ -278,9 +278,9 @@ class SavedFindings(unittest.TestCase):
         """romfolders was added to check_freshness and not here: its rows
         were dropped from a saved report without a word, and --only
         romfolders was refused."""
-        import check_freshness
+        from freshness.findings import AREAS
 
-        self.assertEqual(set(check_freshness.AREAS), set(rs.AUTO_AREAS + rs.MANUAL_AREAS))
+        self.assertEqual(set(AREAS), set(rs.AUTO_AREAS + rs.MANUAL_AREAS))
         jobs, surfaced, _ = rs.plan_jobs([finding("romfolders", "muos")], REGISTRY, {})
         self.assertEqual((jobs, [f["subject"] for f in surfaced]), ([], ["muos"]))
 

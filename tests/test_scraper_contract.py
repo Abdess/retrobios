@@ -724,11 +724,12 @@ class EveryTargetCoreReachesAProfile(unittest.TestCase):
 
         import yaml
 
-        import check_freshness
+        from freshness.targets import profile_name_index, unresolved_target_cores
         from model.profiles import load_emulator_profiles
+        from model.targets import platform_overrides
 
         root = Path(__file__).resolve().parents[1]
-        index = check_freshness.profile_name_index(
+        index = profile_name_index(
             load_emulator_profiles(str(root / "emulators"))
         )
         overrides = yaml.safe_load((root / "platforms/targets/_overrides.yml").read_text()) or {}
@@ -736,9 +737,9 @@ class EveryTargetCoreReachesAProfile(unittest.TestCase):
             platform = os.path.basename(path)[:-4]
             if platform.startswith("_"):
                 continue
-            unresolved = check_freshness.unresolved_target_cores(
+            unresolved = unresolved_target_cores(
                 yaml.safe_load(Path(path).read_text()), index,
-                check_freshness.platform_overrides(overrides, platform),
+                platform_overrides(overrides, platform),
             )
             with self.subTest(platform=platform):
                 if platform == "retropie":

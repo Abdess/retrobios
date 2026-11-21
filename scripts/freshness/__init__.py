@@ -1,1 +1,1 @@
-"""What has an upstream and whether ours is behind it."""
+"""Freshness checks: every transcribed layer confronted with what its upstream serves today."""

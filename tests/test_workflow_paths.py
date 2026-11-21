@@ -277,7 +277,7 @@ class DocumentedSteps(unittest.TestCase):
     def test_the_release_page_names_every_installed_package(self):
         """The page listed pyyaml and mkdocs and left out jsonschema: a
         maintainer following it could not run the contract check."""
-        from check_freshness import parse_pip_pins
+        from freshness.ci import parse_pip_pins
 
         workflow = (REPO_ROOT / ".github/workflows/deploy-site.yml").read_text(encoding="utf-8")
         page = (REPO_ROOT / "wiki/release-process.md").read_text(encoding="utf-8")

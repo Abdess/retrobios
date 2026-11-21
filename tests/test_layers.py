@@ -47,6 +47,10 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     "unattended": frozenset({"devtools"}),
     # The installer event schema is checked against the one the build writes.
     "schemas": frozenset({"installer_build"}),
+    # Each layer is asked through the code that writes it: the scrapers, the
+    # native export, the data directory refresh, the installer pins, the
+    # site's source trees and profile_sync's report.
+    "freshness": frozenset({"scraper", "exporter", "packs", "installer_build", "sitegen", "profiling"}),
 }
 
 # Top-level files that stay whole at their path although packages import them:

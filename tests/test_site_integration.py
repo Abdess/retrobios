@@ -22,7 +22,8 @@ from unittest import mock
 
 import yaml
 
-import check_freshness
+from freshness.findings import OK, STALE
+from freshness.profiles import check_source_paths
 from sitegen import emulatorcards
 from sitegen import emulatorpage
 from sitegen import startwith
@@ -124,8 +125,8 @@ class SourcePathsFreshness(unittest.TestCase):
         from model.profiles import load_emulator_profiles
 
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False)
-        finding = check_freshness.check_source_paths(profiles)
-        self.assertEqual(finding.status, check_freshness.OK, finding.detail)
+        finding = check_source_paths(profiles)
+        self.assertEqual(finding.status, OK, finding.detail)
 
     def test_a_recorded_build_file_tree_is_pinned(self):
         """The record holds the platform trees pin_build reads at a commit,
@@ -139,14 +140,14 @@ class SourcePathsFreshness(unittest.TestCase):
             path = Path(tmp) / "source-paths.json"
             path.write_text(json.dumps({f"github.com/o/r@{pin}": ["p.mk"]}), encoding="utf-8")
             with mock.patch.object(sitegen_sources, "SOURCE_PATHS", path):
-                finding = check_freshness.check_source_paths({"p": profile})
-        self.assertEqual(finding.status, check_freshness.OK, finding.detail)
+                finding = check_source_paths({"p": profile})
+        self.assertEqual(finding.status, OK, finding.detail)
 
     def test_a_moved_pin_is_stale(self):
         profile = _profile("geolith")
         moved = dict(profile, source_commit="f" * 40, upstream_commit="e" * 40)
-        finding = check_freshness.check_source_paths({"geolith": moved})
-        self.assertEqual(finding.status, check_freshness.STALE)
+        finding = check_source_paths({"geolith": moved})
+        self.assertEqual(finding.status, STALE)
         self.assertIn("sitesources.py --fetch", finding.detail)
 
     def test_a_pinned_tree_never_read_is_stale(self):
@@ -166,8 +167,8 @@ class SourcePathsFreshness(unittest.TestCase):
             path = Path(tmp) / "source-paths.json"
             path.write_text(json.dumps(record), encoding="utf-8")
             with mock.patch.object(sitegen_sources, "SOURCE_PATHS", path):
-                finding = check_freshness.check_source_paths({"geolith": profile})
-        self.assertEqual(finding.status, check_freshness.STALE)
+                finding = check_source_paths({"geolith": profile})
+        self.assertEqual(finding.status, STALE)
         self.assertIn("1 pinned trees not recorded", finding.detail)
 
     def test_a_tree_read_with_no_cited_path_is_recorded(self):

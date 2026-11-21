@@ -12,14 +12,61 @@ import tests
 
 import json
 import os
+import subprocess
 import sys
 import tempfile
 import unittest
 from unittest import mock
 from pathlib import Path
 
-import check_freshness as cf
+from core import upstream
+from core.cli import InputMissing
+from exporter.originals import SOURCES_INDEX
+from freshness.catalogs import (
+    NO_INTRO_MIRROR,
+    _check_no_intro,
+    _check_nointro_games,
+    _check_redump_games,
+    check_catalogs,
+    fbneo_blob_drift,
+    mame_versions,
+    tosec_latest_pack,
+)
+from freshness.ci import (
+    _npm_findings,
+    check_ci,
+    parse_action_pins,
+    parse_npm_pins,
+    parse_pip_pins,
+    specifier_allows,
+)
+from freshness.coreinfo import (
+    check_coreinfo,
+    coreinfo_drift,
+    coreinfo_gaps,
+    load_core_info_record,
+    record_core_info,
+)
+from freshness.data import _check_buildbot_system
+from freshness.findings import AREAS, ERROR, OK, SKIPPED, STALE, UNKNOWN, Finding
+from freshness.native import _transcribed_at, check_native, native_cache_state, published_export_state
+from freshness.platformdiff import diff_platform, diff_targets
+from freshness.platforms import _scrapable_platforms, emulatorjs_pin
+from freshness.profiles import check_profiles, summarize_profile_sync
+from freshness.report import exit_code, render, unknown_areas_message
+from freshness.romfolders import check_romfolders, romfolder_pin_drift, romfolder_sources
+from freshness.targets import (
+    _declared_cores,
+    _target_scrapers,
+    _unresolved_findings,
+    check_targets,
+    profile_name_index,
+    unresolved_target_cores,
+)
 from model.safeparse import yaml_load
+from model.targets import platform_overrides
+from scripts.scraper import game_dat_importer
+from tests.sources import SCRIPTS
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -31,7 +78,7 @@ class NativeCacheTests(unittest.TestCase):
         self._tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self._tmp.cleanup)
         self.cache = Path(self._tmp.name)
-        self.index = self.cache / cf.SOURCES_INDEX
+        self.index = self.cache / SOURCES_INDEX
         self.root = self.cache / "plat"
         self.root.mkdir()
         self.wanted = {"list.txt": "https://example.invalid/tag-2/list.txt"}
@@ -39,9 +86,9 @@ class NativeCacheTests(unittest.TestCase):
     def test_an_unreadable_index_is_an_error_not_unrecorded(self):
         """Read as empty, it named "no URL recorded" for every original."""
         self.index.write_text("{", encoding="utf-8")
-        findings = cf.check_native(REPO_ROOT / "platforms", self.cache, self.cache)
+        findings = check_native(REPO_ROOT / "platforms", self.cache, self.cache)
         self.assertEqual([(f.subject, f.status) for f in findings],
-                         [(self.index.name, cf.ERROR)])
+                         [(self.index.name, ERROR)])
         self.assertIn("--refresh-cache", findings[0].detail)
 
     def _cached(self, mtime: float) -> None:
@@ -50,7 +97,7 @@ class NativeCacheTests(unittest.TestCase):
         os.utime(path, (mtime, mtime))
 
     def _state(self, recorded: dict, transcribed_at: float) -> str:
-        return cf.native_cache_state(
+        return native_cache_state(
             self.wanted, self.root, recorded, self.index, transcribed_at
         )
 
@@ -87,8 +134,8 @@ class NativeCacheTests(unittest.TestCase):
         (platforms / "child.yml").write_text("inherits: parent\n", encoding="utf-8")
         os.utime(platforms / "parent.yml", (300.0, 300.0))
         os.utime(platforms / "child.yml", (100.0, 100.0))
-        self.assertEqual(cf._transcribed_at(platforms, "child"), 300.0)
-        self.assertEqual(cf._transcribed_at(platforms, "parent"), 300.0)
+        self.assertEqual(_transcribed_at(platforms, "child"), 300.0)
+        self.assertEqual(_transcribed_at(platforms, "parent"), 300.0)
 
     def test_a_repeated_inherits_key_is_refused(self):
         """refresh_stale read inherits: with yaml.safe_load, which kept the
@@ -106,10 +153,10 @@ class NativeCacheTests(unittest.TestCase):
             refresh_stale._platform_parents({"child": {}})
 
     def test_every_registered_platform_with_an_exporter_gets_a_row(self):
-        rows = cf.check_native(REPO_ROOT / "platforms", self.cache, self.cache / "truth")
+        rows = check_native(REPO_ROOT / "platforms", self.cache, self.cache / "truth")
         self.assertTrue(rows)
         self.assertEqual({r.area for r in rows}, {"native"})
-        self.assertEqual({r.status for r in rows}, {cf.STALE})
+        self.assertEqual({r.status for r in rows}, {STALE})
         self.assertIn("batocera", {r.subject for r in rows})
 
     def test_the_model_build_notes_stay_out_of_the_report(self):
@@ -125,9 +172,9 @@ class NativeCacheTests(unittest.TestCase):
             return {}, None
 
         err = io.StringIO()
-        with mock.patch.object(cf, "build_native_model", side_effect=noisy), \
+        with mock.patch("freshness.native.build_native_model", side_effect=noisy), \
                 contextlib.redirect_stderr(err):
-            cf.check_native(REPO_ROOT / "platforms", self.cache, self.cache / "truth")
+            check_native(REPO_ROOT / "platforms", self.cache, self.cache / "truth")
         self.assertNotIn("hash conflict", err.getvalue())
         self.assertIn("other diagnostic", err.getvalue())
 
@@ -150,8 +197,8 @@ class PublishedExportTests(unittest.TestCase):
             (output / f"{platform}.json").write_text("{}", encoding="utf-8")
             return ok, [] if ok else ["the platform's own file is required"]
 
-        with mock.patch.object(cf, "export_platform", fake):
-            return cf.published_export_state(
+        with mock.patch("freshness.native.export_platform", fake):
+            return published_export_state(
                 "plat", object, Path("t"), Path("p"), Path("c"), self.published
             )
 
@@ -178,12 +225,12 @@ class PlatformDiffTests(unittest.TestCase):
         }
 
     def test_identical_files_are_not_a_change(self):
-        diff = cf.diff_platform(self._platform(), self._platform())
+        diff = diff_platform(self._platform(), self._platform())
         self.assertFalse(diff.changed)
         self.assertEqual(diff.summary(), "identical")
 
     def test_version_alone_is_a_change_but_not_content(self):
-        diff = cf.diff_platform(self._platform("1"), self._platform("2"))
+        diff = diff_platform(self._platform("1"), self._platform("2"))
         self.assertTrue(diff.changed)
         self.assertFalse(diff.content_changed)
         self.assertEqual(diff.version, ("1", "2"))
@@ -191,7 +238,7 @@ class PlatformDiffTests(unittest.TestCase):
     def test_hash_change_on_a_destination_is_a_change_not_a_swap(self):
         old = self._platform(files=[{"name": "x.bin", "destination": "x.bin", "md5": "1"}])
         new = self._platform(files=[{"name": "x.bin", "destination": "x.bin", "md5": "2"}])
-        diff = cf.diff_platform(old, new)
+        diff = diff_platform(old, new)
         self.assertEqual(diff.files_changed, ["sys/x.bin"])
         self.assertEqual(diff.files_added, [])
         self.assertEqual(diff.files_removed, [])
@@ -202,7 +249,7 @@ class PlatformDiffTests(unittest.TestCase):
         new["systems"]["other"] = {"files": []}
         new["systems"]["sys"]["files"].append({"name": "y.bin", "destination": "y.bin"})
         new["standalone_cores"] = ["dolphin"]
-        diff = cf.diff_platform(old, new)
+        diff = diff_platform(old, new)
         self.assertEqual(diff.systems_added, ["other"])
         self.assertEqual(diff.files_added, ["sys/y.bin"])
         self.assertEqual(diff.cores_added, ["c", "standalone:dolphin"])
@@ -220,7 +267,7 @@ class PlatformDiffTests(unittest.TestCase):
         new = self._platform()
         new["launchers"] = []
         new["systems"]["sys"].update(core="c2", native_id="psx")
-        diff = cf.diff_platform(old, new)
+        diff = diff_platform(old, new)
         self.assertTrue(diff.content_changed)
         self.assertEqual(
             diff.fields_changed,
@@ -233,14 +280,14 @@ class PlatformDiffTests(unittest.TestCase):
         old["source"], new["source"] = "https://x/tar.gz/aaa", "https://x/tar.gz/bbb"
         old["launchers"] = [{"emulator": "e", "source_ref": "es_features.cfg:11638-11646"}]
         new["launchers"] = [{"emulator": "e", "source_ref": "es_features.cfg:11649-11657"}]
-        self.assertFalse(cf.diff_platform(old, new).changed)
+        self.assertFalse(diff_platform(old, new).changed)
 
     def test_target_stamp_is_not_a_change(self):
         old = {"scraped_at": "2026-01-01", "targets": {"t": {"cores": ["a"]}}}
         new = {"scraped_at": "2026-02-01", "targets": {"t": {"cores": ["a"]}}}
-        self.assertFalse(cf.diff_targets(old, new).content_changed)
+        self.assertFalse(diff_targets(old, new).content_changed)
         new["targets"]["t"]["cores"].append("b")
-        diff = cf.diff_targets(old, new)
+        diff = diff_targets(old, new)
         self.assertEqual(diff.cores_added, ["t/b"])
 
 
@@ -252,12 +299,12 @@ class CoreResolutionTests(unittest.TestCase):
     }
 
     def test_index_maps_key_and_every_core_alias(self):
-        index = cf.profile_name_index(self.PROFILES)
+        index = profile_name_index(self.PROFILES)
         self.assertEqual(index["mednafen_psx"], {"beetle_psx"})
         self.assertEqual(index["beetle_psx"], {"beetle_psx"})
 
     def test_unresolved_honours_remove_cores_per_target(self):
-        index = cf.profile_name_index(self.PROFILES)
+        index = profile_name_index(self.PROFILES)
         targets = {
             "targets": {
                 "android": {"cores": ["mednafen_psx", "na", "ghost"]},
@@ -266,12 +313,12 @@ class CoreResolutionTests(unittest.TestCase):
         }
         overrides = {"android": {"remove_cores": ["na"]}}
         self.assertEqual(
-            cf.unresolved_target_cores(targets, index, overrides),
+            unresolved_target_cores(targets, index, overrides),
             {"ghost": ["android", "linux"]},
         )
 
     def test_a_default_override_drops_a_name_on_every_target(self):
-        index = cf.profile_name_index(self.PROFILES)
+        index = profile_name_index(self.PROFILES)
         targets = {
             "targets": {
                 "x86_64": {"cores": ["A500", "ghost"]},
@@ -287,26 +334,26 @@ class CoreResolutionTests(unittest.TestCase):
             }
         }
         self.assertEqual(
-            cf.unresolved_target_cores(targets, index, cf.platform_overrides(overrides, "plat")),
+            unresolved_target_cores(targets, index, platform_overrides(overrides, "plat")),
             {"ghost": ["x86_64"]},
         )
 
     def test_an_added_core_is_read_as_the_builder_reads_it(self):
         """add_cores without a profile is the false skip this check exists
         for, and a target may add back what _default removes."""
-        index = cf.profile_name_index(self.PROFILES)
+        index = profile_name_index(self.PROFILES)
         targets = {"targets": {"board": {"cores": ["mednafen_psx"]}}}
         overrides = {
             "_default": {"remove_cores": ["mednafen_psx"]},
             "board": {"add_cores": ["mednafen_psx", "citron"]},
         }
         self.assertEqual(
-            cf.unresolved_target_cores(targets, index, overrides), {"citron": ["board"]}
+            unresolved_target_cores(targets, index, overrides), {"citron": ["board"]}
         )
 
     def test_coreinfo_gaps_fold_case_and_flag_standalone_profiles(self):
         names = ["FreeIntvTSOverlay", "eka2l1", "wqxemu", "mednafen_psx"]
-        unprofiled, standalone = cf.coreinfo_gaps(names, self.PROFILES)
+        unprofiled, standalone = coreinfo_gaps(names, self.PROFILES)
         self.assertEqual(unprofiled, ["wqxemu"])
         self.assertEqual(standalone, [("eka2l1", "eka2l1")])
 
@@ -317,23 +364,23 @@ class CoreResolutionTests(unittest.TestCase):
         recorded = {"mednafen_psx": "old", "eka2l1": "same"}
         with tempfile.TemporaryDirectory() as tmp:
             record = Path(tmp) / "_core_info.json"
-            record.write_text(cf.json.dumps({"blobs": recorded}))
-            with mock.patch.object(cf, "core_info_blobs", return_value=blobs):
-                rows = cf.check_coreinfo(self.PROFILES, "", True, record)
-        stale = {r.subject: r for r in rows if r.status == cf.STALE}
+            record.write_text(json.dumps({"blobs": recorded}))
+            with mock.patch("freshness.coreinfo.core_info_blobs", return_value=blobs):
+                rows = check_coreinfo(self.PROFILES, "", True, record)
+        stale = {r.subject: r for r in rows if r.status == STALE}
         self.assertIn("mednafen_psx", stale)
         self.assertIn("--record-coreinfo mednafen_psx", stale["mednafen_psx"].detail)
         self.assertNotIn(".info changed", stale["eka2l1"].detail)
-        self.assertEqual(cf.coreinfo_drift(blobs, recorded, self.PROFILES), ["mednafen_psx"])
+        self.assertEqual(coreinfo_drift(blobs, recorded, self.PROFILES), ["mednafen_psx"])
 
     def test_recording_a_core_leaves_the_others_unread(self):
         with tempfile.TemporaryDirectory() as tmp:
             record = Path(tmp) / "_core_info.json"
-            record.write_text(cf.json.dumps({"blobs": {"a": "1", "b": "1"}}))
-            cf.record_core_info({"a": "2", "b": "2"}, ["a"], record)
-            self.assertEqual(cf.load_core_info_record(record), {"a": "2", "b": "1"})
-            with self.assertRaises(cf.InputMissing) as raised:
-                cf.record_core_info({"a": "2", "ghosts": "1"}, ["ghost"], record)
+            record.write_text(json.dumps({"blobs": {"a": "1", "b": "1"}}))
+            record_core_info({"a": "2", "b": "2"}, ["a"], record)
+            self.assertEqual(load_core_info_record(record), {"a": "2", "b": "1"})
+            with self.assertRaises(InputMissing) as raised:
+                record_core_info({"a": "2", "ghosts": "1"}, ["ghost"], record)
             self.assertIn("Close matches: ghosts.", str(raised.exception))
 
     def test_record_errors_are_one_line(self):
@@ -353,14 +400,14 @@ class CoreResolutionTests(unittest.TestCase):
     def test_offline_without_a_cached_listing_is_skipped(self):
         """Offline, the row read UNKNOWN and failed the run as an upstream
         that could not be read, though nothing was asked of it."""
-        with mock.patch.object(cf, "core_info_blobs", return_value=None):
-            (row,) = cf.check_coreinfo(self.PROFILES, "", True)
-            self.assertEqual((row.status, row.detail), (cf.SKIPPED, "offline"))
-            (row,) = cf.check_coreinfo(self.PROFILES, "", False)
-            self.assertEqual(row.status, cf.UNKNOWN)
+        with mock.patch("freshness.coreinfo.core_info_blobs", return_value=None):
+            (row,) = check_coreinfo(self.PROFILES, "", True)
+            self.assertEqual((row.status, row.detail), (SKIPPED, "offline"))
+            (row,) = check_coreinfo(self.PROFILES, "", False)
+            self.assertEqual(row.status, UNKNOWN)
 
     def test_the_committed_record_holds_git_blobs(self):
-        recorded = cf.load_core_info_record()
+        recorded = load_core_info_record()
         self.assertIsNotNone(recorded)
         self.assertTrue(all(len(sha) == 40 for sha in recorded.values()))
 
@@ -373,24 +420,24 @@ class PinParsingTests(unittest.TestCase):
     """
 
     def test_pip_pins_keep_the_specifier(self):
-        pins = cf.parse_pip_pins(self.WORKFLOW)
+        pins = parse_pip_pins(self.WORKFLOW)
         self.assertEqual(pins["pyyaml"], "")
         self.assertEqual(pins["jsonschema"], "==4.23.0")
         self.assertEqual(pins["mkdocs-material"], ">=9.7.5,<10")
         self.assertEqual(pins["pymdown-extensions"], ">=10.14")
 
     def test_action_pins_carry_sha_and_optional_tag(self):
-        pins = cf.parse_action_pins(self.WORKFLOW)
+        pins = parse_action_pins(self.WORKFLOW)
         self.assertEqual(pins["actions/checkout"], ("3d3c42e5aac5ba805825da76410c181273ba90b1", "v7"))
         self.assertEqual(pins["actions/deploy-pages"][1], "")
 
     def test_specifier_admits_or_refuses_the_latest(self):
-        self.assertTrue(cf.specifier_allows("", "9.9"))
-        self.assertTrue(cf.specifier_allows(">=9.7.5,<10", "9.7.7"))
-        self.assertFalse(cf.specifier_allows(">=9.7.5,<10", "10.0.0"))
-        self.assertFalse(cf.specifier_allows("==4.23.0", "4.26.0"))
-        self.assertTrue(cf.specifier_allows("==4.23.0", "4.23.0"))
-        self.assertTrue(cf.specifier_allows(">=10.14", "12.0.1"))
+        self.assertTrue(specifier_allows("", "9.9"))
+        self.assertTrue(specifier_allows(">=9.7.5,<10", "9.7.7"))
+        self.assertFalse(specifier_allows(">=9.7.5,<10", "10.0.0"))
+        self.assertFalse(specifier_allows("==4.23.0", "4.26.0"))
+        self.assertTrue(specifier_allows("==4.23.0", "4.23.0"))
+        self.assertTrue(specifier_allows(">=10.14", "12.0.1"))
 
 
 class SiteNpmPins(unittest.TestCase):
@@ -399,7 +446,7 @@ class SiteNpmPins(unittest.TestCase):
     pins: astro 7.4.2 stayed behind 7.4.7 with no STALE row."""
 
     def test_both_dependency_kinds_are_read(self):
-        pins = cf.parse_npm_pins(
+        pins = parse_npm_pins(
             '{"dependencies": {"astro": "7.4.2"}, "devDependencies": {"x": "^1.0.0"}}'
         )
         self.assertEqual(pins, {"astro": "7.4.2", "x": "^1.0.0"})
@@ -414,19 +461,19 @@ class SiteNpmPins(unittest.TestCase):
             def answer(url):
                 name = url.split("registry.npmjs.org/", 1)[1].rsplit("/latest", 1)[0]
                 return {"version": latest[name]}
-            with mock.patch.object(cf, "SITE_PACKAGE", package), \
-                    mock.patch.object(cf.upstream, "http_json", side_effect=answer):
-                rows = {f.subject: f for f in cf._npm_findings()}
-        self.assertEqual(rows["npm:astro"].status, cf.STALE)
+            with mock.patch("freshness.ci.SITE_PACKAGE", package), \
+                    mock.patch.object(upstream, "http_json", side_effect=answer):
+                rows = {f.subject: f for f in _npm_findings()}
+        self.assertEqual(rows["npm:astro"].status, STALE)
         self.assertEqual(rows["npm:astro"].remote, "7.4.7")
-        self.assertEqual(rows["npm:@astrojs/starlight"].status, cf.OK)
-        self.assertEqual(rows["npm:y"].status, cf.UNKNOWN)
+        self.assertEqual(rows["npm:@astrojs/starlight"].status, OK)
+        self.assertEqual(rows["npm:y"].status, UNKNOWN)
 
     def test_the_ci_area_reads_the_site_pins(self):
-        with mock.patch.object(cf, "_npm_findings", return_value=[]) as npm, \
-                mock.patch.object(cf, "parse_pip_pins", return_value={}), \
-                mock.patch.object(cf, "parse_action_pins", return_value={}):
-            cf.check_ci("unused", offline=False)
+        with mock.patch("freshness.ci._npm_findings", return_value=[]) as npm, \
+                mock.patch("freshness.ci.parse_pip_pins", return_value={}), \
+                mock.patch("freshness.ci.parse_action_pins", return_value={}):
+            check_ci("unused", offline=False)
         npm.assert_called_once()
 
 
@@ -449,32 +496,32 @@ class RomFolderPins(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = self._tree(tmp, "https://raw.githubusercontent.com/o/r/v2/list.txt",
                               "    tag: v1\n    commit: " + "a" * 40 + "\n")
-            rows = {f.subject: f for f in cf.check_romfolders(root, "", True)}
-        self.assertEqual(rows["plat"].status, cf.STALE)
+            rows = {f.subject: f for f in check_romfolders(root, "", True)}
+        self.assertEqual(rows["plat"].status, STALE)
         self.assertIn("scraped at v2, the rom folders at v1", rows["plat"].detail)
-        self.assertEqual(rows["other"].status, cf.SKIPPED)
+        self.assertEqual(rows["other"].status, SKIPPED)
 
     def test_the_same_revision_is_fresh(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = self._tree(tmp, "https://github.com/o/r/tree/" + "a" * 40,
                               "    commit: " + "a" * 40 + "\n")
-            rows = {f.subject: f for f in cf.check_romfolders(root, "", True)}
-        self.assertEqual(rows["plat"].status, cf.OK)
+            rows = {f.subject: f for f in check_romfolders(root, "", True)}
+        self.assertEqual(rows["plat"].status, OK)
 
     def test_a_newer_release_makes_another_setup_stale(self):
-        release = cf.upstream.Release("v9", "2026-11-01", False)
+        release = upstream.Release("v9", "2026-11-01", False)
         with tempfile.TemporaryDirectory() as tmp:
             root = self._tree(tmp, "https://github.com/o/r/tree/" + "a" * 40,
                               "    commit: " + "a" * 40 + "\n")
-            with mock.patch.object(cf.upstream, "commit_date", return_value="2026-10-01T00:00:00"), \
-                    mock.patch.object(cf.upstream, "latest_release", return_value=release):
-                rows = {f.subject: f for f in cf.check_romfolders(root, "", False)}
-        self.assertEqual((rows["other"].status, rows["other"].remote), (cf.STALE, "v9 (2026-11-01)"))
+            with mock.patch.object(upstream, "commit_date", return_value="2026-10-01T00:00:00"), \
+                    mock.patch.object(upstream, "latest_release", return_value=release):
+                rows = {f.subject: f for f in check_romfolders(root, "", False)}
+        self.assertEqual((rows["other"].status, rows["other"].remote), (STALE, "v9 (2026-11-01)"))
 
     def test_the_committed_setups_agree_with_their_platform_files(self):
         platforms = REPO_ROOT / "platforms"
-        drift = [d for setup, doc in cf.romfolder_sources(platforms).items()
-                 if (d := cf.romfolder_pin_drift(setup, doc, platforms))]
+        drift = [d for setup, doc in romfolder_sources(platforms).items()
+                 if (d := romfolder_pin_drift(setup, doc, platforms))]
         self.assertEqual(drift, [])
 
 
@@ -482,39 +529,39 @@ class CatalogParsingTests(unittest.TestCase):
     def test_game_catalogs_are_watched(self):
         """The 38 game catalogs the games-on-card mode identifies discs by
         had no row: only the BIOS snapshots of provenance/ were compared."""
-        versions = {code: "2026-01-01 00-00-00" for code in cf.game_dat_importer.REDUMP_DATS}
+        versions = {code: "2026-01-01 00-00-00" for code in game_dat_importer.REDUMP_DATS}
         versions["PSX"] = "2099-01-01 00-00-00"
         local = [{"system": system, "version": "2026-01-01 00-00-00"}
-                 for _n, system, _f in cf.game_dat_importer.REDUMP_DATS.values()]
-        with mock.patch.object(cf, "_game_catalogs", return_value=local), \
-                mock.patch.object(cf, "redump_datfile_version", side_effect=versions.get):
-            row = cf._check_redump_games(False)
-            self.assertEqual((row.status, row.items), (cf.STALE, ["sony-playstation"]))
-            self.assertEqual(cf._check_redump_games(True).status, cf.SKIPPED)
-        with mock.patch.object(cf, "_game_catalogs", return_value=[{"fetched": "2026-11-03"}]), \
-                mock.patch.object(cf, "_today", return_value="2026-11-06"):
-            for rebuilt, status in (("2026-11-02", cf.OK), ("2026-11-04", cf.STALE)):
-                with mock.patch.object(cf, "_no_intro_asset_date", return_value=rebuilt):
-                    self.assertEqual(cf._check_nointro_games("", False).status, status)
+                 for _n, system, _f in game_dat_importer.REDUMP_DATS.values()]
+        with mock.patch("freshness.catalogs._game_catalogs", return_value=local), \
+                mock.patch("freshness.catalogs.redump_datfile_version", side_effect=versions.get):
+            row = _check_redump_games(False)
+            self.assertEqual((row.status, row.items), (STALE, ["sony-playstation"]))
+            self.assertEqual(_check_redump_games(True).status, SKIPPED)
+        with mock.patch("freshness.catalogs._game_catalogs", return_value=[{"fetched": "2026-11-03"}]), \
+                mock.patch("freshness.catalogs._today", return_value="2026-11-06"):
+            for rebuilt, status in (("2026-11-02", OK), ("2026-11-04", STALE)):
+                with mock.patch("freshness.catalogs._no_intro_asset_date", return_value=rebuilt):
+                    self.assertEqual(_check_nointro_games("", False).status, status)
 
     def test_a_mirror_that_stopped_rebuilding_is_stale(self):
         """The mirror failed every daily rebuild from 2026-07-08, and both
         No-Intro rows read OK: an import newer than a dead pack is no
         sign of a fresh catalog."""
-        with mock.patch.object(cf, "_today", return_value="2026-11-06"), \
-                mock.patch.object(cf, "_no_intro_asset_date", return_value="2026-07-08"), \
-                mock.patch.object(cf, "_game_catalogs", return_value=[{"fetched": "2026-11-03"}]), \
-                mock.patch.object(cf, "_snapshot", return_value={"imported_at": "2026-08-08"}):
-            for row in (cf._check_nointro_games("", False), cf._check_no_intro("", False)):
-                self.assertEqual(row.status, cf.STALE)
+        with mock.patch("freshness.catalogs._today", return_value="2026-11-06"), \
+                mock.patch("freshness.catalogs._no_intro_asset_date", return_value="2026-07-08"), \
+                mock.patch("freshness.catalogs._game_catalogs", return_value=[{"fetched": "2026-11-03"}]), \
+                mock.patch("freshness.catalogs._snapshot", return_value={"imported_at": "2026-08-08"}):
+            for row in (_check_nointro_games("", False), _check_no_intro("", False)):
+                self.assertEqual(row.status, STALE)
                 self.assertIn("2026-07-08, 121 days ago", row.detail)
 
     def test_the_freshness_check_reads_the_importer_mirror(self):
-        self.assertEqual(cf.NO_INTRO_MIRROR, cf.game_dat_importer.NOINTRO_MIRROR)
-        self.assertIn(cf.NO_INTRO_MIRROR.removeprefix("https://github.com/"),
-                      cf.game_dat_importer.NOINTRO_RELEASE_API)
+        self.assertEqual(NO_INTRO_MIRROR, game_dat_importer.NOINTRO_MIRROR)
+        self.assertIn(NO_INTRO_MIRROR.removeprefix("https://github.com/"),
+                      game_dat_importer.NOINTRO_RELEASE_API)
         self.assertIn("no-intro games",
-                      [f.subject for f in cf.check_catalogs("", True)])
+                      [f.subject for f in check_catalogs("", True)])
 
     def test_tosec_newest_release_from_category_links(self):
         html = (
@@ -522,8 +569,8 @@ class CatalogParsingTests(unittest.TestCase):
             '<a href="/downloads/category/59-2025-03-13">y</a>'
             '<a href="/downloads/category/22-datfiles">z</a>'
         )
-        self.assertEqual(cf.tosec_latest_pack(html), "2025-03-13")
-        self.assertIsNone(cf.tosec_latest_pack("<html></html>"))
+        self.assertEqual(tosec_latest_pack(html), "2025-03-13")
+        self.assertIsNone(tosec_latest_pack("<html></html>"))
 
     def test_fbneo_drift_compares_blob_shas_and_reports_untracked(self):
         listing = [
@@ -532,14 +579,14 @@ class CatalogParsingTests(unittest.TestCase):
             {"type": "dir", "name": "old"},
         ]
         snapshot = {"upstream": {"blobs": {"A.dat": "1", "B.dat": "9"}}}
-        self.assertEqual(cf.fbneo_blob_drift(snapshot, listing), (["B.dat"], True))
-        self.assertEqual(cf.fbneo_blob_drift({"upstream": {}}, listing), ([], False))
+        self.assertEqual(fbneo_blob_drift(snapshot, listing), (["B.dat"], True))
+        self.assertEqual(fbneo_blob_drift({"upstream": {}}, listing), ([], False))
         snapshot = {"upstream": {"blobs": {"A.dat": "1", "B.dat": "2", "C.dat": "3"}}}
-        self.assertEqual(cf.fbneo_blob_drift(snapshot, listing), (["C.dat"], True))
+        self.assertEqual(fbneo_blob_drift(snapshot, listing), (["C.dat"], True))
 
     def test_mame_versions_read_from_dat_labels(self):
         recipes = {"dats": {"MAME mame0250": "0.250", "MAME mame0289": "0.289", "FinalBurn Neo": "x"}}
-        self.assertEqual(cf.mame_versions(recipes), ["mame0250", "mame0289"])
+        self.assertEqual(mame_versions(recipes), ["mame0250", "mame0289"])
 
 
 class ProfileSummaryTests(unittest.TestCase):
@@ -551,14 +598,14 @@ class ProfileSummaryTests(unittest.TestCase):
             {"name": "d", "skipped": "no declared repository answers"},
             {"name": "e", "skipped": "upstream gone (declared): archived 2019"},
         ]
-        findings = cf.summarize_profile_sync(report)
+        findings = summarize_profile_sync(report)
         by_subject = {f.subject: f for f in findings}
-        self.assertEqual(by_subject["profile_sync"].status, cf.STALE)
+        self.assertEqual(by_subject["profile_sync"].status, STALE)
         self.assertEqual(by_subject["profile_sync"].local, "1 at tip, 1 anchored past the tip")
-        self.assertEqual(by_subject["c"].status, cf.STALE)
-        self.assertEqual(by_subject["d"].status, cf.UNKNOWN)
+        self.assertEqual(by_subject["c"].status, STALE)
+        self.assertEqual(by_subject["d"].status, UNKNOWN)
         # Never checkable by nature: it does not hold the exit code.
-        self.assertEqual(by_subject["e"].status, cf.SKIPPED)
+        self.assertEqual(by_subject["e"].status, SKIPPED)
         self.assertNotIn("a", by_subject)
         self.assertNotIn("b", by_subject)
 
@@ -578,11 +625,11 @@ class ProfileSummaryTests(unittest.TestCase):
                  {"path": "x.c", "line": 4, "name": "old.rom", "since_pin": False},
              ], "new_hashes": []},
         ]
-        by_subject = {f.subject: f for f in cf.summarize_profile_sync(report)}
-        self.assertEqual(by_subject["a"].status, cf.STALE)
+        by_subject = {f.subject: f for f in summarize_profile_sync(report)}
+        self.assertEqual(by_subject["a"].status, STALE)
         self.assertIn("new.rom", by_subject["a"].detail)
         self.assertNotIn("old.rom", by_subject["a"].detail)
-        self.assertEqual(by_subject["b"].status, cf.STALE)
+        self.assertEqual(by_subject["b"].status, STALE)
         self.assertNotIn("c", by_subject)
 
     def test_profile_sync_accepts_the_command_it_is_given(self):
@@ -596,16 +643,16 @@ class ProfileSummaryTests(unittest.TestCase):
             captured.append(cmd)
             return mock.Mock(returncode=0, stdout="[]", stderr="")
 
-        with mock.patch.object(cf.subprocess, "run", side_effect=run):
-            cf.check_profiles(True, offline=True)
+        with mock.patch.object(subprocess, "run", side_effect=run):
+            check_profiles(True, offline=True)
         (cmd,) = captured
         args = profile_sync.build_parser().parse_args(cmd[2:])
         profile_sync._refuse_flag_combinations(args)
         self.assertTrue(args.as_json)
 
     def test_a_non_list_report_is_an_error_not_a_crash(self):
-        findings = cf.summarize_profile_sync({"oops": 1})
-        self.assertEqual(findings[0].status, cf.ERROR)
+        findings = summarize_profile_sync({"oops": 1})
+        self.assertEqual(findings[0].status, ERROR)
 
 
 class RepositoryWiringTests(unittest.TestCase):
@@ -613,7 +660,7 @@ class RepositoryWiringTests(unittest.TestCase):
     module does not exist would be skipped in silence."""
 
     def test_every_registered_scraper_module_exists(self):
-        rows = cf._scrapable_platforms(REPO_ROOT / "platforms")
+        rows = _scrapable_platforms(REPO_ROOT / "platforms")
         self.assertGreaterEqual(len(rows), 10)
         for _name, module, _path in rows:
             self.assertTrue(
@@ -621,7 +668,7 @@ class RepositoryWiringTests(unittest.TestCase):
             )
 
     def test_inheriting_platforms_without_a_source_are_not_scraped(self):
-        names = {name for name, _m, _p in cf._scrapable_platforms(REPO_ROOT / "platforms")}
+        names = {name for name, _m, _p in _scrapable_platforms(REPO_ROOT / "platforms")}
         with (REPO_ROOT / "platforms" / "lakka.yml").open(encoding="utf-8") as fh:
             lakka = yaml_load(fh)
         self.assertTrue(lakka.get("inherits"))
@@ -630,11 +677,11 @@ class RepositoryWiringTests(unittest.TestCase):
 
     def test_render_counts_every_status_once(self):
         findings = [
-            cf.Finding("ci", "a", cf.OK),
-            cf.Finding("ci", "b", cf.STALE, detail="x"),
-            cf.Finding("data", "c", cf.UNKNOWN),
+            Finding("ci", "a", OK),
+            Finding("ci", "b", STALE, detail="x"),
+            Finding("data", "c", UNKNOWN),
         ]
-        text = cf.render(findings)
+        text = render(findings)
         self.assertIn("FRESHNESS: 1 stale, 1 unknown, 1 ok", text)
         self.assertIn("[ci]", text)
         self.assertIn("[data]", text)
@@ -642,26 +689,26 @@ class RepositoryWiringTests(unittest.TestCase):
     def test_an_unanswered_upstream_is_not_fresh(self):
         """With no network every data row was unknown and the run exited 0,
         the answer of a collection with nothing to refresh."""
-        self.assertEqual(cf.exit_code([cf.Finding("data", "a", cf.UNKNOWN)]), 1)
-        self.assertEqual(cf.exit_code([cf.Finding("data", "a", cf.SKIPPED),
-                                       cf.Finding("data", "b", cf.OK)]), 0)
+        self.assertEqual(exit_code([Finding("data", "a", UNKNOWN)]), 1)
+        self.assertEqual(exit_code([Finding("data", "a", SKIPPED),
+                                       Finding("data", "b", OK)]), 0)
 
     def test_stale_rows_name_the_command_that_refreshes_them(self):
-        text = cf.render([cf.Finding("native", "batocera", cf.STALE)])
+        text = render([Finding("native", "batocera", STALE)])
         self.assertIn("refresh_stale.py", text)
-        self.assertNotIn("refresh_stale.py", cf.render([cf.Finding("ci", "a", cf.OK)]))
+        self.assertNotIn("refresh_stale.py", render([Finding("ci", "a", OK)]))
 
     def test_a_stale_original_names_its_platform(self):
         """The hint refetched the originals of all twelve platforms to fix
         one, and wrote no export."""
-        source = Path(cf.__file__).read_text(encoding="utf-8")
+        source = (SCRIPTS / "freshness" / "native.py").read_text(encoding="utf-8")
         hint = source.index('" fetches it, then the export is written again"')
         self.assertIn("--platform {name} --refresh-cache", source[hint - 120:hint])
 
     def test_an_unknown_area_names_the_valid_ones(self):
-        message = cf.unknown_areas_message(["platform"])
+        message = unknown_areas_message(["platform"])
         self.assertIn("did you mean platforms?", message)
-        for area in cf.AREAS:
+        for area in AREAS:
             self.assertIn(area, message)
 
     def test_a_target_of_every_declared_core_does_not_age(self):
@@ -675,9 +722,9 @@ class RepositoryWiringTests(unittest.TestCase):
             targets.mkdir()
             (targets / "solo.yml").write_text(
                 "platform: solo\nsource: static\ntargets:\n  only:\n    cores: null\n")
-            findings = cf.check_targets(_Path(tmp), _Path(tmp), {}, 1, True)
+            findings = check_targets(_Path(tmp), _Path(tmp), {}, 1, True)
         solo = [f for f in findings if f.subject == "solo"]
-        self.assertEqual([(f.status, f.detail) for f in solo], [(cf.OK, "every declared core")])
+        self.assertEqual([(f.status, f.detail) for f in solo], [(OK, "every declared core")])
 
     def test_a_scraped_target_offline_is_skipped_not_ok(self):
         """Offline, scraped target lists were labelled static and counted OK
@@ -685,7 +732,7 @@ class RepositoryWiringTests(unittest.TestCase):
         import tempfile
         from pathlib import Path as _Path
 
-        scraped = sorted(cf._target_scrapers())
+        scraped = sorted(_target_scrapers())
         self.assertTrue(scraped)
         platform = scraped[0]
         with tempfile.TemporaryDirectory() as tmp:
@@ -694,21 +741,21 @@ class RepositoryWiringTests(unittest.TestCase):
             (targets / f"{platform}.yml").write_text(
                 f"platform: {platform}\nscraped_at: '2025-01-01'\n"
                 "targets:\n  one:\n    cores: []\n")
-            findings = cf.check_targets(_Path(tmp), _Path(tmp), {}, 1, True)
+            findings = check_targets(_Path(tmp), _Path(tmp), {}, 1, True)
         row = [f for f in findings if f.subject == platform]
-        self.assertEqual([(f.status, f.detail) for f in row], [(cf.SKIPPED, "offline")])
+        self.assertEqual([(f.status, f.detail) for f in row], [(SKIPPED, "offline")])
 
     def test_romm_emulatorjs_pin_is_read_from_its_dockerfile(self):
         """emulatorjs.yml is no registered platform: a RomM image moving to
         another EmulatorJS changed the cores its users run, unnoticed."""
         text = "FROM x\nARG EMULATORJS_VERSION=4.2.3\nARG EMULATORJS_SHA256=ab\n"
-        self.assertEqual(cf.emulatorjs_pin(text), "4.2.3")
-        self.assertIsNone(cf.emulatorjs_pin("FROM x\n"))
+        self.assertEqual(emulatorjs_pin(text), "4.2.3")
+        self.assertIsNone(emulatorjs_pin("FROM x\n"))
 
     def test_render_keeps_long_values_whole(self):
         """The profile_sync row lost the end of its sentence at 32 characters."""
         local = "12 profiles behind upstream, 103 refs to re-read"
-        text = cf.render([cf.Finding("profiles", "profile_sync", cf.STALE, local=local,
+        text = render([Finding("profiles", "profile_sync", STALE, local=local,
                                      remote="run profile_sync --all --triage")])
         self.assertIn(local, text)
         self.assertIn("run profile_sync --all --triage", text)
@@ -716,7 +763,7 @@ class RepositoryWiringTests(unittest.TestCase):
 
 class RepeatedDestinations(unittest.TestCase):
     def test_a_change_to_an_earlier_declaration_is_seen(self):
-        from check_freshness import diff_platform
+        from freshness.platformdiff import diff_platform
 
         def platform(first_md5: str) -> dict:
             return {"systems": {"pce": {"files": [
@@ -730,7 +777,7 @@ class RepeatedDestinations(unittest.TestCase):
 
 class PinsWithExtras(unittest.TestCase):
     def test_an_extras_bracket_keeps_its_pin(self):
-        from check_freshness import parse_pip_pins
+        from freshness.ci import parse_pip_pins
 
         pins = parse_pip_pins('  run: pip install pyyaml "jsonschema[format-nongpl]==4.26.0"')
         self.assertEqual(pins["jsonschema"], "==4.26.0")
@@ -742,9 +789,9 @@ class AStaticTargetStillNamesItsCores(unittest.TestCase):
     before reading the names, and its 50 unprofiled emulators never showed."""
 
     def test_declared_names_are_checked(self):
-        names = cf._declared_cores("retrobat")
+        names = _declared_cores("retrobat")
         self.assertIn("winuae", names)
-        source = Path(cf.__file__).read_text()
+        source = (SCRIPTS / "freshness" / "targets.py").read_text(encoding="utf-8")
         static = source.index('detail="every declared core"')
         self.assertLess(static, source.index("_declared_cores(platform)"))
 
@@ -764,11 +811,11 @@ class TheBuildbotIndexIsRead(unittest.TestCase):
             {"zip": "Old.zip", "status": "OK", "key": "old"},
         ]}
         with mock.patch.object(buildbot_system, "check", lambda registry: report):
-            finding = cf._check_buildbot_system()
-        self.assertEqual(finding.status, cf.STALE)
+            finding = _check_buildbot_system()
+        self.assertEqual(finding.status, STALE)
         self.assertIn("new New.zip", finding.detail)
         with mock.patch.object(buildbot_system, "check", lambda registry: {"error": "x", "entries": []}):
-            self.assertEqual(cf._check_buildbot_system().status, cf.UNKNOWN)
+            self.assertEqual(_check_buildbot_system().status, UNKNOWN)
         self.assertEqual([e["zip"] for e in buildbot_system.pending(report)], ["New.zip"])
 
 
@@ -778,15 +825,15 @@ class RowsSayAllTheyStandFor(unittest.TestCase):
     RetroPie cores without a profile were cut to 12, in --json too."""
 
     def test_no_arrow_without_a_remote_value(self):
-        text = cf.render([
-            cf.Finding("native", "emudeck", "OK", local="1 file(s)"),
+        text = render([
+            Finding("native", "emudeck", "OK", local="1 file(s)"),
         ])
         self.assertNotIn("->", text)
 
     def test_a_detail_starts_in_one_column(self):
-        text = cf.render([
-            cf.Finding("native", "amberelec", cf.STALE, detail="no longer matches"),
-            cf.Finding("native", "bizhawk", cf.STALE, local="1 file(s)", detail="is not what"),
+        text = render([
+            Finding("native", "amberelec", STALE, detail="no longer matches"),
+            Finding("native", "bizhawk", STALE, local="1 file(s)", detail="is not what"),
         ])
         rows = [line for line in text.splitlines() if line.startswith("  STALE")]
         self.assertEqual(rows[0].index("no longer"), rows[1].index("is not what"))
@@ -794,11 +841,11 @@ class RowsSayAllTheyStandFor(unittest.TestCase):
     def test_a_remote_value_keeps_the_detail_column(self):
         """A row with a remote value pushed its detail past the column the
         rows without one used, in [coreinfo] by some fifteen characters."""
-        text = cf.render([
-            cf.Finding("coreinfo", "anybor", cf.STALE, detail="no profile claims"),
-            cf.Finding("coreinfo", "amiberry", cf.STALE, local="e5d1f0f9a143",
+        text = render([
+            Finding("coreinfo", "anybor", STALE, detail="no profile claims"),
+            Finding("coreinfo", "amiberry", STALE, local="e5d1f0f9a143",
                        remote="ae545d85c06f", detail=".info changed"),
-            cf.Finding("coreinfo", "x", cf.STALE, local="abc", remote="d", detail="third"),
+            Finding("coreinfo", "x", STALE, local="abc", remote="d", detail="third"),
         ])
         rows = [line for line in text.splitlines() if line.startswith("  STALE")]
         columns = {row.index(word) for row, word in zip(rows, ("no profile", ".info", "third"))}
@@ -806,14 +853,13 @@ class RowsSayAllTheyStandFor(unittest.TestCase):
 
     def test_json_carries_every_unresolved_name(self):
         missing = {f"core{i:02d}": [] for i in range(50)}
-        (row,) = cf._unresolved_findings("retropie", missing)
+        (row,) = _unresolved_findings("retropie", missing)
         self.assertEqual(len(row.items), 50)
         self.assertIn("--json lists all 50", row.detail)
 
 
 class AReleasePageMakesAProfileStale(unittest.TestCase):
     def test_a_newer_announced_version_is_stale(self):
-        import check_freshness
 
         rows = [
             {"name": "altirra", "skipped": "unsupported host: x",
@@ -821,14 +867,13 @@ class AReleasePageMakesAProfileStale(unittest.TestCase):
             {"name": "mednafen", "skipped": "unsupported host: y",
              "declared_version": "1.32.1", "page_version": "1.32.1"},
         ]
-        found = {f.subject: f.status for f in check_freshness.summarize_profile_sync(rows)}
-        self.assertEqual(found["altirra"], check_freshness.STALE)
-        self.assertEqual(found["mednafen"], check_freshness.OK)
+        found = {f.subject: f.status for f in summarize_profile_sync(rows)}
+        self.assertEqual(found["altirra"], STALE)
+        self.assertEqual(found["mednafen"], OK)
 
     def test_a_release_with_no_genuine_copy_waits_for_the_next(self):
         """FPse 13.0 exists only as rebuilt copies: the profile stays on 12.1
         and flagging it on every run said nothing new. 13.1 would."""
-        import check_freshness
 
         rows = [
             {"name": "fpse", "skipped": "unsupported host: x", "declared_version": "12.1",
@@ -836,10 +881,10 @@ class AReleasePageMakesAProfileStale(unittest.TestCase):
             {"name": "later", "skipped": "unsupported host: x", "declared_version": "12.1",
              "page_version": "13.1", "no_genuine_copy": "13.0"},
         ]
-        found = {f.subject: f for f in check_freshness.summarize_profile_sync(rows)}
-        self.assertEqual(found["fpse"].status, check_freshness.OK)
+        found = {f.subject: f for f in summarize_profile_sync(rows)}
+        self.assertEqual(found["fpse"].status, OK)
         self.assertIn("no genuine copy", found["fpse"].detail)
-        self.assertEqual(found["later"].status, check_freshness.STALE)
+        self.assertEqual(found["later"].status, STALE)
 
     def test_no_genuine_copy_is_never_the_profiled_version(self):
         """The field names a release the profile could not read."""

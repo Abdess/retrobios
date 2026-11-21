@@ -15,7 +15,9 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-import check_freshness as cf
+from core import upstream
+from freshness.findings import OK, SKIPPED, STALE
+from freshness.pinbuilds import build_variable, check_pin_builds, pin_build_revision
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -40,8 +42,8 @@ class HeldPinsReadTheirBuildFileAgain(unittest.TestCase):
     def _check(self, lines=None, offline=False):
         profiles = {"mame0278": {"pin_frozen": "Recalbox builds it.", "pin_build": [self.REF]},
                     "raine": {"pin_frozen": "RetroBat installs this release."}}
-        with mock.patch.object(cf.upstream, "fetch_file", return_value=lines) as fetched:
-            findings = cf.check_pin_builds(profiles, self.platforms, "cache", offline)
+        with mock.patch.object(upstream, "fetch_file", return_value=lines) as fetched:
+            findings = check_pin_builds(profiles, self.platforms, "cache", offline)
         return {f.subject: f for f in findings}, fetched
 
     def test_the_variable_forms_the_platforms_write(self):
@@ -56,13 +58,13 @@ class HeldPinsReadTheirBuildFileAgain(unittest.TestCase):
         ]
         for lines, variable, expected in cases:
             with self.subTest(variable=variable):
-                self.assertEqual(cf.build_variable(lines, variable), expected)
+                self.assertEqual(build_variable(lines, variable), expected)
 
     def test_the_platform_read_at_the_same_revision_needs_no_network(self):
         self._platform("10.1.1")
         found, fetched = self._check()
         fetched.assert_not_called()
-        self.assertEqual(found["mame0278 (recalbox)"].status, cf.OK)
+        self.assertEqual(found["mame0278 (recalbox)"].status, OK)
 
     def test_a_new_revision_building_another_commit_is_stale(self):
         self._platform("10.2")
@@ -70,18 +72,18 @@ class HeldPinsReadTheirBuildFileAgain(unittest.TestCase):
         self.assertEqual(fetched.call_args.args[1:3],
                          ("10.2", "package/libretro-mame0278/libretro-mame0278.mk"))
         row = found["mame0278 (recalbox)"]
-        self.assertEqual(row.status, cf.STALE)
+        self.assertEqual(row.status, STALE)
         self.assertIn("now builds " + "b" * 40, row.detail)
 
     def test_a_new_revision_building_the_same_commit_is_ok(self):
         self._platform("10.2")
         found, _ = self._check([f"LIBRETRO_MAME0278_VERSION = {'a' * 40}"])
-        self.assertEqual(found["mame0278 (recalbox)"].status, cf.OK)
+        self.assertEqual(found["mame0278 (recalbox)"].status, OK)
 
     def test_a_build_file_gone_is_stale(self):
         self._platform("10.2")
         found, _ = self._check(None)
-        self.assertEqual(found["mame0278 (recalbox)"].status, cf.STALE)
+        self.assertEqual(found["mame0278 (recalbox)"].status, STALE)
         self.assertIn("is gone", found["mame0278 (recalbox)"].detail)
 
     def test_a_file_of_a_submodule_is_read_at_its_gitlink(self):
@@ -101,24 +103,24 @@ class HeldPinsReadTheirBuildFileAgain(unittest.TestCase):
             return None
 
         profiles = {"amiberry": {"pin_frozen": "x", "pin_build": [ref]}}
-        with mock.patch.object(cf.upstream, "fetch_file", side_effect=fetch), \
-                mock.patch.object(cf.upstream, "list_gitlinks", return_value={"batocera": "c" * 40}):
-            (row,) = cf.check_pin_builds(profiles, self.platforms, "cache", False)
-        self.assertEqual(row.status, cf.OK, row.detail)
+        with mock.patch.object(upstream, "fetch_file", side_effect=fetch), \
+                mock.patch.object(upstream, "list_gitlinks", return_value={"batocera": "c" * 40}):
+            (row,) = check_pin_builds(profiles, self.platforms, "cache", False)
+        self.assertEqual(row.status, OK, row.detail)
 
     def test_offline_and_uncached_is_skipped(self):
         self._platform("10.2")
         profiles = {"mame0278": {"pin_frozen": "x", "pin_build": [self.REF]}}
-        cold = cf.upstream.NotCachedError("not cached")
-        with mock.patch.object(cf.upstream, "fetch_file", side_effect=cold):
-            (row,) = cf.check_pin_builds(profiles, self.platforms, "cache", True)
-        self.assertEqual(row.status, cf.SKIPPED)
+        cold = upstream.NotCachedError("not cached")
+        with mock.patch.object(upstream, "fetch_file", side_effect=cold):
+            (row,) = check_pin_builds(profiles, self.platforms, "cache", True)
+        self.assertEqual(row.status, SKIPPED)
 
     def test_a_hold_with_no_build_file_is_counted(self):
         self._platform("10.1.1")
         found, _ = self._check()
         row = found["pin_frozen without pin_build"]
-        self.assertEqual(row.status, cf.SKIPPED)
+        self.assertEqual(row.status, SKIPPED)
         self.assertEqual(row.items, ["raine"])
 
 
@@ -166,7 +168,7 @@ class EveryBuildReferenceNamesThePin(unittest.TestCase):
                 f"{name}: {reference['platform']} is not read from "
                 f"{reference['repo']}"
                 for reference in references
-                if not cf.pin_build_revision(reference, REPO_ROOT / "platforms")
+                if not pin_build_revision(reference, REPO_ROOT / "platforms")
             )
         self.assertEqual(disagree, [])
 
