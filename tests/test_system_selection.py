@@ -475,24 +475,19 @@ class VerifyReportsTheRequiredOnlyPack(unittest.TestCase):
         self.addCleanup(os.chdir, previous)
 
     def test_the_report_holds_the_paths_the_pack_holds(self):
-        import contextlib
-        import io
-
         from packs.emulatorcheck import verify_emulator
 
         db = load_database("database.json")
         for name in ("beetle_psx", "dolphin", "fbneo", "geolith", "mame"):
             with self.subTest(emulator=name):
                 record = archive.PackRecord()
-                with contextlib.redirect_stdout(io.StringIO()), \
-                        contextlib.redirect_stderr(io.StringIO()):
-                    emulatorpack.generate_emulator_pack(
-                        [name], "emulators", db, "bios", "", offline=True,
-                        platforms_dir="platforms", record=record, required_only=True,
-                    )
-                    report = verify_emulator([name], "emulators", db,
-                                             platforms_dir="platforms", required_only=True)
-                    full = verify_emulator([name], "emulators", db, platforms_dir="platforms")
+                emulatorpack.build_emulator_pack(
+                    [name], "emulators", db, "bios", "", offline=True,
+                    platforms_dir="platforms", record=record, required_only=True,
+                )
+                report = verify_emulator([name], "emulators", db,
+                                         platforms_dir="platforms", required_only=True)
+                full = verify_emulator([name], "emulators", db, platforms_dir="platforms")
                 self.assertEqual(sorted(report["pack_destinations"]), sorted(record.files))
                 self.assertLessEqual(set(report["pack_destinations"]),
                                      set(full["pack_destinations"]))

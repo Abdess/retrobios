@@ -194,10 +194,10 @@ class EveryNarrowingIsCompared(unittest.TestCase):
 
         from orchestrate import emulatorpacks
         from packs.naming import pack_narrowings
-        from packs.emulatorpack import generate_emulator_pack
+        from packs.emulatorpack import build_emulator_pack
 
         taken = (set(inspect.signature(pack_narrowings).parameters)
-                 & set(inspect.signature(generate_emulator_pack).parameters))
+                 & set(inspect.signature(build_emulator_pack).parameters))
         self.assertEqual(taken, set(emulatorpacks.EMULATOR_NARROWINGS_COMPARED))
         profile = {"files": [{"name": "a.bin", "region": "japan"},
                              {"name": "b.bin", "region": ["north-america", "europe"]}]}

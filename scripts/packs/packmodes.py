@@ -19,7 +19,13 @@ from model.cliargs import (
 from model.database import load_database
 from model.registry import load_data_dir_registry
 from packs.datadirs import hold_data_dirs
-from packs.emulatorpack import generate_emulator_pack, generate_system_pack
+from packs.datatrees import MISSING_DATA_DIRS
+from packs.emulatorpack import (
+    EmulatorPackOutcome,
+    build_emulator_pack,
+    build_system_pack,
+    print_emulator_pack,
+)
 from packs.md5pack import generate_md5_pack
 from packs.outputdir import holds_other_kind, pack_output_lock
 from packs.packcheck import run_verify_packs
@@ -113,7 +119,7 @@ def _run_profile_mode(args: argparse.Namespace, db: dict, zip_contents: dict) ->
     if args.emulator:
         names = comma_list(args.emulator)
         with pack_output_lock(args.output_dir):
-            built = generate_emulator_pack(
+            outcome = build_emulator_pack(
                 names,
                 args.emulators_dir,
                 db,
@@ -125,15 +131,15 @@ def _run_profile_mode(args: argparse.Namespace, db: dict, zip_contents: dict) ->
                 regions=getattr(args, "regions", None),
                 offline=args.offline,
                 platforms_dir=args.platforms_dir,
+                progress=print,
             )
-        if built is None:
-            sys.exit(1)
+        _account(outcome)
         return
 
     # System mode (standalone, without platform context)
     system_ids = comma_list(args.system)
     with pack_output_lock(args.output_dir):
-        built = generate_system_pack(
+        outcome = build_system_pack(
             system_ids,
             args.emulators_dir,
             db,
@@ -145,7 +151,15 @@ def _run_profile_mode(args: argparse.Namespace, db: dict, zip_contents: dict) ->
             regions=getattr(args, "regions", None),
             offline=args.offline,
             platforms_dir=args.platforms_dir,
+            progress=print,
         )
+    _account(outcome)
+
+
+def _account(outcome: EmulatorPackOutcome) -> None:
+    """Print a profile pack, add its data directory notices to the run, stop on failure."""
+    built = print_emulator_pack(outcome)
+    MISSING_DATA_DIRS.update(outcome.data_dir_notices)
     if built is None:
         sys.exit(1)
 

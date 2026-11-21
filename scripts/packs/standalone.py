@@ -2,14 +2,12 @@
 
 from __future__ import annotations
 
-import contextlib
-import io
 import re
 from pathlib import PurePosixPath
 
 from core.paths import REPO_ROOT
 from packs.archive import PackRecord
-from packs.emulatorpack import generate_emulator_pack
+from packs.emulatorpack import build_emulator_pack
 from packs.manifestentry import manifest_entry
 
 
@@ -223,13 +221,11 @@ def standalone_layouts(
         if "standalone" not in str(profile.get("type", "")):
             continue
         record = PackRecord()
-        with contextlib.redirect_stdout(io.StringIO()), \
-                contextlib.redirect_stderr(io.StringIO()):
-            generate_emulator_pack(
-                [name], emulators_dir, db, bios_dir, "", standalone=True,
-                zip_contents=zip_contents, offline=offline,
-                platforms_dir=platforms_dir, record=record,
-            )
+        build_emulator_pack(
+            [name], emulators_dir, db, bios_dir, "", standalone=True,
+            zip_contents=zip_contents, offline=offline,
+            platforms_dir=platforms_dir, record=record,
+        )
         items: list = []
         for member in record.files:
             entry, _size = manifest_entry(

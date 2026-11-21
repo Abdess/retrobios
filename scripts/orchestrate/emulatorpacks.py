@@ -74,7 +74,7 @@ def check_emulator_packs(
         # lacks the same way, missing, as the narrowed-pack step does.
         with packresolve.offline(), contextlib.redirect_stdout(io.StringIO()), \
                 contextlib.redirect_stderr(io.StringIO()):
-            emulatorpack.generate_emulator_pack(
+            emulatorpack.build_emulator_pack(
                 names, emulators_dir, db, "bios", "", standalone,
                 zip_contents=zip_contents, offline=True, platforms_dir=platforms_dir,
                 record=record, **narrowing,

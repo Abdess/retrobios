@@ -36,7 +36,7 @@ from packs.archive import (
     write_generated_member,
     writing_pack,
 )
-from packs.datatrees import MISSING_DATA_DIRS, pack_data_tree
+from packs.datatrees import pack_data_tree
 from packs.extras import emulator_region_drops, emulator_required_spares, expand_agnostic_entries
 from packs.naming import (
     MAX_PACK_NAME_BYTES, bounded_join, file_name_part, pack_narrowings, system_display_name,
@@ -76,6 +76,7 @@ class EmulatorPackOptions(TypedDict, total=False):
     system_ids: list[str] | None
     final_dir: str | None
     record: PackRecord | None
+    progress: Callable[[str], None] | None
 
 
 @dataclass
@@ -95,6 +96,7 @@ class _EmulatorPackBuild:
     offline: bool | None = None
     system_ids: list[str] | None = None
     record: PackRecord | None = None
+    progress: Callable[[str], None] = lambda _line: None
     total_files: int = 0
     data_files: int = 0
     missing_files: list[str] = field(default_factory=list)
@@ -143,7 +145,7 @@ class _EmulatorPackBuild:
                 fe for fe in files if entry_serves_systems(fe, profile, self.system_ids)
             ]
         if not files and not profile.get("data_directories"):
-            print(f"  No files needed for {profile.get('emulator', emu_name)}")
+            self.progress(f"  No files needed for {profile.get('emulator', emu_name)}")
 
         # What each destination came to, settled by set once the
         # profile is read: a member another member fills is not missing,
@@ -412,37 +414,79 @@ class _EmulatorPackBuild:
             or self.unsourceable_files
         )
 
-    def report(self, shown: str) -> None:
-        # Report. The members of data trees are counted apart: verify --emulator
-        # counts the profile's files, and folding 3500 tree members into the
-        # same number made the two impossible to compare.
-        parts = [f"{self.total_files} files packed"]
-        if self.data_files:
-            parts.append(f"{self.data_files} from data directories")
-        if self.missing_files:
-            parts.append(f"{len(self.missing_files)} missing")
-        if self.rejected_files:
-            parts.append(f"{len(self.rejected_files)} refused by the core")
-        if self.unsourceable_files:
-            parts.append(f"{len(self.unsourceable_files)} unsourceable")
-        if self.instruction_files:
-            parts.append(f"{len(self.instruction_files)} to provide")
-        print(f"  {shown}: {', '.join(parts)}")
-        for name in self.missing_files:
-            print(f"  MISSING: {name}")
-        for name in self.unsourceable_files:
-            print(f"  UNSOURCEABLE: {name}")
-        for name in self.instruction_files:
-            print(f"  TO PROVIDE: {name} (instructions in the pack)")
-        for line in self.rejected_files:
-            print(f"  REFUSED: {line}")
-        for line in self.discrepancies:
-            print(f"  DISCREPANCY: {line}")
-        for ref in sorted(set(self.data_dir_notices)):
-            print(
-                f"  Note: data directory '{ref}' required but not included (use refresh_data_dirs.py)"
-            )
-        MISSING_DATA_DIRS.update(self.data_dir_notices)
+    def outcome(self, path: str | None, shown: str, display_names: list[str]) -> EmulatorPackOutcome:
+        return EmulatorPackOutcome(
+            path=path, shown=shown, display_names=display_names,
+            total_files=self.total_files, data_files=self.data_files,
+            missing=self.missing_files, rejected=self.rejected_files,
+            unsourceable=self.unsourceable_files, to_provide=self.instruction_files,
+            discrepancies=self.discrepancies,
+            data_dir_notices=sorted(set(self.data_dir_notices)),
+        )
+
+
+@dataclass
+class EmulatorPackOutcome:
+    """What an emulator pack build came to: its archive and what it left out.
+
+    `path` is the archive, "" when no file is needed, None on failure.
+    """
+
+    path: str | None
+    shown: str = ""
+    display_names: list[str] = field(default_factory=list)
+    total_files: int = 0
+    data_files: int = 0
+    missing: list[str] = field(default_factory=list)
+    rejected: list[str] = field(default_factory=list)
+    unsourceable: list[str] = field(default_factory=list)
+    to_provide: list[str] = field(default_factory=list)
+    discrepancies: list[str] = field(default_factory=list)
+    data_dir_notices: list[str] = field(default_factory=list)
+    error: str = ""
+
+
+def print_emulator_pack(outcome: EmulatorPackOutcome) -> str | None:
+    """Print what a build came to, and return its archive path."""
+    if outcome.error:
+        print(outcome.error, file=sys.stderr)
+        return outcome.path
+    if outcome.path == "":
+        # What verify --emulator reports as 0/0 OK: no file is needed, so
+        # no pack is written and the run succeeds. Printed with the path,
+        # the run named a file it had just removed and exited 1.
+        print(f"  {', '.join(outcome.display_names)}: no file needed, no pack written")
+        return ""
+    # The members of data trees are counted apart: verify --emulator
+    # counts the profile's files, and folding 3500 tree members into the
+    # same number made the two impossible to compare.
+    parts = [f"{outcome.total_files} files packed"]
+    if outcome.data_files:
+        parts.append(f"{outcome.data_files} from data directories")
+    if outcome.missing:
+        parts.append(f"{len(outcome.missing)} missing")
+    if outcome.rejected:
+        parts.append(f"{len(outcome.rejected)} refused by the core")
+    if outcome.unsourceable:
+        parts.append(f"{len(outcome.unsourceable)} unsourceable")
+    if outcome.to_provide:
+        parts.append(f"{len(outcome.to_provide)} to provide")
+    print(f"  {outcome.shown}: {', '.join(parts)}")
+    for name in outcome.missing:
+        print(f"  MISSING: {name}")
+    for name in outcome.unsourceable:
+        print(f"  UNSOURCEABLE: {name}")
+    for name in outcome.to_provide:
+        print(f"  TO PROVIDE: {name} (instructions in the pack)")
+    for line in outcome.rejected:
+        print(f"  REFUSED: {line}")
+    for line in outcome.discrepancies:
+        print(f"  DISCREPANCY: {line}")
+    for ref in outcome.data_dir_notices:
+        print(
+            f"  Note: data directory '{ref}' required but not included (use refresh_data_dirs.py)"
+        )
+    return outcome.path
 
 
 def generate_emulator_pack(
@@ -457,10 +501,32 @@ def generate_emulator_pack(
     regions: list[str] | None = None,
     **options: Unpack[EmulatorPackOptions],
 ) -> str | None:
-    """Generate a ZIP pack for specific emulator profiles.
+    """build_emulator_pack, printed: the path, "" when no file is needed,
+    None on failure."""
+    reject_unknown("generate_emulator_pack", options, EmulatorPackOptions.__optional_keys__)
+    said: EmulatorPackOptions = {"progress": print, **options}
+    return print_emulator_pack(build_emulator_pack(
+        profile_names, emulators_dir, db, bios_dir, output_dir, standalone,
+        required_only=required_only, regions=regions, **said,
+    ))
 
-    Returns the path, "" when no file is needed (verify --emulator reports
-    0/0 OK), None on failure.
+
+def build_emulator_pack(
+    profile_names: list[str],
+    emulators_dir: str,
+    db: dict,
+    bios_dir: str,
+    output_dir: str,
+    standalone: bool = False,
+    *,
+    required_only: bool = False,
+    regions: list[str] | None = None,
+    **options: Unpack[EmulatorPackOptions],
+) -> EmulatorPackOutcome:
+    """Build a ZIP pack for specific emulator profiles, printing nothing.
+
+    The outcome's path is the archive, "" when no file is needed (verify
+    --emulator reports 0/0 OK), None on failure.
 
     `pack_name` is the caller's own file name: the system pack names its
     archive after the system, and joining 23 SNES emulator names went past
@@ -468,9 +534,10 @@ def generate_emulator_pack(
     of those systems, as a platform pack narrows core extras. `final_dir`
     is where the caller moves the archive, the path the report names.
     `record` builds the pack in memory instead (PackRecord): nothing is
-    written or read, and the paths are kept on it.
+    written or read, and the paths are kept on it. `progress` receives the
+    lines said while the profiles are read.
     """
-    reject_unknown("generate_emulator_pack", options, EmulatorPackOptions.__optional_keys__)
+    reject_unknown("build_emulator_pack", options, EmulatorPackOptions.__optional_keys__)
     all_profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
     zip_contents = options.get("zip_contents")
     if zip_contents is None:
@@ -479,8 +546,7 @@ def generate_emulator_pack(
     try:
         selected = select_emulator_profiles(profile_names, all_profiles, standalone)
     except ProfileSelectionError as exc:
-        print(f"Error: {exc}", file=sys.stderr)
-        return None
+        return EmulatorPackOutcome(None, error=f"Error: {exc}")
 
     record = options.get("record")
     # ZIP naming
@@ -522,6 +588,7 @@ def generate_emulator_pack(
             db, bios_dir, standalone, required_only, zip_contents, data_registry,
             validation_index, region_drops, all_profiles, zf,
             offline=options.get("offline"), system_ids=options.get("system_ids"), record=record,
+            progress=options.get("progress") or (lambda _line: None),
         )
         for emu_name, profile in sorted(selected):
             build.pack_profile(emu_name, profile)
@@ -529,15 +596,14 @@ def generate_emulator_pack(
     # Remove empty ZIP (no files packed and no missing = nothing to ship)
     if record is None and build.nothing_needed():
         os.unlink(zip_path)
-        # What verify --emulator reports as 0/0 OK: no file is needed, so
-        # no pack is written and the run succeeds. Printed with the path,
-        # the run named a file it had just removed and exited 1.
-        print(f"  {', '.join(display_names)}: no file needed, no pack written")
-        return ""
+        return build.outcome("", "", display_names)
 
     final_dir = options.get("final_dir")
-    build.report(os.path.join(final_dir, zip_name) if final_dir else zip_path)
-    return None if build.nothing_needed() else zip_path
+    return build.outcome(
+        None if build.nothing_needed() else zip_path,
+        os.path.join(final_dir, zip_name) if final_dir else zip_path,
+        display_names,
+    )
 
 
 class SystemPackOptions(TypedDict, total=False):
@@ -547,6 +613,7 @@ class SystemPackOptions(TypedDict, total=False):
     regions: list[str] | None
     offline: bool | None
     platforms_dir: str | None
+    progress: Callable[[str], None] | None
 
 
 def generate_system_pack(
@@ -559,11 +626,30 @@ def generate_system_pack(
     zip_contents: dict | None = None,
     **options: Unpack[SystemPackOptions],
 ) -> str | None:
-    """Generate a ZIP pack for all emulators supporting given system IDs.
-
-    Returns the path, "" when no file is needed, None on failure.
-    """
+    """build_system_pack, printed: the path, "" when no file is needed,
+    None on failure."""
     reject_unknown("generate_system_pack", options, SystemPackOptions.__optional_keys__)
+    said: SystemPackOptions = {"progress": print, **options}
+    return print_emulator_pack(build_system_pack(
+        system_ids, emulators_dir, db, bios_dir, output_dir, standalone, zip_contents, **said,
+    ))
+
+
+def build_system_pack(
+    system_ids: list[str],
+    emulators_dir: str,
+    db: dict,
+    bios_dir: str,
+    output_dir: str,
+    standalone: bool = False,
+    zip_contents: dict | None = None,
+    **options: Unpack[SystemPackOptions],
+) -> EmulatorPackOutcome:
+    """Build a ZIP pack for all emulators supporting given system IDs, printing nothing.
+
+    The outcome's path is the archive, "" when no file is needed, None on failure.
+    """
+    reject_unknown("build_system_pack", options, SystemPackOptions.__optional_keys__)
     required_only = options.get("required_only", False)
     regions = options.get("regions")
     offline = options.get("offline")
@@ -572,8 +658,9 @@ def generate_system_pack(
     matching = profiles_for_systems(profiles, system_ids, standalone)
 
     if not matching:
-        print(no_profile_for_systems(profiles, system_ids, standalone), file=sys.stderr)
-        return None
+        return EmulatorPackOutcome(
+            None, error=no_profile_for_systems(profiles, system_ids, standalone)
+        )
 
     # Named like the platform's --system tag: one spelling of a system is
     # one file name, and one selection.
@@ -597,7 +684,7 @@ def generate_system_pack(
     final_name = f"{sys_display}_System{tags}{PACK_SUFFIX}"
     scratch = tempfile.mkdtemp(prefix=".system-", dir=output_dir)
     try:
-        result = generate_emulator_pack(
+        outcome = build_emulator_pack(
             matching,
             emulators_dir,
             db,
@@ -612,12 +699,14 @@ def generate_system_pack(
             pack_name=final_name,
             system_ids=system_ids,
             final_dir=output_dir,
+            progress=options.get("progress"),
         )
-        if not result:
-            return result
+        if not outcome.path:
+            return outcome
         new_path = os.path.join(output_dir, final_name)
-        os.replace(result, new_path)
-        return new_path
+        os.replace(outcome.path, new_path)
+        outcome.path = new_path
+        return outcome
     finally:
         shutil.rmtree(scratch, ignore_errors=True)
 
