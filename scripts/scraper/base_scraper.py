@@ -535,7 +535,7 @@ def fetch_branch_head(repo: str, branch: str | None = None) -> str:
     return sha
 
 
-class _PlatformDumper(yaml.SafeDumper):
+class PlatformDumper(yaml.SafeDumper):
     """Quote scalars that a YAML reader could misparse.
 
     Names such as "7800 BIOS (E).rom" or "Bandai - WonderSwan: x" are plain
@@ -557,7 +557,7 @@ def _quoted_str(dumper: yaml.SafeDumper, data: str) -> yaml.ScalarNode:
     return dumper.represent_scalar("tag:yaml.org,2002:str", data, style=style)
 
 
-_PlatformDumper.add_representer(str, _quoted_str)
+PlatformDumper.add_representer(str, _quoted_str)
 
 
 def exit_on_scrape_error(error: Exception) -> NoReturn:
@@ -655,7 +655,7 @@ def _write_output(
     # Written whole or not at all: a reader in the middle of a streamed
     # dump parsed a valid platform with a fraction of its systems.
     write_text_atomic(output_path, yaml.dump(
-        config, Dumper=_PlatformDumper,
+        config, Dumper=PlatformDumper,
         default_flow_style=False, allow_unicode=True, sort_keys=False,
     ))
     print(f"Written {len(reqs)} entries to {output}")

@@ -20,11 +20,15 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
+import yaml
+
 if (_SCRIPTS_DIR := str(Path(__file__).resolve().parents[2])) not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 
 from core import upstream
 from model.sources import source_yaml_file
+
+from ..base_scraper import PlatformDumper
 
 CACHE_DIR = upstream.CACHE_DIR
 
@@ -201,3 +205,10 @@ def scrape_setup(setup: str, spec: dict, fetcher: Fetcher) -> dict:
     doc = {"setup": setup, **{k: spec[k] for k in SETUP_KEYS[1:-1] if k in spec}}
     doc["folders"] = [folders[k] for k in sorted(folders, key=lambda f: (f.lower(), f))]
     return doc
+
+
+def dump_setup(doc: dict) -> str:
+    """The bytes of platforms/romfolders/<setup>.yml for a setup document."""
+    return yaml.dump(
+        doc, Dumper=PlatformDumper, sort_keys=False, allow_unicode=True, width=100
+    )

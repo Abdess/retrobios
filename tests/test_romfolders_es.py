@@ -19,11 +19,11 @@ from model.romfolders import setup_paths, source_refs, split_refs
 from scraper.romfolders import (
     Fetcher,
     SourceError,
+    dump_setup,
     load_formats,
     load_sources,
     scrape_setup,
 )
-from scraper.romfolders.__main__ import dump_setup
 from scraper.retropie_modules import module_enabled
 
 ROOT = Path(__file__).resolve().parent.parent

@@ -1274,10 +1274,10 @@ class PlatformFileHasNoAnchors(unittest.TestCase):
         the platform file read back the same, but held &id001 and *id001."""
         import yaml
 
-        from scraper.base_scraper import _PlatformDumper
+        from scraper.base_scraper import PlatformDumper
 
         names = ["kick34005.A500", "amiga-os-130.rom"]
-        text = yaml.dump([{"names": names}, {"names": names}], Dumper=_PlatformDumper)
+        text = yaml.dump([{"names": names}, {"names": names}], Dumper=PlatformDumper)
         self.assertNotIn("&id", text)
         self.assertNotIn("*id", text)
         self.assertEqual(yaml.safe_load(text), [{"names": names}, {"names": names}])

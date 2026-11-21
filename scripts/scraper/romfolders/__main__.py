@@ -11,20 +11,11 @@ import argparse
 import sys
 from pathlib import Path
 
-import yaml
-
-from . import Fetcher, SourceError, load_sources, scrape_setup
+from . import Fetcher, SourceError, dump_setup, load_sources, scrape_setup
 from core.upstream import UpstreamError
-from core.artifacts import write_text_atomic
-from ..base_scraper import _PlatformDumper
+from core.artifacts import write_if_changed
 
 DEFAULT_DIR = Path("platforms") / "romfolders"
-
-
-def dump_setup(doc: dict) -> str:
-    return yaml.dump(
-        doc, Dumper=_PlatformDumper, sort_keys=False, allow_unicode=True, width=100
-    )
 
 
 def main() -> int:
@@ -64,10 +55,7 @@ def main() -> int:
         print(f"{setup}: {len(doc['folders'])} folders")
         if not args.dry_run:
             args.output_dir.mkdir(parents=True, exist_ok=True)
-            target = args.output_dir / f"{setup}.yml"
-            text = dump_setup(doc)
-            if not target.exists() or target.read_text(encoding="utf-8") != text:
-                write_text_atomic(str(target), text)
+            write_if_changed(str(args.output_dir / f"{setup}.yml"), dump_setup(doc))
     return 1 if failed else 0
 
 
