@@ -11,7 +11,7 @@ import tempfile
 from collections.abc import Callable, Iterable
 from pathlib import Path
 
-from core.paths import REPO_ROOT
+from core.paths import DB_FILE, REPO_ROOT
 from model.profiles import entry_system_ids
 from core_probe import BUILTIN
 from probes.content import Content, load_content, load_file
@@ -211,7 +211,7 @@ def pack_files(emulator: str, region: str, work: Path) -> dict[str, Path]:
 def local_resolver() -> Callable[[dict], Path | None]:
     from model.database import load_database
 
-    db = load_database(str(REPO_ROOT / "database.json"))
+    db = load_database(str(REPO_ROOT / DB_FILE))
     return lambda entry: held_file(entry, db, REPO_ROOT)
 
 

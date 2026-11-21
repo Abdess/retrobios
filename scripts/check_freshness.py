@@ -75,7 +75,7 @@ from resolve.reconcile import build_native_model
 from scripts.scraper import game_dat_importer
 from scripts.scraper.redump_dat_scraper import fetch_snapshot
 from scripts.scraper.targets import discover_target_scrapers
-from core.paths import REPO_ROOT
+from core.paths import REPO_ROOT, TRUTH_DIR
 
 CORE_INFO_REPO = "https://github.com/libretro/libretro-core-info"
 # The git blob of every .info as last reviewed: `--record-coreinfo` writes it.
@@ -1840,7 +1840,7 @@ def main() -> int:
         help="where the platforms' own files are cached (default: %(default)s)",
     )
     parser.add_argument(
-        "--truth-dir", default="dist/truth",
+        "--truth-dir", default=TRUTH_DIR,
         help="directory of the truth models generate_truth writes (default: "
              "%(default)s)",
     )

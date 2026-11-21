@@ -63,7 +63,9 @@ def platform_arg(value: str) -> str:
 
 
 def require_platform(name: str, platforms_dir: str = PLATFORMS_DIR) -> None:
-    """Exit with a usable message when no platform answers to a name.
+    """Exit with a usable message when no registered platform answers to a
+    name. A file under platforms/ is not enough: _shared, _registry and the
+    emulatorjs base config passed and reported 0/0 present.
 
     A typo used to end in a traceback (verify, cross_reference) or in "no
     pack for batocra" after the whole build ran (generate_pack).
@@ -75,16 +77,35 @@ def require_platform(name: str, platforms_dir: str = PLATFORMS_DIR) -> None:
             f"ERROR: --platform takes one platform, not '{name}'. "
             "Run once per platform, or use --all."
         )
-    if os.path.exists(os.path.join(platforms_dir, f"{name}.yml")):
+    if not os.path.exists(os.path.join(platforms_dir, "_registry.yml")):
+        # A fixture directory without a registry names its platforms by file.
+        if os.path.exists(os.path.join(platforms_dir, f"{name}.yml")):
+            return
+        raise SystemExit(f"ERROR: unknown platform '{name}' in {platforms_dir}")
+    known = list_registered_platforms(platforms_dir)
+    if name in known:
         return
     import difflib
 
-    known = list_registered_platforms(platforms_dir)
     close = difflib.get_close_matches(name, known, n=1)
     hint = f" Close match: '{close[0]}'." if close else ""
     raise SystemExit(
         f"ERROR: unknown platform '{name}'.{hint}\nKnown platforms: {', '.join(known)}"
     )
+
+
+def selected_platforms(
+    args: argparse.Namespace, parser: argparse.ArgumentParser | None = None
+) -> list[str]:
+    """The platforms --all or --platform names, every one registered."""
+    if args.all:
+        return list_registered_platforms(args.platforms_dir)
+    if args.platform:
+        require_platform(args.platform, args.platforms_dir)
+        return [args.platform]
+    if parser is not None:
+        parser.error("Specify --platform or --all")
+    raise SystemExit("ERROR: specify --platform or --all")
 
 
 def list_emulator_profiles(emulators_dir: str, skip_aliases: bool = True) -> None:

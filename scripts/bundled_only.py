@@ -18,6 +18,7 @@ import argparse
 import json
 from pathlib import Path
 
+from core.cli import add_repo_inputs
 from core.hashing import compute_hashes
 from core.sizes import size_text
 from resolve.directories import expand_directory_entries
@@ -110,9 +111,7 @@ def other_copies(rows: list[dict], bios_dir: Path) -> list[dict]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__.splitlines()[0])
-    parser.add_argument("--db", default="database.json", help="database to read (default: %(default)s)")
-    parser.add_argument("--emulators-dir", default="emulators", help="profiles (default: %(default)s)")
-    parser.add_argument("--platforms-dir", default="platforms", help="platform lists (default: %(default)s)")
+    add_repo_inputs(parser, "db", "emulators", "platforms")
     parser.add_argument("--install-dir", default="install", type=Path,
                         help="install manifests, whose files are shipped (default: %(default)s)")
     parser.add_argument("--json", action="store_true", help="print the list as JSON")

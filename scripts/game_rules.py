@@ -19,6 +19,7 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
+from core.cli import add_repo_inputs
 from model.profiles import load_emulator_profiles
 from model.region import REGIONS, normalize_declared
 from model.safeparse import yaml_load
@@ -243,8 +244,7 @@ def main() -> int:
                         help=f"extra-file rules to check (default {EXTRAS_FILE})")
     parser.add_argument("--headers", type=Path, default=HEADERS_FILE,
                         help=f"header readers the triggers name (default {HEADERS_FILE})")
-    parser.add_argument("--emulators-dir", default="emulators",
-                        help="profiles the rules are checked against (default emulators)")
+    add_repo_inputs(parser, "emulators")
     parser.add_argument("--json", action="store_true", help="print the summary as JSON")
     args = parser.parse_args()
     from model.cliargs import work_from_repo_root

@@ -44,6 +44,7 @@ from model.cliargs import (
     platform_arg,
     work_from_repo_root,
     require_platform,
+    selected_platforms,
     list_platform_system_ids,
     list_emulator_profiles,
     list_system_ids,
@@ -53,7 +54,7 @@ from model.systems import resolve_system_arg
 from model.profiles import (
     load_emulator_profiles,
 )
-from model.registry import list_registered_platforms, load_data_dir_registry
+from model.registry import load_data_dir_registry
 from resolve.grouping import group_identical_platforms
 from model.database import load_database
 from model.platforms import load_platform_config
@@ -364,13 +365,7 @@ def _run_platform_mode(
     requested_regions: list[str],
     platform_systems: list[str] | None,
 ) -> None:
-    if args.all:
-        platforms = list_registered_platforms(args.platforms_dir)
-    elif args.platform:
-        platforms = [args.platform]
-    else:
-        parser.error("Specify --platform or --all")
-        return
+    platforms = selected_platforms(args, parser)
 
     # Load emulator profiles once for cross-reference (not per-platform)
     emu_profiles = load_emulator_profiles(args.emulators_dir)

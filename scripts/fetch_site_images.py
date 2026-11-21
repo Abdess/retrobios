@@ -33,7 +33,7 @@ import urllib.parse
 from pathlib import Path
 
 from model.registry import load_platform_registry
-from core.paths import PLATFORMS_DIR, REPO_ROOT
+from core.paths import DB_FILE, PLATFORMS_DIR, REPO_ROOT
 from scraper.base_scraper import FetchError, fetch_bytes
 
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
@@ -199,7 +199,7 @@ def fetch_icons() -> None:
     from model.collection import group_by_manufacturer
     from sitegen.render import SYSTEM_ICON_BASE, console_icon_name
 
-    db = load_database(str(REPO_ROOT / "database.json"))
+    db = load_database(str(REPO_ROOT / DB_FILE))
     names = sorted({
         console_icon_name(manufacturer, console)
         for manufacturer, consoles in group_by_manufacturer(db).items()

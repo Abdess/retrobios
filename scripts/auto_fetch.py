@@ -21,9 +21,8 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from model.cliargs import platform_arg, require_platform
+from model.cliargs import platform_arg, selected_platforms
 from core.cli import add_repo_inputs, require_directory
-from model.registry import list_registered_platforms
 from model.database import load_database, load_optional_database
 from model.platforms import load_platform_config
 from model.safeparse import require_yaml
@@ -59,16 +58,7 @@ def main() -> None:
 
     db = load_database(args.db)
 
-    if args.all:
-        platforms = list_registered_platforms(
-            args.platforms_dir,
-        )
-    elif args.platform:
-        require_platform(args.platform, args.platforms_dir)
-        platforms = [args.platform]
-    else:
-        parser.error("Specify --platform or --all")
-        return
+    platforms = selected_platforms(args, parser)
 
     all_still_missing = {}
 

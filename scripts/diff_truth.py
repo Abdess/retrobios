@@ -10,6 +10,7 @@ Usage:
 
 from __future__ import annotations
 
+from core.paths import TRUTH_DIR
 import argparse
 import json
 import os
@@ -17,8 +18,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 from core.cli import add_repo_inputs
-from model.cliargs import platform_arg, require_platform
-from model.registry import list_registered_platforms
+from model.cliargs import platform_arg, selected_platforms
 from model.platforms import load_platform_config, native_layer
 from model.safeparse import require_yaml, yaml_load
 from model.targets import truth_target_dir
@@ -203,7 +203,7 @@ def main() -> None:
         help="same as --format markdown, the spelling validate_pr uses",
     )
     parser.add_argument(
-        "--truth-dir", default="dist/truth",
+        "--truth-dir", default=TRUTH_DIR,
         help="directory of the truth models generate_truth writes (default: "
              "%(default)s)",
     )
@@ -215,13 +215,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    if args.all:
-        platforms = list_registered_platforms(
-            args.platforms_dir
-        )
-    else:
-        require_platform(args.platform, args.platforms_dir)
-        platforms = [args.platform]
+    platforms = selected_platforms(args)
 
     reports: list[dict] = []
     formatter = _format_markdown if args.format == "markdown" else _format_terminal

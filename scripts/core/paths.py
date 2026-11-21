@@ -15,6 +15,8 @@ DB_FILE = "database.json"
 PLATFORMS_DIR = "platforms"
 EMULATORS_DIR = "emulators"
 BIOS_DIR = "bios"
+# Where generate_truth writes its models and diff_truth and export_native read them.
+TRUTH_DIR = "dist/truth"
 
 
 def sanitize_pack_path(raw: str) -> str:

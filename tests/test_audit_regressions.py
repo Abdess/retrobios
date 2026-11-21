@@ -607,6 +607,16 @@ class OnePlatformPerFlag(unittest.TestCase):
             require_platform("batocra", str(ROOT / "platforms"))
         self.assertIn("batocera", str(caught.exception))
 
+    def test_a_file_that_is_no_platform_is_refused(self):
+        """_shared and the emulatorjs base config are YAML files under
+        platforms/, not platforms: verify --platform _shared reported 0/0."""
+        from model.cliargs import require_platform
+
+        for name in ("_shared", "_registry", "emulatorjs"):
+            with self.subTest(name=name), self.assertRaises(SystemExit) as caught:
+                require_platform(name, str(ROOT / "platforms"))
+            self.assertIn("unknown platform", str(caught.exception))
+
 
 class APackIsSwappedInWhole(unittest.TestCase):
     """Packs were opened on their final name: a rebuild truncated the good

@@ -8,14 +8,15 @@ Usage:
 
 from __future__ import annotations
 
+from core.paths import TRUTH_DIR
 import argparse
 import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 from model.targets import target_scope, truth_target_dir
-from model.cliargs import platform_arg, require_platform
-from model.registry import list_registered_platforms, load_data_dir_registry, load_platform_registry
+from model.cliargs import platform_arg, selected_platforms
+from model.registry import load_data_dir_registry, load_platform_registry
 from model.database import load_optional_database
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
@@ -26,7 +27,7 @@ from resolve.truth import generate_platform_truth
 
 yaml = require_yaml()
 
-DEFAULT_OUTPUT_DIR = "dist/truth"
+DEFAULT_OUTPUT_DIR = TRUTH_DIR
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -63,13 +64,7 @@ def main(argv: list[str] | None = None) -> None:
 
     db = load_optional_database(args.db)
 
-    if args.all:
-        platforms = list_registered_platforms(
-            args.platforms_dir,
-        )
-    else:
-        require_platform(args.platform, args.platforms_dir)
-        platforms = [args.platform]
+    platforms = selected_platforms(args)
 
     # A named platform without that target is refused, as verify and
     # generate_pack refuse it: skipped, it printed Done. and exited 0 with

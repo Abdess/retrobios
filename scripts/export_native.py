@@ -15,6 +15,7 @@ Usage:
 
 from __future__ import annotations
 
+from core.paths import TRUTH_DIR
 import argparse
 import sys
 from pathlib import Path
@@ -22,8 +23,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from core.cli import add_repo_inputs
-from model.cliargs import platform_arg, require_platform
-from model.registry import list_registered_platforms, load_data_dir_registry, load_platform_registry
+from model.cliargs import platform_arg, selected_platforms
+from model.registry import load_data_dir_registry, load_platform_registry
 from exporter import discover_exporters
 from exporter.native import export_platform, refresh_cache
 from exporter.originals import DEFAULT_CACHE
@@ -100,7 +101,7 @@ def main() -> None:
         help="directory the updated platform files go to (default: %(default)s)",
     )
     parser.add_argument(
-        "--truth-dir", default="dist/truth",
+        "--truth-dir", default=TRUTH_DIR,
         help="directory of the truth models generate_truth writes (default: "
              "%(default)s)",
     )
@@ -123,13 +124,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    if args.all:
-        platforms = list_registered_platforms(
-            args.platforms_dir,
-        )
-    else:
-        require_platform(args.platform, args.platforms_dir)
-        platforms = [args.platform]
+    platforms = selected_platforms(args)
 
     if not args.refresh_cache:
         import contextlib

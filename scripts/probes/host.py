@@ -19,7 +19,7 @@ from typing import IO, TYPE_CHECKING, TypedDict
 from unattended import worktree
 import core_probe
 from core import childenv, hostguard
-from core.paths import REPO_ROOT
+from core.paths import DB_FILE, REPO_ROOT
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack
@@ -177,7 +177,7 @@ class Paths:
     def default(cls) -> Paths:
         main = worktree.main_checkout()
         return cls(root=REPO_ROOT, home=main / ".cache" / "campaign",
-                   content=main / ".cache" / "test-content", db=REPO_ROOT / "database.json")
+                   content=main / ".cache" / "test-content", db=REPO_ROOT / DB_FILE)
 
 
 ROMFETCH_PASSED = ("XDG_CONFIG_HOME", "XDG_CACHE_HOME", "XDG_DATA_HOME")

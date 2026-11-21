@@ -21,6 +21,7 @@ Usage:
 
 from __future__ import annotations
 
+from core.paths import PLATFORMS_DIR
 import argparse
 import json
 import subprocess
@@ -57,7 +58,7 @@ def main() -> int:
         f"the release must be these files (default: the list attached to the release)",
     )
     parser.add_argument(
-        "--platforms-dir", default="platforms",
+        "--platforms-dir", default=PLATFORMS_DIR,
         help="registry whose release_pack platforms each need a pack (default: %(default)s)",
     )
     parser.add_argument("--json", action="store_true", help="JSON output")
