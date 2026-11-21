@@ -28,12 +28,16 @@ The repository's own images come from the same shapes, in ``.github/assets/``:
 
 from __future__ import annotations
 
+import argparse
+
 from core.paths import REPO_ROOT
 from sitegen.brand import write_brand
 from sitegen.chromium import require_playwright
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], allow_abbrev=False)
+    parser.parse_args()
     sync_playwright = require_playwright()
     for path in write_brand(sync_playwright):
         print(path.relative_to(REPO_ROOT))

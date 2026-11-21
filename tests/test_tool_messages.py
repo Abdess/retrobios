@@ -1012,5 +1012,21 @@ class CitedCommandsRunWhenPasted(unittest.TestCase):
                       str(caught.exception))
 
 
+class EveryCommandReadsItsArguments(unittest.TestCase):
+    """make_site_icons.py parsed no argument: `--help` launched Chromium and
+    rewrote nine committed images. A command answers its arguments or refuses
+    them, never runs past them."""
+
+    READERS = ("ArgumentParser", "sys.argv", "scraper_cli(", "target_cli(")
+
+    def test_each_entry_point_reads_argv(self):
+        found = [
+            path.name for path in sorted((REPO_ROOT / "scripts").glob("*.py"))
+            if 'if __name__ == "__main__"' in (text := path.read_text(encoding="utf-8"))
+            and not any(reader in text for reader in self.READERS)
+        ]
+        self.assertEqual(found, [])
+
+
 if __name__ == "__main__":
     unittest.main()
