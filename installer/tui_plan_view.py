@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, NamedTuple
 
 from installer.destination import _last_name
 from installer.from_folders import MAX_SCANNED_FILES
-from installer.frontend_folders import _retroarch_config_at, save_where_words
+from installer.frontend_folders import save_where_words
 from installer.install_record import record_changes, record_says
 from installer.manifest import GAME_DATA, OTHER_SYSTEMS
 from installer.offline import LOCAL, _offline_only, offline_named, offline_undo
@@ -285,7 +285,7 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
         _styled(headline, "title"),
         _styled(f"BIOS folder: {_short_path(_plan_folder(state, dest), state.home)}", "path"),
     ]
-    found_in = _retroarch_config_at(dest) if dest is not None else None
+    found_in = state.facts.get("config") if dest is not None else None
     if found_in:
         # Right under the folder it names: after the save lines it read as
         # naming them.

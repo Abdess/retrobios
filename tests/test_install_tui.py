@@ -392,6 +392,7 @@ def fresh_state() -> install.TuiState:
     state = install.TuiState(os_type="linux", home=HOME)
     state.setups = [("retroarch", SYSTEM_DIR, "RetroArch"),
                     ("batocera", Path("/userdata/bios"), "KNULLI (Batocera files)")]
+    state.setup_folders = install.setup_folders(state.setups)
     return state
 
 
@@ -2349,6 +2350,7 @@ class TicksBarAndPaths(unittest.TestCase):
                          ["RetroArch (retroarch/system)", "RetroArch (ra2/system)"])
         state = fresh_state()
         state.setups = setups
+        state.setup_folders = install.setup_folders(setups)
         self.assertIn("RetroArch (Flatpak)", "\n".join(install.tui_view(state, 40, 15)))
         # A Flatpak whose config names a system folder outside its sandbox.
         elsewhere = HOME / "bios"
@@ -3140,7 +3142,8 @@ class CardsSpaceAndConfirm(unittest.TestCase):
         inbox = __import__("queue").Queue()
         with mock.patch.object(install, "_fetch_json", side_effect=error), \
                 mock.patch.dict(os.environ, env or {}):
-            for name in ("HTTPS_PROXY", "https_proxy", "ALL_PROXY", "all_proxy"):
+            for name in ("HTTPS_PROXY", "https_proxy", "ALL_PROXY", "all_proxy",
+                         "NO_PROXY", "no_proxy"):
                 if name not in (env or {}):
                     os.environ.pop(name, None)
             install._tui_fetch("retroarch", inbox)
@@ -3165,6 +3168,26 @@ class CardsSpaceAndConfirm(unittest.TestCase):
         self.assertNotIn("secret", " ".join(lines))
         _title, lines = self.fetch_failure(error)
         self.assertFalse(any("PROXY" in line for line in lines))
+
+    def test_a_proxy_urllib_does_not_use_is_not_named(self):
+        """NO_PROXY sends the host direct, and urllib reads no ALL_PROXY
+        for HTTPS: the screen blamed a proxy the request never went through."""
+        error = urllib_error(ConnectionRefusedError(111, "Connection refused"))
+        for env in ({"HTTPS_PROXY": "http://127.0.0.1:9", "NO_PROXY": "raw.githubusercontent.com"},
+                    {"ALL_PROXY": "http://127.0.0.1:9"}):
+            with self.subTest(env=env):
+                _title, lines = self.fetch_failure(error, env)
+                self.assertFalse(any("proxy" in line.lower() for line in lines), lines)
+
+    def test_a_system_proxy_is_named(self):
+        """A Windows or macOS proxy set in the settings, no variable."""
+        error = urllib_error(ConnectionRefusedError(111, "Connection refused"))
+        with mock.patch.object(install.urllib.request, "getproxies",
+                               return_value={"https": "http://10.0.0.1:3128"}), \
+                mock.patch.object(install.urllib.request, "proxy_bypass", return_value=False):
+            _title, lines = self.fetch_failure(error)
+        self.assertIn("The system settings set a proxy, so the connection goes through "
+                      "it: check that it answers.", lines)
 
     def test_list_that_is_no_json_is_said_in_words(self):
         try:
@@ -3199,9 +3222,26 @@ class CardsSpaceAndConfirm(unittest.TestCase):
     @in_full
     def test_the_plan_says_which_config_named_the_folder(self):
         config = HOME / ".config/retroarch/retroarch.cfg"
-        with mock.patch.dict(install._RETROARCH_CONFIGS, {SYSTEM_DIR: (config, config.parent)}):
-            text = "\n".join(install.tui_view(checked_state(), 80, 24))
+        state = checked_state()
+        with mock.patch.dict(install._RETROARCH_CONFIGS, {state.dest: (config, config.parent)}):
+            state.facts = install._tui_folder_facts(state)
+        # Read with the folder's facts, never by a frame.
+        with mock.patch.object(install, "_retroarch_config_at", side_effect=AssertionError):
+            text = "\n".join(install.tui_view(state, 80, 24))
         self.assertIn("Named by ~/.config/retroarch/retroarch.cfg", text)
+
+    def test_the_setup_screen_probes_no_card_per_frame(self):
+        """The view drew about ten frames a second and asked the card for
+        its games part on each, in the thread that reads the keys."""
+        state = fresh_state()
+        games = Path("/media/x/GAMES")
+        state.setups = [("amberelec", games, "AmberELEC")]
+        with mock.patch.object(install, "games_part", return_value=None):
+            state.setup_folders = install.setup_folders(state.setups)
+        with mock.patch.object(install, "games_part", side_effect=AssertionError):
+            for _frame in range(3):
+                text = "\n".join(install.tui_view(state, 80, 24))
+        self.assertIn(f"BIOS folder: {games}", text)
 
     # The engine's own events (main, after the second audit).
 
@@ -3964,6 +4004,7 @@ class ACardSetupIsOneDesign(unittest.TestCase):
         share = Path("/userdata/bios")
         state = fresh_state()
         state.setups = [("knulli", share, "KNULLI")]
+        state.setup_folders = install.setup_folders(state.setups)
         state.stack = ["setup", "platforms"]
         state.focus["platforms"] = install._platform_focus(state, "knulli")
         with mock.patch.dict(install._DETECTED_OS, {("knulli", share): "KNULLI"}), \
@@ -4648,6 +4689,7 @@ class AFolderThisUserCannotOpen(unittest.TestCase):
     def test_chosen_from_the_setups(self):
         state = fresh_state()
         state.setups = [("retroarch", self.dest, "RetroArch")]
+        state.setup_folders = install.setup_folders(state.setups)
         state.stack = ["setup"]
         self.assertEqual(install.tui_update(state, Key("enter")), [])
         self.assertEqual(state.screen, "folder")
@@ -6278,6 +6320,7 @@ class TheFolderScreenSaysWhatItOffers(unittest.TestCase):
         state = fresh_state()
         found = Path("/home/user/Games/bios")
         state.setups = [("retroarch", found, "RetroArch")]
+        state.setup_folders = install.setup_folders(state.setups)
         state.stack = ["setup", "platforms"]
         install._activate(state, install.TuiRow("platform", "RetroArch", value="retroarch"))
         self.assertEqual(state.folder_default, found)
@@ -8700,6 +8743,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
             setups, _mounted = install.found_setups("linux")
             state = install.TuiState(os_type="linux", home=HOME)
             state.setups = setups
+            state.setup_folders = install.setup_folders(setups)
             for index, (plat, path, label) in enumerate(setups):
                 state.focus["setup"] = index
                 screen = " ".join(install.tui_view(state, 120, 40))
@@ -10623,9 +10667,8 @@ class CardNamesAndHelp(_CardFixtures, unittest.TestCase):
         state = checked_state()
         long_dest = Path("/home/user/" + "a-long-folder-name/" * 5 + "system")
         state.dest = long_dest
-        with mock.patch.object(install, "_retroarch_config_at",
-                               return_value=(HOME / ".config/retroarch/retroarch.cfg", HOME)):
-            lines = [str(line).strip() for line in install.tui_view(state, 80, 30)]
+        state.facts["config"] = (HOME / ".config/retroarch/retroarch.cfg", HOME)
+        lines = [str(line).strip() for line in install.tui_view(state, 80, 30)]
         at = next(index for index, line in enumerate(lines) if line.startswith("BIOS folder:"))
         tail = next(index for index, line in enumerate(lines) if line.startswith("Named by"))
         self.assertNotIn("...", " ".join(lines[at:tail]))
@@ -11650,6 +11693,11 @@ class TapsGameDataAndExitCodes(_CardFixtures, unittest.TestCase):
         self.assertEqual(state.exit_code, 2)
         self.assertTrue(install.tui_quit_chosen(state))
         self.assertEqual(install.tui_farewell(state), ["RetroBIOS: quit. Nothing was installed."])
+        # A returning user's version note follows the quit line: still a
+        # chosen quit, so it goes to stderr where the launcher looks.
+        state.version = "List for RetroArch v2026.11.10, this is v2026.11.01."
+        self.assertTrue(install.tui_quit_chosen(state))
+        self.assertEqual(install.tui_farewell(state)[0], "RetroBIOS: quit. Nothing was installed.")
         idle = fresh_state()
         self.assertEqual(install.tui_idle_code(idle), 2)
 
@@ -11848,9 +11896,8 @@ class TapsGameDataAndExitCodes(_CardFixtures, unittest.TestCase):
         state = checked_state()
         state.dest = self.root / "sys"
         state.cli_systems = ["sony-playstation"]
-        with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}), \
-                mock.patch.object(install, "_retroarch_config_at",
-                                  return_value=(str(cfg / "retroarch.cfg"), cfg)):
+        state.facts["config"] = (str(cfg / "retroarch.cfg"), cfg)
+        with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             lines = [str(line).strip() for line in install.tui_view(state, 120, 40)]
         folder = next(i for i, line in enumerate(lines) if line.startswith("BIOS folder:"))
         named = next(i for i, line in enumerate(lines) if line.startswith("Named by"))

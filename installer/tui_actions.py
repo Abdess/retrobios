@@ -32,6 +32,7 @@ from installer.destination import (
 )
 from installer.detect_os import _DETECTED_OS, _FROM_CARD, detected_os, detected_shown
 from installer.embedded import CARD_PLATFORMS, _a
+from installer.frontend_folders import _retroarch_config_at
 from installer.games import games_probe
 from installer.host_fs import _exists, _folder_writable, _is_dir, _nearest_folder, closed_folder
 from installer.install_record import RECORD_NARROWING, _RECORD_SAID, record_options, setup_record
@@ -748,7 +749,9 @@ def _tui_folder_facts(state: TuiState) -> dict:
         free = None
     cores = (installed_cores(core_dirs(state.platform, dest))
              if state.platform in CORE_PLATFORMS else [])
-    return {"free": free, "writable": _folder_writable(dest), "cores": cores}
+    # The retroarch.cfg that names dest, said under it on the plan.
+    return {"free": free, "writable": _folder_writable(dest), "cores": cores,
+            "config": _retroarch_config_at(dest)}
 
 
 def _row_folder(row: TuiRow) -> Path:

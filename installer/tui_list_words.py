@@ -1,8 +1,6 @@
 """What the full screen says of a file list or board list it could not have."""
 from __future__ import annotations
 
-import os
-
 from installer.lists import ListProblem, manifest_failure_lines, missing_list_advice
 from installer.offline import offline_named, offline_undo
 from installer.platforms import display_name
@@ -38,11 +36,12 @@ def _download_lines(failure: ListProblem) -> tuple[str, list[str]]:
              # A handheld with no Wi-Fi has the pack as its way.
              "Or copy a pack to the card and run the installer with --from-pack "
              "PACK: no network is needed then."]
-    proxy = next((name for name in ("HTTPS_PROXY", "https_proxy", "ALL_PROXY",
-                                    "all_proxy") if os.environ.get(name)), "")
-    if proxy:
-        # Named, never shown: the value can hold a password.
-        lines.append(f"{proxy} is set, so the connection goes through a proxy: "
+    # Named, never shown: the value can hold a password.
+    if failure.proxy == "system settings":
+        lines.append("The system settings set a proxy, so the connection goes through "
+                     "it: check that it answers.")
+    elif failure.proxy:
+        lines.append(f"{failure.proxy} is set, so the connection goes through a proxy: "
                      "check that it answers.")
     return "No connection", lines
 

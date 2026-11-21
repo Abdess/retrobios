@@ -6,7 +6,7 @@ import textwrap
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 
-from installer.cards import _GAMES_PART_CARDS, card_setup, setup_bios_folder
+from installer.cards import _GAMES_PART_CARDS, card_setup
 from installer.destination import card_where
 from installer.detect_os import detected_shown
 from installer.embedded import CARD_PLATFORMS, _a
@@ -113,8 +113,10 @@ def _aligned_devices(rows: list[TuiRow], width: int) -> list[TuiRow]:
 def _view_setup(state: TuiState, width: int, height: int) -> tuple:
     rows = tui_rows(state)
     focus = rows[min(state.focus.get("setup", 0), len(rows) - 1)]
-    after = ([f"BIOS folder: {shown_path(setup_bios_folder(*state.setups[focus.value][:2]))}"]
-             if focus.action == "setup" else [])
+    after = []
+    if focus.action == "setup":
+        plat, path, _label = state.setups[focus.value]
+        after.append(f"BIOS folder: {shown_path(state.setup_folders[plat, path])}")
     before = ["Found on this machine:" if state.setups
               else "A drive here could be either of these:" if state.doubts
               else "Nothing was found here."]

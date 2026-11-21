@@ -11,6 +11,7 @@ import sys
 import threading
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Any
@@ -223,6 +224,24 @@ def install_bounded_opener() -> None:
 
         handlers.append(_BoundedHTTPSHandler)
     urllib.request.install_opener(urllib.request.build_opener(*handlers))
+
+
+def request_proxy(url: str) -> str:
+    """What sends a request for url through a proxy, as urllib's
+    ProxyHandler decides it: the variable naming the proxy for the URL's
+    scheme, "system settings" for one set in the Windows registry or the
+    macOS settings, "" when the request goes direct (none set, or the host
+    bypassed by NO_PROXY or the system's exceptions)."""
+    parts = urllib.parse.urlsplit(url)
+    proxy = urllib.request.getproxies().get(parts.scheme)
+    host = parts.netloc.rpartition("@")[2]
+    if not proxy or (host and urllib.request.proxy_bypass(host)):
+        return ""
+    wanted = f"{parts.scheme}_proxy"
+    # urllib lets the lower-case variable win over the upper-case one.
+    names = sorted((name for name in os.environ if name.lower() == wanted
+                    and os.environ[name] == proxy), key=lambda name: name != wanted)
+    return names[0] if names else "system settings"
 
 
 # The wait for each answer of a file list, its first byte included: a

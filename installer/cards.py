@@ -464,6 +464,12 @@ def setup_bios_folder(plat: str, path: Path) -> Path:
     return path / "bios" if rule is not None and rule.manifest == plat else path
 
 
+def setup_folders(setups: list) -> dict:
+    """The BIOS folder each found setup announces, keyed by (platform,
+    folder), read once for a screen that shows them on every frame."""
+    return {(plat, path): setup_bios_folder(plat, path) for plat, path, *_rest in setups}
+
+
 def card_setup(named: str, plat: str) -> CardSetup | None:
     """The card setup a name stands for with plat's list: a system by its
     own name, or a list that is one (MinUI). RetroArch names a list, not a

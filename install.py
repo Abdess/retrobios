@@ -4512,6 +4512,12 @@ def setup_bios_folder(plat: str, path: Path) -> Path:
     return path / "bios" if rule is not None and rule.manifest == plat else path
 
 
+def setup_folders(setups: list) -> dict:
+    """The BIOS folder each found setup announces, keyed by (platform,
+    folder), read once for a screen that shows them on every frame."""
+    return {(plat, path): setup_bios_folder(plat, path) for plat, path, *_rest in setups}
+
+
 def card_setup(named: str, plat: str) -> CardSetup | None:
     """The card setup a name stands for with plat's list: a system by its
     own name, or a list that is one (MinUI). RetroArch names a list, not a
@@ -7747,6 +7753,24 @@ def install_bounded_opener() -> None:
     urllib.request.install_opener(urllib.request.build_opener(*handlers))
 
 
+def request_proxy(url: str) -> str:
+    """What sends a request for url through a proxy, as urllib's
+    ProxyHandler decides it: the variable naming the proxy for the URL's
+    scheme, "system settings" for one set in the Windows registry or the
+    macOS settings, "" when the request goes direct (none set, or the host
+    bypassed by NO_PROXY or the system's exceptions)."""
+    parts = urllib.parse.urlsplit(url)
+    proxy = urllib.request.getproxies().get(parts.scheme)
+    host = parts.netloc.rpartition("@")[2]
+    if not proxy or (host and urllib.request.proxy_bypass(host)):
+        return ""
+    wanted = f"{parts.scheme}_proxy"
+    # urllib lets the lower-case variable win over the upper-case one.
+    names = sorted((name for name in os.environ if name.lower() == wanted
+                    and os.environ[name] == proxy), key=lambda name: name != wanted)
+    return names[0] if names else "system settings"
+
+
 # The wait for each answer of a file list, its first byte included: a
 # server that takes the connection and never answers (a captive portal, a
 # stuck proxy) held the run 93 s on three waits of 30 s. A list is a few
@@ -8570,6 +8594,8 @@ class ListProblem(NamedTuple):
     clock, no_ca, no_ssl), with words saying it. garbled is an answer that
     is not JSON at all: a Wi-Fi sign-in page or a cut download. fatal is the
     code line mode ends on, 0 when the run carries on without the list.
+    proxy names what sent a network request through a proxy (a variable or
+    the system settings), empty when it went direct.
     """
 
     plat: str
@@ -8582,6 +8608,7 @@ class ListProblem(NamedTuple):
     attempts: int = MAX_RETRIES
     garbled: bool = False
     fatal: int = 1
+    proxy: str = ""
 
     @property
     def overridden(self) -> bool:
@@ -8613,7 +8640,8 @@ def _download_failure(plat: str, url: str, remote: Remote, exc: Exception,
                            status=exc.code, fatal=fatal))
     code, words = network_words(exc)
     return ListFailure(ListProblem(plat, code, words, where=url, remote=remote, fatal=fatal,
-                       attempts=getattr(exc, "attempts", MAX_RETRIES)))
+                       attempts=getattr(exc, "attempts", MAX_RETRIES),
+                       proxy=request_proxy(url)))
 
 
 def missing_list_advice(plat: str, again: str, ref: str) -> str:
@@ -13804,6 +13832,9 @@ class TuiState:
         self.now: float = time.monotonic()
         # (platform, folder, label) for each setup found here.
         self.setups: list = []
+        # The BIOS folder each setup announces, keyed by (platform, folder):
+        # read once when the setups are found, never by a frame.
+        self.setup_folders: dict = {}
         # (platform, card) of each mounted drive whose files fit two systems
         # (share_doubt): offered under each, never taken for one.
         self.doubts: list = []
@@ -26106,11 +26137,12 @@ def _download_lines(failure: ListProblem) -> tuple[str, list[str]]:
              # A handheld with no Wi-Fi has the pack as its way.
              "Or copy a pack to the card and run the installer with --from-pack "
              "PACK: no network is needed then."]
-    proxy = next((name for name in ("HTTPS_PROXY", "https_proxy", "ALL_PROXY",
-                                    "all_proxy") if os.environ.get(name)), "")
-    if proxy:
-        # Named, never shown: the value can hold a password.
-        lines.append(f"{proxy} is set, so the connection goes through a proxy: "
+    # Named, never shown: the value can hold a password.
+    if failure.proxy == "system settings":
+        lines.append("The system settings set a proxy, so the connection goes through "
+                     "it: check that it answers.")
+    elif failure.proxy:
+        lines.append(f"{failure.proxy} is set, so the connection goes through a proxy: "
                      "check that it answers.")
     return "No connection", lines
 
@@ -26607,7 +26639,7 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
         _styled(headline, "title"),
         _styled(f"BIOS folder: {_short_path(_plan_folder(state, dest), state.home)}", "path"),
     ]
-    found_in = _retroarch_config_at(dest) if dest is not None else None
+    found_in = state.facts.get("config") if dest is not None else None
     if found_in:
         # Right under the folder it names: after the save lines it read as
         # naming them.
@@ -27655,8 +27687,10 @@ def _aligned_devices(rows: list[TuiRow], width: int) -> list[TuiRow]:
 def _view_setup(state: TuiState, width: int, height: int) -> tuple:
     rows = tui_rows(state)
     focus = rows[min(state.focus.get("setup", 0), len(rows) - 1)]
-    after = ([f"BIOS folder: {shown_path(setup_bios_folder(*state.setups[focus.value][:2]))}"]
-             if focus.action == "setup" else [])
+    after = []
+    if focus.action == "setup":
+        plat, path, _label = state.setups[focus.value]
+        after.append(f"BIOS folder: {shown_path(state.setup_folders[plat, path])}")
     before = ["Found on this machine:" if state.setups
               else "A drive here could be either of these:" if state.doubts
               else "Nothing was found here."]
@@ -29232,7 +29266,9 @@ def _tui_folder_facts(state: TuiState) -> dict:
         free = None
     cores = (installed_cores(core_dirs(state.platform, dest))
              if state.platform in CORE_PLATFORMS else [])
-    return {"free": free, "writable": _folder_writable(dest), "cores": cores}
+    # The retroarch.cfg that names dest, said under it on the plan.
+    return {"free": free, "writable": _folder_writable(dest), "cores": cores,
+            "config": _retroarch_config_at(dest)}
 
 
 def _row_folder(row: TuiRow) -> Path:
@@ -30887,6 +30923,7 @@ def _tui_detect(state: TuiState, os_type: str) -> None:
     with detection_held():
         state.setups, state.mounted_setups = found_setups(os_type)
         frontends = detect_frontends(os_type)
+    state.setup_folders = setup_folders(state.setups)
     # Said on the normal screen before this one covered it, and kept
     # above the list: a status line under 18 setups was never drawn.
     state.refused = [refused_words(folder, why, _short_path(folder, state.home))
@@ -31205,9 +31242,21 @@ def _closing_lines(state: TuiState) -> list[str]:
                   for line in state.error)]
     if state.exit_code == 0:
         return [f"RetroBIOS: everything is in place in {state.dest}."]
-    if state.quit_asked:
+    if _quit_closing(state):
         return [TUI_QUIT_WORDS]
     return ["RetroBIOS: stopped. Nothing was installed."]
+
+
+def _quit_closing(state: TuiState) -> bool:
+    """Whether the screen closes on the quit the user asked for: no install
+    ran, no result, error or crash to report, and the exit not a success."""
+    if state.screen not in ("result", "details") and state.download is not None:
+        return False
+    if state.screen in ("crashed", "error", "result"):
+        return False
+    if state.screen == "details" and "result" in state.stack:
+        return False
+    return state.exit_code != 0 and state.quit_asked
 
 
 TUI_QUIT_WORDS = "RetroBIOS: quit. Nothing was installed."
@@ -31226,8 +31275,10 @@ def _terminal_words(lines: list[str]) -> list[str]:
 
 
 def tui_quit_chosen(state: TuiState) -> bool:
-    """Whether the screen ended on a quit the user chose, nothing installed."""
-    return tui_farewell(state) == [TUI_QUIT_WORDS]
+    """Whether the screen ended on a quit the user chose, nothing installed:
+    read from the state, so a version note after the quit line changes
+    nothing."""
+    return not state.idle_closed and _quit_closing(state)
 
 
 CTRL_Z_NO_SHELL = ("Ctrl-Z is ignored: no shell started this installer, and none could "

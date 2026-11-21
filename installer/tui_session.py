@@ -19,7 +19,14 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING, TextIO
 
-from installer.cards import _SHARE_FOLDERS, _mounted_cards, card_bound, card_platform, share_doubt
+from installer.cards import (
+    _SHARE_FOLDERS,
+    _mounted_cards,
+    card_bound,
+    card_platform,
+    setup_folders,
+    share_doubt,
+)
 from installer.console import QUIT_CODE
 from installer.destination import card_choice, dest_default
 from installer.detect_frontends import detect_frontends
@@ -139,6 +146,7 @@ def _tui_detect(state: TuiState, os_type: str) -> None:
     with detection_held():
         state.setups, state.mounted_setups = found_setups(os_type)
         frontends = detect_frontends(os_type)
+    state.setup_folders = setup_folders(state.setups)
     # Said on the normal screen before this one covered it, and kept
     # above the list: a status line under 18 setups was never drawn.
     state.refused = [refused_words(folder, why, _short_path(folder, state.home))
@@ -457,9 +465,21 @@ def _closing_lines(state: TuiState) -> list[str]:
                   for line in state.error)]
     if state.exit_code == 0:
         return [f"RetroBIOS: everything is in place in {state.dest}."]
-    if state.quit_asked:
+    if _quit_closing(state):
         return [TUI_QUIT_WORDS]
     return ["RetroBIOS: stopped. Nothing was installed."]
+
+
+def _quit_closing(state: TuiState) -> bool:
+    """Whether the screen closes on the quit the user asked for: no install
+    ran, no result, error or crash to report, and the exit not a success."""
+    if state.screen not in ("result", "details") and state.download is not None:
+        return False
+    if state.screen in ("crashed", "error", "result"):
+        return False
+    if state.screen == "details" and "result" in state.stack:
+        return False
+    return state.exit_code != 0 and state.quit_asked
 
 
 TUI_QUIT_WORDS = "RetroBIOS: quit. Nothing was installed."
@@ -478,8 +498,10 @@ def _terminal_words(lines: list[str]) -> list[str]:
 
 
 def tui_quit_chosen(state: TuiState) -> bool:
-    """Whether the screen ended on a quit the user chose, nothing installed."""
-    return tui_farewell(state) == [TUI_QUIT_WORDS]
+    """Whether the screen ended on a quit the user chose, nothing installed:
+    read from the state, so a version note after the quit line changes
+    nothing."""
+    return not state.idle_closed and _quit_closing(state)
 
 
 CTRL_Z_NO_SHELL = ("Ctrl-Z is ignored: no shell started this installer, and none could "

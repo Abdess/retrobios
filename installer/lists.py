@@ -10,7 +10,7 @@ from typing import NamedTuple
 from installer.events import EVENTS
 from installer.host_fs import _is_file, read_local_json
 from installer.manifest import _check_standalone_layouts, _validate_manifest, _validate_targets
-from installer.network import _address_lines, _fetch_json, network_words
+from installer.network import _address_lines, _fetch_json, network_words, request_proxy
 from installer.offline import LOCAL, _Offline, offline_named, offline_undo, offline_words
 from installer.platforms import TARGET_PLATFORMS, display_name
 from installer.remote import (
@@ -40,6 +40,8 @@ class ListProblem(NamedTuple):
     clock, no_ca, no_ssl), with words saying it. garbled is an answer that
     is not JSON at all: a Wi-Fi sign-in page or a cut download. fatal is the
     code line mode ends on, 0 when the run carries on without the list.
+    proxy names what sent a network request through a proxy (a variable or
+    the system settings), empty when it went direct.
     """
 
     plat: str
@@ -52,6 +54,7 @@ class ListProblem(NamedTuple):
     attempts: int = MAX_RETRIES
     garbled: bool = False
     fatal: int = 1
+    proxy: str = ""
 
     @property
     def overridden(self) -> bool:
@@ -83,7 +86,8 @@ def _download_failure(plat: str, url: str, remote: Remote, exc: Exception,
                            status=exc.code, fatal=fatal))
     code, words = network_words(exc)
     return ListFailure(ListProblem(plat, code, words, where=url, remote=remote, fatal=fatal,
-                       attempts=getattr(exc, "attempts", MAX_RETRIES)))
+                       attempts=getattr(exc, "attempts", MAX_RETRIES),
+                       proxy=request_proxy(url)))
 
 
 def missing_list_advice(plat: str, again: str, ref: str) -> str:

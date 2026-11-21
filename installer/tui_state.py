@@ -84,6 +84,9 @@ class TuiState:
         self.now: float = time.monotonic()
         # (platform, folder, label) for each setup found here.
         self.setups: list = []
+        # The BIOS folder each setup announces, keyed by (platform, folder):
+        # read once when the setups are found, never by a frame.
+        self.setup_folders: dict = {}
         # (platform, card) of each mounted drive whose files fit two systems
         # (share_doubt): offered under each, never taken for one.
         self.doubts: list = []
