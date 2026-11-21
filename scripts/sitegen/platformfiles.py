@@ -11,7 +11,7 @@ import urllib.parse
 from model import siteinputs
 from model.collection import profiles_in, profiles_on_disk
 from model.database import load_database, sha1_at
-from model.profiles import upstream_profile_index
+from model.profiles import is_emulator, upstream_profile_index
 from model.systemnames import system_name
 from sitegen import entries as siteentries, markup
 from sitegen.cards import SHORT_HASH
@@ -76,7 +76,7 @@ def emulator_named_link(key: str, prefix: str = "") -> str:
     profile with no page (an alias, a test) is named only."""
     profile = profiles_on_disk().get(key, {})
     label = escape_tags(str(profile.get("emulator") or key))
-    if profile.get("type") == "alias" or profile.get("role") == "test":
+    if not is_emulator(profile):
         return label
     return f"[{label}]({prefix}emulators/{key}.md)"
 
@@ -589,7 +589,7 @@ def _profiles_with_page(emulators_dir: str) -> frozenset[str]:
     """The profiles the site writes a page for: no alias, no test core."""
     profiles = profiles_in(emulators_dir, skip_aliases=True)
     return frozenset(
-        k for k, v in profiles.items() if v.get("type") != "alias" and v.get("role") != "test"
+        k for k, v in profiles.items() if is_emulator(v)
     )
 
 

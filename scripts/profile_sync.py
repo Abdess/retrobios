@@ -24,7 +24,7 @@ from core import upstream
 from profiling import version_basis
 from model.systems import norm_system_id, system_index
 from core.github import github_token
-from model.profiles import load_emulator_profiles
+from model.profiles import is_emulator, load_emulator_profiles
 from core.cli import add_repo_inputs, suggest_names
 from profiling.bump import DEFAULT_CACHE, write_version
 from profiling.realign import realign_prose
@@ -315,7 +315,7 @@ def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
             # alias and test profiles too, "lists all 553" pointed at 530 lines.
             listed = sorted(
                 name for name, profile in profiles.items()
-                if profile.get("type") != "alias" and profile.get("role") != "test"
+                if is_emulator(profile)
             )
             raise SystemExit(
                 f"ERROR: unknown profile {', '.join(unknown)}. "
@@ -328,7 +328,7 @@ def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
     wanted_system = norm_system_id(args.system) if args.system else None
     selected = {}
     for name, profile in sorted(profiles.items()):
-        if profile.get("type") == "alias" or profile.get("role") == "test":
+        if not is_emulator(profile):
             continue
         if wanted_system and wanted_system not in {
             norm_system_id(str(s)) for s in profile.get("systems") or []

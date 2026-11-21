@@ -6,6 +6,7 @@ import re
 import urllib.parse
 
 from model.systemnames import system_name
+from model.profiles import is_emulator
 from resolve.cores import resolve_platform_cores
 from sitegen import markup
 from sitegen.config import date_line
@@ -262,7 +263,7 @@ def generate_cross_reference(
     ``moved`` collects one page per platform with its core table.
     """
     unique = {
-        k: v for k, v in profiles.items() if v.get("type") != "alias" and v.get("role") != "test"
+        k: v for k, v in profiles.items() if is_emulator(v)
     }
 
     total_cores = len(unique)

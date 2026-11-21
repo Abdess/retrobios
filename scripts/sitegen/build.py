@@ -19,7 +19,7 @@ from model.composition import compute_composition
 from model.database import load_database
 from model.dumpcatalog import load_provenance_snapshots
 from model.guides import HANDHELD_GUIDE
-from model.profiles import load_emulator_profiles
+from model.profiles import is_emulator, load_emulator_profiles
 from model.registry import list_registered_platforms, load_platform_registry
 from model.systemnames import program_names, set_console_sections, system_name
 from packs.crossref import FileConsumers
@@ -379,7 +379,7 @@ def _record_data_trees(profiles: dict) -> None:
     DATA_MEMBERS.update(data_directory_members())
     DATA_REVISIONS.update(data_directory_revisions())
     for key in sorted(profiles):
-        if profiles[key].get("type") == "alias" or profiles[key].get("role") == "test":
+        if not is_emulator(profiles[key]):
             continue
         display = str(profiles[key].get("emulator", key))
         for tree in page_data_directories(key, profiles):
@@ -403,7 +403,7 @@ def _write_emulator_pages(run: _SiteRun) -> None:
     public_profiles = {
         name: profile
         for name, profile in profiles.items()
-        if profile.get("type") != "alias" and profile.get("role") != "test"
+        if is_emulator(profile)
     }
     (run.public / "api" / "v1" / "emulators").mkdir(parents=True, exist_ok=True)
     for name, profile in public_profiles.items():

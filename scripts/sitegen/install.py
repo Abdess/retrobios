@@ -14,6 +14,7 @@ from model import siteinputs
 from model.guides import GUIDES, TERMINALS, install_command
 from model.platforms import load_platform_config
 from model.registry import list_release_pack_platforms
+from model.profiles import reads_own_files
 from resolve.layout import runs_standalone
 from sitegen import markup
 from core.paths import REPO_ROOT
@@ -134,7 +135,7 @@ def emulator_install_route(name: str, profile: dict) -> tuple[str, list[str], tu
     the systems both run on: RetroArch's list names AetherSX2, and the
     command filled RetroArch's system folder, which the app never reads.
     """
-    if profile.get("type") in ("alias", "launcher") or profile.get("role") == "test":
+    if not reads_own_files(profile):
         return "", [], ()
     if not [f for f in profile.get("files") or [] if isinstance(f, dict) and not comes_with_app(f)]:
         return "", [], ()

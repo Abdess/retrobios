@@ -18,6 +18,7 @@ from core.hashing import file_digest
 from model import retired as model_retired
 from model.database import sha1_at
 from model.dumpcatalog import load_provenance_snapshots
+from model.profiles import is_emulator
 from packs.crossref import FileConsumers
 from acquire.provenance import build_report
 from sitegen.apiitems import core_index_items, system_index_items
@@ -268,7 +269,7 @@ def build_emulator_gap_report(
     unique_profiles = {
         k: v
         for k, v in profiles.items()
-        if v.get("type") != "alias" and v.get("role") != "test"
+        if is_emulator(v)
     }
     from resolve.standalone import merged_standalone_set
     from model.declarations import platform_declarations
@@ -399,7 +400,7 @@ def _cross_reference_export_rows(coverages: dict, profiles: dict) -> list[dict]:
     unique = {
         key: value
         for key, value in profiles.items()
-        if value.get("type") != "alias" and value.get("role") != "test"
+        if is_emulator(value)
     }
     rows: list[dict] = []
     for platform_id, coverage in sorted(coverages.items()):

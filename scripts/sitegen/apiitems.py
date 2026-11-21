@@ -8,6 +8,7 @@ from collections.abc import Callable
 from model.collection import group_by_manufacturer, manufacturer_slug
 from model.database import sha1_at
 from model.systemnames import system_name
+from model.profiles import is_emulator
 from sitegen.config import SITE_URL
 from sitegen.lookup import sorted_hash_values, site_path
 from sitegen.render import console_href
@@ -35,7 +36,7 @@ def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
             if sha1:
                 held.setdefault(str(detail.get("system", "")), set()).add(sha1)
     for profile in profiles.values():
-        if profile.get("type") == "alias" or profile.get("role") == "test":
+        if not is_emulator(profile):
             continue
         own = [str(s) for s in profile.get("systems") or []]
         for entry in profile.get("files") or []:
@@ -86,7 +87,7 @@ def _first_file_place(
             return parts[1], site_path(f"systems/{page}.md#sha1-{sha1[:12]}")
     for key in sorted(profiles):
         profile = profiles[key]
-        if profile.get("type") != "alias" and profile.get("role") != "test" and sys_id in (profile.get("systems") or []):
+        if is_emulator(profile) and sys_id in (profile.get("systems") or []):
             return "", site_path(f"emulators/{key}.md")
     return "", None
 
@@ -101,7 +102,7 @@ def core_index_items(profiles: dict) -> list[dict]:
     """
     from model.profiles import preferred_profile, upstream_profile_index
 
-    published = {name for name, p in profiles.items() if p.get("type") != "alias" and p.get("role") != "test"}
+    published = {name for name, p in profiles.items() if is_emulator(p)}
     index = upstream_profile_index(profiles)
     for name, profile in profiles.items():
         target = str(profile.get("alias_of") or "")

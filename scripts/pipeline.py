@@ -79,6 +79,7 @@ from core.artifacts import (
 )
 from core.github import github_token
 from model.registry import load_data_dir_registry
+from model.profiles import reads_own_files
 from packs.datadirs import hold_data_dirs
 from packs.paths import MEDIA_MARKER
 
@@ -647,7 +648,7 @@ def check_emulator_packs(
     systems = sorted({
         norm_system_id(str(sid))
         for profile in profiles.values()
-        if profile.get("type") not in ("launcher", "alias") and profile.get("role") != "test"
+        if reads_own_files(profile)
         for sid in profile.get("systems") or []
     })
     systems_ok = True

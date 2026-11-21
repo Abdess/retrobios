@@ -13,6 +13,7 @@ from pathlib import Path
 from core.sizes import size_text
 from model.collection import manufacturer_slug
 from model.systemnames import system_name
+from model.profiles import reads_own_files
 from packs.crossref import FileConsumers, entry_target, held_copy
 from resolve.cores import resolve_platform_cores
 from sitegen import markup
@@ -844,7 +845,7 @@ def emulator_romset(profile: dict) -> str:
     1.38.1 on MAME 0.289), else the version of a MAME build or of a
     FinalBurn core, whose sets follow its own release.
     """
-    if profile.get("type") in ("alias", "launcher") or profile.get("role") == "test":
+    if not reads_own_files(profile):
         return ""
     emulator = str(profile.get("emulator", ""))
     version = str(profile.get("core_version") or "")

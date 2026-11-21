@@ -43,6 +43,11 @@ def is_emulator(profile: dict) -> bool:
     return profile.get("type") != "alias" and profile.get("role") != "test"
 
 
+def reads_own_files(profile: dict) -> bool:
+    """Whether a profile lists the files its emulator reads and is not a test core."""
+    return lists_files(profile) and profile.get("role") != "test"
+
+
 class ProfileSelectionError(ValueError):
     """A named profile cannot answer for itself."""
 
@@ -59,7 +64,7 @@ def profiles_for_systems(
     wanted = {norm_system_id(sid) for sid in system_ids}
     matching = []
     for name, profile in sorted(profiles.items()):
-        if not lists_files(profile) or profile.get("role") == "test":
+        if not reads_own_files(profile):
             continue
         if standalone and "standalone" not in profile.get("type", "libretro"):
             continue

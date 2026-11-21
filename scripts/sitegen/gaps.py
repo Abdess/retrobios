@@ -8,6 +8,7 @@ import re
 from dataclasses import dataclass
 
 from model.platforms import native_layer
+from model.profiles import is_emulator
 from resolve.cores import resolve_platform_cores
 from resolve.nativemode import check_label
 from sitegen import markup, wanted as sitewanted
@@ -517,7 +518,7 @@ def _emulator_platforms(profiles: dict, coverages: dict) -> dict[str, set[str]]:
     unique_profiles = {
         k: v
         for k, v in profiles.items()
-        if v.get("type") != "alias" and v.get("role") != "test"
+        if is_emulator(v)
     }
     for pname in coverages:
         config = coverages[pname]["config"]

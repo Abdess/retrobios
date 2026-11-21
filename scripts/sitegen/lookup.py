@@ -14,6 +14,7 @@ from model import siteinputs
 from model.collection import manufacturer_slug
 from model.registry import load_versions
 from model.systemnames import system_name
+from model.profiles import is_emulator
 from packs.crossref import FileConsumers
 from sitegen.cards import PROVENANCE_LABELS, emulator_card_anchor, emulator_file_anchors
 from sitegen.config import SITE_URL
@@ -180,7 +181,7 @@ def _data_member_owners(profiles: dict) -> dict[str, str]:
     """
     owners: dict[str, str] = {}
     for name in sorted(profiles):
-        if profiles[name].get("type") == "alias" or profiles[name].get("role") == "test":
+        if not is_emulator(profiles[name]):
             continue
         for tree in page_data_directories(name, profiles):
             owners.setdefault(str(tree.get("ref", "")), name)
@@ -401,7 +402,7 @@ def _emulator_lookup_records(profiles: dict) -> list[dict]:
     """A profile's declared values, each leading to the entry's card."""
     records: list[dict] = []
     for key, profile in sorted(profiles.items()):
-        if profile.get("type") == "alias" or profile.get("role") == "test":
+        if not is_emulator(profile):
             continue
         entries = profile.get("files") or []
         own_systems = [str(s) for s in profile.get("systems") or []]

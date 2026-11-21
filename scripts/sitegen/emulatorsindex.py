@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from model.profiles import unique_emulator_profiles
+from model.profiles import is_emulator, unique_emulator_profiles
 from sitegen.emulatorcards import named_system_link
 
 
@@ -77,7 +77,7 @@ def emulator_initial(display: str) -> str:
 def generate_emulators_index(profiles: dict) -> str:
     unique = {
         k: v for k, v in profiles.items()
-        if v.get("type") != "alias" and v.get("role") != "test"
+        if is_emulator(v)
     }
     aliases = {k: v for k, v in profiles.items() if v.get("type") == "alias"}
 

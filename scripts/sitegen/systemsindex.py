@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from model.collection import SECTION_LABELS, profiles_on_disk, manufacturer_slug
 from model.composition import GAME_DATA_TOPS
+from model.profiles import is_emulator
 from sitegen import starlight as sitestarlight
 from sitegen.render import count_text, console_href
 from sitegen.startwith import section_label
@@ -114,11 +115,11 @@ def folder_emulator(folder: str) -> tuple[str, str]:
     named after, by its profile key or its name, else the folder and "".
     """
     profiles = profiles_on_disk()
-    if folder in profiles and profiles[folder].get("type") != "alias" and profiles[folder].get("role") != "test":
+    if folder in profiles and is_emulator(profiles[folder]):
         return str(profiles[folder].get("emulator") or folder), folder
     for key in sorted(profiles):
         profile = profiles[key]
-        if profile.get("type") == "alias" or profile.get("role") == "test":
+        if not is_emulator(profile):
             continue
         names = {str(profile.get(field) or "").casefold() for field in ("emulator", "display_name")}
         if folder.casefold() in names:

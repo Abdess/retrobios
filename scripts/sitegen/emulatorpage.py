@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from core.hashing import parse_hash_list
 from core.sizes import size_text
 from model.systemnames import system_name
+from model.profiles import is_emulator
 from packs.crossref import FileConsumers
 from sitegen import entries as siteentries, markup, measurements as sitemeasurements
 from sitegen.cards import ROMSET_FAQ, emulator_file_anchors
@@ -500,7 +501,7 @@ def plan_emulator_pages(profiles: dict,
     ``available`` is the test the pages use for a held file."""
     stems = set()
     for name, profile in sorted(profiles.items()):
-        if profile.get("type") == "alias" or profile.get("role") == "test":
+        if not is_emulator(profile):
             continue
         files = profile.get("files") or []
         anchors = emulator_file_anchors(files)
