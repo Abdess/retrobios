@@ -10634,6 +10634,8 @@ class CardNamesAndHelp(_CardFixtures, unittest.TestCase):
         self.assertIn("E:\\", title)
         self.assertNotIn("/mnt/e", title)
 
+    @unittest.skipIf(sys.version_info < BUILDER_FLOOR,
+                     "the installer doc generator needs Python 3.9")
     def test_the_card_marker_table_is_written_from_the_rules(self):
         """The table left out the
         SHARE drives. It is generated: every card rule and SHARE drive file

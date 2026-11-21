@@ -28,8 +28,13 @@ import zipfile
 from pathlib import Path
 
 import install
-from packs import parts as packs_parts
 from tests.test_install_selection import FakeRepository
+
+# The screen tests run under 3.8 and import this module for its payloads. The
+# build scripts stop below 3.9 (core.cli), so their modules load only above
+# that floor.
+if sys.version_info >= (3, 9):
+    from packs import parts as packs_parts
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
