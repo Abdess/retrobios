@@ -3,14 +3,13 @@
 from __future__ import annotations
 
 import os
-import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
 from core.hashing import parse_hash_list
 from core.options import reject_unknown
 from model.platforms import load_platform_config
-from model.profiles import ProfileSelectionError, load_emulator_profiles, select_emulator_profiles
+from model.profiles import load_emulator_profiles, select_emulator_profiles
 from model.releaserecord import PACK_SUFFIX
 from packs.archive import add_pack_member, writing_pack
 from packs.naming import file_name_part, pack_narrowings, selection_digest
@@ -77,9 +76,24 @@ class _Md5Layout:
     context_name: str
 
 
-def _md5_layout(opts: _Md5Settings) -> _Md5Layout | None:
-    """The platform or emulator layout a hash list is packed in, or None
-    when the emulator named is refused."""
+@dataclass
+class Md5PackOutcome:
+    """What a hash-selected pack holds: the archive (None when nothing was
+    packed), the (name, hash) packed and held nowhere, and the hashes the
+    database does not know."""
+
+    requested: int
+    zip_path: str | None = None
+    packed: list[tuple[str, str]] = field(default_factory=list)
+    not_in_repo: list[tuple[str, str]] = field(default_factory=list)
+    not_in_db: list[str] = field(default_factory=list)
+
+
+def _md5_layout(opts: _Md5Settings) -> _Md5Layout:
+    """The platform or emulator layout a hash list is packed in.
+
+    Raises ProfileSelectionError when the emulator named is refused.
+    """
     platform_name = opts.platform_name
     platforms_dir = opts.platforms_dir
     emulator_name = opts.emulator_name
@@ -101,13 +115,9 @@ def _md5_layout(opts: _Md5Settings) -> _Md5Layout | None:
         # The same gate as --emulator, unknown names included: a typo or a
         # buildbot name gave a generic pack in the layout of no emulator. A
         # core with no standalone build has no standalone layout either.
-        try:
-            (_name, profile), = select_emulator_profiles(
-                [emulator_name], profiles, opts.standalone
-            )
-        except ProfileSelectionError as exc:
-            print(f"Error: {exc}", file=sys.stderr)
-            return None
+        (_name, profile), = select_emulator_profiles(
+            [emulator_name], profiles, opts.standalone
+        )
         emu_display = profile.get("emulator", emulator_name)
         for fe in profile.get("files", []):
             plat_file_index.setdefault(fe.get("name", "").lower(), []).append(fe)
@@ -172,22 +182,22 @@ def generate_md5_pack(
     output_dir: str,
     zip_contents: dict | None = None,
     **options: Unpack[Md5PackOptions],
-) -> str | None:
-    """Build a pack from an explicit list of hashes with layout context."""
+) -> Md5PackOutcome:
+    """Build a pack from an explicit list of hashes with layout context.
+
+    Raises ProfileSelectionError when the emulator named is refused.
+    """
     files_db = db.get("files", {})
     if zip_contents is None:
         zip_contents = {}
     reject_unknown("generate_md5_pack", options, Md5PackOptions.__optional_keys__)
     opts = _Md5Settings(**options)
     layout = _md5_layout(opts)
-    if layout is None:
-        return None
     zip_path = os.path.join(output_dir, _md5_pack_name(layout.context_name, hashes, opts))
     os.makedirs(output_dir, exist_ok=True)
 
-    packed: list[tuple[str, str]] = []
-    not_in_repo: list[tuple[str, str]] = []
-    not_in_db: list[str] = []
+    outcome = Md5PackOutcome(len(hashes))
+    packed, not_in_repo, not_in_db = outcome.packed, outcome.not_in_repo, outcome.not_in_db
     seen: set[str] = set()
 
     with writing_pack(zip_path) as zf:
@@ -216,17 +226,9 @@ def generate_md5_pack(
             add_pack_member(zf, local_path, full_dest)
             packed.append((name, hash_val))
 
-    total = len(hashes)
-    print(f"\nPacked {len(packed)}/{total} requested files")
-    for name, h in packed:
-        print(f"  PACKED: {name} ({h[:16]}...)")
-    for name, h in not_in_repo:
-        print(f"  NOT IN REPO: {name} ({h[:16]}...)")
-    for h in not_in_db:
-        print(f"  NOT IN DB: {h}")
-
     if not packed:
         if os.path.exists(zip_path):
             os.unlink(zip_path)
-        return None
-    return zip_path
+    else:
+        outcome.zip_path = zip_path
+    return outcome

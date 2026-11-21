@@ -2871,7 +2871,7 @@ class TestE2E(unittest.TestCase):
                 zip_contents=zip_contents,
                 platform_name="testplat",
                 platforms_dir=plat_dir,
-            )
+            ).zip_path
             self.assertIsNotNone(zip_path)
             with zipfile.ZipFile(zip_path) as zf:
                 names = zf.namelist()
@@ -2896,7 +2896,7 @@ class TestE2E(unittest.TestCase):
                 zip_contents=zip_contents,
                 emulator_name="testplat",
                 emulators_dir=emu_dir,
-            )
+            ).zip_path
             self.assertIsNotNone(emu_zip)
             self.assertNotEqual(os.path.basename(emu_zip), os.path.basename(zip_path))
             self.assertTrue(os.path.exists(zip_path))
@@ -2933,16 +2933,21 @@ class TestE2E(unittest.TestCase):
             os.makedirs(bios_dir)
             buf = io.StringIO()
             with contextlib.redirect_stdout(buf):
-                result = generate_md5_pack(
+                outcome = generate_md5_pack(
                     hashes=[("md5", "md5known" + "0" * 25)],
                     db=db,
                     bios_dir=bios_dir,
                     output_dir=out_dir,
                     zip_contents={},
                 )
-            output = buf.getvalue()
-            self.assertIn("NOT IN REPO", output)
-            self.assertIsNone(result)
+            self.assertEqual(buf.getvalue(), "")
+            self.assertEqual(outcome.not_in_repo, [("missing.bin", "md5known" + "0" * 25)])
+            self.assertEqual((outcome.packed, outcome.not_in_db), ([], []))
+            self.assertIsNone(outcome.zip_path)
+            from packs.packmodes import print_hash_pack
+            with contextlib.redirect_stdout(buf):
+                print_hash_pack(outcome)
+            self.assertIn("NOT IN REPO: missing.bin", buf.getvalue())
 
     def test_144_invalid_split_emulator(self):
         """--split + --emulator is rejected."""

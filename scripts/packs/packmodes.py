@@ -17,6 +17,7 @@ from model.cliargs import (
     work_from_repo_root,
 )
 from model.database import load_database
+from model.profiles import ProfileSelectionError
 from model.registry import load_data_dir_registry
 from packs.datadirs import hold_data_dirs
 from packs.emulatorpack import (
@@ -27,7 +28,7 @@ from packs.emulatorpack import (
 )
 from packs.hashinput import ACCEPTED_HASHES, parse_hash_file, parse_hash_input
 from packs.hashlookup import print_hash_lookup
-from packs.md5pack import generate_md5_pack
+from packs.md5pack import Md5PackOutcome, generate_md5_pack
 from packs.outputdir import holds_other_kind, pack_output_lock
 from packs.packcheck import run_verify_packs
 from packs.packoptions import refuse_for_verify_packs, refuse_unapplied_flags, validate_args
@@ -97,21 +98,37 @@ def _run_hash_mode(args: argparse.Namespace) -> None:
             sys.exit(1)
         return
     zip_contents = build_zip_contents_index(db)
-    with pack_output_lock(args.output_dir):
-        result = generate_md5_pack(
-            hashes=hashes,
-            db=db,
-            bios_dir=args.bios_dir,
-            output_dir=args.output_dir,
-            zip_contents=zip_contents,
-            platform_name=args.platform,
-            platforms_dir=args.platforms_dir,
-            emulator_name=args.emulator,
-            emulators_dir=args.emulators_dir,
-            standalone=getattr(args, "standalone", False),
-        )
-    if not result:
+    try:
+        with pack_output_lock(args.output_dir):
+            outcome = generate_md5_pack(
+                hashes=hashes,
+                db=db,
+                bios_dir=args.bios_dir,
+                output_dir=args.output_dir,
+                zip_contents=zip_contents,
+                platform_name=args.platform,
+                platforms_dir=args.platforms_dir,
+                emulator_name=args.emulator,
+                emulators_dir=args.emulators_dir,
+                standalone=getattr(args, "standalone", False),
+            )
+    except ProfileSelectionError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
         sys.exit(1)
+    print_hash_pack(outcome)
+    if not outcome.zip_path:
+        sys.exit(1)
+
+
+def print_hash_pack(outcome: Md5PackOutcome) -> None:
+    """The lines a hash-selected pack ends on: what went in, what did not."""
+    print(f"\nPacked {len(outcome.packed)}/{outcome.requested} requested files")
+    for name, h in outcome.packed:
+        print(f"  PACKED: {name} ({h[:16]}...)")
+    for name, h in outcome.not_in_repo:
+        print(f"  NOT IN REPO: {name} ({h[:16]}...)")
+    for h in outcome.not_in_db:
+        print(f"  NOT IN DB: {h}")
 
 
 def _run_profile_mode(args: argparse.Namespace, db: dict, zip_contents: dict) -> None:

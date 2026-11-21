@@ -24,7 +24,12 @@ from core.cli import suggest_names
 from model.cliargs import list_system_ids
 from model.database import load_database
 from model.platforms import load_platform_config
-from model.profiles import emulator_profiles_cache, load_emulator_profiles, profiles_for_systems
+from model.profiles import (
+    ProfileSelectionError,
+    emulator_profiles_cache,
+    load_emulator_profiles,
+    profiles_for_systems,
+)
 from packs import archive
 from packs import emulatorpack
 from packs import md5pack
@@ -77,11 +82,12 @@ class StandaloneNeedsAStandaloneBuild(unittest.TestCase):
             emulator_profiles_cache.clear()
             self.addCleanup(emulator_profiles_cache.clear)
             db = {"files": {}, "indexes": {"by_md5": {}, "by_crc32": {}, "by_name": {}}}
-            result = md5pack.generate_md5_pack(
-                [("md5", "d8f1206299c48946e6ec5ef96d014eaa")], db, tmp, tmp,
-                emulator_name="handy", emulators_dir=str(Path(tmp, "emulators")), standalone=True,
-            )
-            self.assertIsNone(result)
+            with self.assertRaisesRegex(ProfileSelectionError, "does not support --standalone"):
+                md5pack.generate_md5_pack(
+                    [("md5", "d8f1206299c48946e6ec5ef96d014eaa")], db, tmp, tmp,
+                    emulator_name="handy", emulators_dir=str(Path(tmp, "emulators")),
+                    standalone=True,
+                )
             self.assertEqual([p for p in os.listdir(tmp) if p.endswith(".zip")], [])
 
 
