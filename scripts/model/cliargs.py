@@ -20,6 +20,7 @@ from model.registry import (
 )
 from model.systems import platform_system_names, resolve_system_arg, system_index
 from core.paths import PLATFORMS_DIR, REPO_ROOT
+from core.text import count_text, series
 
 
 def work_from_repo_root(
@@ -172,6 +173,42 @@ LISTING_FLAGS: dict[str, set[str]] = {
 }
 
 
+def mode_conflicts(
+    args: argparse.Namespace, other_modes: Sequence[tuple[str, bool]] = (),
+) -> list[tuple[bool, str]]:
+    """The mode rules verify.py and generate_pack.py share, each refused
+    combination with its message, in the order they are checked.
+
+    --platform or --all with --system narrows each platform to the system.
+    *other_modes* are the modes a CLI adds (generate_pack's --from-md5),
+    named in the message asking for a mode. Each CLI checks its own flags
+    after these.
+    """
+    has_platform = bool(args.platform)
+    has_all = bool(args.all)
+    has_emulator = bool(args.emulator)
+    has_system = bool(args.system)
+    scoped = has_platform or has_all
+    names = ["--platform", "--all", "--emulator", "--system", *(name for name, _ in other_modes)]
+    return [
+        (has_emulator and (scoped or has_system),
+         "--emulator is mutually exclusive with --platform, --all, and --system"),
+        (has_platform and has_all, "--platform and --all are mutually exclusive"),
+        (not (scoped or has_emulator or has_system or any(on for _, on in other_modes)),
+         f"Specify {series(names, 'or')}"),
+        (bool(args.standalone) and scoped,
+         "--standalone is incompatible with --platform and --all"),
+        (bool(args.standalone) and not (has_emulator or has_system),
+         "--standalone requires --emulator or --system"),
+        (bool(getattr(args, "target", None)) and not scoped,
+         "--target requires --platform or --all"),
+        # Game data is categorized against a platform's list and the cores it
+        # runs: a run over one emulator or a system's emulators has neither.
+        (bool(getattr(args, "no_game_data", False)) and not scoped,
+         "--no-game-data requires --platform or --all"),
+    ]
+
+
 def refuse_beside_mode(
     modes: Sequence[tuple[str, object]],
     given: set[str],
@@ -236,7 +273,7 @@ def list_system_ids(emulators_dir: str) -> None:
     index = system_index(load_emulator_profiles(emulators_dir))
     for _key, (spelling, emulators) in sorted(index.items(), key=lambda kv: kv[1][0]):
         count = len(emulators)
-        print(f"  {spelling:35s} ({count} emulator{'s' if count > 1 else ''})")
+        print(f"  {spelling:35s} ({count_text(count, 'emulator')})")
 
 
 def print_platform_listing(platforms_dir: str) -> None:
@@ -262,6 +299,6 @@ def list_platform_system_ids(platform_name: str, platforms_dir: str) -> None:
         file_count = len(systems[sys_id].get("files", []))
         mfr = systems[sys_id].get("manufacturer", "")
         mfr_display = f"  [{mfr.split('|')[0]}]" if mfr else ""
-        count = f"({file_count} file{'s' if file_count != 1 else ''})"
+        count = f"({count_text(file_count, 'file')})"
         also = f"  also: {', '.join(names[sys_id])}" if sys_id in names else ""
         print(f"  {sys_id:35s} {count:12s}{mfr_display}{also}".rstrip())

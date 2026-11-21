@@ -36,6 +36,7 @@ from model.profiles import (
 from model.cliargs import (
     LISTING_FLAGS,
     comma_list,
+    mode_conflicts,
     platform_arg,
     refuse_beside_mode,
     requested_regions,
@@ -54,6 +55,7 @@ from core.artifacts import (
     ArtifactLockBusy,
 )
 from core.ziptools import build_zip_contents_index
+from core.text import count_text
 from resolve.cores import (
     platforms_with_systems,
     without_profile_blind,
@@ -190,8 +192,6 @@ def _argument_conflicts(args: argparse.Namespace) -> list[tuple[bool, str]]:
     # seen: compared with "full", `--emulator X --source full` went through.
     source_given = getattr(args, "source", None) is not None
     with_platform = has_system and (has_platform or has_all)
-    # Game data is categorized against a platform's list and the cores it
-    # runs: a pack of one emulator or of a system's emulators has neither.
     no_game_data = getattr(args, "no_game_data", False)
     one_per_slot = getattr(args, "one_per_slot", False)
     return [
@@ -199,21 +199,10 @@ def _argument_conflicts(args: argparse.Namespace) -> list[tuple[bool, str]]:
         (has_from_md5 and has_all, "--from-md5 requires --platform or --emulator, not --all"),
         (has_from_md5 and has_system, "--from-md5 and --system are mutually exclusive"),
         (has_from_md5 and args.split, "--split and --from-md5 are mutually exclusive"),
-        # --platform/--all and --system can combine (system filters within platform)
-        # --emulator is exclusive with everything else
-        (has_emulator and (has_platform or has_all or has_system),
-         "--emulator is mutually exclusive with --platform, --all, and --system"),
-        (has_platform and has_all, "--platform and --all are mutually exclusive"),
-        (not (has_platform or has_all or has_emulator or has_system or has_from_md5),
-         "Specify --platform, --all, --emulator, --system, or --from-md5"),
-        (args.standalone and not (
-            has_emulator or (has_system and not has_platform and not has_all)
-        ), "--standalone requires --emulator or --system (without --platform)"),
+        *mode_conflicts(args, (("--from-md5", has_from_md5),)),
         (args.split and not (has_platform or has_all), "--split requires --platform or --all"),
         (args.split and has_emulator, "--split is incompatible with --emulator"),
         (args.group_by is not None and not args.split, "--group-by requires --split"),
-        (args.target and not (has_platform or has_all), "--target requires --platform or --all"),
-        (args.target and has_emulator, "--target is incompatible with --emulator"),
         (args.manifest and not (has_platform or has_all),
          "--manifest requires --platform or --all"),
         (args.manifest and has_emulator, "--manifest is incompatible with --emulator"),
@@ -228,8 +217,6 @@ def _argument_conflicts(args: argparse.Namespace) -> list[tuple[bool, str]]:
         (has_from_md5 and source_given, "--source is incompatible with --from-md5"),
         (with_platform and args.manifest, "--system is incompatible with --manifest"),
         (with_platform and args.split, "--system is incompatible with --split"),
-        (no_game_data and not (has_platform or has_all),
-         "--no-game-data requires --platform or --all"),
         (no_game_data and has_from_md5, "--no-game-data is incompatible with --from-md5"),
         (one_per_slot and has_from_md5, "--one-per-slot and --from-md5 are mutually exclusive"),
         (one_per_slot and args.manifest, "--one-per-slot is incompatible with --manifest"),
@@ -516,7 +503,7 @@ def _verification_summary(failing: list[str], verified: int, output_dir: str) ->
             file=sys.stderr,
         )
     elif verified:
-        print(f"Verified {verified} pack{'s' if verified != 1 else ''}: all OK")
+        print(f"Verified {count_text(verified, 'pack')}: all OK")
     if not verified:
         # Every platform skipped is no check at all: a mistyped or purged
         # output directory read as a passed integrity check.
@@ -1175,7 +1162,7 @@ def _refresh_data_directories(args: argparse.Namespace, data_registry: dict) -> 
     results = refresh_all(data_registry, force=args.refresh_data)
     updated = sum(1 for v in results.values() if v)
     if updated:
-        print(f"Refreshed {updated} data director{'ies' if updated > 1 else 'y'}")
+        print(f"Refreshed {count_text(updated, 'data directory', 'data directories')}")
     failed = sorted(k for k, v in results.items() if v is None)
     if failed:
         print(f"WARNING: data directory refresh failed: {', '.join(failed)}")

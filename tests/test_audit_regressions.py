@@ -4631,6 +4631,11 @@ class EveryToolRefusesAFlagItWouldDrop(unittest.TestCase):
             ["--list-systems", "--region", "us"],
             ["--emulator", "handy", "--target", "switch"],
             ["--platform", "retroarch", "--standalone"],
+            ["--all", "--system", "sony-playstation", "--standalone"],
+        ],
+        "scripts/cross_reference.py": [
+            ["--all", "--platform", "retroarch"],
+            ["--list-emulators", "--all"],
         ],
         "scripts/pipeline.py": [
             ["--offline", "--skip-packs", "--source", "truth"],

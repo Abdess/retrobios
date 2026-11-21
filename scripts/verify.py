@@ -33,6 +33,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from core.cli import add_emulator_selection, add_repo_inputs
+from core.text import count_text
 from resolve.contentlayout import TARGET_KEY
 from model.targets import (
     canonical_target_name,
@@ -41,6 +42,7 @@ from model.targets import (
 from model.cliargs import (
     LISTING_FLAGS,
     comma_list,
+    mode_conflicts,
     platform_arg,
     refuse_beside_mode,
     requested_regions,
@@ -109,21 +111,11 @@ def _refuse_listing_narrowings(
 def _refuse_mode_flags(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
     """A flag the chosen mode does not read is refused, never ignored."""
     for refused, message in (
-        (args.standalone and not (args.emulator or args.system),
-         "--standalone requires --emulator or --system"),
-        (args.standalone and args.platform,
-         "--standalone is incompatible with --platform"),
-        (args.target and not (args.platform or args.all),
-         "--target requires --platform or --all"),
-        (args.target and (args.emulator or (args.system and not (args.platform or args.all))),
-         "--target is incompatible with --emulator and --system"),
+        *mode_conflicts(args),
         (args.destinations and args.system,
          "--destinations describes the full pack and is incompatible with --system"),
         (args.destinations and not (args.platform or args.all),
          "--destinations requires --platform or --all"),
-        # Game data is categorized against a platform's list and its cores.
-        (getattr(args, "no_game_data", False) and not (args.platform or args.all),
-         "--no-game-data requires --platform or --all"),
         (args.destinations and getattr(args, "region", None),
          "--destinations describes the full pack and is incompatible with --region"),
         (args.destinations and args.required_only,
@@ -197,19 +189,8 @@ def _build_parser() -> argparse.ArgumentParser:
 
 def _check_mode(args: argparse.Namespace, parser: argparse.ArgumentParser) -> bool:
     """Refuse a request naming no mode or several, and say if it is the system mode."""
-    # --system beside --platform or --all narrows each platform, as in
-    # generate_pack: refused under --all, verify could not report on the
-    # packs generate_pack --all --system builds.
-    system_mode = bool(args.system) and not (args.platform or args.all)
-    modes = sum(1 for x in (args.platform, args.all, args.emulator, system_mode) if x)
-    if modes == 0:
-        parser.error("Specify --platform, --all, --emulator, or --system")
-    if modes > 1:
-        parser.error(
-            "--platform, --all, --emulator, and --system are mutually exclusive"
-        )
     _refuse_mode_flags(args, parser)
-    return system_mode
+    return bool(args.system) and not (args.platform or args.all)
 
 
 def _run_emulator_mode(args: argparse.Namespace, db: dict, requested_regions: list[str]) -> None:
@@ -480,8 +461,8 @@ def _overall_summary(group_results: list[tuple[dict, list[str]]]) -> str:
         for r, group in group_results
     }
     total = sum(counts.values())
-    parts.append(f"{total} {'discrepancy' if total == 1 else 'discrepancies'}{where(counts)}")
-    lines = [f"{platforms} platforms: {', '.join(parts)}"]
+    parts.append(f"{count_text(total, 'discrepancy', 'discrepancies')}{where(counts)}")
+    lines = [f"{count_text(platforms, 'platform')}: {', '.join(parts)}"]
 
     # Grouped by file, not by platform: sfiii2a.zip missing everywhere was
     # counted and printed once per platform, 24 files for 10 distinct ones.

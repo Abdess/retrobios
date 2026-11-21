@@ -2959,38 +2959,34 @@ class TestE2E(unittest.TestCase):
         """--platform + --system is accepted (not rejected at validation stage)."""
         import argparse
 
-        # Build the same parser as generate_pack.main()
-        parser = argparse.ArgumentParser()
-        parser.add_argument("--platform", "-p")
-        parser.add_argument("--all", action="store_true")
-        parser.add_argument("--emulator", "-e")
-        parser.add_argument("--system", "-s")
-        parser.add_argument("--standalone", action="store_true")
-        parser.add_argument("--split", action="store_true")
-        parser.add_argument(
-            "--group-by", choices=["system", "manufacturer"], default="system"
-        )
-        parser.add_argument("--target", "-t")
-        parser.add_argument("--from-md5")
-        parser.add_argument("--from-md5-file")
-        parser.add_argument("--required-only", action="store_true")
-        args = parser.parse_args(["--platform", "retroarch", "--system", "psx"])
+        from model.cliargs import mode_conflicts
 
-        # Replicate validation logic from main()
-        has_platform = bool(args.platform)
-        has_all = args.all
-        has_emulator = bool(args.emulator)
-        has_system = bool(args.system)
-        has_from_md5 = bool(args.from_md5 or args.from_md5_file)
+        def refused(**given: object) -> list[str]:
+            args = argparse.Namespace(**{
+                "platform": None, "all": False, "emulator": None, "system": None,
+                "standalone": False, "target": None, "no_game_data": False, **given,
+            })
+            return [message for on, message in mode_conflicts(args) if on]
 
-        # These should NOT raise
-        self.assertFalse(has_emulator and (has_platform or has_all or has_system))
-        self.assertFalse(has_platform and has_all)
-        self.assertTrue(
-            has_platform or has_all or has_emulator or has_system or has_from_md5
-        )
-        # --platform + --system is a valid combination
-        self.assertTrue(has_platform and has_system)
+        self.assertEqual(refused(platform="retroarch", system="psx"), [])
+        self.assertEqual(refused(all=True, system="psx"), [])
+        self.assertEqual(refused(system="psx", standalone=True), [])
+        # One table for verify and generate_pack: verify took --all --system
+        # --standalone and dropped --standalone.
+        self.assertTrue(refused(all=True, system="psx", standalone=True))
+        self.assertTrue(refused(emulator="handy", system="psx"))
+        self.assertTrue(refused(platform="retroarch", all=True))
+        self.assertTrue(refused(system="psx", target="switch"))
+        self.assertTrue(refused(emulator="handy", no_game_data=True))
+        self.assertIn("Specify --platform, --all, --emulator, --system or --from-md5", [
+            message for on, message in mode_conflicts(
+                argparse.Namespace(platform=None, all=False, emulator=None, system=None,
+                                   standalone=False),
+                (("--from-md5", False),),
+            ) if on
+        ])
+        for script in ("verify.py", "generate_pack.py"):
+            self.assertIn("mode_conflicts(args", script_source(script), script)
 
     # BizHawk scraper tests
 
