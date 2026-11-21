@@ -1,0 +1,95 @@
+"""The MAME clone map _mame_clones.json: where it lives, reading, merging and writing it."""
+
+from __future__ import annotations
+
+import json
+import os
+
+from core.artifacts import write_text_atomic
+
+
+def clone_map_path(bios_dir: str) -> str:
+    """The clone map beside the scanned tree.
+
+    That is where get_mame_clone_map() reads it for the real layout. A path
+    relative to the working directory let a scan of a fixture tree rewrite
+    the repository's own map.
+    """
+    return os.path.join(os.path.dirname(os.path.abspath(bios_dir)), "_mame_clones.json")
+
+
+def read_clone_map(clone_path: str) -> object:
+    """The clone map an earlier run wrote, {} when there is none."""
+    # Read before anything is removed: the map is cumulative, and a run that
+    # stopped on an unreadable one after deleting clones would lose them.
+    try:
+        with open(clone_path) as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+    except json.JSONDecodeError as e:
+        raise SystemExit(
+            f"{clone_path} is not valid JSON ({e}). Restore it from git "
+            "before deduplicating again"
+        ) from e
+
+
+def record_clone_map(
+    mame_clones: dict[str, dict], previous: object, clone_path: str, dry_run: bool
+) -> None:
+    """Write the clone map, merged with what earlier runs recorded."""
+    # A group is only visible while both copies are on disk, and this run
+    # has just deleted the clone. Writing only what was seen this time
+    # therefore erases every mapping an earlier run recorded, and the
+    # canonical zip stops answering to the names it stands in for. The
+    # older entries stay valid: their canonical file is still here.
+    if not dry_run and isinstance(previous, dict):
+        merged = dict(previous)
+        merged.update(mame_clones)
+        mame_clones = collapse_clone_chains(merged)
+    if dry_run:
+        print(f"\nWould write MAME clone map: {clone_path}")
+    else:
+        write_text_atomic(clone_path, json.dumps(mame_clones, indent=2, sort_keys=True))
+        print(f"\nWrote MAME clone map: {clone_path}")
+    print(
+        f"  {len(mame_clones)} canonical ZIPs with "
+        f"{sum(len(v['clones']) for v in mame_clones.values())} clones"
+    )
+
+
+def collapse_clone_chains(clone_map: dict[str, dict]) -> dict[str, dict]:
+    """Point every clone at a canonical archive that still exists.
+
+    The map is cumulative. When a later run finds that a canonical archive is
+    itself a byte-identical copy of another and removes it, the entry that
+    named it as canonical would send its clones to a file that is gone:
+    sys68k_cpu21a pointed at sys68k_cpu21 after sys68k_cpu21 became a clone
+    of sys68k_cpu20. Each such entry's clones move to the final canonical.
+    """
+    owner = {
+        clone: canonical
+        for canonical, entry in clone_map.items()
+        for clone in entry.get("clones", [])
+    }
+
+    def final(name: str) -> str:
+        seen = {name}
+        while name in owner:
+            name = owner[name]
+            if name in seen:
+                raise ValueError(f"clone map loops through {name}")
+            seen.add(name)
+        return name
+
+    collapsed: dict[str, dict] = {}
+    for canonical, entry in clone_map.items():
+        target = final(canonical)
+        kept = collapsed.setdefault(target, {**clone_map.get(target, entry), "clones": []})
+        names = set(kept["clones"]) | set(entry.get("clones", []))
+        if target != canonical:
+            names.add(canonical)
+        names.discard(target)
+        kept["clones"] = sorted(names)
+        kept["total_copies"] = len(kept["clones"])
+    return collapsed

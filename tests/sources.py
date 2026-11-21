@@ -35,6 +35,10 @@ COMMANDS = {
         "collection/scan.py", "collection/hashcache.py", "collection/releaseassets.py",
         "collection/declared.py", "collection/aliases.py", "collection/indexes.py", "collection/record.py",
     ),
+    "dedup.py": (
+        "model/nodedup.py", "collection/dedup.py", "collection/duplicates.py",
+        "collection/clonemap.py",
+    "bios_integrity.py": ("collection/integrity.py", "collection/gitrestore.py"),
     "release_record.py": ("model/releaserecord.py", "release/record.py"),
     "release_notes.py": ("release/notes.py",),
     "check_release.py": ("release/check.py",),

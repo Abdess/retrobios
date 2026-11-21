@@ -18,7 +18,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import dedup
+from collection import clonemap, dedup, duplicates
 from model import nodedup
 
 
@@ -277,13 +277,13 @@ class CloneMapSurvivesASecondRun(_Bios):
 
 class PathPriority(unittest.TestCase):
     def test_shorter_paths_sort_first(self):
-        short = dedup.path_priority("bios/Sony/PS/a.bin")
-        deep = dedup.path_priority("bios/Sony/PS/x/y/z/a.bin")
+        short = duplicates.path_priority("bios/Sony/PS/a.bin")
+        deep = duplicates.path_priority("bios/Sony/PS/x/y/z/a.bin")
         self.assertLess(short, deep)
 
     def test_a_variant_sorts_after_a_primary(self):
-        primary = dedup.path_priority("bios/Sony/PS/a.bin")
-        variant = dedup.path_priority("bios/Sony/PS/.variants/a.bin")
+        primary = duplicates.path_priority("bios/Sony/PS/a.bin")
+        variant = duplicates.path_priority("bios/Sony/PS/.variants/a.bin")
         self.assertLess(primary, variant)
 
     def test_protected_directories_are_recognised(self):
@@ -321,14 +321,14 @@ class OnlyFilesSharingASizeAreHashed(_Bios):
         self.write("C/other.bin", b"a payload of its own length")
         self.write("D/same_size.bin", b"IDENTICAL PAYLOAX")
         calls: list[tuple[str, frozenset | None]] = []
-        real = dedup.compute_hashes
+        real = duplicates.compute_hashes
 
         def spy(path, algorithms=None, cache=True):
             calls.append((os.path.relpath(path, self.bios), algorithms))
             return real(path, algorithms, cache)
 
-        with mock.patch.object(dedup, "compute_hashes", spy):
-            groups = dedup.scan_duplicates(str(self.bios))
+        with mock.patch.object(duplicates, "compute_hashes", spy):
+            groups = duplicates.scan_duplicates(str(self.bios))
         self.assertEqual(
             sorted(path for path, _algos in calls),
             sorted(os.path.join(*p.split("/")) for p in ("A/one.bin", "B/one.bin", "D/same_size.bin")),
@@ -347,23 +347,19 @@ class CloneChainsCollapse(unittest.TestCase):
     pointed at a file that no longer existed."""
 
     def test_clones_follow_to_the_canonical_that_exists(self):
-        import dedup
-
         chain = {
             "cpu20.zip": {"clones": ["cpu21.zip"], "sha1": "a", "total_copies": 1},
             "cpu21.zip": {"clones": ["cpu21a.zip", "cpu21b.zip"], "sha1": "a", "total_copies": 2},
         }
-        self.assertEqual(dedup.collapse_clone_chains(chain), {
+        self.assertEqual(clonemap.collapse_clone_chains(chain), {
             "cpu20.zip": {"clones": ["cpu21.zip", "cpu21a.zip", "cpu21b.zip"],
                           "sha1": "a", "total_copies": 3},
         })
 
     def test_a_loop_is_refused(self):
-        import dedup
-
         loop = {"a.zip": {"clones": ["b.zip"]}, "b.zip": {"clones": ["a.zip"]}}
         with self.assertRaises(ValueError):
-            dedup.collapse_clone_chains(loop)
+            clonemap.collapse_clone_chains(loop)
 
 
 if __name__ == "__main__":

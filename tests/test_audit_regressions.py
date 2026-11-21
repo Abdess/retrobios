@@ -3732,7 +3732,7 @@ class GeneratedModelsAreWrittenWhole(unittest.TestCase):
                 self.assertNotIn('open(clone_path, "w")', source)
 
     def test_an_unreadable_clone_map_stops_the_run(self):
-        from scripts import dedup
+        from collection import dedup
 
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

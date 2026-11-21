@@ -29,6 +29,7 @@ COMMAND_LAYER = 4
 SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     # A search starts from what verify finds missing.
     "acquire": frozenset({"packs"}),
+    "collection": frozenset(),
     "packs": frozenset(),
     # A campaign commits its findings the way the unattended jobs commit.
     "probes": frozenset({"unattended"}),

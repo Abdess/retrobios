@@ -32,7 +32,8 @@ from core import childenv
 from core.hashing import file_digest
 from core import hostguard
 from core import statefile
-import bios_integrity as bib
+from collection import integrity as bib
+from collection.gitrestore import GitFailed
 import cleanup_disk as cd
 from release import sync
 
@@ -906,7 +907,7 @@ class BiosIntegrity(Scratch):
         rel = "bios/Sony/edited.bin"
         (self.repo / rel).write_bytes(b"\x02" * 80)
         (self.repo / ".git" / "index").write_bytes(b"garbage\n")
-        with self.assertRaises(bib.GitFailed):
+        with self.assertRaises(GitFailed):
             bib.check(self.repo, self.db, apply=True)
         self.assertEqual((self.repo / rel).read_bytes(), b"\x02" * 80)
 

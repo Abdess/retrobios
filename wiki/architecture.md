@@ -39,6 +39,7 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   model/                 data loading: database, platforms, registry, profiles, targets, catalogues
   resolve/               from declarations to files: content checks, resolution, layouts, cores, truth
   packs/                 pack building and verification: selection, archives, manifests, coverage
+  collection/            upkeep of bios/: duplicates, the MAME clone map, bit flips found and repaired
   profiling/             emulator profiles confronted with their upstream source (profile_sync.py)
   collection/            the scan of bios/ into database.json: digests, aliases, indexes
   romrecipes/            romset identification, rebuilt pinned archives, each archive's recipe
