@@ -19,6 +19,7 @@ from core.paths import REPO_ROOT
 from core.text import count_text
 from model import siteinputs
 from sitegen import markup
+from orchestrate.labels import STEP_LABELS
 
 
 PLACEHOLDER = re.compile(r"(?m)^([ \t]*)<!--\s*image:\s*([A-Za-z0-9_-]+)\s*-->[ \t]*$")
@@ -595,21 +596,8 @@ def _minui_narrow() -> tuple[float, float, list[str]]:
 
 
 def _pipeline_boxes() -> list[Box]:
-    """The steps pipeline.py runs, read from the STEP_LABELS literal of its step list."""
-    tree = ast.parse((REPO_ROOT / "scripts" / "orchestrate" / "labels.py").read_text(encoding="utf-8"))
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Assign):
-            target: ast.expr = node.targets[0]
-            value: ast.expr | None = node.value
-        elif isinstance(node, ast.AnnAssign):
-            target, value = node.target, node.value
-        else:
-            continue
-        if isinstance(target, ast.Name) and target.id == "STEP_LABELS" and value is not None:
-            labels = ast.literal_eval(value)
-            break
-    else:
-        raise RuntimeError("STEP_LABELS not found in scripts/orchestrate/labels.py")
+    """The steps pipeline.py runs, numbered as the run prints them."""
+    labels = STEP_LABELS
     boxes = []
     for label in labels.values():
         number, title = label.split(" ", 1)
