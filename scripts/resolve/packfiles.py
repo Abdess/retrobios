@@ -17,7 +17,7 @@ from pathlib import Path
 
 from model.database import record_at, record_for_hash
 from model.largefiles import fetch_large_file
-from core.hashing import HASH_FIELDS, parse_hash_list
+from core.hashing import declared_hash_lists
 from resolve.content import declared_hash_verdict
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from core.paths import REPO_ROOT, declared_destination
@@ -65,21 +65,16 @@ def download_external(
     if not url:
         return False
     name = file_entry.get("name", url)
-    declared = next(
-        (
-            (algo, str(file_entry[algo]).lower())
-            for algo in ("sha256", "sha1", "md5")
-            if file_entry.get(algo)
-        ),
-        None,
-    )
+    # The strongest field declared, every value it accepts: a stringified
+    # list or a comma-joined field matched no digest at all.
+    declared = next(iter(declared_hash_lists(file_entry, ("sha256", "sha1", "md5")).items()), None)
     if declared is None:
         print(f"    WARNING: no hash for {name}, skipping unverifiable download")
         return False
     if OFFLINE if offline is None else offline:
         print(f"    WARNING: {name} is external and the run is offline, not fetched")
         return False
-    algo, expected = declared
+    algo, expected = declared[0], set(declared[1])
     digest = hashlib.new(algo)
     Path(dest_path).parent.mkdir(parents=True, exist_ok=True)
     try:
@@ -92,18 +87,11 @@ def download_external(
         print(f"    WARNING: Failed to download {url}: {exc}")
         Path(dest_path).unlink(missing_ok=True)
         return False
-    if digest.hexdigest() != expected:
+    if digest.hexdigest() not in expected:
         print(f"    WARNING: {algo.upper()} mismatch for {name}")
         Path(dest_path).unlink(missing_ok=True)
         return False
     return True
-
-def _declared_hashes(file_entry: dict) -> dict[str, list[str]]:
-    return {
-        field: parse_hash_list(file_entry.get(field))
-        for field in HASH_FIELDS
-    }
-
 
 def _verified_asset(
     name: str, declared: dict[str, list[str]], file_entry: dict, offline: bool
@@ -115,8 +103,8 @@ def _verified_asset(
     entry declares, sha256 and crc32 included.
     """
     attempts = (
-        [(sha1, "") for sha1 in declared["sha1"]]
-        or [("", md5) for md5 in declared["md5"]]
+        [(sha1, "") for sha1 in declared.get("sha1", [])]
+        or [("", md5) for md5 in declared.get("md5", [])]
         or [("", "")]
     )
     for sha1, md5 in attempts:
@@ -127,11 +115,11 @@ def _verified_asset(
             continue
         verdict = declared_hash_verdict(
             cached,
-            has_strong_hash=any(declared.values()),
-            sha1_candidates=set(declared["sha1"]),
-            sha256_candidates=set(declared["sha256"]),
-            md5_list=declared["md5"],
-            crc_candidates=set(declared["crc32"]),
+            has_strong_hash=bool(declared),
+            sha1_candidates=set(declared.get("sha1", [])),
+            sha256_candidates=set(declared.get("sha256", [])),
+            md5_list=declared.get("md5", []),
+            crc_candidates=set(declared.get("crc32", [])),
             zipped_file=file_entry.get("zipped_file"),
             declared_size=file_entry.get("size"),
             file_entry=file_entry,
@@ -164,10 +152,10 @@ def pending_release_asset(
     name = file_entry.get("name", "")
     if not name or name.endswith("/") or file_entry.get("type") == "directory":
         return None
-    declared = _declared_hashes(file_entry)
-    if file_entry.get("unsourceable") and not any(declared.values()):
+    declared = declared_hash_lists(file_entry)
+    if file_entry.get("unsourceable") and not declared:
         return None
-    if file_entry.get("zipped_file") and not any(declared.values()):
+    if file_entry.get("zipped_file") and not declared:
         return None
     if registered is None:
         registered = load_registered_paths()
@@ -182,7 +170,7 @@ def pending_release_asset(
         if isinstance(declared_size, int) and record.get("size") != declared_size:
             continue
         if all(
-            not values or str(record.get(field, "")).lower() in values
+            str(record.get(field, "")).lower() in values
             for field, values in declared.items()
         ):
             return path
@@ -353,8 +341,8 @@ def resolve_file(
         # A tree the collection does not hold is missing, as verify says,
         # since the asset store holds files, not trees.
         return (path, status) if path else (None, "not_found")
-    declared = _declared_hashes(file_entry)
-    if file_entry.get("unsourceable") and not any(declared.values()):
+    declared = declared_hash_lists(file_entry)
+    if file_entry.get("unsourceable") and not declared:
         # The asset store is addressed by file name: with no hash to check,
         # it would hand back the same-named file of another game, which is
         # exactly what the flag forbids.

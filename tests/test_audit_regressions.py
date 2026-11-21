@@ -7623,6 +7623,19 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
                 self.assertFalse(packresolve.download_external(self.ENTRY, str(target), offline=False))
             self.assertFalse(target.exists())
 
+    def test_every_accepted_value_of_a_listed_field_verifies(self):
+        # A list or a comma-joined field was compared as its string form
+        # ("['a', 'b']"), so no body could ever match it.
+        from resolve import packfiles as packresolve
+
+        good = hashlib.sha1(b"payload").hexdigest().upper()
+        for sha1 in (["0" * 40, good], f"{'0' * 40}, {good}"):
+            with self.subTest(sha1=sha1), tempfile.TemporaryDirectory() as tmp, \
+                    mock.patch.object(packresolve.urllib.request, "urlopen",
+                                      return_value=self._response(b"payload")):
+                entry = {**self.ENTRY, "sha1": sha1}
+                self.assertTrue(packresolve.download_external(entry, f"{tmp}/x", offline=False))
+
     def test_scratch_files_stay_in_the_repository(self):
         source = script_source("generate_pack.py")
         self.assertNotIn("def download_external", source)
