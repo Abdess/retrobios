@@ -163,6 +163,7 @@ class NoPageModuleReadsTheRepositoryInputs(unittest.TestCase):
             build,
             next(n for n in ast.parse(build).body
                  if isinstance(n, ast.FunctionDef) and n.name == "generate_site"))
+        assert source is not None
         self.assertLess(source.index("siteinputs.use("), source.index("load_database("))
 
 
