@@ -7072,18 +7072,14 @@ class AHashConflictIsReportedOnce(unittest.TestCase):
     platform whose model met the same two GameIndex.yaml declarations."""
 
     def test_the_same_pair_prints_once(self):
-        import contextlib
-        import io
-
         from resolve import truth
 
         truth._CONFLICTS_SHOWN.clear()
-        err = io.StringIO()
-        with contextlib.redirect_stderr(err):
+        with self.assertLogs(truth.log, "WARNING") as logged:
             for _platform in range(6):
                 existing = {"name": "x.yaml", "sha1": "a" * 40}
                 truth._merge_hashes(existing, {"name": "x.yaml", "sha1": "b" * 40}, "core")
-        self.assertEqual(err.getvalue().count("WARNING"), 1)
+        self.assertEqual(len(logged.records), 1)
 
 
 class ThePipelineRunsTheSchemaCheckCIRuns(unittest.TestCase):

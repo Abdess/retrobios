@@ -809,8 +809,7 @@ class AHashConflictNamesBothCores(unittest.TestCase):
     def test_both_cores_and_the_kept_value(self):
         truth._CONFLICTS_SHOWN.clear()
         system: dict = {}
-        err = io.StringIO()
-        with contextlib.redirect_stderr(err):
+        with self.assertLogs(truth.log, "WARNING") as logged:
             truth._merge_file_into_system(
                 system, {"name": "G.yaml", "path": "r/G.yaml", "sha1": "5e" * 20},
                 "pcsx2", None,
@@ -819,8 +818,9 @@ class AHashConflictNamesBothCores(unittest.TestCase):
                 system, {"name": "G.yaml", "path": "r/G.yaml", "sha1": "7e" * 20},
                 "yaps2", None,
             )
-        self.assertIn(f"{'5e' * 20} (pcsx2) kept", err.getvalue())
-        self.assertIn(f"{'7e' * 20} (yaps2)", err.getvalue())
+        text = "\n".join(record.getMessage() for record in logged.records)
+        self.assertIn(f"{'5e' * 20} (pcsx2) kept", text)
+        self.assertIn(f"{'7e' * 20} (yaps2)", text)
 
     def test_the_origin_is_not_written_to_the_model(self):
         profile = {"type": "libretro", "systems": ["sony-playstation"],

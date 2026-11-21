@@ -166,9 +166,10 @@ class NativeCacheTests(unittest.TestCase):
         import contextlib
         import io
 
+        from resolve.truth import log as truth_log
+
         def noisy(truth, scraped):
-            print("WARNING: hash conflict for GameIndex.yaml (sha1: a vs b, core yaps2)",
-                  file=sys.stderr)
+            truth_log.warning("WARNING: hash conflict for GameIndex.yaml (sha1: a vs b, core yaps2)")
             print("other diagnostic", file=sys.stderr)
             return {}, None
 

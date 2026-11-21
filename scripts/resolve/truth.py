@@ -7,8 +7,8 @@ and diffs truth against scraped platform data to find divergences.
 from __future__ import annotations
 
 import copy
+import logging
 import os
-import sys
 from dataclasses import dataclass
 
 from model.declarations import OUTER_ROOTS
@@ -29,6 +29,10 @@ from resolve.validation import (
 )
 from core.paths import REPO_ROOT
 
+
+# Notes on how the model settled two cores: a caller that has no use for
+# them (check_freshness) silences this logger, never the text it writes.
+log = logging.getLogger(__name__)
 
 _CONFLICTS_SHOWN: set[tuple[str, ...]] = set()
 
@@ -336,11 +340,10 @@ def _merge_hashes(
                 # Both cores and which value stays: naming only the second
                 # core sent the reader through ten profiles for the first.
                 first = existing.get("_hash_by", {}).get(h, "an earlier core")
-                print(
-                    f"WARNING: hash conflict for {file_entry['name']}: "
-                    f"{h} {ours} ({first}) kept, {theirs} ({emu_name}) "
+                log.warning(
+                    "WARNING: hash conflict for %s: %s %s (%s) kept, %s (%s) "
                     "left out of the model",
-                    file=sys.stderr,
+                    file_entry["name"], h, ours, first, theirs, emu_name,
                 )
 
 

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import contextlib
 import io
-import sys
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -14,6 +13,7 @@ from exporter.originals import SOURCES_INDEX, SourcesIndexUnreadable, load_sourc
 from model.platforms import inheritance_chain
 from model.registry import list_registered_platforms
 from resolve.reconcile import build_native_model
+from resolve.truth import log as truth_log
 from freshness.findings import ERROR, OK, STALE, Finding
 
 
@@ -92,25 +92,20 @@ def _transcribed_at(platforms_dir: Path, platform: str) -> float:
     )
 
 
-# How the truth model settles two cores' hashes: generate_truth reports it,
-# and it says nothing about whether a cached original is current.
-_MODEL_NOTES = ("WARNING: hash conflict",)
-
-
 @contextlib.contextmanager
 def _without_model_notes() -> Iterator[None]:
-    """Keep the model build's own notes out of the freshness report.
+    """Keep the truth model's own notes out of the freshness report.
 
-    Anything else written to stderr passes through.
+    generate_truth reports how two cores' hashes were settled, and that says
+    nothing about whether a cached original is current. Anything else
+    written to stderr passes through.
     """
-    sink = io.StringIO()
+    previous = truth_log.disabled
+    truth_log.disabled = True
     try:
-        with contextlib.redirect_stderr(sink):
-            yield
+        yield
     finally:
-        for line in sink.getvalue().splitlines(keepends=True):
-            if not line.startswith(_MODEL_NOTES):
-                sys.stderr.write(line)
+        truth_log.disabled = previous
 
 
 def check_native(
