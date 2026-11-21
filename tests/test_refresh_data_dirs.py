@@ -405,5 +405,51 @@ class ASourceThatMovesIsPinnedOrFollowed(unittest.TestCase):
                     self.assertIn("{version}", entry["source_path"])
 
 
+class TheRemoteCommitComesFromTheForgeClient(unittest.TestCase):
+    """get_remote_sha read a GitLab subgroup as its first two segments,
+    asked the branches endpoint (no tag, no encoded name), sent the token to
+    any URL containing "github", and skipped the refresh on one 502."""
+
+    def _resolve(self, url: str, version: str, answers: list) -> tuple[str | None, list]:
+        from core import upstream
+
+        seen: list = []
+
+        def urlopen(request, timeout=0):
+            seen.append(request)
+            answer = answers.pop(0)
+            if isinstance(answer, Exception):
+                raise answer
+            return _Response(json.dumps(answer).encode())
+
+        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp, \
+                mock.patch.object(upstream, "CACHE_DIR", tmp), \
+                mock.patch.object(upstream, "_sleep", lambda _s: None), \
+                mock.patch.dict("os.environ", {"GITHUB_TOKEN": "SECRET"}), \
+                mock.patch("urllib.request.urlopen", urlopen):
+            return datadirs.get_remote_sha(url, version), seen
+
+    def test_a_gitlab_subgroup_tag_resolves_without_the_token(self):
+        sha, seen = self._resolve(
+            "https://gitlab.com/grp/github-mirror/proj/-/archive/{version}/proj.tar.gz",
+            "release/1.0", [[{"id": "a" * 40}]],
+        )
+        self.assertEqual(sha, "a" * 40)
+        self.assertIn("projects/grp%2Fgithub-mirror%2Fproj/repository/commits", seen[0].full_url)
+        self.assertIn("ref_name=release%2F1.0", seen[0].full_url)
+        self.assertIsNone(seen[0].get_header("Authorization"))
+
+    def test_a_transient_server_error_is_retried(self):
+        import urllib.error
+
+        sha, seen = self._resolve(
+            "https://github.com/o/n/archive/{version}.tar.gz", "master",
+            [urllib.error.HTTPError("u", 502, "Bad Gateway", None, None), [{"sha": "b" * 40}]],
+        )
+        self.assertEqual((sha, len(seen)), ("b" * 40, 2))
+        self.assertEqual(seen[0].get_header("Authorization"), "Bearer SECRET")
+
+
 if __name__ == "__main__":
     unittest.main()

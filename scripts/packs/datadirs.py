@@ -15,8 +15,8 @@ import zipfile
 from collections.abc import Callable, Iterator
 from pathlib import Path
 
+from core import upstream
 from core.artifacts import file_lock as _file_lock, write_text_atomic
-from core.github import github_token
 from core.upstream import remote_etag as _get_remote_etag
 from model.registry import VERSIONS_FILE, load_versions
 
@@ -159,36 +159,6 @@ def _promote(extract_dir: Path, cache_dir: Path, scratch: Path) -> None:
         raise
 
 
-def _api_request(url: str) -> dict:
-    req = urllib.request.Request(
-        url,
-        headers={
-            "User-Agent": USER_AGENT,
-            "Accept": "application/json",
-        },
-    )
-    token = github_token()
-    if token and "github" in url:
-        req.add_header("Authorization", f"token {token}")
-    with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
-        return json.loads(resp.read())
-
-
-def _parse_repo_from_url(source_url: str) -> tuple[str, str, str]:
-    """Extract (host_type, owner, repo) from a tarball URL.
-
-    Returns host_type as 'github' or 'gitlab'.
-    """
-    if "github.com" in source_url:
-        # https://github.com/owner/repo/archive/{version}.tar.gz
-        parts = source_url.split("github.com/")[1].split("/")
-        return "github", parts[0], parts[1]
-    if "gitlab.com" in source_url:
-        parts = source_url.split("gitlab.com/")[1].split("/")
-        return "gitlab", parts[0], parts[1]
-    raise ValueError(f"Unsupported host in URL: {source_url}")
-
-
 def revisioned(entry: dict) -> bool:
     """Whether the source names a forge revision: {version} in a GitHub or
     GitLab address. Such a tree is fetched at the commit its branch points
@@ -196,31 +166,20 @@ def revisioned(entry: dict) -> bool:
     other source (the buildbot's nightly assets, a release asset) names no
     revision: what it serves today is all it holds."""
     url = str(entry.get("source_url", ""))
-    return "{version}" in url and ("github.com/" in url or "gitlab.com/" in url)
+    repo = upstream.parse_repo(url)
+    return "{version}" in url and repo is not None and repo.family in ("github", "gitlab")
 
 
 def get_remote_sha(source_url: str, version: str) -> str | None:
-    """Fetch the current commit SHA for a branch/tag from GitHub or GitLab."""
-    try:
-        host_type, owner, repo = _parse_repo_from_url(source_url)
-    except ValueError:
+    """The commit a branch or tag of the source's repository points at now."""
+    repo = upstream.parse_repo(source_url)
+    if repo is None:
         log.warning("cannot parse repo from URL: %s", source_url)
         return None
-
     try:
-        if host_type == "github":
-            url = f"https://api.github.com/repos/{owner}/{repo}/commits/{version}"
-            data = _api_request(url)
-            return data["sha"]
-        else:
-            encoded = f"{owner}%2F{repo}"
-            url = f"https://gitlab.com/api/v4/projects/{encoded}/repository/branches/{version}"
-            data = _api_request(url)
-            return data["commit"]["id"]
-    except (urllib.error.URLError, KeyError, OSError) as exc:
-        log.warning(
-            "failed to fetch remote SHA for %s/%s@%s: %s", owner, repo, version, exc
-        )
+        return upstream.resolve_head(repo, upstream.CACHE_DIR, branch=version, fresh=True)
+    except (upstream.UpstreamError, ValueError) as exc:
+        log.warning("failed to fetch remote SHA for %s@%s: %s", repo.slug, version, exc)
         return None
 
 
