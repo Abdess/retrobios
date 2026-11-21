@@ -154,6 +154,9 @@ COMMANDS = {
         "games/inputs.py", "games/profileindex.py", "games/fallback.py", "games/folders.py",
         "games/setups.py", "games/systems.py", "games/arcadesets.py", "games/render.py",
         "games/coverage.py", "games/changes.py", "games/publish.py",
+    "campaign.py": (
+        "probes/campaign.py", "probes/host.py", "probes/content.py", "probes/cores.py", "probes/rules.py",
+        "probes/state.py", "probes/gate.py", "probes/reports.py", "probes/profileedit.py",
     "standalone_probe.py": (
         "probes/standaloneemulators.py", "probes/appimage.py", "probes/xvfb.py", "probes/standalonerun.py",
         "probes/standalonerecord.py",

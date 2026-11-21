@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import contextlib
 import http.client
 import os
@@ -125,6 +126,14 @@ class Host:
     @property
     def max_load(self) -> float:
         return self.cpu_count / 4
+
+
+def parse_budget(text: str) -> float:
+    """Seconds of a --budget value: a number with s, m or h."""
+    match = re.fullmatch(r"\s*(\d+(?:\.\d+)?)\s*([smh]?)\s*", text or "")
+    if not match:
+        raise argparse.ArgumentTypeError(f"--budget {text!r}: a number with s, m or h")
+    return float(match[1]) * {"": 1, "s": 1, "m": 60, "h": 3600}[match[2]]
 
 
 @dataclass

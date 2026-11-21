@@ -14,7 +14,7 @@ from probes.profileedit import write_fields
 from probes.state import DONE, FAILED, PENDING
 
 if TYPE_CHECKING:
-    from probes.campaign import Campaign
+    from probes.campaign import Campaign, Pass
 
 
 # --------------------------------------------------------------------------
@@ -30,6 +30,17 @@ def status_report(campaign: Campaign) -> dict:
                          for key, entry in sorted(checks.items())}
     return {"last_run": runs[-1] if runs else None, "counts": counts, "pending_reasons": reasons,
             "failed": failed, "emulators": per}
+
+
+def pass_report(campaign: Campaign, current: Pass) -> dict:
+    """The line a pass prints: its result, the check counts, its records and findings."""
+    counts, _, _ = campaign.counts()
+    report = {"result": current.result, "detail": current.detail, "counts": counts,
+              "records": len(current.records), "findings": current.findings}
+    if current.result == "refused":
+        # autorun raises an alert from this key of a job's report.
+        report["alert"] = current.detail
+    return report
 
 
 def render_status(report: dict) -> str:

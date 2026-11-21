@@ -62,7 +62,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import signal
 import sys
 from collections.abc import Sequence
@@ -86,18 +85,11 @@ from core.paths import REPO_ROOT
 from probes.campaign import Campaign
 from probes.content import ROMFETCH_ENV
 from probes.gate import changed_profiles, gate
-from probes.host import CONTENT_FILE, Paths, Settings, host_lock
-from probes.reports import REVIEWED, open_findings, render_status, review_finding, status_report
+from probes.host import CONTENT_FILE, Paths, Settings, host_lock, parse_budget
+from probes.reports import REVIEWED, open_findings, pass_report, render_status, review_finding, status_report
 
 
 EXIT_REFUSED = 3
-
-
-def parse_budget(text: str) -> float:
-    match = re.fullmatch(r"\s*(\d+(?:\.\d+)?)\s*([smh]?)\s*", text or "")
-    if not match:
-        raise argparse.ArgumentTypeError(f"--budget {text!r}: a number with s, m or h")
-    return float(match[1]) * {"": 1, "s": 1, "m": 60, "h": 3600}[match[2]]
 
 
 # --------------------------------------------------------------------------
@@ -248,13 +240,7 @@ def _run_pass(campaign: Campaign, args: argparse.Namespace, only: set[str], path
     except hostguard.LockBusy as exc:
         print(f"campaign: deferred, {exc}", file=sys.stderr)
         return 75
-    counts, _, _ = campaign.counts()
-    report = {"result": current.result, "detail": current.detail, "counts": counts,
-              "records": len(current.records), "findings": current.findings}
-    if current.result == "refused":
-        # autorun raises an alert from this key of a job's report.
-        report["alert"] = current.detail
-    print(json.dumps(report))
+    print(json.dumps(pass_report(campaign, current)))
     if current.result == "refused":
         return EXIT_REFUSED
     return 75 if current.result == "paused" else 0

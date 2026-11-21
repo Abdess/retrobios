@@ -491,9 +491,9 @@ class StateAndResume(Workspace):
         self.assertEqual(again.state["checks"]["fake"]["fake/fake-system/x/files"]["status"], "pending")
 
     def test_budget(self) -> None:
-        self.assertEqual(campaign.parse_budget("6h"), 21600)
-        self.assertEqual(campaign.parse_budget("90m"), 5400)
-        self.assertEqual(campaign.parse_budget("30"), 30)
+        self.assertEqual(probes_host.parse_budget("6h"), 21600)
+        self.assertEqual(probes_host.parse_budget("90m"), 5400)
+        self.assertEqual(probes_host.parse_budget("30"), 30)
 
 
 class Guards(Workspace):
@@ -577,6 +577,8 @@ class FailClosed(Workspace):
         self.assertIn("bwrap not found", current.detail)
         self.assertEqual(host.calls, [])
         self.assertEqual(mr.read_campaign(self.root, mr.CAMPAIGN_RUNS)[-1]["result"], "refused")
+        # autorun raises an alert from this key of the printed report.
+        self.assertEqual(reports.pass_report(c, current)["alert"], current.detail)
 
     def test_the_override_lets_it_run(self) -> None:
         c = self.make(allow_unsandboxed=True)
