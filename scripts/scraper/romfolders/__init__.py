@@ -143,11 +143,16 @@ def register(name: str) -> Callable[[Parser], Parser]:
 
 
 def load_formats() -> dict[str, Parser]:
-    """Import every parser module of this package once."""
-    if not FORMATS:
-        for info in pkgutil.iter_modules([str(Path(__file__).parent)]):
-            if not info.name.startswith("_"):
-                importlib.import_module(f"{__name__}.{info.name}")
+    """Import every parser module of this package once.
+
+    Testing FORMATS for emptiness stopped short once a scraper had imported
+    one parser module on its own (retrodeck_scraper reads romfolders.es):
+    the other formats were never registered. import_module returns a module
+    already loaded at once, so every call goes through all of them.
+    """
+    for info in pkgutil.iter_modules([str(Path(__file__).parent)]):
+        if not info.name.startswith("_"):
+            importlib.import_module(f"{__name__}.{info.name}")
     return FORMATS
 
 
