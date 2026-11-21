@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import sys
+
 from packs.verdicts import Severity, Status
 
 
@@ -33,3 +35,19 @@ def emulator_strict_failure(result: dict) -> str | None:
     if not missing:
         return None
     return f"ERROR: {len(missing)} required file(s) missing: {', '.join(missing)}"
+
+
+def exit_if_strict(strict: bool, results: list[dict]) -> None:
+    """Exit 1 under --strict when a platform result counts a critical file."""
+    failure = platform_strict_failure(results)
+    if strict and failure:
+        print(failure, file=sys.stderr)
+        sys.exit(1)
+
+
+def exit_if_strict_emulator(strict: bool, result: dict) -> None:
+    """Exit 1 under --strict when an emulator lacks a file it cannot run without."""
+    failure = emulator_strict_failure(result)
+    if strict and failure:
+        print(failure, file=sys.stderr)
+        sys.exit(1)

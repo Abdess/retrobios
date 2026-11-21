@@ -25,91 +25,27 @@ from __future__ import annotations
 
 import argparse
 import contextlib
-import json
 import os
 import sys
 
 
 sys.path.insert(0, os.path.dirname(__file__))
 from core.cli import add_emulator_selection, add_repo_inputs
-from model.cliargs import (
-    LISTING_FLAGS,
-    comma_list,
-    mode_conflicts,
-    platform_arg,
-    refuse_beside_mode,
-    requested_regions,
-    run_listing,
-    work_from_repo_root,
-    require_platform,
-    resolve_system_ids,
-    selected_platforms,
-)
-from model.registry import load_data_dir_registry
-from model.database import load_database
+from model.cliargs import platform_arg
 from model.safeparse import require_yaml
 
-
-from packs.emulatorcheck import verify_emulator, verify_system
-from packs.report import print_emulator_result, print_platform_result
-from packs.strictgate import emulator_strict_failure, platform_strict_failure
-from packs.verifyoutput import json_details, write_pack_destinations
-from packs.verifyplatforms import PlatformResults, PlatformRun, verify_platforms
-from packs.verifysummary import overall_summary
+from packs.verifyrun import run_verify
 
 yaml = require_yaml()
 
 
-def _refuse_listing_narrowings(
-    args: argparse.Namespace, parser: argparse.ArgumentParser
-) -> str | None:
-    """A listing reads --platform at most: anything else given beside it,
-    another listing included, is refused (generate_pack applies the same
-    table). The listing asked for, if any."""
-    listings = [(flag, getattr(args, flag[2:].replace("-", "_"))) for flag in LISTING_FLAGS]
-    given = {flag for flag, on in (
-        *listings,
-        ("--platform", args.platform),
-        ("--all", args.all),
-        ("--emulator", args.emulator),
-        ("--system", args.system),
-        ("--region", getattr(args, "region", None)),
-        ("--target", getattr(args, "target", None)),
-        ("--standalone", args.standalone),
-        ("--json", args.json),
-        ("--strict", args.strict),
-        ("--verbose", args.verbose),
-        ("--destinations", args.destinations),
-        ("--offline", args.offline),
-        ("--no-game-data", getattr(args, "no_game_data", False)),
-        ("--required-only", args.required_only),
-    ) if on}
-    return refuse_beside_mode(listings, given, LISTING_FLAGS, parser)
-
-
-def _refuse_mode_flags(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
-    """A flag the chosen mode does not read is refused, never ignored."""
-    for refused, message in (
-        *mode_conflicts(args),
-        (args.destinations and args.system,
-         "--destinations describes the full pack and is incompatible with --system"),
-        (args.destinations and not (args.platform or args.all),
-         "--destinations requires --platform or --all"),
-        (args.destinations and getattr(args, "region", None),
-         "--destinations describes the full pack and is incompatible with --region"),
-        (args.destinations and args.required_only,
-         "--destinations describes the full pack and is incompatible with --required-only"),
-    ):
-        if refused:
-            parser.error(message)
-
-
 def main() -> None:
+    parser = build_parser()
     with contextlib.ExitStack() as held:
-        _main(held)
+        run_verify(held, parser, parser.parse_args())
 
 
-def _build_parser() -> argparse.ArgumentParser:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Platform-native BIOS verification")
     parser.add_argument("--platform", "-p", type=platform_arg, help="Platform name")
     parser.add_argument(
@@ -164,131 +100,6 @@ def _build_parser() -> argparse.ArgumentParser:
         "present with an unconfirmed hash is a warning, not a failure",
     )
     return parser
-
-
-def _check_mode(args: argparse.Namespace, parser: argparse.ArgumentParser) -> bool:
-    """Refuse a request naming no mode or several, and say if it is the system mode."""
-    _refuse_mode_flags(args, parser)
-    return bool(args.system) and not (args.platform or args.all)
-
-
-def _run_emulator_mode(args: argparse.Namespace, db: dict, requested_regions: list[str]) -> None:
-    _print_emulator_run(args, verify_emulator(
-        comma_list(args.emulator), args.emulators_dir, db, args.standalone,
-        regions=requested_regions, platforms_dir=args.platforms_dir,
-        required_only=args.required_only,
-    ))
-
-
-def _run_system_mode(args: argparse.Namespace, db: dict, requested_regions: list[str]) -> None:
-    _print_emulator_run(args, verify_system(
-        comma_list(args.system), args.emulators_dir, db, args.standalone,
-        regions=requested_regions, platforms_dir=args.platforms_dir,
-        required_only=args.required_only,
-    ))
-
-
-def _print_emulator_run(args: argparse.Namespace, result: dict) -> None:
-    """An --emulator or --system result, as text or JSON, then the strict gate."""
-    if args.json:
-        result["details"] = json_details(result["details"], args.verbose)
-        print(json.dumps(result, indent=2))
-    else:
-        print_emulator_result(result, verbose=args.verbose)
-    _exit_if_strict_emulator(args.strict, result)
-
-
-def _print_platform_results(args: argparse.Namespace, results: PlatformResults) -> None:
-    group_results = results.group_results
-    if not args.json:
-        for result, group in group_results:
-            print_platform_result(result, group, verbose=args.verbose)
-            print()
-        if len(group_results) > 1:
-            print(overall_summary(group_results))
-
-    if args.destinations:
-        write_pack_destinations(args.destinations, results.groups, group_results)
-
-    if args.json:
-        for r in results.all_results.values():
-            r["details"] = json_details(r["details"], args.verbose)
-        print(json.dumps(results.all_results, indent=2))
-
-
-def _run_platform_mode(
-    args: argparse.Namespace,
-    parser: argparse.ArgumentParser,
-    db: dict,
-    requested_regions: list[str],
-    platform_systems: list[str] | None,
-) -> None:
-    results = verify_platforms(selected_platforms(args, parser), db, PlatformRun(
-        platforms_dir=args.platforms_dir,
-        emulators_dir=args.emulators_dir,
-        target=args.target,
-        is_all=args.all,
-        regions=requested_regions,
-        system_filter=platform_systems,
-        no_game_data=getattr(args, "no_game_data", False),
-        required_only=args.required_only,
-    ))
-    _print_platform_results(args, results)
-    _exit_if_strict(args.strict, [r for r, _ in results.group_results])
-
-
-def _main(held: contextlib.ExitStack) -> None:
-    parser = _build_parser()
-    args = parser.parse_args()
-    work_from_repo_root(args, parser, ["db", "platforms_dir", "emulators_dir"])
-    if args.platform:
-        require_platform(args.platform, args.platforms_dir)
-    if args.offline:
-        from resolve import packfiles as packresolve
-
-        packresolve.set_offline(True)
-
-    regions = requested_regions(args.region, parser)
-
-    if _refuse_listing_narrowings(args, parser):
-        run_listing(args, parser, args.list_platforms)
-        return
-
-    system_mode = _check_mode(args, parser)
-    platform_systems = resolve_system_ids(args, parser)
-    # The trees stay put while names resolve against them and files are read.
-    from packs.datadirs import hold_data_dirs
-
-    hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
-
-    db = load_database(args.db)
-
-    if args.emulator:
-        _run_emulator_mode(args, db, regions)
-        return
-
-    if system_mode:
-        _run_system_mode(args, db, regions)
-        return
-
-    # Platform mode (existing)
-    _run_platform_mode(args, parser, db, regions, platform_systems)
-
-
-def _exit_if_strict(strict: bool, results: list[dict]) -> None:
-    """Exit 1 under --strict when a platform result counts a critical file."""
-    failure = platform_strict_failure(results)
-    if strict and failure:
-        print(failure, file=sys.stderr)
-        sys.exit(1)
-
-
-def _exit_if_strict_emulator(strict: bool, result: dict) -> None:
-    """Exit 1 under --strict when an emulator lacks a file it cannot run without."""
-    failure = emulator_strict_failure(result)
-    if strict and failure:
-        print(failure, file=sys.stderr)
-        sys.exit(1)
 
 
 if __name__ == "__main__":

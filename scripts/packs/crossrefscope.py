@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import argparse
+import sys
 from dataclasses import dataclass
 
 from model.platforms import load_platform_config
@@ -98,3 +100,26 @@ def tree_scope(
         ),
         None,
     )
+
+
+def refuse_empty_scope(args: argparse.Namespace, emulator: str | None, tree: TreeScope) -> None:
+    """Why the scope holds no profile, said before ending the run."""
+    platform_scope = tree.platform
+    if (emulator and args.target and platform_scope is not None
+            and emulator in platform_scope.run_anywhere):
+        raise SystemExit(
+            f"ERROR: {emulator} is not built for {args.platform}'s "
+            f"{args.target} target; {args.platform} runs it elsewhere "
+            f"(drop --target to see its files)"
+        )
+    if emulator and args.platform:
+        raise SystemExit(f"ERROR: {emulator} is not run by {args.platform}")
+    if emulator:
+        raise SystemExit(
+            f"ERROR: no platform with the {args.target} target builds {emulator} "
+            f"for it (drop --target to see its files)"
+        )
+    if args.target and not args.platform:
+        print(f"No platform runs a profiled emulator on {args.target}.", file=sys.stderr)
+    else:
+        print(f"{args.platform or 'The tree'} runs no profiled emulator.", file=sys.stderr)

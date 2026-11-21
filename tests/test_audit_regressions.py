@@ -4907,7 +4907,7 @@ class TheGapReportKeepsItsShape(unittest.TestCase):
     --platform totals said "across all emulators"."""
 
     def test_layout(self):
-        from scripts.cross_reference import print_report
+        from scripts.packs.crossreftext import print_report
 
         report = {"abuse": {
             "emulator": "Abuse", "systems": [], "gaps": 1, "total_files": 1,
@@ -6676,11 +6676,18 @@ class ReportsHoldTheDataTrees(unittest.TestCase):
                 node for node in tree.body
                 if isinstance(node, ast.FunctionDef) and node.name == "main"
             )
+            # A thin command holds them in main or in the package run main calls.
+            called = {getattr(call.func, "id", None) for call in ast.walk(main)
+                      if isinstance(call, ast.Call)}
+            entry_points = [main] + [
+                node for node in ast.walk(ast.parse(script_source(script)))
+                if isinstance(node, ast.FunctionDef) and node.name in called
+            ]
             with self.subTest(script=script):
                 self.assertTrue(any(
                     isinstance(call, ast.Call)
                     and getattr(call.func, "id", None) == "hold_data_dirs"
-                    for call in ast.walk(main)
+                    for entry in entry_points for call in ast.walk(entry)
                 ))
 
 
@@ -6707,7 +6714,7 @@ class TheCliSetsBundledFilesApart(unittest.TestCase):
     by design and verify and the gaps page already say so."""
 
     def test_a_bundled_gap_is_not_missing(self):
-        from scripts.cross_reference import print_report
+        from scripts.packs.crossreftext import print_report
 
         gap = {"name": "n64.psh", "required": True, "bundled": True, "note": "",
                "source": "missing"}

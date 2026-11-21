@@ -177,7 +177,7 @@ class TheDestinationsFlagNeedsAPack(unittest.TestCase):
         import ast
 
         tree = ast.parse(script_source("verify.py"))
-        body = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "_main")
+        body = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "run_verify")
         stack = body.args.args[0].arg
         rebound = [
             node.lineno for node in ast.walk(body)
