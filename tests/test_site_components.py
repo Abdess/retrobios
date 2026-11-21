@@ -363,7 +363,10 @@ class TitleLogoOnAPlate(unittest.TestCase):
                 self.assertIn(rule, style)
 
     def test_every_setup_page_has_a_sized_mark(self):
-        index = json.loads(_read(WEBSITE / "public" / "data" / "picker" / "index.json"))
+        picker = WEBSITE / "public" / "data" / "picker" / "index.json"
+        if not picker.is_file():
+            raise unittest.SkipTest(f"no generated site data at {picker}")
+        index = json.loads(_read(picker))
         for entry in index:
             with self.subTest(setup=entry["platform"]):
                 block = _title_through_heading(_built(f"platforms/{entry['platform']}"))
