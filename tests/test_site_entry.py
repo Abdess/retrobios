@@ -1112,7 +1112,7 @@ class TheSiteSaysWhatTheInstallerShows(unittest.TestCase):
         self.assertIn(f"fewer under **{installer.TUI_SYSTEMS_ROW}**", readme)
         self.assertNotIn("offers to install everything or to choose systems", readme)
         source = script_source("generate_readme.py")
-        self.assertIn("_installer_words().TUI_SYSTEMS_ROW", source)
+        self.assertIn("installer_module().TUI_SYSTEMS_ROW", source)
         from installer_build import installerdoc
 
         page = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")

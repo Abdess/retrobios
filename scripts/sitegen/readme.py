@@ -9,7 +9,6 @@ import sys
 from collections.abc import Callable
 from datetime import datetime, timezone
 from pathlib import Path
-from types import ModuleType
 
 from romrecipes import ledger
 from devtools import prchecks
@@ -19,6 +18,7 @@ from core.cli import InputMissing
 from core.paths import DB_FILE, PLATFORMS_DIR, REPO_ROOT
 from core.sizes import size_text
 from core.upstream import forge_headers
+from installer_build.module import installer_module
 from model.composition import compute_composition, count_catalog_matched
 from model.declarations import declared_root
 from model.guides import PACKAGE_COMMAND, install_command
@@ -30,20 +30,6 @@ from model.systems import system_index
 from packs.coverage import verify_platform
 from resolve.cores import resolve_platform_cores
 from resolve.review import LARGE_FILE_ISSUE_URL
-
-
-def _installer_words() -> ModuleType:
-    """install.py read as a module, for the words its screen shows: the
-    README named a line menu the one-liner never opens."""
-    import importlib.util
-
-    path = REPO_ROOT / "install.py"
-    spec = importlib.util.spec_from_file_location("install", path)
-    if spec is None or spec.loader is None:
-        raise ImportError(f"cannot load {path}")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
 
 
 # The repository's profiles wherever the script is run from: a bare
@@ -663,7 +649,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = DB_FILE) -> str
         "",
         "The installer finds the setup and its BIOS folder, installs the files it needs (only"
         " what the games need when it finds them on the card) and checks each one. Its screen"
-        " installs everything, or fewer under **" + _installer_words().TUI_SYSTEMS_ROW + "**."
+        " installs everything, or fewer under **" + installer_module().TUI_SYSTEMS_ROW + "**."
         " Arrow keys and Enter drive it, or a controller on a handheld. It sends no report of"
         f" its own ([what is counted]({SITE_URL}wiki/privacy/)). Options go after the line in the"
         f" form the [installer page]({SITE_URL}wiki/installer/#passing-options) gives.",

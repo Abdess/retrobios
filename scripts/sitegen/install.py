@@ -7,7 +7,6 @@ import html
 import json
 import re
 import shlex
-import types
 from collections import Counter
 
 from model import siteinputs
@@ -19,6 +18,7 @@ from resolve.layout import runs_standalone, standalone_layout_path
 from resolve.standalone import standalone_set
 from sitegen import markup
 from core.paths import REPO_ROOT
+from installer_build.module import installer_module
 from sitegen.fields import search_excluded
 from sitegen.guides import fence, platform_args, terminal_tabs
 from sitegen.render import code_span, escape_tags
@@ -86,20 +86,6 @@ def install_commands(args: str = "", indent: str = "",
     ):
         lines += [f"{indent}{label}", "", *fence(shell, install_command(shell, args), indent), ""]
     return lines
-
-
-@functools.cache
-def installer_module() -> types.ModuleType:
-    """install.py, read as a module: the names `--emulator` accepts are its
-    own (`emulator_names`)."""
-    import importlib.util
-
-    spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
-    if spec is None or spec.loader is None:
-        raise ImportError(f"cannot load {REPO_ROOT / 'install.py'}")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
 
 
 @functools.cache

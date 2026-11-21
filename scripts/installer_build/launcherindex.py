@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import hashlib
-import importlib.util
 import json
 from pathlib import Path
 
 from core.paths import REPO_ROOT
+from installer_build.module import installer_module
 from installer_build.pins import installer_sha256, pinned_sha256
 from installer_build.port import (
     BATOCERA_ZIP,
@@ -20,11 +20,7 @@ from installer_build.port import (
 
 OUTPUT = REPO_ROOT / "install" / "launchers" / "index.json"
 
-_spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
-if _spec is None or _spec.loader is None:
-    raise ImportError(f"cannot load {REPO_ROOT / 'install.py'}")
-_install = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(_install)
+_install = installer_module()
 
 # The archive whose members each system gets, by its key in APP_PLACES.
 LAUNCHER_ARCHIVES = {"muos": MUOS_APP, "knulli": BATOCERA_ZIP, "rocknix": TOOLS_ZIP}

@@ -6,7 +6,6 @@ import argparse
 import ast
 import contextlib
 import http.server
-import importlib.util
 import json
 import os
 import re
@@ -23,6 +22,7 @@ from typing import Any, Callable, TYPE_CHECKING
 
 from core.paths import REPO_ROOT
 from installer_build import handhelds
+from installer_build.module import installer_module
 
 if TYPE_CHECKING:
     from install import LocalCopy, Progress, _OsRule
@@ -31,11 +31,7 @@ if TYPE_CHECKING:
 PAGE = REPO_ROOT / "wiki" / "installer.md"
 INSTALLER = REPO_ROOT / "install.py"
 
-_spec = importlib.util.spec_from_file_location("install", INSTALLER)
-if _spec is None or _spec.loader is None:
-    raise ImportError(f"cannot load {INSTALLER}")
-_install = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(_install)
+_install = installer_module()
 
 BLOCK = re.compile(
     r"(?P<open><!-- generated: (?P<name>[a-z-]+) -->\n)(?P<body>.*?)"
