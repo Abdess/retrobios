@@ -3406,7 +3406,10 @@ class APackNameFitsAFileName(unittest.TestCase):
     before writing anything, while verify --system snes reported."""
 
     def test_a_long_selection_is_bounded_and_told_apart(self):
-        from scripts.packs.naming import MAX_PACK_NAME_BYTES, bounded_pack_name
+        from scripts.packs.naming import MAX_PACK_NAME_BYTES, bounded_join
+
+        def bounded_pack_name(display: list[str], keys: list[str], suffix: str) -> str:
+            return bounded_join(display, keys, joiner="_", budget=MAX_PACK_NAME_BYTES, suffix=suffix)
 
         names = [f"Emulator_Number_{i}" for i in range(23)]
         long_name = bounded_pack_name(names, names, "_BIOS_Pack.zip")

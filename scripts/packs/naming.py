@@ -109,20 +109,31 @@ def system_tag(system_filter: list[str] | None) -> str:
 MAX_SYSTEM_TAG_BYTES = 120
 
 
-def bounded_join(parts: list[str], keys: list[str]) -> str:
+def selection_digest(keys: list[str]) -> str:
+    """Eight hex digits that tell two selections apart in a file name."""
+    return hashlib.sha1("\n".join(sorted(keys)).encode("utf-8")).hexdigest()[:8]
+
+
+def bounded_join(
+    parts: list[str],
+    keys: list[str],
+    *,
+    joiner: str = "+",
+    budget: int = MAX_SYSTEM_TAG_BYTES,
+    suffix: str = "",
+) -> str:
     """Parts joined while they fit, else the first, a count and a digest.
 
     Thirty systems joined made a 261-byte file name and the ZIP could not
-    be opened. The digest keeps two different selections apart. The joiner
-    is one no part holds: with "_", sega-dreamcast + arcade and
+    be opened. The digest keeps two different selections apart. The default
+    joiner is one no system name holds: with "_", sega-dreamcast + arcade and
     sega-dreamcast-arcade both named Dreamcast_Arcade, and the second build
-    replaced the first.
+    replaced the first. The suffix counts in the budget.
     """
-    joined = "+".join(parts)
-    if len(joined.encode("utf-8")) <= MAX_SYSTEM_TAG_BYTES:
+    joined = joiner.join(parts) + suffix
+    if len(joined.encode("utf-8")) <= budget:
         return joined
-    digest = hashlib.sha1("\n".join(sorted(keys)).encode("utf-8")).hexdigest()[:8]
-    return f"{parts[0]}_and_{len(parts) - 1}_more_{digest}"
+    return f"{parts[0]}_and_{len(parts) - 1}_more_{selection_digest(keys)}{suffix}"
 
 
 _UNSAFE_IN_NAME = re.compile(r'[/\\:*?"<>|]')
@@ -193,20 +204,6 @@ def platform_pack_name(
 # A file name holds 255 bytes on every filesystem a pack is written to,
 # and the margin leaves room for the split part suffix and a scratch prefix.
 MAX_PACK_NAME_BYTES = 200
-
-
-def bounded_pack_name(display_names: list[str], keys: list[str], suffix: str) -> str:
-    """The emulator pack's file name, its emulators joined while they fit.
-
-    Past the limit the name keeps the first emulator, says how many more the
-    pack holds, and carries a digest of the selection so two different
-    selections never share a file.
-    """
-    joined = "_".join(display_names) + suffix
-    if len(joined.encode("utf-8")) <= MAX_PACK_NAME_BYTES:
-        return joined
-    digest = hashlib.sha1("\n".join(sorted(keys)).encode("utf-8")).hexdigest()[:8]
-    return f"{display_names[0]}_and_{len(display_names) - 1}_more_{digest}{suffix}"
 
 
 def expected_pack_names(

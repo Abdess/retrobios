@@ -39,7 +39,7 @@ from packs.archive import (
 from packs.datatrees import MISSING_DATA_DIRS, pack_data_tree
 from packs.extras import emulator_region_drops, emulator_required_spares, expand_agnostic_entries
 from packs.naming import (
-    bounded_join, bounded_pack_name, file_name_part, pack_narrowings, system_display_name,
+    MAX_PACK_NAME_BYTES, bounded_join, file_name_part, pack_narrowings, system_display_name,
 )
 from packs.paths import archive_destination, resolve_destination
 from resolve import packfiles as packresolve
@@ -492,8 +492,12 @@ def generate_emulator_pack(
             "full", regions, None, False, required_only, standalone
         )
     )
-    zip_name = options.get("pack_name") or bounded_pack_name(
-        display_names, [n for n, _p in selected], f"{narrow_tags}{PACK_SUFFIX}"
+    zip_name = options.get("pack_name") or bounded_join(
+        display_names,
+        [n for n, _p in selected],
+        joiner="_",
+        budget=MAX_PACK_NAME_BYTES,
+        suffix=f"{narrow_tags}{PACK_SUFFIX}",
     )
     zip_path = os.path.join(output_dir, zip_name)
     if record is None:

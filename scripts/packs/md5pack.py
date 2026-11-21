@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import os
 import sys
 from dataclasses import dataclass
@@ -14,7 +13,7 @@ from model.platforms import load_platform_config
 from model.profiles import ProfileSelectionError, load_emulator_profiles, select_emulator_profiles
 from model.releaserecord import PACK_SUFFIX
 from packs.archive import add_pack_member, writing_pack
-from packs.naming import file_name_part, pack_narrowings
+from packs.naming import file_name_part, pack_narrowings, selection_digest
 from packs.paths import resolve_destination
 from resolve.packfiles import resolve_file, sha1_for_hash
 
@@ -140,9 +139,7 @@ def _md5_pack_name(
     )
     # The hash list is what chooses the content: two lists under one name
     # overwrote each other in the same output directory.
-    selection = hashlib.sha1(
-        "\n".join(sorted(f"{kind}:{value.lower()}" for kind, value in hashes)).encode()
-    ).hexdigest()[:8]
+    selection = selection_digest([f"{kind}:{value.lower()}" for kind, value in hashes])
     return f"{file_name_part(context_name, '_')}{mode_part}_Custom_{selection}{custom_tags}{PACK_SUFFIX}"
 
 
