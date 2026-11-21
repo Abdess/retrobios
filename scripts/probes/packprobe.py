@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from unattended import worktree
-from core_probe import (EXIT_BUSY, PROBE_LOCK_ENV, PROBE_LOCK_HELD_ENV, VERDICTS, host_probe_lock,
+from core_probe import (EXIT_BUSY, PROBE_LOCK_ENV, PROBE_LOCK_HELD_ENV, VERDICTS, head_commit, host_probe_lock,
                         probe_lock_path)
 from core.paths import REPO_ROOT
 from core.statefile import now_iso
@@ -392,9 +392,12 @@ def probe_one(layout: Layout, platform: str, config: dict, profile: dict, target
 
 
 def git_head() -> str | None:
-    proc = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=False,
-                          cwd=REPO_ROOT)
-    return proc.stdout.strip() or None
+    """The revision the pack was built from, None when git cannot say."""
+    try:
+        return head_commit(REPO_ROOT) or None
+    except (OSError, subprocess.CalledProcessError) as exc:
+        print(f"WARNING: pack source commit unknown, git failed: {exc}", file=sys.stderr)
+        return None
 
 
 def append_line(line: dict, root: Path = REPO_ROOT) -> dict:

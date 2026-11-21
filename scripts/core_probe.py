@@ -671,14 +671,20 @@ def host_identity() -> dict:
     }
 
 
+def head_commit(root: Path = ROOT) -> str:
+    """The commit checked out at *root*. Raises OSError or CalledProcessError
+    when git cannot say: each caller decides what a record holds then."""
+    return subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, capture_output=True,
+                          text=True, check=True).stdout.strip()
+
+
 def frontend_identity(script: Path = SCRIPT_PATH,
                       label: str = "scripts/core_probe.py") -> dict:
     """The commit a measurement came from, and whether its script differs from it."""
     commit: str | None = None
     dirty: bool | None = None
     try:
-        commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True,
-                                text=True, check=True).stdout.strip()
+        commit = head_commit()
         status = subprocess.run(["git", "status", "--porcelain", "--", str(script)], cwd=ROOT,
                                 capture_output=True, text=True, check=True).stdout
         dirty = bool(status.strip())

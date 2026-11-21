@@ -226,6 +226,23 @@ class Line(unittest.TestCase):
             self.assertEqual(pp.main(["plan", "-p", "Lakka"]), 2)
 
 
+class SourceCommit(unittest.TestCase):
+    """repo_commit reads HEAD through core_probe.head_commit, the reader
+    frontend_identity uses, and says when the checkout cannot answer."""
+
+    def test_the_checkout_head(self) -> None:
+        import core_probe
+        self.assertEqual(packprobe.git_head(), core_probe.head_commit(REPO_ROOT))
+
+    def test_a_failing_read_is_none_and_said(self) -> None:
+        from unittest import mock
+        err = io.StringIO()
+        with mock.patch.object(packprobe, "head_commit", side_effect=OSError("absent")), \
+                contextlib.redirect_stderr(err):
+            self.assertIsNone(packprobe.git_head())
+        self.assertIn("pack source commit unknown", err.getvalue())
+
+
 class SitePages(unittest.TestCase):
     """A pack probe runs before a release: its records stay in measurements/
     and reach no page."""
