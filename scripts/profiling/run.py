@@ -222,8 +222,7 @@ def _gained_since_pin(
         # A held pin is not advanced at all: bump_commit says so itself.
         return False
     if report.new_files is None and report.new_hashes is None:
-        probe = argparse.Namespace(**{**vars(args), "detect_new_files": True, "watch_hashes": True})
-        _attach_detection(probe, profile, report)
+        _attach_detection(profile, report, args.cache_dir, args.offline, True, True)
     gained = sorted({item["name"] for item in report.new_files or () if item.get("since_pin")})
     added = report.new_hashes or []
     if not (gained or added or report.detection_skipped):
@@ -240,7 +239,8 @@ def _gained_since_pin(
 
 
 def _attach_detection(
-    args: argparse.Namespace, profile: dict, report: ProfileReport
+    profile: dict, report: ProfileReport, cache_dir: str, offline: bool,
+    files: bool, hashes: bool,
 ) -> None:
     """Record undeclared names and hashes of the cited files on the report.
 
@@ -249,13 +249,13 @@ def _attach_detection(
     report already muted it, and one refusal must not end a pass over every
     profile. A quota signal still ends the profile.
     """
-    if not report.head or not (args.detect_new_files or args.watch_hashes):
+    if not report.head or not (files or hashes):
         return
     repo = select_repo(profile)
     if repo is None:
         return
     try:
-        detect_upstream_changes(args, profile, report, repo)
+        detect_upstream_changes(profile, report, repo, cache_dir, offline, files, hashes)
     except upstream.RateLimitError:
         raise
     except upstream.UpstreamError as exc:
@@ -288,9 +288,9 @@ def _attach_version(
             relation = upstream.ancestry(
                 repo, version.tag_commit, report.pin, args.cache_dir, args.offline
             )
-        passed = latest_passed_release(args, repo, version, report.pin)
+        passed = latest_passed_release(repo, version, report.pin, args.cache_dir, args.offline)
         newer = None if passed or profile.get("pin_frozen") else newer_release(
-            args, repo, version, report.pin
+            repo, version, report.pin, args.cache_dir, args.offline
         )
     except upstream.RateLimitError:
         raise
@@ -430,7 +430,10 @@ def _build_full_report(
             profile["version_source"].get("no_genuine_copy") or "") or None
     if args.check_version:
         _attach_version(args, profile, report)
-    _attach_detection(args, profile, report)
+    _attach_detection(
+        profile, report, args.cache_dir, args.offline,
+        args.detect_new_files, args.watch_hashes,
+    )
     return report
 
 

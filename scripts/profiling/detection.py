@@ -201,23 +201,25 @@ def cited_paths(report: ProfileReport) -> list[str]:
 
 
 def detect_upstream_changes(
-    args: argparse.Namespace, profile: dict, report: ProfileReport,
-    repo: upstream.Repo,
+    profile: dict, report: ProfileReport, repo: upstream.Repo,
+    cache_dir: str, offline: bool, files: bool, hashes: bool,
 ) -> None:
-    names, hashes = declared_names(profile), declared_hashes(profile)
-    new_files: list[dict] = []
-    new_hashes: list[dict] = []
+    """Record on the report the undeclared names (files) and the hash
+    literals added since the pin (hashes) of the cited files at HEAD."""
+    names, known = declared_names(profile), declared_hashes(profile)
+    found_files: list[dict] = []
+    found_hashes: list[dict] = []
     for path in cited_paths(report):
         head_lines = upstream.fetch_file(
-            repo, report.head, path, args.cache_dir, args.offline
+            repo, report.head, path, cache_dir, offline
         )
         if head_lines is None:
             continue
         pin_lines = (
-            upstream.fetch_file(repo, report.pin, path, args.cache_dir, args.offline)
+            upstream.fetch_file(repo, report.pin, path, cache_dir, offline)
             or []
         )
-        if args.detect_new_files:
+        if files:
             found, elided = detect_new_files(head_lines, names, path=path)
             at_pin = {
                 name.casefold()
@@ -225,27 +227,27 @@ def detect_upstream_changes(
                     pin_lines, names, cap=sys.maxsize, path=path
                 )[0]
             }
-            new_files.extend(
+            found_files.extend(
                 {"path": path, "line": number, "name": name,
                  "since_pin": name.casefold() not in at_pin}
                 for number, name in found
             )
             if elided:
                 report.new_files_elided[path] = elided
-        if args.watch_hashes:
+        if hashes:
             added = [
                 line
                 for line in difflib.unified_diff(pin_lines, head_lines, n=0)
                 if line.startswith("+") and not line.startswith("+++")
             ]
-            new_hashes.extend(
+            found_hashes.extend(
                 {"path": path, "kind": kind, "value": value}
-                for kind, value in watch_hashes(added, hashes)
+                for kind, value in watch_hashes(added, known)
             )
-    if args.detect_new_files:
-        report.new_files = new_files
-    if args.watch_hashes:
-        report.new_hashes = new_hashes
+    if files:
+        report.new_files = found_files
+    if hashes:
+        report.new_hashes = found_hashes
 
 
 def print_extras(

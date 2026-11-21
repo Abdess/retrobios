@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import argparse
 import re
 import sys
 from dataclasses import dataclass
@@ -150,10 +149,11 @@ def _later_number(candidate: str, declared: str) -> bool:
 
 
 def newer_release(
-    args: argparse.Namespace,
     repo: upstream.Repo,
     version: VersionReport | None,
     pin: str | None,
+    cache_dir: str,
+    offline: bool,
 ) -> str | None:
     """The latest release, when it comes after both the declared tag and the pin.
 
@@ -166,23 +166,24 @@ def newer_release(
         return None
     if published == version.declared:
         return None
-    commit = upstream.tag_commit(repo, published, args.cache_dir, args.offline)
+    commit = upstream.tag_commit(repo, published, cache_dir, offline)
     if not commit or commit == pin:
         return None
-    after_tag = upstream.ancestry(repo, version.tag_commit, commit, args.cache_dir, args.offline)
+    after_tag = upstream.ancestry(repo, version.tag_commit, commit, cache_dir, offline)
     if not after_tag or after_tag[0] == 0 or after_tag[1] != 0:
         return None
-    after_pin = upstream.ancestry(repo, pin, commit, args.cache_dir, args.offline)
+    after_pin = upstream.ancestry(repo, pin, commit, cache_dir, offline)
     if not after_pin or after_pin[0] == 0:
         return None
     return published
 
 
 def latest_passed_release(
-    args: argparse.Namespace,
     repo: upstream.Repo,
     version: VersionReport | None,
     pin: str | None,
+    cache_dir: str,
+    offline: bool,
 ) -> str | None:
     """The latest release, when the pin already contains it and core_version
     names another one.
@@ -201,18 +202,18 @@ def latest_passed_release(
         # version says it is older. "latest", "continuous" or 1.53 under a
         # declared 1.61 say nothing.
         return None
-    commit = upstream.tag_commit(repo, published, args.cache_dir, args.offline)
+    commit = upstream.tag_commit(repo, published, cache_dir, offline)
     if not commit:
         return None
     if version.tag_commit and version.tag_commit != commit:
         # A project can publish a release older than its newest tag:
         # pcsx2x6's latest release is v0.2.20, its declared tag v0.2.22.
-        older = upstream.ancestry(repo, commit, version.tag_commit, args.cache_dir, args.offline)
+        older = upstream.ancestry(repo, commit, version.tag_commit, cache_dir, offline)
         if older and older[1] == 0:
             return None
     if commit == pin:
         return published
-    relation = upstream.ancestry(repo, commit, pin, args.cache_dir, args.offline)
+    relation = upstream.ancestry(repo, commit, pin, cache_dir, offline)
     if relation and relation[1] == 0:
         return published
     return None

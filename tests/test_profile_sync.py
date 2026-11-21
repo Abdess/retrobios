@@ -2189,13 +2189,6 @@ class TestExtrasSurviveARefusingForge(unittest.TestCase):
     """A pass over every profile used to die on the first forge answering
     403 to the detection reads, after the ref report had already muted it."""
 
-    def _args(self):
-        return argparse.Namespace(
-            check_version=False, detect_new_files=True, watch_hashes=False,
-            full_diff=False, tree_diff=False, cache_dir="x", offline=False,
-            ref=None, context=3,
-        )
-
     def _profile(self):
         return {"emulator": "T", "source": "https://github.com/o/n", "files": []}
 
@@ -2208,7 +2201,7 @@ class TestExtrasSurviveARefusingForge(unittest.TestCase):
         upstream.fetch_file = refuse
         try:
             report = _sample_report()
-            profiling_run._attach_detection(self._args(), self._profile(), report)
+            profiling_run._attach_detection(self._profile(), report, "x", False, True, False)
         finally:
             upstream.fetch_file = original
         self.assertEqual(report.detection_skipped, "https://x/y: HTTP 403")
@@ -2223,11 +2216,9 @@ class TestExtrasSurviveARefusingForge(unittest.TestCase):
         }
         original = upstream.fetch_file
         upstream.fetch_file = lambda repo, rev, path, *a, **k: files[rev]
-        args = self._args()
-        args.watch_hashes = True
         report = _sample_report()
         try:
-            profiling_run._attach_detection(args, self._profile(), report)
+            profiling_run._attach_detection(self._profile(), report, "x", False, True, True)
         finally:
             upstream.fetch_file = original
         by_name = {(i["path"], i["name"]): i["since_pin"] for i in report.new_files}
@@ -2250,7 +2241,7 @@ class TestExtrasSurviveARefusingForge(unittest.TestCase):
         try:
             with self.assertRaises(upstream.RateLimitError):
                 profiling_run._attach_detection(
-                    self._args(), self._profile(), _sample_report()
+                    self._profile(), _sample_report(), "x", False, True, False
                 )
         finally:
             upstream.fetch_file = original
@@ -2649,7 +2640,7 @@ class TestWriteDryRun(unittest.TestCase):
         # The cited files gained nothing since the pin in these fixtures.
         from unittest import mock
 
-        def nothing_gained(args, profile, report):
+        def nothing_gained(profile, report, *_):
             report.new_files, report.new_hashes = [], []
 
         self._detection = mock.patch.object(
@@ -2666,7 +2657,7 @@ class TestWriteDryRun(unittest.TestCase):
         # only shifted.
         from unittest import mock
 
-        def gained(args, profile, report):
+        def gained(profile, report, *_):
             report.new_files = [{"path": "zn.c", "name": "coh3002t.zip", "since_pin": True}]
             report.new_hashes = []
 
@@ -3676,10 +3667,9 @@ class APassedReleaseIsNewerThanTheTag(unittest.TestCase):
         version = versions.VersionReport(
             "v0.2.22", "v0.2.22", "v0.2.20", "2026-07-25", True, "tag22"
         )
-        args = argparse.Namespace(cache_dir="c", offline=True)
         with mock.patch.object(upstream, "tag_commit", return_value="rel20"), \
                 mock.patch.object(upstream, "ancestry", return_value=(5, 0)):
-            self.assertIsNone(versions.latest_passed_release(args, "repo", version, "pin"))
+            self.assertIsNone(versions.latest_passed_release("repo", version, "pin", "c", True))
 
 
 class ANewerReleaseThanTheTag(unittest.TestCase):
@@ -3689,11 +3679,10 @@ class ANewerReleaseThanTheTag(unittest.TestCase):
         from unittest import mock
 
         version = versions.VersionReport("2.8", "2.9", "2.9", "2026-10-01", True, "tag28")
-        args = argparse.Namespace(cache_dir="c", offline=True)
         answers = iter([after_tag, after_pin])
         with mock.patch.object(upstream, "tag_commit", return_value="rel29"), \
                 mock.patch.object(upstream, "ancestry", side_effect=lambda *a, **k: next(answers)):
-            return versions.newer_release(args, "repo", version, "tag28")
+            return versions.newer_release("repo", version, "tag28", "c", True)
 
     def test_a_later_release_is_named(self):
         self.assertEqual(self._newer((12, 0), (12, 0)), "2.9")
@@ -3727,10 +3716,9 @@ class AProjectThatOnlyTags(unittest.TestCase):
         from unittest import mock
 
         version = versions.VersionReport("v1.2", "v1.3", None, None, True, "tag12")
-        args = argparse.Namespace(cache_dir="c", offline=True)
         with mock.patch.object(upstream, "tag_commit", return_value="tag13"), \
                 mock.patch.object(upstream, "ancestry", return_value=(7, 0)):
-            self.assertEqual(versions.newer_release(args, "repo", version, "tag12"), "v1.3")
+            self.assertEqual(versions.newer_release("repo", version, "tag12", "c", True), "v1.3")
 
 
 class APassedReleaseUnderAnUntaggedVersion(unittest.TestCase):
@@ -3745,7 +3733,6 @@ class APassedReleaseUnderAnUntaggedVersion(unittest.TestCase):
     def test_only_a_higher_number_counts_without_a_tag(self):
         from unittest import mock
 
-        args = argparse.Namespace(cache_dir="c", offline=True)
         cases = {("9.0.5", "v9.0-6"): "v9.0-6", ("1.61", "1.53"): None,
                  ("v0.1-12070", "latest"): None, ("Git", "v2.7"): None, ("5.2", "v5.2"): None,
                  ("v1", "v1.0"): None, ("0.83", "20120302"): None, ("0.160", "v1.4.1"): None,
@@ -3755,7 +3742,7 @@ class APassedReleaseUnderAnUntaggedVersion(unittest.TestCase):
             with self.subTest(declared=declared, release=release), \
                     mock.patch.object(upstream, "tag_commit", return_value="rel"), \
                     mock.patch.object(upstream, "ancestry", return_value=(3, 0)):
-                self.assertEqual(versions.latest_passed_release(args, "repo", version, "pin"), expected)
+                self.assertEqual(versions.latest_passed_release("repo", version, "pin", "c", True), expected)
 
     def test_no_tag_and_nothing_passed_stays_quiet(self):
         version = versions.VersionReport("9.0.5", None, None, None, False, None)
@@ -5375,7 +5362,7 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
         each report's text: refusing the pair left the finding unwritten."""
         from unittest import mock
 
-        def detect(args, profile, report):
+        def detect(profile, report, *_):
             report.new_files = [
                 {"path": "a.c", "line": 3, "name": "new.rom", "since_pin": True}
             ]
@@ -5401,7 +5388,7 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
         only in the text report stayed a human reading."""
         from unittest import mock
 
-        def detect(args, profile, report):
+        def detect(profile, report, *_):
             report.new_files = [
                 {"path": "a.c", "line": 3, "name": "new.rom", "since_pin": True}
             ]
