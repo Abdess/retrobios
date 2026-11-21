@@ -1269,6 +1269,23 @@ def commit_date(repo: Repo, sha: str, cache_dir: str, offline: bool = False) -> 
     return stamp.isoformat() if stamp is not None else None
 
 
+def path_commits_url(
+    repo: Repo, path: str, *, per_page: int = 100,
+    since: str | None = None, page: int | None = None,
+) -> str:
+    """The forge's listing of the commits that touch a path."""
+    if repo.family == "gitlab":
+        base = f"{repo.api_base}/projects/{project_path(repo)}/repository/commits"
+    else:
+        base = f"{repo.api_base}/repos/{repo.slug}/commits"
+    url = f"{base}?path={urllib.parse.quote(path)}"
+    if since is not None:
+        url += f"&since={urllib.parse.quote(since)}"
+    size_key = "per_page" if repo.family in ("github", "gitlab") else "limit"
+    url += f"&{size_key}={per_page}"
+    return url if page is None else f"{url}&page={page}"
+
+
 def commits_touching(
     repo: Repo, path: str, base: str, cache_dir: str, offline: bool = False,
     head: str | None = None,
@@ -1284,23 +1301,7 @@ def commits_touching(
     since = commit_date(repo, base, cache_dir, offline)
     if since is None:
         return 0
-    quoted = urllib.parse.quote(path)
-    stamp = urllib.parse.quote(since)
-    if repo.family == "gitlab":
-        url = (
-            f"{repo.api_base}/projects/{project_path(repo)}"
-            f"/repository/commits?path={quoted}&since={stamp}&per_page=100"
-        )
-    elif repo.family == "github":
-        url = (
-            f"{repo.api_base}/repos/{repo.slug}/commits"
-            f"?path={quoted}&since={stamp}&per_page=100"
-        )
-    else:
-        url = (
-            f"{repo.api_base}/repos/{repo.slug}/commits"
-            f"?path={quoted}&since={stamp}&limit=100"
-        )
+    url = path_commits_url(repo, path, since=since)
     # The list grows with every push touching the path: cached for good, the
     # triage drift score stayed at whatever the first run counted.
     payload = cached_api(url, cache_dir, offline, MOVING_TTL)
