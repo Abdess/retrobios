@@ -165,7 +165,7 @@ def truth_steps(args: argparse.Namespace, results: dict) -> bool:
             "scripts/generate_truth.py",
             "--all",
             "--output-dir",
-            str(Path(args.output_dir) / "truth"),
+            str(truth_dir),
         ]
         if args.target:
             truth_cmd.extend(["--target", args.target])
@@ -202,7 +202,7 @@ def truth_steps(args: argparse.Namespace, results: dict) -> bool:
             # install/: written under the pack directory it went stale on
             # every green run.
             "--truth-dir",
-            str(Path(args.output_dir) / "truth"),
+            str(truth_dir),
         ]
         # Seven of the formats carry code, so the export patches the
         # platform's own file rather than regenerating it. Offline that
