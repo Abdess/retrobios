@@ -43,7 +43,7 @@ def _paths_key(entry: dict) -> tuple[str, ...]:
 
 
 def _matching_keys(
-    entry: dict, by_key: dict[tuple[str, str], OrderedDict]
+    entry: dict, by_key: dict[tuple[str, str], list[OrderedDict]]
 ) -> list[tuple[str, str]]:
     """Our keys this platform entry answers to.
 
@@ -56,6 +56,26 @@ def _matching_keys(
         return [(name, s) for s in systems if (name, s) in by_key]
     named = [k for k in by_key if k[0] == name]
     return named if len(named) == 1 else []
+
+
+def _pick(
+    entry: dict, owns: list[OrderedDict], used: set[int], revisions: bool
+) -> OrderedDict | None:
+    """The entry of ours that corrects this platform entry, None for none.
+
+    The one sharing a hash with it first. A name and system the platform
+    declares once is corrected by the first entry of ours left, whatever
+    its hash; declared several times, an entry is a revision and only one
+    of ours sharing its hash speaks for it.
+    """
+    free = [own for own in owns if id(own) not in used]
+    theirs = set(parse_hash_list(entry.get("md5")))
+    sharing = next(
+        (own for own in free if theirs & set(parse_hash_list(own.get("md5")))), None
+    )
+    if sharing is not None or revisions:
+        return sharing
+    return free[0] if free else None
 
 
 class Exporter(BaseExporter[str]):
@@ -222,15 +242,18 @@ class Exporter(BaseExporter[str]):
         """
         # Keyed by name AND system: the retroarch manifest declares
         # ATARIOSB.ROM for atari5200 and atari800 with different md5 lists,
-        # and a name-only key wrote the first of ours over both.
-        by_key: OrderedDict[tuple[str, str], OrderedDict] = OrderedDict()
+        # and a name-only key wrote the first of ours over both. A key holds
+        # every entry of ours under it: the retroarch manifest declares
+        # 64DD_IPL.bin three times for n64dd, one md5 each, and each is
+        # transcribed.
+        by_key: OrderedDict[tuple[str, str], list[OrderedDict]] = OrderedDict()
         for own in ours:
             key = (str(own.get("filename", "")), str(own.get("system", "")))
-            if key[0] and key not in by_key:
-                by_key[key] = own
+            if key[0]:
+                by_key.setdefault(key, []).append(own)
 
         merged: list[OrderedDict] = []
-        corrected: set[tuple[str, str]] = set()
+        used: set[int] = set()
         # PPSSPP writes its one BIOS as an object, not a list of one.
         if isinstance(existing, dict):
             existing = [existing]
@@ -248,21 +271,21 @@ class Exporter(BaseExporter[str]):
         # they were (the 64DD IPL declared twice, both contradicted).
         for entry in entries:
             keys = _matching_keys(entry, by_key)
-            other_revision = (
-                keys
-                and seen_keys.get(keys[0], 0) > 1
-                and not set(parse_hash_list(entry.get("md5"))) & set(parse_hash_list(by_key[keys[0]].get("md5")))
-            )
-            if other_revision or not keys:
+            picked = [
+                _pick(entry, by_key[key], used, seen_keys.get(key, 0) > 1) for key in keys
+            ]
+            if not picked or picked[0] is None:
                 merged.append(OrderedDict(entry))
                 continue
-            merged.append(cls._corrected(entry, by_key[keys[0]]))
-            corrected.update(keys)
+            merged.append(cls._corrected(entry, picked[0]))
+            used.update(id(own) for own in picked if own is not None)
 
-        uncorrected = [key for key in by_key if key not in corrected]
-        merged.extend(by_key[key] for key in uncorrected)
+        uncorrected = [
+            (key, own) for key, owns in by_key.items() for own in owns if id(own) not in used
+        ]
+        merged.extend(own for _key, own in uncorrected)
         if appended is not None:
-            appended.update(uncorrected)
+            appended.update(key for key, _own in uncorrected)
         # A file the platform does not declare is appended unless the list
         # already holds that name for that system at that path. The key
         # above is name and system only, and folded melonDS's SkyEmu/
@@ -341,23 +364,23 @@ class Exporter(BaseExporter[str]):
             except json.JSONDecodeError:
                 continue
 
-            entries = [self._entry(fe) for fe in files if fe.platform is not None]
+            declared = [fe for fe in files if fe.platform is not None]
+            entries = [self._entry(fe) for fe in declared]
             added = [fe for fe in files if fe.platform is None]
             additions = [self._entry(fe) for fe in added]
-            appended: set[tuple[str, str]] = set()
             held_back: list[int] = []
+            merged: list[OrderedDict] = []
             for component_value in manifest.values():
                 if not isinstance(component_value, dict):
                     continue
                 holder = self._bios_holder(component_value)
                 if holder is None:
-                    component_value["bios"] = self._merge(
-                        None, entries, additions, appended, held_back
-                    )
+                    merged = self._merge(None, entries, additions, None, held_back)
+                    component_value["bios"] = merged
                 else:
                     container, key = holder
                     written = container.get(key)
-                    merged = self._merge(written, entries, additions, appended, held_back)
+                    merged = self._merge(written, entries, additions, None, held_back)
                     # A single object stays one while nothing is added to it.
                     container[key] = (
                         merged[0] if isinstance(written, dict) and len(merged) == 1 else merged
@@ -365,11 +388,13 @@ class Exporter(BaseExporter[str]):
                 break
             self._held_back.update(id(added[index]) for index in held_back)
             # A declared entry whose revision the platform does not hold is
-            # written beside theirs: a new line, not a corrected value.
+            # written beside theirs: a new line, not a corrected value. The
+            # merge places such an entry of ours as it is, so its identity
+            # names the file: a name and system tells the three 64DD_IPL.bin
+            # revisions apart from none.
+            placed = {id(entry) for entry in merged}
             self._appended.update(
-                id(fe) for fe in files
-                if fe.platform is not None
-                and (str(fe.name), str(fe.native_system)) in appended
+                id(fe) for fe, entry in zip(declared, entries) if id(entry) in placed
             )
 
             # Nine of ten manifests end without a newline: the file ends as
