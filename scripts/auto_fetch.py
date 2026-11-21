@@ -93,7 +93,7 @@ def main() -> None:
             continue
 
         print(f"  {len(missing)} missing files")
-        result = fetch_missing(missing, db, args.bios_dir, args.dry_run)
+        result = fetch_missing(missing, db, args.bios_dir, args.dry_run, args.platforms_dir)
 
         if result["still_missing"]:
             all_still_missing[config.get("platform") or platform] = result["still_missing"]

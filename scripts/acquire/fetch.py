@@ -12,8 +12,10 @@ import urllib.parse
 from pathlib import Path
 
 from core import upstream
-from core.hashing import parse_hash_list
+from core.hashing import parse_hash_list, parse_md5_list
+from core.paths import EMULATORS_DIR, PLATFORMS_DIR
 from resolve.localfile import held_record_for
+from resolve.review import load_platform_hashes, load_profile_hashes, placement
 
 MAX_DOWNLOAD = 100 * 1024 * 1024  # 100MB per file
 
@@ -272,31 +274,48 @@ def step4_search_archive_org(entry: dict) -> bytes | None:
     return None
 
 
-def place_file(data: bytes, entry: dict, bios_dir: str, db: dict) -> str:
-    """Place a fetched BIOS file in the correct location."""
+def place_file(
+    data: bytes, entry: dict, bios_dir: str, db: dict,
+    platform_hashes: dict, profile_hashes: dict,
+) -> str:
+    """Write a fetched file where the review would accept it.
+
+    The folder is resolve.review.placement()'s, the rule validate_pr and the
+    wanted page read: a slug matched against folder names sent nintendo-ds
+    to Nintendo/3DS and snk-neogeo to a new Unknown/ folder. A system whose
+    folder is not settled leaves the file in tmp/acquire/, never in bios/.
+    """
     name = os.path.basename(entry["name"])
-    system = entry["system"]
+    system = str(entry.get("system") or "")
+    root = Path(bios_dir)
 
-    dest_dir = Path(bios_dir)
+    def local(path: str) -> Path:
+        # placement() speaks repository paths, bios/<Manufacturer>/...
+        return root.joinpath(*path.rstrip("/").split("/")[1:])
 
-    # Every part of the slug, not any: matching "nintendo" alone filed the
-    # N64's n64.psh under the first Nintendo folder walked, the SNES one.
-    parts = [part for part in system.lower().split("-") if len(part) > 1]
-    matches = sorted(
-        (len(f"{manufacturer_dir.name}/{console_dir.name}"), str(console_dir), console_dir)
-        for manufacturer_dir in dest_dir.iterdir() if manufacturer_dir.is_dir()
-        for console_dir in manufacturer_dir.iterdir() if console_dir.is_dir()
-        and all(
-            part in f"{manufacturer_dir.name}/{console_dir.name}".lower()
-            for part in parts
-        )
+    values = [
+        *parse_hash_list(entry.get("sha1")),
+        *parse_md5_list(entry.get("md5")),
+        *parse_hash_list(entry.get("sha256")),
+    ]
+    spot = placement(
+        values, name, db, platform_hashes, profile_hashes, declared=bool(values),
+        systems=[system] if system else [], exists=lambda path: local(path).exists(),
     )
-    folder = matches[0][2] if matches else dest_dir / "Unknown" / system
-    dest = folder / name
-    if dest.exists() and dest.read_bytes() != data:
-        # Another revision under the same name: the collection keeps it
-        # beside, never in place of, the file already there.
-        dest = folder / ".variants" / f"{name}.{hashlib.sha1(data).hexdigest()[:8]}"
+    folders: tuple[str, ...] = spot.folders or ((spot.home,) if spot.home else ())
+    sha1 = hashlib.sha1(data).hexdigest()
+    if len(folders) != 1:
+        print(f"    No single bios/ folder for {system or name}"
+              + (f" ({', '.join(folders)})" if folders else "")
+              + ": kept out of bios/")
+        dest = ACQUIRE_DIR / sha1
+    else:
+        folder = local(folders[0])
+        dest = folder / (spot.name or name)
+        if dest.exists() and dest.read_bytes() != data:
+            # Another revision under the same name: the collection keeps it
+            # beside, never in place of, the file already there.
+            dest = folder / ".variants" / f"{dest.name}.{sha1[:8]}"
     dest.parent.mkdir(parents=True, exist_ok=True)
     with open(dest, "wb") as f:
         f.write(data)
@@ -308,10 +327,20 @@ def fetch_missing(
     db: dict,
     bios_dir: str,
     dry_run: bool = False,
+    platforms_dir: str = PLATFORMS_DIR,
+    emulators_dir: str = EMULATORS_DIR,
 ) -> dict:
     """Run the 5-step auto-fetch pipeline for missing files."""
     stats = {"found": 0, "not_found": 0, "errors": 0, "unverifiable": 0}
     still_missing = []
+    tables: list[dict] = []
+
+    def place(data: bytes, entry: dict) -> str:
+        # Read once, and only when something was found to place.
+        if not tables:
+            tables.extend((load_platform_hashes(platforms_dir, db),
+                           load_profile_hashes(emulators_dir, db)))
+        return place_file(data, entry, bios_dir, db, *tables)
 
     for entry in missing:
         name = entry["name"]
@@ -340,28 +369,28 @@ def fetch_missing(
 
         data = step2_scan_branches(entry)
         if data:
-            path = place_file(data, entry, bios_dir, db)
+            path = place(data, entry)
             print(f"    [2] Found in branch, saved to: {path}")
             stats["found"] += 1
             continue
 
         data = step3_search_public_repos(entry)
         if data:
-            path = place_file(data, entry, bios_dir, db)
+            path = place(data, entry)
             print(f"    [3] Found in public repo, saved to: {path}")
             stats["found"] += 1
             continue
 
         data = step3b_software_heritage(entry)
         if data:
-            path = place_file(data, entry, bios_dir, db)
+            path = place(data, entry)
             print(f"    [3b] Found in Software Heritage, saved to: {path}")
             stats["found"] += 1
             continue
 
         data = step4_search_archive_org(entry)
         if data:
-            path = place_file(data, entry, bios_dir, db)
+            path = place(data, entry)
             print(f"    [4] Found on archive.org, saved to: {path}")
             stats["found"] += 1
             continue

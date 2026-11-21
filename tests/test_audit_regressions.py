@@ -931,7 +931,12 @@ class AutoFetchReadsListsAndPlacesWithoutClobbering(unittest.TestCase):
               "indexes": {"by_md5": {}}}
         self.assertEqual(acquire_fetch.step1_crossref_db(entry, db), "bios/x/n64.psh")
 
-    def test_the_whole_slug_picks_the_folder_and_nothing_is_overwritten(self):
+    @staticmethod
+    def _tables(system: str, folder: str) -> tuple[dict, dict]:
+        """Hash tables where the collection files *system* under *folder*."""
+        return {"system_folders": {system: {folder}}}, {}
+
+    def test_the_review_folder_is_used_and_nothing_is_overwritten(self):
         from scripts.acquire import fetch as acquire_fetch
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
@@ -941,11 +946,45 @@ class AutoFetchReadsListsAndPlacesWithoutClobbering(unittest.TestCase):
             held = bios / "Nintendo" / "N64" / "n64.psh"
             held.write_bytes(b"other revision")
             placed = Path(acquire_fetch.place_file(
-                b"fetched", {"name": "n64.psh", "system": "nintendo-64"}, str(bios), {}
+                b"fetched", {"name": "n64.psh", "system": "nintendo-64"}, str(bios), {},
+                *self._tables("nintendo-64", "bios/Nintendo/N64/"),
             ))
             self.assertEqual(placed.parent.parent, bios / "Nintendo" / "N64")
             self.assertEqual(placed.parent.name, ".variants")
             self.assertEqual(held.read_bytes(), b"other revision")
+
+    def test_a_slug_inside_another_folder_name_is_no_folder(self):
+        """'ds' is in '3DS': the DS firmware went to Nintendo/3DS."""
+        from scripts.acquire import fetch as acquire_fetch
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            bios = Path(directory)
+            for folder in ("Nintendo/3DS", "Nintendo/Nintendo DS"):
+                (bios / folder).mkdir(parents=True)
+            placed = Path(acquire_fetch.place_file(
+                b"fw", {"name": "firmware.bin", "system": "nintendo-ds"}, str(bios), {},
+                *self._tables("nintendo-ds", "bios/Nintendo/Nintendo DS/"),
+            ))
+            self.assertEqual(placed, bios / "Nintendo" / "Nintendo DS" / "firmware.bin")
+
+    def test_an_unsettled_folder_stays_out_of_bios(self):
+        """snk-neogeo went to a new bios/Unknown/snk-neogeo/."""
+        import hashlib
+        from unittest import mock
+
+        from scripts.acquire import fetch as acquire_fetch
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            bios, acquired = Path(directory, "bios"), Path(directory, "acquire")
+            bios.mkdir()
+            with mock.patch.object(acquire_fetch, "ACQUIRE_DIR", acquired), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                placed = Path(acquire_fetch.place_file(
+                    b"set", {"name": "neogeo.zip", "system": "snk-neogeo"}, str(bios), {},
+                    {}, {},
+                ))
+            self.assertEqual(placed, acquired / hashlib.sha1(b"set").hexdigest())
+            self.assertEqual(list(bios.iterdir()), [])
 
 
 class NoParserAcceptsAnAbbreviation(unittest.TestCase):
