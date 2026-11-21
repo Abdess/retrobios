@@ -7,12 +7,12 @@ import urllib.error
 from pathlib import Path
 from typing import NamedTuple
 
-from installer.events import EVENTS
 from installer.host_fs import _is_file, read_local_json
 from installer.manifest import _check_standalone_layouts, _validate_manifest, _validate_targets
 from installer.network import _address_lines, _fetch_json, network_words, request_proxy
 from installer.offline import LOCAL, _Offline, offline_named, offline_undo, offline_words
 from installer.platforms import TARGET_PLATFORMS, display_name
+from installer.refusal import Refusal
 from installer.remote import (
     DEFAULT_RELEASE_REF,
     MAX_MANIFEST_BYTES,
@@ -197,12 +197,13 @@ def fetch_manifest(plat: str) -> dict:
         return load_manifest(plat)
     except ListFailure as stopped:
         failure = stopped.problem
-        event = _manifest_event(failure)
-        if event is not None:
-            EVENTS.emit("error", stage="manifest", reason=event[0], platform=plat,
-                        message=event[1])
-        _say(manifest_failure_lines(failure))
-        sys.exit(failure.fatal)
+        lines = manifest_failure_lines(failure)
+        # A list given as a file or in a pack that cannot be used ended the
+        # run on code 1 with no event: its words are the message.
+        reason, message = _manifest_event(failure) or (
+            failure.code, " ".join(line.strip() for line in lines))
+        raise Refusal("manifest", reason, plat, *lines, code=failure.fatal,
+                      message=message) from None
 
 
 def _say(lines: list[str]) -> None:
@@ -240,11 +241,9 @@ def fetch_standalone(plat: str, manifest: dict) -> dict:
                    else network_words(exc)[1])
     except ValueError as exc:
         problem = f"not valid: {exc}"
-    EVENTS.emit("error", stage="manifest", reason="unavailable", platform=plat,
-                message=f"--standalone needs {where}: {problem}")
-    print(f"Error: --standalone needs {where}, which could not be read ({problem}).",
-          file=sys.stderr)
-    sys.exit(1)
+    raise Refusal("manifest", "unavailable", plat,
+                  f"Error: --standalone needs {where}, which could not be read ({problem}).",
+                  message=f"--standalone needs {where}: {problem}")
 
 
 def held_targets(plat: str) -> dict | None:
@@ -275,8 +274,7 @@ def local_targets(plat: str) -> dict | None:
     try:
         return held_targets(plat)
     except ListFailure as stopped:
-        _say(targets_failure_lines(stopped.problem))
-        sys.exit(stopped.problem.fatal)
+        raise _targets_refusal(stopped.problem) from None
 
 
 def load_targets(plat: str, attempts: int = MAX_RETRIES,
@@ -327,6 +325,12 @@ def targets_failure_lines(failure: ListProblem) -> list[str]:
             *_address_lines(where, failure.overridden), NETWORK_ADVICE]
 
 
+def _targets_refusal(failure: ListProblem) -> Refusal:
+    """A board list the run cannot go on without, as the run's refusal."""
+    return Refusal("targets", failure.code, failure.plat, *targets_failure_lines(failure),
+                   code=failure.fatal)
+
+
 def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
                   timeout: float | None = None) -> dict | None:
     """load_targets in line mode: what went wrong said, None when the run
@@ -334,7 +338,7 @@ def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
     try:
         return load_targets(plat, attempts, timeout)
     except ListFailure as stopped:
-        _say(targets_failure_lines(stopped.problem))
         if stopped.problem.fatal:
-            sys.exit(stopped.problem.fatal)
+            raise _targets_refusal(stopped.problem) from None
+        _say(targets_failure_lines(stopped.problem))
         return None

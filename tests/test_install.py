@@ -49,6 +49,16 @@ PIN_ADVICE = "install.py changed: python scripts/pin_installer.py rewrites both 
 setUpModule, tearDownModule = module_guard("test_install")
 
 
+def reported(call, *args):
+    """call(*args), a refusal said as the command says it: a library
+    function raises it, and the command prints it."""
+    try:
+        return call(*args)
+    except install.Refusal as refusal:
+        refusal.report()
+        raise
+
+
 def _parenthesized_withs(tokens: list) -> list[str]:
     import tokenize
 
@@ -2896,7 +2906,7 @@ class FileListsAreRetried(unittest.TestCase):
                 install.urllib.request, "urlopen",
                 lambda url, timeout=None: contextlib.nullcontext(page)), \
                 contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
-            install.fetch_manifest("retroarch")
+            reported(install.fetch_manifest, "retroarch")
         said = err.getvalue()
         self.assertIn("a Wi-Fi sign-in page or a cut download looks like this", said)
         self.assertIn("run the same command again", said)
@@ -2911,7 +2921,7 @@ class FileListsAreRetried(unittest.TestCase):
                                         side_effect=failures), \
                 unittest.mock.patch.object(install.time, "sleep"), \
                 contextlib.redirect_stderr(err), self.assertRaises(SystemExit) as caught:
-            install.fetch_manifest("retroarch")
+            reported(install.fetch_manifest, "retroarch")
         self.assertEqual(caught.exception.code, 1)
         self.assertIn("HTTPS_PROXY", err.getvalue())
         self.assertIn(f"after {install.MAX_RETRIES} attempts", err.getvalue())
@@ -2949,7 +2959,7 @@ class ASilentServerIsBounded(unittest.TestCase):
                 unittest.mock.patch.dict(os.environ,
                                          {"RETROBIOS_BASE_URL": f"http://127.0.0.1:{port}"}), \
                 contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
-            install.fetch_manifest("retroarch")
+            reported(install.fetch_manifest, "retroarch")
         elapsed = time.monotonic() - start
         self.assertLess(elapsed, 5)
         self.assertEqual(len(held), install.STALLED_ATTEMPTS)
@@ -5235,7 +5245,7 @@ class AMissingFileListNamesTheRef(unittest.TestCase):
                 unittest.mock.patch.object(install, "_fetch_json", side_effect=error), \
                 contextlib.redirect_stderr(io.StringIO()) as err, \
                 self.assertRaises(SystemExit):
-            install.fetch_manifest("retroarch")
+            reported(install.fetch_manifest, "retroarch")
         return err.getvalue()
 
     def test_a_pinned_tag_is_named(self):
@@ -5760,7 +5770,7 @@ class AnOverrideIsNamedWhenItIsTheCause(unittest.TestCase):
                 unittest.mock.patch.object(install, "_fetch_json", side_effect=error), \
                 contextlib.redirect_stderr(io.StringIO()) as err, \
                 self.assertRaises(SystemExit):
-            install.fetch_manifest("retroarch")
+            reported(install.fetch_manifest, "retroarch")
         text = err.getvalue()
         self.assertIn("Address: https://mirror.invalid/install/retroarch.json", text)
         self.assertIn("RETROBIOS_BASE_URL is set", text)
@@ -6056,6 +6066,22 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         self.assertIn("--cores-dir <cores folder>", proc.stderr)
         self.assertIn("without --installed-cores", proc.stderr)
 
+    def test_a_refusal_reaches_the_event_stream(self):
+        """--events read start, detect, then end with code 1: the reason
+        went to stderr alone."""
+        for options, reason in ((["--cores-dir", str(self.home / "core")], "not_found"),
+                                (["--installed-cores"], "none")):
+            with self.subTest(reason=reason):
+                proc = _install_run(self.env, "--platform", "retroarch", "--dest",
+                                    str(self.home / "s"), *options, "--dry-run", "--events")
+                self.assertEqual(proc.returncode, 1, proc.stderr)
+                events = [json.loads(line) for line in proc.stdout.splitlines()]
+                self.assertEqual([event["event"] for event in events][-2:], ["error", "end"])
+                error = events[-2]
+                self.assertEqual((error["stage"], error["reason"], error["platform"]),
+                                 ("cores", reason, "retroarch"))
+                self.assertIn(error["message"].split(". ")[0], proc.stderr)
+
 
 class DestAloneFollowsWhatIsFoundHere(unittest.TestCase):
     """--dest without --platform always meant RetroArch's list, even on a
@@ -6067,8 +6093,8 @@ class DestAloneFollowsWhatIsFoundHere(unittest.TestCase):
                 unittest.mock.patch("builtins.input", lambda _prompt="": answer), \
                 contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
             try:
-                plat, folder = install._platform_for_dest("linux", Path("/media/card"),
-                                                          interactive)
+                plat, folder = reported(install._platform_for_dest, "linux",
+                                        Path("/media/card"), interactive)
                 self.assertEqual(folder, Path("/media/card"))
                 return plat, out.getvalue()
             except SystemExit as exc:

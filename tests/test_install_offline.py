@@ -1155,11 +1155,10 @@ class LocalFilesSayWhyTheyCannotBeUsed(unittest.TestCase):
         self.addCleanup(patcher.stop)
 
     def _said(self, call) -> str:
-        with contextlib.redirect_stderr(io.StringIO()) as err, \
-                self.assertRaises(SystemExit) as stop:
+        with self.assertRaises(install.Refusal) as stop:
             call()
         self.assertEqual(stop.exception.code, 1)
-        return err.getvalue()
+        return "\n".join(stop.exception.lines)
 
     def test_an_oversized_standalone_layout(self):
         (self.root / "standalone").mkdir()

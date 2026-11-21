@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import os
 import re
-import sys
 from pathlib import Path
+from typing import NoReturn
 
 from installer.config_values import _retroarch_cfg_dir
 from installer.events import EVENTS
@@ -14,6 +14,7 @@ from installer.invocation import _INVOCATION
 from installer.local_check import closed_folder_words
 from installer.manifest import entry_copies
 from installer.platforms import display_name
+from installer.refusal import Refusal
 from installer.text import _plural, screen_text
 
 # A libretro core as RetroArch loads it: <name>_libretro.so|dll|dylib, and
@@ -145,7 +146,7 @@ def unknown_cores(manifest: dict, names: list[str]) -> list[str]:
     return sorted(name for name in names if name not in known)
 
 
-def _check_cores_dir(folder: Path) -> None:
+def _check_cores_dir(folder: Path, plat: str) -> None:
     """Refuse a --cores-dir that cannot be listed, saying why: a typo
     (core/ for cores/) or a closed folder read as an empty one, and the
     run said "none in" and asked for the --cores-dir it was given."""
@@ -153,20 +154,20 @@ def _check_cores_dir(folder: Path) -> None:
         with os.scandir(folder):
             return
     except FileNotFoundError:
-        why = "does not exist"
+        reason, why = "not_found", "does not exist"
     except NotADirectoryError:
-        why = "is not a folder"
+        reason, why = "not_a_folder", "is not a folder"
     except PermissionError as exc:
         closed = closed_folder(folder)
+        reason = "unreadable"
         why = (f"cannot be opened by this user ({exc.strerror or exc})"
                if closed is None or closed[0] == folder
                else f"cannot be opened: {closed_folder_words(folder, closed)}")
     except OSError as exc:
-        why = f"could not be read ({exc.strerror or exc})"
-    print(f"Error: --cores-dir {screen_text(str(folder))} {why}.", file=sys.stderr)
-    print("  Name the folder RetroArch loads cores from (libretro_directory in "
-          "retroarch.cfg, cores/ beside RetroArch by default).", file=sys.stderr)
-    sys.exit(1)
+        reason, why = "unreadable", f"could not be read ({exc.strerror or exc})"
+    raise Refusal("cores", reason, plat, f"Error: --cores-dir {screen_text(str(folder))} {why}.",
+                  "  Name the folder RetroArch loads cores from (libretro_directory in "
+                  "retroarch.cfg, cores/ beside RetroArch by default).")
 
 
 def _unprofiled_cores_firmware(
@@ -200,7 +201,7 @@ def _unprofiled_cores_firmware(
     return dests
 
 
-def _no_core_found(plat: str, bios_path: Path, searched: list[Path]) -> None:
+def _no_core_found(plat: str, bios_path: Path, searched: list[Path]) -> NoReturn:
     """Refuse --installed-cores with no core, and say how to point at them.
 
     With no retroarch.cfg naming the folder as its system_directory, and
@@ -209,11 +210,10 @@ def _no_core_found(plat: str, bios_path: Path, searched: list[Path]) -> None:
     """
     where = (f"none in {', '.join(map(str, searched))}" if searched
              else f"no retroarch.cfg was found for {bios_path} to name their folder")
-    print(f"Error: no installed core found for {display_name(plat)}: {where}.",
-          file=sys.stderr)
-    print("  Name the folder RetroArch loads cores from (libretro_directory in "
-          "retroarch.cfg, cores/ beside RetroArch by default):", file=sys.stderr)
     command = _INVOCATION.command(plat, bios_path, without=("--installed-cores", "--cores-dir"))
-    print(f"    {command} --cores-dir <cores folder>", file=sys.stderr)
-    print("  Or run it without --installed-cores to install every file.", file=sys.stderr)
-    sys.exit(1)
+    raise Refusal("cores", "none", plat,
+                  f"Error: no installed core found for {display_name(plat)}: {where}.",
+                  "  Name the folder RetroArch loads cores from (libretro_directory in "
+                  "retroarch.cfg, cores/ beside RetroArch by default):",
+                  f"    {command} --cores-dir <cores folder>",
+                  "  Or run it without --installed-cores to install every file.")

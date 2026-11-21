@@ -26,11 +26,11 @@ from installer.cards import (
 from installer.console import _answer_yes, _folder_answer, _numbers_hint, _typed_folder, detail
 from installer.detect_os import _DETECTED_OS, card_title, detect_os, detected_os, os_conflict
 from installer.embedded import CARD_MARKER, CARD_PLATFORMS, _EMBEDDED_RULES, _a, _built_on
-from installer.events import EVENTS
 from installer.host_fs import _exists, _is_dir, closed_folder
 from installer.local_check import closed_folder_words
 from installer.paths import shown_path
 from installer.platforms import _name_key, did_you_mean, display_name, normalize_platform, refuse_name
+from installer.refusal import Refusal
 from installer.setups import _choose_platform, _setup_label, drive_example, found_setups
 from installer.text import _names_and, _plural, screen_text
 
@@ -42,11 +42,10 @@ def _refuse_closed(dest: Path, named: str) -> None:
     if closed is None:
         return
     message = closed_folder_words(dest, closed)
-    EVENTS.emit("error", stage="dest", reason="unreadable", platform="", message=message)
-    print(f"Error: {screen_text(message)}. Give this user access to it, run as "
-          f"its owner, or choose another folder than the one {named}.",
-          file=sys.stderr)
-    sys.exit(1)
+    raise Refusal("dest", "unreadable", "",
+                  f"Error: {screen_text(message)}. Give this user access to it, run as "
+                  f"its owner, or choose another folder than the one {named}.",
+                  message=message)
 
 
 def _refuse_file(dest: Path, named: str) -> None:
@@ -64,10 +63,9 @@ def _refuse_file(dest: Path, named: str) -> None:
         return
     where = (f"{shown_path(dest)} is a file, not a folder" if folder == dest
              else f"{shown_path(dest)} cannot be a folder: {shown_path(folder)} is a file")
-    EVENTS.emit("error", stage="dest", reason="not_a_folder", platform="", message=where)
-    print(f"Error: {screen_text(where)}. Name the folder the BIOS files go in, not "
-          f"the file {named}.", file=sys.stderr)
-    sys.exit(1)
+    raise Refusal("dest", "not_a_folder", "",
+                  f"Error: {screen_text(where)}. Name the folder the BIOS files go in, not "
+                  f"the file {named}.", message=where)
 
 
 def _missing_dest(dest: Path, ask: bool, named: str = "named with --dest",
@@ -434,11 +432,8 @@ def card_dest(named: str, plat: str, dest: Path) -> tuple[str, Path]:
     choice = card_choice(named, plat, dest)
     if choice.refused:
         message = _dest_refusal_words(choice, card_setup(named, plat))
-        # A script reading the stream learned code 1 and no reason.
-        EVENTS.emit("error", stage="detect", reason="not_found", platform=choice.plat,
-                    message=message)
-        print(f"Error: {message}", file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("detect", "not_found", choice.plat, f"Error: {message}",
+                      message=message)
     for line in (choice.found, choice.note):
         if line:
             print(f"  {line}")
@@ -523,12 +518,11 @@ def card_install_dest(named: str, plat: str, interactive: bool, ask: bool = True
         print(f"  {len(cards)} {system} cards are mounted: "
               + ", ".join(_mount_name(card) for card in cards) + ".", file=sys.stderr)
     if not interactive:
-        EVENTS.emit("error", stage="detect", reason="not_found", platform=plat,
-                    message=f"{system} keeps its BIOS files on its SD card, and no "
-                    "card was named with --dest")
-        print(f"  {system} keeps its BIOS files on its SD card, not on this machine. "
-              f"Mount it and give its root with --dest: {example}", file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("detect", "not_found", plat,
+                      f"  {system} keeps its BIOS files on its SD card, not on this machine. "
+                      f"Mount it and give its root with --dest: {example}",
+                      message=f"{system} keeps its BIOS files on its SD card, and no "
+                      "card was named with --dest")
     print(f"  {system} keeps its BIOS files {card_where(system, setup.below)}, not on "
           "this machine. "
           + ("" if setup.known() else
@@ -633,16 +627,16 @@ def _platform_for_dest(os_type: str, dest: Path, interactive: bool) -> tuple[str
     found = list(dict.fromkeys(name for name, _path, _label in found_setups(os_type)[0]))
     default = found[0] if len(found) == 1 else "" if found else "retroarch"
     if not default:
-        print(f"Error: {' and '.join(display_name(n) for n in found)} found here. "
-              f"Name the platform {dest} is for with --platform.", file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("detect", "conflict", "",
+                      f"Error: {' and '.join(display_name(n) for n in found)} found here. "
+                      f"Name the platform {dest} is for with --platform.")
     why = "the platform found here" if found else "nothing was detected here"
     print(f"  File list: {display_name(default)} ({why}). For another platform's "
           "list, add --platform (--list-platforms names them).")
     return default, dest
 
 
-def _several_found(platforms: list[tuple[str, Path]], setups: list) -> None:
+def _several_found(platforms: list[tuple[str, Path]], setups: list) -> NoReturn:
     """Stop a run without questions that found more than one setup, each
     named with the options that choose it."""
     labels = {(name, path): label for name, path, label in setups}
@@ -653,11 +647,9 @@ def _several_found(platforms: list[tuple[str, Path]], setups: list) -> None:
             if conflict else f"{len(shown)} setups were found here")
     message = (f"{lead}, and a run without questions installs for one: "
                + ", ".join(label for label, _n, _p in shown))
-    EVENTS.emit("error", stage="detect", reason="conflict", platform="", message=message)
-    print(f"Error: {message}. Name the one to install for:", file=sys.stderr)
-    for label, name, path in shown:
-        print(f"  {label}: --platform {name} --dest {shown_path(path)}", file=sys.stderr)
-    sys.exit(1)
+    raise Refusal("detect", "conflict", "", f"Error: {message}. Name the one to install for:",
+                  *(f"  {label}: --platform {name} --dest {shown_path(path)}"
+                    for label, name, path in shown), message=message)
 
 
 def _unknown_target(target: str, plat: str, targets: dict, *after: str) -> NoReturn:

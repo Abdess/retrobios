@@ -465,7 +465,7 @@ def _check_run_cores(run: _InstallRun) -> None:
     for plat_name, bios_path in [] if run.packing else run.platforms:
         if plat_name in CORE_PLATFORMS:
             if args.cores_dir:
-                _check_cores_dir(args.cores_dir)
+                _check_cores_dir(args.cores_dir, plat_name)
             searched = [args.cores_dir] if args.cores_dir else core_dirs(plat_name, bios_path)
             run.cores_found[(plat_name, bios_path)] = installed_cores(searched)
             run.cores_searched[(plat_name, bios_path)] = searched

@@ -497,7 +497,7 @@ those it imports:
 
 | Concern | Modules |
 |---------|---------|
-| Shared words and limits | `remote`, `regions`, `platforms`, `manifest`, `embedded`, `text`, `events`, `invocation` |
+| Shared words and limits | `remote`, `regions`, `platforms`, `manifest`, `embedded`, `text`, `events`, `refusal`, `invocation` |
 | Terminal and line output | `terminal`, `console` |
 | Files and folders | `host_fs`, `paths`, `filesystems`, `config_values`, `local_check`, `safe_replace` |
 | This machine | `detection_notes`, `detect_os`, `detect_frontends`, `cards`, `device`, `cores`, `frontend_folders`, `setups` |

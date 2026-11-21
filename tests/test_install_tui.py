@@ -57,6 +57,16 @@ BUILDER_FLOOR = (3, 9)
 # card in the reader. The module fails at its end when one is tried.
 setUpModule, tearDownModule = module_guard("test_install_tui")
 
+
+def reported(call, *args, **kwargs):
+    """call(...), a refusal said as the command says it: a library
+    function raises it, and the command prints it."""
+    try:
+        return call(*args, **kwargs)
+    except install.Refusal as refusal:
+        refusal.report()
+        raise
+
 try:
     import pyte
 except ImportError:
@@ -2867,7 +2877,7 @@ class CardsSpaceAndConfirm(unittest.TestCase):
         stray = root / "NOTMUOS" / "bios"
         with self.assertRaises(SystemExit), \
                 contextlib.redirect_stderr(io.StringIO()) as err:
-            install.card_dest("muos", "retroarch", stray)
+            reported(install.card_dest, "muos", "retroarch", stray)
         self.assertIn("does not exist", err.getvalue())
         card = self.card({"MUOS/bios/": ""})
         self.assertEqual(install.card_dest("muos", "retroarch", card / "muos" / "BIOS"),
@@ -6637,7 +6647,7 @@ class EveryCardSetupGoesToItsCard(unittest.TestCase):
                 with mock.patch.object(install, "_mounted_cards", return_value=[]), \
                         contextlib.redirect_stderr(io.StringIO()) as err, \
                         self.assertRaises(SystemExit) as stop:
-                    install.card_install_dest(setup.name, plat, interactive=False)
+                    reported(install.card_install_dest, setup.name, plat, interactive=False)
                 self.assertEqual(stop.exception.code, 1)
                 self.assertIn(f"{setup.name} keeps its BIOS files on its SD card",
                               err.getvalue())
@@ -7311,7 +7321,7 @@ class OneCardReading(unittest.TestCase):
         with mock.patch.object(install, "_mounted_cards", return_value=[]), \
                 contextlib.redirect_stderr(io.StringIO()) as err, \
                 self.assertRaises(SystemExit):
-            install.card_install_dest("Anbernic stock firmware", "retroarch", False)
+            reported(install.card_install_dest, "Anbernic stock firmware", "retroarch", False)
         self.assertIn("--platform anbernicstockfirmware --dest", err.getvalue())
 
 
@@ -9429,8 +9439,8 @@ class PacksWordingAndDocs(unittest.TestCase):
         err = io.StringIO()
         install.LOCAL.pack = install.PackSource([old])
         with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
-            install._requested_narrowing(_args(system=["nintendo-gba"]), "retroarch",
-                                         install.LOCAL.pack.manifest("retroarch")["files"], [])
+            reported(install._requested_narrowing, _args(system=["nintendo-gba"]), "retroarch",
+                     install.LOCAL.pack.manifest("retroarch")["files"], [])
         self.assertIn("Add --manifest FILE, a copy of install/retroarch.json", err.getvalue())
         self.assertNotIn("older release", err.getvalue())
 
@@ -9809,7 +9819,7 @@ class CardFoldersAndNarrowBars(unittest.TestCase):
             with self.subTest(named=named):
                 with contextlib.redirect_stderr(io.StringIO()) as err, \
                         self.assertRaises(SystemExit):
-                    install.card_dest(named, plat, dest)
+                    reported(install.card_dest, named, plat, dest)
                 self.assertIn(words, err.getvalue())
                 self.assertNotIn(never, err.getvalue())
         minui = self.root / "MINUI"
@@ -9830,7 +9840,7 @@ class CardFoldersAndNarrowBars(unittest.TestCase):
                 mock.patch.object(install, "_mount_points", return_value=frozenset()):
             with contextlib.redirect_stderr(io.StringIO()) as err, \
                     self.assertRaises(SystemExit):
-                install.card_dest("onion", "retroarch", mnt / "f")
+                reported(install.card_dest, "onion", "retroarch", mnt / "f")
             self.assertIn("F:\\ is a muOS card", err.getvalue())
             note = install.card_choice("knulli", "knulli", mnt / "g").note
             self.assertIn("G:\\bios", note)

@@ -4,7 +4,6 @@ from __future__ import annotations
 import argparse
 import contextlib
 import os
-import sys
 import threading
 import zipfile
 from collections.abc import Callable, Collection, Iterator
@@ -19,6 +18,7 @@ from installer.offline import LOCAL, local_manifest_platform
 from installer.pack_source import _PART_FILE, PackSource
 from installer.paths import _entry_path, _safe_relative_path, shown_path
 from installer.platforms import display_name, normalize_platform
+from installer.refusal import Refusal
 from installer.safe_replace import BACKUP_DIR, _MEMBER_ERRORS, _write_verified, unreadable_words
 from installer.tally import _bytes
 from installer.text import _plural, format_size, screen_text, shown_lines
@@ -821,8 +821,7 @@ def _open_local_sources(args: argparse.Namespace) -> None:
     try:
         LOCAL.pack = PackSource(args.from_pack)
     except ValueError as exc:
-        print(f"Error: {exc}", file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("pack", "invalid", args.platform or "", f"Error: {exc}") from None
     pack = LOCAL.pack
     parts = len(pack.files)
     print(f"  Pack: {pack.name}"
@@ -831,10 +830,10 @@ def _open_local_sources(args: argparse.Namespace) -> None:
     if args.platform is not None:
         plat = normalize_platform(args.platform, say=False)
         if spelled and plat not in spelled:
-            print(f"Error: {pack.name} is a pack for "
-                  f"{' and '.join(display_name(n) for n in spelled)}, not "
-                  f"{display_name(plat)}.", file=sys.stderr)
-            sys.exit(1)
+            raise Refusal("pack", "other_platform", plat,
+                          f"Error: {pack.name} is a pack for "
+                          f"{' and '.join(display_name(n) for n in spelled)}, not "
+                          f"{display_name(plat)}.")
     elif len(spelled) == 1:
         # Named by the pack, not by the user: the setups that read its list
         # are offered, as for a --manifest.
@@ -842,9 +841,9 @@ def _open_local_sources(args: argparse.Namespace) -> None:
         args.platform_from_list = True
     else:
         among = (" (" + ", ".join(spelled) + ")") if spelled else ""
-        print(f"Error: name the platform {pack.name} is installed for with "
-              f"--platform{among}.", file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("pack", "no_platform", "",
+                      f"Error: name the platform {pack.name} is installed for with "
+                      f"--platform{among}.")
 
 
 def _system_folder(folder: Path) -> str:
@@ -898,9 +897,8 @@ def _open_from_folders(folders: list[Path]) -> None:
         if problem is not None:
             reason, what = problem
             message = f"{label} {what}: --from names the folder to copy BIOS files from"
-            EVENTS.emit("error", stage="from", reason=reason, platform="", message=message)
-            print(f"Error: {screen_text(message)}.", file=sys.stderr)
-            sys.exit(1)
+            raise Refusal("from", reason, "", f"Error: {screen_text(message)}.",
+                          message=message)
         _read_from_folder(label)
 
 

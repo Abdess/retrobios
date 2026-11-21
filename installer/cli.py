@@ -30,6 +30,7 @@ from installer.narrowing import FIND_KINDS
 from installer.network import _RAW_ERRORS, install_bounded_opener
 from installer.offline import LOCAL, OFFLINE_FLAG_VALUE, offline_named
 from installer.platforms import AVAILABLE_PLATFORMS, TARGET_PLATFORMS, _name_key, display_name, refuse_name
+from installer.refusal import Refusal
 from installer.regions import resolve_regions
 from installer.remote import remote_from_env, remote_in_use
 from installer.removal import run_backups, run_delete_backup, run_removal
@@ -311,7 +312,13 @@ def main() -> None:
         print(f"Error: {exc}", file=sys.stderr)
         sys.exit(1)
     with remote_in_use(remote):
-        _main_run()
+        try:
+            _main_run()
+        except Refusal as refusal:
+            # Raised outside an install, which reports its own: the full
+            # screen's start, an action and the sources opened before it.
+            refusal.report()
+            raise
 
 
 def _main_run() -> None:
@@ -438,6 +445,8 @@ def _run_action(args: argparse.Namespace,
     try:
         code = action(args)
     except SystemExit as exc:
+        if isinstance(exc, Refusal):
+            exc.report()
         EVENTS.emit("end", code=_event_exit_code(exc.code))
         raise
     except KeyboardInterrupt:

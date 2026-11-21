@@ -23,7 +23,9 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # stage: manifest (reason: network, not_found, invalid, clock for a
     # refused certificate under a clock set in the past, no_ca for no
     # trusted certificates on the machine, or no_ssl for a Python built
-    # without ssl) or detect (reason: conflict, two
+    # without ssl, unreadable for a --manifest file that cannot be read,
+    # unavailable for the standalone layout --standalone needs) or detect
+    # (reason: conflict, two
     # systems found on one machine, or not_found, the platform named with
     # --platform, or by a file list or a pack in a run without questions,
     # found nowhere and no folder to assume) or from (a folder named with --from,
@@ -33,7 +35,14 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # is a file or lies under one, or not_writable, the BIOS folder cannot
     # be created, a summary following) or option (reason:
     # unknown, a platform, target, system, core or emulator the run cannot
-    # use, refused before any download).
+    # use, refused before any download, or not_recorded, the list does not
+    # record what --system, --core, --region, --emulator or --standalone
+    # reads) or cores (--installed-cores, reason: not_found, not_a_folder
+    # or unreadable for the --cores-dir, none for no core installed) or
+    # targets (the board list a run cannot go on without, reason: the
+    # manifest's codes, http for a refused answer) or pack (--from-pack,
+    # reason: invalid, other_platform for a pack of another platform, or
+    # no_platform when none is named and the pack does not say).
     "error": ("stage", "reason", "platform", "message"),
     # A folder named with --from, once read: the files it holds (counted
     # up to MAX_SCANNED_FILES, truncated past them), and the folders below

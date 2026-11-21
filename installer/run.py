@@ -57,6 +57,7 @@ from installer.pack_source import NOT_IN_PACK, pack_holds_trees, pack_lacks, pac
 from installer.paths import _entry_path, shown_path
 from installer.plan import CONFIRM_FROM_BYTES, _check_free_space, _print_plan, bulk_hint
 from installer.platforms import display_name
+from installer.refusal import Refusal
 from installer.romm import ROMM_SCAN_WORDS, _check_run_romm, _pass_romm_layout
 from installer.run_files import _select_setup_files
 from installer.run_setups import (
@@ -762,7 +763,17 @@ def _finish_install(run: _InstallRun, real_stdout: TextIO) -> None:
 
 
 def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
-    """One run of the installer, once the options are read."""
+    """One run of the installer, once the options are read, a refusal
+    reported where it ends the run: its error event before end, its lines
+    before what the unwinding run says."""
+    try:
+        _install_run(args, real_stdout)
+    except Refusal as refusal:
+        refusal.report()
+        raise
+
+
+def _install_run(args: argparse.Namespace, real_stdout: TextIO) -> None:
     run = _start_install(args, real_stdout)
 
     # Early exit for listing

@@ -1390,7 +1390,7 @@ class ADetectedClosedFolderSaysWhereItCameFrom(unittest.TestCase):
 
     def test_an_assumed_default_reads_plainly(self):
         self.assertIn("used by default, since {display_name(name)} was not found",
-                      _source_of(install._install))
+                      _source_of(install._install_run))
 
 
 class OfflineWithNothingFound(unittest.TestCase):

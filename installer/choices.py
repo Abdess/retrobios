@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import sys
 from collections.abc import Collection, Iterable
 from typing import TYPE_CHECKING
 
@@ -22,6 +21,7 @@ from installer.platforms import (
     key_file_holders,
     refuse_name,
 )
+from installer.refusal import Refusal
 from installer.regions import WORLD_REGION, resolve_regions
 from installer.remote import DEFAULT_RELEASE_REF, active_remote
 from installer.text import _plural
@@ -347,10 +347,9 @@ def _narrow_to_emulators(
     does not run is refused rather than read as nothing to install.
     """
     if "system_cores" not in manifest:
-        print(f"Error: the {plat} file list does not say which emulators read "
-              "which systems, which --emulator needs.", file=sys.stderr)
-        print(_older_list_advice(plat), file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("option", "not_recorded", plat,
+                      f"Error: the {plat} file list does not say which emulators read "
+                      "which systems, which --emulator needs.", _older_list_advice(plat))
     known = sorted(emulator_names(manifest, files, omitted))
     try:
         chosen = resolve_choices(names, known, "emulator")
@@ -383,10 +382,9 @@ def _standalone_builds(
     place of the files its core reads. An emulator with no standalone
     build is refused, as `generate_pack.py --standalone` refuses it."""
     if "standalone_builds" not in manifest:
-        print(f"Error: the {plat} file list does not say which emulators have a "
-              "standalone build, which --standalone needs.", file=sys.stderr)
-        print(_older_list_advice(plat), file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("option", "not_recorded", plat,
+                      f"Error: the {plat} file list does not say which emulators have a "
+                      "standalone build, which --standalone needs.", _older_list_advice(plat))
     profiles = sorted({names[name] for name in resolve_choices(values, sorted(names),
                                                                 "emulator")})
     lacking = [p for p in profiles if p not in manifest["standalone_builds"]]
@@ -490,10 +488,9 @@ def _requested_narrowing(
         # lacks, with what works on it.
         source = (LOCAL.pack.name if pack_alone and LOCAL.pack is not None
                   else f"the {plat} file list")
-        print(f"Error: {source} records no {axis}, so {flag} cannot narrow it.",
-              file=sys.stderr)
-        print(_narrowing_advice(plat, axis, flag, recorded, pack_alone), file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("option", "not_recorded", plat,
+                      f"Error: {source} records no {axis}, so {flag} cannot narrow it.",
+                      _narrowing_advice(plat, axis, flag, recorded, pack_alone))
     choices = available_choices(files, omitted)
     try:
         systems = resolve_systems(args.system or [], manifest, files, omitted)

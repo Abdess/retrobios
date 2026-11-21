@@ -1446,7 +1446,9 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # stage: manifest (reason: network, not_found, invalid, clock for a
     # refused certificate under a clock set in the past, no_ca for no
     # trusted certificates on the machine, or no_ssl for a Python built
-    # without ssl) or detect (reason: conflict, two
+    # without ssl, unreadable for a --manifest file that cannot be read,
+    # unavailable for the standalone layout --standalone needs) or detect
+    # (reason: conflict, two
     # systems found on one machine, or not_found, the platform named with
     # --platform, or by a file list or a pack in a run without questions,
     # found nowhere and no folder to assume) or from (a folder named with --from,
@@ -1456,7 +1458,14 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # is a file or lies under one, or not_writable, the BIOS folder cannot
     # be created, a summary following) or option (reason:
     # unknown, a platform, target, system, core or emulator the run cannot
-    # use, refused before any download).
+    # use, refused before any download, or not_recorded, the list does not
+    # record what --system, --core, --region, --emulator or --standalone
+    # reads) or cores (--installed-cores, reason: not_found, not_a_folder
+    # or unreadable for the --cores-dir, none for no core installed) or
+    # targets (the board list a run cannot go on without, reason: the
+    # manifest's codes, http for a refused answer) or pack (--from-pack,
+    # reason: invalid, other_platform for a pack of another platform, or
+    # no_platform when none is named and the pack does not say).
     "error": ("stage", "reason", "platform", "message"),
     # A folder named with --from, once read: the files it holds (counted
     # up to MAX_SCANNED_FILES, truncated past them), and the folders below
@@ -7343,211 +7352,6 @@ def not_in_place(bios_path: Path, files: list[dict]) -> list[dict]:
                      if verdict != "up_to_date"]
 
 
-# --- installer/cores.py ------------------------------------------------------
-
-# A libretro core as RetroArch loads it: <name>_libretro.so|dll|dylib, and
-# <name>_libretro_android.so on Android.
-_CORE_FILE_RE = re.compile(
-    r"^(?P<name>.+?)_libretro(?:_android)?\.(?:so|dll|dylib)$", re.IGNORECASE
-)
-CORE_PLATFORMS = ("retroarch", "lakka", "retropie")
-# Where these systems install cores whatever retroarch.cfg says: RetroPie
-# gives each package its own folder, Lakka keeps the image's cores and the
-# ones the online updater fetches apart.
-_FIXED_CORE_DIRS = {
-    "retropie": (Path("/opt/retropie/libretrocores"),),
-    "lakka": (Path("/usr/lib/libretro"), Path("/storage/cores"), Path("/tmp/cores")),
-}
-
-
-def _config_beside(bios_path: Path) -> tuple[Path, Path] | None:
-    """The retroarch.cfg detection read for bios_path and the directory ':'
-    expands to, else a portable one beside the system directory."""
-    found = _retroarch_config_for(bios_path)
-    if found is None and _is_file(bios_path.parent / "retroarch.cfg"):
-        found = (bios_path.parent / "retroarch.cfg", bios_path.parent)
-    return found
-
-
-def core_dirs(plat: str, bios_path: Path) -> list[Path]:
-    """The directories the RetroArch writing to bios_path loads cores from.
-
-    The config detection read for this system directory names them in
-    libretro_directory, read here when the run was given --dest, as the
-    interface's runs all are. Without one, a retroarch.cfg beside the system
-    directory is the portable layout. Unset, the setting is cores/ under
-    RetroArch's own directory.
-    """
-    found = _config_beside(bios_path)
-    dirs: list[Path] = []
-    if found is not None:
-        cfg, app_dir = found
-        dirs.append(
-            _retroarch_cfg_dir(cfg, "libretro_directory", app_dir, "cores")
-            or app_dir / "cores"
-        )
-    dirs.extend(_FIXED_CORE_DIRS.get(plat, ()))
-    return list(dict.fromkeys(dirs))
-
-
-def installed_cores(dirs: list[Path]) -> list[str]:
-    """The cores present in these directories, by the name the buildbot uses.
-
-    A folder inside is looked into once, which is how RetroPie installs
-    each package. An unreadable directory holds nothing that can be seen.
-    """
-    names: set[str] = set()
-    for directory in dirs:
-        try:
-            children = list(directory.iterdir())
-        except OSError:
-            continue
-        for child in children:
-            candidates = [child]
-            if child.is_dir():
-                try:
-                    candidates = list(child.iterdir())
-                except OSError:
-                    continue
-            for path in candidates:
-                match = _CORE_FILE_RE.match(path.name)
-                if match and path.is_file():
-                    names.add(match.group("name"))
-    return sorted(names)
-
-
-def info_dirs(plat: str, bios_path: Path, searched: list[Path]) -> list[Path]:
-    """The directories RetroArch reads core .info files from.
-
-    libretro_info_path in retroarch.cfg, info/ beside RetroArch by default,
-    then the cores folders: Linux builds and Lakka keep each .info beside
-    its core.
-    """
-    found = _config_beside(bios_path)
-    dirs: list[Path] = []
-    if found is not None:
-        cfg, app_dir = found
-        dirs.append(_retroarch_cfg_dir(cfg, "libretro_info_path", app_dir, "info")
-                    or app_dir / "info")
-    dirs.extend(searched)
-    return list(dict.fromkeys(dirs))
-
-
-_INFO_FIRMWARE_RE = re.compile(r'^\s*firmware\d+_path\s*=\s*"?([^"\r\n]*?)"?\s*$')
-
-
-def info_firmware(dirs: list[Path], core: str) -> list[str] | None:
-    """The firmware paths a core's .info declares, None without a .info.
-
-    RetroArch reads firmware<N>_path, relative to the system directory
-    (core_info.c), and so does this.
-    """
-    for directory in dirs:
-        info = directory / f"{core}_libretro.info"
-        try:
-            text = info.read_text(encoding="utf-8", errors="replace")
-        except OSError:
-            continue
-        paths = (m.group(1).strip().replace("\\", "/")
-                 for m in map(_INFO_FIRMWARE_RE.match, text.splitlines()) if m)
-        return list(dict.fromkeys(p for p in paths if p))
-    return None
-
-
-def known_core_names(manifest: dict) -> set[str]:
-    """Every core name a file list answers for: profiles and their other names."""
-    names: set[str] = set()
-    for profile, aliases in (manifest.get("core_names") or {}).items():
-        names.add(profile)
-        names.update(aliases)
-    for cores in (manifest.get("system_cores") or {}).values():
-        names.update(cores)
-    for entry in [*manifest.get("files", []), *manifest.get("omitted_files", [])]:
-        for copy in entry_copies(entry):
-            names.update(copy.get("cores") or [])
-    return names
-
-
-def unknown_cores(manifest: dict, names: list[str]) -> list[str]:
-    """The installed cores the file list has no profile for, in name order."""
-    known = known_core_names(manifest)
-    return sorted(name for name in names if name not in known)
-
-
-def _check_cores_dir(folder: Path) -> None:
-    """Refuse a --cores-dir that cannot be listed, saying why: a typo
-    (core/ for cores/) or a closed folder read as an empty one, and the
-    run said "none in" and asked for the --cores-dir it was given."""
-    try:
-        with os.scandir(folder):
-            return
-    except FileNotFoundError:
-        why = "does not exist"
-    except NotADirectoryError:
-        why = "is not a folder"
-    except PermissionError as exc:
-        closed = closed_folder(folder)
-        why = (f"cannot be opened by this user ({exc.strerror or exc})"
-               if closed is None or closed[0] == folder
-               else f"cannot be opened: {closed_folder_words(folder, closed)}")
-    except OSError as exc:
-        why = f"could not be read ({exc.strerror or exc})"
-    print(f"Error: --cores-dir {screen_text(str(folder))} {why}.", file=sys.stderr)
-    print("  Name the folder RetroArch loads cores from (libretro_directory in "
-          "retroarch.cfg, cores/ beside RetroArch by default).", file=sys.stderr)
-    sys.exit(1)
-
-
-def _unprofiled_cores_firmware(
-    plat: str, bios_path: Path, manifest: dict, found: list[str], searched: list[Path],
-) -> list[str]:
-    """What the installed cores the list has no profile for declare, each said.
-
-    Such a core reads systems the list cannot name, and narrowing to the
-    installed cores dropped its BIOS without a word (issue 87, parallel_dc
-    before its profile). Its .info is what RetroArch itself checks, so the
-    files it declares are kept. A core without one is named.
-    """
-    unknown = unknown_cores(manifest, found)
-    if not unknown:
-        return []
-    dirs = info_dirs(plat, bios_path, searched)
-    dests: list[str] = []
-    for core in unknown:
-        declared = info_firmware(dirs, core)
-        if declared is None:
-            message = (f"{core}: a core this list does not know, with no .info to read: "
-                       "its files may be missing. Run without --installed-cores "
-                       "to install every file.")
-        else:
-            message = (f"{core}: a core this list does not know, "
-                       f"{_plural(len(declared), 'file')} its .info declares kept")
-        print(f"  {message}")
-        EVENTS.emit("unknown_core", platform=plat, core=core,
-                    info=declared is not None, dests=declared or [], message=message)
-        dests.extend(declared or [])
-    return dests
-
-
-def _no_core_found(plat: str, bios_path: Path, searched: list[Path]) -> None:
-    """Refuse --installed-cores with no core, and say how to point at them.
-
-    With no retroarch.cfg naming the folder as its system_directory, and
-    none beside it, nothing names the cores folder: the run stopped on "no
-    known directory" with no way forward.
-    """
-    where = (f"none in {', '.join(map(str, searched))}" if searched
-             else f"no retroarch.cfg was found for {bios_path} to name their folder")
-    print(f"Error: no installed core found for {display_name(plat)}: {where}.",
-          file=sys.stderr)
-    print("  Name the folder RetroArch loads cores from (libretro_directory in "
-          "retroarch.cfg, cores/ beside RetroArch by default):", file=sys.stderr)
-    command = _INVOCATION.command(plat, bios_path, without=("--installed-cores", "--cores-dir"))
-    print(f"    {command} --cores-dir <cores folder>", file=sys.stderr)
-    print("  Or run it without --installed-cores to install every file.", file=sys.stderr)
-    sys.exit(1)
-
-
 # --- installer/network.py ----------------------------------------------------
 
 def _read_limited(response: http.client.HTTPResponse, limit: int, label: str) -> bytes:
@@ -8577,6 +8381,242 @@ def read_game(facts: GameFacts, system_id: str, system: SystemData, readers: set
     _read_game_headers(facts, system, wanted, packed)
 
 
+# --- installer/refusal.py ----------------------------------------------------
+
+class Refusal(SystemExit):
+    """The run refused, with the error event a script reads and the lines a
+    person reads. Each site printed its lines and chose on its own whether
+    --events got the reason, and several did not: a script learned code 1
+    and nothing else. message is the event's, by default the lines joined
+    without their leading "Error: "."""
+
+    def __init__(self, stage: str, reason: str, platform: str, *lines: str,
+                 code: int = 1, message: str | None = None) -> None:
+        super().__init__(code)
+        self.stage, self.reason, self.platform = stage, reason, platform
+        self.lines = lines
+        if message is None:
+            message = " ".join(line.strip() for line in lines)
+            if message.startswith("Error: "):
+                message = message[len("Error: "):]
+        self.message = message
+        self.reported = False
+
+    def report(self) -> None:
+        """The error event, then the lines on stderr, once."""
+        if self.reported:
+            return
+        self.reported = True
+        EVENTS.emit("error", stage=self.stage, reason=self.reason, platform=self.platform,
+                    message=self.message)
+        for line in self.lines:
+            print(line, file=sys.stderr)
+
+
+# --- installer/cores.py ------------------------------------------------------
+
+# A libretro core as RetroArch loads it: <name>_libretro.so|dll|dylib, and
+# <name>_libretro_android.so on Android.
+_CORE_FILE_RE = re.compile(
+    r"^(?P<name>.+?)_libretro(?:_android)?\.(?:so|dll|dylib)$", re.IGNORECASE
+)
+CORE_PLATFORMS = ("retroarch", "lakka", "retropie")
+# Where these systems install cores whatever retroarch.cfg says: RetroPie
+# gives each package its own folder, Lakka keeps the image's cores and the
+# ones the online updater fetches apart.
+_FIXED_CORE_DIRS = {
+    "retropie": (Path("/opt/retropie/libretrocores"),),
+    "lakka": (Path("/usr/lib/libretro"), Path("/storage/cores"), Path("/tmp/cores")),
+}
+
+
+def _config_beside(bios_path: Path) -> tuple[Path, Path] | None:
+    """The retroarch.cfg detection read for bios_path and the directory ':'
+    expands to, else a portable one beside the system directory."""
+    found = _retroarch_config_for(bios_path)
+    if found is None and _is_file(bios_path.parent / "retroarch.cfg"):
+        found = (bios_path.parent / "retroarch.cfg", bios_path.parent)
+    return found
+
+
+def core_dirs(plat: str, bios_path: Path) -> list[Path]:
+    """The directories the RetroArch writing to bios_path loads cores from.
+
+    The config detection read for this system directory names them in
+    libretro_directory, read here when the run was given --dest, as the
+    interface's runs all are. Without one, a retroarch.cfg beside the system
+    directory is the portable layout. Unset, the setting is cores/ under
+    RetroArch's own directory.
+    """
+    found = _config_beside(bios_path)
+    dirs: list[Path] = []
+    if found is not None:
+        cfg, app_dir = found
+        dirs.append(
+            _retroarch_cfg_dir(cfg, "libretro_directory", app_dir, "cores")
+            or app_dir / "cores"
+        )
+    dirs.extend(_FIXED_CORE_DIRS.get(plat, ()))
+    return list(dict.fromkeys(dirs))
+
+
+def installed_cores(dirs: list[Path]) -> list[str]:
+    """The cores present in these directories, by the name the buildbot uses.
+
+    A folder inside is looked into once, which is how RetroPie installs
+    each package. An unreadable directory holds nothing that can be seen.
+    """
+    names: set[str] = set()
+    for directory in dirs:
+        try:
+            children = list(directory.iterdir())
+        except OSError:
+            continue
+        for child in children:
+            candidates = [child]
+            if child.is_dir():
+                try:
+                    candidates = list(child.iterdir())
+                except OSError:
+                    continue
+            for path in candidates:
+                match = _CORE_FILE_RE.match(path.name)
+                if match and path.is_file():
+                    names.add(match.group("name"))
+    return sorted(names)
+
+
+def info_dirs(plat: str, bios_path: Path, searched: list[Path]) -> list[Path]:
+    """The directories RetroArch reads core .info files from.
+
+    libretro_info_path in retroarch.cfg, info/ beside RetroArch by default,
+    then the cores folders: Linux builds and Lakka keep each .info beside
+    its core.
+    """
+    found = _config_beside(bios_path)
+    dirs: list[Path] = []
+    if found is not None:
+        cfg, app_dir = found
+        dirs.append(_retroarch_cfg_dir(cfg, "libretro_info_path", app_dir, "info")
+                    or app_dir / "info")
+    dirs.extend(searched)
+    return list(dict.fromkeys(dirs))
+
+
+_INFO_FIRMWARE_RE = re.compile(r'^\s*firmware\d+_path\s*=\s*"?([^"\r\n]*?)"?\s*$')
+
+
+def info_firmware(dirs: list[Path], core: str) -> list[str] | None:
+    """The firmware paths a core's .info declares, None without a .info.
+
+    RetroArch reads firmware<N>_path, relative to the system directory
+    (core_info.c), and so does this.
+    """
+    for directory in dirs:
+        info = directory / f"{core}_libretro.info"
+        try:
+            text = info.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        paths = (m.group(1).strip().replace("\\", "/")
+                 for m in map(_INFO_FIRMWARE_RE.match, text.splitlines()) if m)
+        return list(dict.fromkeys(p for p in paths if p))
+    return None
+
+
+def known_core_names(manifest: dict) -> set[str]:
+    """Every core name a file list answers for: profiles and their other names."""
+    names: set[str] = set()
+    for profile, aliases in (manifest.get("core_names") or {}).items():
+        names.add(profile)
+        names.update(aliases)
+    for cores in (manifest.get("system_cores") or {}).values():
+        names.update(cores)
+    for entry in [*manifest.get("files", []), *manifest.get("omitted_files", [])]:
+        for copy in entry_copies(entry):
+            names.update(copy.get("cores") or [])
+    return names
+
+
+def unknown_cores(manifest: dict, names: list[str]) -> list[str]:
+    """The installed cores the file list has no profile for, in name order."""
+    known = known_core_names(manifest)
+    return sorted(name for name in names if name not in known)
+
+
+def _check_cores_dir(folder: Path, plat: str) -> None:
+    """Refuse a --cores-dir that cannot be listed, saying why: a typo
+    (core/ for cores/) or a closed folder read as an empty one, and the
+    run said "none in" and asked for the --cores-dir it was given."""
+    try:
+        with os.scandir(folder):
+            return
+    except FileNotFoundError:
+        reason, why = "not_found", "does not exist"
+    except NotADirectoryError:
+        reason, why = "not_a_folder", "is not a folder"
+    except PermissionError as exc:
+        closed = closed_folder(folder)
+        reason = "unreadable"
+        why = (f"cannot be opened by this user ({exc.strerror or exc})"
+               if closed is None or closed[0] == folder
+               else f"cannot be opened: {closed_folder_words(folder, closed)}")
+    except OSError as exc:
+        reason, why = "unreadable", f"could not be read ({exc.strerror or exc})"
+    raise Refusal("cores", reason, plat, f"Error: --cores-dir {screen_text(str(folder))} {why}.",
+                  "  Name the folder RetroArch loads cores from (libretro_directory in "
+                  "retroarch.cfg, cores/ beside RetroArch by default).")
+
+
+def _unprofiled_cores_firmware(
+    plat: str, bios_path: Path, manifest: dict, found: list[str], searched: list[Path],
+) -> list[str]:
+    """What the installed cores the list has no profile for declare, each said.
+
+    Such a core reads systems the list cannot name, and narrowing to the
+    installed cores dropped its BIOS without a word (issue 87, parallel_dc
+    before its profile). Its .info is what RetroArch itself checks, so the
+    files it declares are kept. A core without one is named.
+    """
+    unknown = unknown_cores(manifest, found)
+    if not unknown:
+        return []
+    dirs = info_dirs(plat, bios_path, searched)
+    dests: list[str] = []
+    for core in unknown:
+        declared = info_firmware(dirs, core)
+        if declared is None:
+            message = (f"{core}: a core this list does not know, with no .info to read: "
+                       "its files may be missing. Run without --installed-cores "
+                       "to install every file.")
+        else:
+            message = (f"{core}: a core this list does not know, "
+                       f"{_plural(len(declared), 'file')} its .info declares kept")
+        print(f"  {message}")
+        EVENTS.emit("unknown_core", platform=plat, core=core,
+                    info=declared is not None, dests=declared or [], message=message)
+        dests.extend(declared or [])
+    return dests
+
+
+def _no_core_found(plat: str, bios_path: Path, searched: list[Path]) -> NoReturn:
+    """Refuse --installed-cores with no core, and say how to point at them.
+
+    With no retroarch.cfg naming the folder as its system_directory, and
+    none beside it, nothing names the cores folder: the run stopped on "no
+    known directory" with no way forward.
+    """
+    where = (f"none in {', '.join(map(str, searched))}" if searched
+             else f"no retroarch.cfg was found for {bios_path} to name their folder")
+    command = _INVOCATION.command(plat, bios_path, without=("--installed-cores", "--cores-dir"))
+    raise Refusal("cores", "none", plat,
+                  f"Error: no installed core found for {display_name(plat)}: {where}.",
+                  "  Name the folder RetroArch loads cores from (libretro_directory in "
+                  "retroarch.cfg, cores/ beside RetroArch by default):",
+                  f"    {command} --cores-dir <cores folder>",
+                  "  Or run it without --installed-cores to install every file.")
+
+
 # --- installer/lists.py ------------------------------------------------------
 
 NETWORK_ADVICE = ("  Check the connection, and HTTPS_PROXY if this network needs a "
@@ -8751,12 +8791,13 @@ def fetch_manifest(plat: str) -> dict:
         return load_manifest(plat)
     except ListFailure as stopped:
         failure = stopped.problem
-        event = _manifest_event(failure)
-        if event is not None:
-            EVENTS.emit("error", stage="manifest", reason=event[0], platform=plat,
-                        message=event[1])
-        _say(manifest_failure_lines(failure))
-        sys.exit(failure.fatal)
+        lines = manifest_failure_lines(failure)
+        # A list given as a file or in a pack that cannot be used ended the
+        # run on code 1 with no event: its words are the message.
+        reason, message = _manifest_event(failure) or (
+            failure.code, " ".join(line.strip() for line in lines))
+        raise Refusal("manifest", reason, plat, *lines, code=failure.fatal,
+                      message=message) from None
 
 
 def _say(lines: list[str]) -> None:
@@ -8794,11 +8835,9 @@ def fetch_standalone(plat: str, manifest: dict) -> dict:
                    else network_words(exc)[1])
     except ValueError as exc:
         problem = f"not valid: {exc}"
-    EVENTS.emit("error", stage="manifest", reason="unavailable", platform=plat,
-                message=f"--standalone needs {where}: {problem}")
-    print(f"Error: --standalone needs {where}, which could not be read ({problem}).",
-          file=sys.stderr)
-    sys.exit(1)
+    raise Refusal("manifest", "unavailable", plat,
+                  f"Error: --standalone needs {where}, which could not be read ({problem}).",
+                  message=f"--standalone needs {where}: {problem}")
 
 
 def held_targets(plat: str) -> dict | None:
@@ -8829,8 +8868,7 @@ def local_targets(plat: str) -> dict | None:
     try:
         return held_targets(plat)
     except ListFailure as stopped:
-        _say(targets_failure_lines(stopped.problem))
-        sys.exit(stopped.problem.fatal)
+        raise _targets_refusal(stopped.problem) from None
 
 
 def load_targets(plat: str, attempts: int = MAX_RETRIES,
@@ -8881,6 +8919,12 @@ def targets_failure_lines(failure: ListProblem) -> list[str]:
             *_address_lines(where, failure.overridden), NETWORK_ADVICE]
 
 
+def _targets_refusal(failure: ListProblem) -> Refusal:
+    """A board list the run cannot go on without, as the run's refusal."""
+    return Refusal("targets", failure.code, failure.plat, *targets_failure_lines(failure),
+                   code=failure.fatal)
+
+
 def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
                   timeout: float | None = None) -> dict | None:
     """load_targets in line mode: what went wrong said, None when the run
@@ -8888,9 +8932,9 @@ def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
     try:
         return load_targets(plat, attempts, timeout)
     except ListFailure as stopped:
-        _say(targets_failure_lines(stopped.problem))
         if stopped.problem.fatal:
-            sys.exit(stopped.problem.fatal)
+            raise _targets_refusal(stopped.problem) from None
+        _say(targets_failure_lines(stopped.problem))
         return None
 
 
@@ -10887,10 +10931,9 @@ def _narrow_to_emulators(
     does not run is refused rather than read as nothing to install.
     """
     if "system_cores" not in manifest:
-        print(f"Error: the {plat} file list does not say which emulators read "
-              "which systems, which --emulator needs.", file=sys.stderr)
-        print(_older_list_advice(plat), file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("option", "not_recorded", plat,
+                      f"Error: the {plat} file list does not say which emulators read "
+                      "which systems, which --emulator needs.", _older_list_advice(plat))
     known = sorted(emulator_names(manifest, files, omitted))
     try:
         chosen = resolve_choices(names, known, "emulator")
@@ -10923,10 +10966,9 @@ def _standalone_builds(
     place of the files its core reads. An emulator with no standalone
     build is refused, as `generate_pack.py --standalone` refuses it."""
     if "standalone_builds" not in manifest:
-        print(f"Error: the {plat} file list does not say which emulators have a "
-              "standalone build, which --standalone needs.", file=sys.stderr)
-        print(_older_list_advice(plat), file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("option", "not_recorded", plat,
+                      f"Error: the {plat} file list does not say which emulators have a "
+                      "standalone build, which --standalone needs.", _older_list_advice(plat))
     profiles = sorted({names[name] for name in resolve_choices(values, sorted(names),
                                                                 "emulator")})
     lacking = [p for p in profiles if p not in manifest["standalone_builds"]]
@@ -11030,10 +11072,9 @@ def _requested_narrowing(
         # lacks, with what works on it.
         source = (LOCAL.pack.name if pack_alone and LOCAL.pack is not None
                   else f"the {plat} file list")
-        print(f"Error: {source} records no {axis}, so {flag} cannot narrow it.",
-              file=sys.stderr)
-        print(_narrowing_advice(plat, axis, flag, recorded, pack_alone), file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("option", "not_recorded", plat,
+                      f"Error: {source} records no {axis}, so {flag} cannot narrow it.",
+                      _narrowing_advice(plat, axis, flag, recorded, pack_alone))
     choices = available_choices(files, omitted)
     try:
         systems = resolve_systems(args.system or [], manifest, files, omitted)
@@ -12578,8 +12619,7 @@ def _open_local_sources(args: argparse.Namespace) -> None:
     try:
         LOCAL.pack = PackSource(args.from_pack)
     except ValueError as exc:
-        print(f"Error: {exc}", file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("pack", "invalid", args.platform or "", f"Error: {exc}") from None
     pack = LOCAL.pack
     parts = len(pack.files)
     print(f"  Pack: {pack.name}"
@@ -12588,10 +12628,10 @@ def _open_local_sources(args: argparse.Namespace) -> None:
     if args.platform is not None:
         plat = normalize_platform(args.platform, say=False)
         if spelled and plat not in spelled:
-            print(f"Error: {pack.name} is a pack for "
-                  f"{' and '.join(display_name(n) for n in spelled)}, not "
-                  f"{display_name(plat)}.", file=sys.stderr)
-            sys.exit(1)
+            raise Refusal("pack", "other_platform", plat,
+                          f"Error: {pack.name} is a pack for "
+                          f"{' and '.join(display_name(n) for n in spelled)}, not "
+                          f"{display_name(plat)}.")
     elif len(spelled) == 1:
         # Named by the pack, not by the user: the setups that read its list
         # are offered, as for a --manifest.
@@ -12599,9 +12639,9 @@ def _open_local_sources(args: argparse.Namespace) -> None:
         args.platform_from_list = True
     else:
         among = (" (" + ", ".join(spelled) + ")") if spelled else ""
-        print(f"Error: name the platform {pack.name} is installed for with "
-              f"--platform{among}.", file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("pack", "no_platform", "",
+                      f"Error: name the platform {pack.name} is installed for with "
+                      f"--platform{among}.")
 
 
 def _system_folder(folder: Path) -> str:
@@ -12655,9 +12695,8 @@ def _open_from_folders(folders: list[Path]) -> None:
         if problem is not None:
             reason, what = problem
             message = f"{label} {what}: --from names the folder to copy BIOS files from"
-            EVENTS.emit("error", stage="from", reason=reason, platform="", message=message)
-            print(f"Error: {screen_text(message)}.", file=sys.stderr)
-            sys.exit(1)
+            raise Refusal("from", reason, "", f"Error: {screen_text(message)}.",
+                          message=message)
         _read_from_folder(label)
 
 
@@ -14844,11 +14883,10 @@ def _refuse_closed(dest: Path, named: str) -> None:
     if closed is None:
         return
     message = closed_folder_words(dest, closed)
-    EVENTS.emit("error", stage="dest", reason="unreadable", platform="", message=message)
-    print(f"Error: {screen_text(message)}. Give this user access to it, run as "
-          f"its owner, or choose another folder than the one {named}.",
-          file=sys.stderr)
-    sys.exit(1)
+    raise Refusal("dest", "unreadable", "",
+                  f"Error: {screen_text(message)}. Give this user access to it, run as "
+                  f"its owner, or choose another folder than the one {named}.",
+                  message=message)
 
 
 def _refuse_file(dest: Path, named: str) -> None:
@@ -14866,10 +14904,9 @@ def _refuse_file(dest: Path, named: str) -> None:
         return
     where = (f"{shown_path(dest)} is a file, not a folder" if folder == dest
              else f"{shown_path(dest)} cannot be a folder: {shown_path(folder)} is a file")
-    EVENTS.emit("error", stage="dest", reason="not_a_folder", platform="", message=where)
-    print(f"Error: {screen_text(where)}. Name the folder the BIOS files go in, not "
-          f"the file {named}.", file=sys.stderr)
-    sys.exit(1)
+    raise Refusal("dest", "not_a_folder", "",
+                  f"Error: {screen_text(where)}. Name the folder the BIOS files go in, not "
+                  f"the file {named}.", message=where)
 
 
 def _missing_dest(dest: Path, ask: bool, named: str = "named with --dest",
@@ -15236,11 +15273,8 @@ def card_dest(named: str, plat: str, dest: Path) -> tuple[str, Path]:
     choice = card_choice(named, plat, dest)
     if choice.refused:
         message = _dest_refusal_words(choice, card_setup(named, plat))
-        # A script reading the stream learned code 1 and no reason.
-        EVENTS.emit("error", stage="detect", reason="not_found", platform=choice.plat,
-                    message=message)
-        print(f"Error: {message}", file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("detect", "not_found", choice.plat, f"Error: {message}",
+                      message=message)
     for line in (choice.found, choice.note):
         if line:
             print(f"  {line}")
@@ -15325,12 +15359,11 @@ def card_install_dest(named: str, plat: str, interactive: bool, ask: bool = True
         print(f"  {len(cards)} {system} cards are mounted: "
               + ", ".join(_mount_name(card) for card in cards) + ".", file=sys.stderr)
     if not interactive:
-        EVENTS.emit("error", stage="detect", reason="not_found", platform=plat,
-                    message=f"{system} keeps its BIOS files on its SD card, and no "
-                    "card was named with --dest")
-        print(f"  {system} keeps its BIOS files on its SD card, not on this machine. "
-              f"Mount it and give its root with --dest: {example}", file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("detect", "not_found", plat,
+                      f"  {system} keeps its BIOS files on its SD card, not on this machine. "
+                      f"Mount it and give its root with --dest: {example}",
+                      message=f"{system} keeps its BIOS files on its SD card, and no "
+                      "card was named with --dest")
     print(f"  {system} keeps its BIOS files {card_where(system, setup.below)}, not on "
           "this machine. "
           + ("" if setup.known() else
@@ -15435,16 +15468,16 @@ def _platform_for_dest(os_type: str, dest: Path, interactive: bool) -> tuple[str
     found = list(dict.fromkeys(name for name, _path, _label in found_setups(os_type)[0]))
     default = found[0] if len(found) == 1 else "" if found else "retroarch"
     if not default:
-        print(f"Error: {' and '.join(display_name(n) for n in found)} found here. "
-              f"Name the platform {dest} is for with --platform.", file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("detect", "conflict", "",
+                      f"Error: {' and '.join(display_name(n) for n in found)} found here. "
+                      f"Name the platform {dest} is for with --platform.")
     why = "the platform found here" if found else "nothing was detected here"
     print(f"  File list: {display_name(default)} ({why}). For another platform's "
           "list, add --platform (--list-platforms names them).")
     return default, dest
 
 
-def _several_found(platforms: list[tuple[str, Path]], setups: list) -> None:
+def _several_found(platforms: list[tuple[str, Path]], setups: list) -> NoReturn:
     """Stop a run without questions that found more than one setup, each
     named with the options that choose it."""
     labels = {(name, path): label for name, path, label in setups}
@@ -15455,11 +15488,9 @@ def _several_found(platforms: list[tuple[str, Path]], setups: list) -> None:
             if conflict else f"{len(shown)} setups were found here")
     message = (f"{lead}, and a run without questions installs for one: "
                + ", ".join(label for label, _n, _p in shown))
-    EVENTS.emit("error", stage="detect", reason="conflict", platform="", message=message)
-    print(f"Error: {message}. Name the one to install for:", file=sys.stderr)
-    for label, name, path in shown:
-        print(f"  {label}: --platform {name} --dest {shown_path(path)}", file=sys.stderr)
-    sys.exit(1)
+    raise Refusal("detect", "conflict", "", f"Error: {message}. Name the one to install for:",
+                  *(f"  {label}: --platform {name} --dest {shown_path(path)}"
+                    for label, name, path in shown), message=message)
 
 
 def _unknown_target(target: str, plat: str, targets: dict, *after: str) -> NoReturn:
@@ -23207,7 +23238,7 @@ def _check_run_cores(run: _InstallRun) -> None:
     for plat_name, bios_path in [] if run.packing else run.platforms:
         if plat_name in CORE_PLATFORMS:
             if args.cores_dir:
-                _check_cores_dir(args.cores_dir)
+                _check_cores_dir(args.cores_dir, plat_name)
             searched = [args.cores_dir] if args.cores_dir else core_dirs(plat_name, bios_path)
             run.cores_found[(plat_name, bios_path)] = installed_cores(searched)
             run.cores_searched[(plat_name, bios_path)] = searched
@@ -23903,7 +23934,17 @@ def _finish_install(run: _InstallRun, real_stdout: TextIO) -> None:
 
 
 def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
-    """One run of the installer, once the options are read."""
+    """One run of the installer, once the options are read, a refusal
+    reported where it ends the run: its error event before end, its lines
+    before what the unwinding run says."""
+    try:
+        _install_run(args, real_stdout)
+    except Refusal as refusal:
+        refusal.report()
+        raise
+
+
+def _install_run(args: argparse.Namespace, real_stdout: TextIO) -> None:
     run = _start_install(args, real_stdout)
 
     # Early exit for listing
@@ -32071,7 +32112,13 @@ def main() -> None:
         print(f"Error: {exc}", file=sys.stderr)
         sys.exit(1)
     with remote_in_use(remote):
-        _main_run()
+        try:
+            _main_run()
+        except Refusal as refusal:
+            # Raised outside an install, which reports its own: the full
+            # screen's start, an action and the sources opened before it.
+            refusal.report()
+            raise
 
 
 def _main_run() -> None:
@@ -32198,6 +32245,8 @@ def _run_action(args: argparse.Namespace,
     try:
         code = action(args)
     except SystemExit as exc:
+        if isinstance(exc, Refusal):
+            exc.report()
         EVENTS.emit("end", code=_event_exit_code(exc.code))
         raise
     except KeyboardInterrupt:
