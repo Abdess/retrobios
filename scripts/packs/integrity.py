@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING, TypedDict
 from core.artifacts import build_timestamp
 from packs.paths import MEDIA_MARKER, has_path_conflict
 from core.ziptools import build_zip_contents_index
+from core.ziptools import safe_member_parts
 from resolve.nativemode import digest_algorithm, platform_mode
 from resolve.validation import (
     baseline_verdict, digest_verdict, inner_rom_check, inner_rom_data_check,
@@ -510,13 +511,12 @@ def _structural_errors(zf: zipfile.ZipFile, zip_set: set) -> list[str]:
     dupes = sum(1 for c in Counter(zf.namelist()).values() if c > 1)
     if dupes:
         errors.append(f"{dupes} duplicate entries")
-    for n in zip_set:
-        if "//" in n:
-            errors.append(f"double slash: {n}")
-        if n.startswith("/"):
-            errors.append(f"absolute path: {n}")
-        if ".." in n:
-            errors.append(f"path traversal: {n}")
+    errors.extend(f"double slash: {n}" for n in zip_set if "//" in n)
+    for info in zf.infolist():
+        try:
+            safe_member_parts(info)
+        except ValueError as exc:
+            errors.append(str(exc))
 
     # Zero-byte check (exclude Dolphin GraphicMods markers)
     errors.extend(

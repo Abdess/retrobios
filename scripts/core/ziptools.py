@@ -257,8 +257,9 @@ class _ZipLimits:
     compression_ratio: int
 
 
-def _member_path(member: zipfile.ZipInfo, seen: set[str]) -> tuple[str, list[str], int]:
-    """(name, path components, mode) of a member whose path and type are safe."""
+def safe_member_parts(member: zipfile.ZipInfo) -> list[str]:
+    """Path components of a member whose path and type are safe to write
+    under a directory, ValueError otherwise."""
     # Archives written on Windows store a backslash separator. It is a
     # separator, not a filename character, so it is normalized before
     # the component checks rather than rejected.
@@ -270,18 +271,23 @@ def _member_path(member: zipfile.ZipInfo, seen: set[str]) -> tuple[str, list[str
     parts = [part for part in name.split("/") if part]
     if any(part in (".", "..") for part in parts):
         raise ValueError(f"ZIP traversal detected: {name}")
-    normalized = "/".join(parts)
-    if normalized in seen:
-        raise ValueError(f"Duplicate ZIP member path: {name}")
-    seen.add(normalized)
-
-    mode = (member.external_attr >> 16) & 0xFFFF
-    file_type = stat.S_IFMT(mode)
+    file_type = stat.S_IFMT(member.external_attr >> 16)
     if file_type not in (0, stat.S_IFREG, stat.S_IFDIR):
         raise ValueError(f"ZIP link or special file rejected: {name}")
     if member.flag_bits & 0x1:
         raise ValueError(f"Encrypted ZIP member rejected: {name}")
-    return name, parts, mode
+    return parts
+
+
+def _member_path(member: zipfile.ZipInfo, seen: set[str]) -> tuple[str, list[str], int]:
+    """(name, path components, mode) of a member whose path and type are safe."""
+    parts = safe_member_parts(member)
+    name = member.filename.replace("\\", "/")
+    normalized = "/".join(parts)
+    if normalized in seen:
+        raise ValueError(f"Duplicate ZIP member path: {name}")
+    seen.add(normalized)
+    return name, parts, (member.external_attr >> 16) & 0xFFFF
 
 
 def _check_member_size(

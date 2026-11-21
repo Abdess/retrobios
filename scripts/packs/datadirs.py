@@ -18,6 +18,7 @@ from pathlib import Path
 from core import upstream
 from core.artifacts import file_lock as _file_lock, write_text_atomic
 from core.upstream import remote_etag as _get_remote_etag
+from core.ziptools import safe_member_parts
 from model.registry import VERSIONS_FILE, load_versions
 
 
@@ -321,16 +322,13 @@ def _download_and_extract_zip(
             for info in zf.infolist():
                 if info.is_dir():
                     continue
-                name = info.filename
-                if ".." in name or name.startswith("/"):
-                    continue
+                parts = safe_member_parts(info)
                 # strip leading path components
-                parts = name.split("/")
                 if strip_components > 0:
                     if len(parts) <= strip_components:
                         continue
                     parts = parts[strip_components:]
-                    name = "/".join(parts)
+                name = "/".join(parts)
                 # skip excludes (check against stripped path)
                 top = parts[0] if parts else ""
                 if top in exclude:
@@ -512,13 +510,14 @@ def _refresh_entry(
             source_url, source_path, local_cache, exclude, measured=archive_sizes.append
         )
 
-    # An archive that reads but holds nothing under the path is the same on
-    # every try: only a failed or unreadable download is tried again.
+    # An archive that reads but holds nothing under the path, or a member
+    # core.ziptools refuses (ValueError), is the same on every try: only a
+    # failed or unreadable download is tried again.
     for attempt, wait in enumerate((*DOWNLOAD_RETRY_WAITS, None), start=1):
         try:
             file_count = fetch()
             break
-        except NothingExtractedError as exc:
+        except (NothingExtractedError, ValueError) as exc:
             log.warning("[%s] download failed: %s", key, exc)
             return None
         except _TRANSIENT as exc:

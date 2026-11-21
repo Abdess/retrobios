@@ -355,6 +355,18 @@ class APackForAndroidHidesItsMedia(PackCountFixture):
             errors = packverify._structural_errors(archive, set(archive.namelist()))
         self.assertEqual(errors, ["zero-byte: empty.bin"])
 
+    def test_the_integrity_check_reads_paths_like_core_ziptools(self):
+        """"Read..me" was reported as a traversal, a backslash one was not."""
+        from packs import integrity as packverify
+
+        buffer = io.BytesIO()
+        with zipfile.ZipFile(buffer, "w") as archive:
+            archive.writestr("Docs/Read..me.txt", b"r")
+            archive.writestr("..\\escape.bin", b"x")
+        with zipfile.ZipFile(buffer) as archive:
+            errors = packverify._structural_errors(archive, set(archive.namelist()))
+        self.assertEqual(errors, ["ZIP traversal detected: ../escape.bin"])
+
     def test_a_platform_without_android_gets_none(self):
         self.assertEqual(datatrees.pack_markers("demo", None, str(self.platforms)), ())
 

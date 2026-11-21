@@ -69,6 +69,26 @@ class RefreshConcurrency(unittest.TestCase):
         leftovers = [p.name for p in self.cache.parent.iterdir() if p.name != "pak"]
         self.assertEqual(leftovers, [])
 
+    def test_members_follow_the_core_ziptools_rule(self):
+        """A name with ".." inside a segment was dropped in silence, and a
+        backslash member became a file named with the backslash."""
+        payload = _zip_bytes({"Docs/Read..me.txt": b"r", "sub\\a.bin": b"a"})
+        with mock.patch.object(
+            datadirs.urllib.request, "urlopen", lambda *a, **k: _Response(payload)
+        ):
+            count = datadirs._download_and_extract_zip("https://x/pak.zip", str(self.cache))
+        self.assertEqual(count, 2)
+        self.assertEqual((self.cache / "Docs" / "Read..me.txt").read_bytes(), b"r")
+        self.assertEqual((self.cache / "sub" / "a.bin").read_bytes(), b"a")
+
+    def test_a_traversing_member_refuses_the_archive(self):
+        payload = _zip_bytes({"a.bin": b"a", "..\\escape.bin": b"x"})
+        with mock.patch.object(
+            datadirs.urllib.request, "urlopen", lambda *a, **k: _Response(payload)
+        ), self.assertRaises(ValueError):
+            datadirs._download_and_extract_zip("https://x/pak.zip", str(self.cache))
+        self.assertFalse(self.cache.exists())
+
     def test_refresh_holds_the_directory_lock(self):
         import fcntl
 
