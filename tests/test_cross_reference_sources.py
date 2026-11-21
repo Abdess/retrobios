@@ -17,7 +17,7 @@ import unittest
 from pathlib import Path
 
 from packs.crossref import build_supplemental_index, cross_reference, entry_source
-from cross_reference import print_report
+from packs.crossreftext import print_report
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

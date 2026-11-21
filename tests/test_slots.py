@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import tests
 
+import inspect
 import os
 import re
 import shutil
@@ -12,11 +13,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import slots
+from packs import slotreport
 from packs import slots as packs_slots
 from resolve import collisions as resolve_collisions
 from packs.slots import Claim, Conflict, arbitrate
-from slots import format_decision
+from packs.slotreport import format_decision
 from tests.sources import script_source
 
 
@@ -346,7 +347,7 @@ class TestConflicts(unittest.TestCase):
         conflicts = packs_slots.find_conflicts(
             self._config("m" * 32), self._profile("GC/JAP/IPL.bin"), REGIONS_DB
         )
-        line = slots.format_conflict(conflicts[0])
+        line = slotreport.format_conflict(conflicts[0])
         self.assertIn("USA/IPL.bin", line)
         self.assertIn("JAP/IPL.bin", line)
         self.assertIn("dolphin", line)
@@ -443,12 +444,12 @@ class TestArbitration(unittest.TestCase):
                 self.assertEqual(served, decision.winner.local_path)
 
     def test_the_reported_line_gives_the_ground_for_the_decision(self):
-        kept = slots.format_decision(packs_slots.arbitrate(self._conflict(), "md5"))
+        kept = slotreport.format_decision(packs_slots.arbitrate(self._conflict(), "md5"))
         self.assertIn("verifies content", kept)
         # A fact about each layer, no verdict on the platform's list.
         self.assertIn("the file dolphin reads", kept)
-        self.assertNotIn("wrong", slots.__loader__.get_source("slots").lower())
-        served = slots.format_decision(packs_slots.arbitrate(self._conflict(), "existence"))
+        self.assertNotIn("wrong", inspect.getsource(slotreport).lower())
+        served = slotreport.format_decision(packs_slots.arbitrate(self._conflict(), "existence"))
         self.assertIn("both are satisfied", served)
 
     def test_each_emulator_is_given_the_file_it_reads(self):
@@ -461,7 +462,7 @@ class TestArbitration(unittest.TestCase):
             packs_slots.Claim("profile", "neocdz.zip", "neocdz.zip", emulator="geolith",
                         local_path="b/neocdz.zip.712816a3", status="md5_exact"),
         ]
-        kept = slots.format_decision(packs_slots.arbitrate(conflict, "md5"))
+        kept = slotreport.format_decision(packs_slots.arbitrate(conflict, "md5"))
         self.assertIn("a/neocdz.zip.ba20a7be, the file fbneo reads", kept)
         self.assertIn("b/neocdz.zip.712816a3, the file geolith reads", kept)
         self.assertEqual(conflict.files_read(), [
@@ -510,7 +511,7 @@ class TestBuilderAndVerifierAgree(unittest.TestCase):
             self.assertNotIn("decision.serves_both", text, source.name)
         self.assertIn(
             "decision.serves_both",
-            (scripts / "slots.py").read_text(encoding="utf-8"),
+            (scripts / "packs" / "slotreport.py").read_text(encoding="utf-8"),
         )
 
     def test_neither_reimplements_the_mode_test(self):
@@ -554,7 +555,7 @@ class TestSelfContradictingDestinations(unittest.TestCase):
                                  "md5": "n" * 32}]},
         }}
         collision = resolve_collisions.find_collisions(config, REGIONS_DB)[0]
-        line = slots.format_collision(collision)
+        line = slotreport.format_collision(collision)
         left, packed = collision.resolved
         # The builder walks the systems sorted: alpha's declaration ships.
         self.assertIn(f"{packed} (alpha) packed", line)
@@ -633,7 +634,7 @@ class TestSelfContradictingDestinations(unittest.TestCase):
             {"name": "IPL.bin", "destination": "disk.rom", "md5": "m" * 32},
             {"name": "IPL.bin", "destination": "disk.rom", "md5": "n" * 32},
         )
-        line = slots.format_collision(resolve_collisions.find_collisions(config, REGIONS_DB)[0])
+        line = slotreport.format_collision(resolve_collisions.find_collisions(config, REGIONS_DB)[0])
         self.assertIn("USA/IPL.bin", line)
         self.assertIn("JAP/IPL.bin", line)
 

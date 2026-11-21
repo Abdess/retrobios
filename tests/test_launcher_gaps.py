@@ -27,12 +27,13 @@ from unittest import mock
 
 import yaml
 
-import verify
 from packs import coverage
 from packs import report as packs_report
 from model.profiles import emulator_profiles_cache, load_emulator_profiles
 from model.platforms import load_platform_config
-from cross_reference import LAUNCHER_READS_KEY, LAUNCHER_UNPROVEN_KEY, print_launcher_reads
+from packs.crossreflaunchers import LAUNCHER_READS_KEY, LAUNCHER_UNPROVEN_KEY
+from packs.crossreftext import print_launcher_reads
+from packs.strictgate import platform_strict_failure
 from packs.crossref import launcher_file_names, launcher_reads_not_held
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -298,16 +299,10 @@ class LauncherGapTest(unittest.TestCase):
                          {"absent.bin", "mixed.rom", "labelled.rom", "user.sf2"})
         self.assertEqual(with_rows, without)
 
-        def exit_code(result: dict) -> int:
-            try:
-                with contextlib.redirect_stderr(io.StringIO()):
-                    verify._exit_if_strict(True, [result])
-            except SystemExit as exc:
-                return int(exc.code or 0)
-            return 0
-
-        self.assertEqual(exit_code({**with_rows, "launcher_reads_not_held": rows}),
-                         exit_code(without))
+        self.assertEqual(
+            platform_strict_failure([{**with_rows, "launcher_reads_not_held": rows}]),
+            platform_strict_failure([without]),
+        )
 
     def test_verify_prints_a_count_and_lists_on_verbose(self) -> None:
         result = coverage.verify_platform(

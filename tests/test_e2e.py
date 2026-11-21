@@ -6896,15 +6896,14 @@ class OneOfASearchList(unittest.TestCase):
         """second.bin used to read required: false beside a required
         first.bin: the set is required and held, so nothing is critical
         for it, and the strict exit names only the set nobody holds."""
-        from verify import _exit_if_strict_emulator
+        from packs.strictgate import emulator_strict_failure
 
         result = self._verify()
         critical = [d["name"] for d in result["details"]
                     if d["status"] == "missing" and d["required"]]
         self.assertEqual(critical, ["none_a.bin"])
-        with self.assertRaises(SystemExit), contextlib.redirect_stderr(io.StringIO()) as err:
-            _exit_if_strict_emulator(True, result)
-        self.assertIn("1 required file(s) missing: none_a.bin", err.getvalue())
+        self.assertIn("1 required file(s) missing: none_a.bin",
+                      emulator_strict_failure(result) or "")
 
     def test_pack_and_verify_agree(self):
         from packs.emulatorpack import generate_emulator_pack

@@ -24,10 +24,16 @@ COMMANDS = {
     ),
     "verify.py": (
         "packs/verdicts.py", "packs/gaps.py", "packs/coverage.py", "packs/emulatorcheck.py",
-        "packs/report.py",
+        "packs/report.py", "packs/verifyplatforms.py", "packs/verifysummary.py",
+        "packs/verifyoutput.py", "packs/strictgate.py",
     ),
-    "cross_reference.py": ("packs/crossref.py",),
-    "slots.py": ("packs/slots.py", "resolve/collisions.py"),
+    "cross_reference.py": (
+        "packs/crossref.py", "packs/crossrefscope.py", "packs/crossrefrun.py",
+        "packs/crossreflaunchers.py", "packs/crossreftext.py",
+    ),
+    "slots.py": (
+        "packs/slots.py", "resolve/collisions.py", "packs/slotscan.py", "packs/slotreport.py",
+    ),
     "validate_pr.py": ("resolve/review.py", "core/gitclone.py"),
     "refresh_data_dirs.py": ("packs/datadirs.py",),
     "split_pack.py": ("packs/parts.py",),

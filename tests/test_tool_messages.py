@@ -24,10 +24,10 @@ import diff_truth
 import pipeline
 from orchestrate import guards, labels, prepare, runner
 from resolve import truth
-import verify
 from packs import coverage
 from packs import report as packs_report
 from packs import verdicts
+from packs import verifysummary
 from tests.sources import script_source
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -527,7 +527,7 @@ class TheVerifySummaryCountsDiscrepancies(unittest.TestCase):
              "discrepancy": "unmet"},
             {"system": "arcade", "name": "x.zip", "status": verdicts.Status.MISSING},
         ]
-        summary = verify._overall_summary([
+        summary = verifysummary.overall_summary([
             ({"severity_counts": {}, "details": details}, ["RetroArch"]),
             ({"severity_counts": {}, "details": []}, ["Batocera"]),
         ])
@@ -552,7 +552,7 @@ class EveryPlatformInTheSummaryCarriesItsCount(unittest.TestCase):
     def test_a_count_of_one_is_written(self):
         one = {"severity_counts": {verdicts.Severity.WARNING: 1}, "details": []}
         two = {"severity_counts": {verdicts.Severity.WARNING: 2}, "details": []}
-        summary = verify._overall_summary([(two, ["Lakka"]), (one, ["ROCKNIX"])])
+        summary = verifysummary.overall_summary([(two, ["Lakka"]), (one, ["ROCKNIX"])])
         self.assertIn("3 warning (Lakka 2, ROCKNIX 1)", summary)
 
 

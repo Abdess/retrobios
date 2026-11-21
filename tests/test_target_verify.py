@@ -222,9 +222,7 @@ class CrossReferenceReadsTheTargetAcrossPlatforms(unittest.TestCase):
     each narrowed to the cores it builds for it."""
 
     def test_the_scope_is_the_union_of_each_platforms_target_cores(self):
-        import argparse
-
-        import cross_reference
+        from packs.crossrefscope import tree_scope
         from model.platforms import load_platform_config
         from model.profiles import load_emulator_profiles
         from model.registry import list_registered_platforms
@@ -232,9 +230,8 @@ class CrossReferenceReadsTheTargetAcrossPlatforms(unittest.TestCase):
 
         platforms_dir = str(REPO_ROOT / "platforms")
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
-        args = argparse.Namespace(platform=None, target="switch", platforms_dir=platforms_dir)
         with contextlib.redirect_stderr(io.StringIO()):
-            tree = cross_reference._tree_scope(args, profiles)
+            tree = tree_scope(None, "switch", platforms_dir, profiles)
             cache, kept = build_target_cores_cache(
                 list_registered_platforms(platforms_dir), "switch", platforms_dir, is_all=True,
             )

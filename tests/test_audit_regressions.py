@@ -572,7 +572,7 @@ class VerboseAppliesToJson(unittest.TestCase):
 
     def test_every_json_branch_reads_the_flag(self):
         source = script_source("verify.py")
-        self.assertEqual(source.count("_json_details("), 4)
+        self.assertEqual(source.count("json_details("), 4)
         self.assertNotIn('if d["status"] != Status.OK\n            ]', source)
 
 
@@ -5391,7 +5391,7 @@ class VerifyAllSummaryNamesWhatIsWrong(unittest.TestCase):
     say which platform carried it."""
 
     def test_counts_carry_platforms_and_core_misses(self):
-        import verify
+        from packs import verifysummary
         from packs import verdicts
 
         clean = {"severity_counts": {}, "undeclared_files": []}
@@ -5403,7 +5403,7 @@ class VerifyAllSummaryNamesWhatIsWrong(unittest.TestCase):
                 "category": "bios", "in_pack": True,
             }],
         }
-        summary = verify._overall_summary(
+        summary = verifysummary.overall_summary(
             [(clean, ["RetroArch"]), (warned, ["RetroDECK"]), (core_miss, ["ROCKNIX"])]
         )
         self.assertIn("1 warning (RetroDECK 1)", summary)
@@ -5413,7 +5413,7 @@ class VerifyAllSummaryNamesWhatIsWrong(unittest.TestCase):
     def test_a_file_missing_on_several_platforms_is_counted_once(self):
         """sfiii2a.zip missing on 15 platforms read '24 core file(s)' for 10
         distinct files, the name printed 15 times on one line."""
-        import verify
+        from packs import verifysummary
 
         def missing(*names: str) -> dict:
             return {"severity_counts": {}, "undeclared_files": [
@@ -5421,7 +5421,7 @@ class VerifyAllSummaryNamesWhatIsWrong(unittest.TestCase):
                  "category": "bios", "in_pack": True} for name in names
             ]}
 
-        summary = verify._overall_summary([
+        summary = verifysummary.overall_summary([
             (missing("sfiii2a.zip"), ["Batocera"]),
             (missing("sfiii2a.zip", "ROM"), ["RetroPie"]),
             (missing("sfiii2a.zip"), ["RomM"]),
@@ -5462,13 +5462,13 @@ class BundledFilesAreNotToSource(unittest.TestCase):
     listed among the files to source, with 19 more like it."""
 
     def test_verify_does_not_count_it_missing(self):
-        import verify
+        from packs import verifysummary
         from packs import report as packs_report
 
         entry = {"name": "n64.psh", "required": True, "in_repo": False,
                  "category": "bios", "in_pack": True, "bundled": True}
         self.assertEqual(packs_report.core_required_missing([entry]), [])
-        summary = verify._overall_summary(
+        summary = verifysummary.overall_summary(
             [({"severity_counts": {}, "undeclared_files": [entry]}, ["ROCKNIX"])]
         )
         self.assertNotIn("n64.psh", summary)
@@ -6391,13 +6391,13 @@ class StrictFailsOnMissingOnly(unittest.TestCase):
     but a rejected file is UNTESTED, a warning, and --strict never saw it."""
 
     def test_the_contract(self):
-        from scripts import verify as verify_mod
+        from scripts.packs.strictgate import platform_strict_failure
         from scripts.packs.verdicts import Severity
 
-        verify_mod._exit_if_strict(True, [{"severity_counts": {Severity.WARNING: 2}}])
-        with self.assertRaises(SystemExit), contextlib.redirect_stderr(io.StringIO()):
-            verify_mod._exit_if_strict(True, [{"severity_counts": {Severity.CRITICAL: 1}}])
-        self.assertNotIn("or rejected", verify_mod._exit_if_strict.__doc__)
+        self.assertIsNone(platform_strict_failure([{"severity_counts": {Severity.WARNING: 2}}]))
+        self.assertIsNotNone(
+            platform_strict_failure([{"severity_counts": {Severity.CRITICAL: 1}}]))
+        self.assertNotIn("or rejected", platform_strict_failure.__doc__)
 
 
 class TheRepairCommandWritesTheFileNamed(unittest.TestCase):
@@ -6465,7 +6465,7 @@ class AHashScanningCoreContradictsNoPlatform(unittest.TestCase):
     def test_no_conflict_names_ares(self):
         import json
 
-        from scripts import slots
+        from scripts.packs import slotscan
         from scripts.model.registry import list_registered_platforms
         from scripts.model.profiles import load_emulator_profiles
 
@@ -6477,7 +6477,7 @@ class AHashScanningCoreContradictsNoPlatform(unittest.TestCase):
         claimed = [
             (platform, conflict.destination)
             for platform in list_registered_platforms(str(root / "platforms"))
-            for conflict in slots.scan_platform(platform, profiles, db, str(root / "platforms"))
+            for conflict in slotscan.scan_platform(platform, profiles, db, str(root / "platforms"))
             if any(claim.emulator == "ares" for claim in conflict.profile_claims)
         ]
         self.assertEqual(claimed, [])

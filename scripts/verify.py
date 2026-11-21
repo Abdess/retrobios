@@ -28,17 +28,10 @@ import contextlib
 import json
 import os
 import sys
-from pathlib import Path
 
 
 sys.path.insert(0, os.path.dirname(__file__))
 from core.cli import add_emulator_selection, add_repo_inputs
-from core.text import count_text
-from resolve.contentlayout import TARGET_KEY
-from model.targets import (
-    canonical_target_name,
-    target_scope,
-)
 from model.cliargs import (
     LISTING_FLAGS,
     comma_list,
@@ -52,31 +45,17 @@ from model.cliargs import (
     resolve_system_ids,
     selected_platforms,
 )
-from model.profiles import (
-    load_emulator_profiles,
-)
 from model.registry import load_data_dir_registry
-from resolve.grouping import group_identical_platforms
 from model.database import load_database
-from model.platforms import load_platform_config
-from resolve.cores import (
-    platforms_with_systems,
-    without_profile_blind,
-)
 from model.safeparse import require_yaml
 
 
-from packs.coverage import verify_platform
 from packs.emulatorcheck import verify_emulator, verify_system
-from packs.report import (
-    NOT_FIRMWARE,
-    core_required_missing,
-    discrepancy_keys,
-    split_undeclared,
-    print_emulator_result,
-    print_platform_result,
-)
-from packs.verdicts import Severity, Status
+from packs.report import print_emulator_result, print_platform_result
+from packs.strictgate import emulator_strict_failure, platform_strict_failure
+from packs.verifyoutput import json_details, write_pack_destinations
+from packs.verifyplatforms import PlatformResults, PlatformRun, verify_platforms
+from packs.verifysummary import overall_summary
 
 yaml = require_yaml()
 
@@ -201,7 +180,7 @@ def _run_emulator_mode(args: argparse.Namespace, db: dict, requested_regions: li
         required_only=args.required_only,
     )
     if args.json:
-        result["details"] = _json_details(result["details"], args.verbose)
+        result["details"] = json_details(result["details"], args.verbose)
         print(json.dumps(result, indent=2))
     else:
         print_emulator_result(result, verbose=args.verbose)
@@ -216,60 +195,29 @@ def _run_system_mode(args: argparse.Namespace, db: dict, requested_regions: list
         required_only=args.required_only,
     )
     if args.json:
-        result["details"] = _json_details(result["details"], args.verbose)
+        result["details"] = json_details(result["details"], args.verbose)
         print(json.dumps(result, indent=2))
     else:
         print_emulator_result(result, verbose=args.verbose)
     _exit_if_strict_emulator(args.strict, result)
 
 
-def _target_scope(
-    args: argparse.Namespace,
-    platforms: list[str],
-    emu_profiles: dict,
-    platform_systems: list[str] | None,
-) -> tuple[dict[str, set[str] | None], list[str]]:
-    """The cores of each platform on --target, and the platforms that have
-    it and a system of the --system list. A system the target leaves no
-    core for was reported 0/0 with exit 0, where generate_pack refuses the
-    same request."""
-    target_cores_cache, platforms = target_scope(
-        platforms, args.target, args.platforms_dir, is_all=args.all
-    )
-    if platform_systems:
-        platforms = platforms_with_systems(
-            platforms, platform_systems, emu_profiles, target_cores_cache,
-            args.platforms_dir, args.target, args.all,
-        )
-    return target_cores_cache, platforms
-
-
-def _print_platform_results(
-    args: argparse.Namespace,
-    groups: list[tuple[list[str], str]],
-    group_results: list[tuple[dict, list[str]]],
-    all_results: dict[str, dict],
-) -> None:
+def _print_platform_results(args: argparse.Namespace, results: PlatformResults) -> None:
+    group_results = results.group_results
     if not args.json:
         for result, group in group_results:
             print_platform_result(result, group, verbose=args.verbose)
             print()
         if len(group_results) > 1:
-            print(_overall_summary(group_results))
+            print(overall_summary(group_results))
 
     if args.destinations:
-        destinations = {}
-        for (result, names), (group, _rep) in zip(group_results, groups):
-            for name, key in zip(names, group):
-                destinations[name] = {
-                    "platform": key, "pack_destinations": result["pack_destinations"],
-                }
-        Path(args.destinations).write_text(json.dumps(destinations, indent=1, sort_keys=True))
+        write_pack_destinations(args.destinations, results.groups, group_results)
 
     if args.json:
-        for r in all_results.values():
-            r["details"] = _json_details(r["details"], args.verbose)
-        print(json.dumps(all_results, indent=2))
+        for r in results.all_results.values():
+            r["details"] = json_details(r["details"], args.verbose)
+        print(json.dumps(results.all_results, indent=2))
 
 
 def _run_platform_mode(
@@ -279,69 +227,18 @@ def _run_platform_mode(
     requested_regions: list[str],
     platform_systems: list[str] | None,
 ) -> None:
-    platforms = selected_platforms(args, parser)
-
-    # Load emulator profiles once for cross-reference (not per-platform)
-    emu_profiles = load_emulator_profiles(args.emulators_dir)
-    data_registry = load_data_dir_registry(args.platforms_dir)
-
-    target_cores_cache, platforms = _target_scope(
-        args, platforms, emu_profiles, platform_systems,
-    )
-
-    # generate_pack refuses these on a platform whose cores no profile
-    # describes, and the report answers the same request the same way.
-    platforms = without_profile_blind(
-        platforms,
-        [
-            flag for flag, given in (
-                ("--region", requested_regions),
-                ("--no-game-data", getattr(args, "no_game_data", False)),
-            ) if given
-        ],
-        args.platforms_dir,
-        emu_profiles,
-        target_cores_cache if args.target else None,
-        args.all,
-    )
-
-    # Group identical platforms (same function as generate_pack)
-    groups = group_identical_platforms(
-        platforms, args.platforms_dir, target_cores_cache if args.target else None
-    )
-
-    all_results = {}
-    group_results: list[tuple[dict, list[str]]] = []
-    for group_platforms, representative in groups:
-        config = load_platform_config(representative, args.platforms_dir)
-        tc = target_cores_cache.get(representative) if args.target else None
-        if tc is not None:
-            # A core a roms folder offers on other boards only is not placed
-            # there, as generate_pack builds the board's pack.
-            config = {**config, TARGET_KEY: canonical_target_name(
-                [representative], args.target, args.platforms_dir)}
-        result = verify_platform(
-            config,
-            db,
-            args.emulators_dir,
-            emu_profiles,
-            target_cores=tc,
-            data_dir_registry=data_registry,
-            regions=requested_regions,
-            system_filter=platform_systems,
-            no_game_data=getattr(args, "no_game_data", False),
-            required_only=args.required_only,
-        )
-        names = [
-            load_platform_config(p, args.platforms_dir).get("platform", p)
-            for p in group_platforms
-        ]
-        group_results.append((result, names))
-        for p in group_platforms:
-            all_results[p] = result
-
-    _print_platform_results(args, groups, group_results, all_results)
-    _exit_if_strict(args.strict, [r for r, _ in group_results])
+    results = verify_platforms(selected_platforms(args, parser), db, PlatformRun(
+        platforms_dir=args.platforms_dir,
+        emulators_dir=args.emulators_dir,
+        target=args.target,
+        is_all=args.all,
+        regions=requested_regions,
+        system_filter=platform_systems,
+        no_game_data=getattr(args, "no_game_data", False),
+        required_only=args.required_only,
+    ))
+    _print_platform_results(args, results)
+    _exit_if_strict(args.strict, [r for r, _ in results.group_results])
 
 
 def _main(held: contextlib.ExitStack) -> None:
@@ -382,117 +279,20 @@ def _main(held: contextlib.ExitStack) -> None:
     _run_platform_mode(args, parser, db, regions, platform_systems)
 
 
-def _json_details(details: list[dict], verbose: bool) -> list[dict]:
-    """The entries a JSON report lists: what needs attention, or every one.
-
-    --verbose shows each entry with its ground truth in the text report. It
-    used to be accepted beside --json and dropped, the output byte for byte
-    the same, so a script asking for the passing entries got nothing.
-    """
-    return list(details) if verbose else [
-        d for d in details if d["status"] != Status.OK or d.get("release_asset")
-    ]
-
-
 def _exit_if_strict(strict: bool, results: list[dict]) -> None:
-    """Exit 1 under --strict when a platform result counts a critical file:
-    a required file missing where the frontend reads hashes.
-
-    A file present whose hash the frontend does not confirm is UNTESTED, a
-    warning (Batocera's BiosStatus calls it so): reported, not failed.
-    """
-    critical = sum(r["severity_counts"].get(Severity.CRITICAL, 0) for r in results)
-    if strict and critical:
-        print(f"ERROR: {critical} required file(s) missing where the frontend "
-              "checks hashes", file=sys.stderr)
+    """Exit 1 under --strict when a platform result counts a critical file."""
+    failure = platform_strict_failure(results)
+    if strict and failure:
+        print(failure, file=sys.stderr)
         sys.exit(1)
 
 
 def _exit_if_strict_emulator(strict: bool, result: dict) -> None:
-    """Exit 1 under --strict when an emulator lacks a file it cannot run without.
-
-    The emulator, not a frontend, is the judge here: a required file with no
-    HLE fallback that the collection does not hold stops the core.
-    """
-    missing = sorted({
-        d["name"] for d in result["details"]
-        if d["status"] == Status.MISSING and d.get("required", True)
-        and not d.get("hle_fallback")
-    })
-    if strict and missing:
-        print(f"ERROR: {len(missing)} required file(s) missing: "
-              f"{', '.join(missing)}", file=sys.stderr)
+    """Exit 1 under --strict when an emulator lacks a file it cannot run without."""
+    failure = emulator_strict_failure(result)
+    if strict and failure:
+        print(failure, file=sys.stderr)
         sys.exit(1)
-
-
-def _overall_summary(group_results: list[tuple[dict, list[str]]]) -> str:
-    """The closing lines of a multi-platform run, worst severity first.
-
-    Each count names the platforms carrying it, and the core files a core
-    cannot run without are counted too: a reader of the summary alone used
-    to conclude nothing required was missing, and could not tell where the
-    one warning was without reading the whole output.
-    """
-    platforms = sum(len(group) for _, group in group_results)
-
-    def where(counts: dict[str, int]) -> str:
-        named = [f"{name} {count}" for name, count in counts.items() if count]
-        return f" ({', '.join(named)})" if named else ""
-
-    def on(groups: tuple[str, ...]) -> str:
-        """The platforms a file is missing on, by the shorter side."""
-        if len(group_results) < 2 or len(groups) * 2 <= len(group_results):
-            return ", ".join(groups)
-        others = [" / ".join(g) for _, g in group_results if " / ".join(g) not in groups]
-        return "every platform" + (f" but {', '.join(others)}" if others else "")
-
-    parts = []
-    for severity, label in ((Severity.CRITICAL, "critical"), (Severity.WARNING, "warning"),
-                            (Severity.INFO, "info")):
-        counts = {
-            " / ".join(group): r["severity_counts"].get(severity, 0)
-            for r, group in group_results
-        }
-        parts.append(f"{sum(counts.values())} {label}{where(counts)}")
-    # Shipped files whose bytes contradict a declaration or a core's own
-    # check: the body printed 19 of them under a last line that read clean.
-    counts = {
-        " / ".join(group): len(discrepancy_keys(r.get("details", [])))
-        for r, group in group_results
-    }
-    total = sum(counts.values())
-    parts.append(f"{count_text(total, 'discrepancy', 'discrepancies')}{where(counts)}")
-    lines = [f"{count_text(platforms, 'platform')}: {', '.join(parts)}"]
-
-    # Grouped by file, not by platform: sfiii2a.zip missing everywhere was
-    # counted and printed once per platform, 24 files for 10 distinct ones.
-    holders: dict[str, list[str]] = {}
-    for r, group in group_results:
-        for name in sorted({
-            u["name"] for u in core_required_missing(split_undeclared(
-                r.get("undeclared_files", []))[1])
-        }):
-            holders.setdefault(name, []).append(" / ".join(group))
-    if holders:
-        by_platforms: dict[tuple[str, ...], list[str]] = {}
-        for name, groups in sorted(holders.items()):
-            by_platforms.setdefault(tuple(groups), []).append(name)
-        detail = "; ".join(
-            f"{', '.join(names)} ({on(groups)})"
-            for groups, names in sorted(by_platforms.items(),
-                                        key=lambda item: (-len(item[0]), item[1]))
-        )
-        lines.append(f"{len(holders)} core file(s) a core cannot run without are "
-                     f"missing: {detail}")
-    for category, label in NOT_FIRMWARE.items():
-        counts = {
-            " / ".join(group): len((r.get("missing_not_firmware") or {}).get(category, []))
-            for r, group in group_results
-        }
-        total = sum(counts.values())
-        if total:
-            lines.append(f"{total} platform entries missing, not firmware, {label}{where(counts)}")
-    return "\n".join(lines)
 
 
 if __name__ == "__main__":
