@@ -224,10 +224,8 @@ class PutTheApp(unittest.TestCase):
         self.repo.__enter__()
         self.addCleanup(self.repo.__exit__, None, None, None)
         install.KEPT.reset()
-        patcher = mock.patch.multiple(
-            install, LAUNCHERS_URL=f"{self.repo.env()['RETROBIOS_BASE_URL']}"
-            "/install/launchers/index.json",
-            RAW_FILE_URL=f"{self.repo.env()['RETROBIOS_BASE_URL']}/{{path}}")
+        patcher = mock.patch.object(install, "active_remote", return_value=install.Remote(
+            install.DEFAULT_RELEASE_REF, self.repo.env()["RETROBIOS_BASE_URL"], False))
         patcher.start()
         self.addCleanup(patcher.stop)
         self.index = json.loads(INDEX.read_text(encoding="utf-8"))

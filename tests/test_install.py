@@ -490,9 +490,7 @@ class TheDataTreesCountInTheFreeSpace(unittest.TestCase):
                 with unittest.mock.patch.object(
                         sys, "argv", ["install.py", "--platform", "retroarch", "--dest",
                                       str(repo.dest), "--no-input"]), \
-                        unittest.mock.patch.object(install, "MANIFEST_URL",
-                                                   base + "/install/{platform}.json"), \
-                        unittest.mock.patch.object(install, "RAW_FILE_URL", base + "/{path}"), \
+                        unittest.mock.patch.dict(os.environ, {"RETROBIOS_BASE_URL": base}), \
                         unittest.mock.patch.object(install.shutil, "disk_usage",
                                                    lambda _p, free=free: SimpleNamespace(free=free)), \
                         unittest.mock.patch.object(
@@ -1888,12 +1886,32 @@ class TestBaseUrlScheme(unittest.TestCase):
         )
 
     def test_plain_http_is_refused(self):
-        with self.assertRaises(SystemExit):
+        with self.assertRaises(ValueError):
             install._checked_base_url("http://example.test/repo")
 
     def test_local_file_scheme_is_refused(self):
-        with self.assertRaises(SystemExit):
+        with self.assertRaises(ValueError):
             install._checked_base_url("file:///etc")
+
+    def test_a_refused_base_is_said_by_main_and_ends_on_code_1(self):
+        with unittest.mock.patch.dict(os.environ, {"RETROBIOS_BASE_URL": "http://example.test"}), \
+                unittest.mock.patch.object(sys, "argv", ["install.py", "--help"]), \
+                contextlib.redirect_stderr(io.StringIO()) as err, \
+                self.assertRaises(SystemExit) as stopped:
+            install.main()
+        self.assertEqual(stopped.exception.code, 1)
+        self.assertEqual(err.getvalue(),
+                         "Error: RETROBIOS_BASE_URL must use HTTPS, got 'http://example.test'\n")
+
+    def test_an_empty_variable_is_unset(self):
+        # Set but empty, the base killed even an import of install.py, where
+        # every other reading of it takes it as unset.
+        with unittest.mock.patch.dict(os.environ, {"RETROBIOS_BASE_URL": "",
+                                                   "RETROBIOS_REF": ""}):
+            remote = install.remote_from_env()
+        self.assertEqual(remote, install.Remote(
+            install.DEFAULT_RELEASE_REF, install.default_base_url(install.DEFAULT_RELEASE_REF),
+            False))
 
     def test_loopback_http_is_allowed_for_end_to_end_runs(self):
         for url in (
@@ -2878,8 +2896,8 @@ class ASilentServerIsBounded(unittest.TestCase):
         start = time.monotonic()
         with unittest.mock.patch.object(install, "LIST_TIMEOUT", 0.5), \
                 unittest.mock.patch.object(install, "_retry_delay", return_value=0), \
-                unittest.mock.patch.object(install, "MANIFEST_URL",
-                                           f"http://127.0.0.1:{port}/{{platform}}.json"), \
+                unittest.mock.patch.dict(os.environ,
+                                         {"RETROBIOS_BASE_URL": f"http://127.0.0.1:{port}"}), \
                 contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
             install.fetch_manifest("retroarch")
         elapsed = time.monotonic() - start
@@ -5162,7 +5180,8 @@ class AMissingFileListNamesTheRef(unittest.TestCase):
 
     def _run(self, ref: str) -> str:
         error = install.urllib.error.HTTPError("u", 404, "Not Found", None, None)
-        with unittest.mock.patch.object(install, "RELEASE_REF", ref), \
+        with unittest.mock.patch.dict(os.environ, {"RETROBIOS_REF": ref,
+                                                   "RETROBIOS_BASE_URL": ""}), \
                 unittest.mock.patch.object(install, "_fetch_json", side_effect=error), \
                 contextlib.redirect_stderr(io.StringIO()) as err, \
                 self.assertRaises(SystemExit):
@@ -5693,7 +5712,7 @@ class AnOverrideIsNamedWhenItIsTheCause(unittest.TestCase):
                 self.assertRaises(SystemExit):
             install.fetch_manifest("retroarch")
         text = err.getvalue()
-        self.assertIn("Address: " + install.MANIFEST_URL.format(platform="retroarch"), text)
+        self.assertIn("Address: https://mirror.invalid/install/retroarch.json", text)
         self.assertIn("RETROBIOS_BASE_URL is set", text)
 
     def test_a_pinned_fingerprint_is_named(self):

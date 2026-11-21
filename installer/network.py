@@ -23,16 +23,13 @@ from installer.platforms import TARGET_PLATFORMS, display_name
 from installer.remote import (
     CONNECT_TIMEOUT,
     DEFAULT_RELEASE_REF,
-    MANIFEST_URL,
     MAX_MANIFEST_BYTES,
     MAX_RETRIES,
     MAX_STANDALONE_BYTES,
     MAX_TARGETS_BYTES,
-    RELEASE_REF,
     STANDALONE_DIR,
-    STANDALONE_URL,
-    TARGETS_URL,
     TROUBLESHOOTING_PAGE,
+    active_remote,
 )
 
 
@@ -203,17 +200,17 @@ def network_words(
     return code, words
 
 
-def _address_lines(url: str) -> list[str]:
+OVERRIDE_LINE = ("  RETROBIOS_BASE_URL is set in this environment and chose that "
+                 "address: unset it to read from the project itself.")
+
+
+def _address_lines(url: str, overridden: bool) -> list[str]:
     """The address that failed, and the override that chose it if one did.
 
     A RETROBIOS_BASE_URL left from a mirror that is down read as a network
     fault: neither the host nor the variable was named.
     """
-    lines = [f"  Address: {url}"]
-    if os.environ.get("RETROBIOS_BASE_URL"):
-        lines.append("  RETROBIOS_BASE_URL is set in this environment and chose that "
-                     "address: unset it to read from the project itself.")
-    return lines
+    return [f"  Address: {url}", *([OVERRIDE_LINE] if overridden else [])]
 
 
 def _open_socket(
@@ -324,7 +321,7 @@ def _fetch_json(
     raise AssertionError("unreachable")
 
 
-def _manifest_invalid(plat: str, url: str, exc: ValueError) -> NoReturn:
+def _manifest_invalid(plat: str, url: str, exc: ValueError, overridden: bool) -> NoReturn:
     """Stop on a file list that arrived and is not valid."""
     words = f"the file list is not valid: {exc}"
     if isinstance(exc.__cause__, (json.JSONDecodeError, UnicodeDecodeError)):
@@ -336,7 +333,7 @@ def _manifest_invalid(plat: str, url: str, exc: ValueError) -> NoReturn:
                 message=words)
     print(f"  For {display_name(plat)}, {words}.", file=sys.stderr)
     if words.startswith("what arrived"):
-        for line in _address_lines(url):
+        for line in _address_lines(url, overridden):
             print(line, file=sys.stderr)
         print("  Check the connection (sign in to the Wi-Fi if it asks), then run the "
               "same command again.", file=sys.stderr)
@@ -346,38 +343,40 @@ def _manifest_invalid(plat: str, url: str, exc: ValueError) -> NoReturn:
 def missing_list_advice(plat: str, again: str) -> str:
     """What to do when the revision asked for has no file list for plat:
     the name was checked before any request, so the revision is the cause."""
-    if RELEASE_REF != DEFAULT_RELEASE_REF:
-        return (f"RETROBIOS_REF={RELEASE_REF} has no list for {plat}: unset it, or pick a "
+    ref = active_remote().ref
+    if ref != DEFAULT_RELEASE_REF:
+        return (f"RETROBIOS_REF={ref} has no list for {plat}: unset it, or pick a "
                 "newer tag from https://github.com/Abdess/retrobios/releases.")
     return f"The repository may be moving its files: {again} in a few minutes."
 
 
-def _manifest_http_error(plat: str, url: str, exc: urllib.error.HTTPError) -> NoReturn:
+def _manifest_http_error(plat: str, url: str, exc: urllib.error.HTTPError,
+                         overridden: bool) -> NoReturn:
     """Stop on a file list the server answered with an HTTP error."""
     EVENTS.emit(
         "error", stage="manifest", reason="not_found" if exc.code == 404 else "network",
         platform=plat, message=f"the file list could not be fetched: HTTP {exc.code}",
     )
-    if exc.code == 404 and os.environ.get("RETROBIOS_BASE_URL"):
+    if exc.code == 404 and overridden:
         print(f"  No file list for {plat} there.", file=sys.stderr)
-        for line in _address_lines(url):
+        for line in _address_lines(url, overridden):
             print(line, file=sys.stderr)
         sys.exit(1)
     if exc.code == 404:
         # Asked once, a 4xx being final. The name was checked before any
         # request, so the revision is what has no such list.
-        print(f"  No file list for {plat} at {RELEASE_REF}.", file=sys.stderr)
+        print(f"  No file list for {plat} at {active_remote().ref}.", file=sys.stderr)
         print(f"  {missing_list_advice(plat, 'run the same command again')}",
               file=sys.stderr)
         sys.exit(1)
     print(f"  Could not fetch the file list for {plat}: HTTP {exc.code}", file=sys.stderr)
-    for line in _address_lines(url):
+    for line in _address_lines(url, overridden):
         print(line, file=sys.stderr)
     print(NETWORK_ADVICE, file=sys.stderr)
     sys.exit(1)
 
 
-def _manifest_unreachable(plat: str, url: str, exc: OSError) -> NoReturn:
+def _manifest_unreachable(plat: str, url: str, exc: OSError, overridden: bool) -> NoReturn:
     """Stop on a file list the network did not bring."""
     code, words = network_words(exc)
     EVENTS.emit("error", stage="manifest", reason=code, platform=plat,
@@ -395,7 +394,7 @@ def _manifest_unreachable(plat: str, url: str, exc: OSError) -> NoReturn:
     tries = getattr(exc, "attempts", MAX_RETRIES)
     print(f"  Could not fetch the file list for {plat} after {tries} "
           f"attempts: {words}", file=sys.stderr)
-    for line in _address_lines(url):
+    for line in _address_lines(url, overridden):
         print(line, file=sys.stderr)
     print(NETWORK_ADVICE, file=sys.stderr)
     sys.exit(1)
@@ -412,15 +411,16 @@ def fetch_manifest(plat: str) -> dict:
             print(f"  The file list in {LOCAL.pack.name} is not valid: {exc}",
                   file=sys.stderr)
             sys.exit(1)
-    url = MANIFEST_URL.format(platform=plat)
+    remote = active_remote()
+    url = remote.manifest_url.format(platform=plat)
     try:
         return _validate_manifest(_fetch_json(url, MAX_MANIFEST_BYTES, "file list"), plat)
     except ValueError as exc:
-        _manifest_invalid(plat, url, exc)
+        _manifest_invalid(plat, url, exc, remote.overridden)
     except urllib.error.HTTPError as exc:
-        _manifest_http_error(plat, url, exc)
+        _manifest_http_error(plat, url, exc, remote.overridden)
     except (urllib.error.URLError, OSError) as exc:
-        _manifest_unreachable(plat, url, exc)
+        _manifest_unreachable(plat, url, exc, remote.overridden)
 
 
 def _pack_alone(plat: str) -> bool:
@@ -461,7 +461,7 @@ def fetch_standalone(plat: str, manifest: dict) -> dict:
     invalid, the run stops on one line, code 1."""
     beside = (LOCAL.manifest.parent / STANDALONE_DIR / f"{plat}.json"
               if LOCAL.manifest is not None else None)
-    url = STANDALONE_URL.format(platform=plat)
+    url = active_remote().standalone_url.format(platform=plat)
     where = str(beside) if beside is not None and _is_file(beside) else url
     try:
         if where != url:
@@ -506,7 +506,8 @@ def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
               f"install/targets/{plat}.json beside the --manifest file, or go online.",
               file=sys.stderr)
         sys.exit(2)
-    url = TARGETS_URL.format(platform=plat)
+    remote = active_remote()
+    url = remote.targets_url.format(platform=plat)
     try:
         return _validate_targets(_fetch_json(url, MAX_TARGETS_BYTES, "target list",
                                              attempts=attempts, timeout=timeout))
@@ -514,7 +515,7 @@ def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
         if exc.code == 404:
             return {}
         print(f"  Error: failed to fetch targets for {plat}: {exc}", file=sys.stderr)
-        for line in _address_lines(url):
+        for line in _address_lines(url, remote.overridden):
             print(line, file=sys.stderr)
         print(NETWORK_ADVICE, file=sys.stderr)
         return None
@@ -524,7 +525,7 @@ def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
     except (urllib.error.URLError, OSError) as exc:
         print(f"  Error: failed to fetch targets for {plat}: "
               f"{network_words(exc)[1]}", file=sys.stderr)
-        for line in _address_lines(url):
+        for line in _address_lines(url, remote.overridden):
             print(line, file=sys.stderr)
         print(NETWORK_ADVICE, file=sys.stderr)
         return None

@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 from installer.invocation import OFFLINE_VARIABLE, _INVOCATION, installer_id
-from installer.remote import INSTALLER_PAGE, RELEASE_REF
+from installer.remote import INSTALLER_PAGE, active_remote
 from installer.safe_replace import BACKUP_DIR
 from installer.text import format_size
 
@@ -373,7 +373,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--version",
         action="version",
-        version=f"retrobios installer {installer_id()} (ref {RELEASE_REF})",
+        version=f"retrobios installer {installer_id()} (ref {active_remote().ref})",
         help="print the installer version and exit",
     )
     parser.add_argument(

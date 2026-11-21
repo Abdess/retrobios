@@ -22,7 +22,7 @@ from installer.manifest import _validate_manifest
 from installer.network import _fetch_json, fetch_manifest, fetch_targets, missing_list_advice, network_words
 from installer.offline import LOCAL, offline_named, offline_undo
 from installer.platforms import display_name
-from installer.remote import MANIFEST_URL, MAX_MANIFEST_BYTES
+from installer.remote import MAX_MANIFEST_BYTES, active_remote
 from installer.tui_rows import TUI_OFFLINE_TITLE
 
 if TYPE_CHECKING:
@@ -141,7 +141,8 @@ def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
             inbox.put(("manifest_failed", plat, "", log.getvalue()[mark:].splitlines(),
                        _event_exit_code(exc.code)))
         return
-    url = MANIFEST_URL.format(platform=plat)
+    remote = active_remote()
+    url = remote.manifest_url.format(platform=plat)
     try:
         data = _fetch_json(url, MAX_MANIFEST_BYTES, "file list", attempts=1,
                            timeout=TUI_FETCH_TIMEOUT)
@@ -157,7 +158,7 @@ def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
         title = "No file list"
         lines = [f"There is no file list for {display_name(plat)} at this address."
                  if exc.code == 404 else f"The server answered HTTP {exc.code}."]
-        if exc.code == 404 and not os.environ.get("RETROBIOS_BASE_URL"):
+        if exc.code == 404 and not remote.overridden:
             # Line mode named RETROBIOS_REF as the cause, the screen nothing.
             lines.append(missing_list_advice(plat, "choose Try again"))
     except (urllib.error.URLError, OSError) as exc:
@@ -190,7 +191,7 @@ def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
                 # Named, never shown: the value can hold a password.
                 lines.append(f"{proxy} is set, so the connection goes through a proxy: "
                              "check that it answers.")
-    if os.environ.get("RETROBIOS_BASE_URL"):
+    if remote.overridden:
         lines.append(f"RETROBIOS_BASE_URL chose the address: {url}")
     inbox.put(("manifest_failed", plat, title, lines, 1))
 

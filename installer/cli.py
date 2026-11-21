@@ -31,6 +31,7 @@ from installer.network import _RAW_ERRORS, install_bounded_opener
 from installer.offline import LOCAL, OFFLINE_FLAG_VALUE, offline_named
 from installer.platforms import AVAILABLE_PLATFORMS, TARGET_PLATFORMS, _name_key, display_name, refuse_name
 from installer.regions import resolve_regions
+from installer.remote import remote_from_env, remote_in_use
 from installer.removal import run_backups, run_delete_backup, run_removal
 from installer.run import _install
 from installer.tui_routes import TUI_LIST_ENV, TUI_RECORD_ENV, line_mode_reason, plain_requested, tui_blocker
@@ -303,7 +304,17 @@ def _main_dispatch(args: argparse.Namespace) -> None:
 
 
 def main() -> None:
-    """Entry point."""
+    """Entry point: the remote resolved once, then the run."""
+    try:
+        remote = remote_from_env()
+    except ValueError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        sys.exit(1)
+    with remote_in_use(remote):
+        _main_run()
+
+
+def _main_run() -> None:
     _INVOCATION.os_type = detect_os()
     parser = build_parser()
     args = parser.parse_args()

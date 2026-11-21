@@ -23,7 +23,7 @@ from installer.platforms import (
     refuse_name,
 )
 from installer.regions import WORLD_REGION, resolve_regions
-from installer.remote import DEFAULT_RELEASE_REF, RELEASE_REF
+from installer.remote import DEFAULT_RELEASE_REF, active_remote
 from installer.text import _plural
 
 if TYPE_CHECKING:
@@ -280,8 +280,9 @@ def _older_list_advice(plat: str = "") -> str:
     if _pack_alone(plat) and LOCAL.pack is not None:
         return (f"  The list in {LOCAL.pack.name} does not record it: add --manifest FILE, "
                 f"a copy of install/{plat or '<platform>'}.json, or run without the option.")
-    if RELEASE_REF != DEFAULT_RELEASE_REF:
-        return (f"  RETROBIOS_REF={RELEASE_REF} selects file lists published before "
+    ref = active_remote().ref
+    if ref != DEFAULT_RELEASE_REF:
+        return (f"  RETROBIOS_REF={ref} selects file lists published before "
                 "this option existed: unset RETROBIOS_REF to use the current ones, "
                 "or run without the option.")
     return ("  The file list comes from an older release: run the one-line "

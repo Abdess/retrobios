@@ -41,7 +41,7 @@ from installer.narrowing import designated_cores
 from installer.network import _fetch_json, fetch_manifest
 from installer.paths import shown_path, spelled
 from installer.platforms import display_name, entry_systems, normalize_platform, refuse_name, system_title
-from installer.remote import MANIFEST_URL, MAX_MANIFEST_BYTES
+from installer.remote import MAX_MANIFEST_BYTES, active_remote
 from installer.safe_replace import (
     BACKUP_DIR,
     KEPT,
@@ -514,7 +514,7 @@ def _other_setup_list(name: str) -> tuple[dict | None, str]:
     if offline_requested():
         return None, "this run is offline: run it again with the internet"
     try:
-        return _validate_manifest(_fetch_json(MANIFEST_URL.format(platform=name),
+        return _validate_manifest(_fetch_json(active_remote().manifest_url.format(platform=name),
                                               MAX_MANIFEST_BYTES, "file list"), name), ""
     except urllib.error.HTTPError as exc:
         if exc.code == 404:

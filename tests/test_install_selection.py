@@ -379,10 +379,8 @@ class DecliningTheSizePointsAtTheChoice(unittest.TestCase):
         with FakeRepository() as repo, mock.patch.dict(os.environ), \
                 mock.patch.object(sys, "argv", ["install.py", "--platform", "retroarch",
                                                 "--dest", str(repo.dest), *options]), \
-                mock.patch.object(install, "MANIFEST_URL",
-                                  repo.env()["RETROBIOS_BASE_URL"] + "/install/{platform}.json"), \
-                mock.patch.object(install, "RAW_FILE_URL",
-                                  repo.env()["RETROBIOS_BASE_URL"] + "/{path}"), \
+                mock.patch.dict(os.environ,
+                                {"RETROBIOS_BASE_URL": repo.env()["RETROBIOS_BASE_URL"]}), \
                 mock.patch.object(install, "CONFIRM_FROM_BYTES", 1), \
                 mock.patch("sys.stdin", mock.Mock(isatty=lambda: True)), \
                 mock.patch.object(install, "_is_terminal", return_value=True), \

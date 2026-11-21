@@ -26,7 +26,7 @@ from installer.network import _fetch_json, _read_limited, _retry_after_failure, 
 from installer.offline import LOCAL, _Offline, _network_allowed
 from installer.outcome import _transfer_failure
 from installer.paths import _destination_path, _safe_relative_path
-from installer.remote import BASE_URL, MAX_RETRIES, RAW_FILE_URL
+from installer.remote import MAX_RETRIES, active_remote
 from installer.safe_replace import KEPT, _write_verified
 from installer.text import _plural
 
@@ -36,7 +36,11 @@ from installer.text import _plural
 # same ref as the file lists, listed with their hashes in
 # install/launchers/index.json, which scripts/generate_launcher_index.py
 # writes from the members of the launcher archives.
-LAUNCHERS_URL = f"{BASE_URL}/install/launchers/index.json"
+def launchers_url() -> str:
+    """Where install/launchers/index.json is read from in this run."""
+    return f"{active_remote().base}/install/launchers/index.json"
+
+
 MAX_LAUNCHERS_BYTES = 256 * 1024
 MAX_APP_FILE_SIZE = 8 * 1024 * 1024
 MAX_APP_FILES = 64
@@ -226,7 +230,7 @@ def _app_bytes(entry: dict, name: str) -> bytes:
     if content is not None:
         data = content.encode("utf-8")
     else:
-        url = RAW_FILE_URL.format(path=urllib.parse.quote(entry["repo_path"], safe="/"))
+        url = active_remote().raw_file_url.format(path=urllib.parse.quote(entry["repo_path"], safe="/"))
         data = _app_download(url, entry["size"])
     if len(data) != entry["size"]:
         raise ValueError(f"{name} holds {len(data)} bytes, the list records {entry['size']}")
@@ -279,7 +283,7 @@ def put_app(card: CardApp) -> dict:
     if card.place is None:
         return fields
     try:
-        data = _fetch_json(LAUNCHERS_URL, MAX_LAUNCHERS_BYTES, "list of the app's files")
+        data = _fetch_json(launchers_url(), MAX_LAUNCHERS_BYTES, "list of the app's files")
         targets = app_targets(data, card.place)
     except (urllib.error.URLError, OSError, ValueError, http.client.HTTPException) as exc:
         fields["reason"] = f"its list of files could not be read: {_app_failure(exc)}"

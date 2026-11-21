@@ -17,12 +17,12 @@ from installer.destination import on_its_card
 from installer.detect_os import detected_os
 from installer.host_fs import DRIVE_FULL, NOT_WRITABLE, READ_ONLY, _held
 from installer.invocation import _INVOCATION
-from installer.network import _address_lines
+from installer.network import OVERRIDE_LINE
 from installer.offline import LOCAL, OFFLINE_WORDS, _offline_only, offline_named, offline_undo
 from installer.pack_source import NOT_IN_PACK
 from installer.paths import shown_path
 from installer.platforms import display_name
-from installer.remote import BASE_URL, TROUBLESHOOTING_PAGE
+from installer.remote import TROUBLESHOOTING_PAGE, active_remote
 from installer.romm import ROMM_SCAN_WORDS
 from installer.safe_replace import BACKUP_DIR, KEPT, NOT_KEPT, _kept_lines
 from installer.tally import _omission_lines, installed_words, needed_absent_words
@@ -172,8 +172,8 @@ def _http_failure_lines(failures: list[tuple[str, str]]) -> list[str]:
         return []
     more = f" (and {_plural(len(refused) - 1, 'other file')})" if len(refused) > 1 else ""
     lines = [f"  The server answered {refused[0]} for {refused[0].url}{more}."]
-    if os.environ.get("RETROBIOS_BASE_URL"):
-        return lines + _address_lines(refused[0].url)[1:]
+    if active_remote().overridden:
+        return [*lines, OVERRIDE_LINE]
     return lines + ["  The file list names files the server does not hold, and running "
                     "again changes nothing until the two match.",
                     f"  More help: {TROUBLESHOOTING_PAGE}"]
@@ -279,9 +279,9 @@ def _failure_advice(
     advice += _http_failure_lines(failures)
     if any(isinstance(reason, NetworkReason) for _dest, reason in failures):
         advice.append(NETWORK_FAILURE_ADVICE)
-        if os.environ.get("RETROBIOS_BASE_URL"):
+        if active_remote().overridden:
             # A mirror that is down read as this machine's connection.
-            advice += _address_lines(BASE_URL)[1:]
+            advice.append(OVERRIDE_LINE)
     if any(str(reason).startswith(NOT_KEPT) for _dest, reason in failures):
         # The same run fails the same way: "retry only those" sent a phone
         # user round the loop with nothing changed.

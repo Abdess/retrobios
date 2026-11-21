@@ -478,18 +478,19 @@ def region_title(name: str) -> str:
 # installer came from. RETROBIOS_REF pins them to a tag or a commit when
 # reproducibility matters.
 DEFAULT_RELEASE_REF = "main"
-RELEASE_REF = os.environ.get("RETROBIOS_REF", DEFAULT_RELEASE_REF)
-DEFAULT_BASE_URL = (
-    "https://raw.githubusercontent.com/Abdess/retrobios/"
-    + urllib.parse.quote(RELEASE_REF, safe="")
-)
+
+
+def default_base_url(ref: str) -> str:
+    """The project's own address for the file lists of ref."""
+    return ("https://raw.githubusercontent.com/Abdess/retrobios/"
+            + urllib.parse.quote(ref, safe=""))
 
 
 _LOOPBACK_HOSTS = ("localhost", "127.0.0.1", "::1")
 
 
 def _checked_base_url(value: str) -> str:
-    """Refuse a base URL that is neither HTTPS nor loopback.
+    """Refuse a base URL that is neither HTTPS nor loopback, as ValueError.
 
     This base serves the manifest and the files it declares, so whoever
     controls it controls the expected hashes too and verification stops
@@ -505,22 +506,69 @@ def _checked_base_url(value: str) -> str:
     host = (parsed.hostname or "").lower()
     if parsed.scheme == "http" and host in _LOOPBACK_HOSTS:
         return value
-    print(
-        f"Error: RETROBIOS_BASE_URL must use HTTPS, got {value!r}",
-        file=sys.stderr,
-    )
-    sys.exit(1)
+    raise ValueError(f"RETROBIOS_BASE_URL must use HTTPS, got {value!r}")
 
 
-BASE_URL = _checked_base_url(os.environ.get("RETROBIOS_BASE_URL", DEFAULT_BASE_URL))
-MANIFEST_URL = f"{BASE_URL}/install/{{platform}}.json"
-TARGETS_URL = f"{BASE_URL}/install/targets/{{platform}}.json"
 # What --standalone reads, apart from the list every run downloads.
 STANDALONE_DIR = "standalone"
-STANDALONE_URL = f"{BASE_URL}/install/standalone/{{platform}}.json"
 
 
-RAW_FILE_URL = f"{BASE_URL}/{{path}}"
+class Remote(NamedTuple):
+    """Where a run reads its lists and files: the revision, the base
+    address, and whether RETROBIOS_BASE_URL chose that base."""
+
+    ref: str
+    base: str
+    overridden: bool
+
+    @property
+    def manifest_url(self) -> str:
+        return f"{self.base}/install/{{platform}}.json"
+
+    @property
+    def targets_url(self) -> str:
+        return f"{self.base}/install/targets/{{platform}}.json"
+
+    @property
+    def standalone_url(self) -> str:
+        return f"{self.base}/install/{STANDALONE_DIR}/{{platform}}.json"
+
+    @property
+    def raw_file_url(self) -> str:
+        return f"{self.base}/{{path}}"
+
+
+def remote_from_env() -> Remote:
+    """The remote RETROBIOS_REF and RETROBIOS_BASE_URL name, ValueError for
+    a base that is neither HTTPS nor loopback. A variable set but empty is
+    unset, as every other reading of them takes it."""
+    ref = os.environ.get("RETROBIOS_REF") or DEFAULT_RELEASE_REF
+    override = os.environ.get("RETROBIOS_BASE_URL") or ""
+    if override:
+        return Remote(ref, _checked_base_url(override), True)
+    return Remote(ref, default_base_url(ref), False)
+
+
+# The remote main resolved, for the length of its run.
+_IN_USE: list[Remote] = []
+
+
+@contextlib.contextmanager
+def remote_in_use(remote: Remote) -> Iterator[None]:
+    """remote answers active_remote() until the block ends."""
+    _IN_USE.append(remote)
+    try:
+        yield
+    finally:
+        _IN_USE.pop()
+
+
+def active_remote() -> Remote:
+    """The remote of this run: the one main resolved, else the one the
+    environment names now, for a caller that did not come through main."""
+    return _IN_USE[-1] if _IN_USE else remote_from_env()
+
+
 RELEASE_URL = (
     "https://github.com/Abdess/retrobios/releases/download/large-files/{asset}"
 )
@@ -7607,17 +7655,17 @@ def network_words(
     return code, words
 
 
-def _address_lines(url: str) -> list[str]:
+OVERRIDE_LINE = ("  RETROBIOS_BASE_URL is set in this environment and chose that "
+                 "address: unset it to read from the project itself.")
+
+
+def _address_lines(url: str, overridden: bool) -> list[str]:
     """The address that failed, and the override that chose it if one did.
 
     A RETROBIOS_BASE_URL left from a mirror that is down read as a network
     fault: neither the host nor the variable was named.
     """
-    lines = [f"  Address: {url}"]
-    if os.environ.get("RETROBIOS_BASE_URL"):
-        lines.append("  RETROBIOS_BASE_URL is set in this environment and chose that "
-                     "address: unset it to read from the project itself.")
-    return lines
+    return [f"  Address: {url}", *([OVERRIDE_LINE] if overridden else [])]
 
 
 def _open_socket(
@@ -7728,7 +7776,7 @@ def _fetch_json(
     raise AssertionError("unreachable")
 
 
-def _manifest_invalid(plat: str, url: str, exc: ValueError) -> NoReturn:
+def _manifest_invalid(plat: str, url: str, exc: ValueError, overridden: bool) -> NoReturn:
     """Stop on a file list that arrived and is not valid."""
     words = f"the file list is not valid: {exc}"
     if isinstance(exc.__cause__, (json.JSONDecodeError, UnicodeDecodeError)):
@@ -7740,7 +7788,7 @@ def _manifest_invalid(plat: str, url: str, exc: ValueError) -> NoReturn:
                 message=words)
     print(f"  For {display_name(plat)}, {words}.", file=sys.stderr)
     if words.startswith("what arrived"):
-        for line in _address_lines(url):
+        for line in _address_lines(url, overridden):
             print(line, file=sys.stderr)
         print("  Check the connection (sign in to the Wi-Fi if it asks), then run the "
               "same command again.", file=sys.stderr)
@@ -7750,38 +7798,40 @@ def _manifest_invalid(plat: str, url: str, exc: ValueError) -> NoReturn:
 def missing_list_advice(plat: str, again: str) -> str:
     """What to do when the revision asked for has no file list for plat:
     the name was checked before any request, so the revision is the cause."""
-    if RELEASE_REF != DEFAULT_RELEASE_REF:
-        return (f"RETROBIOS_REF={RELEASE_REF} has no list for {plat}: unset it, or pick a "
+    ref = active_remote().ref
+    if ref != DEFAULT_RELEASE_REF:
+        return (f"RETROBIOS_REF={ref} has no list for {plat}: unset it, or pick a "
                 "newer tag from https://github.com/Abdess/retrobios/releases.")
     return f"The repository may be moving its files: {again} in a few minutes."
 
 
-def _manifest_http_error(plat: str, url: str, exc: urllib.error.HTTPError) -> NoReturn:
+def _manifest_http_error(plat: str, url: str, exc: urllib.error.HTTPError,
+                         overridden: bool) -> NoReturn:
     """Stop on a file list the server answered with an HTTP error."""
     EVENTS.emit(
         "error", stage="manifest", reason="not_found" if exc.code == 404 else "network",
         platform=plat, message=f"the file list could not be fetched: HTTP {exc.code}",
     )
-    if exc.code == 404 and os.environ.get("RETROBIOS_BASE_URL"):
+    if exc.code == 404 and overridden:
         print(f"  No file list for {plat} there.", file=sys.stderr)
-        for line in _address_lines(url):
+        for line in _address_lines(url, overridden):
             print(line, file=sys.stderr)
         sys.exit(1)
     if exc.code == 404:
         # Asked once, a 4xx being final. The name was checked before any
         # request, so the revision is what has no such list.
-        print(f"  No file list for {plat} at {RELEASE_REF}.", file=sys.stderr)
+        print(f"  No file list for {plat} at {active_remote().ref}.", file=sys.stderr)
         print(f"  {missing_list_advice(plat, 'run the same command again')}",
               file=sys.stderr)
         sys.exit(1)
     print(f"  Could not fetch the file list for {plat}: HTTP {exc.code}", file=sys.stderr)
-    for line in _address_lines(url):
+    for line in _address_lines(url, overridden):
         print(line, file=sys.stderr)
     print(NETWORK_ADVICE, file=sys.stderr)
     sys.exit(1)
 
 
-def _manifest_unreachable(plat: str, url: str, exc: OSError) -> NoReturn:
+def _manifest_unreachable(plat: str, url: str, exc: OSError, overridden: bool) -> NoReturn:
     """Stop on a file list the network did not bring."""
     code, words = network_words(exc)
     EVENTS.emit("error", stage="manifest", reason=code, platform=plat,
@@ -7799,7 +7849,7 @@ def _manifest_unreachable(plat: str, url: str, exc: OSError) -> NoReturn:
     tries = getattr(exc, "attempts", MAX_RETRIES)
     print(f"  Could not fetch the file list for {plat} after {tries} "
           f"attempts: {words}", file=sys.stderr)
-    for line in _address_lines(url):
+    for line in _address_lines(url, overridden):
         print(line, file=sys.stderr)
     print(NETWORK_ADVICE, file=sys.stderr)
     sys.exit(1)
@@ -7816,15 +7866,16 @@ def fetch_manifest(plat: str) -> dict:
             print(f"  The file list in {LOCAL.pack.name} is not valid: {exc}",
                   file=sys.stderr)
             sys.exit(1)
-    url = MANIFEST_URL.format(platform=plat)
+    remote = active_remote()
+    url = remote.manifest_url.format(platform=plat)
     try:
         return _validate_manifest(_fetch_json(url, MAX_MANIFEST_BYTES, "file list"), plat)
     except ValueError as exc:
-        _manifest_invalid(plat, url, exc)
+        _manifest_invalid(plat, url, exc, remote.overridden)
     except urllib.error.HTTPError as exc:
-        _manifest_http_error(plat, url, exc)
+        _manifest_http_error(plat, url, exc, remote.overridden)
     except (urllib.error.URLError, OSError) as exc:
-        _manifest_unreachable(plat, url, exc)
+        _manifest_unreachable(plat, url, exc, remote.overridden)
 
 
 def _pack_alone(plat: str) -> bool:
@@ -7865,7 +7916,7 @@ def fetch_standalone(plat: str, manifest: dict) -> dict:
     invalid, the run stops on one line, code 1."""
     beside = (LOCAL.manifest.parent / STANDALONE_DIR / f"{plat}.json"
               if LOCAL.manifest is not None else None)
-    url = STANDALONE_URL.format(platform=plat)
+    url = active_remote().standalone_url.format(platform=plat)
     where = str(beside) if beside is not None and _is_file(beside) else url
     try:
         if where != url:
@@ -7910,7 +7961,8 @@ def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
               f"install/targets/{plat}.json beside the --manifest file, or go online.",
               file=sys.stderr)
         sys.exit(2)
-    url = TARGETS_URL.format(platform=plat)
+    remote = active_remote()
+    url = remote.targets_url.format(platform=plat)
     try:
         return _validate_targets(_fetch_json(url, MAX_TARGETS_BYTES, "target list",
                                              attempts=attempts, timeout=timeout))
@@ -7918,7 +7970,7 @@ def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
         if exc.code == 404:
             return {}
         print(f"  Error: failed to fetch targets for {plat}: {exc}", file=sys.stderr)
-        for line in _address_lines(url):
+        for line in _address_lines(url, remote.overridden):
             print(line, file=sys.stderr)
         print(NETWORK_ADVICE, file=sys.stderr)
         return None
@@ -7928,7 +7980,7 @@ def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
     except (urllib.error.URLError, OSError) as exc:
         print(f"  Error: failed to fetch targets for {plat}: "
               f"{network_words(exc)[1]}", file=sys.stderr)
-        for line in _address_lines(url):
+        for line in _address_lines(url, remote.overridden):
             print(line, file=sys.stderr)
         print(NETWORK_ADVICE, file=sys.stderr)
         return None
@@ -9618,7 +9670,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--version",
         action="version",
-        version=f"retrobios installer {installer_id()} (ref {RELEASE_REF})",
+        version=f"retrobios installer {installer_id()} (ref {active_remote().ref})",
         help="print the installer version and exit",
     )
     parser.add_argument(
@@ -10600,8 +10652,9 @@ def _older_list_advice(plat: str = "") -> str:
     if _pack_alone(plat) and LOCAL.pack is not None:
         return (f"  The list in {LOCAL.pack.name} does not record it: add --manifest FILE, "
                 f"a copy of install/{plat or '<platform>'}.json, or run without the option.")
-    if RELEASE_REF != DEFAULT_RELEASE_REF:
-        return (f"  RETROBIOS_REF={RELEASE_REF} selects file lists published before "
+    ref = active_remote().ref
+    if ref != DEFAULT_RELEASE_REF:
+        return (f"  RETROBIOS_REF={ref} selects file lists published before "
                 "this option existed: unset RETROBIOS_REF to use the current ones, "
                 "or run without the option.")
     return ("  The file list comes from an older release: run the one-line "
@@ -15765,8 +15818,8 @@ def _http_failure_lines(failures: list[tuple[str, str]]) -> list[str]:
         return []
     more = f" (and {_plural(len(refused) - 1, 'other file')})" if len(refused) > 1 else ""
     lines = [f"  The server answered {refused[0]} for {refused[0].url}{more}."]
-    if os.environ.get("RETROBIOS_BASE_URL"):
-        return lines + _address_lines(refused[0].url)[1:]
+    if active_remote().overridden:
+        return [*lines, OVERRIDE_LINE]
     return lines + ["  The file list names files the server does not hold, and running "
                     "again changes nothing until the two match.",
                     f"  More help: {TROUBLESHOOTING_PAGE}"]
@@ -15872,9 +15925,9 @@ def _failure_advice(
     advice += _http_failure_lines(failures)
     if any(isinstance(reason, NetworkReason) for _dest, reason in failures):
         advice.append(NETWORK_FAILURE_ADVICE)
-        if os.environ.get("RETROBIOS_BASE_URL"):
+        if active_remote().overridden:
             # A mirror that is down read as this machine's connection.
-            advice += _address_lines(BASE_URL)[1:]
+            advice.append(OVERRIDE_LINE)
     if any(str(reason).startswith(NOT_KEPT) for _dest, reason in failures):
         # The same run fails the same way: "retry only those" sent a phone
         # user round the loop with nothing changed.
@@ -16345,7 +16398,7 @@ def _download_one(
     if f.get("release_asset"):
         url = RELEASE_URL.format(asset=urllib.parse.quote(f["release_asset"], safe=""))
     else:
-        url = RAW_FILE_URL.format(path=urllib.parse.quote(f["repo_path"], safe="/"))
+        url = active_remote().raw_file_url.format(path=urllib.parse.quote(f["repo_path"], safe="/"))
     return _fetch_file(_FileFetch(f, bios_path, dest, url, verbose, progress))
 
 
@@ -17326,7 +17379,11 @@ def select_data_directories(manifest: dict, files: list[dict], narrowed: bool,
 # same ref as the file lists, listed with their hashes in
 # install/launchers/index.json, which scripts/generate_launcher_index.py
 # writes from the members of the launcher archives.
-LAUNCHERS_URL = f"{BASE_URL}/install/launchers/index.json"
+def launchers_url() -> str:
+    """Where install/launchers/index.json is read from in this run."""
+    return f"{active_remote().base}/install/launchers/index.json"
+
+
 MAX_LAUNCHERS_BYTES = 256 * 1024
 MAX_APP_FILE_SIZE = 8 * 1024 * 1024
 MAX_APP_FILES = 64
@@ -17516,7 +17573,7 @@ def _app_bytes(entry: dict, name: str) -> bytes:
     if content is not None:
         data = content.encode("utf-8")
     else:
-        url = RAW_FILE_URL.format(path=urllib.parse.quote(entry["repo_path"], safe="/"))
+        url = active_remote().raw_file_url.format(path=urllib.parse.quote(entry["repo_path"], safe="/"))
         data = _app_download(url, entry["size"])
     if len(data) != entry["size"]:
         raise ValueError(f"{name} holds {len(data)} bytes, the list records {entry['size']}")
@@ -17569,7 +17626,7 @@ def put_app(card: CardApp) -> dict:
     if card.place is None:
         return fields
     try:
-        data = _fetch_json(LAUNCHERS_URL, MAX_LAUNCHERS_BYTES, "list of the app's files")
+        data = _fetch_json(launchers_url(), MAX_LAUNCHERS_BYTES, "list of the app's files")
         targets = app_targets(data, card.place)
     except (urllib.error.URLError, OSError, ValueError, http.client.HTTPException) as exc:
         fields["reason"] = f"its list of files could not be read: {_app_failure(exc)}"
@@ -17709,8 +17766,14 @@ def finish_app(
 # and for an arcade set the BIOS sets its romof chain reaches. Any doubt
 # keeps the wider set: the game must run.
 
-GAMES_URL = f"{BASE_URL}/install/games/{{path}}"
 GAMES_FORMAT = 1
+
+
+def games_url(path: str) -> str:
+    """Where install/games/<path> is read from in this run."""
+    return f"{active_remote().base}/install/games/{path}"
+
+
 MAX_GAMES_INDEX_BYTES = 4 * 1024 * 1024
 MAX_GAMES_DOC_BYTES = 32 * 1024 * 1024
 
@@ -17771,7 +17834,7 @@ class GamesData:
         failure = ""
         if raw is None and network:
             try:
-                raw = _fetch_json(GAMES_URL.format(path="index.json"), MAX_GAMES_INDEX_BYTES,
+                raw = _fetch_json(games_url("index.json"), MAX_GAMES_INDEX_BYTES,
                                   "games index", attempts=attempts, raw=True)
             except _Offline:
                 reason = "offline"
@@ -17817,7 +17880,7 @@ class GamesData:
                      cached: Path | None) -> bytes | None:
         """A listed document downloaded and cached, None when offline."""
         try:
-            fetched = _fetch_json(GAMES_URL.format(path=name), limit, f"games {kind}",
+            fetched = _fetch_json(games_url(name), limit, f"games {kind}",
                                   attempts=attempts, raw=True)
         except _Offline:
             return None
@@ -21003,7 +21066,7 @@ def _other_setup_list(name: str) -> tuple[dict | None, str]:
     if offline_requested():
         return None, "this run is offline: run it again with the internet"
     try:
-        return _validate_manifest(_fetch_json(MANIFEST_URL.format(platform=name),
+        return _validate_manifest(_fetch_json(active_remote().manifest_url.format(platform=name),
                                               MAX_MANIFEST_BYTES, "file list"), name), ""
     except urllib.error.HTTPError as exc:
         if exc.code == 404:
@@ -25429,7 +25492,8 @@ def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
             inbox.put(("manifest_failed", plat, "", log.getvalue()[mark:].splitlines(),
                        _event_exit_code(exc.code)))
         return
-    url = MANIFEST_URL.format(platform=plat)
+    remote = active_remote()
+    url = remote.manifest_url.format(platform=plat)
     try:
         data = _fetch_json(url, MAX_MANIFEST_BYTES, "file list", attempts=1,
                            timeout=TUI_FETCH_TIMEOUT)
@@ -25445,7 +25509,7 @@ def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
         title = "No file list"
         lines = [f"There is no file list for {display_name(plat)} at this address."
                  if exc.code == 404 else f"The server answered HTTP {exc.code}."]
-        if exc.code == 404 and not os.environ.get("RETROBIOS_BASE_URL"):
+        if exc.code == 404 and not remote.overridden:
             # Line mode named RETROBIOS_REF as the cause, the screen nothing.
             lines.append(missing_list_advice(plat, "choose Try again"))
     except (urllib.error.URLError, OSError) as exc:
@@ -25478,7 +25542,7 @@ def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
                 # Named, never shown: the value can hold a password.
                 lines.append(f"{proxy} is set, so the connection goes through a proxy: "
                              "check that it answers.")
-    if os.environ.get("RETROBIOS_BASE_URL"):
+    if remote.overridden:
         lines.append(f"RETROBIOS_BASE_URL chose the address: {url}")
     inbox.put(("manifest_failed", plat, title, lines, 1))
 
@@ -31769,7 +31833,17 @@ def _main_dispatch(args: argparse.Namespace) -> None:
 
 
 def main() -> None:
-    """Entry point."""
+    """Entry point: the remote resolved once, then the run."""
+    try:
+        remote = remote_from_env()
+    except ValueError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        sys.exit(1)
+    with remote_in_use(remote):
+        _main_run()
+
+
+def _main_run() -> None:
     _INVOCATION.os_type = detect_os()
     parser = build_parser()
     args = parser.parse_args()

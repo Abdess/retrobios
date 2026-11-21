@@ -41,7 +41,7 @@ from installer.offline import LOCAL, offline_words
 from installer.outcome import HttpReason, NetworkReason, OfflineReason, _transfer_failure
 from installer.pack_source import NOT_IN_PACK, _extract_from_pack
 from installer.paths import _entry_path, _entry_place
-from installer.remote import MAX_DOWNLOAD_SIZE, MAX_RETRIES, RAW_FILE_URL, RELEASE_URL, RESUME_FROM_SIZE
+from installer.remote import MAX_DOWNLOAD_SIZE, MAX_RETRIES, RELEASE_URL, RESUME_FROM_SIZE, active_remote
 from installer.safe_replace import KEPT, NOT_KEPT, _NotKept, _kept_slot
 from installer.terminal import Terminal
 
@@ -134,7 +134,7 @@ def _download_one(
     if f.get("release_asset"):
         url = RELEASE_URL.format(asset=urllib.parse.quote(f["release_asset"], safe=""))
     else:
-        url = RAW_FILE_URL.format(path=urllib.parse.quote(f["repo_path"], safe="/"))
+        url = active_remote().raw_file_url.format(path=urllib.parse.quote(f["repo_path"], safe="/"))
     return _fetch_file(_FileFetch(f, bios_path, dest, url, verbose, progress))
 
 

@@ -2228,8 +2228,8 @@ class TicksBarAndPaths(unittest.TestCase):
             port = probe.getsockname()[1]
         inbox = __import__("queue").Queue()
         started = time.monotonic()
-        with mock.patch.object(install, "MANIFEST_URL",
-                               f"http://127.0.0.1:{port}/install/{{platform}}.json"):
+        with mock.patch.object(install, "active_remote", return_value=install.Remote(
+                install.DEFAULT_RELEASE_REF, f"http://127.0.0.1:{port}", False)):
             install._tui_fetch("retroarch", inbox, io.StringIO())
         self.assertLess(time.monotonic() - started, 5)
         kind, plat, title, lines, code = inbox.get_nowait()
@@ -2252,8 +2252,8 @@ class TicksBarAndPaths(unittest.TestCase):
         inbox = __import__("queue").Queue()
         missing = install.urllib.error.HTTPError("u", 404, "Not Found", {}, None)
         with mock.patch.object(install, "_fetch_json", side_effect=missing), \
-                mock.patch.object(install, "RELEASE_REF", "v2020.01.01"), \
-                mock.patch.dict(os.environ, {"RETROBIOS_BASE_URL": ""}):
+                mock.patch.dict(os.environ, {"RETROBIOS_REF": "v2020.01.01",
+                                             "RETROBIOS_BASE_URL": ""}):
             install._tui_fetch("batocera", inbox, io.StringIO())
         _kind, _plat, title, lines, _code = inbox.get_nowait()
         self.assertEqual(title, "No file list")
@@ -7462,11 +7462,8 @@ class WhatEachScreenOffers(unittest.TestCase):
         with SaveDirectoryRepository() as repo:
             argv = ["install.py", "--platform", "retroarch", "--dest", str(repo.dest),
                     "--manifest", str(repo.root / "install" / "retroarch.json")]
-            # The files come from the repository on the loopback: the module
-            # read its base before the environment named it.
-            served = repo.env()["RETROBIOS_BASE_URL"] + "/{path}"
+            # The files come from the repository on the loopback.
             with mock.patch.dict(os.environ, repo.env()), \
-                    mock.patch.object(install, "RAW_FILE_URL", served), \
                     mock.patch.object(sys, "argv", argv), \
                     mock.patch.object(sys.stdin, "isatty", return_value=True), \
                     mock.patch.object(install, "_is_terminal", return_value=True), \

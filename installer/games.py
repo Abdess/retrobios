@@ -42,7 +42,7 @@ from installer.offline import LOCAL, _Offline, offline_words
 from installer.paths import shown_path
 from installer.platforms import entry_systems, system_title
 from installer.regions import WORLD_REGION, _region_comparable, region_title
-from installer.remote import BASE_URL
+from installer.remote import active_remote
 from installer.text import _plural, agree
 
 if TYPE_CHECKING:
@@ -57,8 +57,14 @@ if TYPE_CHECKING:
 # and for an arcade set the BIOS sets its romof chain reaches. Any doubt
 # keeps the wider set: the game must run.
 
-GAMES_URL = f"{BASE_URL}/install/games/{{path}}"
 GAMES_FORMAT = 1
+
+
+def games_url(path: str) -> str:
+    """Where install/games/<path> is read from in this run."""
+    return f"{active_remote().base}/install/games/{path}"
+
+
 MAX_GAMES_INDEX_BYTES = 4 * 1024 * 1024
 MAX_GAMES_DOC_BYTES = 32 * 1024 * 1024
 
@@ -119,7 +125,7 @@ class GamesData:
         failure = ""
         if raw is None and network:
             try:
-                raw = _fetch_json(GAMES_URL.format(path="index.json"), MAX_GAMES_INDEX_BYTES,
+                raw = _fetch_json(games_url("index.json"), MAX_GAMES_INDEX_BYTES,
                                   "games index", attempts=attempts, raw=True)
             except _Offline:
                 reason = "offline"
@@ -165,7 +171,7 @@ class GamesData:
                      cached: Path | None) -> bytes | None:
         """A listed document downloaded and cached, None when offline."""
         try:
-            fetched = _fetch_json(GAMES_URL.format(path=name), limit, f"games {kind}",
+            fetched = _fetch_json(games_url(name), limit, f"games {kind}",
                                   attempts=attempts, raw=True)
         except _Offline:
             return None

@@ -75,7 +75,8 @@ class _Server:
         self.httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), _RangeHandler)
         threading.Thread(target=self.httpd.serve_forever, daemon=True).start()
         port = self.httpd.server_address[1]
-        self.patch = mock.patch.object(install, "RAW_FILE_URL", f"http://127.0.0.1:{port}/{{path}}")
+        self.patch = mock.patch.object(install, "active_remote", return_value=install.Remote(
+            install.DEFAULT_RELEASE_REF, f"http://127.0.0.1:{port}", False))
         self.patch.start()
         return self
 
