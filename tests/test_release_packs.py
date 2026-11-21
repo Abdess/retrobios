@@ -127,16 +127,18 @@ class NoPlatformIsSetApart(unittest.TestCase):
 class TheBuildReadsTheField(unittest.TestCase):
     def _groups(self, *argv: str) -> list[str]:
         import generate_pack
+        from packs import platformrun
 
         built: list[str] = []
 
         def capture(args, groups, *rest, **kw):
             built.extend(name for group, _rep in groups for name in group)
+            return True
 
         with tempfile.TemporaryDirectory() as out, \
                 contextlib.chdir(REPO_ROOT), \
-                mock.patch.object(generate_pack, "_run_platform_packs", capture), \
-                mock.patch.object(generate_pack, "_run_manifest_mode", capture), \
+                mock.patch.object(platformrun, "run_platform_packs", capture), \
+                mock.patch.object(platformrun, "run_manifest_mode", capture), \
                 mock.patch.object(sys, "argv", ["generate_pack.py", *argv, "--output-dir", out]), \
                 contextlib.redirect_stdout(io.StringIO()):
             generate_pack.main()

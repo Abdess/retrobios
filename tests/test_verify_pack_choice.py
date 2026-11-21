@@ -15,8 +15,9 @@ import json
 import os
 import tempfile
 import unittest
-import generate_pack
 from packs import naming
+from packs import packcheck
+from packs import variants
 from pathlib import Path
 from unittest import mock
 
@@ -69,8 +70,8 @@ class VerifyPackChoice(unittest.TestCase):
 
         self.variants: list[tuple[str, bool]] = []
 
-        with mock.patch.object(generate_pack, "verify_pack_against_platform", record):
-            generate_pack._run_verify_packs(args)
+        with mock.patch.object(packcheck, "verify_pack_against_platform", record):
+            self.ok = packcheck.run_verify_packs(args)
         return checked
 
     def _touch(self, name: str) -> None:
@@ -94,9 +95,8 @@ class VerifyPackChoice(unittest.TestCase):
 
     def test_named_platform_with_only_a_narrowed_pack_fails(self):
         self._touch(f"{self.stem}_Truth_BIOS_Pack.zip")
-        with self.assertRaises(SystemExit) as ctx:
-            self._run(self._args())
-        self.assertEqual(ctx.exception.code, 1)
+        self._run(self._args())
+        self.assertFalse(self.ok)
 
     def test_all_variants_checks_every_variant_as_it_was_built(self):
         """After --all-variants the check opened the full pack only, and then
@@ -104,7 +104,7 @@ class VerifyPackChoice(unittest.TestCase):
         one missing a file its narrowed list requires passed. Each is now
         held to the platform's list narrowed the same way."""
         names = {}
-        for source, required in generate_pack.ALL_VARIANTS:
+        for source, required in variants.ALL_VARIANTS:
             tags = "".join(
                 tag for tag, _ in naming.pack_narrowings(source, None, None, False, required)
             )
@@ -143,11 +143,10 @@ class VerifyPackChoice(unittest.TestCase):
         self._touch(pack)
         out, err = io.StringIO(), io.StringIO()
         failed = (False, 0, 0, ["x: missing"], 1, 0, 1, 1, 0, 0)
-        with mock.patch.object(generate_pack, "verify_pack_against_platform",
+        with mock.patch.object(packcheck, "verify_pack_against_platform",
                                return_value=failed), \
-                contextlib.redirect_stdout(out), contextlib.redirect_stderr(err), \
-                self.assertRaises(SystemExit):
-            generate_pack._run_verify_packs(self._args())
+                contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            self.assertFalse(packcheck.run_verify_packs(self._args()))
         self.assertEqual(
             err.getvalue().strip().splitlines()[-1],
             f"ERROR: packs failed verification: retroarch ({pack})",
@@ -175,9 +174,9 @@ class VerifyPackChoice(unittest.TestCase):
 
 class GroupRenameKeepsSystemTag(unittest.TestCase):
     def test_single_system_pack_does_not_take_the_full_name(self):
-        import generate_pack as gp
         from packs import naming
         from packs import platformpack
+        from packs import platformrun
 
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
@@ -198,10 +197,10 @@ class GroupRenameKeepsSystemTag(unittest.TestCase):
                 one_per_slot=False, offline=True, bios_dir="bios",
                 output_dir=tmp,
             )
-            with mock.patch.object(gp, "generate_pack", fake_generate), \
+            with mock.patch.object(platformrun, "generate_pack", fake_generate), \
                     mock.patch.object(platformpack, "generate_pack", fake_generate), \
-                    mock.patch.object(gp, "verify_and_finalize_packs", return_value=True):
-                gp._run_platform_packs(
+                    mock.patch.object(platformrun, "verify_and_finalize_packs", return_value=True):
+                platformrun.run_platform_packs(
                     args, [(["retroarch", "lakka"], "retroarch")], {}, {}, {},
                     {}, {}, ["atari-lynx"],
                 )

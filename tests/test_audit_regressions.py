@@ -4517,7 +4517,7 @@ class ADataDirectoryIsHeldWhileRead(unittest.TestCase):
         # against data/ while a refresh could swap a tree.
         pack = script_source("generate_pack.py")
         branch = pack.index("if args.verify_packs and not args.all_variants:")
-        run = pack.index("_run_verify_packs(args)", branch)
+        run = pack.index("run_verify_packs(args)", branch)
         self.assertIn("hold_data_dirs(held,", pack[branch:run])
 
 
@@ -4889,7 +4889,7 @@ class VerifyPacksSaysWhatItExcluded(unittest.TestCase):
 
     def test_the_result_is_unpacked_whole_and_every_error_printed(self):
         source = script_source("generate_pack.py")
-        body = source[source.index("def _run_verify_packs"):]
+        body = source[source.index("def _check_pack"):]
         body = body[:body.index("\ndef ")]
         self.assertIn("bl_excluded, bl_absent) = result", body)
         self.assertIn("baseline_shortfall(bl_excluded, bl_absent)", body)

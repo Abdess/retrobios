@@ -1,6 +1,6 @@
 """The conformance stage reads the directories the run was given.
 
-``_run_platform_packs`` called ``verify_and_finalize_packs`` without them, so
+``run_platform_packs`` called ``verify_and_finalize_packs`` without them, so
 packs built from ``--platforms-dir`` and ``--emulators-dir`` were judged
 against ``platforms/`` and ``emulators/``, or not matched to any platform at
 all and never judged.
@@ -16,7 +16,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-import generate_pack as gp
+from packs import platformrun
 from packs import finalize as packs_finalize
 from packs import integrity as packverify
 
@@ -42,9 +42,9 @@ class ConformanceUsesTheRunDirectories(unittest.TestCase):
             if split:
                 Path(self.tmp.name, "X_Split").mkdir(exist_ok=True)
             with self.subTest(split=split), mock.patch.object(
-                gp, "verify_and_finalize_packs", return_value=True
+                platformrun, "verify_and_finalize_packs", return_value=True
             ) as finalize:
-                gp._run_platform_packs(
+                platformrun.run_platform_packs(
                     self._args(split), [], {}, {}, {}, {}, {}, None
                 )
             self.assertTrue(finalize.call_args_list)

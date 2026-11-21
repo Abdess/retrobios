@@ -19,7 +19,8 @@ COMMANDS = {
         "packs/archive.py", "packs/naming.py", "packs/scope.py", "packs/datatrees.py",
         "packs/platformpack.py", "packs/emulatorpack.py", "packs/md5pack.py", "packs/targets.py",
         "packs/manifestentry.py", "packs/manifestcores.py", "packs/standalone.py",
-        "packs/manifest.py", "packs/finalize.py",
+        "packs/manifest.py", "packs/finalize.py", "packs/outputdir.py", "packs/variants.py",
+        "packs/manifestrun.py", "packs/packcheck.py", "packs/platformrun.py",
     ),
     "verify.py": (
         "packs/verdicts.py", "packs/gaps.py", "packs/coverage.py", "packs/emulatorcheck.py",

@@ -16,9 +16,10 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-import generate_pack as gp
 from packs import manifest
+from packs import manifestrun
 from packs import platformpack
+from packs import platformrun
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -45,23 +46,20 @@ class FailedPlatformFailsTheRun(unittest.TestCase):
         )
 
     def test_pack_mode(self):
-        with mock.patch.object(gp, "generate_pack", _boom), \
+        with mock.patch.object(platformrun, "generate_pack", _boom), \
                 mock.patch.object(platformpack, "generate_pack", _boom), \
-                mock.patch.object(gp, "verify_and_finalize_packs", return_value=True), \
-                self.assertRaises(SystemExit) as ctx:
-            gp._run_platform_packs(
+                mock.patch.object(platformrun, "verify_and_finalize_packs", return_value=True):
+            ok = platformrun.run_platform_packs(
                 self._args(), [(["retropie"], "retropie")], {}, {}, {}, {}, {}, None
             )
-        self.assertEqual(ctx.exception.code, 1)
+        self.assertFalse(ok)
 
     def test_manifest_mode(self):
-        with mock.patch.object(gp, "generate_manifest", _boom), \
-                mock.patch.object(manifest, "generate_manifest", _boom), \
-                self.assertRaises(SystemExit) as ctx:
-            gp._run_manifest_mode(
+        with mock.patch.object(manifest, "generate_manifest", _boom):
+            ok = manifestrun.run_manifest_mode(
                 self._args(), [(["retropie"], "retropie")], {}, {}, {}, {}
             )
-        self.assertEqual(ctx.exception.code, 1)
+        self.assertFalse(ok)
 
 
 if __name__ == "__main__":

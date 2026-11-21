@@ -19,20 +19,14 @@ import sys
 if sys.version_info < (3, 9):
     sys.exit(f"generate_pack.py needs Python 3.9 or newer, this is {sys.version.split()[0]}")
 
-from collections.abc import Iterator
-
 import argparse
 import contextlib
-import json
 import os
-from pathlib import Path
-from dataclasses import dataclass
 
 sys.path.insert(0, os.path.dirname(__file__))
-from resolve.cores import resolve_platform_cores as _platform_cores
-from model.profiles import (
-    load_emulator_profiles,
-)
+from core.artifacts import ArtifactLockBusy
+from core.cli import add_emulator_selection, add_repo_inputs, require_directory
+from core.ziptools import build_zip_contents_index
 from model.cliargs import (
     LISTING_FLAGS,
     comma_list,
@@ -44,113 +38,30 @@ from model.cliargs import (
     resolve_system_ids,
     run_listing,
 )
-from core.cli import add_emulator_selection, add_repo_inputs, require_directory
-from model.targets import (
-    target_scope,
-)
-from core.artifacts import (
-    write_if_changed,
-    artifact_lock,
-    repository_output_lock,
-    ArtifactLockBusy,
-)
-from core.ziptools import build_zip_contents_index
-from core.text import count_text
-from resolve.cores import (
-    platforms_with_systems,
-    without_profile_blind,
-)
-from resolve.grouping import group_identical_platforms
+from model.database import load_database
 from model.registry import (
     list_registered_platforms,
     list_release_pack_platforms,
     load_data_dir_registry,
-    load_platform_registry,
 )
-from model.database import load_database
-from model.platforms import load_platform_config
-from model.safeparse import require_yaml
-from resolve import packfiles as packresolve
-from packs.datadirs import hold_data_dirs
-
-from packs.integrity import verify_pack_against_platform
-from resolve.packfiles import (
-    ACCEPTED_HASHES,
-    parse_hash_input,
-    parse_hash_file,
-    lookup_hashes,
-)
-
 from packs.archive import DamagedArchiveError
-from packs.platformpack import generate_split_packs
+from packs.datadirs import hold_data_dirs
 from packs.datatrees import MISSING_DATA_DIRS
 from packs.emulatorpack import generate_emulator_pack, generate_system_pack
-from packs.finalize import baseline_shortfall, verify_and_finalize_packs
-from packs.manifest import generate_install_list, generate_manifest
 from packs.md5pack import generate_md5_pack
-from packs.naming import (
-    expected_pack_names,
-    pack_narrowings,
-    pack_variant,
-    platform_pack_name,
-    platform_target,
+from packs.outputdir import holds_other_kind, pack_output_lock
+from packs.packcheck import run_verify_packs
+from packs.platformrun import run_platform_mode
+from packs.targets import generate_target_manifests
+from resolve import packfiles as packresolve
+from resolve.packfiles import (
+    ACCEPTED_HASHES,
+    lookup_hashes,
+    parse_hash_file,
+    parse_hash_input,
 )
-from packs.platformpack import generate_pack
-from packs.scope import pack_systems, platform_list_version
-from packs.standalone import STANDALONE_DIR, standalone_copies
-from packs.targets import generate_target_manifests, target_list
-
-
-yaml = require_yaml()
 
 DEFAULT_OUTPUT_DIR = "dist"
-
-
-def _json_artifact_kind(path: Path) -> str | None:
-    """"manifest" for an install manifest, "targets" for a per-target core
-    list, None for anything else. The two share their file names: install.py
-    fetches install/<platform>.json and install/targets/<platform>.json."""
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
-        return None
-    if not isinstance(data, dict) or not data:
-        return None
-    if "manifest_version" in data:
-        return "manifest"
-    if all(v is None or isinstance(v, list) for v in data.values()):
-        return "targets"
-    return None
-
-
-def _refuse_mixed_output(output_dir: str, writing: str) -> None:
-    """Stop before one kind of installer JSON overwrites the other.
-
-    Both are named <platform>.json, so --manifest-targets aimed at install/
-    replaced install/retroarch.json, the file every installer downloads, with
-    a target table, and the reverse replaced a target list by a manifest.
-    """
-    directory = Path(output_dir)
-    if not directory.is_dir():
-        return
-    other = "targets" if writing == "manifest" else "manifest"
-    held = sorted(
-        p.name for p in directory.glob("*.json") if _json_artifact_kind(p) == other
-    )
-    if not held:
-        return
-    what = {
-        "manifest": "install manifests (install/ in the repository)",
-        "targets": "per-target core lists (install/targets/ in the repository)",
-    }
-    flag = "--manifest" if writing == "manifest" else "--manifest-targets"
-    print(
-        f"ERROR: {output_dir} holds {what[other]}: {', '.join(held[:3])}"
-        f"{', ...' if len(held) > 3 else ''}. {flag} writes {what[writing]} under the "
-        f"same file names; pass the --output-dir that holds those instead.",
-        file=sys.stderr,
-    )
-    sys.exit(1)
 
 
 def _refuse_for_verify_packs(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
@@ -231,544 +142,6 @@ def _validate_args(args: argparse.Namespace, parser: argparse.ArgumentParser) ->
     for refused, message in _argument_conflicts(args):
         if refused:
             parser.error(message)
-
-
-def _run_manifest_mode(
-    args: argparse.Namespace,
-    groups: list[tuple[list[str], str]],
-    db: dict,
-    zip_contents: dict,
-    emu_profiles: dict,
-    target_cores_cache: dict[str, set[str] | None],
-) -> None:
-    """Generate JSON manifests instead of ZIP packs."""
-    registry_path = os.path.join(args.platforms_dir, "_registry.yml")
-    os.makedirs(args.output_dir, exist_ok=True)
-    platform_registry = load_platform_registry(args.platforms_dir)
-
-    variants = ALL_VARIANTS if args.all_variants else ((args.source, args.required_only),)
-
-    failed: list[str] = []
-    for source, required_only in variants:
-        for group_platforms, representative in groups:
-            print(f"\nGenerating manifest for {representative} [source={source}]...")
-            tc = target_cores_cache.get(representative) if args.target else None
-            if _skip_empty_truth(args, source, representative, emu_profiles, tc, failed):
-                continue
-            layouts: dict = {}
-            try:
-                manifest = generate_install_list(
-                    representative,
-                    args.platforms_dir,
-                    db,
-                    args.bios_dir,
-                    registry_path,
-                    emulators_dir=args.emulators_dir,
-                    zip_contents=zip_contents,
-                    emu_profiles=emu_profiles,
-                    target_cores=tc,
-                    source=source,
-                    regions=getattr(args, "regions", None),
-                    target_name=platform_target(
-                        representative, args.target, args.platforms_dir
-                    ),
-                    offline=args.offline,
-                    required_only=required_only,
-                    no_game_data=getattr(args, "no_game_data", False),
-                    standalone_out=layouts,
-                )
-                narrow_suffix = "".join(
-                    tag.lower()
-                    for tag, _label in pack_narrowings(
-                        source,
-                        getattr(args, "regions", None),
-                        platform_target(representative, args.target, args.platforms_dir),
-                        False,
-                        required_only,
-                        no_game_data=getattr(args, "no_game_data", False),
-                    )
-                )
-                out_path = os.path.join(
-                    args.output_dir,
-                    f"{representative}{narrow_suffix}.json",
-                )
-                write_if_changed(out_path, json.dumps(manifest, indent=2))
-                print(
-                    f"  {out_path}: {manifest['total_files']} files, "
-                    f"{manifest['total_size']} bytes, "
-                    f"{manifest['total_omitted']} safely omitted"
-                )
-                for plat in group_platforms if layouts else ():
-                    print(f"  {_write_standalone_layouts(args.output_dir, plat, layouts)}: "
-                          f"{len(layouts)} standalone builds")
-                # Create aliases for grouped platforms (e.g., lakka -> retroarch)
-                for alias_plat in group_platforms:
-                    if alias_plat != representative:
-                        alias_path = os.path.join(
-                            args.output_dir,
-                            f"{alias_plat}{narrow_suffix}.json",
-                        )
-                        alias_manifest = dict(manifest)
-                        alias_manifest["platform"] = alias_plat
-                        alias_cfg = load_platform_config(alias_plat, args.platforms_dir)
-                        alias_manifest["display_name"] = alias_cfg.get(
-                            "platform", alias_plat
-                        )
-                        alias_manifest["version"] = platform_list_version(
-                            alias_cfg, alias_plat
-                        )
-                        alias_manifest["base_destination"] = alias_cfg.get(
-                            "base_destination", ""
-                        )
-                        alias_registry = platform_registry.get(alias_plat, {})
-                        alias_install = alias_registry.get("install", {})
-                        alias_manifest["detect"] = alias_install.get("detect", [])
-                        # Placed and completed as the representative's are:
-                        # copied raw, an alias's copies named no source.
-                        alias_manifest["standalone_copies"] = standalone_copies(
-                            alias_install.get("standalone_copies", []),
-                            {name: emu_profiles[name]
-                             for name in _platform_cores(alias_cfg, emu_profiles)},
-                            manifest["files"],
-                        )
-                        write_if_changed(alias_path, json.dumps(alias_manifest, indent=2))
-                        print(f"  {alias_path}: alias of {representative}")
-            except (FileNotFoundError, OSError, yaml.YAMLError) as e:
-                print(f"  ERROR: {e}", file=sys.stderr)
-                failed.append(representative)
-
-    # A platform whose manifest could not be built has none, and install.py
-    # serves whatever an older run left there: that is a failed run.
-    if failed:
-        print(f"ERROR: no manifest for {', '.join(sorted(set(failed)))}", file=sys.stderr)
-        sys.exit(1)
-
-
-@contextlib.contextmanager
-def _pack_output_lock(output_dir: str, exclusive: bool = True) -> Iterator[None]:
-    """Hold the output directory for the duration of a pack run, and the
-    repository's fixed outputs when it is one of them (install/)."""
-    try:
-        with artifact_lock(output_dir, exclusive=exclusive), \
-                repository_output_lock(output_dir) if exclusive else contextlib.nullcontext():
-            yield
-    except ArtifactLockBusy as exc:
-        print(f"ERROR: {exc}", file=sys.stderr)
-        sys.exit(1)
-
-
-@dataclass(frozen=True)
-class _PackCheck:
-    """What --verify-packs checks every pack against."""
-
-    db: dict
-    platforms_dir: str
-    emulators_dir: str
-    profiles: dict
-    regions: list[str] | None
-    data_registry: dict
-    no_game_data: bool
-
-
-def _verify_packs_scope(args: argparse.Namespace) -> tuple[list[str], dict[str, set[str] | None]]:
-    """The platforms --verify-packs checks, and the cores of the target."""
-    if args.platform:
-        platforms = [args.platform]
-    elif args.all:
-        # The packs --all builds: a platform without release_pack has no pack
-        # to check, and its absence from the directory is no failure.
-        platforms = list_release_pack_platforms(args.platforms_dir)
-    else:
-        raise ValueError("--verify-packs requires --platform or --all")
-
-    # The target is checked as the build checks it: a mistyped one, or one
-    # the platform does not publish, was dropped and the full pack verified
-    # under it, `all OK` for a pack no build had made.
-    target_cores_cache, platforms = target_scope(
-        platforms, args.target, args.platforms_dir, is_all=args.all
-    )
-    return platforms, target_cores_cache
-
-
-def _run_verify_packs(args: argparse.Namespace) -> None:
-    """Verify each pack in the output directory against its platform.
-
-    Delegates to verify_pack_against_platform so the command answers the same
-    question the pipeline asks: baseline files, core extras and structure. A
-    second implementation here answered a narrower one and reported OK while
-    the core extras went unchecked.
-    """
-    verify_db = load_database(args.db)
-    platforms, target_cores_cache = _verify_packs_scope(args)
-
-    all_ok = True
-    check = _PackCheck(
-        verify_db, args.platforms_dir, args.emulators_dir,
-        load_emulator_profiles(args.emulators_dir), getattr(args, "regions", None),
-        load_data_dir_registry(args.platforms_dir), getattr(args, "no_game_data", False),
-    )
-    # After an --all-variants build every variant is named, so none of the
-    # six packs the run wrote passes unmentioned.
-    expected = expected_pack_names(
-        platforms,
-        args.platforms_dir,
-        check.regions,
-        args.target,
-        ALL_VARIANTS if args.all_variants else (("full", False),),
-        no_game_data=check.no_game_data,
-    )
-    on_disk = (
-        set(os.listdir(args.output_dir)) if os.path.isdir(args.output_dir) else set()
-    )
-
-    verified = 0
-    failing: list[str] = []
-    for platform_name in platforms:
-        found = sorted(expected[platform_name] & on_disk)
-        verified += len(found)
-        if not found:
-            # Naming a platform is asking about its pack: FAIL, with the
-            # command that builds it. With --all, a platform whose pack was
-            # not built is out of scope and skipped.
-            if args.platform:
-                print(
-                    f"  {platform_name}: FAIL (no pack in {args.output_dir}; build it with "
-                    f"python scripts/generate_pack.py --platform {platform_name} "
-                    f"--output-dir {args.output_dir})"
-                )
-                all_ok = False
-                failing.append(f"{platform_name} (no pack)")
-            else:
-                print(f"  {platform_name}: SKIP (no pack in {args.output_dir})")
-            continue
-        tc = target_cores_cache.get(platform_name)
-        # A group pack and a pack built for the platform alone can both be
-        # present, and each one is a pack of this platform.
-        for pack_name in found:
-            variant = pack_variant(pack_name)
-            if variant is None:
-                # One BIOS per slot: the slot choice is not replayed here.
-                print(
-                    f"  {platform_name} [{pack_name}]: hashes checked during the build; "
-                    "one per slot by design, so not compared to the platform's full list"
-                )
-                continue
-            source, required_only = variant
-            zip_path = os.path.join(args.output_dir, pack_name)
-            result = verify_pack_against_platform(
-                zip_path,
-                platform_name,
-                check.platforms_dir,
-                db=check.db,
-                emulators_dir=check.emulators_dir,
-                emu_profiles=check.profiles,
-                regions=check.regions,
-                data_registry=check.data_registry,
-                target_cores=tc,
-                source=source,
-                required_only=required_only,
-                no_game_data=check.no_game_data,
-            )
-            (ok, _checked, _present, errors, bl_checked, bl_present,
-             core_checked, core_present, bl_excluded, bl_absent) = result
-            # These explain a baseline short of its total: a dump whose hash
-            # the frontend refuses is left out on purpose, and a file the
-            # collection does not hold cannot be packed (verify reports it).
-            shortfall = ", ".join(baseline_shortfall(bl_excluded, bl_absent))
-            excluded = f" ({shortfall})" if shortfall else ""
-            counts = (
-                f"{bl_present}/{bl_checked} baseline{excluded}, "
-                f"{core_present}/{core_checked} cores"
-            )
-            if ok:
-                print(f"  {platform_name} [{pack_name}]: OK ({counts})")
-            else:
-                print(f"  {platform_name} [{pack_name}]: FAIL ({counts}, {len(errors)} errors)")
-                for err in errors:
-                    print(f"    {err}")
-                all_ok = False
-                failing.append(f"{platform_name} ({pack_name})")
-
-    if not _verification_summary(failing, verified, args.output_dir) or not all_ok:
-        sys.exit(1)
-
-
-def _verification_summary(failing: list[str], verified: int, output_dir: str) -> bool:
-    """Print how --verify-packs ended. False when nothing was verified."""
-    if failing:
-        # Named at the end, where the log is read, and on stderr, as the
-        # build path does: a failing pack sat among its own error lines.
-        print(
-            f"ERROR: packs failed verification: {', '.join(failing)}",
-            file=sys.stderr,
-        )
-    elif verified:
-        print(f"Verified {count_text(verified, 'pack')}: all OK")
-    if not verified:
-        # Every platform skipped is no check at all: a mistyped or purged
-        # output directory read as a passed integrity check.
-        print(f"ERROR: no pack to verify in {output_dir}", file=sys.stderr)
-        return False
-    return True
-
-
-# The source x required combinations --all-variants builds, in build order.
-ALL_VARIANTS: tuple[tuple[str, bool], ...] = (
-    ("full", False), ("full", True),
-    ("platform", False), ("platform", True),
-    ("truth", False), ("truth", True),
-)
-
-
-def _pack_label(source: str, required_only: bool) -> str:
-    """The variant tag orchestrate.reports.parse_pack_counts reads after a pack name."""
-    return f"[source={source}, required]" if required_only else f"[source={source}]"
-
-
-def _truth_layer_is_empty(
-    platform: str, platforms_dir: str, emu_profiles: dict, target_cores: set[str] | None
-) -> bool:
-    """Whether a platform runs no core a profile describes.
-
-    MiSTer declares `cores: []`: its truth pack held nothing, passed its
-    check and was published under a name claiming a content.
-    """
-    config = load_platform_config(platform, platforms_dir)
-    return not _platform_cores(config, emu_profiles or {}, target_cores=target_cores)
-
-
-def _skip_empty_truth(
-    args: argparse.Namespace,
-    source: str,
-    representative: str,
-    emu_profiles: dict,
-    tc: set[str] | None,
-    failed: list[str],
-) -> bool:
-    """Leave out a truth pack that would be empty, refuse it when asked for."""
-    if source != "truth" or not _truth_layer_is_empty(
-        representative, args.platforms_dir, emu_profiles, tc
-    ):
-        return False
-    if args.all_variants:
-        print(f"  {representative}: no core profile, no truth pack")
-    else:
-        print(
-            f"ERROR: {representative} runs no core a profile describes; "
-            "a truth pack would hold nothing",
-            file=sys.stderr,
-        )
-        failed.append(representative)
-    return True
-
-
-def _produced(split: bool, zip_path: str | None, zip_paths: list[str] | None) -> bool:
-    """Whether the build wrote what the run asked for."""
-    return bool(zip_paths if split else zip_path)
-
-
-def _run_platform_packs(
-    args: argparse.Namespace,
-    groups: list[tuple[list[str], str]],
-    db: dict,
-    zip_contents: dict,
-    data_registry: dict | None,
-    emu_profiles: dict,
-    target_cores_cache: dict[str, set[str] | None],
-    system_filter: list[str] | None,
-) -> None:
-    """Generate ZIP packs for platform groups and verify."""
-    variants = ALL_VARIANTS if args.all_variants else ((args.source, args.required_only),)
-    registry_path = os.path.join(args.platforms_dir, "_registry.yml")
-    # Per pack, the systems each of its files is for, written into its
-    # manifest.json once the pack is verified (pack_systems).
-    systems_for: dict[str, dict] = {}
-    # The packs this run writes, the only ones it verifies and rewrites.
-    built: set[str] = set()
-
-    failed: list[str] = []
-    for source, required_only in variants:
-        for group_platforms, representative in groups:
-            aliases = [p for p in group_platforms if p != representative]
-            if aliases:
-                all_names = [
-                    load_platform_config(p, args.platforms_dir).get("platform", p)
-                    for p in group_platforms
-                ]
-                label = " / ".join(all_names)
-                print(f"\nGenerating pack for {label} {_pack_label(source, required_only)}...")
-            else:
-                print(f"\nGenerating pack for {representative} {_pack_label(source, required_only)}...")
-
-            zip_path = None
-            zip_paths: list = []
-            tc = target_cores_cache.get(representative) if args.target else None
-            named_target = platform_target(representative, args.target, args.platforms_dir)
-            if _skip_empty_truth(args, source, representative, emu_profiles, tc, failed):
-                continue
-            try:
-                if args.split:
-                    zip_paths = generate_split_packs(
-                        representative,
-                        args.platforms_dir,
-                        db,
-                        args.bios_dir,
-                        args.output_dir,
-                        group_by=args.group_by,
-                        emulators_dir=args.emulators_dir,
-                        zip_contents=zip_contents,
-                        data_registry=data_registry,
-                        emu_profiles=emu_profiles,
-                        target_cores=tc,
-                        required_only=required_only,
-                        source=source,
-                        regions=getattr(args, "regions", None),
-                        target_name=named_target,
-                        one_per_slot=args.one_per_slot,
-                        offline=args.offline,
-                        no_game_data=getattr(args, "no_game_data", False),
-                    )
-                    print(f"  Split into {len(zip_paths)} packs")
-                else:
-                    # A group's pack is written under the group's name from
-                    # the start: built under the representative's and then
-                    # renamed, it overwrote and carried away a
-                    # `--platform retroarch` pack already in the directory,
-                    # and os.rename refused an existing target on Windows.
-                    group_name = (
-                        _group_pack_name(
-                            args, group_platforms, representative, (source, required_only),
-                            named_target, system_filter,
-                        )
-                        if aliases else None
-                    )
-                    zip_path = generate_pack(
-                        representative,
-                        args.platforms_dir,
-                        db,
-                        args.bios_dir,
-                        args.output_dir,
-                        emulators_dir=args.emulators_dir,
-                        zip_contents=zip_contents,
-                        data_registry=data_registry,
-                        emu_profiles=emu_profiles,
-                        target_cores=tc,
-                        required_only=required_only,
-                        system_filter=system_filter,
-                        source=source,
-                        regions=getattr(args, "regions", None),
-                        target_name=named_target,
-                        one_per_slot=args.one_per_slot,
-                        offline=args.offline,
-                        pack_name=group_name,
-                        no_game_data=getattr(args, "no_game_data", False),
-                    )
-            except (FileNotFoundError, OSError, yaml.YAMLError) as e:
-                print(f"  ERROR: {e}", file=sys.stderr)
-                failed.append(representative)
-            else:
-                # A builder that declined (no system left under the target)
-                # produced nothing: the run must say so, not verify whatever
-                # the output directory already held and exit 0.
-                if not _produced(args.split, zip_path, zip_paths):
-                    failed.append(representative)
-                    continue
-                built.update(
-                    os.path.relpath(path, args.output_dir)
-                    for path in ([zip_path] if zip_path else zip_paths)
-                )
-                if zip_path and not system_filter:
-                    # The install list of the same choices names each file's
-                    # systems: the pack records them, so a pack alone (a
-                    # handheld without Wi-Fi) can be narrowed by system.
-                    board_list = Path(args.platforms_dir) / "targets" / f"{representative}.yml"
-                    systems_for[os.path.basename(zip_path)] = pack_systems(generate_manifest(
-                        representative, args.platforms_dir, db, args.bios_dir,
-                        registry_path, emulators_dir=args.emulators_dir,
-                        zip_contents=zip_contents, emu_profiles=emu_profiles,
-                        target_cores=tc, source=source,
-                        regions=getattr(args, "regions", None), target_name=named_target,
-                        offline=args.offline, required_only=required_only,
-                        data_registry=data_registry,
-                        no_game_data=getattr(args, "no_game_data", False),
-                    ), target_list(board_list) if board_list.is_file() else None)
-
-    all_ok = _finalize_platform_packs(args, db, data_registry, built, systems_for, system_filter)
-    if failed:
-        # Verification only sees the ZIPs that exist, so a pack that was never
-        # written does not fail it.
-        print(f"ERROR: no pack for {', '.join(sorted(set(failed)))}", file=sys.stderr)
-        sys.exit(1)
-    if not all_ok:
-        sys.exit(1)
-
-
-def _group_pack_name(
-    args: argparse.Namespace,
-    group_platforms: list[str],
-    representative: str,
-    variant: tuple[str, bool],
-    named_target: str | None,
-    system_filter: list[str] | None,
-) -> str:
-    """The file name of a pack shared by a group of identical platforms."""
-    source, required_only = variant
-    narrowings = pack_narrowings(
-        source,
-        getattr(args, "regions", None),
-        named_target,
-        args.one_per_slot,
-        required_only,
-        no_game_data=getattr(args, "no_game_data", False),
-    )
-    return platform_pack_name(
-        representative, args.platforms_dir, narrowings, system_filter, group=group_platforms
-    )
-
-
-def _finalize_platform_packs(
-    args: argparse.Namespace,
-    db: dict,
-    data_registry: dict | None,
-    built: set[str],
-    systems_for: dict[str, dict],
-    system_filter: list[str] | None,
-) -> bool:
-    """Verify the packs this run wrote and write their manifests."""
-    print("\nVerifying packs and generating manifests...")
-    skip_conf = bool(system_filter or args.split)
-    all_ok = verify_and_finalize_packs(
-        args.output_dir,
-        db,
-        platforms_dir=args.platforms_dir,
-        emulators_dir=args.emulators_dir,
-        built=built,
-        pack_systems_by_name=systems_for,
-        skip_conformance=skip_conf,
-        data_registry=data_registry,
-        regions=getattr(args, "regions", None),
-        target_name=args.target,
-        no_game_data=getattr(args, "no_game_data", False),
-    )
-    if args.split:
-        for entry in os.listdir(args.output_dir):
-            sub = os.path.join(args.output_dir, entry)
-            if os.path.isdir(sub) and entry.endswith("_Split"):
-                ok = verify_and_finalize_packs(
-                    sub,
-                    db,
-                    platforms_dir=args.platforms_dir,
-                    emulators_dir=args.emulators_dir,
-                    built={
-                        os.path.basename(name) for name in built
-                        if os.path.dirname(name) == entry
-                    },
-                    skip_conformance=True,
-                    data_registry=data_registry,
-                    regions=getattr(args, "regions", None),
-                )
-                all_ok = all_ok and ok
-    return all_ok
 
 
 def _refuse_for_all_variants(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
@@ -896,9 +269,10 @@ def main() -> None:
     with contextlib.ExitStack() as held:
         try:
             _main(held)
-        except DamagedArchiveError as exc:
+        except (DamagedArchiveError, ArtifactLockBusy) as exc:
             # Emulator, system and hash modes have no per-platform loop to
-            # report it: the run stops with the file to restore.
+            # report a damaged archive: the run stops with the file to
+            # restore. A busy output directory refuses the run.
             print(f"ERROR: {exc}", file=sys.stderr)
             sys.exit(1)
     if MISSING_DATA_DIRS:
@@ -1035,12 +409,14 @@ def _run_quick_mode(
         # The check resolves core files against data/ like the build did,
         # and a refresh swapping a tree mid-check would judge another tree.
         hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
-        with _pack_output_lock(args.output_dir, exclusive=False):
-            _run_verify_packs(args)
+        with pack_output_lock(args.output_dir, exclusive=False):
+            if not run_verify_packs(args):
+                sys.exit(1)
         return True
     if args.manifest_targets:
-        _refuse_mixed_output(args.output_dir, "targets")
-        with _pack_output_lock(args.output_dir):
+        if holds_other_kind(args.output_dir, "targets"):
+            sys.exit(1)
+        with pack_output_lock(args.output_dir):
             generate_target_manifests(
                 os.path.join(args.platforms_dir, "targets"), args.output_dir
             )
@@ -1077,7 +453,7 @@ def _run_hash_mode(args: argparse.Namespace) -> None:
             sys.exit(1)
         return
     zip_contents = build_zip_contents_index(db)
-    with _pack_output_lock(args.output_dir):
+    with pack_output_lock(args.output_dir):
         result = generate_md5_pack(
             hashes=hashes,
             db=db,
@@ -1099,7 +475,7 @@ def _run_profile_mode(args: argparse.Namespace, db: dict, zip_contents: dict) ->
     # Emulator mode
     if args.emulator:
         names = comma_list(args.emulator)
-        with _pack_output_lock(args.output_dir):
+        with pack_output_lock(args.output_dir):
             built = generate_emulator_pack(
                 names,
                 args.emulators_dir,
@@ -1119,7 +495,7 @@ def _run_profile_mode(args: argparse.Namespace, db: dict, zip_contents: dict) ->
 
     # System mode (standalone, without platform context)
     system_ids = comma_list(args.system)
-    with _pack_output_lock(args.output_dir):
+    with pack_output_lock(args.output_dir):
         built = generate_system_pack(
             system_ids,
             args.emulators_dir,
@@ -1153,95 +529,6 @@ def _requested_platforms(args: argparse.Namespace, parser: argparse.ArgumentPars
     if not args.platform:
         parser.error("Specify --platform or --all")
     return [args.platform]
-
-
-def _refresh_data_directories(args: argparse.Namespace, data_registry: dict) -> None:
-    """Bring the data directory caches up to date before a build reads them."""
-    from packs.datadirs import refresh_all
-
-    results = refresh_all(data_registry, force=args.refresh_data)
-    updated = sum(1 for v in results.values() if v)
-    if updated:
-        print(f"Refreshed {count_text(updated, 'data directory', 'data directories')}")
-    failed = sorted(k for k, v in results.items() if v is None)
-    if failed:
-        print(f"WARNING: data directory refresh failed: {', '.join(failed)}")
-
-
-def _run_platform_mode(
-    args: argparse.Namespace,
-    parser: argparse.ArgumentParser,
-    held: contextlib.ExitStack,
-    db: dict,
-    zip_contents: dict,
-) -> None:
-    """--platform or --all: packs or manifests in each platform's layout."""
-    system_filter = getattr(args, "system_ids", None)
-
-    # Platform mode
-    platforms = _requested_platforms(args, parser)
-
-    # A mistyped target is refused before the output lock and the data
-    # directory refresh: checked after them, `--target swich` waited on a
-    # pipeline's caches before saying the target does not exist.
-    target_cores_cache, platforms = target_scope(
-        platforms, args.target, args.platforms_dir, is_all=args.all
-    )
-
-    emu_profiles = load_emulator_profiles(args.emulators_dir)
-    if system_filter:
-        platforms = platforms_with_systems(
-            platforms, system_filter, emu_profiles, target_cores_cache,
-            args.platforms_dir, args.target, args.all,
-        )
-    platforms = without_profile_blind(
-        platforms,
-        [
-            flag for flag, given in (
-                ("--region", getattr(args, "regions", None)),
-                ("--one-per-slot", getattr(args, "one_per_slot", False)),
-                ("--no-game-data", getattr(args, "no_game_data", False)),
-            ) if given
-        ],
-        args.platforms_dir,
-        emu_profiles,
-        target_cores_cache if args.target else None,
-        args.all,
-    )
-
-    data_registry = load_data_dir_registry(args.platforms_dir)
-    # The output directory is claimed before the data directory refresh: a
-    # refresh waits for every run that holds a cache, so a second build
-    # during a pipeline sat silent for hours instead of being refused.
-    with _pack_output_lock(args.output_dir):
-        if data_registry and not args.offline and not args.no_refresh_data:
-            _refresh_data_directories(args, data_registry)
-        if data_registry:
-            hold_data_dirs(held, data_registry)
-
-        groups = group_identical_platforms(
-            platforms, args.platforms_dir, target_cores_cache if args.target else None
-        )
-
-        if args.manifest:
-            _refuse_mixed_output(args.output_dir, "manifest")
-            _run_manifest_mode(
-                args, groups, db, zip_contents, emu_profiles, target_cores_cache
-            )
-        else:
-            _run_platform_packs(
-                args,
-                groups,
-                db,
-                zip_contents,
-                data_registry,
-                emu_profiles,
-                target_cores_cache,
-                system_filter,
-            )
-    if not args.manifest and args.verify_packs:
-        with _pack_output_lock(args.output_dir, exclusive=False):
-            _run_verify_packs(args)
 
 
 def _main(held: contextlib.ExitStack) -> None:
@@ -1283,18 +570,8 @@ def _main(held: contextlib.ExitStack) -> None:
     if args.emulator or (args.system and not args.platform and not args.all):
         _run_profile_mode(args, db, zip_contents)
         return
-    _run_platform_mode(args, parser, held, db, zip_contents)
-
-
-def _write_standalone_layouts(output_dir: str, platform: str, layouts: dict) -> str:
-    """install/standalone/<platform>.json, what --standalone reads beside the
-    list. Its [dest, sha1] items take their download from that list."""
-    path = os.path.join(output_dir, STANDALONE_DIR, f"{platform}.json")
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    write_if_changed(path, json.dumps({
-        "schema": 1, "platform": platform, "standalone_layouts": layouts,
-    }, indent=2))
-    return path
+    if not run_platform_mode(args, _requested_platforms(args, parser), held, db, zip_contents):
+        sys.exit(1)
 
 
 if __name__ == "__main__":
