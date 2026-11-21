@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from resolve.review import ValidationResult
 
-# The terminal's word for each check status; any other status is "info".
+# The terminal's word for each check status. Any other status is "info".
 MARKERS = {"PASS": "ok", "FAIL": "fail", "WARN": "warn"}
 
 

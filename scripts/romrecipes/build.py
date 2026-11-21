@@ -183,7 +183,7 @@ def build_records(
     root: Path,
     discard: bool = False,
 ) -> Iterator[BuildResult]:
-    """Build each record in turn; with *discard* a verified build is deleted once seen."""
+    """Build each record in turn. With *discard* a verified build is deleted once seen."""
     for record in records:
         result = build_archive(record, atoms, output_dir, root)
         yield result

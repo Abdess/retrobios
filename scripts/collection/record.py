@@ -42,5 +42,5 @@ def record_retired(output: Path, database: dict) -> int:
 
 
 def write_database(output: str, database: dict) -> bool:
-    """Write the database unless only its timestamp moved; whether it was written."""
+    """Write the database unless only its timestamp moved, and say whether it was."""
     return write_if_changed(output, json.dumps(database, indent=2))
