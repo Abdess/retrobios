@@ -726,5 +726,16 @@ class MissingDumpsNameTheirRomsets(unittest.TestCase):
         self.assertEqual(len(romsets_holding({"crc32": "00000001", "size": 8}, index)), 1)
 
 
+
+class SizeRule(unittest.TestCase):
+    def test_a_granule_is_read_as_size_fits_reads_it(self):
+        from scripts.acquire.provenance import _fits
+
+        flash = {"min_size": 65536, "size_multiple": 65536}
+        self.assertTrue(_fits(131072, flash))
+        self.assertFalse(_fits(70000, flash))
+        self.assertFalse(_fits(None, flash))
+
+
 if __name__ == "__main__":
     unittest.main()

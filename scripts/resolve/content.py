@@ -214,7 +214,12 @@ def declares_shape(file_entry: dict) -> bool:
 
 
 def size_fits(file_entry: dict, candidate_size: int) -> bool:
-    """Whether a size is one the entry declares.
+    """Whether a size is one the entry declares (size_refusal)."""
+    return size_refusal(file_entry, candidate_size) is None
+
+
+def size_refusal(file_entry: dict, candidate_size: int) -> str | None:
+    """Why the entry's declared sizes turn a size away, or None.
 
     ``size`` is an exact size or the list of sizes the code accepts, and it
     outranks a ``min_size``/``max_size`` range. ``size_multiple`` is a
@@ -225,15 +230,20 @@ def size_fits(file_entry: dict, candidate_size: int) -> bool:
     declared = file_entry.get("size")
     if declared is not None:
         allowed = declared if isinstance(declared, list) else [declared]
-        return candidate_size in allowed
+        if candidate_size in allowed:
+            return None
+        accepted = ",".join(str(s) for s in sorted(allowed))
+        return f"size mismatch: got {candidate_size}, accepted [{accepted}]"
     low = file_entry.get("min_size")
     high = file_entry.get("max_size")
     if low is not None and candidate_size < low:
-        return False
+        return f"size too small: min {low}, got {candidate_size}"
     if high is not None and candidate_size > high:
-        return False
+        return f"size too large: max {high}, got {candidate_size}"
     multiple = file_entry.get("size_multiple")
-    return not (multiple and candidate_size % int(multiple))
+    if multiple and candidate_size % int(multiple):
+        return f"size mismatch: got {candidate_size}, accepted multiples of {multiple}"
+    return None
 
 
 class DeclaredHashes(TypedDict):

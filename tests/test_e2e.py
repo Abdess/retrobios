@@ -1266,7 +1266,7 @@ class TestE2E(unittest.TestCase):
         index = build_validation_index(profiles)
         self.assertIn("present_req.bin", index)
         self.assertIn("size", index["present_req.bin"]["checks"])
-        self.assertIn(16, index["present_req.bin"]["sizes"])
+        self.assertIn(16, {s for r in index["present_req.bin"]["rules"] for s in r["sizes"]})
         self.assertIn("correct_hash.bin", index)
         self.assertIn("crc32", index["correct_hash.bin"]["checks"])
 
@@ -1347,7 +1347,31 @@ class TestE2E(unittest.TestCase):
             },
         }
         index = build_validation_index(profiles)
-        self.assertEqual(index["shared.bin"]["sizes"], {512, 1024})
+        self.assertEqual([r["sizes"] for r in index["shared.bin"]["rules"]], [{512}, {1024}])
+
+    def test_71b_validation_sizes_judged_per_entry(self):
+        """One core's exact size is never bounded by another core's minimum:
+        pooled, gsplus's 131072-byte Apple IIGS ROM fell under basiliskii's
+        min_size and was refused."""
+        import tempfile
+
+        profiles = {
+            "exact": {"type": "libretro", "files": [
+                {"name": "ROM", "validation": ["size"], "size": [131072, 262144]}]},
+            "ranged": {"type": "libretro", "files": [
+                {"name": "ROM", "validation": ["size"], "min_size": 377670}]},
+        }
+        index = build_validation_index(profiles)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "ROM")
+            with open(path, "wb") as f:
+                f.write(b"\0" * 131072)
+            self.assertIsNone(check_file_validation(path, "ROM", index))
+            with open(path, "wb") as f:
+                f.write(b"\0" * 1000)
+            reason, emus = check_file_validation(path, "ROM", index)
+            self.assertIn("size", reason)
+            self.assertEqual(emus, ["exact", "ranged"])
 
     def test_79_validation_md5_pass(self):
         """File with correct MD5 passes validation."""
@@ -1392,9 +1416,9 @@ class TestE2E(unittest.TestCase):
         path = self.files["present_req.bin"]["path"]
         reason = check_file_validation(path, "present_req.bin", index)
         self.assertIsNone(reason)
-        # Verify the index has min/max
-        self.assertEqual(index["present_req.bin"]["min_size"], 10)
-        self.assertEqual(index["present_req.bin"]["max_size"], 100)
+        # Each entry keeps its own min/max
+        rules = index["present_req.bin"]["rules"]
+        self.assertIn((10, 100), {(r["min_size"], r["max_size"]) for r in rules})
 
     def test_84_validation_crypto_tracked(self):
         """Signature/crypto checks are tracked as non-reproducible."""

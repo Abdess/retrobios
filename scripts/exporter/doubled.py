@@ -21,6 +21,7 @@ from resolve.cores import resolve_platform_cores
 from resolve.reconcile import HASH_FIELDS, hash_values
 from core.hashing import lists_hashes
 from resolve.collisions import accepted_by_all, find_collisions
+from resolve.content import size_fits
 from resolve.validation import opens_by_name, outside_gap_scope
 
 
@@ -39,14 +40,7 @@ def _size_fits(entry: dict, local: str) -> bool:
         size = os.path.getsize(local)
     except OSError:
         return False
-    declared = entry.get("size")
-    sizes = declared if isinstance(declared, list) else [declared]
-    sizes = [s for s in sizes if isinstance(s, int)]
-    if sizes and size not in sizes:
-        return False
-    if isinstance(entry.get("min_size"), int) and size < entry["min_size"]:
-        return False
-    return not (isinstance(entry.get("max_size"), int) and size > entry["max_size"])
+    return size_fits(entry, size)
 
 
 def _reads(entry: dict, by_name: bool, local: str, db: dict) -> bool:

@@ -20,6 +20,7 @@ from resolve.content import (
     name_match_size_ok,
     parse_validation,
     shape_fits,
+    size_refusal,
 )
 from resolve.archives import archive_members
 from model.profiles import CONTENT_CHECKS, entry_system_ids, lists_files
@@ -107,17 +108,11 @@ def warned_checks(f: dict, checks: Collection[str]) -> set[str]:
 
 def _rule_size_failure(rule: dict, local_path: str) -> str | None:
     """Why one entry's size check rejects a file, or None."""
-    actual_size = os.path.getsize(local_path)
-    if rule["sizes"] and actual_size not in rule["sizes"]:
-        accepted = ",".join(str(s) for s in sorted(rule["sizes"]))
-        return f"size mismatch: got {actual_size}, accepted [{accepted}]"
-    if rule["min_size"] is not None and actual_size < rule["min_size"]:
-        return f"size too small: min {rule['min_size']}, got {actual_size}"
-    if rule["max_size"] is not None and actual_size > rule["max_size"]:
-        return f"size too large: max {rule['max_size']}, got {actual_size}"
-    if rule.get("size_multiple") and actual_size % int(rule["size_multiple"]):
-        return f"size mismatch: got {actual_size}, accepted multiples of {rule['size_multiple']}"
-    return None
+    declared = {
+        "size": sorted(rule["sizes"]) or None, "min_size": rule["min_size"],
+        "max_size": rule["max_size"], "size_multiple": rule.get("size_multiple"),
+    }
+    return size_refusal(declared, os.path.getsize(local_path))
 
 
 def _rule_failure(
@@ -229,10 +224,6 @@ def _labels_widened(profile: dict) -> list[dict]:
 def _new_index_entry() -> dict:
     return {
         "checks": set(),
-        "sizes": set(),
-        "min_size": None,
-        "max_size": None,
-        "size_multiples": set(),
         "crc32": set(),
         "md5": set(),
         "sha1": set(),
@@ -244,27 +235,6 @@ def _new_index_entry() -> dict:
         "per_emulator": {},
         "rules": [],
     }
-
-
-def _merge_sizes(item: dict, f: dict) -> None:
-    raw_size = f.get("size")
-    if raw_size is not None:
-        if isinstance(raw_size, list):
-            item["sizes"].update(raw_size)
-        else:
-            item["sizes"].add(raw_size)
-    if f.get("min_size") is not None:
-        cur = item["min_size"]
-        item["min_size"] = (
-            min(cur, f["min_size"]) if cur is not None else f["min_size"]
-        )
-    if f.get("size_multiple"):
-        item["size_multiples"].add(int(f["size_multiple"]))
-    if f.get("max_size") is not None:
-        cur = item["max_size"]
-        item["max_size"] = (
-            max(cur, f["max_size"]) if cur is not None else f["max_size"]
-        )
 
 
 def _merge_hashes(item: dict, f: dict, checks: list[str]) -> None:
@@ -341,9 +311,6 @@ def _index_entry(index: dict[str, dict], emu_name: str, f: dict, checks: list[st
     item["checks"].update(checks)
     # Track non-reproducible crypto checks
     item["crypto_only"].update(c for c in checks if c in _CRYPTO_CHECKS)
-    # Size checks
-    if "size" in checks:
-        _merge_sizes(item, f)
     _merge_hashes(item, f, checks)
     _merge_per_emulator(item, emu_name, f, checks)
 
@@ -545,23 +512,19 @@ def _per_emulator_failure(
 def _merged_size_failure(
     entry: dict, local_path: str, pe: dict[str, dict],
 ) -> tuple[str, list[str]] | None:
-    actual_size = os.path.getsize(local_path)
-    if entry["sizes"] and actual_size not in entry["sizes"]:
-        expected = ",".join(str(s) for s in sorted(entry["sizes"]))
-        emus = _emulators_for_check("size", pe)
-        return f"size mismatch: got {actual_size}, accepted [{expected}]", emus
-    if entry["min_size"] is not None and actual_size < entry["min_size"]:
-        emus = _emulators_for_check("size", pe)
-        return f"size too small: min {entry['min_size']}, got {actual_size}", emus
-    if entry["max_size"] is not None and actual_size > entry["max_size"]:
-        emus = _emulators_for_check("size", pe)
-        return f"size too large: max {entry['max_size']}, got {actual_size}", emus
-    multiples = entry.get("size_multiples") or set()
-    if multiples and all(actual_size % m for m in multiples):
-        emus = _emulators_for_check("size", pe)
-        accepted = ",".join(str(m) for m in sorted(multiples))
-        return f"size mismatch: got {actual_size}, accepted multiples of [{accepted}]", emus
-    return None
+    """Refused only when every entry that checks the size turns it away.
+
+    Each entry is judged by its own sizes: pooling one core's exact sizes
+    with another's min_size refused the Apple IIGS ROM that gsplus takes.
+    """
+    rules = [
+        r for r in entry.get("rules", [])
+        if "size" in r["checks"] and "size" not in r["warn"]
+    ]
+    reasons = [_rule_size_failure(rule, local_path) for rule in rules]
+    if not reasons or not all(reasons):
+        return None
+    return _merged_reason([r for r in reasons if r]), _emulators_for_check("size", pe)
 
 
 def _merged_hash_failure(

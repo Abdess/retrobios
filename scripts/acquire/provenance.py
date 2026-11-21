@@ -11,6 +11,7 @@ from pathlib import Path
 
 from core.hashing import parse_hash_list
 from core.paths import REPO_ROOT
+from resolve.content import size_fits
 
 
 HASH_FIELDS = ("sha1", "md5", "sha256")
@@ -22,14 +23,7 @@ def _crc_key(value: str) -> str:
 
 def _fits(size: int | None, entry: dict) -> bool:
     """Whether a size meets what a profile entry states about it."""
-    if size is None:
-        return False
-    declared = entry.get("size")
-    if declared is not None:
-        accepted = declared if isinstance(declared, list) else [declared]
-        return size in {int(value) for value in accepted}
-    low, high = entry.get("min_size"), entry.get("max_size")
-    return (low is None or size >= int(low)) and (high is None or size <= int(high))
+    return size is not None and size_fits(entry, size)
 
 
 def profile_needs(profiles: dict, db: dict) -> dict:
