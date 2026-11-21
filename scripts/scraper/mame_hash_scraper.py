@@ -35,10 +35,12 @@ from ._hash_merge import (
     _build_contents,
     _build_source_ref,
     compute_diff,
+    load_profile,
     merge_mame_devices,
     merge_mame_profile,
     merge_mame_support,
     settled_required,
+    write_mame_profile,
 )
 from .mame_devices import (
     attribute_softlists,
@@ -261,7 +263,8 @@ def _run(args: argparse.Namespace) -> None:
     pinned_before = _pinned_version(main_profile)
     for profile_path in profiles:
         is_main = profile_path.name == "mame.yml"
-        diff = compute_diff(str(profile_path), str(_CACHE_PATH), mode="mame")
+        profile = load_profile(profile_path)
+        diff = compute_diff(profile, hashes, mode="mame")
         lines = _format_diff(profile_path, diff, hashes, show_added=is_main)
         for line in lines:
             print(line)
@@ -270,11 +273,8 @@ def _run(args: argparse.Namespace) -> None:
             updated = diff.get("updated", [])
             added = diff.get("added", []) if is_main else []
             if added or updated:
-                merge_mame_profile(
-                    str(profile_path),
-                    str(_CACHE_PATH),
-                    write=True,
-                    add_new=is_main,
+                write_mame_profile(
+                    profile_path, merge_mame_profile(profile, hashes, add_new=is_main),
                 )
                 log.info("merged into %s", profile_path.name)
 

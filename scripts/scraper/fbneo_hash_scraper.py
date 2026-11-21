@@ -25,7 +25,12 @@ from model.profiles import source_yaml_paths
 from core.artifacts import write_text_atomic
 from model.safeparse import yaml_load
 
-from scripts.scraper._hash_merge import compute_diff, merge_fbneo_profile
+from scripts.scraper._hash_merge import (
+    compute_diff,
+    load_profile,
+    merge_fbneo_profile,
+    write_fbneo_profile,
+)
 from scripts.scraper.fbneo_parser import parse_fbneo_source_tree
 from scripts.scraper.sparse_clone import fresh_cache, remove_clone, sparse_clone
 
@@ -172,7 +177,7 @@ def run(
             "profiles": {},
         }
         for path in profiles:
-            diff = compute_diff(str(path), str(CACHE_PATH), mode="fbneo")
+            diff = compute_diff(load_profile(path), cache, mode="fbneo")
             result["profiles"][path.stem] = diff
         print(json.dumps(result, indent=2))
         return 0
@@ -190,7 +195,8 @@ def run(
 
     for path in profiles:
         is_main = path.name == "fbneo.yml"
-        diff = compute_diff(str(path), str(CACHE_PATH), mode="fbneo")
+        profile = load_profile(path)
+        diff = compute_diff(profile, cache, mode="fbneo")
         print(_format_diff(path.stem, diff, show_added=is_main))
 
         # New entries are never written: the parser knows one line per
@@ -199,7 +205,7 @@ def run(
         # parser keys each board ROM set by the archive GetZipName opens),
         # are refreshed in place.
         if not dry_run and diff["updated"]:
-            merge_fbneo_profile(str(path), str(CACHE_PATH), write=True, add_new=False)
+            write_fbneo_profile(path, merge_fbneo_profile(profile, cache, add_new=False))
             log.info("merged changes into %s", path.name)
 
     return 0

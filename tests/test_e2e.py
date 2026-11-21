@@ -4971,12 +4971,8 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertEqual(roms[0]["crc32"], "9036d879")
 
     def test_mame_merge_preserves_manual_fields(self):
-        import json as json_mod
-
         from scripts.scraper._hash_merge import merge_mame_profile
 
-        merge_dir = os.path.join(self.root, "merge_mame")
-        os.makedirs(merge_dir)
         profile = {
             "emulator": "Test",
             "type": "libretro",
@@ -4996,9 +4992,6 @@ struct BurnDriver BurnDrvneogeo = {
                 }
             ],
         }
-        profile_path = os.path.join(merge_dir, "test.yml")
-        with open(profile_path, "w") as f:
-            yaml.dump(profile, f, sort_keys=False)
         hashes = {
             "source": "mamedev/mame",
             "version": "0.286",
@@ -5019,10 +5012,7 @@ struct BurnDriver BurnDrvneogeo = {
                 }
             },
         }
-        hashes_path = os.path.join(merge_dir, "hashes.json")
-        with open(hashes_path, "w") as f:
-            json_mod.dump(hashes, f)
-        result = merge_mame_profile(profile_path, hashes_path)
+        result = merge_mame_profile(profile, hashes)
         neo = next(f for f in result["files"] if f["name"] == "neogeo.zip")
         self.assertEqual(neo["contents"][0]["crc32"], "newcrc")
         self.assertEqual(neo["system"], "snk-neogeo-mvs")
@@ -5031,12 +5021,8 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertEqual(result["core_version"], "0.286")
 
     def test_fbneo_merge_updates_individual_roms(self):
-        import json as json_mod
-
         from scripts.scraper._hash_merge import merge_fbneo_profile
 
-        merge_dir = os.path.join(self.root, "merge_fbneo")
-        os.makedirs(merge_dir)
         profile = {
             "emulator": "FBNeo",
             "type": "libretro",
@@ -5053,9 +5039,6 @@ struct BurnDriver BurnDrvneogeo = {
                 }
             ],
         }
-        profile_path = os.path.join(merge_dir, "fbneo.yml")
-        with open(profile_path, "w") as f:
-            yaml.dump(profile, f, sort_keys=False)
         hashes = {
             "source": "finalburnneo/FBNeo",
             "version": "v1.0.0.03",
@@ -5069,10 +5052,7 @@ struct BurnDriver BurnDrvneogeo = {
                 }
             },
         }
-        hashes_path = os.path.join(merge_dir, "hashes.json")
-        with open(hashes_path, "w") as f:
-            json_mod.dump(hashes, f)
-        result = merge_fbneo_profile(profile_path, hashes_path)
+        result = merge_fbneo_profile(profile, hashes)
         rom = next(f for f in result["files"] if f["name"] == "sp-s2.sp1")
         self.assertEqual(rom["crc32"], "newcrc")
         self.assertEqual(rom["system"], "snk-neogeo-mvs")

@@ -63,9 +63,8 @@ def settled_required(entry: dict, set_data: dict) -> bool:
 
 
 def merge_mame_profile(
-    profile_path: str,
-    hashes_path: str,
-    write: bool = False,
+    profile: dict[str, Any],
+    hashes: dict[str, Any],
     add_new: bool = True,
 ) -> dict[str, Any]:
     """Merge MAME bios_zip entries from upstream hash data.
@@ -76,10 +75,10 @@ def merge_mame_profile(
     profile). Entries not in the hash data are left untouched (the scraper
     only covers MACHINE_IS_BIOS_ROOT sets, not all machine ROM sets).
 
-    If write=True, backs up existing profile to .old.yml before writing.
+    Returns the merged profile and leaves the input dict as it was. Writing
+    is write_mame_profile's.
     """
-    profile = _load_yaml(profile_path)
-    hashes = _load_json(hashes_path)
+    profile = dict(profile)
 
     # The version follows the refs only for profiles already labelled with a
     # MAME release. A derivative pins its own line: same_cdi ("Git") and a7800
@@ -137,17 +136,12 @@ def merge_mame_profile(
             updated_bios.append(entry)
 
     profile["files"] = non_bios + updated_bios
-
-    if write:
-        _backup_and_write(profile_path, profile)
-
     return profile
 
 
 def merge_fbneo_profile(
-    profile_path: str,
-    hashes_path: str,
-    write: bool = False,
+    profile: dict[str, Any],
+    hashes: dict[str, Any],
     add_new: bool = True,
 ) -> dict[str, Any]:
     """Merge FBNeo individual ROM entries from upstream hash data.
@@ -156,10 +150,10 @@ def merge_fbneo_profile(
     source_ref. New ROMs are only added when add_new=True (main profile).
     Entries not in the hash data are left untouched.
 
-    If write=True, backs up existing profile to .old.yml before writing.
+    Returns the merged profile and leaves the input dict as it was. Writing
+    is write_fbneo_profile's.
     """
-    profile = _load_yaml(profile_path)
-    hashes = _load_json(hashes_path)
+    profile = dict(profile)
 
     # core_version stays as written: it is the version of the code at the
     # profile's own pin, read through version_basis (profile_sync
@@ -217,34 +211,28 @@ def merge_fbneo_profile(
             merged.append(entry)
 
     profile["files"] = non_archive + merged
-
-    if write:
-        _backup_and_write_fbneo(profile_path, profile, hashes)
-
     return profile
 
 
 def compute_diff(
-    profile_path: str,
-    hashes_path: str,
+    profile: dict[str, Any],
+    hashes: dict[str, Any],
     mode: str = "mame",
 ) -> dict[str, Any]:
     """Compute diff between profile and hashes without writing.
 
     Returns counts of added, updated, removed, and unchanged entries.
     """
-    profile = _load_yaml(profile_path)
-    hashes = _load_json(hashes_path)
-
     if mode == "mame":
-        return _diff_mame(profile, hashes)
-    return _diff_fbneo(profile, hashes)
+        return diff_mame(profile, hashes)
+    return diff_fbneo(profile, hashes)
 
 
-def _diff_mame(
+def diff_mame(
     profile: dict[str, Any],
     hashes: dict[str, Any],
 ) -> dict[str, Any]:
+    """Sets the hash data adds to or changes in a MAME profile."""
     files = profile.get("files", [])
     bios_zip, _ = _split_files(files, lambda f: f.get("category") == "bios_zip")
 
@@ -294,10 +282,11 @@ def _diff_mame(
     }
 
 
-def _diff_fbneo(
+def diff_fbneo(
     profile: dict[str, Any],
     hashes: dict[str, Any],
 ) -> dict[str, Any]:
+    """ROMs the hash data adds to or changes in an FBNeo profile."""
     files = profile.get("files", [])
     archive_files, _ = _split_files(files, lambda f: "archive" in f)
 
@@ -350,13 +339,9 @@ def _diff_fbneo(
 # Helpers
 
 
-def _load_yaml(path: str) -> dict[str, Any]:
+def load_profile(path: str | Path) -> dict[str, Any]:
+    """The profile at path as the merge reads it, empty when the file is."""
     return source_yaml_file(path) or {}
-
-
-def _load_json(path: str) -> dict[str, Any]:
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
 
 
 def _split_files(
@@ -425,7 +410,7 @@ def _contents_differ(old: list[dict], new: list[dict]) -> bool:
     return False
 
 
-def _backup_and_write(path: str, data: dict) -> None:
+def write_mame_profile(path: str | Path, data: dict) -> None:
     """Write merged profile using text-based patching to preserve formatting.
 
     Instead of yaml.dump (which destroys comments, quoting, indentation),
@@ -1095,7 +1080,7 @@ def _patch_block_values(block: str, entry: dict) -> str:
     return "\n".join(lines)
 
 
-def _backup_and_write_fbneo(path: str, data: dict, hashes: dict) -> None:
+def write_fbneo_profile(path: str | Path, data: dict) -> None:
     """Write merged FBNeo profile using text-based patching.
 
     FBNeo profiles have individual ROM entries with archive: field.

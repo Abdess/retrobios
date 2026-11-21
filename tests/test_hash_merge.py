@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import tests
 
-import json
+import copy
 import tempfile
 import unittest
 from pathlib import Path
@@ -14,23 +14,17 @@ import yaml
 from scripts.scraper._hash_merge import (
     _build_source_ref,
     compute_diff,
+    load_profile,
     merge_fbneo_profile,
     merge_mame_profile,
+    write_fbneo_profile,
+    write_mame_profile,
 )
 
 
-def _write_yaml(path: Path, data: dict) -> str:
-    p = str(path)
-    with open(p, "w", encoding="utf-8") as f:
-        yaml.dump(data, f, default_flow_style=False, sort_keys=False)
-    return p
-
-
-def _write_json(path: Path, data: dict) -> str:
-    p = str(path)
-    with open(p, "w", encoding="utf-8") as f:
-        json.dump(data, f)
-    return p
+def _refresh_mame(path: Path, hashes: dict) -> None:
+    """Merge hashes into the profile file at path and write it back."""
+    write_mame_profile(path, merge_mame_profile(load_profile(path), hashes))
 
 
 def _make_mame_profile(**overrides: object) -> dict:
@@ -140,19 +134,21 @@ class TestMameMerge(unittest.TestCase):
     """Tests for merge_mame_profile."""
 
     def test_merge_updates_contents(self) -> None:
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "mame.yml", _make_mame_profile())
-            hashes_path = _write_json(p / "hashes.json", _make_mame_hashes())
+        result = merge_mame_profile(_make_mame_profile(), _make_mame_hashes())
 
-            result = merge_mame_profile(profile_path, hashes_path)
+        bios_files = [f for f in result["files"] if f.get("category") == "bios_zip"]
+        self.assertEqual(len(bios_files), 1)
+        contents = bios_files[0]["contents"]
+        self.assertEqual(contents[0]["crc32"], "9036d879")
+        self.assertEqual(contents[0]["sha1"], "4f834c55")
+        self.assertEqual(contents[0]["description"], "Europe MVS (Ver. 2)")
 
-            bios_files = [f for f in result["files"] if f.get("category") == "bios_zip"]
-            self.assertEqual(len(bios_files), 1)
-            contents = bios_files[0]["contents"]
-            self.assertEqual(contents[0]["crc32"], "9036d879")
-            self.assertEqual(contents[0]["sha1"], "4f834c55")
-            self.assertEqual(contents[0]["description"], "Europe MVS (Ver. 2)")
+    def test_merge_leaves_the_input_profile_as_it_was(self) -> None:
+        """The scraper diffs and merges one parsed profile: the merge copies it."""
+        profile = _make_mame_profile()
+        before = copy.deepcopy(profile)
+        merge_mame_profile(profile, _make_mame_hashes())
+        self.assertEqual(profile, before)
 
     def test_merge_preserves_manual_fields(self) -> None:
         profile = _make_mame_profile()
@@ -160,17 +156,12 @@ class TestMameMerge(unittest.TestCase):
         profile["files"][0]["system"] = "snk-neogeo-mvs"
         profile["files"][0]["required"] = False
 
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "mame.yml", profile)
-            hashes_path = _write_json(p / "hashes.json", _make_mame_hashes())
+        result = merge_mame_profile(profile, _make_mame_hashes())
 
-            result = merge_mame_profile(profile_path, hashes_path)
-
-            entry = [f for f in result["files"] if f.get("category") == "bios_zip"][0]
-            self.assertEqual(entry["note"], "manually curated note")
-            self.assertEqual(entry["system"], "snk-neogeo-mvs")
-            self.assertFalse(entry["required"])
+        entry = [f for f in result["files"] if f.get("category") == "bios_zip"][0]
+        self.assertEqual(entry["note"], "manually curated note")
+        self.assertEqual(entry["system"], "snk-neogeo-mvs")
+        self.assertFalse(entry["required"])
 
     def test_merge_sets_required_false_for_a_set_the_machine_runs_without(self) -> None:
         profile = _make_mame_profile()
@@ -183,18 +174,13 @@ class TestMameMerge(unittest.TestCase):
             "source_file": "src/mame/seta/macs.cpp", "source_line": 776,
             "roms": [], "required": False,
         }
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "mame.yml", profile)
-            hashes_path = _write_json(p / "hashes.json", hashes)
+        diff = compute_diff(profile, hashes, mode="mame")
+        self.assertIn("mac2bios", diff["updated"])
 
-            diff = compute_diff(profile_path, hashes_path, mode="mame")
-            self.assertIn("mac2bios", diff["updated"])
-
-            result = merge_mame_profile(profile_path, hashes_path)
-            entry = next(f for f in result["files"] if f["name"] == "mac2bios.zip")
-            self.assertFalse(entry["required"])
-            self.assertEqual(entry["note"], "kept")
+        result = merge_mame_profile(profile, hashes)
+        entry = next(f for f in result["files"] if f["name"] == "mac2bios.zip")
+        self.assertFalse(entry["required"])
+        self.assertEqual(entry["note"], "kept")
 
     def test_written_profile_carries_the_settled_required(self) -> None:
         """The text patcher rewrote contents and source_ref but left required."""
@@ -212,8 +198,7 @@ class TestMameMerge(unittest.TestCase):
                 '    source_ref: "upstream src/mame/seta/macs.cpp:776"\n',
                 encoding="utf-8",
             )
-            hashes_path = _write_json(p / "hashes.json", hashes)
-            merge_mame_profile(profile_path, hashes_path, write=True)
+            _refresh_mame(Path(profile_path), hashes)
             written = yaml.safe_load(Path(profile_path).read_text(encoding="utf-8"))
         entry = next(f for f in written["files"] if f["name"] == "mac2bios.zip")
         self.assertIs(entry["required"], False)
@@ -223,13 +208,9 @@ class TestMameMerge(unittest.TestCase):
         profile["files"][0]["required"] = False
         hashes = _make_mame_hashes()
         hashes["bios_sets"]["neogeo"]["required"] = True
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "mame.yml", profile)
-            hashes_path = _write_json(p / "hashes.json", hashes)
-            result = merge_mame_profile(profile_path, hashes_path)
-            entry = next(f for f in result["files"] if f["name"] == "neogeo.zip")
-            self.assertFalse(entry["required"])
+        result = merge_mame_profile(profile, hashes)
+        entry = next(f for f in result["files"] if f["name"] == "neogeo.zip")
+        self.assertFalse(entry["required"])
 
     def test_merge_restores_required_once_an_undumped_set_is_dumped(self) -> None:
         profile = _make_mame_profile()
@@ -243,13 +224,9 @@ class TestMameMerge(unittest.TestCase):
             "roms": [{"name": "a2361.b1", "size": 1024, "crc32": "eeb8f3f0"}],
             "required": True,
         }
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "mame.yml", profile)
-            hashes_path = _write_json(p / "hashes.json", hashes)
-            result = merge_mame_profile(profile_path, hashes_path)
-            entry = next(f for f in result["files"] if f["name"] == "recel.zip")
-            self.assertTrue(entry["required"])
+        result = merge_mame_profile(profile, hashes)
+        entry = next(f for f in result["files"] if f["name"] == "recel.zip")
+        self.assertTrue(entry["required"])
 
     def test_merge_adds_new_bios_set(self) -> None:
         hashes = _make_mame_hashes()
@@ -261,21 +238,16 @@ class TestMameMerge(unittest.TestCase):
             ],
         }
 
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "mame.yml", _make_mame_profile())
-            hashes_path = _write_json(p / "hashes.json", hashes)
+        result = merge_mame_profile(_make_mame_profile(), hashes)
 
-            result = merge_mame_profile(profile_path, hashes_path)
+        bios_files = [f for f in result["files"] if f.get("category") == "bios_zip"]
+        names = {f["name"] for f in bios_files}
+        self.assertIn("pgm.zip", names)
 
-            bios_files = [f for f in result["files"] if f.get("category") == "bios_zip"]
-            names = {f["name"] for f in bios_files}
-            self.assertIn("pgm.zip", names)
-
-            pgm = next(f for f in bios_files if f["name"] == "pgm.zip")
-            self.assertIsNone(pgm["system"])
-            self.assertTrue(pgm["required"])
-            self.assertEqual(pgm["category"], "bios_zip")
+        pgm = next(f for f in bios_files if f["name"] == "pgm.zip")
+        self.assertIsNone(pgm["system"])
+        self.assertTrue(pgm["required"])
+        self.assertEqual(pgm["category"], "bios_zip")
 
     def test_numeric_looking_rom_name_survives_the_write(self) -> None:
         """MAME ships ROMs named 01 and 23. Bare YAML turns them into numbers.
@@ -327,51 +299,37 @@ class TestMameMerge(unittest.TestCase):
         profile = _make_mame_profile()
         profile["files"].append({"name": "hiscore.dat", "required": False})
 
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "mame.yml", profile)
-            hashes_path = _write_json(p / "hashes.json", _make_mame_hashes())
+        result = merge_mame_profile(profile, _make_mame_hashes())
 
-            result = merge_mame_profile(profile_path, hashes_path)
-
-            non_bios = [f for f in result["files"] if f.get("category") != "bios_zip"]
-            self.assertEqual(len(non_bios), 1)
-            self.assertEqual(non_bios[0]["name"], "hiscore.dat")
+        non_bios = [f for f in result["files"] if f.get("category") != "bios_zip"]
+        self.assertEqual(len(non_bios), 1)
+        self.assertEqual(non_bios[0]["name"], "hiscore.dat")
 
     def test_merge_keeps_unmatched_bios_set(self) -> None:
         """Entries not in scraper scope stay untouched (no _upstream_removed)."""
         hashes = _make_mame_hashes()
         hashes["bios_sets"] = {}  # nothing from scraper
 
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "mame.yml", _make_mame_profile())
-            hashes_path = _write_json(p / "hashes.json", hashes)
+        result = merge_mame_profile(_make_mame_profile(), hashes)
 
-            result = merge_mame_profile(profile_path, hashes_path)
-
-            bios_files = [f for f in result["files"] if f.get("category") == "bios_zip"]
-            self.assertEqual(len(bios_files), 1)
-            self.assertNotIn("_upstream_removed", bios_files[0])
-            self.assertEqual(bios_files[0]["name"], "neogeo.zip")
+        bios_files = [f for f in result["files"] if f.get("category") == "bios_zip"]
+        self.assertEqual(len(bios_files), 1)
+        self.assertNotIn("_upstream_removed", bios_files[0])
+        self.assertEqual(bios_files[0]["name"], "neogeo.zip")
 
     def test_merge_updates_core_version(self) -> None:
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "mame.yml", _make_mame_profile())
-            hashes_path = _write_json(p / "hashes.json", _make_mame_hashes())
+        result = merge_mame_profile(_make_mame_profile(), _make_mame_hashes())
 
-            result = merge_mame_profile(profile_path, hashes_path)
-
-            self.assertEqual(result["core_version"], "0.286")
+        self.assertEqual(result["core_version"], "0.286")
 
     def test_merge_backup_created(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             p = Path(td)
-            profile_path = _write_yaml(p / "mame.yml", _make_mame_profile())
-            hashes_path = _write_json(p / "hashes.json", _make_mame_hashes())
+            profile_path = p / "mame.yml"
+            profile_path.write_text(yaml.dump(_make_mame_profile(), sort_keys=False),
+                                    encoding="utf-8")
 
-            merge_mame_profile(profile_path, hashes_path, write=True)
+            _refresh_mame(profile_path, _make_mame_hashes())
 
             backup = p / "mame.old.yml"
             self.assertTrue(backup.exists())
@@ -381,15 +339,10 @@ class TestMameMerge(unittest.TestCase):
             self.assertEqual(old["core_version"], "0.285")
 
     def test_merge_updates_source_ref(self) -> None:
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "mame.yml", _make_mame_profile())
-            hashes_path = _write_json(p / "hashes.json", _make_mame_hashes())
+        result = merge_mame_profile(_make_mame_profile(), _make_mame_hashes())
 
-            result = merge_mame_profile(profile_path, hashes_path)
-
-            entry = [f for f in result["files"] if f.get("category") == "bios_zip"][0]
-            self.assertEqual(entry["source_ref"], "src/mame/neogeo/neogeo.cpp:2432")
+        entry = [f for f in result["files"] if f.get("category") == "bios_zip"][0]
+        self.assertEqual(entry["source_ref"], "src/mame/neogeo/neogeo.cpp:2432")
 
 
 class TheMamePinMovesWithItsRefs(unittest.TestCase):
@@ -400,14 +353,13 @@ class TheMamePinMovesWithItsRefs(unittest.TestCase):
     def _merged_text(self, **profile_overrides) -> str:
         with tempfile.TemporaryDirectory() as td:
             p = Path(td)
-            profile_path = _write_yaml(
-                p / "mame.yml", _make_mame_profile(**profile_overrides)
+            profile_path = p / "mame.yml"
+            profile_path.write_text(
+                yaml.dump(_make_mame_profile(**profile_overrides), sort_keys=False),
+                encoding="utf-8",
             )
-            hashes_path = _write_json(
-                p / "hashes.json", _make_mame_hashes(commit="f" * 40)
-            )
-            merge_mame_profile(profile_path, hashes_path, write=True)
-            return Path(profile_path).read_text(encoding="utf-8")
+            _refresh_mame(profile_path, _make_mame_hashes(commit="f" * 40))
+            return profile_path.read_text(encoding="utf-8")
 
     def test_the_upstream_pin_follows_the_release(self):
         text = self._merged_text(
@@ -535,17 +487,12 @@ class TestFbneoMerge(unittest.TestCase):
     """Tests for merge_fbneo_profile."""
 
     def test_merge_updates_rom_entries(self) -> None:
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "fbneo.yml", _make_fbneo_profile())
-            hashes_path = _write_json(p / "hashes.json", _make_fbneo_hashes())
+        result = merge_fbneo_profile(_make_fbneo_profile(), _make_fbneo_hashes())
 
-            result = merge_fbneo_profile(profile_path, hashes_path)
-
-            archive_files = [f for f in result["files"] if "archive" in f]
-            self.assertEqual(len(archive_files), 1)
-            self.assertEqual(archive_files[0]["crc32"], "9036d879")
-            self.assertEqual(archive_files[0]["system"], "snk-neogeo-mvs")
+        archive_files = [f for f in result["files"] if "archive" in f]
+        self.assertEqual(len(archive_files), 1)
+        self.assertEqual(archive_files[0]["crc32"], "9036d879")
+        self.assertEqual(archive_files[0]["system"], "snk-neogeo-mvs")
 
     def test_merge_adds_new_roms(self) -> None:
         hashes = _make_fbneo_hashes()
@@ -557,59 +504,39 @@ class TestFbneoMerge(unittest.TestCase):
             }
         )
 
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "fbneo.yml", _make_fbneo_profile())
-            hashes_path = _write_json(p / "hashes.json", hashes)
+        result = merge_fbneo_profile(_make_fbneo_profile(), hashes)
 
-            result = merge_fbneo_profile(profile_path, hashes_path)
-
-            archive_files = [f for f in result["files"] if "archive" in f]
-            self.assertEqual(len(archive_files), 2)
-            new_rom = next(f for f in archive_files if f["name"] == "sp-s3.sp1")
-            self.assertEqual(new_rom["archive"], "neogeo.zip")
-            self.assertTrue(new_rom["required"])
+        archive_files = [f for f in result["files"] if "archive" in f]
+        self.assertEqual(len(archive_files), 2)
+        new_rom = next(f for f in archive_files if f["name"] == "sp-s3.sp1")
+        self.assertEqual(new_rom["archive"], "neogeo.zip")
+        self.assertTrue(new_rom["required"])
 
     def test_merge_preserves_non_archive_files(self) -> None:
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "fbneo.yml", _make_fbneo_profile())
-            hashes_path = _write_json(p / "hashes.json", _make_fbneo_hashes())
+        result = merge_fbneo_profile(_make_fbneo_profile(), _make_fbneo_hashes())
 
-            result = merge_fbneo_profile(profile_path, hashes_path)
-
-            non_archive = [f for f in result["files"] if "archive" not in f]
-            self.assertEqual(len(non_archive), 1)
-            self.assertEqual(non_archive[0]["name"], "hiscore.dat")
+        non_archive = [f for f in result["files"] if "archive" not in f]
+        self.assertEqual(len(non_archive), 1)
+        self.assertEqual(non_archive[0]["name"], "hiscore.dat")
 
     def test_merge_keeps_unmatched_roms(self) -> None:
         """Entries not in scraper scope stay untouched (no _upstream_removed)."""
         hashes = _make_fbneo_hashes()
         hashes["bios_sets"] = {}
 
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "fbneo.yml", _make_fbneo_profile())
-            hashes_path = _write_json(p / "hashes.json", hashes)
+        result = merge_fbneo_profile(_make_fbneo_profile(), hashes)
 
-            result = merge_fbneo_profile(profile_path, hashes_path)
-
-            archive_files = [f for f in result["files"] if "archive" in f]
-            self.assertEqual(len(archive_files), 1)
-            self.assertNotIn("_upstream_removed", archive_files[0])
+        archive_files = [f for f in result["files"] if "archive" in f]
+        self.assertEqual(len(archive_files), 1)
+        self.assertNotIn("_upstream_removed", archive_files[0])
 
     def test_merge_leaves_core_version_to_the_pin(self) -> None:
         # The hashes are read at finalburnneo/FBNeo's tip, which the
         # profile's libretro/FBNeo pin does not name: the version stays the
         # one version_basis reads at that pin.
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "fbneo.yml", _make_fbneo_profile())
-            hashes_path = _write_json(p / "hashes.json", _make_fbneo_hashes())
+        result = merge_fbneo_profile(_make_fbneo_profile(), _make_fbneo_hashes())
 
-            result = merge_fbneo_profile(profile_path, hashes_path)
-
-            self.assertEqual(result["core_version"], "v1.0.0.02")
+        self.assertEqual(result["core_version"], "v1.0.0.02")
 
 
 class TestDiff(unittest.TestCase):
@@ -625,33 +552,23 @@ class TestDiff(unittest.TestCase):
             ],
         }
 
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "mame.yml", _make_mame_profile())
-            hashes_path = _write_json(p / "hashes.json", hashes)
+        diff = compute_diff(_make_mame_profile(), hashes, mode="mame")
 
-            diff = compute_diff(profile_path, hashes_path, mode="mame")
-
-            self.assertIn("pgm", diff["added"])
-            self.assertIn("neogeo", diff["updated"])
-            self.assertEqual(len(diff["removed"]), 0)
-            self.assertEqual(diff["unchanged"], 0)
+        self.assertIn("pgm", diff["added"])
+        self.assertIn("neogeo", diff["updated"])
+        self.assertEqual(len(diff["removed"]), 0)
+        self.assertEqual(diff["unchanged"], 0)
 
     def test_diff_mame_out_of_scope(self) -> None:
         """Items in profile but not in scraper output = out of scope, not removed."""
         hashes = _make_mame_hashes()
         hashes["bios_sets"] = {}
 
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "mame.yml", _make_mame_profile())
-            hashes_path = _write_json(p / "hashes.json", hashes)
+        diff = compute_diff(_make_mame_profile(), hashes, mode="mame")
 
-            diff = compute_diff(profile_path, hashes_path, mode="mame")
-
-            self.assertEqual(diff["removed"], [])
-            self.assertEqual(diff["out_of_scope"], 1)
-            self.assertEqual(len(diff["added"]), 0)
+        self.assertEqual(diff["removed"], [])
+        self.assertEqual(diff["out_of_scope"], 1)
+        self.assertEqual(len(diff["added"]), 0)
 
     def test_diff_fbneo_detects_changes(self) -> None:
         hashes = _make_fbneo_hashes()
@@ -663,16 +580,11 @@ class TestDiff(unittest.TestCase):
             }
         )
 
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "fbneo.yml", _make_fbneo_profile())
-            hashes_path = _write_json(p / "hashes.json", hashes)
+        diff = compute_diff(_make_fbneo_profile(), hashes, mode="fbneo")
 
-            diff = compute_diff(profile_path, hashes_path, mode="fbneo")
-
-            self.assertIn("neogeo.zip:sp-s3.sp1", diff["added"])
-            self.assertIn("neogeo.zip:sp-s2.sp1", diff["updated"])
-            self.assertEqual(len(diff["removed"]), 0)
+        self.assertIn("neogeo.zip:sp-s3.sp1", diff["added"])
+        self.assertIn("neogeo.zip:sp-s2.sp1", diff["updated"])
+        self.assertEqual(len(diff["removed"]), 0)
 
     def test_diff_fbneo_unchanged(self) -> None:
         profile = _make_fbneo_profile()
@@ -681,16 +593,11 @@ class TestDiff(unittest.TestCase):
 
         hashes = _make_fbneo_hashes()
 
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "fbneo.yml", profile)
-            hashes_path = _write_json(p / "hashes.json", hashes)
+        diff = compute_diff(profile, hashes, mode="fbneo")
 
-            diff = compute_diff(profile_path, hashes_path, mode="fbneo")
-
-            self.assertEqual(diff["unchanged"], 1)
-            self.assertEqual(len(diff["added"]), 0)
-            self.assertEqual(len(diff["updated"]), 0)
+        self.assertEqual(diff["unchanged"], 1)
+        self.assertEqual(len(diff["added"]), 0)
+        self.assertEqual(len(diff["updated"]), 0)
 
     def test_diff_fbneo_keeps_a_per_rom_ref(self) -> None:
         """The scraper knows the driver line, while a curated ref knows its ROM."""
@@ -699,13 +606,9 @@ class TestDiff(unittest.TestCase):
         profile["files"][0]["size"] = 131072
         profile["files"][0]["source_ref"] = "src/burn/drv/neogeo/d_neogeo.cpp:1615"
 
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td)
-            profile_path = _write_yaml(p / "fbneo.yml", profile)
-            hashes_path = _write_json(p / "hashes.json", _make_fbneo_hashes())
-            diff = compute_diff(profile_path, hashes_path, mode="fbneo")
-            self.assertEqual(len(diff["updated"]), 0)
-            self.assertEqual(diff["unchanged"], 1)
+        diff = compute_diff(profile, _make_fbneo_hashes(), mode="fbneo")
+        self.assertEqual(len(diff["updated"]), 0)
+        self.assertEqual(diff["unchanged"], 1)
 
 
 class TestSourceRefDrift(unittest.TestCase):
@@ -743,12 +646,7 @@ class TestSourceRefDrift(unittest.TestCase):
         }
 
     def _diff(self, source_ref):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            prof = _write_yaml(root / "p.yml", self._profile(source_ref))
-            hashes = root / "h.json"
-            hashes.write_text(json.dumps(self.HASHES), encoding="utf-8")
-            return compute_diff(prof, str(hashes), mode="mame")
+        return compute_diff(self._profile(source_ref), self.HASHES, mode="mame")
 
     def test_a_moved_line_counts_as_an_update(self):
         diff = self._diff("src/mame/snk/neogeo.cpp:2428")
@@ -779,19 +677,13 @@ class TestDerivativeVersion(unittest.TestCase):
     }
 
     def _run(self, add_new, version="Git"):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            prof = _write_yaml(root / "p.yml", {
-                "emulator": "SAME CDi",
-                "core_version": version,
-                "files": [{"name": "cdibios.zip", "category": "bios_zip",
-                           "source_ref": "old.cpp:1", "contents": []}],
-            })
-            hashes = root / "h.json"
-            hashes.write_text(json.dumps(self.HASHES), encoding="utf-8")
-            return merge_mame_profile(
-                prof, str(hashes), write=False, add_new=add_new
-            )
+        profile = {
+            "emulator": "SAME CDi",
+            "core_version": version,
+            "files": [{"name": "cdibios.zip", "category": "bios_zip",
+                       "source_ref": "old.cpp:1", "contents": []}],
+        }
+        return merge_mame_profile(profile, self.HASHES, add_new=add_new)
 
     def test_a_derivative_keeps_its_own_version(self):
         self.assertEqual(self._run(add_new=False)["core_version"], "Git")
@@ -853,14 +745,16 @@ class WritersPutTheValuesOnDisk(unittest.TestCase):
             '    note: "MVS Asia/Europe ver. 5"\n    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1625"\n',
             encoding="utf-8",
         )
-        hashes = _write_json(self.dir / "h.json", {
+        hashes = {
             "version": "v1.0.0.03",
             "bios_sets": {"neogeo": {"source_file": "src/burn/drv/neogeo/d_neogeo.cpp",
                                      "source_line": 1625,
                                      "roms": [{"name": "sp-s2.sp1", "size": 131072,
                                                "crc32": "9036d879"}]}},
-        })
-        merge_fbneo_profile(str(profile), hashes, write=True, add_new=False)
+        }
+        write_fbneo_profile(
+            profile, merge_fbneo_profile(load_profile(profile), hashes, add_new=False),
+        )
         written = yaml.safe_load(profile.read_text(encoding="utf-8"))
         entry = written["files"][0]
         self.assertEqual(written["core_version"], "v1.0.0.02")
@@ -879,8 +773,7 @@ class WritersPutTheValuesOnDisk(unittest.TestCase):
             '        crc32: oldcrc32\n        description: Europe MVS (Ver. 2)\n',
             encoding="utf-8",
         )
-        hashes = _write_json(self.dir / "h.json", _make_mame_hashes())
-        merge_mame_profile(str(profile), hashes, write=True)
+        _refresh_mame(profile, _make_mame_hashes())
         written = yaml.safe_load(profile.read_text(encoding="utf-8"))
         member = written["files"][0]["contents"][0]
         self.assertEqual(member["crc32"], "9036d879")

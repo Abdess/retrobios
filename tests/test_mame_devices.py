@@ -12,7 +12,6 @@ from __future__ import annotations
 import tests
 
 import io
-import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -21,10 +20,12 @@ from scripts.model.safeparse import yaml_load
 from scripts.scraper._hash_merge import (
     DEVICE_SECTION,
     SOFTLIST_SECTION,
+    load_profile,
     mame_ref_role,
     merge_mame_devices,
     merge_mame_profile,
     merge_mame_support,
+    write_mame_profile,
 )
 from scripts.scraper.listxml import open_listxml
 from scripts.scraper.mame_devices import (
@@ -348,16 +349,15 @@ class MergeIntoTheProfile(unittest.TestCase):
 
     def test_a_new_bios_root_lands_before_the_device_section(self):
         self._merge()
-        hashes = Path(self._tmp.name) / "h.json"
-        hashes.write_text(json.dumps({
+        hashes = {
             "version": "0.289",
             "commit": "f34f02505e32c1993c6a782b6814232cbfc74e36",
             "bios_sets": {"newbios": {
                 "source_file": "src/mame/x/x.cpp", "source_line": 7,
                 "roms": [{"name": "n.bin", "size": 4, "crc32": "12345678"}],
             }},
-        }), encoding="utf-8")
-        merge_mame_profile(str(self.path), str(hashes), write=True)
+        }
+        write_mame_profile(self.path, merge_mame_profile(load_profile(self.path), hashes))
         text = self.path.read_text(encoding="utf-8")
         self.assertLess(text.index("newbios.zip"), text.index(DEVICE_SECTION))
         self.assertEqual(self._entries()["newbios.zip"]["source_ref"], "upstream src/mame/x/x.cpp:7")
@@ -1043,7 +1043,7 @@ class TheDevicesFollowTheRelease(unittest.TestCase):
                 _find_mame_profiles=lambda: [profile],
                 compute_diff=lambda *a, **k: {"updated": ["x"], "added": []},
                 _format_diff=lambda *a, **k: [],
-                merge_mame_profile=merge,
+                write_mame_profile=merge,
                 fetch_release_listxml=lambda version: Path(f"mame{version}lx.zip"),
                 _merge_devices=merged.append,
             ), mock.patch("sys.stdout", new=io.StringIO()):
