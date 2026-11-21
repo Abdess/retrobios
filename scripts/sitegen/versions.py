@@ -51,7 +51,7 @@ def _pack_version(pack_name: str, platforms: list[str]) -> str:
     """
     from packs.naming import platform_pack_prefix
 
-    stem = pack_name.removesuffix("_BIOS_Pack.zip")
+    stem = pack_name.removesuffix(releaserecord.PACK_SUFFIX)
     prefix = platform_pack_prefix(
         platforms, platforms[0], str(siteinputs.current().platforms)
     ) + "_"

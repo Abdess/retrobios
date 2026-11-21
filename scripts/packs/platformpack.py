@@ -19,6 +19,7 @@ from model.alternatives import core_file_spares
 from model.declarations import OUTER_ROOTS, declared_root
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
+from model.releaserecord import PACK_SUFFIX
 from packs import slots
 from packs.archive import (
     CASE_FOLDING_OS,
@@ -1278,7 +1279,7 @@ def generate_split_packs(
     for group_name, group_system_ids in sorted(groups.items()):
         group_extras = _extras_for_systems(all_extras, group_system_ids)
         zip_path = part(
-            f"{part_prefix}_{file_name_part(group_name, '_')}_BIOS_Pack.zip",
+            f"{part_prefix}_{file_name_part(group_name, '_')}{PACK_SUFFIX}",
             {"system_filter": group_system_ids, "precomputed_extras": group_extras},
         )
         if zip_path:
@@ -1296,7 +1297,7 @@ def generate_split_packs(
     undistributed = [fe for fe in all_extras if id(fe) not in distributed]
     if undistributed:
         zip_path = part(
-            f"{part_prefix}_Other_Cores_BIOS_Pack.zip",
+            f"{part_prefix}_Other_Cores{PACK_SUFFIX}",
             {"precomputed_extras": undistributed, "extras_only": True},
         )
         if zip_path:

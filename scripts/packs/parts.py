@@ -9,11 +9,12 @@ import zipfile
 import zlib
 from pathlib import Path
 
+from model.releaserecord import PACK_SUFFIX
+
 
 # "Each file included in a release must be under 2 GiB."
 ASSET_LIMIT = 2 * 1024**3
 
-PACK_SUFFIX = "_BIOS_Pack.zip"
 _PART_NAME = re.compile(r"^(?P<stem>.+_BIOS_Pack)\.part(?P<index>\d+)of(?P<count>\d+)\.zip$")
 _MARKER_NAME = re.compile(r"^(?P<stem>.+_BIOS_Pack)\.part(?P<index>\d+)of(?P<count>\d+)\.txt$")
 # Sizes are written at a fixed width, so a marker's length, and with it the

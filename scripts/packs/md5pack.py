@@ -12,6 +12,7 @@ from core.hashing import parse_hash_list
 from core.options import reject_unknown
 from model.platforms import load_platform_config
 from model.profiles import ProfileSelectionError, load_emulator_profiles, select_emulator_profiles
+from model.releaserecord import PACK_SUFFIX
 from packs.archive import add_pack_member, writing_pack
 from packs.naming import file_name_part, pack_narrowings
 from packs.paths import resolve_destination
@@ -142,10 +143,7 @@ def _md5_pack_name(
     selection = hashlib.sha1(
         "\n".join(sorted(f"{kind}:{value.lower()}" for kind, value in hashes)).encode()
     ).hexdigest()[:8]
-    return (
-        f"{file_name_part(context_name, '_')}{mode_part}_Custom_{selection}{custom_tags}"
-        "_BIOS_Pack.zip"
-    )
+    return f"{file_name_part(context_name, '_')}{mode_part}_Custom_{selection}{custom_tags}{PACK_SUFFIX}"
 
 
 def _md5_destination(entry: dict, layout: _Md5Layout, opts: _Md5Settings) -> str:

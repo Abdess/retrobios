@@ -26,6 +26,7 @@ from model.profiles import (
     select_emulator_profiles,
 )
 from model.registry import load_data_dir_registry
+from model.releaserecord import PACK_SUFFIX
 from packs.archive import (
     PackRecord,
     Placed,
@@ -492,7 +493,7 @@ def generate_emulator_pack(
         )
     )
     zip_name = options.get("pack_name") or bounded_pack_name(
-        display_names, [n for n, _p in selected], f"{narrow_tags}_BIOS_Pack.zip"
+        display_names, [n for n, _p in selected], f"{narrow_tags}{PACK_SUFFIX}"
     )
     zip_path = os.path.join(output_dir, zip_name)
     if record is None:
@@ -589,7 +590,7 @@ def generate_system_pack(
     # The selection mode is part of the name: `--system sega-triforce`
     # and `--emulator triforce` both wrote Triforce_BIOS_Pack.zip, and
     # the second run replaced the first without a word.
-    final_name = f"{sys_display}_System{tags}_BIOS_Pack.zip"
+    final_name = f"{sys_display}_System{tags}{PACK_SUFFIX}"
     scratch = tempfile.mkdtemp(prefix=".system-", dir=output_dir)
     try:
         result = generate_emulator_pack(
