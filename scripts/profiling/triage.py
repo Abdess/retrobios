@@ -8,7 +8,7 @@ import time
 
 from core import upstream
 from profiling.reports import ProfileReport, triage_state
-from profiling.repos import select_repo
+from profiling.version_basis import version_repo
 from profiling.versions import VersionReport, check_version
 
 
@@ -114,7 +114,7 @@ def _score(
     commits = 0
     refused = ""
     sampled = False
-    repo = select_repo(profile)
+    repo = version_repo(profile)[0]
     if report.head and repo is not None:
         # Each cited path counted in the repository the resolver settled it
         # in, between that repository's own pin and HEAD.

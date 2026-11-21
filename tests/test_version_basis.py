@@ -251,6 +251,56 @@ class TheBasisPinIsTheComparisonPin(unittest.TestCase):
         self.assertEqual((repo.slug, pin), ("o/m", "b" * 40))
 
 
+class TheVersionRepositoryIsTheBasisRepository(unittest.TestCase):
+    """--check-version read pcee2's core_version against the port's tags,
+    while version_basis reads it in PCSX2."""
+
+    PROFILE = {
+        "source": "https://github.com/o/port",
+        "upstream": "https://github.com/o/up",
+        "version_basis": {"kind": "tag", "repo": "upstream"},
+    }
+
+    def test_a_basis_naming_the_upstream_is_read_there(self):
+        repo, field = version_basis.version_repo(self.PROFILE)
+        self.assertEqual((repo.slug, field), ("o/up", "upstream"))
+
+    def test_a_profile_without_basis_is_read_where_it_was_profiled(self):
+        profile = {k: v for k, v in self.PROFILE.items() if k != "version_basis"}
+        repo, field = version_basis.version_repo(profile)
+        self.assertEqual((repo.slug, field), ("o/port", "source"))
+
+    def test_a_basis_url_is_its_own_repository(self):
+        profile = dict(self.PROFILE, version_basis={
+            "kind": "package", "url": "https://github.com/o/pkg/releases"})
+        repo, field = version_basis.version_repo(profile)
+        self.assertEqual((repo.slug, field), ("o/pkg", "url"))
+
+    def test_the_check_reads_the_tags_and_the_pin_of_that_repository(self):
+        from profiling import run as profiling_run
+
+        report = ProfileReport(
+            name="p", repo="o/port", host="github.com", pin="portpin", head="porthead",
+            upstream_pin="uppin", upstream_head="uphead",
+        )
+        asked = []
+
+        def tag_commit(repo, tag, *_a, **_k):
+            asked.append(repo.slug)
+            return "uptag" if repo.slug == "o/up" else None
+
+        args = mock.Mock(cache_dir="cache", offline=True)
+        with mock.patch.object(upstream, "latest_release", return_value=None), \
+                mock.patch.object(upstream, "newest_tag", return_value=None), \
+                mock.patch.object(upstream, "tag_commit", side_effect=tag_commit), \
+                mock.patch.object(upstream, "ancestry", return_value=(3, 0)) as ancestry:
+            profiling_run._attach_version(args, dict(self.PROFILE, core_version="v1"), report)
+        self.assertEqual(set(asked), {"o/up"})
+        self.assertEqual(report.version.tag_commit, "uptag")
+        self.assertEqual(ancestry.call_args.args[1:3], ("uptag", "uppin"))
+        self.assertIn("the pin resolved to uppin", report.version_warning)
+
+
 class AnAdvanceReadsTheVersionAgain(unittest.TestCase):
     """A pin never moves without its version: read again, or refused."""
 

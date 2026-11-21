@@ -23,10 +23,10 @@ from profiling.reports import (
     format_report,
     report_to_dict,
 )
-from profiling.repos import select_repo
 from profiling.resolver import build_report
 from profiling.sourcepaths import record_write
 from profiling.triage import PROGRESS_SECONDS, Progress, print_interrupted, print_triage
+from profiling.version_basis import version_repo
 from profiling.versions import (
     newer_release,
     latest_passed_release,
@@ -266,6 +266,17 @@ def _attach_detection(
         report.detection_skipped = str(exc)
 
 
+def _version_pin(report: ProfileReport, repo: upstream.Repo, field: str) -> str | None:
+    """The pin of the repository core_version is read in: upstream_commit for
+    a basis reading the upstream, the primary pin for the primary repository,
+    None for a repository the report did not compare."""
+    if field == "upstream":
+        return report.upstream_pin
+    if (repo.host, repo.slug) == (report.host, report.repo):
+        return report.pin
+    return None
+
+
 def _attach_version(
     args: argparse.Namespace, profile: dict, report: ProfileReport
 ) -> None:
@@ -275,9 +286,13 @@ def _attach_version(
     report does. A forge that refuses is named on the profile's own line
     (version_unread).
     """
-    repo = select_repo(profile) if report.head else None
+    repo, field = version_repo(profile) if report.head else (None, "")
     if repo is None:
         return
+    pin = _version_pin(report, repo, field)
+    # A held upstream (yaps2 synced to PCSX2 342db515) is not one a newer
+    # release of that project asks to profile again, as a held pin is not.
+    frozen_by = "upstream_frozen" if field == "upstream" else "pin_frozen"
     try:
         report.version = check_version(profile, repo, args.cache_dir, args.offline)
     except upstream.RateLimitError:
@@ -289,22 +304,22 @@ def _attach_version(
     passed = None
     version = report.version
     try:
-        if version and version.tag_commit and report.pin and version.tag_commit != report.pin:
+        if version and version.tag_commit and pin and version.tag_commit != pin:
             relation = upstream.ancestry(
-                repo, version.tag_commit, report.pin, args.cache_dir, args.offline
+                repo, version.tag_commit, pin, args.cache_dir, args.offline
             )
-        passed = latest_passed_release(repo, version, report.pin, args.cache_dir, args.offline)
-        newer = None if passed or profile.get("pin_frozen") else newer_release(
-            repo, version, report.pin, args.cache_dir, args.offline
+        passed = latest_passed_release(repo, version, pin, args.cache_dir, args.offline)
+        newer = None if passed or profile.get(frozen_by) else newer_release(
+            repo, version, pin, args.cache_dir, args.offline
         )
     except upstream.RateLimitError:
         raise
     except upstream.UpstreamError as exc:
         report.version_unread = f"tag ancestry unread: {exc}"
         newer = None
-    report.version_warning = version_warning(version, report.pin, relation, passed) or (
+    report.version_warning = version_warning(version, pin, relation, passed) or (
         f"{'release' if version.latest_release else 'tag'} {newer} is newer than core_version {version.declared} and the pin: "
-        "profile it, or hold the pin with pin_frozen and the reason"
+        f"profile it, or hold the pin with {frozen_by} and the reason"
         if newer and version else None
     )
 

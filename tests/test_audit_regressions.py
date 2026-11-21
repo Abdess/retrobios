@@ -4360,7 +4360,6 @@ class TriageSurvivesAForgeRefusal(unittest.TestCase):
         args = SimpleNamespace(cache_dir="", offline=True)
         out = io.StringIO()
         with mock.patch.object(triage, "check_version", check_version), \
-                mock.patch.object(triage, "select_repo", lambda p: object()), \
                 contextlib.redirect_stdout(out), \
                 contextlib.redirect_stderr(io.StringIO()):
             triage.print_triage(args, selected, reports)

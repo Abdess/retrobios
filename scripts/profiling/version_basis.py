@@ -34,7 +34,7 @@ from dataclasses import dataclass
 
 from core import upstream
 from model.profilerepos import pin_field
-from profiling.repos import resolve_pin
+from profiling.repos import resolve_pin, select_repo
 
 KINDS = ("file", "tag", "alias", "package", "none", "unverified")
 # Values copied from a .info or a branch name, which name no version.
@@ -91,6 +91,26 @@ def _by_mode(profile: dict, field: str, mode: str) -> str | None:
     return str(value) if value else None
 
 
+def version_repo(
+    profile: dict, mode: str = "", basis: dict | None = None,
+) -> tuple[upstream.Repo | None, str]:
+    """The repository core_version describes, and the profile field naming it.
+
+    The basis says where the version is read: its url (field "url"), else
+    the repository its `repo` field names. pcee2 reads PCSX2's tags, which
+    the port the profile was read from never carries. A profile with no
+    basis is read in the repository it was profiled from.
+    """
+    if basis is None:
+        basis = bases(profile).get(mode)
+    if not basis:
+        return select_repo(profile), "source"
+    if basis.get("url"):
+        return upstream.parse_repo(str(basis["url"])), "url"
+    field = str(basis.get("repo") or "source")
+    return upstream.parse_repo(_by_mode(profile, field, mode) or ""), field
+
+
 def is_placeholder(value: object) -> bool:
     """A VCS or branch word standing for a version, alone or annotated
     ("SVN (2015 snapshot)"). The schema refuses the same strings."""
@@ -133,15 +153,12 @@ def _repo_and_pin(
     profile: dict, basis: dict, mode: str, cache_dir: str, offline: bool,
 ) -> tuple[upstream.Repo, str]:
     """The repository a basis reads and the commit it is read at."""
-    if basis.get("url"):
-        repo = upstream.parse_repo(str(basis["url"]))
+    repo, field = version_repo(profile, mode, basis)
+    if field == "url":
         pin = str(basis.get("commit") or "")
         where = str(basis["url"])
     else:
-        field = str(basis.get("repo") or "source")
-        url = _by_mode(profile, field, mode) or ""
-        repo = upstream.parse_repo(url)
-        where = url or field
+        where = _by_mode(profile, field, mode) or field
         pin = ""
         if repo is not None:
             # The pin profile_sync compares at: the declared commit, else
