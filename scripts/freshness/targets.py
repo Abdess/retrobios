@@ -8,7 +8,6 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
-from core.paths import REPO_ROOT
 from model.profiles import upstream_profile_index
 from model.sources import source_yaml_file
 from model.targets import apply_target_overrides, platform_overrides, read_target_overrides
@@ -87,7 +86,7 @@ def check_targets(
             # sudachi without one are BIOS its pack never carries.
             out = [Finding("targets", platform, OK, local="static",
                            detail="every declared core")]
-            declared = _declared_cores(platform)
+            declared = _declared_cores(platform, platforms_dir)
             missing = unresolved_target_cores(
                 {"targets": {name: {"cores": declared} for name in targets}},
                 index, platform_overrides(overrides, platform),
@@ -140,12 +139,12 @@ def check_targets(
     return findings
 
 
-def _declared_cores(platform: str) -> list[str]:
+def _declared_cores(platform: str, platforms_dir: Path) -> list[str]:
     """The cores and standalone emulators a platform's own file names."""
     from model.platforms import load_platform_config
 
     try:
-        config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+        config = load_platform_config(platform, str(platforms_dir))
     except (FileNotFoundError, OSError):
         return []
     cores = config.get("cores")

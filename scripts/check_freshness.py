@@ -143,7 +143,7 @@ def main() -> int:
     if "coreinfo" in areas:
         findings.extend(check_coreinfo(profiles, args.cache_dir, args.offline))
     if "data" in areas:
-        findings.extend(check_data(args.offline))
+        findings.extend(check_data(platforms_dir, args.offline))
     if "catalogs" in areas:
         findings.extend(check_catalogs(args.cache_dir, args.offline))
     if "ci" in areas:

@@ -726,6 +726,19 @@ class RepositoryWiringTests(unittest.TestCase):
         solo = [f for f in findings if f.subject == "solo"]
         self.assertEqual([(f.status, f.detail) for f in solo], [(OK, "every declared core")])
 
+    def test_a_static_target_reads_the_given_platforms_dir(self):
+        """The declared cores were read from the repository's platforms/
+        whatever --platforms-dir named."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "targets").mkdir()
+            (root / "targets" / "solo.yml").write_text(
+                "platform: solo\nsource: static\ntargets:\n  only:\n    cores: null\n")
+            (root / "solo.yml").write_text("platform: solo\ncores: [unprofiled_core]\nsystems: {}\n")
+            findings = check_targets(root, root, {}, 1, True)
+        rows = [f for f in findings if f.subject == "solo cores"]
+        self.assertEqual([f.items for f in rows], [["unprofiled_core"]])
+
     def test_a_scraped_target_offline_is_skipped_not_ok(self):
         """Offline, scraped target lists were labelled static and counted OK
         without any comparison, so a list 400 days old read as current."""
@@ -789,11 +802,11 @@ class AStaticTargetStillNamesItsCores(unittest.TestCase):
     before reading the names, and its 50 unprofiled emulators never showed."""
 
     def test_declared_names_are_checked(self):
-        names = _declared_cores("retrobat")
+        names = _declared_cores("retrobat", REPO_ROOT / "platforms")
         self.assertIn("winuae", names)
         source = (SCRIPTS / "freshness" / "targets.py").read_text(encoding="utf-8")
         static = source.index('detail="every declared core"')
-        self.assertLess(static, source.index("_declared_cores(platform)"))
+        self.assertLess(static, source.index("_declared_cores(platform, platforms_dir)"))
 
 
 
@@ -811,11 +824,11 @@ class TheBuildbotIndexIsRead(unittest.TestCase):
             {"zip": "Old.zip", "status": "OK", "key": "old"},
         ]}
         with mock.patch.object(buildbot_system, "check", lambda registry: report):
-            finding = _check_buildbot_system()
+            finding = _check_buildbot_system(REPO_ROOT / "platforms")
         self.assertEqual(finding.status, STALE)
         self.assertIn("new New.zip", finding.detail)
         with mock.patch.object(buildbot_system, "check", lambda registry: {"error": "x", "entries": []}):
-            self.assertEqual(_check_buildbot_system().status, UNKNOWN)
+            self.assertEqual(_check_buildbot_system(REPO_ROOT / "platforms").status, UNKNOWN)
         self.assertEqual([e["zip"] for e in buildbot_system.pending(report)], ["New.zip"])
 
 
