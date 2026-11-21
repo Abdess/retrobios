@@ -93,7 +93,6 @@ def collection_line(total_files: int, comp: dict) -> str:
 
 # The installer demo (scripts/make_demo.py): the recording and what it shows.
 DEMO_GIF = "docs_assets/demo/install.gif"
-REPO_PATH = "../.."
 REPO = REPO_SLUG
 # GitHub's "Add file > Upload files" page for bios/: a browser upload by
 # someone without write access lands on a fork and opens a pull request.
