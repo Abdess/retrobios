@@ -23,13 +23,13 @@ from core.hashing import file_digest
 from core.paths import REPO_ROOT
 from core.statefile import now_iso, save_state
 from model import measurements as mr
+from model.profiles import entry_system_ids
 from probes import rules
 from probes.profileedit import ProfileEditError, write_fields
 from probes.content import Content, ContentStore, load_content, load_file
 from probes.cores import Core, Cores
 from probes.entries import (
     entry_dest,
-    entry_systems,
     held_file,
     is_bios,
     profile_digest,
@@ -342,7 +342,7 @@ class Campaign:
         libretro = filter_files_by_mode(profile.get("files") or [], standalone=False)
         keep = {id(e) for e in libretro}
         return [(i, e) for i, e in enumerate(profile.get("files") or [])
-                if id(e) in keep and system in entry_systems(e, profile) and is_bios(e)]
+                if id(e) in keep and system in entry_system_ids(e, profile) and is_bios(e)]
 
     def boot_entry(self, entries: list[tuple[int, dict]], content: Content) -> tuple[int, dict] | None:
         held = [(i, e) for i, e in entries if region_matches(e, content.region) and self.local_file(e)]

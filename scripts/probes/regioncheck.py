@@ -13,6 +13,7 @@ from collections.abc import Callable, Iterable
 from pathlib import Path
 
 from core.paths import REPO_ROOT
+from model.profiles import entry_system_ids
 from core_probe import BUILTIN
 from probes.content import Content, load_content, load_file
 from probes.cores import cached_nightly
@@ -36,14 +37,12 @@ REGION_WORDS = {"japan": "Japanese", "north-america": "US", "europe": "European"
 
 def region_entries(profile: dict, system: str) -> list[dict]:
     """The BIOS entries of a system that a `region:` ties to territories."""
-    out = []
-    for entry in profile.get("files") or ():
-        systems = entry.get("systems") or ([entry["system"]] if entry.get("system")
-                                            else profile.get("systems") or [])
-        if (system in systems and regions_of(entry) and "world" not in regions_of(entry)
-                and entry.get("category", "bios") == "bios" and entry.get("mode") != "standalone"):
-            out.append(entry)
-    return out
+    return [
+        entry for entry in profile.get("files") or ()
+        if system in entry_system_ids(entry, profile)
+        and regions_of(entry) and "world" not in regions_of(entry)
+        and entry.get("category", "bios") == "bios" and entry.get("mode") != "standalone"
+    ]
 
 
 def plan_variants(entries: Iterable[dict], region: str,

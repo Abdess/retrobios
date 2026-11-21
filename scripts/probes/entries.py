@@ -35,14 +35,6 @@ def held_file(entry: dict, db: dict, root: Path) -> Path | None:
     return local if local.is_file() else None
 
 
-def entry_systems(entry: dict, profile: dict) -> list[str]:
-    if entry.get("systems"):
-        return list(entry["systems"])
-    if entry.get("system"):
-        return [entry["system"]]
-    return list(profile.get("systems") or [])
-
-
 def entry_dest(entry: dict) -> str:
     """Where the core reads the entry, relative to its system directory."""
     path = entry.get("path")

@@ -44,7 +44,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from core.paths import EMULATORS_DIR, PLATFORMS_DIR
-from model.profiles import load_emulator_profiles
+from model.profiles import entry_system_ids, load_emulator_profiles
 from model.platforms import load_platform_config, native_layer
 from core.artifacts import repository_output_lock
 from core.cli import run_cli
@@ -98,14 +98,6 @@ def _load_json(path: Path) -> dict:
 # --- Profiles ---------------------------------------------------------------
 
 
-def _entry_systems(profile: dict, entry: dict) -> set[str]:
-    """The systems a profile file serves: its own system field, else the profile's."""
-    own = entry.get("system") or entry.get("systems")
-    if own:
-        return {own} if isinstance(own, str) else {str(s) for s in own}
-    return {str(s) for s in profile.get("systems") or []}
-
-
 def _entry_names(entry: dict) -> set[str]:
     names = {str(entry.get("name") or "")}
     names |= {str(a) for a in entry.get("aliases") or []}
@@ -136,7 +128,7 @@ class Profiles:
 
     def serves(self, profile: str, entry: dict, system: str) -> bool:
         wanted = self.resolver.equivalents(system)
-        return bool(_entry_systems(self.profiles.get(profile, {}), entry) & wanted)
+        return bool(set(entry_system_ids(entry, self.profiles.get(profile, {}))) & wanted)
 
     def region_files(self, profile: str, system: str) -> dict[str, list[str]]:
         """Region slug -> file names the profile tags for it, for one system.
