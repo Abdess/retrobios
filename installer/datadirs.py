@@ -30,7 +30,7 @@ from installer.host_fs import (
 )
 from installer.local_check import _read_digests
 from installer.manifest import OTHER_SYSTEMS
-from installer.network import _retry_delay
+from installer.network import _retry_after_failure, _retry_delay
 from installer.offline import LOCAL, _Offline, _network_allowed, _offline_only
 from installer.outcome import OfflineReason
 from installer.paths import _destination_path
@@ -168,10 +168,14 @@ def _fetch_archive(url: str, directory: Path, progress: Progress | None = None,
             if exc.code < 500 and exc.code not in (416, 429):
                 raise
             reason = exc
+            # A range past an archive that shrank is asked again whole.
+            delay = (_retry_delay(attempt, None) if exc.code == 416 and attempt < MAX_RETRIES
+                     else _retry_after_failure(exc, attempt, MAX_RETRIES))
         except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
             if keep is None:
                 Path(handle.name).unlink(missing_ok=True)
             reason = exc if isinstance(exc, OSError) else ConnectionError(repr(exc))
+            delay = _retry_after_failure(exc, attempt, MAX_RETRIES)
         except ValueError:
             _drop_archive(Path(handle.name), note)
             raise
@@ -181,8 +185,9 @@ def _fetch_archive(url: str, directory: Path, progress: Progress | None = None,
                 Path(handle.name).unlink(missing_ok=True)
             raise
         count.take_back()
-        if attempt < MAX_RETRIES:
-            time.sleep(_retry_delay(attempt, None))
+        if delay is None:
+            break
+        time.sleep(delay)
     raise reason if reason else OSError("download failed")
 
 

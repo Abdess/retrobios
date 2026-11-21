@@ -36,10 +36,8 @@ from installer.remote import (
 )
 
 
-def _read_limited_json(
-    response: http.client.HTTPResponse, limit: int, label: str, raw: bool = False
-) -> object:
-    """Read a bounded UTF-8 JSON response, its bytes as they came with raw.
+def _read_limited(response: http.client.HTTPResponse, limit: int, label: str) -> bytes:
+    """Read a response of limit bytes at most.
 
     A body shorter than its Content-Length is a dropped connection, raised
     as one so the caller retries: parsed, the cut read as an invalid file
@@ -64,6 +62,14 @@ def _read_limited_json(
         raise ValueError(f"{label} exceeds {limit} bytes")
     if expected is not None and len(payload) < expected:
         raise ConnectionError(f"{label} cut after {len(payload)} of {expected} bytes")
+    return payload
+
+
+def _read_limited_json(
+    response: http.client.HTTPResponse, limit: int, label: str, raw: bool = False
+) -> object:
+    """Read a bounded UTF-8 JSON response, its bytes as they came with raw."""
+    payload = _read_limited(response, limit, label)
     if raw:
         return payload
     try:
@@ -303,21 +309,21 @@ def _fetch_json(
                     return _read_limited_json(resp, limit, label, raw=True)
                 return _read_limited_json(resp, limit, label)
         except urllib.error.HTTPError as exc:
-            if exc.code < 500 and exc.code != 429 or attempt == attempts:
+            wait = _retry_after_failure(exc, attempt, attempts)
+            if wait is None:
                 raise
-            delay = _retry_delay(attempt, exc.headers.get("Retry-After") if exc.headers else None)
+            delay = wait
             problem = f"HTTP {exc.code}"
         except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
-            code, problem = network_words(exc)
-            # A wrong clock or no certificate list fails every attempt alike.
-            if (attempt == attempts or code != "network"
-                    or (_stalled(exc) and attempt >= STALLED_ATTEMPTS)):
+            problem = network_words(exc)[1]
+            wait = _retry_after_failure(exc, attempt, attempts)
+            if wait is None or (_stalled(exc) and attempt >= STALLED_ATTEMPTS):
                 if isinstance(exc, http.client.HTTPException):
                     raise ConnectionError(f"connection cut: {exc!r}") from exc
                 # How many were made, for the line that says so.
                 exc.__dict__["attempts"] = attempt
                 raise
-            delay = _retry_delay(attempt, None)
+            delay = wait
             if _stalled(exc):
                 tries = min(attempts, STALLED_ATTEMPTS)
         # Said, or three 30-second attempts read as a frozen program.
@@ -532,6 +538,26 @@ def _retry_delay(attempt: int, retry_after: str | None) -> float:
         except ValueError:
             pass
     return float(min(2 ** (attempt - 1), 8))
+
+
+def _server_delay(exc: urllib.error.HTTPError, attempt: int) -> float:
+    """Seconds before asking a server that refused again: its Retry-After."""
+    return _retry_delay(attempt, exc.headers.get("Retry-After") if exc.headers else None)
+
+
+def _retry_after_failure(exc: BaseException, attempt: int, attempts: int) -> float | None:
+    """Seconds before the attempt after exc, None when it is final: the last
+    attempt, a refusal other than 429, a wrong clock or no certificate list,
+    which fail every attempt alike."""
+    if attempt >= attempts:
+        return None
+    if isinstance(exc, urllib.error.HTTPError):
+        if exc.code < 500 and exc.code != 429:
+            return None
+        return _server_delay(exc, attempt)
+    if network_words(exc)[0] != "network":
+        return None
+    return _retry_delay(attempt, None)
 
 
 def _read_capped(path: Path, limit: int) -> bytes | None:

@@ -36,7 +36,7 @@ from installer.host_fs import (
 )
 from installer.invocation import offline_requested
 from installer.local_check import _digest_file, _digest_handle, expected_hashes, unreachable_words
-from installer.network import _retry_delay, network_words
+from installer.network import _retry_delay, _server_delay, network_words
 from installer.offline import LOCAL, offline_words
 from installer.outcome import HttpReason, NetworkReason, OfflineReason, _transfer_failure
 from installer.pack_source import NOT_IN_PACK, _extract_from_pack
@@ -217,7 +217,7 @@ def _fetch_file(job: _FileFetch) -> tuple[str, bool, str]:
 
         except urllib.error.HTTPError as exc:
             reason = _http_attempt_failure(job, exc, attempt)
-            delay = _retry_delay(attempt, exc.headers.get("Retry-After") if exc.headers else None)
+            delay = _server_delay(exc, attempt)
 
         # http.client raises IncompleteRead (an HTTPException, not an
         # OSError) when a chunked transfer is cut, as a proxy re-encoding

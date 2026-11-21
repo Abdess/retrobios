@@ -23,6 +23,7 @@ import sys
 import tempfile
 import threading
 import unittest
+import urllib.error
 from pathlib import Path
 from unittest import mock
 
@@ -39,6 +40,7 @@ class _RangeHandler(http.server.BaseHTTPRequestHandler):
 
     ranges: list[str] = []
     fail_first: list[int] = []
+    retry_after = "0"
 
     def log_message(self, *args) -> None:
         pass
@@ -47,7 +49,7 @@ class _RangeHandler(http.server.BaseHTTPRequestHandler):
         if self.fail_first:
             code = self.fail_first.pop(0)
             self.send_response(code)
-            self.send_header("Retry-After", "0")
+            self.send_header("Retry-After", self.retry_after)
             self.end_headers()
             return
         header = self.headers.get("Range")
@@ -69,6 +71,7 @@ class _Server:
     def __enter__(self):
         _RangeHandler.ranges = []
         _RangeHandler.fail_first = []
+        _RangeHandler.retry_after = "0"
         self.httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), _RangeHandler)
         threading.Thread(target=self.httpd.serve_forever, daemon=True).start()
         port = self.httpd.server_address[1]
@@ -292,6 +295,31 @@ class RetriesWait(unittest.TestCase):
             _RangeHandler.fail_first = [503]
             dest, ok, _ = install._download_one(dict(ENTRY), Path(tmp))
             self.assertTrue(ok)
+
+    def test_an_archive_and_the_app_wait_what_the_server_asks(self):
+        # Both waited 1 s on a 429 that asked for 7, and gave up in 3 s
+        # where a BIOS file waited and arrived.
+        with _Server() as server, tempfile.TemporaryDirectory() as tmp, \
+                mock.patch.object(install.time, "sleep") as slept:
+            port = server.httpd.server_address[1]
+            url = f"http://127.0.0.1:{port}/a.zip"
+            _RangeHandler.retry_after = "7"
+            _RangeHandler.fail_first = [429]
+            self.assertEqual(install._fetch_archive(url, Path(tmp)).read_bytes(), PAYLOAD)
+            _RangeHandler.fail_first = [429]
+            self.assertEqual(install._app_download(url, len(PAYLOAD)), PAYLOAD)
+        self.assertEqual([c.args for c in slept.call_args_list], [(7.0,), (7.0,)])
+
+    def test_a_failure_no_attempt_changes_is_final(self):
+        import ssl
+
+        no_list = urllib.error.URLError(ssl.SSLCertVerificationError("unable to get issuer"))
+        refused = urllib.error.HTTPError("u", 404, "Not Found", {}, None)
+        with mock.patch.object(install, "_ca_bundle_found", return_value=False):
+            self.assertIsNone(install._retry_after_failure(no_list, 1, 3))
+        self.assertIsNone(install._retry_after_failure(refused, 1, 3))
+        self.assertEqual(install._retry_after_failure(ConnectionResetError(), 1, 3), 1.0)
+        self.assertIsNone(install._retry_after_failure(ConnectionResetError(), 3, 3))
 
     def test_the_delay_doubles_and_follows_retry_after(self):
         self.assertEqual([install._retry_delay(n, None) for n in (1, 2, 3, 4, 5)],

@@ -22,7 +22,7 @@ from installer.console import _ask
 from installer.events import EVENTS
 from installer.host_fs import NOT_WRITABLE, _write_refused
 from installer.local_check import _sha256_file
-from installer.network import _fetch_json, _retry_delay, network_words
+from installer.network import _fetch_json, _read_limited, _retry_after_failure, network_words
 from installer.offline import LOCAL, _Offline, _network_allowed
 from installer.outcome import _transfer_failure
 from installer.paths import _destination_path, _safe_relative_path
@@ -205,19 +205,17 @@ def app_archive(members: list[tuple[dict, bytes]]) -> bytes:
 
 
 def _app_download(url: str, size: int) -> bytes:
-    """The bytes at url, tried MAX_RETRIES times, never more than size + 1."""
+    """The bytes at url, tried MAX_RETRIES times, refused past size."""
     _network_allowed("the RetroBIOS app")
     for attempt in range(1, MAX_RETRIES + 1):
         try:
             with urllib.request.urlopen(url, timeout=60) as resp:
-                return resp.read(size + 1)
-        except urllib.error.HTTPError as exc:
-            if exc.code < 500 and exc.code != 429 or attempt == MAX_RETRIES:
+                return _read_limited(resp, size, url)
+        except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
+            delay = _retry_after_failure(exc, attempt, MAX_RETRIES)
+            if delay is None:
                 raise
-        except (urllib.error.URLError, OSError, http.client.HTTPException):
-            if attempt == MAX_RETRIES:
-                raise
-        time.sleep(_retry_delay(attempt, None))
+        time.sleep(delay)
     raise AssertionError("unreachable")
 
 
