@@ -28,8 +28,9 @@ from model.platforms import load_platform_config
 from core.ziptools import build_zip_contents_index
 from model.profiles import load_emulator_profiles
 from model.registry import list_registered_platforms, load_data_dir_registry
-from model.targets import build_target_cores_cache
+from model.targets import target_scope
 from resolve.localfile import resolution_is_hash_exact
+from resolve.nativemode import platform_mode
 from resolve.standalone import standalone_set as platform_standalone_set
 
 from packs.slots import ADDRESSEE, Claim, Conflict, Decision, arbitrate, find_conflicts
@@ -120,7 +121,8 @@ def format_conflict(conflict: Conflict) -> str:
 
 def scan_platform(
     platform: str, profiles: dict, db: dict, platforms_dir: str = PLATFORMS_DIR,
-    target_cores: set[str] | None = None,
+    target_cores: set[str] | None = None, zip_index: dict | None = None,
+    data_registry: dict | None = None,
 ) -> list[Conflict]:
     """Conflicts on one platform, using the cores that platform actually runs."""
     from model.platforms import load_platform_config
@@ -138,8 +140,8 @@ def scan_platform(
         db,
         config.get("base_destination", ""),
         platform_standalone_set(config),
-        build_zip_contents_index(db),
-        load_data_dir_registry(platforms_dir),
+        build_zip_contents_index(db) if zip_index is None else zip_index,
+        load_data_dir_registry(platforms_dir) if data_registry is None else data_registry,
     )
 
 
@@ -174,13 +176,13 @@ def main() -> int:
 
     import contextlib
 
-    from model.registry import load_data_dir_registry
     from packs.datadirs import hold_data_dirs
 
     # Claims resolve against data/: the trees stay put until the process
     # ends, which releases the hold.
     held = contextlib.ExitStack()
-    hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
+    data_registry = load_data_dir_registry(args.platforms_dir)
+    hold_data_dirs(held, data_registry)
 
     db = load_database(args.db)
     profiles = load_emulator_profiles(args.emulators_dir)
@@ -191,28 +193,25 @@ def main() -> int:
         if args.platform
         else list_registered_platforms(args.platforms_dir)
     )
-    target_cores: dict[str, set[str] | None] = {}
-    if args.target:
-        try:
-            target_cores, names = build_target_cores_cache(
-                names, args.target, args.platforms_dir, is_all=not args.platform
-            )
-        except (FileNotFoundError, ValueError) as exc:
-            parser.error(str(exc))
+    target_cores, names = target_scope(
+        names, args.target, args.platforms_dir, is_all=not args.platform
+    )
 
+    zip_index = build_zip_contents_index(db)
     found: dict[str, list[Conflict]] = {}
     collided: dict[str, list[Collision]] = {}
     for name in names:
         conflicts = scan_platform(
-            name, profiles, db, args.platforms_dir, target_cores.get(name)
+            name, profiles, db, args.platforms_dir, target_cores.get(name),
+            zip_index, data_registry,
         )
         if conflicts:
             found[name] = conflicts
         collisions = find_collisions(
             load_platform_config(name, args.platforms_dir),
             db,
-            build_zip_contents_index(db),
-            load_data_dir_registry(args.platforms_dir),
+            zip_index,
+            data_registry,
         )
         if collisions:
             collided[name] = collisions
@@ -247,7 +246,7 @@ def main() -> int:
         fixable = 0
         for platform, conflicts in found.items():
             config = load_platform_config(platform, args.platforms_dir)
-            mode = config.get("verification_mode", "existence")
+            mode = platform_mode(config)
             print(f"{platform}: {len(conflicts)} contradicted [{mode}]")
             for conflict in conflicts:
                 decision = arbitrate(conflict, mode, rule=config.get("hash_rule", ""))

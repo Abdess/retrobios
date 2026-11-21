@@ -272,8 +272,9 @@ def build_target_cores_cache(
         # The seventeen per-platform lines buried the one suggestion that
         # mattered: the refusal names the closest target across them all.
         raise ValueError(_unknown_target_message(target, platforms, platforms_dir))
+    # On stderr: slots --json printed them ahead of its document.
     for note in notes:
-        print(note)
+        print(note, file=sys.stderr)
     return cache, kept
 
 

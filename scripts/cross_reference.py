@@ -206,22 +206,15 @@ class _PlatformScope:
     run_anywhere: set[str]
 
 
-def _platform_scope(
-    args: argparse.Namespace, parser: argparse.ArgumentParser, profiles: dict[str, dict],
-) -> _PlatformScope:
-    from model.targets import load_target_config
+def _platform_scope(args: argparse.Namespace, profiles: dict[str, dict]) -> _PlatformScope:
+    from model.targets import target_scope
     from resolve.cores import resolve_platform_cores
 
-    try:
-        target_cores = (
-            load_target_config(args.platform, args.target, args.platforms_dir)
-            if args.target
-            else None
-        )
-    except (FileNotFoundError, ValueError) as exc:
-        # A typo ended in a traceback where verify and slots name the
-        # closest target.
-        parser.error(str(exc))
+    # A typo ended in a traceback where verify and slots name the closest
+    # target, and is refused the way they refuse it.
+    target_cores = target_scope(
+        [args.platform], args.target, args.platforms_dir
+    )[0].get(args.platform)
     config = load_platform_config(args.platform, args.platforms_dir)
     relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
     run_anywhere = (
@@ -321,7 +314,7 @@ def main() -> None:
     platform_scope: _PlatformScope | None = None
     standalone_cores: set[str] = set()
     if args.platform:
-        platform_scope = _platform_scope(args, parser, profiles)
+        platform_scope = _platform_scope(args, profiles)
         profiles = platform_scope.profiles
         standalone_cores = platform_scope.standalone_cores
     else:

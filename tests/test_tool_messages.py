@@ -292,6 +292,29 @@ class AMistypedTargetAcrossAllPlatforms(unittest.TestCase):
         self.assertEqual(out.getvalue(), "")
 
 
+class AMistypedTargetEndsEveryToolAlike(unittest.TestCase):
+    """--target swtich: verify exited 1, slots and cross_reference 2."""
+
+    def test_one_exit_status(self):
+        for script in ("verify.py", "slots.py", "cross_reference.py"):
+            with self.subTest(script=script):
+                proc = subprocess.run(
+                    [sys.executable, f"scripts/{script}", "--platform", "retroarch",
+                     "--target", "swtich"],
+                    cwd=REPO_ROOT, capture_output=True, text=True, check=False, timeout=300,
+                )
+                self.assertEqual(proc.returncode, 1, proc.stderr)
+                self.assertIn("ERROR:", proc.stderr)
+
+    def test_skipped_platforms_are_noted_on_stderr(self):
+        platforms = list_registered_platforms(str(REPO_ROOT / "platforms"))
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            build_target_cores_cache(platforms, "switch", str(REPO_ROOT / "platforms"), is_all=True)
+        self.assertEqual(out.getvalue(), "")
+        self.assertIn("INFO: Skipping", err.getvalue())
+
+
 class AMistypedDataKeyGetsTheClosestName(unittest.TestCase):
     """`--key dolphin-sis` printed all 27 keys on one line."""
 
