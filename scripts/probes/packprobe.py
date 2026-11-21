@@ -23,10 +23,10 @@ from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
 from model.systems import norm_system_id
 from model.targets import load_target_config
-from probes.content import Content, load_content, load_file, verify_identity
+from probes.content import Content, fetch_content, find_romfetch, load_content, load_file, verify_identity
 from probes.cores import buildbot_listing, cached_nightly
 from probes.entries import entry_dest
-from probes.host import CONTENT_FILE, PROBE_TIMEOUT, Unavailable, child_env, run_group, run_when_idle
+from probes.host import CONTENT_FILE, PROBE_TIMEOUT, Unavailable, run_group, run_when_idle
 from probes.packlayout import (
     Layout,
     ProbeFailure,
@@ -246,14 +246,10 @@ def content_folder(content: Content, fetch: bool) -> Path:
     """The game's folder, fetched through romfetch when absent and asked to."""
     folder = CONTENT_DIR / content.romfetch_system / content.name
     if not (folder / "identity.json").is_file() and fetch:
-        romfetch = shutil.which("romfetch")
+        romfetch = find_romfetch()
         if not romfetch:
             raise Unavailable("romfetch not found")
-        proc = subprocess.run([romfetch, "get", content.romfetch_system, content.name, "--json", "-q",
-                               "--content-dir", str(CONTENT_DIR)], capture_output=True, text=True,
-                              check=False, env=child_env(romfetch=True))
-        if proc.returncode != 0:
-            raise Unavailable(f"romfetch exit {proc.returncode} for {content.name!r}")
+        fetch_content(content, CONTENT_DIR, romfetch)
     verify_identity(folder)
     return folder
 

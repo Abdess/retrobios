@@ -255,6 +255,37 @@ class SitePages(unittest.TestCase):
         self.assertEqual(sitemarkup.inline_html("[x](../a.md)"), '<a href="../a.md">x</a>')
 
 
+class ContentFetch(unittest.TestCase):
+    """pack_probe fetches its games as the campaign does: romfetch named by
+    RETROBIOS_ROMFETCH, a transient failure tried again."""
+
+    def test_the_configured_romfetch_is_retried(self) -> None:
+        import subprocess
+        import unittest.mock
+
+        from probes import content as probecontent
+
+        work = TMP / "fetch"
+        shutil.rmtree(work, ignore_errors=True)
+        work.mkdir(parents=True)
+        fetcher = work / "my-romfetch"
+        fetcher.write_text("", encoding="utf-8")
+        game = probecontent.Content("snes", "snes", "Game (USA)", "no-intro", "", "usa", "", 60, 10,
+                                    False, None)
+        codes = [3, 0]
+        calls = []
+
+        def run(argv, **_kwargs):
+            calls.append(argv[0])
+            return subprocess.CompletedProcess(argv, codes[len(calls) - 1], "{}", "")
+
+        with unittest.mock.patch.dict(os.environ, {"RETROBIOS_ROMFETCH": str(fetcher), "PATH": ""}):
+            romfetch = probecontent.find_romfetch()
+            probecontent.fetch_content(game, work, romfetch, run=run, sleep=lambda _s: None,
+                                       log=lambda _m: None)
+        self.assertEqual(calls, [str(fetcher), str(fetcher)])
+
+
 class Lock(unittest.TestCase):
     """The probe lock is held for one core_probe run and released after it."""
 

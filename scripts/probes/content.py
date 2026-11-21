@@ -6,6 +6,10 @@ import contextlib
 import json
 import os
 import shutil
+import subprocess
+import sys
+import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -14,7 +18,7 @@ import yaml
 
 from core.hashing import file_digest
 from core.statefile import now_iso
-from probes.host import Unavailable, child_env
+from probes.host import NETWORK_DELAYS, Unavailable, child_env, run_group
 
 if TYPE_CHECKING:
     from probes.campaign import Campaign
@@ -101,6 +105,44 @@ def folder_size(folder: Path) -> int:
     return sum(p.stat().st_size for p in folder.rglob("*") if p.is_file())
 
 
+def find_romfetch(configured: str = "") -> str | None:
+    """romfetch as --romfetch or RETROBIOS_ROMFETCH names it, else on PATH."""
+    configured = configured or os.environ.get(ROMFETCH_ENV, "")
+    if configured:
+        return configured if Path(configured).is_file() or shutil.which(configured) else None
+    return shutil.which("romfetch")
+
+
+def _stderr(message: str) -> None:
+    print(message, file=sys.stderr)
+
+
+def fetch_content(content: Content, content_dir: Path, romfetch: str, *,
+                  run: Callable[..., subprocess.CompletedProcess] = run_group,
+                  sleep: Callable[[float], None] = time.sleep,
+                  delays: tuple[float, ...] = NETWORK_DELAYS,
+                  log: Callable[[str], None] = _stderr) -> None:
+    """romfetch get, run again after each delay while it fails for a
+    transient reason. Unavailable when it does not deliver."""
+    argv = [romfetch, "get", content.romfetch_system, content.name, "--json", "-q",
+            "--content-dir", str(content_dir)]
+    for attempt, delay in enumerate((*delays, None)):
+        proc = run(argv, capture_output=True, text=True, check=False,
+                   timeout=6 * 3600, env=child_env(romfetch=True))
+        if proc.returncode == 0:
+            log(f"romfetch {content.name}: {proc.stdout.strip()[:300]}")
+            return
+        code = "unknown"
+        with contextlib.suppress(ValueError, AttributeError, KeyError, TypeError):
+            code = json.loads(proc.stdout)["error"]["code"]
+        if proc.returncode != ROMFETCH_TRANSIENT or delay is None:
+            raise Unavailable(f"content: romfetch exit {proc.returncode} ({code}) "
+                              f"for {content.name!r}")
+        log(f"romfetch {content.name}: exit {proc.returncode} ({code}), "
+            f"retry {attempt + 1} in {delay}s")
+        sleep(delay)
+
+
 class ContentStore:
     """Content on disk, its users counted, the least recently used evicted
     past the cap. Only what the campaign fetched is ever deleted, and never
@@ -137,10 +179,7 @@ class ContentStore:
         return folder
 
     def romfetch(self) -> str | None:
-        configured = self.c.settings.romfetch or os.environ.get(ROMFETCH_ENV, "")
-        if configured:
-            return configured if Path(configured).is_file() or shutil.which(configured) else None
-        return shutil.which("romfetch")
+        return find_romfetch(self.c.settings.romfetch)
 
     def fetch(self, content: Content) -> None:
         command = self.romfetch()
@@ -148,23 +187,8 @@ class ContentStore:
             raise Unavailable(f"content: romfetch not found, {content.catalog} entry {content.name!r}")
         if not self.c.settings.network:
             raise Unavailable(f"content: offline, {content.catalog} entry {content.name!r}")
-        argv = [command, "get", content.romfetch_system, content.name, "--json", "-q",
-                "--content-dir", str(self.c.paths.content)]
-        for attempt, delay in enumerate((*self.c.settings.delays, None)):
-            proc = self.c.host.run(argv, capture_output=True, text=True, check=False,
-                                   timeout=6 * 3600, env=child_env(romfetch=True))
-            if proc.returncode == 0:
-                self.c.log(f"romfetch {content.name}: {proc.stdout.strip()[:300]}")
-                return
-            code = "unknown"
-            with contextlib.suppress(ValueError, AttributeError):
-                code = json.loads(proc.stdout)["error"]["code"]
-            if proc.returncode != ROMFETCH_TRANSIENT or delay is None:
-                raise Unavailable(f"content: romfetch exit {proc.returncode} ({code}) "
-                                  f"for {content.name!r}")
-            self.c.log(f"romfetch {content.name}: exit {proc.returncode} ({code}), "
-                       f"retry {attempt + 1} in {delay}s")
-            self.c.host.sleep(delay)
+        fetch_content(content, self.c.paths.content, command, run=self.c.host.run,
+                      sleep=self.c.host.sleep, delays=self.c.settings.delays, log=self.c.log)
 
     def release(self, content: Content, user: str) -> None:
         users = self.refs.get(content.key, set())
