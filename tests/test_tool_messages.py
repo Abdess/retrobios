@@ -882,13 +882,11 @@ class PlatformListsNameEveryPlatform(unittest.TestCase):
 
 class NoScriptReadsTheTokenOnItsOwn(unittest.TestCase):
     """Nine scripts read GITHUB_TOKEN from the environment after
-    github_token() existed, and went anonymous when run on their own.
-    download.py is the user's downloader: it runs without the repository and
-    a user's gh session is not its business."""
+    github_token() existed, and went anonymous when run on their own."""
 
     READS = ('environ.get("GITHUB_TOKEN"', "environ['GITHUB_TOKEN']",
              'environ["GITHUB_TOKEN"]', 'environ.get("GH_TOKEN"')
-    OWNERS = {"scripts/core/github.py", "scripts/download.py"}
+    OWNERS = {"scripts/core/github.py"}
 
     def test_every_reader_asks_github_token(self):
         for path in sorted((REPO_ROOT / "scripts").rglob("*.py")):
