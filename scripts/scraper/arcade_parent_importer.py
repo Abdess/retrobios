@@ -57,6 +57,7 @@ from core.cli import add_repo_inputs, run_cli
 from core.hashing import compute_hashes, git_blob_sha
 from core.upstream import parse_repo
 from .base_scraper import BlobMismatchError, download, fetch_verified_blob
+from .fbneo_parser import zip_name
 from .clex import DriverSourceError, blank_comments, call_args, call_span
 from .listxml import Opener, attrs, iter_elements, open_listxml, rom_members
 from model.mamerelease import mame_tag
@@ -247,7 +248,7 @@ def _fbneo_candidates(entry: SetEntry, names: dict[str, set[str]]) -> list[str]:
     drivers = names.get(entry.source or "", set())
     if entry.name in drivers:
         return [entry.name]
-    return sorted(n for n in drivers if "_" in n and n.split("_", 1)[1] == entry.name)
+    return sorted(n for n in drivers if "_" in n and zip_name(n) == entry.name)
 
 
 def _fbneo_driver_names(entries: list[SetEntry], names: dict[str, set[str]]) -> dict[str, str]:

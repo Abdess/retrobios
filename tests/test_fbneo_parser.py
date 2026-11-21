@@ -12,6 +12,7 @@ from scripts.scraper.fbneo_parser import (
     find_bios_sets,
     parse_fbneo_source_tree,
     parse_rom_info,
+    zip_name,
 )
 
 NEOGEO_FIXTURE = """\
@@ -83,8 +84,72 @@ struct BurnDriver BurnDrvmslug = {
 };
 """
 
+# d_snes.cpp: a console driver with its own GetZipName and a decimal size.
+SNES_FIXTURE = """\
+static struct BurnRomInfo snes_dsp1RomDesc[] = {
+	{ "dsp1.bin", 10240, 0x2838f9f5, BRF_ESS | BRF_PRG },
+};
+
+struct BurnDriver BurnDrvsnes_dsp1 = {
+	"snes_dsp1", NULL, NULL, NULL, "x",
+	"DSP-1\\0", NULL, "DSP microcode", "SNES / Super Famicom",
+	NULL, NULL, NULL, NULL,
+	BDF_BOARDROM, 1, HARDWARE_SNES, GBF_BIOS, 0,
+	SNESGetZipName, snes_dsp1RomInfo, snes_dsp1RomName, NULL, NULL, NULL, NULL, SNESInputInfo, SNESDIPInfo,
+	DrvInit, DrvExit, DrvFrame, DrvDraw, DrvScan, &DrvRecalc, 0x8000,
+	512, 448, 4, 3
+};
+"""
+
+# d_ngp.cpp: the board ROM driver has no GetZipName of its own, its games
+# open it through NgpGetZipName, and its RomDesc is not named after it.
+NGP_FIXTURE = """\
+static struct BurnRomInfo ngpc_ngpRomDesc[] = {
+	{ "SNK Neo-Geo Pocket BIOS (1998)(SNK)(en-ja).bin", 0x10000, 0x6232df8d, BRF_PRG | BRF_BIOS },
+	{ "SNK Neo-Geo Pocket Color BIOS (1999)(SNK)(en-ja).bin", 0x10000, 0x6EEB6F40, BRF_PRG | BRF_BIOS },
+};
+
+struct BurnDriver BurnDrvngpc_ngp = {
+	"ngp_ngp", NULL, NULL, NULL, "1998",
+	"NeoGeo Pocket (Bios)\\0", "BIOS only", "SNK", "NeoGeo Pocket",
+	NULL, NULL, NULL, NULL,
+	BDF_BOARDROM, 0, HARDWARE_SNK_NGP | HARDWARE_SNK_NGPC, GBF_BIOS, 0,
+	NULL, ngpc_ngpRomInfo, ngpc_ngpRomName, NULL, NULL, NULL, NULL, NgpInputInfo, NgpDIPInfo,
+	DrvInit, DrvExit, DrvFrame, k1geDraw, DrvScan, &BurnRecalc, 0x1000,
+	160, 152, 4, 3
+};
+
+struct BurnDriver BurnDrvngpc_bakumats = {
+	"ngp_bakumats", "ngp_lastblad", "ngp_ngp", NULL, "2000",
+	"Bakumatsu Rouman\\0", NULL, "SNK", "NeoGeo Pocket Color",
+	NULL, NULL, NULL, NULL,
+	BDF_GAME_WORKING, 1, HARDWARE_SNK_NGPC, GBF_VSFIGHT, 0,
+	NgpGetZipName, ngpc_bakumatsRomInfo, ngpc_bakumatsRomName, NULL, NULL, NULL, NULL, NgpInputInfo, NgpDIPInfo,
+	DrvInit, DrvExit, DrvFrame, k1geDraw, DrvScan, &BurnRecalc, 0x1000,
+	160, 152, 4, 3
+};
+"""
+
+
+class TestZipName(unittest.TestCase):
+    def test_cuts_the_system_prefix(self) -> None:
+        self.assertEqual(zip_name("msx_msx"), "msx")
+        self.assertEqual(zip_name("msx_1942"), "1942")
+        self.assertEqual(zip_name("snes_st010"), "st010")
+
+    def test_name_without_prefix_is_kept(self) -> None:
+        self.assertEqual(zip_name("neogeo"), "neogeo")
+
 
 class TestFindBiosSets(unittest.TestCase):
+    def test_console_driver_keyed_by_its_archive(self) -> None:
+        result = find_bios_sets(SNES_FIXTURE, "d_snes.cpp")
+        self.assertEqual(list(result), ["dsp1"])
+
+    def test_board_rom_keyed_by_what_its_games_open(self) -> None:
+        result = find_bios_sets(NGP_FIXTURE, "d_ngp.cpp")
+        self.assertEqual(list(result), ["ngp"])
+
     def test_detects_neogeo(self) -> None:
         result = find_bios_sets(NEOGEO_FIXTURE, "d_neogeo.cpp")
         self.assertIn("neogeo", result)
@@ -142,6 +207,10 @@ class TestParseRomInfo(unittest.TestCase):
         self.assertEqual(bios["name"], "pgm_p01s.rom")
         self.assertEqual(bios["crc32"], "e42b166e")
 
+    def test_decimal_size(self) -> None:
+        roms = parse_rom_info(SNES_FIXTURE, "snes_dsp1")
+        self.assertEqual(roms, [{"name": "dsp1.bin", "size": 10240, "crc32": "2838f9f5"}])
+
     def test_unknown_set_returns_empty(self) -> None:
         roms = parse_rom_info(NEOGEO_FIXTURE, "nonexistent")
         self.assertEqual(roms, [])
@@ -157,6 +226,15 @@ class TestParseSourceTree(unittest.TestCase):
             result = parse_fbneo_source_tree(tmpdir)
             self.assertIn("neogeo", result)
             self.assertEqual(len(result["neogeo"]["roms"]), 5)
+
+    def test_reads_the_rom_desc_the_driver_names(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            drv_dir = Path(tmpdir) / "src" / "burn" / "drv"
+            drv_dir.mkdir(parents=True)
+            (drv_dir / "d_ngp.cpp").write_text(NGP_FIXTURE)
+
+            result = parse_fbneo_source_tree(tmpdir)
+            self.assertEqual([r["crc32"] for r in result["ngp"]["roms"]], ["6232df8d", "6eeb6f40"])
 
     def test_skips_non_cpp(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

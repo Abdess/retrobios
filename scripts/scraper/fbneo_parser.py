@@ -2,7 +2,8 @@
 
 Parses BurnRomInfo structs (static ROM arrays) and BurnDriver structs
 (driver registration) from FBNeo C source files. BIOS sets are identified
-by the BDF_BOARDROM flag in BurnDriver definitions.
+by the BDF_BOARDROM flag in BurnDriver definitions, and keyed by the
+archive the driver opens.
 """
 
 from __future__ import annotations
@@ -13,8 +14,9 @@ from pathlib import Path
 
 from core.lines import LineIndex
 
+# Sizes are written in hex or decimal (d_snes.cpp: ``{ "dsp1.bin", 10240, ...``).
 _ROM_ENTRY_RE = re.compile(
-    r'\{\s*"([^"]+)"\s*,\s*(0x[\da-fA-F]+)\s*,\s*(0x[\da-fA-F]+)\s*,\s*([^}]+)\}',
+    r'\{\s*"([^"]+)"\s*,\s*(0x[\da-fA-F]+|\d+)\s*,\s*(0x[\da-fA-F]+)\s*,\s*([^}]+)\}',
 )
 
 _BURN_DRIVER_RE = re.compile(
@@ -22,40 +24,67 @@ _BURN_DRIVER_RE = re.compile(
     re.DOTALL,
 )
 
-_ROM_DESC_RE = re.compile(
-    r"static\s+struct\s+BurnRomInfo\s+(\w+)RomDesc\s*\[\s*\]\s*=\s*\{(.*?)\};",
-    re.DOTALL,
-)
+# The first three fields of a BurnDriver: name, parent, board ROM.
+_DRIVER_HEAD_RE = re.compile(r'\s*("[^"]*"|NULL)\s*,\s*("[^"]*"|NULL)\s*,\s*("[^"]*"|NULL)')
+
+# The GetZipName field of a BurnDriver and its RomInfo, which names the
+# RomDesc array (BurnDrvngpc_ngp is "ngp_ngp" and reads ngpc_ngpRomDesc).
+_ZIP_AND_ROMS_RE = re.compile(r"(\w+)\s*,\s*(\w+)RomInfo\s*,")
+
+
+def zip_name(driver: str) -> str:
+    """The archive a driver opens through a system GetZipName.
+
+    Every non-arcade GetZipName cuts the system prefix up to its underscore
+    (MSXGetZipName in d_msx.cpp: ``msx_msx`` opens msx.zip, ``msx_1942``
+    opens 1942.zip). The arcade drivers have none and open their own name.
+    """
+    return driver.split("_", 1)[1] if "_" in driver else driver
+
+
+def _quoted(field: str) -> str:
+    return field.strip('"') if field != "NULL" else ""
 
 
 def find_bios_sets(source: str, filename: str) -> dict[str, dict]:
     """Find BDF_BOARDROM drivers in source code.
 
-    Returns a dict mapping set name to metadata:
-        {set_name: {"source_file": str, "source_line": int}}
+    A board ROM set is keyed by the archive the games open it under: their
+    GetZipName reads the board ROM name too (``i == 1``), so ``ngp_ngp``,
+    whose own field is NULL, is looked up as ngp.zip by every NGP game.
+
+    Returns a dict mapping that archive to metadata:
+        {archive: {"source_file": str, "source_line": int, "rom_desc": str}}
     """
-    results: dict[str, dict] = {}
     lines = LineIndex(source)
+    boards: list[tuple[str, int, bool, str]] = []
+    zipped_boards: set[str] = set()
 
     for match in _BURN_DRIVER_RE.finditer(source):
         body = match.group(2)
+        head = _DRIVER_HEAD_RE.match(body)
+        fields = _ZIP_AND_ROMS_RE.search(body)
+        own_zip = fields is not None and fields.group(1) != "NULL"
+        if head and own_zip and _quoted(head.group(3)):
+            zipped_boards.add(_quoted(head.group(3)))
         if "BDF_BOARDROM" not in body:
             continue
-
         # Set name is the first quoted string in the struct body
         name_match = re.search(r'"([^"]+)"', body)
         if not name_match:
             continue
+        driver = name_match.group(1)
+        rom_desc = fields.group(2) if fields else driver
+        boards.append((driver, lines.line(match.start()), own_zip, rom_desc))
 
-        set_name = name_match.group(1)
-        line_num = lines.line(match.start())
-
-        results[set_name] = {
+    return {
+        (zip_name(driver) if own_zip or driver in zipped_boards else driver): {
             "source_file": filename,
-            "source_line": line_num,
+            "source_line": line,
+            "rom_desc": rom_desc,
         }
-
-    return results
+        for driver, line, own_zip, rom_desc in boards
+    }
 
 
 def parse_rom_info(source: str, set_name: str) -> list[dict]:
@@ -81,7 +110,7 @@ def parse_rom_info(source: str, set_name: str) -> list[dict]:
         name = entry.group(1)
         if not name:
             continue
-        size = int(entry.group(2), 16)
+        size = int(entry.group(2), 0)
         crc32 = format(int(entry.group(3), 16), "08x")
 
         roms.append(
@@ -101,7 +130,7 @@ def parse_fbneo_source_tree(base_path: str) -> dict[str, dict]:
     Scans .cpp files under src/burn/drv/ for BDF_BOARDROM drivers,
     then parses their associated BurnRomInfo arrays.
 
-    Returns a dict mapping set name to:
+    Returns a dict mapping the archive each driver opens to:
         {source_file, source_line, roms: [{name, size, crc32}, ...]}
     """
     drv_path = Path(base_path) / "src" / "burn" / "drv"
@@ -120,9 +149,9 @@ def parse_fbneo_source_tree(base_path: str) -> dict[str, dict]:
             rel_path = str(filepath.relative_to(base_path))
 
             bios_sets = find_bios_sets(source, rel_path)
-            for set_name, meta in bios_sets.items():
-                roms = parse_rom_info(source, set_name)
-                results[set_name] = {
+            for archive, meta in bios_sets.items():
+                roms = parse_rom_info(source, meta["rom_desc"])
+                results[archive] = {
                     "source_file": meta["source_file"],
                     "source_line": meta["source_line"],
                     "roms": roms,
