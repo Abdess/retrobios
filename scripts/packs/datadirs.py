@@ -15,11 +15,6 @@ import zipfile
 from collections.abc import Callable, Iterator
 from pathlib import Path
 
-try:
-    import yaml
-except ImportError:
-    yaml = None
-
 from core.artifacts import file_lock as _file_lock, set_plain_mode
 from core.cli import InputMissing
 from core.github import github_token
@@ -41,8 +36,6 @@ _TRANSIENT = (urllib.error.URLError, OSError, tarfile.TarError, zipfile.BadZipFi
 
 
 def load_registry(registry_path: str = DEFAULT_REGISTRY) -> dict[str, dict]:
-    if yaml is None:
-        raise ImportError("PyYAML required: pip install pyyaml")
     path = Path(registry_path)
     if not path.exists():
         raise InputMissing(f"Registry not found: {registry_path}")

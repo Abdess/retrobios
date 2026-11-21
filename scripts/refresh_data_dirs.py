@@ -18,10 +18,6 @@ import os
 from core.cli import suggest_names
 from model.cliargs import platform_arg, require_platform
 
-try:
-    import yaml
-except ImportError:
-    yaml = None
 from packs.datadirs import DEFAULT_REGISTRY, load_registry, log, refresh_all, refresh_entry
 
 

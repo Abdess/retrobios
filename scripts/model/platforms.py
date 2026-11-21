@@ -4,11 +4,6 @@ from __future__ import annotations
 
 import os
 
-try:
-    import yaml
-except ImportError:
-    yaml = None
-
 from core.paths import PLATFORMS_DIR, comparable_destination
 from model.sources import source_yaml_file
 
@@ -24,9 +19,6 @@ def _inherited_yaml(platform_name: str, platforms_dir: str) -> tuple[dict, list[
     its systems, so a child's overrides rewrote the parent for the rest of
     the run.
     """
-    if yaml is None:
-        raise ImportError("PyYAML required: pip install pyyaml")
-
     config_file = os.path.join(platforms_dir, f"{platform_name}.yml")
     if not os.path.exists(config_file):
         raise FileNotFoundError(f"Platform config not found: {config_file}")

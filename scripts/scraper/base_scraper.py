@@ -12,7 +12,6 @@ import time
 import urllib.error
 import urllib.request
 
-import yaml
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -21,7 +20,12 @@ from typing import Any, Callable, NoReturn, Protocol, TypeVar
 from core.github import github_token
 from core.artifacts import copy_stream_atomic, write_text_atomic
 from core.upstream import forge_headers as upstream_headers
-from model.safeparse import yaml_load
+from model.safeparse import require_yaml, yaml_load
+
+try:
+    import yaml
+except ImportError:
+    require_yaml()  # exits with the install hint
 
 
 @dataclass

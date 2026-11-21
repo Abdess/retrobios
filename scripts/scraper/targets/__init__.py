@@ -11,6 +11,7 @@ import pkgutil
 from abc import ABC, abstractmethod
 from pathlib import Path
 
+from model.safeparse import require_yaml
 from model.sourcerevision import platform_revision
 
 # Every target scraper reads the network through the platform scrapers'
@@ -48,14 +49,10 @@ class BaseTargetScraper(ABC):
 
     def write_output(self, data: dict, output_path: str) -> None:
         """Write target data to YAML file."""
-        try:
-            import yaml
-        except ImportError as exc:
-            raise ImportError("PyYAML required: pip install pyyaml") from exc
         from core.artifacts import write_text_atomic
 
         write_text_atomic(
-            output_path, yaml.dump(data, default_flow_style=False, sort_keys=False)
+            output_path, require_yaml().dump(data, default_flow_style=False, sort_keys=False)
         )
 
 

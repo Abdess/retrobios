@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import importlib.util
 import logging
 import subprocess
 import sys
@@ -37,9 +36,6 @@ def load_tracked_entries(
 
     Returns {decoded_zip_name: (key, source_url)}.
     """
-    if importlib.util.find_spec("yaml") is None:
-        print("Error: PyYAML required", file=sys.stderr)
-        sys.exit(1)
     with open(registry_path) as f:
         data = yaml_load(f) or {}
     entries: dict[str, tuple[str, str]] = {}

@@ -2976,6 +2976,20 @@ class AMissingDependencyStopsTheBuild(unittest.TestCase):
             self.assertIn("PyYAML required", proc.stderr)
             self.assertFalse(output.exists())
 
+    def test_every_yaml_command_stops_on_one_line(self):
+        """refresh_data_dirs and check_buildbot_system ended on a traceback."""
+        for command in (["scripts/refresh_data_dirs.py", "--dry-run"],
+                        ["scripts/check_buildbot_system.py"]):
+            with self.subTest(command=command[0]):
+                proc = subprocess.run(
+                    [sys.executable, "-S", *command],
+                    cwd=ROOT, capture_output=True, text=True, timeout=120, check=False,
+                )
+                self.assertEqual(proc.returncode, 1, proc.stdout)
+                self.assertEqual(
+                    proc.stderr.strip(), "Error: PyYAML required (pip install pyyaml)"
+                )
+
     def test_no_script_swallows_an_import_error(self):
         offenders = []
         for path in sorted((ROOT / "scripts").rglob("*.py")):
