@@ -6,11 +6,10 @@ was written against, so a permalink is pinned, never guessed."""
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
-from sitegen.sources import SOURCE_PATHS, TREE_CACHE, build_source_paths, keep_unread, read_record
+from sitegen.sources import SOURCE_PATHS, TREE_CACHE, refresh_record
 
 
 def main() -> int:
@@ -40,14 +39,9 @@ def main() -> int:
         print(f"Error: no tree cache at {', '.join(map(str, cache_dirs))}", file=sys.stderr)
         return 1
     from model.profiles import load_emulator_profiles
-    from core.artifacts import repository_output_lock, write_if_changed
 
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
-    with repository_output_lock(str(args.output)):
-        held, unread = build_source_paths(profiles, cache_dirs, args.fetch)
-        held = keep_unread(held, unread, read_record(args.output))
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        write_if_changed(str(args.output), json.dumps(held, indent=1, sort_keys=True) + "\n")
+    held, unread = refresh_record(profiles, cache_dirs, args.fetch, args.output)
     print(f"{sum(map(len, held.values()))} paths held in {len(held)} trees, "
           f"{len(unread)} trees not cached: {args.output}")
     return 0

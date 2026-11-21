@@ -5158,7 +5158,7 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
         with mock.patch.object(sources, "build_source_paths", return_value=({}, [])) as built, \
                 mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
                 mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
-                mock.patch("core.artifacts.write_if_changed") as written, \
+                mock.patch.object(sources, "write_if_changed") as written, \
                 contextlib.redirect_stderr(io.StringIO()):
             profiling_run.WRITTEN_PROFILES.clear()
             profile_sync._refresh_source_paths(self._args())
@@ -5189,13 +5189,36 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
             profile.write_text('emulator: P\nsource_commit: "new"\n', encoding="utf-8")
             with mock.patch.object(sources, "build_source_paths", return_value=({}, [])) as built, \
                     mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
-                    mock.patch("core.artifacts.write_if_changed"), \
+                    mock.patch.object(sources, "write_if_changed"), \
                     contextlib.redirect_stderr(io.StringIO()), \
                     contextlib.redirect_stdout(io.StringIO()):
                 profiling_run.WRITTEN_PROFILES.add("p")
                 self.addCleanup(profiling_run.WRITTEN_PROFILES.clear)
                 profile_sync._refresh_source_paths(self._args(emulators_dir=tmp))
             self.assertEqual(built.call_args[0][0]["p"]["source_commit"], "new")
+
+    def test_the_record_waits_for_a_run_holding_the_repository(self):
+        """profile_sync rewrote source-paths.json without the repository
+        hold sitesources takes, in the middle of a pipeline run."""
+        from unittest import mock
+
+        from core.artifacts import ArtifactLockBusy
+        from sitegen import sources
+
+        busy = mock.MagicMock()
+        busy.__enter__.side_effect = ArtifactLockBusy("another run is writing")
+        with mock.patch.object(sources, "repository_output_lock", return_value=busy) as lock, \
+                mock.patch.object(sources, "build_source_paths") as built, \
+                mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
+                mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
+                contextlib.redirect_stderr(io.StringIO()) as err:
+            profiling_run.WRITTEN_PROFILES.add("x")
+            self.addCleanup(profiling_run.WRITTEN_PROFILES.clear)
+            profile_sync._refresh_source_paths(self._args())
+        lock.assert_called_once_with(str(sources.SOURCE_PATHS))
+        self.assertFalse(built.called)
+        self.assertIn("sitesources.py --fetch", err.getvalue())
+
 
 class AnUnreadTreeKeepsItsRecord(unittest.TestCase):
     """sitesources --fetch, rate-limited by GitLab, dropped about twenty

@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from core import upstream
+from core.artifacts import repository_output_lock, write_if_changed
 from core.paths import REPO_ROOT
 from model.sourceref import (
     HEX_ADDRESS_RE,
@@ -368,6 +369,19 @@ def read_record(path: Path) -> dict[str, list[str]]:
         return json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError:
         return {}
+
+
+def refresh_record(
+    profiles: dict, cache_dirs: list[Path], fetch: bool, output: Path = SOURCE_PATHS,
+) -> tuple[dict[str, list[str]], list[str]]:
+    """Rebuild and write the record of cited source paths, under the
+    repository hold when *output* is one of its outputs (website/)."""
+    with repository_output_lock(str(output)):
+        held, unread = build_source_paths(profiles, cache_dirs, fetch)
+        held = keep_unread(held, unread, read_record(output))
+        output.parent.mkdir(parents=True, exist_ok=True)
+        write_if_changed(str(output), json.dumps(held, indent=1, sort_keys=True) + "\n")
+    return held, unread
 
 
 def _commit_url(repo: upstream.Repo, pin: str) -> str:
