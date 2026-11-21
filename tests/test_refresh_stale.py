@@ -188,6 +188,49 @@ class Planning(unittest.TestCase):
         self.assertEqual(surfaced, [])
 
 
+class ProducedRows(unittest.TestCase):
+    """The rows the checks write are the ones the planner knows: a renamed
+    row would otherwise leave its refresher unplanned with the suite green."""
+
+    def _stale(self, row) -> dict:
+        from dataclasses import asdict, replace
+
+        return asdict(replace(row, status="STALE"))
+
+    def test_catalog_rows_reach_their_importers(self):
+        from freshness import catalogs
+
+        with tempfile.TemporaryDirectory() as cache:
+            rows = [
+                catalogs._check_mame(cache, True),
+                catalogs._check_fbneo(cache, True),
+                catalogs._check_nointro_games(cache, True),
+                catalogs._check_redump_games(True),
+            ]
+        jobs, surfaced, _ = plan_jobs([self._stale(r) for r in rows], REGISTRY, {})
+        sources = {job.subject: job.command[job.command.index("--source") + 1] for job in jobs}
+        self.assertEqual(sources, {
+            "mame recipes": "mame", "fbneo recipes": "fbneo",
+            "no-intro games": "no-intro", "redump games": "redump",
+        })
+        self.assertEqual(surfaced, [])
+
+    def test_the_installer_pin_row_reaches_its_script(self):
+        from freshness import ci
+
+        jobs, surfaced, _ = plan_jobs([self._stale(ci._check_installer_pins())], REGISTRY, {})
+        self.assertEqual([job.command[1:] for job in jobs], [["scripts/pin_installer.py"]])
+        self.assertEqual(surfaced, [])
+
+    def test_the_unprofiled_cores_row_is_surfaced(self):
+        from freshness import targets
+
+        rows = targets._unresolved_findings("batocera", {"newcore": []})
+        jobs, surfaced, _ = plan_jobs([self._stale(r) for r in rows], REGISTRY, {})
+        self.assertEqual(jobs, [])
+        self.assertEqual([f["subject"] for f in surfaced], ["batocera cores"])
+
+
 class Running(unittest.TestCase):
     def test_a_child_starts_after_its_parent_ends(self):
         with tempfile.TemporaryDirectory() as directory:

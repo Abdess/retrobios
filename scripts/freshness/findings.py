@@ -14,6 +14,25 @@ OK, STALE, UNKNOWN, ERROR, SKIPPED = "OK", "STALE", "UNKNOWN", "ERROR", "SKIPPED
 # Every status a finding may carry, in the order the summary counts them.
 STATUSES = (STALE, UNKNOWN, ERROR, SKIPPED, OK)
 
+# Subjects the refresh planner (freshness.stalecommands) picks a command by:
+# the checks name their rows with these, so a rename reaches both sides.
+NO_INTRO_GAMES = "no-intro games"
+REDUMP_GAMES = "redump games"
+MAME_RECIPES = "mame recipes"
+FBNEO_RECIPES = "fbneo recipes"
+INSTALLER_PIN = "install.py pin"
+_UNPROFILED_CORES = " cores"
+
+
+def unprofiled_cores_subject(platform: str) -> str:
+    """The targets row listing the core names of a platform no profile claims."""
+    return f"{platform}{_UNPROFILED_CORES}"
+
+
+def is_unprofiled_cores(subject: str) -> bool:
+    """Whether a targets row is the backlog of unprofiled names, not a target file."""
+    return subject.endswith(_UNPROFILED_CORES)
+
 
 @dataclass(frozen=True)
 class Finding:

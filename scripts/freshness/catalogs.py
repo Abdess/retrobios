@@ -13,7 +13,10 @@ from core import upstream
 from core.paths import REPO_ROOT
 from scripts.scraper import game_dat_importer
 from scripts.scraper.redump_dat_scraper import fetch_snapshot
-from freshness.findings import OK, SKIPPED, STALE, UNKNOWN, Finding
+from freshness.findings import (
+    FBNEO_RECIPES, MAME_RECIPES, NO_INTRO_GAMES, OK, REDUMP_GAMES, SKIPPED, STALE, UNKNOWN,
+    Finding,
+)
 
 
 NO_INTRO_MIRROR = game_dat_importer.NOINTRO_MIRROR
@@ -90,7 +93,7 @@ def _check_nointro_games(cache_dir: str, offline: bool) -> Finding:
     """games/catalogs/no-intro/ against the pack it was read from. The pack
     holds every DAT: rebuilt after the catalogs were read, it may carry
     games the games-on-card mode does not recognise."""
-    subject = "no-intro games"
+    subject = NO_INTRO_GAMES
     fetched = min((str(doc.get("fetched", "")) for doc in _game_catalogs("no-intro")), default="")
     if offline:
         return Finding("catalogs", subject, SKIPPED, local=fetched, detail="offline")
@@ -118,7 +121,7 @@ def redump_datfile_version(code: str) -> str:
 def _check_redump_games(offline: bool) -> Finding:
     """games/catalogs/redump/ against the datfiles redump.info serves now.
     A disc dumped since is not recognised by the games-on-card mode."""
-    subject = "redump games"
+    subject = REDUMP_GAMES
     local = {doc.get("system"): str(doc.get("version", "")) for doc in _game_catalogs("redump")}
     newest = max(local.values(), default="")
     if offline:
@@ -218,13 +221,13 @@ def _check_mame(cache_dir: str, offline: bool) -> Finding:
     versions = mame_versions(local)
     newest = versions[-1] if versions else "none"
     if offline:
-        return Finding("catalogs", "mame recipes", SKIPPED, local=newest, detail="offline")
+        return Finding("catalogs", MAME_RECIPES, SKIPPED, local=newest, detail="offline")
     release = upstream.latest_release(upstream.parse_repo(MAME_REPO), cache_dir, offline)
     if release is None:
-        return Finding("catalogs", "mame recipes", UNKNOWN, local=newest, detail="no release seen")
+        return Finding("catalogs", MAME_RECIPES, UNKNOWN, local=newest, detail="no release seen")
     return Finding(
         "catalogs",
-        "mame recipes",
+        MAME_RECIPES,
         OK if release.tag in versions else STALE,
         local=newest,
         remote=f"{release.tag} ({release.date})",
@@ -257,7 +260,7 @@ def _check_fbneo(cache_dir: str, offline: bool) -> Finding:
     local = _snapshot(REPO_ROOT / "recipes" / "fbneo.json")
     imported = str(local.get("imported_at", ""))
     if offline:
-        return Finding("catalogs", "fbneo recipes", SKIPPED, local=imported, detail="offline")
+        return Finding("catalogs", FBNEO_RECIPES, SKIPPED, local=imported, detail="offline")
     repo = upstream.parse_repo(FBNEO_REPO)
     listing = upstream.cached_api(
         f"{repo.api_base}/repos/{repo.slug}/contents/dats",
@@ -266,12 +269,12 @@ def _check_fbneo(cache_dir: str, offline: bool) -> Finding:
         upstream.MOVING_TTL,
     )
     if not isinstance(listing, list):
-        return Finding("catalogs", "fbneo recipes", UNKNOWN, local=imported, detail="dats/ listing unavailable")
+        return Finding("catalogs", FBNEO_RECIPES, UNKNOWN, local=imported, detail="dats/ listing unavailable")
     drifted, tracked = fbneo_blob_drift(local, listing)
     if not tracked:
         return Finding(
             "catalogs",
-            "fbneo recipes",
+            FBNEO_RECIPES,
             STALE,
             local=imported,
             detail="snapshot records no upstream blobs: re-import with --fetch",
@@ -279,7 +282,7 @@ def _check_fbneo(cache_dir: str, offline: bool) -> Finding:
     shown = ", ".join(n.removeprefix("FinalBurn Neo (ClrMame Pro XML, ").removesuffix(" only).dat") for n in drifted[:4])
     return Finding(
         "catalogs",
-        "fbneo recipes",
+        FBNEO_RECIPES,
         STALE if drifted else OK,
         local=imported,
         remote=f"{len(listing)} DATs listed",

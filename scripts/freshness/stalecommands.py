@@ -8,6 +8,9 @@ from functools import lru_cache
 
 from core.paths import DATA_DIRS_FILE, REPO_ROOT
 from model.registry import data_dir_registry_at
+from freshness.findings import (
+    FBNEO_RECIPES, INSTALLER_PIN, MAME_RECIPES, NO_INTRO_GAMES, REDUMP_GAMES, is_unprofiled_cores,
+)
 from freshness.scrapers import rescrape_command
 
 DATA_DIRS_REGISTRY = REPO_ROOT / DATA_DIRS_FILE
@@ -50,7 +53,7 @@ def _platform_command(subject: str, registry: dict[str, dict]) -> list[str] | No
 def _target_command(subject: str, registry: dict[str, dict]) -> list[str] | None:
     # "<platform> cores" rows list buildbot names without a profile. No
     # scraper fixes that, a human writes `cores:` or _overrides.yml.
-    if subject.endswith(" cores"):
+    if is_unprofiled_cores(subject):
         return None
     return rescrape_command("targets", subject, f"platforms/targets/{subject}.yml")
 
@@ -69,33 +72,29 @@ def _data_command(subject: str, registry: dict[str, dict]) -> list[str] | None:
     ]
 
 
+# The romset recipes and the game DATs each importer fetches, by row.
+_RECIPE_SOURCES = {MAME_RECIPES: "mame", FBNEO_RECIPES: "fbneo"}
+_GAME_SOURCES = {NO_INTRO_GAMES: "no-intro", REDUMP_GAMES: "redump"}
+
+
 def _catalog_command(subject: str, registry: dict[str, dict]) -> list[str] | None:
-    if subject == "mame recipes":
+    if subject in _RECIPE_SOURCES:
         return [
             sys.executable,
             "-m",
             "scripts.scraper.romset_dat_importer",
             "--source",
-            "mame",
+            _RECIPE_SOURCES[subject],
             "--fetch",
         ]
-    if subject == "fbneo recipes":
-        return [
-            sys.executable,
-            "-m",
-            "scripts.scraper.romset_dat_importer",
-            "--source",
-            "fbneo",
-            "--fetch",
-        ]
-    if subject in ("no-intro games", "redump games"):
+    if subject in _GAME_SOURCES:
         # The game DATs download without a browser, unlike the BIOS ones.
         return [
             sys.executable,
             "-m",
             "scripts.scraper.game_dat_importer",
             "--source",
-            subject.split()[0],
+            _GAME_SOURCES[subject],
             "--fetch",
             "--refresh",
             "--floor",
@@ -121,7 +120,7 @@ def command_for(
         # truth comes first and the original follows (Job.then).
         return truth_refresh(subject)
 
-    if area == "ci" and subject == "install.py pin":
+    if area == "ci" and subject == INSTALLER_PIN:
         # The pin is the hash of the committed install.py, nothing to judge.
         return [sys.executable, "scripts/pin_installer.py"]
 

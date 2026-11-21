@@ -8,7 +8,7 @@ import re
 from core import upstream
 from core.paths import REPO_ROOT
 from installer_build import pins as installer_build_pins
-from freshness.findings import OK, SKIPPED, STALE, UNKNOWN, Finding
+from freshness.findings import INSTALLER_PIN, OK, SKIPPED, STALE, UNKNOWN, Finding
 
 
 PYPI_URL = "https://pypi.org/pypi/{name}/json"
@@ -189,7 +189,7 @@ def _check_installer_pins() -> Finding:
     stale = installer_build_pins.stale_pins(REPO_ROOT)
     return Finding(
         "ci",
-        "install.py pin",
+        INSTALLER_PIN,
         STALE if stale else OK,
         local=installer_build_pins.installer_sha256(REPO_ROOT)[:12],
         detail=(

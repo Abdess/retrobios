@@ -11,7 +11,9 @@ from pathlib import Path
 from model.profiles import upstream_profile_index
 from model.sources import source_yaml_file
 from model.targets import apply_target_overrides, platform_overrides, read_target_overrides
-from freshness.findings import ERROR, OK, SHOWN_NAMES, SKIPPED, STALE, UNKNOWN, Finding
+from freshness.findings import (
+    ERROR, OK, SHOWN_NAMES, SKIPPED, STALE, UNKNOWN, Finding, unprofiled_cores_subject,
+)
 from freshness.platformdiff import diff_targets
 from freshness.rescrape import scrape_into_copy
 from freshness.scrapers import target_scrapers
@@ -161,7 +163,7 @@ def _unresolved_findings(platform: str, missing: dict[str, list[str]]) -> list[F
     return [
         Finding(
             "targets",
-            f"{platform} cores",
+            unprofiled_cores_subject(platform),
             STALE,
             local=f"{len(names)} without a profile",
             detail=f"cores: alias or _overrides remove_cores needed for {shown}",
