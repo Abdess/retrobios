@@ -2745,6 +2745,21 @@ class TestWriteDryRun(unittest.TestCase):
         self.assertIn("p: not written: o/n@pin:a.c is not in the offline cache", err.getvalue())
         self.assertEqual(self.path.read_bytes(), before)
 
+    def test_a_recale_held_by_the_bump_names_the_bump_refusal(self):
+        """The pass guessed why the pin would not follow and named the prose
+        on a profile bump_commit had refused for the build a platform ships."""
+        sample = SAMPLE + "built_by: [recalbox]\n"
+        self.path.write_text(sample, encoding="utf-8")
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            self._run(self._args(rebase_refs=True, dry_run=False), self._shifted(), sample)
+        self.assertEqual(self.path.read_text(), sample)
+        self.assertIn(
+            "p: refs recaled but the pin will not follow, so nothing was written: "
+            "pinned to the build recalbox ships, advanced by hand",
+            err.getvalue(),
+        )
+        self.assertNotIn("prose", err.getvalue())
+
     def test_rebase_states_the_move_and_leaves_the_file(self):
         before = self.path.read_text()
         output = self._run(self._args(rebase_refs=True), self._shifted())
@@ -2771,7 +2786,7 @@ class TestWriteDryRun(unittest.TestCase):
             entries=[EntryReport("a.bin", "a.c:10-12", "ANCHORED", [part])],
             counts={"ANCHORED": 1},
         )
-        self.assertFalse(bump_commit(self.path, report))
+        self.assertFalse(bump_commit(self.path, report).moved)
         self.assertEqual(self._run(self._args(bump_commit=True), report), "")
 
     def test_two_writing_pins_give_two_readings(self):
@@ -3068,7 +3083,7 @@ class TestDeliberatelyFrozenPin(TestBuildReport):
         path = Path(self.dir) / "p.yml"
         path.write_text(SAMPLE, encoding="utf-8")
         self.assertEqual(rebase_refs(path, report), [])
-        self.assertFalse(bump_commit(path, report))
+        self.assertFalse(bump_commit(path, report).moved)
 
     def test_the_builds_platforms_hold_say_so(self):
         # reicast is the commit Recalbox's reicast.mk builds, 789 commits
@@ -3324,7 +3339,7 @@ class TestBumpCommit(unittest.TestCase):
             counts={"SHIFTED": 1},
         )
         self.assertEqual(rebase.pending_recale(report), 1)
-        self.assertFalse(bump_commit(self.path, report))
+        self.assertFalse(bump_commit(self.path, report).moved)
 
     def test_a_profile_citing_nothing_advances(self):
         # anarch's pin sat behind HEAD through every bulk advance: the
@@ -3334,7 +3349,7 @@ class TestBumpCommit(unittest.TestCase):
             skipped=resolver.NO_SOURCE_REF,
         )
         report.upstream_head, report.upstream_pin = "uphead", "uppin"
-        self.assertTrue(bump_commit(self.path, report))
+        self.assertTrue(bump_commit(self.path, report).moved)
         text = self.path.read_text(encoding="utf-8")
         self.assertIn("newhead", text)
         # Nothing was compared upstream, so its pin is not written.
@@ -3361,22 +3376,22 @@ class TestBumpCommit(unittest.TestCase):
             bump.shipping_platforms("advanced_drastic", self.tmp.name, platforms),
             ["knulli"],
         )
-        with contextlib.redirect_stderr(io.StringIO()) as err:
-            self.assertFalse(bump_commit(path, report, platforms_dir=platforms))
-        self.assertIn("only knulli ships it", err.getvalue())
+        refused = bump_commit(path, report, platforms_dir=platforms)
+        self.assertFalse(refused.moved)
+        self.assertIn("only knulli ships it", refused.refusal or "")
         path.write_text(
             path.read_text(encoding="utf-8")
             + 'pin_follows: "KNULLI builds the branch tip"\n',
             encoding="utf-8",
         )
-        self.assertTrue(bump_commit(path, report, platforms_dir=platforms))
+        self.assertTrue(bump_commit(path, report, platforms_dir=platforms).moved)
 
     def test_any_other_skip_still_holds_the_pin(self):
         report = ProfileReport(
             name="p", repo="o/n", pin="pin", head="newhead", entries=[], counts={},
             skipped="rate limited: gitlab.com",
         )
-        self.assertFalse(bump_commit(self.path, report))
+        self.assertFalse(bump_commit(self.path, report).moved)
 
     def test_accepted_when_nothing_had_to_move(self):
         part = PartResult(
@@ -3390,7 +3405,7 @@ class TestBumpCommit(unittest.TestCase):
             counts={"ANCHORED": 1},
         )
         self.assertEqual(rebase.pending_recale(report), 0)
-        self.assertTrue(bump_commit(self.path, report))
+        self.assertTrue(bump_commit(self.path, report).moved)
 
     def test_refused_on_a_build_a_platform_compiles(self):
         # mame0258 documents the MAME Recalbox builds: libretro/mame HEAD
@@ -3406,8 +3421,9 @@ class TestBumpCommit(unittest.TestCase):
             ],
             counts={"ANCHORED": 1},
         )
-        with contextlib.redirect_stderr(io.StringIO()):
-            self.assertFalse(bump_commit(self.path, report))
+        refused = bump_commit(self.path, report)
+        self.assertFalse(refused.moved)
+        self.assertIn("recalbox ships, advanced by hand", refused.refusal or "")
         self.assertNotIn("newhead", self.path.read_text())
 
     def test_a_build_of_the_branch_tip_follows_it(self):
@@ -3428,7 +3444,7 @@ class TestBumpCommit(unittest.TestCase):
             ],
             counts={"ANCHORED": 1},
         )
-        self.assertTrue(bump_commit(self.path, report))
+        self.assertTrue(bump_commit(self.path, report).moved)
         self.assertIn("newhead", self.path.read_text())
 
     def test_a_config_read_at_the_pin_follows_it(self):
@@ -3460,7 +3476,7 @@ class TestBumpCommit(unittest.TestCase):
             entries=[EntryReport("a.bin", "a.c:10-12", "ANCHORED", [part])],
             counts={"ANCHORED": 1},
         )
-        self.assertTrue(bump_commit(self.path, report))
+        self.assertTrue(bump_commit(self.path, report).moved)
         document = yaml.safe_load(self.path.read_text(encoding="utf-8"))
         self.assertEqual(document["source_commit"], head)
         self.assertEqual([r["revision"] for r in document["config_reads"]], [head, "b" * 40])
@@ -3479,9 +3495,9 @@ class TestBumpCommit(unittest.TestCase):
                 entries=[EntryReport("a.bin", "libretro.c:10-12", "ANCHORED", [part])],
                 counts={"ANCHORED": 1},
             )
-        self.assertFalse(bump_commit(self.path, report("up/n")))
+        self.assertFalse(bump_commit(self.path, report("up/n")).moved)
         self.assertNotIn("newhead", self.path.read_text())
-        self.assertTrue(bump_commit(self.path, report(None)))
+        self.assertTrue(bump_commit(self.path, report(None)).moved)
 
     def test_a_bump_alone_waits_for_the_recale(self):
         """lrps2 at 0 to review with two SHIFTED parts: --bump-commit run
@@ -3492,10 +3508,10 @@ class TestBumpCommit(unittest.TestCase):
             entries=[EntryReport("a.bin", "a.c:10-12", "SHIFTED", [part])],
             counts={"SHIFTED": 1},
         )
-        self.assertFalse(bump_commit(self.path, report))
+        self.assertFalse(bump_commit(self.path, report).moved)
         self.assertNotIn("newhead", self.path.read_text())
         self.assertEqual(rebase_refs(self.path, report), ["a.c:10-12 -> a.c:30-32"])
-        self.assertTrue(bump_commit(self.path, report))
+        self.assertTrue(bump_commit(self.path, report).moved)
 
     def test_an_upstream_on_its_release_tag_stays_there(self):
         """GroovyMAME's upstream_commit is the mame0289 tag it merged: a bump
@@ -3510,7 +3526,7 @@ class TestBumpCommit(unittest.TestCase):
             upstream_pin="uptag", upstream_head="uphead",
             upstream_origin="upstream_commit", upstream_tag="mame0289",
         )
-        self.assertTrue(bump_commit(self.path, report))
+        self.assertTrue(bump_commit(self.path, report).moved)
         written = yaml.safe_load(self.path.read_text())
         self.assertEqual(written["source_commit"], "newhead")
         self.assertNotIn("upstream_commit", written)
@@ -3526,7 +3542,7 @@ class TestBumpCommit(unittest.TestCase):
             counts={"ANCHORED": 1},
             upstream_pin="uppin", upstream_head="uphead", upstream_origin="upstream_commit",
         )
-        self.assertTrue(bump_commit(self.path, report))
+        self.assertTrue(bump_commit(self.path, report).moved)
         written = yaml.safe_load(self.path.read_text())
         self.assertEqual(written["source_commit"], "newhead")
         self.assertEqual(written["upstream_commit"], "uphead")
@@ -3548,7 +3564,7 @@ class TestBumpCommit(unittest.TestCase):
         )
         before = self.path.read_text(encoding="utf-8")
         with contextlib.redirect_stderr(io.StringIO()):
-            self.assertFalse(bump_commit(self.path, report))
+            self.assertFalse(bump_commit(self.path, report).moved)
         self.assertEqual(self.path.read_text(encoding="utf-8"), before)
 
     def test_refused_when_pinned_to_a_superseded_tag(self):
@@ -3556,21 +3572,21 @@ class TestBumpCommit(unittest.TestCase):
             name="p", repo="o/n", pin="pin", head="newhead",
             entries=[], counts={"ANCHORED": 3}, pinned_tag="v1.6.0",
         )
-        self.assertFalse(bump_commit(self.path, report))
+        self.assertFalse(bump_commit(self.path, report).moved)
 
     def test_refused_while_a_changed_remains(self):
         report = ProfileReport(
             name="p", repo="o/n", pin="pin", head="newhead",
             entries=[], counts={"CHANGED": 1},
         )
-        self.assertFalse(bump_commit(self.path, report))
+        self.assertFalse(bump_commit(self.path, report).moved)
 
     def test_accepted_when_everything_anchors(self):
         report = ProfileReport(
             name="p", repo="o/n", pin="pin", head="newhead",
             entries=[], counts={"ANCHORED": 3, "SHIFTED": 1},
         )
-        self.assertTrue(bump_commit(self.path, report))
+        self.assertTrue(bump_commit(self.path, report).moved)
         self.assertEqual(
             yaml.safe_load(self.path.read_text())["source_commit"], "newhead"
         )
@@ -4425,7 +4441,7 @@ class TestRebaseProse(unittest.TestCase):
         written = self.path.read_text()
         self.assertEqual(written, text.replace("(a.c:10)", "(a.c:14)"))
         self.assertEqual(rebase.pending_recale(report, text=written), 0)
-        self.assertTrue(bump_commit(self.path, report))
+        self.assertTrue(bump_commit(self.path, report).moved)
 
     def test_a_refused_recale_names_the_citation_and_writes_nothing(self):
         # The structured ref could move, the prose could not: the run
@@ -4534,7 +4550,7 @@ class TestPendingProse(unittest.TestCase):
         report = self._report([part])
         text = self.path.read_text()
         self.assertEqual(rebase.pending_recale(report, text=text), 1)
-        self.assertFalse(bump_commit(self.path, report))
+        self.assertFalse(bump_commit(self.path, report).moved)
         self.assertEqual(
             yaml.safe_load(self.path.read_text())["source_commit"], "pin"
         )
@@ -4543,7 +4559,7 @@ class TestPendingProse(unittest.TestCase):
         part = PartResult(RefPart("a.c", 10, 10, "10"), "SHIFTED", None, 14, 14, [])
         report = self._report([part])
         rebase_refs(self.path, report)
-        self.assertTrue(bump_commit(self.path, report))
+        self.assertTrue(bump_commit(self.path, report).moved)
         self.assertEqual(
             yaml.safe_load(self.path.read_text())["source_commit"], "newhead"
         )
@@ -4554,7 +4570,7 @@ class TestPendingProse(unittest.TestCase):
         self.assertEqual(
             rebase.pending_recale(report, text=self.path.read_text()), 0
         )
-        self.assertTrue(bump_commit(self.path, report))
+        self.assertTrue(bump_commit(self.path, report).moved)
 
     def test_unwritable_prose_blocks_the_pin(self):
         self.path.write_text(FOLDED_TWICE, encoding="utf-8")
@@ -4564,7 +4580,7 @@ class TestPendingProse(unittest.TestCase):
             "twice", "q.c:7", "SHIFTED", [part], "prose", "twice"
         )
         self.assertEqual(rebase_refs(self.path, report), [])
-        self.assertFalse(bump_commit(self.path, report))
+        self.assertFalse(bump_commit(self.path, report).moved)
 
 
 class TestWrappedProse(unittest.TestCase):
@@ -4631,7 +4647,7 @@ class TestWrappedProse(unittest.TestCase):
         self.assertEqual(len(rebase_refs(self.path, report)), 1)
         text = self.path.read_text()
         self.assertIn("(libretro.cpp:\n  2381-2382, 2438-2442) and by", text)
-        self.assertTrue(bump_commit(self.path, report))
+        self.assertTrue(bump_commit(self.path, report).moved)
 
     def test_a_break_before_the_colon_moves_the_next_line(self):
         # playdiaemu wrote `.../src/content.rs` and `:111-199` one line apart.
@@ -4650,7 +4666,7 @@ class TestWrappedProse(unittest.TestCase):
             ["adam: src/content.rs:111-199 -> src/content.rs:111-204"],
         )
         self.assertIn("(src/content.rs\n  :111-204). No", self.path.read_text())
-        self.assertTrue(bump_commit(self.path, report, accept_changed=True))
+        self.assertTrue(bump_commit(self.path, report, accept_changed=True).moved)
 
 
 class TestOpcodeCache(unittest.TestCase):
@@ -4726,7 +4742,7 @@ class TestCommentCitations(unittest.TestCase):
             self.path.read_text(),
             self.TEXT.replace("src/cpu.c:3212-3451", "src/cpu.c:3268-3507"),
         )
-        self.assertTrue(bump_commit(self.path, report))
+        self.assertTrue(bump_commit(self.path, report).moved)
 
     def test_a_renamed_comment_path_is_rewritten(self):
         # bennugd `libretro.c:887-910` in a comment: RENAMED to
@@ -4737,7 +4753,7 @@ class TestCommentCitations(unittest.TestCase):
             rebase_refs(self.path, report), ["comment line 16: z.c:9 -> src/z.c:9"]
         )
         self.assertIn('"a.c:10-12"  # see src/z.c:9', self.path.read_text())
-        self.assertTrue(bump_commit(self.path, report))
+        self.assertTrue(bump_commit(self.path, report).moved)
 
 
 class TestRealignProse(unittest.TestCase):

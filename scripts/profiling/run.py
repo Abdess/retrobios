@@ -172,20 +172,21 @@ def _apply_writes(
         applied = []
         if args.rebase_refs and not report.skipped:
             applied = rebase_refs(target, report, args.accept_changed)
-        moved = bump_commit(target, report, args.accept_changed,
-                            args.cache_dir, args.offline)
+        bump = bump_commit(target, report, args.accept_changed,
+                           args.cache_dir, args.offline)
+        moved = bump.moved
         if args.rebase_refs and applied and not moved:
-            keyed = any(isinstance(profile.get(f), dict) for f in ("source_commit", "upstream_commit"))
-            reason = (
-                "its pins are keyed by build mode and are set by hand"
-                if keyed else "the prose or an annotated ref has to move first"
-            )
+            # A refusal bump_commit did not name is a ref the recale left
+            # for a reader: the prose guard above has already passed.
+            reason = bump.refusal or "the prose or an annotated ref has to move first"
             print(
                 f"{name}: refs recaled but the pin will not follow, so nothing "
                 f"was written: {reason}",
                 file=sys.stderr,
             )
             return
+        if bump.refusal:
+            print(f"{name}: {bump.refusal}", file=sys.stderr)
         messages = [f"{name}: {recale}{line}" for line in applied]
         if moved:
             # Each pin the write changes, as written: a bump that only moved

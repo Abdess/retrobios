@@ -277,7 +277,7 @@ class AnAdvanceReadsTheVersionAgain(unittest.TestCase):
             return [self._reading(version_basis.DRIFT, "2.0")]
 
         with mock.patch.object(version_basis, "check", check):
-            self.assertTrue(bump_commit(self.path, self.report))
+            self.assertTrue(bump_commit(self.path, self.report).moved)
         written = yaml.safe_load(self.path.read_text(encoding="utf-8"))
         self.assertEqual(written["source_commit"], "bbbbbbb")
         self.assertEqual(written["core_version"], "2.0")
@@ -287,20 +287,20 @@ class AnAdvanceReadsTheVersionAgain(unittest.TestCase):
     def test_an_unreadable_version_holds_the_pin(self):
         with mock.patch.object(version_basis, "check",
                                return_value=[self._reading(version_basis.UNREADABLE, None)]):
-            self.assertFalse(bump_commit(self.path, self.report))
+            self.assertFalse(bump_commit(self.path, self.report).moved)
         self.assertEqual(self.path.read_text(encoding="utf-8"), SAMPLE)
 
     def test_a_profile_without_basis_is_not_advanced(self):
         self.path.write_text(SAMPLE.split("version_basis:")[0] + "files: []\n", encoding="utf-8")
         before = self.path.read_text(encoding="utf-8")
-        self.assertFalse(bump_commit(self.path, self.report))
+        self.assertFalse(bump_commit(self.path, self.report).moved)
         self.assertEqual(self.path.read_text(encoding="utf-8"), before)
 
     def test_a_package_version_is_advanced_by_hand(self):
         reading = version_basis.Reading("", "package", "1.0", None, "read from x.apk",
                                         version_basis.UNCHECKED)
         with mock.patch.object(version_basis, "check", return_value=[reading]):
-            self.assertFalse(bump_commit(self.path, self.report))
+            self.assertFalse(bump_commit(self.path, self.report).moved)
 
 
 class TheWriterKeepsTheDocument(unittest.TestCase):

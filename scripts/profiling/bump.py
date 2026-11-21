@@ -5,7 +5,7 @@ from __future__ import annotations
 import functools
 import os
 import re
-import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 from core.paths import PLATFORMS_DIR
@@ -105,11 +105,19 @@ def shipping_platforms(
     ]
 
 
+@dataclass(frozen=True)
+class Bump:
+    """Whether the pin moved, and the reason it was refused when one applies."""
+
+    moved: bool
+    refusal: str | None = None
+
+
 def bump_commit(
     path: Path, report: ProfileReport, accept_changed: bool = False,
     cache_dir: str = DEFAULT_CACHE, offline: bool = False,
     platforms_dir: str = PLATFORMS_DIR,
-) -> bool:
+) -> Bump:
     """Advance source_commit to HEAD when nothing needs a read again.
 
     core_version moves with the pin, read again from version_basis at the
@@ -117,22 +125,20 @@ def bump_commit(
     advance whose version cannot be read is refused.
     """
     if not report.head or _needs_review(report, accept_changed):
-        return False
+        return Bump(False)
     text = path.read_text(encoding="utf-8")
     if pending_recale(report, accept_changed, text):
-        return False
+        return Bump(False)
     document = yaml.safe_load(text)
     if document.get("built_by") and not document.get("pin_follows"):
         # The pin is the commit a platform builds (recalbox gsplus.mk, the
         # mame0258 its package fetches), not a point on a moving branch:
         # HEAD is a build nobody ships under this name. A build of the
         # branch tip (RetroPie's advmame) is HEAD, and follows it.
-        print(
-            f"{path.stem}: pinned to the build {', '.join(document['built_by'])} "
-            "ships, advanced by hand",
-            file=sys.stderr,
-        )
-        return False
+        return Bump(False, (
+            f"pinned to the build {', '.join(document['built_by'])} "
+            "ships, advanced by hand"
+        ))
     if not (document.get("pin_frozen") or document.get("pin_follows")):
         shipped = shipping_platforms(path.stem, str(path.parent), platforms_dir)
         if len(shipped) == 1:
@@ -140,22 +146,16 @@ def bump_commit(
             # builds: a bulk advance moved fheroes2, supertux and
             # supermariowar past what EmuELEC compiles, and rigelengine is
             # already one commit ahead of its package.mk.
-            print(
-                f"{path.stem}: only {shipped[0]} ships it. Read the revision its "
+            return Bump(False, (
+                f"only {shipped[0]} ships it. Read the revision its "
                 "build compiles and set pin_frozen, or pin_follows when it "
-                "builds the branch tip",
-                file=sys.stderr,
-            )
-            return False
+                "builds the branch tip"
+            ))
     if any(isinstance(document.get(f), dict) for f in ("source_commit", "upstream_commit")):
         # A pin per build mode names one revision per repository, and the
         # report heads only the primary one: rewriting str(dict) was a
         # refused write on mesence, supermodel and xemu.
-        print(
-            f"{path.stem}: pins keyed by build mode are advanced by hand",
-            file=sys.stderr,
-        )
-        return False
+        return Bump(False, "pins keyed by build mode are advanced by hand")
     # An upstream pinned on a release tag is the base the port was cut from:
     # its HEAD is another program, so the bump leaves it on the tag.
     # A profile citing nothing compared nothing upstream: writing that HEAD
@@ -169,7 +169,7 @@ def bump_commit(
     if document.get("source_commit") == report.head and not upstream_moves:
         # Rewriting the pin to the value it already holds is not a bump, and
         # announcing it buries the profiles that did move.
-        return False
+        return Bump(False)
     if (
         document.get("source_commit") != report.head
         and not cites_primary(report)
@@ -177,11 +177,7 @@ def bump_commit(
         # Every ref anchored in another repository: HEAD of this one was
         # never compared with anything. gam4980's pin moved to the fork's
         # HEAD while its bare libretro.c refs still described upstream.
-        print(
-            f"{path.stem}: no ref resolves in {report.repo}, its pin is not advanced",
-            file=sys.stderr,
-        )
-        return False
+        return Bump(False, f"no ref resolves in {report.repo}, its pin is not advanced")
     expected = dict(document)
     expected["source_commit"] = report.head
     new_text = _set_pin(text, document, "source_commit", report.head, "profiled_date")
@@ -195,8 +191,7 @@ def bump_commit(
     readings = version_basis.check(expected, cache_dir, offline, recompute=True)
     refused = version_refusal(readings)
     if refused:
-        print(f"{path.stem}: {refused}, its pin is not advanced", file=sys.stderr)
-        return False
+        return Bump(False, f"{refused}, its pin is not advanced")
     version, basis = apply_readings(expected, readings)
     if version != expected.get("core_version") or basis != expected.get("version_basis"):
         new_text = set_version_fields(new_text, version, basis)
@@ -204,7 +199,7 @@ def bump_commit(
         if basis is not None:
             expected["version_basis"] = basis
     apply_edit(path, new_text, expected)
-    return True
+    return Bump(True)
 
 
 def version_refusal(readings: list) -> str | None:
