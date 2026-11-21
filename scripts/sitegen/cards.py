@@ -15,7 +15,6 @@ from core.hashing import parse_hash_list
 from model.collection import profiles_on_disk
 from packs.crossref import FileConsumers
 from sitegen import markup, wanted as sitewanted
-from sitegen.config import REPO_URL
 from core.paths import REPO_ROOT
 from sitegen.fields import search_excluded
 from sitegen.install import platform_display
@@ -134,16 +133,10 @@ def fetch_url(path: str) -> str:
     large-files release asset when .gitignore keeps it out of git."""
     global _RELEASE_ASSET_NAMES
     if _RELEASE_ASSET_NAMES is None:
-        from model.largefiles import (
-            LARGE_FILES_RELEASE,
-            asset_names,
-            load_registered_paths,
-            published_asset_name,
-        )
+        from model.largefiles import asset_names, asset_url, load_registered_paths, published_asset_name
 
         _RELEASE_ASSET_NAMES = {
-            registered: f"{REPO_URL}/releases/download/{LARGE_FILES_RELEASE}/"
-            + urllib.parse.quote(published_asset_name(name))
+            registered: asset_url(published_asset_name(name))
             for registered, name in asset_names(load_registered_paths()).items()
         }
     return _RELEASE_ASSET_NAMES.get(path) or (

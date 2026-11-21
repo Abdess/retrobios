@@ -29,6 +29,7 @@ from core.paths import REPO_ROOT
 
 LARGE_FILES_RELEASE = "large-files"
 LARGE_FILES_REPO = "Abdess/retrobios"
+RELEASE_DOWNLOAD = f"https://github.com/{LARGE_FILES_REPO}/releases/download/{LARGE_FILES_RELEASE}/"
 LARGE_FILES_CACHE = ".cache/large"
 # Verified revisions, hard-linked as <sha1>/<asset> beside the cache. A name
 # in the cache is replaced when the release serves new bytes under it, so a
@@ -85,7 +86,7 @@ def asset_names(registered: Iterable[str]) -> dict[str, str]:
     owners: dict[str, str] = {}
     for registered_path, name in names.items():
         # GitHub publishes a space as a dot, so both spellings are taken.
-        for spelling in {name, name.replace(" ", ".")}:
+        for spelling in asset_spellings(name):
             other = owners.setdefault(spelling, registered_path)
             if other != registered_path:
                 raise ValueError(
@@ -103,6 +104,26 @@ def asset_name(path: str, registered: Iterable[str]) -> str:
 def published_asset_name(name: str) -> str:
     """The name GitHub serves an asset under: it publishes a space as a dot."""
     return name.replace(" ", ".")
+
+
+def asset_spellings(name: str) -> list[str]:
+    """Names the release may hold an asset under: as written, and as published."""
+    published = published_asset_name(name)
+    return [name] if published == name else [name, published]
+
+
+def asset_url(name: str) -> str:
+    """Download URL of the large-files release asset *name*."""
+    return RELEASE_DOWNLOAD + urllib.parse.quote(name)
+
+
+def digests_of(assets: Iterable[dict]) -> dict[str, str]:
+    """sha256 a release lists for each asset, by name."""
+    return {
+        str(asset.get("name", "")): str(asset["digest"]).removeprefix("sha256:").lower()
+        for asset in assets
+        if str(asset.get("digest") or "").startswith("sha256:")
+    }
 
 
 def asset_candidates(name: str, registered: Iterable[str]) -> list[str]:
@@ -346,19 +367,7 @@ def _asset_urls(name: str) -> list[tuple[str, str]]:
     GitHub rewrites spaces to dots in release asset names, so a file whose
     name contains spaces is published under a dotted name.
     """
-    candidates = [name]
-    if " " in name:
-        candidates.append(name.replace(" ", "."))
-    return [
-        (
-            candidate,
-            (
-                f"https://github.com/{LARGE_FILES_REPO}/releases/download/"
-                f"{LARGE_FILES_RELEASE}/{urllib.parse.quote(candidate)}"
-            ),
-        )
-        for candidate in candidates
-    ]
+    return [(candidate, asset_url(candidate)) for candidate in asset_spellings(name)]
 
 
 def _read_once(path: str) -> tuple[dict[str, str], int, int] | None:
@@ -428,11 +437,7 @@ def _served_digests() -> dict[str, str]:
     except (upstream.UpstreamError, ValueError) as exc:
         print(f"  large files release listing: {exc}", file=sys.stderr)
         return {}
-    digests: dict[str, str] = {}
-    for asset in release.get("assets") or []:
-        digest = str(asset.get("digest") or "")
-        if digest.startswith("sha256:"):
-            digests[asset.get("name", "")] = digest.removeprefix("sha256:").lower()
+    digests = dict(digests_of(release.get("assets") or []))
     _digests_cache = digests
     return digests
 

@@ -14,7 +14,16 @@ from core.paths import EMULATORS_DIR
 from core.hashing import file_digest
 from core.sizes import size_text
 from model.composition import composition_tier
-from model.largefiles import LARGE_FILES_RELEASE, LARGE_FILES_REPO, asset_names, registered_paths
+from model.largefiles import (
+    LARGE_FILES_RELEASE,
+    LARGE_FILES_REPO,
+    RELEASE_DOWNLOAD,
+    asset_names,
+    asset_spellings,
+    asset_url,
+    digests_of,
+    registered_paths,
+)
 
 
 class AssetFinding(NamedTuple):
@@ -34,15 +43,6 @@ def expected_assets(db: dict, gitignore_text: str) -> dict[str, int]:
         for entry in db.get("files", {}).values()
         if entry.get("path") in ignored
     }
-
-
-def _spellings(name: str) -> list[str]:
-    """Names the release may publish an asset under.
-
-    GitHub rewrites spaces to dots in asset names, so a file whose name
-    carries spaces is published under the dotted form.
-    """
-    return [name, name.replace(" ", ".")] if " " in name else [name]
 
 
 def compare(
@@ -71,7 +71,7 @@ def compare(
     names = asset_names([*(registered or ()), *expected])
     for path, size in sorted(expected.items()):
         served = next(
-            (name for name in _spellings(names[path]) if name in assets), None
+            (name for name in asset_spellings(names[path]) if name in assets), None
         )
         if not served:
             findings.append(AssetFinding("missing", path, size, None))
@@ -97,16 +97,6 @@ def expected_digests(db: dict, gitignore_text: str) -> dict[str, str]:
     }
 
 
-def digests_of(assets_json: list[dict]) -> dict[str, str]:
-    """sha256 the release lists for each asset, by name."""
-    return {
-        a["name"]: str(a["digest"]).removeprefix("sha256:").lower()
-        for a in assets_json
-        if str(a.get("digest") or "").startswith("sha256:")
-    }
-
-
-ASSET_URL = f"https://github.com/{LARGE_FILES_REPO}/releases/download/{LARGE_FILES_RELEASE}/"
 NOT_INDEXED = "Not indexed"
 SECTIONS = (
     "Console firmware",
@@ -181,7 +171,7 @@ def render_notes(
     for sha1, entry in db.get("files", {}).items():
         path = entry.get("path", "")
         if path in names:
-            for candidate in _spellings(names[path]):
+            for candidate in asset_spellings(names[path]):
                 indexed[candidate] = (sha1, path)
 
     rows: dict[str, list[tuple[int, str]]] = {section: [] for section in SECTIONS}
@@ -200,7 +190,7 @@ def render_notes(
             sha1 = ""
             section = NOT_INDEXED
             description = description or name
-        link = f"[{name}]({ASSET_URL}{name})"
+        link = f"[{name}]({asset_url(name)})"
         if section == NOT_INDEXED:
             line = f"| {link} | {description} | {size_text(size)} |"
         else:
@@ -256,8 +246,8 @@ def registry_bundles(registry_path: str = "platforms/_data_dirs.yml") -> dict[st
         if not isinstance(entry, dict):
             continue
         url = str(entry.get("source_url") or "")
-        if url.startswith(ASSET_URL):
-            bundles[url[len(ASSET_URL):]] = str(entry.get("description") or "")
+        if url.startswith(RELEASE_DOWNLOAD):
+            bundles[url.removeprefix(RELEASE_DOWNLOAD)] = str(entry.get("description") or "")
     return bundles
 
 

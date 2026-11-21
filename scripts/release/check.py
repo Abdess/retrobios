@@ -6,8 +6,7 @@ import json
 import subprocess
 from dataclasses import dataclass
 
-from release.assets import digests_of
-from model.largefiles import LARGE_FILES_REPO
+from model.largefiles import LARGE_FILES_REPO, digests_of
 
 
 SUMS = "SHA256SUMS.txt"
