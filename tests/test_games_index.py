@@ -17,8 +17,8 @@ import unittest
 from pathlib import Path
 
 import generate_games_index as gi
-from games import fallback
-from games import setups as setup_docs
+import games.fallback as fallback
+import games.setups as setup_docs
 from games.changes import describe_change
 from games.coverage import FLOORS, floor_failures
 from games.folders import arcade_profiles, emulator_profile, resolve_folder
@@ -210,7 +210,7 @@ class CheckSaysWhatDiffers(unittest.TestCase):
             target = out / "index.json"
             target.write_text(json.dumps({"files": []}), encoding="utf-8")
             files = {target: json.dumps({"files": [["x.rom", 2, "bios"]]})}
-            coverage = {"setups": {}, "systems": {}, "arcade": []}
+            coverage: dict = {"setups": {}, "systems": {}, "arcade": []}
             stdout, stderr = io.StringIO(), io.StringIO()
             argv = ["generate_games_index.py", "--check", "--output-dir", tmp]
             with mock.patch.object(gi, "render", return_value=(files, coverage)), \

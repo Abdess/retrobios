@@ -170,6 +170,9 @@ class FixtureSchemas(unittest.TestCase):
 class RepositoryRules(unittest.TestCase):
     """The committed files, against the committed profiles."""
 
+    regions: dict
+    extras: dict
+
     @classmethod
     def setUpClass(cls) -> None:
         cls.regions = load_yaml(REPO_ROOT / REGIONS_FILE)
