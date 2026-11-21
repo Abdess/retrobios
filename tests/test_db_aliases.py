@@ -11,12 +11,9 @@ from __future__ import annotations
 import tests
 
 import os
-import sys
 import tempfile
-import types
 import unittest
 from pathlib import Path
-from unittest import mock
 
 from collection.aliases import UnreadableSource, collect_all_aliases
 from collection.scan import scan_bios_dir
@@ -25,15 +22,8 @@ from tests.sources import script_source
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
-class _NoCoreInfo:
-    def fetch_requirements(self):
-        return []
-
-
 class AliasesNeedAnUnambiguousName(unittest.TestCase):
     def _aliases(self, files: dict) -> dict:
-        stub = types.ModuleType("scraper.coreinfo_scraper")
-        stub.Scraper = _NoCoreInfo
         with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
             os.chdir(tmp)
@@ -42,8 +32,7 @@ class AliasesNeedAnUnambiguousName(unittest.TestCase):
                 Path("emulators/x.yml").write_text(
                     'files:\n  - name: "disk.rom"\n    aliases: ["n88sub.rom"]\n'
                 )
-                with mock.patch.dict(sys.modules, {"scraper.coreinfo_scraper": stub}):
-                    return collect_all_aliases(files)
+                return collect_all_aliases(files)
             finally:
                 os.chdir(previous)
 
