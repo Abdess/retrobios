@@ -58,9 +58,13 @@ class StaleTruth(ValueError):
 def _truth_sources(platforms_dir: str) -> tuple[dict, dict, dict | None]:
     """Registry, profiles and database, as generate_truth reads them."""
     registry = load_platform_registry(platforms_dir)
-    profiles = load_emulator_profiles("emulators")
     db = load_database(TRUTH_DB) if Path(TRUTH_DB).exists() else None
-    return registry, profiles, db
+    return registry, _profiles(), db
+
+
+def _profiles() -> dict[str, dict]:
+    """The emulator profiles the truth and the exporters read."""
+    return load_emulator_profiles("emulators")
 
 
 def current_truth(platform: str, config: dict, platforms_dir: str) -> dict:
@@ -114,7 +118,7 @@ def refresh_cache(
     except StaleTruth as exc:
         return False, [str(exc)]
     systems, _ = build_native_model(truth or {}, scraped)
-    exporter: BaseExporter = exporter_class()
+    exporter: BaseExporter = exporter_class(_profiles())
     wanted = wanted_sources(exporter, systems, scraped)
     off_pin = unpinned(wanted, scraped)
     if off_pin:
@@ -140,7 +144,7 @@ def doubled_in(scraped: dict | None, platforms_dir: str) -> list[dict]:
         return []
     db, zip_contents = _collection(TRUTH_DB)
     return doubled_destinations(
-        scraped, load_emulator_profiles("emulators"), db, zip_contents,
+        scraped, _profiles(), db, zip_contents,
         load_data_dir_registry(platforms_dir),
     )
 
@@ -171,7 +175,8 @@ def export_platform(
     if not systems:
         return False, ["nothing to write: neither the platform nor the truth has data"]
 
-    exporter: BaseExporter = exporter_class()
+    profiles = _profiles()
+    exporter: BaseExporter = exporter_class(profiles)
     produced, issues, stopped = _produce(
         exporter, systems, report, scraped, upstream_dir, allow_fetch,
     )
@@ -198,8 +203,7 @@ def export_platform(
     unwritten = _unwritten(refused, withheld, report)
     # Reported, never removed: the platform's file keeps every entry.
     candidates = removal_candidates(
-        systems, scraped, load_emulator_profiles("emulators"),
-        load_data_dir_registry(platforms_dir),
+        systems, scraped, profiles, load_data_dir_registry(platforms_dir),
     )
     # Reported, never rewritten: both declarations stay as the platform wrote them.
     doubled = doubled_in(scraped, platforms_dir)

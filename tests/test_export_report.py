@@ -18,6 +18,7 @@ from pathlib import Path
 from exporter import native
 from exporter.landed import landed_changes
 from exporter.native import current_truth, export_platform, write_report
+from model.profiles import load_emulator_profiles
 from sitegen.exports import generate_exports_page, load_export_reports
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -329,7 +330,9 @@ class ReportedChangesAreTheDiff(unittest.TestCase):
         truth = current_truth(platform, config, str(ROOT / "platforms"))
         scraped = native_layer(config)
         systems, report = build_native_model(truth, scraped)
-        exporter = discover_exporters()[platform]()
+        exporter = discover_exporters()[platform](
+            load_emulator_profiles(str(ROOT / "emulators"))
+        )
         original = original_path.read_text(encoding="utf-8")
         originals = {
             p.name: p.read_text(encoding="utf-8")
@@ -406,7 +409,9 @@ class ReportedChangesAreTheDiff(unittest.TestCase):
         truth = current_truth("retropie", config, str(ROOT / "platforms"))
         scraped = native_layer(config)
         systems, report = build_native_model(truth, scraped)
-        exporter = discover_exporters()["retropie"]()
+        exporter = discover_exporters()["retropie"](
+            load_emulator_profiles(str(ROOT / "emulators"))
+        )
         originals = exporter.unpack(archive.read_bytes())
         produced = exporter.render(systems, report, originals, scraped)
         self.assertTrue(produced, "nothing changed, the comparison proves nothing")

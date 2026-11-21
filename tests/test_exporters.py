@@ -30,9 +30,9 @@ import zipfile
 from collections import OrderedDict
 from pathlib import Path
 
-from model.profiles import core_key_index
 from model.registry import list_registered_platforms
 from model.platforms import load_platform_config, native_layer
+from model.profiles import load_emulator_profiles
 from model.safeparse import parse_untrusted_xml
 from exporter import discover_exporters
 from exporter.base_exporter import BaseExporter
@@ -768,7 +768,9 @@ class SearchOrder(unittest.TestCase):
                  cd("jp_mcd1_9112.bin", "japan", 2)]
         script = ('rp_module_id="lr-picodrive"\nrp_module_help="The Sega CD requires the '
                   'BIOS files us_scd1_9210.bin, eu_mcd1_9210.bin copied to $biosdir"\n')
-        exporter = discover_exporters()["retropie"]()
+        exporter = discover_exporters()["retropie"](
+            {"picodrive": {"type": "libretro", "cores": ["picodrive"]}}
+        )
         # The cap is the longest list RetroPie writes: xm7 names thirteen.
         longest = ('rp_module_id="xm7"\nrp_module_help="Copy bios files '
                    + ", ".join(f"n{i}.rom" for i in range(12)) + ' and n12.rom to $biosdir"\n')
@@ -806,7 +808,9 @@ class SearchOrder(unittest.TestCase):
                   'Naomi/Atomiswave BIOS files naomi.zip and awbios.zip to $biosdir/dc"\n')
         longest = ('rp_module_id="xm7"\nrp_module_help="Copy bios files '
                    + ", ".join(f"n{i}.rom" for i in range(12)) + ' and n12.rom to $biosdir"\n')
-        exporter = discover_exporters()["retropie"]()
+        exporter = discover_exporters()["retropie"](
+            {"flycast": {"type": "libretro", "cores": ["flycast"]}}
+        )
         written = exporter.render(
             systems, None,
             {"scriptmodules/libretrocores/lr-flycast.sh": script,
@@ -1413,7 +1417,11 @@ class RecalboxExport(unittest.TestCase):
              "_required_by": ["same_cdi"]},
         ]}}}
         systems, report = build_native_model(truth, scraped)
-        exporter = discover_exporters()["recalbox"]()
+        exporter = discover_exporters()["recalbox"]({
+            "same_cdi": {"type": "libretro", "cores": ["same_cdi"]},
+            "mame0278": {"type": "libretro", "cores": ["mame0278"],
+                         "built_by": ["recalbox"]},
+        })
         produced = exporter.render(systems, report, {}, None)["es_bios.xml"]
         mandatory = {
             b.get("path"): b.get("mandatory") for b in ET.fromstring(produced).iter("bios")
@@ -1495,8 +1503,7 @@ class RecalboxExport(unittest.TestCase):
                                        "built_by": ["recalbox"]},
         }
         systems, _ = build_native_model(truth, scraped)
-        exporter = discover_exporters()["recalbox"]()
-        exporter._core_profiles = (profiles, core_key_index(profiles, include_aliases=True))
+        exporter = discover_exporters()["recalbox"](profiles)
         declared = next(fe for s in systems.values() for fe in s.files if fe.platform)
         self.assertFalse(exporter.required_value(declared))
 
@@ -1513,8 +1520,7 @@ class RecalboxExport(unittest.TestCase):
         }]}}}
         profiles = {"fba2x": {"type": "standalone", "cores": ["fba2x", "pifba"]}}
         systems, _ = build_native_model(truth, scraped)
-        exporter = discover_exporters()["recalbox"]()
-        exporter._core_profiles = (profiles, core_key_index(profiles, include_aliases=True))
+        exporter = discover_exporters()["recalbox"](profiles)
         declared = next(fe for s in systems.values() for fe in s.files if fe.platform)
         self.assertTrue(exporter.required_value(declared))
 
@@ -2524,7 +2530,10 @@ class UpstreamFidelity(unittest.TestCase):
             self.skipTest(f"no cached original for {platform}")
         scraped = load_platform_config(platform, str(REPO_ROOT / "platforms"))
         systems, report = build_native_model(truth or {"systems": {}}, scraped)
-        exporter = discover_exporters()[platform]()
+        # The profiles the export pipeline hands every exporter.
+        exporter = discover_exporters()[platform](
+            load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        )
         originals: dict[str, str] = {}
         for path in cache.rglob("*"):
             if not path.is_file():

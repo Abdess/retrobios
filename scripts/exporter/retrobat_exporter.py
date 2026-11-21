@@ -81,8 +81,8 @@ class Exporter(BaseExporter[str]):
             return bool(self.single_value(fe, "md5"))
         return super().states(fe, field_name)
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, profiles: dict[str, dict] | None = None) -> None:
+        super().__init__(profiles)
         # Additions render did not write: another entry holds their path.
         self._merged: set[int] = set()
 

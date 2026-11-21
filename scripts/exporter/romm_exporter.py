@@ -34,8 +34,8 @@ _FIELDS = (("size", "size"), ("crc", "crc32"), ("md5", "md5"), ("sha1", "sha1"))
 class Exporter(BaseExporter[str]):
     """Write RomM's known_bios_files.json, corrected."""
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, profiles: dict[str, dict] | None = None) -> None:
+        super().__init__(profiles)
         # (system, filename) keys the platform itself declares, and the
         # addition that claims each other key first: both set by render.
         self._platform_keys: set[tuple[str, str]] = set()

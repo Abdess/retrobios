@@ -11,8 +11,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, Union
 
-from core.paths import EMULATORS_DIR, REPO_ROOT
-from model.profiles import core_key_index, load_emulator_profiles, platform_core_profiles
+from model.profiles import core_key_index, platform_core_profiles
 from resolve.reconcile import NativeFile, NativeSystem, Report
 
 # What a produced file holds: text for every format, bytes besides for one
@@ -26,6 +25,12 @@ class BaseExporter(ABC, Generic[Content]):
     # A hash field the checker compares to one value: an addition the
     # truth accepts under several cannot be written whole.
     SINGLE_HASH_FIELD: str | None = None
+
+    def __init__(self, profiles: dict[str, dict] | None = None) -> None:
+        """``profiles`` are the emulator profiles a core name in the
+        platform's own file is read against, none when not given."""
+        self._profiles: dict[str, dict] = profiles or {}
+        self._core_index = core_key_index(self._profiles, include_aliases=True)
 
     @staticmethod
     @abstractmethod
@@ -234,13 +239,9 @@ class BaseExporter(ABC, Generic[Content]):
         revision Batocera builds under that name, and load order picked
         either one.
         """
-        cached = getattr(self, "_core_profiles", None)
-        if cached is None:
-            profiles = load_emulator_profiles(str(REPO_ROOT / EMULATORS_DIR))
-            cached = (profiles, core_key_index(profiles, include_aliases=True))
-            self._core_profiles = cached
-        profiles, index = cached
-        return platform_core_profiles(index, profiles, name, self.platform_name(), mode)
+        return platform_core_profiles(
+            self._core_index, self._profiles, name, self.platform_name(), mode
+        )
 
     def required_value(self, fe: NativeFile) -> bool:
         """The requirement the render writes for an entry.

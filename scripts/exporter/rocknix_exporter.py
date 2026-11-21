@@ -30,8 +30,8 @@ _ADD_EMU_CORE = re.compile(r"^\s*add_emu_core\s+(\S+)\s+(\S+)\s+(\S+)", re.MULTI
 class Exporter(BatoceraExporter):
     """Write ROCKNIX's rocknix-systems, corrected."""
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, profiles: dict[str, dict] | None = None) -> None:
+        super().__init__(profiles)
         self._pairs: set[tuple[str, str]] = set()
 
     def _runner_pair(self, runner: tuple[bool, str]) -> tuple[str, str | None] | None:

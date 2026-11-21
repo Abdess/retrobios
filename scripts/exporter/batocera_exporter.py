@@ -183,8 +183,8 @@ class Exporter(BaseExporter[str]):
     # AmberELEC's and EmuELEC's destinations already start at /storage/roms.
     PATH_PREFIX = "bios/"
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, profiles: dict[str, dict] | None = None) -> None:
+        super().__init__(profiles)
         # The emulator and core each system entry of the original is gated
         # on, read by render.
         self._gates: dict[str, tuple[str, str | None] | None] = {}

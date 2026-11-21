@@ -16,7 +16,6 @@ import unittest
 from collections import OrderedDict
 from pathlib import Path
 
-from model.profiles import core_key_index
 from resolve.reconcile import NativeFile, NativeSystem, Report, build_native_model
 from exporter.bizhawk_exporter import Exporter as BizHawk
 from exporter.misterfpga_exporter import Exporter as Mister
@@ -672,9 +671,7 @@ class RetroPieProposals(unittest.TestCase):
     @staticmethod
     def _knowing(**profiles: dict) -> RetroPie:
         """An exporter that reads these profiles instead of emulators/."""
-        exporter = RetroPie()
-        exporter._core_profiles = (profiles, core_key_index(profiles, include_aliases=True))
-        return exporter
+        return RetroPie(profiles)
 
     @staticmethod
     def _module(module_id: str, help_text: str) -> dict[str, str]:
