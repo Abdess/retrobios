@@ -15,6 +15,7 @@ from xml.sax.saxutils import escape
 
 from model.registry import load_platform_registry
 from core.paths import REPO_ROOT
+from core.text import count_text
 from model import siteinputs
 from sitegen import markup
 
@@ -518,7 +519,7 @@ def _mode_boxes() -> list[Box]:
     boxes = []
     for mode, (title, text) in MODE_TEXT.items():
         count = len(_modes().get(mode, []))
-        boxes.append(Box(title, [text, f"{count} platform" + ("" if count == 1 else "s")]))
+        boxes.append(Box(title, [text, count_text(count, "platform")]))
     return boxes
 
 

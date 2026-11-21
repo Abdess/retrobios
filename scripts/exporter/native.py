@@ -12,6 +12,7 @@ from pathlib import Path
 import yaml
 
 from core.artifacts import write_bytes_atomic, write_if_changed
+from core.text import count_text
 from core.ziptools import build_zip_contents_index
 from .base_exporter import BaseExporter
 from .doubled import doubled_destinations
@@ -142,12 +143,6 @@ def doubled_in(scraped: dict | None, platforms_dir: str) -> list[dict]:
         scraped, load_emulator_profiles("emulators"), db, zip_contents,
         load_data_dir_registry(platforms_dir),
     )
-
-
-def _count(number: int, noun: str, plural: str = "") -> str:
-    """"1 hash", "2 hashes": a count with its noun in the right number."""
-    plural = plural or noun + ("es" if noun.endswith(("sh", "ch", "s", "x")) else "s")
-    return f"{number} {noun if number == 1 else plural}"
 
 
 def export_platform(
@@ -314,7 +309,7 @@ def _landed_summary(report: Report, changes: LandedChanges, landed: int, lost: i
         (changes.lists, "md5 list", "", "written, any listed value passes"),
     )
     parts += [
-        f"{_count(number, noun, plural)} {verb}"
+        f"{count_text(number, noun, plural)} {verb}"
         for number, noun, plural, verb in landed_counts
         if number
     ]
@@ -323,7 +318,7 @@ def _landed_summary(report: Report, changes: LandedChanges, landed: int, lost: i
 
 def _unwritten(refused: int, withheld: list[str], report: Report) -> list[str]:
     return [
-        f"{_count(number, noun, plural)} {what}"
+        f"{count_text(number, noun, plural)} {what}"
         for number, noun, plural, what in (
             (refused, "file", "", "the format or its checker cannot carry"),
             (len(withheld), "update", "", "withheld"),
@@ -351,13 +346,13 @@ def _export_messages(
     if candidates:
         open_question = sum(c["verdict"] == "undetermined" for c in candidates)
         messages.append(
-            f"{_count(len(candidates), 'entry', 'entries')} no examined core is known to open"
+            f"{count_text(len(candidates), 'entry', 'entries')} no examined core is known to open"
             + (f" ({open_question} undetermined)" if open_question else "")
             + ", listed in the report"
         )
     if doubled:
         messages.append(
-            f"{_count(len(doubled), 'destination')} declared twice for two files"
+            f"{count_text(len(doubled), 'destination')} declared twice for two files"
             ", listed in the report"
         )
     messages.extend(f"withheld: {reason}" for reason in withheld)

@@ -27,7 +27,7 @@ from sitegen.platformfiles import (
     render_platform_systems,
     system_emulators,
 )
-from sitegen.render import escape_tags, percent_text
+from sitegen.render import count_text, escape_tags, percent_text
 
 
 # A hash a platform's list writes, in words.
@@ -230,7 +230,7 @@ def generate_platform_page(
         else:
             status = (
                 f'<span class="rb-badge rb-badge-warning">'
-                f'{non_ok} issue{"s" if non_ok > 1 else ""}</span>'
+                f'{count_text(non_ok, "issue")}</span>'
             )
         sys_emus = system_emulators(sys_id, emulator_files, by_system_declared.get(sys_id))
         anchor = sys_id.replace(" ", "-")

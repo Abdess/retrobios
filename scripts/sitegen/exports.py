@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from core.text import count_text
 from sitegen import markup
 
 EXPORTS_DIR = "exports"
@@ -91,10 +92,6 @@ def _lookup_only(block: list[str]) -> list[str]:
     return ["", markup.block_open("section", markup.search_exclude()), "", *block, "", "</section>", ""]
 
 
-def _plural(count: int, noun: str, plural: str = "") -> str:
-    return f"{count:,} {noun if count == 1 else plural or noun + 's'}"
-
-
 def change_text(report: dict) -> str:
     """What the updated file changes, from the report's numbers.
 
@@ -105,7 +102,7 @@ def change_text(report: dict) -> str:
     counts = report.get("counts")
     if not counts:
         return report["summary"]
-    parts = [f"{_plural(counts['kept'], 'entry', 'entries')} kept"]
+    parts = [f"{count_text(counts['kept'], 'entry', 'entries')} kept"]
     extra = [
         (counts["added"], "file", "files", "added"),
         (len(report.get("hashes_updated") or []), "hash", "hashes", "updated"),
@@ -114,7 +111,7 @@ def change_text(report: dict) -> str:
         (len(report.get("hashes_filled") or []), "hash", "hashes", "added"),
         (len(report.get("sizes_updated") or []), "size", "sizes", "updated"),
     ]
-    parts += [f"{_plural(n, one, many)} {verb}" for n, one, many, verb in extra if n]
+    parts += [f"{count_text(n, one, many)} {verb}" for n, one, many, verb in extra if n]
     return ", ".join(parts)
 
 
@@ -131,7 +128,7 @@ def candidate_lines(candidates: list[dict]) -> list[str]:
     if not candidates:
         return []
     open_question = sum(c.get("verdict") == "undetermined" for c in candidates)
-    count = _plural(len(candidates), "entry", "entries")
+    count = count_text(len(candidates), "entry", "entries")
     sentence = (
         f"{count} of the original {'is' if len(candidates) == 1 else 'are'} not "
         "named, by name, path or hash, in the profile of any emulator this "
@@ -187,7 +184,7 @@ def doubled_lines(doubled: list[dict]) -> list[str]:
     """
     if not doubled:
         return []
-    count = _plural(len(doubled), "destination")
+    count = count_text(len(doubled), "destination")
     lines = [
         f"{count} of the original {'is' if len(doubled) == 1 else 'are'} declared "
         "twice, for two different files. One path holds one file, so one of the "
@@ -299,14 +296,14 @@ def generate_exports_page(reports: list[dict], names: dict[str, str]) -> str:
         counts = report.get("counts") or {}
         if counts.get("not_added"):
             lines.extend([
-                f"{_plural(counts['not_added'], 'other file')} the emulators read "
+                f"{count_text(counts['not_added'], 'other file')} the emulators read "
                 f"{'is' if counts['not_added'] == 1 else 'are'} not added, for the "
                 "reasons above.",
                 "",
             ])
         if counts.get("not_kept"):
             lines.extend([
-                f"{_plural(counts['not_kept'], 'entry', 'entries')} of the original "
+                f"{count_text(counts['not_kept'], 'entry', 'entries')} of the original "
                 "cannot be written in this format and should be checked by hand.",
                 "",
             ])

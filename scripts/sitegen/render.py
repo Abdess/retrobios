@@ -11,6 +11,7 @@ from model import siteinputs
 from sitegen import markup
 from core.memo import DerivedView
 from core.paths import REPO_ROOT
+from core.text import count_text as count_text
 from model.collection import PROGRAM_TOPS, card_moves, manufacturer_slug
 from model.systemnames import (
     SYSTEM_PARENTS,
@@ -57,11 +58,6 @@ CARD_ANCHOR = re.compile(rf"sha1-[0-9a-f]{{{SHORT_HASH}}}")
 def card_anchor(sha1: str) -> str:
     """The id of the card a file's sha1 heads: sha1-<first 12 hex>."""
     return f"sha1-{sha1[:SHORT_HASH]}"
-
-
-def count_text(number: int, noun: str, plural: str = "") -> str:
-    """A count and its noun, singular for one: the site printed "1 files" 234 times."""
-    return f"{number:,} {noun if number == 1 else plural or noun + 's'}"
 
 
 def escape_tags(text: str) -> str:
