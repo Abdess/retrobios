@@ -10742,7 +10742,22 @@ def _requested_narrowing(
 # (scripts/split_pack.py), each holding at its root a marker that names the
 # pack, the part and every part with its size. Extracted with the files,
 # the markers say which part a folder lacks.
-_PART_FILE = re.compile(r"^(?P<stem>.+_BIOS_Pack)\.part(?P<index>\d+)of(?P<count>\d+)\.zip$")
+def _part_pattern(ext: str) -> re.Pattern:
+    return re.compile(rf"^(?P<stem>.+_BIOS_Pack)\.part(?P<index>\d+)of(?P<count>\d+)\.{ext}$")
+
+
+_PART_FILE = _part_pattern("zip")
+_PART_MARKER = _part_pattern("txt")
+
+
+def part_file_name(name: str, index: int, count: int) -> str:
+    """Part index of count of the pack name."""
+    return f"{name[: -len('.zip')]}.part{index}of{count}.zip"
+
+
+def part_marker_name(name: str, index: int, count: int) -> str:
+    """The marker part index of count of the pack name holds."""
+    return f"{name[: -len('.zip')]}.part{index}of{count}.txt"
 
 MAX_PARTS = 999
 
@@ -10835,12 +10850,11 @@ class PackSource:
         count = counts[0]
         if count > MAX_PARTS or any(other != count for other in counts):
             raise ValueError(f"the parts of {name} disagree on how many there are")
-        stem = name[: -len(".zip")]
         folders = list(dict.fromkeys(p.parent for p in chosen))
         found: list[Path] = []
         missing: list[str] = []
         for number in range(1, count + 1):
-            part_name = f"{stem}.part{number}of{count}.zip"
+            part_name = part_file_name(name, number, count)
             place = next((folder / part_name for folder in folders
                           if (folder / part_name).is_file()), None)
             if place is None:
@@ -18525,7 +18539,6 @@ def read_games(args: argparse.Namespace, plat: str, bios_path: Path, manifest: d
 
 # --- installer/pack.py -------------------------------------------------------
 
-_PART_MARKER = re.compile(r"^(?P<stem>.+_BIOS_Pack)\.part(?P<index>\d+)of(?P<count>\d+)\.txt$")
 MAX_MARKER_BYTES = 64 * 1024
 
 
@@ -18794,14 +18807,6 @@ def pack_bound(manifest_size: int, members: list[PackMember]) -> int:
     """The most bytes the pack can take as one ZIP."""
     return (_ZIP_END_BYTES + _member_bound("manifest.json", manifest_size)
             + sum(_member_bound(member.name, member.size) for member in members))
-
-
-def part_file_name(name: str, index: int, count: int) -> str:
-    return f"{name[: -len('.zip')]}.part{index}of{count}.zip"
-
-
-def part_marker_name(name: str, index: int, count: int) -> str:
-    return f"{name[: -len('.zip')]}.part{index}of{count}.txt"
 
 
 def part_marker_text(name: str, index: int, sizes: list[int]) -> bytes:

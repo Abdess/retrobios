@@ -7,7 +7,6 @@ import hashlib
 import io
 import json
 import os
-import re
 import shutil
 import stat
 import sys
@@ -29,7 +28,14 @@ from installer.from_folders import plan_local_copies
 from installer.host_fs import DRIVE_FULL, _drive_full, _is_dir, _stop
 from installer.network import fetch_targets, local_targets
 from installer.offline import LOCAL
-from installer.pack_source import MAX_PARTS, _PART_FILE, pack_name_platforms
+from installer.pack_source import (
+    _PART_FILE,
+    _PART_MARKER,
+    MAX_PARTS,
+    pack_name_platforms,
+    part_file_name,
+    part_marker_name,
+)
 from installer.paths import shown_path
 from installer.platforms import PLATFORM_NAMES, TARGET_PLATFORMS, display_name
 from installer.safe_replace import BACKUP_DIR
@@ -38,7 +44,6 @@ from installer.text import _plural, format_size, screen_text
 if TYPE_CHECKING:
     from installer.terminal import Terminal
 
-_PART_MARKER = re.compile(r"^(?P<stem>.+_BIOS_Pack)\.part(?P<index>\d+)of(?P<count>\d+)\.txt$")
 MAX_MARKER_BYTES = 64 * 1024
 
 
@@ -307,14 +312,6 @@ def pack_bound(manifest_size: int, members: list[PackMember]) -> int:
     """The most bytes the pack can take as one ZIP."""
     return (_ZIP_END_BYTES + _member_bound("manifest.json", manifest_size)
             + sum(_member_bound(member.name, member.size) for member in members))
-
-
-def part_file_name(name: str, index: int, count: int) -> str:
-    return f"{name[: -len('.zip')]}.part{index}of{count}.zip"
-
-
-def part_marker_name(name: str, index: int, count: int) -> str:
-    return f"{name[: -len('.zip')]}.part{index}of{count}.txt"
 
 
 def part_marker_text(name: str, index: int, sizes: list[int]) -> bytes:
