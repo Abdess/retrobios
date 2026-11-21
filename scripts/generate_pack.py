@@ -95,9 +95,8 @@ from packs.naming import (
     expected_pack_names,
     pack_narrowings,
     pack_variant,
-    platform_pack_stem,
+    platform_pack_name,
     platform_target,
-    system_tag,
 )
 from packs.platformpack import generate_pack
 from packs.scope import pack_systems, platform_list_version
@@ -801,23 +800,16 @@ def _group_pack_name(
 ) -> str:
     """The file name of a pack shared by a group of identical platforms."""
     source, required_only = variant
-    narrow_tags = "".join(
-        tag
-        for tag, _label in pack_narrowings(
-            source,
-            getattr(args, "regions", None),
-            named_target,
-            args.one_per_slot,
-            required_only,
-            no_game_data=getattr(args, "no_game_data", False),
-        )
+    narrowings = pack_narrowings(
+        source,
+        getattr(args, "regions", None),
+        named_target,
+        args.one_per_slot,
+        required_only,
+        no_game_data=getattr(args, "no_game_data", False),
     )
-    stem = platform_pack_stem(
-        group_platforms, representative, args.platforms_dir
-    )
-    return (
-        f"{stem}{narrow_tags}_BIOS_Pack"
-        f"{system_tag(system_filter)}.zip"
+    return platform_pack_name(
+        representative, args.platforms_dir, narrowings, system_filter, group=group_platforms
     )
 
 

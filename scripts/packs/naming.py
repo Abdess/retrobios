@@ -175,14 +175,17 @@ def platform_pack_name(
     narrowings: list[tuple[str, str]],
     system_filter: list[str] | None,
     pack_name: str | None = None,
+    group: list[str] | None = None,
 ) -> str:
     """File name of a platform pack: stem, narrowing tags, system tag.
 
     A caller naming the pack itself (a --split part) is taken at its word.
+    A pack shared by a group of identical platforms is named after the
+    group, platform_name being its representative.
     """
     if pack_name:
         return pack_name
-    stem = platform_pack_stem([platform_name], platform_name, platforms_dir)
+    stem = platform_pack_stem(group or [platform_name], platform_name, platforms_dir)
     tags = "".join(tag for tag, _label in narrowings)
     return f"{stem}{tags}_BIOS_Pack{system_tag(system_filter)}.zip"
 
@@ -222,22 +225,17 @@ def expected_pack_names(
     and to the name of the group it shares a pack with. ``variants`` lists
     the (source, required_only) combinations the run built.
     """
-    def narrow_tags(platform_name: str) -> list[str]:
+    def narrowings(platform_name: str) -> list[list[tuple[str, str]]]:
         named = platform_target(platform_name, target_name, platforms_dir)
         return [
-            "".join(
-                tag
-                for tag, _label in pack_narrowings(
-                    source, regions, named, False, required, no_game_data=no_game_data
-                )
-            )
+            pack_narrowings(source, regions, named, False, required, no_game_data=no_game_data)
             for source, required in variants
         ]
 
     names: dict[str, set[str]] = {
         p: {
-            f"{platform_pack_stem([p], p, platforms_dir)}{tags}_BIOS_Pack.zip"
-            for tags in narrow_tags(p)
+            platform_pack_name(p, platforms_dir, narrowed, None)
+            for narrowed in narrowings(p)
         }
         for p in platforms
     }
@@ -258,11 +256,11 @@ def expected_pack_names(
     ):
         if len(group) < 2:
             continue
-        stem = platform_pack_stem(group, representative, platforms_dir)
-        for tags in narrow_tags(representative):
+        for narrowed in narrowings(representative):
+            name = platform_pack_name(representative, platforms_dir, narrowed, None, group=group)
             for p in group:
                 if p in names:
-                    names[p].add(f"{stem}{tags}_BIOS_Pack.zip")
+                    names[p].add(name)
     return names
 
 
