@@ -63,8 +63,9 @@ from installer_build import pins as installer_build_pins
 from packs import datadirs
 from core import upstream
 from core.cli import InputMissing, add_repo_inputs, require_directory, suggest_names
+from model.platforms import inheritance_chain
 from model.targets import apply_target_overrides, platform_overrides, read_target_overrides
-from model.registry import list_registered_platforms, load_platform_registry
+from model.registry import list_registered_platforms, load_data_dir_registry, load_platform_registry
 from model.profiles import load_emulator_profiles, upstream_profile_index
 from core.artifacts import write_text_atomic
 from model.safeparse import yaml_load
@@ -488,18 +489,11 @@ def published_export_state(
 
 def _transcribed_at(platforms_dir: Path, platform: str) -> float:
     """Last rewrite of the platform file or of any file it inherits."""
-    newest = 0.0
-    seen: set[str] = set()
-    name: str | None = platform
-    while name and name not in seen:
-        seen.add(name)
-        path = platforms_dir / f"{name}.yml"
-        if not path.is_file():
-            break
-        newest = max(newest, path.stat().st_mtime)
-        with path.open(encoding="utf-8") as fh:
-            name = (yaml_load(fh) or {}).get("inherits")
-    return newest
+    return max(
+        ((platforms_dir / f"{name}.yml").stat().st_mtime
+         for name in inheritance_chain(platform, platforms_dir)),
+        default=0.0,
+    )
 
 
 # How the truth model settles two cores' hashes: generate_truth reports it,
@@ -1016,7 +1010,7 @@ def check_coreinfo(
 def check_data(offline: bool) -> list[Finding]:
     if offline:
         return [Finding("data", "_data_dirs.yml", SKIPPED, detail="offline")]
-    registry = datadirs.load_registry(str(REPO_ROOT / "platforms" / "_data_dirs.yml"))
+    registry = load_data_dir_registry(REPO_ROOT / "platforms", required=True)
     sink = io.StringIO()
     with contextlib.redirect_stdout(sink):
         results = datadirs.refresh_all(registry, dry_run=True)

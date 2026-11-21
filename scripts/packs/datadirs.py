@@ -16,9 +16,7 @@ from collections.abc import Callable, Iterator
 from pathlib import Path
 
 from core.artifacts import file_lock as _file_lock, set_plain_mode
-from core.cli import InputMissing
 from core.github import github_token
-from model.sources import source_yaml_file
 from model.registry import VERSIONS_FILE, load_versions
 
 
@@ -33,14 +31,6 @@ DOWNLOAD_TIMEOUT = 300
 # downloaded fine minutes later. Seconds to wait before each retry.
 DOWNLOAD_RETRY_WAITS = (5, 20)
 _TRANSIENT = (urllib.error.URLError, OSError, tarfile.TarError, zipfile.BadZipFile, EOFError)
-
-
-def load_registry(registry_path: str = DEFAULT_REGISTRY) -> dict[str, dict]:
-    path = Path(registry_path)
-    if not path.exists():
-        raise InputMissing(f"Registry not found: {registry_path}")
-    data = source_yaml_file(path) or {}
-    return data.get("data_directories", {})
 
 
 def cache_lock(

@@ -155,12 +155,12 @@ class ADamagedProfileNamesItself(unittest.TestCase):
         parsed with yaml_load and stopped on a raw yaml traceback."""
         from model.romfolders import load_setup
         from model.sourcerevision import platform_revision
-        from packs.datadirs import load_registry
+        from model.registry import data_dir_registry_at
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as folder:
             bad = Path(folder) / "bad.yml"
             bad.write_text("source: a\nb: [\n", encoding="utf-8")
-            for read in (load_setup, platform_revision, lambda p: load_registry(str(p))):
+            for read in (load_setup, platform_revision, data_dir_registry_at):
                 with self.subTest(read=read), self.assertRaisesRegex(
                     SourceUnreadable, rf"{re.escape(str(bad))}:\d+: "
                 ):

@@ -61,7 +61,8 @@ from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
-from model.registry import load_platform_registry
+from model.platforms import inheritance_chain
+from model.registry import data_dir_registry_at, load_platform_registry
 from core.paths import REPO_ROOT
 
 LOG_DIR = REPO_ROOT / "tmp" / "refresh_stale"
@@ -106,17 +107,11 @@ def _load_platform_registry() -> dict[str, dict]:
 
 def _platform_parents(registry: dict[str, dict]) -> dict[str, str]:
     """Platform to the platform its YAML inherits from."""
-    import yaml
-
     parents: dict[str, str] = {}
     for name in registry:
-        path = REPO_ROOT / "platforms" / f"{name}.yml"
-        if not path.is_file():
-            continue
-        with path.open(encoding="utf-8") as fh:
-            parent = (yaml.safe_load(fh) or {}).get("inherits")
-        if parent:
-            parents[name] = str(parent)
+        chain = inheritance_chain(name, REPO_ROOT / "platforms")
+        if len(chain) > 1:
+            parents[name] = chain[1]
     return parents
 
 
@@ -131,10 +126,7 @@ def _ancestors(platform: str, parents: dict[str, str]) -> set[str]:
 @lru_cache(maxsize=1)
 def _data_dir_keys() -> frozenset[str]:
     """The entries refresh_data_dirs.py --key accepts."""
-    import yaml
-
-    with DATA_DIRS_REGISTRY.open(encoding="utf-8") as fh:
-        return frozenset((yaml.safe_load(fh) or {}).get("data_directories") or {})
+    return frozenset(data_dir_registry_at(DATA_DIRS_REGISTRY, required=True))
 
 
 def _run_check_freshness(areas: tuple[str, ...], extra: list[str]) -> list[dict]:

@@ -13,7 +13,7 @@ from pathlib import Path, PurePosixPath
 
 import yaml
 
-from model.registry import load_platform_registry
+from model.registry import load_data_dir_registry, load_platform_registry
 from model.profiles import source_yaml_paths
 from model.safeparse import yaml_load
 from core.paths import PLATFORMS_DIR, REPO_ROOT
@@ -475,9 +475,7 @@ def _unknown_data_dir_refs() -> list[str]:
     every run printed "not cached" while refresh_data_dirs had nothing to
     refresh.
     """
-    registry_path = REPO_ROOT / "platforms" / "_data_dirs.yml"
-    with registry_path.open(encoding="utf-8") as handle:
-        registered = set((yaml_load(handle) or {}).get("data_directories", {}))
+    registered = set(load_data_dir_registry(REPO_ROOT / "platforms", required=True))
     out: list[str] = []
     for directory in (REPO_ROOT / "emulators", REPO_ROOT / "platforms"):
         for path in source_yaml_paths(directory):

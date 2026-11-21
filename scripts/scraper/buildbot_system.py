@@ -9,8 +9,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-from model.safeparse import yaml_load
-from model.registry import load_versions
+from model.registry import data_dir_registry_at, load_versions
 from .base_scraper import fetch_text
 
 
@@ -36,10 +35,8 @@ def load_tracked_entries(
 
     Returns {decoded_zip_name: (key, source_url)}.
     """
-    with open(registry_path) as f:
-        data = yaml_load(f) or {}
     entries: dict[str, tuple[str, str]] = {}
-    for key, entry in data.get("data_directories", {}).items():
+    for key, entry in data_dir_registry_at(registry_path, required=True).items():
         url = entry.get("source_url", "")
         if "buildbot.libretro.com/assets/system" not in url:
             continue

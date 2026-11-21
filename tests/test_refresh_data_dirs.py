@@ -22,7 +22,7 @@ from unittest import mock
 
 import refresh_data_dirs as rdd
 from packs import datadirs
-from model.registry import load_versions
+from model.registry import load_data_dir_registry, load_versions
 from packs.archive import Placed
 from packs.datatrees import data_directory_members
 
@@ -394,7 +394,7 @@ class ASourceThatMovesIsPinnedOrFollowed(unittest.TestCase):
     def test_every_forge_source_takes_a_commit(self):
         """archive/refs/heads/<commit> is no address: a forge source must be
         written so the commit the refresh reads can replace its branch."""
-        registry = datadirs.load_registry(str(REPO_ROOT / "platforms" / "_data_dirs.yml"))
+        registry = load_data_dir_registry(REPO_ROOT / "platforms", required=True)
         for key, entry in registry.items():
             if not datadirs.revisioned(entry):
                 continue

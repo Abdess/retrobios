@@ -18,7 +18,8 @@ import os
 from core.cli import suggest_names
 from model.cliargs import platform_arg, require_platform
 
-from packs.datadirs import DEFAULT_REGISTRY, load_registry, log, refresh_all, refresh_entry
+from model.registry import data_dir_registry_at
+from packs.datadirs import DEFAULT_REGISTRY, log, refresh_all, refresh_entry
 
 
 def summarize(outcomes: dict[str, bool | None], dry_run: bool) -> str:
@@ -59,7 +60,7 @@ def main() -> None:
     if args.platform:
         # The registry sits in the platforms directory it serves.
         require_platform(args.platform, os.path.dirname(args.registry) or ".")
-    registry = load_registry(args.registry)
+    registry = data_dir_registry_at(args.registry, required=True)
 
     if args.key:
         if args.key not in registry:

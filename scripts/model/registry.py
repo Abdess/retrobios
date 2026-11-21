@@ -11,13 +11,22 @@ from core.cli import InputMissing
 from model.sources import source_yaml_file
 
 
-def load_data_dir_registry(platforms_dir: str = PLATFORMS_DIR) -> dict:
-    """Load the data directory registry from _data_dirs.yml."""
-    registry_path = os.path.join(platforms_dir, "_data_dirs.yml")
+def data_dir_registry_at(registry_path: str | os.PathLike[str], required: bool = False) -> dict:
+    """The `data_directories:` mapping of a data directory registry file.
+
+    An absent file is an empty registry, or with ``required`` an input the
+    command cannot run without.
+    """
     if not os.path.exists(registry_path):
+        if required:
+            raise InputMissing(f"Registry not found: {registry_path}")
         return {}
-    data = source_yaml_file(registry_path) or {}
-    return data.get("data_directories", {})
+    return (source_yaml_file(registry_path) or {}).get("data_directories") or {}
+
+
+def load_data_dir_registry(platforms_dir: str | Path = PLATFORMS_DIR, required: bool = False) -> dict:
+    """Load the data directory registry from _data_dirs.yml."""
+    return data_dir_registry_at(os.path.join(platforms_dir, "_data_dirs.yml"), required)
 
 
 def load_platform_registry(platforms_dir: str | Path = PLATFORMS_DIR, required: bool = False) -> dict:

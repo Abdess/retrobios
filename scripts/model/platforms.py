@@ -48,6 +48,23 @@ def _inherited_yaml(platform_name: str, platforms_dir: str) -> tuple[dict, list[
     return merged, [platform_name, *chain]
 
 
+def inheritance_chain(platform: str, platforms_dir: str | os.PathLike[str]) -> list[str]:
+    """The platform and every platform its file inherits from, nearest first.
+
+    Stops at a file that does not exist or at a name already walked.
+    """
+    chain: list[str] = []
+    name: str | None = platform
+    while name and name not in chain:
+        path = os.path.join(platforms_dir, f"{name}.yml")
+        if not os.path.isfile(path):
+            break
+        chain.append(name)
+        inherits = (source_yaml_file(path) or {}).get("inherits")
+        name = str(inherits) if inherits else None
+    return chain
+
+
 def _cached_platform_yaml(path: str) -> dict:
     """A registry or shared-group file, parsed once per real path."""
     real = os.path.realpath(path)

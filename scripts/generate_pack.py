@@ -1309,10 +1309,9 @@ def _requested_platforms(args: argparse.Namespace, parser: argparse.ArgumentPars
 
 def _refresh_data_directories(args: argparse.Namespace, data_registry: dict) -> None:
     """Bring the data directory caches up to date before a build reads them."""
-    from packs.datadirs import load_registry, refresh_all
+    from packs.datadirs import refresh_all
 
-    registry = load_registry(os.path.join(args.platforms_dir, "_data_dirs.yml"))
-    results = refresh_all(registry, force=args.refresh_data)
+    results = refresh_all(data_registry, force=args.refresh_data)
     updated = sum(1 for v in results.values() if v)
     if updated:
         print(f"Refreshed {updated} data director{'ies' if updated > 1 else 'y'}")
