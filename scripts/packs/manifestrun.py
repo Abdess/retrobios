@@ -11,6 +11,7 @@ from core.artifacts import write_if_changed
 from model.platforms import load_platform_config
 from model.registry import load_platform_registry
 from model.safeparse import require_yaml
+from packs.datatrees import uncached_warning
 from packs.manifest import generate_install_list
 from packs.naming import pack_narrowings, platform_target
 from packs.scope import platform_list_version
@@ -60,6 +61,15 @@ def _alias_manifest(
     return alias_manifest
 
 
+def report_uncached(uncached: dict[str, str], recorded: set[str] | None) -> None:
+    """Name each data directory a list carries and the cache does not hold,
+    once, and record it for the run's exit code."""
+    for ref_key, local_path in uncached.items():
+        print(uncached_warning(ref_key, local_path))
+    if recorded is not None:
+        recorded.update(uncached)
+
+
 def run_manifest_mode(
     args: argparse.Namespace,
     groups: list[tuple[list[str], str]],
@@ -82,6 +92,7 @@ def run_manifest_mode(
             if skip_empty_truth(args, source, representative, emu_profiles, tc, failed):
                 continue
             layouts: dict = {}
+            uncached: dict[str, str] = {}
             try:
                 manifest = generate_install_list(
                     representative,
@@ -102,8 +113,9 @@ def run_manifest_mode(
                     required_only=required_only,
                     no_game_data=getattr(args, "no_game_data", False),
                     standalone_out=layouts,
-                    uncached_out=getattr(args, "uncached_trees", None),
+                    uncached_out=uncached,
                 )
+                report_uncached(uncached, getattr(args, "uncached_trees", None))
                 narrow_suffix = "".join(
                     tag.lower()
                     for tag, _label in pack_narrowings(

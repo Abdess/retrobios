@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import contextlib
-import io
 import os
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
@@ -26,7 +24,6 @@ from packs.datatrees import (
     core_data_trees,
     pack_markers,
     tree_readers,
-    uncached_warning,
 )
 from packs.extras import (
     collect_emulator_extras,
@@ -96,7 +93,7 @@ class InstallListOptions(TypedDict, total=False):
     fold_case: bool | None
     no_game_data: bool
     one_per_slot: bool
-    uncached_out: set[str] | None
+    uncached_out: dict[str, str] | None
 
 
 class ManifestOptions(InstallListOptions, total=False):
@@ -125,7 +122,7 @@ class _ManifestSettings:
     one_per_slot: bool = False
     known_slot_choices: dict | None = None
     build_out: dict | None = None
-    uncached_out: set[str] | None = None
+    uncached_out: dict[str, str] | None = None
 
 
 @dataclass
@@ -479,10 +476,8 @@ class _ManifestBuild:
             core_trees=core_trees,
             reclaim=reclaim, uncached_out=uncached,
         ))
-        for ref_key, local_path in uncached:
-            print(uncached_warning(ref_key, local_path))
         if opts.uncached_out is not None:
-            opts.uncached_out.update(ref_key for ref_key, _path in uncached)
+            opts.uncached_out.update(uncached)
         # A platform entry found in a tree the pack carries is that tree's member:
         # the installer rebuilds it from the tree's archive. One found in a tree
         # the pack does not carry stays omitted, held by the pack alone.
@@ -713,8 +708,8 @@ def generate_manifest(
     One build: generate_install_list adds what --source truth and
     --standalone read. `build_out` receives the slot choices and the
     profiles this build read, which that second build takes over.
-    `uncached_out` receives the data directories the list carries and the
-    cache does not hold.
+    `uncached_out` maps each data directory the list carries and the cache
+    does not hold to its cache folder: the caller reports it.
     """
     reject_unknown("generate_manifest", options, ManifestOptions.__optional_keys__)
     opts = _ManifestSettings(**options)
@@ -822,11 +817,10 @@ def generate_install_list(
             or settings.fold_case is not None or settings.one_per_slot):
         return result
     truth_options: InstallListOptions = {**options, "source": "truth"}
-    with contextlib.redirect_stdout(io.StringIO()):
-        truth = generate_manifest(
-            platform_name, platforms_dir, db, bios_dir, registry_path,
-            **truth_options, known_slot_choices=built["slot_choices"],
-        )
+    truth = generate_manifest(
+        platform_name, platforms_dir, db, bios_dir, registry_path,
+        **truth_options, known_slot_choices=built["slot_choices"],
+    )
     _mark_truth(result, truth)
     layouts = standalone_layouts(
         built["profiles"], settings.emulators_dir, db, bios_dir,

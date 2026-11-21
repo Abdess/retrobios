@@ -189,7 +189,7 @@ class AMissingDataDirectoryFailsTheRun(unittest.TestCase):
         from packs.manifest import generate_manifest
 
         root, db, registry = self._platform()
-        uncached: set[str] = set()
+        uncached: dict[str, str] = {}
         out = io.StringIO()
         with redirect_stdout(out):
             generate_manifest(
@@ -198,8 +198,21 @@ class AMissingDataDirectoryFailsTheRun(unittest.TestCase):
                 emulators_dir=str(root / "emulators"),
                 data_registry=registry, offline=True, uncached_out=uncached,
             )
-        self.assertEqual(uncached, {"assets"})
-        self.assertIn("WARNING: data directory 'assets' not cached", out.getvalue())
+        # The library records; the run names each tree once.
+        self.assertEqual((uncached, out.getvalue()), ({"assets": str(root / "absent")}, ""))
+
+    def test_the_manifest_run_names_each_tree_once(self):
+        from packs.manifestrun import report_uncached
+
+        recorded: set[str] = set()
+        out = io.StringIO()
+        with redirect_stdout(out):
+            report_uncached({"assets": "/c/absent"}, recorded)
+        self.assertEqual(recorded, {"assets"})
+        self.assertEqual(out.getvalue(), (
+            "  WARNING: data directory 'assets' not cached at /c/absent"
+            " (run refresh_data_dirs.py)\n"
+        ))
 
     def test_the_shared_walk_prints_nothing_and_keeps_no_state(self):
         from packs import datatrees

@@ -165,6 +165,8 @@ def run_platform_packs(
                     # systems: the pack records them, so a pack alone (a
                     # handheld without Wi-Fi) can be narrowed by system.
                     board_list = Path(args.platforms_dir) / "targets" / f"{representative}.yml"
+                    # The pack above named its uncached trees: these are recorded only.
+                    unnamed: dict[str, str] = {}
                     systems_for[os.path.basename(zip_path)] = pack_systems(generate_manifest(
                         representative, args.platforms_dir, db, args.bios_dir,
                         registry_path, emulators_dir=args.emulators_dir,
@@ -174,8 +176,11 @@ def run_platform_packs(
                         offline=args.offline, required_only=required_only,
                         data_registry=data_registry,
                         no_game_data=getattr(args, "no_game_data", False),
-                        uncached_out=getattr(args, "uncached_trees", None),
+                        uncached_out=unnamed,
                     ), target_list(board_list) if board_list.is_file() else None)
+                    recorded_trees: set[str] | None = getattr(args, "uncached_trees", None)
+                    if recorded_trees is not None:
+                        recorded_trees.update(unnamed)
 
     if record_counts:
         write_pack_counts(record_counts, recorded)
