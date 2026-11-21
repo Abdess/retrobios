@@ -66,7 +66,7 @@ def _pick(
 
     The one sharing a hash with it first. A name and system the platform
     declares once is corrected by the first entry of ours left, whatever
-    its hash; declared several times, an entry is a revision and only one
+    its hash. Declared several times, an entry is a revision and only one
     of ours sharing its hash speaks for it.
     """
     free = [own for own in owns if id(own) not in used]

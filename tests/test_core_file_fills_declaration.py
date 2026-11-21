@@ -198,7 +198,7 @@ class AMissingDataDirectoryFailsTheRun(unittest.TestCase):
                 emulators_dir=str(root / "emulators"),
                 data_registry=registry, offline=True, uncached_out=uncached,
             )
-        # The library records; the run names each tree once.
+        # The library records, and the run names each tree once.
         self.assertEqual((uncached, out.getvalue()), ({"assets": str(root / "absent")}, ""))
 
     def test_the_manifest_run_names_each_tree_once(self):
