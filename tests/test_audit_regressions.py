@@ -7594,6 +7594,12 @@ class CommentsSayWhy(unittest.TestCase):
         self.assertEqual(found, [])
 
 
+class _ResponseBody(io.BytesIO):
+    """A body with the headers attribute urlopen's response carries."""
+
+    headers: dict[str, str] = {}
+
+
 class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
     """download_external lived outside packresolve and fetched under
     --offline, into the system /tmp, holding the whole body in memory."""
@@ -7601,11 +7607,8 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
     ENTRY = {"name": "ext.bin", "source_url": "https://example.invalid/ext.bin",
              "sha1": hashlib.sha1(b"payload").hexdigest()}
 
-    class _Body(io.BytesIO):
-        headers: dict = {}
-
     def _response(self, body: bytes):
-        stream = self._Body(body)
+        stream = _ResponseBody(body)
         response = mock.MagicMock()
         response.__enter__.return_value = stream
         response.__exit__.return_value = False

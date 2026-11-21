@@ -1382,7 +1382,7 @@ class RecalboxExport(unittest.TestCase):
         if not original.is_file():
             self.skipTest("no cached original for recalbox")
 
-        def zips(text: str) -> dict[tuple[str, str], str]:
+        def zips(text: str) -> dict[tuple[str | None, str | None], str]:
             return {
                 (s.get("platform"), b.get("path")): ",".join(sorted(
                     v.strip().lower() for v in b.get("md5", "").split(",")
@@ -2518,7 +2518,7 @@ class UpstreamFidelity(unittest.TestCase):
                 "no upstream cache, run scripts/export_native.py --all --fetch"
             )
 
-    def _export(self, platform: str, truth: dict | None = None) -> dict[str, str]:
+    def _export(self, platform: str, truth: dict | None = None) -> tuple[dict, dict[str, str]]:
         cache = UPSTREAM_CACHE / platform
         if not cache.is_dir():
             self.skipTest(f"no cached original for {platform}")
@@ -2627,8 +2627,9 @@ class UpstreamFidelity(unittest.TestCase):
                 if child.tag == f"{namespace}element":
                     continue
                 if child.tag == f"{namespace}attribute":
-                    if child.get("use") == "required" and child.get("name"):
-                        found.add(child.get("name"))
+                    name = child.get("name")
+                    if child.get("use") == "required" and name:
+                        found.add(name)
                     continue
                 found |= own_attributes(child)
             return found
