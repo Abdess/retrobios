@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import hashlib
+import http.client
 import json
 import os
 import re
@@ -233,7 +234,7 @@ def github_releases(repo: str) -> list[dict]:
     from scraper.base_scraper import github_json
 
     return github_json(f"https://api.github.com/repos/{repo}/releases",
-                       f"cannot list the releases of {repo}", timeout=60)
+                       f"cannot list the releases of {repo}", timeout=60, error=cp.ProbeError)
 
 
 def fetch(emu: Emulator, cache: Path = CACHE) -> dict:
@@ -692,14 +693,20 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     emu = EMULATORS[args.emulator]
     if args.mode == "resolve":
-        asset = select_asset(github_releases(emu.repo), emu.asset_endswith, emu.asset_contains)
+        try:
+            releases = github_releases(emu.repo)
+        except cp.ProbeError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        asset = select_asset(releases, emu.asset_endswith, emu.asset_contains)
         print(json.dumps({"emulator": emu.name, "platform": emu.platform,
                           "installer_ref": emu.installer_ref, "asset": asset}, indent=2))
         return 0 if asset else 1
     if args.mode == "fetch":
         try:
             print(json.dumps(fetch(emu), indent=2))
-        except (cp.ProbeError, OSError, subprocess.CalledProcessError) as exc:
+        except (cp.ProbeError, upstream.UpstreamError, OSError, http.client.HTTPException,
+                subprocess.CalledProcessError) as exc:
             print(f"ERROR: {exc}", file=sys.stderr)
             return 1
         return 0
