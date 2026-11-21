@@ -10,6 +10,7 @@ Node's compile cache into /tmp.
 from __future__ import annotations
 
 import tests
+from tests import mdsections
 
 import glob
 import json
@@ -213,7 +214,7 @@ class FaqInstallsFromWhatYouHold(unittest.TestCase):
         self.faq = (REPO_ROOT / "wiki" / "faq.md").read_text(encoding="utf-8")
 
     def _section(self, heading: str) -> str:
-        return self.faq.split(f"## {heading}\n", 1)[1].split("\n## ", 1)[0]
+        return mdsections.section(self.faq, heading, stop=2)
 
     def test_no_unzip_before_from_pack(self):
         section = " ".join(self._section("No internet on the device?").split())

@@ -8,9 +8,12 @@ code moves, and nothing else notices.
 from __future__ import annotations
 
 import tests
+from tests import mdsections
+from tests.mdsections import FENCED
 from tests.sources import script_source
 
 import ast
+import functools
 import hashlib
 import inspect
 import io
@@ -26,7 +29,6 @@ from tests.test_prose_style import _python_prose, _sentence_case
 ROOT = Path(__file__).resolve().parent.parent
 WIKI = ROOT / "wiki"
 
-FENCED = re.compile(r"^```.*?^```", re.S | re.M)
 PUBLISHED = sorted(WIKI.glob("*.md")) + [ROOT / "README.md", ROOT / "CONTRIBUTING.md"]
 
 
@@ -34,15 +36,8 @@ def _page(name: str) -> str:
     return (WIKI / name).read_text(encoding="utf-8")
 
 
-def _section(text: str, heading: str) -> str:
-    """Body of a markdown section, up to the next heading of any level."""
-    start = re.search(rf"(?m)^#+ {re.escape(heading)}\n", text)
-    if start is None:
-        raise AssertionError(f"no section {heading!r}")
-    rest = text[start.end():]
-    blanked = FENCED.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), rest)
-    end = re.search(r"(?m)^#+ ", blanked)
-    return rest[: end.start()] if end else rest
+# A section runs to the next heading of any level.
+_section = functools.partial(mdsections.section, stop=6)
 
 
 def _table_rows(text: str) -> list[list[str]]:

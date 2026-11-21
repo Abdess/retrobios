@@ -10,6 +10,7 @@ tool prints, and a size is the one the release record holds.
 from __future__ import annotations
 
 import tests
+from tests import mdsections
 from tests.sources import declared_options, script_source
 
 import contextlib
@@ -60,15 +61,6 @@ SPLIT_RECORD = {
 
 def _read(relative: str) -> str:
     return (REPO_ROOT / relative).read_text(encoding="utf-8")
-
-
-def _section(text: str, heading: str) -> str:
-    """The text under a markdown heading, up to the next heading of its level."""
-    level = len(heading) - len(heading.lstrip("#"))
-    start = text.index(heading + "\n")
-    rest = text[start + len(heading) + 1:]
-    stop = re.search(rf"^#{{1,{level}}} ", rest, re.MULTILINE)
-    return rest[: stop.start()] if stop else rest
 
 
 def _which_pack() -> str:
@@ -197,7 +189,7 @@ class DownloadLinksKeepTheirAddress(unittest.TestCase):
         from model.registry import list_registered_platforms, list_release_pack_platforms
 
         readme = _read("README.md")
-        table = _section(readme, "## Or download a ZIP")
+        table = mdsections.section(readme, "## Or download a ZIP")
         self.assertNotIn("/releases/download/", table)
         released = set(list_release_pack_platforms("platforms"))
         rows = [line for line in table.splitlines() if line.startswith("| ")]
@@ -287,9 +279,14 @@ class EndUsersCheckTheirOwnFolder(unittest.TestCase):
     def test_user_sections_never_send_to_verify(self):
         for page, heading in self.USER_SECTIONS:
             with self.subTest(page=page, heading=heading):
-                section = _section(_read(page), heading)
+                section = mdsections.section(_read(page), heading)
                 self.assertNotIn("verify.py", section)
                 self.assertNotIn("python install.py --check", section)
+
+    def test_a_shell_comment_in_a_fence_does_not_end_the_section(self):
+        text = ("## 2. Fix the files\n\n```bash\n# from a checkout\n"
+                "python scripts/verify.py --all\n```\n\n## Next\n")
+        self.assertIn("verify.py", mdsections.section(text, "## 2. Fix the files"))
 
     def test_the_download_page_gives_the_one_liner_check(self):
         page = _which_pack()
@@ -357,7 +354,7 @@ class ShownOutputIsPrintedOutput(unittest.TestCase):
                     self.assertIn(literal, source)
 
     def test_samples_match_a_shape(self):
-        section = _section(_read("wiki/reading-reports.md"), "### Reading the output")
+        section = mdsections.section(_read("wiki/reading-reports.md"), "### Reading the output")
         blocks = re.findall(r"```\n(.*?)```", section, re.DOTALL)
         self.assertTrue(blocks)
         for block in blocks:
@@ -401,7 +398,7 @@ class ContributorChecksMatchCi(unittest.TestCase):
             contributing_text(lambda page: page, "# C", "here"),
             _read("CONTRIBUTING.md"),
         ):
-            block = _section(text, "## Before opening a PR")
+            block = mdsections.section(text, "## Before opening a PR")
             self.assertIn("python scripts/refresh_data_dirs.py", block)
             self.assertLess(
                 block.index("refresh_data_dirs.py"), block.index("run_tests.py")
@@ -426,7 +423,7 @@ class ContributorChecksMatchCi(unittest.TestCase):
             contributing_text(lambda page: page, "# C", "here"),
             _read("CONTRIBUTING.md"),
         ):
-            block = _section(text, "## Before opening a PR")
+            block = mdsections.section(text, "## Before opening a PR")
             self.assertIn("python scripts/generate_site.py", block)
             self.assertLess(
                 block.index("generate_site.py"), block.index("run_tests.py")
@@ -634,7 +631,7 @@ class ContributorChecksFetchThePlatformsFiles(unittest.TestCase):
             contributing_text(lambda page: page, "# C", "here"),
             _read("CONTRIBUTING.md"),
         ):
-            block = _section(text, "## Before opening a PR")
+            block = mdsections.section(text, "## Before opening a PR")
             self.assertIn("python scripts/export_native.py --all --refresh-cache", block)
             self.assertLess(
                 block.index("export_native.py"), block.index("run_tests.py")

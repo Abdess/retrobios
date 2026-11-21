@@ -32,9 +32,12 @@ setup guides or the generator that writes the page a link opens.
 from __future__ import annotations
 
 import tests
+from tests import mdsections
+from tests.mdsections import FENCED
 from tests.sources import script_source
 
 import fnmatch
+import functools
 import json
 import re
 import unittest
@@ -52,7 +55,6 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 WIKI = REPO_ROOT / "wiki"
-FENCED = re.compile(r"^```.*?^```", re.S | re.M)
 
 
 def _front(text: str) -> dict:
@@ -65,13 +67,9 @@ def _h1(text: str) -> str:
     return match.group(1) if match else ""
 
 
-def _section(text: str, heading: str) -> str:
-    start = re.search(rf"(?m)^#+ {re.escape(heading)}(?:\s*\{{[^}}]*\}})?\n", text)
-    if start is None:
-        raise AssertionError(f"no section {heading!r}")
-    rest = text[start.end():]
-    end = re.search(r"(?m)^#{1,2} ", FENCED.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), rest))
-    return rest[: end.start()] if end else rest
+# A section runs to the next heading of level 1 or 2, its subsections
+# included.
+_section = functools.partial(mdsections.section, stop=2)
 
 
 def _wiki(name: str) -> str:
