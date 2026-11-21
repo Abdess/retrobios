@@ -21,6 +21,7 @@ from installer.tui_actions import (
 )
 from installer.tui_choice import _needed
 from installer.tui_commands import TUI_ACTION_RUNS
+from installer.tui_outcome import full_drive_words
 from installer.tui_paint import _styled
 from installer.tui_rows import tui_rows
 
@@ -309,6 +310,7 @@ def tui_receive(state: TuiState, message: tuple) -> list[tuple]:
     state.running = False
     state.tail = [line for line in tail if not line.startswith("RetroBIOS ")]
     tail = state.tail
+    state.full_drive = full_drive_words(state)
     if state.run in TUI_ACTION_RUNS:
         return _action_ended(state, code, tail)
     if state.run == "check":

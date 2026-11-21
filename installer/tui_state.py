@@ -280,6 +280,9 @@ class TuiState:
         self.code: int | None = None
         self.stopping: bool = False
         self.tail: list = []
+        # The run's stop for lack of space in words, read when it ended: the
+        # result screen looked through the mounted drives on every frame.
+        self.full_drive: str = ""
         self.log: str = ""
         self.exit_code: int | None = None
         # The RetroBIOS app on the card the BIOS folder is on: asked for

@@ -2987,7 +2987,8 @@ class CardsSpaceAndConfirm(unittest.TestCase):
         state.stack.append("result")
         state.code, state.tail = 2, list(self.FULL_TAIL)
         with mock.patch.object(install, "_mounted_cards", return_value=[root]):
-            title, lines = install.tui_outcome(state)
+            state.full_drive = install.full_drive_words(state)
+        title, lines = install.tui_outcome(state)
         self.assertEqual(title, "Not enough space")
         self.assertEqual(lines[0], "The card is full: 1.2 GB needed, 300.0 MB free.")
         self.assertIn("Free some space, or run again and choose another folder.", lines)
@@ -9555,6 +9556,7 @@ class PacksWordingAndDocs(unittest.TestCase):
             view = " ".join(install.tui_view(state, 120, 40))
             state.stack = ["result"]
             state.tail = ["Needed: 87.9 KB. Free: 36.0 KB."]
+            state.full_drive = install.full_drive_words(state)
             _title, lines = install.tui_outcome(state)
         self.assertEqual(state.card_bound, ("Onion", "BIOS"))
         self.assertIn("The BIOS folder chosen for Onion:", view)

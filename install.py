@@ -13771,6 +13771,9 @@ class TuiState:
         self.code: int | None = None
         self.stopping: bool = False
         self.tail: list = []
+        # The run's stop for lack of space in words, read when it ended: the
+        # result screen looked through the mounted drives on every frame.
+        self.full_drive: str = ""
         self.log: str = ""
         self.exit_code: int | None = None
         # The RetroBIOS app on the card the BIOS folder is on: asked for
@@ -26865,8 +26868,9 @@ def _space_stop(state: TuiState) -> re.Match | None:
     return next(filter(None, (_SPACE_NEEDED.search(line) for line in state.tail)), None)
 
 
-def _space_words(state: TuiState) -> str:
-    """The run's stop for lack of space, in words, "" for another stop."""
+def full_drive_words(state: TuiState) -> str:
+    """The run's stop for lack of space, in words, "" for another stop: read
+    once, when the run ends."""
     match = _space_stop(state)
     if match is None:
         return ""
@@ -26926,7 +26930,7 @@ def _outcome_counts(state: TuiState) -> _OutcomeCounts:
                                   if _offline_only() and not offline_failed else 0)
     up_to_date = summary.get("up_to_date", 0)
     total = (state.download or {}).get("files", 0)
-    space = "" if summary else _space_words(state)
+    space = "" if summary else state.full_drive
     errors = f", {len(failed)} failed" if failed else ""
     return _OutcomeCounts(summary, installed, failed, offline_failed, left, up_to_date, total,
                           space, errors)
@@ -30554,6 +30558,7 @@ def tui_receive(state: TuiState, message: tuple) -> list[tuple]:
     state.running = False
     state.tail = [line for line in tail if not line.startswith("RetroBIOS ")]
     tail = state.tail
+    state.full_drive = full_drive_words(state)
     if state.run in TUI_ACTION_RUNS:
         return _action_ended(state, code, tail)
     if state.run == "check":
