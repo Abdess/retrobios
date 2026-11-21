@@ -21,6 +21,8 @@ import struct
 from collections.abc import Callable
 from pathlib import Path
 
+from core.hashing import file_key
+
 # Key file parsing (keys.txt / aes_keys.txt format)
 
 
@@ -489,17 +491,6 @@ _CRYPTO_VERIFIERS: dict[str, Callable] = {
 }
 
 
-def _stat_key(path: str | Path) -> tuple | None:
-    """(path, inode, size, mtime_ns, ctime_ns): the file as compute_hashes
-    keys it, None when it cannot be read."""
-    try:
-        stat = Path(path).stat()
-    except OSError:
-        return None
-    return (str(Path(path).resolve()), stat.st_ino, stat.st_size,
-            stat.st_mtime_ns, stat.st_ctime_ns)
-
-
 # (verifier, file key, keys file key) -> reason or None. verify --all ran the
 # curve and RSA checks of the same five files once per platform, 35 runs for
 # 5 answers: the answer depends on the file's bytes and the keys file alone.
@@ -524,8 +515,8 @@ def check_crypto_validation(
     if not keys_file:
         return "crypto check skipped: no keys file found"
 
-    file_key, keys_key = _stat_key(local_path), _stat_key(keys_file)
-    key = (filename, file_key, keys_key) if file_key and keys_key else None
+    held_key, keys_key = file_key(local_path), file_key(keys_file)
+    key = (filename, held_key, keys_key) if held_key and keys_key else None
     if key in _crypto_cache:
         return _crypto_cache[key]
     keys = parse_keys_file(keys_file)

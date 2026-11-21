@@ -8,7 +8,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import functools
-import hashlib
 import os
 import re
 import stat
@@ -17,7 +16,7 @@ import tempfile
 import zipfile
 
 from core.artifacts import process_umask, set_plain_mode
-from core.hashing import md5sum
+from core.hashing import MAX_HASHED_MEMBER, md5sum
 from core.paths import REPO_ROOT
 
 
@@ -57,7 +56,7 @@ def _member_md5(
             for fname in archive.namelist():
                 if fname.casefold() != folded:
                     continue
-                if archive.getinfo(fname).file_size > 512 * 1024 * 1024:
+                if archive.getinfo(fname).file_size > MAX_HASHED_MEMBER:
                     return "error"
                 if not hashed:
                     return "present"
@@ -125,10 +124,6 @@ MEMBER_CACHE = os.path.join(
 )
 
 
-# No caller asks for a member above this bound, the index's default.
-MAX_HASHED_MEMBER = 512 * 1024 * 1024
-
-
 def _read_member_cache(path: str) -> dict[str, list[list]]:
     import json
 
@@ -170,11 +165,8 @@ def _members_md5(path: str) -> list[list] | None:
                 if info.file_size > MAX_HASHED_MEMBER:
                     members.append([None, info.file_size])
                     continue
-                h = hashlib.md5()
                 with zf.open(info.filename) as inner:
-                    for chunk in iter(lambda: inner.read(65536), b""):
-                        h.update(chunk)
-                members.append([h.hexdigest(), info.file_size])
+                    members.append([md5sum(inner), info.file_size])
     except (zipfile.BadZipFile, OSError) as exc:
         print(f"warning: unreadable archive {path}: {exc}", file=sys.stderr)
         return None
@@ -183,7 +175,7 @@ def _members_md5(path: str) -> list[list] | None:
 
 def build_zip_contents_index(
     db: dict,
-    max_entry_size: int = 512 * 1024 * 1024,
+    max_entry_size: int = MAX_HASHED_MEMBER,
     cache_path: str | None = MEMBER_CACHE,
 ) -> dict:
     """Build {inner_rom_md5: zip_file_sha1} for ROMs inside ZIP files.

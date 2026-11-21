@@ -16,6 +16,9 @@ from collections.abc import Iterable
 
 _ALL_ALGORITHMS = frozenset({"sha1", "md5", "sha256", "crc32", "adler32"})
 
+# No caller asks for an archive member above this bound.
+MAX_HASHED_MEMBER = 512 * 1024 * 1024
+
 # (path, inode, size, mtime_ns, ctime_ns) -> the digests read so far.
 # verify --all hashed GB_dmg.bin 13 times, once per platform and entry. The
 # bytes are still read from disk, once per file and change.
@@ -34,14 +37,7 @@ def compute_hashes(
     algos = frozenset(algorithms) if algorithms else _ALL_ALGORITHMS
     if not cache:
         return _compute_hashes(filepath, algos)
-    try:
-        stat = os.stat(filepath)
-        key: tuple | None = (
-            os.path.realpath(filepath), stat.st_ino, stat.st_size,
-            stat.st_mtime_ns, stat.st_ctime_ns,
-        )
-    except OSError:
-        key = None
+    key = file_key(filepath)
     known = _hash_cache.get(key) if key else None
     if known is not None and algos <= known.keys():
         return {name: known[name] for name in algos}
@@ -49,6 +45,19 @@ def compute_hashes(
     if key is not None:
         _hash_cache.setdefault(key, {}).update(result)
     return result
+
+
+def file_key(filepath: str | Path) -> tuple | None:
+    """(path, inode, size, mtime_ns, ctime_ns): what a digest cache keys a
+    file by, None when it cannot be read."""
+    try:
+        stat = os.stat(filepath)
+    except OSError:
+        return None
+    return (
+        os.path.realpath(filepath), stat.st_ino, stat.st_size,
+        stat.st_mtime_ns, stat.st_ctime_ns,
+    )
 
 
 def _compute_hashes(filepath: str | Path, algos: frozenset[str]) -> dict[str, str]:
@@ -139,7 +148,7 @@ def md5_composite_of(source: str | Path | BinaryIO) -> str:
         h = hashlib.md5()
         for name in names:
             info = zf.getinfo(name)
-            if info.file_size > 512 * 1024 * 1024:
+            if info.file_size > MAX_HASHED_MEMBER:
                 continue  # skip oversized entries
             h.update(zf.read(name))
         return h.hexdigest()
