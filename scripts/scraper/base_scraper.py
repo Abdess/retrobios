@@ -18,6 +18,7 @@ from typing import Any, Callable, NoReturn, TypeVar
 
 from core.github import github_token
 from core.artifacts import copy_stream_atomic, write_text_atomic
+from core.hashing import git_blob_sha
 from core.upstream import (
     MAX_RESPONSE_SIZE,
     RateLimitError,
@@ -257,6 +258,26 @@ def download(
         return resp.headers.get("Content-Disposition", "") or ""
 
     return _open(urllib.request.Request(url, headers=headers or {}), save, timeout)
+
+
+class BlobMismatchError(ValueError):
+    """A downloaded file is not the blob the repository listing names."""
+
+
+def fetch_verified_blob(url: str, destination: Path, blob_sha: str, context: str = "") -> Path:
+    """`destination`, downloaded from `url` unless the cached copy already is
+    git blob `blob_sha`, and checked against it.
+
+    The cache is addressed by content: a file already there is kept only
+    while its blob sha is the one the repository lists.
+    """
+    if destination.is_file() and git_blob_sha(destination.read_bytes()) != blob_sha:
+        destination.unlink()
+    download(url, destination, skip_existing=True)
+    if git_blob_sha(destination.read_bytes()) != blob_sha:
+        destination.unlink()
+        raise BlobMismatchError(f"{url} is not blob {blob_sha}{context}")
+    return destination
 
 
 def github_json(

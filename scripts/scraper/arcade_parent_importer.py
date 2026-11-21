@@ -54,18 +54,12 @@ from model.database import load_database
 from core.artifacts import write_if_changed
 from model.profiles import load_emulator_profiles
 from core.cli import add_repo_inputs, run_cli
-from core.hashing import compute_hashes
+from core.hashing import compute_hashes, git_blob_sha
 from core.upstream import parse_repo
-from .base_scraper import download
+from .base_scraper import BlobMismatchError, download, fetch_verified_blob
 from .clex import DriverSourceError, blank_comments, call_args, call_span
 from .listxml import Opener, attrs, iter_elements, open_listxml, rom_members
-from .romset_dat_importer import (
-    MAME_LISTXML_URL,
-    BlobMismatchError,
-    _api_json,
-    fetch_pack,
-    git_blob_sha,
-)
+from .romset_dat_importer import MAME_LISTXML_URL, _api_json, fetch_pack
 
 SCHEMA_VERSION = 1
 DEFAULT_OUTPUT = Path("games") / "arcade"
@@ -891,17 +885,11 @@ def fetch_repo_file(slug: str, commit: str, path: str, cache_dir: Path) -> tuple
     ) if isinstance(listing, list) else None
     if item is None:
         raise FileNotFoundError(f"{slug}@{commit[:8]} has no {path}")
-    destination = cache_dir / "repo" / slug / commit / path
-    if destination.is_file() and git_blob_sha(destination.read_bytes()) != item["sha"]:
-        destination.unlink()
     url = (
         f"https://raw.githubusercontent.com/{slug}/{commit}/"
         f"{urllib.parse.quote(path)}"
     )
-    download(url, destination, skip_existing=True)
-    if git_blob_sha(destination.read_bytes()) != item["sha"]:
-        destination.unlink()
-        raise BlobMismatchError(f"{url} is not blob {item['sha']}")
+    destination = fetch_verified_blob(url, cache_dir / "repo" / slug / commit / path, item["sha"])
     return destination, item["sha"]
 
 

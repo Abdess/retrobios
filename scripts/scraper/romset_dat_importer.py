@@ -48,7 +48,13 @@ from core.cli import add_repo_inputs, run_cli
 from model.database import load_database
 from model.dumpcatalog import build_snapshot, load_provenance_snapshots, write_snapshot
 from resolve.localfile import variant_base_name
-from .base_scraper import download, fetch_github_latest_version, github_json
+from .base_scraper import (
+    BlobMismatchError,
+    download,
+    fetch_github_latest_version,
+    fetch_verified_blob,
+    github_json,
+)
 from .listxml import (
     Opener,
     iter_dat_documents,
@@ -410,18 +416,6 @@ def fetch_tag(source: str, requested: str) -> str:
     return requested
 
 
-class BlobMismatchError(ValueError):
-    """A downloaded DAT is not the blob the repository listing names."""
-
-
-def git_blob_sha(data: bytes) -> str:
-    """The sha git gives a blob, so a cached file can be checked against a
-    repository listing without any other state."""
-    digest = hashlib.sha1(f"blob {len(data)}\0".encode())
-    digest.update(data)
-    return digest.hexdigest()
-
-
 def fetch_pack(
     source: str, tag: str, cache_dir: Path
 ) -> tuple[Path, dict[str, str]]:
@@ -455,18 +449,10 @@ def fetch_pack(
     for item in listing:
         if item.get("type") != "file" or not item["name"].lower().endswith(".dat"):
             continue
-        destination = target / item["name"]
-        # The cache is addressed by content: a file already there is kept
-        # only while its blob sha is the one the repository lists.
-        if destination.is_file() and git_blob_sha(destination.read_bytes()) != item["sha"]:
-            destination.unlink()
-        download(item["download_url"], destination, skip_existing=True)
-        if git_blob_sha(destination.read_bytes()) != item["sha"]:
-            destination.unlink()
-            raise BlobMismatchError(
-                f"{item['name']} downloaded from {item['download_url']} is not "
-                f"blob {item['sha']} of libretro/FBNeo {sha}"
-            )
+        fetch_verified_blob(
+            item["download_url"], target / item["name"], item["sha"],
+            f" of libretro/FBNeo {sha}",
+        )
         blobs[item["name"]] = item["sha"]
     # A DAT the revision does not carry is not read from an older fetch.
     for stale in target.glob("*"):

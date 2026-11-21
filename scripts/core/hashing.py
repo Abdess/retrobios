@@ -112,6 +112,14 @@ def file_digest(path: Path, algorithm: str = "sha1") -> str:
     return digest.hexdigest()
 
 
+def git_blob_sha(data: bytes) -> str:
+    """The sha git gives a blob, so a cached file can be checked against a
+    repository listing without any other state."""
+    digest = hashlib.sha1(f"blob {len(data)}\0".encode())
+    digest.update(data)
+    return digest.hexdigest()
+
+
 def md5sum(source: str | os.PathLike[str] | IO[bytes]) -> str:
     """Compute MD5 of a file path or file-like object - matches Batocera's md5sum()."""
     if isinstance(source, (str, os.PathLike)):

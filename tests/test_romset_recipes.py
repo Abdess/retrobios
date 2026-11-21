@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import tests
 
+import contextlib
 import hashlib
 import json
 import sys
@@ -27,11 +28,11 @@ from scripts.scraper.romset_dat_importer import (
     compact_entries,
     holds_target,
     listxml_entries,
-    git_blob_sha,
     merge_snapshot,
     recipe_entries,
 )
 from scripts.scraper.logiqx_parser import parse_logiqx
+from core.hashing import git_blob_sha
 from core.torrentzip import build_torrentzip, is_torrentzip
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -889,7 +890,7 @@ class FbneoFetchReadsOneRevision(unittest.TestCase):
             return {"sha": "c0ffee"}
         return [{
             "type": "file", "name": "Demo.dat",
-            "sha": self.importer.git_blob_sha(FBNEO_DAT),
+            "sha": git_blob_sha(FBNEO_DAT),
             "download_url": "https://raw.githubusercontent.com/libretro/FBNeo/c0ffee/dats/Demo.dat",
         }]
 
@@ -897,12 +898,15 @@ class FbneoFetchReadsOneRevision(unittest.TestCase):
         destination.write_bytes(self.served)
         return ""
 
+    @contextlib.contextmanager
     def _patched(self):
         from unittest import mock
 
-        return mock.patch.multiple(
-            self.importer, _api_json=self._api, download=self._download
-        )
+        from scripts.scraper import base_scraper
+
+        with mock.patch.object(self.importer, "_api_json", self._api), \
+                mock.patch.object(base_scraper, "download", self._download):
+            yield
 
     def test_bytes_that_are_not_the_listed_blob_are_refused(self):
         self.served = FBNEO_DAT.replace(b"1.0.0.03", b"1.0.0.02")

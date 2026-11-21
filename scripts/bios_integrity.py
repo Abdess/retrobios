@@ -44,7 +44,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from core.cli import add_repo_inputs
-from core.hashing import file_digest
+from core.hashing import file_digest, git_blob_sha
 from model.largefiles import load_registered_paths
 
 MISREAD = "misread"
@@ -114,7 +114,7 @@ def modified_for_git(root: Path, path: str) -> bool:
 def restore_from_blob(root: Path, path: str, blob: str, expected: str) -> str:
     """Write the blob's bytes over path, after checking them. Empty on success."""
     data = git(root, "cat-file", "blob", blob).stdout
-    object_id = hashlib.sha1(b"blob %d\0" % len(data) + data).hexdigest()
+    object_id = git_blob_sha(data)
     if object_id != blob:
         return f"blob read back as {object_id[:12]}, not {blob[:12]}"
     if hashlib.sha1(data).hexdigest() != expected:
