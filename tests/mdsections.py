@@ -19,7 +19,9 @@ def section(text: str, heading: str, *, stop: int | None = None) -> str:
 
     The heading is its text, or the full line with its hashes, which then
     fix its level; a trailing ``{ #anchor }`` is optional either way."""
-    hashes, title = re.fullmatch(r"(#*)\s*(.*)", heading).groups()
+    title = heading.lstrip("#")
+    hashes = heading[: len(heading) - len(title)]
+    title = title.strip()
     start = re.search(rf"(?m)^({hashes or '#+'}) {re.escape(title)}(?:\s*\{{[^}}]*\}})?\n", text)
     if start is None:
         raise AssertionError(f"no section {heading!r}")
