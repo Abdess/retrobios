@@ -2295,6 +2295,26 @@ class TestReportToDict(unittest.TestCase):
         payload = report_to_dict(_sample_report())
         self.assertEqual(payload["entries"][0]["parts"][0]["status"], "SHIFTED")
 
+    def test_carries_one_attention_verdict(self):
+        """check_freshness rebuilt the verdict from single keys and dropped
+        version_warning and detection_skipped: the report gives it once."""
+        report = _sample_report()
+        report.version_warning = "core_version 1.0 names tag commit aaaaaaa"
+        report.detection_skipped = "HTTP 403"
+        kinds = [(r["kind"], r["level"]) for r in report_to_dict(report)["attention"]]
+        self.assertEqual(kinds, [
+            ("review", "stale"), ("version", "stale"), ("detection_skipped", "unknown"),
+        ])
+
+    def test_strict_kinds_keep_review_and_uncheckable(self):
+        from profiling.reports import STRICT_KINDS, ProfileReport
+
+        self.assertTrue(_sample_report().fails(STRICT_KINDS))
+        dead = ProfileReport("x", skipped="no declared repository answers")
+        self.assertTrue(dead.fails(STRICT_KINDS))
+        warned = ProfileReport("y", pin="a", head="a", version_warning="behind")
+        self.assertFalse(warned.fails(STRICT_KINDS))
+
     def test_markdown_lists_every_profile(self):
         text = format_markdown([_sample_report()])
         self.assertIn("demo", text)

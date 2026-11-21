@@ -67,6 +67,7 @@ from freshness.targets import (
 from model.registry import load_platform_registry
 from model.safeparse import yaml_load
 from model.targets import platform_overrides
+from profiling.reports import ProfileReport, report_to_dict
 from scripts.scraper import game_dat_importer
 from tests.sources import SCRIPTS
 
@@ -591,15 +592,20 @@ class CatalogParsingTests(unittest.TestCase):
         self.assertEqual(mame_versions(recipes), ["mame0250", "mame0289"])
 
 
+def _rows(*reports: ProfileReport) -> list[dict]:
+    """The JSON rows profile_sync --json writes for these reports."""
+    return [report_to_dict(report) for report in reports]
+
+
 class ProfileSummaryTests(unittest.TestCase):
     def test_summary_separates_review_moved_and_unreachable(self):
-        report = [
-            {"name": "a", "pin": "1" * 40, "head": "1" * 40, "needs_review": 0},
-            {"name": "b", "pin": "1" * 40, "head": "2" * 40, "needs_review": 0},
-            {"name": "c", "pin": "1" * 40, "head": "2" * 40, "needs_review": 3},
-            {"name": "d", "skipped": "no declared repository answers"},
-            {"name": "e", "skipped": "upstream gone (declared): archived 2019"},
-        ]
+        report = _rows(
+            ProfileReport("a", pin="1" * 40, head="1" * 40),
+            ProfileReport("b", pin="1" * 40, head="2" * 40),
+            ProfileReport("c", pin="1" * 40, head="2" * 40, counts={"CHANGED": 3}),
+            ProfileReport("d", skipped="no declared repository answers"),
+            ProfileReport("e", skipped="upstream gone (declared): archived 2019"),
+        )
         findings = summarize_profile_sync(report)
         by_subject = {f.subject: f for f in findings}
         self.assertEqual(by_subject["profile_sync"].status, STALE)
@@ -614,25 +620,59 @@ class ProfileSummaryTests(unittest.TestCase):
     def test_new_upstream_names_and_hashes_are_stale(self):
         """A file name the cited code gained since the pin, or a hash nobody
         declares, was printed only by the text pass that --profiles never ran."""
-        report = [
-            {"name": "a", "pin": "1" * 40, "head": "2" * 40, "needs_review": 0,
-             "new_files": [
-                 {"path": "x.c", "line": 4, "name": "old.rom", "since_pin": False},
-                 {"path": "x.c", "line": 9, "name": "new.rom", "since_pin": True},
-             ], "new_hashes": []},
-            {"name": "b", "pin": "1" * 40, "head": "2" * 40, "needs_review": 0,
-             "new_files": [], "new_hashes": [{"path": "x.c", "kind": "md5", "value": "0" * 32}]},
-            {"name": "c", "pin": "1" * 40, "head": "2" * 40, "needs_review": 0,
-             "new_files": [
-                 {"path": "x.c", "line": 4, "name": "old.rom", "since_pin": False},
-             ], "new_hashes": []},
-        ]
+        report = _rows(
+            ProfileReport("a", pin="1" * 40, head="2" * 40, new_files=[
+                {"path": "x.c", "line": 4, "name": "old.rom", "since_pin": False},
+                {"path": "x.c", "line": 9, "name": "new.rom", "since_pin": True},
+            ], new_hashes=[]),
+            ProfileReport("b", pin="1" * 40, head="2" * 40, new_files=[],
+                          new_hashes=[{"path": "x.c", "kind": "md5", "value": "0" * 32}]),
+            ProfileReport("c", pin="1" * 40, head="2" * 40, new_files=[
+                {"path": "x.c", "line": 4, "name": "old.rom", "since_pin": False},
+            ], new_hashes=[]),
+        )
         by_subject = {f.subject: f for f in summarize_profile_sync(report)}
         self.assertEqual(by_subject["a"].status, STALE)
         self.assertIn("new.rom", by_subject["a"].detail)
         self.assertNotIn("old.rom", by_subject["a"].detail)
         self.assertEqual(by_subject["b"].status, STALE)
         self.assertNotIn("c", by_subject)
+
+    def test_a_version_behind_its_code_is_stale(self):
+        """version_warning was on the report and --profiles passed
+        --check-version, yet a core_version older than its pin read OK."""
+        warning = ("core_version 1.0 is older than the code: "
+                   "the pin aaaaaaa already contains release 1.1")
+        rows = _rows(ProfileReport("x", pin="a" * 40, head="a" * 40,
+                                   version_warning=warning))
+        overall, row = summarize_profile_sync(rows)
+        self.assertEqual(overall.status, STALE)
+        self.assertEqual((row.status, row.detail), (STALE, warning))
+
+    def test_a_refused_detection_or_version_check_is_unknown(self):
+        """A detection the forge refused read as "nothing gained": OK."""
+        rows = _rows(
+            ProfileReport("x", pin="a" * 40, head="a" * 40, new_files=None,
+                          new_hashes=None, detection_skipped="403 forbidden"),
+            ProfileReport("y", pin="a" * 40, head="a" * 40,
+                          version_unread="version check skipped: 403 forbidden"),
+        )
+        overall, x, y = summarize_profile_sync(rows)
+        self.assertEqual(overall.status, OK)
+        self.assertEqual(x.status, UNKNOWN)
+        self.assertIn("403 forbidden", x.detail)
+        self.assertEqual((y.status, y.detail),
+                         (UNKNOWN, "version check skipped: 403 forbidden"))
+
+    def test_a_profile_without_refs_still_reports_its_pin(self):
+        """A profile skipped for want of a source_ref has its revisions
+        read: an orphaned pin there is as stale as anywhere."""
+        rows = _rows(ProfileReport("x", pin="a" * 40, head="b" * 40,
+                                   skipped="no source_ref",
+                                   orphaned=["o/r: pin aaaaaaaa is no ancestor of bbbbbbbb"]))
+        _, row = summarize_profile_sync(rows)
+        self.assertEqual(row.status, STALE)
+        self.assertEqual(row.detail, "no source_ref, 1 refs to review")
 
     def test_profile_sync_accepts_the_command_it_is_given(self):
         """--json with the detection flags was refused, so --profiles read an
@@ -896,12 +936,12 @@ class RowsSayAllTheyStandFor(unittest.TestCase):
 class AReleasePageMakesAProfileStale(unittest.TestCase):
     def test_a_newer_announced_version_is_stale(self):
 
-        rows = [
-            {"name": "altirra", "skipped": "unsupported host: x",
-             "declared_version": "4.40", "page_version": "4.50"},
-            {"name": "mednafen", "skipped": "unsupported host: y",
-             "declared_version": "1.32.1", "page_version": "1.32.1"},
-        ]
+        rows = _rows(
+            ProfileReport("altirra", skipped="unsupported host: x",
+                          declared_version="4.40", page_version="4.50"),
+            ProfileReport("mednafen", skipped="unsupported host: y",
+                          declared_version="1.32.1", page_version="1.32.1"),
+        )
         found = {f.subject: f.status for f in summarize_profile_sync(rows)}
         self.assertEqual(found["altirra"], STALE)
         self.assertEqual(found["mednafen"], OK)
@@ -910,9 +950,9 @@ class AReleasePageMakesAProfileStale(unittest.TestCase):
         """An unreadable page read like a profile with no version_source:
         SKIPPED by nature, and a moved or dead feed went unseen."""
 
-        rows = [{"name": "altirra", "skipped": "unsupported host: virtualdub.org",
-                 "declared_version": "4.40", "page_version": None,
-                 "page_version_unread": "page absent"}]
+        rows = _rows(ProfileReport("altirra", skipped="unsupported host: virtualdub.org",
+                                   declared_version="4.40", page_version=None,
+                                   page_version_unread="page absent"))
         (overall, row) = summarize_profile_sync(rows)
         self.assertEqual(row.status, UNKNOWN)
         self.assertEqual(row.detail, "version page unread: page absent")
@@ -921,12 +961,12 @@ class AReleasePageMakesAProfileStale(unittest.TestCase):
         """FPse 13.0 exists only as rebuilt copies: the profile stays on 12.1
         and flagging it on every run said nothing new. 13.1 would."""
 
-        rows = [
-            {"name": "fpse", "skipped": "unsupported host: x", "declared_version": "12.1",
-             "page_version": "13.0", "no_genuine_copy": "13.0"},
-            {"name": "later", "skipped": "unsupported host: x", "declared_version": "12.1",
-             "page_version": "13.1", "no_genuine_copy": "13.0"},
-        ]
+        rows = _rows(
+            ProfileReport("fpse", skipped="unsupported host: x", declared_version="12.1",
+                          page_version="13.0", no_genuine_copy="13.0"),
+            ProfileReport("later", skipped="unsupported host: x", declared_version="12.1",
+                          page_version="13.1", no_genuine_copy="13.0"),
+        )
         found = {f.subject: f for f in summarize_profile_sync(rows)}
         self.assertEqual(found["fpse"].status, OK)
         self.assertIn("no genuine copy", found["fpse"].detail)

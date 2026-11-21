@@ -22,6 +22,7 @@ from profiling import quota, selection
 from profiling.bump import DEFAULT_CACHE
 from profiling.flagchecks import refuse_flag_combinations
 from profiling.realignpass import run_realign
+from profiling.reports import STRICT_KINDS
 from profiling.run import emit_reports, read_selected
 from profiling.sourcepaths import refresh_source_paths
 from profiling.versioncheck import run_versions
@@ -217,9 +218,7 @@ def main() -> None:
     refresh_source_paths(args, written)
     if not complete:
         raise SystemExit(130)
-    if failed or (args.strict and any(
-        report.needs_review() or report.uncheckable() for report in reports
-    )):
+    if failed or (args.strict and any(report.fails(STRICT_KINDS) for report in reports)):
         raise SystemExit(1)
 
 

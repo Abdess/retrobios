@@ -38,6 +38,26 @@ class CitedSource:
         return self.pin != self.head and not self.own_revision
 
 
+# The reasons profile_sync --strict fails on: a ref or pin to look at again,
+# and a profile that cannot be checked as written.
+STRICT_KINDS = frozenset({"review", "uncheckable"})
+
+# Levels of an attention reason: the profile is behind its upstream, it
+# could not be read in full, or a remark that asks nothing.
+STALE_LEVEL = "stale"
+UNKNOWN_LEVEL = "unknown"
+NOTE_LEVEL = "note"
+
+
+@dataclass(frozen=True)
+class Attention:
+    """One reason to look at a profile again, with its level."""
+
+    kind: str
+    level: str
+    detail: str
+
+
 @dataclass
 class ProfileReport:
     name: str
@@ -139,6 +159,74 @@ class ProfileReport:
             + len(self.moved_repos)
             + sum(1 for ref in self.build_refs if ref["status"] != "BUILD_OK")
         )
+
+    def attention(self) -> list[Attention]:
+        """Every reason the pass gives to look at this profile again.
+
+        The one verdict its consumers read: check_freshness maps the levels
+        to its statuses, and --strict picks the kinds that fail a run. A
+        profile skipped for want of a source_ref still has its revisions
+        read, so an orphaned pin or a version warning stands beside the skip.
+        """
+        reasons = self._skip_attention() if self.skipped else []
+        review = self.needs_review()
+        if review:
+            reasons.append(Attention("review", STALE_LEVEL, f"{review} refs to review"))
+        added = sorted({
+            str(item.get("name")) for item in self.new_files or () if item.get("since_pin")
+        })
+        if added:
+            reasons.append(Attention(
+                "new_files", STALE_LEVEL, f"new file names since the pin: {', '.join(added)}"
+            ))
+        if self.new_hashes:
+            reasons.append(Attention(
+                "new_hashes", STALE_LEVEL,
+                f"{len(self.new_hashes)} undeclared hashes added since the pin",
+            ))
+        if self.version_warning:
+            reasons.append(Attention("version", STALE_LEVEL, self.version_warning))
+        if self.version_unread:
+            reasons.append(Attention("version_unread", UNKNOWN_LEVEL, self.version_unread))
+        if self.detection_skipped:
+            reasons.append(Attention(
+                "detection_skipped", UNKNOWN_LEVEL,
+                f"new file and hash detection unread: {self.detection_skipped}",
+            ))
+        return reasons
+
+    def _skip_attention(self) -> list[Attention]:
+        """A skipped profile: a skip that is a defect, then its release page."""
+        reasons = []
+        if self.uncheckable():
+            reasons.append(Attention("uncheckable", UNKNOWN_LEVEL, self.skipped or ""))
+        if self.page_version:
+            # Off any forge, the release page is the feed: a version there
+            # beyond the declared one is a release the profile does not cover.
+            if self.page_version == (self.declared_version or ""):
+                return reasons
+            if self.page_version == self.no_genuine_copy:
+                # Searched for and found only rebuilt: the profile covers the
+                # newest build that can be read, until the page moves on.
+                reasons.append(Attention(
+                    "no_genuine_copy", NOTE_LEVEL, "no genuine copy of the announced release"
+                ))
+                return reasons
+            reasons.append(
+                Attention("page_version", STALE_LEVEL, "a newer release is announced")
+            )
+        elif self.page_version_unread:
+            # The page is the only feed: unread, a new release cannot be told
+            # from none.
+            reasons.append(Attention(
+                "page_version_unread", UNKNOWN_LEVEL,
+                f"version page unread: {self.page_version_unread}",
+            ))
+        return reasons
+
+    def fails(self, kinds: frozenset[str]) -> bool:
+        """Whether a reason of one of ``kinds`` stands on this profile."""
+        return any(reason.kind in kinds for reason in self.attention())
 
 
 def triage_state(report: ProfileReport) -> str:
@@ -322,6 +410,7 @@ def report_to_dict(report: ProfileReport) -> dict:
     payload = asdict(report)
     del payload["cited_sources"]
     payload["needs_review"] = report.needs_review()
+    payload["attention"] = [asdict(reason) for reason in report.attention()]
     return payload
 
 
