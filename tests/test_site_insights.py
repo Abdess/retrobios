@@ -176,7 +176,7 @@ class Downloads(unittest.TestCase):
             self.assertEqual(snapshot, {"taken": "2026-11-19 10:30 UTC",
                                         "counts": {"v1/A.zip": 120, "v1/B.zip": 40, "v2/C.zip": 7}})
             path.write_text("{", encoding="utf-8")
-            with self.assertRaisesRegex(SystemExit, "not a download snapshot"):
+            with self.assertRaisesRegex(insights.SourceUnreadable, "not a download snapshot"):
                 insights.load_snapshot(path)
 
 
@@ -277,15 +277,15 @@ class GoatCounterExport(unittest.TestCase):
                                     {"format": "json", "start_from_day": "2026-10-20T00:00:00Z"}))
         self.assertEqual([url for url, _ in calls[1:]], [f"{insights.GOATCOUNTER}/export/7/download"] * 3)
 
-    def test_an_export_never_ready_ends_the_run(self) -> None:
+    def test_an_export_never_ready_leaves_the_source_out(self) -> None:
         def fetch(url: str, headers: dict[str, str] | None = None, body: dict | None = None) -> tuple[int, bytes]:
             return 202, json.dumps({"id": 7}).encode()
 
         with mock.patch.object(insights, "_fetch", fetch), mock.patch.object(insights.time, "sleep"), \
-                self.assertRaisesRegex(SystemExit, "export 7 not ready"):
+                self.assertRaisesRegex(insights.SourceUnavailable, "export 7 not ready"):
             insights._goat_export(self.FIRST, {})
 
-    def test_a_long_rate_limit_ends_the_run_instead_of_sleeping(self) -> None:
+    def test_a_long_rate_limit_leaves_the_source_out_instead_of_sleeping(self) -> None:
         headers = email.message.Message()
         headers["X-Rate-Limit-Reset"] = "2355"
         refusal = urllib.error.HTTPError("https://retrobios.goatcounter.com/api/v0/stats/hits", 429,
@@ -293,9 +293,10 @@ class GoatCounterExport(unittest.TestCase):
         with mock.patch.object(insights.urllib.request, "urlopen", side_effect=refusal), \
                 mock.patch.object(insights.upstream, "_sleep") as sleep, \
                 mock.patch.object(insights.upstream, "_exhausted_hosts", set()), \
-                self.assertRaisesRegex(SystemExit, "2356 s"):
+                self.assertRaisesRegex(insights.SourceUnavailable, "2356 s") as caught:
             insights._get_json("https://retrobios.goatcounter.com/api/v0/stats/hits")
         sleep.assert_not_called()
+        self.assertEqual(caught.exception.wait, 2356)
 
     def test_a_short_rate_limit_is_waited(self) -> None:
         headers = email.message.Message()
@@ -336,6 +337,44 @@ class GoatCounterExport(unittest.TestCase):
             self.assertEqual(headers["Authorization"], "Bearer SECRET")
             self.assertEqual(headers["Accept"], "application/vnd.github+json")
             self.assertEqual(headers["User-Agent"], insights.USER_AGENT)
+
+
+class AnUnavailableSource(unittest.TestCase):
+    """A GitHub rate limit after Search Console and GoatCounter had been read
+    ended the run on SystemExit: no report, the other readings lost."""
+
+    def test_the_others_are_reported_and_the_source_named(self) -> None:
+        import contextlib
+        import sys
+
+        import site_insights
+
+        goat = {"hits": [("/emulators/mgba/", 4)], "referrers": [], "visits": 4, "actions": 0}
+        with tempfile.TemporaryDirectory() as scratch:
+            config = Path(scratch)
+            # GoatCounter's token is there, Search Console's key is not.
+            (config / "goatcounter-api-token.txt").write_text("t\n", encoding="utf-8")
+            output = config / "report.md"
+            argv = ["site_insights.py", "--skip", "github", "--output", str(output)]
+            stderr = io.StringIO()
+            with mock.patch.object(sys, "argv", argv), \
+                    mock.patch.object(insights, "CONFIG", config), \
+                    mock.patch.object(insights, "_goat_export", return_value=b""), \
+                    mock.patch.object(insights, "read_export", return_value=goat), \
+                    contextlib.redirect_stderr(stderr):
+                code = site_insights.main()
+            text = output.read_text(encoding="utf-8")
+        reason = f"Search Console needs {config / 'gsc-service-account.json'}"
+        self.assertEqual(code, 1)
+        self.assertIn("## On the site", text)
+        self.assertNotIn("## Google searches", text)
+        self.assertIn(f"- Search Console: {reason}", text)
+        self.assertIn(f"Not read, Search Console: {reason}", stderr.getvalue())
+
+    def test_a_missing_credential_is_an_unavailable_source(self) -> None:
+        with mock.patch.object(insights, "CONFIG", Path("/nonexistent")), \
+                self.assertRaisesRegex(insights.SourceUnavailable, "GoatCounter needs"):
+            insights.fetch_goatcounter(dt.date(2026, 10, 1), dt.date(2026, 10, 28))
 
 
 if __name__ == "__main__":

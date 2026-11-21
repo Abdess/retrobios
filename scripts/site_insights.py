@@ -45,6 +45,7 @@ from core.paths import DB_FILE, EMULATORS_DIR, REPO_ROOT
 from sitegen.insights import (
     SOURCES,
     Readings,
+    SourceUnavailable,
     collection_names,
     downloads_snapshot,
     fetch_github,
@@ -76,14 +77,30 @@ def main() -> int:
     held, declared = collection_names(load_database(str(REPO_ROOT / DB_FILE)),
                                       load_emulator_profiles(str(REPO_ROOT / EMULATORS_DIR)))
     now = dt.datetime.now(dt.timezone.utc)
+    # Read before any source: a damaged snapshot ended the run after the
+    # others had been fetched, and their readings were lost.
+    snapshot = load_snapshot(args.downloads_snapshot) if "github" not in skip else None
     readings = Readings(start, end, now, held, declared)
+    # A source that cannot be read is left out and named, the others kept:
+    # a GitHub rate limit threw away what Search Console had given.
+    left_out: list[str] = []
     if "gsc" not in skip:
-        readings = replace(readings, queries=fetch_queries(start, end),
-                           previous=fetch_queries(*readings.previous_span))
+        try:
+            readings = replace(readings, queries=fetch_queries(start, end),
+                               previous=fetch_queries(*readings.previous_span))
+        except SourceUnavailable as error:
+            left_out.append(f"Search Console: {error}")
     if "goatcounter" not in skip:
-        readings = replace(readings, goat=fetch_goatcounter(start, now.date()), goat_end=now.date())
+        try:
+            readings = replace(readings, goat=fetch_goatcounter(start, now.date()), goat_end=now.date())
+        except SourceUnavailable as error:
+            left_out.append(f"GoatCounter: {error}")
     if "github" not in skip:
-        readings = replace(readings, github=fetch_github(), snapshot=load_snapshot(args.downloads_snapshot))
+        try:
+            readings = replace(readings, github=fetch_github(), snapshot=snapshot)
+        except SourceUnavailable as error:
+            left_out.append(f"GitHub: {error}")
+    readings = replace(readings, left_out=tuple(left_out))
     text = report(readings)
     if args.output:
         args.output.write_text(text, encoding="utf-8")
@@ -92,7 +109,9 @@ def main() -> int:
         sys.stdout.write(text)
     if readings.github is not None:
         save_snapshot(args.downloads_snapshot, downloads_snapshot(readings.github["downloads"], now))
-    return 0
+    for line in left_out:
+        print(f"Not read, {line}", file=sys.stderr)
+    return 1 if left_out else 0
 
 
 if __name__ == "__main__":

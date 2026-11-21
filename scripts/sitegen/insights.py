@@ -21,6 +21,7 @@ from pathlib import Path
 
 from core import upstream
 from core.artifacts import write_text_atomic
+from core.cli import SourceUnreadable
 from core.github import github_token
 
 
@@ -68,6 +69,18 @@ class Query:
 # Reading the sources
 
 
+class SourceUnavailable(Exception):
+    """A source that could not be read this run, and how long until it answers again.
+
+    The command leaves the source out of the report and says why, instead of
+    losing what the other sources already gave.
+    """
+
+    def __init__(self, reason: str, wait: float | None = None) -> None:
+        super().__init__(reason)
+        self.wait = wait
+
+
 def _open(request: urllib.request.Request) -> tuple[int, bytes]:
     """Status and body of a request, retried by core.upstream.open_retrying:
     a dropped connection or a 5xx is asked again, a rate limit waited out."""
@@ -79,8 +92,8 @@ def _open(request: urllib.request.Request) -> tuple[int, bytes]:
         headers = error.headers if isinstance(error, urllib.error.HTTPError) else None
         wait = upstream.requested_wait(headers)
         delay = f" for {wait:.0f} s" if wait is not None else ""
-        raise SystemExit(f"{urllib.parse.urlsplit(request.full_url).hostname} refuses requests{delay} "
-                         "(rate limit); run again then, or --skip that source") from error
+        raise SourceUnavailable(f"{urllib.parse.urlsplit(request.full_url).hostname} refuses requests"
+                                f"{delay} (rate limit); run again then", wait) from error
 
 
 def _fetch(url: str, headers: dict[str, str] | None = None, body: dict | None = None) -> tuple[int, bytes]:
@@ -118,8 +131,15 @@ def _google_token(key_file: Path) -> str:
     return json.loads(_open(request)[1])["access_token"]
 
 
+def _credential(path: Path, source: str) -> Path:
+    """A credential file of the configuration folder, or the source is unavailable."""
+    if not path.is_file():
+        raise SourceUnavailable(f"{source} needs {path}")
+    return path
+
+
 def fetch_queries(start: dt.date, end: dt.date) -> list[Query]:
-    token = _google_token(CONFIG / "gsc-service-account.json")
+    token = _google_token(_credential(CONFIG / "gsc-service-account.json", "Search Console"))
     url = ("https://www.googleapis.com/webmasters/v3/sites/"
            f"{urllib.parse.quote(SITE_PROPERTY, safe='')}/searchAnalytics/query")
     rows: list[Query] = []
@@ -128,7 +148,7 @@ def fetch_queries(start: dt.date, end: dt.date) -> list[Query]:
             "startDate": start.isoformat(), "endDate": end.isoformat(),
             "dimensions": ["query", "page"], "rowLimit": 25000, "startRow": len(rows)})
         if not isinstance(answer, dict):
-            raise SystemExit("Search Console answered with something other than an object")
+            raise SourceUnavailable("Search Console answered with something other than an object")
         batch = answer.get("rows", [])
         rows += [Query(r["keys"][0], r["keys"][1], int(r["clicks"]), int(r["impressions"]),
                        float(r["position"])) for r in batch]
@@ -144,13 +164,13 @@ def _goat_export(first: dt.datetime, auth: dict[str, str]) -> bytes:
     export = _get_json(f"{GOATCOUNTER}/export", auth,
                        {"format": "json", "start_from_day": first.strftime("%Y-%m-%dT00:00:00Z")})
     if not isinstance(export, dict) or "id" not in export:
-        raise SystemExit("GoatCounter did not start an export")
+        raise SourceUnavailable("GoatCounter did not start an export")
     for _ in range(EXPORT_TRIES):
         time.sleep(EXPORT_POLL)
         status, raw = _fetch(f"{GOATCOUNTER}/export/{export['id']}/download", auth)
         if status == 200:
             return raw
-    raise SystemExit(f"GoatCounter export {export['id']} not ready after {EXPORT_POLL * EXPORT_TRIES} s")
+    raise SourceUnavailable(f"GoatCounter export {export['id']} not ready after {EXPORT_POLL * EXPORT_TRIES} s")
 
 
 def read_export(raw: bytes, first: dt.datetime, after: dt.datetime) -> dict:
@@ -187,7 +207,7 @@ def read_export(raw: bytes, first: dt.datetime, after: dt.datetime) -> dict:
 
 def fetch_goatcounter(start: dt.date, end: dt.date) -> dict:
     """Paths and events with their visit counts, and the referring domains."""
-    token = (CONFIG / "goatcounter-api-token.txt").read_text(encoding="utf-8").strip()
+    token = _credential(CONFIG / "goatcounter-api-token.txt", "GoatCounter").read_text(encoding="utf-8").strip()
     first = dt.datetime.combine(start, dt.time(), dt.timezone.utc)
     after = dt.datetime.combine(end + dt.timedelta(days=1), dt.time(), dt.timezone.utc)
     return read_export(_goat_export(first, {"Authorization": f"Bearer {token}"}), first, after)
@@ -197,7 +217,7 @@ def fetch_github() -> dict:
     # Traffic figures are only served to the owner: without a token there
     # is nothing to read, not a smaller quota.
     if not github_token():
-        raise SystemExit("GitHub traffic needs a token: GITHUB_TOKEN, or gh auth login")
+        raise SourceUnavailable("GitHub traffic needs a token: GITHUB_TOKEN, or gh auth login")
     api = f"https://api.github.com/repos/{REPOSITORY}"
     auth = upstream.forge_headers(api, "application/vnd.github+json", USER_AGENT)
     releases = _get_json(f"{api}/releases?per_page=10", auth)
@@ -349,9 +369,9 @@ def load_snapshot(path: Path) -> dict | None:
     try:
         snapshot = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as error:
-        raise SystemExit(f"{path} is not a download snapshot ({error}); move it away to start again") from error
+        raise SourceUnreadable(f"{path} is not a download snapshot ({error}); move it away to start again") from error
     if not isinstance(snapshot, dict) or not isinstance(snapshot.get("counts"), dict) or "taken" not in snapshot:
-        raise SystemExit(f"{path} is not a download snapshot; move it away to start again")
+        raise SourceUnreadable(f"{path} is not a download snapshot; move it away to start again")
     return snapshot
 
 
@@ -390,6 +410,8 @@ class Readings:
     goat_end: dt.date | None = None
     github: dict | None = None
     snapshot: dict | None = None
+    # Each source that could not be read, with why: "GitHub: ... needs a token".
+    left_out: tuple[str, ...] = ()
 
     @property
     def previous_span(self) -> tuple[dt.date, dt.date]:
@@ -533,6 +555,8 @@ def _github(readings: Readings, github: dict) -> list[str]:
 def report(readings: Readings) -> str:
     out = ["# Site insights", "", f"Written {readings.now.strftime('%Y-%m-%d %H:%M UTC')}. "
            "Each section gives its own period.", ""]
+    if readings.left_out:
+        out += ["Not read this run:", "", *(f"- {line}" for line in readings.left_out), ""]
     if readings.queries is not None:
         out += _google(readings, readings.queries)
     if readings.goat is not None:
