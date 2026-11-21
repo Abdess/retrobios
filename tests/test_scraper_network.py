@@ -272,10 +272,10 @@ class OneImplementationPerJob(unittest.TestCase):
             for needle in needles
             if needle in path.read_text(encoding="utf-8")
         ]
-        # buildbot_system asks for ETags with HEAD requests, which no shared
-        # helper sends. MinUI reads through a fetch its tests replace, and
-        # hands the answer to tree_entries.
-        self.assertEqual(found, ["buildbot_system.py: urlopen(", "minui_scraper.py: ?recursive=1"])
+        # The ETag HEAD probe is core.upstream.remote_etag. MinUI reads
+        # through a fetch its tests replace, and hands the answer to
+        # tree_entries.
+        self.assertEqual(found, ["minui_scraper.py: ?recursive=1"])
 
     def test_the_target_package_reads_through_the_platform_helpers(self):
         from scraper import targets

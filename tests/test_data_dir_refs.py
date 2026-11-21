@@ -51,7 +51,9 @@ class EachSourceIsParsedOnce(unittest.TestCase):
                 validate_schemas._validate_yaml_directory(root / "emulators", "emulator.schema.json")
                 validate_schemas._unknown_data_dir_refs()
                 layout = validate_schemas._repository_layout_in_profiles()
-        self.assertEqual(sorted(Path(n).name for n in loaded), ["_data_dirs.yml", "core.yml"])
+        # _data_dirs.yml is read by model.registry.load_data_dir_registry, so
+        # only the profile passes through validate_schemas' own loader.
+        self.assertEqual(sorted(Path(n).name for n in loaded), ["core.yml"])
         self.assertEqual(len(layout), 1)
 
 if __name__ == "__main__":

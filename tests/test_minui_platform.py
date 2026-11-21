@@ -454,10 +454,14 @@ class TheWholeTreeKeepsCoresMinUILeavesOut(unittest.TestCase):
         self.assertEqual(layouts, [(profile, False)])
 
     def test_both_readers_build_the_set_the_same_way(self):
+        # The site reaches the merge through global_report_scope, the scope
+        # it shares with the gap report.
         for script in ("cross_reference.py", "generate_site.py"):
             source = script_source(script)
             with self.subTest(script=script):
-                self.assertIn("merged_standalone_set(", source)
+                self.assertTrue(
+                    "merged_standalone_set(" in source or "global_report_scope(" in source
+                )
                 self.assertNotIn("set().union(*(\n            standalone_set(", source)
                 self.assertNotIn("*(standalone_set(cov", source)
 
