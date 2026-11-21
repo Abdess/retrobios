@@ -51,6 +51,7 @@ from packs.extras import (
     undeclared_report,
 )
 from packs.naming import file_name_part, pack_narrowings, platform_pack_name, platform_pack_stem
+from packs.packcounts import PackCounts, pack_counts
 from packs.paths import flat_arcname, save_layout
 from packs.readme import build_agnostic_rename_readme, build_readme, save_place
 from resolve import packfiles as packresolve, regions as resolve_regions, slot as slot_mod
@@ -101,11 +102,10 @@ def _report_pack_counts(
     verification_mode: str,
     tree_count: int = 0,
 ) -> None:
-    """Print the line the pipeline's consistency check reads.
+    """Print the pack's counts line.
 
-    The check compares these counts against what verify.py reports for
-    the same platform, so the wording is a contract: parse_pack_counts
-    in orchestrate/reports.py matches on it.
+    The pipeline's consistency check reads the same counts as data
+    (packs.packcounts), never this line.
     """
     files_ok = sum(1 for s in file_status.values() if s == "ok")
     files_untested = sum(1 for s in file_status.values() if s == "untested")
@@ -316,6 +316,7 @@ class PackOptions(PackNarrowing, _PartScope, total=False):
     record: PackRecord | None
     within: dict[str, str] | None
     uncached_out: set[str] | None
+    counts: list[PackCounts] | None
 
 
 @dataclass(frozen=True)
@@ -342,6 +343,7 @@ class _PackSettings:
     record: PackRecord | None = None
     within: dict[str, str] | None = None
     uncached_out: set[str] | None = None
+    counts: list[PackCounts] | None = None
 
 
 @dataclass
@@ -1093,6 +1095,8 @@ def generate_pack(
     its group, and a name built from every system of a hundred-system group
     is longer than a file name can be.
 
+    ``counts``, when given, receives the pack's PackCounts once it is built.
+
     ``record`` builds the pack in memory (PackRecord): no archive is written,
     no external file fetched, and the paths are kept on it.
 
@@ -1151,6 +1155,8 @@ def generate_pack(
         build = _PlatformPackBuild(plan, zf, resolve, verdict, judge, resolve_extra)
         build.run()
     build.report()
+    if opts.counts is not None:
+        opts.counts.append(pack_counts(plan.zip_path, build.file_status, build.core_count))
     return plan.zip_path
 
 

@@ -81,6 +81,21 @@ def _argument_conflicts(args: argparse.Namespace) -> list[tuple[bool, str]]:
         (one_per_slot and args.manifest, "--one-per-slot is incompatible with --manifest"),
         (one_per_slot and has_emulator, "--one-per-slot is incompatible with --emulator"),
         (one_per_slot and has_system, "--one-per-slot is incompatible with --system"),
+        *_counts_conflicts(args, has_platform or has_all, has_system or has_from_md5),
+    ]
+
+
+def _counts_conflicts(
+    args: argparse.Namespace, platform_run: bool, narrowed: bool,
+) -> list[tuple[bool, str]]:
+    """--counts describes the full platform packs: another mode refuses it."""
+    counts = bool(getattr(args, "counts", None))
+    return [
+        (counts and not platform_run, "--counts requires --platform or --all"),
+        (counts and args.manifest, "--counts is incompatible with --manifest"),
+        (counts and args.split, "--counts is incompatible with --split"),
+        (counts and narrowed,
+         "--counts describes the full pack and is incompatible with --system and --from-md5"),
     ]
 
 
@@ -204,6 +219,7 @@ def _given_flags(args: argparse.Namespace) -> set[str]:
         "--list-emulators": args.list_emulators,
         "--list-systems": args.list_systems,
         "--list-targets": args.list_targets,
+        "--counts": getattr(args, "counts", None),
         "--refresh-data": args.refresh_data,
         "--no-refresh-data": args.no_refresh_data,
     }

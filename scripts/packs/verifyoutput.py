@@ -5,7 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from packs.verdicts import Status
+from packs.report import pack_shares
+from packs.verdicts import Severity, Status
 
 
 def json_details(details: list[dict], verbose: bool) -> list[dict]:
@@ -25,11 +26,23 @@ def write_pack_destinations(
     groups: list[tuple[list[str], str]],
     group_results: list[tuple[dict, list[str]]],
 ) -> None:
-    """The paths each pack holds according to the report, per platform, as JSON."""
+    """What each platform's pack holds according to the report, as JSON.
+
+    Keyed by registry id: the name verify prints, its OK and total counts,
+    the core files and game data the pack takes from the cores, and the
+    paths it credits. The pipeline's consistency check reads them here
+    rather than from the printed report.
+    """
     destinations = {}
     for (result, names), (group, _rep) in zip(group_results, groups):
+        core_files, game_data = pack_shares(result)
         for name, key in zip(names, group):
-            destinations[name] = {
-                "platform": key, "pack_destinations": result["pack_destinations"],
+            destinations[key] = {
+                "platform": key,
+                "label": name,
+                "ok": result["severity_counts"][Severity.OK],
+                "total": result["total_files"],
+                "core_files": core_files + game_data,
+                "pack_destinations": result["pack_destinations"],
             }
     Path(path).write_text(json.dumps(destinations, indent=1, sort_keys=True))

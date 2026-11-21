@@ -89,8 +89,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--destinations", metavar="FILE",
-        help="With --platform or --all, also write the paths each pack holds "
-        "according to this report to FILE (JSON), for comparison with the archive",
+        help="With --platform or --all, also write the counts and paths each pack "
+        "holds according to this report to FILE (JSON), for comparison with the archive",
     )
     parser.add_argument(
         "--strict",

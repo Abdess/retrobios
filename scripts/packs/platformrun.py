@@ -24,6 +24,7 @@ from packs.manifest import generate_manifest
 from packs.manifestrun import run_manifest_mode
 from packs.naming import pack_narrowings, platform_pack_name, platform_target
 from packs.outputdir import holds_other_kind, pack_output_lock
+from packs.packcounts import PackCounts, write_pack_counts
 from packs.packcheck import run_verify_packs
 from packs.platformpack import generate_pack, generate_split_packs
 from packs.runscope import settle_scope
@@ -60,19 +61,23 @@ def run_platform_packs(
     # The packs this run writes, the only ones it verifies and rewrites.
     built: set[str] = set()
 
+    # The full packs' counts, for --counts: the pipeline compares them with
+    # verify's.
+    recorded: list[tuple[str, list[str], PackCounts]] = []
+    record_counts = getattr(args, "counts", None)
+
     failed: list[str] = []
     for source, required_only in run_variants(args):
         for group_platforms, representative in groups:
             aliases = [p for p in group_platforms if p != representative]
-            if aliases:
-                all_names = [
-                    load_platform_config(p, args.platforms_dir).get("platform", p)
-                    for p in group_platforms
-                ]
-                label = " / ".join(all_names)
-                print(f"\nGenerating pack for {label} {pack_label(source, required_only)}...")
-            else:
-                print(f"\nGenerating pack for {representative} {pack_label(source, required_only)}...")
+            label = " / ".join(
+                load_platform_config(p, args.platforms_dir).get("platform", p)
+                for p in group_platforms
+            ) if aliases else representative
+            print(f"\nGenerating pack for {label} {pack_label(source, required_only)}...")
+            counts: list[PackCounts] | None = (
+                [] if record_counts and (source, required_only) == ("full", False) else None
+            )
 
             zip_path = None
             zip_paths: list = []
@@ -138,6 +143,7 @@ def run_platform_packs(
                         pack_name=group_name,
                         no_game_data=getattr(args, "no_game_data", False),
                         uncached_out=getattr(args, "uncached_trees", None),
+                        counts=counts,
                     )
             except (FileNotFoundError, OSError, yaml.YAMLError) as e:
                 print(f"  ERROR: {e}", file=sys.stderr)
@@ -153,6 +159,7 @@ def run_platform_packs(
                     os.path.relpath(path, args.output_dir)
                     for path in ([zip_path] if zip_path else zip_paths)
                 )
+                recorded.extend((label, group_platforms, c) for c in counts or ())
                 if zip_path and not system_filter:
                     # The install list of the same choices names each file's
                     # systems: the pack records them, so a pack alone (a
@@ -170,6 +177,8 @@ def run_platform_packs(
                         uncached_out=getattr(args, "uncached_trees", None),
                     ), target_list(board_list) if board_list.is_file() else None)
 
+    if record_counts:
+        write_pack_counts(record_counts, recorded)
     all_ok = finalize_platform_packs(args, db, data_registry, built, systems_for, system_filter)
     if failed:
         # Verification only sees the ZIPs that exist, so a pack that was never

@@ -5,12 +5,13 @@ from __future__ import annotations
 import argparse
 import sys
 
+from core.paths import PLATFORMS_DIR
+from model.registry import list_release_pack_platforms
 from orchestrate import runner
 from orchestrate.consistency import check_consistency, check_pack_destinations
 from orchestrate.emulatorpacks import check_emulator_packs
 from orchestrate.labels import STEP_LABELS, skip_notice, step_title
 from orchestrate.narrowed import check_narrowed_packs
-from orchestrate.reports import release_pack_keys
 from orchestrate.results import SKIPPED
 from orchestrate.splitcheck import check_split_packs
 
@@ -36,8 +37,7 @@ def check_steps(
     args: argparse.Namespace,
     results: dict,
     *,
-    pack_output: str,
-    verify_output: str,
+    pack_counts_file: str,
     destinations_file: str,
 ) -> bool:
     """Steps 5 and 6: verify against the packs, then the packs' integrity."""
@@ -46,16 +46,16 @@ def check_steps(
     # built only a reduced one (--source platform or truth) has nothing to
     # compare it with, and says so instead of failing on an empty parse.
     full_pack_built = args.source == "full" or args.all_variants
-    if pack_output and verify_output and not full_pack_built:
+    if pack_counts_file and not full_pack_built:
         skip_notice("consistency", "no full pack built")
         results["consistency"] = SKIPPED
-    elif pack_output and verify_output:
+    elif pack_counts_file:
         ok = check_consistency(
-            verify_output, pack_output,
-            release_pack_keys(),
+            destinations_file, pack_counts_file,
+            set(list_release_pack_platforms(PLATFORMS_DIR)),
         )
         # Counts can agree while the paths differ, both ways at once.
-        ok = check_pack_destinations(destinations_file, pack_output) and ok
+        ok = check_pack_destinations(destinations_file, pack_counts_file) and ok
         ok = check_emulator_packs(full=args.full_narrowings) and ok
         ok = check_narrowed_packs(full=args.full_narrowings) and ok
         ok = check_split_packs() and ok

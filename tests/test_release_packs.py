@@ -172,32 +172,33 @@ class TheBuildReadsTheField(unittest.TestCase):
 
 
 class APlatformWithoutAPackFailsNoCheck(unittest.TestCase):
-    VERIFY = (
-        "RetroArch: 10/10 OK [existence]\n"
-        "KNULLI: 5/5 OK [md5]\n"
-    )
-    PACK = (
-        "Generating pack for RetroArch...\n"
-        "  dist/RetroArch_BIOS_Pack.zip: 10 files packed, 10/10 files OK [existence]\n"
-    )
+    VERIFY = {
+        "retroarch": {"platform": "retroarch", "label": "RetroArch", "ok": 10, "total": 10,
+                      "core_files": 0, "pack_destinations": []},
+        "knulli": {"platform": "knulli", "label": "KNULLI", "ok": 5, "total": 5,
+                   "core_files": 0, "pack_destinations": []},
+    }
+    PACKS = [{"label": "retroarch", "platforms": ["retroarch"],
+              "archive": "dist/RetroArch_BIOS_Pack.zip", "ok": 10, "total": 10,
+              "core_files": 0, "unsafe_excluded": 0}]
 
     def test_the_consistency_step_skips_a_setup_served_by_the_installer(self):
-        from orchestrate.consistency import check_consistency
-        from orchestrate.reports import release_pack_keys
+        from orchestrate.consistency import compare_counts
 
         with contextlib.redirect_stdout(io.StringIO()) as out:
-            self.assertTrue(check_consistency(
-                self.VERIFY, self.PACK, release_pack_keys(PLATFORMS)))
+            self.assertTrue(compare_counts(
+                self.VERIFY, self.PACKS, set(list_release_pack_platforms(PLATFORMS))))
         self.assertIn("KNULLI: 5/5 (no release pack, served by the installer)", out.getvalue())
 
     def test_a_released_platform_without_its_pack_still_fails(self):
-        from orchestrate.consistency import check_consistency
-        from orchestrate.reports import release_pack_keys
+        from orchestrate.consistency import compare_counts
 
-        verify = self.VERIFY + "Batocera: 3/3 OK [md5]\n"
+        verify = {**self.VERIFY, "batocera": {
+            "platform": "batocera", "label": "Batocera", "ok": 3, "total": 3,
+            "core_files": 0, "pack_destinations": []}}
         with contextlib.redirect_stdout(io.StringIO()) as out:
-            self.assertFalse(check_consistency(
-                verify, self.PACK, release_pack_keys(PLATFORMS)))
+            self.assertFalse(compare_counts(
+                verify, self.PACKS, set(list_release_pack_platforms(PLATFORMS))))
         # The failing line says it fails: "(no separate pack)" read like
         # the installer-only note above it.
         self.assertIn("Batocera: MISSING pack: verify judged 3/3 but the build wrote no pack for it",
@@ -205,7 +206,7 @@ class APlatformWithoutAPackFailsNoCheck(unittest.TestCase):
 
     def test_the_pipeline_passes_the_release_platforms(self):
         source = script_source("pipeline.py")
-        self.assertIn("release_pack_keys()", source)
+        self.assertIn("set(list_release_pack_platforms(PLATFORMS_DIR))", source)
 
     def test_verify_packs_sweeps_the_release_packs_only(self):
         import subprocess

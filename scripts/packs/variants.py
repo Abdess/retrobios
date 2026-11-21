@@ -22,7 +22,7 @@ def run_variants(args: argparse.Namespace) -> tuple[tuple[str, bool], ...]:
 
 
 def pack_label(source: str, required_only: bool) -> str:
-    """The variant tag orchestrate.reports.parse_pack_counts reads after a pack name."""
+    """The variant tag printed after a pack name."""
     return f"[source={source}, required]" if required_only else f"[source={source}]"
 
 

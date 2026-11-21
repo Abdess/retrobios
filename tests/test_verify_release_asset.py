@@ -247,7 +247,7 @@ class OfflinePipelineVerifiesOffline(unittest.TestCase):
 
     def test_verify_step_gets_offline(self):
         source = script_source("pipeline.py")
-        block = source[source.index("verify_cmd = ["):source.index("ok, verify_output = runner.run(")]
+        block = source[source.index("verify_cmd = ["):source.index("ok, _ = runner.run(verify_cmd")]
         self.assertIn('verify_cmd.append("--offline")', block)
 
 

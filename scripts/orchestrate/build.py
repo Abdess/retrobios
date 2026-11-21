@@ -19,13 +19,23 @@ from orchestrate.results import SKIPPED
 from packs.datadirs import hold_data_dirs
 
 
+def scratch_file(prefix: str) -> str:
+    """An empty JSON file in the repository's tmp/, removed when the run ends."""
+    scratch = REPO_ROOT / "tmp"
+    scratch.mkdir(exist_ok=True)
+    fd, path = tempfile.mkstemp(prefix=prefix, suffix=".json", dir=scratch)
+    os.close(fd)
+    atexit.register(Path(path).unlink, missing_ok=True)
+    return path
+
+
 def verify_steps(
     args: argparse.Namespace, results: dict, held: contextlib.ExitStack
-) -> tuple[bool, str, str]:
+) -> tuple[bool, str]:
     """Steps 3 to 3b: verify, identities, slots.
 
-    Returns whether they passed, verify's output and the file of the paths
-    each pack holds by its report.
+    Returns whether they passed and the file of what each pack holds by
+    verify's report: its counts and paths.
     """
     all_ok = True
     # Every step from here reads the data directory trees: verify, the packs,
@@ -36,15 +46,9 @@ def verify_steps(
     # exclusive.
     hold_data_dirs(held, load_data_dir_registry(PLATFORMS_DIR))
 
-    # Step 3: Verify. The paths each pack holds by this report go to a file
-    # step 5 compares with the archives.
-    scratch = REPO_ROOT / "tmp"
-    scratch.mkdir(exist_ok=True)
-    fd, destinations_file = tempfile.mkstemp(
-        prefix="verify-destinations.", suffix=".json", dir=scratch
-    )
-    os.close(fd)
-    atexit.register(Path(destinations_file).unlink, missing_ok=True)
+    # Step 3: Verify. The counts and paths each pack holds by this report go
+    # to a file step 5 compares with the build's own counts and archives.
+    destinations_file = scratch_file("verify-destinations.")
     verify_cmd = [
         sys.executable, "scripts/verify.py", "--all", "--strict",
         "--destinations", destinations_file,
@@ -55,7 +59,7 @@ def verify_steps(
         # The packs of step 4 fetch no release asset: a missing one is
         # missing on both sides.
         verify_cmd.append("--offline")
-    ok, verify_output = runner.run(verify_cmd, STEP_LABELS["verify"])
+    ok, _ = runner.run(verify_cmd, STEP_LABELS["verify"])
     results["verify"] = ok
     all_ok = all_ok and ok
 
@@ -82,7 +86,7 @@ def verify_steps(
     ok, _ = runner.run(slots_cmd, "3b slot arbitration")
     results["slots"] = ok
     all_ok &= ok
-    return all_ok, verify_output, destinations_file
+    return all_ok, destinations_file
 
 
 def purge_stale_packs(output_dir: str) -> None:
@@ -111,14 +115,16 @@ def purge_stale_packs(output_dir: str) -> None:
         sys.exit(1)
 
 
-def pack_command(args: argparse.Namespace) -> list[str]:
-    """The step 4 command: every platform's pack."""
+def pack_command(args: argparse.Namespace, counts_file: str) -> list[str]:
+    """The step 4 command: every platform's pack, its counts to *counts_file*."""
     pack_cmd = [
         sys.executable,
         "scripts/generate_pack.py",
         "--all",
         "--output-dir",
         args.output_dir,
+        "--counts",
+        counts_file,
     ]
     if args.offline:
         pack_cmd.append("--offline")
@@ -138,14 +144,16 @@ def pack_command(args: argparse.Namespace) -> list[str]:
 def pack_steps(args: argparse.Namespace, results: dict) -> tuple[bool, str]:
     """Steps 4 to 4c: packs, install manifests, target manifests.
 
-    Returns whether they passed and the pack build's output.
+    Returns whether they passed and the file of the full packs' counts,
+    empty when no pack was built.
     """
     all_ok = True
     # Step 4: Generate packs
-    pack_output = ""
+    pack_counts_file = ""
     if not args.skip_packs:
         purge_stale_packs(args.output_dir)
-        ok, pack_output = runner.run(pack_command(args), STEP_LABELS["generate_packs"])
+        pack_counts_file = scratch_file("pack-counts.")
+        ok, _ = runner.run(pack_command(args, pack_counts_file), STEP_LABELS["generate_packs"])
         results["generate_packs"] = ok
         all_ok = all_ok and ok
     else:
@@ -193,7 +201,7 @@ def pack_steps(args: argparse.Namespace, results: dict) -> tuple[bool, str]:
     else:
         skip_notice("generate_target_manifests", "--skip-packs")
         results["generate_target_manifests"] = SKIPPED
-    return all_ok, pack_output
+    return all_ok, pack_counts_file
 
 
 def index_steps(results: dict) -> bool:

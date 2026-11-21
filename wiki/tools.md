@@ -96,9 +96,10 @@ alone, run `python scripts/check_buildbot_system.py`.
 - **A step that did not run says SKIPPED**, never OK.
 - **verify.py and generate_pack.py read the same functions.** A count or a
   path that differs between the report and the pack is a defect, which is
-  what step 5 checks: the counts, the paths each archive holds against the
-  ones verify credits (`--destinations`), every emulator pack, each
-  profile in each build, built in memory against `verify --emulator`, and
+  what step 5 checks: the counts each tool records (`--destinations` and
+  `--counts`, never their printed lines), the paths each archive holds
+  against the ones verify credits, every emulator pack, each profile in
+  each build, built in memory against `verify --emulator`, and
   every system pack that gathers several profiles against `verify --system`.
   Each of them is also built with `--required-only` and with the regions
   its files declare (first, middle and last, all of them with
@@ -165,7 +166,7 @@ python scripts/verify.py --platform retroarch --target switch  # filter by hardw
 python scripts/verify.py --platform recalbox --region us   # regional priority list
 python scripts/verify.py --platform emuelec --no-game-data  # the firmware-only pack, game data named
 python scripts/verify.py --emulator mame --required-only    # the pack built with --required-only
-python scripts/verify.py --all --destinations tmp/paths.json  # also write the paths each pack holds
+python scripts/verify.py --all --destinations tmp/paths.json  # also write the counts and paths each pack holds
 python scripts/verify.py --all --offline             # a release asset the cache lacks counts missing, as in an offline build (any mode, --emulator included)
 python scripts/verify.py --list-platforms          # list all platforms
 python scripts/verify.py --list-emulators          # list all emulators
@@ -247,6 +248,7 @@ python scripts/generate_pack.py --list-emulators
 python scripts/generate_pack.py --list-systems
 python scripts/generate_pack.py --platform retroarch --list-targets
 python scripts/generate_pack.py --all --verify-packs --output-dir dist/  # extract + hash
+python scripts/generate_pack.py --all --counts tmp/counts.json  # also write each full pack's counts
 
 # Data refresh
 python scripts/generate_pack.py --all --refresh-data  # force re-download data dirs

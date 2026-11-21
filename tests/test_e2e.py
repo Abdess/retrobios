@@ -2335,6 +2335,49 @@ class TestE2E(unittest.TestCase):
         # Verify _Required tag in filename
         self.assertIn("_Required_", os.path.basename(zip_path))
 
+    def test_130a_consistency_reads_what_the_builder_and_verify_write(self):
+        """Step 5 compares the records the two tools write, not their wording.
+
+        The builder's counts and verify's go through the files the pipeline
+        reads, so a reworded line can no longer switch a comparison off.
+        """
+        from orchestrate.consistency import check_consistency
+        from packs.packcounts import PackCounts, write_pack_counts
+        from packs.platformpack import generate_pack
+        from packs.verifyoutput import write_pack_destinations
+
+        profiles = load_emulator_profiles(self.emulators_dir)
+        output_dir = os.path.join(self.root, "counted")
+        packs: list[tuple[str, list[str], PackCounts]] = []
+        groups, group_results = [], []
+        for platform in ("test_existence", "test_md5"):
+            sink: list[PackCounts] = []
+            with contextlib.redirect_stdout(io.StringIO()):
+                generate_pack(
+                    platform, self.platforms_dir, self.db, self.bios_dir, output_dir,
+                    emulators_dir=self.emulators_dir, emu_profiles=profiles, counts=sink,
+                )
+            self.assertEqual(len(sink), 1)
+            packs.append((platform, [platform], sink[0]))
+            config = load_platform_config(platform, self.platforms_dir)
+            result = verify_platform(config, self.db, self.emulators_dir, emu_profiles=profiles)
+            groups.append(([platform], platform))
+            group_results.append((result, [config.get("platform", platform)]))
+        destinations = os.path.join(self.root, "destinations.json")
+        counts = os.path.join(self.root, "counts.json")
+        write_pack_destinations(destinations, groups, group_results)
+        write_pack_counts(counts, packs)
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertTrue(check_consistency(destinations, counts), out.getvalue())
+        self.assertEqual(out.getvalue().count("== pack"), 2, out.getvalue())
+
+        skewed = [(label, ids, PackCounts(**{**c.__dict__, "core_files": c.core_files + 1}))
+                  for label, ids, c in packs]
+        write_pack_counts(counts, skewed)
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertFalse(check_consistency(destinations, counts))
+        self.assertIn("MISMATCH core files", out.getvalue())
+
     def test_130b_existence_pack_reports_hash_mismatch(self):
         """Existence mode packs a mismatched file but prints the proof."""
         import contextlib
@@ -6301,6 +6344,18 @@ struct BurnDriver BurnDrvneogeo = {
              "refuse"),
             (["--list-systems"], ["--no-game-data"], "refuse"),
             (["--list"], ["--no-game-data"], "refuse"),
+            # --counts records the full platform packs the pipeline compares
+            # with verify: a mode that builds none refuses it.
+            (["--emulator", "handy"], ["--counts", "counts.json"], "refuse"),
+            (["--platform", "retroarch", "--manifest"], ["--counts", "counts.json"], "refuse"),
+            (["--platform", "retroarch", "--split"], ["--counts", "counts.json"], "refuse"),
+            (["--platform", "retroarch", "--system", "sony-playstation"],
+             ["--counts", "counts.json"], "refuse"),
+            (["--platform", "retroarch", "--from-md5", "d8f1"], ["--counts", "counts.json"],
+             "refuse"),
+            (["--platform", "retroarch", "--verify-packs"], ["--counts", "counts.json"],
+             "refuse"),
+            (["--list"], ["--counts", "counts.json"], "refuse"),
         ]
         for mode, flag, expected in matrix:
             with self.subTest(mode=mode, flag=flag):

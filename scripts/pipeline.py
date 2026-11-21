@@ -150,13 +150,13 @@ def main() -> None:
     all_ok = database_steps(args, results)
     all_ok = refresh_steps(args, results) and all_ok
     all_ok = truth_steps(args, results) and all_ok
-    ok, verify_output, destinations_file = verify_steps(args, results, held)
+    ok, destinations_file = verify_steps(args, results, held)
     all_ok = all_ok and ok
-    ok, pack_output = pack_steps(args, results)
+    ok, pack_counts_file = pack_steps(args, results)
     all_ok = all_ok and ok
     all_ok = index_steps(results) and all_ok
     all_ok = check_steps(
-        args, results, pack_output=pack_output, verify_output=verify_output,
+        args, results, pack_counts_file=pack_counts_file,
         destinations_file=destinations_file,
     ) and all_ok
     all_ok = docs_steps(args, results) and all_ok

@@ -243,6 +243,23 @@ def split_undeclared(undeclared: list[dict]) -> tuple[list[dict], list[dict], li
     return game_data, placed, unplaced
 
 
+def pack_shares(result: dict) -> tuple[int, int]:
+    """The core files and the game data a platform's pack carries, by the report.
+
+    The builder's count, one file per pack path, when the platform pass
+    replayed it. Counting entries said 1130 for RetroArch, 48 more than the
+    pack holds: rom.key alone was claimed by three Amiga cores.
+    """
+    packed = result.get("packed_extras")
+    if packed is not None:
+        return packed["bios"], packed["game_data"]
+    game_data, bios_files, _unplaced = split_undeclared(result.get("undeclared_files", []))
+    return (
+        sum(1 for u in bios_files if u["in_repo"]),
+        sum(1 for u in game_data if u["in_repo"] and u.get("in_pack", True)),
+    )
+
+
 def core_required_missing(bios_files: list[dict]) -> list[dict]:
     """Core files a core cannot run without, absent from the collection.
 
@@ -303,15 +320,8 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
         for u in bios_files
         if u["required"] and not u["in_repo"] and u.get("hle_fallback")
     ]
-    req_in_repo = [u for u in bios_files if u["required"] and u["in_repo"]]
-    opt_in_repo = [u for u in bios_files if not u["required"] and u["in_repo"]]
     opt_not_in_repo = [u for u in bios_files if not u["required"] and not u["in_repo"]]
-    # The builder's count, one file per pack path, when the platform pass
-    # replayed it. Counting entries said 1130 for RetroArch, 48 more than the
-    # pack holds: rom.key alone was claimed by three Amiga cores.
-    core_in_pack = (
-        packed["bios"] if packed is not None else len(req_in_repo) + len(opt_in_repo)
-    )
+    core_in_pack, gd_packed = pack_shares(result)
     core_missing_req = len(req_not_in_repo) + len(req_hle_not_in_repo)
     core_missing_opt = len(opt_not_in_repo)
 
@@ -354,10 +364,6 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
 
     if game_data or (packed and packed.get("game_data")):
         gd_missing = [u for u in game_data if not u["in_repo"]]
-        gd_packed = (
-            packed["game_data"] if packed is not None
-            else sum(1 for u in game_data if u["in_repo"] and u.get("in_pack", True))
-        )
         gd_unplaced = [u for u in game_data if u["in_repo"] and not u.get("in_pack", True)]
         if gd_missing or gd_packed or gd_unplaced:
             listed = "" if verbose or not gd_missing else " (--verbose lists them)"

@@ -251,18 +251,23 @@ class ThePipelineComparesPaths(unittest.TestCase):
         with zipfile.ZipFile(zip_path, "w") as zf:
             for name in ("a.bin", "b.bin", "README.txt", "INSTRUCTIONS_x.bin.txt"):
                 zf.writestr(name, name)
-        output = f"Generating pack for plat [source=full]...\n  {zip_path}: 2 files packed\n"
+        counts = root / "counts.json"
+        counts.write_text(json.dumps([{
+            "label": "plat", "platforms": ["plat"], "archive": str(zip_path),
+            "ok": 2, "total": 2, "core_files": 0, "unsafe_excluded": 0,
+        }]))
         for credited, expected in ((["a.bin", "b.bin"], True), (["a.bin", "c.bin"], False)):
             with self.subTest(credited=credited):
                 destinations = root / "d.json"
                 destinations.write_text(json.dumps(
-                    {"Plat": {"platform": "plat", "pack_destinations": credited}}
+                    {"plat": {"platform": "plat", "label": "Plat", "ok": 2, "total": 2,
+                              "core_files": 0, "pack_destinations": credited}}
                 ))
                 previous = os.getcwd()
                 os.chdir(REPO_ROOT)
                 try:
                     with mock_tree_members(), contextlib.redirect_stdout(io.StringIO()) as out:
-                        ok = check_pack_destinations(str(destinations), output)
+                        ok = check_pack_destinations(str(destinations), str(counts))
                 finally:
                     os.chdir(previous)
                 self.assertIs(ok, expected, out.getvalue())
@@ -272,9 +277,12 @@ class ThePipelineComparesPaths(unittest.TestCase):
 
     def test_the_run_compares_every_emulator_pack(self):
         source = script_source("pipeline.py")
-        self.assertIn("ok = check_pack_destinations(destinations_file, pack_output) and ok", source)
+        self.assertIn(
+            "ok = check_pack_destinations(destinations_file, pack_counts_file) and ok", source
+        )
         self.assertIn("ok = check_emulator_packs(full=args.full_narrowings) and ok", source)
         self.assertIn('"--destinations", destinations_file', source)
+        self.assertIn('"--counts",\n        counts_file,', source)
 
 
 @contextlib.contextmanager

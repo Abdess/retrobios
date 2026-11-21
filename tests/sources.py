@@ -21,7 +21,7 @@ COMMANDS = {
         "packs/manifestentry.py", "packs/manifestcores.py", "packs/standalone.py",
         "packs/manifest.py", "packs/finalize.py", "packs/outputdir.py", "packs/variants.py",
         "packs/manifestrun.py", "packs/packcheck.py", "packs/runscope.py", "packs/platformrun.py",
-        "packs/packoptions.py", "packs/packmodes.py",
+        "packs/packoptions.py", "packs/packmodes.py", "packs/packcounts.py",
     ),
     "verify.py": (
         "packs/verdicts.py", "packs/gaps.py", "packs/coverage.py", "packs/emulatorcheck.py",
@@ -113,7 +113,7 @@ COMMANDS = {
         "orchestrate/labels.py", "orchestrate/results.py", "orchestrate/runner.py",
         "orchestrate/guards.py", "orchestrate/locks.py", "orchestrate/prepare.py",
         "orchestrate/build.py", "orchestrate/checks.py", "orchestrate/docs.py",
-        "orchestrate/reports.py", "orchestrate/compare.py", "orchestrate/consistency.py",
+        "orchestrate/compare.py", "orchestrate/consistency.py",
         "orchestrate/emulatorpacks.py", "orchestrate/narrowed.py", "orchestrate/splitcheck.py",
     ),
     "validate_schemas.py": (

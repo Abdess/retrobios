@@ -166,6 +166,10 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Extract and verify pack integrity (path + hash)",
     )
+    parser.add_argument(
+        "--counts", metavar="FILE",
+        help="Also write each full pack's counts as JSON (the pipeline's consistency check)",
+    )
     return parser
 
 

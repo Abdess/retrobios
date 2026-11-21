@@ -32,7 +32,7 @@ except ImportError:
 import install
 from packs import verdicts
 from scripts import pipeline
-from orchestrate import checks, consistency, reports, results, runner
+from orchestrate import checks, consistency, results, runner
 from scripts.resolve import regionaudit, regions
 from scripts.resolve.localfile import resolve_local_file
 from scripts.core.ziptools import safe_extract_zip
@@ -1196,130 +1196,91 @@ class PipelineRegressions(unittest.TestCase):
         self.assertNotIn("--all-variants", command())
         self.assertEqual(command(target="switch")[-2:], ["--target", "switch"])
 
-    def test_pack_parser_removes_source_metadata(self):
-        output = "\n".join(
-            [
-                "Generating pack for RetroArch [source=full]...",
-                "  3 files packed (2 baseline + 1 from cores), 2/2 files OK",
-            ]
-        )
-        self.assertEqual(reports.parse_pack_counts(output), {"RetroArch": (2, 2)})
+    @staticmethod
+    def _verified(label: str, ok: int, total: int, core_files: int = 0) -> dict:
+        """One platform as verify.py --destinations records it."""
+        key = label.lower().replace(" ", "")
+        return {key: {"platform": key, "label": label, "ok": ok, "total": total,
+                      "core_files": core_files, "pack_destinations": []}}
+
+    @staticmethod
+    def _packed(label: str, ok: int, total: int, core_files: int = 0,
+                unsafe_excluded: int = 0) -> dict:
+        """One full pack as generate_pack.py --counts records it."""
+        return {"label": label, "platforms": [label.lower().replace(" ", "")],
+                "archive": "pack.zip", "ok": ok, "total": total,
+                "core_files": core_files, "unsafe_excluded": unsafe_excluded}
 
     def test_missing_pack_is_a_consistency_failure(self):
-        verify = "RetroArch: 2/2 OK"
+        verify = self._verified("RetroArch", 2, 2)
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertFalse(consistency.check_consistency(verify, ""))
+            self.assertFalse(consistency.compare_counts(verify, []))
 
-    def test_display_name_matches_compact_registry_id(self):
-        verify = "MiSTer FPGA: 65/65 OK [md5]"
-        pack = "\n".join(
-            [
-                "Generating pack for misterfpga [source=full]...",
-                "  pack.zip: 65 files packed (65 baseline + 0 from cores), "
-                "65/65 files OK [md5]",
-            ]
-        )
+    def test_display_name_and_registry_id_meet_by_id(self):
+        verify = self._verified("MiSTer FPGA", 65, 65)
+        pack = {**self._packed("misterfpga", 65, 65), "platforms": ["misterfpga"]}
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertTrue(consistency.check_consistency(verify, pack))
+            self.assertTrue(consistency.compare_counts(verify, [pack]))
 
     def test_the_cores_share_is_compared_too(self):
         """RomM passed this step while verify counted 412 core files and game
         data in the pack and the builder placed 60."""
-        verify = "\n".join([
-            "RomM: 383/383 OK [md5]",
-            "  Core files: 61 in pack, 0 required missing, 1 optional missing",
-            "  Game data: 351 in pack, 0 missing",
-        ])
-        pack = "\n".join([
-            "Generating pack for RomM [source=full]...",
-            "  pack.zip: 443 files packed (383 baseline + 60 from cores), "
-            "383/383 files OK [md5]",
-        ])
+        verify = self._verified("RomM", 383, 383, core_files=412)
+        pack = self._packed("RomM", 383, 383, core_files=60)
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertFalse(consistency.compare_counts(verify, [pack]))
+        self.assertIn("RomM: MISMATCH core files verify 412 != pack 60", out.getvalue())
+        agreed = self._verified("RomM", 383, 383, core_files=60)
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertFalse(consistency.check_consistency(verify, pack))
-            agreed = verify.replace("61 in pack", "60 in pack").replace("351 in pack", "0 in pack")
-            self.assertTrue(consistency.check_consistency(agreed, pack))
+            self.assertTrue(consistency.compare_counts(agreed, [pack]))
 
     def test_an_exclusion_never_covers_a_file_verify_counts_ok(self):
         """An existence platform packs a file whose hash disagrees and a hash
         platform's verify reports it untested: exclusions that make up the
         difference hid the very divergence this step exists to catch."""
-        verify = "RetroArch: 3/3 present [existence]"
-        pack = "\n".join(
-            [
-                "Generating pack for RetroArch [source=full]...",
-                "  pack.zip: 2 files packed (2 baseline + 0 from cores), "
-                "2/3 files OK, 1 unsafe excluded [existence]",
-            ]
-        )
-        with contextlib.redirect_stdout(io.StringIO()):
-            self.assertFalse(consistency.check_consistency(verify, pack))
-        self.assertEqual(reports.parse_pack_exclusions(pack), {"RetroArch": 1})
-
-    def test_unaccounted_pack_omission_is_a_consistency_failure(self):
-        verify = "RetroArch: 3/3 present [existence]"
-        pack = "\n".join(
-            [
-                "Generating pack for RetroArch [source=full]...",
-                "  pack.zip: 1 files packed (1 baseline + 0 from cores), "
-                "1/3 files OK, 1 unsafe excluded, 1 missing [existence]",
-            ]
-        )
-        with contextlib.redirect_stdout(io.StringIO()):
-            self.assertFalse(consistency.check_consistency(verify, pack))
+        verify = self._verified("RetroArch", 3, 3)
+        pack = self._packed("RetroArch", 2, 3, unsafe_excluded=1)
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertFalse(consistency.compare_counts(verify, [pack]))
+        self.assertIn("(1 unsafe excluded)", out.getvalue())
 
     def test_a_pack_more_optimistic_than_verify_is_a_failure(self):
         """The invariant held one way only: a pack counting more OK files
         than the report passed as 'pack resolves more'."""
-        verify = "DupTest: 0/1 OK, 1 untested [md5]"
-        pack = "\n".join(
-            [
-                "Generating pack for DupTest [source=full]...",
-                "  x/DupTest_1_BIOS_Pack.zip: 1 files packed (1 baseline + 0 from cores), "
-                "1/1 files OK [md5]",
-            ]
-        )
+        verify = self._verified("DupTest", 0, 1)
+        pack = self._packed("DupTest", 1, 1)
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertFalse(consistency.check_consistency(verify, pack))
+            self.assertFalse(consistency.compare_counts(verify, [pack]))
 
-    def test_nothing_parsed_is_not_consistent(self):
-        """A changed output format must not pass with no platform compared."""
+    def test_nothing_read_is_not_consistent(self):
+        """A build that recorded nothing must not pass with no platform compared."""
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertFalse(consistency.check_consistency("RetroArch = 2/2 OK", ""))
-            self.assertFalse(consistency.check_consistency("", ""))
+            self.assertFalse(consistency.compare_counts(self._verified("RetroArch", 2, 2), []))
+            self.assertFalse(consistency.compare_counts({}, []))
+
+    def test_an_unwritten_record_file_is_a_failure(self):
+        """A step that crashed leaves its file empty: the check fails, it
+        does not compare nothing and pass."""
+        with tempfile.TemporaryDirectory() as root:
+            empty = os.path.join(root, "empty.json")
+            Path(empty).write_text("")
+            with contextlib.redirect_stdout(io.StringIO()) as out:
+                self.assertFalse(consistency.check_consistency(empty, empty))
+                self.assertFalse(consistency.check_pack_destinations(empty, empty))
+        self.assertIn("unreadable counts", out.getvalue())
 
     def test_pack_without_verify_result_is_a_failure(self):
-        verify = "RetroArch: 2/2 OK"
-        pack = "\n".join(
-            [
-                "Generating pack for RetroArch [source=full]...",
-                "  a.zip: 2 files packed (2 baseline + 0 from cores), 2/2 files OK",
-                "Generating pack for Batocera [source=full]...",
-                "  b.zip: 2 files packed (2 baseline + 0 from cores), 2/2 files OK",
-            ]
-        )
-        with contextlib.redirect_stdout(io.StringIO()):
-            self.assertFalse(consistency.check_consistency(verify, pack))
+        verify = self._verified("RetroArch", 2, 2)
+        packs = [self._packed("RetroArch", 2, 2), self._packed("Batocera", 2, 2)]
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertFalse(consistency.compare_counts(verify, packs))
+        self.assertIn("Batocera: pack with no verify result", out.getvalue())
 
-    def test_only_the_full_variant_feeds_the_comparison(self):
-        """--all-variants printed six packs under one label, and the last won."""
-        output = "\n".join([
-            "Generating pack for RetroArch [source=full]...",
-            "  a.zip: 5 files packed (5 baseline + 0 from cores), 535/535 files OK",
-            "Generating pack for RetroArch [source=platform, required]...",
-            "  b.zip: 5 files packed (5 baseline + 0 from cores), 530/530 files OK",
-        ])
-        self.assertEqual(reports.parse_pack_counts(output), {"RetroArch": (535, 535)})
-
-    def test_exclusions_read_only_the_full_variant(self):
-        """--all-variants printed six packs under one label, and the last won."""
-        output = "\n".join([
-            "Generating pack for Batocera [source=full]...",
-            "  a.zip: 5 files packed (5 baseline + 0 from cores), 5/5 files OK, 3 unsafe excluded",
-            "Generating pack for Batocera [source=truth, required]...",
-            "  b.zip: 2 files packed (0 baseline + 2 from cores), 2/2 files OK",
-        ])
-        self.assertEqual(reports.parse_pack_exclusions(output), {"Batocera": 3})
+    def test_only_the_full_variant_is_recorded(self):
+        """--all-variants built six packs under one label, and the last won."""
+        source = script_source("generate_pack.py")
+        self.assertIn('[] if record_counts and (source, required_only) == ("full", False) else None',
+                      source)
 
     def test_slot_step_reaches_the_summary(self):
         source = script_source("pipeline.py")
