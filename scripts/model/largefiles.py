@@ -241,6 +241,12 @@ def _fetch_asset(
     *,
     offline: bool,
 ) -> str | None:
+    # RETROBIOS_OFFLINE forbids every network call whatever a caller passes:
+    # the CI test job sets it, since tests fetching 252 MB assets into the
+    # shared cache filled the runner's disk and changed what later tests
+    # resolved. Decided once, so the release check of a cached copy obeys it
+    # as the download does.
+    offline = offline or bool(os.environ.get("RETROBIOS_OFFLINE"))
     cached = os.path.join(dest_dir, name)
     # Between the existence test and the hash, a concurrent run can drop the
     # same stale entry: the file is gone by the time this one reads it, and
@@ -269,10 +275,7 @@ def _fetch_asset(
         # (gh release upload --clobber): only a download can answer, and
         # it replaces the copy only if it verifies.
 
-    # RETROBIOS_OFFLINE forbids every download whatever a caller passes: the
-    # CI test job sets it, since tests fetching 252 MB assets into the shared
-    # cache filled the runner's disk and changed what later tests resolved.
-    if offline or os.environ.get("RETROBIOS_OFFLINE"):
+    if offline:
         return None
 
     os.makedirs(dest_dir, exist_ok=True)

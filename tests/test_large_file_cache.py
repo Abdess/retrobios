@@ -338,6 +338,22 @@ class TheOfflineSwitchHoldsEverywhere(unittest.TestCase):
             )
             urlopen.assert_not_called()
 
+    def test_a_cached_copy_of_another_hash_asks_the_release_nothing(self):
+        """The release check of a cached copy read the caller's flag only:
+        under RETROBIOS_OFFLINE it listed the release and HEADed the asset."""
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(
+            os.environ, {"RETROBIOS_OFFLINE": "1"}
+        ), mock.patch.object(largefiles.upstream, "fetch_body") as fetch_body, \
+                mock.patch.object(largefiles.upstream, "open_retrying") as head:
+            Path(tmp, "asset.bin").write_bytes(PAYLOAD_A)
+            self.assertIsNone(largefiles.fetch_large_file(
+                "asset.bin", dest_dir=tmp,
+                expected_sha1=hashlib.sha1(PAYLOAD_B).hexdigest(), offline=False,
+            ))
+            fetch_body.assert_not_called()
+            head.assert_not_called()
+            self.assertEqual(Path(tmp, "asset.bin").read_bytes(), PAYLOAD_A)
+
 
 class HashCacheKeepsEveryDigest(unittest.TestCase):
     """A cache hit must serve the same five digests a fresh hash produces.

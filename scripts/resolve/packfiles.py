@@ -273,7 +273,7 @@ def resolve_file(
         # exactly what the flag forbids.
         return (path, status) if path else (None, "not_found")
     cached = _verified_asset(
-        name, declared, file_entry, OFFLINE if offline is None else offline,
+        name, declared, file_entry, run_is_offline(offline),
     )
     if cached:
         return cached, "release_asset"
