@@ -2336,6 +2336,32 @@ def _answer_yes(prompt: str) -> bool:
     return _ask(prompt).strip().lower() in ("y", "yes")
 
 
+def _folder_answer(prompt: str, usage: str, default: bool, numbers: int = 0) -> str | None:
+    """A folder question's answer: None for Enter on a default, else the
+    text typed. q quits as at every other question, a folder named q being
+    typed ./q: q was a folder created in the current one and filled. Enter
+    with no default, or a number out of range that names no folder, says
+    what to type: the question came back with no word."""
+    while True:
+        raw = _ask(prompt)
+        if not raw:
+            if default:
+                return None
+            print(usage)
+            continue
+        if raw.lower() == "q":
+            _quit()
+        if raw.isdigit() and not 1 <= int(raw) <= numbers and not _is_dir(_typed_folder(raw)):
+            print(usage)
+            continue
+        return raw
+
+
+def _numbers_hint(count: int) -> str:
+    """" or 1 to N" after a question that takes a listed number, N rows."""
+    return "" if not count else " or 1" if count == 1 else f" or 1 to {count}"
+
+
 class ReadCounter:
     """Files read so far, as event_kind events and on the live line: the
     program driving the installer gets the count the terminal gets."""
@@ -14538,15 +14564,14 @@ def _missing_dest(dest: Path, ask: bool, named: str = "named with --dest",
     (print if missing > 1 and ask else detail)(
         f"  {shown_path(dest)} does not exist. The nearest folder that does: "
         f"{shown_path(nearest)}")
-    if missing > 1 and ask:
-        answer = _ask(f"  Create {_plural(missing, 'folder')} under {shown_path(nearest)}? [y/N] ")
-        if not answer.strip().lower().startswith("y"):
-            if again:
-                print("  Not created.")
-                return False
-            print(f"  Nothing installed. Check the folder {named}, then run "
-                  "the command again.")
-            sys.exit(2)
+    if missing > 1 and ask and not _answer_yes(
+            f"  Create {_plural(missing, 'folder')} under {shown_path(nearest)}? [y/N] "):
+        if again:
+            print("  Not created.")
+            return False
+        print(f"  Nothing installed. Check the folder {named}, then run "
+              "the command again.")
+        sys.exit(2)
     return True
 
 
@@ -14982,23 +15007,18 @@ def card_install_dest(named: str, plat: str, interactive: bool, ask: bool = True
              else "Mount the card, then type its top folder."))
     listed = _list_cards(cards, blank)
     while True:
-        numbers = ("" if not listed else " or 1" if len(listed) == 1
-                   else f" or 1 to {len(listed)}")
+        usage = (f"  Type a number from 1 to {len(listed)}, a folder, Enter to look "
+                 "again, or q to quit." if listed else
+                 "  Type the card's top folder, Enter to look again, or q to quit.")
         # Enter looks again, as the screen's Look again does: a card
         # inserted after the question was never found.
-        raw = _ask(f"Card root{numbers}, Enter to look again, q to quit: ")
-        if not raw:
+        raw = _folder_answer(f"Card root{_numbers_hint(len(listed))}, Enter to look again, "
+                             "q to quit: ", usage, True, len(listed))
+        if raw is None:
             listed = _list_cards(mounted_cards_of(system, plat), blank_cards_of(system, plat),
                                  f"Still no {system} card is mounted.")
             continue
-        if raw.lower() == "q":
-            _quit()
         chosen = raw.isdigit() and 1 <= int(raw) <= len(listed)
-        if raw.isdigit() and not chosen and not _is_dir(_typed_folder(raw)):
-            print(f"  Type a number from 1 to {len(listed)}, a folder, Enter to look "
-                  "again, or q to quit." if listed else
-                  "  Type the card's top folder, Enter to look again, or q to quit.")
-            continue
         root = listed[int(raw) - 1] if chosen else _typed_folder(raw).absolute()
         choice = card_choice(system, plat, root)
         if choice.refused:
@@ -15180,22 +15200,16 @@ def _ask_from_folder(files: list[dict] | None = None, bios_path: Path | None = N
         print("\nCopy from:")
         for number, mount in enumerate(drives, 1):
             print(f"  {number}) {card_line(mount)}")
-    numbers = "" if not drives else " or 1" if len(drives) == 1 else f" or 1 to {len(drives)}"
+    count = "" if not drives else "1, " if len(drives) == 1 else f"a number from 1 to {len(drives)}, "
+    # A number out of range, said as one: "2" was read as the folder ./2.
+    usage = f"  Type {count}a folder, or Enter."
     while True:
-        raw = _ask(f"Folder, old card or ZIP to copy from{numbers} (Enter to go back, "
-                   "q to quit): ").strip()
-        if not raw:
+        raw = _folder_answer(f"Folder, old card or ZIP to copy from{_numbers_hint(len(drives))} "
+                             "(Enter to go back, q to quit): ", usage, True, len(drives))
+        if raw is None:
             return
-        if raw.lower() == "q":
-            _quit()
         if raw.isdigit() and 1 <= int(raw) <= len(drives):
             label = str(drives[int(raw) - 1])
-        elif raw.isdigit() and drives and not _is_dir(_typed_folder(raw)):
-            # A number out of range, said as one: "2" was read as the folder
-            # ./2.
-            count = "1" if len(drives) == 1 else f"a number from 1 to {len(drives)}"
-            print(f"  Type {count}, a folder, or Enter.")
-            continue
         else:
             label = os.path.normpath(str(_typed_folder(raw).absolute()))
         refused = copy_source_refusal(Path(label), bios_path)
@@ -15399,8 +15413,7 @@ def ask_platform_folder(os_type: str, plat: str, ask: bool = True,
     unproven = "" if shared else unproven_words()
     if unproven:
         print(f"  {unproven}")
-    numbers = "" if not targets else (" or 1" if len(targets) == 1
-                                      else f" or 1 to {len(targets)}")
+    numbers = _numbers_hint(len(targets))
     why = ("" if default is not None or shared
            else " (no default, a folder above could not be opened)"
            if _default_set_aside(os_type, plat) else " (no default on this system)")
@@ -15430,27 +15443,6 @@ def ask_platform_folder(os_type: str, plat: str, ask: bool = True,
         folder = choice.folder
         if not check or folder == default or _missing_dest(folder, ask, "typed", again=True):
             return folder
-
-
-def _folder_answer(prompt: str, usage: str, default: bool, numbers: int = 0) -> str | None:
-    """A folder question's answer: None for Enter on a default, else the
-    text typed. q quits as at every other question, a folder named q being
-    typed ./q: q was a folder created in the current one and filled. Enter
-    with no default, or a number out of range that names no folder, says
-    what to type: the question came back with no word."""
-    while True:
-        raw = _ask(prompt)
-        if not raw:
-            if default:
-                return None
-            print(usage)
-            continue
-        if raw.lower() == "q":
-            _quit()
-        if raw.isdigit() and not 1 <= int(raw) <= numbers and not _is_dir(_typed_folder(raw)):
-            print(usage)
-            continue
-        return raw
 
 
 def other_side(os_type: str, plat: str) -> list[tuple[str, Path]]:
@@ -17607,9 +17599,8 @@ def finish_app(
                 continue
             if not interactive or args.yes or LOCAL.offline:
                 continue
-            answer = _ask(f"\nPut RetroBIOS on this {card.system} card, to check and update "
-                          "its BIOS files from the console later? [y/N] ")
-            if answer.lower() in ("y", "yes"):
+            if _answer_yes(f"\nPut RetroBIOS on this {card.system} card, to check and "
+                           "update its BIOS files from the console later? [y/N] "):
                 chosen.append(card)
     failed = False
     for card in chosen:

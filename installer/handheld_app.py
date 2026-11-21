@@ -18,7 +18,7 @@ from pathlib import Path, PurePosixPath
 from typing import NamedTuple
 
 from installer.cards import card_system
-from installer.console import _ask
+from installer.console import _answer_yes
 from installer.events import EVENTS
 from installer.host_fs import NOT_WRITABLE, _write_refused
 from installer.local_check import _sha256_file
@@ -393,9 +393,8 @@ def finish_app(
                 continue
             if not interactive or args.yes or LOCAL.offline:
                 continue
-            answer = _ask(f"\nPut RetroBIOS on this {card.system} card, to check and update "
-                          "its BIOS files from the console later? [y/N] ")
-            if answer.lower() in ("y", "yes"):
+            if _answer_yes(f"\nPut RetroBIOS on this {card.system} card, to check and "
+                           "update its BIOS files from the console later? [y/N] "):
                 chosen.append(card)
     failed = False
     for card in chosen:

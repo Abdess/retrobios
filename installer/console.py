@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any, TextIO
 
 from installer.events import EVENTS, EVENT_PROGRESS_INTERVAL
-from installer.host_fs import _host_path
+from installer.host_fs import _host_path, _is_dir
 from installer.terminal import TUI_MIN_COLS, Terminal, terminal_size
 from installer.text import _split_word, cell_width, format_duration, format_size
 
@@ -273,6 +273,32 @@ def _confirm(prompt: str) -> bool:
 def _answer_yes(prompt: str) -> bool:
     """Yes only to y or yes: a removal is never the default answer."""
     return _ask(prompt).strip().lower() in ("y", "yes")
+
+
+def _folder_answer(prompt: str, usage: str, default: bool, numbers: int = 0) -> str | None:
+    """A folder question's answer: None for Enter on a default, else the
+    text typed. q quits as at every other question, a folder named q being
+    typed ./q: q was a folder created in the current one and filled. Enter
+    with no default, or a number out of range that names no folder, says
+    what to type: the question came back with no word."""
+    while True:
+        raw = _ask(prompt)
+        if not raw:
+            if default:
+                return None
+            print(usage)
+            continue
+        if raw.lower() == "q":
+            _quit()
+        if raw.isdigit() and not 1 <= int(raw) <= numbers and not _is_dir(_typed_folder(raw)):
+            print(usage)
+            continue
+        return raw
+
+
+def _numbers_hint(count: int) -> str:
+    """" or 1 to N" after a question that takes a listed number, N rows."""
+    return "" if not count else " or 1" if count == 1 else f" or 1 to {count}"
 
 
 class ReadCounter:

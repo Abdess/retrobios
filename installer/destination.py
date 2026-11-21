@@ -23,7 +23,7 @@ from installer.cards import (
     share_doubt,
     share_drive,
 )
-from installer.console import _ask, _quit, _typed_folder, detail
+from installer.console import _answer_yes, _folder_answer, _numbers_hint, _typed_folder, detail
 from installer.detect_os import _DETECTED_OS, card_title, detect_os, detected_os, os_conflict
 from installer.embedded import CARD_MARKER, CARD_PLATFORMS, _EMBEDDED_RULES, _a, _built_on
 from installer.events import EVENTS
@@ -95,15 +95,14 @@ def _missing_dest(dest: Path, ask: bool, named: str = "named with --dest",
     (print if missing > 1 and ask else detail)(
         f"  {shown_path(dest)} does not exist. The nearest folder that does: "
         f"{shown_path(nearest)}")
-    if missing > 1 and ask:
-        answer = _ask(f"  Create {_plural(missing, 'folder')} under {shown_path(nearest)}? [y/N] ")
-        if not answer.strip().lower().startswith("y"):
-            if again:
-                print("  Not created.")
-                return False
-            print(f"  Nothing installed. Check the folder {named}, then run "
-                  "the command again.")
-            sys.exit(2)
+    if missing > 1 and ask and not _answer_yes(
+            f"  Create {_plural(missing, 'folder')} under {shown_path(nearest)}? [y/N] "):
+        if again:
+            print("  Not created.")
+            return False
+        print(f"  Nothing installed. Check the folder {named}, then run "
+              "the command again.")
+        sys.exit(2)
     return True
 
 
@@ -539,23 +538,18 @@ def card_install_dest(named: str, plat: str, interactive: bool, ask: bool = True
              else "Mount the card, then type its top folder."))
     listed = _list_cards(cards, blank)
     while True:
-        numbers = ("" if not listed else " or 1" if len(listed) == 1
-                   else f" or 1 to {len(listed)}")
+        usage = (f"  Type a number from 1 to {len(listed)}, a folder, Enter to look "
+                 "again, or q to quit." if listed else
+                 "  Type the card's top folder, Enter to look again, or q to quit.")
         # Enter looks again, as the screen's Look again does: a card
         # inserted after the question was never found.
-        raw = _ask(f"Card root{numbers}, Enter to look again, q to quit: ")
-        if not raw:
+        raw = _folder_answer(f"Card root{_numbers_hint(len(listed))}, Enter to look again, "
+                             "q to quit: ", usage, True, len(listed))
+        if raw is None:
             listed = _list_cards(mounted_cards_of(system, plat), blank_cards_of(system, plat),
                                  f"Still no {system} card is mounted.")
             continue
-        if raw.lower() == "q":
-            _quit()
         chosen = raw.isdigit() and 1 <= int(raw) <= len(listed)
-        if raw.isdigit() and not chosen and not _is_dir(_typed_folder(raw)):
-            print(f"  Type a number from 1 to {len(listed)}, a folder, Enter to look "
-                  "again, or q to quit." if listed else
-                  "  Type the card's top folder, Enter to look again, or q to quit.")
-            continue
         root = listed[int(raw) - 1] if chosen else _typed_folder(raw).absolute()
         choice = card_choice(system, plat, root)
         if choice.refused:

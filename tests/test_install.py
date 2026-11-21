@@ -577,6 +577,12 @@ class AMissingDestIsSaid(unittest.TestCase):
         self.assertFalse((root / "retroarh").exists())
         self.assertEqual(self._call(dest, True, "y")[1], None)
 
+    def test_only_y_or_yes_creates_the_folders(self):
+        # A default-no question read "yeah" as yes, as no other one does.
+        root = Path(_tempdir(self))
+        self.assertEqual(self._call(root / "a" / "b", True, "yeah")[1], 2)
+        self.assertFalse((root / "a").exists())
+
     def test_one_missing_level_or_no_terminal_is_said_not_asked(self):
         root = Path(_tempdir(self))
         # A "no" that was asked would stop the run with 2. Said with

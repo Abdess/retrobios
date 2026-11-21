@@ -8385,6 +8385,15 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertIn("Type 1, a folder, or Enter.", out.getvalue())
         self.assertNotIn("does not exist", out.getvalue())
 
+    def test_a_number_with_no_drive_listed_is_said_as_one(self):
+        # With no drive listed, "2" was read as the folder ./2.
+        with mock.patch.object(install, "_mounted_cards", return_value=[]), \
+                mock.patch.object(install, "_ask", side_effect=["2", ""]), \
+                contextlib.redirect_stdout(io.StringIO()) as out:
+            install._ask_from_folder([], self.here)
+        self.assertIn("Type a folder, or Enter.", out.getvalue())
+        self.assertNotIn("does not exist", out.getvalue())
+
     def test_the_copy_line_names_the_folder_it_copies_from(self):
         payload = b"gba"
         files = [self.entry("gba_bios.bin", payload, ["nintendo-gba"])]
