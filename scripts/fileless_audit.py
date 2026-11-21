@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from core import upstream
 from core.cli import add_repo_inputs, require_directory
 from model.profiles import ProfileSelectionError, load_emulator_profiles, resolve_profile_name
-from profiling.fileless import audit, unanswered_profiles
+from profiling import fileless
 
 
 def main() -> None:
@@ -59,12 +59,12 @@ def main() -> None:
     except ProfileSelectionError as exc:
         raise SystemExit(f"ERROR: {exc}") from None
     if args.all:
-        names = unanswered_profiles(args.emulators_dir)
+        names = fileless.unanswered_profiles(args.emulators_dir)
 
     flagged = unreachable = 0
     for name in names:
         try:
-            hits = audit(name, args.emulators_dir, args.cache_dir, args.offline)
+            hits = fileless.audit(name, args.emulators_dir, args.cache_dir, args.offline)
         except upstream.UpstreamError as exc:
             print(f"{name}: unreachable, {exc}", file=sys.stderr)
             unreachable += 1

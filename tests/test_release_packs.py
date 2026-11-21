@@ -470,7 +470,7 @@ class TheReleaseNotesThankPeople(unittest.TestCase):
                     "--platforms-dir", PLATFORMS, "--output", str(tmp / "notes.md")]
             with mock.patch.object(sys, "argv", argv), \
                     mock.patch.object(notes, "_run", self.fake), \
-                    mock.patch.object(release_notes, "gather_thanks",
+                    mock.patch.object(notes, "gather_thanks",
                                       side_effect=AssertionError("gh read")), \
                     contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(release_notes.main(), 0)

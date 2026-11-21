@@ -131,7 +131,7 @@ class TestCommandLine(unittest.TestCase):
 
         with mock.patch.object(sys, "argv", ["fileless.py", *argv,
                                              "--emulators-dir", self.tmp.name]), \
-                mock.patch.object(fileless_audit, "audit", side_effect=fake), \
+                mock.patch.object(fileless, "audit", side_effect=fake), \
                 mock.patch("sys.stderr"), mock.patch("sys.stdout"), self.assertRaises(SystemExit) as caught:
             fileless_audit.main()
         return caught.exception.code, read

@@ -34,10 +34,10 @@ from model import releaserecord
 from core.cli import require_directory
 from core.paths import PLATFORMS_DIR
 from core.artifacts import write_text_atomic
+from release import notes
 from release.notes import (
     changelog_url,
     closing_lines,
-    gather_thanks,
     previous_record_commit,
     refused_words,
     render,
@@ -79,7 +79,7 @@ def main() -> int:
             thanks = [line for line in args.thanks.read_text(encoding="utf-8").splitlines()
                       if line.strip()]
         else:
-            thanks = gather_thanks()
+            thanks = notes.gather_thanks()
     except (subprocess.CalledProcessError, ValueError, KeyError, OSError) as exc:
         detail = getattr(exc, "stderr", "") or exc
         print(f"Error: cannot gather the thanks: {str(detail).strip()}. Pass a checked list"

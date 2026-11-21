@@ -324,6 +324,12 @@ class ThinCommands(unittest.TestCase):
                     if (module in names and attr.isidentifier() and attr not in FILE_SUFFIXES
                             and attr not in COMMAND_DEFINITIONS):
                         found.append(f"{path.name}: {node.value}")
+                if (isinstance(node, ast.Call) and len(node.args) >= 2
+                        and isinstance(node.args[0], ast.Name) and node.args[0].id in bound
+                        and isinstance(node.args[1], ast.Constant) and isinstance(node.args[1].value, str)
+                        and node.args[1].value not in COMMAND_DEFINITIONS):
+                    # mock.patch.object(verify, "x") and setattr(verify, "x", ...) name it apart.
+                    found.append(f"{path.name}: {bound[node.args[0].id]}.{node.args[1].value}")
                 if (isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name)
                         and node.value.id in bound and node.attr not in COMMAND_DEFINITIONS
                         and not node.attr.startswith("__")):
