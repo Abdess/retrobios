@@ -838,7 +838,7 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
 
     def test_emudeck_cheat_sheet_raises(self):
         """A refused cheat sheet was read as empty and its systems left
-        emudeck.yml; only a 404 says the sheet is gone."""
+        emudeck.yml. Only a 404 says the sheet is gone."""
         scraper = emudeck_scraper.Scraper(checkbios_url="pinned", csv_base_url="https://x")
         with mock.patch("urllib.request.urlopen", self._refuse), self.assertRaises(
             ConnectionError

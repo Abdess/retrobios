@@ -38,7 +38,7 @@ class AtomPool:
         self._built: dict[tuple[tuple[str, str], ...], bytes | None] = {}
         self.unreadable: list[str] = []
         # .variants/ copies (x.zip.1a2b3c4d) hold members no primary holds,
-        # bbcm.zip.4cc3e25a's fa2b881f among them; primaries answer first.
+        # bbcm.zip.4cc3e25a's fa2b881f among them. Primaries answer first.
         archives = (p for p in bios_dir.rglob("*") if is_archive_path(p.name) and p.is_file())
         for archive in sorted(archives, key=lambda p: (".variants" in p.parts, p)):
             try:

@@ -2713,7 +2713,7 @@ class TestE2E(unittest.TestCase):
         output = buf.getvalue()
         self.assertIn("test.bin", output)
         self.assertIn("sha1abc", output)
-        # The record's path, the one field the schema gives it; a read of
+        # The record's path, the one field the schema gives it. A read of
         # "paths" printed nothing.
         self.assertIn("Path: bios/Mfr/Console/test.bin", output)
         self.assertEqual(missing, 0)

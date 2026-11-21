@@ -18,7 +18,7 @@ def section(text: str, heading: str, *, stop: int | None = None) -> str:
     higher (the heading's own level by default).
 
     The heading is its text, or the full line with its hashes, which then
-    fix its level; a trailing ``{ #anchor }`` is optional either way."""
+    fix its level. A trailing ``{ #anchor }`` is optional either way."""
     title = heading.lstrip("#")
     hashes = heading[: len(heading) - len(title)]
     title = title.strip()

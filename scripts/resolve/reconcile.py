@@ -769,7 +769,7 @@ def _attach_runners(systems: dict[str, NativeSystem], scraped: dict | None) -> N
     libretro = {str(c) for c in declared} if isinstance(declared, list) else set()
     standalone = {str(c) for c in scraped.get("standalone_cores") or []}
     # The build decision reads the tagged set (own builds, twins), as the
-    # pack does; the runner's name is looked up among the plain names.
+    # pack does. The runner's name is looked up among the plain names.
     layout_set = standalone_set(scraped)
     profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
     for system in systems.values():

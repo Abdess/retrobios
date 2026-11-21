@@ -255,7 +255,7 @@ def read_local_json(path: Path, limit: int) -> object:
 
 def write_atomically(path: Path, data: bytes) -> None:
     """Write data at path through a scratch file beside it, removed when the
-    write fails; a scratch that cannot be removed is named in the error."""
+    write fails. A scratch that cannot be removed is named in the error."""
     fd, scratch = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".part")
     try:
         with os.fdopen(fd, "wb") as handle:
