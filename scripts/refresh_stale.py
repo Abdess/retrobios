@@ -63,12 +63,12 @@ from functools import lru_cache
 from pathlib import Path
 from model.platforms import inheritance_chain
 from model.registry import data_dir_registry_at, load_platform_registry
-from core.paths import REPO_ROOT
+from core.paths import DATA_DIRS_FILE, REPO_ROOT
 
 LOG_DIR = REPO_ROOT / "tmp" / "refresh_stale"
 CHECK_FRESHNESS = REPO_ROOT / "scripts" / "check_freshness.py"
 PLATFORMS_REGISTRY = REPO_ROOT / "platforms" / "_registry.yml"
-DATA_DIRS_REGISTRY = REPO_ROOT / "platforms" / "_data_dirs.yml"
+DATA_DIRS_REGISTRY = REPO_ROOT / DATA_DIRS_FILE
 
 AUTO_AREAS = ("platforms", "native", "targets", "data", "catalogs")
 # A rom-folder pin is moved by hand in platforms/romfolders/_sources/,

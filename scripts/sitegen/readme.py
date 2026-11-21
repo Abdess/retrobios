@@ -26,7 +26,7 @@ from model.guides import PACKAGE_COMMAND, install_command
 from model.largefiles import LARGE_FILES_CACHE, load_registered_paths
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles, unique_emulator_profiles
-from model.registry import list_registered_platforms, load_platform_registry
+from model.registry import VERSIONS_FILE, list_registered_platforms, load_platform_registry
 from model.systems import system_index
 from packs.coverage import verify_platform
 from resolve.cores import resolve_platform_cores
@@ -144,7 +144,7 @@ def _coverage_inputs(db_path: Path, platforms_dir: str, emulators_dir: str) -> s
         for path in sorted(p for p in root.resolve().rglob(pattern) if p.is_file()):
             add_file(path)
     for path in (REPO_ROOT / ".gitignore", REPO_ROOT / "_mame_clones.json",
-                 REPO_ROOT / "data" / ".versions.json"):
+                 REPO_ROOT / VERSIONS_FILE):
         add_file(path)
     digest.update(b"offline\0" + (b"1" if os.environ.get("RETROBIOS_OFFLINE") else b"0") + b"\n")
     large = Path(LARGE_FILES_CACHE).resolve()

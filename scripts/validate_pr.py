@@ -26,8 +26,7 @@ from pathlib import Path
 
 
 sys.path.insert(0, os.path.dirname(__file__))
-from core.paths import DB_FILE
-from model.database import load_database
+from model.database import load_optional_database
 from core.cli import add_repo_inputs, require_directory
 
 try:
@@ -138,18 +137,6 @@ def place(results: list[ValidationResult]) -> list[str]:
     return placed
 
 
-def _load_database_if_any(path: str) -> dict | None:
-    """The database, optional only where the default is meant.
-
-    A mistyped --db read as "no database" and every file passed its
-    duplicate and placement checks unchecked. A damaged one did the same
-    after a warning.
-    """
-    if path == DB_FILE and not os.path.exists(path):
-        return None
-    return load_database(path)
-
-
 def main() -> None:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Validate BIOS file contributions")
     parser.add_argument("files", nargs="*", help="Files to validate")
@@ -188,7 +175,7 @@ def main() -> None:
             print("[]")
         return
 
-    db = _load_database_if_any(args.db)
+    db = load_optional_database(args.db)
     require_directory(args.platforms_dir, "--platforms-dir")
     platform_hashes = load_platform_hashes(args.platforms_dir, db)
     profile_hashes = load_profile_hashes(args.emulators_dir, db)

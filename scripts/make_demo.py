@@ -56,7 +56,6 @@ import argparse
 import functools
 import hashlib
 import http.server
-import importlib.util
 import json
 import os
 import re
@@ -64,11 +63,12 @@ import shutil
 import subprocess
 import sys
 import threading
-import types
 from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
+
+from installer_build.module import installer_module
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "docs_assets" / "demo"
@@ -364,18 +364,11 @@ def session_env(base_url: str, work: Path, card: Path,
     }
 
 
-def _installer() -> types.ModuleType:
-    spec = importlib.util.spec_from_file_location("retrobios_install", ROOT / "install.py")
-    if spec is None or spec.loader is None:
-        raise RuntimeError("install.py cannot be loaded")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
 
 
 def format_size(size: int) -> str:
     """The size as the installer writes it."""
-    return str(_installer().format_size(size))
+    return str(installer_module().format_size(size))
 
 
 def describe(variant: str, facts: dict) -> str:

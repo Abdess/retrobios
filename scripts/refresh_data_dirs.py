@@ -19,7 +19,8 @@ from core.cli import suggest_names
 from model.cliargs import platform_arg, require_platform
 
 from model.registry import data_dir_registry_at
-from packs.datadirs import DEFAULT_REGISTRY, log, refresh_all, refresh_entry
+from core.paths import DATA_DIRS_FILE
+from packs.datadirs import log, refresh_all, refresh_entry
 
 
 def summarize(outcomes: dict[str, bool | None], dry_run: bool) -> str:
@@ -48,7 +49,7 @@ def main() -> None:
         "--platform", "-p", type=platform_arg, help="Only refresh entries for this platform"
     )
     parser.add_argument(
-        "--registry", default=DEFAULT_REGISTRY, help="Path to _data_dirs.yml"
+        "--registry", default=DATA_DIRS_FILE, help="Path to _data_dirs.yml"
     )
     args = parser.parse_args()
 

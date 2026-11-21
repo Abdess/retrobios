@@ -29,18 +29,22 @@ def load_data_dir_registry(platforms_dir: str | Path = PLATFORMS_DIR, required: 
     return data_dir_registry_at(os.path.join(platforms_dir, "_data_dirs.yml"), required)
 
 
-def load_platform_registry(platforms_dir: str | Path = PLATFORMS_DIR, required: bool = False) -> dict:
-    """Return the `platforms:` mapping from _registry.yml.
+def platform_registry_at(registry_path: str | os.PathLike[str], required: bool = False) -> dict:
+    """The `platforms:` mapping of a platform registry file.
 
     An absent file is an empty registry, or with ``required`` an input the
     command cannot run without.
     """
-    registry_path = os.path.join(platforms_dir, "_registry.yml")
     if not os.path.exists(registry_path):
         if required:
             raise InputMissing(f"{registry_path} not found")
         return {}
     return (source_yaml_file(registry_path) or {}).get("platforms") or {}
+
+
+def load_platform_registry(platforms_dir: str | Path = PLATFORMS_DIR, required: bool = False) -> dict:
+    """Return the `platforms:` mapping from _registry.yml."""
+    return platform_registry_at(os.path.join(platforms_dir, "_registry.yml"), required)
 
 
 def list_registered_platforms(platforms_dir: str = PLATFORMS_DIR) -> list[str]:

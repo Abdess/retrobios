@@ -9,6 +9,7 @@ from dataclasses import dataclass
 
 from core.hashing import declared_hash_lists
 from core.text import series
+from model.database import sha1_at
 from model.platforms import native_layer
 from model.profiles import is_emulator
 from resolve.cores import resolve_platform_cores
@@ -104,11 +105,8 @@ def _copy_cell(path: str, algos: list[str], db: dict | None) -> str:
     """The file a path holds, with its hashes in the algorithms declared."""
     if not path:
         return "-"
-    record: dict = next(
-        (rec | {"sha1": sha1} for sha1, rec in (db or {}).get("files", {}).items()
-         if rec.get("path") == path),
-        {},
-    )
+    sha1 = sha1_at(db or {}, path)
+    record: dict = (db or {})["files"][sha1] | {"sha1": sha1} if sha1 else {}
     hashes = {algo: [str(record[algo]).lower()] for algo in algos if record.get(algo)}
     shown = f"[{code_span(path)}]({fetch_url(path)})"
     return f"{shown}<br>{_hash_cell(hashes)}" if hashes else shown

@@ -161,8 +161,7 @@ def gather_thanks(run: Run | None = None, repo: str = REPO) -> list[str]:
                           ("Help in issues", helped)):
         if people:
             names = [f"@{login}" for login in sorted(people, key=str.casefold)]
-            listed = names[0] if len(names) == 1 else f"{', '.join(names[:-1])} and {names[-1]}"
-            lines.append(f"- **{label}**: {listed}.")
+            lines.append(f"- **{label}**: {series(names)}.")
     return lines
 
 

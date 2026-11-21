@@ -14,6 +14,7 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 from model.registry import load_platform_registry
+from model.sources import source_yaml_file
 from core.paths import REPO_ROOT
 from core.text import count_text
 from model import siteinputs
@@ -453,13 +454,11 @@ def emulator_names() -> dict[str, str]:
 
 @cache
 def _emulator_names_in(emulators_dir: str) -> dict[str, str]:
-    import yaml
-
     names: dict[str, str] = {}
     for _, emulator in CHAIN_EXAMPLES:
-        with open(Path(emulators_dir) / f"{emulator}.yml", encoding="utf-8") as handle:
-            label = str(yaml.safe_load(handle).get("emulator", emulator))
-            names[emulator] = re.sub(r"\s*\(.*\)$", "", label)
+        profile = source_yaml_file(Path(emulators_dir) / f"{emulator}.yml") or {}
+        label = str(profile.get("emulator", emulator))
+        names[emulator] = re.sub(r"\s*\(.*\)$", "", label)
     return names
 
 

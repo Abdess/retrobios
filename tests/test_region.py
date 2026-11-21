@@ -1048,13 +1048,9 @@ class UnknownRegionSaysWhatToType(unittest.TestCase):
         self.assertIn("Short forms: jp", message)
 
     def test_the_installer_says_the_same(self):
-        import importlib.util
+        from installer_build.module import installer_module
 
-        spec = importlib.util.spec_from_file_location(
-            "install_under_test", Path(__file__).resolve().parents[1] / "install.py"
-        )
-        install = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(install)
+        install = installer_module()
         with self.assertRaises(ValueError) as caught:
             install.canonical_region("europ")
         self.assertIn("Close matches: europe", str(caught.exception))

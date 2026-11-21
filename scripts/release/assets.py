@@ -10,10 +10,11 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import NamedTuple
 
-from core.paths import EMULATORS_DIR
+from core.paths import DATA_DIRS_FILE, EMULATORS_DIR
 from core.hashing import file_digest
 from core.sizes import size_text
 from model.composition import composition_tier
+from model.registry import data_dir_registry_at
 from model.largefiles import (
     LARGE_FILES_RELEASE,
     LARGE_FILES_REPO,
@@ -235,14 +236,10 @@ def profile_descriptions(emulators_dir: str = EMULATORS_DIR) -> dict[str, str]:
     return found
 
 
-def registry_bundles(registry_path: str = "platforms/_data_dirs.yml") -> dict[str, str]:
+def registry_bundles(registry_path: str = DATA_DIRS_FILE) -> dict[str, str]:
     """Asset name -> description for data directories served from the release."""
-    from model.safeparse import yaml_load
-
-    with open(registry_path, encoding="utf-8") as handle:
-        registry = yaml_load(handle) or {}
     bundles: dict[str, str] = {}
-    for entry in (registry.get("data_directories") or registry).values():
+    for entry in data_dir_registry_at(registry_path, required=True).values():
         if not isinstance(entry, dict):
             continue
         url = str(entry.get("source_url") or "")

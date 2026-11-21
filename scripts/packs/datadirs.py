@@ -25,7 +25,6 @@ from model.registry import VERSIONS_FILE, load_versions
 
 log = logging.getLogger(__name__)
 
-DEFAULT_REGISTRY = "platforms/_data_dirs.yml"
 USER_AGENT = "retrobios/1.0"
 REQUEST_TIMEOUT = 30
 DOWNLOAD_TIMEOUT = 300

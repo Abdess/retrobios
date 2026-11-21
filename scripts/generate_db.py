@@ -19,7 +19,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from core.cli import add_repo_inputs, require_directory
+from core.cli import SourceUnreadable, add_repo_inputs, require_directory
 from model.dumpcatalog import annotate_provenance, DEFAULT_PROVENANCE_DIR, load_provenance_snapshots
 from core.hashing import compute_hashes
 from model.registry import list_registered_platforms
@@ -28,7 +28,8 @@ from core.artifacts import (
     write_if_changed,
     write_text_atomic,
 )
-from model.safeparse import require_yaml, yaml_load
+from model.safeparse import require_yaml
+from model.sources import source_yaml_file
 from model.profiles import source_yaml_paths
 from resolve.localfile import variant_base_name
 from model import retired
@@ -297,14 +298,12 @@ def _declarations(platforms_dir: Path, emulators_dir: Path) -> list[dict]:
     ] if platforms_dir.is_dir() else []
     entries: list[dict] = []
     for source in sources:
-        with open(source) as f:
-            config = yaml_load(f) or {}
+        config = source_yaml_file(source) or {}
         for system in (config.get("systems") or {}).values():
             entries.extend(system.get("files") or [])
     if emulators_dir.is_dir():
         for source in source_yaml_paths(emulators_dir):
-            with open(source) as f:
-                entries.extend((yaml_load(f) or {}).get("files") or [])
+            entries.extend((source_yaml_file(source) or {}).get("files") or [])
     return entries
 
 
@@ -651,9 +650,11 @@ def _platform_aliases(book: _AliasBook, unreadable: list[str]) -> None:
     ):
         config_file = platforms_dir / f"{platform_name}.yml"
         try:
-            with open(config_file) as f:
-                config = yaml_load(f) or {}
-        except (yaml.YAMLError, OSError) as e:
+            config = source_yaml_file(config_file) or {}
+        except SourceUnreadable as e:
+            unreadable.append(str(e))
+            continue
+        except OSError as e:
             unreadable.append(f"{config_file}: {e}")
             continue
 
@@ -741,9 +742,11 @@ def _profile_aliases(
         return
     for emu_file in source_yaml_paths(emulators_dir):
         try:
-            with open(emu_file) as f:
-                emu_config = yaml_load(f) or {}
-        except (yaml.YAMLError, OSError) as e:
+            emu_config = source_yaml_file(emu_file) or {}
+        except SourceUnreadable as e:
+            unreadable.append(str(e))
+            continue
+        except OSError as e:
             unreadable.append(f"{emu_file}: {e}")
             continue
         # A profile whose entries name each other (dosbox-x opens

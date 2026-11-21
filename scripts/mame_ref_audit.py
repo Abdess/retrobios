@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from core import upstream
 from core.cli import add_repo_inputs, require_directory
-from model.safeparse import yaml_load
+from model.sources import source_yaml_file
 from scraper.clex import blank_comments
 from scraper.mame_parser import MACHINE_MACROS
 
@@ -62,8 +62,7 @@ def audit(
     name: str, emulators_dir: str, cache_dir: str, offline: bool
 ) -> tuple[list[Finding], int, int]:
     """Findings, plus counts of refs that agree and of unjudgeable ones."""
-    with open(os.path.join(emulators_dir, f"{name}.yml"), encoding="utf-8") as handle:
-        document = yaml_load(handle) or {}
+    document = source_yaml_file(os.path.join(emulators_dir, f"{name}.yml")) or {}
     trees = {
         role: (upstream.parse_repo(str(document.get(role) or "")),
                str(document.get(f"{role}_commit") or ""))

@@ -24,7 +24,7 @@ if (_SCRIPTS_DIR := str(Path(__file__).resolve().parents[2])) not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 
 from core import upstream
-from model.safeparse import yaml_load
+from model.sources import source_yaml_file
 
 CACHE_DIR = upstream.CACHE_DIR
 
@@ -160,8 +160,7 @@ def load_sources(directory: Path) -> dict[str, dict]:
     """Each setup's declared sources and facts, keyed by its file name."""
     out: dict[str, dict] = {}
     for path in sorted(Path(directory).glob("*.yml")):
-        with path.open(encoding="utf-8") as handle:
-            out[path.stem] = yaml_load(handle) or {}
+        out[path.stem] = source_yaml_file(path) or {}
     return out
 
 

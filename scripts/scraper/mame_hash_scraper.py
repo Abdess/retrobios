@@ -25,6 +25,8 @@ from model.platforms import load_platform_config
 from model.profiles import source_yaml_paths
 from core.artifacts import write_text_atomic
 from model.safeparse import yaml_load
+from model.sources import source_yaml_file
+from core.cli import SourceUnreadable
 
 from core import upstream
 
@@ -123,8 +125,7 @@ def _find_mame_profiles() -> list[Path]:
     profiles: list[Path] = []
     for path in source_yaml_paths(_EMULATORS_DIR):
         try:
-            with open(path, encoding="utf-8") as f:
-                data = yaml_load(f)
+            data = source_yaml_file(path)
             if not isinstance(data, dict):
                 continue
             upstream = data.get("upstream", "")
@@ -149,7 +150,7 @@ def _find_mame_profiles() -> list[Path]:
                 )
             ):
                 profiles.append(path)
-        except (yaml.YAMLError, OSError) as exc:
+        except (SourceUnreadable, OSError) as exc:
             # Skipped, a broken mame.yml left the list and the refresh
             # reported success without touching it.
             raise RuntimeError(f"cannot read {path}: {exc}") from exc

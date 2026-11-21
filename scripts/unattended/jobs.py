@@ -14,6 +14,7 @@ from pathlib import Path
 from core.childenv import is_secret, safe_env
 from core.hostguard import LOCK_HELD_ENV
 from core.paths import REPO_ROOT
+from model.sources import source_yaml_file
 
 
 JOBS_FILE = REPO_ROOT / "automation" / "jobs.yml"
@@ -204,10 +205,7 @@ def parse_jobs(data: dict) -> dict[str, Job]:
 
 
 def load_jobs(path: Path = JOBS_FILE) -> dict[str, Job]:
-    import yaml
-
-    with path.open(encoding="utf-8") as handle:
-        return parse_jobs(yaml.safe_load(handle) or {})
+    return parse_jobs(source_yaml_file(path) or {})
 
 
 # Running a job

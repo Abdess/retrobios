@@ -31,7 +31,7 @@ def _load_truth(truth_dir: str, platform: str) -> dict | None:
     path = os.path.join(truth_dir, f"{platform}.yml")
     if not os.path.exists(path):
         return None
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         return yaml_load(f) or {}
 
 

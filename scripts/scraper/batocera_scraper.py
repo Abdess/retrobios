@@ -12,11 +12,10 @@ import ast
 import re
 import sys
 from collections.abc import Callable, Iterator
-from pathlib import Path
 
 
 from model.database import load_database
-from core.paths import PLATFORMS_DIR, REPO_ROOT
+from core.paths import DB_FILE, PLATFORMS_DIR, REPO_ROOT
 from model.targets import load_target_config, target_overrides
 from core.hashing import cut_md5_owner
 from model.safeparse import yaml_load_upstream
@@ -315,7 +314,7 @@ _MD5_RE = re.compile(r"^[a-fA-F0-9]+$")
 
 def _load_md5_index() -> dict[str, str]:
     """Load by_md5 index from database.json for prefix resolution."""
-    db_path = Path(__file__).resolve().parents[2] / "database.json"
+    db_path = REPO_ROOT / DB_FILE
     if not db_path.exists():
         return {}
     return load_database(str(db_path)).get("indexes", {}).get("by_md5", {})

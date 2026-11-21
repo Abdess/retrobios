@@ -9,6 +9,7 @@ import urllib.error
 import urllib.parse
 
 from core.upstream import remote_etag as get_remote_etag
+from core.paths import DATA_DIRS_FILE
 from model.registry import data_dir_registry_at, load_versions
 from .base_scraper import fetch_text
 
@@ -18,7 +19,6 @@ log = logging.getLogger(__name__)
 BUILDBOT_SYSTEM_URL = "https://buildbot.libretro.com/assets/system/"
 INDEX_URL = BUILDBOT_SYSTEM_URL + ".index"
 
-DEFAULT_REGISTRY = "platforms/_data_dirs.yml"
 
 
 def fetch_index() -> set[str]:
@@ -27,7 +27,7 @@ def fetch_index() -> set[str]:
 
 
 def load_tracked_entries(
-    registry_path: str = DEFAULT_REGISTRY,
+    registry_path: str = DATA_DIRS_FILE,
 ) -> dict[str, tuple[str, str]]:
     """Load buildbot entries from _data_dirs.yml.
 
@@ -43,7 +43,7 @@ def load_tracked_entries(
     return entries
 
 
-def check(registry_path: str = DEFAULT_REGISTRY) -> dict:
+def check(registry_path: str = DATA_DIRS_FILE) -> dict:
     """Run the buildbot check. Returns structured report."""
     try:
         index_zips = fetch_index()

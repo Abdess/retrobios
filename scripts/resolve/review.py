@@ -16,6 +16,7 @@ except ImportError:
     yaml = None
 
 from core.hashing import compute_hashes, parse_hash_list, stream_hashes
+from core.memo import DerivedView
 from model.nodedup import in_nodedup_dir
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
@@ -846,19 +847,20 @@ def placement(
     return Placement(tuple(sorted(homes)))
 
 
-_HELD_DIRECTORIES: dict[int, frozenset[str]] = {}
+def _directories_of(files: dict) -> frozenset[str]:
+    return frozenset(
+        path.rsplit("/", 1)[0] + "/"
+        for record in files.values()
+        if "/" in (path := record.get("path") or "") and "/.variants/" not in path
+    )
+
+
+_held_view = DerivedView(_directories_of)
 
 
 def _held_directories(db: dict | None) -> frozenset[str]:
     """Every directory a file of the database sits in, .variants/ aside."""
-    key = id(db)
-    if key not in _HELD_DIRECTORIES:
-        _HELD_DIRECTORIES[key] = frozenset(
-            path.rsplit("/", 1)[0] + "/"
-            for record in (db or {}).get("files", {}).values()
-            if "/" in (path := record.get("path") or "") and "/.variants/" not in path
-        )
-    return _HELD_DIRECTORIES[key]
+    return _held_view((db or {}).get("files", {}))
 
 
 def _directory_tail(db: dict | None, directory: str) -> str:

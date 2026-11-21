@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+from core.memo import DerivedView
 from resolve.validation import read_by_build
 
 
-_directory_members_cache: dict[int, tuple[dict, dict[str, dict[str, str]]]] = {}
+# The members found under each tail, kept per by_path_suffix index.
+_directory_members_cache: DerivedView[dict[str, dict[str, str]]] = DerivedView(lambda _index: {})
 
 
 def directory_members(db: dict, directory: str) -> dict[str, str]:
@@ -24,12 +26,9 @@ def directory_members(db: dict, directory: str) -> dict[str, str]:
     if not tail:
         return {}
     by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
-    cached = _directory_members_cache.get(id(by_path_suffix))
-    if cached is None or cached[0] is not by_path_suffix:
-        cached = (by_path_suffix, {})
-        _directory_members_cache[id(by_path_suffix)] = cached
-    if tail in cached[1]:
-        return cached[1][tail]
+    found = _directory_members_cache(by_path_suffix)
+    if tail in found:
+        return found[tail]
 
     prefix = f"{tail}/"
     infix = f"/{prefix}"
@@ -54,7 +53,7 @@ def directory_members(db: dict, directory: str) -> dict[str, str]:
         if one_tree and one_content
         else {}
     )
-    cached[1][tail] = members
+    found[tail] = members
     return members
 
 

@@ -30,7 +30,7 @@ from profiling.citations import collect_citations
 from profiling.repos import select_views
 from model.sourceref import ref_role, split_source_ref
 from model.profiles import ProfileSelectionError, load_emulator_profiles, resolve_profile_name
-from model.safeparse import yaml_load
+from model.sources import source_yaml_file
 
 # Ways a program asks for somewhere to read from.
 SIGNALS = (
@@ -58,8 +58,7 @@ def audit(
     name: str, emulators_dir: str, cache_dir: str, offline: bool
 ) -> list[tuple[str, str]] | None:
     """Signals found in the sources a fileless profile cites."""
-    with open(os.path.join(emulators_dir, f"{name}.yml"), encoding="utf-8") as handle:
-        document = yaml_load(handle) or {}
+    document = source_yaml_file(os.path.join(emulators_dir, f"{name}.yml")) or {}
     if document.get("files"):
         return None
     if document.get("type") == "alias":
@@ -136,9 +135,10 @@ def main() -> None:
         known = sorted(path.stem for path in Path(args.emulators_dir).glob("*.yml"))
         names = []
         for name in known:
-            with open(Path(args.emulators_dir) / f"{name}.yml", encoding="utf-8") as handle:
-                if not _settled_before_reading(yaml_load(handle) or {}):
-                    names.append(name)
+            if not _settled_before_reading(
+                source_yaml_file(Path(args.emulators_dir) / f"{name}.yml") or {}
+            ):
+                names.append(name)
 
     flagged = unreachable = 0
     for name in names:

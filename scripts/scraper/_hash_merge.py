@@ -18,6 +18,7 @@ from typing import Any
 from model.profiles import PROFILE_BACKUP_SUFFIX
 from core.artifacts import write_text_atomic
 from model.safeparse import yaml_load
+from model.sources import source_yaml_file
 
 
 _MAME_RELEASE_RE = re.compile(r"^0\.\d+")
@@ -350,8 +351,7 @@ def _diff_fbneo(
 
 
 def _load_yaml(path: str) -> dict[str, Any]:
-    with open(path, encoding="utf-8") as f:
-        return yaml_load(f) or {}
+    return source_yaml_file(path) or {}
 
 
 def _load_json(path: str) -> dict[str, Any]:

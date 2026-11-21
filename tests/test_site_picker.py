@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import tests
 
-import importlib.util
 import json
 import random
 import re
@@ -19,11 +18,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from installer_build.module import installer_module
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
-_spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
-install = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(install)
+install = installer_module()
 
 PICKER = REPO_ROOT / "website" / "src" / "components" / "FilePicker.astro"
 

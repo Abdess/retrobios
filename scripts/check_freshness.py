@@ -68,14 +68,14 @@ from model.targets import apply_target_overrides, platform_overrides, read_targe
 from model.registry import list_registered_platforms, load_data_dir_registry, load_platform_registry
 from model.profiles import load_emulator_profiles, upstream_profile_index
 from core.artifacts import write_text_atomic
-from model.safeparse import yaml_load
+from model.sources import source_yaml_file
 from model.sourcerevision import scraped_revision
 from exporter import discover_exporters
 from resolve.reconcile import build_native_model
 from scripts.scraper import game_dat_importer
 from scripts.scraper.redump_dat_scraper import fetch_snapshot
 from scripts.scraper.targets import discover_target_scrapers
-from core.paths import REPO_ROOT, TRUTH_DIR
+from core.paths import DATA_DIRS_FILE, REPO_ROOT, TRUTH_DIR
 
 CORE_INFO_REPO = "https://github.com/libretro/libretro-core-info"
 # The git blob of every .info as last reviewed: `--record-coreinfo` writes it.
@@ -323,8 +323,7 @@ def _scrapable_platforms(platforms_dir: Path) -> list[tuple[str, str, Path]]:
         path = platforms_dir / f"{name}.yml"
         if not path.is_file():
             continue
-        with path.open(encoding="utf-8") as fh:
-            config = yaml_load(fh) or {}
+        config = source_yaml_file(path) or {}
         scraper = (registry.get(name) or {}).get("scraper")
         if not scraper or (config.get("inherits") and not config.get("source")):
             continue
@@ -356,10 +355,8 @@ def check_platforms(platforms_dir: Path, workdir: Path, jobs: int) -> list[Findi
             return Finding("platforms", name, ERROR, detail="scraper timed out")
         if error:
             return Finding("platforms", name, ERROR, detail=error)
-        with path.open(encoding="utf-8") as fh:
-            old = yaml_load(fh) or {}
-        with fresh.open(encoding="utf-8") as fh:
-            new = yaml_load(fh) or {}
+        old = source_yaml_file(path) or {}
+        new = source_yaml_file(fresh) or {}
         diff = diff_platform(old, new)
         status = STALE if diff.changed else OK
         return Finding(
@@ -394,12 +391,10 @@ def check_emulatorjs(platforms_dir: Path, offline: bool) -> Finding:
     nothing to say so.
     """
     subject = "romm emulatorjs"
-    with (platforms_dir / "emulatorjs.yml").open(encoding="utf-8") as fh:
-        local = str((yaml_load(fh) or {}).get("version", ""))
+    local = str((source_yaml_file(platforms_dir / "emulatorjs.yml") or {}).get("version", ""))
     if offline:
         return Finding("platforms", subject, SKIPPED, local=local, detail="offline")
-    with (platforms_dir / "romm.yml").open(encoding="utf-8") as fh:
-        tag = str((yaml_load(fh) or {}).get("version", ""))
+    tag = str((source_yaml_file(platforms_dir / "romm.yml") or {}).get("version", ""))
     for path in ROMM_DOCKERFILES:
         try:
             text = upstream.http_text(
@@ -618,8 +613,7 @@ def check_targets(
         path = targets_dir / f"{platform}.yml"
         if not path.is_file():
             return [Finding("targets", platform, ERROR, detail="no target file")]
-        with path.open(encoding="utf-8") as fh:
-            old = yaml_load(fh) or {}
+        old = source_yaml_file(path) or {}
         module = scrapers.get(platform)
         targets = old.get("targets") or {}
         if module is not None and offline:
@@ -670,8 +664,7 @@ def check_targets(
             return [Finding("targets", platform, ERROR, detail="scraper timed out")]
         if error:
             return [Finding("targets", platform, ERROR, detail=error)]
-        with fresh.open(encoding="utf-8") as fh:
-            new = yaml_load(fh) or {}
+        new = source_yaml_file(fresh) or {}
         diff = diff_targets(old, new)
         out = [
             Finding(
@@ -748,8 +741,7 @@ def romfolder_sources(platforms_dir: Path) -> dict[str, dict]:
     """setup -> its platforms/romfolders/_sources/<setup>.yml."""
     out = {}
     for path in sorted((platforms_dir / "romfolders" / "_sources").glob("*.yml")):
-        with path.open(encoding="utf-8") as fh:
-            out[path.stem] = yaml_load(fh) or {}
+        out[path.stem] = source_yaml_file(path) or {}
     return out
 
 
@@ -1034,7 +1026,7 @@ def _check_buildbot_system() -> Finding:
 
     with contextlib.redirect_stdout(io.StringIO()):
         report = buildbot_system.check(
-            str(REPO_ROOT / "platforms" / "_data_dirs.yml")
+            str(REPO_ROOT / DATA_DIRS_FILE)
         )
     if report.get("error"):
         return Finding("data", "buildbot system", UNKNOWN, detail="index unreachable")

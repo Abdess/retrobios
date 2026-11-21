@@ -18,8 +18,8 @@ import logging
 import os
 import sys
 from core.cli import InputMissing
+from core.paths import DATA_DIRS_FILE
 from scraper.buildbot_system import (
-    DEFAULT_REGISTRY,
     check,
     pending,
     print_report,
@@ -44,7 +44,7 @@ def main() -> None:
         help="Machine-readable JSON output",
     )
     parser.add_argument(
-        "--registry", default=DEFAULT_REGISTRY,
+        "--registry", default=DATA_DIRS_FILE,
         help="the data directory registry to check (default: %(default)s)",
     )
     args = parser.parse_args()

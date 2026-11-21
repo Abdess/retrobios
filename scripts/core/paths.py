@@ -15,6 +15,8 @@ DB_FILE = "database.json"
 PLATFORMS_DIR = "platforms"
 EMULATORS_DIR = "emulators"
 BIOS_DIR = "bios"
+# The data directory registry refresh_data_dirs, the packs and the checks read.
+DATA_DIRS_FILE = f"{PLATFORMS_DIR}/_data_dirs.yml"
 # Where generate_truth writes its models and diff_truth and export_native read them.
 TRUTH_DIR = "dist/truth"
 

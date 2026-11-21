@@ -43,12 +43,12 @@ import re
 import unittest
 from pathlib import Path
 import yaml
-import importlib.util
 
 from sitegen import diagrams
 from model.guides import INSTALL_SH
 from tests import sitepages
 from installer_build import port
+from installer_build.module import installer_module
 from release.check import SUMS, Asset, compare_release
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -932,13 +932,6 @@ class NoBackslashInProseCode(unittest.TestCase):
                     self.assertNotRegex(line, r"`[^`]*\\\|[^`]*`")
 
 
-def _install_module():
-    spec = importlib.util.spec_from_file_location("install_r4wiki", REPO_ROOT / "install.py")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
 class EventsTranscript(unittest.TestCase):
     """D10: the events table had no sample of what a run writes."""
 
@@ -948,7 +941,7 @@ class EventsTranscript(unittest.TestCase):
         self.assertIsNotNone(block)
         lines = block.group(1).splitlines()
         self.assertEqual(len(lines), 5)
-        keys = _install_module().EVENT_KEYS
+        keys = installer_module().EVENT_KEYS
         events = [json.loads(line) for line in lines]
         for event in events:
             with self.subTest(event=event["event"]):

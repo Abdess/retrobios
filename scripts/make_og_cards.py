@@ -25,6 +25,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
+from core.text import series
 from model.registry import list_registered_platforms
 from model.platforms import load_platform_config
 from sitegen.diagrams import OG_SECTIONS, og_card_svg, wrap
@@ -58,10 +59,8 @@ def consoles_tagline(consoles: list[str], lead: str = "BIOS files for") -> str:
         listed = names[:shown]
         if rest:
             text = f"{lead} {', '.join(listed)} and {rest} more"
-        elif len(listed) > 1:
-            text = f"{lead} {', '.join(listed[:-1])} and {listed[-1]}"
         else:
-            text = f"{lead} {listed[0]}"
+            text = f"{lead} {series(listed)}"
         if len(wrap(text, TAGLINE_WIDTH, TAGLINE_SIZE)) <= TAGLINE_LINES:
             return text
     return f"{lead} {len(names)} sections"

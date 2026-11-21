@@ -22,7 +22,7 @@ from pathlib import Path
 from core.cli import add_repo_inputs
 from model.profiles import load_emulator_profiles
 from model.region import REGIONS, normalize_declared
-from model.safeparse import yaml_load
+from model.sources import source_yaml_file
 
 REGIONS_FILE = Path("games") / "regions.yml"
 EXTRAS_FILE = Path("games") / "extras.yml"
@@ -32,8 +32,7 @@ _REF_REPO = re.compile(r"(?:^|; )([\w.-]+/[\w.-]+)@([0-9a-f]{8,40}) ")
 
 
 def load_yaml(path: Path) -> dict:
-    with Path(path).open(encoding="utf-8") as handle:
-        return yaml_load(handle) or {}
+    return source_yaml_file(path) or {}
 
 
 def profile_pins(profile: dict) -> set[str]:

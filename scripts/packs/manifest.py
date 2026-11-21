@@ -15,8 +15,7 @@ from core.paths import EMULATORS_DIR, REPO_ROOT, declared_destination, sanitize_
 from model.declarations import OUTER_ROOTS, declared_root, outer_layout
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
-from model.registry import load_data_dir_registry
-from model.safeparse import yaml_load
+from model.registry import load_data_dir_registry, platform_registry_at
 from model.systems import platform_system_names
 from packs import slots
 from packs.archive import CASE_FOLDING_OS, PACK_DOCUMENTS, Placed
@@ -610,11 +609,7 @@ def _start_manifest(
         game_entries = platform_game_data(config, emu_profiles, data_registry)
 
     # Load registry for install metadata
-    registry: dict = {}
-    if os.path.exists(registry_path):
-        with open(registry_path) as f:
-            registry = yaml_load(f) or {}
-    plat_registry = registry.get("platforms", {}).get(platform_name, {})
+    plat_registry = platform_registry_at(registry_path).get(platform_name) or {}
 
     plat_cores = _platform_cores(config, emu_profiles) if opts.target_cores else None
     pack_systems = filter_systems_by_target(

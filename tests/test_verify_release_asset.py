@@ -250,5 +250,25 @@ class OfflinePipelineVerifiesOffline(unittest.TestCase):
         self.assertIn('verify_cmd.append("--offline")', block)
 
 
+class RegistryBundlesReadTheRegistry(unittest.TestCase):
+    """registry_bundles read _data_dirs.yml by its own copy of the registry
+    reader: a missing file ended on FileNotFoundError and a syntax error
+    named no line."""
+
+    def test_bundles_and_a_missing_registry(self):
+        from core.cli import InputMissing
+        from release.assets import RELEASE_DOWNLOAD, registry_bundles
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp, "_data_dirs.yml")
+            path.write_text(yaml.safe_dump({"data_directories": {
+                "served": {"source_url": f"{RELEASE_DOWNLOAD}tree.zip", "description": "A tree"},
+                "upstream": {"source_url": "https://example.org/x.zip"},
+            }}), encoding="utf-8")
+            self.assertEqual(registry_bundles(str(path)), {"tree.zip": "A tree"})
+            with self.assertRaises(InputMissing):
+                registry_bundles(str(Path(tmp, "absent.yml")))
+
+
 if __name__ == "__main__":
     unittest.main()

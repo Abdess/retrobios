@@ -51,7 +51,7 @@ from core.cli import run_cli
 from model.region import normalize_declared
 from model.romfolders import ProfileResolver, Resolution, SystemResolver, folder_names, load_setups
 from core.artifacts import write_text_atomic
-from model.safeparse import yaml_load
+from model.sources import source_yaml_file
 
 import install
 
@@ -86,8 +86,7 @@ def dumps(document: object) -> str:
 def _load_yaml(path: Path) -> dict:
     if not path.exists():
         return {}
-    with path.open(encoding="utf-8") as handle:
-        return yaml_load(handle) or {}
+    return source_yaml_file(path) or {}
 
 
 def _load_json(path: Path) -> dict:
