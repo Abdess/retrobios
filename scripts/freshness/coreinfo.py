@@ -40,12 +40,6 @@ def core_info_blobs(cache_dir: str, offline: bool) -> dict[str, str] | None:
     return dict(sorted(blobs.items()))
 
 
-def core_info_names(cache_dir: str, offline: bool) -> list[str] | None:
-    """Every core the libretro core-info repository describes."""
-    blobs = core_info_blobs(cache_dir, offline)
-    return None if blobs is None else list(blobs)
-
-
 def load_core_info_record(path: Path = CORE_INFO_RECORD) -> dict[str, str] | None:
     if not path.is_file():
         return None
