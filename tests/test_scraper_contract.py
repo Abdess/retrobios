@@ -21,6 +21,7 @@ import tempfile
 import unittest
 import urllib.error
 from pathlib import Path
+from types import ModuleType
 from unittest import mock
 
 from model.sourcerevision import source_revision
@@ -766,7 +767,7 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
     FILE_PINNED = {"retrobat"}
 
     @classmethod
-    def _construct(cls, module: object, scraper: str) -> object:
+    def _construct(cls, module: ModuleType, scraper: str) -> object:
         if scraper in cls.FILE_PINNED:
             return module.Scraper(revision="master")
         return module.Scraper()

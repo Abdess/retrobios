@@ -331,6 +331,9 @@ class Determinism(unittest.TestCase):
 class CommittedSetups(unittest.TestCase):
     """The setup files this parser family writes."""
 
+    sources: dict[str, dict]
+    paths: dict[str, Path]
+
     @classmethod
     def setUpClass(cls) -> None:
         cls.sources = load_sources(ROMFOLDERS / "_sources")
