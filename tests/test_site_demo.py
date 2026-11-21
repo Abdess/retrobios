@@ -1,4 +1,4 @@
-"""The installer demos of the README and the site (scripts/make_demo.py).
+"""The installer demos of the README and the site (scripts/demovariants.py).
 
 The home page and Get your files score 98 to 100 on a phone: a video must
 cost nothing before it is on screen, keep still under reduced motion, and say
@@ -20,8 +20,9 @@ import struct
 import unittest
 from pathlib import Path
 
+from sitegen import demosession
+from sitegen import demovariants
 from sitegen import readme as sitegen_readme
-import make_demo
 from sitegen import starlight as sitestarlight
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -41,22 +42,22 @@ def _facts(variant: str = "default") -> dict:
 
 class TheFilesAreThereAndSmall(unittest.TestCase):
     def test_each_output_is_under_its_target(self):
-        for variant in make_demo.VARIANTS.values():
-            for name, limit in make_demo.limits(variant).items():
+        for variant in demovariants.VARIANTS.values():
+            for name, limit in demovariants.limits(variant).items():
                 with self.subTest(name=name):
                     self.assertLessEqual((DEMO / name).stat().st_size, limit)
 
     def test_only_the_readme_variant_has_a_gif(self):
         gifs = sorted(p.name for p in DEMO.glob("*.gif"))
         self.assertEqual(gifs, [Path(sitegen_readme.DEMO_GIF).name])
-        self.assertEqual([v.name for v in make_demo.VARIANTS.values() if v.gif], ["default"])
+        self.assertEqual([v.name for v in demovariants.VARIANTS.values() if v.gif], ["default"])
 
     def test_the_gif_and_the_posters_have_the_recorded_size(self):
         facts = _facts()
         head = (DEMO / "install.gif").read_bytes()[:10]
         self.assertEqual(head[:6], b"GIF89a")
         self.assertEqual(struct.unpack("<HH", head[6:10]), (facts["width"], facts["height"]))
-        for variant in make_demo.VARIANTS.values():
+        for variant in demovariants.VARIANTS.values():
             facts = _facts(variant.name)
             png = (DEMO / f"{variant.stem}.png").read_bytes()[:24]
             with self.subTest(variant=variant.name):
@@ -65,7 +66,7 @@ class TheFilesAreThereAndSmall(unittest.TestCase):
                                  (facts["width"], facts["height"]))
 
     def test_the_videos_are_webm_and_mp4(self):
-        for variant in make_demo.VARIANTS.values():
+        for variant in demovariants.VARIANTS.values():
             with self.subTest(variant=variant.name):
                 self.assertEqual((DEMO / f"{variant.stem}.webm").read_bytes()[:4],
                                  b"\x1a\x45\xdf\xa3")
@@ -73,20 +74,20 @@ class TheFilesAreThereAndSmall(unittest.TestCase):
 
     def test_demo_json_holds_each_variant_and_its_alt_text(self):
         facts = _all_facts()
-        self.assertEqual(list(facts), list(make_demo.VARIANTS))
+        self.assertEqual(list(facts), list(demovariants.VARIANTS))
         for name, entry in facts.items():
             with self.subTest(variant=name):
-                self.assertEqual(entry["alt"], make_demo.describe(name, entry))
+                self.assertEqual(entry["alt"], demovariants.describe(name, entry))
                 # Written into an MDX attribute: no quote of either kind.
                 self.assertNotRegex(entry["alt"], "[\"']")
 
 
 class TheTapeAndTheDriverAgree(unittest.TestCase):
     def setUp(self):
-        self.tape = make_demo.TAPE.read_text(encoding="utf-8")
+        self.tape = demovariants.TAPE.read_text(encoding="utf-8")
 
     def test_each_tape_writes_what_the_driver_encodes(self):
-        for variant in make_demo.VARIANTS.values():
+        for variant in demovariants.VARIANTS.values():
             tape = variant.tape.read_text(encoding="utf-8")
             with self.subTest(variant=variant.name):
                 self.assertIn(f"Output {variant.recorded.relative_to(ROOT).as_posix()}\n", tape)
@@ -94,14 +95,14 @@ class TheTapeAndTheDriverAgree(unittest.TestCase):
                     f"Screenshot {variant.poster_shot.relative_to(ROOT).as_posix()}\n", tape)
 
     def test_the_size_in_demo_json_is_each_tapes(self):
-        for variant in make_demo.VARIANTS.values():
+        for variant in demovariants.VARIANTS.values():
             facts, tape = _facts(variant.name), variant.tape.read_text(encoding="utf-8")
             with self.subTest(variant=variant.name):
                 self.assertIn(f"Set Width {facts['width']}\n", tape)
                 self.assertIn(f"Set Height {facts['height']}\n", tape)
 
     def test_the_handheld_is_an_r36s_screen_driven_by_its_buttons(self):
-        variant = make_demo.VARIANTS["handheld"]
+        variant = demovariants.VARIANTS["handheld"]
         tape = variant.tape.read_text(encoding="utf-8")
         self.assertIn("Set Width 640\n", tape)
         self.assertIn("Set Height 480\n", tape)
@@ -111,7 +112,7 @@ class TheTapeAndTheDriverAgree(unittest.TestCase):
                          ["'exec \"$RETROBIOS_DEMO_SESSION\"'"])
         gptk = (ROOT / "ports" / "shared" / "retrobios.gptk").read_text(encoding="utf-8")
         self.assertRegex(gptk, r"(?m)^a = enter$")
-        env = make_demo.session_env("http://127.0.0.1:1", ROOT / "tmp", ROOT / "tmp", variant)
+        env = demosession.session_env("http://127.0.0.1:1", ROOT / "tmp", ROOT / "tmp", variant)
         self.assertEqual(env["RETROBIOS_PAD"], "gptokeyb")
         self.assertEqual(env["RETROBIOS_OS"], "linux")
         self.assertEqual(variant.mount, "/roms")
@@ -124,7 +125,7 @@ class TheTapeAndTheDriverAgree(unittest.TestCase):
     def test_the_shell_answers_only_the_site_address(self):
         typed = re.search(r'Type "curl -fsSL (\S+) \|', self.tape)
         self.assertIsNotNone(typed)
-        driver = Path(make_demo.__file__).read_text(encoding="utf-8")
+        driver = Path(demosession.__file__).read_text(encoding="utf-8")
         self.assertIn(f'"$*" = "-fsSL {typed.group(1)}"', driver)
 
 
@@ -227,7 +228,7 @@ class TheTwoPagesShowIt(unittest.TestCase):
     def test_the_site_serves_the_videos_not_the_gif(self):
         from sitegen import guidepage
 
-        expected = tuple(name for variant in make_demo.VARIANTS.values()
+        expected = tuple(name for variant in demovariants.VARIANTS.values()
                          for name in variant.outputs if not name.endswith(".gif"))
         self.assertEqual(sorted(guidepage.DEMO_ASSETS), sorted(expected))
 

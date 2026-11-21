@@ -122,6 +122,10 @@ COMMANDS = {
     ),
     "site_insights.py": ("sitegen/insights.py",),
     "generate_readme.py": ("sitegen/readme.py",),
+    "make_demo.py": (
+        "sitegen/demovariants.py", "sitegen/democard.py", "sitegen/demosession.py",
+        "sitegen/demorecord.py",
+    ),
     "romset_recipes.py": (
         "romrecipes/romsets.py", "romrecipes/pool.py", "romrecipes/pins.py", "romrecipes/identify.py",
         "romrecipes/ledger.py", "romrecipes/members.py", "romrecipes/capture.py", "romrecipes/build.py",
