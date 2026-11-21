@@ -37,20 +37,7 @@ def audit(
 ) -> list[tuple[str, str]] | None:
     """Signals found in the sources a fileless profile cites."""
     document = source_yaml_file(os.path.join(emulators_dir, f"{name}.yml")) or {}
-    if document.get("files"):
-        return None
-    if document.get("type") == "alias":
-        # The same binary under another name: its files are its target's.
-        return None
-    if str(document.get("exclusion_note") or "").strip():
-        # Someone read this one and wrote down why nothing is declared. The
-        # check exists to find the profiles nobody has answered yet, and an
-        # answer that goes stale shows up as a drifting ref instead.
-        return None
-    if document.get("data_directories"):
-        # The load is declared, as a directory rather than a file. dinothawr
-        # reads system_dir/dinothawr/ and says so there. That is coverage, not
-        # an assertion waiting to age.
+    if settled_before_reading(document):
         return None
     views = select_views(document, cache_dir, offline)
     if not views:
@@ -70,12 +57,18 @@ def audit(
 
 
 def settled_before_reading(document: dict) -> bool:
-    """A profile answered without its sources: files, an exclusion note, or
-    a declared data directory (see audit)."""
+    """A profile answered without reading its sources."""
     return bool(
         document.get("files")
+        # The same binary under another name: its files are its target's.
         or document.get("type") == "alias"
+        # Someone read this one and wrote down why nothing is declared. The
+        # check exists to find the profiles nobody has answered yet, and an
+        # answer that goes stale shows up as a drifting ref instead.
         or str(document.get("exclusion_note") or "").strip()
+        # The load is declared, as a directory rather than a file. dinothawr
+        # reads system_dir/dinothawr/ and says so there. That is coverage, not
+        # an assertion waiting to age.
         or document.get("data_directories")
     )
 
