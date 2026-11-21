@@ -11,6 +11,9 @@ the pack it belongs to, its number, and the name and size of every part.
 Extracted with the files, the markers let `install.py --check` name a part
 that is missing from the folder.
 
+The directory's SHA256SUMS.txt is then written over the pack files a
+release publishes, the list the release signs and uploads.
+
 Usage:
     python scripts/split_pack.py dist/
     python scripts/split_pack.py dist/RetroArch_v1.22.2_BIOS_Pack.zip
@@ -26,6 +29,7 @@ from pathlib import Path
 
 from core.artifacts import ArtifactLockBusy, artifact_lock
 from packs.parts import ASSET_LIMIT, parse_size, split_directory, split_pack
+from release.sums import write_sums
 
 
 def main() -> int:
@@ -53,11 +57,14 @@ def main() -> int:
                 published = split_directory(args.target, args.max_size)
             else:
                 published = split_pack(args.target, args.max_size)
+            sums = write_sums(directory)
     except (ArtifactLockBusy, OSError, ValueError, zipfile.BadZipFile) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
     for path in published:
         print(f"{path.stat().st_size:>13,}  {path.name}")
+    if sums is not None:
+        print(f"{sums}: checksums of the files to publish")
     return 0
 
 

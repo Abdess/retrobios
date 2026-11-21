@@ -246,6 +246,8 @@ python scripts/pipeline.py
 #    and the set compared with the pack before the pack is removed. Each part
 #    also holds a marker (Pack.part1of2.txt) naming every part and its size,
 #    which install.py --check reads to name a part missing from a folder.
+#    It then writes dist/SHA256SUMS.txt, the checksums of the pack files as
+#    published, whole packs and parts.
 python scripts/split_pack.py dist/
 
 # 2b. The release carries the packs and the signed checksum list, and
@@ -255,11 +257,9 @@ python scripts/split_pack.py dist/
 #     builds and serves them from its own commit. check_release.py refuses an
 #     installer, a file list or a launcher attached to the release.
 
-# 3. Checksums of the files as published, then sign the list. The checksums
-#    answer corruption, and the signature answers a rewritten release, which is
-#    the one thing a checksum published beside its own artifacts cannot
-#    answer.
-(cd dist && sha256sum *_BIOS_Pack*.zip > SHA256SUMS.txt)
+# 3. Sign the checksum list split_pack.py wrote. The checksums answer
+#    corruption, and the signature answers a rewritten release, which is the
+#    one thing a checksum published beside its own artifacts cannot answer.
 ssh-keygen -Y sign -f ~/.ssh/retrobios_signing -n file dist/SHA256SUMS.txt
 
 # 4. Record what each pack holds, read from the archives just checked:

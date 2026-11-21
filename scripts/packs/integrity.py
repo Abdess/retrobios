@@ -22,7 +22,7 @@ from resolve.nativemode import hash_mismatch_excludes_file
 import sys
 from resolve.cores import filter_systems_by_target
 from core.hashing import (
-    compute_hashes, file_digest, md5_composite, md5_composite_of, md5sum, parse_hash_list,
+    compute_hashes, md5_composite, md5_composite_of, md5sum, parse_hash_list,
     stream_hashes,
 )
 from core.options import reject_unknown
@@ -43,7 +43,6 @@ from resolve.cores import resolve_platform_cores
 from core.paths import BIOS_DIR, EMULATORS_DIR, declared_destination
 import zipfile
 from collections.abc import Callable
-from pathlib import Path
 
 # Imported at run time where typing has it: a test reads the signature of
 # verify_pack_against_platform with its annotations evaluated.
@@ -315,22 +314,6 @@ def verify_pack(
 
     all_ok = len(errors) == 0
     return all_ok, manifest
-
-def generate_sha256sums(output_dir: str) -> str | None:
-    """Generate SHA256SUMS.txt for all ZIP files in output_dir."""
-    sums_path = os.path.join(output_dir, "SHA256SUMS.txt")
-    entries = []
-    for name in sorted(os.listdir(output_dir)):
-        if not name.endswith(".zip"):
-            continue
-        path = os.path.join(output_dir, name)
-        entries.append(f"{file_digest(Path(path), 'sha256')}  {name}")
-    if not entries:
-        return None
-    with open(sums_path, "w") as f:
-        f.write("\n".join(entries) + "\n")
-    print(f"\n{sums_path}: {len(entries)} pack checksums")
-    return sums_path
 
 def _check_member_hash(
     zf: zipfile.ZipFile, member: str, file_entry: dict, mode: str, rule: str = ""

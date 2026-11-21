@@ -7,9 +7,9 @@ import subprocess
 from dataclasses import dataclass
 
 from model.largefiles import LARGE_FILES_REPO, digests_of
+from release.sums import SUMS
 
 
-SUMS = "SHA256SUMS.txt"
 SIGNATURE = SUMS + ".sig"
 @dataclass(frozen=True)
 class Asset:

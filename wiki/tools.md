@@ -1386,7 +1386,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `list_platforms.py` | List the registered platforms as JSON |
 | `download.py` | Download a pack from GitHub releases, every part checked (Python, stdlib only) |
 | `download.sh` | Same, as a shell one-liner (`curl` + `unzip`) |
-| `split_pack.py` | Cut a pack over the release asset limit into parts that are each a ZIP of whole files, each with a marker naming every part, read back before the pack is removed |
+| `split_pack.py` | Cut a pack over the release asset limit into parts that are each a ZIP of whole files, each with a marker naming every part, read back before the pack is removed, then write `SHA256SUMS.txt` over the files to publish |
 | `provenance_report.py` | Dump-catalog coverage and acquisition targets (see above) |
 | `find_pinned_revision.py` | Walk the upstream commits that touched a file and return the revision whose bytes match a platform's pinned md5 (`--write` saves them) |
 | `generate_readme.py` | Generate README.md and CONTRIBUTING.md from database |

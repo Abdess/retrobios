@@ -28,6 +28,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
+from core.hashing import file_digest, parse_sha256sums
 from packs import finalize
 from packs import naming
 from core.artifacts import artifact_lock
@@ -221,6 +222,29 @@ class SplitHoldsTheDirectory(SplitFixture):
                 )
 
 
+class SplitWritesThePublishedChecksums(SplitFixture):
+    """The pack build wrote SHA256SUMS.txt over every ZIP before the split,
+    naming a pack the split then removed and none of its parts, and the
+    release overwrote it by hand. The split now writes the one list."""
+
+    def test_the_list_names_the_parts_and_not_the_split_pack(self):
+        self._build(self.dist / "Small_BIOS_Pack.zip", {"one.bin": b"1"})
+        self._build(self.dist / "RetroBIOS.zip", {"install.py": b"launcher"})
+        proc = subprocess.run(
+            [sys.executable, "scripts/split_pack.py", str(self.dist), "--max-size", str(LIMIT)],
+            cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=60, check=False,
+        )
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        sums = parse_sha256sums((self.dist / "SHA256SUMS.txt").read_text(encoding="utf-8"))
+        published = sorted(
+            p.name for p in self.dist.glob("*.zip") if p.name != "RetroBIOS.zip"
+        )
+        self.assertEqual(sorted(sums), published)
+        self.assertNotIn(self.pack.name, sums)
+        for name, digest in sums.items():
+            self.assertEqual(digest, file_digest(self.dist / name, "sha256"))
+
+
 class PartsAreNotTakenForPacks(SplitFixture):
     def test_a_part_is_recognised_by_its_name(self):
         self.assertTrue(packs_parts.is_part("RetroArch_BIOS_Pack.part1of2.zip"))
@@ -278,8 +302,8 @@ class ReleaseProcessPublishesArchives(unittest.TestCase):
 
     def test_the_checksums_are_those_of_the_published_files(self):
         self.assertLess(
-            self.text.index("scripts/split_pack.py"),
-            self.text.index("sha256sum *_BIOS_Pack*.zip"),
+            self.text.index("python scripts/split_pack.py"),
+            self.text.index("ssh-keygen -Y sign"),
         )
 
 

@@ -40,6 +40,7 @@ import fnmatch
 import functools
 import json
 import re
+import tempfile
 import unittest
 from pathlib import Path
 import yaml
@@ -50,6 +51,7 @@ from tests import sitepages
 from installer_build import port
 from installer_build.module import installer_module
 from release.check import SUMS, Asset, compare_release
+from release.sums import published_packs
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -886,18 +888,23 @@ class PinnedInstaller(unittest.TestCase):
     def test_the_release_steps_ship_none(self):
         text = _wiki("release-process.md")
         self.assertNotIn("cp install.py", text)
-        sums = re.search(r"sha256sum [^>]+> SHA256SUMS.txt", text, re.S).group(0)
+        # One producer: split_pack.py writes the list, never a shell line.
+        self.assertNotIn("> SHA256SUMS.txt", text)
         upload = re.search(r"for f in dist/SHA256SUMS.txt.*?; do", text, re.S).group(0)
         for name in ("install.py", "install.sh", "install.ps1", ".json", "RetroBIOS",
                      ".muxapp", "build_port", " *.zip", "/*.zip"):
             with self.subTest(name=name):
-                self.assertNotIn(name, sums)
                 self.assertNotIn(name, upload)
+        with tempfile.TemporaryDirectory() as tmp:
+            for name in ("P_BIOS_Pack.zip", "Q_BIOS_Pack.part1of2.zip", "install.py",
+                         "install.sh", "install.ps1", "retroarch.json", *port.ARCHIVES):
+                (Path(tmp) / name).write_bytes(b"x")
+            self.assertEqual([p.name for p in published_packs(Path(tmp))],
+                             ["P_BIOS_Pack.zip", "Q_BIOS_Pack.part1of2.zip"])
         # A launcher built into dist/ is never caught by the glob either.
         for archive in port.ARCHIVES:
             with self.subTest(archive=archive):
                 self.assertFalse(fnmatch.fnmatch(archive, "*_BIOS_Pack*.zip"))
-        self.assertIn("*_BIOS_Pack*.zip", sums)
         self.assertIn("*_BIOS_Pack*.zip", upload)
         self.assertNotIn("scripts/build_port.py", text)
 

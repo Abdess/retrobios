@@ -39,7 +39,7 @@ COMMANDS = {
         "core/gitclone.py",
     ),
     "refresh_data_dirs.py": ("packs/datadirs.py",),
-    "split_pack.py": ("packs/parts.py",),
+    "split_pack.py": ("packs/parts.py", "release/sums.py"),
     "retired_files.py": ("model/retired.py", "collection/retiredhistory.py"),
     "region_audit.py": ("resolve/regionaudit.py",),
     "dedup.py": (

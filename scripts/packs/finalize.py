@@ -17,7 +17,7 @@ from core.options import reject_unknown
 from model.registry import list_registered_platforms
 from model.targets import load_target_config
 from packs.archive import write_generated_member
-from packs.integrity import generate_sha256sums, verify_pack, verify_pack_against_platform
+from packs.integrity import verify_pack, verify_pack_against_platform
 from packs.naming import expected_pack_names, narrows_contents, pack_archives
 from packs.scope import annotate_pack_systems
 
@@ -35,7 +35,7 @@ def baseline_shortfall(excluded: int, absent: int) -> list[str]:
     return parts
 
 
-# Post-generation pack verification + manifest + SHA256SUMS
+# Post-generation pack verification + manifest
 
 
 def inject_manifest(zip_path: str, manifest: dict) -> None:
@@ -156,7 +156,7 @@ def verify_and_finalize_packs(
     db: dict,
     **options: Unpack[FinalizeOptions],
 ) -> bool:
-    """Verify all packs, inject manifests, generate SHA256SUMS.
+    """Verify all packs and inject their manifests.
 
     pack_systems_by_name gives, per pack file name, the systems its
     manifest.json records (pack_systems).
@@ -225,7 +225,6 @@ def verify_and_finalize_packs(
                 all_ok = False
                 failing.append(f"{name} ({pname})")
 
-    generate_sha256sums(output_dir)
     if failing:
         # Named at the end, where a 4,000-line log is read, and on stderr.
         print(f"ERROR: packs failed verification: {', '.join(failing)}", file=sys.stderr)
