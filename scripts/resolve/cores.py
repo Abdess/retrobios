@@ -395,6 +395,50 @@ def platform_scope_systems(
     return select_systems(systems, system_filter) if system_filter else systems
 
 
+def platforms_with_systems(
+    platforms: list[str],
+    system_filter: list[str],
+    profiles: dict[str, dict],
+    target_cores_cache: dict[str, set[str] | None],
+    platforms_dir: str,
+    target: str | None,
+    is_all: bool,
+) -> list[str]:
+    """The platforms a --system list leaves a system to cover, before any lock.
+
+    Under --all a platform without one is out of scope, as a platform
+    without the target is: `--all --system sony-playstation-2` built every
+    PS2 pack and exited 1 on MiSTer, which has no PS2. Under --platform the
+    request is refused here, with its reason. verify.py and generate_pack.py
+    scope a --system list through this one function.
+    """
+    kept = []
+    for name in platforms:
+        config = load_platform_config(name, platforms_dir)
+        tc = target_cores_cache.get(name) if target else None
+        if platform_scope_systems(config, profiles, tc, system_filter):
+            kept.append(name)
+            continue
+        if not is_all:
+            reason = system_scope_error(config, name, system_filter, target)
+            print(f"ERROR: {reason}", file=sys.stderr)
+            sys.exit(1)
+        declared = select_systems(config.get("systems", {}), system_filter)
+        reason = (
+            system_scope_error(config, name, system_filter, target)
+            if declared and target
+            else f"no system {', '.join(system_filter)}"
+        )
+        # On stderr: verify --json prints its document on stdout.
+        print(f"INFO: Skipping {name}: {reason}", file=sys.stderr)
+    if not kept:
+        where = f" on target {target}" if target else ""
+        print(f"ERROR: no platform here runs {', '.join(system_filter)}{where}",
+              file=sys.stderr)
+        sys.exit(1)
+    return kept
+
+
 def system_scope_error(
     config: dict, platform_name: str, system_filter: list[str], target: str | None
 ) -> str:

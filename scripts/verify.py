@@ -47,9 +47,9 @@ from model.cliargs import (
     run_listing,
     work_from_repo_root,
     require_platform,
+    resolve_system_ids,
     selected_platforms,
 )
-from model.systems import resolve_system_arg
 from model.profiles import (
     load_emulator_profiles,
 )
@@ -58,9 +58,8 @@ from resolve.grouping import group_identical_platforms
 from model.database import load_database
 from model.platforms import load_platform_config
 from resolve.cores import (
+    platforms_with_systems,
     without_profile_blind,
-    platform_scope_systems,
-    system_scope_error,
 )
 from model.safeparse import require_yaml
 
@@ -116,7 +115,7 @@ def _refuse_mode_flags(args: argparse.Namespace, parser: argparse.ArgumentParser
          "--standalone is incompatible with --platform"),
         (args.target and not (args.platform or args.all),
          "--target requires --platform or --all"),
-        (args.target and (args.emulator or (args.system and not args.platform)),
+        (args.target and (args.emulator or (args.system and not (args.platform or args.all))),
          "--target is incompatible with --emulator and --system"),
         (args.destinations and args.system,
          "--destinations describes the full pack and is incompatible with --system"),
@@ -198,8 +197,10 @@ def _build_parser() -> argparse.ArgumentParser:
 
 def _check_mode(args: argparse.Namespace, parser: argparse.ArgumentParser) -> bool:
     """Refuse a request naming no mode or several, and say if it is the system mode."""
-    # --system beside --platform narrows that platform, as in generate_pack.
-    system_mode = bool(args.system) and not args.platform
+    # --system beside --platform or --all narrows each platform, as in
+    # generate_pack: refused under --all, verify could not report on the
+    # packs generate_pack --all --system builds.
+    system_mode = bool(args.system) and not (args.platform or args.all)
     modes = sum(1 for x in (args.platform, args.all, args.emulator, system_mode) if x)
     if modes == 0:
         parser.error("Specify --platform, --all, --emulator, or --system")
@@ -209,22 +210,6 @@ def _check_mode(args: argparse.Namespace, parser: argparse.ArgumentParser) -> bo
         )
     _refuse_mode_flags(args, parser)
     return system_mode
-
-
-def _platform_system_filter(
-    args: argparse.Namespace, parser: argparse.ArgumentParser,
-) -> list[str] | None:
-    if not (args.platform and args.system):
-        return None
-    config = load_platform_config(args.platform, args.platforms_dir)
-    try:
-        return resolve_system_arg(
-            args.system, list(config.get("systems", {})), config,
-            f"--platform {args.platform} --list-systems",
-        )
-    except ValueError as exc:
-        parser.error(f"--system {args.system}: {exc}")
-    return None
 
 
 def _run_emulator_mode(args: argparse.Namespace, db: dict, requested_regions: list[str]) -> None:
@@ -263,24 +248,18 @@ def _target_scope(
     emu_profiles: dict,
     platform_systems: list[str] | None,
 ) -> tuple[dict[str, set[str] | None], list[str]]:
-    """The cores of each platform on --target, and the platforms that have it."""
-    if not args.target:
-        return {}, platforms
+    """The cores of each platform on --target, and the platforms that have
+    it and a system of the --system list. A system the target leaves no
+    core for was reported 0/0 with exit 0, where generate_pack refuses the
+    same request."""
     target_cores_cache, platforms = target_scope(
         platforms, args.target, args.platforms_dir, is_all=args.all
     )
-    # A system the target leaves no core for was reported 0/0 with exit 0,
-    # where generate_pack refuses the same request.
     if platform_systems:
-        config = load_platform_config(args.platform, args.platforms_dir)
-        if not platform_scope_systems(
-            config, emu_profiles, target_cores_cache.get(args.platform), platform_systems
-        ):
-            reason = system_scope_error(
-                config, args.platform, platform_systems, args.target
-            )
-            print(f"ERROR: {reason}", file=sys.stderr)
-            sys.exit(1)
+        platforms = platforms_with_systems(
+            platforms, platform_systems, emu_profiles, target_cores_cache,
+            args.platforms_dir, args.target, args.all,
+        )
     return target_cores_cache, platforms
 
 
@@ -402,7 +381,7 @@ def _main(held: contextlib.ExitStack) -> None:
         return
 
     system_mode = _check_mode(args, parser)
-    platform_systems = _platform_system_filter(args, parser)
+    platform_systems = resolve_system_ids(args, parser)
     # The trees stay put while names resolve against them and files are read.
     from packs.datadirs import hold_data_dirs
 

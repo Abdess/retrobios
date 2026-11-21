@@ -170,20 +170,17 @@ class APlatformWithoutTheSystemIsOutOfScope(unittest.TestCase):
     exited 1 on 'no pack for misterfpga', which has no PS2."""
 
     def _scope(self, **args):
-        import argparse
-
-        import generate_pack
         from model.profiles import load_emulator_profiles
+        from resolve.cores import platforms_with_systems
 
-        values = {"platforms_dir": str(REPO_ROOT / "platforms"), "target": None,
-                  "all": True}
+        values = {"target": None, "all": True}
         values.update(args)
         out = io.StringIO()
         with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
-            kept = generate_pack._platforms_with_systems(
-                argparse.Namespace(**values), ["retroarch", "misterfpga"],
-                ["sony-playstation-2"],
+            kept = platforms_with_systems(
+                ["retroarch", "misterfpga"], ["sony-playstation-2"],
                 load_emulator_profiles(str(REPO_ROOT / "emulators")), {},
+                str(REPO_ROOT / "platforms"), values["target"], values["all"],
             )
         return kept, out.getvalue()
 
@@ -196,6 +193,24 @@ class APlatformWithoutTheSystemIsOutOfScope(unittest.TestCase):
         with self.assertRaises(SystemExit) as ctx:
             self._scope(all=False)
         self.assertEqual(ctx.exception.code, 1)
+
+    def test_verify_reports_on_the_packs_generate_pack_builds(self):
+        """verify --all --system exited 2 'mutually exclusive' while
+        generate_pack built a pack per platform for the same request."""
+        import json
+        import subprocess
+        import sys
+
+        proc = subprocess.run(
+            [sys.executable, "scripts/verify.py", "--all", "--system", "sony-playstation-2",
+             "--json"],
+            cwd=REPO_ROOT, capture_output=True, text=True, check=False, timeout=900,
+        )
+        self.assertIn(proc.returncode, (0, 1), proc.stderr[-500:])
+        self.assertIn("INFO: Skipping misterfpga: no system sony-playstation-2", proc.stderr)
+        report = json.loads(proc.stdout)
+        self.assertIn("retroarch", report)
+        self.assertNotIn("misterfpga", report)
 
 
 class TheSplitDirectoryReadsThePackStem(unittest.TestCase):

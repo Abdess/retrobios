@@ -16,7 +16,7 @@ except ImportError:
 from model.platforms import load_platform_config
 from model.profiles import is_emulator, load_emulator_profiles
 from model.registry import list_registered_platforms, list_release_pack_platforms
-from model.systems import platform_system_names, system_index
+from model.systems import platform_system_names, resolve_system_arg, system_index
 from core.paths import PLATFORMS_DIR, REPO_ROOT
 
 
@@ -107,6 +107,37 @@ def selected_platforms(
     if parser is not None:
         parser.error("Specify --platform or --all")
     raise SystemExit("ERROR: specify --platform or --all")
+
+
+def resolve_system_ids(
+    args: argparse.Namespace, parser: argparse.ArgumentParser
+) -> list[str] | None:
+    """--system beside --platform or --all as system ids, before any work.
+
+    With --platform the platform's own names count too (Batocera's psx), the
+    mapping the install manifest carries. With --all each name must be one
+    of our ids some platform declares. Checked inside the build, a typo cost
+    the lock and a refresh of every data directory first, then ended on a
+    WARNING and exit 1, and a list with one known name ignored the others.
+    """
+    if not args.system or not (args.platform or args.all):
+        return None
+    if args.platform:
+        config = load_platform_config(args.platform, args.platforms_dir)
+        systems = list(config.get("systems", {}))
+        listing = f"--platform {args.platform} --list-systems"
+    else:
+        config = None
+        systems = sorted({
+            sid
+            for name in list_registered_platforms(args.platforms_dir)
+            for sid in load_platform_config(name, args.platforms_dir).get("systems", {})
+        })
+        listing = "--platform <name> --list-systems"
+    try:
+        return resolve_system_arg(args.system, systems, config, listing)
+    except ValueError as exc:
+        parser.error(f"--system {args.system}: {exc}")
 
 
 def comma_list(value: str) -> list[str]:

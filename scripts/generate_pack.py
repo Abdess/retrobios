@@ -40,15 +40,12 @@ from model.cliargs import (
     refuse_beside_mode,
     requested_regions,
     require_platform,
+    resolve_system_ids,
     run_listing,
 )
 from core.cli import add_emulator_selection, add_repo_inputs, require_directory
 from model.targets import (
     target_scope,
-)
-from model.systems import (
-    resolve_system_arg,
-    select_systems,
 )
 from core.artifacts import (
     write_if_changed,
@@ -58,8 +55,7 @@ from core.artifacts import (
 )
 from core.ziptools import build_zip_contents_index
 from resolve.cores import (
-    platform_scope_systems,
-    system_scope_error,
+    platforms_with_systems,
     without_profile_blind,
 )
 from resolve.grouping import group_identical_platforms
@@ -153,75 +149,6 @@ def _refuse_mixed_output(output_dir: str, writing: str) -> None:
         file=sys.stderr,
     )
     sys.exit(1)
-
-
-def _resolve_systems(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
-    """Turn --system into the platform's system ids, before any work.
-
-    With --platform the platform's own names count too (Batocera's psx), the
-    mapping the install manifest carries. With --all each name must be one
-    of our ids some platform declares. Checked inside the build, a typo cost
-    the lock and a refresh of every data directory first, then ended on a
-    WARNING and exit 1, and a list with one known name ignored the others.
-    """
-    if not args.system or not (args.platform or args.all):
-        return
-    if args.platform:
-        config = load_platform_config(args.platform, args.platforms_dir)
-        systems = list(config.get("systems", {}))
-        listing = f"--platform {args.platform} --list-systems"
-    else:
-        config = None
-        systems = sorted({
-            sid
-            for name in list_registered_platforms(args.platforms_dir)
-            for sid in load_platform_config(name, args.platforms_dir).get("systems", {})
-        })
-        listing = "--platform <name> --list-systems"
-    try:
-        args.system_ids = resolve_system_arg(args.system, systems, config, listing)
-    except ValueError as exc:
-        parser.error(f"--system {args.system}: {exc}")
-
-
-def _platforms_with_systems(
-    args: argparse.Namespace,
-    platforms: list[str],
-    system_filter: list[str],
-    emu_profiles: dict,
-    target_cores_cache: dict[str, set[str] | None],
-) -> list[str]:
-    """The platforms a --system list leaves a system to pack, before any lock.
-
-    Under --all a platform without one is out of scope, as a platform
-    without the target is: `--all --system sony-playstation-2` built every
-    PS2 pack and exited 1 on MiSTer, which has no PS2. Under --platform the
-    request is refused here, with its reason.
-    """
-    kept = []
-    for name in platforms:
-        config = load_platform_config(name, args.platforms_dir)
-        tc = target_cores_cache.get(name) if args.target else None
-        if platform_scope_systems(config, emu_profiles, tc, system_filter):
-            kept.append(name)
-            continue
-        if not args.all:
-            reason = system_scope_error(config, name, system_filter, args.target)
-            print(f"ERROR: {reason}", file=sys.stderr)
-            sys.exit(1)
-        declared = select_systems(config.get("systems", {}), system_filter)
-        reason = (
-            system_scope_error(config, name, system_filter, args.target)
-            if declared and args.target
-            else f"no system {', '.join(system_filter)}"
-        )
-        print(f"INFO: Skipping {name}: {reason}")
-    if not kept:
-        where = f" on target {args.target}" if args.target else ""
-        print(f"ERROR: no platform packed here runs {', '.join(system_filter)}{where}",
-              file=sys.stderr)
-        sys.exit(1)
-    return kept
 
 
 def _refuse_for_verify_packs(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
@@ -1276,8 +1203,9 @@ def _run_platform_mode(
 
     emu_profiles = load_emulator_profiles(args.emulators_dir)
     if system_filter:
-        platforms = _platforms_with_systems(
-            args, platforms, system_filter, emu_profiles, target_cores_cache
+        platforms = platforms_with_systems(
+            platforms, system_filter, emu_profiles, target_cores_cache,
+            args.platforms_dir, args.target, args.all,
         )
     platforms = without_profile_blind(
         platforms,
@@ -1349,7 +1277,7 @@ def _main(held: contextlib.ExitStack) -> None:
         return
 
     _validate_args(args, parser)
-    _resolve_systems(args, parser)
+    args.system_ids = resolve_system_ids(args, parser)
     # Unset until every refusal has run, so a typed default value is seen.
     args.source = args.source or "full"
     args.group_by = args.group_by or "system"

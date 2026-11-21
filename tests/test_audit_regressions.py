@@ -7677,15 +7677,14 @@ class AnUnknownSystemIsRefusedBeforeAnyWork(unittest.TestCase):
     def test_a_known_system_passes_the_early_check(self):
         import argparse
 
-        import generate_pack
+        from model.cliargs import resolve_system_ids
 
         parser = argparse.ArgumentParser()
         args = argparse.Namespace(
             system="sony-playstation", platform="retroarch", all=False,
             platforms_dir=str(ROOT / "platforms"), manifest=False,
         )
-        generate_pack._resolve_systems(args, parser)
-        self.assertEqual(args.system_ids, ["sony-playstation"])
+        self.assertEqual(resolve_system_ids(args, parser), ["sony-playstation"])
 
 
 class NoArchiveRepeatsAMemberName(unittest.TestCase):
