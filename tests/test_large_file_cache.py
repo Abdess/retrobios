@@ -492,9 +492,12 @@ class RestoredReleaseAssets(unittest.TestCase):
         self._tmp.cleanup()
 
     def _restore(self, *, offline: bool = False) -> None:
-        entries = {self.sha1: {"name": "FW.PUP", "path": str(self.target)}}
+        # Entries name paths relative to the tree holding bios/, never to
+        # the working directory.
+        path = "bios/Sony/PS3/FW.PUP"
+        entries = {self.sha1: {"name": "FW.PUP", "path": path}}
         self.releaseassets.restore_release_assets(
-            entries, {str(self.target)}, offline=offline
+            entries, {path}, self.tmp, offline=offline
         )
 
     def test_a_fetched_asset_returns_to_its_registered_path(self):

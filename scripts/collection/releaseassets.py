@@ -59,8 +59,10 @@ def surviving_entries(existing_db: dict, files: dict, registered: set[str]) -> d
     }
 
 
-def restore_release_assets(entries: dict, registered: set[str], *, offline: bool) -> None:
-    """Write each kept entry's asset back to its registered path, fetched only when online."""
+def restore_release_assets(
+    entries: dict, registered: set[str], tree: Path, *, offline: bool
+) -> None:
+    """Write each kept entry's asset back to its registered path under tree, fetched only when online."""
     from model.largefiles import fetch_large_file, restore_verified
 
     for sha1, entry in entries.items():
@@ -72,5 +74,6 @@ def restore_release_assets(entries: dict, registered: set[str], *, offline: bool
             offline=offline,
             registered=registered,
         )
-        if cached and not os.path.exists(path):
-            restore_verified(cached, path, sha1)
+        destination = str(tree / path)
+        if cached and not os.path.exists(destination):
+            restore_verified(cached, destination, sha1)

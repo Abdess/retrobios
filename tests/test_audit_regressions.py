@@ -3736,13 +3736,42 @@ class AnUnreadableDatabaseStopsTheScan(unittest.TestCase):
             err = io.StringIO()
             with mock.patch.object(run, "load_gitignored_large_files",
                                    return_value={"bios/big.bin"}), \
-                    mock.patch.object(run, "load_cache", return_value={}), \
-                    mock.patch.object(run, "save_cache") as saved, \
                     redirect_stdout(io.StringIO()), redirect_stderr(err):
                 self.assertEqual(run.generate(args), 1)
             self.assertIn("is not valid JSON", err.getvalue())
-            saved.assert_not_called()
+            self.assertFalse((root / ".cache").exists())
             self.assertTrue(output.read_text().startswith("<<<<<<<"))
+
+
+class TheDigestCacheBelongsToTheScannedTree(unittest.TestCase):
+    """The cache path was fixed on the working directory: scanning a copy
+    (tmp/wt/bios) replaced the repository's cache with the copy's entries,
+    keyed bios/... like the real ones, and the next run rehashed everything."""
+
+    def test_a_scan_writes_its_cache_beside_its_tree(self):
+        import argparse
+        import io
+        from contextlib import redirect_stderr, redirect_stdout
+
+        from collection import hashcache, run
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "bios" / "Sony").mkdir(parents=True)
+            (root / "bios" / "Sony" / "a.bin").write_bytes(b"a")
+            (root / "_registry.yml").write_text("platforms: {}\n")
+            args = argparse.Namespace(
+                bios_dir=str(root / "bios"), force=False,
+                output=str(root / "database.json"), offline=True,
+                platforms_dir=str(root), emulators_dir=str(root),
+                provenance_dir=str(root),
+            )
+            with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                self.assertEqual(run.generate(args), 0)
+            cache = root / ".cache" / "db_cache.json"
+            self.assertEqual(hashcache.cache_path(root / "bios"), str(cache))
+            self.assertEqual(list(hashcache.load_cache(str(cache))), ["bios/Sony/a.bin"])
+            self.assertEqual(hashcache.cache_path(Path("bios")), ".cache/db_cache.json")
 
 
 class TheZipIndexCacheKnowsItsInputs(unittest.TestCase):

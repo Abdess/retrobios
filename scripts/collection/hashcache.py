@@ -4,11 +4,19 @@ from __future__ import annotations
 
 import json
 import os
+from pathlib import Path
 
 from core.artifacts import write_text_atomic
 
-CACHE_DIR = ".cache"
-CACHE_FILE = os.path.join(CACHE_DIR, "db_cache.json")
+
+def cache_path(bios_dir: Path) -> str:
+    """The cache of the tree holding bios_dir, beside it as its keys are relative to it.
+
+    A path fixed on the working directory let a scan of a copy (tmp/wt/bios)
+    replace the repository's cache with the copy's entries, keyed bios/...
+    like the real ones, and the next real run rehashed every file.
+    """
+    return str(bios_dir.parent / ".cache" / "db_cache.json")
 
 
 def load_cache(cache_path: str) -> dict:

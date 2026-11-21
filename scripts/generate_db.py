@@ -4,7 +4,8 @@
 Usage:
     python scripts/generate_db.py [--force] [--bios-dir DIR] [--output FILE]
 
-Supports incremental mode via .cache/db_cache.json (mtime-based).
+Supports incremental mode via .cache/db_cache.json beside the scanned
+tree (mtime-based).
 Use --force to rehash all files.
 """
 
