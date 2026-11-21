@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING
 
 from installer.cards import card_platform, setup_bios_folder
 from installer.config_values import _RETROARCH_CONFIGS, _parse_retroarch_system_dir
+from installer.detection_notes import echo_detection, note_detection
 from installer.embedded import CARD_MARKER, _EMBEDDED_RULES, _NO_FOLDER
 from installer.events import EVENTS
 from installer.host_fs import (
@@ -301,7 +302,7 @@ def _detect_embedded() -> list[tuple[str, Path]]:
             reason = _NO_FOLDER.get(
                 name, "nothing on it names the folder its RetroArch reads")
             closing = "" if name in _CARD_SYSTEMS else " Name the folder with --dest."
-            print(f"{name} found here, but {reason}.{closing}", file=sys.stderr)
+            note_detection(f"{name} found here, but {reason}.{closing}")
             continue
         _DETECTED_OS[(plat, folder)] = name
         found.append((plat, folder))
@@ -383,7 +384,7 @@ def _note_windows_unasked() -> None:
     _DETECTION_REFUSED.append(refused)
     words = refused_words(*refused)
     EVENTS.emit("unsearched", folder=str(refused[0]), reason=why, message=words)
-    print(f"  {screen_text(words)}", file=sys.stderr)
+    echo_detection(f"  {screen_text(words)}")
 
 
 def _winreg_value(key: str, value: str) -> str | None:

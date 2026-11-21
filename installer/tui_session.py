@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import argparse
 import codecs
-import contextlib
 import errno
 import functools
 import io
@@ -24,6 +23,7 @@ from installer.cards import _SHARE_FOLDERS, _mounted_cards, card_bound, card_pla
 from installer.console import QUIT_CODE
 from installer.destination import card_choice, dest_default
 from installer.detect_frontends import detect_frontends
+from installer.detection_notes import DETECTION_NOTES, detection_held
 from installer.detect_os import _enter_wsl, _wsl_dest, detect_os, detected_os
 from installer.from_folders import _open_local_sources, from_folder_problem
 from installer.host_fs import _DETECTION_REFUSED, refused_words
@@ -135,19 +135,18 @@ def _tui_take_args(state: TuiState, args: argparse.Namespace) -> None:
 
 def _tui_detect(state: TuiState, os_type: str) -> None:
     """The setups and cards found here, and what detection said."""
-    captured = io.StringIO()
-    with contextlib.redirect_stdout(captured), contextlib.redirect_stderr(captured):
+    start = len(DETECTION_NOTES)
+    with detection_held():
         state.setups, state.mounted_setups = found_setups(os_type)
         frontends = detect_frontends(os_type)
     # Said on the normal screen before this one covered it, and kept
     # above the list: a status line under 18 setups was never drawn.
     state.refused = [refused_words(folder, why, _short_path(folder, state.home))
                      for folder, why in _DETECTION_REFUSED]
-    unsaid = {refused_words(*refused) for refused in _DETECTION_REFUSED}
     if "esde" in frontends:
         state.notes.append(TUI_ESDE_NOTE)
-    state.notes += [line.strip() for line in captured.getvalue().splitlines()
-                    if line.strip() and line.strip() not in unsaid]
+    state.notes += [line.strip() for note in DETECTION_NOTES[start:]
+                    for line in note.splitlines() if line.strip()]
 
 
 def _start_on_platform(state: TuiState, args: argparse.Namespace, plat: str,

@@ -4723,6 +4723,37 @@ class AFolderThisUserCannotOpen(unittest.TestCase):
                 # The list keeps its focused row in view.
                 self.assertIn("RetroArch", screen)
 
+    def test_detection_lines_are_read_not_captured(self):
+        """The screen read detection's lines by capturing stdout and stderr,
+        and dropped a refusal by comparing its printed text: a folder whose
+        name the terminal text escapes was then said twice."""
+        closed = self.lock.parent / "esc\x1bape"
+        closed.mkdir()
+        os.chmod(closed, 0o000)
+        self.addCleanup(os.chmod, closed, 0o755)
+        install._DETECTION_REFUSED.clear()
+        self.addCleanup(install._DETECTION_REFUSED.clear)
+
+        def detect(_os_type: str) -> list:
+            install._SETUP_SEARCH.active = True
+            try:
+                install._is_dir(closed / "bios")
+                install.note_detection("Batocera found here, but no folder.")
+            finally:
+                install._SETUP_SEARCH.active = False
+            return []
+
+        with mock.patch.object(install, "detect_platforms", side_effect=detect), \
+                mock.patch.object(install, "detect_frontends", return_value=[]), \
+                mock.patch.object(install, "_mounted_cards", return_value=[]), \
+                contextlib.redirect_stdout(io.StringIO()) as out, \
+                contextlib.redirect_stderr(io.StringIO()) as err:
+            state, _effects = install.tui_start(_args(), "linux")
+        self.assertEqual((out.getvalue(), err.getvalue()), ("", ""))
+        self.assertEqual(install._DETECTION_REFUSED, [(closed, "Permission denied")])
+        self.assertEqual(len(state.refused), 1)
+        self.assertEqual(state.notes, ["Batocera found here, but no folder."])
+
 
 class AGoesIntoASubfolder(unittest.TestCase):
     """At HOME or a drive root A went into the first "dir" row: a mounted

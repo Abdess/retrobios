@@ -500,7 +500,7 @@ those it imports:
 | Shared words and limits | `remote`, `regions`, `platforms`, `manifest`, `embedded`, `text`, `events`, `invocation` |
 | Terminal and line output | `terminal`, `console` |
 | Files and folders | `host_fs`, `paths`, `filesystems`, `config_values`, `local_check`, `safe_replace` |
-| This machine | `detect_os`, `detect_frontends`, `cards`, `device`, `cores`, `frontend_folders`, `setups` |
+| This machine | `detection_notes`, `detect_os`, `detect_frontends`, `cards`, `device`, `cores`, `frontend_folders`, `setups` |
 | Sources of files | `offline`, `network`, `pack_source`, `from_folders`, `diagnosis`, `download`, `datadirs`, `standalone` |
 | What a run keeps | `narrowing`, `choices`, `romm`, `install_record`, `game_files`, `games`, `tally` |
 | Line mode | `destination`, `line_folder`, `line_menu`, `plan_words`, `plan`, `outcome` |

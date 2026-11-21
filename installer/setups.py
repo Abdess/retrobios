@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import os
 import re
+import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -19,6 +20,7 @@ from installer.cards import (
     drive_kind,
 )
 from installer.console import _ask, _quit
+from installer.detection_notes import note_detection
 from installer.detect_frontends import _UNNAMEABLE, _android_storage_root, detect_platforms
 from installer.detect_os import (
     _DETECTED_OS,
@@ -555,7 +557,7 @@ def found_setups(os_type: str) -> tuple[list[tuple[str, Path, str]], set]:
             # A drive whose files fit two systems is said, never guessed.
             words = doubt_words(mount)
             if words:
-                print(f"  {words}")
+                note_detection(f"  {words}", sys.stdout)
             continue
         if (card[0], card[1]) not in found and card[2] not in here:
             _DETECTED_OS.setdefault((card[0], card[1]), card[2])

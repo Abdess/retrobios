@@ -7,13 +7,13 @@ import os
 import re
 import shutil
 import stat
-import sys
 import tempfile
 import threading
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from installer.detection_notes import echo_detection
 from installer.events import EVENTS
 from installer.text import screen_text
 
@@ -103,7 +103,7 @@ def _note_refused(path: Path, exc: OSError) -> None:
         _DETECTION_UNREADABLE.add(refused[0])
     words = refused_words(*refused)
     EVENTS.emit("unsearched", folder=str(refused[0]), reason=refused[1], message=words)
-    print(f"  {screen_text(words)}", file=sys.stderr)
+    echo_detection(f"  {screen_text(words)}")
 
 
 def _held(path: Path) -> bool:

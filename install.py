@@ -66,6 +66,41 @@ except ImportError as _missing:
     sys.exit(1)
 
 
+# --- installer/detection_notes.py --------------------------------------------
+
+# Each line detection said, in order, other than a folder it could not look
+# in (_DETECTION_REFUSED keeps those): a system found with no folder, a
+# configuration naming a folder nobody can type, an Android folder out of
+# reach, a card that fits two systems.
+DETECTION_NOTES: list[str] = []
+# Set while the full screen runs detection: it shows the notes and the
+# refusals itself, and a line printed under it would tear the screen.
+_HELD = {"active": False}
+
+
+def echo_detection(line: str, stream: TextIO | None = None) -> None:
+    """Print a line detection says, unless the screen shows it itself."""
+    if not _HELD["active"]:
+        print(line, file=stream if stream is not None else sys.stderr)
+
+
+def note_detection(line: str, stream: TextIO | None = None) -> None:
+    """Keep a line detection says, and print it in line mode."""
+    DETECTION_NOTES.append(line)
+    echo_detection(line, stream)
+
+
+@contextlib.contextmanager
+def detection_held() -> Iterator[None]:
+    """Detection that keeps its lines without printing them."""
+    outer = _HELD["active"]
+    _HELD["active"] = True
+    try:
+        yield
+    finally:
+        _HELD["active"] = outer
+
+
 # --- installer/embedded.py ---------------------------------------------------
 
 # Frontends whose BIOS live on their SD card, installed from a computer the
@@ -1690,7 +1725,7 @@ def _note_refused(path: Path, exc: OSError) -> None:
         _DETECTION_UNREADABLE.add(refused[0])
     words = refused_words(*refused)
     EVENTS.emit("unsearched", folder=str(refused[0]), reason=refused[1], message=words)
-    print(f"  {screen_text(words)}", file=sys.stderr)
+    echo_detection(f"  {screen_text(words)}")
 
 
 def _held(path: Path) -> bool:
@@ -4947,7 +4982,7 @@ def _detect_embedded() -> list[tuple[str, Path]]:
             reason = _NO_FOLDER.get(
                 name, "nothing on it names the folder its RetroArch reads")
             closing = "" if name in _CARD_SYSTEMS else " Name the folder with --dest."
-            print(f"{name} found here, but {reason}.{closing}", file=sys.stderr)
+            note_detection(f"{name} found here, but {reason}.{closing}")
             continue
         _DETECTED_OS[(plat, folder)] = name
         found.append((plat, folder))
@@ -5029,7 +5064,7 @@ def _note_windows_unasked() -> None:
     _DETECTION_REFUSED.append(refused)
     words = refused_words(*refused)
     EVENTS.emit("unsearched", folder=str(refused[0]), reason=why, message=words)
-    print(f"  {screen_text(words)}", file=sys.stderr)
+    echo_detection(f"  {screen_text(words)}")
 
 
 def _winreg_value(key: str, value: str) -> str | None:
@@ -5743,10 +5778,9 @@ def _detect_retrodeck(home: Path, found: list[tuple[str, Path]]) -> None:
         if not rd_home:
             # A home moved to an SD card lives only in this file: the
             # default is a guess, and the user is told so.
-            print(
+            note_detection(
                 f"Warning: could not read paths.rd_home_path from "
                 f"{retrodeck_json}: assuming {home / 'retrodeck'}",
-                file=sys.stderr,
             )
         rd_root = Path(rd_home) if rd_home else home / "retrodeck"
         _record_moved_folders(rd_root, retrodeck_json)
@@ -5868,9 +5902,9 @@ def _without_unnameable(found: list[tuple[str, Path]]) -> list[tuple[str, Path]]
             # setup reads the folder named.
             if name not in _UNNAMEABLE:
                 _UNNAMEABLE.append(name)
-            print(f"  {display_name(name)}: the folder its configuration names holds a "
-                  f"control character ({shown_path(path)}). Name its BIOS folder with "
-                  "--dest.", file=sys.stderr)
+            note_detection(f"  {display_name(name)}: the folder its configuration names "
+                           f"holds a control character ({shown_path(path)}). Name its BIOS "
+                           "folder with --dest.")
             continue
         kept.append((name, path))
     return kept
@@ -5886,7 +5920,7 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
     if os_type == "android":
         found.extend(_detect_android())
         for line in android_unreachable_folders():
-            print(line, file=sys.stderr)
+            note_detection(line)
 
     if os_type in ("linux", "wsl"):
         found.extend(_detect_embedded())
@@ -14372,7 +14406,7 @@ def found_setups(os_type: str) -> tuple[list[tuple[str, Path, str]], set]:
             # A drive whose files fit two systems is said, never guessed.
             words = doubt_words(mount)
             if words:
-                print(f"  {words}")
+                note_detection(f"  {words}", sys.stdout)
             continue
         if (card[0], card[1]) not in found and card[2] not in here:
             _DETECTED_OS.setdefault((card[0], card[1]), card[2])
@@ -30633,19 +30667,18 @@ def _tui_take_args(state: TuiState, args: argparse.Namespace) -> None:
 
 def _tui_detect(state: TuiState, os_type: str) -> None:
     """The setups and cards found here, and what detection said."""
-    captured = io.StringIO()
-    with contextlib.redirect_stdout(captured), contextlib.redirect_stderr(captured):
+    start = len(DETECTION_NOTES)
+    with detection_held():
         state.setups, state.mounted_setups = found_setups(os_type)
         frontends = detect_frontends(os_type)
     # Said on the normal screen before this one covered it, and kept
     # above the list: a status line under 18 setups was never drawn.
     state.refused = [refused_words(folder, why, _short_path(folder, state.home))
                      for folder, why in _DETECTION_REFUSED]
-    unsaid = {refused_words(*refused) for refused in _DETECTION_REFUSED}
     if "esde" in frontends:
         state.notes.append(TUI_ESDE_NOTE)
-    state.notes += [line.strip() for line in captured.getvalue().splitlines()
-                    if line.strip() and line.strip() not in unsaid]
+    state.notes += [line.strip() for note in DETECTION_NOTES[start:]
+                    for line in note.splitlines() if line.strip()]
 
 
 def _start_on_platform(state: TuiState, args: argparse.Namespace, plat: str,

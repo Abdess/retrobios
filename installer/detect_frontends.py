@@ -5,7 +5,6 @@ import contextlib
 import functools
 import os
 import re
-import sys
 import xml.etree.ElementTree as ET
 from collections.abc import Callable, Iterator
 from pathlib import Path
@@ -18,6 +17,7 @@ from installer.config_values import (
     _retroarch_cfg_dir,
     _retroarch_cfg_value,
 )
+from installer.detection_notes import note_detection
 from installer.detect_os import (
     _detect_embedded,
     _macos_retroarch_base,
@@ -693,10 +693,9 @@ def _detect_retrodeck(home: Path, found: list[tuple[str, Path]]) -> None:
         if not rd_home:
             # A home moved to an SD card lives only in this file: the
             # default is a guess, and the user is told so.
-            print(
+            note_detection(
                 f"Warning: could not read paths.rd_home_path from "
                 f"{retrodeck_json}: assuming {home / 'retrodeck'}",
-                file=sys.stderr,
             )
         rd_root = Path(rd_home) if rd_home else home / "retrodeck"
         _record_moved_folders(rd_root, retrodeck_json)
@@ -818,9 +817,9 @@ def _without_unnameable(found: list[tuple[str, Path]]) -> list[tuple[str, Path]]
             # setup reads the folder named.
             if name not in _UNNAMEABLE:
                 _UNNAMEABLE.append(name)
-            print(f"  {display_name(name)}: the folder its configuration names holds a "
-                  f"control character ({shown_path(path)}). Name its BIOS folder with "
-                  "--dest.", file=sys.stderr)
+            note_detection(f"  {display_name(name)}: the folder its configuration names "
+                           f"holds a control character ({shown_path(path)}). Name its BIOS "
+                           "folder with --dest.")
             continue
         kept.append((name, path))
     return kept
@@ -836,7 +835,7 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
     if os_type == "android":
         found.extend(_detect_android())
         for line in android_unreachable_folders():
-            print(line, file=sys.stderr)
+            note_detection(line)
 
     if os_type in ("linux", "wsl"):
         found.extend(_detect_embedded())
