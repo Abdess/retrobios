@@ -22,7 +22,8 @@ from .rocknix_launchers import fixed_paths
 from scraper.shell_launchers import (
     config_placement,
     describe_keys,
-    evidence_fields,
+    apply_evidence,
+    first_boot_placement,
     LauncherPatternMissing,
     Link,
     link_record,
@@ -149,19 +150,12 @@ def _evidence(
     """
     placements = []
     if tree is not None:
-        setup = _read(tree, USERCONFIG)
-        placements.append(config_placement(
-            setup, _storage_path(tree, target), required=False, sources=("/usr/config/",)
-        ))
+        placements.append(first_boot_placement(_read(tree, USERCONFIG), _storage_path(tree, target)))
     placement = config_placement(script, target, keys, source_name=source_name,
                                  required=not placements or not placements[0].install)
     placement.overrides |= set(rewrites)
     placements.append(placement)
-    fields = evidence_fields(placements, installed)
-    record.installs = fields["installs"]
-    record.kept_if_present = fields["kept_if_present"]
-    record.overrides = fields["overrides"]
-    return record
+    return apply_evidence(record, placements, installed)
 
 
 def _read(tree: RepoTree, path: str) -> Script:

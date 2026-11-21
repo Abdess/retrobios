@@ -27,7 +27,8 @@ from scraper.shell_launchers import (
     Script,
     config_placement,
     describe_keys,
-    evidence_fields,
+    apply_evidence,
+    first_boot_placement,
     settings,
     source_ref,
 )
@@ -101,17 +102,12 @@ def _evidence(
 ) -> Launcher:
     """A config record with the steps that put its file at ``target``: the
     first-boot copy of /usr/config, then the start script's own copy."""
-    setup = Script(USERCONFIG, read(USERCONFIG))
-    placements = [config_placement(setup, target, required=False, sources=("/usr/config/",))]
+    placements = [first_boot_placement(Script(USERCONFIG, read(USERCONFIG)), target)]
     if start is not None:
         placements.append(
             config_placement(start, target, keys, source_name=source_name, required=False)
         )
-    fields = evidence_fields(placements)
-    record.installs = fields["installs"]
-    record.kept_if_present = fields["kept_if_present"]
-    record.overrides = fields["overrides"]
-    return record
+    return apply_evidence(record, placements)
 
 
 def retroarch(read: Read) -> list[Launcher]:

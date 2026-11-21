@@ -18,7 +18,7 @@ from dataclasses import dataclass
 from typing import TypeVar
 
 from .configgen_launchers import Launcher
-from scraper.shell_launchers import config_placement, evidence_fields
+from scraper.shell_launchers import apply_evidence, config_placement, first_boot_placement
 from scraper.shell_launchers import (
     describe_keys,
     LauncherPatternMissing,
@@ -196,17 +196,12 @@ def with_evidence(
     already there. A start script can copy or generate it again, and its
     sed lines rewriting one of the record's keys are the overrides.
     """
-    setup = Script(USERCONFIG, tree.read(USERCONFIG))
-    placements = [config_placement(setup, target, required=False, sources=("/usr/config/",))]
+    placements = [first_boot_placement(Script(USERCONFIG, tree.read(USERCONFIG)), target)]
     if start is not None:
         placements.append(config_placement(
             start, target, keys, writers, source_name, required=False
         ))
-    fields = evidence_fields(placements)
-    record.installs = fields["installs"]
-    record.kept_if_present = fields["kept_if_present"]
-    record.overrides = fields["overrides"]
-    return record
+    return apply_evidence(record, placements)
 
 
 def _keys(value: FixedPaths) -> list[str]:

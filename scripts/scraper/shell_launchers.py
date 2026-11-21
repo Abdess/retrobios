@@ -612,6 +612,26 @@ def evidence_fields(
     }
 
 
+def first_boot_placement(setup: Script, target: str) -> ConfigPlacement:
+    """The first-boot copy of /usr/config to /storage/.config (userconfig-setup),
+    which leaves a file already there and may not reach ``target``."""
+    return config_placement(setup, target, required=False, sources=("/usr/config/",))
+
+
+def apply_evidence(
+    record: Launcher,
+    placements: Iterable[ConfigPlacement],
+    installed: Iterable[tuple[str, Iterable[int]]] = (),
+) -> Launcher:
+    """``record`` with the installs, kept_if_present and overrides fields
+    ``evidence_fields`` reads from ``placements``."""
+    fields = evidence_fields(placements, installed)
+    record.installs = fields["installs"]
+    record.kept_if_present = fields["kept_if_present"]
+    record.overrides = fields["overrides"]
+    return record
+
+
 @dataclass
 class Setting:
     section: str
