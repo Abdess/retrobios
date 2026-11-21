@@ -1,6 +1,34 @@
 {
+ "archive.softwareheritage.org/softwareheritage/revision@79dee42601deff2077160906f9a89756fca820a9": [],
  "archive.softwareheritage.org/softwareheritage/revision@dc20a615275f66bee20a4fd851ef0231daca4f14": [],
+ "archive.softwareheritage.org/softwareheritage/revision@ee365bad9501c73ff49936e72ec91cd9c3ce5c24": [],
  "bitbucket.org/linuxwolf6/splitwolf@f6c00044cdef00a31c66307d8b7cb1fb4ddf8c67": [],
+ "codeberg.org/eden-emu/eden@26a03d2473787abf3223b2d0e65b291eee00c1e1": [
+  "src/android/app/src/main/java/org/yuzu/yuzu_emu/fragments/InstallableFragment.kt",
+  "src/android/app/src/main/java/org/yuzu/yuzu_emu/utils/DirectoryInitialization.kt",
+  "src/android/app/src/main/java/org/yuzu/yuzu_emu/utils/InstallableActions.kt",
+  "src/common/fs/fs_paths.h",
+  "src/common/fs/path_util.cpp",
+  "src/core/crypto/key_manager.cpp",
+  "src/core/file_sys/bis_factory.cpp",
+  "src/core/file_sys/registered_cache.cpp",
+  "src/core/hle/service/filesystem/filesystem.cpp",
+  "src/core/hle/service/filesystem/fsp/fsp_srv.cpp",
+  "src/core/hle/service/nfc/common/amiibo_crypto.cpp",
+  "src/core/loader/nca.cpp",
+  "src/frontend_common/content_manager.h",
+  "src/frontend_common/firmware_manager.h",
+  "src/qt_common/util/content.cpp",
+  "src/yuzu/main_window.cpp"
+ ],
+ "codeberg.org/eden-emu/eden@8648c27cbb4c17b176076b09ac245271829cbd9f": [
+  "CMakeModules/GenerateSCMRev.cmake",
+  "src/android/app/build.gradle.kts",
+  "src/android/app/src/main/jni/native.cpp",
+  "src/common/net/net.cpp",
+  "src/common/scm_rev.cpp.in",
+  "src/frontend_common/update_checker.cpp"
+ ],
  "codeberg.org/iyzsong/anarch-libretro@187050344ef440c4eaf3135304a020093564fa3f": [
   "texts.h"
  ],
@@ -82,6 +110,18 @@
   "Src/Sound/MPEG/MpegAudio.cpp",
   "Src/Version.h"
  ],
+ "git.libretro.com/libretro/Omicron@0181fbad079addb1fca895325c711f8f91397be4": [
+  ".gitlab-ci.yml",
+  "libretro/LibretroOmicronCore/ejava.c",
+  "libretro/LibretroOmicronCore/omicron_libretro.c",
+  "libretro/omicron-libretro-java/pom.xml",
+  "libretro/omicron-libretro-java/src/Bootstrap.java",
+  "libretro/omicron-libretro-java/src/experimental/LibretroApplication.java",
+  "libretro/omicron-libretro-java/src/org/github/msx80/omicron/libretro/entrypoint/EntryPoint.java",
+  "omicron-player/omicron-engine/src/main/java/org/github/msx80/omicron/GameRun.java",
+  "omicron-player/omicron-loader/src/main/java/org/github/msx80/omicron/fantasyconsole/cartridges/JarCartridge.java",
+  "omicron-player/omicron-loader/src/main/java/org/github/msx80/omicron/fantasyconsole/crazyclassloader/NonAggressiveClassLoader.java"
+ ],
  "git.libretro.com/libretro/cemu-libretro@91fb753ab8f8fcd35a6ae16ecdb1a750a9240d6b": [
   ".gitlab-ci.yml",
   "CMakeLists.txt",
@@ -140,6 +180,11 @@
   ".gitlab-ci.yml",
   "Makefile",
   "libretro-radio.c"
+ ],
+ "git.libretro.com/libretro/libretro-video-processor@8fe4751f0039a1b645bf750531fcfc234958a7ac": [
+  ".gitlab-ci.yml",
+  "Makefile",
+  "video_processor_v4l2.c"
  ],
  "git.libretro.com/libretro/linuxloader-libretro@1cd5dbd279ac4b39433c956ff174b398d441418a": [
   ".gitlab-ci.yml",
@@ -2086,6 +2131,7 @@
   "UI/Interop/FirmwareTypeExtensions.cs",
   "UI/Program.cs",
   "UI/Utilities/DependencyHelper.cs",
+  "UI/Utilities/FirmwareHelper.cs",
   "UI/ViewModels/CheatDatabaseViewModel.cs",
   "Utilities/FolderUtilities.cpp"
  ],
@@ -2423,6 +2469,36 @@
   "src/stratagus/parameters.cpp",
   "src/stratagus/stratagus.cpp"
  ],
+ "github.com/WizzardSK/cemu-libretro@91fb753ab8f8fcd35a6ae16ecdb1a750a9240d6b": [
+  ".gitlab-ci.yml",
+  "CMakeLists.txt",
+  "bin/resources/sharedFonts/CafeCn.ttf",
+  "bin/resources/sharedFonts/CafeKr.ttf",
+  "bin/resources/sharedFonts/CafeStd.ttf",
+  "bin/resources/sharedFonts/CafeTw.ttf",
+  "src/CMakeLists.txt",
+  "src/Cafe/Account/Account.cpp",
+  "src/Cafe/CafeSystem.cpp",
+  "src/Cafe/Filesystem/FST/FST.cpp",
+  "src/Cafe/Filesystem/FST/KeyCache.cpp",
+  "src/Cafe/GameProfile/GameProfile.cpp",
+  "src/Cafe/GraphicPack/GraphicPack2.cpp",
+  "src/Cafe/HW/Latte/Core/LatteShaderCache.cpp",
+  "src/Cafe/IOSU/legacy/iosu_crypto.cpp",
+  "src/Cafe/OS/RPL/rpl.cpp",
+  "src/Cafe/OS/libs/coreinit/coreinit.cpp",
+  "src/Cafe/OS/libs/nn_olv/nn_olv_InitializeTypes.cpp",
+  "src/Cafe/OS/libs/nn_olv/nn_olv_OfflineDB.cpp",
+  "src/Cafe/OS/libs/snd_user/snd_user.cpp",
+  "src/config/ActiveSettings.cpp",
+  "src/config/CemuConfig.cpp",
+  "src/config/NetworkSettings.cpp",
+  "src/libretro/CemuLibretro.cpp",
+  "src/libretro/LibretroGraphicPacks.cpp",
+  "src/libretro/embed_graphic_packs.cmake",
+  "src/main.cpp",
+  "src/resource/CafeDefaultFont.cpp"
+ ],
  "github.com/WizzardSK/eka2l1-libretro@e39ccac46e631be7470b4f420fb8eebed9c24eca": [
   ".gitlab-ci.yml",
   ".gitmodules",
@@ -2516,6 +2592,22 @@
   "pcsx2/VMManager.cpp",
   "pcsx2/ps2/BiosTools.cpp"
  ],
+ "github.com/WizzardSK/rpcs3-libretro@47599599a4cea37f350eb0936d7c5e4de6f7bf57": [],
+ "github.com/WizzardSK/rpcs3-libretro@8bafcb27ae9cbb708ed05b89d5b1a62fe87cd0ce": [
+  "rpcs3/Crypto/key_vault.h",
+  "rpcs3/Emu/Cell/Modules/cellFont.cpp",
+  "rpcs3/Emu/Cell/Modules/cellSsl.cpp",
+  "rpcs3/Emu/Cell/PPUModule.cpp",
+  "rpcs3/Emu/Cell/lv2/sys_fs.cpp",
+  "rpcs3/Emu/Cell/lv2/sys_prx.cpp",
+  "rpcs3/Emu/System.cpp",
+  "rpcs3/Loader/PUP.cpp",
+  "rpcs3/libretro/CMakeLists.txt",
+  "rpcs3/libretro/libretro_core.cpp",
+  "rpcs3/libretro/libretro_firmware.cpp",
+  "rpcs3/libretro/upstream.version",
+  "rpcs3/rpcs3_version.cpp"
+ ],
  "github.com/X16Community/x16-emulator@af1024080ced455ea098b007aed43142c99e93da": [
   "src/glue.h",
   "src/main.c"
@@ -2575,6 +2667,24 @@
   "src/zc/zelda.cpp",
   "src/zconfig.cpp",
   "src/zq/zquest.cpp"
+ ],
+ "github.com/Zenfone-5-X00QD-4-19/yuzu@15e6e48bef0216480661444a8d8b348c1cca47bb": [
+  "CMakeLists.txt",
+  "src/android/app/src/main/java/org/yuzu/yuzu_emu/fragments/InstallableFragment.kt",
+  "src/android/app/src/main/java/org/yuzu/yuzu_emu/ui/main/MainActivity.kt",
+  "src/android/app/src/main/java/org/yuzu/yuzu_emu/utils/DirectoryInitialization.kt",
+  "src/common/fs/fs_paths.h",
+  "src/common/fs/path_util.cpp",
+  "src/core/crypto/key_manager.cpp",
+  "src/core/file_sys/bis_factory.cpp",
+  "src/core/file_sys/registered_cache.cpp",
+  "src/core/file_sys/system_archive/system_archive.cpp",
+  "src/core/hle/service/filesystem/filesystem.cpp",
+  "src/core/hle/service/filesystem/fsp/fsp_srv.cpp",
+  "src/core/hle/service/nfc/common/amiibo_crypto.cpp",
+  "src/core/loader/nca.cpp",
+  "src/frontend_common/content_manager.h",
+  "src/yuzu/main.cpp"
  ],
  "github.com/Zer0one/TGPulse-Next@3c75f9b2b155e8bb50a225c69520948ef72ecd48": [],
  "github.com/Zer0one/sm2-emu-libretro@6b282b94e781e20b2b6d522d0dcef5974b7a5d84": [
@@ -4711,6 +4821,7 @@
   "UI/Interop/FirmwareTypeExtensions.cs",
   "UI/Program.cs",
   "UI/Utilities/DependencyHelper.cs",
+  "UI/Utilities/FirmwareHelper.cs",
   "UI/ViewModels/CheatDatabaseViewModel.cs",
   "Utilities/FolderUtilities.cpp"
  ],
@@ -6926,6 +7037,7 @@
  ],
  "github.com/libretro/mupen64plus-libretro@ab8134ac90a567581df6de4fc427dd67bfad1b17": [
   "GLideN64/src/Config.cpp",
+  "GLideN64/src/GLideNHQ/TxHiResCache.cpp",
   "Makefile",
   "custom/GLideN64/mupenplus/CommonAPIImpl_mupenplus.cpp",
   "custom/GLideN64/mupenplus/Config_mupenplus.cpp",
@@ -9141,6 +9253,7 @@
   "UI/Interop/FirmwareTypeExtensions.cs",
   "UI/Program.cs",
   "UI/Utilities/DependencyHelper.cs",
+  "UI/Utilities/FirmwareHelper.cs",
   "UI/ViewModels/CheatDatabaseViewModel.cs",
   "Utilities/FolderUtilities.cpp",
   "Utilities/Video/LibrashaderUtilities.h",
@@ -10187,6 +10300,30 @@
   "Resource/samcoupe.rom",
   "Resource/sp0256-al2.bin"
  ],
+ "github.com/simple64-vault/simple64@d8c969c7b932e3d76e6a25549d76348839dbaefd": [
+  "build.sh",
+  "mupen64plus-core/CMakeLists.txt",
+  "mupen64plus-core/src/api/config.c",
+  "mupen64plus-core/src/api/frontend.c",
+  "mupen64plus-core/src/api/m64p_types.h",
+  "mupen64plus-core/src/device/controllers/vru_controller.c",
+  "mupen64plus-core/src/device/pif/bootrom_hle.c",
+  "mupen64plus-core/src/device/pif/pif.c",
+  "mupen64plus-core/src/device/pif/pif.h",
+  "mupen64plus-core/src/device/r4300/interrupt.c",
+  "mupen64plus-core/src/main/main.c",
+  "mupen64plus-core/src/main/rom.c",
+  "mupen64plus-core/src/main/screenshot.c",
+  "mupen64plus-core/src/osal/files_unix.c",
+  "mupen64plus-core/src/osd/osd.h",
+  "parallel-rdp-standalone/parallel-rdp/rdp_renderer.cpp",
+  "simple64-gui/cheats.cpp",
+  "simple64-gui/interface/common.cpp",
+  "simple64-gui/main.cpp",
+  "simple64-gui/mainwindow.cpp",
+  "simple64-input-qt/configdialog.cpp",
+  "simple64-input-qt/main.cpp"
+ ],
  "github.com/simple64/simple64@d8c969c7b932e3d76e6a25549d76348839dbaefd": [
   "build.sh",
   "mupen64plus-core/CMakeLists.txt",
@@ -10341,6 +10478,12 @@
   "yabause/src/yabause.c"
  ],
  "github.com/teknogods/TeknoParrotUI@b75872addc1d5cce81a62f4c1468eab59e2d3cbe": [
+  "TeknoParrotUi.Common/EmulatorType.cs",
+  "TeknoParrotUi.Common/TeknoNaomiCatalog.cs",
+  "TeknoParrotUi.Common/TeknoNaomiLaunch.cs",
+  "TeknoParrotUi/MainWindow.xaml.cs"
+ ],
+ "github.com/thecrixux/TeknoParrotUI@b75872addc1d5cce81a62f4c1468eab59e2d3cbe": [
   "TeknoParrotUi.Common/EmulatorType.cs",
   "TeknoParrotUi.Common/TeknoNaomiCatalog.cs",
   "TeknoParrotUi.Common/TeknoNaomiLaunch.cs",
