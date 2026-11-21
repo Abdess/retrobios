@@ -14,7 +14,14 @@ import tarfile
 from datetime import datetime, timezone
 
 from ..retropie_modules import PLATFORM_FLAGS, module_enabled, module_fields
-from ..retropie_scraper import SOURCE_URL, core_name, fetch_archive, script_members
+from ..retropie_scraper import (
+    PACKAGE_SECTIONS,
+    SOURCE_URL,
+    core_name,
+    fetch_archive,
+    package_script,
+    script_members,
+)
 from . import BaseTargetScraper, target_cli
 
 PLATFORM_NAME = "retropie"
@@ -23,9 +30,6 @@ PLATFORM_NAME = "retropie"
 GITHUB_API_URL = (
     "https://api.github.com/repos/RetroPie/RetroPie-Setup/contents/scriptmodules"
 )
-# The sections the platform scraper reads: a standalone package missing here
-# is filtered out of every targeted pack.
-PACKAGE_DIRS = ("emulators", "libretrocores", "ports")
 
 ARCH_MAP: dict[str, str] = {
     "rpi1": "armv6",
@@ -66,12 +70,11 @@ class Scraper(BaseTargetScraper):
         modules: dict[str, str] = {}
         try:
             for relative, text in script_members(_fetch_archive(url)):
-                parts = relative.split("/")
-                if len(parts) == 3 and parts[0] == "scriptmodules" and parts[1] in PACKAGE_DIRS:
-                    modules[f"{parts[1]}/{parts[2]}"] = text
+                if name := package_script(relative):
+                    modules[name] = text
         except tarfile.TarError as exc:
             raise RuntimeError(f"{url}: {exc}") from exc
-        for section in PACKAGE_DIRS:
+        for section in PACKAGE_SECTIONS:
             if not any(name.startswith(f"{section}/") for name in modules):
                 raise RuntimeError(f"no scriptmodules under {section}/ in {url}")
         return dict(sorted(modules.items()))

@@ -19,6 +19,7 @@ import urllib.error
 from pathlib import Path
 from unittest import mock
 
+from scripts.scraper import retropie_scraper
 from scripts.scraper.retropie_modules import PLATFORM_FLAGS, module_enabled
 from scripts.scraper.targets import (
     batocera_targets_scraper,
@@ -709,6 +710,25 @@ class RetroPieModuleFlags(unittest.TestCase):
         )
         self.assertEqual(targets["x86_64"]["cores"], ["beetle_psx", "dosbox", "dosbox-staging"])
 
+    def test_platform_and_targets_select_the_same_packages(self):
+        # A section the platform list gains reaches every target list too,
+        # or --target filters its systems out of the pack without a word.
+        modules = {
+            "emulators/dosbox.sh": 'rp_module_id="dosbox"',
+            "libretrocores/lr-mgba.sh": 'rp_module_id="lr-mgba"',
+            "ports/openbor.sh": 'rp_module_id="openbor"',
+            "supplementary/runcommand.sh": 'rp_module_id="runcommand"',
+        }
+        archive = _retropie_tarball(modules)
+        sections = (*retropie_scraper.PACKAGE_SECTIONS, "supplementary")
+        with mock.patch.object(retropie_scraper, "PACKAGE_SECTIONS", sections), \
+                mock.patch.object(retropie_targets_scraper, "_fetch_archive", lambda _url: archive):
+            platform = retropie_scraper.Scraper(url="unused").module_ids(archive)
+            targets = retropie_targets_scraper.Scraper(revision="abc").fetch_targets()
+        listed = {retropie_scraper.core_name(module_id) for module_id in platform}
+        self.assertIn("runcommand", listed)
+        self.assertEqual(set(targets["targets"]["x86_64"]["cores"]), listed)
+
     def test_a_section_without_scripts_stops_the_scrape(self):
         archive = _retropie_tarball({"emulators/dosbox.sh": 'rp_module_id="dosbox"'})
         with mock.patch.object(retropie_targets_scraper, "_fetch_archive", lambda _url: archive), \
@@ -751,7 +771,7 @@ class TargetsReadThePlatformRevision(unittest.TestCase):
         seen: list[str] = []
         archive = _retropie_tarball({
             f"{section}/x.sh": 'rp_module_id="lr-mgba"'
-            for section in retropie_targets_scraper.PACKAGE_DIRS
+            for section in retropie_targets_scraper.PACKAGE_SECTIONS
         })
 
         def fetch(url):

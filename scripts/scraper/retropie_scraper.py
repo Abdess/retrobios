@@ -30,7 +30,7 @@ from collections.abc import Iterator
 
 from .base_scraper import BaseScraper, BiosRequirement, fetch_branch_head, fetch_bytes
 from .retropie_launchers import SCRIPTMODULES
-from .retropie_launchers import SECTIONS as _SCRIPT_SECTIONS
+from .retropie_launchers import SECTIONS as PACKAGE_SECTIONS
 from .retropie_launchers import extract_launchers
 from .retropie_modules import module_fields
 
@@ -44,9 +44,20 @@ MAX_ARCHIVE = 64 * 1024 * 1024
 # SD image. The version a user runs is the one this script declares.
 _VERSION_FILE = "retropie_packages.sh"
 _VERSION = re.compile(r'^__version="([^"]+)"', re.MULTILINE)
-# Sections RetroPie does not build as emulators: setup helpers, themes,
-# drivers and the like carry no core.
-_PACKAGE_DIRS = _SCRIPT_SECTIONS
+
+
+def package_script(relative: str) -> str | None:
+    """section/filename of a package script, None for any other member.
+
+    Only the PACKAGE_SECTIONS hold packages: setup helpers, themes, drivers
+    and the like carry no core. The platform and target scrapers both select
+    scripts here, so a targeted pack never filters a package the platform
+    list names.
+    """
+    parts = relative.split("/")
+    if len(parts) == 3 and parts[0] == SCRIPTMODULES and parts[1] in PACKAGE_SECTIONS:
+        return f"{parts[1]}/{parts[2]}"
+    return None
 
 
 def core_name(module_id: str) -> str:
@@ -107,13 +118,9 @@ class Scraper(BaseScraper):
         for relative, text in script_members(raw):
             parts = relative.split("/")
             is_version_file = relative == _VERSION_FILE
-            is_package = (
-                len(parts) == 3
-                and parts[0] == "scriptmodules"
-                and parts[1] in _PACKAGE_DIRS
-            )
+            is_package = package_script(relative) is not None
             is_launch_script = (
-                len(parts) == 4 and parts[0] == SCRIPTMODULES and parts[1] in _SCRIPT_SECTIONS
+                len(parts) == 4 and parts[0] == SCRIPTMODULES and parts[1] in PACKAGE_SECTIONS
             )
             if is_package or is_launch_script:
                 self._scripts[relative] = text
