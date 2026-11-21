@@ -55,6 +55,7 @@ on:
       - "scripts/model/measurements.py"
       - "scripts/model/nodedup.py"
       - "scripts/model/platforms.py"
+      - "scripts/model/profilerepos.py"
       - "scripts/model/profiles.py"
       - "scripts/model/profilekinds.py"
       - "scripts/model/region.py"
