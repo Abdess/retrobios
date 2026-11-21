@@ -29,6 +29,7 @@ from pathlib import PurePosixPath
 from typing import Any, ClassVar
 
 from .configgen_launchers import Launcher as ConfiggenLauncher
+from .retropie_modules import module_field_lines
 
 SCRIPTMODULES = "scriptmodules"
 SECTIONS = ("emulators", "libretrocores", "ports")
@@ -68,7 +69,6 @@ _HEREDOC = re.compile(r"(?<!<)<<-?(?!<)\s*['\"]?(\w+)['\"]?")
 _VAR = re.compile(r"\$\{([A-Za-z_]\w*)(\[@\])?\}|\$([A-Za-z_]\w*|\d)")
 _SUBST = re.compile(r"\$\(([\w.+-]+(?:\$\{md_id\}|\$md_id)?)\)")
 _MD_ID_TEST = re.compile(r'^!?\s*\[\[\s*"\$md_id"\s*(==|!=)\s*"?([\w.+-]+)"?\s*\]\]$')
-_MODULE_FIELD = re.compile(r'^rp_module_(id|repo)="([^"]*)"', re.MULTILINE)
 _EXTENSION = re.compile(r"\.[A-Za-z0-9]{1,5}$")
 
 
@@ -207,10 +207,7 @@ class Scripts:
     @staticmethod
     def _parse(path: str, section: str, text: str) -> Module | None:
         lines = text.splitlines()
-        fields: dict[str, tuple[str, int]] = {}
-        for found in _MODULE_FIELD.finditer(text):
-            field_line = text.count("\n", 0, found.start()) + 1
-            fields.setdefault(found.group(1), (found.group(2), field_line))
+        fields = module_field_lines(text)
         if "id" not in fields:
             return None
         repo = fields.get("repo")

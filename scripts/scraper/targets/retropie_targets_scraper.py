@@ -9,12 +9,11 @@ to determine which platforms each package supports.
 
 from __future__ import annotations
 
-import re
 import sys
 import tarfile
 from datetime import datetime, timezone
 
-from ..retropie_modules import PLATFORM_FLAGS, module_enabled
+from ..retropie_modules import PLATFORM_FLAGS, module_enabled, module_fields
 from ..retropie_scraper import SOURCE_URL, core_name, fetch_archive, script_members
 from . import BaseTargetScraper, target_cli
 
@@ -38,24 +37,11 @@ ARCH_MAP: dict[str, str] = {
     "x86_64": "x86_64",
 }
 
-_MODULE_ID_RE = re.compile(r'rp_module_id\s*=\s*["\']([^"\']+)["\']')
-_MODULE_FLAGS_RE = re.compile(r'rp_module_flags\s*=\s*["\']([^"\']*)["\']')
-
-
 def _fetch_archive(url: str) -> bytes:
     try:
         return fetch_archive(url)
     except (ConnectionError, ValueError) as exc:
         raise RuntimeError(str(exc)) from exc
-
-
-def _parse_module(content: str) -> tuple[str | None, str]:
-    """Return (module_id, flags_string) from a scriptmodule file."""
-    id_match = _MODULE_ID_RE.search(content)
-    flags_match = _MODULE_FLAGS_RE.search(content)
-    module_id = id_match.group(1) if id_match else None
-    flags = flags_match.group(1) if flags_match else ""
-    return module_id, flags
 
 
 class Scraper(BaseTargetScraper):
@@ -99,13 +85,14 @@ class Scraper(BaseTargetScraper):
         platform_cores: dict[str, set[str]] = {p: set() for p in PLATFORM_FLAGS}
 
         for filename, content in modules.items():
-            module_id, flags = _parse_module(content)
+            fields = module_fields(content)
+            module_id = fields.get("id")
             if not module_id:
                 print(f"  warning: no rp_module_id in {filename}", file=sys.stderr)
                 continue
             # The platform scraper names the package the same way.
             for platform in PLATFORM_FLAGS:
-                if module_enabled(flags.split(), PLATFORM_FLAGS[platform]):
+                if module_enabled(fields.get("flags", "").split(), PLATFORM_FLAGS[platform]):
                     platform_cores[platform].add(core_name(module_id))
 
         print(f"  parsed {len(modules)} scriptmodules", file=sys.stderr)

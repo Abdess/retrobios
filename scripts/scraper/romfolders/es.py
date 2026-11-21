@@ -33,7 +33,7 @@ from collections.abc import Iterator
 
 from model.safeparse import parse_untrusted_xml, yaml_load_upstream
 
-from ..retropie_modules import PLATFORM_FLAGS, module_enabled
+from ..retropie_modules import PLATFORM_FLAGS, module_enabled, module_fields
 from . import Fetcher, SourceError, register
 
 
@@ -917,7 +917,6 @@ def recalbox(spec: dict, fetcher: Fetcher) -> list[dict]:
 # RetroPie
 
 
-_MODULE_FIELD = re.compile(r'^rp_module_(id|section|flags)="([^"]*)"', re.MULTILINE)
 _ADD_EMULATOR = re.compile(r'^\s*addEmulator\s+(\S+)\s+("[^"]*"|\S+)\s+("[^"]*"|\S+)')
 _LIST = re.compile(r'(?:local\s+)?(\w+)=\(([^)]*)\)')
 _LOOP = re.compile(r'for (\w+) in (.+?); do')
@@ -979,7 +978,7 @@ def retropie(spec: dict, fetcher: Fetcher) -> list[dict]:
             if not path.endswith(".sh") or path.count("/") != 2:
                 continue
             text = fetcher.text(key, path)
-            fields = dict(_MODULE_FIELD.findall(text))
+            fields = module_fields(text)
             if not module_enabled(fields.get("flags", "").split(), platform):
                 continue
             modules.append({"path": path, "id": fields.get("id", ""),

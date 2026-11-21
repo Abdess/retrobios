@@ -32,6 +32,7 @@ from .base_scraper import BaseScraper, BiosRequirement, fetch_branch_head, fetch
 from .retropie_launchers import SCRIPTMODULES
 from .retropie_launchers import SECTIONS as _SCRIPT_SECTIONS
 from .retropie_launchers import extract_launchers
+from .retropie_modules import module_fields
 
 PLATFORM_NAME = "retropie"
 
@@ -39,7 +40,6 @@ SOURCE_URL = "https://codeload.github.com/RetroPie/RetroPie-Setup/tar.gz/{rev}"
 GITHUB_REPO = "RetroPie/RetroPie-Setup"
 MAX_ARCHIVE = 64 * 1024 * 1024
 
-_MODULE_ID = re.compile(r'^rp_module_id="([^"]+)"', re.MULTILINE)
 # RetroPie updates in place from master, so its release tags stop at the last
 # SD image. The version a user runs is the one this script declares.
 _VERSION_FILE = "retropie_packages.sh"
@@ -119,13 +119,12 @@ class Scraper(BaseScraper):
                 self._scripts[relative] = text
             if not (is_version_file or is_package):
                 continue
-            match = (_VERSION if is_version_file else _MODULE_ID).search(text)
-            if not match:
-                continue
             if is_version_file:
-                self._version = match.group(1)
-            else:
-                found.add(match.group(1))
+                version = _VERSION.search(text)
+                if version:
+                    self._version = version.group(1)
+            elif module_id := module_fields(text).get("id"):
+                found.add(module_id)
 
         if not found:
             raise ValueError(f"{self.url}: no rp_module_id under {SCRIPTMODULES}/")

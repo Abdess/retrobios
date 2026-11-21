@@ -19,6 +19,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from scraper.retropie_modules import module_fields
 from scraper.retropie_scraper import script_members
 
 from .base_exporter import BaseExporter
@@ -33,7 +34,6 @@ ARCHIVE = "RetroPie-Setup.tar.gz"
 # sentence stops being something a reader uses, so the names are reported
 # instead of appended.
 
-_MODULE_ID = re.compile(r'rp_module_id="([^"]+)"')
 _MODULE_HELP = re.compile(r'rp_module_help="((?:[^"\\]|\\.)*)"')
 _FILENAME = re.compile(r"[A-Za-z0-9][\w.+-]*\.[A-Za-z0-9]{1,5}\b")
 # fs-uae's help reads "(e.g, kick13.rom)": e.g and i.e have a file name's shape.
@@ -286,11 +286,11 @@ class Exporter(BaseExporter[str]):
         for relative, text in originals.items():
             if not relative.startswith("scriptmodules/"):
                 continue
-            module = _MODULE_ID.search(text)
+            module_id = module_fields(text).get("id")
             help_text = _MODULE_HELP.search(text)
-            if not module or not help_text or "bios" not in help_text.group(1).lower():
+            if not module_id or not help_text or "bios" not in help_text.group(1).lower():
                 continue
-            found[relative] = (module.group(1), help_text.group(1))
+            found[relative] = (module_id, help_text.group(1))
         return found
 
     def render(
@@ -481,9 +481,8 @@ class Exporter(BaseExporter[str]):
     ) -> list[str]:
         issues: list[str] = []
         for relative, text in produced.items():
-            module = _MODULE_ID.search(text)
             help_text = _MODULE_HELP.search(text)
-            if not module:
+            if not module_fields(text).get("id"):
                 issues.append(f"{relative}: the module lost its id")
             if not help_text:
                 issues.append(f"{relative}: the help string is not closed")

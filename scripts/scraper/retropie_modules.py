@@ -1,8 +1,14 @@
-"""Which RetroPie scriptmodules a platform enables, as RetroPie-Setup decides."""
+"""How RetroPie-Setup reads a scriptmodule: the fields it declares, the platforms that enable it."""
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterable
+
+# scriptmodules/packages.sh rp_registerModule sources the script, so a
+# top-level assignment sets the field and the last one wins. RetroPie writes
+# each at the start of a line, in double quotes.
+_MODULE_FIELD = re.compile(r'^rp_module_(id|section|flags|repo)="([^"]*)"', re.MULTILINE)
 
 # scriptmodules/system.sh: set_platform_defaults starts each platform's flags
 # with its own name and getconf LONG_BIT (`x86_64`, `64bit`), then the cpu_*
@@ -23,6 +29,20 @@ PLATFORM_FLAGS: dict[str, set[str]] = {
     "x86": {"i686", "x86", "32bit", "gl", "vulkan", "x11"},
     "x86_64": {"x86_64", "x86", "64bit", "gl", "vulkan", "x11"},
 }
+
+
+def module_field_lines(text: str) -> dict[str, tuple[str, int]]:
+    """(value, line) of the id, section, flags and repo a scriptmodule
+    declares, by field name."""
+    return {
+        found.group(1): (found.group(2), text.count("\n", 0, found.start()) + 1)
+        for found in _MODULE_FIELD.finditer(text)
+    }
+
+
+def module_fields(text: str) -> dict[str, str]:
+    """The id, section, flags and repo a scriptmodule declares, by field name."""
+    return dict(_MODULE_FIELD.findall(text))
 
 
 def module_enabled(flags: Iterable[str], platform_flags: set[str]) -> bool:
