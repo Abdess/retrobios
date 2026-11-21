@@ -112,7 +112,9 @@ def review_finding(root: Path, key: str, status: str, reason: str,
         entry = entries[matches[0]]
         verdict = rules.Verdict(finding["rule"], finding["field"], finding["run_shows"],
                                 finding["statement"], tuple(finding["evidence"]))
-        evidence = rules.merge_evidence(entry.get("evidence"), verdict)
+        evidence = rules.merge_evidence(
+            entry.get("evidence"), verdict,
+            keep=lambda rid: mr.judged(root, finding["emulator"], rid))
         write_fields(path, matches[0], {**updates, "evidence": evidence})
     body = {key_: value for key_, value in finding.items() if key_ != "id"}
     line = mr.seal_line({**body, "found_at": now_iso(), "status": status, "reason": reason},

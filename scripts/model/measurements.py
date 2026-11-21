@@ -84,6 +84,30 @@ def records_path(emulator: str) -> str:
     return f"{RECORDS_DIR}/{emulator}.jsonl"
 
 
+def read_record(root: Path, emulator: str, rid: str | None) -> dict | None:
+    """A record by its id, or the record that supersedes it: a run
+    judged again offline is read as judged last."""
+    if not rid:
+        return None
+    path = root / records_path(emulator)
+    if not path.is_file():
+        return None
+    records = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+    by_id = {r["id"]: r for r in records}
+    successor = {r["supersedes"]: r["id"] for r in records if r.get("supersedes")}
+    seen = set()
+    while rid in successor and rid not in seen:
+        seen.add(rid)
+        rid = successor[rid]
+    return by_id.get(rid)
+
+
+def judged(root: Path, emulator: str, rid: str) -> bool:
+    """True for a record the boot oracle judged: only those prove a field."""
+    record = read_record(root, emulator, rid)
+    return record is not None and record.get("record_version", 0) >= 4
+
+
 # The campaign's own files beside the records: append-only like them, one
 # line per finding, per pass or per pack probe, each line hashed to its id.
 # No profile takes these names (tests/test_campaign.py checks it).

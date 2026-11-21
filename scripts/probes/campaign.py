@@ -513,26 +513,7 @@ class Campaign:
         self.settle(unit.emulator, content, core, index, entry, [verdict])
 
     def read_record(self, emulator: str, rid: str | None) -> dict | None:
-        """A record by its id, or the record that supersedes it: a run
-        judged again offline is read as judged last."""
-        if not rid:
-            return None
-        path = self.paths.root / mr.records_path(emulator)
-        if not path.is_file():
-            return None
-        records = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
-        by_id = {r["id"]: r for r in records}
-        successor = {r["supersedes"]: r["id"] for r in records if r.get("supersedes")}
-        seen = set()
-        while rid in successor and rid not in seen:
-            seen.add(rid)
-            rid = successor[rid]
-        return by_id.get(rid)
-
-    def judged(self, emulator: str, rid: str) -> bool:
-        """True for a record the boot oracle judged: only those prove a field."""
-        record = self.read_record(emulator, rid)
-        return record is not None and record.get("record_version", 0) >= 4
+        return mr.read_record(self.paths.root, emulator, rid)
 
     @staticmethod
     def opened(record: dict, position: int) -> set[str]:
@@ -621,7 +602,7 @@ class Campaign:
                 if not agrees or (verdict.field not in fresh and verdict.field != "validation"):
                     updates[verdict.field] = verdict.value
                 evidence = rules.merge_evidence(fresh.get("evidence"), verdict,
-                                                keep=lambda rid: self.judged(emulator, rid))
+                                                keep=lambda rid: mr.judged(self.paths.root, emulator, rid))
                 if evidence != fresh.get("evidence"):
                     updates["evidence"] = evidence
                 if updates:

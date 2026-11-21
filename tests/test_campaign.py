@@ -989,6 +989,20 @@ class Findings(Workspace):
         for found in self.lines():
             self.assertEqual(list(Draft202012Validator(schema).iter_errors(found)), [])
 
+    def test_a_review_drops_evidence_from_before_the_oracle(self) -> None:
+        """Settle and review keep the same record ids: a record the boot
+        oracle never judged proves nothing on either path."""
+        self.c.settle("fake", self.content, self.core, 0, self.entry(), [self.contradicted()])
+        key = self.lines()[-1]["key"]
+        old = "2026-10-01-000000000003"
+        lines = self.root / mr.records_path("fake")
+        lines.parent.mkdir(parents=True, exist_ok=True)
+        lines.write_text(json.dumps({"id": old, "record_version": 3}) + "\n", encoding="utf-8")
+        profileedit.write_fields(self.profile, 0, {"evidence": {"validation": [old]}})
+        reports.review_finding(self.root, key, "applied", "the core logs the md5 (x.c:1)",
+                               {"on_mismatch": "warn"})
+        self.assertEqual(self.entry()["evidence"], {"validation": [self.RID]})
+
     def test_a_rejected_finding_stays_closed_on_the_same_run(self) -> None:
         verdict = self.contradicted()
         self.c.settle("fake", self.content, self.core, 0, self.entry(), [verdict])
