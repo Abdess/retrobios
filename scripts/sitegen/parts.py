@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import json
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from pathlib import Path
+from typing import TypeVar
 
 from core.paths import REPO_ROOT
 from sitegen import starlight as sitestarlight
@@ -83,20 +84,58 @@ def character_count(lines: list[str]) -> int:
     return sum(len(line) + 1 for line in lines)
 
 
+_T = TypeVar("_T")
+
+
+def weighted_runs(items: Sequence[_T], budget: float, sizes: Sequence[float]) -> list[list[_T]]:
+    """Items in runs of at most ``budget``, in order, ``sizes`` giving each
+    item's weight. An item heavier than the budget gets a run of its own."""
+    runs: list[list[_T]] = [[]]
+    size: float = 0
+    for item, weight in zip(items, sizes):
+        if runs[-1] and size + weight > budget:
+            runs.append([])
+            size = 0
+        runs[-1].append(item)
+        size += weight
+    return runs
+
+
+def even_runs(
+    items: Sequence[_T], sizes: Sequence[int], count: int, ceiling: int | None = None
+) -> list[list[_T]]:
+    """Items in at most ``count`` runs, each near the mean: cut at a budget,
+    the last run took what the others left. The share grows from the mean,
+    never past ``ceiling``, until ``count`` runs hold everything."""
+    share = -(-sum(sizes) // count)
+    if ceiling is not None:
+        share = min(share, ceiling)
+    runs = weighted_runs(items, share, sizes)
+    while len(runs) > count:
+        share += max(1, share // 50)
+        if ceiling is not None:
+            share = min(share, ceiling)
+        runs = weighted_runs(items, share, sizes)
+    return runs
+
+
 def blocks_in_runs(blocks: list[list[str]], budget: int,
                     weigh: Callable[[list[str]], float] = character_count) -> list[list[str]]:
     """Blocks (table rows, folded lists) in runs of at most ``budget``, by
     default in characters, a block never cut."""
-    runs: list[list[str]] = [[]]
-    size: float = 0
-    for block in blocks:
-        weight = weigh(block)
-        if runs[-1] and size + weight > budget:
-            runs.append([])
-            size = 0
-        runs[-1].extend(block)
-        size += weight
-    return runs
+    runs = weighted_runs(blocks, budget, [weigh(block) for block in blocks])
+    return [[line for block in run for line in block] for run in runs]
+
+
+def part_stems(stem: str, count: int) -> list[str]:
+    """The page names of a list cut in ``count`` parts: the first keeps the stem."""
+    return [stem + (f"-{n}" if n > 1 else "") for n in range(1, count + 1)]
+
+
+def part_links(stems: list[str], here: str | None = None) -> str:
+    """Every part linked, ``here`` named without a link."""
+    return ", ".join(f"[part {i}]({other}.md)" if other != here else f"part {i}"
+                     for i, other in enumerate(stems, 1))
 
 
 def parent_front_matter(parent: tuple[str, str] | None) -> list[str]:
@@ -118,7 +157,7 @@ def list_pages(
     went, as the page it left says it. ``parent`` (label, site path) is the
     page the parts belong to, for the breadcrumb."""
     runs = blocks_in_runs(blocks, budget)
-    stems = [stem + (f"-{n}" if n > 1 else "") for n in range(1, len(runs) + 1)]
+    stems = part_stems(stem, len(runs))
     for n, (here, run) in enumerate(zip(stems, runs), 1):
         part = f" (part {n} of {len(runs)})" if len(runs) > 1 else ""
         # The page description is the opening of the intro: parts sharing
@@ -127,11 +166,9 @@ def list_pages(
         moved[here] = "\n".join([
             "---", "level: reference", *parent_front_matter(parent), "---", "",
             f"# {title}{part}", "", opening, "",
-            *([", ".join(f"[part {i}]({other}.md)" if other != here else f"part {i}"
-                         for i, other in enumerate(stems, 1)), ""] if len(runs) > 1 else []),
+            *([part_links(stems, here), ""] if len(runs) > 1 else []),
             *head, *run, "", date_line(),
         ]) + "\n"
     if len(stems) == 1:
         return f"[a page of their own]({stems[0]}.md)"
-    return "pages of their own: " + ", ".join(
-        f"[part {i}]({other}.md)" for i, other in enumerate(stems, 1))
+    return "pages of their own: " + part_links(stems)

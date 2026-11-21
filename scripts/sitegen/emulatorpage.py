@@ -54,7 +54,7 @@ from sitegen.render import (
     record_emulator_cards,
 )
 from sitegen.sources import source_ref_markdown, link_prose_citations, revision_markdown
-from sitegen.startwith import card_runs
+from sitegen.parts import even_runs, weighted_runs
 from sitegen.structured import emulator_file_aliases
 
 
@@ -364,15 +364,11 @@ def emulator_parts(name: str, files: list, profile: dict | None = None,
     words = _entry_row_words(files, profile, available or (lambda _f: True))
     sizes = [words[i] for i in order]
     ceiling = max(EMULATOR_PART_WORDS, max(sizes))
-    count = max(len(card_runs(order, ceiling, sizes)), -(-len(files) // EMULATOR_CARDS_PER_PART))
+    count = max(len(weighted_runs(order, ceiling, sizes)), -(-len(files) // EMULATOR_CARDS_PER_PART))
     while True:
         # The fewest words a part can hold for the parts to be ``count``:
         # cut at the ceiling, the last part took what the others left.
-        share = min(-(-sum(sizes) // count), ceiling)
-        runs = card_runs(order, share, sizes)
-        while len(runs) > count:
-            share = min(share + max(1, share // 50), ceiling)
-            runs = card_runs(order, share, sizes)
+        runs = even_runs(order, sizes, count, ceiling)
         if max(len(run) for run in runs) <= EMULATOR_CARDS_PER_PART:
             return [(f"{name}-files-{index}", run) for index, run in enumerate(runs, 1)]
         count += 1

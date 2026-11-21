@@ -31,13 +31,12 @@ from sitegen.decorate import DEMOTED_WEIGHT, SEARCH_WEIGHT
 from sitegen.fields import search_excluded
 from sitegen.home import next_block
 from sitegen.install import console_install_block, platform_display
-from sitegen.parts import parent_front_matter
+from sitegen.parts import character_count, even_runs, parent_front_matter, part_stems, weighted_runs
 from sitegen.render import count_text, slugify_anchor, console_href, record_console_pages
 from sitegen.startwith import (
     OTHER_ARCADE,
     cards_markdown,
     console_heading,
-    card_runs,
     romset_note,
     section_label,
     start_order,
@@ -289,10 +288,6 @@ class _ConsoleParts:
     lead: set[str]
 
 
-def _card_weight(card: list[str]) -> int:
-    return sum(len(line) + 1 for line in card)
-
-
 @dataclass
 class _MakerPages:
     """What a manufacturer's pages are built from, and how each part reads."""
@@ -401,19 +396,14 @@ class _MakerPages:
         # holds are its own.
         cards = self.cards_of(console, set(), by_name)
         with markup.using("mkdocs"):
-            sizes = [_card_weight(card) for _variant, card, _sha1 in self.cards_of(
+            sizes = [character_count(card) for _variant, card, _sha1 in self.cards_of(
                 console, set(), by_name)]
-        parts = card_runs(cards, self.budget, sizes)
+        parts = weighted_runs(cards, self.budget, sizes)
         if len(parts) < 2:
             return parts
         # Even parts: cut at budget, the PlayStation 2 was 137 cards
         # and 4. The same number of parts, each near the mean.
-        share = -(-sum(sizes) // len(parts))
-        even = card_runs(cards, share, sizes)
-        while len(even) > len(parts):
-            share += max(1, share // 50)
-            even = card_runs(cards, share, sizes)
-        return even
+        return even_runs(cards, sizes, len(parts))
 
     def moved(self, weights: dict[str, int], rendered: dict[str, float]) -> set[str]:
         """Every board has a page of its own. Then the heaviest sections move
@@ -485,7 +475,7 @@ class _MakerPages:
         board = self.boards.get(console)
         base = (f"arcade-{board_slug(board)}" if board
                 else f"{self.slug}-{slugify_anchor(console) or 'files'}")
-        stems = [base if index == 0 else f"{base}-{index + 1}" for index in range(len(parts))]
+        stems = part_stems(base, len(parts))
         clash = set(stems) & set(pages)
         if clash:
             raise RuntimeError(f"two system sections take one page: {sorted(clash)}")
@@ -548,7 +538,7 @@ def system_pages(
         measured = maker.all_sections()
         measured_text = maker.whole_page(measured)
     weights = {
-        console: sum(_card_weight(card) for _variant, card, _sha1 in cards)
+        console: sum(character_count(card) for _variant, card, _sha1 in cards)
         for console, cards in measured.items()
     }
     # An install box is a few lines of Markdown and about nine times that

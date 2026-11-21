@@ -13,7 +13,6 @@ from sitegen.cards import ROMSET_FAQ, emulator_display, romset_releases
 from sitegen.consolecards import (
     Card,
     START_WITH_NAMES,
-    Item,
     NO_PRIORITY,
     add_name,
     card_rank,
@@ -691,21 +690,6 @@ def cards_markdown(cards: list[Card]) -> list[str]:
         lines.extend(markup.details(
             "note", f"Variants ({len(variants)})", [line for card in variants for line in card]))
     return lines
-
-
-def card_runs(cards: list[Item], budget: int, sizes: list[int]) -> list[list[Item]]:
-    """Cards in runs of at most ``budget`` bytes, in order, ``sizes``
-    giving each card's weight."""
-    parts: list[list[Item]] = [[]]
-    size = 0
-    for index, card in enumerate(cards):
-        weight = sizes[index]
-        if parts[-1] and size + weight > budget:
-            parts.append([])
-            size = 0
-        parts[-1].append(card)
-        size += weight
-    return parts
 
 
 def console_heading(manufacturer: str, console: str, label: str = "") -> str:

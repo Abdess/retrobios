@@ -28,6 +28,8 @@ from sitegen.parts import (
     blocks_in_runs,
     character_count,
     parent_front_matter,
+    part_links,
+    part_stems,
 )
 from sitegen.render import (
     code_span,
@@ -427,8 +429,7 @@ def render_platform_systems(
             runs = [sec["head"] + _platform_file_list(run, sec["has_path"], anchor)
                     for run in blocks_in_runs([[row] for row in sec["rows"]],
                                                PLATFORM_PART_BUDGET, _page_share)]
-            stems = [f"{key}-{anchor}" + (f"-{n}" if n > 1 else "")
-                     for n in range(1, len(runs) + 1)]
+            stems = part_stems(f"{key}-{anchor}", len(runs))
             for n, (stem, run) in enumerate(zip(stems, runs), 1):
                 part = f" (part {n} of {len(runs)})" if len(runs) > 1 else ""
                 # A console query landed here with no way to the console's
@@ -440,9 +441,7 @@ def render_platform_systems(
                     f"Part of the [{display} page]({key}.md#{anchor}), whose other systems "
                     f"are listed there. Each file below is as {display} declares it, with "
                     "its status in the pack.",
-                    *([""] + [", ".join(
-                        f"[part {i}]({other}.md)" if other != stem else f"part {i}"
-                        for i, other in enumerate(stems, 1))] if len(runs) > 1 else []),
+                    *(["", part_links(stems, stem)] if len(runs) > 1 else []),
                     "", "## Files", "", *markup.details("note", ROLE_LEGEND_TITLE, [ROLE_LEGEND]),
                     *search_excluded(run),
                     "", date_line(),
@@ -452,8 +451,7 @@ def render_platform_systems(
             tag = "OK" if ok_count == total else count_text(total - ok_count, "issue")
             count = f"{count_text(total, 'file')} ({tag})"
             lines.extend([
-                f"[{count}]({stems[0]}.md)" if len(stems) == 1 else f"{count}: " + ", ".join(
-                    f"[part {i}]({stem}.md)" for i, stem in enumerate(stems, 1)),
+                f"[{count}]({stems[0]}.md)" if len(stems) == 1 else f"{count}: " + part_links(stems),
                 "",
             ])
             continue
