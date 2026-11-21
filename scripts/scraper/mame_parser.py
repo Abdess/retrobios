@@ -15,6 +15,8 @@ from pathlib import Path
 
 from core.lines import LineIndex
 
+from .clex import DriverSourceError, blank_comments, call_span
+
 # Macros that declare a machine entry. GAMEL is GAME plus a layout and is
 # the only suffixed form MAME declares (src/emu/gamedrv.h): a BIOS root that
 # ships a layout, such as gq863 or aristmk5, is written with it.
@@ -73,54 +75,6 @@ _ROM_BIOS = re.compile(r"ROM_BIOS\s*\(\s*(\d+)\s*\)")
 _OPTIONAL = re.compile(r"\bROM_OPTIONAL\b|\bROMX?_LOAD\w*_OPTIONAL\b")
 
 
-def strip_comments(source: str) -> str:
-    """Remove C block and line comments, preserving string and char literals.
-
-    Drivers disable a flag by commenting it out inside the macro call, as in
-    MACHINE_IMPERFECT_SOUND /*| MACHINE_IS_BIOS_ROOT*/. A plain substring test
-    on the raw text reads those as active.
-    """
-    out: list[str] = []
-    i, end = 0, len(source)
-
-    while i < end:
-        ch = source[i]
-
-        if ch in ('"', "'"):
-            quote = ch
-            out.append(ch)
-            i += 1
-            while i < end:
-                out.append(source[i])
-                if source[i] == "\\":
-                    i += 2
-                    if i - 1 < end:
-                        out.append(source[i - 1])
-                    continue
-                if source[i] == quote:
-                    i += 1
-                    break
-                i += 1
-            continue
-
-        if ch == "/" and i + 1 < end:
-            if source[i + 1] == "*":
-                closing = source.find("*/", i + 2)
-                i = end if closing == -1 else closing + 2
-                out.append(" ")
-                continue
-            if source[i + 1] == "/":
-                newline = source.find("\n", i + 2)
-                i = end if newline == -1 else newline
-                out.append(" ")
-                continue
-
-        out.append(ch)
-        i += 1
-
-    return "".join(out)
-
-
 def find_bios_root_sets(source: str, filename: str) -> dict[str, dict]:
     """Find machine entries flagged as BIOS root sets.
 
@@ -129,21 +83,17 @@ def find_bios_root_sets(source: str, filename: str) -> dict[str, dict]:
     """
     results: dict[str, dict] = {}
     lines = LineIndex(source)
+    # Drivers disable a flag by commenting it out inside the macro call, as
+    # in MACHINE_IMPERFECT_SOUND /*| MACHINE_IS_BIOS_ROOT*/: a substring test
+    # on the raw text reads those as active. Blanking keeps every offset.
+    code = blank_comments(source)
 
-    for match in MACHINE_MACROS.finditer(source):
-        start = match.end() - 1  # position of opening paren
-        block_end = _find_closing_paren(source, start)
-        if block_end == -1:
+    for match in MACHINE_MACROS.finditer(code):
+        try:
+            args, block_end = call_span(code, match.end())
+        except DriverSourceError:
             continue
-
-        block = strip_comments(source[start : block_end + 1])
-        if "MACHINE_IS_BIOS_ROOT" not in block:
-            continue
-
-        # Extract set name: first arg after the opening paren
-        inner = block[1:]  # skip opening paren
-        args = _split_macro_args(inner)
-        if not args:
+        if "MACHINE_IS_BIOS_ROOT" not in code[match.end() : block_end]:
             continue
 
         # The set name position varies by macro type
@@ -319,67 +269,6 @@ def _expand_macros(block: str, macros: dict[str, str], depth: int = 5) -> str:
     return block
 
 
-def _find_closing_paren(source: str, start: int) -> int:
-    """Find the matching closing paren for source[start] which must be '('."""
-    depth = 0
-    i = start
-    while i < len(source):
-        ch = source[i]
-        if ch == "(":
-            depth += 1
-        elif ch == ")":
-            depth -= 1
-            if depth == 0:
-                return i
-        elif ch == '"':
-            i += 1
-            while i < len(source) and source[i] != '"':
-                i += 1
-        i += 1
-    return -1
-
-
-def _split_macro_args(inner: str) -> list[str]:
-    """Split macro arguments respecting nested parens and strings."""
-    args: list[str] = []
-    depth = 0
-    current: list[str] = []
-
-    i = 0
-    while i < len(inner):
-        ch = inner[i]
-        if ch == '"':
-            current.append(ch)
-            i += 1
-            while i < len(inner) and inner[i] != '"':
-                current.append(inner[i])
-                i += 1
-            if i < len(inner):
-                current.append(inner[i])
-        elif ch == "(":
-            depth += 1
-            current.append(ch)
-        elif ch == ")":
-            if depth == 0:
-                args.append("".join(current))
-                break
-            depth -= 1
-            current.append(ch)
-        elif ch == "," and depth == 0:
-            args.append("".join(current))
-            current = []
-        else:
-            current.append(ch)
-        i += 1
-
-    if current:
-        remaining = "".join(current).strip()
-        if remaining:
-            args.append(remaining)
-
-    return args
-
-
 def _parse_rom_entries(block: str, keep_no_dump: bool = False) -> list[dict]:
     """Parse ROM entries from a ROM block (content between ROM_START and ROM_END).
 
@@ -417,10 +306,11 @@ def _parse_rom_entries(block: str, keep_no_dump: bool = False) -> list[dict]:
             context_start = m.start()
             # Find the opening paren of the ROM_LOAD macro
             paren_pos = block.find("(", context_start)
-            if paren_pos != -1:
-                close_pos = _find_closing_paren(block, paren_pos)
-                context_end = close_pos + 1 if close_pos != -1 else m.end() + 200
-            else:
+            try:
+                if paren_pos == -1:
+                    raise DriverSourceError("no call")
+                context_end = call_span(block, paren_pos + 1)[1]
+            except DriverSourceError:
                 context_end = m.end() + 200
             context = block[context_start : min(context_end, len(block))]
 

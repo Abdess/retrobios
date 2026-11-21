@@ -27,6 +27,7 @@ from typing import IO, NamedTuple
 from model.safeparse import yaml_load
 
 from ._hash_merge import generated_start
+from .clex import blank_comments
 from .listxml import LISTXML_CHUNK, attrs, iter_elements, rom_members
 from .mame_parser import _collect_rom_macros, _expand_macros, _parse_rom_entries
 
@@ -40,9 +41,6 @@ _SOFTWARE_LIST = re.compile(rb'<softwarelist\b[^>]*\bname="([^"]+)"')
 _ROM_START = re.compile(r"ROM_START\s*\(\s*(\w+)\s*\)")
 _ROM_END = re.compile(r"\bROM_END\b")
 _CRC = re.compile(r"CRC\s*\(\s*([0-9a-fA-F]+)\s*\)")
-_COMMENT_OR_LITERAL = re.compile(
-    r'//[^\n]*|/\*.*?\*/|"(?:\\.|[^"\\\n])*"|\'(?:\\.|[^\'\\\n])*\'', re.S
-)
 _ROM_NAME = re.compile(r"\bROM_NAME\s*\(\s*(\w+)\s*\)")
 _CLASS_END = re.compile(r"^\};", re.M)
 
@@ -408,22 +406,6 @@ def source_path(sourcefile: str) -> str:
     if sourcefile.startswith(("devices/", "emu/", "lib/")):
         return f"src/{sourcefile}"
     return f"src/mame/{sourcefile}"
-
-
-def blank_comments(text: str) -> str:
-    """Text with every comment blanked and its newlines kept.
-
-    Line numbers survive, so a block found in the result is cited at its
-    line in the file. A ROM_START written inside a comment is not a block.
-    """
-
-    def blank(match: re.Match[str]) -> str:
-        found = match.group(0)
-        if found[0] in "\"'":
-            return found
-        return re.sub(r"[^\n]", " ", found)
-
-    return _COMMENT_OR_LITERAL.sub(blank, text)
 
 
 def rom_region_label(text: str, set_name: str) -> str:

@@ -57,6 +57,7 @@ from core.cli import add_repo_inputs, run_cli
 from core.hashing import compute_hashes
 from core.upstream import parse_repo
 from .base_scraper import download
+from .clex import DriverSourceError, blank_comments, call_args, call_span
 from .listxml import Opener, attrs, iter_elements, open_listxml, rom_members
 from .romset_dat_importer import (
     MAME_LISTXML_URL,
@@ -312,30 +313,6 @@ def fbneo_sets(
 _TOKEN = re.compile(r'"(?:\\.|[^"\\])*"|[{},]|[^\s{},"]+')
 
 
-def _strip_comments(text: str) -> str:
-    """C source with comments removed, string literals kept intact."""
-    out: list[str] = []
-    i, n = 0, len(text)
-    while i < n:
-        c = text[i]
-        if c == '"':
-            j = i + 1
-            while j < n and text[j] != '"':
-                j += 2 if text[j] == "\\" else 1
-            out.append(text[i : j + 1])
-            i = j + 1
-        elif text.startswith("//", i):
-            i = text.find("\n", i)
-            i = n if i == -1 else i
-        elif text.startswith("/*", i):
-            i = text.find("*/", i + 2)
-            i = n if i == -1 else i + 2
-        else:
-            out.append(c)
-            i += 1
-    return "".join(out)
-
-
 def _initializer(text: str, array: str) -> list:
     """The brace initializer of ``const <type> <array>[] = {...}`` as nested
     lists of tokens, each element split on its top-level commas."""
@@ -376,7 +353,7 @@ def _string(token: object) -> str | None:
 
 def flycast_index(source: str) -> dict:
     """BIOS archive per NAOMI/Atomiswave game from naomi_roms.cpp."""
-    text = _strip_comments(source)
+    text = blank_comments(source)
     archive_of: dict[str, str] = {}
     for element in _initializer(text, "BIOS"):
         if not isinstance(element, list) or not element:
@@ -446,47 +423,6 @@ _CONDITION_TOKEN = re.compile(
 )
 _IDENTIFIER = re.compile(r"\b[A-Za-z_]\w*\b")
 _INCLUDE = re.compile(r'"([^"]+)"')
-
-
-class DriverSourceError(ValueError):
-    """The driver source does not have the shape the reader knows."""
-
-
-def _call_args(text: str, start: int) -> list[str]:
-    """Top-level arguments of the call whose opening parenthesis ends at
-    *start*, string literals kept whole."""
-    return _call_span(text, start)[0]
-
-
-def _call_span(text: str, start: int) -> tuple[list[str], int]:
-    """The arguments of a call and the offset just past its parenthesis."""
-    args: list[str] = []
-    current: list[str] = []
-    depth, i, n = 1, start, len(text)
-    while i < n:
-        c = text[i]
-        if c == '"':
-            j = i + 1
-            while j < n and text[j] != '"':
-                j += 2 if text[j] == "\\" else 1
-            current.append(text[i : j + 1])
-            i = j + 1
-            continue
-        if c == "(":
-            depth += 1
-        elif c == ")":
-            depth -= 1
-            if depth == 0:
-                args.append("".join(current).strip())
-                return args, i + 1
-        elif c == "," and depth == 1:
-            args.append("".join(current).strip())
-            current = []
-            i += 1
-            continue
-        current.append(c)
-        i += 1
-    raise DriverSourceError("unterminated macro call")
 
 
 def _condition_value(expr: str, defines: dict[str, str], depth: int = 0) -> int:
@@ -590,7 +526,7 @@ class _Preprocessor:
         self, path: str, text: str, defines: dict[str, str],
         local: dict[str, tuple[list[str] | None, str]] | None, seen: set[str],
     ) -> str:
-        text = _strip_comments(text).replace("\\\r\n", " ").replace("\\\n", " ")
+        text = blank_comments(text, keep_lines=False).replace("\\\r\n", " ").replace("\\\n", " ")
         out: list[str] = []
         # Each level: (enclosing level active, a branch already taken, this branch active).
         stack: list[tuple[bool, bool, bool]] = []
@@ -700,7 +636,7 @@ def _expand_declarations(text: str, local: dict[str, tuple[list[str] | None, str
         if match.start() < position:
             continue
         params, body = writers[match.group(1)]
-        args, end = _call_span(text, match.end())
+        args, end = call_span(text, match.end())
         if len(args) != len(params):
             raise DriverSourceError(f"{match.group(1)} called with {len(args)} arguments")
         values = dict(zip(params, args))
@@ -726,7 +662,7 @@ def _holds_roms(
     seen: frozenset[str] = frozenset(),
 ) -> bool:
     for match in _ROM_LOAD.finditer(body):
-        if _dumped(_call_args(body, match.end())):
+        if _dumped(call_args(body, match.end())):
             return True
     # A ROM list shared through a macro of the same file (a BIOS
     # block every game of the board pulls in).
@@ -753,7 +689,7 @@ def _read_driver(
             match.group(1), (_holds_roms(body, local, known), bool(_DISK_IMAGE.search(body)))
         )
     for match in _GAME_MACRO.finditer(text):
-        args = _call_args(text, match.end())
+        args = call_args(text, match.end())
         if len(args) < 9:
             raise DriverSourceError(f"{path}: {match.group(1)} with {len(args)} arguments")
         name, parent = args[1], args[2]

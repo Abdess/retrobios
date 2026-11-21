@@ -403,5 +403,25 @@ class TestParseMameSourceTree(unittest.TestCase):
             self.assertEqual(results, {})
 
 
+class TestCSourceLexer(unittest.TestCase):
+    """One reader of C comments and macro calls for every driver scraper."""
+
+    def test_a_char_literal_quote_opens_no_string(self) -> None:
+        from scripts.scraper.clex import blank_comments
+
+        text = "c = '\"';  /* ROM_START( fake ) */\nx"
+        self.assertNotIn("ROM_START", blank_comments(text))
+        self.assertEqual(len(blank_comments(text)), len(text))
+        self.assertEqual(blank_comments("a/*x\ny*/b", keep_lines=False), "a b")
+
+    def test_an_escaped_quote_does_not_end_the_call(self) -> None:
+        from scripts.scraper.clex import call_span
+
+        text = 'GAME(1990, foo, "a\\"b)", 0) tail'
+        self.assertEqual(call_span(text, 5), (["1990", "foo", '"a\\"b)"', "0"], 27))
+        root = 'GAME(1990, foo, 0, m, i, d, ROT0, "a\\"b)", "n", MACHINE_IS_BIOS_ROOT)'
+        self.assertIn("foo", find_bios_root_sets(root, "x.cpp"))
+
+
 if __name__ == "__main__":
     unittest.main()
