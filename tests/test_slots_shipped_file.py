@@ -28,6 +28,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 MAME_ADAM = "bios/Arcade/MAME/adam_fdc.zip"
 MSX_DISK = "bios/Microsoft/MSX/DISK.ROM"
+COCO_DISK = "bios/Tandy/CoCo/disk.rom"
 
 
 def _needs(*paths: str) -> None:
@@ -43,25 +44,23 @@ class SlotsReadTheShippedFile(unittest.TestCase):
         self.addCleanup(os.chdir, previous)
 
     def test_case_kept_where_the_filesystem_keeps_it(self):
-        _needs(MSX_DISK)
+        """RetroDECK runs on Linux: the MSX DISK.ROM and the CoCo disk.rom
+        are two files. Its own manifests declare DISK.ROM for MSX and PC-88
+        too, a collision of the same name, which stays. Only the folded
+        pairing with disk.rom must not."""
+        _needs(MSX_DISK, COCO_DISK)
         db = load_database("database.json")
         config = load_platform_config("retrodeck")
         self.assertFalse(config.get("case_insensitive_fs"))
-        listed = {
-            path
-            for collision in collisions.find_collisions(config, db)
-            for path in collision.resolved
-        }
-        self.assertNotIn(MSX_DISK, listed)
 
+        def paired(cfg: dict) -> bool:
+            return any({MSX_DISK, COCO_DISK} <= set(collision.resolved)
+                       for collision in collisions.find_collisions(cfg, db))
+
+        self.assertFalse(paired(config))
         folded = copy.deepcopy(config)
         folded["case_insensitive_fs"] = True
-        listed = {
-            path
-            for collision in collisions.find_collisions(folded, db)
-            for path in collision.resolved
-        }
-        self.assertIn(MSX_DISK, listed)
+        self.assertTrue(paired(folded))
 
     def test_profile_judged_against_the_builders_archive(self):
         _needs(MAME_ADAM)
