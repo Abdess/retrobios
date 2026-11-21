@@ -15,7 +15,7 @@ from model.guides import GUIDES, TERMINALS, install_command
 from model.platforms import load_platform_config
 from model.registry import list_release_pack_platforms
 from model.profiles import reads_own_files
-from resolve.layout import runs_standalone
+from resolve.layout import runs_standalone, standalone_layout_path
 from resolve.standalone import standalone_set
 from sitegen import markup
 from core.paths import REPO_ROOT
@@ -293,15 +293,12 @@ def standalone_place(name: str, profile: dict, entry: dict, key: str = "") -> st
     """
     if not isinstance(entry, dict) or not profile.get("data_root"):
         return ""
-    mode = entry.get("mode")
-    if mode == "libretro" or comes_with_app(entry):
+    if entry.get("mode") == "libretro" or comes_with_app(entry):
         return ""
     excluded = _folder_only(name, entry)
     if "*" in excluded or (key in excluded if key else excluded):
         return ""
-    if profile.get("type") == "standalone" or mode == "standalone":
-        return str(entry.get("standalone_path") or entry.get("path") or "")
-    return str(entry.get("standalone_path") or "")
+    return str(standalone_layout_path(entry, profile) or "")
 
 
 OS_LABELS = {"windows": "Windows", "macos": "macOS", "linux": "Linux",
