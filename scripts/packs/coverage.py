@@ -219,12 +219,13 @@ class _DeclarationResolver:
 
 def _resolve_declaration(
     file_entry: dict, sys_id: str, resolver: _DeclarationResolver,
-) -> tuple[str | None, str, str | None]:
+) -> tuple[str | None, str, str | None, dict]:
     """Resolve a declaration to the file the pack ships at its destination.
 
     When another declaration holds the destination, that one's file is
     returned and the evidence reset: the winner's hash match is not this
-    declaration's, which is hashed against the shipped file.
+    declaration's, which is hashed against the shipped file. The
+    declaration that holds the path comes last.
     """
     base_dest = resolver.base_dest
     bare = declared_destination(file_entry)
@@ -237,7 +238,22 @@ def _resolve_declaration(
         resolver.data_dir_registry, resolver.slot_overrides, resolver.mode,
         resolver.platform_profiles,
     )
-    return local_path, "" if held_by else resolve_status, held_by
+    return local_path, "" if held_by else resolve_status, held_by, winner
+
+
+def _expects(entry: dict) -> str:
+    """The first hash a declaration names, as the message quotes it."""
+    return next(
+        (f" ({h} {str(entry[h]).split(',')[0]})"
+         for h in ("sha1", "md5", "crc32") if entry.get(h)),
+        "",
+    )
+
+
+def _side(sys_id: str, entry: dict) -> str:
+    """One declaration named by the platform's own system, or its component."""
+    native = entry.get("native_system") or entry.get("component")
+    return f"{sys_id} ({native})" if native else sys_id
 
 
 def _twin_unmet(
@@ -246,6 +262,7 @@ def _twin_unmet(
     file_entry: dict | None = None,
     sys_id: str = "",
     destination: str = "",
+    holder: dict | None = None,
 ) -> bool:
     """Mark a declaration unmet at a path another declaration holds.
 
@@ -253,21 +270,25 @@ def _twin_unmet(
     This declaration's failure is reported, never folded into the
     destination's status. The message names the path, both systems and
     what this declaration expects: "is not met at the path coco holds"
-    named neither the path nor the file wanted there.
+    named neither the path nor the file wanted there. Two declarations of
+    one system are told apart by the platform's own system (RetroDECK
+    declares decocass.zip for MAME and for FBNeo, both arcade here), and by
+    the hash the holder names when that is the same too (its three
+    64DD_IPL.bin revisions).
     """
     if held_by is None or result["status"] == Status.OK:
         return False
     entry = file_entry or {}
-    expects = next(
-        (f" ({h} {str(entry[h]).split(',')[0]})"
-         for h in ("sha1", "md5", "crc32") if entry.get(h)),
-        "",
-    )
-    owner = sys_id or "this"
+    expects = _expects(entry)
+    owner, other, held = sys_id or "this", held_by, ""
+    if owner == other and holder is not None:
+        owner, other = _side(owner, entry), _side(other, holder)
+        if owner == other:
+            held = _expects(holder)
     result["discrepancy"] = (
         f"{destination or result.get('name', '')} is declared for {owner}"
-        f" and for {held_by}. The {owner} declaration{expects} is not met at"
-        f" the path, which holds the {held_by} file"
+        f" and for {other}. The {owner} declaration{expects} is not met at"
+        f" the path, which holds the {other} file{held}"
     )
     # Read by reports that list entries: the destination itself is held, and
     # a count by destination does not include this one.
@@ -365,7 +386,7 @@ class _PlatformTally:
         destination = declared_destination(file_entry)
         if self.region_drops and destination in self.region_drops:
             return
-        local_path, resolve_status, held_by = _resolve_declaration(
+        local_path, resolve_status, held_by, holder = _resolve_declaration(
             file_entry, sys_id, self.resolver,
         )
         result, local_path = self._verdict(
@@ -393,7 +414,7 @@ class _PlatformTally:
             self.packed_order.append((sys_id, self.run.full(destination), local_path))
             self.shipped_keys.add(_dest_key(file_entry, sys_id))
         if _twin_unmet(
-            result, held_by, file_entry, sys_id, self.run.full(destination),
+            result, held_by, file_entry, sys_id, self.run.full(destination), holder,
         ):
             return
         self._aggregate(sys_id, file_entry, destination, result)
