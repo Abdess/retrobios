@@ -33,7 +33,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from core import upstream
-from profiling.repos import pin_field, resolve_pin
+from model.profilerepos import pin_field
+from profiling.repos import resolve_pin
 
 KINDS = ("file", "tag", "alias", "package", "none", "unverified")
 # Values copied from a .info or a branch name, which name no version.

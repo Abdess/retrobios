@@ -24,8 +24,14 @@ from model.sourceref import (
     source_ref_values,
     split_source_ref,
 )
+from model.profilerepos import (
+    REPOSITORY_FIELDS,
+    declared_pin,
+    declared_repositories,
+    pin_field,
+)
 from model.sourcerevision import parse_source
-from sitegen.render import by_mode, escape_tags
+from sitegen.render import escape_tags
 
 
 def _repo_pins(profile: dict, field: str, label: str) -> list[tuple[str, str, str]]:
@@ -35,32 +41,18 @@ def _repo_pins(profile: dict, field: str, label: str) -> list[tuple[str, str, st
     and the revision by build mode. Reading them apart would pin a libretro
     fork to the standalone revision and produce a permalink into a tree that
     never held the cited line. Each tuple is (url, pin, source_commit
-    fallback for that same mode).
+    fallback for that same mode). A mirror is pinned by source_commit.
     """
-    raw = profile.get(field, "")
-    pin_field = profile.get(f"{field}_commit") or ""
-    source_field = profile.get("source_commit") or ""
-
-    if not isinstance(raw, dict):
-        if not raw:
-            return []
-        return [
-            (
-                str(raw),
-                by_mode(pin_field, label),
-                by_mode(source_field, label),
-            )
-        ]
-
+    declared = [(mode, url) for name, mode, url in declared_repositories(profile)
+                if name == field]
     # The requested build mode first, so it wins when several repositories
     # would otherwise be equally good candidates.
-    ordered = ([label] if label and label in raw else []) + [
-        key for key in raw if key != label
-    ]
+    declared.sort(key=lambda pair: bool(pair[0]) and pair[0] != label)
+    pinned_by = pin_field(field)
     return [
-        (str(raw[key]), by_mode(pin_field, key), by_mode(source_field, key))
-        for key in ordered
-        if raw.get(key)
+        (url, declared_pin(profile, pinned_by, mode or label)[0],
+         declared_pin(profile, "source", mode or label)[0])
+        for mode, url in declared
     ]
 
 # Forges the pages link into but upstream.py does not read from. Each is
@@ -110,7 +102,7 @@ def _forge_sources(profile: dict, label: str = "") -> list[tuple[upstream.Repo, 
     seen: set[tuple[str, str, str]] = set()
     source_repos: set[tuple[str, str]] = set()
 
-    for field in ("source", "upstream"):
+    for field in REPOSITORY_FIELDS:
         for value, pin, fallback in _repo_pins(profile, field, label):
             repo = browse_repo(value)
             if repo is None:
@@ -124,7 +116,7 @@ def _forge_sources(profile: dict, label: str = "") -> list[tuple[upstream.Repo, 
             if key not in seen:
                 candidates.append((repo, pin))
                 seen.add(key)
-            if field == "source":
+            if pin_field(field) == "source":
                 source_repos.add(repo_key)
     return candidates
 
@@ -269,7 +261,7 @@ def profile_trees(profile: dict) -> list[tuple[upstream.Repo, str]]:
     """Every repository and revision a page of the profile can link into."""
     found: list[tuple[upstream.Repo, str]] = []
     labels = {""} | {
-        str(mode) for field in ("source", "upstream", "source_commit", "upstream_commit")
+        str(mode) for field in (*REPOSITORY_FIELDS, "source_commit", "upstream_commit")
         if isinstance(profile.get(field), dict) for mode in profile[field]}
     for label in sorted(labels):
         for pair in _forge_sources(profile, label) + list(role_sources(profile, label).values()):
@@ -463,11 +455,11 @@ def role_label(profile: dict, role: str, path: str = "") -> str:
 def role_sources(profile: dict, label: str = "") -> dict[str, tuple[upstream.Repo, str]]:
     """The forge repository and pin behind each role a citation can name."""
     found: dict[str, tuple[upstream.Repo, str]] = {}
-    for field in ("source", "upstream"):
+    for field in REPOSITORY_FIELDS:
         for value, pin, _fallback in _repo_pins(profile, field, label):
             repo = browse_repo(value)
-            if repo is not None and pin and field not in found:
-                found[field] = (repo, pin)
+            if repo is not None and pin:
+                found.setdefault(pin_field(field), (repo, pin))
     return found
 
 

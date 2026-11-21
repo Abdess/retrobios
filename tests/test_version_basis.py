@@ -28,7 +28,7 @@ from profiling import resolver
 from profiling import yamledit
 from core import upstream
 from profiling import version_basis
-from profiling.repos import pin_field
+from model.profilerepos import pin_field
 from model.profiles import load_emulator_profiles
 from profiling.reports import ProfileReport
 from profiling.bump import bump_commit

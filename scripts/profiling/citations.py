@@ -16,7 +16,7 @@ import yaml
 from core import upstream
 from core.hashing import parse_hash_list
 from model.sourceref import RefPart, prose_runs, ref_prose_text, ref_role, source_ref_values
-from profiling.repos import declared_repositories
+from model.profilerepos import declared_repositories
 
 
 HASH_FIELDS = ("sha1", "md5", "crc32", "sha256", "known_hash_adler32")

@@ -287,6 +287,17 @@ class PerModeSourcePins(unittest.TestCase):
             [("vendor/emu", "c" * 40)],
         )
 
+    def test_a_mirror_is_read_at_the_source_commit_as_profile_sync_reads_it(self):
+        profile = {
+            "source": "https://github.com/gone/emu",
+            "source_mirror": "https://github.com/keeper/emu",
+            "source_commit": "d" * 40,
+        }
+        self.assertEqual(
+            [(repo.slug, pin) for repo, pin in _forge_sources(profile)],
+            [("gone/emu", "d" * 40), ("keeper/emu", "d" * 40)],
+        )
+
     def test_sqlite_export_accepts_a_per_mode_commit(self):
         from core.artifacts import json_text as _json_text
 

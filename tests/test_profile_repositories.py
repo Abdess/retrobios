@@ -19,7 +19,7 @@ from pathlib import Path
 import yaml
 
 from core import upstream
-from profiling.repos import declared_repositories
+from model.profilerepos import declared_repositories
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

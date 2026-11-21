@@ -13,7 +13,7 @@ from profiling.anchoring import PartResult, REBASE_STATUSES, REVIEW_STATUSES
 from profiling.citations import Citation, citation_key, collect_citations
 from profiling.proseedit import apply_prose_edits, run_after_moves, set_scalar
 from profiling.reports import EntryReport, ProfileReport, original_part, rendered_part
-from profiling.repos import declared_repositories
+from model.profilerepos import declared_repositories
 from profiling.yamledit import YamlWriteError, apply_edit, find_field_line, replace_field_line
 
 

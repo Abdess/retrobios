@@ -39,12 +39,12 @@ from profiling.citations import (
     symlink_target,
 )
 from profiling.reports import EntryReport, ProfileReport
+from model.profilerepos import declared_repositories
 from profiling.repos import (
     PIN,
     RepoView,
     reads_own_revision,
     build_revision,
-    declared_repositories,
     detect_pinned_tag,
     moved_repositories,
     resolve_through_gitlinks,

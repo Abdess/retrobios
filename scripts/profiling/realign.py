@@ -16,7 +16,7 @@ from model.sourceref import RefPart
 from profiling.anchoring import anchor_block
 from profiling.citations import Citation, citation_key, collect_citations, is_external_citation
 from profiling.proseedit import apply_prose_edits, run_after_moves
-from profiling.repos import declared_repositories
+from model.profilerepos import declared_repositories
 from profiling.yamledit import apply_edit
 
 

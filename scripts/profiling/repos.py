@@ -7,6 +7,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass, replace
 
 from core import upstream
+from model.profilerepos import declared_pin, declared_repositories, pin_field
 
 
 PIN = "pin"
@@ -44,12 +45,6 @@ def select_repo(profile: dict) -> upstream.Repo | None:
     return None
 
 
-def pin_field(field: str) -> str:
-    """The `<field>_commit` that pins a repository field. A mirror carries
-    the source's history, commits and branches alike: source_commit pins it."""
-    return "source" if field == "source_mirror" else field
-
-
 def resolve_pin(
     profile: dict, repo: upstream.Repo, cache_dir: str, offline: bool,
     field: str = "source", mode: str = "", branch: str | None = None,
@@ -61,14 +56,9 @@ def resolve_pin(
     A profile whose builds live in different repositories keys its pin by
     build mode, the way `ymir` keys `source` and `core_version`.
     """
-    pinned = profile.get(f"{field}_commit")
-    if isinstance(pinned, dict):
-        pinned = pinned.get(mode)
-        origin = f"{field}_commit[{mode}]"
-    else:
-        origin = f"{field}_commit"
+    pinned, origin = declared_pin(profile, field, mode)
     if pinned:
-        return str(pinned), origin
+        return pinned, origin
     date = str(profile.get("profiled_date") or "")
     if not date:
         return None, None
@@ -230,27 +220,6 @@ def _follow_fork_base(
         )
     return followed
 
-
-def declared_repositories(profile: dict) -> list[tuple[str, str, str]]:
-    """Every repository URL the profile declares, source before upstream.
-
-    `source` and `upstream` are usually plain strings. `ymir` keys them by
-    build mode instead, because its standalone and libretro builds live in
-    different repositories.
-
-    `source_mirror` comes last and is the only thing that keeps a profile
-    checkable once its forge is gone: yuzu and suyu answer 451, citron's
-    host stopped resolving. Being last, it never decides attribution while
-    a declared repository still answers.
-    """
-    urls: list[tuple[str, str, str]] = []
-    for field_name in ("source", "upstream", "source_mirror"):
-        value = profile.get(field_name)
-        if isinstance(value, dict):
-            urls.extend((field_name, str(k), str(v)) for k, v in value.items() if v)
-        elif value:
-            urls.append((field_name, "", str(value)))
-    return urls
 
 
 def branch_in_url(url: str) -> str | None:
