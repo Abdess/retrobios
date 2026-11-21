@@ -20,7 +20,7 @@ from pathlib import Path
 
 import yaml
 
-import validate_pr
+from resolve import reviewfiles
 from core import gitclone
 from resolve import review
 
@@ -209,7 +209,7 @@ class AnUnfetchedUpstreamIsFetched(unittest.TestCase):
             os.chdir(clone)
             try:
                 with mock.patch.object(gitclone, "PROJECT_URLS", (str(project),)):
-                    self.assertEqual(validate_pr.get_changed_files(), ["bios/new.bin"])
+                    self.assertEqual(reviewfiles.get_changed_files(), ["bios/new.bin"])
             finally:
                 os.chdir(cwd)
 

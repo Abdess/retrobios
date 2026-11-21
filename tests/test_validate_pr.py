@@ -16,7 +16,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import validate_pr
+from resolve import reviewfiles
 from resolve import review
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -61,7 +61,7 @@ class FileShapeChecks(_Fixture):
         self._bios_file("card/bios/sub/b.bin")
         (self.tmp / "empty").mkdir()
         self.assertEqual(
-            validate_pr.expand_folders(["card", "empty", "loose.bin"]),
+            reviewfiles.expand_folders(["card", "empty", "loose.bin"]),
             [str(Path("card/bios/a.bin")), str(Path("card/bios/sub/b.bin")), "empty", "loose.bin"],
         )
         result = review.validate_file("empty", None, EMPTY_HASHES)
@@ -174,10 +174,10 @@ class AFileOnlyACoreReadsIsKnown(_Fixture):
         # Copied under the declared name, never over a file, and only once.
         card = self._bios_file("card/B.BIN", missing)
         named = review.validate_file(card, db, EMPTY_HASHES, known)
-        self.assertEqual(validate_pr.place([named]), [named.destination])
+        self.assertEqual(reviewfiles.place([named]), [named.destination])
         self.assertEqual((self.tmp / named.destination).read_bytes(), missing)
         self.assertTrue((self.tmp / card).is_file())
-        self.assertEqual(validate_pr.place([named]), [])
+        self.assertEqual(reviewfiles.place([named]), [])
         unknown = review.validate_file(self._bios_file("card/x.bin"), db, EMPTY_HASHES, known)
         self.assertEqual((unknown.outcome, unknown.destination), ("unknown", ""))
         placed = review.validate_file(

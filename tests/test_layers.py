@@ -34,10 +34,9 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     # A campaign commits its findings the way the unattended jobs commit, and a
     # standalone probe lists an emulator's releases through the one GitHub reader.
     "probes": frozenset({"unattended", "scraper"}),
-    # A pass that wrote profiles rebuilds the site's record of cited source paths.
-    "profiling": frozenset({"sitegen"}),
-    # The MAME ref audit reads machine declarations as the MAME scraper parses them.
-    "profiling": frozenset({"scraper"}),
+    # A pass that wrote profiles rebuilds the site's record of cited source paths,
+    # and the MAME ref audit reads machine declarations as the MAME scraper parses them.
+    "profiling": frozenset({"sitegen", "scraper"}),
     "romrecipes": frozenset(),
     # The site prints the recipe counts and the dump-catalog coverage report
     # those two packages compute, serves the handheld launchers and prints the

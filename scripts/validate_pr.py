@@ -20,77 +20,15 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import shutil
 import sys
-from pathlib import Path
 
 
 sys.path.insert(0, os.path.dirname(__file__))
 from model.database import load_optional_database
 from core.cli import add_repo_inputs, require_directory
-
-try:
-    import yaml
-except ImportError:
-    yaml = None
-from core.gitclone import compare_base, git_lines
-from resolve.review import (
-    ValidationResult,
-    load_platform_hashes,
-    load_profile_hashes,
-    validate_file,
-)
-
-
-def get_changed_files() -> list[str]:
-    """BIOS files this checkout changes against the project's main line.
-
-    Committed changes are read against the project's main line: the remote
-    that names the project (upstream/<base> first, then origin/<base>), or
-    the project's main fetched when no remote does. Uncommitted and
-    untracked files count too,
-    since CONTRIBUTING has the file copied into bios/ before any commit.
-    A git that fails outright is an error, never "nothing changed".
-    """
-    changed: list[str] = []
-    base = compare_base()
-    committed = git_lines("diff", "--name-only", f"{base}...HEAD") if base else None
-    compared = committed is not None
-    changed.extend(committed or [])
-    staged = git_lines("diff", "--cached", "--name-only")
-    local = git_lines("diff", "--name-only")
-    untracked = git_lines("ls-files", "--others", "--exclude-standard", "--", "bios")
-    if staged is None and local is None and untracked is None:
-        raise RuntimeError("git cannot read this checkout")
-    for found in (staged, local, untracked):
-        changed.extend(found or [])
-    if not compared:
-        print(
-            "no upstream/ or origin/ main line to compare against, reading the "
-            "staged, modified and untracked files only",
-            file=sys.stderr,
-        )
-    return [f for f in dict.fromkeys(changed) if f.startswith("bios/") and os.path.isfile(f)]
-
-
-def expand_folders(paths: list[str]) -> list[str]:
-    """Each folder named replaced by the files under it, subfolders included.
-
-    A card's BIOS folder was refused as "Not a regular file", and the
-    contributor had to list its files by hand. A link inside the folder
-    stays listed, so it is refused like a named one, and an empty folder
-    stays as itself to be reported.
-    """
-    out: list[str] = []
-    for path in paths:
-        if not os.path.isdir(path) or os.path.islink(path):
-            out.append(path)
-            continue
-        found = sorted(
-            str(f) for f in Path(path).rglob("*") if f.is_symlink() or f.is_file()
-        )
-        out.extend(found or [path])
-    return out
+from resolve.review import load_platform_hashes, load_profile_hashes, validate_file
+from resolve.reviewfiles import expand_folders, get_changed_files, place
+from resolve.reviewreport import json_rows, markdown_report, text_lines
 
 
 def _files_to_validate(
@@ -113,28 +51,6 @@ def _files_to_validate(
     if not files and not args.json:
         print("No changed BIOS files detected")
     return files
-
-
-def place(results: list[ValidationResult]) -> list[str]:
-    """Copy each placeable file to its destination, never over a file.
-
-    The report named the folder of each file and left 40 copies from a card
-    to be made by hand, each .variants/ name retyped. The source is copied,
-    not moved: it is often a card or another tree the contributor keeps.
-    """
-    placed = []
-    for r in results:
-        if not (r.passed and r.destination and not r.outcome):
-            continue
-        target = Path(r.destination)
-        if target.exists():
-            print(f"not placed: {target} exists", file=sys.stderr)
-            continue
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(r.filepath, target)
-        placed.append(r.destination)
-        print(f"placed {r.filepath} at {r.destination}", file=sys.stderr)
-    return placed
 
 
 def main() -> None:
@@ -180,71 +96,20 @@ def main() -> None:
     platform_hashes = load_platform_hashes(args.platforms_dir, db)
     profile_hashes = load_profile_hashes(args.emulators_dir, db)
 
-    results = []
-    for f in files:
-        result = validate_file(f, db, platform_hashes, profile_hashes)
-        results.append(result)
-
-    all_passed = all(r.passed for r in results)
+    results = [validate_file(f, db, platform_hashes, profile_hashes) for f in files]
 
     if args.json:
-        output = [
-            {
-                "file": r.filepath,
-                "passed": r.passed,
-                # A file that failed, unread or refused, is not a new one.
-                "outcome": r.outcome or ("new" if r.passed else "failed"),
-                "destination": r.destination,
-                "sha1": r.sha1,
-                "md5": r.md5,
-                "size": r.size,
-                "checks": [{"status": s, "message": m} for s, m in r.checks],
-            }
-            for r in results
-        ]
-        print(json.dumps(output, indent=2))
+        print(json.dumps(json_rows(results), indent=2))
     elif args.markdown:
-        lines = ["## BIOS Validation Report", ""]
-        held = sum(r.outcome == "held" for r in results)
-        unknown = sum(r.outcome == "unknown" for r in results)
-        review = ", ".join(part for part in (
-            f"{held} already held" if held else "",
-            f"{unknown} not recognised" if unknown else "",
-        ) if part)
-        status = ("some checks failed" if not all_passed
-                  else f"no check failed, to review: {review}" if review
-                  else "all checks passed")
-        lines.append(f"**Status**: {status}")
-        lines.append("")
-
-        for r in results:
-            lines.append(r.to_markdown())
-            lines.append("")
-
-        print("\n".join(lines))
+        print(markdown_report(results))
     else:
-        for r in results:
-            print(f"\n[{r.status}] {r.filepath}")
-            if r.sha1:
-                print(f"  SHA1: {r.sha1}")
-                print(f"  MD5:  {r.md5}")
-                print(f"  Size: {r.size:,}")
-            for s, m in r.checks:
-                marker = (
-                    "ok"
-                    if s == "PASS"
-                    else "fail"
-                    if s == "FAIL"
-                    else "warn"
-                    if s == "WARN"
-                    else "info"
-                )
-                print(f"  [{marker}] {m}")
+        for line in text_lines(results):
+            print(line)
 
     if args.place:
         place(results)
 
-    if not all_passed:
+    if not all(r.passed for r in results):
         sys.exit(1)
 
 

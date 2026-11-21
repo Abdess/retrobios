@@ -56,7 +56,7 @@ class GitThatCannotAnswer(unittest.TestCase):
             proc = subprocess.run(
                 [sys.executable, "-c", (
                     f"import sys; sys.path.insert(0, {str(REPO_ROOT / 'scripts')!r}); "
-                    "import validate_pr; print(validate_pr.get_changed_files())"
+                    "from resolve import reviewfiles; print(reviewfiles.get_changed_files())"
                 )],
                 cwd=tmp, capture_output=True, text=True, timeout=60, check=False,
             )
@@ -86,14 +86,14 @@ class AProjectMainThatCannotBeFetched(unittest.TestCase):
                 cli.run_cli(worktree.project_base)
             self.assertEqual(ended.exception.code, 1)
             self.assertEqual(err.getvalue(), "ERROR: no main\n")
-            import validate_pr
+            from resolve import reviewfiles
             with self.assertRaises(RuntimeError):
-                validate_pr.get_changed_files()
+                reviewfiles.get_changed_files()
 
     def test_both_tools_compare_against_the_same_line(self):
-        import validate_pr
         from core import gitclone
         from profiling import worktree
+        from resolve import reviewfiles
 
         diffs: list[tuple[str, ...]] = []
 
@@ -105,9 +105,9 @@ class AProjectMainThatCannotBeFetched(unittest.TestCase):
 
         with mock.patch.object(gitclone, "project_main_line", return_value=None), \
                 mock.patch.object(gitclone, "git_lines", side_effect=lines), \
-                mock.patch.object(validate_pr, "git_lines", side_effect=lines):
+                mock.patch.object(reviewfiles, "git_lines", side_effect=lines):
             self.assertEqual(worktree.project_base(), "origin/main")
-            validate_pr.get_changed_files()
+            reviewfiles.get_changed_files()
         self.assertIn(("diff", "--name-only", "origin/main...HEAD"), diffs)
 
 
@@ -128,7 +128,7 @@ class ChangesNotYetCommittedAreRead(unittest.TestCase):
             proc = subprocess.run(
                 [sys.executable, "-c", (
                     f"import sys; sys.path.insert(0, {str(REPO_ROOT / 'scripts')!r}); "
-                    "import validate_pr; print(validate_pr.get_changed_files())"
+                    "from resolve import reviewfiles; print(reviewfiles.get_changed_files())"
                 )],
                 cwd=tmp, capture_output=True, text=True, timeout=60, check=False,
             )
@@ -151,9 +151,9 @@ class AForkPushedToItsOwnMain(unittest.TestCase):
         return subprocess.run(
             [sys.executable, "-c", (
                 f"import sys; sys.path.insert(0, {str(REPO_ROOT / 'scripts')!r}); "
-                "import validate_pr; from core import gitclone; "
+                "from resolve import reviewfiles; from core import gitclone; "
                 f"gitclone.PROJECT_URLS = ({project!r},); "
-                "print(validate_pr.get_changed_files())"
+                "print(reviewfiles.get_changed_files())"
             )],
             cwd=clone, capture_output=True, text=True, timeout=60, check=False,
         )
