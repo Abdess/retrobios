@@ -23,6 +23,7 @@ import tempfile
 import unittest
 import zipfile
 from pathlib import Path
+from typing import ClassVar
 
 
 from model import measurements as mr
@@ -82,7 +83,7 @@ class ImportDoesNoIO(unittest.TestCase):
 
 class CoreChoice(unittest.TestCase):
     def test_system_ids_compare_normalised(self) -> None:
-        config = {"systems": {"megacd": {}, "psx": {}}}
+        config: dict[str, dict[str, dict]] = {"systems": {"megacd": {}, "psx": {}}}
         self.assertEqual(packprobe.platform_system(config, "sega-mega-cd"), "megacd")
         self.assertIsNone(packprobe.platform_system(config, "sega-saturn"))
 
@@ -428,6 +429,10 @@ def collection_on_disk() -> bool:
 @unittest.skipUnless(collection_on_disk(), "the collection is not on disk")
 class RealLayouts(unittest.TestCase):
     """Both install paths, from this checkout, narrowed to PlayStation."""
+
+    work: ClassVar[Path]
+    pack: ClassVar[Path]
+    identity: ClassVar[dict]
 
     @classmethod
     def setUpClass(cls) -> None:
