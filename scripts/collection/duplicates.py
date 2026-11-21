@@ -66,14 +66,13 @@ def plan_group_removals(
 
     Records clone groups in *mame_clones* and returns the paths to remove.
     """
-    true_dupes_to_remove: list[str] = []
     # Separate by filename: same name = true duplicate, different name = clone
     by_name: dict[str, list[str]] = defaultdict(list)
     for p in paths:
         by_name[os.path.basename(p)].append(p)
 
     # True duplicates: same filename in multiple directories
-    true_dupes_to_remove = []
+    true_dupes_to_remove: list[str] = []
     for name_paths in by_name.values():
         if len(name_paths) > 1:
             name_paths.sort(key=path_priority)
@@ -92,32 +91,22 @@ def plan_group_removals(
         ]
         true_dupes_to_remove.extend(p for p in variants if p not in holders)
 
-    # Different filenames, same content: need special handling
+    # Different filenames, same content. Outside a MAME directory each name
+    # may be needed by a different emulator (64DD_IPL_US.n64, IPL_USA.n64)
+    # and all are kept. Zips that all sit under MAME/Arcade are device
+    # clones: one canonical stays, the clones go and the clone map records them.
     unique_names = sorted(by_name.keys())
-    if len(unique_names) > 1:
-        # Check if these are all in MAME/Arcade dirs AND all ZIPs
-        all_mame_zip = all(
-            any(_is_mame_dir(p) for p in name_paths)
-            for name_paths in by_name.values()
-        ) and all(n.endswith(".zip") for n in unique_names)
-        if all_mame_zip:
-            # MAME device clones: different ZIP names, same ROM content
-            # Keep one canonical, remove clones, record in clone map
-            canonical_name = min(unique_names, key=len)
-            clone_names = sorted(n for n in unique_names if n != canonical_name)
-            if clone_names:
-                mame_clones[canonical_name] = {
-                    "sha1": sha1,
-                    "clones": clone_names,
-                    "total_copies": sum(len(by_name[n]) for n in clone_names),
-                }
-                for clone_name in clone_names:
-                    for p in by_name[clone_name]:
-                        true_dupes_to_remove.append(p)
-        else:
-            # Non-MAME different names (e.g., 64DD_IPL_US.n64 vs IPL_USA.n64)
-            # Keep ALL: each name may be needed by a different emulator
-            # Only remove true duplicates (same name in multiple dirs)
-            pass
+    all_mame_zip = all(
+        any(_is_mame_dir(p) for p in name_paths) for name_paths in by_name.values()
+    ) and all(n.endswith(".zip") for n in unique_names)
+    if len(unique_names) > 1 and all_mame_zip:
+        canonical_name = min(unique_names, key=len)
+        clone_names = [n for n in unique_names if n != canonical_name]
+        mame_clones[canonical_name] = {
+            "sha1": sha1,
+            "clones": clone_names,
+            "total_copies": sum(len(by_name[n]) for n in clone_names),
+        }
+        true_dupes_to_remove.extend(p for n in clone_names for p in by_name[n])
 
     return true_dupes_to_remove
