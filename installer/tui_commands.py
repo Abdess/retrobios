@@ -11,8 +11,8 @@ from installer.choices import choosable_cores, emulator_names
 from installer.handheld_app import card_app
 from installer.host_fs import _is_dir
 from installer.install_record import RECORD_NARROWING, record_argv, record_options
-from installer.invocation import OFFLINE_VARIABLE, Invocation, offline_option
-from installer.offline import LOCAL, OFFLINE_FLAG_VALUE
+from installer.invocation import Invocation
+from installer.offline import LOCAL
 from installer.tally import leave_out_game_data
 from installer.tui_routes import TUI_LIST_ENV, TUI_RECORD_ENV
 
@@ -78,10 +78,7 @@ def tui_flags(state: TuiState) -> list[tuple[str, str | None]]:
         # the runs, whose own reading of the record would narrow it again.
         flags.append(("--all-files", None))
     flags += [("--from", str(folder)) for folder in state.from_folders]
-    if (os.environ.get(OFFLINE_VARIABLE) == OFFLINE_FLAG_VALUE
-            and not any(flag == "--offline" for flag, _v in flags)):
-        # Given as --offline: said so in the command. Set as the variable,
-        # the runs inherit it and the words name it.
+    if state.offline and not any(flag == "--offline" for flag, _v in flags):
         flags.append(("--offline", None))
     return flags
 
@@ -132,9 +129,6 @@ def tui_hint(state: TuiState) -> Invocation:
     hint.options += tui_flags(state)
     if state.add_app and _tui_app_ready(state):
         hint.options.append(("--add-app", None))
-    # The runs inherit the variable, a command shown to the user does not.
-    if offline_option(False) and ("--offline", None) not in hint.options:
-        hint.options.append(("--offline", None))
     return hint
 
 

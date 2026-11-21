@@ -2976,6 +2976,7 @@ class CardsSpaceAndConfirm(unittest.TestCase):
         short of space then put "Install anyway" back, a run that could
         only fail every file."""
         state = checked_state({"free": 1024, "writable": False, "cores": []})
+        state.offline = True
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             labels = [row.label for row in install.tui_rows(state)]
         self.assertEqual(labels[0], "Choose another folder")
@@ -4305,6 +4306,23 @@ class OfflineInTheInterface(unittest.TestCase):
         self.assertIn("--offline", install.tui_command(state))
 
 
+class OfflineToggleStalesTheCheck(unittest.TestCase):
+    """Turning the network back on changes the run, however offline was set:
+    the variable alone left the check current and Install skipped Confirm."""
+
+    def test_each_way_offline_was_set(self):
+        for value in ("1", install.OFFLINE_FLAG_VALUE):
+            with self.subTest(value=value), \
+                    mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: value}):
+                state = install.TuiState()
+                state.checked_flags = install.tui_flags(state)
+                self.assertIn(("--offline", None), state.checked_flags)
+                self.assertEqual(install._option_offline(state, 0), [("offline", False)])
+                install.set_offline(False)
+                self.assertNotIn(("--offline", None), install.tui_flags(state))
+                self.assertEqual(install._begin_install(state), [("run", "confirm")])
+
+
 class BackTicksAndSaveFolder(unittest.TestCase):
     """Going back keeps the ticks, and the save folder is said once."""
 
@@ -4361,6 +4379,7 @@ class BackTicksAndSaveFolder(unittest.TestCase):
         state.stack.append("confirm")
         state.dry = dict(CHECK)
         state.dry_files = [dict(event, state="missing") for event in FILES]
+        state.offline = True
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             rows = [row.action for row in install.tui_rows(state)]
             text = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
@@ -6831,6 +6850,9 @@ class ConfirmRefusalsAndCardRows(unittest.TestCase):
 
     def test_offline_with_nothing_on_hand_runs_nothing_from_the_list(self):
         state = checked_state()
+        # Checked offline: the counts read are those of an offline run.
+        state.offline = True
+        state.checked_flags = install.tui_flags(state)
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             state.focus["plan"] = [row.action for row in install.tui_rows(state)].index(
                 "systems")
@@ -9649,6 +9671,7 @@ class PacksWordingAndDocs(unittest.TestCase):
         state = checked_state()
         state.stack.append("confirm")
         state.dry = dict(CHECK)
+        state.offline = True
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             self.assertIn("Nothing to install", install.tui_view(state, 80, 24)[0])
 
@@ -10638,6 +10661,7 @@ class CardNamesAndHelp(_CardFixtures, unittest.TestCase):
         state.stack.append("options")
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: ""}):
             self.assertIn("jobs", [row.action for row in install.tui_rows(state)])
+        state.offline = True
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             self.assertNotIn("jobs", [row.action for row in install.tui_rows(state)])
 
@@ -11693,6 +11717,7 @@ class TapsGameDataAndExitCodes(_CardFixtures, unittest.TestCase):
         """Sudo resets the environment, and the root
         command the screen gave fetched what the offline run left out."""
         state = checked_state({"free": 50 * 1024 ** 3, "writable": False, "cores": []})
+        state.offline = True
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}), \
                 mock.patch.object(install, "_on_read_only_mount", return_value=False):
             text = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
@@ -14716,6 +14741,7 @@ class ProvenCardsAndCounts(unittest.TestCase):
         line = install.Invocation()
         line.os_type = "linux"
         line.record(args)
+        state.offline = True
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             line.options.append(("--offline", None))
             self.assertEqual(install.tui_command(state), line.command("retroarch", SYSTEM_DIR))

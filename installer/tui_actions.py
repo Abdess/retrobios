@@ -36,7 +36,7 @@ from installer.frontend_folders import _retroarch_config_at
 from installer.games import games_probe
 from installer.host_fs import _exists, _folder_writable, _is_dir, _nearest_folder, closed_folder
 from installer.install_record import RECORD_NARROWING, _RECORD_SAID, record_options, setup_record
-from installer.invocation import OFFLINE_VARIABLE, offline_requested
+from installer.invocation import OFFLINE_VARIABLE
 from installer.lists import local_targets
 from installer.offline import LOCAL, OFFLINE_FLAG_VALUE
 from installer.pack import _listed
@@ -1187,7 +1187,7 @@ def _option_flag(state: TuiState, action: str, step: int) -> bool:
 
 def _option_offline(state: TuiState, step: int) -> list[tuple]:
     """Without the internet, turned on or off."""
-    on = step > 0 if step else not offline_requested()
+    on = step > 0 if step else not state.offline
     if (on and state.target and not state.manifest_given and not state.packs
             and not (state.targets_for == state.platform and state.targets)):
         # The run reads the board list beside the file list it is
@@ -1198,6 +1198,7 @@ def _option_offline(state: TuiState, step: int) -> list[tuple]:
         return []
     # Set in this process by the effect, as --offline sets it: the
     # runs started next inherit it, and their command names it.
+    state.offline = on
     return [("offline", on)]
 
 

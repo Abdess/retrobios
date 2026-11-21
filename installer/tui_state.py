@@ -6,6 +6,8 @@ import unicodedata
 from pathlib import Path
 from typing import TYPE_CHECKING, NamedTuple
 
+from installer.invocation import offline_requested
+
 if TYPE_CHECKING:
     from installer.handheld_app import CardApp
     from installer.tui_folder_scan import FolderScan
@@ -294,6 +296,10 @@ class TuiState:
         # (--add-app, the options), what putting it did (the app event),
         # and the card, read once per folder.
         self.add_app: bool = False
+        # Without the internet: read from --offline or the variable when the
+        # screens start, changed by the option. The 'offline' effect writes
+        # it for the runs, and the check is stale whenever it moves.
+        self.offline: bool = offline_requested()
         self.app: dict | None = None
         self.app_running: bool = False
         self.card_for: Path | None = None

@@ -14115,6 +14115,10 @@ class TuiState:
         # (--add-app, the options), what putting it did (the app event),
         # and the card, read once per folder.
         self.add_app: bool = False
+        # Without the internet: read from --offline or the variable when the
+        # screens start, changed by the option. The 'offline' effect writes
+        # it for the runs, and the check is stale whenever it moves.
+        self.offline: bool = offline_requested()
         self.app: dict | None = None
         self.app_running: bool = False
         self.card_for: Path | None = None
@@ -24103,10 +24107,7 @@ def tui_flags(state: TuiState) -> list[tuple[str, str | None]]:
         # the runs, whose own reading of the record would narrow it again.
         flags.append(("--all-files", None))
     flags += [("--from", str(folder)) for folder in state.from_folders]
-    if (os.environ.get(OFFLINE_VARIABLE) == OFFLINE_FLAG_VALUE
-            and not any(flag == "--offline" for flag, _v in flags)):
-        # Given as --offline: said so in the command. Set as the variable,
-        # the runs inherit it and the words name it.
+    if state.offline and not any(flag == "--offline" for flag, _v in flags):
         flags.append(("--offline", None))
     return flags
 
@@ -24157,9 +24158,6 @@ def tui_hint(state: TuiState) -> Invocation:
     hint.options += tui_flags(state)
     if state.add_app and _tui_app_ready(state):
         hint.options.append(("--add-app", None))
-    # The runs inherit the variable, a command shown to the user does not.
-    if offline_option(False) and ("--offline", None) not in hint.options:
-        hint.options.append(("--offline", None))
     return hint
 
 
@@ -25107,6 +25105,11 @@ def _core_screen_rows(state: TuiState) -> list[TuiRow]:
     return rows + _CHECKLIST_END
 
 
+def _tui_offline_only(state: TuiState) -> bool:
+    """Without the internet and without a pack: what is not here cannot come."""
+    return state.offline and LOCAL.pack is None
+
+
 def _confirm_screen_rows(state: TuiState) -> list[TuiRow]:
     """The rows of the confirm screen."""
     if state.running or state.dry is None:
@@ -25115,7 +25118,7 @@ def _confirm_screen_rows(state: TuiState) -> list[TuiRow]:
         # Counted again, every file is in place: Install wrote nothing
         # and said Done.
         return [TuiRow("close", "Close"), TuiRow("back", "Back")]
-    if _offline_only() and not _dry_copies(state):
+    if _tui_offline_only(state) and not _dry_copies(state):
         # The plan's rule: Install would only fail every file.
         return [TuiRow("back", "Back")]
     return [TuiRow("install", "Install"), TuiRow("back", "Back")]
@@ -25190,7 +25193,7 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
     label = (f"{TUI_INSTALL_ROW} {format_size(size)}" if size >= CONFIRM_FROM_BYTES
              else TUI_INSTALL_ROW)
     rows = [TuiRow("install", label)]
-    if _offline_only() and not _plan_copies(state, check):
+    if _tui_offline_only(state) and not _plan_copies(state, check):
         # Nothing here to copy, and the network refused: Install would
         # only fail every file, in this folder or another.
         rows = []
@@ -25440,8 +25443,8 @@ def _option_rows(state: TuiState) -> list[TuiRow]:
     # and the focus stays on the row just changed.
     how = [TuiRow("offline", "Without the internet: "
                   + ("yes, a pack is read" if LOCAL.pack is not None
-                     else _yes(offline_requested())), "--offline")]
-    if not LOCAL.offline:
+                     else _yes(state.offline)), "--offline")]
+    if LOCAL.pack is None and not state.offline:
         # From a pack, or offline, nothing is downloaded.
         how.append(TuiRow("jobs", f"Parallel downloads: {state.jobs}", "--jobs"))
     see = [TuiRow("preview", "Preview the file list", "--dry-run"),
@@ -29805,7 +29808,7 @@ def _option_flag(state: TuiState, action: str, step: int) -> bool:
 
 def _option_offline(state: TuiState, step: int) -> list[tuple]:
     """Without the internet, turned on or off."""
-    on = step > 0 if step else not offline_requested()
+    on = step > 0 if step else not state.offline
     if (on and state.target and not state.manifest_given and not state.packs
             and not (state.targets_for == state.platform and state.targets)):
         # The run reads the board list beside the file list it is
@@ -29816,6 +29819,7 @@ def _option_offline(state: TuiState, step: int) -> list[tuple]:
         return []
     # Set in this process by the effect, as --offline sets it: the
     # runs started next inherit it, and their command names it.
+    state.offline = on
     return [("offline", on)]
 
 

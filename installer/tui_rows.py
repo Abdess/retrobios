@@ -12,9 +12,8 @@ from installer.cores import CORE_PLATFORMS
 from installer.destination import _card_what
 from installer.handheld_app import APP_OFFER, APP_OFFER_SHORT
 from installer.install_record import record_day
-from installer.invocation import offline_requested
 from installer.manifest import GAME_DATA
-from installer.offline import LOCAL, _offline_only
+from installer.offline import LOCAL
 from installer.plan import CONFIRM_FROM_BYTES
 from installer.plan_words import cores_words
 from installer.platforms import TARGET_PLATFORMS, _tui_system_label, system_title
@@ -243,6 +242,11 @@ def _core_screen_rows(state: TuiState) -> list[TuiRow]:
     return rows + _CHECKLIST_END
 
 
+def _tui_offline_only(state: TuiState) -> bool:
+    """Without the internet and without a pack: what is not here cannot come."""
+    return state.offline and LOCAL.pack is None
+
+
 def _confirm_screen_rows(state: TuiState) -> list[TuiRow]:
     """The rows of the confirm screen."""
     if state.running or state.dry is None:
@@ -251,7 +255,7 @@ def _confirm_screen_rows(state: TuiState) -> list[TuiRow]:
         # Counted again, every file is in place: Install wrote nothing
         # and said Done.
         return [TuiRow("close", "Close"), TuiRow("back", "Back")]
-    if _offline_only() and not _dry_copies(state):
+    if _tui_offline_only(state) and not _dry_copies(state):
         # The plan's rule: Install would only fail every file.
         return [TuiRow("back", "Back")]
     return [TuiRow("install", "Install"), TuiRow("back", "Back")]
@@ -326,7 +330,7 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
     label = (f"{TUI_INSTALL_ROW} {format_size(size)}" if size >= CONFIRM_FROM_BYTES
              else TUI_INSTALL_ROW)
     rows = [TuiRow("install", label)]
-    if _offline_only() and not _plan_copies(state, check):
+    if _tui_offline_only(state) and not _plan_copies(state, check):
         # Nothing here to copy, and the network refused: Install would
         # only fail every file, in this folder or another.
         rows = []
@@ -576,8 +580,8 @@ def _option_rows(state: TuiState) -> list[TuiRow]:
     # and the focus stays on the row just changed.
     how = [TuiRow("offline", "Without the internet: "
                   + ("yes, a pack is read" if LOCAL.pack is not None
-                     else _yes(offline_requested())), "--offline")]
-    if not LOCAL.offline:
+                     else _yes(state.offline)), "--offline")]
+    if LOCAL.pack is None and not state.offline:
         # From a pack, or offline, nothing is downloaded.
         how.append(TuiRow("jobs", f"Parallel downloads: {state.jobs}", "--jobs"))
     see = [TuiRow("preview", "Preview the file list", "--dry-run"),
