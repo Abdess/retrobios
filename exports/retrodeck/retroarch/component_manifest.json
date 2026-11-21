@@ -1708,7 +1708,7 @@
           ],
           "system": "atari5200",
           "description": "Atari 400/800 NTSC BIOS",
-          "required": "Required"
+          "required": "Optional"
         },
         {
           "filename": "tos.img",

@@ -253,19 +253,19 @@
         "file": "bios/apple2-asoft-auto.rom"
       },
       {
-        "md5": "",
+        "md5": "4f80448507cf43ab40c17ac08d89e278",
         "file": "bios/disk2-13boot.rom"
       },
       {
-        "md5": "",
+        "md5": "008568a8a28a79f795ad73a4b064de1e",
         "file": "bios/disk2-13seq.rom"
       },
       {
-        "md5": "",
+        "md5": "2020aa1413ff77fe29353f3ee72dc295",
         "file": "bios/disk2-16boot.rom"
       },
       {
-        "md5": "",
+        "md5": "5f1be0c1cdff26f5956eef9643911886",
         "file": "bios/disk2-16seq.rom"
       },
       {
@@ -1935,6 +1935,18 @@
       {
         "md5": "af5828fdff51384f99b3c4926be27762",
         "file": "bios/kronos/saturn_bios.bin"
+      },
+      {
+        "md5": "74570fed4d44b2682b560c8cd44b8b6a",
+        "file": "bios/sega1003.bin"
+      },
+      {
+        "md5": "af5828fdff51384f99b3c4926be27762",
+        "file": "bios/sega_100.bin"
+      },
+      {
+        "md5": "f273555d7d91e8a5a6bfd9bcf066331c",
+        "file": "bios/sega_100a.bin"
       }
     ]
   },

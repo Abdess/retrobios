@@ -2290,7 +2290,7 @@
   "hashes_cleared": [],
   "required_aligned": 129,
   "withheld": [],
-  "found_by_content": 370,
+  "found_by_content": 374,
   "unattributed": [],
   "removal_candidates": [
     {
@@ -2342,6 +2342,100 @@
         "bluemsx",
         "fbneo",
         "fmsx"
+      ],
+      "unresolved_cores": [
+        "glide64mk2",
+        "gliden64",
+        "gliden64_20",
+        "n64_gles2",
+        "rice",
+        "rice_gles2"
+      ]
+    },
+    {
+      "system": "spectravideo",
+      "name": "svi806.rom",
+      "destination": "Machines/SVI - Spectravideo SVI-328 80 Column/svi806.rom",
+      "verdict": "undetermined",
+      "reason": "a core the platform names has no profile yet",
+      "cores_examined": [
+        "bluemsx"
+      ],
+      "unresolved_cores": [
+        "glide64mk2",
+        "gliden64",
+        "gliden64_20",
+        "n64_gles2",
+        "rice",
+        "rice_gles2"
+      ]
+    },
+    {
+      "system": "spectravideo",
+      "name": "svi806se.rom",
+      "destination": "Machines/SVI - Spectravideo SVI-328 80 Swedish/svi806se.rom",
+      "verdict": "undetermined",
+      "reason": "a core the platform names has no profile yet",
+      "cores_examined": [
+        "bluemsx"
+      ],
+      "unresolved_cores": [
+        "glide64mk2",
+        "gliden64",
+        "gliden64_20",
+        "n64_gles2",
+        "rice",
+        "rice_gles2"
+      ]
+    },
+    {
+      "system": "spectravideo",
+      "name": "svi806.rom",
+      "destination": "Machines/SVI - Spectravideo SVI-328 MK2/svi806.rom",
+      "verdict": "undetermined",
+      "reason": "a core the platform names has no profile yet",
+      "cores_examined": [
+        "bluemsx"
+      ],
+      "unresolved_cores": [
+        "glide64mk2",
+        "gliden64",
+        "gliden64_20",
+        "n64_gles2",
+        "rice",
+        "rice_gles2"
+      ]
+    },
+    {
+      "system": "colecovision",
+      "name": "czz50-1.rom",
+      "destination": "Machines/COL - Bit Corporation Dina/czz50-1.rom",
+      "verdict": "undetermined",
+      "reason": "a core the platform names has no profile yet",
+      "cores_examined": [
+        "bluemsx",
+        "fbneo",
+        "gearcoleco"
+      ],
+      "unresolved_cores": [
+        "glide64mk2",
+        "gliden64",
+        "gliden64_20",
+        "n64_gles2",
+        "rice",
+        "rice_gles2"
+      ]
+    },
+    {
+      "system": "colecovision",
+      "name": "czz50-2.rom",
+      "destination": "Machines/COL - Bit Corporation Dina/czz50-2.rom",
+      "verdict": "undetermined",
+      "reason": "a core the platform names has no profile yet",
+      "cores_examined": [
+        "bluemsx",
+        "fbneo",
+        "gearcoleco"
       ],
       "unresolved_cores": [
         "glide64mk2",

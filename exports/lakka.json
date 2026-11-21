@@ -6,11 +6,11 @@
   "files": [
     "System.dat"
   ],
-  "summary": "519 kept, 147 files added, 76 hashes updated to the emulator source, 23 sizes updated to the emulator source, 1 size removed, 2 hashes removed",
+  "summary": "519 kept, 202 files added, 76 hashes updated to the emulator source, 23 sizes updated to the emulator source, 1 size removed, 2 hashes removed",
   "counts": {
     "kept": 519,
-    "added": 147,
-    "not_added": 1854,
+    "added": 202,
+    "not_added": 1799,
     "not_kept": 0
   },
   "changes": [
@@ -295,15 +295,281 @@
     {
       "kind": "added",
       "system": "Commodore - Amiga",
+      "name": "xpkmaster.library",
+      "destination": "whdboot/Libs/xpkmaster.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "5bd19f9503b59c5d19bfe1c6a6e3b6e7c0e9eae2",
+        "md5": "94bf2832dc8588e4b1b96da05c90d495",
+        "crc32": "c59aab67",
+        "size": 16496
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkCBR0.library",
+      "destination": "whdboot/Libs/Compressors/xpkCBR0.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "a2a76c10cb06315e51990911fa050669cc89830d",
+        "md5": "2461c65dcd95124cc98327324d9bb184",
+        "crc32": "f86d3c50",
+        "size": 1300
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkDLTA.library",
+      "destination": "whdboot/Libs/Compressors/xpkDLTA.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "ca64f89919c2869cb6fd75346b9a21245a6d04a8",
+        "md5": "d7474dd89a09009fa84937b01e742171",
+        "crc32": "7035bf8e",
+        "size": 960
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkDUKE.library",
+      "destination": "whdboot/Libs/Compressors/xpkDUKE.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "8102d77ae0a3d64496436ee56a9c577c84b11992",
+        "md5": "d6a9aafb790d40423c4ed0acbc6e85c3",
+        "crc32": "db24e9df",
+        "size": 3280
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkFAST.library",
+      "destination": "whdboot/Libs/Compressors/xpkFAST.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "4599430f3baa302635a85b26a7b70a4116dc5f09",
+        "md5": "7e4ad7cdd26cb6badc571ce79ab91693",
+        "crc32": "14e639c6",
+        "size": 2136
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkFRLE.library",
+      "destination": "whdboot/Libs/Compressors/xpkFRLE.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "d0746429187ab38e886a47820203315f734e8d89",
+        "md5": "7a2c0a4eb36241ca6ed9303a13da9821",
+        "crc32": "8e52f98c",
+        "size": 1124
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkHFMN.library",
+      "destination": "whdboot/Libs/Compressors/xpkHFMN.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2",
+        "md5": "4d600301435d442f59068e52265cc9f2",
+        "crc32": "482e44a6",
+        "size": 2124
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkHUFF.library",
+      "destination": "whdboot/Libs/Compressors/xpkHUFF.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "f22d099b81d2d039c4fbb3fea47cc9700b01fecf",
+        "md5": "0b752081f321d324f47c9ec7440531d0",
+        "crc32": "71bcf51a",
+        "size": 2284
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkIMPL.library",
+      "destination": "whdboot/Libs/Compressors/xpkIMPL.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "0e00bc18aec757d86f9831131c2236a704c175db",
+        "md5": "6aa281fa42b10e3ff01be01d2f3bbf22",
+        "crc32": "8c2ca755",
+        "size": 4048
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkMASH.library",
+      "destination": "whdboot/Libs/Compressors/xpkMASH.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "1093133a17cb635c21c5532ae26ded83b6d359ce",
+        "md5": "1527b4f331464f3013ba90ca44a91e54",
+        "crc32": "4ef3bab9",
+        "size": 2816
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkNONE.library",
+      "destination": "whdboot/Libs/Compressors/xpkNONE.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269",
+        "md5": "2e98fd5760fb158d697c3c183eb16827",
+        "crc32": "bfa564e8",
+        "size": 812
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkNUKE.library",
+      "destination": "whdboot/Libs/Compressors/xpkNUKE.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "168bee97805be1f85b65f615e6931c4942caf4e4",
+        "md5": "d644cfccffa44a284bc6e4050e2f2029",
+        "crc32": "b73c89a4",
+        "size": 2900
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkRAKE.library",
+      "destination": "whdboot/Libs/Compressors/xpkRAKE.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910",
+        "md5": "c1c5d4aad555f1ce3049127bfb911cea",
+        "crc32": "9a908635",
+        "size": 6604
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkRLEN.library",
+      "destination": "whdboot/Libs/Compressors/xpkRLEN.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "c81cf6d99de56faa6154cc81a9876517c2a8efc0",
+        "md5": "91531faa9caaff395ba3b5bbdd7996c2",
+        "crc32": "12b10dea",
+        "size": 1008
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkSHRI.library",
+      "destination": "whdboot/Libs/Compressors/xpkSHRI.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "fc96d367e7b3409074841c7f145ab6daef0a6a4d",
+        "md5": "0807f616ba364d5e1151de505a4845d4",
+        "crc32": "8e29d45a",
+        "size": 9272
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkSMPL.library",
+      "destination": "whdboot/Libs/Compressors/xpkSMPL.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "d140b4e87a2ff76cf94616d97fe7b127d128d973",
+        "md5": "069b09e57a18c0f24a72564eaa15199e",
+        "crc32": "53543641",
+        "size": 1740
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "Compressors/xpkSQSH.library",
+      "destination": "whdboot/Libs/Compressors/xpkSQSH.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "2191b616abd4b2fb34c89ae243c35feea2b71104",
+        "md5": "0545456a27a23c3ee10686ab525ade94",
+        "crc32": "87c5de68",
+        "size": 2936
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "explode.library",
+      "destination": "whdboot/Libs/explode.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "c29ac7a92db4837703049af91d0d35b2a592f03d",
+        "md5": "a3a6c7fa59ef63b0b432d32f98efa09e",
+        "crc32": "c1e31c87",
+        "size": 1784
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "medplayer.library",
+      "destination": "whdboot/Libs/medplayer.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "4313334a01dd02eaf60ea7eb95dee72c97835645",
+        "md5": "57c19c020dafc309ff6f238ae6934cb9",
+        "crc32": "39919294",
+        "size": 15340
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
       "name": "host-quit",
       "destination": "whdboot/host-quit",
       "field": null,
       "old": null,
       "new": {
-        "sha1": "3ae8939c8f1cdd721eabd7d73c2d6277a038672a",
-        "md5": "a491e6bc79db7e968d35577cee2769a5",
-        "crc32": "8ef13553",
-        "size": 3180
+        "sha1": "f717cb754078a350908e2839b3095843ccd90fa7",
+        "md5": "9a42e69421e3148c69be679b18b9444e",
+        "crc32": "3069c8f9",
+        "size": 1736
       }
     },
     {
@@ -314,10 +580,10 @@
       "field": null,
       "old": null,
       "new": {
-        "sha1": "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86",
-        "md5": "28b7fd41cd5d1b345324aa2571fb1c5d",
-        "crc32": "0ea2cf94",
-        "size": 297373
+        "sha1": "b1e841768bf18b0d7d0ffbbe7f7788742b641677",
+        "md5": "3f04bc22c0ac3e2aa1611c3ced93ae74",
+        "crc32": "c79884ee",
+        "size": 187033
       }
     },
     {
@@ -328,10 +594,10 @@
       "field": null,
       "old": null,
       "new": {
-        "sha1": "6540ae1a35080e3dbeacfba5139e4781eb74ca86",
-        "md5": "51d44cd24e16fbb395b1bfefbaacd375",
-        "crc32": "d50e6275",
-        "size": 6741053
+        "sha1": "7554061aa6f928bd41acdbcafe2d20322a0e188c",
+        "md5": "932a2c1b886e6daf87f0e72ed7533146",
+        "crc32": "b2267d3c",
+        "size": 6750282
       }
     },
     {
@@ -882,6 +1148,398 @@
     },
     {
       "kind": "added",
+      "system": "DOS",
+      "name": "awe32.raw",
+      "destination": "awe32.raw",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "6ac3c1317c1acb83902397d7767763cca4de357a",
+        "md5": "30b76c45ca0712418239d2b15c65881a",
+        "crc32": "ceb2787e",
+        "size": 1048576
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk1-v1.21/rom1.bin",
+      "destination": "sc55-roms/mk1-v1.21/rom1.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "dd01ec54027751c2f2f2e47bbb7a0bf3d1ca8ae2",
+        "md5": "462cb3a2ce9e54f4e54a52f643931ffd",
+        "crc32": "4ed0d171",
+        "size": 32768
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk1-v1.21/rom2.bin",
+      "destination": "sc55-roms/mk1-v1.21/rom2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "9c17f85e784dc1549ac1f98d457b353393331f6b",
+        "md5": "6b61186953b50d900e430ae6a996bda7",
+        "crc32": "2dc58549",
+        "size": 262144
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk1-v1.21/wave1.bin",
+      "destination": "sc55-roms/mk1-v1.21/wave1.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "8cc3c0d7ec0993df81d4ca1970e01a4b0d8d3775",
+        "md5": "5f40d5297f47358ddea43b8d225874cc",
+        "crc32": "1ac774d3",
+        "size": 1048576
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk1-v1.21/wave2.bin",
+      "destination": "sc55-roms/mk1-v1.21/wave2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "80e6eb130c18c09955551563f78906163c55cc11",
+        "md5": "f78fb079a7d8c5f1eb04e0fd5aedbc9e",
+        "crc32": "8dcc592a",
+        "size": 1048576
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk1-v1.21/wave3.bin",
+      "destination": "sc55-roms/mk1-v1.21/wave3.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "7454b817778179806f3f9d1985b3a2ef67ace76f",
+        "md5": "53c013d4bad0337385cfda2631e5b78e",
+        "crc32": "e21ebc04",
+        "size": 1048576
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk1-v1.00/rom1.bin",
+      "destination": "sc55-roms/mk1-v1.00/rom1.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "675ea03634429c49fdeebf14849953bc1dd844aa",
+        "md5": "c4e923344906aa630ab1b950720db386",
+        "crc32": "d072c251",
+        "size": 32768
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk1-v1.00/rom2.bin",
+      "destination": "sc55-roms/mk1-v1.00/rom2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "f7f8ac018d24be8de6cc37ed4a3b3bfc0953510a",
+        "md5": "7e90b34c777e2c5e1277ae559d959c26",
+        "crc32": "dbaaae8f",
+        "size": 262144
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk1-v1.10/rom1.bin",
+      "destination": "sc55-roms/mk1-v1.10/rom1.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "1af0102664883ce17ea3a978e5a9a7113c040542",
+        "md5": "b301bfdaac9650ac97322f533396fdfb",
+        "crc32": "c450da76",
+        "size": 32768
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk1-v1.10/rom2.bin",
+      "destination": "sc55-roms/mk1-v1.10/rom2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "6bc23a354ecd2e61c705b6191b49196db35f3d2d",
+        "md5": "c0f0c8c2ffcfaf9a56c7e0d2dd440857",
+        "crc32": "15f0aedb",
+        "size": 262144
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk1-v1.20/rom1.bin",
+      "destination": "sc55-roms/mk1-v1.20/rom1.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "dd01ec54027751c2f2f2e47bbb7a0bf3d1ca8ae2",
+        "md5": "462cb3a2ce9e54f4e54a52f643931ffd",
+        "crc32": "4ed0d171",
+        "size": 32768
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk1-v1.20/rom2.bin",
+      "destination": "sc55-roms/mk1-v1.20/rom2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "ffa8e3d5b3ec45485de4c13029bb4406c08ac9c3",
+        "md5": "181b86f1c5a81caa65b6cebbf7c2678b",
+        "crc32": "ebd488fd",
+        "size": 262144
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk1-v2.00/rom1.bin",
+      "destination": "sc55-roms/mk1-v2.00/rom1.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "76f646bc03f66dbee7606f2181d4ea76f05ece7d",
+        "md5": "6b74988a79c2a48239809f07a54175b3",
+        "crc32": "a160da90",
+        "size": 32768
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk1-v2.00/rom2.bin",
+      "destination": "sc55-roms/mk1-v2.00/rom2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "6d6346b35c2379e9e6adc182214580e3d164b0c7",
+        "md5": "d79cf9c9aa88416372cb0fd318f79beb",
+        "crc32": "1768cc18",
+        "size": 262144
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk2-v1.01/rom1.bin",
+      "destination": "sc55-roms/mk2-v1.01/rom1.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "b91bb1d9dccffe831b7cfde7800a3fe32b2fbda6",
+        "md5": "4ca058f7db05f51e97bb30a162e9610a",
+        "crc32": "9b66631f",
+        "size": 32768
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk2-v1.01/rom2.bin",
+      "destination": "sc55-roms/mk2-v1.01/rom2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "078cb5feea05e80bb9a1bb857a2163ee434fd053",
+        "md5": "63b24c7193ce34afefce9cec32ac39f0",
+        "crc32": "fcee1e8e",
+        "size": 524288
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk2-v1.01/smrom.bin",
+      "destination": "sc55-roms/mk2-v1.01/smrom.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "4d48578d811a762a8e7bfaf18989bcac70ae1ba4",
+        "md5": "4e39dcfc30352a33caf1f4d81a7f13e4",
+        "crc32": "702c0a82",
+        "size": 4096
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk2-v1.01/wave1.bin",
+      "destination": "sc55-roms/mk2-v1.01/wave1.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "96708cb21381c2fd03de4babbf7aea301c7594a6",
+        "md5": "30df645acf7f1b621d5f2891ea53e00b",
+        "crc32": "1519d3b3",
+        "size": 2097152
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/mk2-v1.01/wave2.bin",
+      "destination": "sc55-roms/mk2-v1.01/wave2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "4d91cdeaed048d653dbf846a221003c3a3f08279",
+        "md5": "f86e0433a11707a048a8a79e8d98a3be",
+        "crc32": "0f826c7f",
+        "size": 1048576
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/sc155-rev1/rom2.bin",
+      "destination": "sc55-roms/sc155-rev1/rom2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "e9e1bb1bc2691145ffe17f01a48d6614c9f22225",
+        "md5": "5c7c6ab34ef6da079b05a36fd23c9c91",
+        "crc32": "e19d4a52",
+        "size": 262144
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/cm300-v1.30/rom1.bin",
+      "destination": "sc55-roms/cm300-v1.30/rom1.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "30b788af86b97f84a4acf0e51bdfc864ed05d530",
+        "md5": "c40042f1469eec55870391f131c96230",
+        "crc32": "4b9e6eae",
+        "size": 32768
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/cm300-v1.30/rom2.bin",
+      "destination": "sc55-roms/cm300-v1.30/rom2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "8f744c7b9eadd4056f4611c9f703f7d6bdcbbd62",
+        "md5": "cfbd838e3fe6bcfb92f2587fafee048e",
+        "crc32": "baaab31a",
+        "size": 262144
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/cm300-v1.30/wave1.bin",
+      "destination": "sc55-roms/cm300-v1.30/wave1.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "891cf2ac5ca64f453b370b9076f9fb2b4ebc5dcf",
+        "md5": "1e8c539412480c3c261d82e049a8bb10",
+        "crc32": "b1b31a41",
+        "size": 1048576
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/cm300-v1.30/wave2.bin",
+      "destination": "sc55-roms/cm300-v1.30/wave2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "49f38f181b444fc39ad86c4ddab3b25bf839d0b4",
+        "md5": "fb28743cef3fa73542554f68a8e2297f",
+        "crc32": "359edfb2",
+        "size": 1048576
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/st-v1.01/rom2.bin",
+      "destination": "sc55-roms/st-v1.01/rom2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "950f2ae1c2f44e8d92f4f267bac09565a17e540c",
+        "md5": "fe2ba2027fa06dca43f2379f18b24a4d",
+        "crc32": "8f51dd3c",
+        "size": 262144
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/cm300-v1.10/rom2.bin",
+      "destination": "sc55-roms/cm300-v1.10/rom2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "32e76286a626cf960b6665792e53dce3d51170d1",
+        "md5": "b2c215cdf5325ec84ecde86a5d3d1eb8",
+        "crc32": "94d96954",
+        "size": 262144
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/cm300-v1.20/rom2.bin",
+      "destination": "sc55-roms/cm300-v1.20/rom2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "b288cef2aa2df60cbaa2c084a77a68b298de9567",
+        "md5": "437d9575678bdcc30c2f0e1a32765027",
+        "crc32": "546542ab",
+        "size": 262144
+      }
+    },
+    {
+      "kind": "added",
+      "system": "DOS",
+      "name": "sc55-roms/scb55-v2.00/rom2.bin",
+      "destination": "sc55-roms/scb55-v2.00/rom2.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "84d063df8afd13b88498eafb96c7346049d379bc",
+        "md5": "89d8263a413326249c042da8bcd0fda1",
+        "crc32": "a61270ca",
+        "size": 262144
+      }
+    },
+    {
+      "kind": "added",
       "system": "Microsoft - MSX",
       "name": "DEFAULT.FNT",
       "destination": "DEFAULT.FNT",
@@ -992,6 +1650,104 @@
     },
     {
       "kind": "added",
+      "system": "Nintendo - Nintendo Entertainment System",
+      "name": "ymf288_adpcm_rom.bin",
+      "destination": "ymf288_adpcm_rom.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "50b6c3e288eaa12ad275d4f323267bb72b0445df",
+        "md5": "8740932cda05e518a9955f1d08d6786f",
+        "crc32": "23c9e0d8",
+        "size": 8192
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Nintendo - Nintendo Entertainment System",
+      "name": "MesenNesDB.txt",
+      "destination": "MesenNesDB.txt",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "946098931db8c6f963ec9ea2f40d88e96dec40dc",
+        "md5": "b68d6d68a7e8069fb83da97956fe43dd",
+        "crc32": "b5ae7e32",
+        "size": 548608
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Nintendo - Satellaview",
+      "name": "BSX0120-0.bin",
+      "destination": "Satellaview/BSX0120-0.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "f51c52bb26f2546fb167ab1084a56457475ff0a0",
+        "md5": "f958ecd1e15f518c57e6ad45d8fa785e",
+        "crc32": "f677f548",
+        "size": 34
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Nintendo - Satellaview",
+      "name": "BSX0121-0.bin",
+      "destination": "Satellaview/BSX0121-0.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "20c81ded0f31e236de0d38cf0a50538960851213",
+        "md5": "6f38b9f4553bc2caa5968caeb513375b",
+        "crc32": "6e72890c",
+        "size": 34
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Nintendo - Satellaview",
+      "name": "BSX0122-0.bin",
+      "destination": "Satellaview/BSX0122-0.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "88d83a7bcf705e9eccfbaebb35f150c2c69bf803",
+        "md5": "01a6effc102c3004f8958c9d02630afa",
+        "crc32": "af2f6415",
+        "size": 1031
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Nintendo - Satellaview",
+      "name": "BSX0123-0.bin",
+      "destination": "Satellaview/BSX0123-0.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "32ef39d22eeccd9f3128e92e62b28bed6d3bc930",
+        "md5": "6c730e9aef2789bf2544bbc92111786f",
+        "crc32": "b3655ba5",
+        "size": 16
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Nintendo - Satellaview",
+      "name": "BSX0124-0.bin",
+      "destination": "Satellaview/BSX0124-0.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "fcc541ea293ec759dc183c98c9ce45602c7198dc",
+        "md5": "fc703df4222db23dbda27cbe30f30904",
+        "crc32": "3d78292a",
+        "size": 97
+      }
+    },
+    {
+      "kind": "added",
       "system": "Nintendo - Super Game Boy",
       "name": "lr35902.boot.rom",
       "destination": "SGB1.sfc/lr35902.boot.rom",
@@ -1016,6 +1772,20 @@
         "md5": "d574d4f9c12f305074798f54c091a8b4",
         "crc32": "ec8a83b9",
         "size": 256
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Nintendo - Super Nintendo Entertainment System",
+      "name": "dsp1b.rom",
+      "destination": "dsp1b.rom",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "78b724811f5f18d8c67669d9390397eb1a47a5e2",
+        "md5": "332273cc0df5775d3803f2fd88e95d18",
+        "crc32": "465c4e1c",
+        "size": 8192
       }
     },
     {

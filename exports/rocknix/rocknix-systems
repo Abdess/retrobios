@@ -51,7 +51,10 @@ systems = {
                                                             { "md5": "3240872c70984b6cbfda1586cab68dbe", "file": "bios/mpr-17933.bin" },
                                                             { "md5": "255113ba943c92a54facd25a10fd780c", "file": "bios/mpr-18811-mx.ic1" },
                                                             { "md5": "1cd19988d1d72a3e7caa0b73234c96b4", "file": "bios/mpr-19367-mx.ic1" },
-                                                            { "md5": "af5828fdff51384f99b3c4926be27762", "file": "bios/saturn_bios.bin" } ] },
+                                                            { "md5": "af5828fdff51384f99b3c4926be27762", "file": "bios/saturn_bios.bin" },
+                                                            { "md5": "74570fed4d44b2682b560c8cd44b8b6a", "file": "bios/sega1003.bin", "emulator": "mednafen", "core": "gb" },
+                                                            { "md5": "af5828fdff51384f99b3c4926be27762", "file": "bios/sega_100.bin", "emulator": "mednafen", "core": "gb" },
+                                                            { "md5": "f273555d7d91e8a5a6bfd9bcf066331c", "file": "bios/sega_100a.bin", "emulator": "mednafen", "core": "gb" } ] },
 
     # ---------- Sony ---------- #
     "psx": { "name": "PSX", "biosFiles": [ { "md5": "c53ca5908936d412331790f4426c6c33", "file": "bios/psxonpsp660.bin" },

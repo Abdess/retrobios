@@ -120,7 +120,8 @@
           "md5": "acf4730ceb38ac9d8c7d8e21f2614600",
           "system": "ps2",
           "description": "PlayStation 2 BIOS - Japan",
-          "required": "At least one BIOS file required"
+          "required": "At least one BIOS file required",
+          "sha256": "c4dad3b5c6ad58bce70a47fc332602880f041c0338ac6be89061c928f6919ab1"
         },
         {
           "filename": "ps2-0101j-20000217.bin",
@@ -169,7 +170,8 @@
           "md5": "0eee5d1c779aa50e94edd168b4ebf42e",
           "system": "ps2",
           "description": "PlayStation 2 BIOS - Japan",
-          "required": "At least one BIOS file required"
+          "required": "At least one BIOS file required",
+          "sha256": "3b377ce5f7bb8d880260851867a5452b59149aeb8bb189c5df41e3bace7b8e09"
         },
         {
           "filename": "ps2-0210j-20040917.bin",
@@ -225,7 +227,8 @@
           "md5": "d5ce2c7d119f563ce04bc04dbc3a323e",
           "system": "ps2",
           "description": "PlayStation 2 BIOS - USA",
-          "required": "At least one BIOS file required"
+          "required": "At least one BIOS file required",
+          "sha256": "f4c948e61a291d4b3f92a141e550cf8357204287a31ff784caccbedaef910c9d"
         },
         {
           "filename": "ps2-0170a-20030325.bin",
@@ -309,7 +312,8 @@
           "md5": "0d2228e6fd4fb639c9c39d077a9ec10c",
           "system": "ps2",
           "description": "PlayStation 2 BIOS - EUROPE",
-          "required": "At least one BIOS file required"
+          "required": "At least one BIOS file required",
+          "sha256": "5b7cfc4dfdcf556d70ea975b754da6ec26542f6a0e3dfa43a6fcef2902e8f60d"
         },
         {
           "filename": "ps2-0170e-20030227.bin",
@@ -330,7 +334,8 @@
           "md5": "dc752f160044f2ed5fc1f4964db2a095",
           "system": "ps2",
           "description": "PlayStation 2 BIOS - EUROPE",
-          "required": "At least one BIOS file required"
+          "required": "At least one BIOS file required",
+          "sha256": "d6653f4e93be2f6f9e9d690a934f26cf0f6ad4e348b69f41ef736732c3a6685b"
         },
         {
           "filename": "ps2-0220e-20050620.bin",

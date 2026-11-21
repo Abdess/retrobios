@@ -1348,7 +1348,7 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 2,
+  "found_by_content": 4,
   "unattributed": [
     "microsoft-msx/msx.zip"
   ],
@@ -2706,19 +2706,6 @@
     },
     {
       "system": "ps2",
-      "name": "ps2-0100j-20000117.bin",
-      "destination": "ps2/ps2-0100j-20000117.bin",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "lrps2",
-        "pcsx2",
-        "play"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "ps2",
       "name": "ps2-0101jd-20000217.bin",
       "destination": "ps2/ps2-0101jd-20000217.bin",
       "verdict": "candidate",
@@ -3020,32 +3007,6 @@
       "system": "ps2",
       "name": "ps2-0160h-20010730.bin",
       "destination": "ps2/ps2-0160h-20010730.bin",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "lrps2",
-        "pcsx2",
-        "play"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "ps2",
-      "name": "ps2-0160a-20020207.bin",
-      "destination": "ps2/ps2-0160a-20020207.bin",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "lrps2",
-        "pcsx2",
-        "play"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "ps2",
-      "name": "ps2-0160e-20020319.bin",
-      "destination": "ps2/ps2-0160e-20020319.bin",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [

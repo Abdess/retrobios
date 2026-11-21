@@ -6,11 +6,11 @@
   "files": [
     "batocera-systems"
   ],
-  "summary": "692 kept, 153 files added, 4 hashes updated to the emulator source",
+  "summary": "692 kept, 172 files added, 4 hashes updated to the emulator source",
   "counts": {
     "kept": 692,
-    "added": 153,
-    "not_added": 2574,
+    "added": 172,
+    "not_added": 2554,
     "not_kept": 0
   },
   "changes": [
@@ -405,6 +405,215 @@
     {
       "kind": "added",
       "system": "amiga500",
+      "name": "xpkmaster.library",
+      "destination": "whdboot/Libs/xpkmaster.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "94bf2832dc8588e4b1b96da05c90d495"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkCBR0.library",
+      "destination": "whdboot/Libs/Compressors/xpkCBR0.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "2461c65dcd95124cc98327324d9bb184"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkDLTA.library",
+      "destination": "whdboot/Libs/Compressors/xpkDLTA.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "d7474dd89a09009fa84937b01e742171"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkDUKE.library",
+      "destination": "whdboot/Libs/Compressors/xpkDUKE.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "d6a9aafb790d40423c4ed0acbc6e85c3"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkFAST.library",
+      "destination": "whdboot/Libs/Compressors/xpkFAST.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "7e4ad7cdd26cb6badc571ce79ab91693"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkFRLE.library",
+      "destination": "whdboot/Libs/Compressors/xpkFRLE.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "7a2c0a4eb36241ca6ed9303a13da9821"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkHFMN.library",
+      "destination": "whdboot/Libs/Compressors/xpkHFMN.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "4d600301435d442f59068e52265cc9f2"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkHUFF.library",
+      "destination": "whdboot/Libs/Compressors/xpkHUFF.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "0b752081f321d324f47c9ec7440531d0"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkIMPL.library",
+      "destination": "whdboot/Libs/Compressors/xpkIMPL.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "6aa281fa42b10e3ff01be01d2f3bbf22"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkMASH.library",
+      "destination": "whdboot/Libs/Compressors/xpkMASH.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "1527b4f331464f3013ba90ca44a91e54"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkNONE.library",
+      "destination": "whdboot/Libs/Compressors/xpkNONE.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "2e98fd5760fb158d697c3c183eb16827"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkNUKE.library",
+      "destination": "whdboot/Libs/Compressors/xpkNUKE.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "d644cfccffa44a284bc6e4050e2f2029"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkRAKE.library",
+      "destination": "whdboot/Libs/Compressors/xpkRAKE.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "c1c5d4aad555f1ce3049127bfb911cea"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkRLEN.library",
+      "destination": "whdboot/Libs/Compressors/xpkRLEN.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "91531faa9caaff395ba3b5bbdd7996c2"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkSHRI.library",
+      "destination": "whdboot/Libs/Compressors/xpkSHRI.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "0807f616ba364d5e1151de505a4845d4"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkSMPL.library",
+      "destination": "whdboot/Libs/Compressors/xpkSMPL.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "069b09e57a18c0f24a72564eaa15199e"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "Compressors/xpkSQSH.library",
+      "destination": "whdboot/Libs/Compressors/xpkSQSH.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "0545456a27a23c3ee10686ab525ade94"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "explode.library",
+      "destination": "whdboot/Libs/explode.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "a3a6c7fa59ef63b0b432d32f98efa09e"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "medplayer.library",
+      "destination": "whdboot/Libs/medplayer.library",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "57c19c020dafc309ff6f238ae6934cb9"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
       "name": "WHDLoad",
       "destination": "whdboot/WHDLoad",
       "field": null,
@@ -432,7 +641,7 @@
       "field": null,
       "old": null,
       "new": {
-        "md5": "a491e6bc79db7e968d35577cee2769a5"
+        "md5": "9a42e69421e3148c69be679b18b9444e"
       }
     },
     {
@@ -443,7 +652,7 @@
       "field": null,
       "old": null,
       "new": {
-        "md5": "28b7fd41cd5d1b345324aa2571fb1c5d"
+        "md5": "3f04bc22c0ac3e2aa1611c3ced93ae74"
       }
     },
     {
@@ -454,7 +663,7 @@
       "field": null,
       "old": null,
       "new": {
-        "md5": "51d44cd24e16fbb395b1bfefbaacd375"
+        "md5": "932a2c1b886e6daf87f0e72ed7533146"
       }
     },
     {
@@ -1746,7 +1955,7 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 477,
+  "found_by_content": 481,
   "unattributed": [],
   "removal_candidates": [
     {

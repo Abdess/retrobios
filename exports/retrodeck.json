@@ -24,7 +24,7 @@
     "xemu/component_manifest.json",
     "xroar/component_manifest.json"
   ],
-  "summary": "2021 kept, 77 files added, 40 required flags aligned with the code, 113 hashes added to an existing entry",
+  "summary": "2021 kept, 77 files added, 41 required flags aligned with the code, 118 hashes added to an existing entry",
   "counts": {
     "kept": 2021,
     "added": 77,
@@ -331,6 +331,51 @@
       "new": {
         "required": false
       }
+    },
+    {
+      "kind": "hash_filled",
+      "system": "ps2",
+      "name": "ps2-0100j-20000117.bin",
+      "destination": "bios/ps2-0100j-20000117.bin",
+      "field": "sha256",
+      "old": null,
+      "new": "c4dad3b5c6ad58bce70a47fc332602880f041c0338ac6be89061c928f6919ab1"
+    },
+    {
+      "kind": "hash_filled",
+      "system": "ps2",
+      "name": "ps2-0200j-20040614.bin",
+      "destination": "bios/ps2-0200j-20040614.bin",
+      "field": "sha256",
+      "old": null,
+      "new": "3b377ce5f7bb8d880260851867a5452b59149aeb8bb189c5df41e3bace7b8e09"
+    },
+    {
+      "kind": "hash_filled",
+      "system": "ps2",
+      "name": "ps2-0160a-20020207.bin",
+      "destination": "bios/ps2-0160a-20020207.bin",
+      "field": "sha256",
+      "old": null,
+      "new": "f4c948e61a291d4b3f92a141e550cf8357204287a31ff784caccbedaef910c9d"
+    },
+    {
+      "kind": "hash_filled",
+      "system": "ps2",
+      "name": "ps2-0160e-20020319.bin",
+      "destination": "bios/ps2-0160e-20020319.bin",
+      "field": "sha256",
+      "old": null,
+      "new": "5b7cfc4dfdcf556d70ea975b754da6ec26542f6a0e3dfa43a6fcef2902e8f60d"
+    },
+    {
+      "kind": "hash_filled",
+      "system": "ps2",
+      "name": "ps2-0200e-20040614.bin",
+      "destination": "bios/ps2-0200e-20040614.bin",
+      "field": "sha256",
+      "old": null,
+      "new": "d6653f4e93be2f6f9e9d690a934f26cf0f6ad4e348b69f41ef736732c3a6685b"
     },
     {
       "kind": "added",
@@ -698,6 +743,15 @@
       "system": "atari5200",
       "name": "ATARIOSA.ROM",
       "destination": "bios/ATARIOSA.ROM",
+      "field": "required",
+      "old": true,
+      "new": false
+    },
+    {
+      "kind": "required_aligned",
+      "system": "atari5200",
+      "name": "ATARIOSB.ROM",
+      "destination": "bios/ATARIOSB.ROM",
       "field": "required",
       "old": true,
       "new": false
@@ -2290,6 +2344,11 @@
     "psx/scph102B.bin sha256",
     "psx/scph3000.bin sha256",
     "psx/scph3500.bin sha256",
+    "ps2/ps2-0100j-20000117.bin sha256",
+    "ps2/ps2-0200j-20040614.bin sha256",
+    "ps2/ps2-0160a-20020207.bin sha256",
+    "ps2/ps2-0160e-20020319.bin sha256",
+    "ps2/ps2-0200e-20040614.bin sha256",
     "pico8/pico8 md5",
     "pico8/pico8 sha256",
     "pico8/pico8.dat md5",
@@ -2394,7 +2453,7 @@
   "sizes_updated": [],
   "sizes_removed": [],
   "hashes_cleared": [],
-  "required_aligned": 40,
+  "required_aligned": 41,
   "withheld": [],
   "found_by_content": 384,
   "unattributed": [

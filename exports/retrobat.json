@@ -6,11 +6,11 @@
   "files": [
     "batocera-systems.json"
   ],
-  "summary": "362 kept, 47 files added, 1 hash updated to the emulator source, 5 hashes added to an existing entry",
+  "summary": "362 kept, 50 files added, 1 hash updated to the emulator source, 9 hashes added to an existing entry",
   "counts": {
     "kept": 362,
-    "added": 47,
-    "not_added": 1937,
+    "added": 50,
+    "not_added": 1931,
     "not_kept": 0
   },
   "changes": [
@@ -156,6 +156,42 @@
       "new": {
         "md5": "4fe4f6800076ea3d897d4285653447bd"
       }
+    },
+    {
+      "kind": "hash_filled",
+      "system": "apple2",
+      "name": "disk2-13boot.rom",
+      "destination": "disk2-13boot.rom",
+      "field": "md5",
+      "old": null,
+      "new": "4f80448507cf43ab40c17ac08d89e278"
+    },
+    {
+      "kind": "hash_filled",
+      "system": "apple2",
+      "name": "disk2-13seq.rom",
+      "destination": "disk2-13seq.rom",
+      "field": "md5",
+      "old": null,
+      "new": "008568a8a28a79f795ad73a4b064de1e"
+    },
+    {
+      "kind": "hash_filled",
+      "system": "apple2",
+      "name": "disk2-16boot.rom",
+      "destination": "disk2-16boot.rom",
+      "field": "md5",
+      "old": null,
+      "new": "2020aa1413ff77fe29353f3ee72dc295"
+    },
+    {
+      "kind": "hash_filled",
+      "system": "apple2",
+      "name": "disk2-16seq.rom",
+      "destination": "disk2-16seq.rom",
+      "field": "md5",
+      "old": null,
+      "new": "5f1be0c1cdff26f5956eef9643911886"
     },
     {
       "kind": "added",
@@ -543,6 +579,39 @@
     },
     {
       "kind": "added",
+      "system": "saturn",
+      "name": "sega1003.bin",
+      "destination": "sega1003.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "74570fed4d44b2682b560c8cd44b8b6a"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "saturn",
+      "name": "sega_100.bin",
+      "destination": "sega_100.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "af5828fdff51384f99b3c4926be27762"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "saturn",
+      "name": "sega_100a.bin",
+      "destination": "sega_100a.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "f273555d7d91e8a5a6bfd9bcf066331c"
+      }
+    },
+    {
+      "kind": "added",
       "system": "scummvm",
       "name": "MT32_CONTROL.ROM",
       "destination": "system/MT32_CONTROL.ROM",
@@ -590,6 +659,10 @@
     "dragon32/d64_1.rom md5"
   ],
   "hashes_filled": [
+    "apple2/disk2-13boot.rom md5",
+    "apple2/disk2-13seq.rom md5",
+    "apple2/disk2-16boot.rom md5",
+    "apple2/disk2-16seq.rom md5",
     "chihiro/chihiro_xbox_bios.bin md5",
     "nds/dsi_bios9.bin md5",
     "nds/dsi_bios7.bin md5",
@@ -601,7 +674,7 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 614,
+  "found_by_content": 615,
   "unattributed": [
     "commodore-amiga/kick13.rom",
     "commodore-amiga/kick12.rom",

@@ -7,11 +7,11 @@
   "files": [
     "rocknix-systems"
   ],
-  "summary": "38 kept, 3 files added, 2 hashes updated to the emulator source",
+  "summary": "38 kept, 6 files added, 2 hashes updated to the emulator source",
   "counts": {
     "kept": 38,
-    "added": 3,
-    "not_added": 1855,
+    "added": 6,
+    "not_added": 1853,
     "not_kept": 0
   },
   "changes": [
@@ -46,6 +46,39 @@
     },
     {
       "kind": "added",
+      "system": "saturn",
+      "name": "sega1003.bin",
+      "destination": "sega1003.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "74570fed4d44b2682b560c8cd44b8b6a"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "saturn",
+      "name": "sega_100.bin",
+      "destination": "sega_100.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "af5828fdff51384f99b3c4926be27762"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "saturn",
+      "name": "sega_100a.bin",
+      "destination": "sega_100a.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "f273555d7d91e8a5a6bfd9bcf066331c"
+      }
+    },
+    {
+      "kind": "added",
       "system": "psx",
       "name": "scph5903.bin",
       "destination": "scph5903.bin",
@@ -77,7 +110,7 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 377,
+  "found_by_content": 373,
   "unattributed": [],
   "removal_candidates": [
     {

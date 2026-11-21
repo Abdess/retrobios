@@ -10,7 +10,7 @@
   "counts": {
     "kept": 170,
     "added": 0,
-    "not_added": 2332,
+    "not_added": 2334,
     "not_kept": 0
   },
   "changes": [],
@@ -21,7 +21,7 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 301,
+  "found_by_content": 299,
   "unattributed": [],
   "removal_candidates": [
     {
