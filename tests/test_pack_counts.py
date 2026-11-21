@@ -401,9 +401,10 @@ class TheTableDescribesTheRelease(unittest.TestCase):
             {"RetroArch": "`system/`"},
             RECORD,
         )
-        self.assertIn("| Platform | Files | Extracted size |", rows[0])
+        self.assertIn("| Setup | Files | Size | Unzip into |", rows[0])
         self.assertIn("| RetroArch | 4,525 | 5.5 GB | `system/` |", rows[2])
-        self.assertIn("| Vita3K | - | - |", rows[3])
+        self.assertEqual(rows[3], "")
+        self.assertIn("get/vita3k/", rows[4])
 
     def test_the_committed_record_is_the_one_the_readme_prints(self):
         record_path = REPO_ROOT / "release.json"

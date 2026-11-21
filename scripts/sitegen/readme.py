@@ -15,7 +15,7 @@ from devtools import prchecks
 from model import releaserecord
 from core.artifacts import write_if_changed
 from core.cli import InputMissing
-from core.paths import DB_FILE, PLATFORMS_DIR, REPO_ROOT
+from core.paths import DB_FILE, REPO_ROOT
 from core.sizes import size_text
 from core.upstream import forge_headers
 from installer_build.module import installer_module
@@ -30,7 +30,7 @@ from model.systems import system_index
 from packs.coverage import verify_platform
 from resolve.cores import resolve_platform_cores
 from resolve.review import LARGE_FILE_ISSUE_URL
-from sitegen.install import display_name, platform_display
+from sitegen.install import display_name, has_release_pack, platform_display
 
 
 # The repository's profiles wherever the script is run from: a bare
@@ -240,6 +240,18 @@ def release_totals(platform_name: str, record: dict) -> tuple[int | None, int | 
     return pack["files"], pack["extracted_size"]
 
 
+def release_state(platform_name: str, record: dict) -> str:
+    """"none" for a setup no release publishes a ZIP for (`release_pack`),
+    "pending" for one the recorded release carries no pack for, added since,
+    else "released". No recorded tag, no release to be missing from."""
+    if not has_release_pack(platform_name):
+        return "none"
+    pack = releaserecord.pack_for(platform_name, record)
+    if record.get("tag") and not (pack and pack.get("assets")):
+        return "pending"
+    return "released"
+
+
 NO_PACK = "Use the command"
 
 
@@ -282,7 +294,7 @@ def asset_links(
 def download_links(
     platform_name: str, record: dict, label: str, attrs: str = "",
     button: Callable[[str, str], str] | None = None,
-    site: str = "", platforms_dir: str = PLATFORMS_DIR, page: str | None = None,
+    site: str = "", page: str | None = None,
 ) -> str:
     """The download cell of a platform: its permanent get/ page.
 
@@ -299,10 +311,10 @@ def download_links(
     def link(text: str) -> str:
         return button(text, page) if button else f"[{text}]({page}){attrs}"
 
-    if (load_platform_registry(platforms_dir).get(platform_name) or {}).get("release_pack") is not True:
+    state = release_state(platform_name, record)
+    if state == "none":
         return link(NO_PACK)
-    pack = releaserecord.pack_for(platform_name, record)
-    if record.get("tag") and not (pack and pack.get("assets")):
+    if state == "pending":
         return f"No ZIP yet: {link(NO_PACK.lower())}"
     return link(label)
 
@@ -369,30 +381,31 @@ def download_table(
     extract_paths: dict[str, str],
     record: dict,
 ) -> list[str]:
-    """One row per platform: what its released pack holds and where it extracts."""
+    """The README's ZIP table: one row per setup the release carries a pack
+    for, then the sentence linking every other setup to its get/ page."""
+    by_name = sorted(coverages, key=lambda n: coverages[n]["platform"])
+    released = [name for name in by_name if release_totals(name, record)[0]]
     lines = [
-        "| Platform | Files | Extracted size | Extract to | Download |",
-        "|----------|------:|---------------:|-----------|----------|",
+        "| Setup | Files | Size | Unzip into | Download |",
+        "|-------|------:|-----:|------------|----------|",
     ]
-    for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
+    for name in released:
         files, size = release_totals(name, record)
+        display = coverages[name]["platform"]
         lines.append(
-            f"| {cov['platform']} | {f'{files:,}' if files else '-'} |"
-            f" {size_text(size) if size else '-'} |"
-            f" {extract_paths.get(cov['platform'], '')} |"
+            f"| {display} | {files:,} | {size_text(size) if size else '-'} |"
+            f" {extract_paths.get(display, '')} |"
             f" {download_links(name, record, 'Download', site=SITE_URL)} |"
         )
-    return lines
-
-
-def no_pack_line() -> str:
-    """Why some rows read "Use the command", in one sentence."""
-    return (
-        "ZIPs are made for the setups most people download. The others read"
-        f" \"{NO_PACK}\": the installer above installs every file for them and"
-        " checks each one, and `--dry-run` shows what it would install"
-        f" ([why no ZIP]({SITE_URL}wiki/faq/#why-is-there-no-zip-for-my-setup))."
-    )
+    others = [name for name in by_name if name not in released]
+    return [
+        *lines,
+        "",
+        "ZIPs are made for the setups most people download. The others install with the line"
+        " above, and each page gives the command: "
+        + ", ".join(f"[{coverages[name]['platform']}]({SITE_URL}get/{name}/)" for name in others)
+        + ".",
+    ]
 
 
 def _names_list(coverages: dict) -> str:
@@ -598,8 +611,6 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = DB_FILE) -> str
     # once carried (coverage, collection, build commands) are the site's.
     record = releaserecord.load_advertised(platforms_dir=platforms_dir)
     extract_paths = _extract_cells(platforms_dir)
-    released = [name for name in sorted(coverages, key=lambda n: coverages[n]["platform"])
-                if release_totals(name, record)[0]]
     lines = [
         '<p align="center">',
         "  <picture>",
@@ -663,25 +674,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = DB_FILE) -> str
         "",
         "The Files column counts what a pack holds once unzipped.",
         "",
-        "| Setup | Files | Size | Unzip into | Download |",
-        "|-------|------:|-----:|------------|----------|",
-    ]
-    for name in released:
-        files, size = release_totals(name, record)
-        display = coverages[name]["platform"]
-        lines.append(
-            f"| {display} | {files:,} | {size_text(size) if size else '-'} |"
-            f" {extract_paths.get(display, '')} |"
-            f" {download_links(name, record, 'Download', site=SITE_URL)} |"
-        )
-    others = [name for name in sorted(coverages, key=lambda n: coverages[n]["platform"])
-              if name not in released]
-    lines.extend([
-        "",
-        "ZIPs are made for the setups most people download. The others install with the line"
-        " above, and each page gives the command: "
-        + ", ".join(f"[{coverages[name]['platform']}]({SITE_URL}get/{name}/)" for name in others)
-        + ".",
+        *download_table(coverages, extract_paths, record),
         "",
         "Unzip into the BIOS folder, files straight in it. A big pack comes in parts"
         " (`Pack.part1of2.zip`): download every part"
@@ -726,7 +719,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = DB_FILE) -> str
         "",
         "</details>",
         "",
-    ])
+    ]
 
     contributors = fetch_contributors()
     if not contributors:

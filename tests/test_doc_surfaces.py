@@ -26,6 +26,7 @@ from sitegen.readme import (
     contributing_text,
     download_links,
     download_table,
+    release_state,
 )
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -164,6 +165,12 @@ class DownloadLinksKeepTheirAddress(unittest.TestCase):
             f"No ZIP yet: [use the command]({SITE_URL}get/retroarch/)",
         )
 
+    def test_no_zip_yet_needs_a_recorded_release(self):
+        self.assertEqual(release_state("retroarch", SPLIT_RECORD), "pending")
+        self.assertEqual(release_state("retroarch", {}), "released")
+        self.assertEqual(release_state("bizhawk", {}), "none")
+        self.assertEqual(release_state("romm", SPLIT_RECORD), "released")
+
     def test_without_a_recorded_release_the_get_page_answers(self):
         self.assertEqual(
             download_links("romm", {}, "Download", site=SITE_URL),
@@ -176,12 +183,13 @@ class DownloadLinksKeepTheirAddress(unittest.TestCase):
             "bizhawk": {"platform": "BizHawk"},
             "romm": {"platform": "RomM"},
         }
-        rows = download_table(coverages, {}, SPLIT_RECORD)[2:]
-        self.assertEqual(len(rows), 3)
+        lines = download_table(coverages, {}, SPLIT_RECORD)
+        rows = [line for line in lines[2:] if line.startswith("|")]
+        self.assertEqual([row.split(" | ")[0] for row in rows], ["| Batocera", "| RomM"])
         for row in rows:
             self.assertNotIn("/releases/", row)
             self.assertIn(f"{SITE_URL}get/", row)
-        self.assertIn("[Use the command]", next(r for r in rows if "BizHawk" in r))
+        self.assertIn(f"[BizHawk]({SITE_URL}get/bizhawk/)", lines[-1])
 
     def test_the_generated_readme_links_every_get_page(self):
         if not RECORD.get("packs"):

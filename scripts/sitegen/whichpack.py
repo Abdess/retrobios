@@ -25,8 +25,8 @@ from sitegen.config import RELEASE_URL
 from sitegen.guidepage import NO_ZIP_FAQ, devices_meta, first_screen_words, get_page_link
 from sitegen.guides import fence, terminal_tabs, trust_box
 from sitegen.home import group_keys, next_block, runs_on_text, setup_picker
-from sitegen.install import installer_module, has_release_pack, platform_display
-from sitegen.readme import NO_PACK, download_links
+from sitegen.install import installer_module, platform_display
+from sitegen.readme import NO_PACK, download_links, release_state
 
 
 # Build cross-reference indexes
@@ -76,11 +76,11 @@ def _folder_cell(name: str, guide: Guide, prefix: str = "") -> str:
 
 def _pack_cell(name: str, record: dict, prefix: str = "") -> str:
     """The pack's parts and size, or the command where the release has none."""
-    if not has_release_pack(name):
-        return f"No ZIP. [{NO_PACK}]({prefix}platforms/{name}.md#install)."
+    state = release_state(name, record)
+    if state != "released":
+        no_zip = "No ZIP yet" if state == "pending" else "No ZIP"
+        return f"{no_zip}. [{NO_PACK}]({prefix}platforms/{name}.md#install)."
     pack = releaserecord.pack_for(name, record)
-    if record.get("tag") and not (pack and pack.get("assets")):
-        return f"No ZIP yet. [{NO_PACK}]({prefix}platforms/{name}.md#install)."
     # One small button to the setup's get/ page, which lists every part, and
     # the size after it.
     link = download_links(name, record, "ZIP", page=get_page_link(name, prefix),
@@ -233,9 +233,7 @@ def generate_which_pack() -> str:
         *markup.details("note", "Every folder and ZIP in one table",
                         _folder_tables(registry, record, display)),
     ]
-    pending = any(has_release_pack(key) and not (pack and pack.get("assets"))
-                  for key, pack in ((key, releaserecord.pack_for(key, record)) for key in registry))
-    if record.get("tag") and pending:
+    if any(release_state(key, record) == "pending" for key in registry):
         lines += ["Setups added after the last release have no ZIP until the next one.", ""]
     lines += ["No ZIP on a row: the command serves that setup. ZIPs are made for the "
               f"setups most people download. [Why?]({NO_ZIP_FAQ})", ""]

@@ -8,8 +8,7 @@ from resolve.nativemode import check_label
 from sitegen import markup
 from sitegen.guidepage import NO_ZIP_FAQ
 from sitegen.home import group_members
-from sitegen.install import has_release_pack
-from sitegen.readme import release_totals
+from sitegen.readme import release_state, release_totals
 
 
 # Platform pages
@@ -66,9 +65,11 @@ def setup_table(coverages: dict) -> list[str]:
     ]
     for name, cov in sorted(coverages.items(), key=lambda item: item[1]["platform"].casefold()):
         listed = f"{cov['total']:,}" if cov["total"] else "No list of its own"
-        files, _size = release_totals(name, releaserecord.load_advertised())
-        zipped = (f"{files:,}" if files
-                  else "No ZIP yet" if has_release_pack(name) else "No ZIP")
+        record = releaserecord.load_advertised()
+        state = release_state(name, record)
+        files, _size = release_totals(name, record)
+        zipped = ("No ZIP" if state == "none" else "No ZIP yet" if state == "pending"
+                  else f"{files:,}" if files else "-")
         lines.append(
             f"| [{cov['platform']}](../platforms/{name}.md) | {listed} | {zipped} | "
             f"{check_label(cov['mode'], cov['config'].get('hash_rule'))} |"
