@@ -19,12 +19,19 @@ yaml = require_yaml()
 STARLIGHT_DIR = "website"
 STARLIGHT_CONTENT = "src/content/docs"
 SITE_NAME = "RetroBIOS"
-REPO_URL = "https://github.com/Abdess/retrobios"
+REPO_SLUG = "Abdess/retrobios"
+REPO_URL = f"https://github.com/{REPO_SLUG}"
 RELEASE_URL = f"{REPO_URL}/releases/latest"
+# A release asset's address is this, its tag, a slash and the asset name.
+RELEASE_DOWNLOAD = f"{REPO_URL}/releases/download/"
+# The upload page of a folder is this followed by the folder.
+UPLOAD_ROOT = f"{REPO_URL}/upload/main/"
 # What LICENSE grants over the published data: its MIT terms name the
 # metadata. The BIOS files themselves are under NOTICE, never this.
 DATA_LICENSE = "MIT (LICENSE: scripts, tooling, schemas, documentation and metadata)"
-SITE_URL = "https://abdess.github.io/retrobios/"
+SITE_ORIGIN = "https://abdess.github.io"
+BASE = "/retrobios/"
+SITE_URL = SITE_ORIGIN + BASE
 GENERATED_DIRS = ["platforms", "systems", "emulators", "wiki", "api", "downloads", "files",
                   releaserecord.GET_DIR]
 # Generated directories of files served as they are, not pages.

@@ -30,6 +30,7 @@ from model.systems import system_index
 from packs.coverage import verify_platform
 from resolve.cores import resolve_platform_cores
 from resolve.review import LARGE_FILE_ISSUE_URL
+from sitegen.config import REPO_SLUG, REPO_URL, SITE_URL, UPLOAD_ROOT
 from sitegen.install import display_name, has_release_pack, platform_display
 
 
@@ -432,15 +433,14 @@ def collection_line(total_files: int, comp: dict) -> str:
     )
 
 
-SITE_URL = "https://abdess.github.io/retrobios/"
 # The installer demo (scripts/make_demo.py): the recording and what it shows.
 DEMO_DIR = REPO_ROOT / "docs_assets" / "demo"
 DEMO_GIF = "docs_assets/demo/install.gif"
 REPO_PATH = "../.."
-REPO = "Abdess/retrobios"
+REPO = REPO_SLUG
 # GitHub's "Add file > Upload files" page for bios/: a browser upload by
 # someone without write access lands on a fork and opens a pull request.
-UPLOAD_URL = f"https://github.com/{REPO}/upload/main/bios"
+UPLOAD_URL = f"{UPLOAD_ROOT}bios"
 
 
 def clone_line(db: dict) -> str:
@@ -556,8 +556,8 @@ def _catalog_matched_line(db: dict) -> list[str]:
 BADGES = (
     ("PyPI version", "https://img.shields.io/pypi/v/retrobios", "https://pypi.org/project/retrobios/"),
     ("Validation",
-     "https://github.com/Abdess/retrobios/actions/workflows/validate.yml/badge.svg?branch=main",
-     "https://github.com/Abdess/retrobios/actions/workflows/validate.yml"),
+     f"{REPO_URL}/actions/workflows/validate.yml/badge.svg?branch=main",
+     f"{REPO_URL}/actions/workflows/validate.yml"),
 )
 
 

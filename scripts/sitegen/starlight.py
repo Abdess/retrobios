@@ -22,9 +22,8 @@ from pathlib import Path, PurePosixPath
 
 from core.paths import REPO_ROOT
 from core.anchors import unique_anchor, toc_slug
+from sitegen.config import BASE, SITE_URL
 
-BASE = "/retrobios/"
-SITE_URL = "https://abdess.github.io/retrobios/"
 
 # Components a page body may use, and where each comes from.
 COMPONENTS = {

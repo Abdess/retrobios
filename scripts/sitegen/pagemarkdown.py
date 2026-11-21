@@ -12,11 +12,10 @@ from pathlib import Path
 from typing import ClassVar
 
 from core.paths import REPO_ROOT
-from sitegen.config import build_commit
+from sitegen.config import BASE, SITE_ORIGIN, build_commit
 
 
-SITE = "https://abdess.github.io"
-BASE = "/retrobios/"
+SITE = SITE_ORIGIN
 # Elements whose content is never words a reader needs.
 SKIPPED = frozenset({"script", "style", "svg", "button", "nav", "template", "noscript", "video"})
 HEADINGS = {f"h{n}": n for n in range(1, 7)}

@@ -29,13 +29,12 @@ from packs.crossref import first_hash
 from core.hashing import cut_md5_owner, parse_hash_list
 from resolve.review import LARGE_FILE_ISSUE_URL, Placement, placement
 from resolve.validation import deliverable, filter_files_by_mode, installed_with_emulator
+from sitegen.config import UPLOAD_ROOT
 
 ALGORITHMS = ("sha1", "sha256", "md5", "crc32")
 # GitHub's upload page takes 25 MB per file. A larger file goes in by a
 # push or, past 100 MB, through the issue form (CONTRIBUTING.md).
 BROWSER_UPLOAD_LIMIT = 25 * 1024 * 1024
-# The upload page of a folder is this followed by the folder.
-UPLOAD_ROOT = "https://github.com/Abdess/retrobios/upload/main/"
 # Under the site's public folder, read by WantedFiles.astro.
 DATA_FILE = "data/wanted.json"
 

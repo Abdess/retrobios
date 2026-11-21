@@ -36,8 +36,9 @@ from sitegen import markup
 from core.artifacts import json_text, write_if_changed
 from sitegen.render import escape_tags
 from core.paths import REPO_ROOT
+from sitegen.config import REPO_URL
 
-REPO = "https://github.com/Abdess/retrobios"
+REPO = REPO_URL
 EXPLORER_PAGE = "measurements.md"
 METHOD_PAGE = "wiki/measurements.md"
 HOSTS_MARKER = "<!-- measurements-hosts -->"

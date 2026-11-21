@@ -11,6 +11,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
+from sitegen.config import BASE, RELEASE_DOWNLOAD, SITE_NAME
+
 
 
 @dataclass
@@ -352,7 +354,7 @@ def _jsonld_issues(page: Page, is_404: bool) -> list[str]:
     return messages
 
 
-def description_template(page: Page, site_name: str = "RetroBIOS") -> str:
+def description_template(page: Page, site_name: str = SITE_NAME) -> str:
     """A page's description with its own names taken out: its h1 and its
     window title. What is left is the text it shares with its template."""
     text = page.descriptions[0] if page.descriptions else ""
@@ -405,9 +407,6 @@ def _check_links(pages: dict, site: Path, base_path: str) -> list[str]:
     return issues
 
 
-RELEASE_DOWNLOAD = "https://github.com/Abdess/retrobios/releases/download/"
-
-
 def _check_get_pages(
     pages: dict, site: Path, platforms_dir: Path, record_path: Path,
 ) -> list[str]:
@@ -451,7 +450,7 @@ def _check_get_pages(
 
 
 def validate_site(
-    site: Path, base_path: str = "/retrobios/", platforms_dir: Path | None = None,
+    site: Path, base_path: str = BASE, platforms_dir: Path | None = None,
     record_path: Path | None = None,
 ) -> list[str]:
     site = site.resolve()

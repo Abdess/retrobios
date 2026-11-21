@@ -11,7 +11,7 @@ from model import siteinputs
 from model.composition import count_catalog_matched
 from model.platforms import load_platform_config
 from model.profiles import unique_emulator_profiles
-from sitegen.config import RELEASE_URL, REPO_URL
+from sitegen.config import RELEASE_DOWNLOAD, RELEASE_URL, REPO_URL
 from sitegen.install import display_name
 
 
@@ -72,7 +72,7 @@ def release_line(platform_name: str, record: dict) -> list[str]:
     pack_name = releaserecord.pack_name_for(platform_name, record)
     if not tag or not pack_name:
         return []
-    base = f"{REPO_URL}/releases/download/{tag}"
+    base = f"{RELEASE_DOWNLOAD}{tag}"
     built = _release_date(tag)
     lines = [
         f"Pack {tag}{f', built {built}' if built else ''}. "
