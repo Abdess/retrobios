@@ -35,6 +35,7 @@ COMMANDS = {
         "packs/slots.py", "resolve/collisions.py", "packs/slotscan.py", "packs/slotreport.py",
     ),
     "validate_pr.py": ("resolve/review.py", "core/gitclone.py"),
+    "mame_ref_audit.py": ("profiling/mamerefs.py",),
     "refresh_data_dirs.py": ("packs/datadirs.py",),
     "split_pack.py": ("packs/parts.py",),
     "dedup.py": ("model/nodedup.py",),

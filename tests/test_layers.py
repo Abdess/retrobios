@@ -36,6 +36,8 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     "probes": frozenset({"unattended", "scraper"}),
     # A pass that wrote profiles rebuilds the site's record of cited source paths.
     "profiling": frozenset({"sitegen"}),
+    # The MAME ref audit reads machine declarations as the MAME scraper parses them.
+    "profiling": frozenset({"scraper"}),
     "romrecipes": frozenset(),
     # The site prints the recipe counts and the dump-catalog coverage report
     # those two packages compute, serves the handheld launchers and prints the

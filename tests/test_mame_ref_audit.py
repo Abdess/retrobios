@@ -13,8 +13,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import mame_ref_audit
-from mame_ref_audit import declares
+from profiling import mamerefs
+from profiling.mamerefs import declares
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -64,18 +64,18 @@ class TestAudit(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.dir = self.tmp.name
         Path(self.dir, "p.yml").write_text(PROFILE, encoding="utf-8")
-        self._fetch = mame_ref_audit.upstream.fetch_file
-        mame_ref_audit.upstream.fetch_file = (
+        self._fetch = mamerefs.upstream.fetch_file
+        mamerefs.upstream.fetch_file = (
             lambda repo, sha, path, cache, offline=False:
             DRIVER if path.endswith("xavix.cpp") else ["ROM_START( soundbox )"]
         )
 
     def tearDown(self):
-        mame_ref_audit.upstream.fetch_file = self._fetch
+        mamerefs.upstream.fetch_file = self._fetch
         self.tmp.cleanup()
 
     def test_a_ref_pointing_elsewhere_is_reported_with_its_declaration(self):
-        findings, agreed, unjudged = mame_ref_audit.audit("p", self.dir, ".c", False)
+        findings, agreed, unjudged = mamerefs.audit("p", self.dir, ".c", False)
         self.assertEqual(agreed, 1, "ekarag cites its own line")
         self.assertEqual([f.set_name for f in findings], ["ekara"])
         self.assertEqual(findings[0].cited, 99)
@@ -83,12 +83,12 @@ class TestAudit(unittest.TestCase):
 
     def test_a_set_no_machine_declares_is_left_unjudged(self):
         """A device archive takes its DEFINE_DEVICE_TYPE shortname."""
-        _, _, unjudged = mame_ref_audit.audit("p", self.dir, ".c", False)
+        _, _, unjudged = mamerefs.audit("p", self.dir, ".c", False)
         self.assertEqual(unjudged, 1)
 
     def test_rewrite_moves_only_the_entry_that_owns_the_ref(self):
-        findings, _, _ = mame_ref_audit.audit("p", self.dir, ".c", False)
-        self.assertEqual(mame_ref_audit.rewrite("p", self.dir, findings), 1)
+        findings, _, _ = mamerefs.audit("p", self.dir, ".c", False)
+        self.assertEqual(mamerefs.rewrite("p", self.dir, findings), 1)
         text = Path(self.dir, "p.yml").read_text(encoding="utf-8")
         self.assertIn('source_ref: "src/mame/tvgames/xavix.cpp:2"', text)
         self.assertIn(
@@ -97,9 +97,9 @@ class TestAudit(unittest.TestCase):
         )
 
     def test_a_corrected_profile_reports_nothing(self):
-        findings, _, _ = mame_ref_audit.audit("p", self.dir, ".c", False)
-        mame_ref_audit.rewrite("p", self.dir, findings)
-        again, agreed, _ = mame_ref_audit.audit("p", self.dir, ".c", False)
+        findings, _, _ = mamerefs.audit("p", self.dir, ".c", False)
+        mamerefs.rewrite("p", self.dir, findings)
+        again, agreed, _ = mamerefs.audit("p", self.dir, ".c", False)
         self.assertEqual(again, [])
         self.assertEqual(agreed, 2)
 
@@ -112,16 +112,16 @@ class TestCorpusStaysCorrect(unittest.TestCase):
     """
 
     def test_every_mame_family_ref_names_its_own_set(self):
-        cache = ROOT / mame_ref_audit.upstream.CACHE_DIR
+        cache = ROOT / mamerefs.upstream.CACHE_DIR
         if not cache.is_dir():
             self.skipTest("no upstream cache")
         for name in ("mame", "mamearcade", "mamemess", "groovymame"):
             with self.subTest(emulator=name):
                 try:
-                    findings, agreed, _ = mame_ref_audit.audit(
+                    findings, agreed, _ = mamerefs.audit(
                         name, str(ROOT / "emulators"), str(cache), True
                     )
-                except mame_ref_audit.upstream.NotCachedError as exc:
+                except mamerefs.upstream.NotCachedError as exc:
                     # A cache that holds some drivers and not others is as
                     # cold as an empty one for this profile.
                     self.skipTest(f"{name}: {exc}")
