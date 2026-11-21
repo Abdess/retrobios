@@ -34,14 +34,14 @@ show. Anything else settles nothing. A check the entry declares with
 agrees with it. Of validation, the table writes only a
 missing `size`. A contradicted content check goes to review: which hash a
 core computes is read in its code.
-
-Standard library only.
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass, field
+
+from model import profiles
 
 BOOTS = "boots"
 BIOS_ERROR = "bios_error"
@@ -51,7 +51,9 @@ UNKNOWN = "unknown"
 FAILS = (BIOS_ERROR, CRASH, HANG)
 REFUSED = "refused"
 USED = "used"
-CONTENT_CHECKS = ("md5", "sha1", "sha256", "crc32", "adler32", "signature")
+HASH_CHECKS = ("md5", "sha1", "sha256", "crc32", "adler32", "signature")
+# A check that judges a file by its content: a hash, or a test model.profiles runs.
+CONTENT_CHECKS = frozenset(HASH_CHECKS) | profiles.CONTENT_CHECKS
 
 # A field an entry leaves out reads as this value.
 FIELD_DEFAULTS: dict[str, object] = {"hle_fallback": False, "path": None, "aliases": [],
@@ -230,7 +232,7 @@ def rule_validation(zeros: Run | None, half: Run | None, none: Run, present: Run
     problems = []
     if content is not None:
         shown.append("checks the content" if content else "does not check the content")
-        if content != bool(enforced & set(CONTENT_CHECKS)):
+        if content != bool(enforced & CONTENT_CHECKS):
             problems.append("a same-size file of zeros is " + ("refused" if content else "run")
                             + f", the profile declares validation {said}")
     missing_size = size is True and "size" not in declared

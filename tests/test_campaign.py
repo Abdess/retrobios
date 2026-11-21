@@ -229,6 +229,15 @@ class RuleTable(unittest.TestCase):
         self.assertEqual(rules.rule_validation(used, used, NONE_BOOTS, PRESENT, {"name": "b"}).rule,
                          "validation_agrees")
 
+    def test_a_content_test_agrees_with_refused_zeros(self) -> None:
+        """LRPS2 reads the ROMDIR table of a PS2 BIOS (validation: [size, romdir]):
+        zeros of its size are refused, as the profile says."""
+        refused = run(rules.BIOS_ERROR)
+        for check in ("romdir", "masked_sha1"):
+            entry = {"name": "ps2-0230a-20080220.bin", "validation": ["size", check]}
+            verdict = rules.rule_validation(refused, refused, refused, PRESENT, entry)
+            self.assertEqual(verdict.rule, "validation_agrees", check)
+
     def test_validation_contradicted_is_queued(self) -> None:
         refused = run(rules.BIOS_ERROR)
         used = run(rules.HANG)
