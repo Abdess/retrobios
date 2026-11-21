@@ -7,7 +7,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "0.10.10b",
-  "generated": "2026-11-13T11:31:17Z",
+  "generated": "2026-11-20T03:39:07Z",
   "base_destination": "",
   "detect": [
     {
@@ -2365,10 +2365,10 @@
       }
     }
   ],
-  "total_files": 12197,
-  "total_size": 10572282384,
-  "pack_files": 16110,
-  "pack_size": 10688969670,
+  "total_files": 12216,
+  "total_size": 10573616128,
+  "pack_files": 16129,
+  "pack_size": 10690303414,
   "total_omitted": 340,
   "omitted_files": [
     {
@@ -7898,7 +7898,8 @@
       "pc8800"
     ],
     "nec-pc-98": [
-      "pc98"
+      "pc98",
+      "pc9800"
     ],
     "nec-pc-engine": [
       "pcengine",
@@ -14714,29 +14715,6 @@
       "cores": null,
       "systems": [
         "arcade"
-      ],
-      "truth": false
-    },
-    {
-      "dest": "bios/decocass.zip",
-      "sha1": "5c5f300f3ab2bd10e2adf4dd96baa78317578d8d",
-      "sha256": "fb7051f8864f10d5a1079bd63fe3ceab88cd8c394024b69fc773eb709bc3493a",
-      "size": 13225,
-      "repo_path": "bios/Arcade/Arcade/.variants/decocass.zip.5c5f300f",
-      "cores": null,
-      "systems": [
-        "arcade"
-      ],
-      "alternatives": [
-        {
-          "sha1": "1b33cf0e730a6cde96479b0face108b6931d433e",
-          "sha256": "bd86d293abab2e816d307626cdd793e2da2ed69c4124bf92f7e7eca69f9a5096",
-          "size": 22379,
-          "repo_path": "bios/Arcade/Arcade/decocass.zip",
-          "cores": [
-            "fbalpha2019"
-          ]
-        }
       ],
       "truth": false
     },
@@ -23451,29 +23429,6 @@
       "truth": false
     },
     {
-      "dest": "bios/skns.zip",
-      "sha1": "44bc8180dca3dfdf1b461268919da8efb2e3fb07",
-      "sha256": "43e0385c53f004a8eb08a2075957b28a852883c29917ba88ecefc68c11753400",
-      "size": 783788,
-      "repo_path": "bios/Arcade/Arcade/.variants/skns.zip.44bc8180",
-      "cores": null,
-      "systems": [
-        "arcade"
-      ],
-      "alternatives": [
-        {
-          "sha1": "4257bd14b541fafbd555cb98ba079a3416a45934",
-          "sha256": "6edf22c68e70be06c9b32741e0d1df1aa38cf6fc162c1027c15d6c1d882f621b",
-          "size": 924762,
-          "repo_path": "bios/Arcade/Arcade/skns.zip",
-          "cores": [
-            "fbalpha2019"
-          ]
-        }
-      ],
-      "truth": false
-    },
-    {
       "dest": "bios/sms_diypaddle.zip",
       "sha1": "bc9f567b606b8e88cfd88564c8f02f832ea0016a",
       "sha256": "8b93fb482fdaffb331d62d5ae89756e722149d649e166bd10f207dd044d811e7",
@@ -26428,6 +26383,51 @@
       "truth": false
     },
     {
+      "dest": "bios/decocass.zip",
+      "sha1": "30b97b2670b79d0de41cba190324c504846c6fa1",
+      "sha256": "ff29929e3e094459f6358a5a3ca4d2dabe64f64e2cade0faa407969d83e096bf",
+      "size": 16107,
+      "repo_path": "bios/Arcade/Arcade/.variants/decocass.zip.30b97b26",
+      "cores": null,
+      "systems": [
+        "arcade"
+      ],
+      "alternatives": [
+        {
+          "sha1": "1b33cf0e730a6cde96479b0face108b6931d433e",
+          "sha256": "bd86d293abab2e816d307626cdd793e2da2ed69c4124bf92f7e7eca69f9a5096",
+          "size": 22379,
+          "repo_path": "bios/Arcade/Arcade/decocass.zip",
+          "cores": [
+            "fbalpha2019"
+          ]
+        }
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/skns.zip",
+      "sha1": "4257bd14b541fafbd555cb98ba079a3416a45934",
+      "sha256": "6edf22c68e70be06c9b32741e0d1df1aa38cf6fc162c1027c15d6c1d882f621b",
+      "size": 924762,
+      "repo_path": "bios/Arcade/Arcade/skns.zip",
+      "cores": null,
+      "systems": [
+        "arcade"
+      ],
+      "alternatives": [
+        {
+          "sha1": "4257bd14b541fafbd555cb98ba079a3416a45934",
+          "sha256": "6edf22c68e70be06c9b32741e0d1df1aa38cf6fc162c1027c15d6c1d882f621b",
+          "size": 924762,
+          "repo_path": "bios/Arcade/Arcade/skns.zip",
+          "cores": [
+            "fbalpha2019"
+          ]
+        }
+      ]
+    },
+    {
       "dest": "bios/coleco.zip",
       "sha1": "db2190922f359f19b47f8270fa87a7c1b38f5b2b",
       "sha256": "8924b6d76ad7d57ea1f1e2ab83bbbf3d652c1f169ef75747e3240d5c45ebc267",
@@ -28843,7 +28843,28 @@
       "repo_path": "bios/Microsoft/MSX/DISK.ROM",
       "cores": null,
       "systems": [
-        "microsoft-msx"
+        "microsoft-msx",
+        "nec-pc-88"
+      ],
+      "declared_choices": [
+        {
+          "sha1": "032cb1c1c75b9a191fa1230978971698d9d2a17f",
+          "sha256": "31740a761447d7590c304338d389b0ae114546a8b9f79c9ffd5e374f80b7d354",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/DISK.ROM",
+          "systems": [
+            "microsoft-msx"
+          ]
+        },
+        {
+          "sha1": "bb7103a0818850a039c67ff666a31ce49a8d516f",
+          "sha256": "9dc63118728a171ce2ed437ad38ef280b8b7bcf4a5a95fedf18946501b010456",
+          "size": 2048,
+          "repo_path": "bios/NEC/PC-88/N88SUB.ROM",
+          "systems": [
+            "nec-pc-88"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -29170,6 +29191,18 @@
       "truth": false
     },
     {
+      "dest": "bios/FMPAC.rom",
+      "sha1": "9d789166e3caf28e4742fe933d962e99618c633d",
+      "sha256": "3cfe44646b69a622656b96305f1b975f48ca018839f7946895f7a1352d9720aa",
+      "size": 65536,
+      "repo_path": "bios/Microsoft/MSX/FMPAC.ROM",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "truth": false
+    },
+    {
       "dest": "bios/GCVMX80.ROM",
       "sha1": "977fed1135b6cc73e765b47f51570fc00acd5b79",
       "sha256": "531537e092df40ae8ae5728e58dd9224521fe98cde7c5af53f38007ed1b0353b",
@@ -29187,6 +29220,18 @@
       "sha256": "0ba0a8e4c4fc4635621170faef6866b630aac7680aa13f044ed3becbccaca0a5",
       "size": 131072,
       "repo_path": "bios/Microsoft/MSX/Shared Roms/HANGUL.rom",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/KANJI.rom",
+      "sha1": "5aff2d9b6efc723bc395b0f96f0adfa83cc54a49",
+      "sha256": "d87ce758a7171870a2a3e7893e09cbba2bd68ee70b4d0f0e49dd2ecd60aafdd1",
+      "size": 262144,
+      "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_kanjifont.rom",
       "cores": null,
       "systems": [
         "microsoft-msx"
@@ -29259,6 +29304,18 @@
       "sha256": "0a89f2a084d18c470b148ecea91e5be34f4ab242ba0828f5f011553fa556ca30",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2BR.rom",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/MSX2EXT.rom",
+      "sha1": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
+      "sha256": "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
       "cores": null,
       "systems": [
         "microsoft-msx"
@@ -29374,11 +29431,35 @@
       "truth": false
     },
     {
+      "dest": "bios/MSX2PEXT.rom",
+      "sha1": "fe0254cbfc11405b79e7c86c7769bd6322b04995",
+      "sha256": "36000685128f95ff515a128973f8d439116c1a1a8e38c1777293a428894434a2",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/MSX2PEXT.ROM",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "truth": false
+    },
+    {
       "dest": "bios/MSX2PMUS.rom",
       "sha1": "6354ccc5c100b1c558c9395fa8c00784d2e9b0a3",
       "sha256": "e49cc4f1ad9de4df6c965d92fc631175c1d004e647d680d884ec6971a824eebc",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2PMUS.rom",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/MSX2P.rom",
+      "sha1": "e90f80a61d94c617850c415e12ad70ac41e66bb7",
+      "sha256": "ca45b50d49a8199a2b8f74300556367a776df1bb28bf8af24d33e65f0fe37a99",
+      "size": 32768,
+      "repo_path": "bios/Other/msx-emu/Machines/Shared Roms/MSX2P.rom",
       "cores": null,
       "systems": [
         "microsoft-msx"
@@ -29403,6 +29484,18 @@
       "sha256": "482a822df0111c09bb74d67e89eda62b7dfb47ff9672fa838a96da0237d987e8",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2REXT.rom",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/MSX2.rom",
+      "sha1": "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e",
+      "sha256": "4bc4ae85ca5f28246cd3e7b7e017d298ddd375603657f84ef2c7954bc2d9b919",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/MSX2.ROM",
       "cores": null,
       "systems": [
         "microsoft-msx"
@@ -29571,6 +29664,18 @@
       "sha256": "21bdad83858a3c52913546b26906892df69f77dfd85e5741cd1dab0ab145b18a",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/MSXR2.rom",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/MSX.rom",
+      "sha1": "e998f0c441f4f1800ef44e42cd1659150206cf79",
+      "sha256": "1c85dac5536fa3ba6f2cb70deba02ff680b34ac6cc787d2977258bd663a99555",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/MSX_8020-20bios.rom",
       "cores": null,
       "systems": [
         "microsoft-msx"
@@ -29787,6 +29892,18 @@
       "sha256": "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/fmpac.rom",
+      "sha1": "9d789166e3caf28e4742fe933d962e99618c633d",
+      "sha256": "3cfe44646b69a622656b96305f1b975f48ca018839f7946895f7a1352d9720aa",
+      "size": 65536,
+      "repo_path": "bios/Microsoft/MSX/FMPAC.ROM",
       "cores": null,
       "systems": [
         "microsoft-msx"
@@ -30079,11 +30196,35 @@
       "truth": false
     },
     {
+      "dest": "bios/N88.ROM",
+      "sha1": "3b31fc68fa7f47b21c1a1cb027b86b9e87afbfff",
+      "sha256": "cf0b48f5541f5efd54a006d1a6042dd7ce613ccc69e13f2f41ca678569b5d650",
+      "size": 32768,
+      "repo_path": "bios/NEC/PC-88/.variants/N88.ROM.3b31fc68",
+      "cores": null,
+      "systems": [
+        "nec-pc-88"
+      ],
+      "truth": false
+    },
+    {
       "dest": "bios/N88SUB.ROM",
       "sha1": "bb7103a0818850a039c67ff666a31ce49a8d516f",
       "sha256": "9dc63118728a171ce2ed437ad38ef280b8b7bcf4a5a95fedf18946501b010456",
       "size": 2048,
       "repo_path": "bios/NEC/PC-88/N88SUB.ROM",
+      "cores": null,
+      "systems": [
+        "nec-pc-88"
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/N88N.ROM",
+      "sha1": "5b922ed9de07d2a729bdf1da7b57c50ddf08809a",
+      "sha256": "11c3c727d7d12d0c7e044dd02ce154a5715bd7a2b8a9007132645962c7803881",
+      "size": 32768,
+      "repo_path": "bios/NEC/PC-88/.variants/N88N.ROM.5b922ed9",
       "cores": null,
       "systems": [
         "nec-pc-88"
@@ -30115,7 +30256,31 @@
       "truth": false
     },
     {
+      "dest": "bios/N88_0.ROM",
+      "sha1": "d239c26ad7ac5efac6e947b0e9549b1534aa970d",
+      "sha256": "290286a513c39af02581481958b8f1291c0ee8409b3940ae808352e0c3a2e2f8",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-88/N88EXT0.ROM",
+      "cores": null,
+      "systems": [
+        "nec-pc-88"
+      ],
+      "truth": false
+    },
+    {
       "dest": "bios/N88EXT1.ROM",
+      "sha1": "8528eef7946edf6501a6ccb1f416b60c64efac7c",
+      "sha256": "bbb6283a0810eb4468909a364ccbc6d9cec51024aa0a2afa2e72a7af6d23049b",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-88/N88EXT1.ROM",
+      "cores": null,
+      "systems": [
+        "nec-pc-88"
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/N88_1.ROM",
       "sha1": "8528eef7946edf6501a6ccb1f416b60c64efac7c",
       "sha256": "bbb6283a0810eb4468909a364ccbc6d9cec51024aa0a2afa2e72a7af6d23049b",
       "size": 8192,
@@ -30139,11 +30304,47 @@
       "truth": false
     },
     {
+      "dest": "bios/N88_2.ROM",
+      "sha1": "b7c8bcea219b77d9cc3ee0efafe343cc307425d1",
+      "sha256": "ad0f26064f44718eedd0103fde3d41bd29e60317680611e784dc9c1943e7574b",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-88/N88EXT2.ROM",
+      "cores": null,
+      "systems": [
+        "nec-pc-88"
+      ],
+      "truth": false
+    },
+    {
       "dest": "bios/N88EXT3.ROM",
       "sha1": "efce0b51cab9f0da6cf68507757f1245a2867a72",
       "sha256": "8580fecc6574b40a082aaf227afc3c1dbd06f333ba7549278ff73647b02b2303",
       "size": 8192,
       "repo_path": "bios/NEC/PC-88/N88EXT3.ROM",
+      "cores": null,
+      "systems": [
+        "nec-pc-88"
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/N88_3.ROM",
+      "sha1": "efce0b51cab9f0da6cf68507757f1245a2867a72",
+      "sha256": "8580fecc6574b40a082aaf227afc3c1dbd06f333ba7549278ff73647b02b2303",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-88/N88EXT3.ROM",
+      "cores": null,
+      "systems": [
+        "nec-pc-88"
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/N88KNJ1.ROM",
+      "sha1": "82e11a177af6a5091dd67f50a2f4bafda84d6556",
+      "sha256": "7608040cffb1951e5cc567abb63f75b5746777a1ba96196c1b75606b793bb4bb",
+      "size": 131072,
+      "repo_path": "bios/NEC/PC-88/KANJI1.ROM",
       "cores": null,
       "systems": [
         "nec-pc-88"
@@ -30348,6 +30549,54 @@
       "sha256": "d0f5b6d96a01295ab5436d7852d2c9eea1faa87fcf016b7e6599cdd689266cd2",
       "size": 98304,
       "repo_path": "bios/NEC/PC-98/bios.rom",
+      "cores": null,
+      "systems": [
+        "nec-pc-98"
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/font.rom",
+      "sha1": "78ba9960f135372825ab7244b5e4e73a810002ff",
+      "sha256": "8db165d567e13bce3f50ee495975671faa5a0ff332dcb08e187aa91125c81ec6",
+      "size": 288768,
+      "repo_path": "bios/NEC/PC-98/font.rom",
+      "cores": null,
+      "systems": [
+        "nec-pc-98"
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/BIOS.ROM",
+      "sha1": "910fae6763c0cd59b3957b6cde479c72e21f33c1",
+      "sha256": "2c2684d21ca44ab022d294a42709083ebe53f678e66b96c0ddd48f06aa5c869d",
+      "size": 98304,
+      "repo_path": "bios/NEC/PC-98/.variants/BIOS.ROM.910fae67",
+      "cores": null,
+      "systems": [
+        "nec-pc-98"
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/SOUND.ROM",
+      "sha1": "34137c287c39c44300b04ee97c1e6459bb826b60",
+      "sha256": "4db8274393f8267db83665bbb70be8efb83201818dff3ad76c11f451be96a803",
+      "size": 16384,
+      "repo_path": "bios/NEC/PC-98/.variants/SOUND.ROM.34137c28",
+      "cores": null,
+      "systems": [
+        "nec-pc-98"
+      ],
+      "truth": false
+    },
+    {
+      "dest": "bios/ITF.ROM",
+      "sha1": "9bca7d5116788776ed0f297bccb4dfc485379b41",
+      "sha256": "2ca3ee3c7d5a6b6304a0205fec3cd7eaeb4e1e197e5db740cff0665006498076",
+      "size": 32768,
+      "repo_path": "bios/NEC/PC-98/.variants/ITF.ROM.9bca7d51",
       "cores": null,
       "systems": [
         "nec-pc-98"
@@ -120082,19 +120331,6 @@
       ]
     },
     {
-      "dest": "bios/openmsx/share/systemroms/fmpac.rom",
-      "sha1": "9d789166e3caf28e4742fe933d962e99618c633d",
-      "sha256": "3cfe44646b69a622656b96305f1b975f48ca018839f7946895f7a1352d9720aa",
-      "size": 65536,
-      "repo_path": "bios/Microsoft/MSX/FMPAC.ROM",
-      "cores": [
-        "openmsx-libretro"
-      ],
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
       "dest": "bios/openmsx/share/systemroms/novaxis.rom",
       "sha1": "352ec8c99fe1397a88ecb3aee6dbb4d121c818e9",
       "sha256": "9b57b6bfb8958d435ba34bcbbcd44b46710fa7ed7b9d41bcd2485fac05a602ce",
@@ -138048,19 +138284,6 @@
       "sha256": "25773eaee3af617db08d26602d8f4cdc7d42ed946ca510d3b1d96fe1645af63c",
       "size": 524288,
       "repo_path": "bios/NEC/PC-88/n88jisho.rom",
-      "cores": [
-        "quasi88"
-      ],
-      "systems": [
-        "nec-pc-88"
-      ]
-    },
-    {
-      "dest": "bios/quasi88/font.rom",
-      "sha1": "84b90f69671d4b72e8f219e1fe7cd667e976cf7f",
-      "sha256": "3227087599afd9304f260cdeb3bf1533e39e425cf444ceb3c24f55f561e71a0c",
-      "size": 2048,
-      "repo_path": "bios/NEC/PC-88/font.rom",
       "cores": [
         "quasi88"
       ],
@@ -178566,6 +178789,19 @@
       ]
     },
     {
+      "dest": "bios/openmsx/share/systemroms/fmpac.rom",
+      "sha1": "9d789166e3caf28e4742fe933d962e99618c633d",
+      "sha256": "3cfe44646b69a622656b96305f1b975f48ca018839f7946895f7a1352d9720aa",
+      "size": 65536,
+      "repo_path": "bios/Microsoft/MSX/FMPAC.ROM",
+      "cores": [
+        "openmsx-libretro"
+      ],
+      "systems": [
+        "microsoft-msx"
+      ]
+    },
+    {
       "dest": "bios/GBA/gba_bios.bin",
       "sha1": "300c20df6731a33952ded8c436f7f186d25d3492",
       "sha256": "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570",
@@ -178809,6 +179045,19 @@
       "sha256": "7608040cffb1951e5cc567abb63f75b5746777a1ba96196c1b75606b793bb4bb",
       "size": 131072,
       "repo_path": "bios/NEC/PC-88/KANJI1.ROM",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
+      ]
+    },
+    {
+      "dest": "bios/quasi88/font.rom",
+      "sha1": "84b90f69671d4b72e8f219e1fe7cd667e976cf7f",
+      "sha256": "3227087599afd9304f260cdeb3bf1533e39e425cf444ceb3c24f55f561e71a0c",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-88/font.rom",
       "cores": [
         "quasi88"
       ],
@@ -198293,20 +198542,6 @@
       "sha256": "b26918d5b844b60490a748e3afe21313db2de285c188e58bdfc72add865b9049",
       "size": 2190114,
       "repo_path": "bios/Arcade/Arcade/pgm.zip",
-      "cores": [
-        "fbneo",
-        "fbalpha2019"
-      ],
-      "systems": [
-        "arcade"
-      ]
-    },
-    {
-      "dest": "bios/skns.zip",
-      "sha1": "4257bd14b541fafbd555cb98ba079a3416a45934",
-      "sha256": "6edf22c68e70be06c9b32741e0d1df1aa38cf6fc162c1027c15d6c1d882f621b",
-      "size": 924762,
-      "repo_path": "bios/Arcade/Arcade/skns.zip",
       "cores": [
         "fbneo",
         "fbalpha2019"

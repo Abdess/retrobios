@@ -29,7 +29,9 @@ def _manifest(md5: str) -> dict:
 
 
 class RetrodeckConflicts(unittest.TestCase):
-    def test_a_conflicting_md5_is_recorded(self) -> None:
+    def test_a_second_components_md5_is_kept_not_dropped(self) -> None:
+        """RetroDECK checks each manifest entry against its own md5 list
+        (api_data_processing.sh:350-361): both are transcribed."""
         with tempfile.TemporaryDirectory() as tmp:
             for name, md5 in (("np2kai", "a" * 32), ("xm6", "b" * 32)):
                 folder = Path(tmp) / name
@@ -37,10 +39,9 @@ class RetrodeckConflicts(unittest.TestCase):
                 (folder / "component_manifest.json").write_text(json.dumps({name: _manifest(md5)}))
             scraper = retrodeck_scraper.Scraper(manifests_dir=tmp)
             reqs = scraper.fetch_requirements()
-        self.assertEqual([r.md5 for r in reqs], ["a" * 32])
-        self.assertEqual(len(scraper.dropped), 1)
-        self.assertIn("MD5 conflict", scraper.dropped[0])
-        self.assertIn("xm6", scraper.dropped[0])
+        self.assertEqual([(r.md5, r.native["component"]) for r in reqs],
+                         [("a" * 32, "np2kai"), ("b" * 32, "xm6")])
+        self.assertEqual(scraper.dropped, [])
 
     def test_a_plain_repeat_is_not_a_drop(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

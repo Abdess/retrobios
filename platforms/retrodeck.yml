@@ -12110,6 +12110,67 @@ systems:
       component: retroarch
       description: Neo Geo CDZ BIOS
       required_label: Required
+    - name: decocass.zip
+      destination: bios/decocass.zip
+      required: true
+      md5: b7e1189b341bf6a8e270017c096d21b0
+      native_system: fbneo
+      component: retroarch
+      description: DECO Cassette System BIOS
+      required_label: Required
+    - name: pgm.zip
+      destination: bios/pgm.zip
+      required: true
+      md5: 87cc944eef4c671aa2629a8ba48a08e0
+      native_system: fbneo
+      component: retroarch
+      description: PGM System BIOS
+      required_label: Required
+    - name: skns.zip
+      destination: bios/skns.zip
+      required: true
+      md5: 3f956c4e7008804cb47cbde49bd5b908
+      native_system: fbneo
+      component: retroarch
+      description: Super Kaneko Nova System BIOS
+      required_label: Required
+    - name: ym2608.zip
+      destination: bios/ym2608.zip
+      required: true
+      md5: 79ae0d2bb1901b7e606b6dc339b79a97
+      native_system: fbneo
+      component: retroarch
+      description: YM2608 FM synthesis chip ROM
+      required_label: Required
+    - name: bubsys.zip
+      destination: bios/bubsys.zip
+      required: true
+      md5: f81298afd68a1a24a49a1a2d9f087964
+      native_system: fbneo
+      component: retroarch
+      description: Bubble System BIOS
+      required_label: Required
+    - name: namcoc69.zip
+      destination: bios/namcoc69.zip
+      required: true
+      native_system: fbneo
+      component: retroarch
+      description: Namco C69 BIOS
+      required_label: Required
+    - name: namcoc70.zip
+      destination: bios/namcoc70.zip
+      required: true
+      native_system: fbneo
+      component: retroarch
+      description: Namco C70 BIOS
+      required_label: Required
+    - name: namcoc75.zip
+      destination: bios/namcoc75.zip
+      required: true
+      native_system: fbneo
+      component: retroarch
+      description: Namco C75 BIOS
+      required_label: Required
     - name: coleco.zip
       destination: bios/coleco.zip
       required: true
@@ -13601,6 +13662,13 @@ systems:
       native_system: msx
       component: retroarch
       description: BeerIDE IDE disk ROM
+    - name: FMPAC.rom
+      destination: bios/FMPAC.rom
+      required: false
+      md5: 6f69cc8b5ed761b03afd78000dfb0e19
+      native_system: msx
+      component: retroarch
+      description: FMPAC Music/Sound ROM for Yamaha FM-PAC interface
     - name: GCVMX80.ROM
       destination: bios/GCVMX80.ROM
       required: false
@@ -13616,6 +13684,14 @@ systems:
       component: retroarch
       description: Hangul language ROM
       required_label: Required for some Korean games.
+    - name: KANJI.rom
+      destination: bios/KANJI.rom
+      required: true
+      md5: acf53887c2d2783dc059a9b442c86b90
+      native_system: msx
+      component: retroarch
+      description: Kanji font ROM for MSX
+      required_label: Required for some Japanese games.
     - name: MICROSOLDISK.ROM
       destination: bios/MICROSOLDISK.ROM
       required: false
@@ -13659,6 +13735,13 @@ systems:
       native_system: msx
       component: retroarch
       description: MSX2B ROM
+    - name: MSX2EXT.rom
+      destination: bios/MSX2EXT.rom
+      required: false
+      md5: 2183c2aff17cf4297bdb496de78c2e8a
+      native_system: msx
+      component: retroarch
+      description: MSX2 Extended ROM
     - name: MSX2FREXT.rom
       destination: bios/MSX2FREXT.rom
       required: true
@@ -13728,6 +13811,13 @@ systems:
       native_system: msx
       component: retroarch
       description: MSX2 Korean ROM
+    - name: MSX2PEXT.rom
+      destination: bios/MSX2PEXT.rom
+      required: false
+      md5: 7c8243c71d8f143b2531f01afa6a05dc
+      native_system: msx
+      component: retroarch
+      description: MSX2+ Extended ROM
     - name: MSX2PMUS.rom
       destination: bios/MSX2PMUS.rom
       required: false
@@ -13735,6 +13825,13 @@ systems:
       native_system: msx
       component: retroarch
       description: MSX2+ Music extension ROM
+    - name: MSX2P.rom
+      destination: bios/MSX2P.rom
+      required: false
+      md5: 847cc025ffae665487940ff2639540e5
+      native_system: msx
+      component: retroarch
+      description: MSX2+ BIOS
     - name: MSX2R2.ROM
       destination: bios/MSX2R2.ROM
       required: false
@@ -13749,6 +13846,13 @@ systems:
       native_system: msx
       component: retroarch
       description: MSX2 R Extended ROMn
+    - name: MSX2.rom
+      destination: bios/MSX2.rom
+      required: false
+      md5: ec3a01c91f24fbddcbcab0ad301bc9ef
+      native_system: msx
+      component: retroarch
+      description: MSX2 BIOS
     - name: MSX2R.rom
       destination: bios/MSX2R.rom
       required: false
@@ -13849,6 +13953,13 @@ systems:
       native_system: msx
       component: retroarch
       description: MSX R2 ROM
+    - name: MSX.rom
+      destination: bios/MSX.rom
+      required: false
+      md5: 364a1a579fe5cb8dba54519bcfcdac0d,aa95aea2563cd5ec0a0919b44cc17d47
+      native_system: msx
+      component: retroarch
+      description: MSX1 BIOS ROM
     - name: MSXR.rom
       destination: bios/MSXR.rom
       required: false
@@ -13933,6 +14044,13 @@ systems:
       native_system: msx
       component: retroarch
       description: Philips Disk ROM
+    - name: RS232.ROM
+      destination: bios/RS232.ROM
+      required: false
+      md5: 55cca200bbbdd0a1ec5c9d70966c05c0
+      native_system: msx
+      component: retroarch
+      description: RS232 Serial ROM
     - name: SUNRISEIDE.rom
       destination: bios/SUNRISEIDE.rom
       required: false
@@ -13975,6 +14093,13 @@ systems:
       native_system: msx
       component: retroarch
       description: MSX2 Sub BIOS for NMS8250
+    - name: fmpac.rom
+      destination: bios/fmpac.rom
+      required: false
+      md5: 6f69cc8b5ed761b03afd78000dfb0e19
+      native_system: msx
+      component: retroarch
+      description: FMPAC Music/Sound ROM for Yamaha FM-PAC
     - name: phc-70fd2_basickun.rom
       destination: bios/phc-70fd2_basickun.rom
       required: false
@@ -14195,6 +14320,77 @@ systems:
       component: retroarch
       description: NEC PC-9800 series BIOS
       required_label: Required
+    - name: font.rom
+      destination: bios/font.rom
+      required: true
+      md5: 38d32748ae49d1815b0614970849fd40
+      native_system: pc98
+      component: retroarch
+      description: NEC PC-9800 font ROM
+      required_label: Required
+    - name: 2608_BD.WAV
+      destination: bios/2608_BD.WAV
+      required: false
+      md5: 29aad51cd243c8e449d311d14613f0b1
+      native_system: pc9800
+      component: retroarch
+      description: Bass drum waveform for PC-9800
+    - name: 2608_HH.WAV
+      destination: bios/2608_HH.WAV
+      required: false
+      md5: 59a009ee444318bd57d99a19068731e4
+      native_system: pc9800
+      component: retroarch
+      description: Hi-hat waveform for PC-9800
+    - name: 2608_RIM.WAV
+      destination: bios/2608_RIM.WAV
+      required: false
+      md5: 943290d1c5c6ae6295bd02be4411c7c0
+      native_system: pc9800
+      component: retroarch
+      description: Rimshot waveform for PC-9800
+    - name: 2608_SD.WAV
+      destination: bios/2608_SD.WAV
+      required: false
+      md5: c99156118789b6cba662c864ebadc62e
+      native_system: pc9800
+      component: retroarch
+      description: Snare drum waveform for PC-9800
+    - name: 2608_TOM.WAV
+      destination: bios/2608_TOM.WAV
+      required: false
+      md5: c321a6835b26ad125b2eb78be56394a4
+      native_system: pc9800
+      component: retroarch
+      description: Tom-tom drum waveform for PC-9800
+    - name: 2608_TOP.WAV
+      destination: bios/2608_TOP.WAV
+      required: false
+      md5: 9e73ff2345236ebe72f7a937e477f0bd
+      native_system: pc9800
+      component: retroarch
+      description: Top cymbal waveform for PC-9800
+    - name: BIOS.ROM
+      destination: bios/BIOS.ROM
+      required: false
+      md5: e246140dec5124c5e404869a84caefce
+      native_system: pc9800
+      component: retroarch
+      description: Main BIOS for PC-9800
+    - name: SOUND.ROM
+      destination: bios/SOUND.ROM
+      required: false
+      md5: caf90f22197aed6f14c471c21e64658d
+      native_system: pc9800
+      component: retroarch
+      description: Sound ROM for PC-9800
+    - name: ITF.ROM
+      destination: bios/ITF.ROM
+      required: false
+      md5: e9fc3890963b12cf15d0a2eea5815b72
+      native_system: pc9800
+      component: retroarch
+      description: Interface ROM for PC-9800
   nec-pc-88:
     files:
     - name: n88.rom
@@ -14260,6 +14456,13 @@ systems:
       component: retroarch
       description: "PC-88 BIOS extension (variant 3)"
       required_label: Optional
+    - name: N88.ROM
+      destination: bios/N88.ROM
+      required: false
+      md5: 4f984e04a99d56c4cfe36115415d6eb8
+      native_system: pc8800
+      component: retroarch
+      description: Main PC-8800 system BIOS
     - name: N88SUB.ROM
       destination: bios/N88SUB.ROM
       required: false
@@ -14267,6 +14470,20 @@ systems:
       native_system: pc8800
       component: retroarch
       description: PC-8800 disk controller BIOS
+    - name: DISK.ROM
+      destination: bios/DISK.ROM
+      required: false
+      md5: 793f86784e5608352a5d7f03f03e0858
+      native_system: pc8800
+      component: retroarch
+      description: Alternate name for N88SUB.ROM
+    - name: N88N.ROM
+      destination: bios/N88N.ROM
+      required: false
+      md5: 2ff07b8769367321128e03924af668a0
+      native_system: pc8800
+      component: retroarch
+      description: PC-8800 N80 BIOS
     - name: N80.ROM
       destination: bios/N80.ROM
       required: false
@@ -14281,6 +14498,13 @@ systems:
       native_system: pc8800
       component: retroarch
       description: PC-8800 extension ROM 0
+    - name: N88_0.ROM
+      destination: bios/N88_0.ROM
+      required: false
+      md5: d675a2ca186c6efcd6277b835de4c7e5
+      native_system: pc8800
+      component: retroarch
+      description: Alternate name for N88EXT0.ROM
     - name: N88EXT1.ROM
       destination: bios/N88EXT1.ROM
       required: false
@@ -14288,6 +14512,13 @@ systems:
       native_system: pc8800
       component: retroarch
       description: PC-8800 extension ROM 1
+    - name: N88_1.ROM
+      destination: bios/N88_1.ROM
+      required: false
+      md5: e844534dfe5744b381444dbe61ef1b66
+      native_system: pc8800
+      component: retroarch
+      description: Alternate name for N88EXT1.ROM
     - name: N88EXT2.ROM
       destination: bios/N88EXT2.ROM
       required: false
@@ -14295,6 +14526,13 @@ systems:
       native_system: pc8800
       component: retroarch
       description: PC-8800 extension ROM 2
+    - name: N88_2.ROM
+      destination: bios/N88_2.ROM
+      required: false
+      md5: 6548fa45061274dee1ea8ae1e9e93910
+      native_system: pc8800
+      component: retroarch
+      description: Alternate name for N88EXT2.ROM
     - name: N88EXT3.ROM
       destination: bios/N88EXT3.ROM
       required: false
@@ -14302,6 +14540,20 @@ systems:
       native_system: pc8800
       component: retroarch
       description: PC-8800 extension ROM 3
+    - name: N88_3.ROM
+      destination: bios/N88_3.ROM
+      required: false
+      md5: fc4b76a402ba501e6ba6de4b3e8b4273
+      native_system: pc8800
+      component: retroarch
+      description: Alternate name for N88EXT3.ROM
+    - name: N88KNJ1.ROM
+      destination: bios/N88KNJ1.ROM
+      required: false
+      md5: d81c6d5d7ad1a4bbbd6ae22a01257603
+      native_system: pc8800
+      component: retroarch
+      description: PC-8800 Kanji font ROM 1
     - name: KANJI1.ROM
       destination: bios/KANJI1.ROM
       required: false
@@ -15341,6 +15593,22 @@ systems:
       component: retroarch
       description: Nintendo 64 64DD IPL BIOS - Japan
       required_label: At least one
+    - name: 64DD_IPL.bin
+      destination: bios/64DD_IPL.bin
+      required: true
+      md5: aad37b1492886b892f1821f37fd3ae34
+      native_system: n64dd
+      component: retroarch
+      description: Nintendo 64 64DD IPL BIOS - Japan Dev
+      required_label: At least one
+    - name: 64DD_IPL.bin
+      destination: bios/64DD_IPL.bin
+      required: true
+      md5: 37c36e4286d36892a9fc70eafe4104be
+      native_system: n64dd
+      component: retroarch
+      description: Nintendo 64 64DD IPL BIOS - USA
+      required_label: At least one
   nintendo-snes:
     files:
     - name: BS-X.bin
@@ -15422,6 +15690,14 @@ systems:
       native_system: snes
       component: retroarch
       description: Super Game Boy BIOS - Alternative name SGB2.sfc
+      required_label: Optional, for boot logo
+    - name: sgb_bios.bin
+      destination: bios/sgb_bios.bin
+      required: true
+      md5: e0430bca9925fb9882148fd2dc2418c1
+      native_system: snes
+      component: retroarch
+      description: Super Game Boy BIOS
       required_label: Optional, for boot logo
     - name: sgb2_boot.bin
       destination: bios/sgb2_boot.bin

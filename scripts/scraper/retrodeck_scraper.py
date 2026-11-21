@@ -21,6 +21,8 @@ Entries with no paths key default to bios/ (RetroDECK's default BIOS dir).
 
 Verification logic (api_data_processing.sh:289-405):
   - md5sum per file, compared against known_md5 (comma-separated list)
+  - one result per manifest entry: a file two entries declare with other
+    md5 lists is checked against each list on its own
   - envsubst resolves path tokens at runtime
   - Multi-threaded on system_cpu_max_threads
 """
@@ -363,26 +365,25 @@ def _entry_requirement(entry: dict, comp_key: str, default_system: object) -> Bi
     )
 
 
-def _md5_conflict(
-    requirements: list[BiosRequirement], key: tuple[str, str], req: BiosRequirement
-) -> str | None:
-    """Why *req* is left out: an earlier component declares the same file
-    with another MD5. None for a plain repeat."""
-    existing = next(
-        (
-            r
-            for r in requirements
-            if (r.system, r.name.lower()) == key
-        ),
-        None,
+def _repeat_key(req: BiosRequirement) -> tuple[object, ...]:
+    """What makes two manifest entries one declaration.
+
+    RetroDECK checks every entry of every manifest on its own: one result
+    row per entry, the md5 of the file found under that exact basename
+    tested against that entry's list alone (api_data_processing.sh:304-313,
+    322-339 and 350-361 at RetroDECK 0.10.10b). Two entries that differ in
+    their hashes are two verdicts on the file (decocass.zip for MAME and for
+    FBNeo, the three 64DD_IPL.bin revisions), and two spellings are two files
+    on its Linux filesystem (MSX.ROM and MSX.rom). Only the same name at the
+    same place with the same hashes repeats a declaration.
+    """
+    return (
+        req.system,
+        req.name,
+        req.destination,
+        frozenset(parse_hash_list(req.md5)),
+        req.sha256 or "",
     )
-    md5 = req.md5
-    if existing and md5 and existing.md5 and md5 != existing.md5:
-        return (
-            f"{req.name} ({req.system}): MD5 conflict "
-            f"({existing.md5[:12]}... vs {md5[:12]}... in {req.native['component']})"
-        )
-    return None
 
 
 class Scraper(BaseScraper):
@@ -481,7 +482,7 @@ class Scraper(BaseScraper):
         manifests = self._get_manifests()
 
         requirements: list[BiosRequirement] = []
-        seen: set[tuple[str, str]] = set()
+        seen: set[tuple[object, ...]] = set()
 
         for _comp_name, manifest in manifests:
             for comp_key, comp_val in manifest.items():
@@ -496,11 +497,8 @@ class Scraper(BaseScraper):
                     req = _entry_requirement(entry, comp_key, default_system)
                     if req is None:
                         continue
-                    key = (req.system, req.name.lower())
+                    key = _repeat_key(req)
                     if key in seen:
-                        conflict = _md5_conflict(requirements, key, req)
-                        if conflict:
-                            self.dropped.append(conflict)
                         continue
                     seen.add(key)
                     requirements.append(req)
