@@ -102,6 +102,7 @@ def run_manifest_mode(
                     required_only=required_only,
                     no_game_data=getattr(args, "no_game_data", False),
                     standalone_out=layouts,
+                    uncached_out=getattr(args, "uncached_trees", None),
                 )
                 narrow_suffix = "".join(
                     tag.lower()

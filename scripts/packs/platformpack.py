@@ -33,7 +33,12 @@ from packs.archive import (
     write_generated_member,
     writing_pack,
 )
-from packs.datatrees import data_directory_members, core_data_trees, pack_markers
+from packs.datatrees import (
+    core_data_trees,
+    data_directory_members,
+    pack_markers,
+    uncached_warning,
+)
 from packs.naming import system_display_name
 from packs.extras import (
     ExtraResolver,
@@ -310,6 +315,7 @@ class PackOptions(PackNarrowing, _PartScope, total=False):
     pack_name: str | None
     record: PackRecord | None
     within: dict[str, str] | None
+    uncached_out: set[str] | None
 
 
 @dataclass(frozen=True)
@@ -335,6 +341,7 @@ class _PackSettings:
     no_game_data: bool = False
     record: PackRecord | None = None
     within: dict[str, str] | None = None
+    uncached_out: set[str] | None = None
 
 
 @dataclass
@@ -954,15 +961,20 @@ class _PlatformPackBuild:
         plan = self.plan
         required_only = plan.opts.required_only
         added = 0
+        uncached: list[tuple[str, str]] = []
         for src, full in data_directory_members(
             pack_systems, plan.opts.data_registry, plan.platform_name, plan.base_dest,
             self.placed, required_only=required_only,
-            core_trees=core_trees,
+            core_trees=core_trees, uncached_out=uncached,
         ):
             add_pack_member(self.zf, src, self._flat(full))
             if isinstance(self.zf, PackRecord):
                 self.zf.trees.append(self._flat(full))
             added += 1
+        for ref_key, local_path in uncached:
+            print(uncached_warning(ref_key, local_path))
+        if plan.opts.uncached_out is not None:
+            plan.opts.uncached_out.update(ref_key for ref_key, _path in uncached)
         return added
 
     def _unfolded_twins(self) -> None:
@@ -1090,6 +1102,9 @@ def generate_pack(
     their extras, so a path the full pack settles (a file/directory conflict,
     a case twin, a path another system's file takes) was written again.
 
+    ``uncached_out`` receives the data directories the pack carries and the
+    cache does not hold: the pack is written without them.
+
     Returns the path to the generated ZIP, or None on failure.
     """
     reject_unknown("generate_pack", options, PackOptions.__optional_keys__)
@@ -1158,6 +1173,7 @@ class SplitOptions(PackNarrowing, total=False):
     """The keyword options of generate_split_packs."""
 
     records: dict[str, PackRecord] | None
+    uncached_out: set[str] | None
 
 
 def _split_extras(config: dict, db: dict, narrowing: PackNarrowing) -> list[dict]:
@@ -1250,10 +1266,11 @@ def generate_split_packs(
         emu_profiles = load_emulator_profiles(narrowing["emulators_dir"])
         narrowing["emu_profiles"] = emu_profiles
     full = PackRecord()
+    # The parts add up to the full pack: its trees are the run's account.
     with contextlib.redirect_stdout(io.StringIO()):
         generate_pack(
             platform_name, platforms_dir, db, bios_dir, split_dir,
-            record=full, **narrowing,
+            record=full, uncached_out=options.get("uncached_out"), **narrowing,
         )
 
     def part(pack_name: str, scope: _PartScope) -> str | None:

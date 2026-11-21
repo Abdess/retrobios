@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import contextlib
-import io
 import os
 import re
 
@@ -36,13 +34,12 @@ def tree_members(
         config, load_emulator_profiles(emulators_dir), platform, registry,
     )
     members: dict[str, int] = {}
-    with contextlib.redirect_stdout(io.StringIO()):
-        for src, full in datatrees.data_directory_members(
-            config.get("systems", {}), registry,
-            platform, base_dest, Placed(False),
-            core_trees=core_trees,
-        ):
-            members[flat_arcname(full, base_dest, True)] = os.path.getsize(src)
+    for src, full in datatrees.data_directory_members(
+        config.get("systems", {}), registry,
+        platform, base_dest, Placed(False),
+        core_trees=core_trees,
+    ):
+        members[flat_arcname(full, base_dest, True)] = os.path.getsize(src)
     return members
 
 

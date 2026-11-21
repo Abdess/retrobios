@@ -26,6 +26,7 @@ from packs.datatrees import (
     core_data_trees,
     pack_markers,
     tree_readers,
+    uncached_warning,
 )
 from packs.extras import (
     collect_emulator_extras,
@@ -95,6 +96,7 @@ class InstallListOptions(TypedDict, total=False):
     fold_case: bool | None
     no_game_data: bool
     one_per_slot: bool
+    uncached_out: set[str] | None
 
 
 class ManifestOptions(InstallListOptions, total=False):
@@ -123,6 +125,7 @@ class _ManifestSettings:
     one_per_slot: bool = False
     known_slot_choices: dict | None = None
     build_out: dict | None = None
+    uncached_out: set[str] | None = None
 
 
 @dataclass
@@ -469,12 +472,17 @@ class _ManifestBuild:
         core_trees = ([] if opts.source == "platform"
                       else core_data_trees(self.config, self.emu_profiles, self.platform_name,
                                            self.data_registry, opts.target_cores))
+        uncached: list[tuple[str, str]] = []
         self.data_members = list(data_directory_members(
             self.pack_systems, self.data_registry, self.platform_name, self.base_dest,
             self.placed, refs_out=data_refs, required_only=required_only,
             core_trees=core_trees,
-            reclaim=reclaim,
+            reclaim=reclaim, uncached_out=uncached,
         ))
+        for ref_key, local_path in uncached:
+            print(uncached_warning(ref_key, local_path))
+        if opts.uncached_out is not None:
+            opts.uncached_out.update(ref_key for ref_key, _path in uncached)
         # A platform entry found in a tree the pack carries is that tree's member:
         # the installer rebuilds it from the tree's archive. One found in a tree
         # the pack does not carry stays omitted, held by the pack alone.
@@ -705,6 +713,8 @@ def generate_manifest(
     One build: generate_install_list adds what --source truth and
     --standalone read. `build_out` receives the slot choices and the
     profiles this build read, which that second build takes over.
+    `uncached_out` receives the data directories the list carries and the
+    cache does not hold.
     """
     reject_unknown("generate_manifest", options, ManifestOptions.__optional_keys__)
     opts = _ManifestSettings(**options)

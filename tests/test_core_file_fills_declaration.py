@@ -149,11 +149,7 @@ class AMissingDataDirectoryFailsTheRun(unittest.TestCase):
     """A refresh refused by a quota left the PPSSPP pack with 2 files and
     the run exited 0: nothing downstream checks data directories."""
 
-    def test_the_pack_records_it_and_main_exits_non_zero(self):
-        import generate_pack as gp
-        from packs import datatrees, packmodes
-        from packs import platformpack
-
+    def _platform(self) -> tuple[Path, dict, dict]:
         root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
         (root / "platforms").mkdir()
@@ -166,26 +162,88 @@ class AMissingDataDirectoryFailsTheRun(unittest.TestCase):
                 {"ref": "assets", "destination": "assets"},
             ]}},
         }))
-        db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}, "by_crc32": {},
-                                      "by_path_suffix": {}}}
-        datatrees.MISSING_DATA_DIRS.clear()
-        self.addCleanup(datatrees.MISSING_DATA_DIRS.clear)
-        with redirect_stdout(io.StringIO()):
+        db: dict = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}, "by_crc32": {},
+                                            "by_path_suffix": {}}}
+        return root, db, {"assets": {"local_cache": str(root / "absent")}}
+
+    def test_the_pack_records_it(self):
+        from packs import platformpack
+
+        root, db, registry = self._platform()
+        uncached: set[str] = set()
+        out = io.StringIO()
+        with redirect_stdout(out):
             platformpack.generate_pack(
                 "fakeplat", str(root / "platforms"), db, str(root / "bios"),
                 str(root / "out"), emulators_dir=str(root / "emulators"),
-                data_registry={"assets": {"local_cache": str(root / "absent")}},
-                offline=True,
+                data_registry=registry, offline=True, uncached_out=uncached,
             )
-        self.assertEqual(datatrees.MISSING_DATA_DIRS, {"assets"})
-        # main() starts each run with no notices, so the run itself records it.
-        with mock.patch.object(packmodes, "run_pack_command",
-                                  lambda parser, held: datatrees.MISSING_DATA_DIRS.add("assets")), \
-                contextlib.redirect_stderr(io.StringIO()), \
+        self.assertEqual(uncached, {"assets"})
+        self.assertIn(
+            f"  WARNING: data directory 'assets' not cached at {root / 'absent'}"
+            " (run refresh_data_dirs.py)\n",
+            out.getvalue(),
+        )
+
+    def test_the_manifest_records_it(self):
+        from packs.manifest import generate_manifest
+
+        root, db, registry = self._platform()
+        uncached: set[str] = set()
+        out = io.StringIO()
+        with redirect_stdout(out):
+            generate_manifest(
+                "fakeplat", str(root / "platforms"), db, str(root / "bios"),
+                str(root / "platforms" / "_registry.yml"),
+                emulators_dir=str(root / "emulators"),
+                data_registry=registry, offline=True, uncached_out=uncached,
+            )
+        self.assertEqual(uncached, {"assets"})
+        self.assertIn("WARNING: data directory 'assets' not cached", out.getvalue())
+
+    def test_the_shared_walk_prints_nothing_and_keeps_no_state(self):
+        from packs import datatrees
+        from packs.archive import Placed
+
+        root, _db, registry = self._platform()
+        systems = {"s": {"files": [], "data_directories": [
+            {"ref": "assets", "destination": "a"}]}}
+        uncached: list[tuple[str, str]] = []
+        out = io.StringIO()
+        with redirect_stdout(out):
+            members = list(datatrees.data_directory_members(
+                systems, registry, "x", "", Placed(False), uncached_out=uncached,
+            ))
+            again = list(datatrees.data_directory_members(
+                systems, registry, "x", "", Placed(False),
+            ))
+        self.assertEqual((members, again, out.getvalue()), ([], [], ""))
+        self.assertEqual(uncached, [("assets", str(root / "absent"))])
+        self.assertFalse(hasattr(datatrees, "MISSING_DATA_DIRS"))
+
+    def _main_stderr(self, manifest: bool) -> tuple[object, str]:
+        import argparse
+        import generate_pack as gp
+        from packs import packmodes
+
+        args = argparse.Namespace(manifest=manifest, uncached_trees={"assets"})
+        err = io.StringIO()
+        with mock.patch.object(packmodes, "run_pack_command", lambda parser, held: args), \
+                contextlib.redirect_stderr(err), \
                 self.assertRaises(SystemExit) as stop:
             gp.main()
-        self.assertEqual(stop.exception.code, 1)
+        return stop.exception.code, err.getvalue()
 
+    def test_main_exits_non_zero_naming_what_it_wrote(self):
+        self.assertEqual(self._main_stderr(False), (1, (
+            "ERROR: packs written without data directories that are not cached: "
+            "assets (run refresh_data_dirs.py)\n"
+        )))
+        # A manifest run writes no pack.
+        self.assertEqual(self._main_stderr(True), (1, (
+            "ERROR: manifests written without data directories that are not cached: "
+            "assets (run refresh_data_dirs.py)\n"
+        )))
 
 
 class AFileNobodyHoldsIsAnOmission(unittest.TestCase):

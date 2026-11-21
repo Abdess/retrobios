@@ -28,29 +28,28 @@ from core.artifacts import ArtifactLockBusy
 from core.cli import add_emulator_selection, add_repo_inputs
 from model.cliargs import platform_arg
 from packs.archive import DamagedArchiveError
-from packs.datatrees import MISSING_DATA_DIRS
 from packs import packmodes
 
 DEFAULT_OUTPUT_DIR = "dist"
 
 
 def main() -> None:
-    # One run's account: tests call main() repeatedly in one process, and a
-    # notice left by an earlier run failed a later one that missed nothing.
-    MISSING_DATA_DIRS.clear()
     with contextlib.ExitStack() as held:
         try:
-            packmodes.run_pack_command(build_parser(), held)
+            args = packmodes.run_pack_command(build_parser(), held)
         except (DamagedArchiveError, ArtifactLockBusy) as exc:
             # Emulator, system and hash modes have no per-platform loop to
             # report a damaged archive: the run stops with the file to
             # restore. A busy output directory refuses the run.
             print(f"ERROR: {exc}", file=sys.stderr)
             sys.exit(1)
-    if MISSING_DATA_DIRS:
+    # A refresh refused by a quota left the PPSSPP pack with 2 files, exit 0:
+    # a run written without a tree it carries is not complete.
+    if args.uncached_trees:
+        written = "manifests" if args.manifest else "packs"
         print(
-            "ERROR: packs written without data directories that are not cached: "
-            f"{', '.join(sorted(MISSING_DATA_DIRS))} (run refresh_data_dirs.py)",
+            f"ERROR: {written} written without data directories that are not cached: "
+            f"{', '.join(sorted(args.uncached_trees))} (run refresh_data_dirs.py)",
             file=sys.stderr,
         )
         sys.exit(1)

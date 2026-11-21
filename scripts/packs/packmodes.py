@@ -19,7 +19,6 @@ from model.cliargs import (
 from model.database import load_database
 from model.registry import load_data_dir_registry
 from packs.datadirs import hold_data_dirs
-from packs.datatrees import MISSING_DATA_DIRS
 from packs.emulatorpack import (
     EmulatorPackOutcome,
     build_emulator_pack,
@@ -133,7 +132,7 @@ def _run_profile_mode(args: argparse.Namespace, db: dict, zip_contents: dict) ->
                 platforms_dir=args.platforms_dir,
                 progress=print,
             )
-        _account(outcome)
+        _account(outcome, args.uncached_trees)
         return
 
     # System mode (standalone, without platform context)
@@ -153,20 +152,27 @@ def _run_profile_mode(args: argparse.Namespace, db: dict, zip_contents: dict) ->
             platforms_dir=args.platforms_dir,
             progress=print,
         )
-    _account(outcome)
+    _account(outcome, args.uncached_trees)
 
 
-def _account(outcome: EmulatorPackOutcome) -> None:
+def _account(outcome: EmulatorPackOutcome, uncached: set[str]) -> None:
     """Print a profile pack, add its data directory notices to the run, stop on failure."""
     built = print_emulator_pack(outcome)
-    MISSING_DATA_DIRS.update(outcome.data_dir_notices)
+    uncached.update(outcome.data_dir_notices)
     if built is None:
         sys.exit(1)
 
 
-def run_pack_command(parser: argparse.ArgumentParser, held: contextlib.ExitStack) -> None:
-    """One run of generate_pack.py, from its command line to the mode it names."""
+def run_pack_command(
+    parser: argparse.ArgumentParser, held: contextlib.ExitStack,
+) -> argparse.Namespace:
+    """One run of generate_pack.py, from its command line to the mode it names.
+
+    Returns its arguments, with ``uncached_trees``: the data directories the
+    run's packs or manifests carry and the cache does not hold.
+    """
     args = parser.parse_args()
+    args.uncached_trees = set()
     work_from_repo_root(
         args, parser,
         ["db", "platforms_dir", "bios_dir", "output_dir", "emulators_dir", "from_md5_file"],
@@ -179,7 +185,7 @@ def run_pack_command(parser: argparse.ArgumentParser, held: contextlib.ExitStack
     refuse_unapplied_flags(args, parser)
     refuse_for_verify_packs(args, parser)
     if _run_quick_mode(args, parser, held):
-        return
+        return args
 
     validate_args(args, parser)
     args.system_ids = resolve_system_ids(args, parser)
@@ -194,12 +200,13 @@ def run_pack_command(parser: argparse.ArgumentParser, held: contextlib.ExitStack
         hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
     if args.from_md5 or getattr(args, "from_md5_file", None):
         _run_hash_mode(args)
-        return
+        return args
 
     db = load_database(args.db)
     zip_contents = build_zip_contents_index(db)
     if args.emulator or (args.system and not args.platform and not args.all):
         _run_profile_mode(args, db, zip_contents)
-        return
+        return args
     if not run_platform_mode(args, requested_platforms(args, parser), held, db, zip_contents):
         sys.exit(1)
+    return args

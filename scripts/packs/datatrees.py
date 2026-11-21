@@ -142,13 +142,15 @@ class _TreeWalkOptions(TypedDict, total=False):
     """The keyword options of data_directory_members."""
 
     refs_out: dict | None
+    uncached_out: list[tuple[str, str]] | None
     required_only: bool
     core_trees: Iterable[dict]
     reclaim: dict[str, str] | None
 
 
 def _carried_tree(dd: dict, data_registry: dict | None, platform_name: str) -> str | None:
-    """The cache folder of a tree reference the pack carries, or None."""
+    """The cache folder of a tree reference the pack carries ("" when the
+    cache does not hold it), or None for a tree the pack does not carry."""
     ref_key = dd.get("ref", "")
     if not ref_key or not data_registry or ref_key not in data_registry:
         return None
@@ -158,14 +160,12 @@ def _carried_tree(dd: dict, data_registry: dict | None, platform_name: str) -> s
     allowed = entry.get("for_platforms")
     if allowed and platform_name not in allowed:
         return None
-    local_path = entry.get("local_cache", "")
-    if not local_path or not os.path.isdir(local_path):
-        print(
-            f"  WARNING: data directory '{ref_key}' not cached at {local_path} (run refresh_data_dirs.py)"
-        )
-        MISSING_DATA_DIRS.add(ref_key)
-        return None
-    return local_path
+    return entry.get("local_cache", "")
+
+
+def uncached_warning(ref_key: str, local_path: str) -> str:
+    """The line a build prints for a tree it carries and the cache does not hold."""
+    return f"  WARNING: data directory '{ref_key}' not cached at {local_path} (run refresh_data_dirs.py)"
 
 
 def _tree_files(local_path: str, dd_prefix: str) -> Iterator[tuple[str, str]]:
@@ -198,6 +198,10 @@ def data_directory_members(
     (registry key, system ids, directory destination, whether the core
     needs the tree), for the manifest.
 
+    ``uncached_out``, when given, receives (registry key, cache folder) for
+    each tree the pack carries and the cache does not hold: the caller
+    reports it and counts its run incomplete.
+
     These are not BIOS and carry no hash of their own: they are whole
     trees an emulator reads, refreshed from upstream, so what ships is
     whatever the cache holds. The pack and the install manifest both read
@@ -207,6 +211,7 @@ def data_directory_members(
     """
     reject_unknown("data_directory_members", options, _TreeWalkOptions.__optional_keys__)
     refs_out = options.get("refs_out")
+    uncached_out = options.get("uncached_out")
     reclaim = options.get("reclaim")
     required_only = options.get("required_only", False)
     core_trees = options.get("core_trees", ())
@@ -219,6 +224,10 @@ def data_directory_members(
         if local_path is None:
             continue
         ref_key = dd.get("ref", "")
+        if not local_path or not os.path.isdir(local_path):
+            if uncached_out is not None:
+                uncached_out.append((ref_key, local_path))
+            continue
         dd_dest = dd.get("destination", "")
         dd_prefix = f"{base_dest}/{dd_dest}" if base_dest and dd_dest else base_dest or dd_dest
         # Held while the caller writes what is yielded: a refresh swapping
@@ -267,12 +276,6 @@ def pack_data_tree(
                     packed_at[full.lower()] = src
                 added += 1
     return added
-
-
-# Data directories a pack needed and the cache did not hold. The pack is
-# written without them, so the run cannot exit as if it were complete: a
-# refresh refused by a quota left the PPSSPP pack with 2 files, exit 0.
-MISSING_DATA_DIRS: set[str] = set()
 
 
 def tree_readers(pack_systems: dict, core_trees: Iterable[dict]) -> dict[str, list[str]]:

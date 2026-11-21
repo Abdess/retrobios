@@ -101,6 +101,7 @@ def run_platform_packs(
                         one_per_slot=args.one_per_slot,
                         offline=args.offline,
                         no_game_data=getattr(args, "no_game_data", False),
+                        uncached_out=getattr(args, "uncached_trees", None),
                     )
                     print(f"  Split into {len(zip_paths)} packs")
                 else:
@@ -136,6 +137,7 @@ def run_platform_packs(
                         offline=args.offline,
                         pack_name=group_name,
                         no_game_data=getattr(args, "no_game_data", False),
+                        uncached_out=getattr(args, "uncached_trees", None),
                     )
             except (FileNotFoundError, OSError, yaml.YAMLError) as e:
                 print(f"  ERROR: {e}", file=sys.stderr)
@@ -165,6 +167,7 @@ def run_platform_packs(
                         offline=args.offline, required_only=required_only,
                         data_registry=data_registry,
                         no_game_data=getattr(args, "no_game_data", False),
+                        uncached_out=getattr(args, "uncached_trees", None),
                     ), target_list(board_list) if board_list.is_file() else None)
 
     all_ok = finalize_platform_packs(args, db, data_registry, built, systems_for, system_filter)
