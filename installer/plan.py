@@ -150,7 +150,7 @@ def _print_largest_systems(
         # Counted as the line above counts: the groups, when it names them.
         unit = "group" if "groups" in groups else "system"
         more = len(largest) - PLAN_LARGEST_SYSTEMS
-        print(f"  ... and {more} more {unit}{'s' if more > 1 else ''}: --verbose lists "
+        print(f"  ... and {_plural(more, 'more ' + unit)}: --verbose lists "
               "every system and its files.")
 
 

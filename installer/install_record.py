@@ -47,6 +47,14 @@ RECORD_CHOICE = ("--system", "--core", "--emulator", "--region", "--for-games",
 RECORD_NARROWING = tuple(flag for flag in RECORD_CHOICE if flag != "--all-files")
 _MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov",
            "Dec")
+
+
+def day_words(when: datetime.datetime) -> str:
+    """A day as a list says it: 3 Nov, its year when not this one."""
+    day = f"{when.day} {_MONTHS[when.month - 1]}"
+    return day if when.year == datetime.datetime.now().year else f"{day} {when.year}"
+
+
 # The records already said unreadable in this run, said once each.
 _RECORD_SAID: set[str] = set()
 # Per platform, the record whose choice this run took (apply_record).
@@ -220,8 +228,7 @@ def record_day(setup: dict) -> str:
         local = when.astimezone()
     except (KeyError, TypeError, AttributeError, ValueError, OverflowError, OSError):
         return ""
-    day = f"{local.day} {_MONTHS[local.month - 1]}"
-    return day if local.year == datetime.datetime.now().year else f"{day} {local.year}"
+    return day_words(local)
 
 
 def record_options(argv: list[str]) -> list[tuple[str, str | None]]:
@@ -321,7 +328,7 @@ def write_record(
     for item in files:
         merged[(item["root"], item["dest"])] = item
     setup = {
-        "written": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "written": _record_now(),
         "list": {"version": manifest.get("version"), "generated": manifest.get("generated")},
         "choice": choice,
         "files": [merged[key] for key in sorted(merged)],

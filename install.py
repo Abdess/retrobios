@@ -9628,6 +9628,14 @@ RECORD_CHOICE = ("--system", "--core", "--emulator", "--region", "--for-games",
 RECORD_NARROWING = tuple(flag for flag in RECORD_CHOICE if flag != "--all-files")
 _MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov",
            "Dec")
+
+
+def day_words(when: datetime.datetime) -> str:
+    """A day as a list says it: 3 Nov, its year when not this one."""
+    day = f"{when.day} {_MONTHS[when.month - 1]}"
+    return day if when.year == datetime.datetime.now().year else f"{day} {when.year}"
+
+
 # The records already said unreadable in this run, said once each.
 _RECORD_SAID: set[str] = set()
 # Per platform, the record whose choice this run took (apply_record).
@@ -9801,8 +9809,7 @@ def record_day(setup: dict) -> str:
         local = when.astimezone()
     except (KeyError, TypeError, AttributeError, ValueError, OverflowError, OSError):
         return ""
-    day = f"{local.day} {_MONTHS[local.month - 1]}"
-    return day if local.year == datetime.datetime.now().year else f"{day} {local.year}"
+    return day_words(local)
 
 
 def record_options(argv: list[str]) -> list[tuple[str, str | None]]:
@@ -9902,7 +9909,7 @@ def write_record(
     for item in files:
         merged[(item["root"], item["dest"])] = item
     setup = {
-        "written": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "written": _record_now(),
         "list": {"version": manifest.get("version"), "generated": manifest.get("generated")},
         "choice": choice,
         "files": [merged[key] for key in sorted(merged)],
@@ -11218,7 +11225,7 @@ def installed_words(bios: int, games: int, data: int = 0) -> str:
         (bios, "BIOS file"), (games, "game data file"), (data, "data file")) if count]
     if not parts:
         return _plural(0, "file")
-    return f"{', '.join(parts[:-1])} and {parts[-1]}" if len(parts) > 1 else parts[0]
+    return _names_and(parts)
 
 
 def parts_words(counts: Tally, data: int = 0, data_size: int | None = None,
@@ -11240,7 +11247,7 @@ def parts_words(counts: Tally, data: int = 0, data_size: int | None = None,
                      + (f" ({format_size(data_size)})" if data_size is not None else ""))
     if len(parts) < 2 and not left_out:
         return ""
-    text = f"{', '.join(parts[:-1])} and {parts[-1]}" if len(parts) > 1 else parts[0]
+    text = _names_and(parts)
     return text + (f". {_plural(left_out, 'game data file')} left out" if left_out else "")
 
 
@@ -19434,8 +19441,7 @@ def choosable_systems(files: list[dict], omitted: list[dict],
 def emptied_words(names: list[str], game_data: bool) -> str:
     """What a choice that keeps no file says, on the plan and in line mode,
     in place of "Everything is in place": Sega Dreamcast holds only game data."""
-    subject = (", ".join(names[:-1]) + " and " + names[-1]) if len(names) > 1 else (
-        names[0] if names else "This choice")
+    subject = _names_and(names) if names else "This choice"
     verb = "hold" if len(names) > 1 else "holds"
     why = "only game data" if game_data else "no file under these options"
     return f"{subject} {verb} {why}: nothing is left to install."
@@ -19570,7 +19576,7 @@ def narrowing_words(files: list[dict], omitted: list[dict]) -> str:
         ("systems", "systems", len(listed_systems(files)) > 1),
         ("cores", "cores", len(choices["cores"]) > 1),
         ("regions", "regions", bool(choices["regions"]))) if axis in axes and enough]
-    return f"{', '.join(named[:-1])} and {named[-1]}" if len(named) > 1 else "".join(named)
+    return _names_and(named)
 
 
 def chosen_flags(choice: object) -> list[tuple[str, str | None]]:
@@ -20362,7 +20368,7 @@ def _print_largest_systems(
         # Counted as the line above counts: the groups, when it names them.
         unit = "group" if "groups" in groups else "system"
         more = len(largest) - PLAN_LARGEST_SYSTEMS
-        print(f"  ... and {more} more {unit}{'s' if more > 1 else ''}: --verbose lists "
+        print(f"  ... and {_plural(more, 'more ' + unit)}: --verbose lists "
               "every system and its files.")
 
 
@@ -21287,10 +21293,7 @@ def backup_words(date: str) -> str:
         when = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
     except ValueError:
         return date or "unknown date"
-    day = f"{when.day} {_MONTHS[when.month - 1]}"
-    if when.year != datetime.datetime.now().year:
-        day += f" {when.year}"
-    return f"{day} {when.hour:02d}:{when.minute:02d}"
+    return f"{day_words(when)} {when.hour:02d}:{when.minute:02d}"
 
 
 def list_backups(folder: Path) -> list[dict]:
@@ -24080,7 +24083,7 @@ def _choice_in_place(state: TuiState) -> str:
         return ""
     titles = _system_titles(state)
     names = [_tui_system_label(row, titles) for row in chosen]
-    subject = (", ".join(names[:-1]) + " and " + names[-1]) if len(names) > 1 else names[0]
+    subject = _names_and(names)
     return f"{subject} {'are' if len(names) > 1 else 'is'} in place: nothing is left to install."
 
 

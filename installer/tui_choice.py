@@ -23,7 +23,7 @@ from installer.platforms import _tui_system_label, system_title
 from installer.regions import region_title
 from installer.removal import _served
 from installer.tally import tally
-from installer.text import _plural, agree
+from installer.text import _names_and, _plural, agree
 from installer.tui_commands import _core_base, _tui_system_flags, _tui_systems_chosen, tui_flags, tui_run_files
 from installer.tui_paint import _detail, _short_path
 
@@ -139,7 +139,7 @@ def _choice_in_place(state: TuiState) -> str:
         return ""
     titles = _system_titles(state)
     names = [_tui_system_label(row, titles) for row in chosen]
-    subject = (", ".join(names[:-1]) + " and " + names[-1]) if len(names) > 1 else names[0]
+    subject = _names_and(names)
     return f"{subject} {'are' if len(names) > 1 else 'is'} in place: nothing is left to install."
 
 

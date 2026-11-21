@@ -100,8 +100,7 @@ def choosable_systems(files: list[dict], omitted: list[dict],
 def emptied_words(names: list[str], game_data: bool) -> str:
     """What a choice that keeps no file says, on the plan and in line mode,
     in place of "Everything is in place": Sega Dreamcast holds only game data."""
-    subject = (", ".join(names[:-1]) + " and " + names[-1]) if len(names) > 1 else (
-        names[0] if names else "This choice")
+    subject = _names_and(names) if names else "This choice"
     verb = "hold" if len(names) > 1 else "holds"
     why = "only game data" if game_data else "no file under these options"
     return f"{subject} {verb} {why}: nothing is left to install."
@@ -236,7 +235,7 @@ def narrowing_words(files: list[dict], omitted: list[dict]) -> str:
         ("systems", "systems", len(listed_systems(files)) > 1),
         ("cores", "cores", len(choices["cores"]) > 1),
         ("regions", "regions", bool(choices["regions"]))) if axis in axes and enough]
-    return f"{', '.join(named[:-1])} and {named[-1]}" if len(named) > 1 else "".join(named)
+    return _names_and(named)
 
 
 def chosen_flags(choice: object) -> list[tuple[str, str | None]]:

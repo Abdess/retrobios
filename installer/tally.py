@@ -14,7 +14,7 @@ from installer.narrowing import _settle_slot
 from installer.paths import _entry_path, shown_path
 from installer.platforms import display_name, entry_systems
 from installer.remote import SITE_URL
-from installer.text import _plural, agree, format_size
+from installer.text import _names_and, _plural, agree, format_size
 
 
 def _bytes(files: list[dict]) -> int:
@@ -176,7 +176,7 @@ def installed_words(bios: int, games: int, data: int = 0) -> str:
         (bios, "BIOS file"), (games, "game data file"), (data, "data file")) if count]
     if not parts:
         return _plural(0, "file")
-    return f"{', '.join(parts[:-1])} and {parts[-1]}" if len(parts) > 1 else parts[0]
+    return _names_and(parts)
 
 
 def parts_words(counts: Tally, data: int = 0, data_size: int | None = None,
@@ -198,7 +198,7 @@ def parts_words(counts: Tally, data: int = 0, data_size: int | None = None,
                      + (f" ({format_size(data_size)})" if data_size is not None else ""))
     if len(parts) < 2 and not left_out:
         return ""
-    text = f"{', '.join(parts[:-1])} and {parts[-1]}" if len(parts) > 1 else parts[0]
+    text = _names_and(parts)
     return text + (f". {_plural(left_out, 'game data file')} left out" if left_out else "")
 
 

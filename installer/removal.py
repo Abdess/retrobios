@@ -23,12 +23,12 @@ from installer.events import EVENTS
 from installer.filesystems import keeps_case
 from installer.host_fs import _clear_read_only, _is_link
 from installer.install_record import (
-    _MONTHS,
     _backup_note,
     _below,
     _check_ours,
     _record_now,
     _update_record,
+    day_words,
     load_record,
     record_argv,
     record_options,
@@ -854,10 +854,7 @@ def backup_words(date: str) -> str:
         when = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
     except ValueError:
         return date or "unknown date"
-    day = f"{when.day} {_MONTHS[when.month - 1]}"
-    if when.year != datetime.datetime.now().year:
-        day += f" {when.year}"
-    return f"{day} {when.hour:02d}:{when.minute:02d}"
+    return f"{day_words(when)} {when.hour:02d}:{when.minute:02d}"
 
 
 def list_backups(folder: Path) -> list[dict]:
