@@ -140,7 +140,10 @@ def build_archive(name: str, output: Path, root: Path = REPO_ROOT) -> Path:
     try:
         with zipfile.ZipFile(scratch, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
             for member, path in members:
-                add_pack_member(zf, str(path or table), member)
+                # A launcher is runnable where ports/ commits it so, and
+                # install.py, run by python, is not.
+                runnable = bool(path and path.stat().st_mode & 0o111)
+                add_pack_member(zf, str(path or table), member, executable=runnable)
     finally:
         table.unlink()
     scratch.replace(output)

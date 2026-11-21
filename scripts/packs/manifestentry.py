@@ -13,6 +13,7 @@ from model.database import sha1_at
 from model.declarations import OUTER_ROOTS, declared_root
 from model.profiles import profile_names
 from model.largefiles import asset_name, load_registered_paths, published_asset_name
+from packs.executable import ships_executable
 from packs.extras import (
     detect_extras_prefix,
     extra_system_ids,
@@ -152,28 +153,11 @@ def manifest_entry(
     if local_path and is_release_asset:
         entry["storage"] = "release"
         entry["release_asset"] = _release_asset_name(local_path, repo_root)
-    # The installer writes what it downloads with the umask's mode, but a program
-    # (RetroDECK's pico8, vox) has to stay runnable. The git mode cannot say:
-    # hundreds of MAME archives carry an execute bit nothing reads.
-    if local_path and _is_program(local_path):
+    # The installer writes what it downloads with the umask's mode, and the
+    # pack writes the same file executable by the same rule.
+    if local_path and ships_executable(local_path):
         entry["executable"] = True
     return entry, file_size
-
-
-_PROGRAM_MAGIC = (
-    b"\x7fELF",
-    b"#!",
-    b"\xcf\xfa\xed\xfe",
-    b"\xce\xfa\xed\xfe",
-    b"\xca\xfe\xba\xbe",
-)
-
-
-def _is_program(path: str) -> bool:
-    """An ELF or Mach-O binary, or a script with an interpreter line."""
-    with open(path, "rb") as handle:
-        head = handle.read(4)
-    return any(head.startswith(magic) for magic in _PROGRAM_MAGIC)
 
 
 @dataclass(frozen=True)

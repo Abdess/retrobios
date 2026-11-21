@@ -969,7 +969,8 @@ class _PlatformPackBuild:
             self.placed, required_only=required_only,
             core_trees=core_trees, uncached_out=uncached,
         ):
-            add_pack_member(self.zf, src, self._flat(full))
+            # The installer writes a data tree member without the bit.
+            add_pack_member(self.zf, src, self._flat(full), executable=False)
             if isinstance(self.zf, PackRecord):
                 self.zf.trees.append(self._flat(full))
             added += 1

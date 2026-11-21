@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 from core.artifacts import atomic_scratch
 from core.hashing import compute_hashes
 from core.paths import comparable_destination, sanitize_pack_path
+from packs.executable import ships_executable
 from packs.paths import MEDIA_MARKER, has_path_conflict, register_path, placement_block
 
 
@@ -56,7 +57,10 @@ class PackRecord:
 
 
 def add_pack_member(
-    zf: zipfile.ZipFile | PackRecord, source_path: str, arcname: str
+    zf: zipfile.ZipFile | PackRecord,
+    source_path: str,
+    arcname: str,
+    executable: bool | None = None,
 ) -> None:
     """Add a file to the pack with metadata that does not depend on the build.
 
@@ -67,6 +71,8 @@ def add_pack_member(
     byte of content matched: 348 members of the Recalbox pack moved between
     two consecutive builds. The content is streamed rather than read whole,
     because some members are firmware images of several hundred megabytes.
+    `executable` defaults to the rule the manifest applies to a collection
+    file.
     """
     if isinstance(zf, PackRecord):
         zf.members.append(arcname)
@@ -76,13 +82,13 @@ def add_pack_member(
     info.compress_type = _member_compression(arcname)
     # The executable bit is the one permission worth carrying: the RetroDECK
     # pack ships the two Voxatron engine binaries, and a user who extracts
-    # them at 644 cannot run them. Git records the bit, so reading it from
-    # the source keeps the pack the same from any clone. Nothing else about
-    # the source's mode reaches the archive.
-    stat_result = os.stat(source_path)
-    mode = 0o755 if stat_result.st_mode & 0o111 else 0o644
+    # them at 644 cannot run them. Nothing else about the source's mode
+    # reaches the archive.
+    if executable is None:
+        executable = ships_executable(source_path)
+    mode = 0o755 if executable else 0o644
     info.external_attr = (0o100000 | mode) << 16
-    size = stat_result.st_size
+    size = os.stat(source_path).st_size
     info.file_size = size
     with open(source_path, "rb") as source, zf.open(
         info, "w", force_zip64=size >= 1 << 31

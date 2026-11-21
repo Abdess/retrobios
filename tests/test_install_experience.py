@@ -213,7 +213,7 @@ class ProgramsAreMarked(unittest.TestCase):
     the git mode cannot, hundreds of MAME archives carrying an execute bit."""
 
     def test_header_decides(self):
-        from packs import manifestentry
+        from packs.executable import ships_executable
 
         with tempfile.TemporaryDirectory() as tmp:
             for data, expected in ((b"\x7fELF\x02", True), (b"#!/bin/sh\n", True),
@@ -221,7 +221,42 @@ class ProgramsAreMarked(unittest.TestCase):
                 path = Path(tmp) / "f"
                 path.write_bytes(data)
                 with self.subTest(head=data):
-                    self.assertEqual(manifestentry._is_program(str(path)), expected)
+                    self.assertEqual(ships_executable(str(path)), expected)
+
+    def test_pack_and_manifest_agree_on_every_file(self):
+        """A file extracted from a pack and the same file written by
+        install.py carry the same execute bit: 833 committed archives
+        carried a git bit the manifest ignored, 75 programs the reverse."""
+        import zipfile
+        from packs import manifestentry
+        from packs.archive import add_pack_member
+
+        db = json.loads((REPO_ROOT / "database.json").read_text())
+        written: list[zipfile.ZipInfo] = []
+
+        class Members:
+            def open(self, info, mode, force_zip64=False):
+                written.append(info)
+                return io.BytesIO()
+
+        held = 0
+        for sha1, record in db["files"].items():
+            path = str(REPO_ROOT / record["path"])
+            if not os.path.isfile(path):
+                continue
+            held += 1
+            with mock.patch.object(manifestentry, "_stable_hashes",
+                                   return_value={"sha1": sha1, "sha256": ""}), \
+                    mock.patch("packs.archive.shutil.copyfileobj"):
+                entry, _size = manifestentry.manifest_entry(
+                    path, "x", None, db, str(REPO_ROOT), {})
+                add_pack_member(Members(), path, "x")  # type: ignore[arg-type]
+            packed = bool((written[-1].external_attr >> 16) & 0o111)
+            with self.subTest(path=record["path"]):
+                self.assertIsNotNone(entry)
+                self.assertEqual(packed, bool(entry and entry.get("executable")))
+        if not held:
+            self.skipTest("no collection file on disk")
 
     def test_retrodeck_launchers_are_executable(self):
         manifest = json.loads((REPO_ROOT / "install" / "retrodeck.json").read_text())

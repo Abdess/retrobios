@@ -238,7 +238,7 @@ class EmulatorPackHoldsTheCache(unittest.TestCase):
             (cache / "a.dat").write_bytes(b"a")
             held: list[bool] = []
 
-            def member(_zf, _src, _dest):
+            def member(_zf, _src, _dest, executable=None):
                 with open(cache.with_name(".scummvm.lock"), "a") as handle:
                     try:
                         fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)

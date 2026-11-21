@@ -200,15 +200,16 @@ class TestPackDeterminism(unittest.TestCase):
         """Pinning the mode stripped the bit the RetroDECK pack needs.
 
         It ships the two Voxatron engine binaries, and extracted at 644 they
-        cannot be run. Git records the bit, so reading it from the source
-        leaves the pack the same from any clone.
+        cannot be run. The bit is read from the header, as the manifest
+        reads it, so a ROM committed with an execute bit stays 644.
         """
         import os
         import stat as stat_module
 
         runnable = self.bios / "engine.bin"
-        runnable.write_bytes(b"NOT REALLY AN ELF")
-        os.chmod(runnable, 0o755)
+        runnable.write_bytes(b"\x7fELF NOT REALLY")
+        os.chmod(runnable, 0o644)
+        os.chmod(self.bios / "boot.rom", 0o755)
         digest = hashlib.sha1(runnable.read_bytes()).hexdigest()
         self.db["files"][digest] = {
             "path": str(runnable), "name": "engine.bin",

@@ -21,8 +21,8 @@ one-line command of the same commit. The site builds them at each deploy
 and serves them under get/handheld/ (scripts/sitegen/handheld.py): they are no
 release files, and are written to tmp/handheld/ by default, away from the
 packs of dist/. Members are written as the packs write
-theirs: fixed timestamps, sorted names, the executable bit read from the
-source, so the same tree gives the same archives.
+theirs, fixed timestamps and sorted names, with the executable bit ports/
+commits on each launcher, so the same tree gives the same archives.
 
 Usage:
     python scripts/build_port.py

@@ -271,7 +271,8 @@ def pack_data_tree(
                 if placed.block(full):
                     continue
                 placed.take(full)
-                add_pack_member(zf, src, full)
+                # The installer writes a data tree member without the bit.
+                add_pack_member(zf, src, full, executable=False)
                 if packed_at is not None:
                     packed_at[full.lower()] = src
                 added += 1
