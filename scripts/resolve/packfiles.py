@@ -6,11 +6,13 @@ and the offline switch that forbids reaching for the network."""
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import os
 import re
 import urllib.error
 import urllib.request
+from collections.abc import Iterator
 from pathlib import Path
 
 from model.database import record_at, record_for_hash
@@ -30,6 +32,17 @@ def set_offline(value: bool) -> None:
     """Forbid every network reach for the rest of the run."""
     global OFFLINE
     OFFLINE = value
+
+
+@contextlib.contextmanager
+def offline() -> Iterator[None]:
+    """The run offline for the length of a block, the previous policy restored after."""
+    was_offline = OFFLINE
+    set_offline(True)
+    try:
+        yield
+    finally:
+        set_offline(was_offline)
 
 
 def scratch_dir() -> str:

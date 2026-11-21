@@ -56,7 +56,7 @@ import subprocess
 import sys
 import tempfile
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -212,21 +212,47 @@ def run(cmd: list[str], label: str) -> tuple[bool, str]:
     return ok, "".join(lines)
 
 
-def parse_verify_counts(output: str) -> dict[str, tuple[int, int]]:
-    """Extract per-group OK/total from verify output.
+# "Label: X/Y OK ..." or "Label: X/Y present ...", the summary line verify
+# prints for each group of identical platforms.
+_VERIFY_SUMMARY = re.compile(r"^(.+?):\s+(\d+)/(\d+)\s+(OK|present)")
+_PACK_HEADER = re.compile(r"Generating (?:shared )?pack for (.+)\.\.\.")
 
-    Matches: "Label: X/Y OK ..." or "Label: X/Y present ..."
-    Returns {group_label: (ok, total)}.
-    """
-    counts = {}
+
+def _verify_groups(output: str) -> Iterator[tuple[list[str] | None, str, re.Match[str] | None]]:
+    """Each verify line with the platforms of the summary it falls under,
+    and its own summary match when it is one."""
+    names: list[str] | None = None
     for line in output.splitlines():
-        m = re.match(r"^(.+?):\s+(\d+)/(\d+)\s+(OK|present)", line)
+        m = _VERIFY_SUMMARY.match(line)
         if m:
-            label = m.group(1).strip()
-            ok, total = int(m.group(2)), int(m.group(3))
-            for name in label.split(" / "):
-                counts[name.strip()] = (ok, total)
-    return counts
+            names = [name.strip() for name in m.group(1).split(" / ")]
+        yield names, line, m
+
+
+def _pack_lines(output: str) -> Iterator[tuple[str, str]]:
+    """Each generate_pack line under a full pack's header, with its label.
+
+    Labels carry execution metadata such as ``[source=full]``. Only the
+    full, unreduced pack is what verify describes: with --all-variants the
+    six variants shared one label and the last (platform, required) was
+    compared to the full report.
+    """
+    label = ""
+    for line in output.splitlines():
+        m = _PACK_HEADER.match(line)
+        if m:
+            label = _full_pack_label(m.group(1).strip())
+        elif label:
+            yield label, line
+
+
+def parse_verify_counts(output: str) -> dict[str, tuple[int, int]]:
+    """Per-platform OK/total from verify output."""
+    return {
+        name: (int(m.group(2)), int(m.group(3)))
+        for names, _line, m in _verify_groups(output) if m and names
+        for name in names
+    }
 
 
 def parse_verify_extras(output: str) -> dict[str, int]:
@@ -236,13 +262,9 @@ def parse_verify_extras(output: str) -> dict[str, int]:
     that follow a platform's summary line.
     """
     extras: dict[str, int] = {}
-    names: list[str] = []
-    for line in output.splitlines():
-        m = re.match(r"^(.+?):\s+(\d+)/(\d+)\s+(OK|present)", line)
-        if m:
-            names = [name.strip() for name in m.group(1).split(" / ")]
-            for name in names:
-                extras[name] = 0
+    for names, line, m in _verify_groups(output):
+        if m and names:
+            extras.update(dict.fromkeys(names, 0))
             continue
         packed = re.match(r"^\s+(?:Core files|Game data): (\d+) in pack", line)
         if packed and names:
@@ -254,15 +276,10 @@ def parse_verify_extras(output: str) -> dict[str, int]:
 def parse_pack_extras(output: str) -> dict[str, int]:
     """Files each full pack takes from the cores, per pack label."""
     extras: dict[str, int] = {}
-    current_label = ""
-    for line in output.splitlines():
-        m = re.match(r"Generating (?:shared )?pack for (.+)\.\.\.", line)
-        if m:
-            current_label = _full_pack_label(m.group(1).strip())
-            continue
+    for label, line in _pack_lines(output):
         cores = re.search(r"\+ (\d+) from cores\)", line)
-        if current_label and "files packed" in line and cores:
-            extras[current_label] = int(cores.group(1))
+        if "files packed" in line and cores:
+            extras[label] = int(cores.group(1))
     return extras
 
 
@@ -275,49 +292,23 @@ def _full_pack_label(label: str) -> str:
 
 
 def parse_pack_counts(output: str) -> dict[str, tuple[int, int]]:
-    """Extract per-pack OK/total from generate_pack output.
-
-    Returns {pack_label: (ok, total)}.
-    """
+    """Per-pack OK/total from generate_pack output: {pack_label: (ok, total)}."""
     counts = {}
-    current_label = ""
-    for line in output.splitlines():
-        m = re.match(r"Generating (?:shared )?pack for (.+)\.\.\.", line)
-        if m:
-            # Labels carry execution metadata such as ``[source=full]``. Only
-            # the full, unreduced pack is what verify describes: with
-            # --all-variants the six variants shared one label and the last
-            # (platform, required) was compared to the full report.
-            current_label = _full_pack_label(m.group(1).strip())
-            continue
-        if not current_label:
-            continue
-        if "files packed" not in line:
-            continue
+    for label, line in _pack_lines(output):
         # "622 files packed (359 baseline + 263 from cores), 358/359 files OK"
-        ok_m = re.search(r"(\d+)/(\d+) files OK", line)
+        ok_m = re.search(r"(\d+)/(\d+) files OK", line) if "files packed" in line else None
         if ok_m:
-            counts[current_label] = (int(ok_m.group(1)), int(ok_m.group(2)))
+            counts[label] = (int(ok_m.group(1)), int(ok_m.group(2)))
     return counts
 
 
 def parse_pack_exclusions(output: str) -> dict[str, int]:
-    """Extract intentional unsafe-omission counts from pack output."""
+    """Intentional unsafe-omission counts from pack output, per pack label."""
     exclusions: dict[str, int] = {}
-    current_label = ""
-    for line in output.splitlines():
-        label_match = re.match(r"Generating (?:shared )?pack for (.+)\.\.\.", line)
-        if label_match:
-            # The same reading as parse_pack_counts: a reduced variant must
-            # not overwrite the full pack's count under the shared label.
-            current_label = _full_pack_label(label_match.group(1).strip())
-            continue
-        if not current_label or "files packed" not in line:
-            continue
-        excluded_match = re.search(r"(\d+) unsafe excluded", line)
-        exclusions[current_label] = (
-            int(excluded_match.group(1)) if excluded_match else 0
-        )
+    for label, line in _pack_lines(output):
+        if "files packed" in line:
+            excluded = re.search(r"(\d+) unsafe excluded", line)
+            exclusions[label] = int(excluded.group(1)) if excluded else 0
     return exclusions
 
 
@@ -433,15 +424,10 @@ def check_consistency(
 def parse_pack_paths(output: str) -> dict[str, str]:
     """The archive each full pack was written to, per pack label."""
     paths: dict[str, str] = {}
-    current_label = ""
-    for line in output.splitlines():
-        m = re.match(r"Generating (?:shared )?pack for (.+)\.\.\.", line)
-        if m:
-            current_label = _full_pack_label(m.group(1).strip())
-            continue
+    for label, line in _pack_lines(output):
         written = re.match(r"^\s+(\S.*?\.zip): \d+ files packed", line)
-        if current_label and written:
-            paths[current_label] = written.group(1)
+        if written:
+            paths[label] = written.group(1)
     return paths
 
 
@@ -602,24 +588,19 @@ def check_emulator_packs(
 
     def compare(names: list[str], standalone: bool, label: str, **narrowing: object) -> bool:
         record = archive.PackRecord()
-        was_offline = packresolve.OFFLINE
         # The pack is built offline: verify counts a release asset the cache
         # lacks the same way, missing, as the narrowed-pack step does.
-        packresolve.set_offline(True)
-        try:
-            with contextlib.redirect_stdout(io.StringIO()), \
-                    contextlib.redirect_stderr(io.StringIO()):
-                emulatorpack.generate_emulator_pack(
-                    names, emulators_dir, db, "bios", "", standalone,
-                    zip_contents=zip_contents, offline=True, platforms_dir=platforms_dir,
-                    record=record, **narrowing,
-                )
-                report = emulatorcheck.verify_emulator(
-                    names, emulators_dir, db, standalone, platforms_dir=platforms_dir,
-                    **narrowing,
-                )
-        finally:
-            packresolve.set_offline(was_offline)
+        with packresolve.offline(), contextlib.redirect_stdout(io.StringIO()), \
+                contextlib.redirect_stderr(io.StringIO()):
+            emulatorpack.generate_emulator_pack(
+                names, emulators_dir, db, "bios", "", standalone,
+                zip_contents=zip_contents, offline=True, platforms_dir=platforms_dir,
+                record=record, **narrowing,
+            )
+            report = emulatorcheck.verify_emulator(
+                names, emulators_dir, db, standalone, platforms_dir=platforms_dir,
+                **narrowing,
+            )
         lines = _set_difference_lines(
             label, set(report["pack_destinations"]), set(record.files)
         )
@@ -733,6 +714,23 @@ def narrowed_variants(
     return variants
 
 
+def _comparison_inputs(
+    db_path: str, emulators_dir: str, platforms_dir: str,
+) -> tuple[dict, dict, dict, dict, list[tuple[list[str], str]]]:
+    """What the in-memory pack comparisons read: the database, its ZIP
+    index, the profiles, the data-directory registry and the platform groups."""
+    from core.ziptools import build_zip_contents_index
+    from resolve.grouping import group_identical_platforms
+    from model.registry import list_registered_platforms
+    from model.database import load_database
+    from model.profiles import load_emulator_profiles
+
+    db = load_database(db_path)
+    groups = group_identical_platforms(list_registered_platforms(platforms_dir), platforms_dir)
+    return (db, build_zip_contents_index(db), load_emulator_profiles(emulators_dir),
+            load_data_dir_registry(platforms_dir), groups)
+
+
 def check_narrowed_packs(
     emulators_dir: str = EMULATORS_DIR, platforms_dir: str = PLATFORMS_DIR,
     db_path: str = DB_FILE, full: bool = False,
@@ -758,28 +756,16 @@ def check_narrowed_packs(
     from packs import platformpack
     from resolve import packfiles as packresolve
     from packs import coverage
-    from core.ziptools import build_zip_contents_index
-    from resolve.grouping import group_identical_platforms
-    from model.registry import list_registered_platforms
-    from model.database import load_database
-    from model.profiles import load_emulator_profiles
     from model.platforms import load_platform_config
     from model.targets import load_target_config
 
     print(f"\n--- {step_title(STEP_LABELS['consistency'])}, narrowed packs ---")
-    db = load_database(db_path)
-    zip_contents = build_zip_contents_index(db)
-    profiles = load_emulator_profiles(emulators_dir)
-    registry = load_data_dir_registry(platforms_dir)
-    groups = group_identical_platforms(
-        list_registered_platforms(platforms_dir),
-        platforms_dir,
+    db, zip_contents, profiles, registry, groups = _comparison_inputs(
+        db_path, emulators_dir, platforms_dir
     )
-    was_offline = packresolve.OFFLINE
-    packresolve.set_offline(True)
     all_ok = True
     compared = 0
-    try:
+    with packresolve.offline():
         for _members, platform in groups:
             config = load_platform_config(platform, platforms_dir)
             for label, narrowing in narrowed_variants(
@@ -822,8 +808,6 @@ def check_narrowed_packs(
                 if lines:
                     print("\n".join(lines))
                     all_ok = False
-    finally:
-        packresolve.set_offline(was_offline)
     scope = "full matrix" if full else "sampled"
     print(f"  {compared} narrowed platform packs compared ({scope}), "
           f"{'all equal' if all_ok else 'differences above'}")
@@ -866,28 +850,15 @@ def check_split_packs(
     comparison of this step.
     """
     from packs import archive
-    from packs import platformpack as packs_platformpack
     from packs import platformpack
     from resolve import packfiles as packresolve
-    from core.ziptools import build_zip_contents_index
-    from resolve.grouping import group_identical_platforms
-    from model.registry import list_registered_platforms, load_data_dir_registry
-    from model.database import load_database
-    from model.profiles import load_emulator_profiles
 
     print(f"\n--- {step_title(STEP_LABELS['consistency'])}, split packs ---")
-    db = load_database(db_path)
-    zip_contents = build_zip_contents_index(db)
-    profiles = load_emulator_profiles(emulators_dir)
-    registry = load_data_dir_registry(platforms_dir)
-    groups = group_identical_platforms(
-        list_registered_platforms(platforms_dir),
-        platforms_dir,
+    db, zip_contents, profiles, registry, groups = _comparison_inputs(
+        db_path, emulators_dir, platforms_dir
     )
-    was_offline = packresolve.OFFLINE
-    packresolve.set_offline(True)
     all_ok = True
-    try:
+    with packresolve.offline():
         for _members, platform in groups:
             args = dict(
                 emulators_dir=emulators_dir, zip_contents=zip_contents,
@@ -900,7 +871,7 @@ def check_split_packs(
                 platformpack.generate_pack(
                     platform, platforms_dir, db, "bios", "", record=full, **args,
                 )
-                packs_platformpack.generate_split_packs(
+                platformpack.generate_split_packs(
                     platform, platforms_dir, db, "bios", "", records=parts, **args,
                 )
             lines = split_differences(full, parts, archive.same_bytes)
@@ -908,8 +879,6 @@ def check_split_packs(
                 all_ok = False
                 print(f"  {platform} --split: {len(lines)} differences")
                 print("\n".join(f"    {line}" for line in lines[:20]))
-    finally:
-        packresolve.set_offline(was_offline)
     print(f"  {len(groups)} split platform packs compared, "
           f"{'all equal' if all_ok else 'differences above'}")
     return all_ok
