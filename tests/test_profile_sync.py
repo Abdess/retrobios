@@ -2734,7 +2734,8 @@ class TestWriteDryRun(unittest.TestCase):
                 mock.patch.object(profiling_run, "realign_prose", side_effect=cold), \
                 contextlib.redirect_stderr(io.StringIO()) as err:
             profiling_run.read_one_profile(
-                self._args(rebase_refs=True), "p", yaml.safe_load(SAMPLE), reports, failed, True
+                self._args(rebase_refs=True), "p", yaml.safe_load(SAMPLE), reports, failed, True,
+                set(),
             )
         self.assertEqual(reports, [skipped])
         self.assertEqual(failed, {"p"})
@@ -5180,15 +5181,12 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
                 mock.patch.object(profiling_sourcepaths, "load_emulator_profiles", return_value={}), \
                 mock.patch.object(sources, "write_if_changed") as written, \
                 contextlib.redirect_stderr(io.StringIO()):
-            profiling_run.WRITTEN_PROFILES.clear()
-            profiling_sourcepaths.refresh_source_paths(self._args())
+            profiling_sourcepaths.refresh_source_paths(self._args(), set())
             self.assertFalse(built.called)
-            profiling_run.WRITTEN_PROFILES.add("x")
-            profiling_sourcepaths.refresh_source_paths(self._args(dry_run=True))
+            profiling_sourcepaths.refresh_source_paths(self._args(dry_run=True), {"x"})
             self.assertFalse(built.called)
-            profiling_sourcepaths.refresh_source_paths(self._args())
+            profiling_sourcepaths.refresh_source_paths(self._args(), {"x"})
             self.assertTrue(built.called and written.called)
-            profiling_run.WRITTEN_PROFILES.clear()
 
 
     def test_the_record_reads_the_pins_just_written(self):
@@ -5211,9 +5209,7 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
                     mock.patch.object(sources, "write_if_changed"), \
                     contextlib.redirect_stderr(io.StringIO()), \
                     contextlib.redirect_stdout(io.StringIO()):
-                profiling_run.WRITTEN_PROFILES.add("p")
-                self.addCleanup(profiling_run.WRITTEN_PROFILES.clear)
-                profiling_sourcepaths.refresh_source_paths(self._args(emulators_dir=tmp))
+                profiling_sourcepaths.refresh_source_paths(self._args(emulators_dir=tmp), {"p"})
             self.assertEqual(built.call_args[0][0]["p"]["source_commit"], "new")
 
     def test_the_record_waits_for_a_run_holding_the_repository(self):
@@ -5231,12 +5227,50 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
                 mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
                 mock.patch.object(profiling_sourcepaths, "load_emulator_profiles", return_value={}), \
                 contextlib.redirect_stderr(io.StringIO()) as err:
-            profiling_run.WRITTEN_PROFILES.add("x")
-            self.addCleanup(profiling_run.WRITTEN_PROFILES.clear)
-            profiling_sourcepaths.refresh_source_paths(self._args())
+            profiling_sourcepaths.refresh_source_paths(self._args(), {"x"})
         lock.assert_called_once_with(str(sources.SOURCE_PATHS))
         self.assertFalse(built.called)
         self.assertIn("sitesources.py --fetch", err.getvalue())
+
+
+class EveryWriterIsRecorded(unittest.TestCase):
+    """--backfill-commits wrote a pin without saying so: the record of cited
+    source paths then lacked the tree that pin names."""
+
+    def test_a_backfilled_pin_is_a_write(self):
+        from unittest import mock
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "p.yml"
+            path.write_text('emulator: P\nprofiled_date: "2026-01-01"\n', encoding="utf-8")
+            args = argparse.Namespace(
+                emulators_dir=tmp, backfill_commits=True, rebase_refs=False,
+                bump_commit=False, dry_run=False,
+            )
+            report = ProfileReport(name="p", entries=[], counts={}, pin="abcdef0")
+            written: set[str] = set()
+            with mock.patch.object(profiling_run, "_build_full_report", return_value=report), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                profiling_run.read_one_profile(
+                    args, "p", yaml.safe_load(path.read_text()), [], set(), True, written,
+                )
+            self.assertIn('source_commit: "abcdef0"', path.read_text())
+        self.assertEqual(written, {"p"})
+
+    def test_a_write_put_back_is_not_recorded(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "p.yml"
+            path.write_text("emulator: P\n", encoding="utf-8")
+            written: set[str] = set()
+            with profiling_sourcepaths.record_write(path, "p", written):
+                path.write_text("emulator: Q\n", encoding="utf-8")
+                path.write_text("emulator: P\n", encoding="utf-8")
+            self.assertEqual(written, set())
+            with self.assertRaises(YamlWriteError), \
+                    profiling_sourcepaths.record_write(path, "p", written):
+                path.write_text("emulator: Q\n", encoding="utf-8")
+                raise YamlWriteError("a later write refused")
+        self.assertEqual(written, {"p"})
 
 
 class AnUnreadTreeKeepsItsRecord(unittest.TestCase):

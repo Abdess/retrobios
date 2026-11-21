@@ -25,6 +25,7 @@ from profiling.reports import (
 )
 from profiling.repos import select_repo
 from profiling.resolver import build_report
+from profiling.sourcepaths import record_write
 from profiling.triage import PROGRESS_SECONDS, Progress, print_interrupted, print_triage
 from profiling.versions import (
     newer_release,
@@ -135,7 +136,6 @@ def _promote(
             file=sys.stderr,
         )
         return False
-    WRITTEN_PROFILES.add(name)
     return True
 
 
@@ -311,8 +311,12 @@ def read_one_profile(
     reports: list[ProfileReport],
     failed: set[str],
     writes: bool,
+    written: set[str],
 ) -> None:
-    """Build one profile's report into ``reports``, then apply the writes."""
+    """Build one profile's report into ``reports``, then apply the writes.
+
+    A profile the writes changed is added to ``written``.
+    """
     profile_path = Path(args.emulators_dir) / f"{name}.yml"
     try:
         report = _build_full_report(args, name, profile, profile_path, failed)
@@ -330,7 +334,8 @@ def read_one_profile(
     reports.append(report)
     if writes:
         try:
-            _apply_writes(args, name, profile, report)
+            with record_write(profile_path, name, written):
+                _apply_writes(args, name, profile, report)
         except YamlWriteError as exc:
             # The guard already left the file untouched, so keep going.
             print(f"{name}: write refused: {exc}", file=sys.stderr)
@@ -345,12 +350,13 @@ def read_one_profile(
 
 def read_selected(
     args: argparse.Namespace, selected: dict, writes: bool
-) -> tuple[list[ProfileReport], set[str], bool]:
+) -> tuple[list[ProfileReport], set[str], set[str], bool]:
     """Every selected profile's pass: the reports, the profiles that failed,
-    and whether the pass ran to its end."""
+    the profiles it wrote, and whether the pass ran to its end."""
     # A profile that could not be compared or written is not a profile with
     # nothing to review: it stays in every output and fails the run.
     failed: set[str] = set()
+    written: set[str] = set()
     reports: list[ProfileReport] = []
     quiet = args.offline or len(selected) < 2
     if not quiet:
@@ -364,18 +370,13 @@ def read_selected(
     try:
         for name, profile in selected.items():
             progress.step(len(reports), name)
-            read_one_profile(args, name, profile, reports, failed, writes)
+            read_one_profile(args, name, profile, reports, failed, writes, written)
     except KeyboardInterrupt:
         # What was read is still worth printing: a ranking of 200 profiles
         # beats none after 15 minutes.
         print_interrupted(len(reports), len(selected), "the output covers those read")
         complete = False
-    return reports, failed, complete
-
-
-# Profiles this run wrote. Their new pins name trees the site's record of
-# cited source paths does not hold yet.
-WRITTEN_PROFILES: set[str] = set()
+    return reports, failed, written, complete
 
 
 def _build_full_report(

@@ -205,7 +205,7 @@ def main() -> None:
         run_realign(args, selected)
         return
 
-    reports, failed, complete = read_selected(args, selected, writes)
+    reports, failed, written, complete = read_selected(args, selected, writes)
 
     # --changed-only narrows every output, not the text report alone: the
     # documented `--all --changed-only --json` listed every profile.
@@ -214,7 +214,7 @@ def main() -> None:
         if not args.changed_only or report.needs_review() or report.name in failed
     ]
     complete = emit_reports(args, selected, reports, shown) is not False and complete
-    refresh_source_paths(args)
+    refresh_source_paths(args, written)
     if not complete:
         raise SystemExit(130)
     if failed or (args.strict and any(

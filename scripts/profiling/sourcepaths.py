@@ -5,12 +5,30 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+from collections.abc import Iterator
+from contextlib import contextmanager
+from pathlib import Path
 
 from model.profiles import load_emulator_profiles
-from profiling.run import WRITTEN_PROFILES
 
 
-def refresh_source_paths(args: argparse.Namespace) -> None:
+@contextmanager
+def record_write(path: Path, name: str, written: set[str]) -> Iterator[None]:
+    """Add *name* to *written* when the profile's bytes changed in the block.
+
+    Every writer of a pass runs inside it, so a new writer cannot forget to
+    say it wrote: --backfill-commits and --attribute-refs never did, and the
+    pins they wrote stayed out of the record. A write put back is no write.
+    """
+    before = path.read_bytes() if path.is_file() else None
+    try:
+        yield
+    finally:
+        if path.is_file() and path.read_bytes() != before:
+            written.add(name)
+
+
+def refresh_source_paths(args: argparse.Namespace, written: set[str]) -> None:
     """Rebuild the site's record of cited source paths after a write.
 
     Each bump left website/src/data/source-paths.json behind its pins, and
@@ -18,7 +36,7 @@ def refresh_source_paths(args: argparse.Namespace) -> None:
     --fetch by hand. A run that writes nothing, or makes no request, leaves
     it alone.
     """
-    if not WRITTEN_PROFILES or args.dry_run or args.offline or os.environ.get("RETROBIOS_OFFLINE"):
+    if not written or args.dry_run or args.offline or os.environ.get("RETROBIOS_OFFLINE"):
         return
     from core.artifacts import ArtifactLockBusy
     from model.profiles import emulator_profiles_cache
