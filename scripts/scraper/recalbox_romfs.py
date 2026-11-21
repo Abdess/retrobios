@@ -14,6 +14,7 @@ TARGET_PREFIX = "BR2_PACKAGE_RECALBOX_TARGET_"
 # romfs2 inisettings.py loadFile: a key line is tried first, then a section.
 _INI_KEY = re.compile(r'^([^#;].*?)\s?=\s?"?(.*?)"?$')
 _INI_SECTION = re.compile(r"^\[(.*)\]")
+_CORE_SECTION = re.compile(r"core\.(\d+)(?:\.[\w-]+)?")
 # romfs2 keyvaluesettings.py loadFile, the reader configin.py uses.
 _CONFIG_KEY = re.compile(r"^([^#;].*?)\s?=\s?(.+)$")
 
@@ -24,6 +25,13 @@ class SystemIni:
 
     sections: dict[str, dict[str, str]]
     lines: dict[str, int]
+
+    def core_sections(self) -> Iterator[dict[str, str]]:
+        """Every `[core.N]` and `[core.N.<board>]` section some board builds."""
+        for name, values in self.sections.items():
+            slot = _CORE_SECTION.fullmatch(name)
+            if slot and int(slot.group(1)) < CORE_SLOTS:
+                yield values
 
     def slots(self, board: str) -> Iterator[str]:
         """The `core.N` sections a board builds: `[core.N]` or `[core.N.<board>]` alone."""

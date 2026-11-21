@@ -155,13 +155,10 @@ def _core_names(values: dict[str, str]) -> tuple[set[str], set[str]]:
 
 def system_ini_libretro(text: str) -> set[str]:
     """The libretro cores one Recalbox system.ini offers."""
-    import re
-
     return {
         values.get("core", "")
-        for section, values in read_system_ini(text).sections.items()
-        if re.fullmatch(r"core\.\d+(\.[\w-]+)?", section)
-        and values.get("emulator") == "libretro" and values.get("core")
+        for values in read_system_ini(text).core_sections()
+        if values.get("emulator") == "libretro" and values.get("core")
     }
 
 
@@ -196,13 +193,9 @@ def system_ini_cores(text: str) -> tuple[set[str], set[str]]:
     or a standalone emulator. es_bios.xml only names the cores that need a
     BIOS, so read alone it left most of Recalbox's cores outside the pack.
     """
-    import re
-
     cores: set[str] = set()
     standalone: set[str] = set()
-    for section, values in read_system_ini(text).sections.items():
-        if not re.fullmatch(r"core\.\d+(\.[\w-]+)?", section):
-            continue
+    for values in read_system_ini(text).core_sections():
         found, alone = _core_names(values)
         cores |= found
         standalone |= alone

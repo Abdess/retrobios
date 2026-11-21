@@ -672,6 +672,18 @@ class RecalboxPerBoard(unittest.TestCase):
         path, config = found["rpi3"]
         self.assertEqual((path, config.enabled["BR2_arm"]), ("configs/recalbox-pi3_defconfig", 2))
 
+    def test_core_slots_stop_where_systemholder_stops(self):
+        """systemholder.py reads core.0 to core.19: a later section is
+        neither built on a board nor offered by the platform."""
+        from scraper.recalbox_scraper import board_cores, system_ini_cores
+
+        ini = ("[core.20]\npackage = BR2_PACKAGE_PCSX2\nemulator = \"pcsx2\"\ncore = \"pcsx2\"\n"
+               "[core.19]\npackage = BR2_PACKAGE_LIBRETRO_GAMBATTE\nemulator = \"libretro\"\n"
+               "core = \"gambatte\"\n")
+        enabled = {"BR2_PACKAGE_PCSX2", "BR2_PACKAGE_LIBRETRO_GAMBATTE"}
+        self.assertEqual(board_cores(ini, "x86_64", enabled), {"gambatte"})
+        self.assertEqual(system_ini_cores(ini), ({"gambatte"}, set()))
+
 
 class RetroPieModuleFlags(unittest.TestCase):
     """The RetroPie target list read flags as requirements and libretro alone.
