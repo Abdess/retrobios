@@ -173,27 +173,23 @@ def _check_mode(args: argparse.Namespace, parser: argparse.ArgumentParser) -> bo
 
 
 def _run_emulator_mode(args: argparse.Namespace, db: dict, requested_regions: list[str]) -> None:
-    names = comma_list(args.emulator)
-    result = verify_emulator(
-        names, args.emulators_dir, db, args.standalone,
+    _print_emulator_run(args, verify_emulator(
+        comma_list(args.emulator), args.emulators_dir, db, args.standalone,
         regions=requested_regions, platforms_dir=args.platforms_dir,
         required_only=args.required_only,
-    )
-    if args.json:
-        result["details"] = json_details(result["details"], args.verbose)
-        print(json.dumps(result, indent=2))
-    else:
-        print_emulator_result(result, verbose=args.verbose)
-    _exit_if_strict_emulator(args.strict, result)
+    ))
 
 
 def _run_system_mode(args: argparse.Namespace, db: dict, requested_regions: list[str]) -> None:
-    system_ids = comma_list(args.system)
-    result = verify_system(
-        system_ids, args.emulators_dir, db, args.standalone,
+    _print_emulator_run(args, verify_system(
+        comma_list(args.system), args.emulators_dir, db, args.standalone,
         regions=requested_regions, platforms_dir=args.platforms_dir,
         required_only=args.required_only,
-    )
+    ))
+
+
+def _print_emulator_run(args: argparse.Namespace, result: dict) -> None:
+    """An --emulator or --system result, as text or JSON, then the strict gate."""
     if args.json:
         result["details"] = json_details(result["details"], args.verbose)
         print(json.dumps(result, indent=2))

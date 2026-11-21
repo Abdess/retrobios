@@ -572,7 +572,8 @@ class VerboseAppliesToJson(unittest.TestCase):
 
     def test_every_json_branch_reads_the_flag(self):
         source = script_source("verify.py")
-        self.assertEqual(source.count("json_details("), 4)
+        # Defined once, called by the emulator and system output and the platform output.
+        self.assertEqual(source.count("json_details("), 3)
         self.assertNotIn('if d["status"] != Status.OK\n            ]', source)
 
 
