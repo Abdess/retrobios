@@ -55,6 +55,7 @@ def _run_platform_mode(
         system_filter=platform_systems,
         no_game_data=getattr(args, "no_game_data", False),
         required_only=args.required_only,
+        json_output=args.json,
     ))
     print_platform_results(args, results)
     exit_if_strict(args.strict, [r for r, _ in results.group_results])

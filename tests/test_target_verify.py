@@ -178,24 +178,54 @@ class APlatformWithoutTheSystemIsOutOfScope(unittest.TestCase):
 
         values = {"target": None, "all": True}
         values.update(args)
-        out = io.StringIO()
-        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
-            kept = platforms_with_systems(
-                ["retroarch", "misterfpga"], ["sony-playstation-2"],
-                load_emulator_profiles(str(REPO_ROOT / "emulators")), {},
-                str(REPO_ROOT / "platforms"), values["target"], values["all"],
-            )
-        return kept, out.getvalue()
+        return platforms_with_systems(
+            ["retroarch", "misterfpga"], ["sony-playstation-2"],
+            load_emulator_profiles(str(REPO_ROOT / "emulators")), {},
+            str(REPO_ROOT / "platforms"), values["target"], values["all"],
+        )
 
     def test_all_skips_it(self):
-        kept, out = self._scope()
-        self.assertEqual(kept, ["retroarch"])
-        self.assertIn("INFO: Skipping misterfpga: no system sony-playstation-2", out)
+        scope = self._scope()
+        self.assertEqual(scope.kept, ["retroarch"])
+        self.assertIsNone(scope.refusal)
+        self.assertIn("INFO: Skipping misterfpga: no system sony-playstation-2",
+                      scope.notices)
 
     def test_a_named_platform_is_refused(self):
-        with self.assertRaises(SystemExit) as ctx:
-            self._scope(all=False)
+        from packs.runscope import settle_scope
+
+        scope = self._scope(all=False)
+        self.assertIn("misterfpga", scope.refusal or "")
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err), self.assertRaises(SystemExit) as ctx:
+            settle_scope(scope, io.StringIO())
         self.assertEqual(ctx.exception.code, 1)
+        self.assertEqual(err.getvalue(), f"ERROR: {scope.refusal}\n")
+
+    def test_a_profile_blind_platform_prints_nothing_itself(self):
+        """verify --all --region us --json printed the left-out notice on
+        stdout, ahead of the JSON document."""
+        from model.profiles import load_emulator_profiles
+        from resolve.cores import without_profile_blind
+
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
+            scope = without_profile_blind(
+                ["retroarch", "misterfpga"], ["--region"], str(REPO_ROOT / "platforms"),
+                load_emulator_profiles(str(REPO_ROOT / "emulators")), None, True,
+            )
+        self.assertEqual(out.getvalue(), "")
+        self.assertEqual(scope.kept, ["retroarch"])
+        self.assertEqual(scope.notices, [
+            "  misterfpga runs no core a profile describes, and --region reads "
+            "the profiles: left out",
+        ])
+        named = without_profile_blind(
+            ["misterfpga"], ["--region"], str(REPO_ROOT / "platforms"),
+            load_emulator_profiles(str(REPO_ROOT / "emulators")), None, False,
+        )
+        self.assertEqual(named.refusal, "misterfpga runs no core a profile describes, "
+                         "and --region reads the profiles: drop --region")
 
     def test_verify_reports_on_the_packs_generate_pack_builds(self):
         """verify --all --system exited 2 'mutually exclusive' while

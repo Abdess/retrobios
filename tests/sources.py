@@ -20,14 +20,14 @@ COMMANDS = {
         "packs/platformpack.py", "packs/emulatorpack.py", "packs/md5pack.py", "packs/targets.py",
         "packs/manifestentry.py", "packs/manifestcores.py", "packs/standalone.py",
         "packs/manifest.py", "packs/finalize.py", "packs/outputdir.py", "packs/variants.py",
-        "packs/manifestrun.py", "packs/packcheck.py", "packs/platformrun.py",
+        "packs/manifestrun.py", "packs/packcheck.py", "packs/runscope.py", "packs/platformrun.py",
         "packs/packoptions.py", "packs/packmodes.py",
     ),
     "verify.py": (
         "packs/verdicts.py", "packs/gaps.py", "packs/coverage.py", "packs/emulatorcheck.py",
         "packs/report.py", "packs/verifyplatforms.py", "packs/verifysummary.py",
         "packs/verifyoutput.py", "packs/strictgate.py", "packs/verifyoptions.py",
-        "packs/verifyprint.py", "packs/verifyrun.py",
+        "packs/verifyprint.py", "packs/runscope.py", "packs/verifyrun.py",
     ),
     "cross_reference.py": (
         "packs/crossref.py", "packs/crossrefscope.py", "packs/crossrefrun.py",

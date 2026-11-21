@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import functools
-import sys
 from collections.abc import Collection
+from dataclasses import dataclass
 
 from core.cli import suggest_names
 from core.paths import sanitize_pack_path
@@ -16,6 +16,16 @@ from model.targets import list_available_targets, load_target_config
 from core.paths import REPO_ROOT
 
 
+@dataclass(frozen=True)
+class RunScope:
+    """The platforms a run keeps, a notice for each one it leaves out, and
+    why it refuses a platform the command line names."""
+
+    kept: list[str]
+    notices: list[str]
+    refusal: str | None = None
+
+
 def without_profile_blind(
     platforms: list[str],
     flags: list[str],
@@ -23,18 +33,18 @@ def without_profile_blind(
     profiles: dict[str, dict],
     target_cores: dict[str, set[str] | None] | None,
     is_all: bool,
-) -> list[str]:
+) -> RunScope:
     """The platforms a narrowing read from profiles can apply to.
 
     Regions, search order and game data are read from the profiles of the
     cores a platform runs. MiSTer and BizHawk declare `cores: []`: a
     --region, --one-per-slot or --no-game-data pack of theirs withdrew
     nothing while its name and README said it had. A named platform is
-    refused (exit 1). Under --all it is left out with a notice. generate_pack
-    and verify both read this.
+    refused. Under --all it is left out with a notice. generate_pack and
+    verify both read this, and print the notices and the refusal.
     """
     if not flags:
-        return platforms
+        return RunScope(platforms, [])
     blind = [
         name for name in platforms
         if not resolve_platform_cores(
@@ -43,16 +53,17 @@ def without_profile_blind(
             target_cores=(target_cores or {}).get(name),
         )
     ]
+    kept = [name for name in platforms if name not in blind]
+    notices: list[str] = []
     for name in blind:
         message = (
             f"{name} runs no core a profile describes, and {', '.join(flags)} "
             "reads the profiles"
         )
         if not is_all:
-            print(f"ERROR: {message}: drop {', '.join(flags)}", file=sys.stderr)
-            sys.exit(1)
-        print(f"  {message}: left out")
-    return [name for name in platforms if name not in blind]
+            return RunScope(kept, notices, f"{message}: drop {', '.join(flags)}")
+        notices.append(f"  {message}: left out")
+    return RunScope(kept, notices)
 
 
 def resolve_platform_cores(
@@ -403,16 +414,18 @@ def platforms_with_systems(
     platforms_dir: str,
     target: str | None,
     is_all: bool,
-) -> list[str]:
+) -> RunScope:
     """The platforms a --system list leaves a system to cover, before any lock.
 
     Under --all a platform without one is out of scope, as a platform
     without the target is: `--all --system sony-playstation-2` built every
     PS2 pack and exited 1 on MiSTer, which has no PS2. Under --platform the
-    request is refused here, with its reason. verify.py and generate_pack.py
-    scope a --system list through this one function.
+    request is refused, with its reason. verify.py and generate_pack.py
+    scope a --system list through this one function, and print the notices
+    on stderr: verify --json prints its document on stdout.
     """
-    kept = []
+    kept: list[str] = []
+    notices: list[str] = []
     for name in platforms:
         config = load_platform_config(name, platforms_dir)
         tc = target_cores_cache.get(name) if target else None
@@ -420,23 +433,22 @@ def platforms_with_systems(
             kept.append(name)
             continue
         if not is_all:
-            reason = system_scope_error(config, name, system_filter, target)
-            print(f"ERROR: {reason}", file=sys.stderr)
-            sys.exit(1)
+            return RunScope(
+                kept, notices, system_scope_error(config, name, system_filter, target)
+            )
         declared = select_systems(config.get("systems", {}), system_filter)
         reason = (
             system_scope_error(config, name, system_filter, target)
             if declared and target
             else f"no system {', '.join(system_filter)}"
         )
-        # On stderr: verify --json prints its document on stdout.
-        print(f"INFO: Skipping {name}: {reason}", file=sys.stderr)
+        notices.append(f"INFO: Skipping {name}: {reason}")
     if not kept:
         where = f" on target {target}" if target else ""
-        print(f"ERROR: no platform here runs {', '.join(system_filter)}{where}",
-              file=sys.stderr)
-        sys.exit(1)
-    return kept
+        return RunScope(
+            kept, notices, f"no platform here runs {', '.join(system_filter)}{where}"
+        )
+    return RunScope(kept, notices)
 
 
 def system_scope_error(

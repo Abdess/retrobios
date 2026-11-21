@@ -26,6 +26,7 @@ from packs.naming import pack_narrowings, platform_pack_name, platform_target
 from packs.outputdir import holds_other_kind, pack_output_lock
 from packs.packcheck import run_verify_packs
 from packs.platformpack import generate_pack, generate_split_packs
+from packs.runscope import settle_scope
 from packs.scope import pack_systems
 from packs.targets import target_list
 from packs.variants import pack_label, run_variants, skip_empty_truth
@@ -287,18 +288,18 @@ def run_platform_mode(
 
     emu_profiles = load_emulator_profiles(args.emulators_dir)
     if system_filter:
-        platforms = platforms_with_systems(
+        platforms = settle_scope(platforms_with_systems(
             platforms, system_filter, emu_profiles, target_cores_cache,
             args.platforms_dir, args.target, args.all,
-        )
-    platforms = without_profile_blind(
+        ), sys.stderr)
+    platforms = settle_scope(without_profile_blind(
         platforms,
         _narrowing_flags(args),
         args.platforms_dir,
         emu_profiles,
         target_cores_cache if args.target else None,
         args.all,
-    )
+    ), sys.stdout)
 
     data_registry = load_data_dir_registry(args.platforms_dir)
     # The output directory is claimed before the data directory refresh: a

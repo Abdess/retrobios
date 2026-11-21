@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import sys
 from dataclasses import dataclass, field
 
 from model.platforms import load_platform_config
@@ -9,6 +10,7 @@ from model.profiles import load_emulator_profiles
 from model.registry import load_data_dir_registry
 from model.targets import canonical_target_name, target_scope
 from packs.coverage import verify_platform
+from packs.runscope import settle_scope
 from resolve.contentlayout import TARGET_KEY
 from resolve.cores import platforms_with_systems, without_profile_blind
 from resolve.grouping import group_identical_platforms
@@ -26,6 +28,7 @@ class PlatformRun:
     system_filter: list[str] | None = None
     no_game_data: bool = False
     required_only: bool = False
+    json_output: bool = False
 
 
 @dataclass
@@ -48,10 +51,10 @@ def run_target_scope(
         platforms, run.target, run.platforms_dir, is_all=run.is_all
     )
     if run.system_filter:
-        platforms = platforms_with_systems(
+        platforms = settle_scope(platforms_with_systems(
             platforms, run.system_filter, emu_profiles, target_cores_cache,
             run.platforms_dir, run.target, run.is_all,
-        )
+        ), sys.stderr)
     return target_cores_cache, platforms
 
 
@@ -64,8 +67,9 @@ def verify_platforms(platforms: list[str], db: dict, run: PlatformRun) -> Platfo
     target_cores_cache, platforms = run_target_scope(run, platforms, emu_profiles)
 
     # generate_pack refuses these on a platform whose cores no profile
-    # describes, and the report answers the same request the same way.
-    platforms = without_profile_blind(
+    # describes, and the report answers the same request the same way. Its
+    # notices go to stderr under --json, which prints the document on stdout.
+    platforms = settle_scope(without_profile_blind(
         platforms,
         [
             flag for flag, given in (
@@ -77,7 +81,7 @@ def verify_platforms(platforms: list[str], db: dict, run: PlatformRun) -> Platfo
         emu_profiles,
         target_cores_cache if run.target else None,
         run.is_all,
-    )
+    ), sys.stderr if run.json_output else sys.stdout)
 
     # Group identical platforms (same function as generate_pack)
     groups = group_identical_platforms(
