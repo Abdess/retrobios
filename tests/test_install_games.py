@@ -758,6 +758,13 @@ class Cache(GamesTestCase):
             self.assertEqual(len(counted), 2)
             self.assertEqual(plan.games[0].dat_regions, frozenset({"japan"}))
 
+    def test_a_cache_write_that_fails_leaves_no_scratch(self):
+        # Each failing run left one index.json.<pid>.part beside the cache.
+        cached = self.card.cache / "games"
+        (cached / "index.json").mkdir(parents=True)
+        install._cache_write(cached / "index.json", b"{}")
+        self.assertEqual([p.name for p in cached.iterdir()], ["index.json"])
+
     def test_the_index_is_cached_and_read_offline_without_the_list_beside_it(self):
         self.card.game("MD", "eu.md", MD_EU)
         index = (self.card.lists / "games" / "index.json").read_bytes()

@@ -239,6 +239,24 @@ def _replace_with_copy(src: Path, dest: Path) -> None:
         raise
 
 
+def write_atomically(path: Path, data: bytes) -> None:
+    """Write data at path through a scratch file beside it, removed when the
+    write fails; a scratch that cannot be removed is named in the error."""
+    fd, scratch = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".part")
+    try:
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(data)
+        os.replace(scratch, path)
+    except OSError as exc:
+        if os.path.lexists(scratch):
+            try:
+                os.unlink(scratch)
+            except OSError as left:
+                exc.strerror = (f"{exc.strerror or exc}, and {scratch} stays "
+                                f"({left.strerror or left})")
+        raise
+
+
 # FILE_ATTRIBUTE_REPARSE_POINT: a junction, a mount point or a link on Windows.
 # Before Python 3.12 lstat does not report a junction as a link, and
 # os.walk(followlinks=False) descends into it.

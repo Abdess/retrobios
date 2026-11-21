@@ -9,14 +9,13 @@ import os
 import re
 import stat
 import sys
-import tempfile
 from collections.abc import Callable, Iterable
 from pathlib import Path, PurePosixPath
 from typing import NamedTuple
 
 from installer.arguments import build_parser
 from installer.events import EVENTS
-from installer.host_fs import _clear_read_only, _is_dir, _is_link, _replace_with_copy
+from installer.host_fs import _clear_read_only, _is_dir, _is_link, _replace_with_copy, write_atomically
 from installer.invocation import _INVOCATION, _VALUED_OPTIONS, _command_rank, installer_id
 from installer.local_check import _digest_file
 from installer.offline import LOCAL
@@ -345,23 +344,12 @@ def _save_record(folder: Path, data: dict, found: Path | None) -> tuple[Path | N
         places = [found] + [place for place in places if place != found]
     failure = "nothing could be written beside the folder"
     for path in places:
-        scratch: Path | None = None
         try:
             path.parent.mkdir(exist_ok=True)
             _check_holder(path.parent)
-            with tempfile.NamedTemporaryFile(
-                    "w", encoding="utf-8", dir=path.parent, prefix=f".{path.name}.",
-                    suffix=".part", delete=False) as handle:
-                scratch = Path(handle.name)
-                handle.write(text)
-            os.replace(scratch, path)
+            write_atomically(path, text.encode("utf-8"))
         except OSError as exc:
             failure = exc.strerror or str(exc)
-            if scratch is not None and os.path.lexists(scratch):
-                try:
-                    scratch.unlink()
-                except OSError as left:
-                    failure += f", and {scratch} stays ({left.strerror or left})"
             continue
         return path, ""
     return None, failure

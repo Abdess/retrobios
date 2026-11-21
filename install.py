@@ -1816,6 +1816,24 @@ def _replace_with_copy(src: Path, dest: Path) -> None:
         raise
 
 
+def write_atomically(path: Path, data: bytes) -> None:
+    """Write data at path through a scratch file beside it, removed when the
+    write fails; a scratch that cannot be removed is named in the error."""
+    fd, scratch = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".part")
+    try:
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(data)
+        os.replace(scratch, path)
+    except OSError as exc:
+        if os.path.lexists(scratch):
+            try:
+                os.unlink(scratch)
+            except OSError as left:
+                exc.strerror = (f"{exc.strerror or exc}, and {scratch} stays "
+                                f"({left.strerror or left})")
+        raise
+
+
 # FILE_ATTRIBUTE_REPARSE_POINT: a junction, a mount point or a link on Windows.
 # Before Python 3.12 lstat does not report a junction as a link, and
 # os.walk(followlinks=False) descends into it.
@@ -7890,9 +7908,7 @@ def _cache_write(path: Path, data: bytes) -> None:
     costs a second read, never the run."""
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
-        scratch = path.with_name(f"{path.name}.{os.getpid()}.part")
-        scratch.write_bytes(data)
-        os.replace(scratch, path)
+        write_atomically(path, data)
     except OSError as exc:
         if os.environ.get("RETROBIOS_DEBUG"):
             print(f"  Not cached: {path} ({exc.strerror or exc})", file=sys.stderr)
@@ -9839,23 +9855,12 @@ def _save_record(folder: Path, data: dict, found: Path | None) -> tuple[Path | N
         places = [found] + [place for place in places if place != found]
     failure = "nothing could be written beside the folder"
     for path in places:
-        scratch: Path | None = None
         try:
             path.parent.mkdir(exist_ok=True)
             _check_holder(path.parent)
-            with tempfile.NamedTemporaryFile(
-                    "w", encoding="utf-8", dir=path.parent, prefix=f".{path.name}.",
-                    suffix=".part", delete=False) as handle:
-                scratch = Path(handle.name)
-                handle.write(text)
-            os.replace(scratch, path)
+            write_atomically(path, text.encode("utf-8"))
         except OSError as exc:
             failure = exc.strerror or str(exc)
-            if scratch is not None and os.path.lexists(scratch):
-                try:
-                    scratch.unlink()
-                except OSError as left:
-                    failure += f", and {scratch} stays ({left.strerror or left})"
             continue
         return path, ""
     return None, failure

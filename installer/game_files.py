@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from installer.cards import games_part
-from installer.host_fs import _is_dir
+from installer.host_fs import _is_dir, write_atomically
 from installer.network import _read_capped
 
 CACHE_VARIABLE = "RETROBIOS_CACHE"
@@ -64,9 +64,7 @@ def _cache_write(path: Path, data: bytes) -> None:
     costs a second read, never the run."""
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
-        scratch = path.with_name(f"{path.name}.{os.getpid()}.part")
-        scratch.write_bytes(data)
-        os.replace(scratch, path)
+        write_atomically(path, data)
     except OSError as exc:
         if os.environ.get("RETROBIOS_DEBUG"):
             print(f"  Not cached: {path} ({exc.strerror or exc})", file=sys.stderr)
