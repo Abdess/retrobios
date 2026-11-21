@@ -149,6 +149,25 @@ class PoolAndBuild(unittest.TestCase):
         self.assertIsNone(reconstruct("0" * 32, {"v1": [("a.rom", "ffffffff")]}, self.pool))
 
 
+class AVariantCopyIsAnArchive(unittest.TestCase):
+    """AtomPool listed bios/**/*.zip: bbcm.zip.4cc3e25a's members were never
+    atoms, so --missing called a recipe unbuildable that --build rebuilt,
+    and the copy itself was indexed as a loose ROM."""
+
+    def test_its_members_are_atoms_and_the_copy_is_no_rom(self):
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            bios = Path(directory)
+            copy = bios / "Acorn" / ".variants" / "bbcm.zip.4cc3e25a"
+            copy.parent.mkdir(parents=True)
+            with zipfile.ZipFile(copy, "w") as archive:
+                archive.writestr("a.rom", ROM_A)
+            container = f"{zlib.crc32(copy.read_bytes()):08x}"
+            db = {"files": {"s": {"path": str(copy), "crc32": container}}}
+            pool = AtomPool(bios, db=db)
+            self.assertEqual(pool.read(_crc(ROM_A)), ROM_A)
+            self.assertNotIn(container, pool)
+
+
 class ReportsOverAFixture(unittest.TestCase):
     """A whole run over a synthetic collection, database and platform."""
 

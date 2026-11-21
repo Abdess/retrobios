@@ -576,6 +576,19 @@ class ArchiveMembersAreHeld(unittest.TestCase):
         self.assertEqual(report["no-intro"]["matched"], 1)
         self.assertEqual([e["name"] for e in report["no-intro"]["missing"]], ["other.bin"])
 
+    def test_member_of_a_variant_copy_counts_as_held(self):
+        """A .variants/x.zip.<md5> copy was skipped: dumps only it holds
+        stayed acquisition targets."""
+        from scripts.acquire.provenance import archive_members
+
+        with tempfile.TemporaryDirectory() as tmp:
+            copy = Path(tmp) / "bbcm.zip.4cc3e25a"
+            with zipfile.ZipFile(copy, "w") as zf:
+                zf.writestr("mos.rom", b"mos")
+            members = archive_members({"files": {"z": {"path": str(copy)}}})
+        self.assertEqual([m for ms in members.values() for _p, m in ms], ["mos.rom"])
+
+
 class OneDumpIsCountedOnce(unittest.TestCase):
     """No-Intro's three FM-7 DATs each list DICROM.rom and KANJI.rom: the
     report said 2 485 missing where 2 284 distinct dumps were missing, and

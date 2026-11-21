@@ -11,6 +11,7 @@ from pathlib import Path
 
 from core.hashing import parse_hash_list
 from core.paths import REPO_ROOT
+from core.ziptools import is_archive_path
 from resolve.content import size_fits
 
 
@@ -132,7 +133,7 @@ def archive_members(db: dict) -> dict[tuple[str, int], list[tuple[str, str]]]:
     members: dict[tuple[str, int], list[tuple[str, str]]] = {}
     for entry in db.get("files", {}).values():
         path = entry.get("path", "")
-        if not path.endswith(".zip") or not os.path.exists(path):
+        if not is_archive_path(path) or not os.path.exists(path):
             continue
         try:
             with zipfile.ZipFile(path) as archive:

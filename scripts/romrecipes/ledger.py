@@ -30,22 +30,16 @@ before moving it into place.
 from __future__ import annotations
 
 import json
-import re
 from pathlib import Path
 
 from core.paths import REPO_ROOT
+from core.ziptools import is_archive_path
 
 
 ARCHIVES_FILE = REPO_ROOT / "recipes" / "archives.json"
 # The writer contract: build_torrentzip's layout over stock zlib. A change to
 # the layout is a new builder name and a new proof of every record.
 BUILDER = "torrentzip-1"
-_ARCHIVE_PATH = re.compile(r"\.zip(\.[0-9a-f]{8})?$", re.IGNORECASE)
-
-
-def is_archive_path(path: str) -> bool:
-    """A ZIP by its name: ``x.zip`` or a ``.variants/`` copy ``x.zip.1a2b3c4d``."""
-    return bool(_ARCHIVE_PATH.search(path))
 
 
 def database_archives(db: dict) -> dict[str, dict]:

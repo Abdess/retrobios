@@ -10,6 +10,7 @@ from pathlib import Path
 
 from core.paths import REPO_ROOT
 from core.torrentzip import build_torrentzip
+from core.ziptools import is_archive_path
 from romrecipes.romsets import Recipe
 
 
@@ -36,7 +37,10 @@ class AtomPool:
         # same archives, and every build re-reads and re-deflates its ROMs.
         self._built: dict[tuple[tuple[str, str], ...], bytes | None] = {}
         self.unreadable: list[str] = []
-        for archive in sorted(bios_dir.rglob("*.zip")):
+        # .variants/ copies (x.zip.1a2b3c4d) hold members no primary holds,
+        # bbcm.zip.4cc3e25a's fa2b881f among them; primaries answer first.
+        archives = (p for p in bios_dir.rglob("*") if is_archive_path(p.name) and p.is_file())
+        for archive in sorted(archives, key=lambda p: (".variants" in p.parts, p)):
             try:
                 with zipfile.ZipFile(archive) as handle:
                     for info in handle.infolist():
@@ -51,7 +55,7 @@ class AtomPool:
         root = bios_dir.resolve()
         for entry in ((db or {}).get("files") or {}).values():
             crc, path = str(entry.get("crc32") or "").lower(), entry.get("path", "")
-            if not crc or not path or path.lower().endswith(".zip"):
+            if not crc or not path or is_archive_path(path):
                 continue
             loose = Path(path)
             if root in loose.resolve().parents and loose.is_file():

@@ -10,7 +10,7 @@ from pathlib import Path
 from core.hashing import compute_hashes
 from core.paths import REPO_ROOT
 from core.torrentzip import write_torrentzip, zlib_ng_version
-from romrecipes.ledger import is_archive_path
+from core.ziptools import is_archive_path
 from romrecipes.members import member_sha1, member_opener
 
 

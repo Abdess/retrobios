@@ -20,6 +20,13 @@ from core.artifacts import process_umask, write_text_atomic
 from core.hashing import MAX_HASHED_MEMBER, md5sum
 from core.paths import REPO_ROOT
 
+_ARCHIVE_PATH = re.compile(r"\.zip(\.[0-9a-f]{8})?$", re.IGNORECASE)
+
+
+def is_archive_path(path: str) -> bool:
+    """A ZIP by its name: ``x.zip`` or a ``.variants/`` copy ``x.zip.1a2b3c4d``."""
+    return bool(_ARCHIVE_PATH.search(path))
+
 
 def check_inside_zip(container: str, file_name: str, expected_md5: str) -> str:
     """Check a ROM inside a ZIP, as Batocera's checkInsideZip() does.
