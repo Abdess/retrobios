@@ -42,6 +42,7 @@ def part_marker_name(name: str, index: int, count: int) -> str:
     """The marker part index of count of the pack name holds."""
     return f"{name[: -len('.zip')]}.part{index}of{count}.txt"
 
+
 MAX_PARTS = 999
 
 # A system id as the file lists write them (sony-playstation, other).
