@@ -15,7 +15,7 @@ from sitegen import markup, measurements as sitemeasurements, starlight as sites
 from sitegen.config import SITE_NAME, SITE_URL, yaml
 from core.paths import REPO_ROOT
 from sitegen.descriptions import PAGE_DATA, page_browser_title, page_description, page_title
-from sitegen.diagrams import prepare_page, unresolved_images
+from sitegen.pageprep import prepare_page, unresolved_images
 from sitegen.render import CARD_ANCHOR, WIKI_SRC_DIR, card_anchor
 from sitegen.write import undecorated, write_decorated
 

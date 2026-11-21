@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render the sharing cards (Open Graph images) to PNG, once.
 
-Each card is an SVG written by ``sitegen.diagrams.og_card_svg`` from the
+Each card is an SVG written by ``sitegen.ogcards.og_card_svg`` from the
 registry, rasterised by a headless Chromium through Playwright, then
 committed under ``docs_assets/og/``. The site build copies the PNG files and
 never runs this script, so it adds nothing to the build's dependencies.

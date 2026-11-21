@@ -17,7 +17,7 @@ import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-from sitegen import diagrams
+from sitegen import diagrams, ogcards, pageprep
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -54,7 +54,7 @@ class EveryDiagramIsAccessibleSvg(unittest.TestCase):
                 self.assertNotIn("; ", re.sub(r"<[^>]+>", " ", html))
 
     def test_a_second_copy_on_one_page_gets_its_own_ids(self):
-        page = diagrams.resolve_images(
+        page = pageprep.resolve_images(
             "<!-- image: install-flow -->\n\ntext\n\n<!-- image: install-flow -->\n"
         )
         ids = re.findall(r'\bid="([^"]+)"', page)
@@ -70,19 +70,19 @@ class PlaceholdersResolve(unittest.TestCase):
         found = 0
         for path in sources:
             text = path.read_text(encoding="utf-8")
-            for image_id in diagrams.PLACEHOLDER_ANYWHERE.findall(text):
+            for image_id in pageprep.PLACEHOLDER_ANYWHERE.findall(text):
                 found += 1
                 with self.subTest(page=path.name, image=image_id):
                     self.assertIn(image_id, diagrams.IMAGE_IDS)
         self.assertGreater(found, 0)
 
     def test_a_block_placeholder_becomes_a_figure(self):
-        page = diagrams.resolve_images("Intro\n\n<!-- image: bios-chain -->\n\nMore\n")
+        page = pageprep.resolve_images("Intro\n\n<!-- image: bios-chain -->\n\nMore\n")
         self.assertIn('<figure class="rb-figure"', page)
         self.assertNotIn("<!-- image:", page)
 
     def test_an_indented_placeholder_keeps_its_indent_and_escapes_markdown(self):
-        page = diagrams.resolve_images("1. Step\n\n    <!-- image: data-layers -->\n")
+        page = pageprep.resolve_images("1. Step\n\n    <!-- image: data-layers -->\n")
         line = page.splitlines()[2]
         self.assertTrue(line.startswith("    <span class=\"rb-figure"))
         self.assertNotIn("_shared", line)
@@ -90,8 +90,8 @@ class PlaceholdersResolve(unittest.TestCase):
 
     def test_an_unknown_name_is_left_for_the_validator(self):
         page = "<!-- image: no-such-diagram -->\n"
-        self.assertEqual(diagrams.resolve_images(page), page)
-        self.assertEqual(diagrams.unresolved_images(page), ["no-such-diagram"])
+        self.assertEqual(pageprep.resolve_images(page), page)
+        self.assertEqual(pageprep.unresolved_images(page), ["no-such-diagram"])
 
 
 class DiagramsMatchTheData(unittest.TestCase):
@@ -166,13 +166,13 @@ class ImagesAreServedFromTheSite(unittest.TestCase):
     def test_remote_links_with_a_copy_are_rewritten(self):
         logo = self._manifest("logos")[0]
         page = f"| ![X]({logo['source']}){{ width=20 }} | <img src=\"{logo['source']}\"> |"
-        local = diagrams.localize_images(page, Path("platforms/x.md"))
+        local = pageprep.localize_images(page, Path("platforms/x.md"))
         self.assertNotIn(logo["source"], local)
         self.assertEqual(local.count(f"../assets/logos/{logo['file']}"), 2)
 
     def test_icon_paths_are_link_safe(self):
         icon = self._manifest("system-icons")[0]
-        local = diagrams.localize_images(f"![a]({icon['source']})", Path("systems/x.md"))
+        local = pageprep.localize_images(f"![a]({icon['source']})", Path("systems/x.md"))
         self.assertNotIn(" ", local)
 
     def test_the_validator_refuses_a_remote_image(self):
@@ -193,13 +193,13 @@ class SharingCards(unittest.TestCase):
     def test_one_card_per_section_at_the_open_graph_size(self):
         import struct
 
-        for section in diagrams.OG_SECTIONS:
+        for section in ogcards.OG_SECTIONS:
             with self.subTest(section=section):
                 data = (ROOT / "docs_assets" / "og" / f"{section}.png").read_bytes()
                 self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n")
                 self.assertEqual(struct.unpack(">II", data[16:24]), (1200, 630))
                 mark = (ROOT / "docs_assets" / "brand" / "logo.svg").read_text(encoding="utf-8")
-                ET.fromstring(diagrams.og_card_svg(section, mark))
+                ET.fromstring(ogcards.og_card_svg(section, mark))
 
     def test_the_template_names_every_section(self):
         from sitegen import starlight as sitestarlight
@@ -207,7 +207,7 @@ class SharingCards(unittest.TestCase):
         named = {sitestarlight.og_section("index.md", "")} | {
             sitestarlight.og_section("wiki/page.md", level)
             for level in ("start", "setup", "explore", "reference", "contribute")}
-        self.assertEqual(named, set(diagrams.OG_SECTIONS))
+        self.assertEqual(named, set(ogcards.OG_SECTIONS))
         for section in named:
             with self.subTest(section=section):
                 self.assertTrue((ROOT / "docs_assets" / "og" / f"{section}.png").is_file())

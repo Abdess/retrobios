@@ -27,7 +27,7 @@ from freshness.profiles import check_source_paths
 from sitegen import emulatorcards
 from sitegen import emulatorpage
 from sitegen import startwith
-from sitegen import diagrams
+from sitegen import pageprep
 from model import collection
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -187,14 +187,14 @@ class OptionsGlanceFromTheParser(unittest.TestCase):
     table, and not the hand-written glance above it."""
 
     def test_every_parser_option_has_a_group(self):
-        named = {flag for _label, flags in diagrams.GLANCE_GROUPS for flag in flags}
-        self.assertEqual(set(diagrams.installer_flags()) - named, set())
-        self.assertEqual(named - set(diagrams.installer_flags()), set())
+        named = {flag for _label, flags in pageprep.GLANCE_GROUPS for flag in flags}
+        self.assertEqual(set(pageprep.installer_flags()) - named, set())
+        self.assertEqual(named - set(pageprep.installer_flags()), set())
 
     def test_an_option_no_group_names_still_lands(self):
-        with mock.patch.object(diagrams, "installer_flags",
+        with mock.patch.object(pageprep, "installer_flags",
                                return_value=["--platform", "--brand-new"]):
-            lines = diagrams.options_glance()
+            lines = pageprep.options_glance()
         self.assertEqual(lines, [
             "- **Where and for what**: [`--platform`](#option-platform)",
             "- **Other**: [`--brand-new`](#option-brand-new)",
@@ -202,10 +202,10 @@ class OptionsGlanceFromTheParser(unittest.TestCase):
 
     def test_the_source_holds_no_list(self):
         text = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
-        section = text[text.index(diagrams.GLANCE_HEADING):text.index("\n## One line")]
+        section = text[text.index(pageprep.GLANCE_HEADING):text.index("\n## One line")]
         self.assertNotIn("\n- ", section)
         with self.assertRaises(ValueError):
-            diagrams.expand_glance(f"# x\n\n{diagrams.GLANCE_HEADING}\n\n- a\n\n## y\n")
+            pageprep.expand_glance(f"# x\n\n{pageprep.GLANCE_HEADING}\n\n- a\n\n## y\n")
 
 
 class FaqInstallsFromWhatYouHold(unittest.TestCase):

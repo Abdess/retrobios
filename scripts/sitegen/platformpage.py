@@ -11,7 +11,7 @@ from resolve.nativemode import check_label, reads_file_contents
 from sitegen import markup
 from sitegen.config import REPO_URL, date_line
 from sitegen.decorate import level_label
-from sitegen.diagrams import local_images
+from sitegen.pageprep import local_images
 from sitegen.guidepage import pack_buttons, platform_guide
 from sitegen.home import stat_block
 from sitegen.install import platform_install_block

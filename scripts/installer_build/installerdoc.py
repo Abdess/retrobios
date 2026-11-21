@@ -96,13 +96,21 @@ def _with_prose(name: str, facts: list[tuple[str, str]], body: str, key: str,
     return [[cell, *prose[fact]] for fact, cell in facts]
 
 
-def option_rows(body: str) -> list[list[str]]:
-    facts = []
-    # argparse's own --help last, after the options of the run.
+def parser_options() -> list[tuple[list[str], str]]:
+    """(flags with the long form first, metavar or "" for a switch) for each
+    option of install.py, in the order --help lists them, argparse's --help last."""
+    options = []
     for action in sorted(_install.build_parser()._actions,
                          key=lambda action: isinstance(action, argparse._HelpAction)):
         flags = sorted(action.option_strings, key=lambda flag: not flag.startswith("--"))
         metavar = "" if action.nargs == 0 else (action.metavar or action.dest.upper())
+        options.append((flags, metavar))
+    return options
+
+
+def option_rows(body: str) -> list[list[str]]:
+    facts = []
+    for flags, metavar in parser_options():
         shown = ", ".join(f"`{flag} {metavar}`" if metavar else f"`{flag}`" for flag in flags)
         facts.append((flags[0], f'<span id="option-{flags[0][2:]}"></span>{shown}'))
     return _with_prose("options", facts, body, r"`(--[a-z-]+)", 1)

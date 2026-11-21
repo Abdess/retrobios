@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
+from xml.sax.saxutils import escape
 
 from core.paths import DB_FILE, PLATFORMS_DIR, REPO_ROOT
 from core.text import series
@@ -13,7 +14,7 @@ from model.composition import GAME_DATA_TOPS
 from model.database import load_database
 from model.platforms import load_platform_config
 from model.registry import list_registered_platforms
-from sitegen.diagrams import OG_SECTIONS, og_card_svg, wrap
+from sitegen.diagrams import FONT, setups_named, wrap
 
 OUT = REPO_ROOT / "docs_assets" / "og"
 LOGO = REPO_ROOT / "docs_assets" / "brand" / "logo.svg"
@@ -21,6 +22,43 @@ PLATFORM_TAGLINE = "Which BIOS files it needs, and where each one goes"
 # The tagline's box on the card: og_card_svg wraps it at this width and
 # size, and three lines fit above the address.
 TAGLINE_WIDTH, TAGLINE_SIZE, TAGLINE_LINES = 1000, 34, 3
+
+
+# Sharing cards: one 1200x630 card per section of the site, rendered to PNG
+# once by scripts/make_og_cards.py and committed under docs_assets/og/.
+
+OG_SECTIONS: dict[str, tuple[str, str]] = {
+    "home": ("BIOS and firmware packs", "Checked file by file, for {frontends}"),
+    "start": ("Start here", "What BIOS files are, and how to install them with one command"),
+    "setup": ("Setups", "Where the files go on each device and frontend"),
+    "explore": ("Systems and emulators", "Which files each console and emulator reads"),
+    "reference": ("Reference", "Verification modes, gaps, provenance and the data API"),
+    "contribute": ("Contribute", "Adding files, emulator profiles and platforms"),
+}
+
+
+def og_card_svg(section: str, mark_svg: str) -> str:
+    """A sharing card. ``mark_svg`` is the site's white mark
+    (docs_assets/brand/logo.svg), drawn as the header draws it."""
+    title, tagline = OG_SECTIONS[section]
+    tagline = tagline.format(frontends=setups_named(["RetroArch", "Batocera", "EmuDeck"]))
+    mark = mark_svg.strip().replace("<svg ", '<svg x="96" y="88" width="112" height="112" ', 1)
+    body = [
+        '<rect width="1200" height="630" fill="#2b2e5c"/>',
+        '<rect x="0" y="606" width="1200" height="24" fill="#3b3f7a"/>',
+        mark,
+        '<text x="236" y="164" font-size="48" font-weight="700" fill="#ffffff">RetroBIOS</text>',
+        f'<text x="96" y="330" font-size="72" font-weight="700" fill="#ffffff">{escape(title)}</text>',
+    ]
+    for index, line in enumerate(wrap(tagline, TAGLINE_WIDTH, TAGLINE_SIZE)):
+        body.append(
+            f'<text x="96" y="{400 + index * 46}" font-size="34" fill="#d4d6ee">{escape(line)}</text>'
+        )
+    body.append('<text x="96" y="556" font-size="28" fill="#aebcff">abdess.github.io/retrobios</text>')
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" '
+        f'font-family="{FONT}">' + "".join(body) + "</svg>"
+    )
 
 
 def platform_cards() -> dict[str, tuple[str, str]]:

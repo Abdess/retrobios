@@ -6,7 +6,7 @@ The site served these from other hosts: GitHub avatars and files on the
 in silence, and every page view hit third-party hosts. This tool copies them
 into ``docs_assets/logos/`` and ``docs_assets/system-icons/``, which are
 committed, and records where each came from in a ``sources.json`` beside
-them. The site build only reads those copies (``sitegen.diagrams.localize_images``).
+them. The site build only reads those copies (``sitegen.pageprep.localize_images``).
 
 Raster logos are normalised to an 80 px square WebP, twice the 40 px they
 are shown at, and system icons to a 48 px PNG, so every tile has the same

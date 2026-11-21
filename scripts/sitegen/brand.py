@@ -18,7 +18,7 @@ GLYPH_DIM = "#4fa3c4"
 TITLE = {"light": "#273c8f", "dark": "#aebcff"}
 # The mark beside it: the header logo in each scheme (website/src/assets).
 MARK = {"light": HEADER, "dark": "#fff"}
-# The sharing cards' background (sitegen.diagrams.og_card_svg).
+# The sharing cards' background (sitegen.ogcards.og_card_svg).
 CARD = "#2b2e5c"
 FONT = "system-ui, -apple-system, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif"
 
