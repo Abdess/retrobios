@@ -68,13 +68,17 @@ def pack_systems(install_manifest: dict, targets: dict | None = None) -> dict:
     # the pack alone it names that list as the way to --core and --region
     # only when the list records them. It named install/misterfpga.json for
     # --core, a list that records no core.
-    records = {"systems"} if any("systems" in entry for entry in entries) else set()
-    if any(copy.get("cores") for entry in files
-           for copy in [entry, *entry.get("alternatives", []),
-                        *entry.get("slot_choices", [])]):
-        records.add("cores")
-    if records or any("regions" in entry for entry in entries):
-        records.add("regions")
+    # A list with neither systems nor regions is from an older release:
+    # its cores are read by nothing that narrows.
+    records: set[str] = set()
+    if any("systems" in entry or "regions" in entry for entry in entries):
+        records = {"regions"}
+        if any("systems" in entry for entry in entries):
+            records.add("systems")
+        if any(copy.get("cores") for entry in files
+               for copy in [entry, *entry.get("alternatives", []),
+                            *entry.get("slot_choices", [])]):
+            records.add("cores")
     systems = {
         "files": {entry["dest"]: list(entry.get("systems") or [])
                   for entry in files if "systems" in entry},

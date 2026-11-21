@@ -637,5 +637,32 @@ class PartSizes(unittest.TestCase):
                 install.parse_part_size(text)
 
 
+
+class AListRecordsWhatItNarrowsBy(unittest.TestCase):
+    """A pack built here, a pack built by generate_pack and the list itself
+    agree on what --system, --core and --region narrow. A list with cores
+    and neither systems nor regions, from an older release, records none:
+    the packs said cores and regions."""
+
+    SHAPES = (
+        [{"dest": "a.bin", "cores": ["mgba"]}],
+        [{"dest": "a.bin", "cores": ["mgba"], "regions": ["usa"]}],
+        [{"dest": "a.bin", "cores": None, "systems": ["nintendo-gba"]}],
+        [{"dest": "a.bin", "cores": None, "systems": [],
+          "slot_choices": [{"sha1": "0" * 40, "cores": ["mgba"]}]}],
+    )
+
+    def test_each_shape(self):
+        from packs.scope import pack_systems
+
+        for files in self.SHAPES:
+            listing = {"files": files, "omitted_files": []}
+            with self.subTest(files=files):
+                axes = sorted(install.recorded_axes(files))
+                built = json.loads(install.pack_manifest("retroarch", listing, [], None))
+                self.assertEqual(built["list_records"], axes)
+                self.assertEqual(pack_systems(listing)["list_records"], axes)
+
+
 if __name__ == "__main__":
     unittest.main()

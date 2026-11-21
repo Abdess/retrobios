@@ -19,6 +19,7 @@ from pathlib import Path, PurePosixPath
 from typing import TYPE_CHECKING, NamedTuple
 
 from installer.arguments import PACK_NAME_END
+from installer.choices import recorded_axes
 from installer.console import OUTPUT, detail
 from installer.datadirs import install_data_directory
 from installer.download import download_files
@@ -280,14 +281,8 @@ def pack_install_list(manifest: dict, files: list[dict], omitted: list[dict],
 def pack_manifest(plat: str, install_list: dict, rows: list[dict],
                   targets: dict | None) -> bytes:
     """manifest.json of a pack made here, as --from-pack reads it."""
-    entries = [*install_list.get("files", []), *install_list.get("omitted_files", [])]
-    records = {"systems"} if any("systems" in entry for entry in entries) else set()
-    if any(copy.get("cores") for entry in install_list.get("files", [])
-           for copy in [entry, *entry.get("alternatives", []),
-                        *entry.get("slot_choices", [])]):
-        records.add("cores")
-    if records or any("regions" in entry for entry in entries):
-        records.add("regions")
+    records = recorded_axes(install_list.get("files", []),
+                            install_list.get("omitted_files", []))
     data: dict = {"platform": plat, "files": rows}
     for key in ("system_titles", "system_names"):
         if install_list.get(key):
