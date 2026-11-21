@@ -19,7 +19,6 @@ from unittest import mock
 import yaml
 
 import profile_sync
-from tests.sources import script_source
 from profiling import anchoring
 from profiling import bump
 from profiling import citations as profiling_citations
@@ -4296,10 +4295,14 @@ class TestCitationSurfaceGuard(unittest.TestCase):
         A consumer keying on the field name reopens the gap this closes:
         citations outside its list rot while the pin advances. The walker
         matches the key once. Everything else goes through the collector.
-        The audits beside it in profiling (mamerefs reads MAME driver refs)
-        advance no pin and are not read here.
+        Every profiling module is read, the audits beside profile_sync
+        included: mamerefs takes its driver refs from the collector too.
         """
-        source = script_source("profile_sync.py")
+        cli = Path(profile_sync.__file__)
+        source = "".join(
+            path.read_text(encoding="utf-8")
+            for path in [cli, *sorted((cli.parent / "profiling").glob("*.py"))]
+        )
         self.assertNotIn('.get("source_ref")', source)
         self.assertEqual(source.count('== "source_ref"'), 1)
 
