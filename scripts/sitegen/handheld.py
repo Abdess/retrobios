@@ -21,6 +21,7 @@ import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
+from core.text import series
 from sitegen import markup
 from core.artifacts import write_bytes_atomic
 from installer_build.port import (
@@ -37,11 +38,6 @@ GROUP_TITLE = "RetroBIOS app for handhelds"
 
 def group_systems() -> list[str]:
     return [name for name in systems() if name not in PLATFORM_OF]
-
-
-def joined(names: list[str], last: str = "and") -> str:
-    """muOS, ArkOS and JELOS."""
-    return names[0] if len(names) == 1 else f"{', '.join(names[:-1])} {last} {names[-1]}"
 
 
 @dataclass(frozen=True)
@@ -126,7 +122,7 @@ def group_page(root: Path = REPO_ROOT) -> str:
     """get/linux-handhelds/: the app for the systems no setup page answers
     for, then the setup pages that carry it for the others."""
     names = group_systems()
-    listed = joined(names)
+    listed = series(names)
     lines = [
         "---", "search: exclude",
         f'description: "The RetroBIOS app for {listed}: the file to put on the card '
@@ -141,6 +137,6 @@ def group_page(root: Path = REPO_ROOT) -> str:
             lines += _launcher_block(launcher, system, root)
     others = [f"[{name}]({PLATFORM_OF[name]}.md#on-the-handheld)"
               for name in sorted(PLATFORM_OF, key=str.casefold)]
-    lines += ["## Other systems", "", f"On {joined(others, 'or')}: on its page.", "",
+    lines += ["## Other systems", "", f"On {series(others, 'or')}: on its page.", "",
               DETAILS_LINK, ""]
     return "\n".join(lines)

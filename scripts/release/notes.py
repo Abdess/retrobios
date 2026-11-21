@@ -6,6 +6,7 @@ import json
 import subprocess
 from collections.abc import Callable
 
+from core.text import series
 from core.sizes import size_text
 from model.guides import install_command
 from model.platforms import load_platform_config
@@ -55,7 +56,7 @@ def no_pack_paragraph(platforms_dir: str) -> list[str]:
     names = without_pack(platforms_dir)
     if not names:
         return []
-    listed = ", ".join(names[:-1]) + f" and {names[-1]}" if len(names) > 1 else names[0]
+    listed = series(names)
     return [
         ("Only the most used setups have a pack, to keep the release small."
          f" For {listed}, use the command above."),

@@ -29,7 +29,7 @@ from sitegen.cards import (
     card_fold,
 )
 from sitegen.config import REPO_URL
-from sitegen.descriptions import said_as_list
+from core.text import series
 from sitegen.fields import hash_spans
 from sitegen.install import (
     OS_LABELS,
@@ -90,7 +90,7 @@ def region_words(value: object, most: int = 0) -> str:
     words = [_REGION_WORDS.get(str(r)) or label(str(r)) for r in raw]
     if most and len(words) > most:
         words = words[:most] + [f"{len(words) - most} more"]
-    return said_as_list(words)
+    return series(words)
 
 
 _CATEGORY_WORDS = {"bios": "BIOS", "game_data": "game data", "bios_zip": "BIOS ZIP"}

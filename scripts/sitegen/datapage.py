@@ -7,6 +7,7 @@ import re
 import urllib.parse
 from pathlib import Path
 
+from core.text import series
 from model import siteinputs
 from model.registry import load_platform_registry
 from sitegen import markup, measurements as sitemeasurements
@@ -124,10 +125,6 @@ def _platforms_without_a_list(platforms_dir: Path | None = None) -> list[str]:
             continue
         names.append(platform_display(key, str(platforms_dir)))
     return names
-
-
-def _join_names(names: list[str]) -> str:
-    return names[0] if len(names) == 1 else ", ".join(names[:-1]) + f" and {names[-1]}"
 
 
 def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = None) -> str:
@@ -326,7 +323,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "passes when any file in the BIOS folder has one of its md5.",
         "- `hash_rule: size_and_any_hash` (RomM) wants the size and any one hash. "
         "The script below does not apply it.",
-        *([f"- {_join_names(no_list)} have no list of their own (`native_list: none`). "
+        *([f"- {series(no_list)} have no list of their own (`native_list: none`). "
            "An empty list does not mean nothing is needed."] if no_list else []),
         "",
         "```python",

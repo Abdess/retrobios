@@ -5,6 +5,7 @@ from __future__ import annotations
 import html
 import json
 
+from core.text import series
 from model import releaserecord
 from model import siteinputs
 from model.collection import profiles_on_disk
@@ -454,7 +455,7 @@ def generate_handheld_guide(guide: HandheldGuide) -> str:
         "",
         *_guide_download(guide.uses, display, uses, None, "## Download { #download }"),
         *_offline_line(guide.uses),
-        f"On {sitehandheld.joined(sitehandheld.group_systems(), 'or')}: "
+        f"On {series(sitehandheld.group_systems(), 'or')}: "
         f"[{sitehandheld.GROUP_TITLE}]"
         f"(../get/{GROUP_PAGE}.md).",
         "",

@@ -11,6 +11,7 @@ from collections.abc import Iterator
 from dataclasses import dataclass
 from pathlib import Path
 
+from core.text import series
 from core import upstream
 from core.artifacts import repository_output_lock, write_if_changed
 from core.paths import REPO_ROOT
@@ -482,7 +483,7 @@ def requested_by(profile: dict, value: str | dict | None) -> str:
                     labels.append(label)
     if not labels or not _two_repositories(profile):
         return ""
-    return labels[0] if len(labels) == 1 else ", ".join(labels[:-1]) + f" and {labels[-1]}"
+    return series(labels)
 
 
 def _two_repositories(profile: dict) -> bool:

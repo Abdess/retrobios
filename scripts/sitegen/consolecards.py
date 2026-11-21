@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from typing import TypeVar
 
+from core.text import series
 from model.collection import profiles_on_disk
 from model.composition import GAME_DATA_TOPS
 from model.guides import INSTALL_PS1, INSTALL_SH
@@ -244,7 +245,7 @@ def without_files(emulators: list[str]) -> str:
     names = sorted({emulator_display(e) for e in emulators}, key=str.casefold)
     if len(names) > 3:
         return f": none of its {len(names)} emulators requires one"
-    return " with " + (", ".join(names[:-1]) + f" or {names[-1]}" if len(names) > 1 else names[0])
+    return " with " + series(names, "or")
 
 
 def visible_name(name: str) -> str:

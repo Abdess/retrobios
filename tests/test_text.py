@@ -6,7 +6,7 @@ import tests
 
 import unittest
 
-from core.text import count_text
+from core.text import count_text, series
 
 
 class CountsTakeTheirNumber(unittest.TestCase):
@@ -18,6 +18,16 @@ class CountsTakeTheirNumber(unittest.TestCase):
     def test_a_sibilant_noun_takes_es(self):
         self.assertEqual(count_text(2, "hash"), "2 hashes")
         self.assertEqual(count_text(2, "entry", "entries"), "2 entries")
+
+
+class ListsHaveNoSerialComma(unittest.TestCase):
+    """The README alone wrote "RetroPie, and RomM", every page "B and C"."""
+
+    def test_series(self):
+        self.assertEqual(series([]), "")
+        self.assertEqual(series(["a"]), "a")
+        self.assertEqual(series(["a", "b"]), "a and b")
+        self.assertEqual(series(["a", "b", "c"], "or"), "a, b or c")
 
 
 if __name__ == "__main__":

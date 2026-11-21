@@ -31,6 +31,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
+from core.text import series
 from model import measurements as mr
 from sitegen import markup
 from core.artifacts import json_text, write_if_changed
@@ -514,7 +515,7 @@ def proof_result(verdicts: list[dict]) -> str:
         return VERDICT_WORDS.get(verdict["verdict"], verdict["verdict"].replace("_", " "))
     if len(verdicts) == 1:
         staged = verdicts[0].get("staged") or []
-        given = " and ".join(staged) if len(staged) < 3 else f"{', '.join(staged[:-1])} and {staged[-1]}"
+        given = series(staged)
         return f"with {given or 'no BIOS'}, it {said(verdicts[0])}"
     return ". ".join(f"{v['variant']}: {said(v)}" for v in verdicts)
 

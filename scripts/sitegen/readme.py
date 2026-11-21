@@ -10,6 +10,7 @@ from collections.abc import Callable
 from datetime import datetime, timezone
 from pathlib import Path
 
+from core.text import series
 from romrecipes import ledger
 from devtools import prchecks
 from model import releaserecord
@@ -409,12 +410,6 @@ def download_table(
     ]
 
 
-def _names_list(coverages: dict) -> str:
-    """The platforms' names in reading order, the last after "and"."""
-    names = sorted(c["platform"] for c in coverages.values())
-    return ", ".join(names[:-1]) + f", and {names[-1]}" if len(names) > 1 else "".join(names)
-
-
 def collection_line(total_files: int, comp: dict) -> str:
     """The size of the whole collection, said as such.
 
@@ -632,7 +627,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = DB_FILE) -> str
         "",
         "Some consoles need a small program, the **BIOS**, to start their games: PlayStation 1"
         " and 2, Saturn, Neo Geo, Dreamcast and more. RetroBIOS installs the BIOS and firmware"
-        f" files for {_names_list(coverages)}, checked the way each one checks them.",
+        f" files for {series(sorted(c['platform'] for c in coverages.values()))}, checked the way each one checks them.",
         "",
         "## Install in one line",
         "",

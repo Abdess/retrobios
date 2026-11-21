@@ -7,6 +7,7 @@ import html
 import re
 from dataclasses import dataclass
 
+from core.text import series
 from model.platforms import native_layer
 from model.profiles import is_emulator
 from resolve.cores import resolve_platform_cores
@@ -310,7 +311,7 @@ def _platform_lists_sentence(
         parts.append(f"{untested:,} {_is(untested)} held but not verified "
                      "(listed under Untested below)")
     parts.append(f"{missing:,} {_is(missing)} missing")
-    listed = ", ".join(parts[:-1]) + f" and {parts[-1]}"
+    listed = series(parts)
     split = ""
     if missing and not_firmware:
         labels = {"game_data": "game data",
@@ -320,7 +321,7 @@ def _platform_lists_sentence(
             f"{count:,} {'is' if count == 1 else 'are'} {labels.get(category, category)}"
             for category, count in sorted(not_firmware.items())
         ]
-        others_text = others[0] if len(others) == 1 else ", ".join(others[:-1]) + f" and {others[-1]}"
+        others_text = series(others)
         head = (f"None of the missing is firmware: {others_text}" if not firmware
                 else f"Of the missing, {firmware:,} {'is' if firmware == 1 else 'are'} "
                      f"firmware, {others_text}")

@@ -10,6 +10,7 @@ import urllib.parse
 import zipfile
 from collections.abc import Callable
 
+from core.text import series
 from core.hashing import parse_hash_list
 from model.collection import profiles_on_disk
 from packs.crossref import FileConsumers
@@ -565,7 +566,7 @@ _CARD_MORE_WORDS = {"Romset": "romset", "Collection path": "collection path",
 
 def listed_words(words: list[str]) -> str:
     """"a", "a and b", "a, b and c", first letter capital."""
-    text = words[0] if len(words) == 1 else f"{', '.join(words[:-1])} and {words[-1]}"
+    text = series(words)
     return text[:1].upper() + text[1:]
 
 

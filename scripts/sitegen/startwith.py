@@ -24,7 +24,7 @@ from sitegen.consolecards import (
     visible_name,
     without_files,
 )
-from sitegen.descriptions import said_as_list
+from core.text import series
 from sitegen.emulatorcards import region_words
 from sitegen.install import comes_with_app
 from sitegen.render import card_anchor, code_span, count_text, console_anchor
@@ -446,7 +446,7 @@ def _names_counted(names: list[str], most: int = 3, noun: str = "") -> str:
     if len(names) > most + 1:
         more = f"{len(names) - most} more" + (f" {noun}" if noun else "")
         return f"{', '.join(names[:most])} and {more}"
-    return said_as_list(names)
+    return series(names)
 
 
 def _lead_file(groups: dict[str | None, _StartGroup]) -> list[str]:
@@ -475,7 +475,7 @@ def _lead_file(groups: dict[str | None, _StartGroup]) -> list[str]:
     zipped = " Keep it zipped." if top.casefold().endswith(".zip") else ""
     names = _display_names(readers)
     said = (_names_counted(names, 2, "emulators") if len(names) > 2
-            else said_as_list(names))
+            else series(names))
     lines = [f"**Start with** {written[top]}.{zipped} {said} read{'s' if len(names) == 1 else ''} it.",
              ""]
     # The emulators that require other files and not this one, by the
@@ -490,7 +490,7 @@ def _lead_file(groups: dict[str | None, _StartGroup]) -> list[str]:
     for files, who in sorted(others.items(), key=lambda item: (-len(item[1]), item[0])):
         names = _display_names(who)
         verb = "reads" if len(names) == 1 else "read"
-        sentences.append(f"{_names_counted(names)} {verb} {said_as_list(list(files))} instead.")
+        sentences.append(f"{_names_counted(names)} {verb} {series(list(files))} instead.")
     if sentences:
         lines += [" ".join(sentences), ""]
     return lines
@@ -527,7 +527,7 @@ class _GroupWords:
         for files, who in sorted(others.items(), key=lambda item: (-len(item[1]), item[0])):
             shown = _display_names(who)
             verb = "reads" if len(shown) == 1 else "read"
-            sentences.append(f"{_names_counted(shown)} {verb} {said_as_list(list(files))} instead.")
+            sentences.append(f"{_names_counted(shown)} {verb} {series(list(files))} instead.")
         return " ".join(sentences)
 
     def split(self, line: str, names: list[str]) -> tuple[list[str], str, set[str]]:

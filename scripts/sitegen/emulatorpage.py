@@ -17,7 +17,7 @@ from sitegen import entries as siteentries, markup, measurements as sitemeasurem
 from sitegen.cards import ROMSET_FAQ, emulator_file_anchors
 from sitegen.config import REPO_URL, date_line, yaml
 from sitegen.decorate import DEMOTED_WEIGHT, SEARCH_WEIGHT
-from sitegen.descriptions import said_as_list
+from core.text import series
 from sitegen.emulatorcards import (
     CardLayout,
     DATA_MEMBERS,
@@ -200,7 +200,7 @@ def _emulator_file_summary(files: list[dict], groups: dict | None = None) -> lis
             )
             if categories.count(key)
         ]
-        lines.extend([f"By kind: {said_as_list(cats)}.", ""])
+        lines.extend([f"By kind: {series(cats)}.", ""])
     return lines
 
 
@@ -218,7 +218,7 @@ def _emulator_held_line(files: list[dict], available: Callable[[dict], bool]) ->
     held = [f"{in_repo:,} in repo", f"{len(slots) - in_repo - unsourceable:,} missing"]
     if unsourceable:
         held.append(f"{unsourceable:,} unsourceable")
-    return [f"<p><small>In this collection: {said_as_list(held)}.</small></p>", ""]
+    return [f"<p><small>In this collection: {series(held)}.</small></p>", ""]
 
 
 DATA_REVISIONS: dict[str, dict] = {}
@@ -252,7 +252,7 @@ def _data_tree_page(ref: str, entry: dict, pages: list[tuple[str, list[str]]],
     stem, names = pages[index]
     members = DATA_MEMBERS.get(ref) or {}
     part = f" (part {index + 1} of {len(pages)})" if len(pages) > 1 else ""
-    read_by = said_as_list([f"[{escape_tags(display)}]({key}.md#data-directories)"
+    read_by = series([f"[{escape_tags(display)}]({key}.md#data-directories)"
                              for key, display in DATA_READERS.get(ref, [])])
     # A file list out of the search: "dolphin" found three parts of the
     # dolphin-sys tree, on their title, before the Dolphin page.
@@ -615,7 +615,7 @@ def _emulator_intro(emu_name: str, profile: dict, href: str = "", name: str = ""
     sentences = []
     if names:
         shown = names if len(names) <= 4 else names[:3] + [f"{len(names) - 3} more systems"]
-        sentences.append(f"{emu_name} emulates {said_as_list(shown)}.")
+        sentences.append(f"{emu_name} emulates {series(shown)}.")
     regional = _regional_set(requirements)
     by_region = "" if regional else _regional_choice(required)
     others = len(files) - len(required)
@@ -667,7 +667,7 @@ def _regional_choice(required: list[dict], most: int = 6) -> str:
     if len({region_words(f["region"]) for f in required}) < 2:
         return ""
     choices = [f"{f.get('name', '')} ({region_words(f['region'], 3)})" for f in required]
-    return ", ".join(choices[:-1]) + f" or {choices[-1]}"
+    return series(choices, "or")
 
 
 def _alias_page(name: str, profile: dict) -> str:

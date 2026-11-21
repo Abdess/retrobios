@@ -9,6 +9,7 @@ import re
 import shlex
 from collections import Counter
 
+from core.text import series
 from model import siteinputs
 from model.guides import GUIDES, TERMINALS, install_command
 from model.platforms import load_platform_config
@@ -189,10 +190,6 @@ def _standalone_cores_in(platforms_dir: str, platform: str) -> frozenset[str]:
     return frozenset(standalone_set(config))
 
 
-def _said_or(names: list[str]) -> str:
-    return names[0] if len(names) == 1 else ", ".join(names[:-1]) + f" or {names[-1]}"
-
-
 def install_block(name: str, profile: dict) -> list[str]:
     """One command that installs this emulator's files where it reads them.
 
@@ -209,7 +206,7 @@ def install_block(name: str, profile: dict) -> list[str]:
     emu = str(profile.get("emulator") or name)
     shown = [platform_display(setup) for setup in setups]
     if profile.get("type") == "standalone":
-        lead = (f"With {_said_or(shown)}: the installer finds {_said_or(shown)} and its "
+        lead = (f"With {series(shown, 'or')}: the installer finds {series(shown, 'or')} and its "
                 f"BIOS folder, then downloads only the files {emu} reads there and checks "
                 "each one.")
     else:
@@ -217,7 +214,7 @@ def install_block(name: str, profile: dict) -> list[str]:
                 "only the files this emulator reads there and checks each one.")
         if profile.get("type") == "standalone + libretro":
             # The command fills a setup, never the app's own folder.
-            where = (_said_or(shown) if len(shown) <= 3
+            where = (series(shown, 'or') if len(shown) <= 3
                      else f"{shown[0]}, {shown[1]} or another setup")
             lead = f"For {emu} inside {where}. {lead}"
     return search_excluded(markup.details("tip", "Install this emulator's files", [
