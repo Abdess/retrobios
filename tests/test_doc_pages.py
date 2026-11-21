@@ -800,7 +800,8 @@ class PublishedNumbersShareOneFormat(unittest.TestCase):
         from core.sizes import size_text
         from sitegen import readme as sitegen_readme
 
-        readme_source = inspect.getsource(sitegen_readme.generate_readme)
+        readme_source = (inspect.getsource(sitegen_readme.generate_readme)
+                         + inspect.getsource(sitegen_readme.download_table))
         self.assertNotIn("size_mb", readme_source)
         self.assertIn("size_text(size)", readme_source)
         self.assertIn("{total_files:,}", script_source("generate_site.py"))
