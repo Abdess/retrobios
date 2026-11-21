@@ -8,6 +8,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import functools
+import io
 import os
 import re
 import stat
@@ -33,6 +34,18 @@ def check_inside_zip(container: str, file_name: str, expected_md5: str) -> str:
         container, info.st_size, info.st_mtime_ns, file_name.casefold(),
         expected_md5 != "",
     )
+    return _inside_zip_answer(found, expected_md5)
+
+
+def check_inside_zip_data(data: bytes, file_name: str, expected_md5: str) -> str:
+    """check_inside_zip on the bytes of an archive, such as a pack member."""
+    found = _read_member_md5(
+        io.BytesIO(data), file_name.casefold(), expected_md5 != ""
+    )
+    return _inside_zip_answer(found, expected_md5)
+
+
+def _inside_zip_answer(found: str, expected_md5: str) -> str:
     if found in ("not_in_zip", "error"):
         return found
     if expected_md5 == "":
@@ -51,8 +64,12 @@ def _member_md5(
     members 4 788 times. Keyed by the archive's size and mtime, so a
     rewritten archive is read again.
     """
+    return _read_member_md5(container, folded, hashed)
+
+
+def _read_member_md5(source: str | io.BytesIO, folded: str, hashed: bool) -> str:
     try:
-        with zipfile.ZipFile(container) as archive:
+        with zipfile.ZipFile(source) as archive:
             for fname in archive.namelist():
                 if fname.casefold() != folded:
                     continue

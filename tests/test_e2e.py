@@ -5406,18 +5406,6 @@ struct BurnDriver BurnDrvneogeo = {
             self.assertTrue(result[3][0].startswith("baseline missing: "))
             self.assertEqual(result[9], 0)
 
-    def test_214_hash_matches_truncated_and_multi(self):
-        """Declared-hash compare handles truncation, case, multi-values."""
-        from packs.integrity import _hash_matches
-
-        full = "85254fbe320ca82a768ec2c26bb08def"
-        self.assertTrue(_hash_matches(full, full))
-        self.assertTrue(_hash_matches(full.upper(), full))
-        self.assertTrue(_hash_matches(full[:29], full))  # Batocera truncated
-        self.assertTrue(_hash_matches(f"deadbeef, {full}", full))
-        self.assertFalse(_hash_matches("0" * 32, full))
-        self.assertFalse(_hash_matches("", full))
-
     def test_216_resolve_by_sha256(self):
         """resolve_local_file matches files by declared sha256."""
         import tempfile

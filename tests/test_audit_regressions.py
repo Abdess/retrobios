@@ -5953,9 +5953,10 @@ class ZippedFileMd5IsParsedOnce(unittest.TestCase):
                     )
 
     def test_the_three_sites_share_the_parser(self):
-        for module in ("resolve/validation.py", "packs/integrity.py", "verify.py"):
+        for module in ("resolve/validation.py", "verify.py"):
             source = script_source(module)
             self.assertIn("parse_md5_list(", source, module)
+        self.assertIn("inner_rom_data_check(", script_source("packs/integrity.py"))
 
 
 

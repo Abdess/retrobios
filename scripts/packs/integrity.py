@@ -13,14 +13,16 @@ from typing import TYPE_CHECKING, TypedDict
 from core.artifacts import build_timestamp
 from packs.paths import MEDIA_MARKER, has_path_conflict
 from core.ziptools import build_zip_contents_index
-from core.ziptools import check_inside_zip
 from resolve.nativemode import digest_algorithm, platform_mode
-from resolve.validation import baseline_verdict, digest_verdict
+from resolve.validation import (
+    baseline_verdict, digest_verdict, inner_rom_check, inner_rom_data_check,
+)
 from resolve.nativemode import hash_mismatch_excludes_file
-import hashlib
 import sys
 from resolve.cores import filter_systems_by_target
-from core.hashing import compute_hashes, file_digest, md5_composite_of, parse_md5_list, stream_hashes
+from core.hashing import (
+    compute_hashes, file_digest, md5_composite_of, md5sum, parse_hash_list, stream_hashes,
+)
 from core.options import reject_unknown
 import io
 from model.profiles import load_emulator_profiles
@@ -56,7 +58,8 @@ def _members_are_held(data: bytes, by_md5: dict, held_inside: dict) -> bool:
             if not members:
                 return False
             for info in members:
-                digest = hashlib.md5(archive.read(info)).hexdigest()
+                with archive.open(info) as stream:
+                    digest = md5sum(stream)
                 if digest not in by_md5 and digest not in held_inside:
                     return False
     except (zipfile.BadZipFile, OSError):
@@ -327,25 +330,6 @@ def generate_sha256sums(output_dir: str) -> str | None:
     print(f"\n{sums_path}: {len(entries)} pack checksums")
     return sums_path
 
-def _hash_matches(declared: str, actual: str) -> bool:
-    """Compare a declared hash value against an actual hex digest.
-
-    Handles comma-separated multi-hash lists and uppercase (Recalbox)
-    and MD5s shorter than 32 characters: a declared value shorter than
-    the digest matches by prefix.
-    """
-    actual = actual.lower()
-    for cand in declared.split(","):
-        cand = cand.strip().lower()
-        if not cand:
-            continue
-        if len(cand) < len(actual):
-            if actual.startswith(cand):
-                return True
-        elif actual == cand:
-            return True
-    return False
-
 def _check_member_hash(
     zf: zipfile.ZipFile, member: str, file_entry: dict, mode: str, rule: str = ""
 ) -> str | None:
@@ -356,30 +340,23 @@ def _check_member_hash(
     (Batocera hashes a ROM inside the ZIP, matched case-insensitively).
     Returns an error string, or None when the member passes.
     """
-    declared = str(file_entry.get(mode) or "").strip()
-    if not declared:
-        return None
-
     zipped_file = file_entry.get("zipped_file")
     if zipped_file:
-        import io
+        # checkInsideZip runs with an empty md5 too, and needs the member.
+        verdict = inner_rom_data_check(file_entry, zf.read(member))
+        if verdict == "ok":
+            return None
+        if verdict == "not_in_zip":
+            return f"{member}: {zipped_file} not found inside ZIP"
+        if verdict == "error":
+            return f"{member}: {zipped_file} unreadable inside ZIP"
+        return (
+            f"{member}: {zipped_file} inside-zip md5 != declared "
+            f"{', '.join(parse_hash_list(file_entry.get('md5')))}"
+        )
 
-        try:
-            with zipfile.ZipFile(io.BytesIO(zf.read(member))) as inner:
-                want = zipped_file.casefold()
-                target = next(
-                    (n for n in inner.namelist() if n.casefold() == want), None
-                )
-                if target is None:
-                    return f"{member}: {zipped_file} not found inside ZIP"
-                actual = hashlib.md5(inner.read(target)).hexdigest()
-        except zipfile.BadZipFile:
-            return f"{member}: not a valid ZIP"
-        if not _hash_matches(declared, actual):
-            return (
-                f"{member}: {zipped_file} inside-zip md5 {actual} "
-                f"!= declared {declared}"
-            )
+    declared = str(file_entry.get(mode) or "").strip()
+    if not declared:
         return None
 
     # The frontend's own rule, as the builder and verify apply it: RomM's
@@ -421,10 +398,9 @@ def _repo_satisfies_declaration(
     by_name = db.get("indexes", {}).get("by_name", {})
 
     for fe in entries:
-        declared = str(fe.get(mode) or "").strip()
-        if not declared:
+        hashes = parse_hash_list(fe.get(mode))
+        if not hashes:
             continue
-        hashes = [h.strip().lower() for h in declared.split(",") if h.strip()]
         for h in hashes:
             if mode == "sha1":
                 entry = files_db.get(h)
@@ -451,12 +427,11 @@ def _repo_satisfies_declaration(
 def _repo_holds_member(file_entry: dict, db: dict) -> bool:
     """Whether a held archive of that name carries the declared member."""
     files_db = db.get("files", {})
-    declared = parse_md5_list(file_entry.get("md5"))
     for sha1 in db.get("indexes", {}).get("by_name", {}).get(file_entry.get("name", ""), []):
         path = (files_db.get(sha1) or {}).get("path", "")
         if not path.endswith(".zip") or not os.path.exists(path):
             continue
-        if any(check_inside_zip(path, file_entry["zipped_file"], m) == "ok" for m in declared):
+        if inner_rom_check(file_entry, path) == "ok":
             return True
     return False
 
@@ -905,7 +880,7 @@ def _native_hash_errors(
         checkable = [
             fe
             for fe in decl_entries
-            if str(fe.get(digest) or "").strip()
+            if fe.get("zipped_file") or str(fe.get(digest) or "").strip()
         ]
         if not checkable:
             continue

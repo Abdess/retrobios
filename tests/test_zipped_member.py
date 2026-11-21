@@ -58,6 +58,40 @@ class ZippedMemberIsChecked(unittest.TestCase):
 
 
 
+class PackIntegrityChecksTheMember(unittest.TestCase):
+    """Step 6 skipped a zipped_file entry without md5 and matched a cut md5
+    by prefix: dragon32.zip without d32.rom passed where Batocera refuses it
+    (batocera-systems checkInsideZip with md5 "", whole-string compare)."""
+
+    def _verdict(self, members: dict[str, bytes], entry: dict) -> str | None:
+        import io
+
+        from packs.integrity import _check_member_hash
+
+        inner = io.BytesIO()
+        with zipfile.ZipFile(inner, "w") as zf:
+            for name, data in members.items():
+                zf.writestr(name, data)
+        pack = io.BytesIO()
+        with zipfile.ZipFile(pack, "w") as zf:
+            zf.writestr("bios/dragon32.zip", inner.getvalue())
+        with zipfile.ZipFile(pack) as zf:
+            return _check_member_hash(zf, "bios/dragon32.zip", entry, "md5")
+
+    def test_member_needed_without_md5(self):
+        entry = {"name": "dragon32.zip", "zipped_file": "d32.rom"}
+        self.assertIn("not found inside ZIP", self._verdict({"other.rom": b"x"}, entry))
+        self.assertIsNone(self._verdict({"D32.ROM": b"x"}, entry))
+
+    def test_whole_md5_only(self):
+        md5 = hashlib.md5(b"x").hexdigest()
+        members = {"d32.rom": b"x"}
+        entry = {"name": "dragon32.zip", "zipped_file": "d32.rom"}
+        self.assertIsNone(self._verdict(members, {**entry, "md5": f"{'0' * 32},{md5}"}))
+        self.assertIsNone(self._verdict(members, {**entry, "md5": ["0" * 32, md5.upper()]}))
+        self.assertIsNotNone(self._verdict(members, {**entry, "md5": md5[:29]}))
+
+
 class TheMemberIndexIsCachedByContent(unittest.TestCase):
     """Each pipeline step that resolves a zipped_file decompressed all 54 845
     archive members again, about 23 s a step."""

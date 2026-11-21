@@ -26,7 +26,7 @@ from core.hashing import compute_hashes, parse_hash_list
 from core.paths import BIOS_DIR, sanitize_pack_path
 from core.hashing import md5_composite, parse_md5_list
 from resolve.nativemode import SIZE_AND_ANY_HASH, digest_algorithm, hash_mismatch_excludes_file
-from core.ziptools import check_inside_zip
+from core.ziptools import check_inside_zip, check_inside_zip_data
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack
@@ -1051,10 +1051,25 @@ def inner_rom_check(file_entry: dict, local_path: str) -> str:
     matches, else for the last one tried. The pack and the install manifest
     both read it, so a file one of them ships is a file the other lists.
     """
-    declared = parse_md5_list(file_entry.get("md5"))
+    return _first_accepted_md5(
+        file_entry,
+        lambda md5: check_inside_zip(local_path, file_entry["zipped_file"], md5),
+    )
+
+
+def inner_rom_data_check(file_entry: dict, data: bytes) -> str:
+    """inner_rom_check on the bytes of an archive, as a pack holds it."""
+    return _first_accepted_md5(
+        file_entry,
+        lambda md5: check_inside_zip_data(data, file_entry["zipped_file"], md5),
+    )
+
+
+def _first_accepted_md5(file_entry: dict, check: Callable[[str], str]) -> str:
+    # With no md5 declared, checkInsideZip still runs and needs the member.
     result = "not_in_zip"
-    for candidate in declared or [""]:
-        result = check_inside_zip(local_path, file_entry["zipped_file"], candidate)
+    for candidate in parse_md5_list(file_entry.get("md5")) or [""]:
+        result = check(candidate)
         if result == "ok":
             break
     return result
