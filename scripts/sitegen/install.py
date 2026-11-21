@@ -16,6 +16,7 @@ from model.platforms import load_platform_config
 from model.registry import list_release_pack_platforms
 from model.profiles import reads_own_files
 from resolve.layout import runs_standalone
+from resolve.standalone import standalone_set
 from sitegen import markup
 from core.paths import REPO_ROOT
 from sitegen.fields import search_excluded
@@ -180,7 +181,7 @@ def _standalone_cores(platform: str) -> frozenset[str]:
 @functools.cache
 def _standalone_cores_in(platforms_dir: str, platform: str) -> frozenset[str]:
     config = load_platform_config(platform, platforms_dir)
-    return frozenset(str(c) for c in config.get("standalone_cores") or [])
+    return frozenset(standalone_set(config))
 
 
 def _said_or(names: list[str]) -> str:

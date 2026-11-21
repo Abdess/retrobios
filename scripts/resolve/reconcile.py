@@ -770,10 +770,14 @@ def _attach_runners(systems: dict[str, NativeSystem], scraped: dict | None) -> N
         return
     from model.profiles import load_emulator_profiles
     from resolve.layout import runs_standalone
+    from resolve.standalone import standalone_set
 
     declared = scraped.get("cores")
     libretro = {str(c) for c in declared} if isinstance(declared, list) else set()
     standalone = {str(c) for c in scraped.get("standalone_cores") or []}
+    # The build decision reads the tagged set (own builds, twins), as the
+    # pack does; the runner's name is looked up among the plain names.
+    layout_set = standalone_set(scraped)
     profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
     for system in systems.values():
         for fe in system.files:
@@ -785,7 +789,7 @@ def _attach_runners(systems: dict[str, NativeSystem], scraped: dict | None) -> N
                 sorted((key, build == "standalone") for key, _, build in
                        (b.partition(":") for b in brought))
                 if brought is not None
-                else [(key, runs_standalone(key, profiles.get(key, {}), standalone))
+                else [(key, runs_standalone(key, profiles.get(key, {}), layout_set))
                       for key in sorted(fe.truth.get("_cores") or ())]
             )
             for key, as_standalone in layers:

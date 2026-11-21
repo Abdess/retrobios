@@ -37,7 +37,8 @@ from probes.packlayout import (
     pack_layout,
 )
 from resolve.cores import resolve_platform_cores
-from resolve.layout import runs_standalone
+from resolve.layout import DUAL_MODE_PREFIX, runs_standalone
+from resolve.standalone import standalone_set
 from resolve.validation import filter_files_by_mode
 
 
@@ -79,10 +80,10 @@ def libretro_build_runs(name: str, profile: dict, config: dict) -> bool:
     the platform does not run the emulator standalone only."""
     if "libretro" not in str(profile.get("type", "")) or profile.get("type") == "alias":
         return False
-    standalone = {str(c) for c in config.get("standalone_cores") or ()}
+    standalone = standalone_set(config)
     if not runs_standalone(name, profile, standalone):
         return True
-    dual = {str(c) for c in config.get("dual_mode_cores") or ()}
+    dual = {c.removeprefix(DUAL_MODE_PREFIX) for c in standalone if c.startswith(DUAL_MODE_PREFIX)}
     return bool(dual & ({name} | {str(c) for c in profile.get("cores") or ()}))
 
 

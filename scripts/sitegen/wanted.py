@@ -23,6 +23,7 @@ from pathlib import Path
 
 from romrecipes import ledger as romrecipes_ledger
 from resolve.layout import runs_standalone
+from resolve.standalone import standalone_set
 from model.profiles import unique_emulator_profiles
 from packs.crossref import first_hash
 from core.hashing import cut_md5_owner, parse_hash_list
@@ -158,7 +159,9 @@ def _paired(files: list, details: list[dict]) -> Iterable[tuple[dict, dict]]:
             yield detail, same[position]
 
 
-def _brought_by_readers(detail: dict, config: dict, platform: str, profiles: dict) -> bool:
+def _brought_by_readers(
+    detail: dict, standalone_cores: set[str], platform: str, profiles: dict,
+) -> bool:
     """Whether every core that reads a platform entry installs it itself.
 
     The readers are those verify names for the entry's category, the cores
@@ -168,7 +171,6 @@ def _brought_by_readers(detail: dict, config: dict, platform: str, profiles: dic
     """
     readers = (detail.get("category_evidence") or {}).get("read_by") or []
     own = [r for r in readers if r.get("runs_system")] or readers
-    standalone_cores = set(config.get("standalone_cores") or [])
     verdicts = []
     for reader in own:
         profile = profiles.get(reader.get("emulator", ""))
@@ -197,6 +199,7 @@ def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> li
     found: list[dict] = []
     for key, coverage in sorted(coverages.items()):
         systems = coverage.get("config", {}).get("systems") or {}
+        standalone_cores = standalone_set(coverage.get("config", {}))
         by_system: dict[str, list[dict]] = {}
         for detail in coverage.get("details", []):
             by_system.setdefault(detail.get("system", ""), []).append(detail)
@@ -206,7 +209,7 @@ def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> li
                 if detail.get("settled_by") or detail.get("status") not in ("missing", "untested"):
                     continue
                 if detail.get("category") == GAME_DATA or _brought_by_readers(
-                        detail, coverage.get("config", {}), key, profiles):
+                        detail, standalone_cores, key, profiles):
                     continue
                 found.append({
                     "name": str(entry["name"]), "system": system,
