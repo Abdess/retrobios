@@ -73,7 +73,7 @@ def download_external(
     if declared is None:
         print(f"    WARNING: no hash for {name}, skipping unverifiable download")
         return False
-    if OFFLINE if offline is None else offline:
+    if run_is_offline(offline):
         print(f"    WARNING: {name} is external and the run is offline, not fetched")
         return False
     algo, expected = declared[0], set(declared[1])

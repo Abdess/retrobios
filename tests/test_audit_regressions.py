@@ -7658,6 +7658,13 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
     ENTRY = {"name": "ext.bin", "source_url": "https://example.invalid/ext.bin",
              "sha1": hashlib.sha1(b"payload").hexdigest()}
 
+    def setUp(self):
+        # tests/__init__ sets RETROBIOS_OFFLINE for the suite: these cases
+        # download from a mocked urlopen, so the switch is cleared here.
+        patcher = mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
     def _response(self, body: bytes):
         stream = _ResponseBody(body)
         response = mock.MagicMock()
@@ -7688,6 +7695,18 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
             urlopen.assert_not_called()
         finally:
             packresolve.set_offline(saved)
+
+    def test_the_environment_switch_holds_whatever_the_caller_passes(self):
+        """RETROBIOS_OFFLINE stopped release assets but not external URLs."""
+        from resolve import packfiles as packresolve
+
+        with tempfile.TemporaryDirectory() as tmp, \
+                mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": "1"}), \
+                mock.patch("urllib.request.urlopen") as urlopen, \
+                contextlib.redirect_stdout(io.StringIO()):
+            self.assertFalse(
+                packresolve.download_external(self.ENTRY, f"{tmp}/x", offline=False))
+        urlopen.assert_not_called()
 
     def test_a_verified_body_lands_and_a_wrong_one_is_removed(self):
         from resolve import packfiles as packresolve
