@@ -7710,6 +7710,15 @@ def _manifest_invalid(plat: str, url: str, exc: ValueError) -> NoReturn:
     sys.exit(1)
 
 
+def missing_list_advice(plat: str, again: str) -> str:
+    """What to do when the revision asked for has no file list for plat:
+    the name was checked before any request, so the revision is the cause."""
+    if RELEASE_REF != DEFAULT_RELEASE_REF:
+        return (f"RETROBIOS_REF={RELEASE_REF} has no list for {plat}: unset it, or pick a "
+                "newer tag from https://github.com/Abdess/retrobios/releases.")
+    return f"The repository may be moving its files: {again} in a few minutes."
+
+
 def _manifest_http_error(plat: str, url: str, exc: urllib.error.HTTPError) -> NoReturn:
     """Stop on a file list the server answered with an HTTP error."""
     EVENTS.emit(
@@ -7725,13 +7734,8 @@ def _manifest_http_error(plat: str, url: str, exc: urllib.error.HTTPError) -> No
         # Asked once, a 4xx being final. The name was checked before any
         # request, so the revision is what has no such list.
         print(f"  No file list for {plat} at {RELEASE_REF}.", file=sys.stderr)
-        if RELEASE_REF != DEFAULT_RELEASE_REF:
-            print(f"  RETROBIOS_REF={RELEASE_REF} has no list for {plat}: unset it, or "
-                  "pick a newer tag from https://github.com/Abdess/retrobios/releases.",
-                  file=sys.stderr)
-        else:
-            print("  The repository may be moving its files: run the same command "
-                  "again in a few minutes.", file=sys.stderr)
+        print(f"  {missing_list_advice(plat, 'run the same command again')}",
+              file=sys.stderr)
         sys.exit(1)
     print(f"  Could not fetch the file list for {plat}: HTTP {exc.code}", file=sys.stderr)
     for line in _address_lines(url):
@@ -25358,6 +25362,9 @@ def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
         title = "No file list"
         lines = [f"There is no file list for {display_name(plat)} at this address."
                  if exc.code == 404 else f"The server answered HTTP {exc.code}."]
+        if exc.code == 404 and not os.environ.get("RETROBIOS_BASE_URL"):
+            # Line mode named RETROBIOS_REF as the cause, the screen nothing.
+            lines.append(missing_list_advice(plat, "choose Try again"))
     except (urllib.error.URLError, OSError) as exc:
         code, words = network_words(exc)
         if code == "offline":

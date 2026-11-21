@@ -2246,6 +2246,18 @@ class TicksBarAndPaths(unittest.TestCase):
         self.assertEqual([row.action for row in install.tui_rows(state)],
                          ["retry", "elsewhere", "quit"])
 
+    def test_a_missing_list_names_the_revision_asked_for(self):
+        # Line mode named RETROBIOS_REF, the screen said only "at this address".
+        inbox = __import__("queue").Queue()
+        missing = install.urllib.error.HTTPError("u", 404, "Not Found", {}, None)
+        with mock.patch.object(install, "_fetch_json", side_effect=missing), \
+                mock.patch.object(install, "RELEASE_REF", "v2020.01.01"), \
+                mock.patch.dict(os.environ, {"RETROBIOS_BASE_URL": ""}):
+            install._tui_fetch("batocera", inbox, io.StringIO())
+        _kind, _plat, title, lines, _code = inbox.get_nowait()
+        self.assertEqual(title, "No file list")
+        self.assertIn("RETROBIOS_REF=v2020.01.01 has no list for batocera", lines[1])
+
     def test_the_clock_says_so(self):
         import ssl
 

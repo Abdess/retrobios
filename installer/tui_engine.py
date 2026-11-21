@@ -19,7 +19,7 @@ from installer.events import _event_exit_code
 from installer.games import games_probe
 from installer.handheld_app import put_app
 from installer.manifest import _validate_manifest
-from installer.network import _fetch_json, fetch_manifest, fetch_targets, network_words
+from installer.network import _fetch_json, fetch_manifest, fetch_targets, missing_list_advice, network_words
 from installer.offline import LOCAL, offline_named, offline_undo
 from installer.platforms import display_name
 from installer.remote import MANIFEST_URL, MAX_MANIFEST_BYTES
@@ -157,6 +157,9 @@ def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
         title = "No file list"
         lines = [f"There is no file list for {display_name(plat)} at this address."
                  if exc.code == 404 else f"The server answered HTTP {exc.code}."]
+        if exc.code == 404 and not os.environ.get("RETROBIOS_BASE_URL"):
+            # Line mode named RETROBIOS_REF as the cause, the screen nothing.
+            lines.append(missing_list_advice(plat, "choose Try again"))
     except (urllib.error.URLError, OSError) as exc:
         code, words = network_words(exc)
         if code == "offline":
