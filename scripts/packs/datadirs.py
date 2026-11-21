@@ -7,7 +7,6 @@ import http.client
 import json
 import logging
 import os
-import shutil
 import tarfile
 import tempfile
 import time
@@ -19,8 +18,8 @@ from pathlib import Path
 from core import upstream
 from core.artifacts import file_lock as _file_lock, write_text_atomic
 from core.upstream import remote_etag as _get_remote_etag
-from core.ziptools import safe_member_parts
 from model.registry import VERSIONS_FILE, load_versions
+from packs.datadirextract import extract_tar_subtree, extract_zip_tree
 
 
 log = logging.getLogger(__name__)
@@ -199,17 +198,6 @@ class NothingExtractedError(Exception):
     """
 
 
-def _is_safe_tar_member(member: tarfile.TarInfo, dest: Path) -> bool:
-    """Reject path traversal, absolute paths, and symlinks in tar members."""
-    if member.issym() or member.islnk():
-        return False
-    if member.name.startswith("/") or ".." in member.name.split("/"):
-        return False
-    resolved = (dest / member.name).resolve()
-    dest_str = str(dest.resolve()) + os.sep
-    return str(resolved).startswith(dest_str) or str(resolved) == str(dest.resolve())
-
-
 def _download_and_extract(
     source_url: str,
     source_path: str,
@@ -222,62 +210,20 @@ def _download_and_extract(
     Returns the number of files extracted. measured receives the size of
     the archive downloaded.
     """
-    exclude = exclude or []
     cache_dir = Path(local_cache)
 
     with _staging_dir(cache_dir) as tmpdir:
         tarball_path = Path(tmpdir) / "archive.tar.gz"
-        log.info("downloading %s", source_url)
-
-        upstream.download(
-            source_url, tarball_path, timeout=DOWNLOAD_TIMEOUT, user_agent=USER_AGENT
-        )
-        if measured is not None:
-            measured(tarball_path.stat().st_size)
+        _fetch(source_url, tarball_path, measured)
 
         log.info("extracting %s -> %s", source_path, local_cache)
-
-        prefix = source_path.rstrip("/") + "/"
-        file_count = 0
-
-        with tarfile.open(tarball_path, "r:gz") as tf:
-            extract_dir = Path(tmpdir) / "extract"
-            extract_dir.mkdir()
-
-            for member in tf.getmembers():
-                if not member.name.startswith(prefix) and member.name != source_path:
-                    continue
-
-                rel = member.name[len(prefix) :]
-                if not rel:
-                    continue
-
-                # skip excluded subdirectories
-                top_component = rel.split("/")[0]
-                if top_component in exclude:
-                    continue
-
-                if not _is_safe_tar_member(member, extract_dir):
-                    log.warning("skipping unsafe tar member: %s", member.name)
-                    continue
-
-                # rewrite member name to relative path
-                member_copy = tarfile.TarInfo(name=rel)
-                member_copy.size = member.size
-                member_copy.mode = member.mode
-                member_copy.type = member.type
-
-                if member.isdir():
-                    (extract_dir / rel).mkdir(parents=True, exist_ok=True)
-                elif member.isfile():
-                    dest_file = extract_dir / rel
-                    dest_file.parent.mkdir(parents=True, exist_ok=True)
-                    src = tf.extractfile(member)
-                    if src is None:
-                        continue
-                    with src, open(dest_file, "wb") as dst:
-                        shutil.copyfileobj(src, dst)
-                    file_count += 1
+        extract_dir = Path(tmpdir) / "extract"
+        extract_dir.mkdir()
+        file_count, skipped = extract_tar_subtree(
+            tarball_path, extract_dir, source_path, exclude or []
+        )
+        for name in skipped:
+            log.warning("skipping unsafe tar member: %s", name)
 
         if not file_count:
             raise NothingExtractedError(f"no file under {source_path} in the archive")
@@ -299,43 +245,15 @@ def _download_and_extract_zip(
     (like tar --strip-components). Useful when a ZIP has a single root
     directory that should be flattened.
     """
-    exclude = exclude or []
     cache_dir = Path(local_cache)
 
     with _staging_dir(cache_dir) as tmpdir:
         zip_path = Path(tmpdir) / "archive.zip"
-        log.info("downloading %s", source_url)
-
-        upstream.download(
-            source_url, zip_path, timeout=DOWNLOAD_TIMEOUT, user_agent=USER_AGENT
-        )
-        if measured is not None:
-            measured(zip_path.stat().st_size)
+        _fetch(source_url, zip_path, measured)
 
         extract_dir = Path(tmpdir) / "extract"
         extract_dir.mkdir()
-        file_count = 0
-
-        with zipfile.ZipFile(zip_path) as zf:
-            for info in zf.infolist():
-                if info.is_dir():
-                    continue
-                parts = safe_member_parts(info)
-                # strip leading path components
-                if strip_components > 0:
-                    if len(parts) <= strip_components:
-                        continue
-                    parts = parts[strip_components:]
-                name = "/".join(parts)
-                # skip excludes (check against stripped path)
-                top = parts[0] if parts else ""
-                if top in exclude:
-                    continue
-                dest = extract_dir / name
-                dest.parent.mkdir(parents=True, exist_ok=True)
-                with zf.open(info) as src, open(dest, "wb") as dst:
-                    shutil.copyfileobj(src, dst)
-                file_count += 1
+        file_count = extract_zip_tree(zip_path, extract_dir, exclude or [], strip_components)
 
         if not file_count:
             raise NothingExtractedError("the archive holds no file to extract")
@@ -345,6 +263,16 @@ def _download_and_extract_zip(
         _promote(extract_dir, cache_dir, Path(tmpdir))
 
     return file_count
+
+
+def _fetch(source_url: str, archive_path: Path, measured: Callable[[int], None] | None) -> None:
+    """Download source_url to archive_path, its size handed to measured."""
+    log.info("downloading %s", source_url)
+    upstream.download(
+        source_url, archive_path, timeout=DOWNLOAD_TIMEOUT, user_agent=USER_AGENT
+    )
+    if measured is not None:
+        measured(archive_path.stat().st_size)
 
 
 def _measure_archive(source_url: str) -> int | None:

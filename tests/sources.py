@@ -41,7 +41,7 @@ COMMANDS = {
         "resolve/review.py", "resolve/reviewfiles.py", "resolve/reviewreport.py",
         "core/gitclone.py",
     ),
-    "refresh_data_dirs.py": ("packs/datadirs.py",),
+    "refresh_data_dirs.py": ("packs/datadirs.py", "packs/datadirextract.py"),
     "split_pack.py": ("packs/parts.py", "release/sums.py"),
     "retired_files.py": ("model/retired.py", "collection/retiredhistory.py"),
     "region_audit.py": ("resolve/regionaudit.py",),
@@ -64,7 +64,9 @@ COMMANDS = {
     "generate_installer_doc.py": ("installer_build/installerdoc.py",),
     "commit_rules.py": ("devtools/commitrules.py",),
     "pr_checks.py": ("devtools/prchecks.py",),
-    "check_buildbot_system.py": ("scraper/buildbot_system.py", "packs/datadirs.py"),
+    "check_buildbot_system.py": (
+        "scraper/buildbot_system.py", "packs/datadirs.py", "packs/datadirextract.py",
+    ),
     "generate_site.py": (
         "sitegen/config.py", "sitegen/emulatorsindex.py", "sitegen/places.py", "sitegen/home.py",
         "sitegen/versions.py", "sitegen/guidepage.py", "sitegen/install.py", "sitegen/getpages.py",

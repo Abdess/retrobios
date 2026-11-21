@@ -13,6 +13,8 @@ import tests
 
 import io
 import json
+import shutil
+import tarfile
 import tempfile
 import threading
 import unittest
@@ -23,6 +25,7 @@ from unittest import mock
 from packs import datadirs
 from model.registry import load_data_dir_registry, load_versions
 from packs.archive import Placed
+from packs.datadirextract import extract_tar_subtree, extract_zip_tree
 from packs.datatrees import data_directory_members
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -61,7 +64,7 @@ class RefreshConcurrency(unittest.TestCase):
         with mock.patch.object(
             datadirs.urllib.request, "urlopen", lambda *a, **k: _Response(payload)
         ), mock.patch.object(
-            datadirs.shutil, "move", side_effect=AssertionError("copy across filesystems")
+            shutil, "move", side_effect=AssertionError("copy across filesystems")
         ):
             count = datadirs._download_and_extract_zip("https://x/pak.zip", str(self.cache))
         self.assertEqual(count, 1)
@@ -69,24 +72,11 @@ class RefreshConcurrency(unittest.TestCase):
         leftovers = [p.name for p in self.cache.parent.iterdir() if p.name != "pak"]
         self.assertEqual(leftovers, [])
 
-    def test_members_follow_the_core_ziptools_rule(self):
-        """A name with ".." inside a segment was dropped in silence, and a
-        backslash member became a file named with the backslash."""
-        payload = _zip_bytes({"Docs/Read..me.txt": b"r", "sub\\a.bin": b"a"})
-        with mock.patch.object(
-            datadirs.urllib.request, "urlopen", lambda *a, **k: _Response(payload)
-        ):
-            count = datadirs._download_and_extract_zip("https://x/pak.zip", str(self.cache))
-        self.assertEqual(count, 2)
-        self.assertEqual((self.cache / "Docs" / "Read..me.txt").read_bytes(), b"r")
-        self.assertEqual((self.cache / "sub" / "a.bin").read_bytes(), b"a")
-
-    def test_a_traversing_member_refuses_the_archive(self):
-        payload = _zip_bytes({"a.bin": b"a", "..\\escape.bin": b"x"})
-        with mock.patch.object(
-            datadirs.urllib.request, "urlopen", lambda *a, **k: _Response(payload)
-        ), self.assertRaises(ValueError):
-            datadirs._download_and_extract_zip("https://x/pak.zip", str(self.cache))
+    def test_a_refused_archive_leaves_no_cache(self):
+        archive = self.root / "pak.zip"
+        archive.write_bytes(_zip_bytes({"a.bin": b"a", "..\\escape.bin": b"x"}))
+        with self.assertRaises(ValueError):
+            datadirs._download_and_extract_zip(archive.as_uri(), str(self.cache))
         self.assertFalse(self.cache.exists())
 
     def test_refresh_holds_the_directory_lock(self):
@@ -477,6 +467,84 @@ class TheRemoteCommitComesFromTheForgeClient(unittest.TestCase):
             )
         self.assertEqual(sha, "c" * 40)
         write.assert_not_called()
+
+class ArchiveExtraction(unittest.TestCase):
+    """The member rules, read on a local archive with no download."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+        self.out = self.root / "extract"
+        self.out.mkdir()
+
+    def _zip(self, files: dict[str, bytes], method: int = zipfile.ZIP_STORED) -> Path:
+        path = self.root / "archive.zip"
+        with zipfile.ZipFile(path, "w", method) as zf:
+            for name, data in files.items():
+                zf.writestr(name, data)
+        return path
+
+    def test_members_follow_the_core_ziptools_rule(self):
+        """A name with ".." inside a segment was dropped in silence, and a
+        backslash member became a file named with the backslash."""
+        archive = self._zip({"Docs/Read..me.txt": b"r", "sub\\a.bin": b"a"})
+        self.assertEqual(extract_zip_tree(archive, self.out, []), 2)
+        self.assertEqual((self.out / "Docs" / "Read..me.txt").read_bytes(), b"r")
+        self.assertEqual((self.out / "sub" / "a.bin").read_bytes(), b"a")
+
+    def test_a_traversing_member_refuses_the_archive(self):
+        archive = self._zip({"a.bin": b"a", "..\\escape.bin": b"x"})
+        with self.assertRaises(ValueError):
+            extract_zip_tree(archive, self.out, [])
+
+    def test_two_members_on_one_path_refuse_the_archive(self):
+        """`a/x` and `a\\x` are one file once the separator is read: the
+        second overwrote the first in silence."""
+        archive = self._zip({"a/x": b"1", "a\\x": b"2"})
+        with self.assertRaisesRegex(ValueError, "Duplicate"):
+            extract_zip_tree(archive, self.out, [])
+
+    def test_stripping_onto_one_path_refuses_the_archive(self):
+        archive = self._zip({"r1/a.bin": b"1", "r2/a.bin": b"2"})
+        with self.assertRaisesRegex(ValueError, "Duplicate"):
+            extract_zip_tree(archive, self.out, [], strip_components=1)
+
+    def test_a_member_larger_than_declared_refuses_the_archive(self):
+        """A header that announces 10 bytes for a member that expands to
+        more was copied to the end with no bound, and left a partial file."""
+        archive = self._zip({"bomb.bin": b"x" * 100})
+        data = bytearray(archive.read_bytes())
+        local = data.index(b"PK\x03\x04")
+        central = data.index(b"PK\x01\x02")
+        data[local + 22:local + 26] = (10).to_bytes(4, "little")
+        data[central + 24:central + 28] = (10).to_bytes(4, "little")
+        archive.write_bytes(bytes(data))
+        with self.assertRaises((ValueError, zipfile.BadZipFile)):
+            extract_zip_tree(archive, self.out, [])
+        self.assertEqual(list(self.out.iterdir()), [])
+
+    def test_strip_and_exclude(self):
+        archive = self._zip({
+            "root/a.bin": b"a", "root/skip/b.bin": b"b", "root/": b"", "top.bin": b"t",
+        })
+        self.assertEqual(extract_zip_tree(archive, self.out, ["skip"], strip_components=1), 1)
+        self.assertEqual(sorted(p.name for p in self.out.rglob("*")), ["a.bin"])
+
+    def test_tar_subtree_relative_to_its_path(self):
+        archive = self.root / "archive.tar.gz"
+        payload = self.root / "f"
+        payload.write_bytes(b"x")
+        with tarfile.open(archive, "w:gz") as tf:
+            for name in ("repo/Data/Sys/a.bin", "repo/Data/Sys/skip/b.bin", "repo/Other/c.bin"):
+                tf.add(payload, arcname=name)
+            link = tarfile.TarInfo("repo/Data/Sys/link")
+            link.type = tarfile.SYMTYPE
+            link.linkname = "/etc/passwd"
+            tf.addfile(link)
+        count, skipped = extract_tar_subtree(archive, self.out, "repo/Data/Sys", ["skip"])
+        self.assertEqual((count, skipped), (1, ["repo/Data/Sys/link"]))
+        self.assertEqual((self.out / "a.bin").read_bytes(), b"x")
 
 
 if __name__ == "__main__":

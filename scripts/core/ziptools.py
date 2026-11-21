@@ -5,6 +5,7 @@ capping a real romset: the largest pack is already several gigabytes."""
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 
 import functools
@@ -304,9 +305,23 @@ def safe_member_parts(member: zipfile.ZipInfo) -> list[str]:
     return parts
 
 
-def _member_path(member: zipfile.ZipInfo, seen: set[str]) -> tuple[str, list[str], int]:
-    """(name, path components, mode) of a member whose path and type are safe."""
+MemberSelect = Callable[[zipfile.ZipInfo, list[str]], "list[str] | None"]
+"""Maps a member's safe path components to the components it is written
+under, or to None to leave the member out."""
+
+
+def _member_path(
+    member: zipfile.ZipInfo, seen: set[str], select: MemberSelect | None = None,
+) -> tuple[str, list[str], int] | None:
+    """(name, path components, mode) of a member whose path and type are
+    safe, None when select leaves it out. Two members written to one path
+    refuse the archive."""
     parts = safe_member_parts(member)
+    if select is not None:
+        chosen = select(member, parts)
+        if chosen is None:
+            return None
+        parts = chosen
     name = member.filename.replace("\\", "/")
     normalized = "/".join(parts)
     if normalized in seen:
@@ -389,11 +404,14 @@ def safe_extract_zip(
     max_member_size: int = MAX_ZIP_MEMBER_SIZE,
     max_total_size: int = MAX_ZIP_TOTAL_SIZE,
     max_compression_ratio: int = MAX_ZIP_COMPRESSION_RATIO,
-) -> None:
+    select: MemberSelect | None = None,
+) -> int:
     """Extract a ZIP with traversal, link and resource-limit protection.
 
     Files are streamed to a temporary sibling and atomically installed only
     after their declared length and CRC have been checked by ``zipfile``.
+    select renames or leaves out members, and the limits apply to what it
+    keeps. Returns the number of files written.
     """
     limits = _ZipLimits(max_members, max_member_size, max_total_size, max_compression_ratio)
     dest = os.path.realpath(dest_dir)
@@ -407,9 +425,13 @@ def safe_extract_zip(
             )
 
         declared_total = 0
+        written = 0
         seen: set[str] = set()
         for member in members:
-            name, parts, mode = _member_path(member, seen)
+            path = _member_path(member, seen, select)
+            if path is None:
+                continue
+            name, parts, mode = path
             declared_total = _check_member_size(member, name, declared_total, limits)
 
             target = os.path.realpath(os.path.join(dest, *parts))
@@ -419,3 +441,5 @@ def safe_extract_zip(
                 os.makedirs(target, exist_ok=True)
                 continue
             _install_member(zf, member, name, target, mode, umask, limits.member_size)
+            written += 1
+    return written

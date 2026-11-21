@@ -76,6 +76,7 @@ on:
       - "scripts/packs/archive.py"
       - "scripts/packs/coverage.py"
       - "scripts/packs/crossref.py"
+      - "scripts/packs/datadirextract.py"
       - "scripts/packs/datadirs.py"
       - "scripts/packs/extras.py"
       - "scripts/packs/gaps.py"
