@@ -285,16 +285,9 @@ def project_base() -> str:
     is HEAD, and --changed --strict found nothing and passed while the PR's
     CI then failed. validate_pr.py resolves the same line the same way.
     """
-    from core.gitclone import fallback_lines, git_lines, project_main_line
+    from core.gitclone import compare_base
 
-    line = project_main_line()
-    if line:
-        return line
-    for candidates in fallback_lines():
-        for candidate in candidates:
-            if git_lines("rev-parse", "--verify", "--quiet", candidate):
-                return candidate
-    return "HEAD"
+    return compare_base() or "HEAD"
 
 
 def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:

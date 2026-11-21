@@ -10,6 +10,10 @@ class GitRefused(RuntimeError):
     """A git command that exited non-zero, with what it said."""
 
 
+class MainLineUnreachable(RuntimeError):
+    """The clone does not hold the project's main and cannot fetch it."""
+
+
 def _run(args: tuple[str, ...]) -> subprocess.CompletedProcess[str]:
     return subprocess.run(["git", *args], capture_output=True, text=True, check=False)
 
@@ -83,8 +87,23 @@ def project_main_line() -> str | None:
         capture_output=True, text=True, check=False,
     )
     if fetched.returncode != 0:
-        raise RuntimeError(
+        raise MainLineUnreachable(
             f"this clone does not hold the main of {PROJECT_URLS[0]}, and "
             f"fetching its main from {source} failed: {fetched.stderr.strip()}"
         )
     return "FETCH_HEAD"
+
+
+def compare_base() -> str | None:
+    """The line --changed compares with: the project's main line, else the
+    first upstream/ or origin/ line the clone holds, None when it holds none
+    and only its uncommitted files can be read. profile_sync and validate_pr
+    both read it, so the two compare against the same base."""
+    line = project_main_line()
+    if line:
+        return line
+    for candidates in fallback_lines():
+        for candidate in candidates:
+            if git_lines("rev-parse", "--verify", "--quiet", candidate):
+                return candidate
+    return None

@@ -34,7 +34,7 @@ try:
     import yaml
 except ImportError:
     yaml = None
-from core.gitclone import fallback_lines, git_lines, project_main_line
+from core.gitclone import compare_base, git_lines
 from resolve.review import (
     ValidationResult,
     load_platform_hashes,
@@ -54,19 +54,10 @@ def get_changed_files() -> list[str]:
     A git that fails outright is an error, never "nothing changed".
     """
     changed: list[str] = []
-    compared = False
-    project_base = project_main_line()
-    remotes = [[project_base]] if project_base else fallback_lines()
-    for candidates in remotes:
-        for line in candidates:
-            committed = git_lines("diff", "--name-only", f"{line}...HEAD")
-            if committed is None:
-                continue
-            compared = True
-            changed.extend(committed)
-            break
-        if compared and changed:
-            break
+    base = compare_base()
+    committed = git_lines("diff", "--name-only", f"{base}...HEAD") if base else None
+    compared = committed is not None
+    changed.extend(committed or [])
     staged = git_lines("diff", "--cached", "--name-only")
     local = git_lines("diff", "--name-only")
     untracked = git_lines("ls-files", "--others", "--exclude-standard", "--", "bios")

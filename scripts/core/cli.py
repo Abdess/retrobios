@@ -10,6 +10,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 from core.artifacts import ArtifactDirectoryMissing, ArtifactLockBusy
+from core.gitclone import MainLineUnreachable
 from core.paths import BIOS_DIR, DB_FILE, EMULATORS_DIR, PLATFORMS_DIR
 
 
@@ -130,7 +131,7 @@ def run_cli(main: Callable[[], int | None]) -> None:
         code = main()
         sys.stdout.flush()
     except (InputMissing, SourceUnreadable, ArtifactLockBusy,
-            ArtifactDirectoryMissing) as exc:
+            ArtifactDirectoryMissing, MainLineUnreachable) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         sys.exit(1)
     except BrokenPipeError:
