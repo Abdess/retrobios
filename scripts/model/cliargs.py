@@ -15,7 +15,9 @@ except ImportError:
 
 from model.platforms import load_platform_config
 from model.profiles import is_emulator, load_emulator_profiles
-from model.registry import list_registered_platforms, list_release_pack_platforms
+from model.registry import (
+    list_registered_platforms, list_release_pack_platforms, load_platform_registry,
+)
 from model.systems import platform_system_names, resolve_system_arg, system_index
 from core.paths import PLATFORMS_DIR, REPO_ROOT
 
@@ -83,7 +85,9 @@ def require_platform(name: str, platforms_dir: str = PLATFORMS_DIR) -> None:
         if os.path.exists(os.path.join(platforms_dir, f"{name}.yml")):
             return
         raise SystemExit(f"ERROR: unknown platform '{name}' in {platforms_dir}")
-    known = list_registered_platforms(platforms_dir)
+    # The registry's names, not list_registered_platforms: one platform
+    # asked for is not refused because another one's file is missing.
+    known = sorted(load_platform_registry(platforms_dir))
     if name in known:
         return
     import difflib
@@ -146,7 +150,7 @@ def comma_list(value: str) -> list[str]:
 
 
 def requested_regions(value: str | None, parser: argparse.ArgumentParser) -> list[str]:
-    """--region as a priority list, best first; a bad value ends the run."""
+    """--region as a priority list, best first. A bad value ends the run."""
     if not value:
         return []
     from model import region
