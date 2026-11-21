@@ -25,6 +25,7 @@ import unittest
 import unittest.mock
 from pathlib import Path
 from types import MappingProxyType
+from typing import Any, cast
 
 import yaml
 
@@ -559,10 +560,13 @@ class ChildEnvironment(unittest.TestCase):
         self.assertEqual(fetch["ROMFETCH_CONTENT_DIR"], "/c")
 
     def test_the_probe_is_started_with_that_environment(self) -> None:
-        seen: list[dict] = []
+        seen: list[Any] = []
         host = FakeHost()
-        host.run = lambda argv, **kw: (seen.append(kw.get("env")),
-                                       subprocess.CompletedProcess([], 0, '{"id": "x"}', ""))[1]
+
+        def run(argv: list[str], **kw: Any) -> subprocess.CompletedProcess:
+            seen.append(kw.get("env"))
+            return subprocess.CompletedProcess([], 0, '{"id": "x"}', "")
+        host.run = run
         with tempfile.TemporaryDirectory() as tmp:
             paths = probes_host.Paths(root=Path(tmp), home=Path(tmp) / "h", content=Path(tmp) / "c",
                                    db=Path(tmp) / "db.json", content_file=probes_host.CONTENT_FILE)
@@ -817,8 +821,11 @@ class Content(Workspace):
             self.put_game(game)
             return subprocess.CompletedProcess([], 0, '{"status": "verified"}', "")
         host.results = [subprocess.CompletedProcess([], 3, error, ""), None]
-        host.run = lambda argv, **kw: (host.calls.append(argv), fetched() if len(host.calls) == 2
-                                        else host.results[0])[1]
+
+        def run(argv: list[str], **kw: Any) -> subprocess.CompletedProcess:
+            host.calls.append(argv)
+            return fetched() if len(host.calls) == 2 else cast(subprocess.CompletedProcess, host.results[0])
+        host.run = run
         c = self.make(host, romfetch=str(fetcher))
         self.assertEqual(c.store.get(self.content()), self.game)
         self.assertEqual(host.slept, [1])
@@ -1081,6 +1088,9 @@ class Registry(unittest.TestCase):
 @unittest.skipUnless(shutil.which("cc") and shutil.which("strace"), "no C compiler or no strace")
 class FakeCorePasses(Workspace):
     """Whole passes against a core compiled from FAKE_CORE."""
+
+    build: Path
+    cores: dict[str, Path]
 
     @classmethod
     def setUpClass(cls) -> None:
