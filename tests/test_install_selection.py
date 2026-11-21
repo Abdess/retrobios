@@ -1418,10 +1418,10 @@ class ANativeNameSelectsOneSetEverywhere(unittest.TestCase):
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
             raise unittest.SkipTest("database.json is not built")
-        import pipeline
+        from orchestrate import compare
         from model.profiles import load_emulator_profiles
 
-        cls.pipeline = pipeline
+        cls.compare = compare
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
         cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
 
@@ -1460,11 +1460,11 @@ class ANativeNameSelectsOneSetEverywhere(unittest.TestCase):
                 )
                 self.assertEqual(report["systems"], [system_id])
                 credited = set(report["pack_destinations"])
-                trees = self.pipeline._tree_members(platform, str(REPO_ROOT / "platforms"))
+                trees = self.compare.tree_members(platform, str(REPO_ROOT / "platforms"))
                 members = self._packed(platform, chosen)
                 written = {
                     name for name, size in members.items()
-                    if not self.pipeline._PACK_NOTES.search(name)
+                    if not self.compare.PACK_NOTES.search(name)
                     and not (trees.get(name) == size and name not in credited)
                 }
                 self.assertTrue(written)

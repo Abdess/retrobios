@@ -161,7 +161,7 @@ class OneTruthModelPerTarget(unittest.TestCase):
             with self.subTest(module=module):
                 self.assertIn("truth_target_dir(", source)
                 self.assertNotIn('re.sub(\n            r"[^a-z0-9]+"', source)
-        pipeline = (REPO_ROOT / "scripts" / "pipeline.py").read_text()
+        pipeline = script_source("pipeline.py")
         self.assertIn('diff_cmd.extend(["--target", args.target])', pipeline)
 
 
@@ -224,7 +224,7 @@ class PublishedListsAreNotNarrowed(unittest.TestCase):
     file list with the Switch one and check_release asked for it as an asset."""
 
     def test_pipeline_writes_install_unfiltered(self):
-        pipeline = (REPO_ROOT / "scripts" / "pipeline.py").read_text()
+        pipeline = script_source("pipeline.py")
         self.assertNotIn('manifest_cmd.extend(["--target"', pipeline)
 
     def test_every_install_list_is_a_whole_platform(self):

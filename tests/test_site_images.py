@@ -124,7 +124,7 @@ class DiagramsMatchTheData(unittest.TestCase):
                 self.assertTrue(diagrams.minui_files().get(tag))
 
     def test_the_pipeline_drawing_is_the_step_list(self):
-        from pipeline import STEP_LABELS
+        from orchestrate.labels import STEP_LABELS
 
         numbers = [box.number for box in diagrams._pipeline_boxes()]
         self.assertEqual(numbers, [label.split(" ", 1)[0] for label in STEP_LABELS.values()])

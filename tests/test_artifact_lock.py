@@ -26,6 +26,7 @@ from core.artifacts import (
     publish_hold,
 )
 from tests.scratchtree import scratch_checkout
+from tests.sources import script_source
 from core import artifacts
 from unittest import mock
 
@@ -359,7 +360,7 @@ class HeldLockTest(unittest.TestCase):
         self.assertEqual(self._child_locks(dict(os.environ)).returncode, 0)
 
     def test_the_pipeline_holds_its_output_for_the_run(self):
-        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        source = script_source("pipeline.py")
         self.assertIn("hold_artifact_lock(args.output_dir)", source)
 
 
@@ -369,7 +370,7 @@ class PipelineHoldsTheDataTrees(unittest.TestCase):
     and the manifests, which then described two revisions of it."""
 
     def test_the_trees_are_held_after_the_refresh_and_before_verify(self):
-        source = (Path(__file__).resolve().parents[1] / "scripts" / "pipeline.py").read_text()
+        source = script_source("pipeline.py")
         refresh = source.index('"scripts/refresh_data_dirs.py"')
         hold = source.index("hold_data_dirs(held,")
         verify = source.index('"scripts/verify.py", "--all"')

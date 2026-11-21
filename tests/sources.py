@@ -116,6 +116,12 @@ COMMANDS = {
         "freshness/catalogs.py", "freshness/ci.py", "freshness/pinbuilds.py",
         "freshness/profiles.py", "freshness/report.py",
     ),
+    "pipeline.py": (
+        "orchestrate/labels.py", "orchestrate/results.py", "orchestrate/runner.py",
+        "orchestrate/guards.py", "orchestrate/locks.py", "orchestrate/prepare.py",
+        "orchestrate/build.py", "orchestrate/checks.py", "orchestrate/docs.py",
+        "orchestrate/reports.py", "orchestrate/compare.py", "orchestrate/consistency.py",
+        "orchestrate/emulatorpacks.py", "orchestrate/narrowed.py", "orchestrate/splitcheck.py",
 }
 
 

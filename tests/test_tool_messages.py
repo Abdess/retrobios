@@ -22,11 +22,13 @@ from model.registry import list_registered_platforms
 from model.targets import load_target_config, build_target_cores_cache
 import diff_truth
 import pipeline
+from orchestrate import guards, labels, prepare, runner
 from resolve import truth
 import verify
 from packs import coverage
 from packs import report as packs_report
 from packs import verdicts
+from tests.sources import script_source
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -377,15 +379,15 @@ class AnOfflineRunWithNoCacheStopsFirst(unittest.TestCase):
                 f"data_directories:\n  a:\n    local_cache: {cache}\n"
             )
             parser = mock.Mock()
-            pipeline._refuse_offline_without_caches(parser, self._args(), tmp)
+            guards.refuse_offline_without_caches(parser, self._args(), tmp)
             self.assertIn("refresh_data_dirs.py", parser.error.call_args.args[0])
             for args in (self._args(offline=False), self._args(skip_packs=True)):
                 parser = mock.Mock()
-                pipeline._refuse_offline_without_caches(parser, args, tmp)
+                guards.refuse_offline_without_caches(parser, args, tmp)
                 parser.error.assert_not_called()
             cache.mkdir()
             parser = mock.Mock()
-            pipeline._refuse_offline_without_caches(parser, self._args(), tmp)
+            guards.refuse_offline_without_caches(parser, self._args(), tmp)
             parser.error.assert_not_called()
 
 
@@ -407,19 +409,19 @@ class AnOfflineExportWithNoOriginalsStopsFirst(unittest.TestCase):
         self.assertIn("batocera", patched)
         with tempfile.TemporaryDirectory() as tmp:
             parser = mock.Mock()
-            pipeline._refuse_offline_export_without_originals(parser, self._args(), tmp)
+            guards.refuse_offline_export_without_originals(parser, self._args(), tmp)
             message = parser.error.call_args.args[0]
             self.assertIn("export_native.py --all --refresh-cache", message)
             self.assertIn("batocera", message)
             for args in (self._args(offline=False), self._args(with_export=False)):
                 parser = mock.Mock()
-                pipeline._refuse_offline_export_without_originals(parser, args, tmp)
+                guards.refuse_offline_export_without_originals(parser, args, tmp)
                 parser.error.assert_not_called()
             for name in patched:
                 (Path(tmp) / name).mkdir()
                 (Path(tmp) / name / "original").write_text("x")
             parser = mock.Mock()
-            pipeline._refuse_offline_export_without_originals(parser, self._args(), tmp)
+            guards.refuse_offline_export_without_originals(parser, self._args(), tmp)
             parser.error.assert_not_called()
 
     def test_the_tools_page_says_so(self):
@@ -443,7 +445,7 @@ class ThePipelineFlagTableSaysEveryRefusal(unittest.TestCase):
         for flag, value in flags.items():
             setattr(args, flag.lstrip("-").replace("-", "_"), value)
         parser = mock.Mock()
-        pipeline._refuse_unapplied_flags(parser, args)
+        guards.refuse_unapplied_flags(parser, args)
         return parser.error.called
 
     def test_each_refused_pair_is_in_the_row_of_a_flag(self):
@@ -696,7 +698,7 @@ class ThePipelineRefreshesTheCommittedExport(unittest.TestCase):
     def test_the_export_step_writes_the_default_directory(self):
         import ast
 
-        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        source = script_source("pipeline.py")
         for node in ast.walk(ast.parse(source)):
             if (isinstance(node, ast.Assign)
                     and any(getattr(t, "id", "") == "export_cmd" for t in node.targets)):
@@ -714,16 +716,16 @@ class ThePipelineCountsItsRealSteps(unittest.TestCase):
     def test_every_recorded_step_has_a_label(self):
         import re
 
-        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        source = script_source("pipeline.py")
         keys = set(re.findall(r'results\["(\w+)"\] =', source))
-        self.assertEqual(keys - set(pipeline.STEP_LABELS), set())
+        self.assertEqual(keys - set(labels.STEP_LABELS), set())
 
     def test_a_label_written_out_is_one_of_the_list(self):
         import re
 
-        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        source = script_source("pipeline.py")
         written = re.findall(r'run\([^()]*?, "([^"]+)"\)', source)
-        numbers = {label.split(" ", 1)[0] for label in pipeline.STEP_LABELS.values()}
+        numbers = {label.split(" ", 1)[0] for label in labels.STEP_LABELS.values()}
         for label in written:
             with self.subTest(label=label):
                 # A step's own label, or a second command of a listed step.
@@ -734,25 +736,25 @@ class ThePipelineCountsItsRealSteps(unittest.TestCase):
         computed "5 consistency check [20/24]"."""
         import re
 
-        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        source = script_source("pipeline.py")
         self.assertEqual(re.findall(r'"[^"\n]*---[^"\n]*\b\d+[a-z]?/\d+\b[^"\n]*"', source), [])
 
     def test_progress_comes_from_the_list(self):
-        total = len(pipeline.STEP_LABELS)
-        title = pipeline.step_title(pipeline.STEP_LABELS["render_site"])
+        total = len(labels.STEP_LABELS)
+        title = labels.step_title(labels.STEP_LABELS["render_site"])
         self.assertEqual(title, f"8b render site [{total}/{total}]")
-        self.assertNotIn("/8", pipeline.step_title(pipeline.STEP_LABELS["verify"]))
+        self.assertNotIn("/8", labels.step_title(labels.STEP_LABELS["verify"]))
 
     def test_a_skipped_schema_check_says_how_to_run_it(self):
         """Step 0 said only "jsonschema not installed", then the run read
         COMPLETE and the schema failed in PR validation."""
         argv = ["pipeline.py", "--offline", "--skip-packs", "--skip-docs"]
         out = io.StringIO()
-        real_find_spec = pipeline.importlib.util.find_spec
+        real_find_spec = prepare.importlib.util.find_spec
         with mock.patch.object(sys, "argv", argv), mock.patch.object(
-            pipeline, "run", return_value=(True, "")
+            runner, "run", return_value=(True, "")
         ), mock.patch.object(
-            pipeline.importlib.util, "find_spec",
+            prepare.importlib.util, "find_spec",
             side_effect=lambda name, *a: None if name == "jsonschema"
             else real_find_spec(name, *a),
         ), contextlib.redirect_stdout(out), contextlib.suppress(SystemExit):
@@ -769,7 +771,7 @@ class ThePipelineCountsItsRealSteps(unittest.TestCase):
                 "--skip-docs"]
         out = io.StringIO()
         with mock.patch.object(sys, "argv", argv), mock.patch.object(
-            pipeline, "run", return_value=(True, "RetroArch: 1/1 OK\n")
+            runner, "run", return_value=(True, "RetroArch: 1/1 OK\n")
         ), contextlib.redirect_stdout(out), contextlib.suppress(SystemExit):
             pipeline.main()
         summary = out.getvalue().split("=" * 60)[1]
@@ -777,7 +779,7 @@ class ThePipelineCountsItsRealSteps(unittest.TestCase):
         # The number the run printed for the step leads its summary row.
         self.assertIn("4d   bundled_only", summary)
         self.assertTrue(
-            pipeline.step_title(pipeline.STEP_LABELS["bundled_only"]).startswith("4d ")
+            labels.step_title(labels.STEP_LABELS["bundled_only"]).startswith("4d ")
         )
 
 

@@ -180,27 +180,29 @@ class APlatformWithoutAPackFailsNoCheck(unittest.TestCase):
     )
 
     def test_the_consistency_step_skips_a_setup_served_by_the_installer(self):
-        import pipeline
+        from orchestrate.consistency import check_consistency
+        from orchestrate.reports import release_pack_keys
 
         with contextlib.redirect_stdout(io.StringIO()) as out:
-            self.assertTrue(pipeline.check_consistency(
-                self.VERIFY, self.PACK, pipeline.release_pack_keys(PLATFORMS)))
+            self.assertTrue(check_consistency(
+                self.VERIFY, self.PACK, release_pack_keys(PLATFORMS)))
         self.assertIn("KNULLI: 5/5 (no release pack, served by the installer)", out.getvalue())
 
     def test_a_released_platform_without_its_pack_still_fails(self):
-        import pipeline
+        from orchestrate.consistency import check_consistency
+        from orchestrate.reports import release_pack_keys
 
         verify = self.VERIFY + "Batocera: 3/3 OK [md5]\n"
         with contextlib.redirect_stdout(io.StringIO()) as out:
-            self.assertFalse(pipeline.check_consistency(
-                verify, self.PACK, pipeline.release_pack_keys(PLATFORMS)))
+            self.assertFalse(check_consistency(
+                verify, self.PACK, release_pack_keys(PLATFORMS)))
         # The failing line says it fails: "(no separate pack)" read like
         # the installer-only note above it.
         self.assertIn("Batocera: MISSING pack: verify judged 3/3 but the build wrote no pack for it",
                       out.getvalue())
 
     def test_the_pipeline_passes_the_release_platforms(self):
-        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        source = script_source("pipeline.py")
         self.assertIn("release_pack_keys()", source)
 
     def test_verify_packs_sweeps_the_release_packs_only(self):

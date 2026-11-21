@@ -770,7 +770,7 @@ python scripts/pipeline.py --offline
 ```
 
 This executes in sequence, numbered as the run prints them (`STEP_LABELS` in
-`scripts/pipeline.py`):
+`scripts/orchestrate/labels.py`):
 
 - 0 `validate_schemas.py --source-only`, the schema check PR validation runs
 - 1 `generate_db.py`, rebuild `database.json` from `bios/`

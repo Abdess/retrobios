@@ -53,6 +53,7 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   schemas/               the data contracts behind validate_schemas.py: schemas and semantic invariants
   unattended/            the job registry, worktree, CI breaker and units behind autorun.py
   freshness/             each transcribed layer against its upstream, one module per area (check_freshness.py), and the refresh of each stale row (refresh_stale.py)
+  orchestrate/           the pipeline's steps in order and the comparisons of step 5 (pipeline.py)
 install/                 JSON install manifests per platform
   targets/               JSON target manifests per platform (cores per architecture)
 install.py               the installer, with install.sh and install.ps1 to start it,

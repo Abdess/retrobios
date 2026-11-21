@@ -29,7 +29,7 @@ from packs import archive
 from packs import emulatorpack
 from packs import md5pack
 from tests.scratchtree import scratch_checkout, snapshot
-from tests.sources import declared_options
+from tests.sources import declared_options, script_source
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -539,7 +539,7 @@ class StrictVerifyFailsOnACriticalMiss(unittest.TestCase):
         self.assertIn("1 required file(s) missing", strict.stderr)
 
     def test_the_pipeline_asks_for_it(self):
-        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text()
+        source = script_source("pipeline.py")
         self.assertIn('"scripts/verify.py", "--all", "--strict"', source)
 
 

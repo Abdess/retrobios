@@ -24,6 +24,7 @@ from unittest import mock
 import yaml
 
 from model.platforms import _platform_config_cache
+from tests.sources import script_source
 from model.profiles import emulator_profiles_cache
 import generate_db
 from packs import archive
@@ -245,8 +246,8 @@ class OfflinePipelineVerifiesOffline(unittest.TestCase):
     step has to count them the same way, or step 5 compares two answers."""
 
     def test_verify_step_gets_offline(self):
-        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text()
-        block = source[source.index("verify_cmd = ["):source.index("ok, verify_output = run(")]
+        source = script_source("pipeline.py")
+        block = source[source.index("verify_cmd = ["):source.index("ok, verify_output = runner.run(")]
         self.assertIn('verify_cmd.append("--offline")', block)
 
 

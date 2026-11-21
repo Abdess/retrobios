@@ -24,6 +24,8 @@ from pathlib import Path
 
 import yaml
 
+from tests.sources import script_source
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -173,12 +175,12 @@ class EveryNarrowingIsCompared(unittest.TestCase):
     def test_each_dimension_of_the_name_builder_is_accounted_for(self):
         import inspect
 
-        import pipeline
+        from orchestrate import narrowed
         from packs.naming import pack_narrowings
 
         dimensions = set(inspect.signature(pack_narrowings).parameters)
-        compared = set(pipeline.NARROWINGS_COMPARED)
-        exempt = set(pipeline.NARROWINGS_NOT_COMPARED)
+        compared = set(narrowed.NARROWINGS_COMPARED)
+        exempt = set(narrowed.NARROWINGS_NOT_COMPARED)
         self.assertFalse(compared & exempt)
         self.assertEqual(dimensions, compared | exempt,
                          "compare the new narrowing in check_narrowed_packs, "
@@ -190,25 +192,25 @@ class EveryNarrowingIsCompared(unittest.TestCase):
         it describes the platform packs only."""
         import inspect
 
-        import pipeline
+        from orchestrate import emulatorpacks
         from packs.naming import pack_narrowings
         from packs.emulatorpack import generate_emulator_pack
 
         taken = (set(inspect.signature(pack_narrowings).parameters)
                  & set(inspect.signature(generate_emulator_pack).parameters))
-        self.assertEqual(taken, set(pipeline.EMULATOR_NARROWINGS_COMPARED))
+        self.assertEqual(taken, set(emulatorpacks.EMULATOR_NARROWINGS_COMPARED))
         profile = {"files": [{"name": "a.bin", "region": "japan"},
                              {"name": "b.bin", "region": ["north-america", "europe"]}]}
-        used = {key for _label, narrowing in pipeline.emulator_variants([profile], False)
+        used = {key for _label, narrowing in emulatorpacks.emulator_variants([profile], False)
                 for key in narrowing}
         # standalone is the loop around the variants, both builds of each profile.
-        self.assertEqual(used, pipeline.EMULATOR_NARROWINGS_COMPARED - {"standalone"})
-        regions = [n["regions"] for _l, n in pipeline.emulator_variants([profile], True)
+        self.assertEqual(used, emulatorpacks.EMULATOR_NARROWINGS_COMPARED - {"standalone"})
+        regions = [n["regions"] for _l, n in emulatorpacks.emulator_variants([profile], True)
                    if "regions" in n]
         self.assertEqual(len(regions), 3)
 
     def test_the_variants_reach_every_compared_dimension(self):
-        import pipeline
+        from orchestrate import narrowed
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
 
@@ -217,23 +219,23 @@ class EveryNarrowingIsCompared(unittest.TestCase):
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         for full in (False, True):
             with self.subTest(full=full):
-                variants = pipeline.narrowed_variants(
+                variants = narrowed.narrowed_variants(
                     "retroarch", config, profiles, platforms, full,
                 )
                 used = {key for _label, narrowing in variants for key in narrowing}
-                self.assertEqual(used, pipeline.NARROWINGS_COMPARED | {"system_filter"})
+                self.assertEqual(used, narrowed.NARROWINGS_COMPARED | {"system_filter"})
         systems = [n for _l, n in variants if "system_filter" in n]
         self.assertEqual(len(systems), len(config["systems"]))
 
     def test_the_sample_takes_both_ends_and_the_middle(self):
-        import pipeline
+        from orchestrate.narrowed import matrix_coverage
 
-        self.assertEqual(list(pipeline._matrix_coverage(False, 2)), [0, 1])
-        self.assertEqual(pipeline._matrix_coverage(False, 11), [0, 5, 10])
-        self.assertEqual(list(pipeline._matrix_coverage(True, 11)), list(range(11)))
+        self.assertEqual(list(matrix_coverage(False, 2)), [0, 1])
+        self.assertEqual(matrix_coverage(False, 11), [0, 5, 10])
+        self.assertEqual(list(matrix_coverage(True, 11)), list(range(11)))
 
     def test_the_run_compares_them(self):
-        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        source = script_source("pipeline.py")
         self.assertIn("ok = check_narrowed_packs(", source)
 
 
@@ -241,7 +243,7 @@ class ThePipelineComparesPaths(unittest.TestCase):
     """Equal counts, other paths: the comparison fails and names both sides."""
 
     def test_a_swap_at_equal_counts_fails(self):
-        import pipeline
+        from orchestrate.consistency import check_pack_destinations
 
         root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
@@ -260,7 +262,7 @@ class ThePipelineComparesPaths(unittest.TestCase):
                 os.chdir(REPO_ROOT)
                 try:
                     with mock_tree_members(), contextlib.redirect_stdout(io.StringIO()) as out:
-                        ok = pipeline.check_pack_destinations(str(destinations), output)
+                        ok = check_pack_destinations(str(destinations), output)
                 finally:
                     os.chdir(previous)
                 self.assertIs(ok, expected, out.getvalue())
@@ -269,7 +271,7 @@ class ThePipelineComparesPaths(unittest.TestCase):
                     self.assertIn("pack only 1: b.bin", out.getvalue())
 
     def test_the_run_compares_every_emulator_pack(self):
-        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        source = script_source("pipeline.py")
         self.assertIn("ok = check_pack_destinations(destinations_file, pack_output) and ok", source)
         self.assertIn("ok = check_emulator_packs(full=args.full_narrowings) and ok", source)
         self.assertIn('"--destinations", destinations_file', source)
@@ -277,14 +279,14 @@ class ThePipelineComparesPaths(unittest.TestCase):
 
 @contextlib.contextmanager
 def mock_tree_members():
-    import pipeline
+    from orchestrate import compare
 
-    original = pipeline._tree_members
-    pipeline._tree_members = lambda *_args: {}
+    original = compare.tree_members
+    compare.tree_members = lambda *_args: {}
     try:
         yield
     finally:
-        pipeline._tree_members = original
+        compare.tree_members = original
 
 
 class EveryEmulatorPackMatchesItsReport(unittest.TestCase):
@@ -293,13 +295,13 @@ class EveryEmulatorPackMatchesItsReport(unittest.TestCase):
     def test_the_paths_agree(self):
         if not (REPO_ROOT / "database.json").is_file():
             self.skipTest("database.json is not built")
-        import pipeline
+        from orchestrate.emulatorpacks import check_emulator_packs
 
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
         try:
             with contextlib.redirect_stdout(io.StringIO()) as out:
-                ok = pipeline.check_emulator_packs()
+                ok = check_emulator_packs()
         finally:
             os.chdir(previous)
         self.assertTrue(ok, out.getvalue())

@@ -303,7 +303,7 @@ class ReleaseCommitCarriesTheManifests(unittest.TestCase):
     release pipeline regenerates: v2026.10.10 added three by hand."""
 
     def test_the_commit_step_adds_what_the_pipeline_rewrites(self):
-        pipeline = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        pipeline = script_source("pipeline.py")
         self.assertIn('"--manifest"', pipeline)
         block = _section(_page("release-process.md"), "Cutting a release")
         add = next(line for line in block.splitlines() if line.startswith("git add "))
@@ -1174,7 +1174,7 @@ class ListsFollowTheCode(unittest.TestCase):
         self.assertEqual({row[0].strip("`") for row in _table_rows(section)}, used)
 
     def test_pipeline_steps(self):
-        from pipeline import STEP_LABELS
+        from orchestrate.labels import STEP_LABELS
 
         section = _section(_page("adding-a-platform.md"), "Step 8: Validate the full pipeline")
         listed = re.findall(r"^- (\d\w*) ", section, re.M)
@@ -1380,9 +1380,9 @@ class PipelineStepsMatchTheRun(unittest.TestCase):
 
     @staticmethod
     def labels() -> list[str]:
-        import pipeline
+        from orchestrate.labels import STEP_LABELS, step_number
 
-        return [pipeline.step_number(key) for key in pipeline.STEP_LABELS]
+        return [step_number(key) for key in STEP_LABELS]
 
     @staticmethod
     def cited(text: str) -> list[str]:

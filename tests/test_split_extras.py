@@ -23,6 +23,7 @@ from model.profiles import load_emulator_profiles
 from packs.archive import PackRecord
 from packs.platformpack import generate_pack
 from packs.platformpack import generate_split_packs
+from tests.sources import script_source
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -206,9 +207,9 @@ class PipelineComparesTheSplitParts(unittest.TestCase):
     RetroBat's 21 openmsx/openMSX twins passed every check."""
 
     def setUp(self):
-        import pipeline
+        from orchestrate import splitcheck
 
-        self.pipeline = pipeline
+        self.splitcheck = splitcheck
 
     def _record(self, sources: dict[str, str]) -> PackRecord:
         record = PackRecord()
@@ -219,7 +220,7 @@ class PipelineComparesTheSplitParts(unittest.TestCase):
     def test_equal_parts_report_nothing(self):
         full = self._record({"a.bin": "x", "b.bin": "y"})
         parts = {"A": self._record({"a.bin": "x"}), "B": self._record({"b.bin": "y"})}
-        self.assertEqual(self.pipeline.split_differences(full, parts, str.__eq__), [])
+        self.assertEqual(self.splitcheck.split_differences(full, parts, str.__eq__), [])
 
     def test_each_difference_is_named(self):
         full = self._record({"SGB1.sfc": "x", "kept.bin": "k", "lost.bin": "l"})
@@ -228,7 +229,7 @@ class PipelineComparesTheSplitParts(unittest.TestCase):
             "Other": self._record({"SGB1.sfc/program.rom": "p"}),
         }
         self.assertEqual(
-            self.pipeline.split_differences(full, parts, str.__eq__),
+            self.splitcheck.split_differences(full, parts, str.__eq__),
             [
                 "in a part, not in the full pack: SGB1.sfc/program.rom",
                 "in the full pack, in no part: lost.bin",
@@ -237,7 +238,7 @@ class PipelineComparesTheSplitParts(unittest.TestCase):
         )
 
     def test_step_five_runs_the_comparison(self):
-        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text()
+        source = script_source("pipeline.py")
         step = source[source.index("# Step 5: Consistency check"):source.index("# Step 6:")]
         self.assertIn("check_split_packs(", step)
 

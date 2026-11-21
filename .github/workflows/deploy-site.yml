@@ -69,6 +69,7 @@ on:
       - "scripts/model/systemnames.py"
       - "scripts/model/systems.py"
       - "scripts/model/targets.py"
+      - "scripts/orchestrate/labels.py"
       - "scripts/packs/__init__.py"
       - "scripts/packs/archive.py"
       - "scripts/packs/coverage.py"

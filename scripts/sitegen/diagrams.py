@@ -595,8 +595,8 @@ def _minui_narrow() -> tuple[float, float, list[str]]:
 
 
 def _pipeline_boxes() -> list[Box]:
-    """The steps pipeline.py runs, read from its STEP_LABELS literal."""
-    tree = ast.parse((REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8"))
+    """The steps pipeline.py runs, read from the STEP_LABELS literal of its step list."""
+    tree = ast.parse((REPO_ROOT / "scripts" / "orchestrate" / "labels.py").read_text(encoding="utf-8"))
     for node in ast.walk(tree):
         if isinstance(node, ast.Assign):
             target: ast.expr = node.targets[0]
@@ -609,7 +609,7 @@ def _pipeline_boxes() -> list[Box]:
             labels = ast.literal_eval(value)
             break
     else:
-        raise RuntimeError("STEP_LABELS not found in scripts/pipeline.py")
+        raise RuntimeError("STEP_LABELS not found in scripts/orchestrate/labels.py")
     boxes = []
     for label in labels.values():
         number, title = label.split(" ", 1)
@@ -709,7 +709,7 @@ def _figures() -> dict[str, Figure]:
             "Pipeline steps",
             "The pipeline runs its steps in order: "
             + ", ".join(f"{b.number} {b.title}" for b in _pipeline_boxes()) + ".",
-            "Read from the step list in scripts/pipeline.py, numbered as the run prints them.",
+            "Read from the step list in scripts/orchestrate/labels.py, numbered as the run prints them.",
             lambda: grid(_pipeline_boxes(), 4, WIDE),
             lambda: grid(_pipeline_boxes(), 2, NARROW),
         ),

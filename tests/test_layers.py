@@ -51,6 +51,9 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     # native export, the data directory refresh, the installer pins, the
     # site's source trees and profile_sync's report.
     "freshness": frozenset({"scraper", "exporter", "packs", "installer_build", "sitegen", "profiling"}),
+    # Step 5 builds the packs in memory, and the offline export refusal asks
+    # the exporters which ones patch a cached original.
+    "orchestrate": frozenset({"packs", "exporter"}),
 }
 
 # Top-level files that stay whole at their path although packages import them:

@@ -32,6 +32,7 @@ except ImportError:
 import install
 from packs import verdicts
 from scripts import pipeline
+from orchestrate import checks, consistency, reports, results, runner
 from scripts.resolve import regionaudit, regions
 from scripts.resolve.localfile import resolve_local_file
 from scripts.core.ziptools import safe_extract_zip
@@ -1188,7 +1189,7 @@ class PipelineRegressions(unittest.TestCase):
 
         def command(**flags) -> list[str]:
             base = {"output_dir": "dist", "target": None, "all_variants": False}
-            return pipeline.integrity_command(argparse.Namespace(**{**base, **flags}))
+            return checks.integrity_command(argparse.Namespace(**{**base, **flags}))
 
         self.assertIn("--all-variants", command(all_variants=True))
         self.assertNotIn("--all-variants", command())
@@ -1201,12 +1202,12 @@ class PipelineRegressions(unittest.TestCase):
                 "  3 files packed (2 baseline + 1 from cores), 2/2 files OK",
             ]
         )
-        self.assertEqual(pipeline.parse_pack_counts(output), {"RetroArch": (2, 2)})
+        self.assertEqual(reports.parse_pack_counts(output), {"RetroArch": (2, 2)})
 
     def test_missing_pack_is_a_consistency_failure(self):
         verify = "RetroArch: 2/2 OK"
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertFalse(pipeline.check_consistency(verify, ""))
+            self.assertFalse(consistency.check_consistency(verify, ""))
 
     def test_display_name_matches_compact_registry_id(self):
         verify = "MiSTer FPGA: 65/65 OK [md5]"
@@ -1218,7 +1219,7 @@ class PipelineRegressions(unittest.TestCase):
             ]
         )
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertTrue(pipeline.check_consistency(verify, pack))
+            self.assertTrue(consistency.check_consistency(verify, pack))
 
     def test_the_cores_share_is_compared_too(self):
         """RomM passed this step while verify counted 412 core files and game
@@ -1234,9 +1235,9 @@ class PipelineRegressions(unittest.TestCase):
             "383/383 files OK [md5]",
         ])
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertFalse(pipeline.check_consistency(verify, pack))
+            self.assertFalse(consistency.check_consistency(verify, pack))
             agreed = verify.replace("61 in pack", "60 in pack").replace("351 in pack", "0 in pack")
-            self.assertTrue(pipeline.check_consistency(agreed, pack))
+            self.assertTrue(consistency.check_consistency(agreed, pack))
 
     def test_an_exclusion_never_covers_a_file_verify_counts_ok(self):
         """An existence platform packs a file whose hash disagrees and a hash
@@ -1251,8 +1252,8 @@ class PipelineRegressions(unittest.TestCase):
             ]
         )
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertFalse(pipeline.check_consistency(verify, pack))
-        self.assertEqual(pipeline.parse_pack_exclusions(pack), {"RetroArch": 1})
+            self.assertFalse(consistency.check_consistency(verify, pack))
+        self.assertEqual(reports.parse_pack_exclusions(pack), {"RetroArch": 1})
 
     def test_unaccounted_pack_omission_is_a_consistency_failure(self):
         verify = "RetroArch: 3/3 present [existence]"
@@ -1264,7 +1265,7 @@ class PipelineRegressions(unittest.TestCase):
             ]
         )
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertFalse(pipeline.check_consistency(verify, pack))
+            self.assertFalse(consistency.check_consistency(verify, pack))
 
     def test_a_pack_more_optimistic_than_verify_is_a_failure(self):
         """The invariant held one way only: a pack counting more OK files
@@ -1278,13 +1279,13 @@ class PipelineRegressions(unittest.TestCase):
             ]
         )
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertFalse(pipeline.check_consistency(verify, pack))
+            self.assertFalse(consistency.check_consistency(verify, pack))
 
     def test_nothing_parsed_is_not_consistent(self):
         """A changed output format must not pass with no platform compared."""
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertFalse(pipeline.check_consistency("RetroArch = 2/2 OK", ""))
-            self.assertFalse(pipeline.check_consistency("", ""))
+            self.assertFalse(consistency.check_consistency("RetroArch = 2/2 OK", ""))
+            self.assertFalse(consistency.check_consistency("", ""))
 
     def test_pack_without_verify_result_is_a_failure(self):
         verify = "RetroArch: 2/2 OK"
@@ -1297,7 +1298,7 @@ class PipelineRegressions(unittest.TestCase):
             ]
         )
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertFalse(pipeline.check_consistency(verify, pack))
+            self.assertFalse(consistency.check_consistency(verify, pack))
 
     def test_only_the_full_variant_feeds_the_comparison(self):
         """--all-variants printed six packs under one label, and the last won."""
@@ -1307,7 +1308,7 @@ class PipelineRegressions(unittest.TestCase):
             "Generating pack for RetroArch [source=platform, required]...",
             "  b.zip: 5 files packed (5 baseline + 0 from cores), 530/530 files OK",
         ])
-        self.assertEqual(pipeline.parse_pack_counts(output), {"RetroArch": (535, 535)})
+        self.assertEqual(reports.parse_pack_counts(output), {"RetroArch": (535, 535)})
 
     def test_exclusions_read_only_the_full_variant(self):
         """--all-variants printed six packs under one label, and the last won."""
@@ -1317,10 +1318,10 @@ class PipelineRegressions(unittest.TestCase):
             "Generating pack for Batocera [source=truth, required]...",
             "  b.zip: 2 files packed (0 baseline + 2 from cores), 2/2 files OK",
         ])
-        self.assertEqual(pipeline.parse_pack_exclusions(output), {"Batocera": 3})
+        self.assertEqual(reports.parse_pack_exclusions(output), {"Batocera": 3})
 
     def test_slot_step_reaches_the_summary(self):
-        source = Path(pipeline.__file__).read_text(encoding="utf-8")
+        source = script_source("pipeline.py")
         self.assertIn('results["slots"] = ok', source)
 
     def test_every_refresh_failure_reaches_pipeline_exit_status(self):
@@ -1336,7 +1337,7 @@ class PipelineRegressions(unittest.TestCase):
                 argv = ["pipeline.py", "--skip-packs", "--skip-docs"]
                 with (
                     mock.patch.object(sys, "argv", argv),
-                    mock.patch.object(pipeline, "run", side_effect=fake_run),
+                    mock.patch.object(runner, "run", side_effect=fake_run),
                     contextlib.redirect_stdout(io.StringIO()),
                     self.assertRaises(SystemExit) as raised,
                 ):
@@ -1357,8 +1358,8 @@ class PipelineRegressions(unittest.TestCase):
         # The originals the offline export patches are not cached in a
         # checkout: the run would be refused before any step.
         with mock.patch.object(sys, "argv", argv), mock.patch.object(
-            pipeline, "run", side_effect=fake_run
-        ), mock.patch.object(pipeline, "_refuse_offline_export_without_originals"), \
+            runner, "run", side_effect=fake_run
+        ), mock.patch.object(pipeline, "refuse_offline_export_without_originals"), \
                 contextlib.redirect_stdout(io.StringIO()), contextlib.suppress(SystemExit):
             pipeline.main()
         truth_runs = [c for c in commands if "scripts/generate_truth.py" in c]
@@ -2845,7 +2846,7 @@ class ReleaseAssetsMatchTheCollection(unittest.TestCase):
                 return True, ""
 
             argv = ["pipeline.py", "--skip-packs", "--skip-docs", *flags]
-            with mock.patch.object(pipeline, "run", record), \
+            with mock.patch.object(runner, "run", record), \
                     mock.patch.object(sys, "argv", argv), \
                     contextlib.redirect_stdout(io.StringIO()) as out, \
                     self.assertRaises(SystemExit) as done:
@@ -2882,7 +2883,7 @@ class OneRefreshPerOnlineRun(unittest.TestCase):
         # A scratch output directory: step 4 purges the ZIPs of the one it
         # is given, and this run must never touch dist/.
         with tempfile.TemporaryDirectory() as out, \
-                mock.patch.object(pipeline, "run", record), \
+                mock.patch.object(runner, "run", record), \
                 mock.patch.object(
                     sys, "argv", ["pipeline.py", "--skip-docs", "--output-dir", out]
                 ), \
@@ -3086,14 +3087,12 @@ class PipelineReportsWhatItDid(unittest.TestCase):
     """
 
     def test_a_skipped_step_is_not_reported_as_done(self):
-        import pipeline
-
-        self.assertTrue(bool(pipeline.SKIPPED), "a skip must not fail the run")
-        self.assertEqual(repr(pipeline.SKIPPED), "SKIPPED")
-        self.assertIsNot(pipeline.SKIPPED, True)
+        self.assertTrue(bool(results.SKIPPED), "a skip must not fail the run")
+        self.assertEqual(repr(results.SKIPPED), "SKIPPED")
+        self.assertIsNot(results.SKIPPED, True)
 
     def test_every_skip_branch_uses_the_sentinel(self):
-        source = (ROOT / "scripts" / "pipeline.py").read_text()
+        source = script_source("pipeline.py")
         stale = re.findall(r'results\["(\w+)"\] = True', source)
         self.assertEqual(stale, [], f"steps still claiming OK when skipped: {stale}")
 
@@ -4047,7 +4046,7 @@ class PipelineStepsSpeakAsTheyGo(unittest.TestCase):
                   "print('two', file=sys.stderr, flush=True); print('three')")
         echoed = io.StringIO()
         with contextlib.redirect_stdout(echoed):
-            ok, output = pipeline.run([sys.executable, "-c", script], "probe")
+            ok, output = runner.run([sys.executable, "-c", script], "probe")
         self.assertTrue(ok)
         self.assertEqual(output, "one\ntwo\nthree\n")
         text = echoed.getvalue()
@@ -4841,7 +4840,7 @@ class ThePipelineTableNamesEveryStep(unittest.TestCase):
 
     def test_every_labelled_step_is_documented(self):
         labels = set(re.findall(
-            r'"(\d[a-z]?\d?)(?:/8)? [a-z]', (ROOT / "scripts" / "pipeline.py").read_text()
+            r'"(\d[a-z]?\d?)(?:/8)? [a-z]', script_source("pipeline.py")
         ))
         doc = (ROOT / "wiki" / "tools.md").read_text()
         documented = set(re.findall(r"^\| (\d[a-z]?\d?)(?:/8)? \|", doc, re.MULTILINE))
@@ -5379,9 +5378,9 @@ class PipelineDocstringNamesThePrintedSteps(unittest.TestCase):
         source = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
         doc = ast.get_docstring(ast.parse(source))
         listed = set(re.findall(r"^  (\d[a-z0-9]*)\s{2,}", doc, re.M))
-        import pipeline
+        from orchestrate.labels import STEP_LABELS, step_number
 
-        printed = {pipeline.step_number(key) for key in pipeline.STEP_LABELS}
+        printed = {step_number(key) for key in STEP_LABELS}
         self.assertEqual(listed, printed)
 
 
@@ -6377,14 +6376,14 @@ class ThePipelineSummaryTimesEachStep(unittest.TestCase):
         from unittest import mock
 
         clock = iter([10.0, 12.5, 12.5, 20.0])
-        with mock.patch.object(pipeline.time, "monotonic", lambda: next(clock)):
-            results = pipeline.StepResults(pipeline.time.monotonic())
-            results["generate_db"] = True
-            results["refresh_data"] = pipeline.SKIPPED
-            results["verify"] = True
-        self.assertEqual(results.seconds, {"generate_db": 2.5, "refresh_data": 0.0, "verify": 7.5})
-        self.assertEqual(dict(results), {"generate_db": True, "refresh_data": pipeline.SKIPPED,
-                                         "verify": True})
+        with mock.patch.object(results.time, "monotonic", lambda: next(clock)):
+            outcomes = results.StepResults(results.time.monotonic())
+            outcomes["generate_db"] = True
+            outcomes["refresh_data"] = results.SKIPPED
+            outcomes["verify"] = True
+        self.assertEqual(outcomes.seconds, {"generate_db": 2.5, "refresh_data": 0.0, "verify": 7.5})
+        self.assertEqual(dict(outcomes), {"generate_db": True, "refresh_data": results.SKIPPED,
+                                          "verify": True})
 
 
 class StrictFailsOnMissingOnly(unittest.TestCase):
@@ -7044,9 +7043,7 @@ class AStepThatCannotFailTheRunIsNotShownFailed(unittest.TestCase):
     column by fourteen characters."""
 
     def test_every_step_outside_all_ok_is_declared_non_blocking(self):
-        import pipeline
-
-        lines = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8").splitlines()
+        lines = script_source("pipeline.py").splitlines()
         loose = set()
         for number, line in enumerate(lines):
             found = re.search(r'results\["(\w+)"\] = ok$', line.strip())
@@ -7055,14 +7052,14 @@ class AStepThatCannotFailTheRunIsNotShownFailed(unittest.TestCase):
             after = " ".join(lines[number + 1:number + 4])
             if "all_ok" not in after and "sys.exit" not in after:
                 loose.add(found.group(1))
-        self.assertEqual(loose, set(pipeline.NON_BLOCKING))
+        self.assertEqual(loose, set(results.NON_BLOCKING))
 
     def test_the_total_sits_under_the_durations(self):
         step = f"  {'x':.<40} {'OK':<7}{1.0:>8.1f}s"
         total = f"  {'total':.<40} {'':<7}{12.5:>8.1f}s"
         self.assertEqual(len(step), len(total))
         self.assertIn("{'':<7}{total_elapsed:>8.1f}s",
-                      (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8"))
+                      script_source("pipeline.py"))
 
 
 class AHashConflictIsReportedOnce(unittest.TestCase):
@@ -7093,7 +7090,7 @@ class ThePipelineRunsTheSchemaCheckCIRuns(unittest.TestCase):
         workflow = (ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
         command = re.search(r"python (scripts/validate_schemas\.py[^\n]*)", workflow).group(1)
         script, *flags = command.split()
-        source = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        source = script_source("pipeline.py")
         self.assertIn(f'"{script}"', source)
         for flag in flags:
             self.assertIn(f'"{flag}"', source)
@@ -7102,7 +7099,7 @@ class ThePipelineRunsTheSchemaCheckCIRuns(unittest.TestCase):
         """The pipeline generated pages without rendering them: 20 pages with
         duplicate ids passed it and failed the deploy."""
         workflow = (ROOT / ".github" / "workflows" / "deploy-site.yml").read_text(encoding="utf-8")
-        source = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        source = script_source("pipeline.py")
         self.assertIn("npm run build --prefix website", workflow)
         self.assertIn('["npm", "run", "build", "--prefix", "website"]', source)
         self.assertIn("scripts/validate_site.py", workflow)
@@ -7455,14 +7452,14 @@ class PipelineOutputDirIsTheOneItWrites(unittest.TestCase):
         previous = os.getcwd()
         self.addCleanup(os.chdir, previous)
         os.chdir(ROOT / "scripts")
-        self.assertEqual(pipeline._output_dir(None), str(ROOT / "dist"))
-        self.assertEqual(pipeline._output_dir("out"), str(ROOT / "scripts" / "out"))
+        self.assertEqual(runner.pack_output_dir(None), str(ROOT / "dist"))
+        self.assertEqual(runner.pack_output_dir("out"), str(ROOT / "scripts" / "out"))
 
     def test_main_resolves_it_before_the_lock(self):
-        source = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        source = script_source("pipeline.py")
         body = source[source.index("def main("):]
         self.assertLess(
-            body.index("args.output_dir = _output_dir(args.output_dir)"),
+            body.index("args.output_dir = pack_output_dir(args.output_dir)"),
             body.index("hold_artifact_lock(args.output_dir)"),
         )
 
@@ -7515,11 +7512,11 @@ class SkipPacksHelpSaysWhatRuns(unittest.TestCase):
         self.assertNotIn("docs/", text)
 
     def test_every_step_it_names_is_one_it_skips(self):
-        import pipeline
+        from orchestrate.labels import step_number
 
-        source = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        source = script_source("pipeline.py")
         keys = re.findall(r'skip_notice\("(\w+)", "--skip-packs"\)', source)
-        skipped = {pipeline.step_number(key) for key in keys}
+        skipped = {step_number(key) for key in keys}
         self.assertEqual(skipped, {"4", "4b", "4c", "6"})
 
 
@@ -7767,7 +7764,7 @@ class PipelineChildrenSkipNodeCompileCache(unittest.TestCase):
     every child the pipeline starts carries NODE_DISABLE_COMPILE_CACHE."""
 
     def test_the_run_helper_sets_it(self):
-        source = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        source = script_source("pipeline.py")
         self.assertIn('"NODE_DISABLE_COMPILE_CACHE": "1"', source)
 
 

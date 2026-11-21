@@ -521,7 +521,7 @@ ALL_VARIANTS: tuple[tuple[str, bool], ...] = (
 
 
 def _pack_label(source: str, required_only: bool) -> str:
-    """The variant tag pipeline.parse_pack_counts reads after a pack name."""
+    """The variant tag orchestrate.reports.parse_pack_counts reads after a pack name."""
     return f"[source={source}, required]" if required_only else f"[source={source}]"
 
 

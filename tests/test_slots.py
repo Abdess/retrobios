@@ -17,6 +17,7 @@ from packs import slots as packs_slots
 from resolve import collisions as resolve_collisions
 from packs.slots import Claim, Conflict, arbitrate
 from slots import format_decision
+from tests.sources import script_source
 
 
 def _db(entries: dict[str, dict]) -> dict:
@@ -942,7 +943,7 @@ class SlotsJudgeWhatVerifyJudged(unittest.TestCase):
     the target does not ship."""
 
     def test_the_pipeline_passes_the_target(self):
-        source = (Path(__file__).resolve().parents[1] / "scripts" / "pipeline.py").read_text()
+        source = script_source("pipeline.py")
         step = source[source.index('slots_cmd = [sys.executable, "scripts/slots.py"]'):]
         step = step[:step.index("3b slot arbitration")]
         self.assertIn('slots_cmd.extend(["--target", args.target])', step)

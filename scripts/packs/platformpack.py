@@ -100,7 +100,7 @@ def _report_pack_counts(
 
     The check compares these counts against what verify.py reports for
     the same platform, so the wording is a contract: parse_pack_counts
-    in pipeline.py matches on it.
+    in orchestrate/reports.py matches on it.
     """
     files_ok = sum(1 for s in file_status.values() if s == "ok")
     files_untested = sum(1 for s in file_status.values() if s == "untested")
