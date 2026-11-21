@@ -12,6 +12,7 @@ on:
       # Every script the build runs or imports, and no other
       # (tests/test_workflow_paths.py).
       - "scripts/acquire/provenance.py"
+      - "scripts/check_platform_folder.py"
       - "scripts/core/__init__.py"
       - "scripts/core/anchors.py"
       - "scripts/core/artifacts.py"

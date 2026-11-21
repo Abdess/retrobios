@@ -32,9 +32,31 @@ def _module_file(name: str) -> Path | None:
     return None
 
 
+def _path_parts(node: ast.expr) -> list[str]:
+    """The string segments of a `a / "b" / "c.py"` chain, outermost last."""
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
+        return _path_parts(node.left) + _path_parts(node.right)
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return [node.value]
+    return []
+
+
+def _read_scripts(node: ast.AST) -> set[Path]:
+    """A script read as data (`REPO_ROOT / "scripts" / "x" / "y.py"`) is an input too."""
+    if not (isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div)):
+        return set()
+    parts = _path_parts(node)
+    if "scripts" in parts and parts[-1].endswith(".py"):
+        target = REPO_ROOT.joinpath(*parts[parts.index("scripts"):])
+        if target.is_file():
+            return {target}
+    return set()
+
+
 def _imports(path: Path) -> set[Path]:
     found: set[Path] = set()
     for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
+        found.update(_read_scripts(node))
         if isinstance(node, ast.Import):
             names = [alias.name for alias in node.names]
         elif isinstance(node, ast.ImportFrom) and node.level == 0 and node.module:
