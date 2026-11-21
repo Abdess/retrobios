@@ -11,6 +11,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, Union
 
+from core.paths import EMULATORS_DIR, REPO_ROOT
+from model.profiles import core_key_index, load_emulator_profiles, platform_core_profiles
 from resolve.reconcile import NativeFile, NativeSystem, Report
 
 # What a produced file holds: text for every format, bytes besides for one
@@ -221,6 +223,24 @@ class BaseExporter(ABC, Generic[Content]):
         it writes one string. The report shows a list as a list: joined, it
         reads as one value the checker never compares."""
         return None
+
+    def core_profiles(self, name: str, mode: str | None) -> set[str]:
+        """The profiles a core name in the platform's own file stands for,
+        in the build ``mode`` it names (libretro or standalone, None for
+        either).
+
+        The platform's own build of a name is what the name means there:
+        Recalbox's libretro/pcsx2 is its PCSX2 1.7 fork, not the LRPS2
+        revision Batocera builds under that name, and load order picked
+        either one.
+        """
+        cached = getattr(self, "_core_profiles", None)
+        if cached is None:
+            profiles = load_emulator_profiles(str(REPO_ROOT / EMULATORS_DIR))
+            cached = (profiles, core_key_index(profiles, include_aliases=True))
+            self._core_profiles = cached
+        profiles, index = cached
+        return platform_core_profiles(index, profiles, name, self.platform_name(), mode)
 
     def required_value(self, fe: NativeFile) -> bool:
         """The requirement the render writes for an entry.

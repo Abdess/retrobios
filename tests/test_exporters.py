@@ -30,6 +30,7 @@ import zipfile
 from collections import OrderedDict
 from pathlib import Path
 
+from model.profiles import core_key_index
 from model.registry import list_registered_platforms
 from model.platforms import load_platform_config, native_layer
 from model.safeparse import parse_untrusted_xml
@@ -1472,6 +1473,48 @@ class RecalboxExport(unittest.TestCase):
         }]}}}
         systems, _ = build_native_model(truth, scraped)
         exporter = discover_exporters()["recalbox"]()
+        declared = next(fe for s in systems.values() for fe in s.files if fe.platform)
+        self.assertTrue(exporter.required_value(declared))
+
+    def test_a_core_name_means_recalboxs_own_build(self):
+        """libretro/pcsx2 is Recalbox's PCSX2 1.7 fork. The first profile
+        loaded under the name was the LRPS2 revision Batocera builds, and its
+        requirement stood for Recalbox's core."""
+        scraped = {"systems": {"ps2": {"native_id": "ps2", "files": [{
+            "name": "ps2.bin", "destination": "ps2/ps2.bin", "md5": "a" * 32,
+            "native_system": "ps2", "required": True, "core": "libretro/pcsx2",
+        }]}}}
+        truth = {"systems": {"ps2": {"files": [{
+            "name": "ps2.bin", "path": "ps2/ps2.bin", "md5": "a" * 32, "required": True,
+            "_cores": ["lrps2-416291a", "pcsx2-libretro-408e3b2"],
+            "_required_by": ["lrps2-416291a"],
+        }]}}}
+        profiles = {
+            "lrps2-416291a": {"type": "libretro", "cores": ["pcsx2"], "built_by": ["batocera"]},
+            "pcsx2-libretro-408e3b2": {"type": "libretro", "cores": ["pcsx2"],
+                                       "built_by": ["recalbox"]},
+        }
+        systems, _ = build_native_model(truth, scraped)
+        exporter = discover_exporters()["recalbox"]()
+        exporter._core_profiles = (profiles, core_key_index(profiles, include_aliases=True))
+        declared = next(fe for s in systems.values() for fe in s.files if fe.platform)
+        self.assertFalse(exporter.required_value(declared))
+
+    def test_a_prefix_no_profile_of_that_build_claims_names_the_emulator(self):
+        """es_bios.xml writes libretro/fba2x for piFBA, a standalone binary:
+        the element's reader is still piFBA."""
+        scraped = {"systems": {"neogeo": {"native_id": "neogeo", "files": [{
+            "name": "neogeo.zip", "destination": "neogeo.zip", "md5": "a" * 32,
+            "native_system": "neogeo", "required": False, "core": "libretro/fba2x",
+        }]}}}
+        truth = {"systems": {"neogeo": {"files": [{
+            "name": "neogeo.zip", "md5": "a" * 32, "required": True,
+            "_cores": ["fba2x"], "_required_by": ["fba2x"],
+        }]}}}
+        profiles = {"fba2x": {"type": "standalone", "cores": ["fba2x", "pifba"]}}
+        systems, _ = build_native_model(truth, scraped)
+        exporter = discover_exporters()["recalbox"]()
+        exporter._core_profiles = (profiles, core_key_index(profiles, include_aliases=True))
         declared = next(fe for s in systems.values() for fe in s.files if fe.platform)
         self.assertTrue(exporter.required_value(declared))
 

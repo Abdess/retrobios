@@ -23,7 +23,7 @@ from dataclasses import dataclass
 from core.hashing import HASH_FIELDS, declared_hashes
 from model.database import record_at
 from model.declarations import CONFIGS_ROOT, ROMS_ROOT, declared_root, declared_slot, outer_layout
-from model.profiles import lists_files, profile_names
+from model.profiles import lists_files, platform_builds, profile_names
 from resolve.content import name_match_size_ok
 from resolve.localfile import resolve_local_file
 from core.paths import comparable_destination, sanitize_pack_path
@@ -435,8 +435,7 @@ def _named_profiles(record: dict, profiles: Mapping[str, dict], platform: str) -
             key for key, profile in profiles.items()
             if lists_files(profile) and part in profile_names(key, profile)
         ]
-        own = [k for k in named if platform in (profiles[k].get("built_by") or [])]
-        found.extend(own or [k for k in named if not profiles[k].get("built_by")])
+        found.extend(platform_builds(named, profiles, platform))
     return sorted(set(found))
 
 

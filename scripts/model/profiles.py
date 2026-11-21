@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import sys
+from collections.abc import Iterable, Mapping
 from pathlib import Path
 
 from core.cli import InputMissing, suggest_names
@@ -327,3 +328,46 @@ def preferred_profile(index: dict[str, set[str]], name: str) -> str | None:
     if not claimants:
         return None
     return name if name in claimants else sorted(claimants)[0]
+
+
+def platform_builds(
+    claimants: Iterable[str], profiles: Mapping[str, dict], platform: str
+) -> set[str]:
+    """The claimants of a core name that a platform runs.
+
+    The builds the platform ships itself (``built_by``) when it names one,
+    else every claimant no platform builds on its own: a revision only
+    another platform compiles is not on this one. Recalbox's pcsx2 core is
+    its PCSX2 1.7 fork, not the LRPS2 revision Batocera builds under that
+    name.
+    """
+    claimed = set(claimants)
+    own = {k for k in claimed if platform in (profiles[k].get("built_by") or [])}
+    return own or {k for k in claimed if not profiles[k].get("built_by")}
+
+
+def platform_core_profiles(
+    index: Mapping[str, set[str]],
+    profiles: Mapping[str, dict],
+    name: str,
+    platform: str,
+    mode: str | None,
+) -> set[str]:
+    """The profiles a core name designates in a platform's own list.
+
+    ``index`` is a ``core_key_index``, ``mode`` the build the list names
+    (``libretro`` or ``standalone``, None for either). The platform's own builds answer
+    first, all of them: RetroPie builds Amiberry 5.7.2 and 6.3.3 under one
+    package, one per board. Without one, the profile whose key is the name
+    does: Recalbox's vice_x64 is the vice_x64 core, not the vice profile
+    that also lists it.
+    """
+    key = core_key(name)
+    claimants = {
+        k for k in index.get(key, ())
+        if mode is None or mode in str(profiles[k].get("type", ""))
+    }
+    builds = platform_builds(claimants, profiles, platform)
+    if any(platform in (profiles[k].get("built_by") or []) for k in builds):
+        return builds
+    return {k for k in builds if core_key(k) == key} or builds

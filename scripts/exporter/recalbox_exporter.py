@@ -20,7 +20,6 @@ from xml.sax.saxutils import quoteattr
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from model.profiles import load_emulator_profiles
 from core.hashing import parse_hash_list
 from model.safeparse import parse_untrusted_xml
 
@@ -33,8 +32,6 @@ SOURCE_URL = (
     "https://gitlab.com/recalbox/recalbox/-/raw/master/board/recalbox/fsoverlay"
     "/recalbox/share_init/system/.emulationstation/es_bios.xml"
 )
-# Resolved from the file: the profiles say which names each core answers to.
-EMULATORS_DIR = Path(__file__).resolve().parents[2] / "emulators"
 SCHEMA_URL = (
     "https://gitlab.com/recalbox/recalbox/-/raw/master/board/recalbox/fsoverlay"
     "/recalbox/share_init/system/.emulationstation/es_bios.xsd"
@@ -185,17 +182,6 @@ class Exporter(BaseExporter[str]):
             return path
         return fe.destination or fe.name
 
-    def _profile_keys(self) -> dict[str, str]:
-        """Each name a core answers to, as Recalbox writes it, to its profile."""
-        index = getattr(self, "_keys", None)
-        if index is None:
-            index = {}
-            for key, profile in load_emulator_profiles(str(EMULATORS_DIR)).items():
-                for name in (key, *(str(c) for c in profile.get("cores") or [])):
-                    index.setdefault(name.replace("-", "_").lower(), key)
-            self._keys = index
-        return index
-
     def required_value(self, fe: NativeFile) -> bool:
         """Whether the cores the element names need the file.
 
@@ -216,11 +202,14 @@ class Exporter(BaseExporter[str]):
         ]
         if not entries:
             return fe.required
-        index = self._profile_keys()
-        named = {
-            index.get(core.rsplit("/", 1)[-1].replace("-", "_").lower(), "")
-            for core in fe.cores()
-        } - {""}
+        # Recalbox writes a libretro core under libretro/ and a standalone
+        # emulator bare, mostly: its own list writes libretro/fba2x for
+        # piFBA, a standalone binary. A name no profile of the build written
+        # claims is the emulator of either build.
+        named: set[str] = set()
+        for core in fe.cores():
+            mode, _, name = core.rpartition("/")
+            named |= self.core_profiles(name, mode or "standalone") or self.core_profiles(name, None)
         readers: set[str] = set()
         requirers: set[str] = set()
         set_readers: set[str] = set()

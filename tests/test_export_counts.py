@@ -16,6 +16,7 @@ import unittest
 from collections import OrderedDict
 from pathlib import Path
 
+from model.profiles import core_key_index
 from resolve.reconcile import NativeFile, NativeSystem, Report, build_native_model
 from exporter.bizhawk_exporter import Exporter as BizHawk
 from exporter.misterfpga_exporter import Exporter as Mister
@@ -651,8 +652,8 @@ class RetroPieProposals(unittest.TestCase):
         fe = NativeFile("scph5501.bin", "scph5501.bin", "psx",
                         truth={"required": True, "_required_by": ["beetle_psx"],
                                "_cores": ["beetle_psx", "pcsx_rearmed"]})
-        self.assertTrue(RetroPie._required_for(fe, "beetle_psx"))
-        self.assertFalse(RetroPie._required_for(fe, "pcsx_rearmed"))
+        self.assertTrue(RetroPie._required_for(fe, frozenset({"beetle_psx"})))
+        self.assertFalse(RetroPie._required_for(fe, frozenset({"pcsx_rearmed"})))
 
     def test_a_file_the_package_installs_is_not_proposed(self):
         """gngeopi's help asked to copy gngeo_data.zip, which make install
@@ -665,8 +666,15 @@ class RetroPieProposals(unittest.TestCase):
                              truth={"required": True, "_required_by": ["gngeopi"],
                                     "_cores": ["gngeopi"],
                                     "_brought_by": ["gngeopi:standalone"]})
-        self.assertFalse(RetroPie._required_for(installed, "gngeopi"))
-        self.assertTrue(RetroPie._required_for(brought, "gngeopi"))
+        self.assertFalse(RetroPie._required_for(installed, frozenset({"gngeopi"})))
+        self.assertTrue(RetroPie._required_for(brought, frozenset({"gngeopi"})))
+
+    @staticmethod
+    def _knowing(**profiles: dict) -> RetroPie:
+        """An exporter that reads these profiles instead of emulators/."""
+        exporter = RetroPie()
+        exporter._core_profiles = (profiles, core_key_index(profiles, include_aliases=True))
+        return exporter
 
     @staticmethod
     def _module(module_id: str, help_text: str) -> dict[str, str]:
@@ -689,46 +697,57 @@ class RetroPieProposals(unittest.TestCase):
     def test_a_module_left_as_is_is_not_written(self):
         """minivmac was reported "left as is" for a name no profile documents
         and written all the same: the skip had no continue after it."""
-        from unittest import mock
-
-        exporter = RetroPie()
+        exporter = self._knowing(vmac={"type": "standalone"})
         module = self._module("vmac", "Copy the required BIOS file vMac.ROM to $biosdir")
-        with mock.patch.object(RetroPie, "_core_index",
-                               return_value={"standalone": {"vmac": "vmac"}, "libretro": {}}):
-            produced = exporter.render(self._wanting("vmac", "MacII.ROM"), Report(), module)
+        produced = exporter.render(self._wanting("vmac", "MacII.ROM"), Report(), module)
         self.assertEqual(produced, {})
 
     def test_a_standalone_package_does_not_borrow_a_libretro_profile(self):
         """lr- was stripped whatever the build: RetroPie's standalone
         minivmac package matched the libretro profile, which reads
         MacII.ROM where Mini vMac 37 reads vMac.ROM."""
-        from unittest import mock
-
         module = self._module("minivmac", "Copy the required BIOS file vMac.ROM to $biosdir")
-        index = {"libretro": {"minivmac": "minivmac"}, "standalone": {}}
-        with mock.patch.object(RetroPie, "_core_index", return_value=index):
-            exporter = RetroPie()
-            produced = exporter.render(self._wanting("minivmac", "MacII.ROM"), Report(), module)
+        exporter = self._knowing(minivmac={"type": "libretro"})
+        produced = exporter.render(self._wanting("minivmac", "MacII.ROM"), Report(), module)
         self.assertEqual(produced, {})
         self.assertIn("minivmac", sum(exporter._skipped.values(), []))
+
+    def test_a_package_stands_for_every_build_retropie_compiles(self):
+        """RetroPie builds Amiberry 5.7.2 and 6.3.3 under the amiberry
+        package, one per board. The last profile loaded under the name was
+        the generic amiberry, which the truth never names for RetroPie, and
+        the package was left as is."""
+        exporter = self._knowing(**{
+            "amiberry": {"type": "standalone + libretro"},
+            "amiberry-5.7.2": {"type": "standalone", "cores": ["amiberry"],
+                               "built_by": ["retropie"]},
+            "amiberry-6.3.3": {"type": "standalone", "cores": ["amiberry"],
+                               "built_by": ["retropie"]},
+        })
+        listed = NativeFile("a.rom", "a.rom", "sys", platform={"name": "a.rom"})
+        wanted = self._wanting("amiberry-6.3.3", "b.rom")
+        wanted["sys"].files.insert(0, listed)
+        modules = {
+            **self._module("amiberry", "Copy the required BIOS file a.rom to $biosdir"),
+            **self._module("other", "Copy bios files x.rom, y.rom and z.rom to $biosdir"),
+        }
+        produced = exporter.render(wanted, Report(), modules)
+        self.assertEqual(list(produced), ["scriptmodules/emulators/amiberry.sh"])
+        self.assertIn("a.rom and b.rom", produced["scriptmodules/emulators/amiberry.sh"])
 
     def test_a_list_is_capped_by_retropies_longest_not_a_constant(self):
         """The cap of six came from the longest list read, case-sensitively:
         xm7 writes thirteen names."""
-        from unittest import mock
-
         names = [f"n{i}.rom" for i in range(8)]
         modules = {
             **self._module("long", "Copy bios files " + ", ".join(names[:7]) + " and "
                            + names[7] + " to $biosdir"),
             **self._module("short", "Copy the required BIOS files a.rom and b.rom to $biosdir"),
         }
-        index = {"standalone": {"short": "short"}, "libretro": {}}
-        with mock.patch.object(RetroPie, "_core_index", return_value=index):
-            exporter = RetroPie()
-            produced = exporter.render(
-                self._wanting("short", "a.rom", "b.rom", "c.rom", "d.rom", "e.rom",
-                              "f.rom", "g.rom"), Report(), modules)
+        exporter = self._knowing(short={"type": "standalone"})
+        produced = exporter.render(
+            self._wanting("short", "a.rom", "b.rom", "c.rom", "d.rom", "e.rom",
+                          "f.rom", "g.rom"), Report(), modules)
         self.assertEqual(len(produced), 1)
         self.assertEqual(exporter.validate({}, produced), [])
 
@@ -736,8 +755,6 @@ class RetroPieProposals(unittest.TestCase):
         """lr-geargrafx adds pcengine only (addSystem, lr-geargrafx.sh:42),
         and its sentence was extended with the LaserActive's pac-n1.bin and
         pac-n10.bin, a system RetroPie does not have."""
-        from unittest import mock
-
         files = [NativeFile(n, n, sys_id, truth={
             "required": True, "_required_by": ["geargrafx"], "_cores": ["geargrafx"],
             "_brought_by": ["geargrafx:libretro"]}, foreign_system=foreign)
@@ -750,10 +767,8 @@ class RetroPieProposals(unittest.TestCase):
             **self._module("lr-geargrafx", "Copy the required BIOS file syscard3.pce to $biosdir"),
             **self._module("xm7", "Copy bios files a.rom, b.rom and c.rom to $biosdir"),
         }
-        with mock.patch.object(RetroPie, "_core_index",
-                               return_value={"libretro": {"geargrafx": "geargrafx"},
-                                             "standalone": {}}):
-            produced = RetroPie().render(systems, Report(), module)
+        exporter = self._knowing(geargrafx={"type": "libretro"})
+        produced = exporter.render(systems, Report(), module)
         (text,) = produced.values()
         self.assertIn("gexpress.pce", text)
         self.assertNotIn("pac-n1.bin", text)

@@ -19,7 +19,6 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from model.profiles import load_emulator_profiles
 from scraper.retropie_scraper import script_members
 
 from .base_exporter import BaseExporter
@@ -29,9 +28,6 @@ SOURCE_URL = (
     "https://codeload.github.com/RetroPie/RetroPie-Setup/tar.gz/refs/heads/master"
 )
 ARCHIVE = "RetroPie-Setup.tar.gz"
-# Resolved from the file rather than the working directory: the profiles
-# are what say which files a package needs.
-EMULATORS_DIR = Path(__file__).resolve().parents[2] / "emulators"
 
 # The longest list RetroPie writes is six names (lr-atari800). Past that the
 # sentence stops being something a reader uses, so the names are reported
@@ -97,24 +93,17 @@ class Exporter(BaseExporter[str]):
             if relative.startswith("scriptmodules/") and "bios" in text.lower()
         }
 
-    def _core_index(self) -> dict[str, dict[str, str]]:
-        """Module id (without its lr- prefix) to the profile it stands for,
-        per build.
+    def _module_cores(self, module_id: str) -> frozenset[str]:
+        """The profiles a package stands for.
 
         An lr- package is a libretro core and a bare one a standalone
         emulator: the standalone minivmac package matched the libretro
         profile, which reads MacII.ROM where Mini vMac 37 reads vMac.ROM.
+        A build RetroPie compiles itself is what its name means there, all
+        of them: the amiberry package is Amiberry 5.7.2 or 6.3.3 by board.
         """
-        index: dict[str, dict[str, str]] = {"libretro": {}, "standalone": {}}
-        for key, profile in load_emulator_profiles(str(EMULATORS_DIR)).items():
-            kind = str(profile.get("type", ""))
-            for build in ("libretro", "standalone"):
-                if build not in kind:
-                    continue
-                index[build][key.replace("-", "_").lower()] = key
-                for name in profile.get("cores", []) or []:
-                    index[build][str(name).replace("-", "_").lower()] = key
-        return index
+        build = "libretro" if module_id.startswith("lr-") else "standalone"
+        return frozenset(self.core_profiles(module_id.removeprefix("lr-"), build))
 
     @staticmethod
     def _files_by_core(systems: dict[str, NativeSystem]) -> dict[str, list[NativeFile]]:
@@ -246,8 +235,8 @@ class Exporter(BaseExporter[str]):
         return kept
 
     @staticmethod
-    def _required_for(fe: NativeFile, core: str | None) -> bool:
-        """Whether the package's own core needs the file.
+    def _required_for(fe: NativeFile, cores: frozenset[str]) -> bool:
+        """Whether the package's own cores need the file.
 
         The merged `required` is true when any core needs it: pcsx_rearmed
         runs in HLE without a BIOS, yet four were proposed as required for
@@ -257,12 +246,14 @@ class Exporter(BaseExporter[str]):
         # A file the package installs is not one to copy: gngeopi's
         # gngeo_data.zip lands in its data directory with make install.
         brought = truth.get("_brought_by")
-        if brought is not None and not any(b.startswith(f"{core}:") for b in brought):
+        if brought is not None and not any(
+            b.startswith(f"{core}:") for b in brought for core in cores
+        ):
             return False
         required_by = truth.get("_required_by")
         if required_by is None:
             return fe.required
-        return core in required_by
+        return bool(cores.intersection(required_by))
 
     @staticmethod
     def _join(names: list[str], serial: bool = False) -> str:
@@ -316,7 +307,6 @@ class Exporter(BaseExporter[str]):
                 "repository: the BIOS list is a sentence inside a shell script"
             )
 
-        index = self._core_index()
         # A sentence grows no longer than the longest RetroPie writes itself:
         # past that it stops reading as one, and the names are reported.
         self._longest = max(len(self._listed(help_text)) for _, help_text in modules.values())
@@ -335,13 +325,14 @@ class Exporter(BaseExporter[str]):
         produced: dict[str, str] = {}
 
         for relative, (module_id, help_text) in sorted(modules.items()):
-            build = "libretro" if module_id.startswith("lr-") else "standalone"
-            core = index[build].get(module_id.removeprefix("lr-").replace("-", "_").lower())
-            files = by_core.get(core or "", [])
+            cores = self._module_cores(module_id)
+            files = list({
+                id(fe): fe for core in sorted(cores) for fe in by_core.get(core, [])
+            }.values())
             if not files:
                 self._skip("which no profiled core matches", module_id)
                 continue
-            new_help = self._new_help(module_id, help_text, files, core, systems_of)
+            new_help = self._new_help(module_id, help_text, files, cores, systems_of)
             if new_help is None:
                 continue
             produced[relative] = originals[relative].replace(
@@ -360,7 +351,7 @@ class Exporter(BaseExporter[str]):
         module_id: str,
         help_text: str,
         files: list[NativeFile],
-        core: str | None,
+        cores: frozenset[str],
         systems_of: dict[str, set[str]],
     ) -> str | None:
         """The help sentence with the files it lacks, None when left as is."""
@@ -381,7 +372,7 @@ class Exporter(BaseExporter[str]):
             fe
             for fe in files
             if not fe.foreign_system
-            and self._required_for(fe, core)
+            and self._required_for(fe, cores)
             and not (
                 {fe.name.lower()}
                 | {str(a).lower() for a in _aliases(fe)}
