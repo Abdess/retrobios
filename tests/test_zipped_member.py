@@ -57,6 +57,36 @@ class ZippedMemberIsChecked(unittest.TestCase):
             self.assertNotIn("trs80.zip", names)
 
 
+class VariantArchivesAreIndexed(unittest.TestCase):
+    """A .variants/ copy is named neogeo.zip.<md5 prefix>: the contents
+    index skipped every one, so a ROM only such a copy holds answered no
+    zipped_file pin. A member a primary holds still answers with it."""
+
+    def test_variant_members_count_and_the_primary_wins(self):
+        from core import ziptools
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            primary = root / "bios" / "set.zip"
+            variant = root / "bios" / ".variants" / "set.zip.1a2b3c4d"
+            variant.parent.mkdir(parents=True)
+            with zipfile.ZipFile(primary, "w") as zf:
+                zf.writestr("shared.rom", b"shared")
+            with zipfile.ZipFile(variant, "w") as zf:
+                zf.writestr("shared.rom", b"shared")
+                zf.writestr("own.rom", b"own")
+            files = {}
+            # The variant first, as a database may list it.
+            for path in (variant, primary):
+                data = path.read_bytes()
+                files[hashlib.sha1(data).hexdigest()] = {"path": str(path), "name": path.name}
+            sha1_of = {entry["path"]: sha1 for sha1, entry in files.items()}
+            ziptools._zip_contents_cache = None
+            index = build_zip_contents_index({"files": files}, cache_path=None)
+            self.assertEqual(index[hashlib.md5(b"own").hexdigest()], sha1_of[str(variant)])
+            self.assertEqual(index[hashlib.md5(b"shared").hexdigest()], sha1_of[str(primary)])
+
+
 
 class PackIntegrityChecksTheMember(unittest.TestCase):
     """Step 6 skipped a zipped_file entry without md5 and matched a cut md5

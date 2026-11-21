@@ -203,7 +203,10 @@ def build_zip_contents_index(
 ) -> dict:
     """Build {inner_rom_md5: zip_file_sha1} for ROMs inside ZIP files.
 
-    Cached in-process, and on disk per archive sha1 when cache_path is set.
+    A ``.variants/`` copy counts (``neogeo.zip.1a2b3c4d`` is an archive), and
+    a member a primary archive holds answers with the primary, as the
+    resolver prefers it. Cached in-process, and on disk per archive sha1
+    when cache_path is set.
     """
     global _zip_contents_cache
 
