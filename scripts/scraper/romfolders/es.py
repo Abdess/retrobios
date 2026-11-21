@@ -33,6 +33,7 @@ from collections.abc import Iterator
 
 from model.safeparse import parse_untrusted_xml, yaml_load_upstream
 
+from ..retropie_modules import PLATFORM_FLAGS, module_enabled
 from . import Fetcher, SourceError, register
 
 
@@ -922,20 +923,6 @@ _LIST = re.compile(r'(?:local\s+)?(\w+)=\(([^)]*)\)')
 _LOOP = re.compile(r'for (\w+) in (.+?); do')
 
 
-def _module_valid(flags: list[str], platform: set[str]) -> bool:
-    """packages.sh rp_registerModule: flags read in order, `!all` drops
-    the module, a platform flag keeps it, `!<platform flag>` drops it."""
-    valid = True
-    for flag in flags:
-        if flag == "!all":
-            valid = False
-        elif flag in platform:
-            valid = True
-        elif flag.startswith("!") and flag[1:] in platform:
-            valid = False
-    return valid
-
-
 def _emulator_calls(text: str) -> Iterator[tuple[int, str, str, list[str]]]:
     """(line, default flag, emulator id, systems) of each addEmulator call,
     a system variable expanded through the loop or array that sets it."""
@@ -985,7 +972,7 @@ def retropie(spec: dict, fetcher: Fetcher) -> list[dict]:
         match = re.match(r'^([\w-]+)_exts="([^"]*)"', cfg_line)
         if match:
             exts[match.group(1)] = (match.group(2), number)
-    platform = set(params["platform_flags"])
+    platform = PLATFORM_FLAGS[params["platform"]]
     modules: list[dict] = []
     for kind in params["module_dirs"]:
         for path in fetcher.tree(key, f"scriptmodules/{kind}/"):
@@ -993,7 +980,7 @@ def retropie(spec: dict, fetcher: Fetcher) -> list[dict]:
                 continue
             text = fetcher.text(key, path)
             fields = dict(_MODULE_FIELD.findall(text))
-            if not _module_valid(fields.get("flags", "").split(), platform):
+            if not module_enabled(fields.get("flags", "").split(), platform):
                 continue
             modules.append({"path": path, "id": fields.get("id", ""),
                             "section": fields.get("section", ""), "text": text})

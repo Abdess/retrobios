@@ -19,6 +19,7 @@ import urllib.error
 from pathlib import Path
 from unittest import mock
 
+from scripts.scraper.retropie_modules import PLATFORM_FLAGS, module_enabled
 from scripts.scraper.targets import (
     batocera_targets_scraper,
     emudeck_targets_scraper,
@@ -643,7 +644,9 @@ class RetroPieModuleFlags(unittest.TestCase):
     """
 
     def test_flags_follow_rp_register_module(self):
-        available = retropie_targets_scraper._is_available
+        def available(flags: str, platform: str) -> bool:
+            return module_enabled(flags.split(), PLATFORM_FLAGS[platform])
+
         cases = {
             ("sdl1 !mali", "rpi4"): True,
             ("!all videocore", "rpi3"): True,
@@ -653,6 +656,10 @@ class RetroPieModuleFlags(unittest.TestCase):
             ("!all x86", "rpi4"): False,
             ("!all x86", "x86_64"): True,
             ("!all arm rpi3 rpi4 rpi5 x86", "rpi1"): True,
+            # system.sh:541 puts the platform name first: redream.sh
+            # declares `!all gles31 aarch64 x86_64` and runs on a PC.
+            ("noinstclean !all gles31 aarch64 x86_64", "x86_64"): True,
+            ("noinstclean !all gles31 aarch64 x86_64", "x86"): False,
         }
         for (flags, platform), expected in cases.items():
             with self.subTest(flags=flags, platform=platform):

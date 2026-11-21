@@ -5,7 +5,7 @@ params:
   platforms_cfg: platforms.cfg
   module_dirs: [emulators, libretrocores]
   install_sections: [core, main, opt, exp]
-  platform_flags: [native, 64bit, gl, vulkan, x11, x86]
+  platform: x86_64
 sources:
   os:
     repo: https://github.com/RetroPie/RetroPie-Setup

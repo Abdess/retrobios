@@ -1,6 +1,6 @@
 platform: retropie
 source: https://api.github.com/repos/RetroPie/RetroPie-Setup/contents/scriptmodules?ref=427e76216633591861791cfb28807ac1039c5ea8
-scraped_at: '2026-11-09T16:03:30Z'
+scraped_at: '2026-11-21T03:32:27Z'
 targets:
   rpi1:
     architecture: armv6
@@ -1125,6 +1125,7 @@ targets:
     - px68k
     - quasi88
     - quicknes
+    - redream
     - reicast
     - retro8
     - retroarch

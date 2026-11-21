@@ -14,6 +14,7 @@ import sys
 import tarfile
 from datetime import datetime, timezone
 
+from ..retropie_modules import PLATFORM_FLAGS, module_enabled
 from ..retropie_scraper import SOURCE_URL, core_name, fetch_archive, script_members
 from . import BaseTargetScraper, target_cli
 
@@ -26,24 +27,6 @@ GITHUB_API_URL = (
 # The sections the platform scraper reads: a standalone package missing here
 # is filtered out of every targeted pack.
 PACKAGE_DIRS = ("emulators", "libretrocores", "ports")
-
-# The flags RetroPie's set_platform_defaults, cpu_* and platform_* functions
-# give each platform (scriptmodules/system.sh), with the video stack of the
-# images it ships: videocore and dispmanx on rpi1-3, kms with fkms dispmanx
-# on rpi4 (buster), kms on rpi5.
-PLATFORM_FLAGS: dict[str, set[str]] = {
-    "rpi1": {"rpi1", "32bit", "arm", "armv6", "rpi", "gles", "videocore", "dispmanx"},
-    "rpi2": {"rpi2", "32bit", "arm", "armv7", "neon", "rpi", "gles", "videocore",
-             "dispmanx"},
-    "rpi3": {"rpi3", "32bit", "arm", "armv8", "neon", "rpi", "gles", "videocore",
-             "dispmanx"},
-    "rpi4": {"rpi4", "32bit", "arm", "armv8", "neon", "rpi", "gles", "gles3", "gles31",
-             "mesa", "kms", "dispmanx"},
-    "rpi5": {"rpi5", "32bit", "arm", "armv8", "neon", "rpi", "gles", "gles3", "gles31",
-             "mesa", "kms"},
-    "x86": {"x86", "32bit", "gl", "vulkan", "x11"},
-    "x86_64": {"x86", "64bit", "gl", "vulkan", "x11"},
-}
 
 ARCH_MAP: dict[str, str] = {
     "rpi1": "armv6",
@@ -64,28 +47,6 @@ def _fetch_archive(url: str) -> bytes:
         return fetch_archive(url)
     except (ConnectionError, ValueError) as exc:
         raise RuntimeError(str(exc)) from exc
-
-
-def _is_available(flags_str: str, platform: str) -> bool:
-    """Whether RetroPie enables a module on *platform*.
-
-    Port of rp_registerModule (scriptmodules/packages.sh): flags are read in
-    order from an enabled default; !all disables, a flag the platform has
-    enables, !flag disables when the platform has it. A flag the platform
-    does not know (sdl1, nodistcc) changes nothing, and a comparison against
-    the build host (:$__gcc_version:-lt:7) cannot be decided here, so it
-    leaves the module as it was.
-    """
-    platform_has = PLATFORM_FLAGS.get(platform, set())
-    enabled = True
-    for token in flags_str.split():
-        if token == "!all":
-            enabled = False
-        elif token in platform_has:
-            enabled = True
-        elif token.startswith("!") and token[1:] in platform_has:
-            enabled = False
-    return enabled
 
 
 def _parse_module(content: str) -> tuple[str | None, str]:
@@ -144,7 +105,7 @@ class Scraper(BaseTargetScraper):
                 continue
             # The platform scraper names the package the same way.
             for platform in PLATFORM_FLAGS:
-                if _is_available(flags, platform):
+                if module_enabled(flags.split(), PLATFORM_FLAGS[platform]):
                     platform_cores[platform].add(core_name(module_id))
 
         print(f"  parsed {len(modules)} scriptmodules", file=sys.stderr)

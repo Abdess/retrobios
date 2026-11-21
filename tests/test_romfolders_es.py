@@ -24,7 +24,7 @@ from scraper.romfolders import (
     scrape_setup,
 )
 from scraper.romfolders.__main__ import dump_setup
-from scraper.romfolders.es import _module_valid
+from scraper.retropie_modules import module_enabled
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -300,7 +300,7 @@ class RetroPieFormat(unittest.TestCase):
         self.rows = by_folder(scrape("retropie", "retropie", {
             "platforms_cfg": "platforms.cfg", "module_dirs": ["emulators", "libretrocores"],
             "install_sections": ["core", "main", "opt", "exp"],
-            "platform_flags": ["native", "64bit", "gl", "vulkan", "x11", "x86"]}))
+            "platform": "x86_64"}))
 
     def test_folders_and_loop_systems(self) -> None:
         self.assertEqual(sorted(self.rows), ["nes", "psx", "vectrex"])
@@ -314,10 +314,10 @@ class RetroPieFormat(unittest.TestCase):
 
     def test_module_flags_read_in_order(self) -> None:
         x86 = {"x86", "64bit"}
-        self.assertFalse(_module_valid(["!all"], x86))
-        self.assertTrue(_module_valid(["!all", "x86"], x86))
-        self.assertFalse(_module_valid(["!x86"], x86))
-        self.assertTrue(_module_valid(["!arm"], x86))
+        self.assertFalse(module_enabled(["!all"], x86))
+        self.assertTrue(module_enabled(["!all", "x86"], x86))
+        self.assertFalse(module_enabled(["!x86"], x86))
+        self.assertTrue(module_enabled(["!arm"], x86))
 
 
 class Determinism(unittest.TestCase):
