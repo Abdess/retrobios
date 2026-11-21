@@ -701,6 +701,25 @@ class RecordReview(unittest.TestCase):
                 # Typed, it is refused as before.
                 self.assertNotEqual(self.run_line(*typed, "--check").returncode, 0)
 
+    def test_a_recorded_target_with_an_unreadable_board_list_is_left_out(self):
+        """The board list beside --manifest could not be read: the run ended
+        with code 1 and said nothing, its stderr thrown away. The screen's
+        runs carry the record's options as typed ones."""
+        targets = self.repo.site / "install" / "targets"
+        targets.mkdir()
+        (targets / "retroarch.json").write_text("{not json")
+        proc = subprocess.run(
+            [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "retroarch",
+             "--dest", str(self.dest), "--system", "nintendo-gba", "--target", "switch",
+             "--manifest", str(self.repo.site / "install" / "retroarch.json"),
+             "--yes", "--events"],
+            env={**self.repo.env, install.TUI_RECORD_ENV: "1"}, capture_output=True,
+            text=True, timeout=120, check=False, stdin=subprocess.DEVNULL)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn("Left out of the recorded choice: --target (the board list could not "
+                      "be read).", proc.stderr)
+        self.assertEqual(self.dests(proc), ["gba_bios.bin"])
+
     def test_a_date_no_clock_can_show_is_an_unknown_day(self):
         if not hasattr(time, "tzset"):
             self.skipTest("no tzset")

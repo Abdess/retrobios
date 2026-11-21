@@ -382,6 +382,21 @@ class Events(Repository):
         self.assertEqual((pack["status"], pack["parts"]), ("failed", []))
         self.assertEqual(events[-1], {"event": "end", "code": 1})
 
+    def test_a_board_list_beside_the_manifest_it_cannot_read_is_said(self):
+        """The run ended with code 1, no pack event and nothing on stderr."""
+        (self.served / "install" / "targets").mkdir()
+        (self.served / "install" / "targets" / "retroarch.json").write_text("{not json")
+        proc = self.make("--events", "--dry-run", "--manifest",
+                         str(self.served / "install" / "retroarch.json"))
+        events = [json.loads(line) for line in proc.stdout.splitlines()]
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("targets/retroarch.json is not valid", proc.stderr)
+        self.assertIn("No pack was written.", proc.stderr)
+        pack = next(event for event in events if event["event"] == "pack")
+        self.assertEqual(pack["status"], "failed")
+        self.assertIn("is not valid", pack["message"])
+        self.assertEqual(events[-1], {"event": "end", "code": 1})
+
 
 class Refusals(Repository):
     def test_options_of_this_machine_s_folder_are_refused(self):

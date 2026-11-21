@@ -2,9 +2,7 @@
 from __future__ import annotations
 
 import argparse
-import contextlib
 import hashlib
-import io
 import json
 import os
 import shutil
@@ -26,7 +24,7 @@ from installer.events import EVENTS
 from installer.filesystems import fat32_drive
 from installer.from_folders import plan_local_copies
 from installer.host_fs import DRIVE_FULL, _drive_full, _is_dir, _stop
-from installer.lists import fetch_targets, local_targets
+from installer.lists import ListFailure, held_targets, load_targets, targets_file_words
 from installer.offline import LOCAL
 from installer.pack_source import (
     _PART_FILE,
@@ -627,13 +625,18 @@ def _listed_paths(folder: Path) -> list[Path]:
 def _pack_targets(plat: str) -> dict | None:
     """The cores per board the pack carries, as a pack built by the
     repository does: the list at hand offline, else the one fetched. None
-    for a platform that publishes none, or a list that cannot be read."""
+    for a platform that publishes none, or a list the network did not
+    bring. ListFailure for a list this run was given and cannot use."""
     if plat not in TARGET_PLATFORMS:
         return None
     if LOCAL.offline:
-        return local_targets(plat)
-    with contextlib.redirect_stderr(io.StringIO()):
-        return fetch_targets(plat)
+        return held_targets(plat)
+    try:
+        return load_targets(plat)
+    except ListFailure as stopped:
+        if stopped.problem.fatal:
+            raise
+        return None
 
 
 def _pack_event(plat: str, path: Path, members: dict[str, tuple[str, int]],
@@ -692,8 +695,15 @@ def run_pack(args: argparse.Namespace, plat: str, manifest: dict, files: list[di
     members, rows, sources = pack_layout(files, data_dirs)
     if not members:
         return _pack_refused(plat, path, "the choice keeps no file to put in a pack", 2)
+    try:
+        targets = _pack_targets(plat)
+    except ListFailure as stopped:
+        failure = stopped.problem
+        words = (targets_file_words(failure) if failure.source == "file" else
+                 f"the board list for {display} could not be read: {failure.words}")
+        return _pack_refused(plat, path, words, failure.fatal, members)
     body = pack_manifest(plat, pack_install_list(manifest, files, omitted, data_dirs), rows,
-                         _pack_targets(plat))
+                         targets)
     planned = [PackMember(name, sha1, size, Path())
                for name, (sha1, size) in sorted(members.items())]
     fat = fat32_drive(path.parent)

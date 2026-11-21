@@ -2,8 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import contextlib
-import io
 import os
 import sys
 from pathlib import Path
@@ -28,11 +26,11 @@ from installer.line_folder import (
     ask_platform_folder,
     share_words,
 )
-from installer.lists import fetch_targets, local_targets
+from installer.lists import ListFailure, fetch_targets, load_targets
 from installer.offline import LOCAL
 from installer.pack import pack_path
 from installer.pack_source import pack_name_platforms
-from installer.platforms import AVAILABLE_PLATFORMS, TARGET_PLATFORMS, _NO_BIOS_FOLDER, display_name, normalize_platform
+from installer.platforms import AVAILABLE_PLATFORMS, _NO_BIOS_FOLDER, display_name, normalize_platform
 from installer.run_files import _output_kind
 from installer.safe_replace import KEPT
 from installer.setups import PORTABLE_ONLY, _default_dest, _line_setups, drive_example, found_setups
@@ -437,14 +435,15 @@ def _check_run_target(run: _InstallRun) -> None:
     if args.target and by_record(args) and len(platforms) == 1:
         # The screen's runs carry the record's options as typed ones.
         plat = platforms[0][0]
-        if LOCAL.offline and local_targets(plat) is None and plat in TARGET_PLATFORMS:
-            drop_recorded(args, plat, "--target", "the board list needs the internet")
+        try:
+            known = load_targets(plat)
+        except ListFailure as stopped:
+            drop_recorded(args, plat, "--target", "the board list needs the internet"
+                          if stopped.problem.code == "offline"
+                          else "the board list could not be read")
         else:
-            with contextlib.redirect_stderr(io.StringIO()):
-                known = fetch_targets(plat)
-            if known is None or args.target not in known:
-                drop_recorded(args, plat, "--target", "the board list does not name it"
-                              if known is not None else "the board list could not be read")
+            if args.target not in known:
+                drop_recorded(args, plat, "--target", "the board list does not name it")
     if args.target:
         for plat_name, _bios_path in platforms:
             targets = fetch_targets(plat_name)

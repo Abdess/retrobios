@@ -8904,12 +8904,17 @@ def load_targets(plat: str, attempts: int = MAX_RETRIES,
         raise _download_failure(plat, url, remote, exc, fatal=0) from exc
 
 
+def targets_file_words(failure: ListProblem) -> str:
+    """Why the board list beside --manifest cannot be used, in one clause."""
+    state = "cannot be read" if failure.code == "unreadable" else "is not valid"
+    return f"the target list {failure.where} {state}: {failure.words}"
+
+
 def targets_failure_lines(failure: ListProblem) -> list[str]:
     """What line mode prints of a board list it could not have."""
     plat, code, words, where = failure.plat, failure.code, failure.words, failure.where
     if failure.source == "file":
-        state = "cannot be read" if code == "unreadable" else "is not valid"
-        return [f"  Error: the target list {where} {state}: {words}"]
+        return [f"  Error: {targets_file_words(failure)}"]
     if code == "offline":
         return [f"Error: --target needs the {display_name(plat)} board list ({words}). Put "
                 f"install/targets/{plat}.json beside the --manifest file, or go online."]
@@ -19480,13 +19485,18 @@ def _listed_paths(folder: Path) -> list[Path]:
 def _pack_targets(plat: str) -> dict | None:
     """The cores per board the pack carries, as a pack built by the
     repository does: the list at hand offline, else the one fetched. None
-    for a platform that publishes none, or a list that cannot be read."""
+    for a platform that publishes none, or a list the network did not
+    bring. ListFailure for a list this run was given and cannot use."""
     if plat not in TARGET_PLATFORMS:
         return None
     if LOCAL.offline:
-        return local_targets(plat)
-    with contextlib.redirect_stderr(io.StringIO()):
-        return fetch_targets(plat)
+        return held_targets(plat)
+    try:
+        return load_targets(plat)
+    except ListFailure as stopped:
+        if stopped.problem.fatal:
+            raise
+        return None
 
 
 def _pack_event(plat: str, path: Path, members: dict[str, tuple[str, int]],
@@ -19545,8 +19555,15 @@ def run_pack(args: argparse.Namespace, plat: str, manifest: dict, files: list[di
     members, rows, sources = pack_layout(files, data_dirs)
     if not members:
         return _pack_refused(plat, path, "the choice keeps no file to put in a pack", 2)
+    try:
+        targets = _pack_targets(plat)
+    except ListFailure as stopped:
+        failure = stopped.problem
+        words = (targets_file_words(failure) if failure.source == "file" else
+                 f"the board list for {display} could not be read: {failure.words}")
+        return _pack_refused(plat, path, words, failure.fatal, members)
     body = pack_manifest(plat, pack_install_list(manifest, files, omitted, data_dirs), rows,
-                         _pack_targets(plat))
+                         targets)
     planned = [PackMember(name, sha1, size, Path())
                for name, (sha1, size) in sorted(members.items())]
     fat = fat32_drive(path.parent)
@@ -23210,14 +23227,15 @@ def _check_run_target(run: _InstallRun) -> None:
     if args.target and by_record(args) and len(platforms) == 1:
         # The screen's runs carry the record's options as typed ones.
         plat = platforms[0][0]
-        if LOCAL.offline and local_targets(plat) is None and plat in TARGET_PLATFORMS:
-            drop_recorded(args, plat, "--target", "the board list needs the internet")
+        try:
+            known = load_targets(plat)
+        except ListFailure as stopped:
+            drop_recorded(args, plat, "--target", "the board list needs the internet"
+                          if stopped.problem.code == "offline"
+                          else "the board list could not be read")
         else:
-            with contextlib.redirect_stderr(io.StringIO()):
-                known = fetch_targets(plat)
-            if known is None or args.target not in known:
-                drop_recorded(args, plat, "--target", "the board list does not name it"
-                              if known is not None else "the board list could not be read")
+            if args.target not in known:
+                drop_recorded(args, plat, "--target", "the board list does not name it")
     if args.target:
         for plat_name, _bios_path in platforms:
             targets = fetch_targets(plat_name)

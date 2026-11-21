@@ -310,12 +310,17 @@ def load_targets(plat: str, attempts: int = MAX_RETRIES,
         raise _download_failure(plat, url, remote, exc, fatal=0) from exc
 
 
+def targets_file_words(failure: ListProblem) -> str:
+    """Why the board list beside --manifest cannot be used, in one clause."""
+    state = "cannot be read" if failure.code == "unreadable" else "is not valid"
+    return f"the target list {failure.where} {state}: {failure.words}"
+
+
 def targets_failure_lines(failure: ListProblem) -> list[str]:
     """What line mode prints of a board list it could not have."""
     plat, code, words, where = failure.plat, failure.code, failure.words, failure.where
     if failure.source == "file":
-        state = "cannot be read" if code == "unreadable" else "is not valid"
-        return [f"  Error: the target list {where} {state}: {words}"]
+        return [f"  Error: {targets_file_words(failure)}"]
     if code == "offline":
         return [f"Error: --target needs the {display_name(plat)} board list ({words}). Put "
                 f"install/targets/{plat}.json beside the --manifest file, or go online."]
