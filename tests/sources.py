@@ -126,6 +126,7 @@ COMMANDS = {
         "sitegen/demovariants.py", "sitegen/democard.py", "sitegen/demosession.py",
         "sitegen/demorecord.py",
     ),
+    "diff_truth.py": ("exporter/truthdiff.py", "exporter/diffreport.py"),
     "romset_recipes.py": (
         "romrecipes/romsets.py", "romrecipes/pool.py", "romrecipes/pins.py", "romrecipes/identify.py",
         "romrecipes/ledger.py", "romrecipes/members.py", "romrecipes/capture.py", "romrecipes/build.py",

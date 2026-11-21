@@ -47,7 +47,7 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   games/                 the games-on-card rules and the index the installer reads for them
   scraper/               upstream scrapers (libretro, batocera, recalbox...)
   scraper/targets/       hardware target scrapers (one *_targets_scraper.py per platform)
-  exporter/              native format exporters (batocera, recalbox, emudeck...)
+  exporter/              native format exporters (batocera, recalbox, emudeck...), the truth diff
   sitegen/               the site and README generators: pages, navigation, data files
   probes/                real-condition runs: the campaign, the pack and region probes
   release/               the release record, its notes, the checks of its assets and the pack downloader

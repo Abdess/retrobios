@@ -20,7 +20,7 @@ from core.github import github_token, _gh_cli_token
 from model.profiles import select_emulator_profiles, ProfileSelectionError
 from model.registry import list_registered_platforms
 from model.targets import load_target_config, build_target_cores_cache
-import diff_truth
+from exporter import diffreport
 import pipeline
 from orchestrate import guards, labels, prepare, runner
 from resolve import truth
@@ -507,8 +507,8 @@ class TheTruthDiffShowsWhereAndAsksNothing(unittest.TestCase):
 
     def test_neither_format_asks_for_a_removal(self):
         report = self._report()
-        for text in (diff_truth._format_markdown(report),
-                     diff_truth._format_terminal(report)):
+        for text in (diffreport.format_markdown(report),
+                     diffreport.format_terminal(report)):
             self.assertNotIn("Remove", text)
             self.assertNotIn("phantom", text.lower())
             self.assertIn("fbneo/hiscore.dat", text)
