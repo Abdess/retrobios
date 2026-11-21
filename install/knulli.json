@@ -7,7 +7,7 @@
   "platform": "knulli",
   "display_name": "KNULLI",
   "version": "20260511",
-  "generated": "2026-11-13T11:31:17Z",
+  "generated": "2026-11-20T03:39:07Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -33,7 +33,7 @@
   "total_files": 10763,
   "total_size": 9218213541,
   "pack_files": 14381,
-  "pack_size": 9230363613,
+  "pack_size": 9230405709,
   "total_omitted": 221,
   "omitted_files": [
     {
@@ -176517,8 +176517,8 @@
           "size": 32420
         },
         "compat.ini": {
-          "sha1": "298b14b73c9a378842dcd77fb4483c00f6bd804f",
-          "size": 56375
+          "sha1": "9236381e2a75fbf9206f2caaff0c95246c3d92d7",
+          "size": 58120
         },
         "sfx_select.wav": {
           "sha1": "0bd3eabc432b6119507e4fc43354113b68bdbf66",
@@ -176769,192 +176769,192 @@
           "size": 27664
         },
         "lang/hu_HU.ini": {
-          "sha1": "23299d0005840a37e557a7be21563ad794261d0b",
-          "size": 98981
+          "sha1": "2a4e9479611a7545f214e82c2d4d69e827a100b8",
+          "size": 99892
         },
         "lang/cz_CZ.ini": {
-          "sha1": "ce743b9d821f54a6057e8ad73e28aaa28e612dfe",
-          "size": 107185
+          "sha1": "e840e87031a658f3b4cd09782bc3f4f872b25f8a",
+          "size": 108035
         },
         "lang/pl_PL.ini": {
-          "sha1": "f12f94eca55f329292c1e0c9b6a26f470c772d83",
-          "size": 94392
+          "sha1": "6d9cc266e5ced2c7674af662fdc066028d500451",
+          "size": 95254
         },
         "lang/pt_PT.ini": {
-          "sha1": "3b528019dbb1a6518c7002b9179856746ee675ef",
-          "size": 97261
+          "sha1": "98c2346cd56f363c6e69ccd1fa84dd04065afb2e",
+          "size": 98190
         },
         "lang/bg_BG.ini": {
-          "sha1": "9effd78d996dafe5375b7d98b7246565ac478c17",
-          "size": 142958
+          "sha1": "3e8f42215874ebc1b72c6470c87e0ad1e477089a",
+          "size": 144124
         },
         "lang/nl_NL.ini": {
-          "sha1": "399740e9e33bb06cdf0f7d0a3940c3c5dfea0fb2",
-          "size": 103383
+          "sha1": "7618697f1fc77f14acb910dd2a9edd70378534ab",
+          "size": 104211
         },
         "lang/lo_LA.ini": {
-          "sha1": "b46184ba98e891401408aefa7057eacfc14ec7cf",
-          "size": 98671
+          "sha1": "41030986b0acadcbad5b1d79fd39ed94c053afd2",
+          "size": 99284
         },
         "lang/jv_ID.ini": {
-          "sha1": "6aed880790e1e9288539935912eeb27e9e22a8ca",
-          "size": 79793
+          "sha1": "0fb62d184cea44d0217bd9a8cd734f5e9f605a07",
+          "size": 80406
         },
         "lang/pt_BR.ini": {
-          "sha1": "1655d9b7663c885161e64827781009b9fee924de",
-          "size": 89645
+          "sha1": "64b8636fba51bcff594306dcc242f9603decab45",
+          "size": 90539
         },
         "lang/es_ES.ini": {
-          "sha1": "7275516fd94d808970eea082a49b926617c7cc2c",
-          "size": 95596
+          "sha1": "1009cbd0d4c2cbae518988c8f2fea2e8a74ea7af",
+          "size": 96497
         },
         "lang/es_LA.ini": {
-          "sha1": "f70a443879634e902a820880551ffca9bc112d50",
-          "size": 97449
+          "sha1": "bb2d12de9bc13ccb8fadf1a946a924219614a2e4",
+          "size": 98341
         },
         "lang/lt-LT.ini": {
-          "sha1": "3cb0b1cc2520711f5087facda11dceac0bcbba2e",
-          "size": 113180
+          "sha1": "f74359f9c4844886703062806c0e641a8ed93f78",
+          "size": 114030
         },
         "lang/ms_MY.ini": {
-          "sha1": "24cdab2ae9d1e5bc8094dc7c55a3777b90d7f673",
-          "size": 90630
+          "sha1": "f32113b8ccffc91632333c547e5e7f697bee34f2",
+          "size": 91453
         },
         "lang/sv_SE.ini": {
-          "sha1": "10d8cbb64daa48ca377dea9d6efa02dab44fcb1a",
-          "size": 89571
+          "sha1": "5cd0e7da0054e27241287136092196b5f6d00dc6",
+          "size": 90413
         },
         "lang/th_TH.ini": {
-          "sha1": "ef6669b91170201a7802ce504b37fbcbf5ef735d",
-          "size": 166720
+          "sha1": "2e057d817c88e1aeaf953ab184d17898b62b74c2",
+          "size": 168018
         },
         "lang/README.md": {
           "sha1": "5105feaabb525902ecc92eb6cb4bc969943926d5",
           "size": 1060
         },
         "lang/be_BY.ini": {
-          "sha1": "43cb7fefe0d6d34f86171936a758f2211e425408",
-          "size": 137233
+          "sha1": "82e0629ce33d85ff5d2f80da10f664da5a7948b1",
+          "size": 138305
         },
         "lang/fr_FR.ini": {
-          "sha1": "923c3f9ac096e22af97ff72f56e6b219bcc7e48a",
-          "size": 100548
+          "sha1": "a69c2f5d5d17596c6ea19d017019224082bd8911",
+          "size": 101497
         },
         "lang/ja_JP.ini": {
-          "sha1": "e30061075a2be3b10d274566e1d2e32214d683c1",
-          "size": 111250
+          "sha1": "fd08524b7d3b8784ea4200a21fb941ee098afbf7",
+          "size": 112232
         },
         "lang/tg_PH.ini": {
-          "sha1": "145c3ff9d022d4086c058f325470f9e9804e9b81",
-          "size": 101721
+          "sha1": "544cb4c095f655411d2cfdf8f5b858aaf43fd1ea",
+          "size": 102494
         },
         "lang/da_DK.ini": {
-          "sha1": "db739dfd5f9515bf272ab2305140ebe243832a2d",
-          "size": 103232
+          "sha1": "8d9434b47273e3c417579163273ba47f20f14932",
+          "size": 104029
         },
         "lang/ko_KR.ini": {
-          "sha1": "cd8594a16eb576727cbe2dc9f2b605a17636d5e4",
-          "size": 96462
+          "sha1": "1acf5b9b255b294f9df3a2e4c4a3011a663a0984",
+          "size": 97372
         },
         "lang/he_IL.ini": {
-          "sha1": "d3fd4b6303992d3796f34b2a7ab315d1f4c8f1e2",
-          "size": 122601
+          "sha1": "aa234b2cd3ea3ad4a706d075003c1300330022c7",
+          "size": 123575
         },
         "lang/zh_CN.ini": {
-          "sha1": "f41b757a11ca704b077f80466392aece78447c8c",
-          "size": 83161
+          "sha1": "f5f862da053f6b0599171d74fce89b899ff6df8b",
+          "size": 83974
         },
         "lang/zh_TW.ini": {
-          "sha1": "343c3617905828ad9e7755dcf2cca189146182c5",
-          "size": 84386
+          "sha1": "f13db5fb5344cd73754c30f4e6eab1f19544ad94",
+          "size": 85190
         },
         "lang/tr_TR.ini": {
-          "sha1": "43c2d498fb8fe3fbf1b035d759208f5910bf64fd",
-          "size": 92112
+          "sha1": "289fdea2a9ebf5905db781b3113b534e9bd8fb54",
+          "size": 92980
         },
         "lang/it_IT.ini": {
-          "sha1": "49b490a293529af74d4edc3bfdb64a8e9c43ea42",
-          "size": 94699
+          "sha1": "9540588ef00b0e148e6c13dbdbd2bde96916912d",
+          "size": 95612
         },
         "lang/en_US.ini": {
-          "sha1": "a79298188d69676d2bbdc48b8274c84e8482479c",
-          "size": 78596
+          "sha1": "363d6ab83f5c403e00e78ef8ba865ca7a7fc444a",
+          "size": 79173
         },
         "lang/fi_FI.ini": {
-          "sha1": "3e49a7260ec8733ada532a67144844cff8c6c38f",
-          "size": 99125
+          "sha1": "ab58992523216c6500e012ad4e77ddf149cd76c2",
+          "size": 99988
         },
         "lang/id_ID.ini": {
-          "sha1": "811ad5f36fc03f60c94d7ce6699ff0fd34157b31",
-          "size": 90957
+          "sha1": "c90dfc24bd7fdf184b2714d669a4e5482e23b07f",
+          "size": 91745
         },
         "lang/dr_ID.ini": {
-          "sha1": "ed21f83afbac95c217df05bacbfeae6a9a04004f",
-          "size": 78768
+          "sha1": "3984f0d383d49eb879024daf9b22c4822ea065ad",
+          "size": 79381
         },
         "lang/no_NO.ini": {
-          "sha1": "823192c4a8d49354ef83f79ead8378c577b8e18c",
-          "size": 90138
+          "sha1": "8be818cdbc972c91a281b485dec1148c1237b030",
+          "size": 90973
         },
         "lang/nn_NO.ini": {
-          "sha1": "ee8cfb5baa8550ad6ac74b23fd854932a98aa3af",
-          "size": 88897
+          "sha1": "feaed9beda89760a9b8d51569b2527013f554f82",
+          "size": 89730
         },
         "lang/fa_IR.ini": {
-          "sha1": "6cfe0f52a41a56e2d7b334455054a164a1ef8a74",
-          "size": 128989
+          "sha1": "2ee6cb25ff8425b05c24fa2d04d0b3bf4823d59c",
+          "size": 130067
         },
         "lang/km_KH.ini": {
-          "sha1": "2732fa472e2536aa26800fecd380e30d1776d3a0",
-          "size": 135267
+          "sha1": "99a4eace0ad04346b1dab201932099235e2aa71e",
+          "size": 135880
         },
         "lang/ru_RU.ini": {
-          "sha1": "398dc8de180f9b0b36364d4e32e4a0f375fc5b94",
-          "size": 125283
+          "sha1": "55798073ea677f0f2f09880d7dedcfc274b42d72",
+          "size": 126349
         },
         "lang/gl_ES.ini": {
-          "sha1": "4b062f1ee3ccd10d62f4518b1fd5615af193799d",
-          "size": 109416
+          "sha1": "051d8994108648c68caa4d216feac28f057de9ab",
+          "size": 110292
         },
         "lang/az_AZ.ini": {
-          "sha1": "d3db726d9a3c53862d9409ef9fc6cc46b6204e0c",
-          "size": 94566
+          "sha1": "673e05dc7df271a786963515f0b33e98c6ec3c28",
+          "size": 95367
         },
         "lang/ar_AE.ini": {
-          "sha1": "cc1edcc51f2c46bee6a49b81e828e292b0a8508d",
-          "size": 123787
+          "sha1": "0fbd00fca8567bf284bedd65ba4cc899ed56d1ff",
+          "size": 124801
         },
         "lang/ca_ES.ini": {
-          "sha1": "4461823bc71d29536e915baa72e48088429c61c7",
-          "size": 108062
+          "sha1": "20a7453d30cbd8e6695a60c69f42f5fb568cd08f",
+          "size": 108965
         },
         "lang/uk_UA.ini": {
-          "sha1": "bde6179d760bacd3778a5842a68fb8f428805e27",
-          "size": 127678
+          "sha1": "3dfeb0532ba7fcc1607e9a31aa767b202421fc2e",
+          "size": 128741
         },
         "lang/hr_HR.ini": {
-          "sha1": "c7639a4b1b50c976f6aa9005e26ae08263365dbf",
-          "size": 103351
+          "sha1": "e57478e2b783243f19dd0c2f8206d73060626bca",
+          "size": 104194
         },
         "lang/gr_EL.ini": {
-          "sha1": "5e927fb5104382d60161e727a816e9353d0a6752",
-          "size": 148081
+          "sha1": "f00dcc9abe99dcd321e43c16ee145e6b8e92fd1d",
+          "size": 149309
         },
         "lang/ro_RO.ini": {
-          "sha1": "bcc8c29e21245cf310ce413ea8b99b11a44e857b",
-          "size": 109944
+          "sha1": "df494e29c8343faf58d98a4931f8be43e7d066ea",
+          "size": 110835
         },
         "lang/vi_VN.ini": {
-          "sha1": "f9b72f47a08992e2f0eb1a815a41e4edd31e2513",
-          "size": 112766
+          "sha1": "83729a2de2b3cc0da12ff7f42a1fd9416b4ca6b5",
+          "size": 113678
         },
         "lang/ku_SO.ini": {
-          "sha1": "08a71246878f910ff91176bfc47688066e7e3606",
-          "size": 84313
+          "sha1": "9f42da441579e6d5c088fd4142abb74a360b36d7",
+          "size": 84926
         },
         "lang/de_DE.ini": {
-          "sha1": "0b88d89b4a3a609b9c24a5f751c7f11c46572f45",
-          "size": 93635
+          "sha1": "1fde4ca37bfae0bf967f02faa5c5902652e13d82",
+          "size": 94449
         },
         "shaders/naturalA.vsh": {
           "sha1": "f758f44549d685db9e9fb386b2f8bb14c3cee9c6",
@@ -177174,7 +177174,7 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 9893234,
+      "archive_size": 9904919,
       "rolling": true,
       "cores": [
         "ppsspp"

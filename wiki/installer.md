@@ -445,13 +445,13 @@ lists record these files as omitted.
 
 <!-- generated: dry-run -->
 
-A RetroArch dry run into an empty folder, with the list of 2026-11-13, printed this:
+A RetroArch dry run into an empty folder, with the list of 2026-11-20, printed this:
 
 ```
 Fetching file index for retroarch...
   106 files read from RetroArch's save directory go to a folder per core under /home/me/.config/retroarch/saves
   15093 files (7.5 GB)
-    3404 BIOS files (4.3 GB), 5108 game data files (3.1 GB) and 6581 data files (135.6 MB).
+    3404 BIOS files (4.3 GB), 5108 game data files (3.1 GB) and 6581 data files (135.7 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   Not installable: 346 files, 264 of them required. Why: not found (66), read outside the BIOS folder (280).
 
@@ -666,7 +666,7 @@ narrowing would save, once that saving is over half.
 
 <!-- generated: bulk-hint -->
 
-RetroArch with `--system sony-playstation`, from the list of 2026-11-13:
+RetroArch with `--system sony-playstation`, from the list of 2026-11-20:
 
 ```
   duckstation pulls 316.5 MB of this 329.0 MB download for sony-playstation. --core pcsx1 keeps 11.0 MB of it and saves 318.0 MB (96%).
@@ -1062,7 +1062,7 @@ by `scripts/generate_installer_doc.py`):
 
 ```
 RetroArch: 15093 files, 7.5 GB.
-  3404 BIOS files (4.3 GB), 5108 game data files (3.1 GB) and 6581 data files (135.6 MB).
+  3404 BIOS files (4.3 GB), 5108 game data files (3.1 GB) and 6581 data files (135.7 MB).
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
   Not available here, and needed to start their emulators: 3dobios.zip (Panasonic 3Do), 3dobios.zip (Panasonic 3Do), 3dobios.zip (Panasonic 3Do) and 260 more. An owned copy goes in the BIOS folder.
@@ -1077,7 +1077,7 @@ RetroArch: 15093 files, 7.5 GB.
   Counted again for these choices. Nothing is written before Enter.
 
 RetroArch: 9985 files, 4.4 GB.
-  3404 BIOS files (4.3 GB) and 6581 data files (135.6 MB). 5108 game data files left out.
+  3404 BIOS files (4.3 GB) and 6581 data files (135.7 MB). 5108 game data files left out.
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
   Not available here, and needed to start their emulators: 3dobios.zip (Panasonic 3Do), 3dobios.zip (Panasonic 3Do), 3dobios.zip (Panasonic 3Do) and 260 more. An owned copy goes in the BIOS folder.
