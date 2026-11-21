@@ -444,13 +444,22 @@ def describe(job: Job, ctx: Context) -> list[str]:
     return lines
 
 
-def run_job(ctx: Context, name: str) -> tuple[str, str]:
-    """Run one job and record it, returning (result, detail)."""
+class UnknownJob(LookupError):
+    """A job name that automation/jobs.yml does not declare."""
+
+
+def find_job(ctx: Context, name: str) -> Job:
+    """The job of that name, or UnknownJob naming the declared ones."""
     job = ctx.jobs.get(name)
     if job is None:
-        raise SystemExit(f"unknown job {name!r}: {', '.join(sorted(ctx.jobs))}")
+        raise UnknownJob(f"unknown job {name!r}: {', '.join(sorted(ctx.jobs))}")
+    return job
+
+
+def run_job(ctx: Context, name: str) -> tuple[str, str]:
+    """Run one job and record it, returning (result, detail)."""
+    job = find_job(ctx, name)
     if ctx.dry_run:
-        print("\n".join(describe(job, ctx)))
         return OK, "dry run"
     state = load_state(ctx.state_path)
     runner = Runner(ctx, job, state)

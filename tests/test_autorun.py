@@ -9,8 +9,6 @@ from __future__ import annotations
 
 import tests
 
-import contextlib
-import io
 import json
 import os
 import shutil
@@ -194,6 +192,13 @@ class Guards(Scratch):
         self.assertEqual(result, unattended_jobs.REFUSED)
         self.assertIn("GB free", detail)
         self.assertFalse((ctx.repo / "ran").exists())
+
+    def test_an_unknown_job_raises_and_records_nothing(self):
+        ctx = self.context({"x": {"worktree": False, "min_free_gb": 0, "steps": []}})
+        with self.assertRaises(runner.UnknownJob) as caught:
+            runner.run_job(ctx, "y")
+        self.assertEqual(str(caught.exception), "unknown job 'y': x")
+        self.assertFalse(ctx.state_path.exists())
 
     def test_a_failure_counts_and_a_success_resets(self):
         ctx = self.context({
@@ -517,8 +522,7 @@ class Commits(Origin):
                          jobs=unattended_jobs.parse_jobs({"jobs": {"n": {"commits": [{
                              "subject": "chore: regenerate collection records",
                              "paths": ["database.json", "install/*.json"]}]}}}))
-        with contextlib.redirect_stdout(io.StringIO()):
-            self.assertEqual(runner.run_job(ctx, "n"), (unattended_jobs.OK, "dry run"))
+        self.assertEqual(runner.run_job(ctx, "n"), (unattended_jobs.OK, "dry run"))
         lines = runner.describe(ctx.jobs["n"], ctx)
         would = sorted(line.split("would commit ")[1] for line in lines if "would commit" in line)
         self.assertEqual(would, ["database.json", "install/b.json"])

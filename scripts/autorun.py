@@ -44,7 +44,7 @@ from core.hostguard import (
 )
 from unattended.breaker import gh_json
 from unattended.jobs import DEFERRED, OK, load_jobs
-from unattended.runner import Context, render_status, run_job, status
+from unattended.runner import Context, UnknownJob, describe, find_job, render_status, run_job, status
 from unattended.timers import install_timers, render_units
 from unattended.worktree import main_checkout
 
@@ -90,7 +90,13 @@ def main() -> int:
     )
     if args.command == "run":
         ctx.dry_run, ctx.push = args.dry_run, args.push
-        result, detail = run_job(ctx, args.job)
+        try:
+            if args.dry_run:
+                print("\n".join(describe(find_job(ctx, args.job), ctx)))
+            result, detail = run_job(ctx, args.job)
+        except UnknownJob as exc:
+            print(exc, file=sys.stderr)
+            return 1
         print(f"{args.job}: {result} ({detail})")
         return EXIT_CODES.get(result, 1)
     if args.command == "status":
