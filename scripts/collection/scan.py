@@ -70,25 +70,19 @@ def _settled_hashes(
     )
 
 
-def _emulator_tree(path: str) -> bool:
-    """Whether a path lies in one emulator's own tree, bios/Other/<emulator>/."""
-    parts = path.replace("\\", "/").split("/")
-    return len(parts) > 3 and parts[1] == "Other"
-
-
-def _takes_primary(current: str, candidate: str) -> bool:
-    """Whether another copy of the same bytes becomes the content's path.
+def primary_rank(path: Path, bios_dir: Path) -> tuple:
+    """Rank of one copy of a content, the lowest being its path in the index.
 
     A .variants/ copy yields to any other one. A copy in an emulator's own
-    tree yields to one filed under its machine: ZEsarUX's sms.rom sorted
-    before bios/Sega/Master System/, the resolver set it aside as another
-    emulator's file, and Genesis Plus GX got a variant instead of v1.3.
+    tree, bios/Other/<emulator>/, yields to one filed under its machine:
+    ZEsarUX's sms.rom sorted before bios/Sega/Master System/, the resolver
+    set it aside as another emulator's file, and Genesis Plus GX got a
+    variant instead of v1.3. Equal copies follow the walk's order. The scan
+    and the dedup both read this rank, so the copy the dedup keeps is the
+    one the index names.
     """
-    if "/.variants/" in candidate.replace("\\", "/"):
-        return False
-    if "/.variants/" in current:
-        return True
-    return _emulator_tree(current) and not _emulator_tree(candidate)
+    parts = path.relative_to(bios_dir).parts
+    return (".variants" in parts, len(parts) > 2 and parts[0] == "Other", parts)
 
 
 def _add_scanned(
@@ -98,6 +92,7 @@ def _add_scanned(
     rel_path: str,
     size: int,
     hashes: dict,
+    root: Path,
 ) -> None:
     """Record a scanned file as its content's primary, or as an alias of it."""
     sha1 = hashes["sha1"]
@@ -109,7 +104,7 @@ def _add_scanned(
     }
     if sha1 not in files:
         files[sha1] = entry
-    elif _takes_primary(files[sha1]["path"], rel_path):
+    elif primary_rank(Path(rel_path), root) < primary_rank(Path(files[sha1]["path"]), root):
         aliases.setdefault(sha1, []).append(
             {"name": files[sha1]["name"], "path": files[sha1]["path"]}
         )
@@ -138,6 +133,7 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
     files: dict[str, dict] = {}
     aliases: dict[str, list[dict]] = {}
     new_cache = {}
+    root = Path(bios_dir.name)
 
     for filepath in sorted(bios_dir.rglob("*")):
         if not filepath.is_file():
@@ -154,7 +150,7 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
         hashes = None if force else _cached_hashes(cache.get(cache_key), mtime, size)
         if hashes is None:
             hashes = _settled_hashes(filepath, cache.get(cache_key), mtime, size)
-        _add_scanned(files, aliases, filepath, rel_path, size, hashes)
+        _add_scanned(files, aliases, filepath, rel_path, size, hashes, root)
         new_cache[cache_key] = {**hashes, "mtime": mtime, "size": size}
 
     return files, aliases, new_cache

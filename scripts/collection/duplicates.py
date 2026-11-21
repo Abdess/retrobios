@@ -6,20 +6,9 @@ import os
 from collections import defaultdict
 from pathlib import Path
 
+from collection.scan import primary_rank
 from core.hashing import compute_hashes
 from model.nodedup import in_nodedup_dir
-
-
-def path_priority(path: str) -> tuple:
-    """Lower score = better candidate to keep as canonical.
-
-    Prefers: shorter path, non-variant, non-MAME (system-specific over generic).
-    """
-    parts = Path(path).parts
-    is_variant = ".variants" in parts
-    is_mame = "MAME" in parts
-    is_arcade = "Arcade" in parts
-    return (is_variant, is_mame, is_arcade, len(parts), path)
 
 
 def _is_mame_dir(path: str) -> bool:
@@ -54,7 +43,7 @@ def scan_duplicates(bios_dir: str) -> dict[str, list[str]]:
 
 
 def plan_group_removals(
-    sha1: str, paths: list[str], mame_clones: dict
+    sha1: str, paths: list[str], mame_clones: dict, bios_dir: str
 ) -> list[str]:
     """Decide which copies of one content hash may go.
 
@@ -66,6 +55,9 @@ def plan_group_removals(
 
     Records clone groups in *mame_clones* and returns the paths to remove.
     """
+    def rank(path: str) -> tuple:
+        return primary_rank(Path(path), Path(bios_dir))
+
     # Separate by filename: same name = true duplicate, different name = clone
     by_name: dict[str, list[str]] = defaultdict(list)
     for p in paths:
@@ -75,7 +67,7 @@ def plan_group_removals(
     true_dupes_to_remove: list[str] = []
     for name_paths in by_name.values():
         if len(name_paths) > 1:
-            name_paths.sort(key=path_priority)
+            name_paths.sort(key=rank)
             true_dupes_to_remove.extend(name_paths[1:])
 
     # A variant exists to hold a content its primary does not. Once another
@@ -87,7 +79,7 @@ def plan_group_removals(
     variants = [p for p in remaining if ".variants" in Path(p).parts]
     if variants:
         holders = [p for p in remaining if p not in variants] or [
-            min(variants, key=path_priority)
+            min(variants, key=rank)
         ]
         true_dupes_to_remove.extend(p for p in variants if p not in holders)
 

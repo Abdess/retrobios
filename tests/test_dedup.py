@@ -19,6 +19,7 @@ import unittest
 from pathlib import Path
 
 from collection import clonemap, dedup, duplicates
+from collection.scan import primary_rank, scan_bios_dir
 from model import nodedup
 
 
@@ -305,21 +306,51 @@ class CloneMapSurvivesASecondRun(_Bios):
         self.assertEqual(self._map(), {})
 
 
-class PathPriority(unittest.TestCase):
-    def test_shorter_paths_sort_first(self):
-        short = duplicates.path_priority("bios/Sony/PS/a.bin")
-        deep = duplicates.path_priority("bios/Sony/PS/x/y/z/a.bin")
-        self.assertLess(short, deep)
+class PrimaryRank(unittest.TestCase):
+    BIOS = Path("bios")
+
+    def rank(self, relative: str) -> tuple:
+        return primary_rank(self.BIOS / relative, self.BIOS)
+
+    def test_equal_copies_follow_the_walk_order(self):
+        self.assertLess(self.rank("Sony/PS/a.bin"), self.rank("Sony/PS/x/y/z/a.bin"))
 
     def test_a_variant_sorts_after_a_primary(self):
-        primary = duplicates.path_priority("bios/Sony/PS/a.bin")
-        variant = duplicates.path_priority("bios/Sony/PS/.variants/a.bin")
-        self.assertLess(primary, variant)
+        self.assertLess(self.rank("Sony/PS/zz/a.bin"), self.rank("Sony/PS/.variants/a.bin"))
+
+    def test_an_emulator_tree_sorts_after_a_machine_folder(self):
+        self.assertLess(
+            self.rank("Sega/Master System/sms.rom"), self.rank("Other/zesarux/sms.rom")
+        )
 
     def test_protected_directories_are_recognised(self):
         self.assertTrue(nodedup.in_nodedup_dir("bios/RPG Maker/x/font.png"))
         self.assertTrue(nodedup.in_nodedup_dir("bios/ScummVM/x/monkey.tbl"))
         self.assertFalse(nodedup.in_nodedup_dir("bios/Sony/PlayStation/scph.bin"))
+
+
+class DedupKeepsTheIndexedCopy(_Bios):
+    """The dedup removed bios/Sega/Master System/sms.rom, the copy the index
+    names, and kept ZEsarUX's, a tree the resolver sets aside as another
+    emulator's: two rules chose the primary of one content."""
+
+    def assert_kept_is_primary(self, *relatives: str) -> None:
+        for relative in relatives:
+            self.write(relative)
+        files, _aliases, _cache = scan_bios_dir(self.bios, {}, True)
+        (indexed,) = (entry["path"] for entry in files.values())
+        self.run_dedup()
+        (kept,) = self.existing()
+        self.assertEqual(f"bios/{kept}", indexed)
+
+    def test_a_machine_folder_wins_over_an_emulator_tree(self):
+        self.assert_kept_is_primary("Other/zesarux/sms.rom", "Sega/Master System/sms.rom")
+
+    def test_a_primary_wins_over_a_variant(self):
+        self.assert_kept_is_primary("Sony/PS/zz/scph.bin", "Sony/PS/.variants/scph.bin")
+
+    def test_equal_copies_keep_the_first_walked(self):
+        self.assert_kept_is_primary("Arcade/MAME/naomi.zip", "Sega/Dreamcast/naomi.zip")
 
 
 class TheNoDedupListIsPinned(unittest.TestCase):

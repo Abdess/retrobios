@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 from collection.clonemap import clone_map_path, read_clone_map, record_clone_map
-from collection.duplicates import path_priority, plan_group_removals, scan_duplicates
+from collection.duplicates import plan_group_removals, scan_duplicates
+from collection.scan import primary_rank
 from core.sizes import size_text
 
 
@@ -34,7 +36,11 @@ def _remove_copies(canonical: str, true_dupes_to_remove: list[str], dry_run: boo
 
 
 def _settle_group(
-    paths: list[str], true_dupes_to_remove: list[str], clone_names: list[str], dry_run: bool
+    paths: list[str],
+    true_dupes_to_remove: list[str],
+    clone_names: list[str],
+    dry_run: bool,
+    bios_dir: str,
 ) -> dict:
     """Keep the best copy of one content and remove the others.
 
@@ -43,15 +49,18 @@ def _settle_group(
     is one an emulator looks for: printing either as a MAME clone named a
     file that stays, or a clone map entry that does not exist.
     """
+    def rank(path: str) -> tuple:
+        return primary_rank(Path(path), Path(bios_dir))
+
     # Find the best canonical across all paths
     all_paths = [p for p in paths if p not in true_dupes_to_remove]
     if not all_paths:
         # All copies were marked for removal: keep the best one
-        all_paths_sorted = sorted(paths, key=path_priority)
+        all_paths_sorted = sorted(paths, key=rank)
         all_paths = [all_paths_sorted[0]]
         true_dupes_to_remove = [p for p in paths if p != all_paths[0]]
 
-    canonical = sorted(all_paths, key=path_priority)[0]
+    canonical = sorted(all_paths, key=rank)[0]
     canonical_name = os.path.basename(canonical)
 
     all_names = set(os.path.basename(p) for p in paths)
@@ -114,14 +123,14 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
             continue
 
         group_clones: dict[str, dict] = {}
-        true_dupes_to_remove = plan_group_removals(sha1, paths, group_clones)
+        true_dupes_to_remove = plan_group_removals(sha1, paths, group_clones, bios_dir)
         mame_clones.update(group_clones)
 
         if not true_dupes_to_remove:
             continue
 
         clone_names = [name for entry in group_clones.values() for name in entry["clones"]]
-        settled = _settle_group(paths, true_dupes_to_remove, clone_names, dry_run)
+        settled = _settle_group(paths, true_dupes_to_remove, clone_names, dry_run, bios_dir)
         total_removed += len(settled["removed"])
         total_saved += settled.pop("saved")
         results[sha1] = settled
