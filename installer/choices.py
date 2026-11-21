@@ -173,6 +173,15 @@ def resolve_choices(
     return chosen
 
 
+def resolve_systems(values: list[str], manifest: dict | None, files: list[dict],
+                    omitted: list[dict]) -> list[str]:
+    """The systems --system names, for an install and a removal alike: the
+    list's ids, the platform's own names and the site's titles. --remove
+    took the ids alone, and refused the psx that installed the files."""
+    return resolve_choices(values, available_choices(files, omitted)["systems"], "system",
+                           system_aliases(manifest), key_file_holders(files, omitted))
+
+
 def parse_selection(text: str, count: int, ordered: bool = False) -> list[int]:
     """Numbers typed at a prompt: `3`, `1,4`, `2-5`, or `all`, 1-based.
 
@@ -470,10 +479,7 @@ def _requested_narrowing(
         sys.exit(1)
     choices = available_choices(files, omitted)
     try:
-        systems = resolve_choices(
-            args.system or [], choices["systems"], "system", system_aliases(manifest),
-            key_file_holders(files, omitted),
-        )
+        systems = resolve_systems(args.system or [], manifest, files, omitted)
         cores = resolve_choices(args.core or [], choices["cores"], "core")
         regions = resolve_regions(args.region or [])
     except ValueError as exc:

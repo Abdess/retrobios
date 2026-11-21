@@ -14,7 +14,7 @@ from collections.abc import Collection, Iterable
 from pathlib import Path, PurePosixPath
 from typing import NamedTuple
 
-from installer.choices import available_choices, emulator_names, resolve_choices
+from installer.choices import available_choices, emulator_names, resolve_choices, resolve_systems
 from installer.console import QUIT_CODE, _answer_yes
 from installer.destination import card_dest
 from installer.detect_frontends import detect_platforms
@@ -789,8 +789,7 @@ def run_removal(args: argparse.Namespace) -> int:
     omitted = list(manifest.get("omitted_files") or [])
     known = available_choices(every, omitted)
     try:
-        systems = resolve_choices(args.system, known["systems"], "system") \
-            if args.system else []
+        systems = resolve_systems(args.system or [], manifest, every, omitted)
         cores = resolve_choices(args.core, known["cores"], "core") if args.core else []
         emulators = resolve_choices(args.emulator, sorted(emulator_names(
             manifest, every, omitted)), "emulator") if args.emulator else []

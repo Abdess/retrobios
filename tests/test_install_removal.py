@@ -179,6 +179,23 @@ class RemoveOneOfTwoSystems(unittest.TestCase):
                           install.record_options(repo.setup()["choice"]))
 
 
+class TheNamesAnInstallTakes(unittest.TestCase):
+    """--remove read --system against the list's ids alone: the psx that
+    installed the PlayStation files stopped the removal on "unknown system"."""
+
+    def test_a_platform_name_removes_what_it_installed(self):
+        with SharedRepository() as repo:
+            listed = repo.root / "install" / "retroarch.json"
+            manifest = json.loads(listed.read_text())
+            manifest["system_names"] = {"sony-playstation": ["psx"]}
+            listed.write_text(json.dumps(manifest))
+            proc = repo.run("--system", "psx", "--system", "nintendo-gba", "--yes")
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            proc = repo.run("--remove", "--system", "psx", "--yes")
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            self.assertEqual(sorted(repo.snapshot()), sorted(GBA_ONLY + ["shared.bin"]))
+
+
 class NeverTouched(unittest.TestCase):
     def test_a_changed_file_and_one_added_by_hand_stay(self):
         with SharedRepository() as repo:
