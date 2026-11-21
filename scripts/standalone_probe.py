@@ -508,7 +508,11 @@ def probe(args: argparse.Namespace) -> int:
 
 
 def _probe(args: argparse.Namespace, emu: Emulator) -> int:
-    meta, tree = installed(emu, args.sha256)
+    try:
+        meta, tree = installed(emu, args.sha256)
+    except (cp.ProbeError, OSError, subprocess.SubprocessError) as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
     max_load = args.max_load if args.max_load is not None else (os.cpu_count() or 1) / 4
     load_before = cp.load_average()
     if args.record and load_before and load_before[0] > max_load:
