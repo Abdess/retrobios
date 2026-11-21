@@ -568,7 +568,7 @@ class AMissingDestIsSaid(unittest.TestCase):
 
     def test_only_y_or_yes_creates_the_folders(self):
         # A default-no question read "yeah" as yes, as no other one does.
-        root = Path(_tempdir(self))
+        root = scratch_dir(self)
         self.assertEqual(self._call(root / "a" / "b", True, "yeah")[1], 2)
         self.assertFalse((root / "a").exists())
 

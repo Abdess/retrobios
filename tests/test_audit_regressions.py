@@ -965,7 +965,7 @@ class AutoFetchReadsListsAndPlacesWithoutClobbering(unittest.TestCase):
         """'ds' is in '3DS': the DS firmware went to Nintendo/3DS."""
         from scripts.acquire import fetch as acquire_fetch
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             bios = Path(directory)
             for folder in ("Nintendo/3DS", "Nintendo/Nintendo DS"):
                 (bios / folder).mkdir(parents=True)
@@ -982,7 +982,7 @@ class AutoFetchReadsListsAndPlacesWithoutClobbering(unittest.TestCase):
 
         from scripts.acquire import fetch as acquire_fetch
 
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             bios, acquired = Path(directory, "bios"), Path(directory, "acquire")
             bios.mkdir()
             with mock.patch.object(acquire_fetch, "ACQUIRE_DIR", acquired), \

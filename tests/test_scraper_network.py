@@ -134,7 +134,7 @@ class SourceRevisionReadsEveryShape(unittest.TestCase):
         them so, the scrapers' required_revision did not."""
         url = "https://raw.githubusercontent.com/ROCKNIX/distribution/20250101/f"
         self.assertEqual(required_revision(url, "rocknix/distribution"), "20250101")
-        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp, "p.yml")
             path.write_text(f"source: {url}\n")
             self.assertEqual(scraped_revision(path, "rocknix/Distribution"), "20250101")

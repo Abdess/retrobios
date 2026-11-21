@@ -158,7 +158,7 @@ class AVariantCopyIsAnArchive(unittest.TestCase):
             container = f"{zlib.crc32(copy.read_bytes()):08x}"
             db = {"files": {"s": {"path": str(copy), "crc32": container}}}
             pool = AtomPool(bios, db=db)
-            self.assertEqual(pool.read(_crc(ROM_A)), ROM_A)
+            self.assertEqual(pool.read(loopback.crc(ROM_A)), ROM_A)
             self.assertNotIn(container, pool)
 
 
