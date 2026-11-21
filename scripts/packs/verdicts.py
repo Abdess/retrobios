@@ -269,6 +269,18 @@ def compute_severity(
     return Severity.OK
 
 
+def blocking_missing(severity_counts: dict[str, int], mode: str) -> int:
+    """Destinations whose missing file stops the console, from verify's counts.
+
+    compute_severity gives a required firmware gap with no HLE fallback
+    CRITICAL where the frontend reads the bytes and WARNING where it only
+    checks the file is there, and nothing else reaches that severity in an
+    existence frontend.
+    """
+    severity = Severity.CRITICAL if reads_file_contents(mode) else Severity.WARNING
+    return severity_counts.get(severity, 0)
+
+
 def storage_verdict(file_entry: dict, emulator_pack: bool) -> dict | None:
     """The result a storage tier fixes before any lookup, as the builder sees it.
 

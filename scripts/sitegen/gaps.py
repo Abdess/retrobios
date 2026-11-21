@@ -321,19 +321,6 @@ def _platform_lists_sentence(
     )
 
 
-def _missing_required_firmware(cov: dict) -> int:
-    """Entries of a platform's list that are missing, required and firmware.
-
-    Only those stop a console from starting. Game data and files no core
-    opens are counted apart, and red on every short row carried no signal.
-    """
-    return len({
-        (d.get("system", ""), d.get("name", "")) for d in cov.get("details") or []
-        if d.get("status") == "missing" and d.get("required", True)
-        and d.get("category", "bios") == "bios" and not d.get("settled_by")
-    })
-
-
 def _ratio_cell(done: int, total: int, alarm: int = 0) -> str:
     """A held-over-needed cell: the numbers, a bar, and a badge only when
     required firmware is missing."""
@@ -453,7 +440,7 @@ def _pack_content_rows(coverages: dict) -> list[str]:
         )
         rows.append(
             f"| [{display}](platforms/{pname}.md) "
-            f"| {_ratio_cell(cov['present'], cov['total'], _missing_required_firmware(cov))} "
+            f"| {_ratio_cell(cov['present'], cov['total'], cov['required_missing'])} "
             f"| {_ratio_cell(cov['core_present'], core_total)} "
             f"| {check_label(cov['mode'], cov['config'].get('hash_rule'))} |"
         )

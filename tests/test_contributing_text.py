@@ -44,7 +44,8 @@ class CoverageReadsTheGivenProfiles(unittest.TestCase):
 
         def fake_verify(_config, _db, emulators_dir, **_kwargs):
             seen.append(emulators_dir)
-            return {"status_counts": {}, "total_files": 0, "undeclared_files": [], "details": []}
+            return {"status_counts": {}, "severity_counts": {}, "verification_mode": "existence",
+                    "total_files": 0, "undeclared_files": [], "details": []}
 
         with mock.patch.object(readme, "verify_platform", fake_verify), \
                 mock.patch.object(readme, "load_emulator_profiles", return_value={}):

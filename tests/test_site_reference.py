@@ -82,6 +82,7 @@ import core
 from sitegen import sources
 from model import releaserecord
 from core import upstream
+from packs.verdicts import Severity, blocking_missing, compute_severity
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -329,13 +330,18 @@ class GapsPageNumbers(unittest.TestCase):
         self.assertNotIn("rb-badge", gaps._ratio_cell(99, 100))
         self.assertIn('class="rb-bar"', gaps._ratio_cell(99, 100))
         self.assertIn("rb-badge-danger", gaps._ratio_cell(99, 100, 1))
-        cov = {"details": [
-            {"name": "a", "system": "s", "status": "missing", "required": True, "category": "bios"},
-            {"name": "b", "system": "s", "status": "missing", "required": True,
-             "category": "game_data"},
-            {"name": "c", "system": "s", "status": "missing", "required": False},
-        ]}
-        self.assertEqual(gaps._missing_required_firmware(cov), 1)
+        self.assertNotIn("_missing_required_firmware", script_source("generate_site.py"))
+
+    def test_blocking_missing_reads_verify_severity(self):
+        """The badge is verify's count: a required gap with an HLE fallback
+        is INFO there and stopped no console, yet the page counted it."""
+        def gap(mode: str, hle: bool) -> int:
+            severity = compute_severity("missing", True, mode, hle)
+            return blocking_missing({severity: 1}, mode)
+        for mode in ("existence", "md5", "sha1"):
+            self.assertEqual(gap(mode, False), 1, mode)
+            self.assertEqual(gap(mode, True), 0, mode)
+        self.assertEqual(blocking_missing({Severity.WARNING: 2}, "md5"), 0)
 
     def test_headings_and_header(self):
         source = script_source("generate_site.py")

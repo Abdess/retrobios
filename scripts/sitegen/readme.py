@@ -29,6 +29,7 @@ from model.profiles import load_emulator_profiles, unique_emulator_profiles
 from model.registry import VERSIONS_FILE, list_registered_platforms, load_platform_registry
 from model.systems import system_index
 from packs.coverage import verify_platform
+from packs.verdicts import blocking_missing
 from resolve.cores import resolve_platform_cores
 from resolve.review import LARGE_FILE_ISSUE_URL
 from sitegen.config import REPO_SLUG, REPO_URL, SITE_URL, UPLOAD_ROOT
@@ -103,6 +104,9 @@ def compute_coverage(
         "pack_files": present + core_present,
         "total_missing": missing + core_missing,
         "mode": config.get("verification_mode", "existence"),
+        # The gaps page badge: verify's count, never refiltered from details.
+        "required_missing": blocking_missing(
+            result["severity_counts"], result["verification_mode"]),
         "details": result["details"],
         "config": config,
         "ground_truth": result.get(
@@ -116,7 +120,7 @@ def compute_coverage(
 # stores it here and the second reads it back, instead of verifying every
 # platform twice (about a minute of the site build).
 COVERAGE_CACHE_DIR = REPO_ROOT / "tmp" / "coverage-cache"
-_COVERAGE_CACHE_FORMAT = "3"
+_COVERAGE_CACHE_FORMAT = "4"
 
 
 def _coverage_inputs(db_path: Path, platforms_dir: str, emulators_dir: str) -> str:
