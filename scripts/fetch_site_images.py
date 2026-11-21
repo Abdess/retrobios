@@ -29,13 +29,12 @@ import json
 import re
 import subprocess
 import sys
-import urllib.error
 import urllib.parse
-import urllib.request
 from pathlib import Path
 
 from model.registry import load_platform_registry
 from core.paths import PLATFORMS_DIR, REPO_ROOT
+from scraper.base_scraper import FetchError, fetch_bytes
 
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
@@ -47,9 +46,9 @@ AVATAR_HOST = "avatars.githubusercontent.com"
 USER_AGENT = "retrobios-site-images"
 
 def fetch(url: str) -> bytes:
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(request, timeout=60) as response:
-        return response.read()
+    """A GET retried on a rate limit or a dropped connection: one 429
+    midway left icons rewritten under a sources.json of the previous run."""
+    return fetch_bytes(url, {"User-Agent": USER_AGENT}, timeout=60)
 
 
 def square_image(data: bytes, size: int, kind: str = "PNG", flip: bool = False,
@@ -212,8 +211,8 @@ def fetch_icons() -> None:
         url = f"{SYSTEM_ICON_BASE}/{urllib.parse.quote(name)}.png"
         try:
             data = fetch(url)
-        except urllib.error.HTTPError as exc:
-            if exc.code == 404:
+        except FetchError as exc:
+            if exc.status == 404:
                 continue
             raise
         file_name = f"{name}.png"

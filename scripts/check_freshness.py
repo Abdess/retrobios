@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import http.client
 import io
 import json
 import re
@@ -1130,8 +1131,9 @@ def redump_datfile_version(code: str) -> str:
     gives the download: a HEAD request, nothing downloaded."""
     url = game_dat_importer.REDUMP_DATFILE_URL.format(code=code)
     request = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "retrobios/1.0"})
-    with urllib.request.urlopen(request, timeout=60) as response:
-        disposition = response.headers.get("Content-Disposition", "")
+    disposition = upstream.open_retrying(
+        request, lambda response: response.headers.get("Content-Disposition", ""), timeout=60
+    )
     named = game_dat_importer.DISPOSITION.search(disposition)
     match = game_dat_importer.REDUMP_FILE.match(named["file"]) if named else None
     if not match:
@@ -1152,7 +1154,7 @@ def _check_redump_games(offline: bool) -> Finding:
     for code, (_name, system, _floor) in sorted(game_dat_importer.REDUMP_DATS.items()):
         try:
             remote = redump_datfile_version(code)
-        except (OSError, ValueError) as exc:
+        except (OSError, http.client.HTTPException, upstream.UpstreamError, ValueError) as exc:
             return Finding("catalogs", subject, UNKNOWN, local=newest, detail=str(exc))
         remote_newest = max(remote_newest, remote)
         if local.get(system) != remote:
