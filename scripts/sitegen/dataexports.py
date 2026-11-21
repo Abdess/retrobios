@@ -20,7 +20,7 @@ from model import retired as model_retired
 from model.database import sha1_at
 from model.dumpcatalog import load_provenance_snapshots
 from model.profiles import is_emulator
-from packs.crossref import FileConsumers
+from packs.crossref import FileConsumers, SupplementalIndex
 from acquire.provenance import build_report
 from sitegen.apiitems import core_index_items, system_index_items
 from sitegen.config import DATA_LICENSE, REPO_URL, build_commit
@@ -241,7 +241,7 @@ def build_emulator_gap_report(
     profiles: dict,
     coverages: dict,
     db: dict,
-    data_names: set[str] | None = None,
+    data_names: SupplementalIndex | None = None,
 ) -> dict:
     """Files a core loads that no platform declares, per emulator profile.
 

@@ -4405,15 +4405,13 @@ class ASameNamedMemberIsNotTheFile(unittest.TestCase):
         with zipfile.ZipFile(tmp / "bios" / "extras.zip", "w") as zf:
             zf.writestr("files/other.ttf", b"MEMBER FONT")
         names = crossref.build_supplemental_index(str(tmp / "data"), str(tmp / "bios"))
-        locations = crossref._supplemental_locations(str(tmp / "data"), str(tmp / "bios"))
-        with mock.patch.object(crossref, "_supplemental_locations", lambda: locations):
-            for fname, data in (("font.ttf", b"DATA FONT"), ("other.ttf", b"MEMBER FONT")):
-                with self.subTest(name=fname):
-                    held = {"name": fname, "sha1": hashlib.sha1(data).hexdigest()}
-                    other = {"name": fname, "sha1": "0" * 40}
-                    self.assertTrue(crossref._data_hit(fname, None, held, names))
-                    self.assertFalse(crossref._data_hit(fname, None, other, names))
-                    self.assertTrue(crossref._data_hit(fname, None, {"name": fname}, names))
+        for fname, data in (("font.ttf", b"DATA FONT"), ("other.ttf", b"MEMBER FONT")):
+            with self.subTest(name=fname):
+                held = {"name": fname, "sha1": hashlib.sha1(data).hexdigest()}
+                other = {"name": fname, "sha1": "0" * 40}
+                self.assertTrue(crossref._data_hit(fname, None, held, names))
+                self.assertFalse(crossref._data_hit(fname, None, other, names))
+                self.assertTrue(crossref._data_hit(fname, None, {"name": fname}, names))
 
 
 class AnEmptyTargetIsNotEveryCore(unittest.TestCase):

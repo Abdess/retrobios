@@ -107,10 +107,29 @@ def global_report_scope(
     }
 
 
+@dataclass(frozen=True)
+class SupplementalIndex:
+    """The names data/ and the ZIPs under bios/ hold, and where, for one pair of roots."""
+
+    names: frozenset[str]
+    data_root: str
+    bios_root: str
+
+    def __contains__(self, name: object) -> bool:
+        return name in self.names
+
+    def __bool__(self) -> bool:
+        return bool(self.names)
+
+    def locations(self) -> dict[str, list[tuple[str, str]]]:
+        """Each name's files and members under the same roots, read on first use."""
+        return _supplemental_locations(self.data_root, self.bios_root)
+
+
 def build_supplemental_index(
     data_root: str = "data", bios_root: str = BIOS_DIR
-) -> set[str]:
-    """Build a set of filenames and directory names in data/ and inside bios/ ZIPs.
+) -> SupplementalIndex:
+    """Index the filenames and directory names in data/ and inside bios/ ZIPs.
 
     A directory is indexed only with its trailing slash: a bare name matched a
     file entry of the same name, and BasiliskII's required `ROM` read as held
@@ -143,7 +162,7 @@ def build_supplemental_index(
                 names.add(dpath.name + "/")
                 names.add(dpath.name.lower() + "/")
         names |= _zip_member_names(bios_path)
-    return names
+    return SupplementalIndex(frozenset(names), data_root, str(bios_root))
 
 
 _zip_members_cache: dict[str, list[tuple[str, list[str]]]] = {}
@@ -189,7 +208,7 @@ def _resolve_source(
     fname: str,
     by_name: dict[str, list],
     by_name_lower: dict[str, str],
-    data_names: set[str] | None = None,
+    data_names: SupplementalIndex | None = None,
     by_path_suffix: dict | None = None,
     file_entry: dict | None = None,
     db_files: dict | None = None,
@@ -271,7 +290,7 @@ def _resolve_source(
 
 
 def _data_hit(
-    fname: str, basename: str | None, file_entry: dict | None, data_names: set[str]
+    fname: str, basename: str | None, file_entry: dict | None, data_names: SupplementalIndex
 ) -> bool:
     """Whether data/ or a ZIP holds the name: a directory entry looks for a
     directory, a file entry for a file. A file entry that declares a hash is
@@ -289,7 +308,7 @@ def _data_hit(
         return True
     return any(
         _content_matches(location, declared)
-        for location in _supplemental_locations().get((basename or fname).lower(), ())
+        for location in data_names.locations().get((basename or fname).lower(), ())
     )
 
 
@@ -583,7 +602,7 @@ def entry_target(entry: dict, files: list[dict]) -> tuple[dict, str]:
     return with_archive_members(entry, files), entry.get("path") or ""
 
 
-def entry_index(db: dict, data_names: set[str] | None) -> dict:
+def entry_index(db: dict, data_names: SupplementalIndex | None) -> dict:
     """The collection indexes entry_source reads, one build for every caller."""
     indexes = db.get("indexes", {})
     by_name = indexes.get("by_name", {})
@@ -646,7 +665,7 @@ def _resolve_archive_source(
     archive_name: str,
     by_name: dict[str, list],
     by_name_lower: dict[str, str],
-    data_names: set[str] | None = None,
+    data_names: SupplementalIndex | None = None,
     by_path_suffix: dict | None = None,
 ) -> str:
     """Resolve source for an archive (ZIP) name, returning a source category string."""
@@ -1369,7 +1388,7 @@ def cross_reference(
     profiles: dict[str, dict],
     declared: dict[str, set[str]],
     db: dict,
-    data_names: set[str] | None = None,
+    data_names: SupplementalIndex | None = None,
     **scope: Unpack[ReportScope],
 ) -> dict:
     """Compare emulator profiles against platform declarations.

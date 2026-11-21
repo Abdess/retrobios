@@ -12,7 +12,7 @@ from core.hashing import parse_hash_list
 from core.sizes import size_text
 from model.systemnames import system_name
 from model.profiles import is_emulator
-from packs.crossref import FileConsumers
+from packs.crossref import FileConsumers, SupplementalIndex
 from sitegen import entries as siteentries, markup, measurements as sitemeasurements
 from sitegen.cards import ROMSET_FAQ, emulator_file_anchors
 from sitegen.config import REPO_URL, date_line, yaml
@@ -73,7 +73,7 @@ def _distinct_spellings(names: list) -> list[str]:
 
 
 def availability_check(
-    db: dict, data_names: set[str] | None, owner: str = "",
+    db: dict, data_names: SupplementalIndex | None, owner: str = "",
 ) -> Callable[[dict], bool]:
     """A predicate answering whether the collection holds a file.
 
@@ -502,7 +502,7 @@ def generate_emulator_page(
     profile: dict,
     db: dict,
     consumers: FileConsumers | None = None,
-    data_names: set[str] | None = None,
+    data_names: SupplementalIndex | None = None,
     data_registry: dict | None = None,
     data_dirs: list[dict] | None = None,
 ) -> str:
@@ -774,7 +774,7 @@ class _EmulatorSources:
 
     db: dict
     consumers: FileConsumers | None
-    data_names: set[str] | None
+    data_names: SupplementalIndex | None
 
 
 def _emulator_files_section(
@@ -891,7 +891,7 @@ def emulator_pages(
     profile: dict,
     db: dict,
     consumers: FileConsumers | None = None,
-    data_names: set[str] | None = None,
+    data_names: SupplementalIndex | None = None,
     data_registry: dict | None = None,
     data_dirs: list[dict] | None = None,
 ) -> dict[str, str]:

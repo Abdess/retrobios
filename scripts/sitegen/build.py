@@ -23,7 +23,7 @@ from model.guides import HANDHELD_GUIDE
 from model.profiles import is_emulator, lists_files, load_emulator_profiles
 from model.registry import list_registered_platforms, load_platform_registry
 from model.systemnames import program_names, set_console_sections, system_name
-from packs.crossref import FileConsumers
+from packs.crossref import FileConsumers, SupplementalIndex
 from acquire.provenance import build_report, profile_needs
 from resolve.cores import resolve_platform_cores
 from resolve.review import load_platform_hashes, load_profile_hashes
@@ -179,7 +179,7 @@ class _SiteRun:
     registry: dict
     platform_names: list[str]
     data_registry: dict
-    suppl_names: set[str]
+    suppl_names: SupplementalIndex
     coverages: dict
     profiles: dict
     consumers: FileConsumers

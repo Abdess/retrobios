@@ -6,6 +6,7 @@ import dataclasses
 import html
 import re
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from core.hashing import declared_hash_lists
 from core.text import series
@@ -23,6 +24,9 @@ from sitegen.emulatorsindex import content_check_ceiling
 from sitegen.parts import list_pages
 from sitegen.render import code_span, count_text, escape_tags
 from sitegen.sources import source_ref_markdown
+
+if TYPE_CHECKING:
+    from packs.crossref import SupplementalIndex
 
 
 # Contributing page
@@ -878,7 +882,7 @@ def generate_gap_analysis(
     profiles: dict,
     coverages: dict,
     db: dict,
-    data_names: set[str] | None = None,
+    data_names: SupplementalIndex | None = None,
     registry: dict | None = None,
     gap_report: dict | None = None,
     listing: SourceListing | None = None,
