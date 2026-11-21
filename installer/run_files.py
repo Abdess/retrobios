@@ -49,7 +49,7 @@ from installer.games import fallback_lines, read_games
 from installer.install_record import _RECORD_TAKEN, by_record, drop_recorded, record_menu_words
 from installer.invocation import _INVOCATION
 from installer.line_menu import MenuContext, _prompt_custom_selection
-from installer.lists import fetch_manifest, fetch_targets, local_targets
+from installer.lists import ListFailure, fetch_manifest, fetch_targets, load_targets, local_targets, targets_failure_lines
 from installer.manifest import GAME_DATA
 from installer.narrowing import (
     _chosen,
@@ -78,6 +78,7 @@ from installer.plan_words import (
     unlisted_saves_words,
 )
 from installer.platforms import PLATFORM_NAMES, display_name, system_title
+from installer.refusal import Refusal
 from installer.tally import (
     _bytes,
     _left_out_lines,
@@ -174,13 +175,10 @@ def _found_files(args: argparse.Namespace, plat: str,
                       *(f"  {match['dest']}  {match.get('sha1', '')}" for match in matches)],
     }.get(result)
     if lines is not None:
-        EVENTS.emit("error", stage="option", reason="unknown", platform=plat,
-                    message=lines[0][len("Error: "):])
-        for line in lines:
-            print(line, file=sys.stderr)
         # 4: the hash was read and the list holds no one file for it, neither
         # a failure (1) nor an option refused (2).
-        sys.exit(4)
+        raise Refusal("option", "unknown", plat, *lines, code=4,
+                      message=lines[0][len("Error: "):])
     for match in matches:
         print(f"  {value} is {match['dest']}")
     return matches, []
@@ -258,10 +256,10 @@ def _pass_files(run: _InstallRun, plat_name: str, bios_path: Path) -> _PlatformP
     p = _PlatformPass(plat_name, bios_path, manifest)
     if run.args.source == "truth":
         if manifest.get("truth_files") is None:
-            print(f"Error: the {plat_name} file list does not say what the emulator "
-                  "profiles prove is read, which --source truth needs.", file=sys.stderr)
-            print(_older_list_advice(plat_name), file=sys.stderr)
-            sys.exit(1)
+            raise Refusal("option", "not_recorded", plat_name,
+                          f"Error: the {plat_name} file list does not say what the emulator "
+                          "profiles prove is read, which --source truth needs.",
+                          _older_list_advice(plat_name))
         before = len(p.files)
         p.files, p.omitted_files = truth_lists(manifest, p.files, p.omitted_files)
         detail(f"  What the emulator profiles prove is read: {before} to "
@@ -322,10 +320,9 @@ def _pass_options(run: _InstallRun, p: _PlatformPass) -> bool:
     if args.no_game_data and not p.manifest.get("categorized"):
         # Without the field nothing is marked, and the run would
         # install the game data it was asked to leave out.
-        print(f"Error: the {plat_name} file list records no file category, "
-              "which --no-game-data needs.", file=sys.stderr)
-        print(_older_list_advice(plat_name), file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("option", "not_recorded", plat_name,
+                      f"Error: the {plat_name} file list records no file category, "
+                      "which --no-game-data needs.", _older_list_advice(plat_name))
 
     if args.declared_only:
         before = len(p.files)
@@ -334,9 +331,7 @@ def _pass_options(run: _InstallRun, p: _PlatformPass) -> bool:
                "(--declared-only)")
 
     if args.list_targets:
-        targets = fetch_targets(plat_name)
-        if targets is None:
-            sys.exit(1)
+        targets = needed_targets(plat_name)
         if not targets:
             print(f"  No targets available for {plat_name}")
         else:
@@ -390,13 +385,23 @@ def _pass_target(run: _InstallRun, p: _PlatformPass) -> None:
         _pass_target_cores(run, p, target)
 
 
+def needed_targets(plat: str) -> dict:
+    """The board list a run cannot go on without, its failure the run's refusal."""
+    try:
+        return load_targets(plat)
+    except ListFailure as stopped:
+        # A list the run would carry on without stops this one all the same:
+        # it said why on stderr and ended with code 1, no error event sent.
+        problem = stopped.problem
+        raise Refusal("targets", problem.code, problem.plat,
+                      *targets_failure_lines(problem), code=problem.fatal or 1) from None
+
+
 def _pass_target_cores(run: _InstallRun, p: _PlatformPass, target: str) -> None:
     """The files narrowed to the cores the board's list names."""
     targets = run.target_lists.get(p.plat_name)
     if targets is None:
-        targets = fetch_targets(p.plat_name)
-    if targets is None:
-        sys.exit(1)
+        targets = needed_targets(p.plat_name)
     target_info = targets.get(target)
     if target_info is None:
         # Carrying on would install every file, which is the opposite
@@ -433,13 +438,10 @@ def _pass_installed_cores(run: _InstallRun, p: _PlatformPass) -> None:
     if not args.installed_cores:
         return
     if "system_cores" not in manifest:
-        print(
-            f"Error: the {plat_name} file list does not say which cores "
-            "read which systems, which --installed-cores needs.",
-            file=sys.stderr,
-        )
-        print(_older_list_advice(plat_name), file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("option", "not_recorded", plat_name,
+                      f"Error: the {plat_name} file list does not say which cores "
+                      "read which systems, which --installed-cores needs.",
+                      _older_list_advice(plat_name))
     before = len(p.files)
     info_dests = _unprofiled_cores_firmware(
         plat_name, bios_path, manifest, found_cores,
@@ -697,10 +699,10 @@ def _pass_narrow(run: _InstallRun, p: _PlatformPass) -> None:
             detail(f"  Narrowed {before} to {len(p.files)} files")
     if args.one_per_slot:
         if not p.manifest.get("slot_fields"):
-            print(f"Error: the {plat_name} file list does not say which files a "
-                  "slot holds, which --one-per-slot needs.", file=sys.stderr)
-            print(_older_list_advice(plat_name), file=sys.stderr)
-            sys.exit(1)
+            raise Refusal("option", "not_recorded", plat_name,
+                          f"Error: the {plat_name} file list does not say which files a "
+                          "slot holds, which --one-per-slot needs.",
+                          _older_list_advice(plat_name))
         before = len(p.files)
         p.files, p.omitted_files = one_per_slot(p.files, p.omitted_files, p.slot_reach)
         detail(f"  One BIOS per console and region: {before} to {len(p.files)} files")

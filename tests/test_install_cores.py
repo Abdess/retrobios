@@ -579,7 +579,11 @@ class APlatformWithoutTargetsSaysSo(unittest.TestCase):
     def test_the_way_forward_is_named(self):
         with contextlib.redirect_stderr(io.StringIO()) as err, \
                 self.assertRaises(SystemExit):
-            install._unknown_target("switch", "misterfpga", {})
+            try:
+                install._unknown_target("switch", "misterfpga", {})
+            except install.Refusal as refusal:
+                refusal.report()
+                raise
         said = err.getvalue()
         self.assertIn("MiSTer FPGA has no hardware targets: run again without --target.", said)
         self.assertNotIn("unknown target", said)

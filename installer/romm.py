@@ -1,12 +1,12 @@
 """RomM: where it reads each platform's firmware, and the list laid out under its library."""
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 from installer.console import detail
 from installer.host_fs import _is_dir
+from installer.refusal import Refusal
 
 if TYPE_CHECKING:
     from installer.run_files import _PlatformPass
@@ -133,14 +133,13 @@ def _check_run_romm(run: _InstallRun) -> None:
         return
     # Applied or refused, never ignored.
     if not any(name == "romm" for name, _path in run.platforms):
-        print("Error: --romm-firmware applies to RomM, which this run does not "
-              "install for.", file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("option", "not_applicable", "romm",
+                      "Error: --romm-firmware applies to RomM, which this run does not "
+                      "install for.")
     try:
         parse_romm_firmware(args.romm_firmware)
     except ValueError as exc:
-        print(f"Error: {exc}", file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("option", "invalid", "romm", f"Error: {exc}") from None
 
 
 def _pass_romm_layout(run: _InstallRun, p: _PlatformPass) -> None:
@@ -149,8 +148,7 @@ def _pass_romm_layout(run: _InstallRun, p: _PlatformPass) -> None:
     try:
         layout = romm_firmware_layout(bios_path, run.args.romm_firmware)
     except ValueError as exc:
-        print(f"Error: {exc}", file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("option", "invalid", "romm", f"Error: {exc}") from None
     if layout is not None:
         p.files, library = romm_relayout(p.files, bios_path, *layout)
         if library != bios_path:

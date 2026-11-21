@@ -1,7 +1,6 @@
 """The plan shown before a download: what comes, its size and the space it needs."""
 from __future__ import annotations
 
-import sys
 from collections.abc import Collection
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -15,6 +14,7 @@ from installer.outcome import EVERYTHING_IN_PLACE
 from installer.paths import shown_path
 from installer.plan_words import _sized
 from installer.platforms import OTHER_TITLE, entry_systems, system_title
+from installer.refusal import Refusal
 from installer.space import space_shortfall
 from installer.tally import _bytes, parts_words, tally
 from installer.terminal import terminal_size
@@ -249,25 +249,21 @@ def _check_free_space(bios_path: Path, needed: int, plat: str = "", code: int = 
     free = shortfall[1]
     EVENTS.emit("no_space", platform=plat, folder=str(bios_path), bytes_needed=needed,
                 bytes_free=free)
-    EVENTS.emit("error", stage="space", reason="drive_full", platform=plat,
-                message=f"Not enough space on the drive holding {bios_path}: "
-                        f"{format_size(needed)} needed, {format_size(free)} free.")
-    print(f"\nNot enough space on the drive holding {bios_path}.", file=sys.stderr)
-    print(f"  Needed: {format_size(needed)}. Free: {format_size(free)}.",
-          file=sys.stderr)
+    lines = [f"\nNot enough space on the drive holding {bios_path}.",
+             f"  Needed: {format_size(needed)}. Free: {format_size(free)}."]
     if card:
         # Its system reads this card alone: another drive, with RetroArch's
         # list, was offered for an Onion card.
-        print(f"  Free up {format_size(needed - free)} on the card, then run it again: "
-              "its system reads its BIOS files there only.", file=sys.stderr)
-        sys.exit(code)
-    if not plat:
-        print(f"  Free up {format_size(needed - free)}, or use --dest to install "
-              "to another drive.", file=sys.stderr)
-        sys.exit(code)
-    # --dest alone used to mean RetroArch's list: the platform is named, so
-    # a Batocera install moved to a USB drive stays Batocera's.
-    print(f"  Free up {format_size(needed - free)}, or install to another drive:\n"
-          f"    {_INVOCATION.command(plat, '<folder on another drive>')}",
-          file=sys.stderr)
-    sys.exit(code)
+        lines.append(f"  Free up {format_size(needed - free)} on the card, then run it "
+                     "again: its system reads its BIOS files there only.")
+    elif not plat:
+        lines.append(f"  Free up {format_size(needed - free)}, or use --dest to install "
+                     "to another drive.")
+    else:
+        # --dest alone used to mean RetroArch's list: the platform is named, so
+        # a Batocera install moved to a USB drive stays Batocera's.
+        lines.append(f"  Free up {format_size(needed - free)}, or install to another "
+                     f"drive:\n    {_INVOCATION.command(plat, '<folder on another drive>')}")
+    raise Refusal("space", "drive_full", plat, *lines, code=code,
+                  message=f"Not enough space on the drive holding {bios_path}: "
+                          f"{format_size(needed)} needed, {format_size(free)} free.")

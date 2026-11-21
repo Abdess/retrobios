@@ -7949,7 +7949,7 @@ class _LineModeFindings(_CardFixtures):
                                return_value=mock.Mock(free=10)), \
                 contextlib.redirect_stderr(io.StringIO()) as err, \
                 self.assertRaises(SystemExit):
-            install._check_free_space(self.root, 1000, "retroarch", card=True)
+            reported(install._check_free_space, self.root, 1000, "retroarch", card=True)
         said = err.getvalue()
         self.assertIn("on the card, then run it again", said)
         self.assertNotIn("--platform", said)

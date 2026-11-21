@@ -436,7 +436,7 @@ class TestFreeSpaceGuard(unittest.TestCase):
         code = 0
         with contextlib.redirect_stderr(buf):
             try:
-                install._check_free_space(path or self.root, needed)
+                reported(install._check_free_space, path or self.root, needed)
             except SystemExit as exc:
                 code = exc.code
         return buf.getvalue(), code
@@ -460,7 +460,7 @@ class TestFreeSpaceGuard(unittest.TestCase):
         events = io.StringIO()
         with unittest.mock.patch.object(install.EVENTS, "stream", events), \
                 contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
-            install._check_free_space(self.root, 5_000, "batocera")
+            reported(install._check_free_space, self.root, 5_000, "batocera")
         said = [json.loads(line) for line in events.getvalue().splitlines()]
         self.assertEqual(said[0], {"event": "no_space", "platform": "batocera",
                                    "folder": str(self.root), "bytes_needed": 5_000,
@@ -5573,7 +5573,7 @@ class ATypoGetsTheClosestName(unittest.TestCase):
         platform" with no way forward."""
         err = io.StringIO()
         with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
-            install.normalize_platform("TrimUI")
+            reported(install.normalize_platform, "TrimUI")
         self.assertNotIn("Unknown platform", err.getvalue())
         self.assertIn("--platform retroarch --dest FOLDER", err.getvalue())
 
@@ -5585,7 +5585,7 @@ class ATypoGetsTheClosestName(unittest.TestCase):
             err = io.StringIO()
             with self.subTest(typed=typed), contextlib.redirect_stderr(err), \
                     self.assertRaises(SystemExit) as raised:
-                install.normalize_platform(typed)
+                reported(install.normalize_platform, typed)
             self.assertEqual(raised.exception.code, 2)
             self.assertIn(f"{said} has no BIOS folder of its own: run again without "
                           "--platform", err.getvalue())
@@ -5593,7 +5593,7 @@ class ATypoGetsTheClosestName(unittest.TestCase):
     def test_a_system_name_is_suggested(self):
         err = io.StringIO()
         with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
-            install.normalize_platform("spruce")
+            reported(install.normalize_platform, "spruce")
         self.assertIn("Close matches: spruceOS.", err.getvalue())
         # The distinct names --list-platforms prints: Batocera is both a
         # platform and a system it recognises.
@@ -5606,7 +5606,7 @@ class ATypoGetsTheClosestName(unittest.TestCase):
     def test_a_platform_typo_is_answered_with_one_name(self):
         err = io.StringIO()
         with contextlib.redirect_stderr(err), self.assertRaises(SystemExit) as raised:
-            install.normalize_platform("batocra")
+            reported(install.normalize_platform, "batocra")
         self.assertEqual(raised.exception.code, 2)
         self.assertIn("Close matches: batocera.", err.getvalue())
         self.assertNotIn("recalbox", err.getvalue())
@@ -5640,7 +5640,8 @@ class ATypoGetsTheClosestName(unittest.TestCase):
     def test_a_target_typo(self):
         err = io.StringIO()
         with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
-            install._unknown_target("swich", "retroarch", {"switch": {}, "desktop": {}})
+            reported(install._unknown_target, "swich", "retroarch",
+                     {"switch": {}, "desktop": {}})
         self.assertIn("Close matches: switch.", err.getvalue())
         self.assertIn("--list-targets", err.getvalue())
 
@@ -5751,7 +5752,7 @@ class HintsGiveTheUsersOwnCommandBack(unittest.TestCase):
         with unittest.mock.patch.object(install.shutil, "disk_usage",
                                         return_value=SimpleNamespace(free=1)), \
                 contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
-            install._check_free_space(scratch_dir(self), 10, "batocera")
+            reported(install._check_free_space, scratch_dir(self), 10, "batocera")
         self.assertIn("--platform batocera --dest <folder on another drive>", err.getvalue())
 
     def test_the_one_liner_tells_the_installer_how_it_was_started(self):

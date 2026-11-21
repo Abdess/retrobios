@@ -26,12 +26,13 @@ from installer.line_folder import (
     ask_platform_folder,
     share_words,
 )
-from installer.lists import ListFailure, fetch_targets, load_targets
+from installer.lists import ListFailure, load_targets
 from installer.offline import LOCAL
 from installer.pack import pack_path
 from installer.pack_source import pack_name_platforms
 from installer.platforms import AVAILABLE_PLATFORMS, _NO_BIOS_FOLDER, display_name, normalize_platform
-from installer.run_files import _output_kind
+from installer.refusal import Refusal
+from installer.run_files import _output_kind, needed_targets
 from installer.safe_replace import KEPT
 from installer.setups import PORTABLE_ONLY, _default_dest, _line_setups, drive_example, found_setups
 from installer.standalone import _install_standalone_folders
@@ -145,9 +146,9 @@ def _start_install(args: argparse.Namespace, real_stdout: TextIO) -> _InstallRun
         if args.platform is None:
             spelled = pack_name_platforms(Path(os.path.expanduser(str(args.pack))).name)
             if len(spelled) != 1:
-                print("Error: name the platform the pack is for with --platform.",
-                      file=sys.stderr)
-                sys.exit(2)
+                raise Refusal("pack", "no_platform", "",
+                              "Error: name the platform the pack is for with --platform.",
+                              code=2)
             args.platform = spelled[0]
     return _InstallRun(args, term, os_type, interactive, listing, packing)
 
@@ -187,9 +188,6 @@ def _named_by_list_only(run: _InstallRun) -> NoReturn:
               else "the file list")
     message = (f"No supported platform detected: {display_name(args.platform)} was "
                f"not found here, and {source} does not say where it goes")
-    EVENTS.emit("error", stage="detect", reason="not_found", platform=args.platform,
-                message=message)
-    print(f"  {message}.", file=sys.stderr)
     hint = Invocation()
     hint.os_type, hint.options = run.os_type, _INVOCATION.options
     example = _default_dest(run.os_type, args.platform)
@@ -197,10 +195,11 @@ def _named_by_list_only(run: _InstallRun) -> NoReturn:
     # example stopped at a question.
     answered = "".join(f" {flag}" for flag, on in (
         ("--yes", args.yes), ("--no-input", args.no_input)) if on)
-    print("  Name its folder with --dest, for example:\n    "
-          + hint.command(args.platform, example if example is not None
-                         else "<its BIOS folder>") + answered, file=sys.stderr)
-    sys.exit(1)
+    raise Refusal("detect", "not_found", args.platform, f"  {message}.",
+                  "  Name its folder with --dest, for example:\n    "
+                  + hint.command(args.platform, example if example is not None
+                                 else "<its BIOS folder>") + answered,
+                  message=message)
 
 
 def _named_setup_default(run: _InstallRun) -> list[tuple[str, Path]]:
@@ -212,42 +211,32 @@ def _named_setup_default(run: _InstallRun) -> list[tuple[str, Path]]:
     if args.platform in PORTABLE_ONLY:
         # A portable emulator reads the folder beside its executable:
         # any default would be a folder it never opens.
-        EVENTS.emit("error", stage="detect", reason="not_found", platform=args.platform,
-                    message=f"Platform '{args.platform}' not found. "
-                    f"{PORTABLE_ONLY[args.platform]}")
-        print(
+        raise Refusal(
+            "detect", "not_found", args.platform,
             f"  Platform '{args.platform}' not found. {PORTABLE_ONLY[args.platform]} "
             f"Name it with --dest, for example: --platform {args.platform} "
             f"--dest '<BizHawk folder>{os.sep}Firmware'",
-            file=sys.stderr,
-        )
-        sys.exit(1)
+            message=f"Platform '{args.platform}' not found. {PORTABLE_ONLY[args.platform]}")
     if args.platform in _SHARE_FOLDERS:
         # Its own folder exists on the Batocera machine alone, which
         # detection would have found: here /userdata/bios was taken, and
         # the run ended on "Cannot create" with no event saying why.
         message = (f"Platform '{args.platform}' not found here. "
                    f"{share_words(args.platform)}")
-        EVENTS.emit("error", stage="detect", reason="not_found", platform=args.platform,
-                    message=message)
         example = drive_example(run.os_type, "SHARE", "bios", args.platform)
-        print(f"  {message} Name it with --dest, for example: --platform "
-              f"{args.platform} --dest {example}", file=sys.stderr)
-        sys.exit(1)
+        raise Refusal("detect", "not_found", args.platform,
+                      f"  {message} Name it with --dest, for example: --platform "
+                      f"{args.platform} --dest {example}", message=message)
     default_dest = _default_dest(run.os_type, args.platform)
     if default_dest is None:
         where = ("where this user can look, and its default folder may not be "
                  "the one it reads" if _default_set_aside(run.os_type, args.platform)
                  else "and no folder on this system is one it reads")
         message = f"Platform '{args.platform}' not found {where}"
-        EVENTS.emit("error", stage="detect", reason="not_found",
-                    platform=args.platform, message=message)
-        print(
-            f"  {message}. Name it with --dest, for example: "
-            f"--platform {args.platform} --dest <its BIOS folder>",
-            file=sys.stderr,
-        )
-        sys.exit(1)
+        raise Refusal("detect", "not_found", args.platform,
+                      f"  {message}. Name it with --dest, for example: "
+                      f"--platform {args.platform} --dest <its BIOS folder>",
+                      message=message)
     print(
         f"  Platform '{args.platform}' not detected, "
         f"using default path: {default_dest}"
@@ -446,9 +435,7 @@ def _check_run_target(run: _InstallRun) -> None:
                 drop_recorded(args, plat, "--target", "the board list does not name it")
     if args.target:
         for plat_name, _bios_path in platforms:
-            targets = fetch_targets(plat_name)
-            if targets is None:
-                sys.exit(1)
+            targets = needed_targets(plat_name)
             run.target_lists[plat_name] = targets
             if args.target not in targets:
                 _unknown_target(args.target, plat_name, targets, *(
@@ -472,12 +459,9 @@ def _check_run_cores(run: _InstallRun) -> None:
             drop_recorded(args, plat_name, "--installed-cores",
                           f"{plat_name} ships its cores with the system")
         elif args.installed_cores:
-            print(
-                f"Error: {plat_name} ships its cores with the system. "
-                f"--installed-cores applies to {', '.join(CORE_PLATFORMS)}",
-                file=sys.stderr,
-            )
-            sys.exit(1)
+            raise Refusal("option", "not_applicable", plat_name,
+                          f"Error: {plat_name} ships its cores with the system. "
+                          f"--installed-cores applies to {', '.join(CORE_PLATFORMS)}")
         if args.installed_cores and not run.cores_found[(plat_name, bios_path)]:
             if by_record(args):
                 drop_recorded(args, plat_name, "--installed-cores", "no core is installed")

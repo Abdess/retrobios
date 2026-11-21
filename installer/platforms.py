@@ -2,13 +2,12 @@
 from __future__ import annotations
 
 import re
-import sys
 from pathlib import Path, PurePosixPath
 from typing import NoReturn
 
 from installer.embedded import _EMBEDDED_RULES, _NO_FOLDER
-from installer.events import EVENTS
 from installer.manifest import OTHER_SYSTEMS
+from installer.refusal import Refusal
 
 # The platforms that publish a core list per board, install/targets/ in the
 # repository: a test holds the two equal. Offline, a platform outside it
@@ -197,14 +196,7 @@ def refuse_name(platform: str, *lines: str) -> NoReturn:
     2, as for an option argparse refuses: 1 also means --check found files
     to fetch, and a script reading it reran the install on a typo forever.
     """
-    message = " ".join(line.strip() for line in lines)
-    if message.startswith("Error: "):
-        message = message[len("Error: "):]
-    EVENTS.emit("error", stage="option", reason="unknown", platform=platform,
-                message=message)
-    for line in lines:
-        print(line, file=sys.stderr)
-    sys.exit(2)
+    raise Refusal("option", "unknown", platform, *lines, code=2)
 
 
 # Frontends and systems that keep no BIOS folder of their own: each
