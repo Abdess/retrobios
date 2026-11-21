@@ -7124,10 +7124,10 @@ class WhatOnlyAnInstallProvidesIsListed(unittest.TestCase):
     def test_only_the_bundled_only_copy_is_listed(self):
         import tempfile
 
-        import bundled_only
+        from packs import bundledonly
 
         with tempfile.TemporaryDirectory() as tmp, \
-                mock.patch.object(bundled_only, "list_registered_platforms", return_value=[]):
+                mock.patch.object(bundledonly, "list_registered_platforms", return_value=[]):
             def entry(sha1, name):
                 path = Path(tmp, name)
                 path.write_bytes(name.encode())
@@ -7145,12 +7145,12 @@ class WhatOnlyAnInstallProvidesIsListed(unittest.TestCase):
                                   {"name": "bios.rom", "sha1": "b" * 40, "bundled": True}]},
                 "core": {"files": [{"name": "bios.rom", "sha1": "b" * 40}]},
             }
-            rows = bundled_only.bundled_only(db, profiles, tmp, Path(tmp))
+            rows = bundledonly.bundled_only(db, profiles, tmp, Path(tmp))
             self.assertEqual([row["path"] for row in rows], [str(Path(tmp, "icon.png"))])
             # A platform whose package leaves the file out brings it from the
             # collection: the copy stays.
             profiles["app"]["files"][0]["not_bundled_on"] = ["someplatform"]
-            self.assertEqual(bundled_only.bundled_only(db, profiles, tmp, Path(tmp)), [])
+            self.assertEqual(bundledonly.bundled_only(db, profiles, tmp, Path(tmp)), [])
 
     def test_every_copy_of_the_listed_bytes_is_listed(self):
         """The database keeps one path per content: splitwolf's sprite
@@ -7158,7 +7158,7 @@ class WhatOnlyAnInstallProvidesIsListed(unittest.TestCase):
         import hashlib
         import tempfile
 
-        import bundled_only
+        from packs import bundledonly
 
         with tempfile.TemporaryDirectory() as tmp:
             for name in ("dir1/a.bmp", "dir2/a.bmp", "dir2/b.bmp"):
@@ -7167,17 +7167,17 @@ class WhatOnlyAnInstallProvidesIsListed(unittest.TestCase):
             sha1 = hashlib.sha1(b"same").hexdigest()
             row = {"sha1": sha1, "path": Path(tmp, "dir1/a.bmp").as_posix(), "size": 4,
                    "emulators": ["splitwolf"]}
-            copies = bundled_only.other_copies([row], Path(tmp))
+            copies = bundledonly.other_copies([row], Path(tmp))
             self.assertEqual([c["path"] for c in copies], [Path(tmp, "dir2/a.bmp").as_posix()])
 
     def test_the_collection_holds_no_copy_only_an_install_provides(self):
         """The pull request checks run this suite, not the pipeline: without
         this, a copy only a bundled entry reaches merges green."""
-        import bundled_only
+        from packs import bundledonly
         from model.database import load_database
         from model.profiles import load_emulator_profiles
 
-        rows = bundled_only.bundled_only(
+        rows = bundledonly.bundled_only(
             load_database(str(ROOT / "database.json")),
             load_emulator_profiles(str(ROOT / "emulators")),
             str(ROOT / "platforms"), ROOT / "install",
