@@ -42,6 +42,8 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   collection/            upkeep of bios/: duplicates, the MAME clone map, bit flips found and repaired
   profiling/             emulator profiles confronted with their upstream source (profile_sync.py)
   collection/            the scan of bios/ into database.json: digests, aliases, indexes
+  profiling/             emulator profiles confronted with their upstream source (profile_sync.py,
+                         fileless_audit.py, mame_ref_audit.py)
   romrecipes/            romset identification, rebuilt pinned archives, each archive's recipe
   acquire/               catalog coverage and the searches for a missing file
   games/                 the games-on-card rules and the index the installer reads for them
