@@ -28,6 +28,7 @@ from installer.destination import (
     card_root_above,
     copy_source_refusal,
     dest_drive,
+    missing_folder,
     mounted_cards_of,
 )
 from installer.detect_os import _DETECTED_OS, _FROM_CARD, detected_os, detected_shown
@@ -578,14 +579,18 @@ def _choose(state: TuiState, plat: str, dest: Path, proposed: bool = False) -> l
         state.card_note = (f"{dest.name} is created in "
                            f"{_short_path(dest.parent, state.home)}{reads}.")
         return _start_check(state)
-    if not dest.exists():
-        nearest = _nearest_folder(dest)
-        missing = len(dest.absolute().parts) - len(nearest.parts)
-        state.facts = {"nearest": nearest, "risky": nearest.parent == nearest or missing > 2}
-        # A path whose start was mistyped would be created from the root:
-        # the safe answer is the one under A.
-        return _push(state, "create", 1 if state.facts["risky"] else 0)
-    return _start_check(state)
+    found = missing_folder(dest)
+    if found is None:
+        return _start_check(state)
+    if found.verdict == "create":
+        # One level is a BIOS folder not made yet: line mode makes it and
+        # says so, the plan says so here.
+        state.card_note = f"{dest.name} is created in {_short_path(dest.parent, state.home)}."
+        return _start_check(state)
+    # Asked with no as the answer, as line mode asks. A path whose start
+    # was mistyped would be created from the root: said on the screen.
+    state.facts = {"nearest": found.nearest, "risky": found.nearest.parent == found.nearest}
+    return _push(state, "create", 1)
 
 
 def _card_folder(state: TuiState, folder: Path) -> CardChoice | None:

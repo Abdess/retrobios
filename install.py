@@ -14927,6 +14927,29 @@ def _refuse_file(dest: Path, named: str) -> None:
                   f"the file {named}.", message=where)
 
 
+class MissingFolder(NamedTuple):
+    """What a BIOS folder that does not exist yet needs before it is made."""
+    nearest: Path
+    missing: int
+    # "create": one level, a BIOS folder not made yet, made without a
+    # question. "ask": several, a path that may be mistyped, asked first
+    # with no as the answer when it can be asked.
+    verdict: str
+
+
+def missing_folder(dest: Path) -> MissingFolder | None:
+    """None when dest exists, else its nearest existing folder, how many
+    levels are missing below it and whether they are made or asked for:
+    the one rule line mode and the full screen both follow."""
+    if dest.exists():
+        return None
+    nearest = dest.absolute()
+    while not nearest.exists() and nearest.parent != nearest:
+        nearest = nearest.parent
+    missing = len(dest.absolute().relative_to(nearest).parts)
+    return MissingFolder(nearest, missing, "ask" if missing > 1 else "create")
+
+
 def _missing_dest(dest: Path, ask: bool, named: str = "named with --dest",
                   again: bool = False) -> bool:
     """Say that a --dest folder does not exist before anything goes there.
@@ -14942,17 +14965,16 @@ def _missing_dest(dest: Path, ask: bool, named: str = "named with --dest",
     """
     _refuse_closed(dest, named)
     _refuse_file(dest, named)
-    if dest.exists():
+    found = missing_folder(dest)
+    if found is None:
         return True
-    nearest = dest.absolute()
-    while not nearest.exists() and nearest.parent != nearest:
-        nearest = nearest.parent
-    missing = len(dest.absolute().relative_to(nearest).parts)
+    nearest, missing, verdict = found
+    asked = verdict == "ask" and ask
     # Said where it comes before a question: elsewhere the folder is made.
-    (print if missing > 1 and ask else detail)(
+    (print if asked else detail)(
         f"  {shown_path(dest)} does not exist. The nearest folder that does: "
         f"{shown_path(nearest)}")
-    if missing > 1 and ask and not _answer_yes(
+    if asked and not _answer_yes(
             f"  Create {_plural(missing, 'folder')} under {shown_path(nearest)}? [y/N] "):
         if again:
             print("  Not created.")
@@ -29180,14 +29202,18 @@ def _choose(state: TuiState, plat: str, dest: Path, proposed: bool = False) -> l
         state.card_note = (f"{dest.name} is created in "
                            f"{_short_path(dest.parent, state.home)}{reads}.")
         return _start_check(state)
-    if not dest.exists():
-        nearest = _nearest_folder(dest)
-        missing = len(dest.absolute().parts) - len(nearest.parts)
-        state.facts = {"nearest": nearest, "risky": nearest.parent == nearest or missing > 2}
-        # A path whose start was mistyped would be created from the root:
-        # the safe answer is the one under A.
-        return _push(state, "create", 1 if state.facts["risky"] else 0)
-    return _start_check(state)
+    found = missing_folder(dest)
+    if found is None:
+        return _start_check(state)
+    if found.verdict == "create":
+        # One level is a BIOS folder not made yet: line mode makes it and
+        # says so, the plan says so here.
+        state.card_note = f"{dest.name} is created in {_short_path(dest.parent, state.home)}."
+        return _start_check(state)
+    # Asked with no as the answer, as line mode asks. A path whose start
+    # was mistyped would be created from the root: said on the screen.
+    state.facts = {"nearest": found.nearest, "risky": found.nearest.parent == found.nearest}
+    return _push(state, "create", 1)
 
 
 def _card_folder(state: TuiState, folder: Path) -> CardChoice | None:

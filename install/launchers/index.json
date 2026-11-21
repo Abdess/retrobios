@@ -27,8 +27,8 @@
         {
           "dest": "roms/ports/retrobios/install.py",
           "repo_path": "install.py",
-          "size": 1470751,
-          "sha256": "d245aefa5fc0b6ee54bccbaf2b5788c8c032aac4f7f25e9967328ed3dc7bd8e3",
+          "size": 1471771,
+          "sha256": "fdb3c4d389126120d7f865212b08d99864983c6ac49210d04a98c1150cc46c9c",
           "executable": false
         },
         {
@@ -71,8 +71,8 @@
     "muos": {
       "archive": {
         "dest": "ARCHIVE/RetroBIOS.muxapp",
-        "size": 1524376,
-        "sha256": "71f1b4e07193fd40e74c7910597aa9f0c86ede64472fb6935e7b7dd73cb0079d"
+        "size": 1525396,
+        "sha256": "13a0aa4bbf7c17d7dc171568b060722a095b0010cfe6ee4ddd827c838b0d7bc2"
       },
       "members": [
         {
@@ -92,8 +92,8 @@
         {
           "name": "RetroBIOS/install.py",
           "repo_path": "install.py",
-          "size": 1470751,
-          "sha256": "d245aefa5fc0b6ee54bccbaf2b5788c8c032aac4f7f25e9967328ed3dc7bd8e3",
+          "size": 1471771,
+          "sha256": "fdb3c4d389126120d7f865212b08d99864983c6ac49210d04a98c1150cc46c9c",
           "executable": false
         },
         {
@@ -166,8 +166,8 @@
         {
           "dest": ".config/modules/retrobios/install.py",
           "repo_path": "install.py",
-          "size": 1470751,
-          "sha256": "d245aefa5fc0b6ee54bccbaf2b5788c8c032aac4f7f25e9967328ed3dc7bd8e3",
+          "size": 1471771,
+          "sha256": "fdb3c4d389126120d7f865212b08d99864983c6ac49210d04a98c1150cc46c9c",
           "executable": false
         },
         {

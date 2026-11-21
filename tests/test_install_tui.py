@@ -717,12 +717,13 @@ class Flow(unittest.TestCase):
         state.path_text = ""
         press(state, "paste")
         install.tui_update(state, Key("paste", '"~/my bios"'))
-        with mock.patch.object(install.Path, "exists", return_value=False), \
-                mock.patch.object(install, "_nearest_folder", return_value=HOME):
+        # Two missing levels are asked, Choose another folder in focus.
+        with mock.patch.object(install, "missing_folder",
+                               return_value=install.MissingFolder(HOME, 2, "ask")):
             press(state, "enter")
         self.assertEqual(state.screen, "create")
         self.assertEqual(state.dest, Path(os.path.expanduser("~/my bios")))
-        press(state, "down", "enter")
+        press(state, "enter")
         self.assertEqual(state.screen, "folder")
 
     def test_typed_paths(self):
@@ -2343,8 +2344,18 @@ class TicksBarAndPaths(unittest.TestCase):
                       " ".join(install.tui_view(state, 120, 40)))
         near = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, near, True)
-        install._choose(state, "retroarch", near / "bios")
-        self.assertEqual(self.focused(state).action, "create")
+        # Line mode's rule: two missing levels are asked with no in focus,
+        # one is made and said on the plan.
+        state.stack = ["folder"]
+        with contextlib.redirect_stdout(io.StringIO()):
+            install._choose(state, "retroarch", near / "a" / "b")
+        self.assertEqual((state.screen, self.focused(state).action), ("create", "other"))
+        self.assertFalse(state.facts["risky"])
+        state.stack = ["folder"]
+        with contextlib.redirect_stdout(io.StringIO()):
+            install._choose(state, "retroarch", near / "bios")
+        self.assertEqual(state.screen, "checking")
+        self.assertIn("bios is created in", state.card_note)
 
     def test_two_setups_of_one_name(self):
         flatpak = HOME / ".var/app/org.libretro.RetroArch/config/retroarch/system"
