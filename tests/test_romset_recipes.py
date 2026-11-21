@@ -889,8 +889,10 @@ class FbneoFetchReadsOneRevision(unittest.TestCase):
     CDN caches, and --fetch <revision> read the tip whatever was named."""
 
     def setUp(self):
+        from scripts.scraper import datfetch
         from scripts.scraper import romset_dat_importer as importer
 
+        self.datfetch = datfetch
         self.importer = importer
         self._tmp = tempfile.TemporaryDirectory()
         self.dir = Path(self._tmp.name)
@@ -922,46 +924,46 @@ class FbneoFetchReadsOneRevision(unittest.TestCase):
 
         from scripts.scraper import base_scraper
 
-        with mock.patch.object(self.importer, "_api_json", self._api), \
-                mock.patch.object(self.importer, "fetch_branch_head", self._head), \
+        with mock.patch.object(self.datfetch, "api_json", self._api), \
+                mock.patch.object(self.datfetch, "fetch_branch_head", self._head), \
                 mock.patch.object(base_scraper, "download", self._download):
             yield
 
     def test_bytes_that_are_not_the_listed_blob_are_refused(self):
         self.served = FBNEO_DAT.replace(b"1.0.0.03", b"1.0.0.02")
-        with self._patched(), self.assertRaises(self.importer.BlobMismatchError):
-            self.importer.fetch_pack("fbneo", "latest", self.dir)
+        with self._patched(), self.assertRaises(self.datfetch.BlobMismatchError):
+            self.datfetch.fetch_pack("fbneo", "latest", self.dir)
         self.assertFalse((self.dir / "fbneo-dats" / "c0ffee" / "Demo.dat").exists())
 
     def test_the_named_revision_is_the_one_listed(self):
         with self._patched():
-            target, blobs = self.importer.fetch_pack("fbneo", "v1.0.0.02", self.dir)
+            target, blobs = self.datfetch.fetch_pack("fbneo", "v1.0.0.02", self.dir)
         self.assertEqual(
             self.calls,
             ["libretro/FBNeo@v1.0.0.02",
-             f"{self.importer.FBNEO_API}/contents/dats?ref=c0ffee"],
+             f"{self.datfetch.FBNEO_API}/contents/dats?ref=c0ffee"],
         )
         self.assertEqual(list(blobs), ["Demo.dat"])
 
     def test_the_cache_is_keyed_by_the_commit(self):
         with self._patched():
-            target, blobs = self.importer.fetch_pack("fbneo", "v1.0.0.02", self.dir)
+            target, blobs = self.datfetch.fetch_pack("fbneo", "v1.0.0.02", self.dir)
         self.assertEqual(target, self.dir / "fbneo-dats" / "c0ffee")
-        self.assertEqual(self.importer.cached_pack("fbneo", "c0ffee", self.dir), (target, blobs))
+        self.assertEqual(self.datfetch.cached_pack("fbneo", "c0ffee", self.dir), (target, blobs))
 
     def test_another_commit_is_not_cached(self):
         with self._patched():
-            self.importer.fetch_pack("fbneo", "latest", self.dir)
-        with self.assertRaises(self.importer.NotCached):
-            self.importer.cached_pack("fbneo", "da14132b", self.dir)
+            self.datfetch.fetch_pack("fbneo", "latest", self.dir)
+        with self.assertRaises(self.datfetch.NotCached):
+            self.datfetch.cached_pack("fbneo", "da14132b", self.dir)
 
     def test_an_uncached_listxml_is_named(self):
-        with self.assertRaises(self.importer.NotCached):
-            self.importer.cached_pack("mame", "mame0289", self.dir)
+        with self.assertRaises(self.datfetch.NotCached):
+            self.datfetch.cached_pack("mame", "mame0289", self.dir)
 
     def test_latest_reads_the_default_branch(self):
         with self._patched():
-            self.importer.fetch_pack("fbneo", "latest", self.dir)
+            self.datfetch.fetch_pack("fbneo", "latest", self.dir)
         self.assertEqual(self.calls[0], "libretro/FBNeo@None")
 
     def test_a_revision_import_is_labelled_and_leaves_the_tip_blobs(self):

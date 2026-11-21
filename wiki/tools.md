@@ -1716,6 +1716,7 @@ the GitHub and text fetches, and the shared CLI), `dat_parser.py` (clrmamepro DA
 `logiqx_parser.py` (Logiqx XML DAT parser, used by the dump catalogs),
 `mame_parser.py` (MAME C source BIOS root set parser),
 `fbneo_parser.py` (FBNeo C source BIOS set parser),
+`datfetch.py` (upstream MAME `-listxml` and FBNeo DATs, cached under `.cache/dats/`),
 `_hash_merge.py` (text-based YAML patching that preserves formatting).
 
 Adding a scraper: inherit `BaseScraper`, implement `fetch_requirements()` and

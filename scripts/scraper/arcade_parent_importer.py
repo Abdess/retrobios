@@ -61,7 +61,7 @@ from .fbneo_parser import zip_name
 from .clex import DriverSourceError, blank_comments, call_args, call_span
 from .listxml import Opener, attrs, iter_elements, open_listxml, rom_members
 from model.mamerelease import mame_tag
-from .romset_dat_importer import MAME_LISTXML_URL, _api_json, cached_pack, fetch_pack
+from .datfetch import MAME_LISTXML_URL, api_json, cached_pack, fetch_pack
 
 SCHEMA_VERSION = 1
 DEFAULT_OUTPUT = Path("games") / "arcade"
@@ -813,7 +813,7 @@ def fetch_driver_source(
                  skip_existing=True)
     source = read_driver_source(tarball)
     if not offline:
-        listing = _api_json(f"https://api.github.com/repos/{slug}/git/trees/{commit}")
+        listing = api_json(f"https://api.github.com/repos/{slug}/git/trees/{commit}")
         listed = next(
             (
                 item.get("sha")
@@ -879,7 +879,7 @@ def fetch_repo_file(slug: str, commit: str, path: str, cache_dir: Path) -> tuple
     """One file of a GitHub repository at a commit, checked against the blob
     sha the repository lists for it, and that sha."""
     folder, _, name = path.rpartition("/")
-    listing = _api_json(
+    listing = api_json(
         f"https://api.github.com/repos/{slug}/contents/{urllib.parse.quote(folder)}?ref={commit}"
     )
     item = next(

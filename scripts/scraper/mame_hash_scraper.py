@@ -58,7 +58,7 @@ from .mame_devices import (
 )
 from .listxml import open_listxml
 from model.mamerelease import mame_tag, mame_version
-from .romset_dat_importer import fetch_pack
+from .datfetch import fetch_pack
 from .sparse_clone import fresh_cache, remove_clone, sparse_clone
 from .mame_parser import parse_mame_source_tree
 from core.paths import EMULATORS_DIR, PLATFORMS_DIR, REPO_ROOT
@@ -299,7 +299,7 @@ def _pinned_version(profile_path: Path) -> str:
 
 
 def fetch_release_listxml(version: str) -> Path:
-    """The -listxml MAME publishes for a release, in the DAT importer's cache.
+    """The -listxml MAME publishes for a release, in the shared DAT cache.
 
     0.289 is the tag mame0289 and the asset mame0289lx.zip.
     """
