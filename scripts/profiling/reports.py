@@ -20,6 +20,24 @@ class EntryReport:
     field: str = ""
 
 
+@dataclass(frozen=True)
+class CitedSource:
+    """A cited path in the repository the resolver settled it in, and the
+    two revisions that repository is compared at."""
+
+    path: str
+    repo: upstream.Repo
+    pin: str
+    head: str
+    # Read at its own revision: on HEAD, or held on the release tag the
+    # profile documents. A bump does not move such a repository.
+    own_revision: bool = False
+
+    def advances(self) -> bool:
+        """Whether a bump moves this repository's pin past what was cited."""
+        return self.pin != self.head and not self.own_revision
+
+
 @dataclass
 class ProfileReport:
     name: str
@@ -91,6 +109,11 @@ class ProfileReport:
     # revision, ref, status, detail}. A status other than BUILD_OK is review
     # work.
     build_refs: list[dict] = field(default_factory=list)
+    # Each cited path with the repository holding it, as the resolver
+    # settled it: detection, the extras and the triage read the files
+    # there. geolith cites jg.c in its GitLab upstream, which the port the
+    # profile was read from does not carry. Not part of the JSON form.
+    cited_sources: list[CitedSource] = field(default_factory=list)
 
     # Skips that say the profile cannot be checked as written: a repository
     # that no longer answers, no pin to read, a death the forge contradicts.
@@ -297,6 +320,7 @@ def format_report(report: ProfileReport, changed_only: bool = False) -> str:
 def report_to_dict(report: ProfileReport) -> dict:
     """Serialisable form of one report."""
     payload = asdict(report)
+    del payload["cited_sources"]
     payload["needs_review"] = report.needs_review()
     return payload
 

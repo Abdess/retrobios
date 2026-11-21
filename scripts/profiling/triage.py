@@ -7,7 +7,6 @@ import sys
 import time
 
 from core import upstream
-from profiling.detection import cited_paths
 from profiling.reports import ProfileReport, triage_state
 from profiling.repos import select_repo
 from profiling.versions import VersionReport, check_version
@@ -117,19 +116,21 @@ def _score(
     sampled = False
     repo = select_repo(profile)
     if report.head and repo is not None:
-        paths = cited_paths(report)
+        # Each cited path counted in the repository the resolver settled it
+        # in, between that repository's own pin and HEAD.
+        sources = report.cited_sources
         try:
             version = check_version(profile, repo, args.cache_dir, args.offline)
-            for path in paths[:TRIAGE_PATH_SAMPLE]:
+            for source in sources[:TRIAGE_PATH_SAMPLE]:
                 commits += upstream.commits_touching(
-                    repo, path, report.pin, args.cache_dir, args.offline,
-                    head=report.head,
+                    source.repo, source.path, source.pin, args.cache_dir, args.offline,
+                    head=source.head,
                 )
         except upstream.UpstreamError as exc:
             # One forge refusing a request (Eden's answers 403 to commit
             # lookups) leaves this profile unscored, not the whole ranking.
             refused = "commit history unreachable"
             print(f"{report.name}: {exc}", file=sys.stderr)
-        sampled = len(paths) > TRIAGE_PATH_SAMPLE and not refused
+        sampled = len(sources) > TRIAGE_PATH_SAMPLE and not refused
     ranked.append((drift_score(report, version, commits), report, refused))
     return sampled

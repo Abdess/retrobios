@@ -38,6 +38,7 @@ from profiling import selection as profiling_selection
 from model import profiles as model_profiles
 from model import sourceref
 from profiling.reports import (
+    CitedSource,
     EntryReport,
     ProfileReport,
     fetch_plan,
@@ -1713,6 +1714,36 @@ class TestBuildReport(unittest.TestCase):
         report = build_report("mame", profile, self.dir)
         self.assertEqual(report.entries[0].status, "ANCHORED")
 
+    def test_each_cited_path_keeps_the_repository_it_was_settled_in(self):
+        # geolith cites jg.c in its GitLab upstream and src/geo.c in the
+        # port: detection read every path in the port and skipped jg.c.
+        self.files[("portpin", "src/geo.c")] = ["x", "load bios.bin"]
+        self.files[("porthead", "src/geo.c")] = ["x", "load bios.bin"]
+        self.files[("uppin", "jg.c")] = ["y", "load bios.bin"]
+        self.files[("uphead", "jg.c")] = ["pad", "y", "load bios.bin"]
+        heads = {"o/port": "porthead", "o/up": "uphead"}
+        upstream.resolve_head = (
+            lambda repo, cache, offline=False, branch=None: heads[repo.slug]
+        )
+        profile = {
+            "emulator": "Geolith",
+            "source": "https://github.com/o/port",
+            "upstream": "https://github.com/o/up",
+            "source_commit": "portpin",
+            "upstream_commit": "uppin",
+            "files": [
+                {"name": "bios.bin", "source_ref": "src/geo.c:2"},
+                {"name": "bios.bin", "source_ref": "jg.c:2"},
+            ],
+        }
+        report = build_report("geolith", profile, self.dir)
+        self.assertEqual(
+            [(s.path, s.repo.slug, s.pin, s.head) for s in report.cited_sources],
+            [("jg.c", "o/up", "uppin", "uphead"),
+             ("src/geo.c", "o/port", "portpin", "porthead")],
+        )
+        self.assertNotIn("cited_sources", report_to_dict(report))
+
     def test_self_check_reads_every_repository_before_calling_a_range_gone(self):
         # hatari: the port's src/paths.c runs 365 lines, the upstream's 345,
         # and a source_ref attributes the path to the upstream. With both on
@@ -1923,7 +1954,15 @@ def _sample_report():
             EntryReport("f1.bin", "b.c:5", "CHANGED", [changed]),
         ],
         counts={"SHIFTED": 1, "CHANGED": 1},
+        cited_sources=[
+            CitedSource(path, _SAMPLE_REPO, "pinsha0000", "headsha000")
+            for path in ("a.c", "b.c")
+        ],
     )
+
+
+_SAMPLE_REPO = upstream.parse_repo("https://github.com/o/n")
+_UPSTREAM_REPO = upstream.parse_repo("https://gitlab.com/u/n")
 
 
 class TestDeclaredDeadUpstream(TestBuildReport):
@@ -2658,7 +2697,7 @@ class TestWriteDryRun(unittest.TestCase):
         from unittest import mock
 
         def gained(profile, report, *_):
-            report.new_files = [{"path": "zn.c", "name": "coh3002t.zip", "since_pin": True}]
+            report.new_files = [{"path": "a.c", "name": "coh3002t.zip", "since_pin": True}]
             report.new_hashes = []
 
         before = self.path.read_text()
@@ -2670,6 +2709,49 @@ class TestWriteDryRun(unittest.TestCase):
         with mock.patch.object(profiling_run, "_attach_detection", side_effect=gained):
             self._run(self._args(rebase_refs=True, dry_run=False, accept_changed=True), self._shifted())
         self.assertIn('source_commit: "newhead"', self.path.read_text())
+
+    def test_an_upstream_that_moved_is_read_while_the_port_sits_on_head(self):
+        """geolith cites jg.c in its upstream: with the port on HEAD the guard
+        looked at the port alone and let upstream_commit move unread."""
+        from unittest import mock
+
+        seen = []
+
+        def gained(profile, report, *_):
+            seen.append(True)
+            report.new_files = [{"path": "jg.c", "name": "new.rom", "since_pin": True}]
+            report.new_hashes = []
+
+        report = self._shifted()
+        report.head = report.pin
+        report.cited_sources = [
+            CitedSource("a.c", _SAMPLE_REPO, "pin", "pin", True),
+            CitedSource("jg.c", _UPSTREAM_REPO, "uppin", "uphead"),
+        ]
+        args = self._args(rebase_refs=True, dry_run=False)
+        with mock.patch.object(profiling_run, "_attach_detection", side_effect=gained), \
+                contextlib.redirect_stderr(io.StringIO()) as err:
+            self.assertTrue(profiling_run._gained_since_pin(args, "p", {}, report))
+        self.assertEqual(seen, [True])
+        self.assertIn("new.rom", err.getvalue())
+
+    def test_a_repository_held_on_its_tag_does_not_hold_the_bump(self):
+        """GroovyMAME's upstream sits on mame0289 and the bump leaves it there:
+        what mamedev HEAD added to a cited driver is no reason to refuse."""
+        from unittest import mock
+
+        def gained(profile, report, *_):
+            report.new_files = [{"path": "neogeo.cpp", "name": "x.zip", "since_pin": True}]
+            report.new_hashes = [{"path": "neogeo.cpp", "kind": "md5", "value": "0" * 32}]
+
+        report = self._shifted()
+        report.cited_sources = [
+            CitedSource("a.c", _SAMPLE_REPO, "pin", "newhead"),
+            CitedSource("neogeo.cpp", _UPSTREAM_REPO, "tag", "uphead", True),
+        ]
+        args = self._args(rebase_refs=True, dry_run=False)
+        with mock.patch.object(profiling_run, "_attach_detection", side_effect=gained):
+            self.assertFalse(profiling_run._gained_since_pin(args, "p", {}, report))
 
     def _args(self, **over):
         base = dict(
@@ -2696,6 +2778,7 @@ class TestWriteDryRun(unittest.TestCase):
             name="p", repo="o/n", pin="pin", head="newhead",
             entries=[EntryReport("a.bin", "a.c:10-12", "SHIFTED", [part])],
             counts={"SHIFTED": 1},
+            cited_sources=[CitedSource("a.c", _SAMPLE_REPO, "pin", "newhead")],
         )
 
     def test_a_prose_read_that_fails_leaves_the_profile_as_it_was(self):
@@ -6315,6 +6398,9 @@ class TheTriageCountsWhatBlocksThePin(unittest.TestCase):
         return ProfileReport(
             name=name, pin="p", head="h", entries=entries,
             counts={"ANCHORED": paths}, stale_prose=stale,
+            cited_sources=[
+                CitedSource(f"d/{i}.c", _SAMPLE_REPO, "p", "h") for i in range(paths)
+            ],
         )
 
     def test_stale_prose_is_review_work(self):

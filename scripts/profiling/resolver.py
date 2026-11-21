@@ -38,7 +38,7 @@ from profiling.citations import (
     strip_repo_word,
     symlink_target,
 )
-from profiling.reports import EntryReport, ProfileReport
+from profiling.reports import CitedSource, EntryReport, ProfileReport
 from model.profilerepos import declared_repositories
 from profiling.repos import (
     PIN,
@@ -565,6 +565,24 @@ class _Resolver:
             self.owners[key] = self.locate(path, start, tokens, role)
         return self.owners[key]
 
+    def cited_source(
+        self, result: PartResult, tokens: Sequence[str]
+    ) -> CitedSource | None:
+        """Where a judged part's file was settled, None when it never was.
+
+        A part annotated for another version is not looked up: no revision
+        of the pinned repositories holds that program.
+        """
+        part = result.part
+        owner = self.owners.get((part.path, part.start, tuple(tokens), self.role_of(part)))
+        if owner is None:
+            return None
+        view, actual = owner
+        return CitedSource(
+            result.new_path or actual, view.repo, view.pin, view.head,
+            self.on_own_revision(view),
+        )
+
     def pin_tree_for(self, view: RepoView) -> list[str]:
         """Tree at the revision the refs were written against, memoised."""
         key = view.repo.slug
@@ -856,13 +874,23 @@ class _Resolver:
 def _judge_refs(resolver: _Resolver, refs: list, report: ProfileReport) -> None:
     """Judge every ref and put its entry on the report."""
     staged = []
+    sources: dict[tuple[str, str, str], CitedSource] = {}
     for entry_name, ref, tokens, hashes, ref_parts, citation in refs:
         flags = [resolver.self_checked(part, tokens) for part in ref_parts]
         judged = [
             resolver.judge(part, flag, tokens, hashes)
             for part, flag in zip(ref_parts, flags)
         ]
+        for result in judged:
+            source = resolver.cited_source(result, tokens)
+            if source is not None:
+                sources.setdefault((source.path, source.repo.host, source.repo.slug), source)
         staged.append((entry_name, ref, citation, reconcile_self_check(judged, flags)))
+    order = {(v.repo.host, v.repo.slug): n for n, v in enumerate(resolver.views)}
+    report.cited_sources = sorted(
+        sources.values(),
+        key=lambda s: (s.path, order.get((s.repo.host, s.repo.slug), len(order))),
+    )
 
     shifts = dominant_shifts([p for _, _, _, parts in staged for p in parts])
     for entry_name, ref, citation, parts in staged:

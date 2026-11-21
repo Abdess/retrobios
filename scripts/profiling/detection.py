@@ -12,8 +12,7 @@ import sys
 from core import upstream
 from core.upstream import CompareResult
 from profiling.citations import collect_tokens
-from profiling.reports import ProfileReport
-from profiling.repos import select_repo
+from profiling.reports import CitedSource, ProfileReport
 
 
 FILE_EXTENSIONS = (
@@ -194,56 +193,77 @@ def tree_diff(result: CompareResult, ref_dirs: set[str]) -> list[str]:
     return lines
 
 
-def cited_paths(report: ProfileReport) -> list[str]:
-    return sorted(
-        {part.new_path or part.part.path for e in report.entries for part in e.parts}
-    )
+def _scan_source(
+    source: CitedSource, names: set[str], known: set[str],
+    cache_dir: str, offline: bool, files: bool, hashes: bool,
+) -> tuple[list[dict], int, list[dict]] | None:
+    """Undeclared names and added hash literals of one cited file, None when
+    its repository does not carry it at HEAD."""
+    path = source.path
+    head_lines = upstream.fetch_file(source.repo, source.head, path, cache_dir, offline)
+    if head_lines is None:
+        return None
+    pin_lines = upstream.fetch_file(source.repo, source.pin, path, cache_dir, offline) or []
+    found_files: list[dict] = []
+    elided = 0
+    found_hashes: list[dict] = []
+    if files:
+        found, elided = detect_new_files(head_lines, names, path=path)
+        at_pin = {
+            name.casefold()
+            for _, name in detect_new_files(
+                pin_lines, names, cap=sys.maxsize, path=path
+            )[0]
+        }
+        found_files = [
+            {"path": path, "line": number, "name": name,
+             "since_pin": name.casefold() not in at_pin}
+            for number, name in found
+        ]
+    if hashes:
+        added = [
+            line
+            for line in difflib.unified_diff(pin_lines, head_lines, n=0)
+            if line.startswith("+") and not line.startswith("+++")
+        ]
+        found_hashes = [
+            {"path": path, "kind": kind, "value": value}
+            for kind, value in watch_hashes(added, known)
+        ]
+    return found_files, elided, found_hashes
 
 
 def detect_upstream_changes(
-    profile: dict, report: ProfileReport, repo: upstream.Repo,
+    profile: dict, report: ProfileReport,
     cache_dir: str, offline: bool, files: bool, hashes: bool,
 ) -> None:
     """Record on the report the undeclared names (files) and the hash
-    literals added since the pin (hashes) of the cited files at HEAD."""
+    literals added since the pin (hashes) of the cited files at HEAD, each
+    read in the repository the resolver settled it in."""
     names, known = declared_names(profile), declared_hashes(profile)
     found_files: list[dict] = []
     found_hashes: list[dict] = []
-    for path in cited_paths(report):
-        head_lines = upstream.fetch_file(
-            repo, report.head, path, cache_dir, offline
-        )
-        if head_lines is None:
+    # A path two repositories carry is read in both: a name or a hash the
+    # first already listed for that path is not listed again.
+    listed_files: set[tuple[str, str]] = set()
+    listed_hashes: set[tuple[str, str, str]] = set()
+    for source in report.cited_sources:
+        scanned = _scan_source(source, names, known, cache_dir, offline, files, hashes)
+        if scanned is None:
             continue
-        pin_lines = (
-            upstream.fetch_file(repo, report.pin, path, cache_dir, offline)
-            or []
+        new_files, elided, new_hashes = scanned
+        found_files.extend(
+            item for item in new_files
+            if (item["path"], item["name"].casefold()) not in listed_files
         )
-        if files:
-            found, elided = detect_new_files(head_lines, names, path=path)
-            at_pin = {
-                name.casefold()
-                for _, name in detect_new_files(
-                    pin_lines, names, cap=sys.maxsize, path=path
-                )[0]
-            }
-            found_files.extend(
-                {"path": path, "line": number, "name": name,
-                 "since_pin": name.casefold() not in at_pin}
-                for number, name in found
-            )
-            if elided:
-                report.new_files_elided[path] = elided
-        if hashes:
-            added = [
-                line
-                for line in difflib.unified_diff(pin_lines, head_lines, n=0)
-                if line.startswith("+") and not line.startswith("+++")
-            ]
-            found_hashes.extend(
-                {"path": path, "kind": kind, "value": value}
-                for kind, value in watch_hashes(added, known)
-            )
+        found_hashes.extend(
+            item for item in new_hashes
+            if (item["path"], item["kind"], item["value"]) not in listed_hashes
+        )
+        listed_files.update((item["path"], item["name"].casefold()) for item in new_files)
+        listed_hashes.update((item["path"], item["kind"], item["value"]) for item in new_hashes)
+        if elided:
+            report.new_files_elided.setdefault(source.path, elided)
     if files:
         report.new_files = found_files
     if hashes:
@@ -251,7 +271,7 @@ def detect_upstream_changes(
 
 
 def print_extras(
-    args: argparse.Namespace, profile: dict, report: ProfileReport
+    args: argparse.Namespace, report: ProfileReport
 ) -> None:
     """--full-diff and --tree-diff, read from the forge after the ref report.
 
@@ -260,48 +280,44 @@ def print_extras(
     instead of ending a pass over every profile. A quota signal still
     ends the profile.
     """
-    if not (args.full_diff or args.tree_diff) or not report.head:
-        return
-    repo = select_repo(profile)
-    if repo is None:
+    if not (args.full_diff or args.tree_diff) or not report.cited_sources:
         return
     try:
-        _print_extras_from(args, profile, report, repo)
+        _print_extras_from(args, report)
     except upstream.RateLimitError:
         raise
     except upstream.UpstreamError as exc:
         print(f"  extras skipped: {exc}")
 
 
-def _print_extras_from(
-    args: argparse.Namespace, profile: dict, report: ProfileReport,
-    repo: upstream.Repo,
-) -> None:
+def _print_extras_from(args: argparse.Namespace, report: ProfileReport) -> None:
     if args.full_diff:
-        for path in cited_paths(report):
-            if args.ref and args.ref not in path:
+        for source in report.cited_sources:
+            if args.ref and args.ref not in source.path:
                 continue
-            pin_lines = (
-                upstream.fetch_file(
-                    repo, report.pin, path, args.cache_dir, args.offline
-                )
-                or []
-            )
-            head_lines = (
-                upstream.fetch_file(
-                    repo, report.head, path, args.cache_dir, args.offline
-                )
-                or []
-            )
-            text = unified_for_path(pin_lines, head_lines, path, args.context)
+            pin_lines = upstream.fetch_file(
+                source.repo, source.pin, source.path, args.cache_dir, args.offline
+            ) or []
+            head_lines = upstream.fetch_file(
+                source.repo, source.head, source.path, args.cache_dir, args.offline
+            ) or []
+            text = unified_for_path(pin_lines, head_lines, source.path, args.context)
             if text:
                 print(text)
     if args.tree_diff:
-        comparison = upstream.compare(
-            repo, report.pin, report.head, args.cache_dir, args.offline
-        )
-        # The repository root is a directory like any other: dropping the
-        # empty dirname would turn the filter off and list the whole tree.
-        ref_dirs = {posixpath.dirname(p) for p in cited_paths(report)}
-        for line in tree_diff(comparison, ref_dirs):
-            print(f"  {line}")
+        by_repo: dict[tuple[str, str], list[CitedSource]] = {}
+        for source in report.cited_sources:
+            by_repo.setdefault((source.repo.host, source.repo.slug), []).append(source)
+        for sources in by_repo.values():
+            first = sources[0]
+            comparison = upstream.compare(
+                first.repo, first.pin, first.head, args.cache_dir, args.offline
+            )
+            if len(by_repo) > 1:
+                print(f"  {first.repo.slug}:")
+            # The repository root is a directory like any other: dropping
+            # the empty dirname would turn the filter off and list the
+            # whole tree.
+            ref_dirs = {posixpath.dirname(source.path) for source in sources}
+            for line in tree_diff(comparison, ref_dirs):
+                print(f"  {line}")

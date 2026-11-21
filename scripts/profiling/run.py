@@ -215,16 +215,23 @@ def _gained_since_pin(
     mame2003_plus gained two Taito G-NET BIOS sets in a zn.c whose cited
     lines only shifted. A bump past that would document a file set the code
     no longer has. --accept-changed says the additions were read.
+    Decided per repository: an upstream that moved while the port sits on
+    HEAD is read before a bump advances upstream_commit, and a repository
+    held on its tag, which the bump leaves there, is not.
     """
-    if args.accept_changed or not report.head or report.pin == report.head:
+    advancing = {s.path for s in report.cited_sources if s.advances()}
+    if args.accept_changed or not advancing:
         return False
     if report.pinned_tag:
         # A held pin is not advanced at all: bump_commit says so itself.
         return False
     if report.new_files is None and report.new_hashes is None:
         _attach_detection(profile, report, args.cache_dir, args.offline, True, True)
-    gained = sorted({item["name"] for item in report.new_files or () if item.get("since_pin")})
-    added = report.new_hashes or []
+    gained = sorted({
+        item["name"] for item in report.new_files or ()
+        if item.get("since_pin") and item["path"] in advancing
+    })
+    added = [item for item in report.new_hashes or () if item["path"] in advancing]
     if not (gained or added or report.detection_skipped):
         return False
     detail = ", ".join(gained[:5]) + (f", {len(added)} hash literal(s)" if added else "")
@@ -251,11 +258,8 @@ def _attach_detection(
     """
     if not report.head or not (files or hashes):
         return
-    repo = select_repo(profile)
-    if repo is None:
-        return
     try:
-        detect_upstream_changes(profile, report, repo, cache_dir, offline, files, hashes)
+        detect_upstream_changes(profile, report, cache_dir, offline, files, hashes)
     except upstream.RateLimitError:
         raise
     except upstream.UpstreamError as exc:
@@ -466,7 +470,7 @@ def emit_reports(
         return print_triage(args, selected, shown)
     for report in shown:
         print(format_report(report, args.changed_only))
-        print_extras(args, selected[report.name], report)
+        print_extras(args, report)
         print()
     if args.changed_only:
         _print_elided(reports, len(shown), frozenset(report.name for report in shown))
