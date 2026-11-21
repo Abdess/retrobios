@@ -2807,7 +2807,8 @@ class ReleaseAssetsMatchTheCollection(unittest.TestCase):
         self.assertIn("| [whoopee.zip](https://github.com/Abdess/retrobios/releases/download/large-files/whoopee.zip) | Toaplan Whoopee samples | 212.4 MB |", body)
         self.assertNotIn("9" * 40, body)
         self.assertNotIn("small.bin", body)
-        self.assertIn("4 files, 1.0 GB total", body)
+        # The total reads in the unit of the rows above it: 1022.4 MB, not 1.0 GB.
+        self.assertIn("4 files, 1022.4 MB total", body)
         self.assertEqual(body.index("## Console firmware"), min(
             body.index(h) for h in ("## Console firmware", "## Arcade", "## Not indexed")
         ))
