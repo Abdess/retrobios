@@ -35,7 +35,7 @@ import json
 import sys
 import urllib.parse
 import zipfile
-from collections.abc import Callable, Iterator
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -49,10 +49,15 @@ from model.database import load_database
 from model.dumpcatalog import build_snapshot, load_provenance_snapshots, write_snapshot
 from resolve.localfile import variant_base_name
 from .base_scraper import download, fetch_github_latest_version, github_json
-from .listxml import Opener, iter_elements, open_listxml, rom_members, xml_members
+from .listxml import (
+    Opener,
+    iter_dat_documents,
+    iter_elements,
+    open_listxml,
+    rom_members,
+    xml_members,
+)
 from .logiqx_parser import LogiqxDat, parse_logiqx
-
-MAX_MEMBER_SIZE = 200 * 1024 * 1024
 
 SOURCES = ("mame", "fbneo")
 DEFAULT_OUTPUT = "recipes/{source}.json"
@@ -383,34 +388,6 @@ def merge_snapshot(
     return write_snapshot(output, snapshot)
 
 
-def _iter_dat_contents(pack: Path) -> Iterator[tuple[str, bytes]]:
-    """Yield (member name, content bytes) for DAT files in *pack*."""
-    if pack.is_dir():
-        for path in sorted(pack.rglob("*")):
-            if path.suffix.lower() in (".dat", ".xml") and path.is_file():
-                yield path.name, path.read_bytes()
-        return
-    if pack.suffix.lower() == ".zip":
-        with zipfile.ZipFile(pack) as archive:
-            for info in sorted(archive.infolist(), key=lambda i: i.filename):
-                if info.is_dir():
-                    continue
-                if Path(info.filename).suffix.lower() not in (".dat", ".xml"):
-                    continue
-                if info.file_size > MAX_MEMBER_SIZE:
-                    # Said out loud: a DAT left out silently ended the run
-                    # on "Unchanged" with a version missing.
-                    print(
-                        f"  Skipping {info.filename}: {info.file_size} bytes "
-                        f"exceeds {MAX_MEMBER_SIZE}",
-                        file=sys.stderr,
-                    )
-                    continue
-                yield info.filename, archive.read(info)
-        return
-    yield pack.name, pack.read_bytes()
-
-
 MAME_LISTXML_URL = (
     "https://github.com/mamedev/mame/releases/download/{tag}/{tag}lx.zip"
 )
@@ -593,7 +570,7 @@ def _dat_recipes(
     dats: dict[str, str] = {}
     entries: list[dict] = []
     skipped = 0
-    for member, content in _iter_dat_contents(pack):
+    for member, content in iter_dat_documents(pack):
         try:
             dat = parse_logiqx(content)
         except (ValueError, SyntaxError) as exc:

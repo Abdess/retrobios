@@ -29,8 +29,6 @@ import gzip
 import json
 import re
 import sys
-import zipfile
-from collections.abc import Iterator
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -44,6 +42,7 @@ from model.region import REGIONS, WORLD
 from model.region import NOINTRO
 
 from .base_scraper import download, github_json
+from .listxml import iter_dat_documents
 
 SOURCES = ("no-intro", "redump")
 CACHE_DIR = Path(".cache") / "game-dats"
@@ -341,24 +340,9 @@ def fetch_redump(code: str, cache_dir: Path, offline: bool, refresh: bool) -> tu
 # Reading packs ----------------------------------------------------------
 
 
-def _iter_dats(pack: Path) -> Iterator[tuple[str, bytes]]:
-    """(member name, bytes) of every .dat in a ZIP, a directory or a file."""
-    if pack.is_dir():
-        for path in sorted(pack.rglob("*.dat")):
-            yield path.name, path.read_bytes()
-        return
-    if zipfile.is_zipfile(pack):
-        with zipfile.ZipFile(pack) as archive:
-            for info in sorted(archive.infolist(), key=lambda i: i.filename):
-                if info.filename.lower().endswith(".dat"):
-                    yield Path(info.filename).name, archive.read(info)
-        return
-    yield pack.name, pack.read_bytes()
-
-
 def import_nointro(pack: Path, meta: dict) -> list[dict]:
     docs = []
-    for member, data in _iter_dats(pack):
+    for member, data in iter_dat_documents(pack, (".dat",)):
         match = _NOINTRO_MEMBER.match(member)
         name = match["name"] if match else None
         if name not in NOINTRO_DATS:
@@ -382,7 +366,7 @@ def import_nointro(pack: Path, meta: dict) -> list[dict]:
 def import_redump(pack: Path, meta: dict) -> list[dict]:
     docs = []
     by_name = {name: (code, system) for code, (name, system, _) in REDUMP_DATS.items()}
-    for member, data in _iter_dats(pack):
+    for member, data in iter_dat_documents(pack, (".dat",)):
         dat_name, version, games = parse_dat(data)
         if dat_name not in by_name:
             continue

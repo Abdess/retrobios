@@ -16,14 +16,12 @@ from __future__ import annotations
 import argparse
 import sys
 import zipfile
-from collections.abc import Iterator
 from datetime import datetime, timezone
 from pathlib import Path
 
 from model.dumpcatalog import write_provenance_snapshot
+from .listxml import iter_dat_documents
 from .logiqx_parser import LogiqxDat, parse_logiqx
-
-MAX_MEMBER_SIZE = 100 * 1024 * 1024
 
 SOURCES = ("no-intro", "tosec")
 
@@ -40,33 +38,12 @@ def _bios_entries(source: str, dat: LogiqxDat) -> list[dict]:
     return dat.provenance_entries(roms)
 
 
-def _iter_dat_contents(pack: Path) -> Iterator[tuple[str, bytes]]:
-    """Yield (member name, content bytes) for DAT files in a pack.
-
-    Accepts a ZIP archive or a directory of extracted DATs.
-    """
-    if pack.is_dir():
-        for path in sorted(pack.rglob("*")):
-            if path.suffix.lower() in (".dat", ".xml") and path.is_file():
-                yield str(path), path.read_bytes()
-        return
-    with zipfile.ZipFile(pack) as zf:
-        for info in sorted(zf.infolist(), key=lambda i: i.filename):
-            suffix = Path(info.filename).suffix.lower()
-            if info.is_dir() or suffix not in (".dat", ".xml"):
-                continue
-            if info.file_size > MAX_MEMBER_SIZE:
-                print(f"  Skipping {info.filename}: exceeds {MAX_MEMBER_SIZE} bytes")
-                continue
-            yield info.filename, zf.read(info)
-
-
 def import_pack(source: str, pack: Path) -> tuple[dict, list[dict], int]:
     """Import BIOS entries from a pack. Returns (dats, entries, skipped)."""
     dats = {}
     entries = []
     skipped = 0
-    for _member, content in _iter_dat_contents(pack):
+    for _member, content in iter_dat_documents(pack):
         try:
             dat = parse_logiqx(content)
         except (ValueError, SyntaxError):

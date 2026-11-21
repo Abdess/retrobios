@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import html
 import re
+import sys
 import zipfile
 from collections.abc import Callable, Collection, Iterator
 from contextlib import AbstractContextManager, contextmanager
@@ -99,6 +100,42 @@ def rom_members(
         member.update((key, found[key]) for key in extra if key in found)
         members.append(member)
     return members
+
+
+# A member past this is refused aloud rather than read into memory.
+MAX_DAT_MEMBER = 200 * 1024 * 1024
+
+
+def iter_dat_documents(
+    pack: Path,
+    suffixes: tuple[str, ...] = (".dat", ".xml"),
+    max_member: int = MAX_DAT_MEMBER,
+) -> Iterator[tuple[str, bytes]]:
+    """(base name, bytes) of every DAT in a ZIP, a directory or a lone file.
+
+    A suffix matches in any case. A member past `max_member` is skipped and
+    said on stderr: a DAT left out silently ended a run on "Unchanged" with
+    a version missing.
+    """
+    if pack.is_dir():
+        for path in sorted(pack.rglob("*")):
+            if path.suffix.lower() in suffixes and path.is_file():
+                yield path.name, path.read_bytes()
+        return
+    if not zipfile.is_zipfile(pack):
+        yield pack.name, pack.read_bytes()
+        return
+    with zipfile.ZipFile(pack) as archive:
+        for info in sorted(archive.infolist(), key=lambda i: i.filename):
+            if info.is_dir() or Path(info.filename).suffix.lower() not in suffixes:
+                continue
+            if info.file_size > max_member:
+                print(
+                    f"  Skipping {info.filename}: {info.file_size} bytes exceeds {max_member}",
+                    file=sys.stderr,
+                )
+                continue
+            yield Path(info.filename).name, archive.read(info)
 
 
 def xml_members(archive: zipfile.ZipFile) -> list[str]:

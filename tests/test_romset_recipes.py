@@ -823,19 +823,38 @@ class AnOversizedDatIsNamed(unittest.TestCase):
         import contextlib
         import io
         import zipfile
-        from unittest import mock
 
-        from scripts.scraper import romset_dat_importer as importer
+        from scripts.scraper.listxml import iter_dat_documents
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             pack = Path(directory) / "pack.zip"
             with zipfile.ZipFile(pack, "w") as archive:
                 archive.writestr("big.dat", b"x" * 64)
             err = io.StringIO()
-            with mock.patch.object(importer, "MAX_MEMBER_SIZE", 16), \
-                    contextlib.redirect_stderr(err):
-                self.assertEqual(list(importer._iter_dat_contents(pack)), [])
+            with contextlib.redirect_stderr(err):
+                self.assertEqual(list(iter_dat_documents(pack, max_member=16)), [])
             self.assertIn("Skipping big.dat", err.getvalue())
+
+    def test_every_importer_reads_a_pack_alike(self):
+        """game_dat_importer missed an upper-case X.DAT in an extracted
+        folder, and dat_pack_importer refused a lone DAT file."""
+        import zipfile
+
+        from scripts.scraper.listxml import iter_dat_documents
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            (root / "dir" / "sub").mkdir(parents=True)
+            (root / "dir" / "sub" / "X.DAT").write_bytes(b"a")
+            (root / "dir" / "y.xml").write_bytes(b"b")
+            self.assertEqual(list(iter_dat_documents(root / "dir", (".dat",))), [("X.DAT", b"a")])
+            lone = root / "lone.dat"
+            lone.write_bytes(b"c")
+            self.assertEqual(list(iter_dat_documents(lone)), [("lone.dat", b"c")])
+            pack = root / "pack.zip"
+            with zipfile.ZipFile(pack, "w") as archive:
+                archive.writestr("in/Z.Dat", b"d")
+            self.assertEqual(list(iter_dat_documents(pack)), [("Z.Dat", b"d")])
 
 
 
