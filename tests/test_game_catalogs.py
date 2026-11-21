@@ -130,6 +130,23 @@ class FixtureImport(unittest.TestCase):
         self.assertIn("--fetch", result.stderr)
 
 
+class OneLogiqxReader(unittest.TestCase):
+    """The catalog importer read <game> only and kept nameless ROMs."""
+
+    def test_machine_entries_and_serials(self) -> None:
+        from scripts.scraper.logiqx_parser import parse_logiqx_games
+
+        name, version, games = parse_logiqx_games(
+            b'<datafile><header><name>D</name><version>1</version></header>'
+            b'<machine name="m"><serial>A-1, B-2</serial>'
+            b'<rom name="a.bin" size="4" crc="ABCD1234"/><rom size="1" crc="00000000"/>'
+            b'</machine></datafile>'
+        )
+        self.assertEqual((name, version), ("D", "1"))
+        self.assertEqual([g.serials for g in games], [["A-1", "B-2"]])
+        self.assertEqual([(r.name, r.crc32) for r in games[0].roms], [("a.bin", "abcd1234")])
+
+
 class Selection(unittest.TestCase):
     def test_every_system_is_a_repository_system(self) -> None:
         from model.romfolders import SystemResolver

@@ -32,6 +32,16 @@ class LogiqxRom:
 
 
 @dataclass
+class LogiqxGame:
+    """A <game> or <machine> of a Logiqx DAT, its serials and named ROMs."""
+
+    name: str
+    description: str
+    serials: list[str]
+    roms: list[LogiqxRom]
+
+
+@dataclass
 class LogiqxDat:
     """A parsed Logiqx DAT file."""
 
@@ -55,46 +65,56 @@ class LogiqxDat:
         ]
 
 
-def parse_logiqx(content: str | bytes) -> LogiqxDat:
-    """Parse Logiqx XML DAT content.
+def parse_logiqx_games(content: str | bytes) -> tuple[str, str, list[LogiqxGame]]:
+    """Header name, version and games of Logiqx XML DAT content.
 
     Handles both <game> and <machine> entries, and games with
-    multiple <rom> children. Content declaring XML entities is
-    rejected: DAT files never define them, and expanding entities
-    from untrusted packs opens entity-expansion attacks.
+    multiple <rom> children. A ROM without a name is left out. Content
+    declaring XML entities is rejected: DAT files never define them, and
+    expanding entities from untrusted packs opens entity-expansion attacks.
     """
     root = parse_untrusted_xml(content, "DAT files")
-    dat = LogiqxDat()
-
     header = root.find("header")
+    name = version = ""
     if header is not None:
-        dat.name = header.findtext("name", "").strip()
-        dat.version = header.findtext("version", "").strip()
+        name = header.findtext("name", "").strip()
+        version = header.findtext("version", "").strip()
 
+    games: list[LogiqxGame] = []
     for game in list(root.iter("game")) + list(root.iter("machine")):
         game_name = game.get("name", "")
-        description = game.findtext("description", "").strip()
+        description = game.findtext("description", "").strip() or game_name
+        serial = game.findtext("serial") or ""
+        roms: list[LogiqxRom] = []
         for rom in game.iter("rom"):
-            name = rom.get("name", "")
-            if not name:
+            rom_name = rom.get("name", "")
+            if not rom_name:
                 continue
             try:
                 size = int(rom.get("size", "0"))
             except ValueError:
                 size = 0
-            dat.roms.append(
+            roms.append(
                 LogiqxRom(
                     game=game_name,
-                    description=description or game_name,
-                    name=name,
+                    description=description,
+                    name=rom_name,
                     size=size,
                     crc32=rom.get("crc", "").lower(),
                     md5=rom.get("md5", "").lower(),
                     sha1=rom.get("sha1", "").lower(),
                 )
             )
+        games.append(LogiqxGame(
+            game_name, description, [s.strip() for s in serial.split(",") if s.strip()], roms,
+        ))
+    return name, version, games
 
-    return dat
+
+def parse_logiqx(content: str | bytes) -> LogiqxDat:
+    """Parse Logiqx XML DAT content into its header and every named ROM."""
+    name, version, games = parse_logiqx_games(content)
+    return LogiqxDat(name, version, [rom for game in games for rom in game.roms])
 
 
 def validate_logiqx_format(content: str | bytes) -> bool:

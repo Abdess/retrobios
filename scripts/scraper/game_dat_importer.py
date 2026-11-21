@@ -29,7 +29,6 @@ import gzip
 import json
 import re
 import sys
-from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -37,12 +36,12 @@ if (_SCRIPTS_DIR := str(Path(__file__).resolve().parents[1])) not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 
 from core.artifacts import write_if_changed, write_text_atomic
-from model.safeparse import parse_untrusted_xml
 from model.region import REGIONS, WORLD
 from model.region import NOINTRO
 
 from .base_scraper import download, github_json
 from .listxml import iter_dat_documents
+from .logiqx_parser import LogiqxGame, LogiqxRom, parse_logiqx_games
 
 SOURCES = ("no-intro", "redump")
 CACHE_DIR = Path(".cache") / "game-dats"
@@ -188,45 +187,16 @@ def name_regions(name: str) -> list[str] | None:
     return None
 
 
-@dataclass
-class DatGame:
-    name: str
-    serials: list[str]
-    roms: list[tuple[str, int, str, str]]  # (name, size, crc32, sha1)
-
-
-def parse_dat(content: bytes) -> tuple[str, str, list[DatGame]]:
-    """Header name, version and games of a Logiqx DAT, serials included."""
-    root = parse_untrusted_xml(content, "DAT files")
-    header = root.find("header")
-    name = (header.findtext("name") or "").strip() if header is not None else ""
-    version = (header.findtext("version") or "").strip() if header is not None else ""
-    games: list[DatGame] = []
-    for game in root.iter("game"):
-        serial = game.findtext("serial") or ""
-        serials = [s.strip() for s in serial.split(",") if s.strip()]
-        roms = []
-        for rom in game.findall("rom"):
-            try:
-                size = int(rom.get("size") or 0)
-            except ValueError:
-                size = 0
-            roms.append((rom.get("name") or "", size,
-                         (rom.get("crc") or "").lower(), (rom.get("sha1") or "").lower()))
-        games.append(DatGame(game.get("name") or "", serials, roms))
-    return name, version, games
-
-
-def _first_data_track(roms: list[tuple[str, int, str, str]]) -> tuple[str, int, str, str] | None:
+def _first_data_track(roms: list[LogiqxRom]) -> LogiqxRom | None:
     for rom in roms:
-        if rom[0].lower().endswith((".cue", ".gdi")) or not rom[2]:
+        if rom.name.lower().endswith((".cue", ".gdi")) or not rom.crc32:
             continue
         return rom
     return None
 
 
 def build_catalog(source: str, system: str, dat_name: str, version: str,
-                  games: list[DatGame], origin: dict) -> dict:
+                  games: list[LogiqxGame], origin: dict) -> dict:
     """The catalog document of one DAT."""
     region_ids: dict[tuple[str, ...], int] = {}
     rows: list[list] = []
@@ -239,11 +209,11 @@ def build_catalog(source: str, system: str, dat_name: str, version: str,
             track = _first_data_track(game.roms)
             if track is None:
                 continue
-            rows.append([track[2], track[1], track[3], index, game.name, sorted(game.serials)])
+            rows.append([track.crc32, track.size, track.sha1, index, game.name,
+                         sorted(game.serials)])
         else:
-            for _, size, crc, sha1 in game.roms:
-                if crc:
-                    rows.append([crc, size, sha1, index, game.name])
+            rows.extend([rom.crc32, rom.size, rom.sha1, index, game.name]
+                        for rom in game.roms if rom.crc32)
     # Region ids are renumbered in sorted order so the table does not depend
     # on the DAT's game order.
     order = sorted(region_ids, key=lambda r: (len(r), r))
@@ -349,10 +319,10 @@ def import_nointro(pack: Path, meta: dict) -> list[dict]:
             # A member named without the version stamp is read for its header.
             if match:
                 continue
-            name = parse_dat(data)[0]
+            name = parse_logiqx_games(data)[0]
             if name not in NOINTRO_DATS:
                 continue
-        dat_name, version, games = parse_dat(data)
+        dat_name, version, games = parse_logiqx_games(data)
         origin = {
             "fetched_from": meta.get("url", ""),
             "fetched": meta.get("fetched", ""),
@@ -367,7 +337,7 @@ def import_redump(pack: Path, meta: dict) -> list[dict]:
     docs = []
     by_name = {name: (code, system) for code, (name, system, _) in REDUMP_DATS.items()}
     for member, data in iter_dat_documents(pack, (".dat",)):
-        dat_name, version, games = parse_dat(data)
+        dat_name, version, games = parse_logiqx_games(data)
         if dat_name not in by_name:
             continue
         file = meta.get("file", member)
