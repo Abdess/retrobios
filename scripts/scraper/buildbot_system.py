@@ -7,8 +7,8 @@ import subprocess
 import sys
 import urllib.error
 import urllib.parse
-import urllib.request
 
+from core.upstream import remote_etag as get_remote_etag
 from model.registry import data_dir_registry_at, load_versions
 from .base_scraper import fetch_text
 
@@ -17,8 +17,6 @@ log = logging.getLogger(__name__)
 
 BUILDBOT_SYSTEM_URL = "https://buildbot.libretro.com/assets/system/"
 INDEX_URL = BUILDBOT_SYSTEM_URL + ".index"
-USER_AGENT = "retrobios/1.0"
-REQUEST_TIMEOUT = 15
 
 DEFAULT_REGISTRY = "platforms/_data_dirs.yml"
 
@@ -43,18 +41,6 @@ def load_tracked_entries(
         zip_name = urllib.parse.unquote(url.rsplit("/", 1)[-1])
         entries[zip_name] = (key, url)
     return entries
-
-
-def get_remote_etag(url: str) -> str | None:
-    """HEAD request to get ETag."""
-    try:
-        req = urllib.request.Request(
-            url, method="HEAD", headers={"User-Agent": USER_AGENT}
-        )
-        with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
-            return resp.headers.get("ETag") or resp.headers.get("Last-Modified") or ""
-    except (urllib.error.URLError, OSError):
-        return None
 
 
 def check(registry_path: str = DEFAULT_REGISTRY) -> dict:

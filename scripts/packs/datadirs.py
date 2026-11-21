@@ -17,6 +17,7 @@ from pathlib import Path
 
 from core.artifacts import file_lock as _file_lock, write_text_atomic
 from core.github import github_token
+from core.upstream import remote_etag as _get_remote_etag
 from model.registry import VERSIONS_FILE, load_versions
 
 
@@ -432,18 +433,6 @@ def _record_archive_size(key: str, entry: dict, versions_path: str) -> None:
             versions[key]["archive_size"] = size
             _save_versions(versions, versions_path)
     log.info("[%s] archive size recorded: %d bytes", key, size)
-
-
-def _get_remote_etag(source_url: str) -> str | None:
-    """HEAD request to get ETag or Last-Modified for freshness check."""
-    try:
-        req = urllib.request.Request(
-            source_url, method="HEAD", headers={"User-Agent": USER_AGENT}
-        )
-        with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
-            return resp.headers.get("ETag") or resp.headers.get("Last-Modified") or ""
-    except (urllib.error.URLError, OSError):
-        return None
 
 
 def _short_tag(tag: str | None) -> str:

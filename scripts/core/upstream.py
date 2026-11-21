@@ -419,6 +419,19 @@ def http_text(url: str) -> str | None:
     return None if body is None else body.decode("utf-8", errors="replace")
 
 
+def remote_etag(url: str, timeout: float = 30) -> str | None:
+    """ETag, else Last-Modified, of a HEAD; "" when neither is sent, None
+    when the server does not answer."""
+    req = urllib.request.Request(
+        url, method="HEAD", headers=forge_headers(url, user_agent="retrobios/1.0")
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.headers.get("ETag") or resp.headers.get("Last-Modified") or ""
+    except (urllib.error.URLError, OSError):
+        return None
+
+
 def http_json(url: str) -> object | None:
     """Parsed JSON body of a GET, or None on 404. Replaced in tests."""
     body = fetch_body(url, accept_json=True)
