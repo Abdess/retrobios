@@ -20,7 +20,7 @@ import re
 from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 
-from core.hashing import parse_hash_list
+from core.hashing import HASH_FIELDS, declared_hashes
 from model.database import record_at
 from model.declarations import CONFIGS_ROOT, ROMS_ROOT, declared_root, declared_slot, outer_layout
 from model.profiles import lists_files, profile_names
@@ -49,7 +49,6 @@ _ROOTED = ("/", "~/", "$HOME/", "$home/", "${HOME}/")
 
 _LABELLED = re.compile(r"^([^\s()]+\.[A-Za-z0-9]+) \([^()]*\)$")
 _PLACEHOLDER = re.compile(r"\{(\w+)\}")
-_HASH_FIELDS = ("sha1", "md5", "crc32", "sha256")
 
 
 @dataclass(frozen=True)
@@ -1259,13 +1258,8 @@ def declared_destinations(config: dict) -> set[str]:
 
 
 def _hashes(entry: dict) -> dict[str, set[str]]:
-    found: dict[str, set[str]] = {}
-    for field in _HASH_FIELDS:
-        value = entry.get(field) or (entry.get("expected") or {}).get(field)
-        if not value:
-            continue
-        found[field] = set(parse_hash_list(value))
-    return found
+    expected = entry.get("expected") or {}
+    return declared_hashes({f: entry.get(f) or expected.get(f) for f in HASH_FIELDS})
 
 
 def accepts(entry: dict, record: dict) -> bool:

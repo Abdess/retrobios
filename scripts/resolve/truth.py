@@ -16,8 +16,9 @@ from model.systems import norm_system_id
 from model.registry import load_data_dir_registry
 from resolve.standalone import platform_layouts, standalone_set as platform_standalone_set
 from resolve.cores import resolve_platform_cores
+from resolve.reconcile import contradicts, shares_hash
 from model.alternatives import groups_of
-from core.hashing import compute_hashes, parse_hash_list
+from core.hashing import HASH_FIELDS, compute_hashes, declared_hashes, lists_hashes, parse_hash_list
 from resolve.validation import (
     filter_files_by_mode,
     installed_with_emulator,
@@ -134,8 +135,6 @@ _COPIED_FIELDS = (
     "priority",
     "region",
 )
-_HASH_FIELDS = ("sha1", "md5", "sha256", "crc32")
-
 
 def _merge_file_into_system(
     system: dict,
@@ -242,24 +241,12 @@ def _brought(file_entry: dict, emu_name: str) -> set[str]:
 
 
 def _shares_hash(a: dict, b: dict) -> bool:
-    return any(
-        _declared(a, field) & _declared(b, field)
-        for field in ("sha1", "md5", "sha256", "crc32")
-    )
-
-
-def _declared(entry: dict, field: str) -> set[str]:
-    """The values an entry declares for a hash field, one, a list or comma-joined."""
-    return set(parse_hash_list(entry.get(field)))
+    return shares_hash(declared_hashes(a), declared_hashes(b))
 
 
 def _contents_disagree(a: dict, b: dict) -> bool:
     """A hash both declare without a value in common, or no size both admit."""
-    for field in ("sha1", "md5", "sha256", "crc32"):
-        ours, theirs = _declared(a, field), _declared(b, field)
-        if ours and theirs and not ours & theirs:
-            return True
-    return _sizes_clash(a, b)
+    return contradicts(declared_hashes(a), declared_hashes(b)) or _sizes_clash(a, b)
 
 
 def _fold_into(existing: dict, file_entry: dict, emu_name: str) -> None:
@@ -339,7 +326,7 @@ def _merge_hashes(
     (dosbox's MT-32 control ROMs, raze's GRP versions): ``revision`` keeps
     the union. Two cores that disagree keep the first value and are reported.
     """
-    for h in _HASH_FIELDS:
+    for h in HASH_FIELDS:
         theirs = file_entry.get(h, "")
         ours = existing.get(h, "")
         if not theirs:
@@ -405,7 +392,7 @@ def _new_truth_entry(file_entry: dict, emu_name: str, db: dict | None) -> dict:
         if val is not None:
             entry[field] = val
     # Strip empty string hashes (profile says "" when hash is unknown)
-    for h in _HASH_FIELDS:
+    for h in HASH_FIELDS:
         if entry.get(h) == "":
             del entry[h]
     # Normalize CRC32: strip 0x prefix, lowercase
@@ -426,7 +413,7 @@ def _new_truth_entry(file_entry: dict, emu_name: str, db: dict | None) -> dict:
         _enrich_hashes(entry, db)
     # Which core gave each hash, for the conflict warning. Dropped before
     # the model is written.
-    entry["_hash_by"] = {h: emu_name for h in _HASH_FIELDS if entry.get(h)}
+    entry["_hash_by"] = {h: emu_name for h in HASH_FIELDS if entry.get(h)}
     return entry
 
 
@@ -437,7 +424,7 @@ def _has_exploitable_data(entry: dict) -> bool:
     sibling cores before being judged empty.
     """
     return bool(
-        any(entry.get(h) for h in ("sha1", "md5", "sha256", "crc32"))
+        lists_hashes(entry)
         or entry.get("path")
         or entry.get("size")
         or entry.get("min_size")
@@ -542,10 +529,7 @@ def _identity(entry: dict, db: dict | None) -> dict:
 
 def _identity_values(entry: dict) -> set[str]:
     """Every hash an identity declares."""
-    values: set[str] = set()
-    for field in ("sha1", "md5", "sha256", "crc32"):
-        values |= _declared(entry, field)
-    return values
+    return {v for values in declared_hashes(entry).values() for v in values}
 
 
 def _declaration_verdict(entry: dict, declaration: dict, db: dict | None) -> str:

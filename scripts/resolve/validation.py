@@ -25,7 +25,7 @@ from resolve.archives import archive_members
 from model.profiles import CONTENT_CHECKS, entry_system_ids, lists_files
 from core.hashing import compute_hashes, parse_hash_list
 from core.paths import BIOS_DIR, sanitize_pack_path
-from core.hashing import md5_composite, parse_md5_list
+from core.hashing import lists_hashes, md5_composite, parse_md5_list
 from resolve.nativemode import SIZE_AND_ANY_HASH, digest_algorithm, hash_mismatch_excludes_file
 from core.ziptools import check_inside_zip, check_inside_zip_data
 
@@ -919,7 +919,7 @@ def agnostic_substitute(
     asked, and the pack and verify read this one answer. An entry that
     declares a content hash names one file: no substitute stands for it.
     """
-    if any(file_entry.get(h) for h in ("sha1", "md5", "sha256", "crc32")):
+    if lists_hashes(file_entry):
         return None
     by_name = db.get("indexes", {}).get("by_name", {})
     files_db = db.get("files", {})

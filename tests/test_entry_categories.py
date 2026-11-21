@@ -59,6 +59,21 @@ class EachProfileEntryIsHashedOnce(unittest.TestCase):
         self.assertFalse(candidates._accepts({"a" * 32}, {"md5": {"a" * 29}}))
         self.assertFalse(candidates._accepts({"a" * 32}, {"md5": {"b" * 32}}))
 
+class CompositeMd5(unittest.TestCase):
+    """Recalbox hashes an archive by its members (zip_digest: composite), a
+    digest no profile declares: it contradicts no container md5, as reconcile
+    reads it."""
+
+    def test_a_composite_md5_leaves_the_same_named_entry(self):
+        profiles = {"core": {"emulator": "Core", "type": "libretro", "cores": ["core"],
+                             "systems": ["s"],
+                             "files": [{"name": "neogeo.zip", "md5": "a" * 32}]}}
+        cats = EntryCategories(_config(["core"], []), profiles)
+        composite = {"name": "neogeo.zip", "md5": "b" * 32, "zip_digest": "composite"}
+        self.assertEqual(cats._matching("core", BIOS, composite), [{"name": "neogeo.zip", "by": "name"}])
+        self.assertEqual(cats._matching("core", BIOS, {"name": "neogeo.zip", "md5": "b" * 32}), [])
+
+
 class Category(unittest.TestCase):
     def test_each_category(self):
         cats = EntryCategories(_config(["bluemsx", "devilutionx"], []), PROFILES)

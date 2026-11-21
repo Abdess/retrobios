@@ -15,7 +15,7 @@ from pathlib import Path
 
 from model.database import record_at
 from model.largefiles import fetch_large_file
-from core.hashing import cut_md5_owner, parse_hash_list
+from core.hashing import HASH_FIELDS, cut_md5_owner, parse_hash_list
 from resolve.content import declared_hash_verdict
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from core.paths import REPO_ROOT, declared_destination
@@ -88,7 +88,7 @@ def download_external(
 def _declared_hashes(file_entry: dict) -> dict[str, list[str]]:
     return {
         field: parse_hash_list(file_entry.get(field))
-        for field in ("sha1", "md5", "sha256", "crc32")
+        for field in HASH_FIELDS
     }
 
 

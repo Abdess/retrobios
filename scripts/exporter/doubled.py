@@ -19,7 +19,8 @@ from resolve.archives import contents_members, holds_required_members
 from resolve.standalone import platform_layouts, standalone_set
 from resolve.cores import resolve_platform_cores
 from resolve.reconcile import HASH_FIELDS, hash_values
-from resolve.collisions import accepted_by_all, lists_hashes, find_collisions
+from core.hashing import lists_hashes
+from resolve.collisions import accepted_by_all, find_collisions
 from resolve.validation import opens_by_name, outside_gap_scope
 
 

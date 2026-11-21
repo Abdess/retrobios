@@ -187,6 +187,20 @@ def parse_hash_list(raw: str | list | int | None) -> list[str]:
     return out
 
 
+HASH_FIELDS = ("sha1", "md5", "sha256", "crc32")
+
+
+def declared_hashes(entry: dict, fields: Iterable[str] = HASH_FIELDS) -> dict[str, set[str]]:
+    """Hash field -> the values an entry declares, for each field it declares."""
+    found = {f: set(parse_hash_list(entry.get(f))) for f in fields}
+    return {f: values for f, values in found.items() if values}
+
+
+def lists_hashes(entry: dict) -> bool:
+    """Whether a declaration says anything about content at all."""
+    return bool(declared_hashes(entry))
+
+
 def parse_md5_list(raw: str | list | None) -> list[str]:
     """Normalize an md5 field into a lowercase list.
 

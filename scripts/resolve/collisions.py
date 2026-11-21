@@ -6,7 +6,7 @@ import os
 import zlib
 from dataclasses import dataclass, field
 
-from core.hashing import compute_hashes, parse_hash_list, parse_md5_list
+from core.hashing import compute_hashes, declared_hashes, parse_md5_list
 from core.paths import comparable_destination
 from core.ziptools import check_inside_zip
 from resolve.localfile import resolve_local_file, variant_base_name
@@ -106,19 +106,6 @@ def find_collisions(
     return collisions
 
 
-def lists_hashes(entry: dict) -> bool:
-    """Whether a declaration says anything about content at all."""
-    return any(
-        _declared_hashes(entry, field_name)
-        for field_name in ("md5", "sha1", "sha256", "crc32")
-    )
-
-
-def _declared_hashes(entry: dict, field_name: str) -> set[str]:
-    """Hashes an entry accepts for one field, declared as a string or a list."""
-    return set(parse_hash_list(entry.get(field_name)))
-
-
 def content_sha1(path: str, db: dict) -> str | None:
     """The sha1 of the file at path, from the database or read from disk.
 
@@ -145,9 +132,8 @@ def accepted_by_all(path: str, entries: list[dict], db: dict) -> bool:
             ):
                 return False
             continue
-        for field_name in ("md5", "sha1", "sha256", "crc32"):
-            declared = _declared_hashes(entry, field_name)
-            if declared and str(record.get(field_name, "")).lower() not in declared:
+        for field_name, declared in declared_hashes(entry).items():
+            if str(record.get(field_name, "")).lower() not in declared:
                 if field_name == "crc32" and _headerless_crc32(path, record, entry) in declared:
                     continue
                 return False

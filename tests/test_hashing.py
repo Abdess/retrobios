@@ -97,5 +97,15 @@ class TheSiteReadsAHashFieldTheResolversWay(unittest.TestCase):
                 self.assertEqual(lookup.sorted_hash_values(raw), sorted(hashing.parse_hash_list(raw)))
 
 
+
+class DeclaredHashes(unittest.TestCase):
+    def test_only_fields_with_a_value_count(self):
+        entry = {"md5": "A, b", "sha1": " , ", "crc32": "0x1234ABCD", "sha256": ""}
+        self.assertEqual(hashing.declared_hashes(entry), {"md5": {"a", "b"}, "crc32": {"1234abcd"}})
+        # A field holding only separators declares nothing.
+        self.assertFalse(hashing.lists_hashes({"sha1": " , "}))
+        self.assertTrue(hashing.lists_hashes({"crc32": "1234abcd"}))
+
+
 if __name__ == "__main__":
     unittest.main()

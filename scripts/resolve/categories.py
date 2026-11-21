@@ -18,7 +18,10 @@ from pathlib import Path
 
 from model.systems import norm_system_id
 from resolve.cores import resolve_platform_cores, unresolved_platform_cores
-from resolve.reconcile import HASH_FIELDS, NativeSystem, entry_names, hash_values
+from core.hashing import declared_hashes
+from resolve.reconcile import (
+    HASH_FIELDS, NativeSystem, comparable, contradicts, entry_names, hash_values,
+)
 from resolve.launchers import record_names as launcher_names
 
 
@@ -37,26 +40,22 @@ def _entry_hashes(entry: dict) -> set[str]:
 
 
 def _declared_hashes(entry: dict) -> dict[str, set[str]]:
-    """Hash field -> the values a platform entry declares, alt_md5 as md5."""
-    found = {f: set(hash_values(entry, f)) for f in HASH_FIELDS}
-    found["md5"] |= set(hash_values(entry, "alt_md5"))
-    return {f: values for f, values in found.items() if values}
+    """Hash field -> the values a platform entry declares, alt_md5 as md5.
+
+    A Recalbox composite md5 describes no container a profile declares
+    (comparable), so it neither accepts nor contradicts a profile entry.
+    """
+    entry = comparable(entry)
+    found = declared_hashes(entry)
+    if alt := set(hash_values(entry, "alt_md5")):
+        found["md5"] = found.get("md5", set()) | alt
+    return found
 
 
 def _accepts(accepted: set[str], declared: dict[str, set[str]]) -> bool:
     """True when the hashes a profile entry accepts, the members of its
     archive included, hold one the platform entry declares."""
     return any(values & accepted for values in declared.values())
-
-
-def _contradicts(profile_entry: dict, declared: dict[str, set[str]]) -> bool:
-    """True when both sides state the same kind of hash and no value agrees:
-    the profile entry describes another dump under the same name."""
-    for field_name, values in declared.items():
-        own = set(hash_values(profile_entry, field_name))
-        if own and not set(values) & set(own):
-            return True
-    return False
 
 
 @dataclass
@@ -427,7 +426,7 @@ class EntryCategories:
         return [
             {**cited(named[p]), "by": "name"}
             for p in sorted(named)
-            if not (declared and _contradicts(named[p], declared))
+            if not (declared and contradicts(declared_hashes(named[p]), declared))
         ]
 
     def explain(self, entry: dict, destination: str, system: str) -> dict:

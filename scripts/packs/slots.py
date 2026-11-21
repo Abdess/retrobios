@@ -6,14 +6,14 @@ import os
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from core.hashing import parse_md5_list
+from core.hashing import lists_hashes, parse_md5_list
 from model.declarations import declared_slot
 from model.profiles import entry_system_ids, lists_files
 from packs.gaps import gap_destination
 from resolve import nativemode
 from resolve.archives import archive_entry, holds_required_members
 from core.paths import comparable_destination
-from resolve.collisions import accepted_by_all, content_sha1, lists_hashes
+from resolve.collisions import accepted_by_all, content_sha1
 from resolve.cores import resolve_platform_cores
 from resolve.layout import system_dir_path
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file

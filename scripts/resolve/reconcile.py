@@ -17,12 +17,10 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 
 
-from core.hashing import parse_hash_list
+from core.hashing import HASH_FIELDS, declared_hashes, parse_hash_list
 from model.profiles import profile_names
 from model.systems import norm_system_id
 from core.paths import REPO_ROOT
-
-HASH_FIELDS = ("sha1", "md5", "sha256", "crc32")
 
 
 def hash_values(entry: dict, field_name: str) -> list[str]:
@@ -89,14 +87,19 @@ def contradicted_hashes(truth_entry: dict, platform_entry: dict | None) -> list[
     value settle all of them, so it stayed silent on an md5 or a sha256
     the export rewrote.
     """
-    checked = checked_hashes(truth_entry) or {}
-    theirs = comparable(platform_entry)
-    return [
-        field_name for field_name in HASH_FIELDS
-        if (ours := set(hash_values(checked, field_name)))
-        and (held := set(hash_values(theirs, field_name)))
-        and not ours & held
-    ]
+    ours = declared_hashes(checked_hashes(truth_entry) or {})
+    theirs = declared_hashes(comparable(platform_entry))
+    return [f for f, values in ours.items() if f in theirs and not values & theirs[f]]
+
+
+def contradicts(ours: dict[str, set[str]], theirs: dict[str, set[str]]) -> bool:
+    """A hash field both declared maps hold without a value in common."""
+    return any(f in theirs and not values & theirs[f] for f, values in ours.items())
+
+
+def shares_hash(ours: dict[str, set[str]], theirs: dict[str, set[str]]) -> bool:
+    """A value in common on any hash field both declared maps hold."""
+    return any(values & theirs.get(f, set()) for f, values in ours.items())
 
 
 def is_label(entry: dict) -> bool:
@@ -422,22 +425,12 @@ def by_name(truth_entry: dict, platform_entry: dict) -> bool:
 
 def by_hash(truth_entry: dict, platform_entry: dict) -> bool:
     """A value on any of the four hash fields in common: a renamed file."""
-    ours = {v for f in HASH_FIELDS for v in hash_values(truth_entry, f)}
-    if not ours:
-        return False
-    theirs = comparable(platform_entry)
-    return bool(ours & {v for f in HASH_FIELDS for v in hash_values(theirs, f)})
+    return shares_hash(declared_hashes(truth_entry), declared_hashes(comparable(platform_entry)))
 
 
 def _contradicts(truth_entry: dict, platform_entry: dict) -> bool:
     """A hash both entries declare, without a value in common."""
-    platform_entry = comparable(platform_entry)
-    return any(
-        (ours := set(hash_values(truth_entry, f)))
-        and (theirs := set(hash_values(platform_entry, f)))
-        and not ours & theirs
-        for f in HASH_FIELDS
-    )
+    return contradicts(declared_hashes(truth_entry), declared_hashes(comparable(platform_entry)))
 
 
 def _agreeing(test: Callable[[dict, dict], bool]) -> Callable[[dict, dict], bool]:
