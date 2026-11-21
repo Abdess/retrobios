@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 import logging
-import subprocess
-import sys
 import urllib.error
 import urllib.parse
 
@@ -104,26 +102,9 @@ def print_report(report: dict) -> None:
     print(f"\nSummary: {', '.join(parts)}")
 
 
-def update_changed(report: dict) -> list[str]:
-    """Refresh entries that have changed and return the keys whose refresh failed."""
-    failed: list[str] = []
-    for e in report.get("entries", []):
-        if e["status"] == "UPDATED" and e.get("key"):
-            log.info("refreshing %s ...", e["key"])
-            result = subprocess.run(
-                [
-                    sys.executable,
-                    "scripts/refresh_data_dirs.py",
-                    "--force",
-                    "--key",
-                    e["key"],
-                ],
-                check=False,
-            )
-            if result.returncode != 0:
-                log.error("refresh of %s failed (exit %d)", e["key"], result.returncode)
-                failed.append(e["key"])
-    return failed
+def updated(report: dict) -> list[str]:
+    """Keys of the tracked entries whose remote version changed."""
+    return [e["key"] for e in report.get("entries", []) if e["status"] == "UPDATED" and e.get("key")]
 
 
 def pending(report: dict) -> list[dict]:

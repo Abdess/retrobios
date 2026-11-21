@@ -579,6 +579,31 @@ def refresh_all(
     return results
 
 
+def refresh_keys(
+    registry: dict[str, dict],
+    keys: list[str],
+    *,
+    force: bool = False,
+    versions_path: str = VERSIONS_FILE,
+) -> list[str]:
+    """Refresh the named entries of a registry and return the keys whose
+    refresh failed."""
+    failed: list[str] = []
+    refreshed = False
+    for key in keys:
+        log.info("refreshing %s ...", key)
+        outcome = refresh_entry(key, registry[key], force=force, versions_path=versions_path)
+        if outcome is None:
+            log.error("refresh of %s failed", key)
+            failed.append(key)
+        refreshed = refreshed or bool(outcome)
+    if refreshed:
+        from resolve.datadirs import forget_data_dir_index
+
+        forget_data_dir_index()
+    return failed
+
+
 def summarize(outcomes: dict[str, bool | None], dry_run: bool) -> str:
     """One closing line: how many entries changed, were current, failed."""
     refreshed = sum(1 for o in outcomes.values() if o is True)

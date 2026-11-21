@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import tests
 
+import contextlib
+import io
 import json
 import os
 import shutil
@@ -185,14 +187,45 @@ class RefreshFailuresAreFailures(unittest.TestCase):
     def test_a_failed_refresh_is_returned_and_exits_nonzero(self):
         report = {"entries": [{"status": "UPDATED", "key": "dolphin-sys"},
                               {"status": "OK", "key": "ppsspp-assets"}]}
-        with mock.patch.object(
-            buildbot_system.subprocess, "run",
-            return_value=subprocess.CompletedProcess([], 1),
-        ):
-            self.assertEqual(buildbot_system.update_changed(report), ["dolphin-sys"])
+        self.assertEqual(buildbot_system.updated(report), ["dolphin-sys"])
+        registry = {"dolphin-sys": {"local_cache": "data/dolphin-sys"}}
+        with mock.patch.object(datadirs, "refresh_entry", return_value=None):
+            self.assertEqual(datadirs.refresh_keys(registry, ["dolphin-sys"]), ["dolphin-sys"])
         source = (REPO_ROOT / "scripts" / "check_buildbot_system.py").read_text(encoding="utf-8")
-        self.assertIn("failed = update_changed(report)", source)
-        self.assertIn("sys.exit(1)", source[source.index("failed = update_changed(report)"):])
+        self.assertIn("failed = refresh_keys(", source)
+        self.assertIn("sys.exit(1)", source[source.index("failed = refresh_keys("):])
+
+    def test_update_refreshes_from_the_registry_it_checked(self):
+        """--update ran scripts/refresh_data_dirs.py by a relative path and
+        without --registry: the refresh read the default registry, and from
+        any other directory the child was not found."""
+        import check_buildbot_system as cbs
+
+        with tempfile.TemporaryDirectory() as tmp:
+            registry = Path(tmp, "other.yml")
+            registry.write_text(
+                "data_directories:\n"
+                "  elsewhere:\n"
+                "    source_url: https://buildbot.libretro.com/assets/system/Else.zip\n"
+                "    source_type: zip\n"
+                f"    local_cache: {tmp}/else\n",
+                encoding="utf-8",
+            )
+            seen: list[tuple[str, dict]] = []
+
+            def refresh(key, entry, **_kwargs):
+                seen.append((key, entry))
+                return True
+
+            with mock.patch.object(buildbot_system, "fetch_index", return_value={"Else.zip"}), \
+                    mock.patch.object(buildbot_system, "get_remote_etag", return_value='"new"'), \
+                    mock.patch.object(datadirs, "refresh_entry", side_effect=refresh), \
+                    mock.patch.object(sys, "argv", ["check_buildbot_system.py", "--update",
+                                                    "--registry", str(registry)]), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                cbs.main()
+        self.assertEqual([key for key, _entry in seen], ["elsewhere"])
+        self.assertEqual(seen[0][1]["local_cache"], f"{tmp}/else")
 
 
 class AnEmptyExtractionKeepsTheCache(unittest.TestCase):

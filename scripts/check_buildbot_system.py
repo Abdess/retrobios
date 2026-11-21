@@ -19,12 +19,14 @@ import os
 import sys
 from core.cli import InputMissing
 from core.paths import DATA_DIRS_FILE
+from model.registry import data_dir_registry_at
+from packs.datadirs import refresh_keys
 from scraper.buildbot_system import (
     check,
     pending,
     print_report,
     unanswered,
-    update_changed,
+    updated,
 )
 
 
@@ -60,7 +62,11 @@ def main() -> None:
         print_report(report)
 
     if args.update:
-        failed = update_changed(report)
+        # The registry checked is the one refreshed, read in this process:
+        # a child run by relative path read the default registry, and failed
+        # outside the repository root.
+        registry = data_dir_registry_at(args.registry, required=True)
+        failed = refresh_keys(registry, updated(report), force=True)
         if failed:
             print(f"ERROR: refresh failed for {', '.join(failed)}", file=sys.stderr)
             sys.exit(1)

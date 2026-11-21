@@ -61,7 +61,7 @@ COMMANDS = {
     "generate_installer_doc.py": ("installer_build/installerdoc.py",),
     "commit_rules.py": ("devtools/commitrules.py",),
     "pr_checks.py": ("devtools/prchecks.py",),
-    "check_buildbot_system.py": ("scraper/buildbot_system.py",),
+    "check_buildbot_system.py": ("scraper/buildbot_system.py", "packs/datadirs.py"),
     "generate_site.py": (
         "sitegen/config.py", "sitegen/emulatorsindex.py", "sitegen/places.py", "sitegen/home.py",
         "sitegen/versions.py", "sitegen/guidepage.py", "sitegen/install.py", "sitegen/getpages.py",
