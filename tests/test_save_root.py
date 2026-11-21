@@ -811,7 +811,7 @@ class TheScrapersReadTheSystemLists(unittest.TestCase):
                          {"dolphin": ["gamecube", "wii"], "stella": ["atari2600"]})
 
     def test_retrobat_es_systems_cfg(self):
-        from scripts.scraper.retrobat_scraper import es_systems_libretro_systems
+        from scripts.scraper.es_emulators import libretro_systems, xml_systems
 
         text = (
             "<systemList><system><name>3ds</name><emulators>"
@@ -820,7 +820,7 @@ class TheScrapersReadTheSystemLists(unittest.TestCase):
             "<emulator name=\"citra-qt\"><cores><core>citra-qt</core></cores></emulator>"
             "</emulators></system></systemList>"
         )
-        self.assertEqual(es_systems_libretro_systems(text), {"azahar": ["3ds"]})
+        self.assertEqual(libretro_systems(xml_systems(text)), {"azahar": ["3ds"]})
 
     def test_recalbox_system_ini(self):
         from scripts.scraper.recalbox_scraper import libretro_systems

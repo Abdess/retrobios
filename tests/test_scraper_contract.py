@@ -477,11 +477,28 @@ class RetroBatCoresFromItsES(unittest.TestCase):
 """
 
     def test_libretro_cores_and_standalone_emulators(self):
-        from scraper.retrobat_scraper import es_systems_cores
+        from scraper.es_emulators import es_cores, xml_systems
 
-        cores, standalone = es_systems_cores(self.ES_SYSTEMS)
-        self.assertEqual(cores, {"snes9x", "bsnes", "simcoupe"})
-        self.assertEqual(standalone, {"bsnes", "simcoupe"})
+        cores, standalone, dual = es_cores(xml_systems(self.ES_SYSTEMS), {"libretro": None})
+        self.assertEqual(cores, ["bsnes", "simcoupe", "snes9x"])
+        self.assertEqual(standalone, ["bsnes", "simcoupe"])
+        self.assertEqual(dual, ["bsnes"])
+
+    def test_same_named_systems_keep_every_emulator(self):
+        # RetroBat 8.3.1 names two <system> blocks `starship`: ghostship
+        # sits under the first one only.
+        from scraper.es_emulators import es_cores, xml_systems
+
+        text = (
+            "<systemList>"
+            "<system><name>starship</name><emulators>"
+            "<emulator name=\"ghostship\"/></emulators></system>"
+            "<system><name>starship</name><emulators>"
+            "<emulator name=\"starship\"/></emulators></system>"
+            "</systemList>"
+        )
+        _cores, standalone, _dual = es_cores(xml_systems(text), {"libretro": None})
+        self.assertEqual(standalone, ["ghostship", "starship"])
 
     def test_the_registry_leaves_the_list_to_the_scraper(self):
         import yaml

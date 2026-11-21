@@ -23,6 +23,7 @@ from .base_scraper import (
     systems_from_requirements,
 )
 from .batocera_scraper import SYSTEM_SLUG_MAP as BATOCERA_SLUGS
+from .es_emulators import es_cores, libretro_systems, xml_systems
 from .retrobat_launchers import SOURCE_FILES as LAUNCHER_FILES
 from .retrobat_launchers import extract_launchers
 
@@ -45,72 +46,6 @@ ES_SYSTEMS_URL = (
     "https://raw.githubusercontent.com/RetroBat-Official/retrobat/{tag}"
     "/system/templates/emulationstation/es_systems.cfg"
 )
-
-
-def es_systems_dual(text: str) -> set[str]:
-    """Emulators es_systems.cfg offers both as a libretro core and standalone."""
-    from model.safeparse import parse_untrusted_xml
-
-    libretro: set[str] = set()
-    standalone: set[str] = set()
-    for emulator in parse_untrusted_xml(text, "es_systems.cfg").iter("emulator"):
-        name = (emulator.get("name") or "").strip()
-        if name == "libretro":
-            libretro |= {(core.text or "").strip() for core in emulator.iter("core")} - {""}
-        elif name:
-            standalone.add(name)
-    return libretro & standalone
-
-
-def es_systems_cores(text: str) -> tuple[set[str], set[str]]:
-    """Every core RetroBat's ES offers, and the emulators it runs standalone.
-
-    emulatorlauncher starts what es_systems.cfg lists: a libretro core by its
-    name under ``<emulator name="libretro">``, any other emulator by its own
-    name. batocera-systems.json names BIOS files only, so the platform read
-    from it alone had no core list and relied on one kept by hand.
-    """
-    from model.safeparse import parse_untrusted_xml
-
-    root = parse_untrusted_xml(text, "es_systems.cfg")
-    cores: set[str] = set()
-    standalone: set[str] = set()
-    for emulator in root.iter("emulator"):
-        name = (emulator.get("name") or "").strip()
-        if not name:
-            continue
-        listed = {(core.text or "").strip() for core in emulator.iter("core")} - {""}
-        if name == "libretro":
-            cores |= listed
-        else:
-            cores.add(name)
-            standalone.add(name)
-    return cores, standalone
-
-
-def es_systems_libretro_systems(text: str) -> dict[str, list[str]]:
-    """libretro core -> the ES systems es_systems.cfg offers it for.
-
-    emulatorLauncher hands a libretro core saves\\<system> at each launch
-    (LibRetro.Generator.cs Configure: savefile_directory), so a file a core
-    reads below its save directory sits once in each of these system
-    folders. A commented-out system is no element and counts for nothing.
-    """
-    from model.safeparse import parse_untrusted_xml
-
-    found: dict[str, set[str]] = {}
-    for system in parse_untrusted_xml(text, "es_systems.cfg").iter("system"):
-        name = (system.findtext("name") or "").strip()
-        if not name:
-            continue
-        for emulator in system.iter("emulator"):
-            if (emulator.get("name") or "").strip() != "libretro":
-                continue
-            for core in emulator.iter("core"):
-                core_name = (core.text or "").strip()
-                if core_name:
-                    found.setdefault(core_name, set()).add(name)
-    return {core: sorted(systems) for core, systems in sorted(found.items())}
 
 
 def pinned_revision(platform_file: Path = PLATFORM_FILE) -> str:
@@ -262,11 +197,13 @@ class Scraper(BaseScraper):
         version = fetch_github_latest_version(GITHUB_REPO)
         es_url = ES_SYSTEMS_URL.format(tag=version)
         es_text = fetch_text(es_url)
-        cores, standalone = es_systems_cores(es_text)
-        dual = es_systems_dual(es_text)
-        libretro_systems = es_systems_libretro_systems(es_text)
-        if not cores:
-            raise RuntimeError(f"es_systems.cfg at {version} names no core")
+        # emulatorLauncher starts a libretro core by its name under
+        # <emulator name="libretro">, any other emulator by its own name.
+        es_systems = xml_systems(es_text)
+        cores, standalone, dual = es_cores(es_systems, {"libretro": None})
+        # emulatorLauncher hands a libretro core saves\\<system> at each launch
+        # (LibRetro.Generator.cs Configure: savefile_directory).
+        core_systems = libretro_systems(es_systems)
 
         return {
             "platform": "RetroBat",
@@ -276,13 +213,13 @@ class Scraper(BaseScraper):
             "base_destination": "bios",
             "hash_type": "md5",
             "verification_mode": "md5",
-            "cores": sorted(cores),
-            "standalone_cores": sorted(standalone),
+            "cores": cores,
+            "standalone_cores": standalone,
             # Launched both ways: each layout gets its files.
-            **({"dual_mode_cores": sorted(dual)} if dual else {}),
+            **({"dual_mode_cores": dual} if dual else {}),
             "systems": systems,
             # The systems each libretro core runs for: its save folders.
-            "libretro_systems": libretro_systems,
+            "libretro_systems": core_systems,
             "launchers": fetch_launchers(required_revision(self.url, LAUNCHER_REPO, commit=True)),
         }
 

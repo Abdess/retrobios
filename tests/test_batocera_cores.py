@@ -131,12 +131,12 @@ class AnEmulatorLaunchedBothWaysGetsBothLayouts(unittest.TestCase):
 
     def test_retrobat_and_recalbox_name_theirs(self):
         from scripts.scraper.recalbox_scraper import system_ini_cores, system_ini_libretro
-        from scripts.scraper.retrobat_scraper import es_systems_dual
+        from scripts.scraper.es_emulators import es_cores, xml_systems
 
-        cfg = ("<systemList><system><emulators>"
+        cfg = ("<systemList><system><name>gamecube</name><emulators>"
                "<emulator name=\"libretro\"><cores><core>dolphin</core></cores></emulator>"
                "<emulator name=\"dolphin\"/></emulators></system></systemList>")
-        self.assertEqual(es_systems_dual(cfg), {"dolphin"})
+        self.assertEqual(es_cores(xml_systems(cfg), {"libretro": None})[2], ["dolphin"])
         ini = "[core.0]\nemulator = libretro\ncore = dolphin\n[core.1]\nemulator = dolphin\ncore = dolphin\n"
         _cores, standalone = system_ini_cores(ini)
         self.assertEqual(system_ini_libretro(ini) & standalone, {"dolphin"})

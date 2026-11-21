@@ -28,12 +28,14 @@ def xml_systems(text: str) -> SystemEmulators:
         name = (system.findtext("name") or "").strip()
         if not name:
             continue
-        systems[name] = [
+        # Two <system> blocks may share a name (RetroBat's two `starship`):
+        # each still offers its emulators.
+        systems.setdefault(name, []).extend(
             (emulator.get("name"),
-             [core.text.strip() for core in emulator.iter("core") if core.text])
+             [text for core in emulator.iter("core") if (text := (core.text or "").strip())])
             for emulator in system.iter("emulator")
             if emulator.get("name")
-        ]
+        )
     if not any(systems.values()):
         raise ValueError("es_systems.cfg names no emulator")
     return systems
@@ -43,10 +45,10 @@ def json_systems(text: str) -> SystemEmulators:
     """Each system's emulators and cores, from an es_systems.json."""
     systems: SystemEmulators = {}
     for system in json.loads(text).get("systems", []):
-        systems[system["name"]] = [
+        systems.setdefault(system["name"], []).extend(
             (emulator["name"], [core["name"] for core in emulator.get("cores") or []])
             for emulator in system.get("emulators") or []
-        ]
+        )
     if not any(systems.values()):
         raise ValueError("es_systems.json names no emulator")
     return systems
@@ -58,6 +60,19 @@ def _pairs(systems: SystemEmulators) -> dict[str, set[str]]:
         for emulator, cores in emulators:
             pairs.setdefault(emulator, set()).update(cores)
     return pairs
+
+
+def libretro_systems(
+    systems: SystemEmulators, runner: str = "libretro"
+) -> dict[str, list[str]]:
+    """libretro core -> the systems the list offers it for, under `runner`."""
+    found: dict[str, set[str]] = {}
+    for system, emulators in systems.items():
+        for emulator, cores in emulators:
+            if emulator == runner:
+                for core in cores:
+                    found.setdefault(core, set()).add(system)
+    return {core: sorted(names) for core, names in sorted(found.items())}
 
 
 def xml_emulators(text: str) -> dict[str, set[str]]:
