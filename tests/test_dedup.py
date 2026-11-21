@@ -125,6 +125,36 @@ class TrueDuplicates(_Bios):
         self.run_dedup()
         self.assertEqual(len(self.existing()), 2)
 
+    def report(self) -> str:
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            dedup.deduplicate(str(self.bios), dry_run=True)
+        return out.getvalue()
+
+    def test_a_removed_variant_is_not_reported_as_a_mame_clone(self):
+        # The run printed "MAME clones: ['x.bin.1234']" for a variant copy,
+        # a name the clone map never records.
+        self.write("Sony/PS/x.bin")
+        self.write("Sony/PS/.variants/x.bin.1234")
+        report = self.report()
+        self.assertNotIn("MAME clones", report)
+        self.assertIn("Would remove 1 copies", report)
+
+    def test_another_name_kept_beside_the_canonical_is_named_as_kept(self):
+        self.write("Nintendo/N64DD/64DD_IPL_US.n64")
+        self.write("Nintendo/N64DD/x/64DD_IPL_US.n64")
+        self.write("Nintendo/N64DD/IPL_USA.n64")
+        report = self.report()
+        self.assertNotIn("MAME clones", report)
+        self.assertIn("Kept under other names: ['IPL_USA.n64']", report)
+
+    def test_a_device_clone_is_still_reported_as_one(self):
+        self.write("Arcade/MAME/a.zip")
+        self.write("Arcade/MAME/abc.zip")
+        report = self.report()
+        self.assertIn("MAME clones: ['abc.zip']", report)
+        self.assertNotIn("Kept under other names", report)
+
     def test_a_lone_file_is_left_alone(self):
         self.write("Sony/PS/only.bin")
         self.assertEqual(self.run_dedup(), {})
