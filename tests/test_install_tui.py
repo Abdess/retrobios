@@ -7873,6 +7873,18 @@ class _LineModeFindings(_CardFixtures):
             lines = install.folder_warnings("retroarch", self.root, [], hint, True, True)
         self.assertEqual(lines, [install.read_only_words(self.root)])
 
+    def test_the_plan_warns_on_the_space_the_run_refuses_on(self):
+        """The screen held the files missing or wrong against the free space,
+        the run those and the data trees: a plan without a warning stopped
+        for space right after Install."""
+        state = fresh_state()
+        state.facts["free"] = 1000
+        check = {"bytes_needed": 500}
+        self.assertFalse(install._short_of_space(state, check))
+        check["space_bytes"] = 5000
+        self.assertTrue(install._short_of_space(state, check))
+        self.assertEqual(install.space_needed(check), 5000)
+
 
 
 class _OutsideTextFindings:

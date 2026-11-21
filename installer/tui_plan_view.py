@@ -48,6 +48,7 @@ from installer.tui_choice import (
     _tui_tally,
     games_plan_words,
     games_where,
+    space_needed,
     tui_systems,
     tui_verbose,
 )
@@ -315,8 +316,8 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
     free = state.facts.get("free")
     if free is not None:
         lines.append(_detail(f"Free space: {format_size(free)}"))
-        if check["bytes_needed"] > free:
-            lines.append(space_words(check["bytes_needed"], free, _on_its_card(state)))
+        if space_needed(check) > free:
+            lines.append(space_words(space_needed(check), free, _on_its_card(state)))
     backup = _plan_backups(check, state, fig)
     misplaced = _tui_misplaced(state) if check is state.check else []
     if misplaced:

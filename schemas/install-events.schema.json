@@ -29,6 +29,7 @@
         "check",
         "declared",
         "data",
+        "space",
         "found",
         "unreadable",
         "saves",
@@ -105,6 +106,9 @@
     },
     {
       "$ref": "#/$defs/data"
+    },
+    {
+      "$ref": "#/$defs/space"
     },
     {
       "$ref": "#/$defs/found"
@@ -772,6 +776,27 @@
         "files": {
           "type": "integer",
           "minimum": 0
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "space": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "platform",
+        "bytes"
+      ],
+      "properties": {
+        "event": {
+          "const": "space"
+        },
+        "platform": {
+          "type": "string"
         },
         "bytes": {
           "type": "integer",

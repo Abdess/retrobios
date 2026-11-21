@@ -1,19 +1,21 @@
 """What a plan says on the line and on the screen: sizes, systems kept, space and folders."""
 from __future__ import annotations
 
-import shutil
 from collections.abc import Collection
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 from installer.choices import GamesChoice, available_choices, recorded_axes
 from installer.destination import shown_bios_folder
-from installer.host_fs import _exists, _folder_writable, _nearest_folder
+from installer.datadirs import data_directory_state
+from installer.host_fs import _exists, _folder_writable
+from installer.local_check import not_in_place
 from installer.manifest import GAME_DATA, OTHER_SYSTEMS
 from installer.narrowing import _chosen, narrow
 from installer.outcome import _on_read_only_mount, write_remedy
 from installer.paths import _entry_path
 from installer.platforms import entry_systems, system_title
+from installer.space import bytes_written, free_space
 from installer.tally import game_data_missing, sized_words, tally
 from installer.text import _names_and, _no_widow, _wrap, cell_width, format_size
 
@@ -149,35 +151,37 @@ def systems_in_order(systems: list[str], files: list[dict], manifest: dict | Non
         in_place(system), system_title(system, manifest).casefold()))
 
 
-def _space_short(bios_path: Path, files: list[dict]) -> tuple[int, int] | None:
-    """(bytes needed, bytes free) when the files absent from the folder do
-    not fit on its drive, None when they fit or it cannot be told. The
-    screen's plan warns of this before Install, line mode only after Enter."""
-    probe = _nearest_folder(bios_path)
-    try:
-        free = shutil.disk_usage(probe).free
-    except OSError:
+def _space_short(bios_path: Path, files: list[dict],
+                 trees: Collection[dict] = ()) -> tuple[int, int] | None:
+    """(bytes needed, bytes free) when what the run writes (bytes_written:
+    the files not in place, missing or replaced, and the data trees) does
+    not fit on the folder's drive, None when it fits or it cannot be told.
+    Counted as the run's refusal counts it: the absent files alone said
+    nothing of a run that then stopped for space after Enter."""
+    free = free_space(bios_path)
+    if free is None:
         return None
-    needed = 0
-    for entry in files:
-        try:
-            where = _entry_path(bios_path, entry)
-        except ValueError:
-            continue
-        if not _exists(where):
-            needed += entry.get("size", 0)
+    # Every file and every tree file written: what fits so needs no read.
+    if bytes_written(files, [(tree, (bios_path, tree.get("files") or {}, 0))
+                             for tree in trees]) <= free:
+        return None
+    needed = bytes_written(not_in_place(bios_path, files),
+                           [(tree, data_directory_state(tree, bios_path, remember=True))
+                            for tree in trees])
     return (needed, free) if needed > free else None
 
 
 def folder_warnings(plat: str, bios_path: Path, files: list[dict], hint: Invocation,
-                    commands: bool = True, card: bool = False) -> list[str]:
-    """What the plan says of a folder the files cannot go to, before the
-    question that installs them: the folder refused, or too small. card is
-    a setup that runs from that card, whose own folder is the one it reads."""
+                    commands: bool = True, card: bool = False,
+                    trees: Collection[dict] = ()) -> list[str]:
+    """What the plan says of a folder the files and the data trees cannot go
+    to, before the question that installs them: the folder refused, or too
+    small. card is a setup that runs from that card, whose own folder is the
+    one it reads."""
     lines = []
     if not _folder_writable(bios_path):
         lines += cannot_write_words(bios_path, plat, hint, commands, card)
-    short = _space_short(bios_path, files)
+    short = _space_short(bios_path, files, trees)
     if short is not None:
         lines.append(space_words(short[0], short[1], card))
     return lines

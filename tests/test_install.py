@@ -451,8 +451,58 @@ class TestFreeSpaceGuard(unittest.TestCase):
 
     def test_the_space_check_comes_before_the_folder(self):
         source = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
-        check = source.index("_check_free_space(bios_path, dl_size")
+        check = source.index("_check_free_space(bios_path, written")
         self.assertLess(check, source.index("bios_path.mkdir(parents=True, exist_ok=True)"))
+
+
+class ThePlansCountWhatTheRunRefusesOn(unittest.TestCase):
+    """The line plan counted the absent files alone: a file in place with
+    the wrong bytes, to be replaced, gave no warning at 100 B free, and the
+    run stopped for space right after Enter."""
+
+    def setUp(self):
+        self.root = scratch_dir(self)
+        self.addCleanup(shutil.rmtree, self.root, True)
+        # The plan's reads are kept for the check after it.
+        install.head_reads_done()
+        self.addCleanup(install.head_reads_done)
+        wrong = b"w" * 1000
+        (self.root / "a.bin").write_bytes(wrong)
+        right = b"r" * 1000
+        self.files = [{"dest": "a.bin", "size": 1000,
+                       "sha1": hashlib.sha1(right).hexdigest()}]
+
+    def short(self, free: int, trees: list[dict] | None = None) -> tuple[int, int] | None:
+        with unittest.mock.patch.object(install.shutil, "disk_usage",
+                                        lambda _p: SimpleNamespace(free=free)):
+            return install._space_short(self.root, self.files, trees or [])
+
+    def test_a_file_to_replace_is_counted(self):
+        self.assertEqual(self.short(100), (1000, 100))
+        self.assertEqual(self.short(100), (install.bytes_written(self.files, []), 100))
+
+    def test_a_file_in_place_is_not(self):
+        (self.root / "a.bin").write_bytes(b"r" * 1000)
+        self.assertIsNone(self.short(100))
+
+    def test_the_data_trees_count(self):
+        (self.root / "a.bin").write_bytes(b"r" * 1000)
+        tree = {"ref": "t", "dest": "tree", "systems": [], "files": {
+            "x.bin": {"sha1": hashlib.sha1(b"x").hexdigest(), "size": 500}}}
+        with unittest.mock.patch.object(install, "_offline_only", return_value=False):
+            # The tree's file, and its source beside it until it is read:
+            # a list that records no archive size gives the files' sizes.
+            self.assertEqual(self.short(100, [tree]), (1000, 100))
+
+    def test_what_fits_whole_reads_nothing(self):
+        with unittest.mock.patch.object(install, "read_in_place") as read:
+            self.assertIsNone(self.short(10_000))
+        read.assert_not_called()
+
+    def test_a_check_says_the_space_it_needs(self):
+        self.assertIn("space", install.EVENT_KEYS)
+        source = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
+        self.assertIn('EVENTS.emit("space", platform=plat, bytes=tally.space_bytes)', source)
 
 
 class TheDataTreesCountInTheFreeSpace(unittest.TestCase):
@@ -7050,6 +7100,9 @@ class EventsDescribeTheRun(unittest.TestCase, _SyntheticTree):
              "dests": ["a.bin", "b.bin", "c.bin", "d.bin"]},
             # No data tree in this list.
             {"event": "data", "platform": "retroarch", "files": 0, "bytes": 0},
+            # The missing and the wrong copy, written: what the run holds
+            # against the free space.
+            {"event": "space", "platform": "retroarch", "bytes": 245},
         ]
 
     SKIPPED = [{"reason": "not_found", "label": "not found", "files": 1, "required": 1}]

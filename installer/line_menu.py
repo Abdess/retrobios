@@ -1,8 +1,6 @@
 """Line mode's menu: the plan above it and the systems, cores and regions it narrows to."""
 from __future__ import annotations
 
-import concurrent.futures
-import time
 from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING, NamedTuple
@@ -16,7 +14,7 @@ from installer.choices import (
     parse_selection,
     recorded_axes,
 )
-from installer.console import _ask, _live_stdout, _quit
+from installer.console import _ask, _quit
 from installer.datadirs import data_directory_state, data_fetch_bytes, select_data_directories
 from installer.destination import _last_name, on_its_card, shown_bios_folder
 from installer.from_folders import plan_local_copies
@@ -25,7 +23,7 @@ from installer.host_fs import _is_file
 from installer.install_record import _RECORD_TAKEN
 from installer.invocation import _INVOCATION
 from installer.line_folder import _ask_from_folder
-from installer.local_check import _classify_local
+from installer.local_check import not_in_place, read_in_place
 from installer.manifest import OTHER_SYSTEMS
 from installer.narrowing import _chosen, narrow
 from installer.offline import LOCAL, _offline_only, offline_named
@@ -463,7 +461,7 @@ def _print_menu_head(
     # Done, where the screen names it on every plan.
     print(f"  BIOS folder: {shown_path(shown_bios_folder(bios_path, files))}")
     for line in folder_warnings(plat, bios_path, shown, _INVOCATION, True,
-                                on_its_card(plat, bios_path)):
+                                on_its_card(plat, bios_path), kept_trees):
         print(f"  {line}")
     # The frontend's save directory, named as the end of the run and the
     # screen name it: "Onion's" before the menu, "RetroArch's" after.
@@ -485,28 +483,7 @@ def found_head(files: list[dict], trees: list[dict], bios_path: Path) -> str:
     "nothing to download" stood over a run that left it. What is read here is
     kept for the check after Enter (_HEAD_READS): a card read twice is read at
     the speed of its reader."""
-
-    def held(path: Path, size: object) -> bool:
-        try:
-            return _is_file(path) and path.stat().st_size == size
-        except OSError:
-            return False
-
-    needed, sized = [], []
-    for entry in files:
-        try:
-            path = _entry_path(bios_path, entry)
-        except ValueError:
-            continue
-        if held(path, entry.get("size")):
-            sized.append((entry, path))
-        else:
-            needed.append(entry)
-    # Only a copy of the right size is read, on the check's workers and
-    # with its count: one at a time and silent, 400 files of a card read
-    # as a hung run before the menu.
-    needed += [entry for (entry, _path), verdict in zip(sized, read_in_place(sized))
-               if verdict != "up_to_date"]
+    needed = not_in_place(bios_path, files)
     copies = plan_local_copies(needed, bios_path, None, LOCAL.folders)
     if not copies:
         return ""
@@ -555,30 +532,6 @@ def all_in_place(files: list[dict], trees: list[dict], bios_path: Path) -> bool:
     return (all(verdict == "up_to_date" for verdict in read_in_place(paths))
             and all(not data_directory_state(tree, bios_path, remember=True)[1]
                     for tree in trees))
-
-
-def read_in_place(pairs: list[tuple[dict, Path]]) -> list[str]:
-    """_classify_local of each (entry, path), read before the line menu as
-    the check after it reads: on --jobs workers, a count moving at a
-    terminal, what is read kept for that check (_HEAD_READS). Each file is
-    read once whatever the question: the head reads the files of the right
-    size only, and the check after Enter reads none of them again."""
-    if not pairs:
-        return []
-    live = _live_stdout()
-    verdicts: list[str] = []
-    last = 0.0
-    with concurrent.futures.ThreadPoolExecutor(max_workers=LOCAL.jobs) as pool:
-        for done, verdict in enumerate(pool.map(
-                lambda pair: _classify_local(pair[0], pair[1], remember=True), pairs), 1):
-            verdicts.append(verdict)
-            now = time.monotonic()
-            if live and (now - last >= 0.1 or done == len(pairs)):
-                last = now
-                print(f"\r  read {done}/{len(pairs)}", end="", flush=True)
-    if live:
-        print("\r\033[K", end="", flush=True)
-    return verdicts
 
 
 def menu_choice(

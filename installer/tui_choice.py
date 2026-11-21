@@ -281,9 +281,16 @@ def _dry_copies(state: TuiState) -> list[str]:
     return [event["dest"] for event in state.dry_files if event["dest"] in local]
 
 
+def space_needed(check: dict) -> int:
+    """What the run writes on the folder's drive, as its space event says
+    it: the files and the data trees, the number its refusal holds against
+    the free space. bytes_needed for a check that names none."""
+    return check.get("space_bytes", check.get("bytes_needed", 0))
+
+
 def _short_of_space(state: TuiState, check: dict) -> bool:
     free = state.facts.get("free")
-    return free is not None and check.get("bytes_needed", 0) > free
+    return free is not None and space_needed(check) > free
 
 
 def _shared_needed(state: TuiState) -> dict[str, tuple[int, int]]:

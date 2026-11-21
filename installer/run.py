@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, TextIO
 
 from installer.console import OUTPUT, Progress, _confirm, detail
-from installer.datadirs import data_directory_state, data_fetch_bytes, data_space_bytes, install_data_directory
+from installer.datadirs import data_directory_state, data_fetch_bytes, install_data_directory
 from installer.destination import _missing_dest, _refuse_closed, _refuse_file, on_its_card
 from installer.detect_frontends import launchbox_bios_dirs, launchbox_root
 from installer.detect_os import detected_shown
@@ -68,6 +68,7 @@ from installer.run_setups import (
     _start_install,
 )
 from installer.safe_replace import KEPT, NOT_KEPT, plan_kept
+from installer.space import bytes_written
 from installer.standalone import do_standalone_copies, standalone_folders_here
 from installer.tally import (
     CheckTally,
@@ -178,12 +179,17 @@ def _pass_check_existing(run: _InstallRun, p: _PlatformPass) -> None:
     )
 
     if EVENTS.on:
+        # What the run would write, as _pass_download holds it against the
+        # free space: the screen's plan warns on this number.
+        lacking = {id(f) for f in pack_lacks([f for f in to_download if id(f) not in copies])}
         _emit_check(
             p.plat_name, p.manifest, bios_path,
             CheckTally(files, up_to_date, mismatched,
                        sum(len(state[1]) for _entry, state in data_states),
                        len(p.omitted_files),
-                       sum(data_fetch_bytes(entry, state[1]) for entry, state in data_states)),
+                       sum(data_fetch_bytes(entry, state[1]) for entry, state in data_states),
+                       bytes_written([f for f in to_download if id(f) not in lacking],
+                                     data_states)),
             chosen=selection[0] if selection else None,
         )
         emit_copies(p.plat_name, to_download, copies, bios_index, bios_path, files)
@@ -401,13 +407,13 @@ def _pass_download_head(run: _InstallRun, p: _PlatformPass, fetched: list[dict],
            "carries on from here.")
 
 
-def _pass_make_folder(run: _InstallRun, p: _PlatformPass, dl_size: int) -> bool:
+def _pass_make_folder(run: _InstallRun, p: _PlatformPass, written: int) -> bool:
     """The space checked and the BIOS folder made. True when it was created."""
     args, plat_name, bios_path = run.args, p.plat_name, p.bios_path
     # Checked before the folder is created: a run stopped for space
     # left an empty BIOS folder behind. The data trees count too,
     # written after the files on the same drive.
-    _check_free_space(bios_path, dl_size + data_space_bytes(p.data_states), plat_name,
+    _check_free_space(bios_path, written, plat_name,
                       1 if run.total_downloaded else 2, on_its_card(plat_name, bios_path))
     p.space_checked = True
     created = not bios_path.exists()
@@ -501,7 +507,8 @@ def _pass_download(run: _InstallRun, p: _PlatformPass) -> str:
         run.files_pending += len(p.to_download)
         run.total_up_to_date += len(p.up_to_date)
         return "next"
-    dl_size = sum(f.get("size", 0) for f in p.to_download if id(f) not in lacking)
+    coming = [f for f in p.to_download if id(f) not in lacking]
+    dl_size = _bytes(coming)
     fetch_size = _bytes([f for f in fetched if id(f) not in lacking])
     if not p.to_download:
         run.total_up_to_date += len(p.up_to_date)
@@ -515,7 +522,7 @@ def _pass_download(run: _InstallRun, p: _PlatformPass) -> str:
         return "next"
     EVENTS.emit("download", platform=p.plat_name, files=len(p.to_download), bytes=dl_size)
     _pass_download_head(run, p, fetched, lacking, dl_size)
-    created = _pass_make_folder(run, p, dl_size)
+    created = _pass_make_folder(run, p, bytes_written(coming, p.data_states))
     return "stop" if _pass_fetch(run, p, dl_size, created) else "go"
 
 
@@ -603,7 +610,7 @@ def _pass_data_trees(run: _InstallRun, p: _PlatformPass) -> None:
     if writable and not p.space_checked:
         # With every BIOS file in place, the trees alone: checked
         # before the first archive is written.
-        _check_free_space(p.bios_path, data_space_bytes(writable), p.plat_name,
+        _check_free_space(p.bios_path, bytes_written([], writable), p.plat_name,
                           1 if run.total_downloaded else 2,
                           on_its_card(p.plat_name, p.bios_path))
     if writable:

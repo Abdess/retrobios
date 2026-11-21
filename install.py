@@ -1526,6 +1526,12 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # data_missing) and the bytes they write. A kind of its own, since
     # schema 1 never adds a key to check.
     "data": ("platform", "files", "bytes"),
+    # Right after data: the bytes the run writes on the drive of the BIOS
+    # folder, the files missing or replaced and the data trees rebuilt
+    # beside them. The number the run's refusal for space and both plans
+    # hold against the free space. A kind of its own, since schema 1 never
+    # adds a key to check.
+    "space": ("platform", "bytes"),
     # A file to install that this machine already holds: misplaced in the
     # BIOS folder (folder is its bios_dir, reason says why in words) or in
     # a folder named with --from (reason empty). member names the ZIP member
@@ -2988,160 +2994,6 @@ def fat32_drive(folder: Path) -> bool:
     except (OSError, subprocess.SubprocessError):
         return False
     return text is not None and fat_mounted(target, mountinfo_types(text))
-
-
-# --- installer/local_check.py ------------------------------------------------
-
-def expected_hashes(entry: dict) -> dict[str, str]:
-    """The SHA-256 and SHA-1 an entry records, lowercased."""
-    return {name: entry[name].lower() for name in ("sha256", "sha1") if entry.get(name)}
-
-
-def _digest_file(path: Path, algorithms: tuple[str, ...]) -> dict[str, str]:
-    """Compute several digests of a file in a single read.
-
-    Checking a 3 GB collection against both a SHA-1 and a SHA-256 used to walk
-    every file twice, single threaded. Hashing is cheap next to the I/O, so
-    the read is what has to happen once.
-    """
-    with open(path, "rb") as fh:
-        return _digest_handle(fh, algorithms)
-
-
-def _digest_handle(fh: IO[bytes], algorithms: tuple[str, ...]) -> dict[str, str]:
-    """Digests of an open file, read from its start."""
-    hashers = {name: hashlib.new(name) for name in algorithms}
-    fh.seek(0)
-    for chunk in iter(lambda: fh.read(1024 * 1024), b""):
-        for hasher in hashers.values():
-            hasher.update(chunk)
-    return {name: hasher.hexdigest() for name, hasher in hashers.items()}
-
-
-def _sha1_file(path: Path) -> str:
-    """Compute SHA1 of a file."""
-    return _digest_file(path, ("sha1",))["sha1"]
-
-
-def _sha256_file(path: Path) -> str:
-    """Compute SHA256 of a file."""
-    return _digest_file(path, ("sha256",))["sha256"]
-
-
-# The digests the line menu's head read of the files in place, by path and
-# by what stat says of the file, kept for the check that follows Enter: the
-# head named a wrong copy of the right size in place,
-# and a card read twice is read at the speed of its reader. Emptied once
-# that check has read them (head_reads_done).
-_HEAD_READS: dict[tuple, dict[str, str]] = {}
-
-
-def _stat_key(path: Path) -> tuple | None:
-    """What tells a file apart from the same path rewritten: None for none."""
-    try:
-        info = path.stat()
-    except OSError:
-        return None
-    return (str(path), info.st_size, info.st_mtime_ns, info.st_ctime_ns, info.st_ino)
-
-
-def _read_digests(path: Path, algorithms: tuple[str, ...], remember: bool = False) -> dict:
-    """_digest_file, answered from what the head read when the file is the
-    same one, and remembered for the check when remember is set."""
-    key = _stat_key(path)
-    known = _HEAD_READS.get((key, algorithms)) if key is not None else None
-    if known is not None:
-        return known
-    digests = _digest_file(path, algorithms)
-    if remember and key is not None:
-        _HEAD_READS[(key, algorithms)] = digests
-    return digests
-
-
-def head_reads_done() -> None:
-    """The check after the head has read what it holds: nothing more is
-    answered from it, a file the run writes being read again."""
-    _HEAD_READS.clear()
-
-
-def _classify_local(entry: dict, dest: Path, remember: bool = False) -> str:
-    """Return 'up_to_date' or 'mismatched' for a file already on disk.
-    remember keeps what was read for the check after the line menu."""
-    expected = expected_hashes(entry)
-    try:
-        is_file = dest.is_file()
-    except OSError:
-        # A folder above it this user cannot enter: what sits there is not
-        # known to be the right file.
-        return "mismatched"
-    if not is_file:
-        # A folder at the file's place: --check says so, an install fails
-        # on that file alone.
-        return "mismatched"
-    if not expected:
-        return "up_to_date"
-    try:
-        actual = _read_digests(dest, tuple(expected), remember)
-    except OSError:
-        # Unreadable (no permission, a read error on a failing card): its
-        # contents are not known to be the right ones.
-        return "mismatched"
-    if all(actual[name] == value for name, value in expected.items()):
-        return "up_to_date"
-    return "mismatched"
-
-
-def closed_folder_words(dest: Path, closed: tuple[Path, str]) -> str:
-    folder, why = closed
-    return f"this user cannot open {folder} ({why}), which holds {dest}"
-
-
-def unreachable_words(exc: OSError) -> str:
-    """Why the place of a file could not be looked at, in words."""
-    return (f"could not be read ({exc.strerror or exc}): this user may not "
-            f"have access to its folder")
-
-
-def check_local(
-    files: list[dict], bios_path: Path, jobs: int = 8,
-    term: "Terminal | None" = None,
-) -> tuple[list[dict], list[dict], list[dict]]:
-    """Check which files exist locally and have correct hashes.
-
-    Returns (to_download, up_to_date, mismatched). With a terminal, a count
-    moves while the files are read: 3.9 GB on an SD card went by in minutes
-    of silence, read as a hung run and stopped with Ctrl+C.
-    """
-    to_download: list[dict] = []
-    present: list[tuple[dict, Path]] = []
-
-    for f in files:
-        dest = _entry_path(bios_path, f)
-        if _held(dest):
-            present.append((f, dest))
-        else:
-            to_download.append(f)
-
-    up_to_date: list[dict] = []
-    mismatched: list[dict] = []
-    if present:
-        with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as pool:
-            verdicts = pool.map(
-                lambda item: (item[0], _classify_local(item[0], item[1])), present
-            )
-            # A screen with a bare timer over 6 GB on an SD card read as hung.
-            counter = ReadCounter(len(present), term, "checking")
-            for entry, verdict in verdicts:
-                if verdict == "up_to_date":
-                    up_to_date.append(entry)
-                else:
-                    mismatched.append(entry)
-                counter.done += 1
-                if counter.done < counter.total:
-                    counter.step()
-            counter.end()
-
-    return to_download, up_to_date, mismatched
 
 
 # --- installer/manifest.py ---------------------------------------------------
@@ -6655,211 +6507,6 @@ def save_lines(files: list[dict], omitted: list[dict], bios_path: Path | None,
     return lines
 
 
-# --- installer/cores.py ------------------------------------------------------
-
-# A libretro core as RetroArch loads it: <name>_libretro.so|dll|dylib, and
-# <name>_libretro_android.so on Android.
-_CORE_FILE_RE = re.compile(
-    r"^(?P<name>.+?)_libretro(?:_android)?\.(?:so|dll|dylib)$", re.IGNORECASE
-)
-CORE_PLATFORMS = ("retroarch", "lakka", "retropie")
-# Where these systems install cores whatever retroarch.cfg says: RetroPie
-# gives each package its own folder, Lakka keeps the image's cores and the
-# ones the online updater fetches apart.
-_FIXED_CORE_DIRS = {
-    "retropie": (Path("/opt/retropie/libretrocores"),),
-    "lakka": (Path("/usr/lib/libretro"), Path("/storage/cores"), Path("/tmp/cores")),
-}
-
-
-def _config_beside(bios_path: Path) -> tuple[Path, Path] | None:
-    """The retroarch.cfg detection read for bios_path and the directory ':'
-    expands to, else a portable one beside the system directory."""
-    found = _retroarch_config_for(bios_path)
-    if found is None and _is_file(bios_path.parent / "retroarch.cfg"):
-        found = (bios_path.parent / "retroarch.cfg", bios_path.parent)
-    return found
-
-
-def core_dirs(plat: str, bios_path: Path) -> list[Path]:
-    """The directories the RetroArch writing to bios_path loads cores from.
-
-    The config detection read for this system directory names them in
-    libretro_directory, read here when the run was given --dest, as the
-    interface's runs all are. Without one, a retroarch.cfg beside the system
-    directory is the portable layout. Unset, the setting is cores/ under
-    RetroArch's own directory.
-    """
-    found = _config_beside(bios_path)
-    dirs: list[Path] = []
-    if found is not None:
-        cfg, app_dir = found
-        dirs.append(
-            _retroarch_cfg_dir(cfg, "libretro_directory", app_dir, "cores")
-            or app_dir / "cores"
-        )
-    dirs.extend(_FIXED_CORE_DIRS.get(plat, ()))
-    return list(dict.fromkeys(dirs))
-
-
-def installed_cores(dirs: list[Path]) -> list[str]:
-    """The cores present in these directories, by the name the buildbot uses.
-
-    A folder inside is looked into once, which is how RetroPie installs
-    each package. An unreadable directory holds nothing that can be seen.
-    """
-    names: set[str] = set()
-    for directory in dirs:
-        try:
-            children = list(directory.iterdir())
-        except OSError:
-            continue
-        for child in children:
-            candidates = [child]
-            if child.is_dir():
-                try:
-                    candidates = list(child.iterdir())
-                except OSError:
-                    continue
-            for path in candidates:
-                match = _CORE_FILE_RE.match(path.name)
-                if match and path.is_file():
-                    names.add(match.group("name"))
-    return sorted(names)
-
-
-def info_dirs(plat: str, bios_path: Path, searched: list[Path]) -> list[Path]:
-    """The directories RetroArch reads core .info files from.
-
-    libretro_info_path in retroarch.cfg, info/ beside RetroArch by default,
-    then the cores folders: Linux builds and Lakka keep each .info beside
-    its core.
-    """
-    found = _config_beside(bios_path)
-    dirs: list[Path] = []
-    if found is not None:
-        cfg, app_dir = found
-        dirs.append(_retroarch_cfg_dir(cfg, "libretro_info_path", app_dir, "info")
-                    or app_dir / "info")
-    dirs.extend(searched)
-    return list(dict.fromkeys(dirs))
-
-
-_INFO_FIRMWARE_RE = re.compile(r'^\s*firmware\d+_path\s*=\s*"?([^"\r\n]*?)"?\s*$')
-
-
-def info_firmware(dirs: list[Path], core: str) -> list[str] | None:
-    """The firmware paths a core's .info declares, None without a .info.
-
-    RetroArch reads firmware<N>_path, relative to the system directory
-    (core_info.c), and so does this.
-    """
-    for directory in dirs:
-        info = directory / f"{core}_libretro.info"
-        try:
-            text = info.read_text(encoding="utf-8", errors="replace")
-        except OSError:
-            continue
-        paths = (m.group(1).strip().replace("\\", "/")
-                 for m in map(_INFO_FIRMWARE_RE.match, text.splitlines()) if m)
-        return list(dict.fromkeys(p for p in paths if p))
-    return None
-
-
-def known_core_names(manifest: dict) -> set[str]:
-    """Every core name a file list answers for: profiles and their other names."""
-    names: set[str] = set()
-    for profile, aliases in (manifest.get("core_names") or {}).items():
-        names.add(profile)
-        names.update(aliases)
-    for cores in (manifest.get("system_cores") or {}).values():
-        names.update(cores)
-    for entry in [*manifest.get("files", []), *manifest.get("omitted_files", [])]:
-        for copy in entry_copies(entry):
-            names.update(copy.get("cores") or [])
-    return names
-
-
-def unknown_cores(manifest: dict, names: list[str]) -> list[str]:
-    """The installed cores the file list has no profile for, in name order."""
-    known = known_core_names(manifest)
-    return sorted(name for name in names if name not in known)
-
-
-def _check_cores_dir(folder: Path) -> None:
-    """Refuse a --cores-dir that cannot be listed, saying why: a typo
-    (core/ for cores/) or a closed folder read as an empty one, and the
-    run said "none in" and asked for the --cores-dir it was given."""
-    try:
-        with os.scandir(folder):
-            return
-    except FileNotFoundError:
-        why = "does not exist"
-    except NotADirectoryError:
-        why = "is not a folder"
-    except PermissionError as exc:
-        closed = closed_folder(folder)
-        why = (f"cannot be opened by this user ({exc.strerror or exc})"
-               if closed is None or closed[0] == folder
-               else f"cannot be opened: {closed_folder_words(folder, closed)}")
-    except OSError as exc:
-        why = f"could not be read ({exc.strerror or exc})"
-    print(f"Error: --cores-dir {screen_text(str(folder))} {why}.", file=sys.stderr)
-    print("  Name the folder RetroArch loads cores from (libretro_directory in "
-          "retroarch.cfg, cores/ beside RetroArch by default).", file=sys.stderr)
-    sys.exit(1)
-
-
-def _unprofiled_cores_firmware(
-    plat: str, bios_path: Path, manifest: dict, found: list[str], searched: list[Path],
-) -> list[str]:
-    """What the installed cores the list has no profile for declare, each said.
-
-    Such a core reads systems the list cannot name, and narrowing to the
-    installed cores dropped its BIOS without a word (issue 87, parallel_dc
-    before its profile). Its .info is what RetroArch itself checks, so the
-    files it declares are kept. A core without one is named.
-    """
-    unknown = unknown_cores(manifest, found)
-    if not unknown:
-        return []
-    dirs = info_dirs(plat, bios_path, searched)
-    dests: list[str] = []
-    for core in unknown:
-        declared = info_firmware(dirs, core)
-        if declared is None:
-            message = (f"{core}: a core this list does not know, with no .info to read: "
-                       "its files may be missing. Run without --installed-cores "
-                       "to install every file.")
-        else:
-            message = (f"{core}: a core this list does not know, "
-                       f"{_plural(len(declared), 'file')} its .info declares kept")
-        print(f"  {message}")
-        EVENTS.emit("unknown_core", platform=plat, core=core,
-                    info=declared is not None, dests=declared or [], message=message)
-        dests.extend(declared or [])
-    return dests
-
-
-def _no_core_found(plat: str, bios_path: Path, searched: list[Path]) -> None:
-    """Refuse --installed-cores with no core, and say how to point at them.
-
-    With no retroarch.cfg naming the folder as its system_directory, and
-    none beside it, nothing names the cores folder: the run stopped on "no
-    known directory" with no way forward.
-    """
-    where = (f"none in {', '.join(map(str, searched))}" if searched
-             else f"no retroarch.cfg was found for {bios_path} to name their folder")
-    print(f"Error: no installed core found for {display_name(plat)}: {where}.",
-          file=sys.stderr)
-    print("  Name the folder RetroArch loads cores from (libretro_directory in "
-          "retroarch.cfg, cores/ beside RetroArch by default):", file=sys.stderr)
-    command = _INVOCATION.command(plat, bios_path, without=("--installed-cores", "--cores-dir"))
-    print(f"    {command} --cores-dir <cores folder>", file=sys.stderr)
-    print("  Or run it without --installed-cores to install every file.", file=sys.stderr)
-    sys.exit(1)
-
-
 # --- installer/narrowing.py --------------------------------------------------
 
 def board_target(board: str, targets: dict[str, dict]) -> str | None:
@@ -7484,6 +7131,415 @@ def local_manifest_platform(path: Path) -> str | None:
 def _offline_only() -> bool:
     """--offline without a pack: what is not on this machine cannot come."""
     return offline_requested() and LOCAL.pack is None
+
+
+# --- installer/local_check.py ------------------------------------------------
+
+def expected_hashes(entry: dict) -> dict[str, str]:
+    """The SHA-256 and SHA-1 an entry records, lowercased."""
+    return {name: entry[name].lower() for name in ("sha256", "sha1") if entry.get(name)}
+
+
+def _digest_file(path: Path, algorithms: tuple[str, ...]) -> dict[str, str]:
+    """Compute several digests of a file in a single read.
+
+    Checking a 3 GB collection against both a SHA-1 and a SHA-256 used to walk
+    every file twice, single threaded. Hashing is cheap next to the I/O, so
+    the read is what has to happen once.
+    """
+    with open(path, "rb") as fh:
+        return _digest_handle(fh, algorithms)
+
+
+def _digest_handle(fh: IO[bytes], algorithms: tuple[str, ...]) -> dict[str, str]:
+    """Digests of an open file, read from its start."""
+    hashers = {name: hashlib.new(name) for name in algorithms}
+    fh.seek(0)
+    for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+        for hasher in hashers.values():
+            hasher.update(chunk)
+    return {name: hasher.hexdigest() for name, hasher in hashers.items()}
+
+
+def _sha1_file(path: Path) -> str:
+    """Compute SHA1 of a file."""
+    return _digest_file(path, ("sha1",))["sha1"]
+
+
+def _sha256_file(path: Path) -> str:
+    """Compute SHA256 of a file."""
+    return _digest_file(path, ("sha256",))["sha256"]
+
+
+# The digests the line menu's head read of the files in place, by path and
+# by what stat says of the file, kept for the check that follows Enter: the
+# head named a wrong copy of the right size in place,
+# and a card read twice is read at the speed of its reader. Emptied once
+# that check has read them (head_reads_done).
+_HEAD_READS: dict[tuple, dict[str, str]] = {}
+
+
+def _stat_key(path: Path) -> tuple | None:
+    """What tells a file apart from the same path rewritten: None for none."""
+    try:
+        info = path.stat()
+    except OSError:
+        return None
+    return (str(path), info.st_size, info.st_mtime_ns, info.st_ctime_ns, info.st_ino)
+
+
+def _read_digests(path: Path, algorithms: tuple[str, ...], remember: bool = False) -> dict:
+    """_digest_file, answered from what the head read when the file is the
+    same one, and remembered for the check when remember is set."""
+    key = _stat_key(path)
+    known = _HEAD_READS.get((key, algorithms)) if key is not None else None
+    if known is not None:
+        return known
+    digests = _digest_file(path, algorithms)
+    if remember and key is not None:
+        _HEAD_READS[(key, algorithms)] = digests
+    return digests
+
+
+def head_reads_done() -> None:
+    """The check after the head has read what it holds: nothing more is
+    answered from it, a file the run writes being read again."""
+    _HEAD_READS.clear()
+
+
+def _classify_local(entry: dict, dest: Path, remember: bool = False) -> str:
+    """Return 'up_to_date' or 'mismatched' for a file already on disk.
+    remember keeps what was read for the check after the line menu."""
+    expected = expected_hashes(entry)
+    try:
+        is_file = dest.is_file()
+    except OSError:
+        # A folder above it this user cannot enter: what sits there is not
+        # known to be the right file.
+        return "mismatched"
+    if not is_file:
+        # A folder at the file's place: --check says so, an install fails
+        # on that file alone.
+        return "mismatched"
+    if not expected:
+        return "up_to_date"
+    try:
+        actual = _read_digests(dest, tuple(expected), remember)
+    except OSError:
+        # Unreadable (no permission, a read error on a failing card): its
+        # contents are not known to be the right ones.
+        return "mismatched"
+    if all(actual[name] == value for name, value in expected.items()):
+        return "up_to_date"
+    return "mismatched"
+
+
+def closed_folder_words(dest: Path, closed: tuple[Path, str]) -> str:
+    folder, why = closed
+    return f"this user cannot open {folder} ({why}), which holds {dest}"
+
+
+def unreachable_words(exc: OSError) -> str:
+    """Why the place of a file could not be looked at, in words."""
+    return (f"could not be read ({exc.strerror or exc}): this user may not "
+            f"have access to its folder")
+
+
+def check_local(
+    files: list[dict], bios_path: Path, jobs: int = 8,
+    term: "Terminal | None" = None,
+) -> tuple[list[dict], list[dict], list[dict]]:
+    """Check which files exist locally and have correct hashes.
+
+    Returns (to_download, up_to_date, mismatched). With a terminal, a count
+    moves while the files are read: 3.9 GB on an SD card went by in minutes
+    of silence, read as a hung run and stopped with Ctrl+C.
+    """
+    to_download: list[dict] = []
+    present: list[tuple[dict, Path]] = []
+
+    for f in files:
+        dest = _entry_path(bios_path, f)
+        if _held(dest):
+            present.append((f, dest))
+        else:
+            to_download.append(f)
+
+    up_to_date: list[dict] = []
+    mismatched: list[dict] = []
+    if present:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as pool:
+            verdicts = pool.map(
+                lambda item: (item[0], _classify_local(item[0], item[1])), present
+            )
+            # A screen with a bare timer over 6 GB on an SD card read as hung.
+            counter = ReadCounter(len(present), term, "checking")
+            for entry, verdict in verdicts:
+                if verdict == "up_to_date":
+                    up_to_date.append(entry)
+                else:
+                    mismatched.append(entry)
+                counter.done += 1
+                if counter.done < counter.total:
+                    counter.step()
+            counter.end()
+
+    return to_download, up_to_date, mismatched
+
+
+def read_in_place(pairs: list[tuple[dict, Path]]) -> list[str]:
+    """_classify_local of each (entry, path), read before the line menu as
+    the check after it reads: on --jobs workers, a count moving at a
+    terminal, what is read kept for that check (_HEAD_READS). Each file is
+    read once whatever the question: the head reads the files of the right
+    size only, and the check after Enter reads none of them again."""
+    if not pairs:
+        return []
+    live = _live_stdout()
+    verdicts: list[str] = []
+    last = 0.0
+    with concurrent.futures.ThreadPoolExecutor(max_workers=LOCAL.jobs) as pool:
+        for done, verdict in enumerate(pool.map(
+                lambda pair: _classify_local(pair[0], pair[1], remember=True), pairs), 1):
+            verdicts.append(verdict)
+            now = time.monotonic()
+            if live and (now - last >= 0.1 or done == len(pairs)):
+                last = now
+                print(f"\r  read {done}/{len(pairs)}", end="", flush=True)
+    if live:
+        print("\r\033[K", end="", flush=True)
+    return verdicts
+
+
+def not_in_place(bios_path: Path, files: list[dict]) -> list[dict]:
+    """The files a run puts in place: absent, of another size, or of the
+    right size and not the list's. Only a copy of the right size is read,
+    on the check's workers and with its count (read_in_place): judged by
+    its size, a wrong copy of the right size was in place."""
+
+    def held(path: Path, size: object) -> bool:
+        try:
+            return _is_file(path) and path.stat().st_size == size
+        except OSError:
+            return False
+
+    needed, sized = [], []
+    for entry in files:
+        try:
+            path = _entry_path(bios_path, entry)
+        except ValueError:
+            continue
+        if held(path, entry.get("size")):
+            sized.append((entry, path))
+        else:
+            needed.append(entry)
+    return needed + [entry for (entry, _path), verdict in zip(sized, read_in_place(sized))
+                     if verdict != "up_to_date"]
+
+
+# --- installer/cores.py ------------------------------------------------------
+
+# A libretro core as RetroArch loads it: <name>_libretro.so|dll|dylib, and
+# <name>_libretro_android.so on Android.
+_CORE_FILE_RE = re.compile(
+    r"^(?P<name>.+?)_libretro(?:_android)?\.(?:so|dll|dylib)$", re.IGNORECASE
+)
+CORE_PLATFORMS = ("retroarch", "lakka", "retropie")
+# Where these systems install cores whatever retroarch.cfg says: RetroPie
+# gives each package its own folder, Lakka keeps the image's cores and the
+# ones the online updater fetches apart.
+_FIXED_CORE_DIRS = {
+    "retropie": (Path("/opt/retropie/libretrocores"),),
+    "lakka": (Path("/usr/lib/libretro"), Path("/storage/cores"), Path("/tmp/cores")),
+}
+
+
+def _config_beside(bios_path: Path) -> tuple[Path, Path] | None:
+    """The retroarch.cfg detection read for bios_path and the directory ':'
+    expands to, else a portable one beside the system directory."""
+    found = _retroarch_config_for(bios_path)
+    if found is None and _is_file(bios_path.parent / "retroarch.cfg"):
+        found = (bios_path.parent / "retroarch.cfg", bios_path.parent)
+    return found
+
+
+def core_dirs(plat: str, bios_path: Path) -> list[Path]:
+    """The directories the RetroArch writing to bios_path loads cores from.
+
+    The config detection read for this system directory names them in
+    libretro_directory, read here when the run was given --dest, as the
+    interface's runs all are. Without one, a retroarch.cfg beside the system
+    directory is the portable layout. Unset, the setting is cores/ under
+    RetroArch's own directory.
+    """
+    found = _config_beside(bios_path)
+    dirs: list[Path] = []
+    if found is not None:
+        cfg, app_dir = found
+        dirs.append(
+            _retroarch_cfg_dir(cfg, "libretro_directory", app_dir, "cores")
+            or app_dir / "cores"
+        )
+    dirs.extend(_FIXED_CORE_DIRS.get(plat, ()))
+    return list(dict.fromkeys(dirs))
+
+
+def installed_cores(dirs: list[Path]) -> list[str]:
+    """The cores present in these directories, by the name the buildbot uses.
+
+    A folder inside is looked into once, which is how RetroPie installs
+    each package. An unreadable directory holds nothing that can be seen.
+    """
+    names: set[str] = set()
+    for directory in dirs:
+        try:
+            children = list(directory.iterdir())
+        except OSError:
+            continue
+        for child in children:
+            candidates = [child]
+            if child.is_dir():
+                try:
+                    candidates = list(child.iterdir())
+                except OSError:
+                    continue
+            for path in candidates:
+                match = _CORE_FILE_RE.match(path.name)
+                if match and path.is_file():
+                    names.add(match.group("name"))
+    return sorted(names)
+
+
+def info_dirs(plat: str, bios_path: Path, searched: list[Path]) -> list[Path]:
+    """The directories RetroArch reads core .info files from.
+
+    libretro_info_path in retroarch.cfg, info/ beside RetroArch by default,
+    then the cores folders: Linux builds and Lakka keep each .info beside
+    its core.
+    """
+    found = _config_beside(bios_path)
+    dirs: list[Path] = []
+    if found is not None:
+        cfg, app_dir = found
+        dirs.append(_retroarch_cfg_dir(cfg, "libretro_info_path", app_dir, "info")
+                    or app_dir / "info")
+    dirs.extend(searched)
+    return list(dict.fromkeys(dirs))
+
+
+_INFO_FIRMWARE_RE = re.compile(r'^\s*firmware\d+_path\s*=\s*"?([^"\r\n]*?)"?\s*$')
+
+
+def info_firmware(dirs: list[Path], core: str) -> list[str] | None:
+    """The firmware paths a core's .info declares, None without a .info.
+
+    RetroArch reads firmware<N>_path, relative to the system directory
+    (core_info.c), and so does this.
+    """
+    for directory in dirs:
+        info = directory / f"{core}_libretro.info"
+        try:
+            text = info.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        paths = (m.group(1).strip().replace("\\", "/")
+                 for m in map(_INFO_FIRMWARE_RE.match, text.splitlines()) if m)
+        return list(dict.fromkeys(p for p in paths if p))
+    return None
+
+
+def known_core_names(manifest: dict) -> set[str]:
+    """Every core name a file list answers for: profiles and their other names."""
+    names: set[str] = set()
+    for profile, aliases in (manifest.get("core_names") or {}).items():
+        names.add(profile)
+        names.update(aliases)
+    for cores in (manifest.get("system_cores") or {}).values():
+        names.update(cores)
+    for entry in [*manifest.get("files", []), *manifest.get("omitted_files", [])]:
+        for copy in entry_copies(entry):
+            names.update(copy.get("cores") or [])
+    return names
+
+
+def unknown_cores(manifest: dict, names: list[str]) -> list[str]:
+    """The installed cores the file list has no profile for, in name order."""
+    known = known_core_names(manifest)
+    return sorted(name for name in names if name not in known)
+
+
+def _check_cores_dir(folder: Path) -> None:
+    """Refuse a --cores-dir that cannot be listed, saying why: a typo
+    (core/ for cores/) or a closed folder read as an empty one, and the
+    run said "none in" and asked for the --cores-dir it was given."""
+    try:
+        with os.scandir(folder):
+            return
+    except FileNotFoundError:
+        why = "does not exist"
+    except NotADirectoryError:
+        why = "is not a folder"
+    except PermissionError as exc:
+        closed = closed_folder(folder)
+        why = (f"cannot be opened by this user ({exc.strerror or exc})"
+               if closed is None or closed[0] == folder
+               else f"cannot be opened: {closed_folder_words(folder, closed)}")
+    except OSError as exc:
+        why = f"could not be read ({exc.strerror or exc})"
+    print(f"Error: --cores-dir {screen_text(str(folder))} {why}.", file=sys.stderr)
+    print("  Name the folder RetroArch loads cores from (libretro_directory in "
+          "retroarch.cfg, cores/ beside RetroArch by default).", file=sys.stderr)
+    sys.exit(1)
+
+
+def _unprofiled_cores_firmware(
+    plat: str, bios_path: Path, manifest: dict, found: list[str], searched: list[Path],
+) -> list[str]:
+    """What the installed cores the list has no profile for declare, each said.
+
+    Such a core reads systems the list cannot name, and narrowing to the
+    installed cores dropped its BIOS without a word (issue 87, parallel_dc
+    before its profile). Its .info is what RetroArch itself checks, so the
+    files it declares are kept. A core without one is named.
+    """
+    unknown = unknown_cores(manifest, found)
+    if not unknown:
+        return []
+    dirs = info_dirs(plat, bios_path, searched)
+    dests: list[str] = []
+    for core in unknown:
+        declared = info_firmware(dirs, core)
+        if declared is None:
+            message = (f"{core}: a core this list does not know, with no .info to read: "
+                       "its files may be missing. Run without --installed-cores "
+                       "to install every file.")
+        else:
+            message = (f"{core}: a core this list does not know, "
+                       f"{_plural(len(declared), 'file')} its .info declares kept")
+        print(f"  {message}")
+        EVENTS.emit("unknown_core", platform=plat, core=core,
+                    info=declared is not None, dests=declared or [], message=message)
+        dests.extend(declared or [])
+    return dests
+
+
+def _no_core_found(plat: str, bios_path: Path, searched: list[Path]) -> None:
+    """Refuse --installed-cores with no core, and say how to point at them.
+
+    With no retroarch.cfg naming the folder as its system_directory, and
+    none beside it, nothing names the cores folder: the run stopped on "no
+    known directory" with no way forward.
+    """
+    where = (f"none in {', '.join(map(str, searched))}" if searched
+             else f"no retroarch.cfg was found for {bios_path} to name their folder")
+    print(f"Error: no installed core found for {display_name(plat)}: {where}.",
+          file=sys.stderr)
+    print("  Name the folder RetroArch loads cores from (libretro_directory in "
+          "retroarch.cfg, cores/ beside RetroArch by default):", file=sys.stderr)
+    command = _INVOCATION.command(plat, bios_path, without=("--installed-cores", "--cores-dir"))
+    print(f"    {command} --cores-dir <cores folder>", file=sys.stderr)
+    print("  Or run it without --installed-cores to install every file.", file=sys.stderr)
+    sys.exit(1)
 
 
 # --- installer/network.py ----------------------------------------------------
@@ -11262,6 +11318,7 @@ class CheckTally(NamedTuple):
     data_missing: int = 0
     not_installable: int = 0
     data_bytes: int = 0
+    space_bytes: int = 0
 
 
 def _emit_check(
@@ -11331,6 +11388,7 @@ def _emit_check(
         dests=[dest for dest, _s, _state in own_states],
     )
     EVENTS.emit("data", platform=plat, files=tally.data_missing, bytes=tally.data_bytes)
+    EVENTS.emit("space", platform=plat, bytes=tally.space_bytes)
 
 
 def _declared_state(copy: dict, entry: dict, bios_path: Path) -> str:
@@ -19557,1137 +19615,6 @@ def _listed(folder: Path) -> list[str]:
         return []
 
 
-# --- installer/plan_words.py -------------------------------------------------
-
-def _sized(files: list[dict]) -> str:
-    return sized_words(tally(files))
-
-
-# A core whose files are all the platform's own. "pcsx_rearmed 0 files,
-# 0 B" read as a core that gets nothing.
-NO_CORE_FILES = "no extra file: it reads the platform's own, always kept"
-
-
-def _core_sized(files: list[dict]) -> str:
-    return _sized(files) if files else NO_CORE_FILES
-
-
-def _system_sized(files: list[dict]) -> str:
-    """A system's files, those other systems share counted apart.
-
-    `3do 1704 files, 349.0 MB` read as the 3DO BIOS: 1689 of them are the
-    MAME hash and plugin files six systems carry.
-    """
-    shared = [f for f in files if len(entry_systems(f)) > 1]
-    if not shared:
-        return _sized(files)
-    if len(shared) == len(files):
-        return f"{_sized(shared)}, all shared with other systems"
-    own = [f for f in files if len(entry_systems(f)) <= 1]
-    return f"{_sized(own)}, and {_sized(shared)} shared with other systems"
-
-
-# The shared part of a size in fewer words, where the whole one does not
-# fit beside its system (_size_lines), said once under the list.
-_SHARED_LONG = " shared with other systems"
-_SHARED_SHORT = " shared"
-SHARED_NOTE = "Shared: files other systems read too."
-
-
-def _size_lines(size: str, room: int, words: int = 0) -> list[str]:
-    """A size in lines of at most room cells: whole, else its own part and
-    its shared part apart. words shortens the shared part: 0 says "and
-    1689 files, 334.2 MB shared with other systems", 1 "... shared", 2
-    "+1689 files, 334.2 MB shared". 26 of 66 sizes were folded by an
-    80-column terminal, and a row that fitted on one line took two."""
-    if words:
-        size = size.replace(_SHARED_LONG, _SHARED_SHORT)
-    if words > 1:
-        size = size.replace(", and ", ", +")
-    if cell_width(size) <= room:
-        return [size]
-    for joint in (", and ", ", +", ", all "):
-        own, found, shared = size.partition(joint)
-        if found:
-            return [*_no_widow(_wrap(f"{own},", room, ""), room),
-                    *_no_widow(_wrap(found[2:] + shared, room, ""), room)]
-    return _no_widow(_wrap(size, room, ""), room)
-
-
-def listed_systems(files: list[dict]) -> list[str]:
-    """The systems Choose systems lists for these files, in id order: each
-    one a file belongs to, and the other systems for a file that names
-    none. The plan, Choose systems and line mode count these: the plan
-    said 12 systems where Choose systems listed 11, a system whose only
-    file was left out counted."""
-    systems = sorted({system for entry in files for system in entry_systems(entry)})
-    if any(not entry_systems(entry) for entry in files):
-        systems.append(OTHER_SYSTEMS)
-    return systems
-
-
-def choosable_systems(files: list[dict], omitted: list[dict],
-                      cores: Collection[str] = (), regions: Collection[str] = ()) -> list[str]:
-    """The systems a run with these cores and regions lets one choose
-    among, --system aside: what the check reports (the choices event)."""
-    if cores or regions:
-        files = narrow(files, omitted, [], list(cores), list(regions))[0]
-    return listed_systems(files)
-
-
-def emptied_words(names: list[str], game_data: bool) -> str:
-    """What a choice that keeps no file says, on the plan and in line mode,
-    in place of "Everything is in place": Sega Dreamcast holds only game data."""
-    subject = _names_and(names) if names else "This choice"
-    verb = "hold" if len(names) > 1 else "holds"
-    why = "only game data" if game_data else "no file under these options"
-    return f"{subject} {verb} {why}: nothing is left to install."
-
-
-def game_data_only(named: list[str], files: list[dict]) -> list[str]:
-    """The systems named with --system whose files are all game data, of
-    the list with its game data: --no-game-data leaves them empty."""
-    return [system for system in named
-            if any(_chosen(entry, {system}) for entry in files)
-            and all(entry.get("category") == GAME_DATA for entry in files
-                    if _chosen(entry, {system}))]
-
-
-def game_data_only_words(titles: list[str]) -> str:
-    """Said on the plan and in line mode's head of those systems, before the
-    question: "For 1 of 8 systems (--system)" stood for two systems named
-    and said nothing of the other. "" for none."""
-    if not titles:
-        return ""
-    verb = "holds" if len(titles) == 1 else "hold"
-    return f"{_names_and(titles)} {verb} only game data: left out (--no-game-data)."
-
-
-def systems_in_order(systems: list[str], files: list[dict], manifest: dict | None,
-                     bios_path: Path | None) -> list[str]:
-    """Systems in the screen's order (_sorted_systems): those with a file
-    to install first, each group by the title a person reads. Line mode
-    listed them by id, nintendo-3ds before nintendo-ds where the screen
-    put it after Nintendo Game Boy Advance. Before the check, a file is
-    taken as in place when it exists."""
-    def in_place(system: str) -> bool:
-        if bios_path is None:
-            return False
-        held = [entry for entry in files if _chosen(entry, {system})]
-        for entry in held:
-            try:
-                where = _entry_path(bios_path, entry)
-            except ValueError:
-                return False
-            if not _exists(where):
-                return False
-        return bool(held)
-
-    return sorted(systems, key=lambda system: (
-        in_place(system), system_title(system, manifest).casefold()))
-
-
-def _space_short(bios_path: Path, files: list[dict]) -> tuple[int, int] | None:
-    """(bytes needed, bytes free) when the files absent from the folder do
-    not fit on its drive, None when they fit or it cannot be told. The
-    screen's plan warns of this before Install, line mode only after Enter."""
-    probe = _nearest_folder(bios_path)
-    try:
-        free = shutil.disk_usage(probe).free
-    except OSError:
-        return None
-    needed = 0
-    for entry in files:
-        try:
-            where = _entry_path(bios_path, entry)
-        except ValueError:
-            continue
-        if not _exists(where):
-            needed += entry.get("size", 0)
-    return (needed, free) if needed > free else None
-
-
-def folder_warnings(plat: str, bios_path: Path, files: list[dict], hint: Invocation,
-                    commands: bool = True, card: bool = False) -> list[str]:
-    """What the plan says of a folder the files cannot go to, before the
-    question that installs them: the folder refused, or too small. card is
-    a setup that runs from that card, whose own folder is the one it reads."""
-    lines = []
-    if not _folder_writable(bios_path):
-        lines += cannot_write_words(bios_path, plat, hint, commands, card)
-    short = _space_short(bios_path, files)
-    if short is not None:
-        lines.append(space_words(short[0], short[1], card))
-    return lines
-
-
-CANNOT_WRITE = "This folder cannot be written to"
-
-
-def cannot_write_words(bios_path: Path, plat: str, hint: Invocation, commands: bool,
-                       card: bool, screen: bool = False, remedy: bool = True) -> list[str]:
-    """What the plan says of a folder this user cannot write, one remedy
-    for a card: unlock it, never another folder its system does not read.
-    Line mode has no folder row: "choose another one" there offered no way
-    to, so it names --dest, the screen its row."""
-    said = write_remedy(bios_path, plat, hint, commands) if remedy else []
-    if card and _on_read_only_mount(bios_path):
-        return said
-    another = ("choose another one" if screen
-               else "run it again with another --dest" if commands
-               else "run it again and choose another one")
-    return [f"{CANNOT_WRITE}: {another}."] + said
-
-
-def space_words(needed: int, free: int, card: bool) -> str:
-    """Not enough room, and what to do: on a card setup's own card, room is
-    made on the card, another folder being one its system does not read."""
-    if card:
-        return (f"Not enough free space: {format_size(needed)} needed, "
-                f"{format_size(free)} free. Free some space on the card first.")
-    return (f"Not enough free space: {format_size(needed)} needed. Free some, or "
-            "choose another folder.")
-
-
-def unlisted_saves_words(display: str) -> str:
-    """Why a file list holds none of the files read from the save
-    directory: the platform keeps it in no fixed place, and the list leaves
-    them out with no hash or address, which --save-dir cannot change."""
-    return f"{display} keeps it in no fixed place, and its file list holds none of them"
-
-
-INSTALLED_ONLY = "installed"
-
-
-def chosen_systems(choice: object) -> list[str] | None:
-    """The systems a choice names, None for one that names none."""
-    return list(choice[0]) or None if isinstance(choice, tuple) else None
-
-
-def narrowing_words(files: list[dict], omitted: list[dict]) -> str:
-    """What c chooses among for these files, in words, "" for nothing: a
-    question with one answer is not asked."""
-    axes = recorded_axes(files, omitted)
-    choices = available_choices(files, omitted)
-    named = [word for word, axis, enough in (
-        ("systems", "systems", len(listed_systems(files)) > 1),
-        ("cores", "cores", len(choices["cores"]) > 1),
-        ("regions", "regions", bool(choices["regions"]))) if axis in axes and enough]
-    return _names_and(named)
-
-
-def chosen_flags(choice: object) -> list[tuple[str, str | None]]:
-    """The options a choice made at the questions stands for."""
-    if choice == INSTALLED_ONLY:
-        return [("--installed-cores", None)]
-    if isinstance(choice, GamesChoice):
-        return choice.flags()
-    assert isinstance(choice, tuple)
-    systems, cores, regions = choice
-    return [*(("--system", name) for name in systems), *(("--core", name) for name in cores),
-            *([("--region", ",".join(regions))] if regions else [])]
-
-
-def cores_words(chosen: int, total: int) -> str:
-    """The cores a run keeps, as the plan, Options and line mode say it:
-    all cores, or 3 of 12 cores."""
-    return "all cores" if chosen >= total else f"{chosen} of {total} cores"
-
-
-def core_count_words(cores: list[str], base: list[str]) -> str:
-    """cores_words for the cores named out of those the systems chosen
-    offer: a core of another system counted toward "all cores", the run
-    keeping none of the system's own."""
-    return cores_words(len(set(cores) & set(base)), len(base))
-
-
-def unavailable_lines(needed: list[dict], manifest: dict | None, dest: Path | None,
-                      files: list[dict]) -> list[str]:
-    """The screen's plan and line mode's head say these sentences of the
-    required files the collection cannot supply: line mode counted "1
-    required, not found: 37" and never named the file or its folder."""
-    if not needed:
-        return []
-
-    def system(name: str) -> str:
-        label = system_title(name, manifest)
-        # An id no title names (jazz-jackrabbit-2) read as a raw key.
-        return label.replace("-", " ").title() if label == name else label
-
-    # Named below the BIOS folder the plan names: bios/Machines/... under a
-    # BIOS folder that is bios/ read as a second one.
-    lead = ""
-    if dest is not None and shown_bios_folder(dest, files) != dest:
-        lead = shown_bios_folder(dest, files).name + "/"
-
-    def where(dest: str) -> str:
-        return dest[len(lead):] if lead and dest.startswith(lead) else dest
-
-    def named(entries: list[dict]) -> str:
-        names = [f"{where(entry['dest'])} ({system(entry['system'])})" if entry.get("system")
-                 else where(entry["dest"]) for entry in entries[:3]]
-        more = f" and {len(entries) - 3} more" if len(entries) > 3 else ""
-        return f"{', '.join(names)}{more}"
-
-    # A game's own data is not firmware: on every RetroArch plan the one
-    # alarm named Jazz Jackrabbit 2's Anims.j2a, read as a broken install.
-    games = [entry for entry in needed if entry.get("category") == GAME_DATA]
-    firmware = [entry for entry in needed if entry.get("category") != GAME_DATA]
-    lines = []
-    if firmware:
-        lines.append(f"Not available here, and needed to start "
-                     f"{'its emulator' if len(firmware) == 1 else 'their emulators'}: "
-                     f"{named(firmware)}. An owned copy goes in the BIOS folder.")
-    if games:
-        lines.append(game_data_missing(named(games), len(games), [
-            (dest / entry["dest"]).parent for entry in games] if dest else []))
-    return lines
-
-
-# --- installer/line_menu.py --------------------------------------------------
-
-def _pick(
-    title: str, rows: list[tuple[str, list[dict]]], ordered: bool = False,
-    sizer: Callable[[list[dict]], str] = _sized, labels: dict | None = None,
-    note: str = "", short: dict | None = None,
-) -> list[str]:
-    """Numbered list of names. An empty answer keeps every one.
-
-    sizer says what each name holds, labels how each one is shown, short
-    in fewer words where those take fewer lines (a system's title without
-    its id at 40 columns), note what the list needs said, under it.
-    """
-    if not rows:
-        return []
-    print(f"\n{title}")
-    shown = {name: screen_text((labels or {}).get(name, name)) for name, _files in rows}
-    sizes = {name: sizer(files) for name, files in rows}
-    # One cell short of the terminal: a line as wide as it was folded by
-    # some terminals, the next row then starting on its last cell.
-    cols = terminal_size()[0] - 1
-    # The fewest lines, the whole words where they cost no line: one
-    # wording for the whole list, the id dropped where it takes a tenth
-    # more lines (40 columns).
-    briefs = [shown] + ([{name: screen_text(short.get(name, name)) for name, _files in rows}]
-                        if short else [])
-    layouts = [(len(lines) * (10 if brief is shown else 11), words, lines)
-               for brief in briefs for words in range(3)
-               for lines in [_pick_lines(rows, brief, sizes, cols, words)]]
-    _cost, words, lines = min(layouts, key=lambda layout: layout[:2])
-    for line in lines:
-        print(line)
-    notes = [*([SHARED_NOTE] if words and any(_SHARED_SHORT in size for size in sizes.values())
-               else []), *([note] if note else [])]
-    if notes:
-        # At the terminal's width too: the note on the other systems passed
-        # 40 columns.
-        print("\n" + "\n".join(piece for text in notes
-                                for piece in _no_widow(_wrap(text, cols, ""), cols)))
-    hint = "order of preference, e.g. 2,1" if ordered else "e.g. 1,3-5"
-    while True:
-        text = _ask(f"Numbers ({hint}), Enter for all, q to quit: ")
-        if not text:
-            return []
-        if text.lower() == "q":
-            _quit()
-        try:
-            chosen = parse_selection(text, len(rows), ordered=ordered)
-        except ValueError as exc:
-            print(f"  {exc}")
-            continue
-        if chosen:
-            return [rows[number - 1][0] for number in chosen]
-
-
-def _pick_lines(rows: list[tuple[str, list[dict]]], shown: dict, sizes: dict,
-                cols: int, words: int = 0) -> list[str]:
-    """The numbered rows of a line question, cols wide at most. The sizes
-    stand in one column placed for the labels, where every size of one
-    part fits beside the longest label that leaves it room: the column was
-    placed for the longest size, and every row but five took two lines.
-    A row keeps one line where
-    its label and its size fit, a longer size goes on under its column, and
-    a label too long for the column takes its own line."""
-    width = len(str(len(rows)))
-    lead = 2 + width + 2
-    plain = [cell_width(size) for size in sizes.values() if "shared" not in size]
-    least = max([*plain, 16]) if plain else 16
-    labels = sorted(cell_width(label) for label in shown.values())
-    name_width = max([label for label in labels if lead + label + 2 + least <= cols]
-                     or [0])
-    column = lead + name_width + 2
-    lines = []
-    for index, (name, _files) in enumerate(rows, 1):
-        label, size = shown[name], sizes[name]
-        number = f"  {index:>{width}}) "
-        if name_width and cell_width(label) <= name_width:
-            parts = _size_lines(size, cols - column, words)
-            lines.append(f"{number}{_pad(label, name_width)}  {parts[0]}")
-            lines += [f"{' ' * column}{part}" for part in parts[1:]]
-            continue
-        # The size beside the label only where all of it fits there: its
-        # first part alone left "21 files, 1.4 MB," with its shared files
-        # unsaid.
-        fitted = _size_lines(size, cols, words)
-        whole = fitted[0] if len(fitted) == 1 else size
-        if cell_width(f"{number}{label}  {whole}") <= cols:
-            lines.append(f"{number}{label}  {whole}")
-            continue
-        lines += [f"{number}{part}" if not at else f"{' ' * lead}{part}"
-                  for at, part in enumerate(_no_widow(_wrap(label, cols - lead, ""),
-                                                      cols - lead))]
-        at = column if name_width and cols - column >= least else lead
-        lines += [f"{' ' * at}{part}" for part in _size_lines(size, cols - at, words)]
-    return lines
-
-
-def _menu_trees_kept(trees: list[dict], kept: list[dict], narrowed: bool,
-                     current: object) -> list[dict]:
-    """The data trees of the files a line menu choice keeps."""
-    return select_data_directories({"data_directories": trees}, kept,
-                                   narrowed or current is not None,
-                                   isinstance(current, GamesChoice) and current.required,
-                                   current.plan if isinstance(current, GamesChoice) else None,
-                                   chosen_systems(current))
-
-
-class _SelectionMenu(NamedTuple):
-    """What each round of the line menu reads, as it was given."""
-
-    plat: str
-    files: list[dict]
-    omitted: list[dict]
-    installed: tuple[list[dict], list[dict]] | None
-    manifest: dict | None
-    bios_path: Path | None
-    dry_run: bool
-    given: tuple[list[str], list[str], list[str]] | GamesChoice | None
-    played: GamesPlan | None
-    cut: list[bool] | None
-
-    def choice(self, current: object, cutting: bool) -> tuple[list[dict], list[dict]]:
-        return menu_choice(self.files, self.omitted, self.installed, current, cutting)
-
-
-def _print_menu_enter(whole: str, emptied: str, dry_run: bool, offline: bool) -> None:
-    """The Enter line of the line menu, none for a choice that keeps no file."""
-    if emptied:
-        pass
-    elif dry_run:
-        print(f"  Enter) list {whole}, nothing is written")
-    elif offline and LOCAL.folders:
-        print("  Enter) install what is found in "
-              + ", ".join(screen_text(shown_path(index.label)) for index in LOCAL.folders))
-    elif offline:
-        print("  Enter) check the BIOS folder, nothing can be downloaded")
-    else:
-        print(f"  Enter) install {whole}")
-
-
-def _print_menu_keys(menu: _SelectionMenu, current: object, shown: list[dict],
-                     cutting: bool, games: Tally, emptied: str, axes: str) -> list[str]:
-    """The lettered lines of the line menu, and the keys it takes."""
-    played, installed = menu.played, menu.installed
-    playing = bool(played is not None and played.games)
-    if playing and isinstance(current, GamesChoice):
-        other = GamesChoice(current.plan, not current.required)
-        print(f"  r) {GAMES_REQUIRED_WORDS if other.required else 'every file the games read'}"
-              f": {_sized(menu.choice(other, cutting)[0])}")
-        print(f"  e) everything, whatever the games: {_sized(shown)}")
-    elif playing and played is not None:
-        kept_games = menu.choice(GamesChoice(played), cutting)[0]
-        print(f"  h) only for the games {played.where()}: {_sized(kept_games)}")
-    # The screen's "Same choice as last time: no": the whole list.
-    widen = (menu.plat in _RECORD_TAKEN and current is not None
-             and not (playing and isinstance(current, GamesChoice)))
-    if widen:
-        print(f"  e) everything: {_sized(shown)}")
-    if installed is not None and current != INSTALLED_ONLY:
-        print(f"  i) only what the installed cores read: {_sized(installed[0])}")
-    choosable = bool(axes)
-    if choosable:
-        print(f"  c) choose {axes}" + (" again" if current is not menu.given else ""))
-    # The screen's "Copy the BIOS files from an old card or a folder".
-    copying = not menu.dry_run
-    if copying:
-        print("  f) copy from a folder or an old card")
-    if menu.cut is not None and games.games:
-        # The screen's row: one label, its state first.
-        print(f"  g) {game_data_state(menu.cut[0], games)}: "
-              f"{'keep it' if menu.cut[0] else 'leave it out'}")
-    print("  q) quit")
-    return [*([] if emptied else [""]), "q", *(["c"] if choosable else []),
-            *((["r", "e"] if isinstance(current, GamesChoice) else ["h"]) if playing else []),
-            *(["e"] if widen else []),
-            *(["i"] if installed is not None and current != INSTALLED_ONLY else []),
-            *(["f"] if copying else []), *(["g"] if games.games else [])]
-
-
-def _menu_answered(
-    menu: _SelectionMenu, answer: str,
-    current: tuple[list[str], list[str], list[str]] | str | GamesChoice | None,
-) -> tuple[list[str], list[str], list[str]] | str | GamesChoice | None:
-    """The choice a key of the line menu makes, f copying from a folder."""
-    if answer == "r" and isinstance(current, GamesChoice):
-        return GamesChoice(current.plan, not current.required)
-    if answer == "e":
-        return None
-    if answer == "h" and menu.played is not None:
-        return GamesChoice(menu.played)
-    if answer == "i":
-        return INSTALLED_ONLY
-    if answer == "c":
-        return _choose_narrowing(menu.files, menu.omitted, menu.manifest, menu.bios_path)
-    _ask_from_folder(menu.files, menu.bios_path)
-    return current
-
-
-class MenuContext(NamedTuple):
-    """The list the line menu narrows, and the folder and setup it is for."""
-
-    plat: str
-    files: list[dict]
-    omitted: list[dict]
-    installed: tuple[list[dict], list[dict]] | None = None
-    name: str = ""
-    data_trees: list[dict] | None = None
-    bios_path: Path | None = None
-    manifest: dict | None = None
-    narrowed: bool = False
-
-
-def _prompt_custom_selection(
-    context: MenuContext, *, dry_run: bool = False, choosable: bool = True,
-    given: tuple[list[str], list[str], list[str]] | GamesChoice | None = None,
-    command: Callable[[object], str] | None = None, cut: list[bool] | None = None,
-    note: str = "", played: GamesPlan | None = None,
-) -> tuple[list[str], list[str], list[str]] | str | GamesChoice | None:
-    """Offer to narrow the install by system, core and region.
-
-    cut, given for a list that marks its game data, holds whether g left
-    it out: one key, as one row of the screen's plan, toggles it, and the
-    caller applies it as --no-game-data does.
-
-    Enter installs everything, the default most runs want. Returns None
-    then, INSTALLED_ONLY for what `installed` (the files the cores found
-    installed read) holds, or the three choices. Each empty list keeps
-    everything on its axis. A list that records no system (a pack's own)
-    has no c: the menu and its folder line are still shown, a pack having
-    installed at once into a folder named only after Done. given is what
-    --system, --core and --region named: Enter keeps it, c chooses anew from
-    every system. The menu was skipped, and the folder never named.
-
-    A choice made here is counted again before anything is written, as the
-    screen's Confirm counts it: the menu comes back narrowed, with the
-    command that makes the same choice (command, given the choice), and
-    Enter installs. c installed as soon as the cores were answered, "Enter
-    for all" read as a choice. narrowed says the list was narrowed before
-    the menu (--target, --no-game-data): the data trees kept are then those
-    of the systems kept, as the plan and --dry-run count them. note is said
-    under the head (game_data_only_words). played, the games of the card
-    when it holds some, is the first choice (h), the whole list one key
-    away (e), and r keeps only what the games cannot start without.
-    """
-    plat, files, omitted, installed = (context.plat, context.files, context.omitted,
-                                       context.installed)
-    name, bios_path, manifest, narrowed = (context.name, context.bios_path, context.manifest,
-                                           context.narrowed)
-    trees = context.data_trees or []
-    menu = _SelectionMenu(plat, files, omitted, installed, manifest, bios_path, dry_run,
-                          given, played, cut)
-    current: tuple[list[str], list[str], list[str]] | str | GamesChoice | None = given
-    if current is None and played is not None and played.games:
-        current = GamesChoice(played)
-    toggled = False
-    if bios_path is not None and not dry_run and current != INSTALLED_ONLY:
-        kept = menu.choice(current, False)[0]
-        kept_trees = _menu_trees_kept(trees, kept, narrowed, current)
-        if kept and all_in_place(kept, kept_trees, bios_path):
-            # Read before the menu, as the screen reads before it asks: a
-            # rerun was offered an install that installs nothing, then told
-            # so twice. The check after it reads none
-            # of it again (_HEAD_READS).
-            print(f"\n{name or display_name(plat)}: "
-                  f"{_plural(len(kept) + sum(len(t.get('files') or {}) for t in kept_trees), 'file')}"
-                  ", every one in place: nothing to install.")
-            print(f"  BIOS folder: {shown_path(shown_bios_folder(bios_path, kept))}")
-            return current
-    while True:
-        cutting = bool(cut and cut[0])
-        shown, shown_omitted = ((leave_out_game_data(files, omitted)[:2])
-                                if cutting else (files, omitted))
-        # The game data of the choice the head counts, which g takes out of
-        # it or puts back: counted over the whole list, it said 5089 files
-        # under a head counting 12 for one system. Not offered for a
-        # choice that holds none.
-        games = tally(menu.choice(current, False)[0] if cut is not None else [])
-        kept = menu.choice(current, cutting)[0]
-        # A choice that keeps no file says so in the headline, as the screen
-        # does, and offers no Enter and no command: both installed nothing.
-        emptied = (emptied_words([system_title(name_, manifest) for name_ in current[0]],
-                                 cutting)
-                   if isinstance(current, tuple) and not kept else "")
-        _print_menu_head(context._replace(files=shown, omitted=shown_omitted, data_trees=trees),
-                         current, object() if toggled else given,
-                         chosen=menu.choice(current, cutting),
-                         cut_games=games.games if cutting else 0, emptied=emptied,
-                         note=note if current is given else "")
-        if (current is not given or toggled) and command is not None and not emptied:
-            print(f"  Same choice without questions: {screen_text(command(current))}")
-        offline = _offline_only()
-        if offline:
-            # Said before the menu: "install everything" was offered, then
-            # nothing came and the run said Done.
-            print(f"  {offline_named()}: only the files found on this machine are installed"
-                  + ("." if LOCAL.folders else ", and no --from names a folder to copy "
-                     "them from."))
-        # A dry run installs nothing: "install everything" was asked before it.
-        # Offline with nothing to copy from, nothing can be installed but
-        # what is in place already.
-        whole = ("everything" if current is None
-                 else f"what the games {played.where()} need"
-                 if isinstance(current, GamesChoice) and played is not None else "these")
-        _print_menu_enter(whole, emptied, dry_run, offline)
-        # What c asks, named: "systems, cores and regions" was offered with
-        # a pack that records systems only.
-        axes = narrowing_words(files, omitted) if choosable else ""
-        choosable = bool(axes)
-        keys = _print_menu_keys(menu, current, shown, cutting, games, emptied, axes)
-        others = [key for key in keys if key not in ("", "q")]
-        answer = _ask("> ").lower()
-        while answer not in keys:
-            print(f"  Type {', '.join([*([] if emptied else ['Enter']), *others])} or q.")
-            answer = _ask("> ").lower()
-        if answer == "":
-            return current
-        if answer == "q":
-            _quit()
-        if answer == "g" and cut is not None and games.games:
-            cut[0] = not cut[0]
-            toggled = True
-        else:
-            current = _menu_answered(menu, answer, current)
-
-
-def _print_menu_head(
-    context: MenuContext, current: object, given: object, *,
-    chosen: tuple[list[dict], list[dict]] | None = None,
-    cut_games: int = 0, emptied: str = "", note: str = "",
-) -> None:
-    """The plan above the line menu: what the choice holds, its folder, what
-    stands in its way and where the save files go, as the screen's plan.
-    chosen is what the choice keeps (menu_choice), the list every count of
-    the head is taken from. cut_games is the game data g left out of it."""
-    plat, files, omitted, installed = (context.plat, context.files, context.omitted,
-                                       context.installed)
-    name, bios_path, manifest = context.name, context.bios_path, context.manifest
-    trees, narrowed = context.data_trees or [], context.narrowed
-    shown, kept_omitted = chosen or menu_choice(files, omitted, installed, current, False)
-    # The trees of the systems kept: 2636 data files of blueMSX, Dolphin
-    # and PPSSPP were counted for every --system tried.
-    kept_trees = _menu_trees_kept(trees, shown, narrowed, current)
-    data = sum(len(entry.get("files") or {}) for entry in kept_trees)
-    data_size = sum(meta.get("size", 0) for entry in kept_trees
-                    for meta in (entry.get("files") or {}).values())
-    named = ""
-    if current == INSTALLED_ONLY:
-        named = ", only what the installed cores read"
-    elif isinstance(current, GamesChoice):
-        named = f", {current.words()}" + (" (--for-games)" if current is given
-                                          and plat not in _RECORD_TAKEN else "")
-    elif isinstance(current, tuple):
-        systems, cores, regions = current
-        # A recorded choice was typed by nobody: no option is named.
-        flag = current is given and plat not in _RECORD_TAKEN
-        listed = choosable_systems(files, omitted, cores, regions)
-        total = len(listed)
-        # The systems chosen that still hold a file: Sega Dreamcast holding
-        # only game data, g left the line at "2 of 8" where the screen,
-        # which drops it, said "1 of 8".
-        held = len(set(systems) & set(listed))
-        named = ", " + ", ".join(filter(None, [
-            f"for {held} of {total} systems" + (" (--system)" if flag else "")
-            if systems else "",
-            # Out of the cores the systems chosen offered, as Cores counts
-            # them: "1 core chosen" read as one of one. A flag typed is
-            # named after the words, never alone: "--region." stood as a
-            # sentence of its own.
-            core_count_words(cores, choosable_cores(files, omitted, systems))
-            + (" (--core)" if flag else "") if cores else "",
-            "regions ranked" + (" (--region)" if flag else "") if regions else ""]))
-        named = "" if named == ", " else named
-    if current is not given:
-        print("\n  Counted again for these choices. Nothing is written before Enter.")
-    counts = tally(shown)
-    if emptied:
-        # The screen's headline for a choice that keeps no file.
-        print(f"\n{name or display_name(plat)}: {emptied}")
-        if bios_path is not None:
-            print(f"  BIOS folder: {shown_path(shown_bios_folder(bios_path, files))}")
-        return
-    # One total, data files in it, the kinds on the line under it adding up
-    # to it, as the screen's headline. With --from,
-    # what the folders hold first, as the screen's plan says it: nothing
-    # said how many were found before Enter.
-    found = (found_head(shown, kept_trees, bios_path)
-             if LOCAL.folders and bios_path is not None else "")
-    print(f"\n{name or display_name(plat)}: " + (found or (
-          f"{_plural(counts.files + data, 'file')}, "
-          f"{format_size(counts.size + data_size)}")) + named + ".")
-    if note:
-        print(f"  {note}")
-    categorized = bool((manifest or {}).get("categorized"))
-    kinds = counts if categorized else tally({"size": e.get("size")} for e in shown)
-    parts = parts_words(kinds, data, data_size, cut_games)
-    if parts:
-        print(f"  {parts}.")
-    defined = kinds_definition(categorized and bool(counts.games or cut_games), bool(data))
-    if defined:
-        print(f"  {defined}")
-    if bios_path is None:
-        return
-    # Named before anything is written: line mode said where only after
-    # Done, where the screen names it on every plan.
-    print(f"  BIOS folder: {shown_path(shown_bios_folder(bios_path, files))}")
-    for line in folder_warnings(plat, bios_path, shown, _INVOCATION, True,
-                                on_its_card(plat, bios_path)):
-        print(f"  {line}")
-    # The frontend's save directory, named as the end of the run and the
-    # screen name it: "Onion's" before the menu, "RetroArch's" after.
-    for line in save_lines(shown, kept_omitted, bios_path, display_name(plat, manifest)):
-        print(f"  {line}")
-    # The required files the collection cannot supply, named as the screen's
-    # plan names them.
-    for line in unavailable_lines([entry for entry in kept_omitted if entry.get("required")],
-                                  manifest, bios_path, (manifest or {}).get("files") or shown):
-        print(f"  {line}")
-
-
-def found_head(files: list[dict], trees: list[dict], bios_path: Path) -> str:
-    """What the --from folders hold of the files not in place, and what is
-    left, in the screen plan's words: "6 found in OLD, 16 need the
-    internet". "" when they hold none of them. A file of the wrong size is
-    not in place. One of the right size is read, as check_local reads it:
-    judged by its size, a wrong copy of the right size was in place, and
-    "nothing to download" stood over a run that left it. What is read here is
-    kept for the check after Enter (_HEAD_READS): a card read twice is read at
-    the speed of its reader."""
-
-    def held(path: Path, size: object) -> bool:
-        try:
-            return _is_file(path) and path.stat().st_size == size
-        except OSError:
-            return False
-
-    needed, sized = [], []
-    for entry in files:
-        try:
-            path = _entry_path(bios_path, entry)
-        except ValueError:
-            continue
-        if held(path, entry.get("size")):
-            sized.append((entry, path))
-        else:
-            needed.append(entry)
-    # Only a copy of the right size is read, on the check's workers and
-    # with its count: one at a time and silent, 400 files of a card read
-    # as a hung run before the menu.
-    needed += [entry for (entry, _path), verdict in zip(sized, read_in_place(sized))
-               if verdict != "up_to_date"]
-    copies = plan_local_copies(needed, bios_path, None, LOCAL.folders)
-    if not copies:
-        return ""
-    by_folder: dict[str, int] = {}
-    for copy in copies.values():
-        by_folder[copy.index.label] = by_folder.get(copy.index.label, 0) + 1
-    data, data_bytes = 0, 0
-    for tree in trees:
-        _root, wanted, _present = data_directory_state(tree, bios_path, remember=True)
-        data += len(wanted)
-        data_bytes += data_fetch_bytes(tree, wanted)
-    left = [entry for entry in needed if id(entry) not in copies]
-    rest = len(left) + data
-    where = ", ".join(f"{count} found in {_last_name(label)}"
-                      for label, count in by_folder.items())
-    if not rest:
-        return f"{where}, nothing to download"
-    if _offline_only():
-        return f"{where}, {agree(rest, 'needs', 'need')} the internet"
-    return f"{where}, {rest} to download ({format_size(_bytes(left) + data_bytes)})"
-
-
-def all_in_place(files: list[dict], trees: list[dict], bios_path: Path) -> bool:
-    """Whether every file and every data tree file is in place, read as the
-    check reads it. Sizes first: a folder missing a file is told without a
-    read. What is read is kept for the check (_HEAD_READS)."""
-    paths = []
-    for entry in files:
-        try:
-            path = _entry_path(bios_path, entry)
-            if not _is_file(path) or path.stat().st_size != entry.get("size"):
-                return False
-        except (OSError, ValueError):
-            return False
-        paths.append((entry, path))
-    for tree in trees:
-        root = (_destination_path(bios_path, tree["dest"]) if tree.get("dest")
-                else bios_path.resolve())
-        for rel, meta in (tree.get("files") or {}).items():
-            target = _destination_path(root, rel)
-            try:
-                if not _is_file(target) or target.stat().st_size != meta.get("size"):
-                    return False
-            except OSError:
-                return False
-    return (all(verdict == "up_to_date" for verdict in read_in_place(paths))
-            and all(not data_directory_state(tree, bios_path, remember=True)[1]
-                    for tree in trees))
-
-
-def read_in_place(pairs: list[tuple[dict, Path]]) -> list[str]:
-    """_classify_local of each (entry, path), read before the line menu as
-    the check after it reads: on --jobs workers, a count moving at a
-    terminal, what is read kept for that check (_HEAD_READS). Each file is
-    read once whatever the question: the head reads the files of the right
-    size only, and the check after Enter reads none of them again."""
-    if not pairs:
-        return []
-    live = _live_stdout()
-    verdicts: list[str] = []
-    last = 0.0
-    with concurrent.futures.ThreadPoolExecutor(max_workers=LOCAL.jobs) as pool:
-        for done, verdict in enumerate(pool.map(
-                lambda pair: _classify_local(pair[0], pair[1], remember=True), pairs), 1):
-            verdicts.append(verdict)
-            now = time.monotonic()
-            if live and (now - last >= 0.1 or done == len(pairs)):
-                last = now
-                print(f"\r  read {done}/{len(pairs)}", end="", flush=True)
-    if live:
-        print("\r\033[K", end="", flush=True)
-    return verdicts
-
-
-def menu_choice(
-    files: list[dict], omitted: list[dict],
-    installed: tuple[list[dict], list[dict]] | None, current: object, cut: bool,
-) -> tuple[list[dict], list[dict]]:
-    """The files and omissions a choice at the line menu keeps, in the order
-    the run applies it: the systems, cores and regions chosen, or what the
-    installed cores read (i), then the game data left out (g)."""
-    kept, kept_omitted = files, omitted
-    if current == INSTALLED_ONLY and installed is not None:
-        kept, kept_omitted = installed
-    elif isinstance(current, GamesChoice):
-        kept, kept_omitted = current.apply(files, omitted)
-    elif isinstance(current, tuple):
-        kept, kept_omitted = narrow(files, omitted, *current)
-    return leave_out_game_data(kept, kept_omitted)[:2] if cut else (kept, kept_omitted)
-
-
-def _choose_narrowing(files: list[dict], omitted: list[dict], manifest: dict | None,
-                      bios_path: Path | None) -> tuple[list[str], list[str], list[str]]:
-    """Systems, cores and regions asked one after the other, the systems
-    titled and ordered as the screen's Choose systems lists them. A question
-    with one answer is skipped: "Cores: 1) azahar" was asked after the 3DS
-    alone was chosen."""
-    listed = listed_systems(files) if "systems" in recorded_axes(files, omitted) else []
-    systems_listed = (systems_in_order(listed, files, manifest, bios_path)
-                      if len(listed) > 1 else [])
-    # Said under the list it explains, before the question: above
-    # "Systems:" it read as a heading.
-    # One sentence wrapped at the width: its line break, placed for a
-    # shorter title, left "platform" alone on a line.
-    note = (f"'{OTHER_TITLE}' holds what cores load for systems this platform "
-            "does not list, such as game engines and extra computers."
-            if OTHER_SYSTEMS in systems_listed else "")
-    labels = {}
-    for system in systems_listed:
-        title = system_title(system, manifest)
-        labels[system] = title if system in title or system == OTHER_SYSTEMS \
-            else f"{title}  {system}"
-    systems = _pick("Systems:", [
-        (system, [f for f in files if _chosen(f, {system})]) for system in systems_listed
-    ], sizer=_system_sized, labels=labels, note=note,
-        short={system: system_title(system, manifest) for system in systems_listed})
-    kept, kept_omitted = narrow(files, omitted, systems, [], [])
-
-    cores: list[str] = []
-    core_names = choosable_cores(kept, kept_omitted)
-    if len(core_names) > 1:
-        print("\nThe platform's own files for these systems are always kept.")
-        # Every core is kept, as Cores draws them all ticked: a list of
-        # numbers read as nothing chosen yet.
-        print("Every core's extra files are kept: Enter keeps them all, numbers keep "
-              "only those cores.")
-        cores = _pick("Cores:", [(core, core_files(kept, core)) for core in core_names],
-                      sizer=_core_sized)
-        kept, kept_omitted = narrow(kept, kept_omitted, [], cores, [])
-
-    regions: list[str] = []
-    region_names = available_choices(kept, kept_omitted)["regions"]
-    if region_names:
-        print("\nSome systems have one BIOS per region. Keeping only the")
-        print("preferred region removes the others where a match exists.")
-        regions = _pick("Regions:", [
-            (region, [f for f in kept if region in (f.get("regions") or [])])
-            for region in region_names
-        ], ordered=True, labels={region: region_title(region) for region in region_names})
-    return systems, cores, regions
-
-
-# --- installer/plan.py -------------------------------------------------------
-
-# Below this a download is small enough that narrowing it is not worth a line.
-BULK_HINT_FROM = 100 * 1024 * 1024
-
-
-def bulk_hint(
-    to_download: list[dict], manifest: dict, systems_chosen: bool, cores_chosen: bool,
-    accepted: Collection[str] = (),
-) -> list[str]:
-    """Name what pulls most of a download, when narrowing saves over half of it.
-
-    `--system 3do` fetched 349 MB for RetroArch, and `--core opera` 12.5 MB:
-    the arcade cores that also read 3DO pulled the rest, and nothing said so.
-    accepted holds the names --core takes. Drawn from every core of the
-    system, the advice named ares, which loads no file of its own, and
-    `--core ares` was then refused.
-    """
-    total = _bytes(to_download)
-    if total < BULK_HINT_FROM:
-        return []
-    systems = {s for entry in to_download for s in entry_systems(entry)}
-    if not cores_chosen and len(systems) == 1:
-        system = next(iter(systems))
-        candidates = [core for core in (manifest.get("system_cores") or {}).get(system) or []
-                      if core in accepted]
-        by_core: dict[str, int] = {}
-        for entry in to_download:
-            for core in entry.get("cores") or []:
-                by_core[core] = by_core.get(core, 0) + entry.get("size", 0)
-        kept = {core: _bytes(_filter_by_target(to_download, [core])) for core in candidates}
-        if by_core and kept:
-            heavy = max(sorted(by_core), key=lambda core: by_core[core])
-            light = min(sorted(kept), key=lambda core: kept[core])
-            saved = total - kept[light]
-            if saved * 2 > total:
-                return [
-                    f"  {heavy} pulls {format_size(by_core[heavy])} of this "
-                    f"{format_size(total)} download for {system}. --core {light} "
-                    f"keeps {format_size(kept[light])} of it and saves "
-                    f"{format_size(saved)} ({saved * 100 // total}%)."
-                ]
-    if not systems_chosen and len(systems) > 1:
-        alone: dict[str, int] = {}
-        for entry in to_download:
-            own = entry_systems(entry)
-            if len(own) == 1:
-                alone[own[0]] = alone.get(own[0], 0) + entry.get("size", 0)
-        if alone:
-            heavy = max(sorted(alone), key=lambda system: alone[system])
-            if alone[heavy] * 2 > total:
-                return [
-                    f"  {heavy} pulls {format_size(alone[heavy])} of this "
-                    f"{format_size(total)} download. --system naming the systems "
-                    f"played leaves it out and saves {format_size(alone[heavy])} "
-                    f"({alone[heavy] * 100 // total}%), --list-systems names them."
-                ]
-    return []
-
-
-# Asked before, in an interactive run: past this size a download is worth a
-# second thought, and --system, --core or --region can make it smaller.
-CONFIRM_FROM_BYTES = 1024 * 1024 * 1024
-
-# A --dry-run plan: file names per system, the systems shown when the
-# listing is taller than the screen, and the lines around the listing.
-PLAN_FILES_PER_SYSTEM = 8
-PLAN_LARGEST_SYSTEMS = 10
-PLAN_FRAME_LINES = 6
-# Past this many systems a group sharing files is named by its first two.
-PLAN_GROUP_TITLES = 3
-
-
-def _plan_by_system(
-    to_download: list[dict], verbose: bool, manifest: dict | None,
-) -> tuple[dict[str, list[dict]], dict[str, str]]:
-    """The files of a plan by system, and the title each system is listed by."""
-    by_system: dict[str, list[dict]] = {}
-    titles: dict[str, str] = {}
-    for entry in to_download:
-        names = [system_title(name, manifest) for name in entry_systems(entry)]
-        system = ", ".join(names) or OTHER_TITLE
-        by_system.setdefault(system, []).append(entry)
-        # Batocera's group of systems sharing MAME's device ROMs was one line
-        # of 732 characters, ten rows on an 80-column terminal.
-        titles[system] = (system if verbose or len(names) <= PLAN_GROUP_TITLES
-                          else f"{', '.join(names[:2])} and {len(names) - 2} more systems")
-    return by_system, titles
-
-
-def _plan_listing(
-    by_system: dict[str, list[dict]], titles: dict[str, str], term: Terminal, verbose: bool,
-) -> list[tuple[str, str]]:
-    """Each system of a plan and its files."""
-    shown = None if verbose else PLAN_FILES_PER_SYSTEM
-    # (line, its text without styles), the second measuring the rows it takes.
-    listing: list[tuple[str, str]] = []
-    for system in sorted(by_system):
-        entries = sorted(by_system[system], key=lambda e: e["dest"])
-        listing.append((f"  {term.bold(titles[system])}  {_sized(entries)}",
-                        f"  {titles[system]}  {_sized(entries)}"))
-        listing += [(f"    {entry['dest']}  {term.dim(format_size(entry.get('size', 0)))}",
-                     f"    {entry['dest']}  {format_size(entry.get('size', 0))}")
-                    for entry in entries[:shown]]
-        if shown is not None and len(entries) > shown:
-            more = f"    ... and {len(entries) - shown} more"
-            listing.append((more, more))
-    return listing
-
-
-def _print_largest_systems(
-    to_download: list[dict], by_system: dict[str, list[dict]], titles: dict[str, str],
-    term: Terminal,
-) -> None:
-    """The largest systems of a plan taller than the screen."""
-    largest = sorted(by_system, key=lambda s: (-_bytes(by_system[s]), s))
-    # A file several systems share is a group of its own: "88 systems"
-    # were 66 systems, as the full screen counts them, and 22 groups.
-    systems = {name for entry in to_download for name in entry_systems(entry)}
-    groups = (f"{_plural(len(systems), 'system')} in {len(largest)} groups"
-              if systems and len(systems) != len(largest)
-              else _plural(len(largest), 'system'))
-    print(f"  {groups}, the largest first:")
-    for system in largest[:PLAN_LARGEST_SYSTEMS]:
-        print(f"  {term.bold(titles[system])}  {_sized(by_system[system])}")
-    if len(largest) > PLAN_LARGEST_SYSTEMS:
-        # Counted as the line above counts: the groups, when it names them.
-        unit = "group" if "groups" in groups else "system"
-        more = len(largest) - PLAN_LARGEST_SYSTEMS
-        print(f"  ... and {_plural(more, 'more ' + unit)}: --verbose lists "
-              "every system and its files.")
-
-
-def _print_plan(
-    to_download: list[dict], bios_path: Path, term: Terminal,
-    trees: Collection[tuple[dict, dict[str, dict]]] = (),
-    kept: dict[Path, list[int]] | None = None,
-    copied: Collection[str] = (),
-    verbose: bool = False,
-    manifest: dict | None = None,
-) -> None:
-    """What a real run would fetch: the totals first, then by system, each
-    by the title the list and the screen give it, and nothing written.
-
-    The data trees count in the total and come before the closing line:
-    printed after it, they left 2636 RetroArch files out of the figure a
-    user plans an SD card from. A listing taller than the screen pushed the
-    total out of sight (599 lines for RetroArch): it gives way to the
-    largest systems, and --verbose lists every file.
-    """
-    counts = tally(to_download)
-    filled = [(entry, needed) for entry, needed in trees if needed]
-    tree_counts = tally(meta for _entry, needed in filled for meta in needed.values())
-    tree_files = tree_counts.files
-    # One count for the plan, the screen's: "8252
-    # files, and 2636 data files" read as two kinds of one thing. The kinds
-    # follow, adding up to it.
-    total = counts.files + tree_files
-    tree_bytes = sum(data_fetch_bytes(entry, needed) for entry, needed in filled)
-    parts = ([f"{_plural(total, 'file')} ({format_size(counts.size + tree_bytes)})"]
-             if total else [])
-    split = parts_words(counts if (manifest or {}).get("categorized")
-                        else tally({"size": e.get("size")} for e in to_download),
-                        tree_files, tree_bytes)
-    if split and filled:
-        split += f", the data files extracted from {_plural(len(filled), 'archive')}"
-    # A pack is copied from, not downloaded: "Would download 23 files" was
-    # said of a run that makes no network request.
-    verb = "copy" if LOCAL.pack is not None else "download"
-    if not parts and not copied:
-        print(f"\n  {EVERYTHING_IN_PLACE} A real run would {verb} nothing.")
-        return
-    if parts and _offline_only():
-        # --offline fetches none of them: "Would download" promised a
-        # transfer the run never makes, where the screen says "need the
-        # internet".
-        one = total == 1
-        print(f"\n{' and '.join(parts)} {'needs' if one else 'need'} the internet, which "
-              f"{offline_named()} does not use. Run {offline_undo()}, and they would go "
-              f"to {shown_path(bios_path)}:")
-    elif parts:
-        source = " from the pack" if LOCAL.pack is not None else ""
-        print(f"\nWould {verb} {' and '.join(parts)}{source} to {shown_path(bios_path)}:")
-    if parts and split:
-        print(f"  {split}.")
-    for line in copied:
-        print(line)
-    if not parts:
-        print(f"\n  Nothing to {verb}.")
-    by_system, titles = _plan_by_system(to_download, verbose, manifest)
-    listing = _plan_listing(by_system, titles, term, verbose)
-    columns, screen = terminal_size()
-    # A line wider than the terminal wraps: counted as one, the total the
-    # listing must leave in view scrolled out of sight.
-    rows = sum(-(-max(1, cell_width(plain)) // max(1, columns)) for _line, plain in listing)
-    if verbose or rows + len(filled) + PLAN_FRAME_LINES <= screen:
-        for line, _plain in listing:
-            print(line)
-    else:
-        _print_largest_systems(to_download, by_system, titles, term)
-    for entry, needed in filled:
-        source = LOCAL.pack.name if LOCAL.pack is not None else entry["url"]
-        fetched = data_fetch_bytes(entry, needed)
-        archive = ("" if fetched == sum(meta.get("size", 0) for meta in needed.values())
-                   else f" (a {format_size(fetched)} archive)")
-        print(f"  {term.bold(entry['ref'] + ' data')}  {_sized(list(needed.values()))}, "
-              f"from {source}{archive}")
-    for folder, (count, size) in sorted((kept or {}).items()):
-        print(f"\n  Would keep {_plural(count, 'file')} already there ({format_size(size)}), "
-              f"whose contents differ, in {folder}")
-    print("\n  Nothing was written. Run without --dry-run to install.")
-
-
-def _check_free_space(bios_path: Path, needed: int, plat: str = "", code: int = 2,
-                      card: bool = False) -> None:
-    """Stop before writing when the volume cannot hold the download.
-
-    Reported against the nearest existing ancestor, since the destination
-    may not exist yet. The run ends with code: 2 when nothing was installed,
-    the status a script reads as "nothing installed", 1 after an earlier
-    platform of the run installed files.
-    """
-    probe = bios_path
-    while not _exists(probe) and probe != probe.parent:
-        probe = probe.parent
-    try:
-        free = shutil.disk_usage(probe).free
-    except OSError:
-        return
-    if free >= needed:
-        return
-    print(f"\nNot enough space on the drive holding {bios_path}.", file=sys.stderr)
-    print(f"  Needed: {format_size(needed)}. Free: {format_size(free)}.",
-          file=sys.stderr)
-    if card:
-        # Its system reads this card alone: another drive, with RetroArch's
-        # list, was offered for an Onion card.
-        print(f"  Free up {format_size(needed - free)} on the card, then run it again: "
-              "its system reads its BIOS files there only.", file=sys.stderr)
-        sys.exit(code)
-    if not plat:
-        print(f"  Free up {format_size(needed - free)}, or use --dest to install "
-              "to another drive.", file=sys.stderr)
-        sys.exit(code)
-    # --dest alone used to mean RetroArch's list: the platform is named, so
-    # a Batocera install moved to a USB drive stays Batocera's.
-    print(f"  Free up {format_size(needed - free)}, or install to another drive:\n"
-          f"    {_INVOCATION.command(plat, '<folder on another drive>')}",
-          file=sys.stderr)
-    sys.exit(code)
-
-
 # --- installer/removal.py ----------------------------------------------------
 
 # Removal deletes for good, or moves into a backup with --backup, only what
@@ -21632,6 +20559,1109 @@ def _action_setup(args: argparse.Namespace) -> tuple[str, Path]:
             print(f"  --platform {name} --dest {_INVOCATION.word(str(path))}",
                   file=sys.stderr)
     sys.exit(2)
+
+
+# --- installer/space.py ------------------------------------------------------
+
+def bytes_written(files: Iterable[dict],
+                  data_states: list[tuple[dict, tuple[Path, dict[str, dict], int]]]) -> int:
+    """The files a run puts in place, missing or replaced, and the data
+    trees it rebuilds beside them (data_space_bytes). The line plan, the
+    screen's plan and the run's refusal hold this one number against the
+    free space: the plans counted the files absent alone, and a run they
+    said nothing of stopped for space right after Enter."""
+    return sum(entry.get("size", 0) for entry in files) + data_space_bytes(data_states)
+
+
+def free_space(bios_path: Path) -> int | None:
+    """The bytes free on the drive that holds bios_path, read at its nearest
+    existing folder since it may not exist yet. None when it cannot be told."""
+    try:
+        return shutil.disk_usage(_nearest_folder(bios_path)).free
+    except OSError:
+        return None
+
+
+# --- installer/plan_words.py -------------------------------------------------
+
+def _sized(files: list[dict]) -> str:
+    return sized_words(tally(files))
+
+
+# A core whose files are all the platform's own. "pcsx_rearmed 0 files,
+# 0 B" read as a core that gets nothing.
+NO_CORE_FILES = "no extra file: it reads the platform's own, always kept"
+
+
+def _core_sized(files: list[dict]) -> str:
+    return _sized(files) if files else NO_CORE_FILES
+
+
+def _system_sized(files: list[dict]) -> str:
+    """A system's files, those other systems share counted apart.
+
+    `3do 1704 files, 349.0 MB` read as the 3DO BIOS: 1689 of them are the
+    MAME hash and plugin files six systems carry.
+    """
+    shared = [f for f in files if len(entry_systems(f)) > 1]
+    if not shared:
+        return _sized(files)
+    if len(shared) == len(files):
+        return f"{_sized(shared)}, all shared with other systems"
+    own = [f for f in files if len(entry_systems(f)) <= 1]
+    return f"{_sized(own)}, and {_sized(shared)} shared with other systems"
+
+
+# The shared part of a size in fewer words, where the whole one does not
+# fit beside its system (_size_lines), said once under the list.
+_SHARED_LONG = " shared with other systems"
+_SHARED_SHORT = " shared"
+SHARED_NOTE = "Shared: files other systems read too."
+
+
+def _size_lines(size: str, room: int, words: int = 0) -> list[str]:
+    """A size in lines of at most room cells: whole, else its own part and
+    its shared part apart. words shortens the shared part: 0 says "and
+    1689 files, 334.2 MB shared with other systems", 1 "... shared", 2
+    "+1689 files, 334.2 MB shared". 26 of 66 sizes were folded by an
+    80-column terminal, and a row that fitted on one line took two."""
+    if words:
+        size = size.replace(_SHARED_LONG, _SHARED_SHORT)
+    if words > 1:
+        size = size.replace(", and ", ", +")
+    if cell_width(size) <= room:
+        return [size]
+    for joint in (", and ", ", +", ", all "):
+        own, found, shared = size.partition(joint)
+        if found:
+            return [*_no_widow(_wrap(f"{own},", room, ""), room),
+                    *_no_widow(_wrap(found[2:] + shared, room, ""), room)]
+    return _no_widow(_wrap(size, room, ""), room)
+
+
+def listed_systems(files: list[dict]) -> list[str]:
+    """The systems Choose systems lists for these files, in id order: each
+    one a file belongs to, and the other systems for a file that names
+    none. The plan, Choose systems and line mode count these: the plan
+    said 12 systems where Choose systems listed 11, a system whose only
+    file was left out counted."""
+    systems = sorted({system for entry in files for system in entry_systems(entry)})
+    if any(not entry_systems(entry) for entry in files):
+        systems.append(OTHER_SYSTEMS)
+    return systems
+
+
+def choosable_systems(files: list[dict], omitted: list[dict],
+                      cores: Collection[str] = (), regions: Collection[str] = ()) -> list[str]:
+    """The systems a run with these cores and regions lets one choose
+    among, --system aside: what the check reports (the choices event)."""
+    if cores or regions:
+        files = narrow(files, omitted, [], list(cores), list(regions))[0]
+    return listed_systems(files)
+
+
+def emptied_words(names: list[str], game_data: bool) -> str:
+    """What a choice that keeps no file says, on the plan and in line mode,
+    in place of "Everything is in place": Sega Dreamcast holds only game data."""
+    subject = _names_and(names) if names else "This choice"
+    verb = "hold" if len(names) > 1 else "holds"
+    why = "only game data" if game_data else "no file under these options"
+    return f"{subject} {verb} {why}: nothing is left to install."
+
+
+def game_data_only(named: list[str], files: list[dict]) -> list[str]:
+    """The systems named with --system whose files are all game data, of
+    the list with its game data: --no-game-data leaves them empty."""
+    return [system for system in named
+            if any(_chosen(entry, {system}) for entry in files)
+            and all(entry.get("category") == GAME_DATA for entry in files
+                    if _chosen(entry, {system}))]
+
+
+def game_data_only_words(titles: list[str]) -> str:
+    """Said on the plan and in line mode's head of those systems, before the
+    question: "For 1 of 8 systems (--system)" stood for two systems named
+    and said nothing of the other. "" for none."""
+    if not titles:
+        return ""
+    verb = "holds" if len(titles) == 1 else "hold"
+    return f"{_names_and(titles)} {verb} only game data: left out (--no-game-data)."
+
+
+def systems_in_order(systems: list[str], files: list[dict], manifest: dict | None,
+                     bios_path: Path | None) -> list[str]:
+    """Systems in the screen's order (_sorted_systems): those with a file
+    to install first, each group by the title a person reads. Line mode
+    listed them by id, nintendo-3ds before nintendo-ds where the screen
+    put it after Nintendo Game Boy Advance. Before the check, a file is
+    taken as in place when it exists."""
+    def in_place(system: str) -> bool:
+        if bios_path is None:
+            return False
+        held = [entry for entry in files if _chosen(entry, {system})]
+        for entry in held:
+            try:
+                where = _entry_path(bios_path, entry)
+            except ValueError:
+                return False
+            if not _exists(where):
+                return False
+        return bool(held)
+
+    return sorted(systems, key=lambda system: (
+        in_place(system), system_title(system, manifest).casefold()))
+
+
+def _space_short(bios_path: Path, files: list[dict],
+                 trees: Collection[dict] = ()) -> tuple[int, int] | None:
+    """(bytes needed, bytes free) when what the run writes (bytes_written:
+    the files not in place, missing or replaced, and the data trees) does
+    not fit on the folder's drive, None when it fits or it cannot be told.
+    Counted as the run's refusal counts it: the absent files alone said
+    nothing of a run that then stopped for space after Enter."""
+    free = free_space(bios_path)
+    if free is None:
+        return None
+    # Every file and every tree file written: what fits so needs no read.
+    if bytes_written(files, [(tree, (bios_path, tree.get("files") or {}, 0))
+                             for tree in trees]) <= free:
+        return None
+    needed = bytes_written(not_in_place(bios_path, files),
+                           [(tree, data_directory_state(tree, bios_path, remember=True))
+                            for tree in trees])
+    return (needed, free) if needed > free else None
+
+
+def folder_warnings(plat: str, bios_path: Path, files: list[dict], hint: Invocation,
+                    commands: bool = True, card: bool = False,
+                    trees: Collection[dict] = ()) -> list[str]:
+    """What the plan says of a folder the files and the data trees cannot go
+    to, before the question that installs them: the folder refused, or too
+    small. card is a setup that runs from that card, whose own folder is the
+    one it reads."""
+    lines = []
+    if not _folder_writable(bios_path):
+        lines += cannot_write_words(bios_path, plat, hint, commands, card)
+    short = _space_short(bios_path, files, trees)
+    if short is not None:
+        lines.append(space_words(short[0], short[1], card))
+    return lines
+
+
+CANNOT_WRITE = "This folder cannot be written to"
+
+
+def cannot_write_words(bios_path: Path, plat: str, hint: Invocation, commands: bool,
+                       card: bool, screen: bool = False, remedy: bool = True) -> list[str]:
+    """What the plan says of a folder this user cannot write, one remedy
+    for a card: unlock it, never another folder its system does not read.
+    Line mode has no folder row: "choose another one" there offered no way
+    to, so it names --dest, the screen its row."""
+    said = write_remedy(bios_path, plat, hint, commands) if remedy else []
+    if card and _on_read_only_mount(bios_path):
+        return said
+    another = ("choose another one" if screen
+               else "run it again with another --dest" if commands
+               else "run it again and choose another one")
+    return [f"{CANNOT_WRITE}: {another}."] + said
+
+
+def space_words(needed: int, free: int, card: bool) -> str:
+    """Not enough room, and what to do: on a card setup's own card, room is
+    made on the card, another folder being one its system does not read."""
+    if card:
+        return (f"Not enough free space: {format_size(needed)} needed, "
+                f"{format_size(free)} free. Free some space on the card first.")
+    return (f"Not enough free space: {format_size(needed)} needed. Free some, or "
+            "choose another folder.")
+
+
+def unlisted_saves_words(display: str) -> str:
+    """Why a file list holds none of the files read from the save
+    directory: the platform keeps it in no fixed place, and the list leaves
+    them out with no hash or address, which --save-dir cannot change."""
+    return f"{display} keeps it in no fixed place, and its file list holds none of them"
+
+
+INSTALLED_ONLY = "installed"
+
+
+def chosen_systems(choice: object) -> list[str] | None:
+    """The systems a choice names, None for one that names none."""
+    return list(choice[0]) or None if isinstance(choice, tuple) else None
+
+
+def narrowing_words(files: list[dict], omitted: list[dict]) -> str:
+    """What c chooses among for these files, in words, "" for nothing: a
+    question with one answer is not asked."""
+    axes = recorded_axes(files, omitted)
+    choices = available_choices(files, omitted)
+    named = [word for word, axis, enough in (
+        ("systems", "systems", len(listed_systems(files)) > 1),
+        ("cores", "cores", len(choices["cores"]) > 1),
+        ("regions", "regions", bool(choices["regions"]))) if axis in axes and enough]
+    return _names_and(named)
+
+
+def chosen_flags(choice: object) -> list[tuple[str, str | None]]:
+    """The options a choice made at the questions stands for."""
+    if choice == INSTALLED_ONLY:
+        return [("--installed-cores", None)]
+    if isinstance(choice, GamesChoice):
+        return choice.flags()
+    assert isinstance(choice, tuple)
+    systems, cores, regions = choice
+    return [*(("--system", name) for name in systems), *(("--core", name) for name in cores),
+            *([("--region", ",".join(regions))] if regions else [])]
+
+
+def cores_words(chosen: int, total: int) -> str:
+    """The cores a run keeps, as the plan, Options and line mode say it:
+    all cores, or 3 of 12 cores."""
+    return "all cores" if chosen >= total else f"{chosen} of {total} cores"
+
+
+def core_count_words(cores: list[str], base: list[str]) -> str:
+    """cores_words for the cores named out of those the systems chosen
+    offer: a core of another system counted toward "all cores", the run
+    keeping none of the system's own."""
+    return cores_words(len(set(cores) & set(base)), len(base))
+
+
+def unavailable_lines(needed: list[dict], manifest: dict | None, dest: Path | None,
+                      files: list[dict]) -> list[str]:
+    """The screen's plan and line mode's head say these sentences of the
+    required files the collection cannot supply: line mode counted "1
+    required, not found: 37" and never named the file or its folder."""
+    if not needed:
+        return []
+
+    def system(name: str) -> str:
+        label = system_title(name, manifest)
+        # An id no title names (jazz-jackrabbit-2) read as a raw key.
+        return label.replace("-", " ").title() if label == name else label
+
+    # Named below the BIOS folder the plan names: bios/Machines/... under a
+    # BIOS folder that is bios/ read as a second one.
+    lead = ""
+    if dest is not None and shown_bios_folder(dest, files) != dest:
+        lead = shown_bios_folder(dest, files).name + "/"
+
+    def where(dest: str) -> str:
+        return dest[len(lead):] if lead and dest.startswith(lead) else dest
+
+    def named(entries: list[dict]) -> str:
+        names = [f"{where(entry['dest'])} ({system(entry['system'])})" if entry.get("system")
+                 else where(entry["dest"]) for entry in entries[:3]]
+        more = f" and {len(entries) - 3} more" if len(entries) > 3 else ""
+        return f"{', '.join(names)}{more}"
+
+    # A game's own data is not firmware: on every RetroArch plan the one
+    # alarm named Jazz Jackrabbit 2's Anims.j2a, read as a broken install.
+    games = [entry for entry in needed if entry.get("category") == GAME_DATA]
+    firmware = [entry for entry in needed if entry.get("category") != GAME_DATA]
+    lines = []
+    if firmware:
+        lines.append(f"Not available here, and needed to start "
+                     f"{'its emulator' if len(firmware) == 1 else 'their emulators'}: "
+                     f"{named(firmware)}. An owned copy goes in the BIOS folder.")
+    if games:
+        lines.append(game_data_missing(named(games), len(games), [
+            (dest / entry["dest"]).parent for entry in games] if dest else []))
+    return lines
+
+
+# --- installer/line_menu.py --------------------------------------------------
+
+def _pick(
+    title: str, rows: list[tuple[str, list[dict]]], ordered: bool = False,
+    sizer: Callable[[list[dict]], str] = _sized, labels: dict | None = None,
+    note: str = "", short: dict | None = None,
+) -> list[str]:
+    """Numbered list of names. An empty answer keeps every one.
+
+    sizer says what each name holds, labels how each one is shown, short
+    in fewer words where those take fewer lines (a system's title without
+    its id at 40 columns), note what the list needs said, under it.
+    """
+    if not rows:
+        return []
+    print(f"\n{title}")
+    shown = {name: screen_text((labels or {}).get(name, name)) for name, _files in rows}
+    sizes = {name: sizer(files) for name, files in rows}
+    # One cell short of the terminal: a line as wide as it was folded by
+    # some terminals, the next row then starting on its last cell.
+    cols = terminal_size()[0] - 1
+    # The fewest lines, the whole words where they cost no line: one
+    # wording for the whole list, the id dropped where it takes a tenth
+    # more lines (40 columns).
+    briefs = [shown] + ([{name: screen_text(short.get(name, name)) for name, _files in rows}]
+                        if short else [])
+    layouts = [(len(lines) * (10 if brief is shown else 11), words, lines)
+               for brief in briefs for words in range(3)
+               for lines in [_pick_lines(rows, brief, sizes, cols, words)]]
+    _cost, words, lines = min(layouts, key=lambda layout: layout[:2])
+    for line in lines:
+        print(line)
+    notes = [*([SHARED_NOTE] if words and any(_SHARED_SHORT in size for size in sizes.values())
+               else []), *([note] if note else [])]
+    if notes:
+        # At the terminal's width too: the note on the other systems passed
+        # 40 columns.
+        print("\n" + "\n".join(piece for text in notes
+                                for piece in _no_widow(_wrap(text, cols, ""), cols)))
+    hint = "order of preference, e.g. 2,1" if ordered else "e.g. 1,3-5"
+    while True:
+        text = _ask(f"Numbers ({hint}), Enter for all, q to quit: ")
+        if not text:
+            return []
+        if text.lower() == "q":
+            _quit()
+        try:
+            chosen = parse_selection(text, len(rows), ordered=ordered)
+        except ValueError as exc:
+            print(f"  {exc}")
+            continue
+        if chosen:
+            return [rows[number - 1][0] for number in chosen]
+
+
+def _pick_lines(rows: list[tuple[str, list[dict]]], shown: dict, sizes: dict,
+                cols: int, words: int = 0) -> list[str]:
+    """The numbered rows of a line question, cols wide at most. The sizes
+    stand in one column placed for the labels, where every size of one
+    part fits beside the longest label that leaves it room: the column was
+    placed for the longest size, and every row but five took two lines.
+    A row keeps one line where
+    its label and its size fit, a longer size goes on under its column, and
+    a label too long for the column takes its own line."""
+    width = len(str(len(rows)))
+    lead = 2 + width + 2
+    plain = [cell_width(size) for size in sizes.values() if "shared" not in size]
+    least = max([*plain, 16]) if plain else 16
+    labels = sorted(cell_width(label) for label in shown.values())
+    name_width = max([label for label in labels if lead + label + 2 + least <= cols]
+                     or [0])
+    column = lead + name_width + 2
+    lines = []
+    for index, (name, _files) in enumerate(rows, 1):
+        label, size = shown[name], sizes[name]
+        number = f"  {index:>{width}}) "
+        if name_width and cell_width(label) <= name_width:
+            parts = _size_lines(size, cols - column, words)
+            lines.append(f"{number}{_pad(label, name_width)}  {parts[0]}")
+            lines += [f"{' ' * column}{part}" for part in parts[1:]]
+            continue
+        # The size beside the label only where all of it fits there: its
+        # first part alone left "21 files, 1.4 MB," with its shared files
+        # unsaid.
+        fitted = _size_lines(size, cols, words)
+        whole = fitted[0] if len(fitted) == 1 else size
+        if cell_width(f"{number}{label}  {whole}") <= cols:
+            lines.append(f"{number}{label}  {whole}")
+            continue
+        lines += [f"{number}{part}" if not at else f"{' ' * lead}{part}"
+                  for at, part in enumerate(_no_widow(_wrap(label, cols - lead, ""),
+                                                      cols - lead))]
+        at = column if name_width and cols - column >= least else lead
+        lines += [f"{' ' * at}{part}" for part in _size_lines(size, cols - at, words)]
+    return lines
+
+
+def _menu_trees_kept(trees: list[dict], kept: list[dict], narrowed: bool,
+                     current: object) -> list[dict]:
+    """The data trees of the files a line menu choice keeps."""
+    return select_data_directories({"data_directories": trees}, kept,
+                                   narrowed or current is not None,
+                                   isinstance(current, GamesChoice) and current.required,
+                                   current.plan if isinstance(current, GamesChoice) else None,
+                                   chosen_systems(current))
+
+
+class _SelectionMenu(NamedTuple):
+    """What each round of the line menu reads, as it was given."""
+
+    plat: str
+    files: list[dict]
+    omitted: list[dict]
+    installed: tuple[list[dict], list[dict]] | None
+    manifest: dict | None
+    bios_path: Path | None
+    dry_run: bool
+    given: tuple[list[str], list[str], list[str]] | GamesChoice | None
+    played: GamesPlan | None
+    cut: list[bool] | None
+
+    def choice(self, current: object, cutting: bool) -> tuple[list[dict], list[dict]]:
+        return menu_choice(self.files, self.omitted, self.installed, current, cutting)
+
+
+def _print_menu_enter(whole: str, emptied: str, dry_run: bool, offline: bool) -> None:
+    """The Enter line of the line menu, none for a choice that keeps no file."""
+    if emptied:
+        pass
+    elif dry_run:
+        print(f"  Enter) list {whole}, nothing is written")
+    elif offline and LOCAL.folders:
+        print("  Enter) install what is found in "
+              + ", ".join(screen_text(shown_path(index.label)) for index in LOCAL.folders))
+    elif offline:
+        print("  Enter) check the BIOS folder, nothing can be downloaded")
+    else:
+        print(f"  Enter) install {whole}")
+
+
+def _print_menu_keys(menu: _SelectionMenu, current: object, shown: list[dict],
+                     cutting: bool, games: Tally, emptied: str, axes: str) -> list[str]:
+    """The lettered lines of the line menu, and the keys it takes."""
+    played, installed = menu.played, menu.installed
+    playing = bool(played is not None and played.games)
+    if playing and isinstance(current, GamesChoice):
+        other = GamesChoice(current.plan, not current.required)
+        print(f"  r) {GAMES_REQUIRED_WORDS if other.required else 'every file the games read'}"
+              f": {_sized(menu.choice(other, cutting)[0])}")
+        print(f"  e) everything, whatever the games: {_sized(shown)}")
+    elif playing and played is not None:
+        kept_games = menu.choice(GamesChoice(played), cutting)[0]
+        print(f"  h) only for the games {played.where()}: {_sized(kept_games)}")
+    # The screen's "Same choice as last time: no": the whole list.
+    widen = (menu.plat in _RECORD_TAKEN and current is not None
+             and not (playing and isinstance(current, GamesChoice)))
+    if widen:
+        print(f"  e) everything: {_sized(shown)}")
+    if installed is not None and current != INSTALLED_ONLY:
+        print(f"  i) only what the installed cores read: {_sized(installed[0])}")
+    choosable = bool(axes)
+    if choosable:
+        print(f"  c) choose {axes}" + (" again" if current is not menu.given else ""))
+    # The screen's "Copy the BIOS files from an old card or a folder".
+    copying = not menu.dry_run
+    if copying:
+        print("  f) copy from a folder or an old card")
+    if menu.cut is not None and games.games:
+        # The screen's row: one label, its state first.
+        print(f"  g) {game_data_state(menu.cut[0], games)}: "
+              f"{'keep it' if menu.cut[0] else 'leave it out'}")
+    print("  q) quit")
+    return [*([] if emptied else [""]), "q", *(["c"] if choosable else []),
+            *((["r", "e"] if isinstance(current, GamesChoice) else ["h"]) if playing else []),
+            *(["e"] if widen else []),
+            *(["i"] if installed is not None and current != INSTALLED_ONLY else []),
+            *(["f"] if copying else []), *(["g"] if games.games else [])]
+
+
+def _menu_answered(
+    menu: _SelectionMenu, answer: str,
+    current: tuple[list[str], list[str], list[str]] | str | GamesChoice | None,
+) -> tuple[list[str], list[str], list[str]] | str | GamesChoice | None:
+    """The choice a key of the line menu makes, f copying from a folder."""
+    if answer == "r" and isinstance(current, GamesChoice):
+        return GamesChoice(current.plan, not current.required)
+    if answer == "e":
+        return None
+    if answer == "h" and menu.played is not None:
+        return GamesChoice(menu.played)
+    if answer == "i":
+        return INSTALLED_ONLY
+    if answer == "c":
+        return _choose_narrowing(menu.files, menu.omitted, menu.manifest, menu.bios_path)
+    _ask_from_folder(menu.files, menu.bios_path)
+    return current
+
+
+class MenuContext(NamedTuple):
+    """The list the line menu narrows, and the folder and setup it is for."""
+
+    plat: str
+    files: list[dict]
+    omitted: list[dict]
+    installed: tuple[list[dict], list[dict]] | None = None
+    name: str = ""
+    data_trees: list[dict] | None = None
+    bios_path: Path | None = None
+    manifest: dict | None = None
+    narrowed: bool = False
+
+
+def _prompt_custom_selection(
+    context: MenuContext, *, dry_run: bool = False, choosable: bool = True,
+    given: tuple[list[str], list[str], list[str]] | GamesChoice | None = None,
+    command: Callable[[object], str] | None = None, cut: list[bool] | None = None,
+    note: str = "", played: GamesPlan | None = None,
+) -> tuple[list[str], list[str], list[str]] | str | GamesChoice | None:
+    """Offer to narrow the install by system, core and region.
+
+    cut, given for a list that marks its game data, holds whether g left
+    it out: one key, as one row of the screen's plan, toggles it, and the
+    caller applies it as --no-game-data does.
+
+    Enter installs everything, the default most runs want. Returns None
+    then, INSTALLED_ONLY for what `installed` (the files the cores found
+    installed read) holds, or the three choices. Each empty list keeps
+    everything on its axis. A list that records no system (a pack's own)
+    has no c: the menu and its folder line are still shown, a pack having
+    installed at once into a folder named only after Done. given is what
+    --system, --core and --region named: Enter keeps it, c chooses anew from
+    every system. The menu was skipped, and the folder never named.
+
+    A choice made here is counted again before anything is written, as the
+    screen's Confirm counts it: the menu comes back narrowed, with the
+    command that makes the same choice (command, given the choice), and
+    Enter installs. c installed as soon as the cores were answered, "Enter
+    for all" read as a choice. narrowed says the list was narrowed before
+    the menu (--target, --no-game-data): the data trees kept are then those
+    of the systems kept, as the plan and --dry-run count them. note is said
+    under the head (game_data_only_words). played, the games of the card
+    when it holds some, is the first choice (h), the whole list one key
+    away (e), and r keeps only what the games cannot start without.
+    """
+    plat, files, omitted, installed = (context.plat, context.files, context.omitted,
+                                       context.installed)
+    name, bios_path, manifest, narrowed = (context.name, context.bios_path, context.manifest,
+                                           context.narrowed)
+    trees = context.data_trees or []
+    menu = _SelectionMenu(plat, files, omitted, installed, manifest, bios_path, dry_run,
+                          given, played, cut)
+    current: tuple[list[str], list[str], list[str]] | str | GamesChoice | None = given
+    if current is None and played is not None and played.games:
+        current = GamesChoice(played)
+    toggled = False
+    if bios_path is not None and not dry_run and current != INSTALLED_ONLY:
+        kept = menu.choice(current, False)[0]
+        kept_trees = _menu_trees_kept(trees, kept, narrowed, current)
+        if kept and all_in_place(kept, kept_trees, bios_path):
+            # Read before the menu, as the screen reads before it asks: a
+            # rerun was offered an install that installs nothing, then told
+            # so twice. The check after it reads none
+            # of it again (_HEAD_READS).
+            print(f"\n{name or display_name(plat)}: "
+                  f"{_plural(len(kept) + sum(len(t.get('files') or {}) for t in kept_trees), 'file')}"
+                  ", every one in place: nothing to install.")
+            print(f"  BIOS folder: {shown_path(shown_bios_folder(bios_path, kept))}")
+            return current
+    while True:
+        cutting = bool(cut and cut[0])
+        shown, shown_omitted = ((leave_out_game_data(files, omitted)[:2])
+                                if cutting else (files, omitted))
+        # The game data of the choice the head counts, which g takes out of
+        # it or puts back: counted over the whole list, it said 5089 files
+        # under a head counting 12 for one system. Not offered for a
+        # choice that holds none.
+        games = tally(menu.choice(current, False)[0] if cut is not None else [])
+        kept = menu.choice(current, cutting)[0]
+        # A choice that keeps no file says so in the headline, as the screen
+        # does, and offers no Enter and no command: both installed nothing.
+        emptied = (emptied_words([system_title(name_, manifest) for name_ in current[0]],
+                                 cutting)
+                   if isinstance(current, tuple) and not kept else "")
+        _print_menu_head(context._replace(files=shown, omitted=shown_omitted, data_trees=trees),
+                         current, object() if toggled else given,
+                         chosen=menu.choice(current, cutting),
+                         cut_games=games.games if cutting else 0, emptied=emptied,
+                         note=note if current is given else "")
+        if (current is not given or toggled) and command is not None and not emptied:
+            print(f"  Same choice without questions: {screen_text(command(current))}")
+        offline = _offline_only()
+        if offline:
+            # Said before the menu: "install everything" was offered, then
+            # nothing came and the run said Done.
+            print(f"  {offline_named()}: only the files found on this machine are installed"
+                  + ("." if LOCAL.folders else ", and no --from names a folder to copy "
+                     "them from."))
+        # A dry run installs nothing: "install everything" was asked before it.
+        # Offline with nothing to copy from, nothing can be installed but
+        # what is in place already.
+        whole = ("everything" if current is None
+                 else f"what the games {played.where()} need"
+                 if isinstance(current, GamesChoice) and played is not None else "these")
+        _print_menu_enter(whole, emptied, dry_run, offline)
+        # What c asks, named: "systems, cores and regions" was offered with
+        # a pack that records systems only.
+        axes = narrowing_words(files, omitted) if choosable else ""
+        choosable = bool(axes)
+        keys = _print_menu_keys(menu, current, shown, cutting, games, emptied, axes)
+        others = [key for key in keys if key not in ("", "q")]
+        answer = _ask("> ").lower()
+        while answer not in keys:
+            print(f"  Type {', '.join([*([] if emptied else ['Enter']), *others])} or q.")
+            answer = _ask("> ").lower()
+        if answer == "":
+            return current
+        if answer == "q":
+            _quit()
+        if answer == "g" and cut is not None and games.games:
+            cut[0] = not cut[0]
+            toggled = True
+        else:
+            current = _menu_answered(menu, answer, current)
+
+
+def _print_menu_head(
+    context: MenuContext, current: object, given: object, *,
+    chosen: tuple[list[dict], list[dict]] | None = None,
+    cut_games: int = 0, emptied: str = "", note: str = "",
+) -> None:
+    """The plan above the line menu: what the choice holds, its folder, what
+    stands in its way and where the save files go, as the screen's plan.
+    chosen is what the choice keeps (menu_choice), the list every count of
+    the head is taken from. cut_games is the game data g left out of it."""
+    plat, files, omitted, installed = (context.plat, context.files, context.omitted,
+                                       context.installed)
+    name, bios_path, manifest = context.name, context.bios_path, context.manifest
+    trees, narrowed = context.data_trees or [], context.narrowed
+    shown, kept_omitted = chosen or menu_choice(files, omitted, installed, current, False)
+    # The trees of the systems kept: 2636 data files of blueMSX, Dolphin
+    # and PPSSPP were counted for every --system tried.
+    kept_trees = _menu_trees_kept(trees, shown, narrowed, current)
+    data = sum(len(entry.get("files") or {}) for entry in kept_trees)
+    data_size = sum(meta.get("size", 0) for entry in kept_trees
+                    for meta in (entry.get("files") or {}).values())
+    named = ""
+    if current == INSTALLED_ONLY:
+        named = ", only what the installed cores read"
+    elif isinstance(current, GamesChoice):
+        named = f", {current.words()}" + (" (--for-games)" if current is given
+                                          and plat not in _RECORD_TAKEN else "")
+    elif isinstance(current, tuple):
+        systems, cores, regions = current
+        # A recorded choice was typed by nobody: no option is named.
+        flag = current is given and plat not in _RECORD_TAKEN
+        listed = choosable_systems(files, omitted, cores, regions)
+        total = len(listed)
+        # The systems chosen that still hold a file: Sega Dreamcast holding
+        # only game data, g left the line at "2 of 8" where the screen,
+        # which drops it, said "1 of 8".
+        held = len(set(systems) & set(listed))
+        named = ", " + ", ".join(filter(None, [
+            f"for {held} of {total} systems" + (" (--system)" if flag else "")
+            if systems else "",
+            # Out of the cores the systems chosen offered, as Cores counts
+            # them: "1 core chosen" read as one of one. A flag typed is
+            # named after the words, never alone: "--region." stood as a
+            # sentence of its own.
+            core_count_words(cores, choosable_cores(files, omitted, systems))
+            + (" (--core)" if flag else "") if cores else "",
+            "regions ranked" + (" (--region)" if flag else "") if regions else ""]))
+        named = "" if named == ", " else named
+    if current is not given:
+        print("\n  Counted again for these choices. Nothing is written before Enter.")
+    counts = tally(shown)
+    if emptied:
+        # The screen's headline for a choice that keeps no file.
+        print(f"\n{name or display_name(plat)}: {emptied}")
+        if bios_path is not None:
+            print(f"  BIOS folder: {shown_path(shown_bios_folder(bios_path, files))}")
+        return
+    # One total, data files in it, the kinds on the line under it adding up
+    # to it, as the screen's headline. With --from,
+    # what the folders hold first, as the screen's plan says it: nothing
+    # said how many were found before Enter.
+    found = (found_head(shown, kept_trees, bios_path)
+             if LOCAL.folders and bios_path is not None else "")
+    print(f"\n{name or display_name(plat)}: " + (found or (
+          f"{_plural(counts.files + data, 'file')}, "
+          f"{format_size(counts.size + data_size)}")) + named + ".")
+    if note:
+        print(f"  {note}")
+    categorized = bool((manifest or {}).get("categorized"))
+    kinds = counts if categorized else tally({"size": e.get("size")} for e in shown)
+    parts = parts_words(kinds, data, data_size, cut_games)
+    if parts:
+        print(f"  {parts}.")
+    defined = kinds_definition(categorized and bool(counts.games or cut_games), bool(data))
+    if defined:
+        print(f"  {defined}")
+    if bios_path is None:
+        return
+    # Named before anything is written: line mode said where only after
+    # Done, where the screen names it on every plan.
+    print(f"  BIOS folder: {shown_path(shown_bios_folder(bios_path, files))}")
+    for line in folder_warnings(plat, bios_path, shown, _INVOCATION, True,
+                                on_its_card(plat, bios_path), kept_trees):
+        print(f"  {line}")
+    # The frontend's save directory, named as the end of the run and the
+    # screen name it: "Onion's" before the menu, "RetroArch's" after.
+    for line in save_lines(shown, kept_omitted, bios_path, display_name(plat, manifest)):
+        print(f"  {line}")
+    # The required files the collection cannot supply, named as the screen's
+    # plan names them.
+    for line in unavailable_lines([entry for entry in kept_omitted if entry.get("required")],
+                                  manifest, bios_path, (manifest or {}).get("files") or shown):
+        print(f"  {line}")
+
+
+def found_head(files: list[dict], trees: list[dict], bios_path: Path) -> str:
+    """What the --from folders hold of the files not in place, and what is
+    left, in the screen plan's words: "6 found in OLD, 16 need the
+    internet". "" when they hold none of them. A file of the wrong size is
+    not in place. One of the right size is read, as check_local reads it:
+    judged by its size, a wrong copy of the right size was in place, and
+    "nothing to download" stood over a run that left it. What is read here is
+    kept for the check after Enter (_HEAD_READS): a card read twice is read at
+    the speed of its reader."""
+    needed = not_in_place(bios_path, files)
+    copies = plan_local_copies(needed, bios_path, None, LOCAL.folders)
+    if not copies:
+        return ""
+    by_folder: dict[str, int] = {}
+    for copy in copies.values():
+        by_folder[copy.index.label] = by_folder.get(copy.index.label, 0) + 1
+    data, data_bytes = 0, 0
+    for tree in trees:
+        _root, wanted, _present = data_directory_state(tree, bios_path, remember=True)
+        data += len(wanted)
+        data_bytes += data_fetch_bytes(tree, wanted)
+    left = [entry for entry in needed if id(entry) not in copies]
+    rest = len(left) + data
+    where = ", ".join(f"{count} found in {_last_name(label)}"
+                      for label, count in by_folder.items())
+    if not rest:
+        return f"{where}, nothing to download"
+    if _offline_only():
+        return f"{where}, {agree(rest, 'needs', 'need')} the internet"
+    return f"{where}, {rest} to download ({format_size(_bytes(left) + data_bytes)})"
+
+
+def all_in_place(files: list[dict], trees: list[dict], bios_path: Path) -> bool:
+    """Whether every file and every data tree file is in place, read as the
+    check reads it. Sizes first: a folder missing a file is told without a
+    read. What is read is kept for the check (_HEAD_READS)."""
+    paths = []
+    for entry in files:
+        try:
+            path = _entry_path(bios_path, entry)
+            if not _is_file(path) or path.stat().st_size != entry.get("size"):
+                return False
+        except (OSError, ValueError):
+            return False
+        paths.append((entry, path))
+    for tree in trees:
+        root = (_destination_path(bios_path, tree["dest"]) if tree.get("dest")
+                else bios_path.resolve())
+        for rel, meta in (tree.get("files") or {}).items():
+            target = _destination_path(root, rel)
+            try:
+                if not _is_file(target) or target.stat().st_size != meta.get("size"):
+                    return False
+            except OSError:
+                return False
+    return (all(verdict == "up_to_date" for verdict in read_in_place(paths))
+            and all(not data_directory_state(tree, bios_path, remember=True)[1]
+                    for tree in trees))
+
+
+def menu_choice(
+    files: list[dict], omitted: list[dict],
+    installed: tuple[list[dict], list[dict]] | None, current: object, cut: bool,
+) -> tuple[list[dict], list[dict]]:
+    """The files and omissions a choice at the line menu keeps, in the order
+    the run applies it: the systems, cores and regions chosen, or what the
+    installed cores read (i), then the game data left out (g)."""
+    kept, kept_omitted = files, omitted
+    if current == INSTALLED_ONLY and installed is not None:
+        kept, kept_omitted = installed
+    elif isinstance(current, GamesChoice):
+        kept, kept_omitted = current.apply(files, omitted)
+    elif isinstance(current, tuple):
+        kept, kept_omitted = narrow(files, omitted, *current)
+    return leave_out_game_data(kept, kept_omitted)[:2] if cut else (kept, kept_omitted)
+
+
+def _choose_narrowing(files: list[dict], omitted: list[dict], manifest: dict | None,
+                      bios_path: Path | None) -> tuple[list[str], list[str], list[str]]:
+    """Systems, cores and regions asked one after the other, the systems
+    titled and ordered as the screen's Choose systems lists them. A question
+    with one answer is skipped: "Cores: 1) azahar" was asked after the 3DS
+    alone was chosen."""
+    listed = listed_systems(files) if "systems" in recorded_axes(files, omitted) else []
+    systems_listed = (systems_in_order(listed, files, manifest, bios_path)
+                      if len(listed) > 1 else [])
+    # Said under the list it explains, before the question: above
+    # "Systems:" it read as a heading.
+    # One sentence wrapped at the width: its line break, placed for a
+    # shorter title, left "platform" alone on a line.
+    note = (f"'{OTHER_TITLE}' holds what cores load for systems this platform "
+            "does not list, such as game engines and extra computers."
+            if OTHER_SYSTEMS in systems_listed else "")
+    labels = {}
+    for system in systems_listed:
+        title = system_title(system, manifest)
+        labels[system] = title if system in title or system == OTHER_SYSTEMS \
+            else f"{title}  {system}"
+    systems = _pick("Systems:", [
+        (system, [f for f in files if _chosen(f, {system})]) for system in systems_listed
+    ], sizer=_system_sized, labels=labels, note=note,
+        short={system: system_title(system, manifest) for system in systems_listed})
+    kept, kept_omitted = narrow(files, omitted, systems, [], [])
+
+    cores: list[str] = []
+    core_names = choosable_cores(kept, kept_omitted)
+    if len(core_names) > 1:
+        print("\nThe platform's own files for these systems are always kept.")
+        # Every core is kept, as Cores draws them all ticked: a list of
+        # numbers read as nothing chosen yet.
+        print("Every core's extra files are kept: Enter keeps them all, numbers keep "
+              "only those cores.")
+        cores = _pick("Cores:", [(core, core_files(kept, core)) for core in core_names],
+                      sizer=_core_sized)
+        kept, kept_omitted = narrow(kept, kept_omitted, [], cores, [])
+
+    regions: list[str] = []
+    region_names = available_choices(kept, kept_omitted)["regions"]
+    if region_names:
+        print("\nSome systems have one BIOS per region. Keeping only the")
+        print("preferred region removes the others where a match exists.")
+        regions = _pick("Regions:", [
+            (region, [f for f in kept if region in (f.get("regions") or [])])
+            for region in region_names
+        ], ordered=True, labels={region: region_title(region) for region in region_names})
+    return systems, cores, regions
+
+
+# --- installer/plan.py -------------------------------------------------------
+
+# Below this a download is small enough that narrowing it is not worth a line.
+BULK_HINT_FROM = 100 * 1024 * 1024
+
+
+def bulk_hint(
+    to_download: list[dict], manifest: dict, systems_chosen: bool, cores_chosen: bool,
+    accepted: Collection[str] = (),
+) -> list[str]:
+    """Name what pulls most of a download, when narrowing saves over half of it.
+
+    `--system 3do` fetched 349 MB for RetroArch, and `--core opera` 12.5 MB:
+    the arcade cores that also read 3DO pulled the rest, and nothing said so.
+    accepted holds the names --core takes. Drawn from every core of the
+    system, the advice named ares, which loads no file of its own, and
+    `--core ares` was then refused.
+    """
+    total = _bytes(to_download)
+    if total < BULK_HINT_FROM:
+        return []
+    systems = {s for entry in to_download for s in entry_systems(entry)}
+    if not cores_chosen and len(systems) == 1:
+        system = next(iter(systems))
+        candidates = [core for core in (manifest.get("system_cores") or {}).get(system) or []
+                      if core in accepted]
+        by_core: dict[str, int] = {}
+        for entry in to_download:
+            for core in entry.get("cores") or []:
+                by_core[core] = by_core.get(core, 0) + entry.get("size", 0)
+        kept = {core: _bytes(_filter_by_target(to_download, [core])) for core in candidates}
+        if by_core and kept:
+            heavy = max(sorted(by_core), key=lambda core: by_core[core])
+            light = min(sorted(kept), key=lambda core: kept[core])
+            saved = total - kept[light]
+            if saved * 2 > total:
+                return [
+                    f"  {heavy} pulls {format_size(by_core[heavy])} of this "
+                    f"{format_size(total)} download for {system}. --core {light} "
+                    f"keeps {format_size(kept[light])} of it and saves "
+                    f"{format_size(saved)} ({saved * 100 // total}%)."
+                ]
+    if not systems_chosen and len(systems) > 1:
+        alone: dict[str, int] = {}
+        for entry in to_download:
+            own = entry_systems(entry)
+            if len(own) == 1:
+                alone[own[0]] = alone.get(own[0], 0) + entry.get("size", 0)
+        if alone:
+            heavy = max(sorted(alone), key=lambda system: alone[system])
+            if alone[heavy] * 2 > total:
+                return [
+                    f"  {heavy} pulls {format_size(alone[heavy])} of this "
+                    f"{format_size(total)} download. --system naming the systems "
+                    f"played leaves it out and saves {format_size(alone[heavy])} "
+                    f"({alone[heavy] * 100 // total}%), --list-systems names them."
+                ]
+    return []
+
+
+# Asked before, in an interactive run: past this size a download is worth a
+# second thought, and --system, --core or --region can make it smaller.
+CONFIRM_FROM_BYTES = 1024 * 1024 * 1024
+
+# A --dry-run plan: file names per system, the systems shown when the
+# listing is taller than the screen, and the lines around the listing.
+PLAN_FILES_PER_SYSTEM = 8
+PLAN_LARGEST_SYSTEMS = 10
+PLAN_FRAME_LINES = 6
+# Past this many systems a group sharing files is named by its first two.
+PLAN_GROUP_TITLES = 3
+
+
+def _plan_by_system(
+    to_download: list[dict], verbose: bool, manifest: dict | None,
+) -> tuple[dict[str, list[dict]], dict[str, str]]:
+    """The files of a plan by system, and the title each system is listed by."""
+    by_system: dict[str, list[dict]] = {}
+    titles: dict[str, str] = {}
+    for entry in to_download:
+        names = [system_title(name, manifest) for name in entry_systems(entry)]
+        system = ", ".join(names) or OTHER_TITLE
+        by_system.setdefault(system, []).append(entry)
+        # Batocera's group of systems sharing MAME's device ROMs was one line
+        # of 732 characters, ten rows on an 80-column terminal.
+        titles[system] = (system if verbose or len(names) <= PLAN_GROUP_TITLES
+                          else f"{', '.join(names[:2])} and {len(names) - 2} more systems")
+    return by_system, titles
+
+
+def _plan_listing(
+    by_system: dict[str, list[dict]], titles: dict[str, str], term: Terminal, verbose: bool,
+) -> list[tuple[str, str]]:
+    """Each system of a plan and its files."""
+    shown = None if verbose else PLAN_FILES_PER_SYSTEM
+    # (line, its text without styles), the second measuring the rows it takes.
+    listing: list[tuple[str, str]] = []
+    for system in sorted(by_system):
+        entries = sorted(by_system[system], key=lambda e: e["dest"])
+        listing.append((f"  {term.bold(titles[system])}  {_sized(entries)}",
+                        f"  {titles[system]}  {_sized(entries)}"))
+        listing += [(f"    {entry['dest']}  {term.dim(format_size(entry.get('size', 0)))}",
+                     f"    {entry['dest']}  {format_size(entry.get('size', 0))}")
+                    for entry in entries[:shown]]
+        if shown is not None and len(entries) > shown:
+            more = f"    ... and {len(entries) - shown} more"
+            listing.append((more, more))
+    return listing
+
+
+def _print_largest_systems(
+    to_download: list[dict], by_system: dict[str, list[dict]], titles: dict[str, str],
+    term: Terminal,
+) -> None:
+    """The largest systems of a plan taller than the screen."""
+    largest = sorted(by_system, key=lambda s: (-_bytes(by_system[s]), s))
+    # A file several systems share is a group of its own: "88 systems"
+    # were 66 systems, as the full screen counts them, and 22 groups.
+    systems = {name for entry in to_download for name in entry_systems(entry)}
+    groups = (f"{_plural(len(systems), 'system')} in {len(largest)} groups"
+              if systems and len(systems) != len(largest)
+              else _plural(len(largest), 'system'))
+    print(f"  {groups}, the largest first:")
+    for system in largest[:PLAN_LARGEST_SYSTEMS]:
+        print(f"  {term.bold(titles[system])}  {_sized(by_system[system])}")
+    if len(largest) > PLAN_LARGEST_SYSTEMS:
+        # Counted as the line above counts: the groups, when it names them.
+        unit = "group" if "groups" in groups else "system"
+        more = len(largest) - PLAN_LARGEST_SYSTEMS
+        print(f"  ... and {_plural(more, 'more ' + unit)}: --verbose lists "
+              "every system and its files.")
+
+
+def _print_plan(
+    to_download: list[dict], bios_path: Path, term: Terminal,
+    trees: Collection[tuple[dict, dict[str, dict]]] = (),
+    kept: dict[Path, list[int]] | None = None,
+    copied: Collection[str] = (),
+    verbose: bool = False,
+    manifest: dict | None = None,
+) -> None:
+    """What a real run would fetch: the totals first, then by system, each
+    by the title the list and the screen give it, and nothing written.
+
+    The data trees count in the total and come before the closing line:
+    printed after it, they left 2636 RetroArch files out of the figure a
+    user plans an SD card from. A listing taller than the screen pushed the
+    total out of sight (599 lines for RetroArch): it gives way to the
+    largest systems, and --verbose lists every file.
+    """
+    counts = tally(to_download)
+    filled = [(entry, needed) for entry, needed in trees if needed]
+    tree_counts = tally(meta for _entry, needed in filled for meta in needed.values())
+    tree_files = tree_counts.files
+    # One count for the plan, the screen's: "8252
+    # files, and 2636 data files" read as two kinds of one thing. The kinds
+    # follow, adding up to it.
+    total = counts.files + tree_files
+    tree_bytes = sum(data_fetch_bytes(entry, needed) for entry, needed in filled)
+    parts = ([f"{_plural(total, 'file')} ({format_size(counts.size + tree_bytes)})"]
+             if total else [])
+    split = parts_words(counts if (manifest or {}).get("categorized")
+                        else tally({"size": e.get("size")} for e in to_download),
+                        tree_files, tree_bytes)
+    if split and filled:
+        split += f", the data files extracted from {_plural(len(filled), 'archive')}"
+    # A pack is copied from, not downloaded: "Would download 23 files" was
+    # said of a run that makes no network request.
+    verb = "copy" if LOCAL.pack is not None else "download"
+    if not parts and not copied:
+        print(f"\n  {EVERYTHING_IN_PLACE} A real run would {verb} nothing.")
+        return
+    if parts and _offline_only():
+        # --offline fetches none of them: "Would download" promised a
+        # transfer the run never makes, where the screen says "need the
+        # internet".
+        one = total == 1
+        print(f"\n{' and '.join(parts)} {'needs' if one else 'need'} the internet, which "
+              f"{offline_named()} does not use. Run {offline_undo()}, and they would go "
+              f"to {shown_path(bios_path)}:")
+    elif parts:
+        source = " from the pack" if LOCAL.pack is not None else ""
+        print(f"\nWould {verb} {' and '.join(parts)}{source} to {shown_path(bios_path)}:")
+    if parts and split:
+        print(f"  {split}.")
+    for line in copied:
+        print(line)
+    if not parts:
+        print(f"\n  Nothing to {verb}.")
+    by_system, titles = _plan_by_system(to_download, verbose, manifest)
+    listing = _plan_listing(by_system, titles, term, verbose)
+    columns, screen = terminal_size()
+    # A line wider than the terminal wraps: counted as one, the total the
+    # listing must leave in view scrolled out of sight.
+    rows = sum(-(-max(1, cell_width(plain)) // max(1, columns)) for _line, plain in listing)
+    if verbose or rows + len(filled) + PLAN_FRAME_LINES <= screen:
+        for line, _plain in listing:
+            print(line)
+    else:
+        _print_largest_systems(to_download, by_system, titles, term)
+    for entry, needed in filled:
+        source = LOCAL.pack.name if LOCAL.pack is not None else entry["url"]
+        fetched = data_fetch_bytes(entry, needed)
+        archive = ("" if fetched == sum(meta.get("size", 0) for meta in needed.values())
+                   else f" (a {format_size(fetched)} archive)")
+        print(f"  {term.bold(entry['ref'] + ' data')}  {_sized(list(needed.values()))}, "
+              f"from {source}{archive}")
+    for folder, (count, size) in sorted((kept or {}).items()):
+        print(f"\n  Would keep {_plural(count, 'file')} already there ({format_size(size)}), "
+              f"whose contents differ, in {folder}")
+    print("\n  Nothing was written. Run without --dry-run to install.")
+
+
+def _check_free_space(bios_path: Path, needed: int, plat: str = "", code: int = 2,
+                      card: bool = False) -> None:
+    """Stop before writing when the volume cannot hold the download.
+
+    Reported against the nearest existing ancestor, since the destination
+    may not exist yet. The run ends with code: 2 when nothing was installed,
+    the status a script reads as "nothing installed", 1 after an earlier
+    platform of the run installed files.
+    """
+    free = free_space(bios_path)
+    if free is None or free >= needed:
+        return
+    print(f"\nNot enough space on the drive holding {bios_path}.", file=sys.stderr)
+    print(f"  Needed: {format_size(needed)}. Free: {format_size(free)}.",
+          file=sys.stderr)
+    if card:
+        # Its system reads this card alone: another drive, with RetroArch's
+        # list, was offered for an Onion card.
+        print(f"  Free up {format_size(needed - free)} on the card, then run it again: "
+              "its system reads its BIOS files there only.", file=sys.stderr)
+        sys.exit(code)
+    if not plat:
+        print(f"  Free up {format_size(needed - free)}, or use --dest to install "
+              "to another drive.", file=sys.stderr)
+        sys.exit(code)
+    # --dest alone used to mean RetroArch's list: the platform is named, so
+    # a Batocera install moved to a USB drive stays Batocera's.
+    print(f"  Free up {format_size(needed - free)}, or install to another drive:\n"
+          f"    {_INVOCATION.command(plat, '<folder on another drive>')}",
+          file=sys.stderr)
+    sys.exit(code)
 
 
 # --- installer/run_files.py --------------------------------------------------
@@ -23231,12 +23261,17 @@ def _pass_check_existing(run: _InstallRun, p: _PlatformPass) -> None:
     )
 
     if EVENTS.on:
+        # What the run would write, as _pass_download holds it against the
+        # free space: the screen's plan warns on this number.
+        lacking = {id(f) for f in pack_lacks([f for f in to_download if id(f) not in copies])}
         _emit_check(
             p.plat_name, p.manifest, bios_path,
             CheckTally(files, up_to_date, mismatched,
                        sum(len(state[1]) for _entry, state in data_states),
                        len(p.omitted_files),
-                       sum(data_fetch_bytes(entry, state[1]) for entry, state in data_states)),
+                       sum(data_fetch_bytes(entry, state[1]) for entry, state in data_states),
+                       bytes_written([f for f in to_download if id(f) not in lacking],
+                                     data_states)),
             chosen=selection[0] if selection else None,
         )
         emit_copies(p.plat_name, to_download, copies, bios_index, bios_path, files)
@@ -23454,13 +23489,13 @@ def _pass_download_head(run: _InstallRun, p: _PlatformPass, fetched: list[dict],
            "carries on from here.")
 
 
-def _pass_make_folder(run: _InstallRun, p: _PlatformPass, dl_size: int) -> bool:
+def _pass_make_folder(run: _InstallRun, p: _PlatformPass, written: int) -> bool:
     """The space checked and the BIOS folder made. True when it was created."""
     args, plat_name, bios_path = run.args, p.plat_name, p.bios_path
     # Checked before the folder is created: a run stopped for space
     # left an empty BIOS folder behind. The data trees count too,
     # written after the files on the same drive.
-    _check_free_space(bios_path, dl_size + data_space_bytes(p.data_states), plat_name,
+    _check_free_space(bios_path, written, plat_name,
                       1 if run.total_downloaded else 2, on_its_card(plat_name, bios_path))
     p.space_checked = True
     created = not bios_path.exists()
@@ -23554,7 +23589,8 @@ def _pass_download(run: _InstallRun, p: _PlatformPass) -> str:
         run.files_pending += len(p.to_download)
         run.total_up_to_date += len(p.up_to_date)
         return "next"
-    dl_size = sum(f.get("size", 0) for f in p.to_download if id(f) not in lacking)
+    coming = [f for f in p.to_download if id(f) not in lacking]
+    dl_size = _bytes(coming)
     fetch_size = _bytes([f for f in fetched if id(f) not in lacking])
     if not p.to_download:
         run.total_up_to_date += len(p.up_to_date)
@@ -23568,7 +23604,7 @@ def _pass_download(run: _InstallRun, p: _PlatformPass) -> str:
         return "next"
     EVENTS.emit("download", platform=p.plat_name, files=len(p.to_download), bytes=dl_size)
     _pass_download_head(run, p, fetched, lacking, dl_size)
-    created = _pass_make_folder(run, p, dl_size)
+    created = _pass_make_folder(run, p, bytes_written(coming, p.data_states))
     return "stop" if _pass_fetch(run, p, dl_size, created) else "go"
 
 
@@ -23656,7 +23692,7 @@ def _pass_data_trees(run: _InstallRun, p: _PlatformPass) -> None:
     if writable and not p.space_checked:
         # With every BIOS file in place, the trees alone: checked
         # before the first archive is written.
-        _check_free_space(p.bios_path, data_space_bytes(writable), p.plat_name,
+        _check_free_space(p.bios_path, bytes_written([], writable), p.plat_name,
                           1 if run.total_downloaded else 2,
                           on_its_card(p.plat_name, p.bios_path))
     if writable:
@@ -24422,9 +24458,16 @@ def _dry_copies(state: TuiState) -> list[str]:
     return [event["dest"] for event in state.dry_files if event["dest"] in local]
 
 
+def space_needed(check: dict) -> int:
+    """What the run writes on the folder's drive, as its space event says
+    it: the files and the data trees, the number its refusal holds against
+    the free space. bytes_needed for a check that names none."""
+    return check.get("space_bytes", check.get("bytes_needed", 0))
+
+
 def _short_of_space(state: TuiState, check: dict) -> bool:
     free = state.facts.get("free")
-    return free is not None and check.get("bytes_needed", 0) > free
+    return free is not None and space_needed(check) > free
 
 
 def _shared_needed(state: TuiState) -> dict[str, tuple[int, int]]:
@@ -26595,8 +26638,8 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
     free = state.facts.get("free")
     if free is not None:
         lines.append(_detail(f"Free space: {format_size(free)}"))
-        if check["bytes_needed"] > free:
-            lines.append(space_words(check["bytes_needed"], free, _on_its_card(state)))
+        if space_needed(check) > free:
+            lines.append(space_words(space_needed(check), free, _on_its_card(state)))
     backup = _plan_backups(check, state, fig)
     misplaced = _tui_misplaced(state) if check is state.check else []
     if misplaced:
@@ -30570,6 +30613,8 @@ def _take_check_event(state: TuiState, kind: str | None, event: dict) -> None:
         state.saves = event
     elif kind == "data" and state.check is not None:
         state.check["data_bytes"] = event["bytes"]
+    elif kind == "space" and state.check is not None:
+        state.check["space_bytes"] = event["bytes"]
     elif kind == "check":
         state.check = event
     elif kind == "file":
@@ -30587,6 +30632,8 @@ def _take_dry_event(state: TuiState, kind: str | None, event: dict) -> None:
         state.dry_saves = event
     elif kind == "data" and state.dry is not None:
         state.dry["data_bytes"] = event["bytes"]
+    elif kind == "space" and state.dry is not None:
+        state.dry["space_bytes"] = event["bytes"]
     elif kind == "check":
         state.dry = event
     elif kind == "file" and event.get("state") != "present":

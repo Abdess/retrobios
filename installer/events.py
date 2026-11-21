@@ -103,6 +103,12 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # data_missing) and the bytes they write. A kind of its own, since
     # schema 1 never adds a key to check.
     "data": ("platform", "files", "bytes"),
+    # Right after data: the bytes the run writes on the drive of the BIOS
+    # folder, the files missing or replaced and the data trees rebuilt
+    # beside them. The number the run's refusal for space and both plans
+    # hold against the free space. A kind of its own, since schema 1 never
+    # adds a key to check.
+    "space": ("platform", "bytes"),
     # A file to install that this machine already holds: misplaced in the
     # BIOS folder (folder is its bios_dir, reason says why in words) or in
     # a folder named with --from (reason empty). member names the ZIP member

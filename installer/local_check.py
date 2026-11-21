@@ -3,11 +3,13 @@ from __future__ import annotations
 
 import concurrent.futures
 import hashlib
+import time
 from pathlib import Path
 from typing import IO, TYPE_CHECKING
 
-from installer.console import ReadCounter
-from installer.host_fs import _held
+from installer.console import ReadCounter, _live_stdout
+from installer.host_fs import _held, _is_file
+from installer.offline import LOCAL
 from installer.paths import _entry_path
 
 if TYPE_CHECKING:
@@ -164,3 +166,53 @@ def check_local(
             counter.end()
 
     return to_download, up_to_date, mismatched
+
+
+def read_in_place(pairs: list[tuple[dict, Path]]) -> list[str]:
+    """_classify_local of each (entry, path), read before the line menu as
+    the check after it reads: on --jobs workers, a count moving at a
+    terminal, what is read kept for that check (_HEAD_READS). Each file is
+    read once whatever the question: the head reads the files of the right
+    size only, and the check after Enter reads none of them again."""
+    if not pairs:
+        return []
+    live = _live_stdout()
+    verdicts: list[str] = []
+    last = 0.0
+    with concurrent.futures.ThreadPoolExecutor(max_workers=LOCAL.jobs) as pool:
+        for done, verdict in enumerate(pool.map(
+                lambda pair: _classify_local(pair[0], pair[1], remember=True), pairs), 1):
+            verdicts.append(verdict)
+            now = time.monotonic()
+            if live and (now - last >= 0.1 or done == len(pairs)):
+                last = now
+                print(f"\r  read {done}/{len(pairs)}", end="", flush=True)
+    if live:
+        print("\r\033[K", end="", flush=True)
+    return verdicts
+
+
+def not_in_place(bios_path: Path, files: list[dict]) -> list[dict]:
+    """The files a run puts in place: absent, of another size, or of the
+    right size and not the list's. Only a copy of the right size is read,
+    on the check's workers and with its count (read_in_place): judged by
+    its size, a wrong copy of the right size was in place."""
+
+    def held(path: Path, size: object) -> bool:
+        try:
+            return _is_file(path) and path.stat().st_size == size
+        except OSError:
+            return False
+
+    needed, sized = [], []
+    for entry in files:
+        try:
+            path = _entry_path(bios_path, entry)
+        except ValueError:
+            continue
+        if held(path, entry.get("size")):
+            sized.append((entry, path))
+        else:
+            needed.append(entry)
+    return needed + [entry for (entry, _path), verdict in zip(sized, read_in_place(sized))
+                     if verdict != "up_to_date"]

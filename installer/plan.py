@@ -1,14 +1,12 @@
 """The plan shown before a download: what comes, its size and the space it needs."""
 from __future__ import annotations
 
-import shutil
 import sys
 from collections.abc import Collection
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 from installer.datadirs import data_fetch_bytes
-from installer.host_fs import _exists
 from installer.invocation import _INVOCATION
 from installer.narrowing import _filter_by_target
 from installer.offline import LOCAL, _offline_only, offline_named, offline_undo
@@ -16,6 +14,7 @@ from installer.outcome import EVERYTHING_IN_PLACE
 from installer.paths import shown_path
 from installer.plan_words import _sized
 from installer.platforms import OTHER_TITLE, entry_systems, system_title
+from installer.space import free_space
 from installer.tally import _bytes, parts_words, tally
 from installer.terminal import terminal_size
 from installer.text import _plural, cell_width, format_size
@@ -243,14 +242,8 @@ def _check_free_space(bios_path: Path, needed: int, plat: str = "", code: int = 
     the status a script reads as "nothing installed", 1 after an earlier
     platform of the run installed files.
     """
-    probe = bios_path
-    while not _exists(probe) and probe != probe.parent:
-        probe = probe.parent
-    try:
-        free = shutil.disk_usage(probe).free
-    except OSError:
-        return
-    if free >= needed:
+    free = free_space(bios_path)
+    if free is None or free >= needed:
         return
     print(f"\nNot enough space on the drive holding {bios_path}.", file=sys.stderr)
     print(f"  Needed: {format_size(needed)}. Free: {format_size(free)}.",

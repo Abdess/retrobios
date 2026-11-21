@@ -30,6 +30,7 @@ class CheckTally(NamedTuple):
     data_missing: int = 0
     not_installable: int = 0
     data_bytes: int = 0
+    space_bytes: int = 0
 
 
 def _emit_check(
@@ -99,6 +100,7 @@ def _emit_check(
         dests=[dest for dest, _s, _state in own_states],
     )
     EVENTS.emit("data", platform=plat, files=tally.data_missing, bytes=tally.data_bytes)
+    EVENTS.emit("space", platform=plat, bytes=tally.space_bytes)
 
 
 def _declared_state(copy: dict, entry: dict, bios_path: Path) -> str:
