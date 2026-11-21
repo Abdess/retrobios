@@ -88,6 +88,13 @@ COMMANDS = {
     "sitesources.py": ("sitegen/sources.py",),
     "site_markdown.py": ("sitegen/pagemarkdown.py",),
     "validate_site.py": ("sitegen/validate.py",),
+    "validate_schemas.py": (
+        "schemas/validators.py", "schemas/sources.py", "schemas/profilechecks.py",
+        "schemas/citations.py", "schemas/platformchecks.py", "schemas/sourcetree.py",
+        "schemas/registry.py", "schemas/documents.py", "schemas/installs.py",
+        "schemas/packmanifests.py", "schemas/events.py", "schemas/measurements.py",
+        "schemas/romfolders.py", "schemas/games.py", "schemas/run.py",
+    ),
     "site_insights.py": ("sitegen/insights.py",),
     "generate_readme.py": ("sitegen/readme.py",),
     "romset_recipes.py": (

@@ -472,9 +472,9 @@ class UnreachableCitationRegressions(unittest.TestCase):
 
     @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
     def _hits(self, text: str) -> bool:
-        import validate_schemas
+        from schemas import citations
 
-        return bool(validate_schemas._UNREACHABLE_REF.search(" " + text))
+        return bool(citations.UNREACHABLE_REF.search(" " + text))
 
     def test_a_scratch_directory_is_rejected(self):
         self.assertTrue(self._hits("tmp/es-de/ANDROID.md:470-474"))
@@ -499,13 +499,13 @@ class UnreachableCitationRegressions(unittest.TestCase):
 
     @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
     def test_the_corpus_carries_none(self):
-        import validate_schemas
+        from schemas import citations
 
         errors = []
         for path in sorted((ROOT / "emulators").glob("*.yml")):
             with path.open(encoding="utf-8") as handle:
                 errors.extend(
-                    validate_schemas._unreachable_citations(path, yaml.safe_load(handle))
+                    citations.unreachable_citations(path, yaml.safe_load(handle))
                 )
         self.assertEqual(errors, [])
 
@@ -517,9 +517,9 @@ class DoubledCitationPaths(unittest.TestCase):
     showed it to the citation checks."""
 
     def _hits(self, text: str) -> bool:
-        import validate_schemas
+        from schemas import citations
 
-        return bool(validate_schemas._DOUBLED_PATH.search(text))
+        return bool(citations.DOUBLED_PATH.search(text))
 
     def test_a_repeated_directory_is_rejected(self):
         self.assertTrue(self._hits(
@@ -537,11 +537,11 @@ class DoubledCitationPaths(unittest.TestCase):
                 self.assertFalse(self._hits(good))
 
     def test_the_corpus_carries_none(self):
-        import validate_schemas
+        from schemas import citations
 
         errors = []
         for path in sorted((ROOT / "emulators").glob("*.yml")):
-            errors.extend(validate_schemas._doubled_paths(path))
+            errors.extend(citations.doubled_paths(path))
         self.assertEqual(errors, [])
 
 
@@ -1377,11 +1377,11 @@ class SchemaFormatsAreChecked(unittest.TestCase):
 
     @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
     def test_a_missing_checker_is_named(self):
-        import validate_schemas
+        from schemas import validators
 
         empty = mock.Mock(checkers={})
-        with mock.patch.object(validate_schemas, "FormatChecker", return_value=empty):
-            self.assertEqual(validate_schemas.unchecked_formats(), ["date-time", "uri"])
+        with mock.patch.object(validators, "FormatChecker", return_value=empty):
+            self.assertEqual(validators.unchecked_formats(), ["date-time", "uri"])
 
     def test_every_install_asks_for_the_extras(self):
         for path in (".github/workflows/validate.yml", ".github/workflows/deploy-site.yml",
@@ -2162,7 +2162,7 @@ class InstallerBoundaryRegressions(unittest.TestCase):
         A filesystem glob over dist/ matches nothing and reports success
         without validating a single document.
         """
-        import validate_schemas
+        from schemas import packmanifests
 
         with tempfile.TemporaryDirectory() as directory:
             dist = Path(directory)
@@ -2180,7 +2180,7 @@ class InstallerBoundaryRegressions(unittest.TestCase):
             with zipfile.ZipFile(dist / "Pack.zip", "w") as archive:
                 archive.writestr("manifest.json", json.dumps(broken))
 
-            errors = validate_schemas._validate_pack_manifests(dist)
+            errors = packmanifests.validate_pack_manifests(dist)
             self.assertTrue(errors, "an invalid in-archive manifest must be reported")
             self.assertTrue(any("sha1" in message for message in errors), errors)
 
@@ -2191,7 +2191,7 @@ class InstallerBoundaryRegressions(unittest.TestCase):
         alone. The pack schema refused both keys, and each is checked under
         its own contract."""
         from packs import scope
-        import validate_schemas
+        from schemas import packmanifests
 
         install_list = json.loads((ROOT / "install" / "romm.json").read_text(encoding="utf-8"))
         targets = {"browser": None, "rpi4": {"cores": ["mgba"], "images": ["rpi4"]}}
@@ -2210,13 +2210,13 @@ class InstallerBoundaryRegressions(unittest.TestCase):
             dist = Path(directory)
             with zipfile.ZipFile(dist / "Pack.zip", "w") as archive:
                 archive.writestr("manifest.json", json.dumps(document))
-            self.assertEqual(validate_schemas._validate_pack_manifests(dist), [])
+            self.assertEqual(packmanifests.validate_pack_manifests(dist), [])
 
             broken = {**document, "targets": {"rpi4": [1]},
                       "install_list": {**install_list, "files": "none"}}
             with zipfile.ZipFile(dist / "Pack.zip", "w") as archive:
                 archive.writestr("manifest.json", json.dumps(broken))
-            errors = validate_schemas._validate_pack_manifests(dist)
+            errors = packmanifests.validate_pack_manifests(dist)
             self.assertTrue(any(":targets:" in message for message in errors), errors)
             self.assertTrue(any(":install_list:" in message for message in errors), errors)
 
@@ -3905,8 +3905,8 @@ class ModuleConstantsDeclaredOnce(unittest.TestCase):
 
 class OnlyTheSchemaValidatorNeedsJsonschema(unittest.TestCase):
     """Build scripts and install.py run on stdlib plus pyyaml, and jsonschema is
-    tooling for validate_schemas and CI. An import anywhere else turns a
-    contributor's pipeline run into an ImportError."""
+    tooling for the schemas package behind validate_schemas and CI. An import
+    anywhere else turns a contributor's pipeline run into an ImportError."""
 
     @staticmethod
     def _imports_jsonschema(source: str) -> bool:
@@ -3925,7 +3925,7 @@ class OnlyTheSchemaValidatorNeedsJsonschema(unittest.TestCase):
         offenders = [
             str(path.relative_to(ROOT))
             for path in sorted(ROOT.glob("scripts/**/*.py")) + [ROOT / "install.py"]
-            if path.name != "validate_schemas.py"
+            if path.parent != ROOT / "scripts" / "schemas"
             and self._imports_jsonschema(path.read_text())
         ]
         self.assertEqual(offenders, [])
@@ -3945,14 +3945,14 @@ class HashMergeBackupsAreNotSources(unittest.TestCase):
 
     def test_the_validator_skips_a_backup(self):
         try:
-            from validate_schemas import _validate_yaml_directory
+            from schemas.sourcetree import validate_yaml_directory
         except ImportError as exc:
             self.skipTest(f"validate_schemas needs jsonschema: {exc}")
 
         with tempfile.TemporaryDirectory() as directory:
             (Path(directory) / "mame.old.yml").write_text("emulator: [\n")
             self.assertEqual(
-                _validate_yaml_directory(Path(directory), "emulator.schema.json"), []
+                validate_yaml_directory(Path(directory), "emulator.schema.json"), []
             )
 
     def test_the_backup_suffix_is_written_once(self):
@@ -6161,7 +6161,7 @@ class AProfilePathIsTheEmulatorsNotOurs(unittest.TestCase):
         from unittest import mock
 
         try:
-            from scripts import validate_schemas
+            from schemas import sourcetree
         except ImportError as exc:
             self.skipTest(f"validate_schemas needs jsonschema: {exc}")
 
@@ -6172,8 +6172,8 @@ class AProfilePathIsTheEmulatorsNotOurs(unittest.TestCase):
                 "emulator: X\nfiles:\n  - name: scph1001.bin\n"
                 "    path: .variants/scph1001.bin.abc12345\n"
             )
-            with mock.patch.object(validate_schemas, "REPO_ROOT", Path(directory)):
-                errors = validate_schemas._repository_layout_in_profiles()
+            with mock.patch("core.paths.REPO_ROOT", Path(directory)):
+                errors = sourcetree.repository_layout_in_profiles()
         self.assertEqual(len(errors), 1)
         self.assertIn(".variants/", errors[0])
 

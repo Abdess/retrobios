@@ -17,10 +17,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 class DataDirRefsAreRegistered(unittest.TestCase):
     def test_no_unknown_ref(self):
         try:
-            import validate_schemas
+            from schemas import sourcetree
         except ImportError as exc:
             self.skipTest(f"validate_schemas needs jsonschema: {exc}")
-        self.assertEqual(validate_schemas._unknown_data_dir_refs(), [])
+        self.assertEqual(sourcetree.unknown_data_dir_refs(), [])
 
 
 
@@ -33,7 +33,7 @@ class EachSourceIsParsedOnce(unittest.TestCase):
         from unittest import mock
 
         try:
-            import validate_schemas
+            from schemas import sources, sourcetree
         except ImportError as exc:
             self.skipTest(f"validate_schemas needs jsonschema: {exc}")
         with tempfile.TemporaryDirectory() as tmp:
@@ -44,15 +44,15 @@ class EachSourceIsParsedOnce(unittest.TestCase):
             (root / "emulators" / "core.yml").write_text(
                 "emulator: Core\nfiles:\n- name: a.bin\n  path: .variants/a.bin\n")
             loaded = []
-            real = validate_schemas.yaml_load
-            with mock.patch.object(validate_schemas, "REPO_ROOT", root), \
-                    mock.patch.object(validate_schemas, "yaml_load",
+            real = sources.yaml_load
+            with mock.patch("core.paths.REPO_ROOT", root), \
+                    mock.patch.object(sources, "yaml_load",
                                       side_effect=lambda h: loaded.append(h.name) or real(h)):
-                validate_schemas._validate_yaml_directory(root / "emulators", "emulator.schema.json")
-                validate_schemas._unknown_data_dir_refs()
-                layout = validate_schemas._repository_layout_in_profiles()
+                sourcetree.validate_yaml_directory(root / "emulators", "emulator.schema.json")
+                sourcetree.unknown_data_dir_refs()
+                layout = sourcetree.repository_layout_in_profiles()
         # _data_dirs.yml is read by model.registry.load_data_dir_registry, so
-        # only the profile passes through validate_schemas' own loader.
+        # only the profile passes through the schema checks' own loader.
         self.assertEqual(sorted(Path(n).name for n in loaded), ["core.yml"])
         self.assertEqual(len(layout), 1)
 

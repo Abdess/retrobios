@@ -650,10 +650,10 @@ class APickReadsTheEntrySystems(unittest.TestCase):
 
     def test_the_schema_and_the_profile_list(self):
         try:
-            from scripts import validate_schemas
+            from schemas import profilechecks, validators
         except ImportError as exc:
             self.skipTest(f"validate_schemas needs jsonschema: {exc}")
-        validator = validate_schemas._validator("emulator.schema.json")
+        validator = validators.schema_validator("emulator.schema.json")
         root = Path(__file__).resolve().parents[1]
         base = {"emulator": "x", "type": "libretro", "systems": ["a", "b"]}
         both = {**base, "files": [{"name": "x.zip", "system": "a", "systems": ["a", "b"]}]}
@@ -663,16 +663,16 @@ class APickReadsTheEntrySystems(unittest.TestCase):
         fine = {**base, "files": [{"name": "x.zip", "systems": ["a", "b"]}]}
         self.assertEqual(list(validator.iter_errors(fine)), [])
         outside = {**base, "files": [{"name": "x.zip", "systems": ["a", "c"]}]}
-        found = validate_schemas._systems_outside_profile(root / "emulators" / "x.yml", outside)
+        found = profilechecks.systems_outside_profile(root / "emulators" / "x.yml", outside)
         self.assertEqual(len(found), 1)
         self.assertIn("system c", found[0])
         single = {**base, "files": [{"name": "x.zip", "system": "c"}]}
-        found = validate_schemas._systems_outside_profile(root / "emulators" / "x.yml", single)
+        found = profilechecks.systems_outside_profile(root / "emulators" / "x.yml", single)
         self.assertEqual(len(found), 1)
         self.assertIn("system c", found[0])
         listed = {**base, "files": [{"name": "x.zip", "system": "a"}]}
         self.assertEqual(
-            validate_schemas._systems_outside_profile(root / "emulators" / "x.yml", listed), []
+            profilechecks.systems_outside_profile(root / "emulators" / "x.yml", listed), []
         )
 
 

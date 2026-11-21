@@ -11,6 +11,7 @@ import tests
 
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
 import yaml
 
@@ -31,13 +32,17 @@ from resolve.launcherrefs import config_ref, is_feature_ref
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
-def schema_checks(test: unittest.TestCase):
-    """validate_schemas, or a skip: it needs jsonschema, the build does not."""
+def schema_checks(test: unittest.TestCase) -> SimpleNamespace:
+    """The launcher and config_reads checks, or a skip: they need jsonschema,
+    the build does not."""
     try:
-        import validate_schemas
+        from schemas import platformchecks, profilechecks
     except ImportError as exc:
         test.skipTest(f"validate_schemas needs jsonschema: {exc}")
-    return validate_schemas
+    return SimpleNamespace(
+        config_records_without_evidence=platformchecks.config_records_without_evidence,
+        config_reads_without_build=profilechecks.config_reads_without_build,
+    )
 
 
 def record(**fields: object) -> dict:
@@ -241,27 +246,27 @@ class StartScripts(unittest.TestCase):
 
 class Invariants(unittest.TestCase):
     def test_a_config_record_without_its_platform_links_is_an_error(self) -> None:
-        _config_records_without_evidence = schema_checks(self)._config_records_without_evidence
+        config_records_without_evidence = schema_checks(self).config_records_without_evidence
         path = REPO_ROOT / "platforms" / "x.yml"
         bare = {k: v for k, v in record().items() if k not in ("installs", "overrides")}
         listed = record(source_ref="gen.cs:3, es_features.yml:9")
-        errors = _config_records_without_evidence(path, {"launchers": [record(), bare, listed]})
+        errors = config_records_without_evidence(path, {"launchers": [record(), bare, listed]})
         self.assertEqual(len(errors), 2)
         self.assertIn("without installs and overrides", errors[0])
         self.assertIn("choices_from holds it", errors[1])
 
     def test_reads_naming_a_platform_need_its_build(self) -> None:
-        _config_reads_without_build = schema_checks(self)._config_reads_without_build
+        config_reads_without_build = schema_checks(self).config_reads_without_build
         path = REPO_ROOT / "emulators" / "x.yml"
         reads = [{"file": "a.ini", "platforms": ["rocknix"], "source_ref": "a:1", "keys": []}]
-        self.assertEqual(len(_config_reads_without_build(path, {"config_reads": reads})), 1)
-        self.assertEqual(_config_reads_without_build(
+        self.assertEqual(len(config_reads_without_build(path, {"config_reads": reads})), 1)
+        self.assertEqual(config_reads_without_build(
             path, {"config_reads": reads, "pin_build": [{"platform": "rocknix"}]}
         ), [])
         pinned = [{**reads[0], "revision": "c" * 40, "revision_from": "the exe"}]
-        self.assertEqual(_config_reads_without_build(path, {"config_reads": pinned}), [])
+        self.assertEqual(config_reads_without_build(path, {"config_reads": pinned}), [])
         closed = [{**reads[0], "binary_sha256": "d" * 64, "revision_from": "the archive"}]
-        self.assertEqual(_config_reads_without_build(path, {"config_reads": closed}), [])
+        self.assertEqual(config_reads_without_build(path, {"config_reads": closed}), [])
 
 
 class ShippedBuild(unittest.TestCase):
@@ -395,13 +400,13 @@ class RepositoryRecords(unittest.TestCase):
                 )
 
     def test_every_config_record_carries_its_platform_links(self) -> None:
-        _config_records_without_evidence = schema_checks(self)._config_records_without_evidence
+        config_records_without_evidence = schema_checks(self).config_records_without_evidence
         for path in sorted((REPO_ROOT / "platforms").glob("*.yml")):
             if path.name.startswith("_"):
                 continue
             with self.subTest(platform=path.stem):
                 document = yaml.safe_load(path.read_text(encoding="utf-8"))
-                self.assertEqual(_config_records_without_evidence(path, document), [])
+                self.assertEqual(config_records_without_evidence(path, document), [])
 
 
 if __name__ == "__main__":

@@ -343,14 +343,14 @@ class ReadAndIndex(Workspace):
             from jsonschema import Draft202012Validator
         except ImportError:
             self.skipTest("jsonschema is not installed")
-        import validate_schemas
+        from schemas import measurements
 
-        self.assertEqual(validate_schemas._measurement_errors(self.tree), [])
+        self.assertEqual(measurements.measurement_errors(self.tree), [])
         lines = self.tree / mr.records_path("beta")
         record = json.loads(lines.read_text())
         record["kind"] = "guess"
         lines.write_text(mr.line_text(record) + "\n")
-        errors = validate_schemas._measurement_errors(self.tree)
+        errors = measurements.measurement_errors(self.tree)
         self.assertTrue(any("measurements/beta.jsonl:1" in e and "kind" in e for e in errors), errors)
         self.assertIsNotNone(Draft202012Validator)
 
@@ -375,20 +375,20 @@ class ReadAndIndex(Workspace):
     def test_a_version_4_record_needs_its_verdicts(self) -> None:
         if importlib.util.find_spec("jsonschema") is None:
             self.skipTest("jsonschema is not installed")
-        import validate_schemas
+        from schemas import measurements
 
         lines = self.tree / mr.records_path("beta")
         record = json.loads(lines.read_text())
         del record["variants"][0]["verdict"]
         del record["variants"][0]["repetitions"][0]["verdict_evidence"]
         lines.write_text(mr.line_text(record) + "\n")
-        errors = validate_schemas._measurement_errors(self.tree)
+        errors = measurements.measurement_errors(self.tree)
         self.assertTrue(any("'verdict' is a required property" in e for e in errors), errors)
         self.assertTrue(any("'verdict_evidence' is a required property" in e for e in errors), errors)
         old = {**record, "record_version": 3}
         lines.write_text(mr.line_text(old) + "\n")
         self.assertFalse(any("required property" in e
-                             for e in validate_schemas._measurement_errors(self.tree)))
+                             for e in measurements.measurement_errors(self.tree)))
 
 
 class AppendOnly(Workspace):

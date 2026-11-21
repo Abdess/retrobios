@@ -593,7 +593,7 @@ class ExpertRuns(Lists):
         from unittest import mock
 
         try:
-            import validate_schemas
+            from schemas import installs
         except ImportError as exc:
             self.skipTest(f"validate_schemas needs jsonschema: {exc}")
 
@@ -603,8 +603,8 @@ class ExpertRuns(Lists):
                 json.dumps({**LIST, "truth_files": None}), encoding="utf-8")
             path = Path(root) / "install" / "standalone" / "retroarch.json"
             path.write_text(json.dumps(LAYOUTS), encoding="utf-8")
-            with mock.patch.object(validate_schemas, "REPO_ROOT", Path(root)):
-                self.assertEqual(validate_schemas._semantic_standalone_checks(path, LAYOUTS),
+            with mock.patch("core.paths.REPO_ROOT", Path(root)):
+                self.assertEqual(installs.semantic_standalone_checks(path, LAYOUTS),
                                  [])
 
     def test_a_layout_file_missing_or_unreachable_refuses_on_one_line(self):

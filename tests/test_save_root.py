@@ -180,12 +180,12 @@ class ThePlatformNamesItsSaveDirectory(unittest.TestCase):
                          "userdata-saves/atari2600/stella/KVS1.WAV")
         self.assertEqual(SaveLayout("saves", True).in_pack, "saves")
         try:
-            from validate_schemas import _bios_tree_below
+            from schemas.registry import bios_tree_below
         except ImportError:
             self.skipTest("validate_schemas needs jsonschema")
-        self.assertEqual(_bios_tree_below("batocera", "saves"),
+        self.assertEqual(bios_tree_below("batocera", "saves"),
                          "saves/dolphin-emu/Triforce/segaboot.gcm")
-        self.assertEqual(_bios_tree_below("batocera", "userdata-saves"), "")
+        self.assertEqual(bios_tree_below("batocera", "userdata-saves"), "")
 
     def test_the_systems_a_core_runs_for(self):
         from packs.paths import libretro_systems
@@ -750,14 +750,14 @@ class TheInstallerWritesThem(unittest.TestCase):
 class TheProfilesFollowTheContract(unittest.TestCase):
     def test_every_save_dir_entry_has_a_library_name(self):
         try:
-            from validate_schemas import _save_dir_without_library_name
+            from schemas.profilechecks import save_dir_without_library_name
         except ImportError:
             self.skipTest("validate_schemas needs jsonschema")
 
         for path in sorted((REPO_ROOT / "emulators").glob("*.yml")):
             document = yaml.safe_load(path.read_text(encoding="utf-8"))
             with self.subTest(profile=path.name):
-                self.assertEqual(_save_dir_without_library_name(path, document), [])
+                self.assertEqual(save_dir_without_library_name(path, document), [])
 
     def test_azahar_reads_its_user_folder_below_the_save_directory(self):
         profile = yaml.safe_load((REPO_ROOT / "emulators" / "azahar.yml").read_text())
@@ -769,11 +769,11 @@ class TheProfilesFollowTheContract(unittest.TestCase):
 
     def test_the_registry_blocks(self):
         try:
-            from validate_schemas import _save_directory_blocks
+            from schemas.registry import save_directory_blocks
         except ImportError:
             self.skipTest("validate_schemas needs jsonschema")
 
-        self.assertEqual(_save_directory_blocks(), [])
+        self.assertEqual(save_directory_blocks(), [])
 
     def test_the_published_retroarch_list_places_azahar(self):
         manifest = json.loads((REPO_ROOT / "install" / "retroarch.json").read_text())

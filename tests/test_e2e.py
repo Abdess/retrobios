@@ -7018,19 +7018,19 @@ class OneOfASearchList(unittest.TestCase):
 
     @unittest.skipUnless(HAS_JSONSCHEMA, "validate_schemas needs jsonschema")
     def test_schema_refuses_a_set_split_on_required(self):
-        from validate_schemas import _group_requirement_split
+        from schemas.profilechecks import group_requirement_split
         from core.paths import REPO_ROOT
 
         path = REPO_ROOT / "emulators" / "seq.yml"
         own_value = {"groups": {"g": {"required": True}},
                      "files": [{"name": "a", "group": "g", "required": False},
                                {"name": "b", "group": "g"}]}
-        self.assertEqual(len(_group_requirement_split(path, own_value)), 1)
+        self.assertEqual(len(group_requirement_split(path, own_value)), 1)
         undeclared_set = {"files": [{"name": "a", "group": "g"}]}
-        self.assertEqual(len(_group_requirement_split(path, undeclared_set)), 1)
+        self.assertEqual(len(group_requirement_split(path, undeclared_set)), 1)
         unused = {"groups": {"g": {"required": True}}, "files": [{"name": "a"}]}
-        self.assertEqual(len(_group_requirement_split(path, unused)), 1)
-        self.assertEqual(_group_requirement_split(path, self.raw), [])
+        self.assertEqual(len(group_requirement_split(path, unused)), 1)
+        self.assertEqual(group_requirement_split(path, self.raw), [])
 
     def test_a_shared_fallback_takes_its_requirement_from_its_sets(self):
         """pom2 falls back on apple2e.rom for the //e it boots by default

@@ -35,7 +35,7 @@ sys.exit(0 if result.wasSuccessful() else 1)
 """
 
 
-IMPORTS_SCHEMA_CODE = re.compile(r"^\s*(?:import|from)\s+(?:jsonschema|validate_schemas)\b", re.M)
+IMPORTS_SCHEMA_CODE = re.compile(r"^\s*(?:import|from)\s+(?:jsonschema|validate_schemas|schemas)\b", re.M)
 
 
 class SuiteWithoutJsonschema(unittest.TestCase):
@@ -91,7 +91,8 @@ def _runtime_nodes(node: ast.AST) -> Iterator[ast.AST]:
 
 def _foreign_imports(source: str, file_name: str, local: set[str]) -> list[str]:
     """The top-level packages a script imports at run time beyond the
-    standard library, pyyaml and the repository's own modules."""
+    standard library, pyyaml and the repository's own modules. ``file_name``
+    is the path under scripts/."""
     allowed = {"yaml"}
     found = []
     for node in _runtime_nodes(ast.parse(source)):
@@ -104,7 +105,7 @@ def _foreign_imports(source: str, file_name: str, local: set[str]) -> list[str]:
         for name in names:
             if name in sys.stdlib_module_names or name in local or name in allowed:
                 continue
-            if name == "jsonschema" and file_name == "validate_schemas.py":
+            if name == "jsonschema" and file_name.startswith("schemas/"):
                 continue
             if MAINTENANCE_TOOLS.get(file_name) == name:
                 continue
@@ -114,9 +115,10 @@ def _foreign_imports(source: str, file_name: str, local: set[str]) -> list[str]:
 
 class ScriptsNeedOnlyPyyaml(unittest.TestCase):
     """The build scripts need the standard library and pyyaml. jsonschema is
-    validate_schemas.py's alone. CI installs jsonschema with its whole tree
-    (attrs, referencing, rpds-py), so an import of any of them would pass
-    there and fail for a contributor following the documented setup."""
+    the schemas package's alone, behind validate_schemas.py. CI installs
+    jsonschema with its whole tree (attrs, referencing, rpds-py), so an
+    import of any of them would pass there and fail for a contributor
+    following the documented setup."""
 
     def test_no_script_imports_another_package(self):
         scripts = Path(__file__).resolve().parents[1] / "scripts"
@@ -129,7 +131,8 @@ class ScriptsNeedOnlyPyyaml(unittest.TestCase):
         found = [
             f"{path.relative_to(scripts)}: {name}"
             for path in sorted(scripts.rglob("*.py"))
-            for name in _foreign_imports(path.read_text(encoding="utf-8"), path.name, local)
+            for name in _foreign_imports(path.read_text(encoding="utf-8"),
+                                         path.relative_to(scripts).as_posix(), local)
         ]
         self.assertEqual(found, [])
 

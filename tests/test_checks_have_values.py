@@ -20,10 +20,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 class ChecksHaveValues(unittest.TestCase):
     def setUp(self):
         try:
-            import validate_schemas
+            from schemas import profilechecks
         except ImportError as exc:
             self.skipTest(f"validate_schemas needs jsonschema: {exc}")
-        self.check = validate_schemas._checks_without_values
+        self.check = profilechecks.checks_without_values
 
     def test_a_valueless_check_is_named(self):
         path = REPO_ROOT / "emulators" / "x.yml"

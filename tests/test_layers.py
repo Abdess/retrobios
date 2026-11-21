@@ -43,13 +43,10 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     # The launcher archives are written by the pack member writer.
     "installer_build": frozenset({"packs"}),
     "devtools": frozenset(),
-    "freshness": frozenset(),
-    "orchestrate": frozenset(),
-    "schemas": frozenset(),
-    "collection": frozenset(),
-    "games": frozenset(),
     # A job's commit subjects are checked against the repository's commit rules.
     "unattended": frozenset({"devtools"}),
+    # The installer event schema is checked against the one the build writes.
+    "schemas": frozenset({"installer_build"}),
 }
 
 # Top-level files that stay whole at their path although packages import them:

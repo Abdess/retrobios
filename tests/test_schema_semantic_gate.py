@@ -17,6 +17,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 try:
     import validate_schemas
+    from schemas import documents, installs
 except ImportError as exc:
     validate_schemas = None
     IMPORT_ERROR = str(exc)
@@ -50,7 +51,7 @@ class SemanticManifestValidation(unittest.TestCase):
             )
 
             output = io.StringIO()
-            with mock.patch.object(validate_schemas, "REPO_ROOT", root), mock.patch.object(
+            with mock.patch("core.paths.REPO_ROOT", root), mock.patch.object(
                 sys, "argv", ["validate_schemas.py"]
             ), redirect_stdout(output):
                 result = validate_schemas.main()
@@ -85,10 +86,10 @@ class SemanticManifestValidation(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=REPO_ROOT) as directory:
             path = Path(directory) / "synthetic.json"
             path.write_text(json.dumps(manifest), encoding="utf-8")
-            errors = validate_schemas._validate_json_files(
+            errors = documents.validate_json_files(
                 [path],
                 "install-manifest.schema.json",
-                validate_schemas._semantic_install_checks,
+                installs.semantic_install_checks,
             )
 
         self.assertEqual(len(errors), 1)
@@ -105,7 +106,7 @@ class SemanticManifestValidation(unittest.TestCase):
         def errors(omitted: list[dict]) -> list[str]:
             manifest = {"files": [], "total_files": 0, "total_size": 0,
                         "omitted_files": omitted, "total_omitted": len(omitted)}
-            return [e for e in validate_schemas._semantic_install_checks(path, manifest)
+            return [e for e in installs.semantic_install_checks(path, manifest)
                     if "omitted destinations" in e]
 
         self.assertEqual(errors([omission("mame2015"), omission("mame2016")]), [])

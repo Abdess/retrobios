@@ -412,9 +412,9 @@ class CommittedIndex(unittest.TestCase):
         """A bumped profile kept the game-to-BIOS map of the old code."""
         from unittest import mock
 
-        import validate_schemas
+        from schemas import games
 
-        self.assertEqual(validate_schemas._arcade_pin_errors(), [])
+        self.assertEqual(games.arcade_pin_errors(), [])
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "games" / "arcade").mkdir(parents=True)
@@ -423,8 +423,8 @@ class CommittedIndex(unittest.TestCase):
                 f"source_commit: {'b' * 40}\ncore_version: '0.2'\n")
             (root / "games" / "arcade" / "core.json").write_text(json.dumps(
                 {"profile": "core", "core_version": "0.1", "source": {"commit": COMMIT}}))
-            with mock.patch.object(validate_schemas, "REPO_ROOT", root):
-                (error,) = validate_schemas._arcade_pin_errors()
+            with mock.patch("core.paths.REPO_ROOT", root):
+                (error,) = games.arcade_pin_errors()
         self.assertIn("read at aaaaaaaaaaaa", error)
         self.assertIn("core_version '0.1'", error)
         self.assertIn("arcade_parent_importer --profile core", error)

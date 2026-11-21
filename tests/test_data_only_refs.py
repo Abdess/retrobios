@@ -10,9 +10,9 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 try:
-    import validate_schemas
+    from schemas import citations, sources
 except ImportError as exc:
-    validate_schemas = None
+    citations = sources = None
     IMPORT_ERROR = str(exc)
 else:
     IMPORT_ERROR = ""
@@ -22,12 +22,12 @@ def _profile(ref: object) -> dict:
     return {"files": [{"name": "doom.wad", "source_ref": ref}]}
 
 
-@unittest.skipIf(validate_schemas is None, f"validate_schemas unavailable: {IMPORT_ERROR}")
+@unittest.skipIf(citations is None, f"the schema checks are unavailable: {IMPORT_ERROR}")
 class DataOnlySourceRefs(unittest.TestCase):
     path = REPO_ROOT / "emulators" / "synthetic.yml"
 
     def errors(self, ref: object) -> list[str]:
-        return validate_schemas._data_only_source_refs(self.path, _profile(ref))
+        return citations.data_only_source_refs(self.path, _profile(ref))
 
     def test_a_data_table_alone_is_refused(self):
         self.assertEqual(len(self.errors("wadsrc_extra/static/iwadinfo.txt:420, 437")), 1)
@@ -78,15 +78,15 @@ class DataOnlySourceRefs(unittest.TestCase):
 
     def test_an_excepted_profile_is_not_judged(self):
         path = REPO_ROOT / "emulators" / "synthetic.yml"
-        exceptions = validate_schemas.DATA_ONLY_REF_EXCEPTIONS
+        exceptions = citations.DATA_ONLY_REF_EXCEPTIONS
         exceptions["synthetic"] = "binary found nowhere"
         try:
-            self.assertEqual(validate_schemas._data_only_source_refs(path, _profile("history.txt:38")), [])
+            self.assertEqual(citations.data_only_source_refs(path, _profile("history.txt:38")), [])
         finally:
             del exceptions["synthetic"]
 
     def test_every_exception_names_a_profile_and_a_reason(self):
-        for name, reason in validate_schemas.DATA_ONLY_REF_EXCEPTIONS.items():
+        for name, reason in citations.DATA_ONLY_REF_EXCEPTIONS.items():
             with self.subTest(profile=name):
                 self.assertTrue((REPO_ROOT / "emulators" / f"{name}.yml").is_file())
                 self.assertTrue(reason.strip())
@@ -94,8 +94,8 @@ class DataOnlySourceRefs(unittest.TestCase):
     def test_the_profiles_cite_their_readers(self):
         errors: list[str] = []
         for path in sorted((REPO_ROOT / "emulators").glob("*.yml")):
-            errors.extend(validate_schemas._data_only_source_refs(
-                path, validate_schemas._load_source(path)))
+            errors.extend(citations.data_only_source_refs(
+                path, sources.load_source(path)))
         self.assertEqual(errors, [])
 
 
