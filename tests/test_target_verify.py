@@ -30,8 +30,7 @@ class CheckReadsTheTargetLikeTheBuild(unittest.TestCase):
     def test_a_platform_without_a_target_file(self):
         # Left out of a targeted --all run rather than built unfiltered, and
         # a run where no platform has the target is refused.
-        with tempfile.TemporaryDirectory() as platforms, \
-                contextlib.redirect_stdout(io.StringIO()), self.assertRaises(ValueError):
+        with tempfile.TemporaryDirectory() as platforms, self.assertRaises(ValueError):
             build_target_cores_cache(["recalbox"], "x86_64", platforms, is_all=True)
         # The build never packs such a platform under the target, so the
         # check refuses it too instead of reading the full pack.
@@ -262,9 +261,9 @@ class CrossReferenceReadsTheTargetAcrossPlatforms(unittest.TestCase):
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         with contextlib.redirect_stderr(io.StringIO()):
             tree = tree_scope(None, "switch", platforms_dir, profiles)
-            cache, kept = build_target_cores_cache(
-                list_registered_platforms(platforms_dir), "switch", platforms_dir, is_all=True,
-            )
+        cache, kept, _notes = build_target_cores_cache(
+            list_registered_platforms(platforms_dir), "switch", platforms_dir, is_all=True,
+        )
         self.assertEqual(tree.selected, kept)
         self.assertIsNone(tree.platform)
         expected: set[str] = set()

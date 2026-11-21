@@ -19,7 +19,7 @@ from core.cli import SourceUnreadable
 from core.github import github_token, _gh_cli_token
 from model.profiles import select_emulator_profiles, ProfileSelectionError
 from model.registry import list_registered_platforms
-from model.targets import load_target_config, build_target_cores_cache
+from model.targets import load_target_config, build_target_cores_cache, target_scope
 from exporter import diffreport
 import pipeline
 from orchestrate import guards, labels, prepare, runner
@@ -312,7 +312,13 @@ class AMistypedTargetEndsEveryToolAlike(unittest.TestCase):
         platforms = list_registered_platforms(str(REPO_ROOT / "platforms"))
         out, err = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
-            build_target_cores_cache(platforms, "switch", str(REPO_ROOT / "platforms"), is_all=True)
+            _cache, _kept, notes = build_target_cores_cache(
+                platforms, "switch", str(REPO_ROOT / "platforms"), is_all=True
+            )
+        self.assertEqual(out.getvalue() + err.getvalue(), "")
+        self.assertTrue(any(n.startswith("INFO: Skipping") for n in notes))
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            target_scope(platforms, "switch", str(REPO_ROOT / "platforms"), is_all=True)
         self.assertEqual(out.getvalue(), "")
         self.assertIn("INFO: Skipping", err.getvalue())
 

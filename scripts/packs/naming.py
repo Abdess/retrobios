@@ -242,7 +242,7 @@ def expected_pack_names(
     cache = None
     if target_name:
         try:
-            cache, pool = build_target_cores_cache(
+            cache, pool, _notes = build_target_cores_cache(
                 pool, target_name, platforms_dir, is_all=True
             )
         except ValueError:

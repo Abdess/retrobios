@@ -6957,12 +6957,11 @@ class AnUnknownTargetIsRefusedUnderAll(unittest.TestCase):
         from scripts.model.registry import list_registered_platforms
 
         platforms = list_registered_platforms(str(ROOT / "platforms"))
-        with contextlib.redirect_stdout(io.StringIO()):
-            with self.assertRaises(ValueError):
-                build_target_cores_cache(platforms, "swtich", str(ROOT / "platforms"), is_all=True)
-            _cache, kept = build_target_cores_cache(
-                platforms, "switch", str(ROOT / "platforms"), is_all=True
-            )
+        with self.assertRaises(ValueError):
+            build_target_cores_cache(platforms, "swtich", str(ROOT / "platforms"), is_all=True)
+        _cache, kept, _notes = build_target_cores_cache(
+            platforms, "switch", str(ROOT / "platforms"), is_all=True
+        )
         self.assertNotIn("bizhawk", kept)
         self.assertIn("retroarch", kept)
 

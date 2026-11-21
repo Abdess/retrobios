@@ -248,10 +248,11 @@ def build_target_cores_cache(
     target: str,
     platforms_dir: str,
     is_all: bool = False,
-) -> tuple[dict[str, set[str] | None], list[str]]:
+) -> tuple[dict[str, set[str] | None], list[str], list[str]]:
     """Build target cores cache for a list of platforms.
 
-    Returns (cache dict, list of platforms to keep after skipping failures).
+    Returns (cache dict, platforms kept after skipping failures, one note per
+    skipped platform for a command line to print).
     A platform without a targets file cannot honour the target and is left
     out with the others, never run unfiltered, and a target no platform knows
     is refused: `--all --target swtich` checked BizHawk and MiSTer whole and
@@ -282,10 +283,7 @@ def build_target_cores_cache(
         # The seventeen per-platform lines buried the one suggestion that
         # mattered: the refusal names the closest target across them all.
         raise ValueError(_unknown_target_message(target, platforms, platforms_dir))
-    # On stderr: slots --json printed them ahead of its document.
-    for note in notes:
-        print(note, file=sys.stderr)
-    return cache, kept
+    return cache, kept, notes
 
 
 def target_scope(
@@ -299,10 +297,16 @@ def target_scope(
     if not target:
         return {}, platforms
     try:
-        return build_target_cores_cache(platforms, target, platforms_dir, is_all=is_all)
+        cache, kept, notes = build_target_cores_cache(
+            platforms, target, platforms_dir, is_all=is_all
+        )
     except (FileNotFoundError, ValueError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         sys.exit(1)
+    # On stderr: slots --json printed them ahead of its document.
+    for note in notes:
+        print(note, file=sys.stderr)
+    return cache, kept
 
 
 def _unknown_target_message(target: str, platforms: list[str], platforms_dir: str) -> str:
