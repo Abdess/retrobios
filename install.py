@@ -8813,7 +8813,7 @@ def load_targets(plat: str, attempts: int = MAX_RETRIES,
     the list could not be read: a timeout says nothing about the platform,
     and answering "no targets" for it sent users to the full pack. A run
     without the network and with no list at hand fails with code 2, before
-    any file is written; a list the network did not bring lets the run go
+    any file is written. A list the network did not bring lets the run go
     on (fatal 0).
     """
     held = held_targets(plat)

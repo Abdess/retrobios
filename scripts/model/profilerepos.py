@@ -38,7 +38,7 @@ def pin_field(field: str) -> str:
 
 def declared_pin(profile: dict, field: str, mode: str = "") -> tuple[str, str]:
     """The commit `<field>_commit` declares for a build mode, and the field
-    it was read from; ('', origin) when the profile declares none.
+    it was read from, or ('', origin) when the profile declares none.
 
     A profile whose builds live in different repositories keys its pin by
     build mode, the way `ymir` keys `source` and `core_version`. Without a
