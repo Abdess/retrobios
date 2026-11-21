@@ -8,6 +8,7 @@ from functools import lru_cache
 
 from core.paths import DATA_DIRS_FILE, REPO_ROOT
 from model.registry import data_dir_registry_at
+from freshness.scrapers import rescrape_command
 
 DATA_DIRS_REGISTRY = REPO_ROOT / DATA_DIRS_FILE
 
@@ -43,18 +44,7 @@ def export_refresh(platform: str) -> list[str]:
 
 
 def _platform_command(subject: str, registry: dict[str, dict]) -> list[str] | None:
-    entry = registry.get(subject) or {}
-    scraper = entry.get("scraper")
-    if not scraper:
-        return None
-    return [
-        sys.executable,
-        "-m",
-        f"scripts.scraper.{scraper}_scraper",
-        "-o",
-        f"platforms/{subject}.yml",
-        *(str(a) for a in entry.get("rescrape_args") or ()),
-    ]
+    return rescrape_command("platforms", subject, f"platforms/{subject}.yml", registry)
 
 
 def _target_command(subject: str, registry: dict[str, dict]) -> list[str] | None:
@@ -62,17 +52,7 @@ def _target_command(subject: str, registry: dict[str, dict]) -> list[str] | None
     # scraper fixes that, a human writes `cores:` or _overrides.yml.
     if subject.endswith(" cores"):
         return None
-    entry = registry.get(subject) or {}
-    module = entry.get("target_scraper")
-    if not module:
-        return None
-    return [
-        sys.executable,
-        "-m",
-        f"scripts.scraper.targets.{module}_scraper",
-        "-o",
-        f"platforms/targets/{subject}.yml",
-    ]
+    return rescrape_command("targets", subject, f"platforms/targets/{subject}.yml")
 
 
 def _data_command(subject: str, registry: dict[str, dict]) -> list[str] | None:

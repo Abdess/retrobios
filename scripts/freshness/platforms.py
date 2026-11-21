@@ -13,6 +13,7 @@ from model.sources import source_yaml_file
 from freshness.findings import ERROR, OK, SKIPPED, STALE, UNKNOWN, Finding
 from freshness.platformdiff import diff_platform
 from freshness.rescrape import scrape_into_copy
+from freshness.scrapers import platform_scraper
 
 
 def _scrapable_platforms(platforms_dir: Path) -> list[tuple[str, str, Path]]:
@@ -28,33 +29,22 @@ def _scrapable_platforms(platforms_dir: Path) -> list[tuple[str, str, Path]]:
         if not path.is_file():
             continue
         config = source_yaml_file(path) or {}
-        scraper = (registry.get(name) or {}).get("scraper")
-        if not scraper or (config.get("inherits") and not config.get("source")):
+        module = platform_scraper(registry.get(name) or {})
+        if not module or (config.get("inherits") and not config.get("source")):
             continue
-        rows.append((name, f"scripts.scraper.{scraper}_scraper", path))
+        rows.append((name, module, path))
     return rows
-
-
-def rescrape_args(platforms_dir: Path, name: str) -> tuple[str, ...]:
-    """What a rescrape passes so the scraper reads upstream's moving head.
-
-    A scraper that rereads the revision its platform file pins by default
-    (RetroBat) names the ref to move to in the registry's rescrape_args.
-    """
-    registry = load_platform_registry(platforms_dir, required=True)
-    return tuple(str(a) for a in (registry.get(name) or {}).get("rescrape_args") or ())
 
 
 def check_platforms(platforms_dir: Path, workdir: Path, jobs: int) -> list[Finding]:
     rows = _scrapable_platforms(platforms_dir)
+    registry = load_platform_registry(platforms_dir, required=True)
     findings: list[Finding] = []
 
     def run(row: tuple[str, str, Path]) -> Finding:
-        name, module, path = row
+        name, _module, path = row
         try:
-            fresh, error = scrape_into_copy(
-                module, path, workdir, extra=rescrape_args(platforms_dir, name)
-            )
+            fresh, error = scrape_into_copy("platforms", name, path, workdir, registry)
         except subprocess.TimeoutExpired:
             return Finding("platforms", name, ERROR, detail="scraper timed out")
         if error:

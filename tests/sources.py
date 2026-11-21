@@ -94,7 +94,8 @@ COMMANDS = {
     "find_pinned_revision.py": ("acquire/history.py",),
     "check_freshness.py": (
         "freshness/findings.py", "freshness/platformdiff.py", "freshness/rescrape.py",
-        "freshness/platforms.py", "freshness/native.py", "freshness/targets.py",
+        "freshness/scrapers.py", "freshness/platforms.py", "freshness/native.py",
+        "freshness/targets.py",
         "freshness/romfolders.py", "freshness/coreinfo.py", "freshness/data.py",
         "freshness/catalogs.py", "freshness/ci.py", "freshness/pinbuilds.py",
         "freshness/profiles.py", "freshness/report.py",
@@ -102,6 +103,7 @@ COMMANDS = {
     "refresh_stale.py": (
         "freshness/stalejob.py", "freshness/stalefindings.py", "freshness/stalecommands.py",
         "freshness/staleplan.py", "freshness/stalerun.py", "freshness/stalereport.py",
+        "freshness/scrapers.py",
     ),
     "pipeline.py": (
         "orchestrate/labels.py", "orchestrate/results.py", "orchestrate/runner.py",

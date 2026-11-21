@@ -56,14 +56,15 @@ from freshness.platforms import _scrapable_platforms, emulatorjs_pin
 from freshness.profiles import check_profiles, summarize_profile_sync
 from freshness.report import exit_code, render, unknown_areas_message
 from freshness.romfolders import check_romfolders, romfolder_pin_drift, romfolder_sources
+from freshness.scrapers import rescrape_command, target_scrapers
 from freshness.targets import (
     _declared_cores,
-    _target_scrapers,
     _unresolved_findings,
     check_targets,
     profile_name_index,
     unresolved_target_cores,
 )
+from model.registry import load_platform_registry
 from model.safeparse import yaml_load
 from model.targets import platform_overrides
 from scripts.scraper import game_dat_importer
@@ -669,6 +670,25 @@ class RepositoryWiringTests(unittest.TestCase):
                 (REPO_ROOT / (module.replace(".", "/") + ".py")).is_file(), module
             )
 
+    def test_the_registry_names_the_target_scrapers_the_check_runs(self):
+        """refresh_stale and the check read the same scraper: a target file
+        the check rescrapes is never left to a human by the refresh."""
+        registry = load_platform_registry(REPO_ROOT / "platforms", required=True)
+        declared = {
+            name: f"scripts.scraper.targets.{entry['target_scraper']}_scraper"
+            for name, entry in registry.items() if (entry or {}).get("target_scraper")
+        }
+        self.assertEqual(declared, target_scrapers())
+
+    def test_the_check_and_the_refresh_run_one_scrape(self):
+        registry = {"retrobat": {"scraper": "retrobat", "rescrape_args": ["--revision", "master"]}}
+        self.assertEqual(
+            rescrape_command("platforms", "retrobat", "out.yml", registry)[1:],
+            ["-m", "scripts.scraper.retrobat_scraper", "-o", "out.yml", "--revision", "master"],
+        )
+        self.assertIsNone(rescrape_command("platforms", "lakka", "out.yml", {"lakka": {}}))
+        self.assertIsNone(rescrape_command("targets", "retrobat", "out.yml"))
+
     def test_inheriting_platforms_without_a_source_are_not_scraped(self):
         names = {name for name, _m, _p in _scrapable_platforms(REPO_ROOT / "platforms")}
         with (REPO_ROOT / "platforms" / "lakka.yml").open(encoding="utf-8") as fh:
@@ -747,7 +767,7 @@ class RepositoryWiringTests(unittest.TestCase):
         import tempfile
         from pathlib import Path as _Path
 
-        scraped = sorted(_target_scrapers())
+        scraped = sorted(target_scrapers())
         self.assertTrue(scraped)
         platform = scraped[0]
         with tempfile.TemporaryDirectory() as tmp:

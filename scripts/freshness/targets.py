@@ -11,10 +11,10 @@ from pathlib import Path
 from model.profiles import upstream_profile_index
 from model.sources import source_yaml_file
 from model.targets import apply_target_overrides, platform_overrides, read_target_overrides
-from scripts.scraper.targets import discover_target_scrapers
 from freshness.findings import ERROR, OK, SHOWN_NAMES, SKIPPED, STALE, UNKNOWN, Finding
 from freshness.platformdiff import diff_targets
 from freshness.rescrape import scrape_into_copy
+from freshness.scrapers import target_scrapers
 
 
 def profile_name_index(profiles: dict[str, dict]) -> dict[str, set[str]]:
@@ -42,14 +42,6 @@ def unresolved_target_cores(
     return {core: sorted(names) for core, names in sorted(unresolved.items())}
 
 
-def _target_scrapers() -> dict[str, str]:
-    """platform -> scraper module for every target scraper on disk."""
-    return {
-        platform: cls.__module__
-        for platform, cls in discover_target_scrapers().items()
-    }
-
-
 def check_targets(
     platforms_dir: Path, workdir: Path, profiles: dict[str, dict], jobs: int,
     offline: bool,
@@ -57,7 +49,7 @@ def check_targets(
     targets_dir = platforms_dir / "targets"
     overrides = read_target_overrides(targets_dir)
     index = profile_name_index(profiles)
-    scrapers = _target_scrapers()
+    scrapers = target_scrapers()
     findings: list[Finding] = []
     today = datetime.now(timezone.utc)
 
@@ -111,7 +103,7 @@ def check_targets(
             out.extend(_unresolved_findings(platform, missing))
             return out
         try:
-            fresh, error = scrape_into_copy(module, path, workdir)
+            fresh, error = scrape_into_copy("targets", platform, path, workdir)
         except subprocess.TimeoutExpired:
             return [Finding("targets", platform, ERROR, detail="scraper timed out")]
         if error:
