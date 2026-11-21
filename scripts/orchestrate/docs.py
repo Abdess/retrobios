@@ -5,8 +5,8 @@ from __future__ import annotations
 import argparse
 import shutil
 import sys
-from pathlib import Path
 
+from core.paths import REPO_ROOT
 from orchestrate import runner
 from orchestrate.labels import STEP_LABELS, skip_notice
 from orchestrate.results import SKIPPED
@@ -59,7 +59,7 @@ def docs_steps(args: argparse.Namespace, results: dict) -> bool:
     if args.skip_docs:
         skip_notice("render_site", "--skip-docs")
         results["render_site"] = SKIPPED
-    elif shutil.which("npm") is None or not Path("website/node_modules").is_dir():
+    elif shutil.which("npm") is None or not (REPO_ROOT / "website" / "node_modules").is_dir():
         skip_notice("render_site", "Node not set up: npm ci --prefix website")
         results["render_site"] = SKIPPED
     else:

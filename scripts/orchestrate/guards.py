@@ -6,7 +6,7 @@ import argparse
 import os
 from pathlib import Path
 
-from core.paths import PLATFORMS_DIR
+from core.paths import PLATFORMS_DIR, REPO_ROOT
 from model.registry import load_data_dir_registry
 
 
@@ -46,12 +46,16 @@ def refuse_offline_without_caches(
     On a fresh clone none is: --offline skips the refresh, and the run went
     through the database, verify and every pack before failing at the end
     of the build. Only an empty cache is refused here: with some cached, the
-    packs decide which ones they need and the build names the rest.
+    packs decide which ones they need and the build names the rest. A
+    relative cache is read from the repository root, where the steps run.
     """
     if not args.offline or args.skip_packs:
         return
     registry = load_data_dir_registry(platforms_dir)
-    if registry and not any(os.path.isdir(e.get("local_cache") or "") for e in registry.values()):
+    if registry and not any(
+        e.get("local_cache") and os.path.isdir(os.path.join(REPO_ROOT, e["local_cache"]))
+        for e in registry.values()
+    ):
         parser.error(
             "no data directory is cached and --offline skips their refresh: run "
             "python scripts/refresh_data_dirs.py once, or drop --offline"
@@ -66,7 +70,8 @@ def refuse_offline_export_without_originals(
 
     Seven formats carry code, so step 2e patches the platform's own file,
     which --offline does not fetch. On a fresh clone the database, verify
-    and the truth model were built before step 2e failed on every one.
+    and the truth model were built before step 2e failed on every one. A
+    relative cache is read from the repository root, where step 2e runs.
     """
     if not (args.offline and args.with_export):
         return
@@ -74,7 +79,7 @@ def refuse_offline_export_without_originals(
 
     lacking = sorted(
         name for name, exporter in discover_exporters().items()
-        if exporter.needs_original() and not any(Path(cache, name).glob("*"))
+        if exporter.needs_original() and not any(Path(REPO_ROOT, cache, name).glob("*"))
     )
     if lacking:
         parser.error(

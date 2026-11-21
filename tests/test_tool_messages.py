@@ -390,6 +390,20 @@ class AnOfflineRunWithNoCacheStopsFirst(unittest.TestCase):
             guards.refuse_offline_without_caches(parser, self._args(), tmp)
             parser.error.assert_not_called()
 
+    def test_a_relative_cache_is_read_from_the_repository_root(self):
+        """The registry writes data/<name>: started from scripts/, the run
+        looked for scripts/data/ and refused a checkout whose trees were cached."""
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "_data_dirs.yml").write_text(
+                "data_directories:\n  a:\n    local_cache: tests\n"
+            )
+            previous = os.getcwd()
+            self.addCleanup(os.chdir, previous)
+            os.chdir(REPO_ROOT / "scripts")
+            parser = mock.Mock()
+            guards.refuse_offline_without_caches(parser, self._args(), tmp)
+            parser.error.assert_not_called()
+
 
 class AnOfflineExportWithNoOriginalsStopsFirst(unittest.TestCase):
     """pipeline.py --offline --with-export, which tools.md listed as a
