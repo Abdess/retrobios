@@ -15,6 +15,7 @@ Recalbox verification logic:
 
 from __future__ import annotations
 
+from core import upstream
 from model.safeparse import parse_untrusted_xml
 
 from .base_scraper import BaseScraper, BiosRequirement, fetch_bytes, systems_from_requirements
@@ -250,6 +251,29 @@ class Scraper(BaseScraper):
         self.tag = tag or _fetch_gitlab_stable_tag()
         super().__init__(url=SOURCE_URL.format(tag=self.tag))
 
+    def system_folders(self) -> list[str]:
+        """The system folders of recalbox-romfs2 at the scraped tag.
+
+        An empty listing raises: written as is, it gave every board of the
+        targets scraper an empty core list.
+        """
+        import json
+
+        systems: list[str] = []
+        for page in range(1, upstream.MAX_TREE_PAGES + 1):
+            listing = json.loads(fetch_bytes(SYSTEMS_TREE_URL.format(tag=self.tag, page=page)))
+            systems += [
+                item["name"] for item in listing
+                if item.get("type") == "tree" and not item["name"].startswith(".")
+            ]
+            if len(listing) < upstream.TREE_PAGE_SIZE:
+                break
+        else:
+            raise RuntimeError(f"{SYSTEMS_DIR} at {self.tag} outruns the page cap")
+        if not systems:
+            raise RuntimeError(f"no Recalbox system found at {self.tag}")
+        return systems
+
     def _system_inis(self, systems: list[str]) -> list[str]:
         """Every system's system.ini at the tag, read in batches."""
         paths = [f"{SYSTEMS_DIR}/{system}/system.ini" for system in systems]
@@ -296,21 +320,7 @@ class Scraper(BaseScraper):
         Read from each system.ini of recalbox-romfs2 at the scraped tag: the
         systems ES lists and the cores a user can pick for each.
         """
-        import json
-
-        systems: list[str] = []
-        page = 1
-        while True:
-            listing = json.loads(fetch_bytes(SYSTEMS_TREE_URL.format(tag=self.tag, page=page)))
-            systems += [
-                item["name"] for item in listing
-                if item.get("type") == "tree" and not item["name"].startswith(".")
-            ]
-            if len(listing) < 100:
-                break
-            page += 1
-        if not systems:
-            raise RuntimeError(f"no Recalbox system found at {self.tag}")
+        systems = self.system_folders()
         cores: set[str] = set()
         standalone: set[str] = set()
         libretro: set[str] = set()

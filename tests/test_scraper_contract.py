@@ -242,6 +242,27 @@ class RecalboxReadsItsSystemsInBatches(unittest.TestCase):
         self.assertEqual(len(cores), 120)
 
 
+class AnEmptyRecalboxListingStopsTheTargets(unittest.TestCase):
+    """The targets scraper kept its own copy of the systems listing, without
+    the empty check: an empty answer wrote every board with no core."""
+
+    def test_the_targets_scraper_refuses_an_empty_listing(self):
+        from scraper import recalbox_scraper
+        from scraper.targets import recalbox_targets_scraper as targets
+
+        def fetch(url, data=None, headers=None):
+            if "path=configs" in url:
+                return b'[{"name": "recalbox-rpi4_64_defconfig"}]'
+            return b"[]"
+
+        scraper = targets.Scraper()
+        with mock.patch.object(scraper, "pinned_revision", lambda _name: "10.1.1"), \
+                mock.patch.object(targets, "fetch_bytes", fetch), \
+                mock.patch.object(recalbox_scraper, "fetch_bytes", fetch), \
+                self.assertRaisesRegex(RuntimeError, "no Recalbox system"):
+            scraper.fetch_targets()
+
+
 class EveryNamedScraperExists(unittest.TestCase):
     """The registry named lakka_targets, a scraper no file defines: a refresh
     of stale targets would have failed on its import."""

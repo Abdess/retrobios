@@ -117,24 +117,15 @@ class Fetcher:
         self, repo: upstream.Repo, sha: str, directory: str, *, recursive: bool, blobs: bool
     ) -> list[str]:
         directory = directory.strip("/")
-        paths: list[str] = []
-        for page in range(1, upstream.MAX_TREE_PAGES + 1):
-            url = (
-                f"{repo.api_base}/projects/{upstream.project_path(repo)}/repository/tree"
-                f"?ref={sha}&path={directory}&recursive={'true' if recursive else 'false'}"
-                f"&per_page={upstream.TREE_PAGE_SIZE}&page={page}"
-            )
-            payload = upstream.cached_api(url, self.cache_dir, self.offline)
-            if not isinstance(payload, list):
-                raise SourceError(f"{repo.slug}@{sha[:8]}: {directory} could not be listed")
-            paths.extend(
-                entry["path"] for entry in payload
-                if isinstance(entry, dict) and entry.get("path")
-                and (entry.get("type") == "blob" or not blobs)
-            )
-            if len(payload) < upstream.TREE_PAGE_SIZE:
-                return sorted(paths)
-        raise SourceError(f"{repo.slug}@{sha[:8]}: {directory} outruns the page cap")
+        entries, truncated = upstream.gitlab_tree_entries(
+            repo, sha, self.cache_dir, self.offline, path=directory, recursive=recursive
+        )
+        if truncated:
+            raise SourceError(f"{repo.slug}@{sha[:8]}: {directory} could not be listed whole")
+        return sorted(
+            entry["path"] for entry in entries
+            if entry.get("path") and (entry.get("type") == "blob" or not blobs)
+        )
 
 
 Parser = Callable[[dict, Fetcher], list[dict]]

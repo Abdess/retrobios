@@ -21,7 +21,7 @@ from datetime import datetime, timezone
 
 from . import BaseTargetScraper, target_cli
 from ..base_scraper import fetch_bytes, fetch_text
-from ..recalbox_scraper import SYSTEMS_TREE_URL, Scraper as PlatformScraper, board_cores
+from ..recalbox_scraper import Scraper as PlatformScraper, board_cores
 
 PLATFORM_NAME = "recalbox"
 
@@ -66,16 +66,7 @@ class Scraper(BaseTargetScraper):
         if not boards:
             raise RuntimeError(f"no recalbox-*_defconfig in configs/ at {tag}")
 
-        systems: list[str] = []
-        page = 1
-        while True:
-            entries = json.loads(fetch_bytes(SYSTEMS_TREE_URL.format(tag=tag, page=page)))
-            systems += [e["name"] for e in entries
-                        if e.get("type") == "tree" and not e["name"].startswith(".")]
-            if len(entries) < 100:
-                break
-            page += 1
-        inis = platform._system_inis(systems)
+        inis = platform._system_inis(platform.system_folders())
 
         targets: dict[str, dict] = {}
         for board, name in sorted(boards.items()):

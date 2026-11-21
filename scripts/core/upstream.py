@@ -1028,33 +1028,44 @@ TREE_PAGE_SIZE = 100
 MAX_TREE_PAGES = 50
 
 
-def _gitlab_tree(
-    repo: Repo, sha: str, cache_dir: str, offline: bool
-) -> tuple[list[str], bool]:
-    """GitLab serves its tree in pages, each page cached on its own URL.
+def gitlab_tree_entries(
+    repo: Repo, sha: str, cache_dir: str, offline: bool, *,
+    path: str | None = None, recursive: bool = True,
+) -> tuple[list[dict], bool]:
+    """The entries of a GitLab tree at a revision, and whether the listing
+    is truncated. GitLab serves its tree in pages, each page cached on its
+    own URL.
 
-    A page that cannot be read mid-walk reports the listing as truncated:
-    the paths already collected are real, but their absence proves nothing.
+    A page that cannot be read mid-walk, or the page cap, reports the
+    listing as truncated: the entries already collected are real, but an
+    absence proves nothing.
     """
-    paths: list[str] = []
+    entries: list[dict] = []
+    scope = "" if path is None else f"&path={path}"
     for page in range(1, MAX_TREE_PAGES + 1):
         url = (
             f"{repo.api_base}/projects/{project_path(repo)}/repository/tree"
-            f"?ref={sha}&recursive=true&per_page={TREE_PAGE_SIZE}&page={page}"
+            f"?ref={sha}{scope}&recursive={'true' if recursive else 'false'}"
+            f"&per_page={TREE_PAGE_SIZE}&page={page}"
         )
         payload = cached_api(url, cache_dir, offline)
         if not isinstance(payload, list):
-            return paths, True
-        paths.extend(
-            entry["path"]
-            for entry in payload
-            if isinstance(entry, dict)
-            and entry.get("type") == "blob"
-            and entry.get("path")
-        )
+            return entries, True
+        entries.extend(entry for entry in payload if isinstance(entry, dict))
         if len(payload) < TREE_PAGE_SIZE:
-            return paths, False
-    return paths, True
+            return entries, False
+    return entries, True
+
+
+def _gitlab_tree(
+    repo: Repo, sha: str, cache_dir: str, offline: bool
+) -> tuple[list[str], bool]:
+    entries, truncated = gitlab_tree_entries(repo, sha, cache_dir, offline)
+    paths = [
+        entry["path"] for entry in entries
+        if entry.get("type") == "blob" and entry.get("path")
+    ]
+    return paths, truncated
 
 
 def cache_gitlab_directory(
@@ -1183,24 +1194,12 @@ def list_gitlinks(
     once the tree is cached.
     """
     if repo.family == "gitlab":
-        links: dict[str, str] = {}
-        for page in range(1, MAX_TREE_PAGES + 1):
-            url = (
-                f"{repo.api_base}/projects/{project_path(repo)}/repository/tree"
-                f"?ref={sha}&recursive=true&per_page={TREE_PAGE_SIZE}&page={page}"
-            )
-            payload = cached_api(url, cache_dir, offline)
-            if not isinstance(payload, list):
-                break
-            links.update(
-                (entry["path"], entry["id"])
-                for entry in payload
-                if isinstance(entry, dict) and entry.get("type") == "commit"
-                and entry.get("path") and entry.get("id")
-            )
-            if len(payload) < TREE_PAGE_SIZE:
-                break
-        return links
+        entries, _truncated = gitlab_tree_entries(repo, sha, cache_dir, offline)
+        return {
+            entry["path"]: entry["id"]
+            for entry in entries
+            if entry.get("type") == "commit" and entry.get("path") and entry.get("id")
+        }
     tree_url = _tree_url(repo, sha)
     payload = cached_api(tree_url, cache_dir, offline) if tree_url else None
     if not isinstance(payload, dict):
