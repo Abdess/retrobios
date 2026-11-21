@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import os
 import re
 import zipfile
@@ -13,6 +12,7 @@ from typing import TYPE_CHECKING, TypedDict
 from core.hashing import compute_hashes
 from core.options import reject_unknown
 from model.declarations import declared_root
+from model.registry import load_versions
 from model.profiles import entry_system_ids, installed_data_refs
 from model.systems import norm_system_id
 from packs.archive import PackRecord, Placed, add_pack_member
@@ -340,10 +340,7 @@ def _recorded_version(ref: str, entry: dict, versions: dict[str, dict[str, dict]
         return {}
     recorded = Path(cache).parent / ".versions.json"
     if str(recorded) not in versions:
-        try:
-            versions[str(recorded)] = json.loads(recorded.read_text())
-        except FileNotFoundError:
-            versions[str(recorded)] = {}
+        versions[str(recorded)] = load_versions(recorded)
     found = versions[str(recorded)].get(ref)
     return found if isinstance(found, dict) else {}
 

@@ -173,7 +173,8 @@ class RefreshConcurrency(unittest.TestCase):
     def test_version_file_is_never_left_truncated(self):
         Path(self.versions).parent.mkdir(parents=True)
         Path(self.versions).write_text(json.dumps({"keep": {"sha": "1"}}))
-        with mock.patch.object(datadirs.json, "dump", side_effect=OSError("disk full")), self.assertRaises(OSError):
+        with mock.patch("core.artifacts.os.replace", side_effect=OSError("disk full")), \
+                self.assertRaises(OSError):
             datadirs._save_versions({"keep": {"sha": "2"}}, self.versions)
         self.assertEqual(json.loads(Path(self.versions).read_text()), {"keep": {"sha": "1"}})
 

@@ -12,6 +12,7 @@ from pathlib import Path
 from core.hashing import parse_hash_list
 from model import siteinputs
 from model.collection import manufacturer_slug
+from model.registry import load_versions
 from model.systemnames import system_name
 from packs.crossref import FileConsumers
 from sitegen.cards import PROVENANCE_LABELS, emulator_card_anchor, emulator_file_anchors
@@ -121,10 +122,7 @@ def data_directory_members(install_dir: Path = REPO_ROOT / "install") -> dict[st
 
 def data_directory_revisions(data_dir: Path = REPO_ROOT / "data") -> dict[str, dict]:
     """The revision each data directory was fetched at, as refresh_data_dirs records it."""
-    path = data_dir / ".versions.json"
-    if not path.is_file():
-        return {}
-    return json.loads(path.read_text(encoding="utf-8"))
+    return load_versions(data_dir / ".versions.json")
 
 
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}")

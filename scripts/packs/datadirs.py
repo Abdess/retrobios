@@ -15,7 +15,7 @@ import zipfile
 from collections.abc import Callable, Iterator
 from pathlib import Path
 
-from core.artifacts import file_lock as _file_lock, set_plain_mode
+from core.artifacts import file_lock as _file_lock, write_text_atomic
 from core.github import github_token
 from model.registry import VERSIONS_FILE, load_versions
 
@@ -113,24 +113,10 @@ def _save_versions(
     """Write the version file whole or not at all.
 
     Truncating in place let a concurrent reader load an empty file and die
-    on JSONDecodeError. The scratch file sits beside the target so the
-    rename stays on one filesystem.
+    on JSONDecodeError.
     """
-    path = Path(versions_path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    handle, scratch = tempfile.mkstemp(
-        dir=path.parent, prefix=f".{path.name}.", suffix=".tmp"
-    )
-    try:
-        with os.fdopen(handle, "w") as f:
-            json.dump(versions, f, indent=2, sort_keys=True)
-            f.write("\n")
-        set_plain_mode(scratch)
-        os.replace(scratch, path)
-    except BaseException:
-        with contextlib.suppress(OSError):
-            os.unlink(scratch)
-        raise
+    Path(versions_path).parent.mkdir(parents=True, exist_ok=True)
+    write_text_atomic(versions_path, json.dumps(versions, indent=2, sort_keys=True) + "\n")
 
 
 def _record_version(key: str, record: dict, versions_path: str) -> None:

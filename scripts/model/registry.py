@@ -87,9 +87,9 @@ def list_release_pack_platforms(platforms_dir: str = PLATFORMS_DIR) -> list[str]
 VERSIONS_FILE = "data/.versions.json"
 
 
-def load_versions(versions_path: str = VERSIONS_FILE) -> dict[str, dict]:
+def load_versions(versions_path: str | os.PathLike[str] = VERSIONS_FILE) -> dict[str, dict]:
+    """What refresh_data_dirs recorded of each tree's last fetch."""
     path = Path(versions_path)
-    if not path.exists():
+    if not path.is_file():
         return {}
-    with open(path) as f:
-        return json.load(f)
+    return json.loads(path.read_text(encoding="utf-8"))
