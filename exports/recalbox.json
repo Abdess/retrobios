@@ -7,7 +7,7 @@
   "files": [
     "es_bios.xml"
   ],
-  "summary": "357 kept, 90 files added, 2 hashes updated to the emulator source, 129 required flags aligned with the code, 1 md5 list written, any listed value passes",
+  "summary": "357 kept, 90 files added, 2 hashes updated to the emulator source, 131 required flags aligned with the code, 1 md5 list written, any listed value passes",
   "counts": {
     "kept": 357,
     "added": 90,
@@ -15,6 +15,15 @@
     "not_kept": 0
   },
   "changes": [
+    {
+      "kind": "required_aligned",
+      "system": "amiga600",
+      "name": "kick33180.A500",
+      "destination": "amiga/bios/kick33180.A500",
+      "field": "required",
+      "old": true,
+      "new": false
+    },
     {
       "kind": "required_aligned",
       "system": "amiga600",
@@ -332,6 +341,15 @@
         "md5": "40cdf89f35b68cfefd4df5fb0256e02f",
         "required": false
       }
+    },
+    {
+      "kind": "required_aligned",
+      "system": "amiga1200",
+      "name": "kick39106.A1200",
+      "destination": "amiga/bios/kick39106.A1200",
+      "field": "required",
+      "old": true,
+      "new": false
     },
     {
       "kind": "required_aligned",
@@ -2288,7 +2306,7 @@
   "sizes_updated": [],
   "sizes_removed": [],
   "hashes_cleared": [],
-  "required_aligned": 129,
+  "required_aligned": 131,
   "withheld": [],
   "found_by_content": 374,
   "unattributed": [],

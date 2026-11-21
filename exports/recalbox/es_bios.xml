@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <biosList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="es_bios.xsd">
   <system fullname="Amiga 600 (ECS/OCS)" platform="amiga600">
-    <bios path="amiga/bios/kick33180.A500"     md5="85ad74194e87c08904327de1a9443b7a" core="amiberry" />
+    <bios path="amiga/bios/kick33180.A500"     md5="85ad74194e87c08904327de1a9443b7a" core="amiberry" mandatory="false" />
     <bios path="amiga/bios/kick34005.A500"     md5="82a21c1890cae844b3df741f2762d48d" core="amiberry,libretro/amiberry,libretro/uae,libretro/uae4arm,libretro/uae4all" />
     <bios path="amiga/bios/kick37175.A500"     md5="dc10d7bdd1b6f450773dfb558477c230" core="amiberry,libretro/uae" mandatory="false" />
     <bios path="amiga/bios/kick40063.A600"     md5="e40a5dfb3d017ba8779faba30cbd1c8e" mandatory="false" core="amiberry,libretro/amiberry,libretro/uae,libretro/uae4arm" />
@@ -34,7 +34,7 @@
     <bios path="uae_data/drive_snatch_LOUD.wav" md5="40cdf89f35b68cfefd4df5fb0256e02f" core="libretro/puae,libretro/puae2021" mandatory="false" />
   </system>
   <system fullname="Amiga 1200 (AGA)" platform="amiga1200">
-    <bios path="amiga/bios/kick39106.A1200" md5="b7cc148386aa631136f510cd29e42fc3" core="amiberry" />
+    <bios path="amiga/bios/kick39106.A1200" md5="b7cc148386aa631136f510cd29e42fc3" core="amiberry" mandatory="false" />
     <bios path="amiga/bios/kick40068.A1200" md5="646773759326fbac3b2311fd8c8793ee" core="amiberry,libretro/amiberry,libretro/uae,libretro/uae4arm" />
     <bios path="amiga/bios/kick40068.A4000" md5="9bdedde6a4f33555b4a270c8ca53297d" core="amiberry,libretro/amiberry,libretro/uae" note="This bios is required only for A4000 emulation" mandatory="false" />
   </system>

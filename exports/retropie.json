@@ -8,7 +8,7 @@
     "scriptmodules/emulators/quasi88.sh",
     "scriptmodules/libretrocores/lr-flycast.sh"
   ],
-  "summary": "3 packages updated. Left as is: amiberry, dgen, gpsp, lr-freechaf and 2 more, which no profiled core matches. Left as is: lr-fbneo, lr-flycast-dev, lr-fmsx, pifba, whose help text lists no files of that system to add to. Left as is: xm7, whose help text names a file no profile documents yet (dicrom.rom, extsub.rom, fbasic30.rom, fddseek.wav, initiate.rom, relay_on.wav, relayoff.wav, subsys_a.rom, subsys_b.rom, subsys_c.rom, subsyscg.rom). Left as is: sdltrs, whose help text names a file no profile documents yet (level3.rom, level4.rom, level4p.rom). Left as is: lr-opera, whose help text names a file no profile documents yet (panazf10.bin)",
+  "summary": "3 packages updated. Left as is: dgen, gpsp, lr-freechaf, openmsx and 1 more, which no profiled core matches. Left as is: lr-fbneo, lr-flycast-dev, lr-fmsx, pifba, whose help text lists no files of that system to add to. Left as is: xm7, whose help text names a file no profile documents yet (dicrom.rom, extsub.rom, fbasic30.rom, fddseek.wav, initiate.rom, relay_on.wav, relayoff.wav, subsys_a.rom, subsys_b.rom, subsys_c.rom, subsyscg.rom). Left as is: sdltrs, whose help text names a file no profile documents yet (level3.rom, level4.rom, level4p.rom). Left as is: lr-opera, whose help text names a file no profile documents yet (panazf10.bin)",
   "counts": null,
   "changes": [
     {
