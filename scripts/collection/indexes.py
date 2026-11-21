@@ -27,6 +27,18 @@ def _path_suffixes(rel_path: str) -> list[str]:
     return ["/".join(parts[-depth:]) for depth in range(len(parts), 1, -1)]
 
 
+def _index_suffixes(
+    by_path_suffix: dict[str, list[str]], path: str, name: str, sha1: str
+) -> None:
+    """File a content under every tail of one of its paths but its bare name."""
+    for suffix in _path_suffixes(path):
+        if suffix == name:
+            continue
+        held = by_path_suffix.setdefault(suffix, [])
+        if sha1 not in held:
+            held.append(sha1)
+
+
 def build_indexes(files: dict, aliases: dict) -> dict:
     """Build secondary indexes for fast lookup."""
     by_md5: dict[str, str] = {}
@@ -47,13 +59,7 @@ def build_indexes(files: dict, aliases: dict) -> dict:
         by_sha256[entry["sha256"]] = sha1
 
         # Path suffix index for regional variant resolution
-        for suffix in _path_suffixes(entry["path"]):
-            if suffix == name:
-                continue
-            if suffix not in by_path_suffix:
-                by_path_suffix[suffix] = []
-            if sha1 not in by_path_suffix[suffix]:
-                by_path_suffix[suffix].append(sha1)
+        _index_suffixes(by_path_suffix, entry["path"], name, sha1)
 
     # Add alias names to by_name index (aliases have different filenames for same SHA1)
     for sha1, alias_list in aliases.items():
@@ -64,13 +70,7 @@ def build_indexes(files: dict, aliases: dict) -> dict:
             if sha1 not in by_name[name]:
                 by_name[name].append(sha1)
             # Also index alias paths in by_path_suffix
-            for suffix in _path_suffixes(alias["path"]):
-                if suffix == name:
-                    continue
-                if suffix not in by_path_suffix:
-                    by_path_suffix[suffix] = []
-                if sha1 not in by_path_suffix[suffix]:
-                    by_path_suffix[suffix].append(sha1)
+            _index_suffixes(by_path_suffix, alias["path"], name, sha1)
 
     return {
         "by_md5": by_md5,
