@@ -115,7 +115,7 @@ RetroDECK: 2007/2008 OK, 1 untested [md5]
   Game data: 5146 in pack, 51 missing (--verbose lists them)
   Game data held but not packed: 11 (installed with its emulator)
   Launcher records unproven: 3 (--verbose lists them)
-  No external files: 81 cores (--verbose lists them)
+  No external files: 82 cores (--verbose lists them)
   Ground truth: 109/2008 files have emulator validation (5%)
     441 platform-only (no emulator profile)
 ```

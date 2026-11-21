@@ -39,9 +39,8 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   model/                 data loading: database, platforms, registry, profiles, targets, catalogues
   resolve/               from declarations to files: content checks, resolution, layouts, cores, truth
   packs/                 pack building and verification: selection, archives, manifests, coverage
-  collection/            upkeep of bios/: duplicates, the MAME clone map, bit flips found and repaired
-  profiling/             emulator profiles confronted with their upstream source (profile_sync.py)
-  collection/            the scan of bios/ into database.json: digests, aliases, indexes
+  collection/            bios/ itself: the scan into database.json (digests, aliases, indexes),
+                         duplicates, the MAME clone map, bit flips found and repaired
   profiling/             emulator profiles confronted with their upstream source (profile_sync.py,
                          fileless_audit.py, mame_ref_audit.py)
   romrecipes/            romset identification, rebuilt pinned archives, each archive's recipe
@@ -51,15 +50,15 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   scraper/targets/       hardware target scrapers (one *_targets_scraper.py per platform)
   exporter/              native format exporters (batocera, recalbox, emudeck...), the truth diff
   sitegen/               the site and README generators: pages, navigation, data files
-  probes/                real-condition runs: the campaign, the pack and region probes
-  release/               the release record, its notes, the checks of its assets and the pack downloader
   probes/                real-condition runs: the campaign, the pack, region and standalone probes
+  release/               the release record, its notes, the checks of its assets and the pack downloader
   installer_build/       install.py from installer/, its pins, launchers and PyPI package
   schemas/               the data contracts behind validate_schemas.py: schemas and semantic invariants
   devtools/              the commit message rules, the checks of a pull request, the test
                          runner, the disk cleanup and the bios/ migration
   unattended/            the job registry, worktree, CI breaker and units behind autorun.py
-  freshness/             each transcribed layer against its upstream, one module per area (check_freshness.py), and the refresh of each stale row (refresh_stale.py)
+  freshness/             each transcribed layer against its upstream (check_freshness.py) and the
+                         refresh of each stale row (refresh_stale.py)
   orchestrate/           the pipeline's steps in order and the comparisons of step 5 (pipeline.py)
 install/                 JSON install manifests per platform
   targets/               JSON target manifests per platform (cores per architecture)
