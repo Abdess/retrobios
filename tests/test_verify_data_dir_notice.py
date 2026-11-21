@@ -18,7 +18,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import generate_db
+from collection.indexes import build_indexes
 from packs.report import print_platform_result
 from packs.coverage import verify_platform
 
@@ -32,7 +32,7 @@ class UncachedDataDirectoryNotice(unittest.TestCase):
         os.chdir(self._tmp.name)
         Path("emulators").mkdir()
         Path("data/present").mkdir(parents=True)
-        self.db = {"files": {}, "indexes": generate_db.build_indexes({}, {})}
+        self.db = {"files": {}, "indexes": build_indexes({}, {})}
         self.config = {
             "platform": "Tree", "verification_mode": "md5",
             "systems": {"msx": {"files": [{

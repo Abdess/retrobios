@@ -75,7 +75,7 @@ class SystemAndEmulatorPacksKeepTheirNames(unittest.TestCase):
         import yaml
 
         from model.profiles import emulator_profiles_cache
-        import generate_db
+        from collection.indexes import build_indexes
         from packs import emulatorpack
 
         with tempfile.TemporaryDirectory() as directory:
@@ -92,7 +92,7 @@ class SystemAndEmulatorPacksKeepTheirNames(unittest.TestCase):
                 "md5": hashlib.md5(payload).hexdigest(),
                 "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "0",
             }}
-            db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+            db = {"files": files, "indexes": build_indexes(files, {})}
             (root / "emulators" / "triforce.yml").write_text(yaml.dump({
                 "emulator": "Triforce", "type": "libretro", "cores": ["triforce"],
                 "systems": ["sega-triforce"],

@@ -21,7 +21,7 @@ import unittest
 import zlib
 from pathlib import Path
 
-import generate_db
+from collection.indexes import build_indexes, proven_name_index
 from resolve.localfile import resolve_local_file
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -49,10 +49,10 @@ class ProvenNameIndex(unittest.TestCase):
             hashlib.sha1(RETAIL).hexdigest(): record("bios/N/DSi/biosdsi7.bin", RETAIL),
             hashlib.sha1(OTHER).hexdigest(): record("bios/X/Y/other.bin", OTHER),
         }
-        self.indexes = generate_db.build_indexes(self.files, {})
+        self.indexes = build_indexes(self.files, {})
 
     def index(self, declarations: list[dict]) -> dict:
-        return generate_db.proven_name_index(self.files, self.indexes, declarations)
+        return proven_name_index(self.files, self.indexes, declarations)
 
     def test_name_points_at_the_proven_dump_beside_it(self):
         declared = [{"name": "dsi_bios7.bin", "md5": hashlib.md5(RETAIL).hexdigest()}]
@@ -95,13 +95,13 @@ class HashlessEntryTakesTheProvenDump(unittest.TestCase):
             hashlib.sha1(DEVKIT).hexdigest(): record("bios/N/DSi/dsi_bios7.bin", DEVKIT),
             hashlib.sha1(RETAIL).hexdigest(): record("bios/N/DSi/biosdsi7.bin", RETAIL),
         }
-        indexes = generate_db.build_indexes(files, {})
+        indexes = build_indexes(files, {})
         db = {"files": files, "indexes": indexes}
         entry = {"name": "dsi_bios7.bin", "size": 64}
         self.assertEqual(
             resolve_local_file(entry, db)[0], "bios/N/DSi/dsi_bios7.bin"
         )
-        indexes["by_proven_name"] = generate_db.proven_name_index(
+        indexes["by_proven_name"] = proven_name_index(
             files, indexes,
             [{"name": "dsi_bios7.bin", "md5": hashlib.md5(RETAIL).hexdigest()}],
         )

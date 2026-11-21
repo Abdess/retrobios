@@ -26,7 +26,7 @@ import yaml
 from model.platforms import _platform_config_cache
 from tests.sources import script_source
 from model.profiles import emulator_profiles_cache
-import generate_db
+from collection.indexes import build_indexes
 from packs import archive
 from packs import emulatorpack
 from packs import platformpack
@@ -57,7 +57,7 @@ class ReleaseAssetNotCached(unittest.TestCase):
             "sha1": SHA1, "md5": hashlib.md5(PAYLOAD).hexdigest(),
             "sha256": hashlib.sha256(PAYLOAD).hexdigest(), "crc32": "00000001",
         }}
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         self.config = {
             "platform": "Big", "verification_mode": self.mode,
             "systems": {"sys": {"files": [{

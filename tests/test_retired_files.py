@@ -16,6 +16,7 @@ import unittest
 from pathlib import Path
 
 from model import retired as model_retired
+from tests.sources import script_source
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -62,7 +63,7 @@ class WhatLeftIsRecorded(unittest.TestCase):
             self.assertEqual(model_retired.update(path, self.old, self.new, "2026-10-23"), 0)
             record = json.loads(path.read_text())["files"]
             self.assertEqual(record[OLD]["left"], "2026-10-22")
-        source = (REPO_ROOT / "scripts" / "generate_db.py").read_text(encoding="utf-8")
+        source = script_source("generate_db.py")
         self.assertIn("retired.update(", source)
 
 

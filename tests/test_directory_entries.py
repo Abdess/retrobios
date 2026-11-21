@@ -27,7 +27,8 @@ except ImportError:
     jsonschema = None
 from model.profiles import load_emulator_profiles, emulator_profiles_cache
 from resolve.directories import directory_members
-import generate_db
+from collection.indexes import build_indexes
+from collection.scan import should_skip
 from packs import emulatorpack
 from packs import manifest as packs_manifest
 from packs import platformpack
@@ -116,7 +117,7 @@ class DirectoryFixture(unittest.TestCase):
 
     def _db(self) -> dict:
         """The index generate_db builds, over files stored where the test put them."""
-        indexes = generate_db.build_indexes(self.files, {})
+        indexes = build_indexes(self.files, {})
         stored = {
             sha1: {**record, "path": str(self.root / record["path"])}
             for sha1, record in self.files.items()
@@ -393,9 +394,9 @@ class CollectionScanAndIgnoreRules(unittest.TestCase):
         The scan dropped every dot-directory but `.variants`, so 695 files
         of a collected tree could not enter the database."""
         self.assertFalse(
-            generate_db.should_skip(Path("Game Engines/cdogs/data/.wolf3d/N3D.json"))
+            should_skip(Path("Game Engines/cdogs/data/.wolf3d/N3D.json"))
         )
-        self.assertFalse(generate_db.should_skip(Path("Sony/.variants/scph.bin.1234")))
+        self.assertFalse(should_skip(Path("Sony/.variants/scph.bin.1234")))
 
     def test_hidden_files_and_tooling_directories_stay_out(self):
         for skipped in (
@@ -404,7 +405,7 @@ class CollectionScanAndIgnoreRules(unittest.TestCase):
             ".cache/large/file.bin",
             ".git/config",
         ):
-            self.assertTrue(generate_db.should_skip(Path(skipped)), skipped)
+            self.assertTrue(should_skip(Path(skipped)), skipped)
 
     def test_an_ignored_file_under_bios_is_a_registered_release_asset(self):
         """`.gitignore` is the register of release assets, path by path. A

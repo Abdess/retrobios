@@ -1051,7 +1051,7 @@ class AHeldFileTheInstallerCannotFetch(unittest.TestCase):
         from model import profiles
         from model.platforms import _platform_config_cache
         from model.profiles import emulator_profiles_cache
-        import generate_db
+        from collection.indexes import build_indexes
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
@@ -1075,7 +1075,7 @@ class AHeldFileTheInstallerCannotFetch(unittest.TestCase):
         )
         registered.start()
         self.addCleanup(registered.stop)
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         Path("platforms").mkdir()
         Path("platforms/p.yml").write_text(json.dumps({
             "platform": "P", "version": "2.1", "verification_mode": "existence", "cores": ["core"],
@@ -1132,7 +1132,7 @@ class AStandaloneLayoutBelowTheBiosFolder(unittest.TestCase):
         from model import profiles
         from model.platforms import _platform_config_cache
         from model.profiles import emulator_profiles_cache
-        import generate_db
+        from collection.indexes import build_indexes
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
@@ -1149,7 +1149,7 @@ class AStandaloneLayoutBelowTheBiosFolder(unittest.TestCase):
                            "md5": hashlib.md5(payload).hexdigest(),
                            "sha256": hashlib.sha256(payload).hexdigest(),
                            "crc32": "00000001"}
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         Path("platforms").mkdir()
         Path("platforms/p.yml").write_text(json.dumps({
             "platform": "P", "version": "2.1", "verification_mode": "existence",
@@ -1215,7 +1215,7 @@ class AnExtraBesideItsDeclarationBelowTheBiosFolder(unittest.TestCase):
         from model import profiles
         from model.platforms import _platform_config_cache
         from model.profiles import emulator_profiles_cache
-        import generate_db
+        from collection.indexes import build_indexes
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
@@ -1232,7 +1232,7 @@ class AnExtraBesideItsDeclarationBelowTheBiosFolder(unittest.TestCase):
                            "md5": hashlib.md5(payload).hexdigest(),
                            "sha256": hashlib.sha256(payload).hexdigest(),
                            "crc32": "00000001"}
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         Path("platforms").mkdir()
         Path("platforms/p.yml").write_text(json.dumps({
             "platform": "P", "version": "2.1", "verification_mode": "existence",

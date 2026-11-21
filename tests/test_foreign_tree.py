@@ -17,7 +17,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import generate_db
+from collection.indexes import build_indexes
 from resolve.localfile import resolve_local_file
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -43,7 +43,7 @@ class ForeignTree(unittest.TestCase):
                 "md5": hashlib.md5(payload).hexdigest(),
                 "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "00000001",
             }
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
 
     def tearDown(self):
         os.chdir(self._cwd)
@@ -91,7 +91,7 @@ class AReleaseNamedAfterTheTree(unittest.TestCase):
                            "sha1": sha1, "md5": hashlib.md5(payload).hexdigest(),
                            "sha256": hashlib.sha256(payload).hexdigest(),
                            "crc32": f"{len(files) + 1:08x}"}
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
 
     def tearDown(self):
         os.chdir(self._cwd)

@@ -105,7 +105,7 @@ class AbsentFileIsNotReplacedByAHomonym(unittest.TestCase):
         import hashlib
         import tempfile
 
-        import generate_db
+        from collection.indexes import build_indexes
 
         self._tmp = tempfile.TemporaryDirectory()
         root = Path(self._tmp.name)
@@ -123,7 +123,7 @@ class AbsentFileIsNotReplacedByAHomonym(unittest.TestCase):
                 "sha1": sha1, "md5": hashlib.md5(payload).hexdigest(),
                 "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "0",
             }
-        indexes = generate_db.build_indexes(
+        indexes = build_indexes(
             {s: {**r, "path": r["path"][len(str(root)) + 1:]} for s, r in files.items()},
             {},
         )
@@ -154,7 +154,7 @@ class APlatformEntryTakesNoOtherEmulatorsTree(unittest.TestCase):
     def setUp(self):
         import tempfile
 
-        import generate_db
+        from collection.indexes import build_indexes
 
         self._tmp = tempfile.TemporaryDirectory()
         self._cwd = os.getcwd()
@@ -172,7 +172,7 @@ class APlatformEntryTakesNoOtherEmulatorsTree(unittest.TestCase):
             "sha1": sha1, "md5": hashlib.md5(payload).hexdigest(),
             "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "0",
         }}
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         self.registry = {"xrick": {"local_cache": "data/xrick"}}
 
     def tearDown(self):

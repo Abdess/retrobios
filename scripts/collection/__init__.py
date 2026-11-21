@@ -1,1 +1,1 @@
-"""The BIOS collection on disk: its database, duplicates and integrity."""
+"""The collection held in bios/: its scan, its database and the checks of its files."""

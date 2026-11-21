@@ -605,11 +605,11 @@ class TestSelfContradictingDestinations(unittest.TestCase):
         )
 
     def test_the_database_and_the_arbiter_read_one_rule(self):
-        import generate_db
+        from collection import scan
 
         variant = Path("bios/M/C/.variants/aes.zip")
-        self.assertEqual(generate_db._canonical_name(variant), "aes.zip")
-        for module in ("resolve/collisions.py", "generate_db.py"):
+        self.assertEqual(scan._canonical_name(variant), "aes.zip")
+        for module in ("resolve/collisions.py", "collection/scan.py"):
             source = (Path(__file__).resolve().parents[1] / "scripts" / module).read_text()
             with self.subTest(module=module):
                 self.assertIn("variant_base_name(", source)

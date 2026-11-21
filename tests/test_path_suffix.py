@@ -11,7 +11,7 @@ import unittest
 from pathlib import Path
 
 from resolve.localfile import resolve_local_file
-from generate_db import _path_suffixes
+from collection.indexes import _path_suffixes
 
 
 class TestPathSuffixes(unittest.TestCase):

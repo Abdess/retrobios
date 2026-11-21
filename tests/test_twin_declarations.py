@@ -18,7 +18,7 @@ import unittest
 from pathlib import Path
 
 from model.profiles import emulator_profiles_cache
-import generate_db
+from collection.indexes import build_indexes
 from packs.coverage import verify_platform
 
 
@@ -42,7 +42,7 @@ class TwinDeclarations(unittest.TestCase):
                 "md5": self.md5[rel], "sha256": hashlib.sha256(payload).hexdigest(),
                 "crc32": "00000001",
             }
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         self.emulators = Path(self._tmp.name) / "emulators"
         self.emulators.mkdir()
         emulator_profiles_cache.clear()

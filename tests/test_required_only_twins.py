@@ -23,7 +23,7 @@ import yaml
 
 from model.platforms import _platform_config_cache
 from model.profiles import emulator_profiles_cache
-import generate_db
+from collection.indexes import build_indexes
 from packs import manifest as packs_manifest
 from packs import platformpack
 
@@ -48,7 +48,7 @@ class RequiredTwins(unittest.TestCase):
                 "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "00000008",
             }
         }
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         platform = {
             "platform": "Twins",
             "version": "2.1",

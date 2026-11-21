@@ -18,7 +18,9 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-import generate_db
+from collection.aliases import UnreadableSource, collect_all_aliases
+from collection.scan import scan_bios_dir
+from tests.sources import script_source
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -41,7 +43,7 @@ class AliasesNeedAnUnambiguousName(unittest.TestCase):
                     'files:\n  - name: "disk.rom"\n    aliases: ["n88sub.rom"]\n'
                 )
                 with mock.patch.dict(sys.modules, {"scraper.coreinfo_scraper": stub}):
-                    return generate_db._collect_all_aliases(files)
+                    return collect_all_aliases(files)
             finally:
                 os.chdir(previous)
 
@@ -86,7 +88,7 @@ class AliasesNeedAnUnambiguousName(unittest.TestCase):
 class NoNetworkInTheBuild(unittest.TestCase):
     def test_generate_db_reads_no_remote_source(self):
         """core-info was fetched on every run, offline ones included."""
-        source = (REPO_ROOT / "scripts" / "generate_db.py").read_text(encoding="utf-8")
+        source = script_source("generate_db.py")
         self.assertNotIn("coreinfo_scraper", source)
         self.assertNotIn("urllib.request", source)
 
@@ -99,7 +101,7 @@ class NoNetworkInTheBuild(unittest.TestCase):
                 Path("emulators/g.yml").write_text(
                     'files:\n  - name: "writer.rom"\n    sha1: "s1"\n'
                 )
-                aliases = generate_db._collect_all_aliases(
+                aliases = collect_all_aliases(
                     {"s1": {"name": "WRITER.ROM", "path": "bios/WRITER.ROM", "md5": "m"}}
                 )
             finally:
@@ -118,7 +120,7 @@ class AcceptedRevisionLists(unittest.TestCase):
                     'files:\n  - name: "MT32_CONTROL.ROM"\n'
                     '    sha1: ["s1", "s2", "absent"]\n'
                 )
-                aliases = generate_db._collect_all_aliases({
+                aliases = collect_all_aliases({
                     "s1": {"name": "ctrl_1_04.rom", "path": "a", "md5": "m1"},
                     "s2": {"name": "ctrl_1_05.rom", "path": "b", "md5": "m2"},
                 })
@@ -140,7 +142,7 @@ class CrossNamingStaysInItsProfile(unittest.TestCase):
                     '  - name: "MT32_CONTROL.ROM"\n    sha1: "mt"\n    aliases: ["CM32L_CONTROL.ROM"]\n'
                     '  - name: "CM32L_CONTROL.ROM"\n    sha1: "cm"\n    aliases: ["MT32_CONTROL.ROM"]\n'
                 )
-                aliases = generate_db._collect_all_aliases({
+                aliases = collect_all_aliases({
                     "mt": {"name": "mt32_control.rom", "path": "a", "md5": "m1"},
                     "cm": {"name": "cm32l_control.rom", "path": "b", "md5": "m2"},
                 })
@@ -158,7 +160,6 @@ class AnUnreadableSourceStopsTheRun(unittest.TestCase):
         import shutil
         import tempfile
 
-        import generate_db
 
         root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
@@ -167,8 +168,8 @@ class AnUnreadableSourceStopsTheRun(unittest.TestCase):
         self.addCleanup(os.chdir, previous)
         Path("emulators").mkdir()
         Path("emulators/broken.yml").write_text("files: [\n  - name: a\n")
-        with self.assertRaises(generate_db.UnreadableSource) as caught:
-            generate_db._collect_all_aliases({})
+        with self.assertRaises(UnreadableSource) as caught:
+            collect_all_aliases({})
         self.assertIn("broken.yml", str(caught.exception))
 
 
@@ -184,7 +185,7 @@ class DrasticNamesTheDSDumps(unittest.TestCase):
             os.chdir(tmp)
             try:
                 Path("emulators").mkdir()
-                return generate_db._collect_all_aliases(files)
+                return collect_all_aliases(files)
             finally:
                 os.chdir(previous)
 
@@ -230,7 +231,7 @@ class AliasesFollowContentNotPrimaryCopy(unittest.TestCase):
             try:
                 Path("emulators").mkdir()
                 Path("emulators/p.yml").write_text(self.PROFILE)
-                return generate_db._collect_all_aliases(files, copies)
+                return collect_all_aliases(files, copies)
             finally:
                 os.chdir(previous)
 
@@ -259,14 +260,14 @@ class AliasesFollowContentNotPrimaryCopy(unittest.TestCase):
                 Path("emulators/s.yml").write_text(
                     'files:\n  - name: "BS-X.bin"\n    aliases: ["BS-X.bios"]\n'
                 )
-                aliases = generate_db._collect_all_aliases(files, copies)
+                aliases = collect_all_aliases(files, copies)
             finally:
                 os.chdir(previous)
         self.assertEqual(aliases, {})
 
     def test_the_build_passes_the_scan_copies(self):
-        source = (REPO_ROOT / "scripts" / "generate_db.py").read_text(encoding="utf-8")
-        self.assertIn("_collect_all_aliases(files, aliases, shadowed)", source)
+        source = script_source("generate_db.py")
+        self.assertIn("collect_all_aliases(files, aliases, shadowed)", source)
 
 
 class TheSmsBiosKeepsItsNames(unittest.TestCase):
@@ -291,7 +292,7 @@ class TheSmsBiosKeepsItsNames(unittest.TestCase):
                     "systems:\n  sms:\n    files:\n"
                     '      - name: "bios_U.sms"\n        sha1: "v13"\n'
                 )
-                aliases = generate_db._collect_all_aliases(files)
+                aliases = collect_all_aliases(files)
             finally:
                 os.chdir(previous)
         self.assertIn("bios_U.sms", {a["name"] for a in aliases.get("v13", [])})
@@ -311,7 +312,7 @@ class TheSmsBiosKeepsItsNames(unittest.TestCase):
                     "systems:\n  sms:\n    files:\n"
                     '      - name: "bios_U.sms"\n        sha1: "v13"\n'
                 )
-                aliases = generate_db._collect_all_aliases(files)
+                aliases = collect_all_aliases(files)
             finally:
                 os.chdir(previous)
         self.assertEqual(aliases, {})
@@ -323,7 +324,7 @@ class TheSmsBiosKeepsItsNames(unittest.TestCase):
                 (bios / rel).parent.mkdir(parents=True, exist_ok=True)
                 (bios / rel).write_bytes(b"v1.3")
             (bios / "Other/zesarux/own.rom").write_bytes(b"only zesarux")
-            files, copies, _cache = generate_db.scan_bios_dir(bios, {}, True)
+            files, copies, _cache = scan_bios_dir(bios, {}, True)
         paths = {entry["path"] for entry in files.values()}
         self.assertIn("bios/Sega/Master System/SMS_us_1.3.sms", paths)
         self.assertIn("bios/Other/zesarux/own.rom", paths)

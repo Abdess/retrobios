@@ -29,7 +29,7 @@ import yaml
 
 from model.platforms import load_platform_config, _platform_config_cache
 from model.profiles import emulator_profiles_cache
-import generate_db
+from collection.indexes import build_indexes
 from packs import archive as packs_archive
 from packs import manifest as packs_manifest
 from packs import platformpack
@@ -88,7 +88,7 @@ class _Fixture(unittest.TestCase):
                 "md5": hashlib.md5(data).hexdigest(),
                 "sha256": hashlib.sha256(data).hexdigest(), "crc32": "00000000",
             }
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         self.platforms.mkdir()
         self.emulators.mkdir()
         for key, profile in PROFILES.items():
@@ -161,7 +161,7 @@ class ManifestCategory(_Fixture):
     def test_an_omitted_game_data_file_is_marked(self):
         (self.bios / "Doom" / "engine.pk3").unlink()
         files = {sha1: e for sha1, e in self.db["files"].items() if e["name"] != "engine.pk3"}
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         manifest = self.manifest()
         omitted = {e["dest"]: e.get("category") for e in manifest["omitted_files"]}
         self.assertEqual(omitted.get("engine.pk3"), "game_data")

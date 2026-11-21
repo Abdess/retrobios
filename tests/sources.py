@@ -31,6 +31,10 @@ COMMANDS = {
     "refresh_data_dirs.py": ("packs/datadirs.py",),
     "split_pack.py": ("packs/parts.py",),
     "dedup.py": ("model/nodedup.py",),
+    "generate_db.py": (
+        "collection/scan.py", "collection/hashcache.py", "collection/releaseassets.py",
+        "collection/declared.py", "collection/aliases.py", "collection/indexes.py", "collection/record.py",
+    ),
     "release_record.py": ("model/releaserecord.py", "release/record.py"),
     "release_notes.py": ("release/notes.py",),
     "check_release.py": ("release/check.py",),

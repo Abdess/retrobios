@@ -33,7 +33,7 @@ from model.profiles import emulator_profiles_cache, load_emulator_profiles
 from model.registry import list_registered_platforms, load_data_dir_registry
 from resolve.localfile import resolve_local_file
 from resolve.ownership import BUCKET_FOLDERS, names_manufacturer
-import generate_db
+from collection.indexes import shadowed_alias_index
 from packs import manifest as packs_manifest, md5pack, naming as packs_naming, platformpack
 from resolve import ownership
 from packs.coverage import verify_platform
@@ -134,7 +134,7 @@ class ShadowedAliasIndex(_Collection):
         shadowed = [("a.rom", set(), ["B.ROM"]), ("c.rom", {"1" * 40}, ["B.ROM"])]
         by_name = {"a.rom": ["2" * 40, "3" * 40], "B.ROM": ["4" * 40]}
         self.assertEqual(
-            generate_db.shadowed_alias_index(shadowed, by_name), {"B.ROM": ["1" * 40]}
+            shadowed_alias_index(shadowed, by_name), {"B.ROM": ["1" * 40]}
         )
 
 

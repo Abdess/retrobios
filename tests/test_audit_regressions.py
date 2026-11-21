@@ -1940,9 +1940,9 @@ class RegionRegressions(unittest.TestCase):
                 files[sha1] = {"path": rel, "name": "IPL.bin", "size": len(payload), "sha1": sha1,
                                "md5": hashlib.md5(payload).hexdigest(),
                                "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "00000001"}
-            from scripts import generate_db
+            from collection.indexes import build_indexes
 
-            db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+            db = {"files": files, "indexes": build_indexes(files, {})}
             by_md5 = {e["md5"]: s for s, e in files.items()}
             self.assertEqual(
                 regionaudit.resolve_sha1({"name": "IPL.bin", "md5": [files[shas["bios/GC/USA/IPL.bin"]]["md5"]]}, db),
@@ -3678,17 +3678,17 @@ class AnUnreadableDatabaseStopsTheScan(unittest.TestCase):
     def test_a_corrupt_database_is_not_an_empty_one(self):
         from unittest import mock
 
-        from scripts import generate_db
+        from collection import releaseassets
 
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "database.json"
             path.write_text("<<<<<<< HEAD\n{}\n")
-            with mock.patch.object(generate_db, "_load_gitignored_large_files",
+            with mock.patch.object(releaseassets, "load_gitignored_large_files",
                                    return_value={"bios/big.bin"}):
                 with self.assertRaises(SystemExit):
-                    generate_db._preserve_large_file_entries({}, str(path))
+                    releaseassets.preserve_large_file_entries({}, str(path))
                 self.assertEqual(
-                    generate_db._preserve_large_file_entries(
+                    releaseassets.preserve_large_file_entries(
                         {}, str(Path(directory) / "absent.json")
                     ),
                     0,
@@ -3828,15 +3828,15 @@ class TheDatabaseCacheIsWrittenWhole(unittest.TestCase):
         import json
         from unittest import mock
 
-        from scripts import generate_db
+        from collection import hashcache
 
         with tempfile.TemporaryDirectory() as directory:
             path = os.path.join(directory, "cache", "db_cache.json")
-            generate_db.save_cache(path, {"a": 1})
+            hashcache.save_cache(path, {"a": 1})
             with mock.patch.object(json, "dumps", side_effect=TypeError("miscomputed")), \
                     self.assertRaises(TypeError):
-                generate_db.save_cache(path, {"a": 2})
-            self.assertEqual(generate_db.load_cache(path), {"a": 1})
+                hashcache.save_cache(path, {"a": 2})
+            self.assertEqual(hashcache.load_cache(path), {"a": 1})
             self.assertEqual(os.listdir(os.path.dirname(path)), ["db_cache.json"])
 
 
@@ -6906,13 +6906,13 @@ class AForcedRehashIsCheckedAgainstTheLastOne(unittest.TestCase):
     def test_a_reading_the_cache_and_a_second_reading_contradict_is_outvoted(self):
         from unittest import mock
 
-        from scripts import generate_db
+        from collection import scan
 
         cached = {"sha1": "a" * 40, "mtime": 1.0, "size": 4}
         readings = iter([{"sha1": "b" * 40}, {"sha1": "a" * 40}])
-        with mock.patch.object(generate_db, "compute_hashes", lambda *a, **k: next(readings)), \
+        with mock.patch.object(scan, "compute_hashes", lambda *a, **k: next(readings)), \
                 contextlib.redirect_stderr(io.StringIO()) as err:
-            settled = generate_db._settled_hashes(Path("x.bin"), cached, 1.0, 4)
+            settled = scan._settled_hashes(Path("x.bin"), cached, 1.0, 4)
         self.assertEqual(settled["sha1"], "a" * 40)
         self.assertIn("WARNING", err.getvalue())
 
@@ -6923,22 +6923,22 @@ class AForcedRehashIsCheckedAgainstTheLastOne(unittest.TestCase):
         later run read it back. An unmoved file is never rewritten silently."""
         from unittest import mock
 
-        from scripts import generate_db
+        from collection import scan
 
         cached = {"sha1": "a" * 40, "mtime": 1.0, "size": 4}
-        with mock.patch.object(generate_db, "compute_hashes", lambda *a, **k: {"sha1": "b" * 40}), \
+        with mock.patch.object(scan, "compute_hashes", lambda *a, **k: {"sha1": "b" * 40}), \
                 self.assertRaisesRegex(RuntimeError, "touch"):
-            generate_db._settled_hashes(Path("x.bin"), cached, 1.0, 4)
+            scan._settled_hashes(Path("x.bin"), cached, 1.0, 4)
 
     def test_a_changed_file_takes_its_new_digest(self):
         from unittest import mock
 
-        from scripts import generate_db
+        from collection import scan
 
         cached = {"sha1": "a" * 40, "mtime": 1.0, "size": 4}
-        with mock.patch.object(generate_db, "compute_hashes", lambda *a, **k: {"sha1": "c" * 40}):
+        with mock.patch.object(scan, "compute_hashes", lambda *a, **k: {"sha1": "c" * 40}):
             self.assertEqual(
-                generate_db._settled_hashes(Path("x.bin"), cached, 2.0, 4)["sha1"], "c" * 40
+                scan._settled_hashes(Path("x.bin"), cached, 2.0, 4)["sha1"], "c" * 40
             )
 
 

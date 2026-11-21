@@ -23,7 +23,7 @@ import yaml
 
 from model.platforms import _platform_config_cache
 from model.profiles import load_emulator_profiles, emulator_profiles_cache
-import generate_db
+from collection.indexes import build_indexes
 from packs import manifest as packs_manifest
 from packs import platformpack
 from resolve.validation import core_size_refusal
@@ -77,7 +77,7 @@ class _Collection(unittest.TestCase):
             "sha1": sha1, "md5": hashlib.md5(self.payload).hexdigest(),
             "sha256": hashlib.sha256(self.payload).hexdigest(), "crc32": "00000001",
         }}
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         self.config = {
             "platform": "Exist", "version": "2.1", "verification_mode": "existence",
             "cores": ["sized", "unsized"],

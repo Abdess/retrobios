@@ -31,7 +31,7 @@ except ImportError:
 from core.artifacts import ArtifactLockBusy, artifact_lock
 from model.platforms import _platform_config_cache
 from model.profiles import emulator_profiles_cache, load_emulator_profiles
-import generate_db
+from collection.indexes import build_indexes
 from packs import archive as packs_archive
 from packs import datatrees
 from packs import manifest as packs_manifest
@@ -101,7 +101,7 @@ class PackCountFixture(unittest.TestCase):
                 "sha256": hashlib.sha256(payload).hexdigest(),
                 "crc32": f"{len(payload):08x}",
             }
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         for name, payload in (("a.txt", b"one"), ("sub/b.txt", b"three"), ("c.txt", b"")):
             (self.data / name).parent.mkdir(parents=True, exist_ok=True)
             (self.data / name).write_bytes(payload)
@@ -252,7 +252,7 @@ class ManifestFollowsTheBuilder(PackCountFixture):
             "sha1": sha1, "md5": hashlib.md5(raw).hexdigest(),
             "sha256": hashlib.sha256(raw).hexdigest(), "crc32": "00000000",
         }
-        self.db["indexes"] = generate_db.build_indexes(self.db["files"], {})
+        self.db["indexes"] = build_indexes(self.db["files"], {})
         self._platform([{
             "name": "set.zip", "destination": "set.zip",
             "md5": hashlib.md5(rom).hexdigest(), "zipped_file": "basic.rom",
@@ -548,7 +548,7 @@ class RefusedFilesAreNotPresent(unittest.TestCase):
         import os
 
         from model.platforms import _platform_config_cache
-        import generate_db
+        from collection.indexes import build_indexes
         from sitegen import readme as sitegen_readme
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -567,7 +567,7 @@ class RefusedFilesAreNotPresent(unittest.TestCase):
                     "sha1": sha1, "md5": hashlib.md5(payload).hexdigest(),
                     "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "00000001",
                 }
-            db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+            db = {"files": files, "indexes": build_indexes(files, {})}
             config = {
                 "platform": "Hashy", "version": "2.1", "verification_mode": "md5", "base_destination": "bios",
                 "systems": {"sys": {"files": [

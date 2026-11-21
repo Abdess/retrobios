@@ -22,7 +22,7 @@ import yaml
 
 from model.platforms import load_platform_config, _platform_config_cache
 from model.profiles import emulator_profiles_cache
-import generate_db
+from collection.indexes import build_indexes
 from packs import emulatorpack
 from packs import platformpack
 from packs.coverage import verify_platform
@@ -50,7 +50,7 @@ class ConflictingDeclarations(unittest.TestCase):
                 "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "00000001",
             }
         }
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         platform = {
             "platform": "Conflict",
             "verification_mode": "existence",
@@ -123,7 +123,7 @@ class AnExtraDoesNotPassAHashCheck(unittest.TestCase):
                 "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "00000002",
             }
         }
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         platform = {
             "platform": "Hashed",
             "verification_mode": "md5",
@@ -190,7 +190,7 @@ class TheEmulatorPackShipsWhatTheCoreAccepts(unittest.TestCase):
             "sha1": sha1, "md5": hashlib.md5(payload).hexdigest(),
             "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "00000003",
         }}
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         profile = {
             "emulator": "Mac", "type": "libretro", "cores": ["mac"],
             "systems": ["apple-macintosh"],
@@ -247,7 +247,7 @@ class AlternativesAgreeWithThePack(unittest.TestCase):
             "sha1": sha1, "md5": hashlib.md5(payload).hexdigest(),
             "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "00000004",
         }}
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         profile = {
             "emulator": "Eng", "type": "libretro", "cores": ["eng"], "systems": ["x"],
             "files": [
@@ -307,7 +307,7 @@ class AMaskedArchiveIsMissing(unittest.TestCase):
                            "sha1": sha1, "md5": hashlib.md5(payload).hexdigest(),
                            "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "0"}
         self.sha1_b = sha1
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         self.emulators.mkdir()
         a_sha1 = next(k for k in files if k != sha1)
         (self.emulators / "a.yml").write_text(yaml.dump({

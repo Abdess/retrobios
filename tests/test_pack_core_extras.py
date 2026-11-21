@@ -151,7 +151,7 @@ class NarrowedPacksAgainstTheirOwnList(unittest.TestCase):
     def setUp(self):
         from model.platforms import _platform_config_cache
         from model.profiles import load_emulator_profiles, emulator_profiles_cache
-        import generate_db
+        from collection.indexes import build_indexes
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
@@ -167,7 +167,7 @@ class NarrowedPacksAgainstTheirOwnList(unittest.TestCase):
                            "sha1": sha1, "md5": hashlib.md5(payload).hexdigest(),
                            "sha256": hashlib.sha256(payload).hexdigest(),
                            "crc32": "00000001"}
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         Path("platforms").mkdir()
         config = {"platform": "P", "verification_mode": "existence", "cores": ["c"],
                   "systems": {"s": {"files": [

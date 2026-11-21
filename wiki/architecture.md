@@ -40,6 +40,7 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   resolve/               from declarations to files: content checks, resolution, layouts, cores, truth
   packs/                 pack building and verification: selection, archives, manifests, coverage
   profiling/             emulator profiles confronted with their upstream source (profile_sync.py)
+  collection/            the scan of bios/ into database.json: digests, aliases, indexes
   romrecipes/            romset identification, rebuilt pinned archives, each archive's recipe
   acquire/               catalog coverage and the searches for a missing file
   scraper/               upstream scrapers (libretro, batocera, recalbox...)

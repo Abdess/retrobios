@@ -347,9 +347,9 @@ class HashCacheKeepsEveryDigest(unittest.TestCase):
     """
 
     def setUp(self):
-        import generate_db
+        from collection import scan
 
-        self.generate_db = generate_db
+        self.scan = scan
         self._tmp = tempfile.TemporaryDirectory()
         self.bios = Path(self._tmp.name) / "bios"
         (self.bios / "Sony" / "PS").mkdir(parents=True)
@@ -359,23 +359,23 @@ class HashCacheKeepsEveryDigest(unittest.TestCase):
         self._tmp.cleanup()
 
     def test_cache_hit_serves_the_full_digest_set(self):
-        files, _, cache = self.generate_db.scan_bios_dir(self.bios, {}, force=False)
+        files, _, cache = self.scan.scan_bios_dir(self.bios, {}, force=False)
         entry = next(iter(files.values()))
-        self.assertTrue(set(self.generate_db.CACHED_HASHES).issubset(entry))
+        self.assertTrue(set(self.scan.CACHED_HASHES).issubset(entry))
 
         # Second pass, this time served entirely from the cache.
-        again, _, cache2 = self.generate_db.scan_bios_dir(self.bios, cache, force=False)
+        again, _, cache2 = self.scan.scan_bios_dir(self.bios, cache, force=False)
         entry2 = next(iter(again.values()))
         self.assertTrue(
-            set(self.generate_db.CACHED_HASHES).issubset(entry2),
-            f"cache hit lost {set(self.generate_db.CACHED_HASHES) - set(entry2)}",
+            set(self.scan.CACHED_HASHES).issubset(entry2),
+            f"cache hit lost {set(self.scan.CACHED_HASHES) - set(entry2)}",
         )
         self.assertEqual(
-            {k: entry[k] for k in self.generate_db.CACHED_HASHES},
-            {k: entry2[k] for k in self.generate_db.CACHED_HASHES},
+            {k: entry[k] for k in self.scan.CACHED_HASHES},
+            {k: entry2[k] for k in self.scan.CACHED_HASHES},
         )
         self.assertTrue(
-            set(self.generate_db.CACHED_HASHES).issubset(next(iter(cache2.values())))
+            set(self.scan.CACHED_HASHES).issubset(next(iter(cache2.values())))
         )
 
     def test_a_warm_cache_serialises_exactly_like_a_fresh_hash(self):
@@ -385,8 +385,8 @@ class HashCacheKeepsEveryDigest(unittest.TestCase):
         hashing, so a run with a warm cache rewrote all 7,850 entries with
         their digests in a different order and no content change.
         """
-        fresh, _, cache = self.generate_db.scan_bios_dir(self.bios, {}, force=True)
-        warm, _, _ = self.generate_db.scan_bios_dir(self.bios, cache, force=False)
+        fresh, _, cache = self.scan.scan_bios_dir(self.bios, {}, force=True)
+        warm, _, _ = self.scan.scan_bios_dir(self.bios, cache, force=False)
         self.assertEqual(
             [list(entry) for entry in fresh.values()],
             [list(entry) for entry in warm.values()],
@@ -396,13 +396,13 @@ class HashCacheKeepsEveryDigest(unittest.TestCase):
         )
 
     def test_a_partial_cache_entry_is_rehashed_instead_of_trusted(self):
-        _, _, cache = self.generate_db.scan_bios_dir(self.bios, {}, force=False)
+        _, _, cache = self.scan.scan_bios_dir(self.bios, {}, force=False)
         key = next(iter(cache))
         cache[key].pop("adler32")
-        files, _, healed = self.generate_db.scan_bios_dir(self.bios, cache, force=False)
+        files, _, healed = self.scan.scan_bios_dir(self.bios, cache, force=False)
         entry = next(iter(files.values()))
-        self.assertTrue(set(self.generate_db.CACHED_HASHES).issubset(entry))
-        self.assertTrue(set(self.generate_db.CACHED_HASHES).issubset(healed[key]))
+        self.assertTrue(set(self.scan.CACHED_HASHES).issubset(entry))
+        self.assertTrue(set(self.scan.CACHED_HASHES).issubset(healed[key]))
 
 
 class PreservedLargeFileEntries(unittest.TestCase):
@@ -414,16 +414,16 @@ class PreservedLargeFileEntries(unittest.TestCase):
     """
 
     def setUp(self):
-        import generate_db
+        from collection import releaseassets
 
-        self.generate_db = generate_db
+        self.releaseassets = releaseassets
         self._tmp = tempfile.TemporaryDirectory()
         self.tmp = Path(self._tmp.name)
         self._cwd = os.getcwd()
         os.chdir(self.tmp)
         (self.tmp / ".gitignore").write_text("bios/Sony/PS3/FW.PUP\n")
         self._real_fetch = largefiles.fetch_large_file
-        generate_db.__dict__.pop("fetch_large_file", None)
+        releaseassets.__dict__.pop("fetch_large_file", None)
 
     def tearDown(self):
         os.chdir(self._cwd)
@@ -445,7 +445,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         )
         # The scan found the current revision at that path.
         files = {"a" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
-        count = self.generate_db._preserve_large_file_entries(files, db_path)
+        count = self.releaseassets.preserve_large_file_entries(files, db_path)
         self.assertEqual(count, 0)
         self.assertEqual(list(files), ["a" * 40])
 
@@ -455,7 +455,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
             {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
         )
         files: dict = {}
-        count = self.generate_db._preserve_large_file_entries(files, db_path)
+        count = self.releaseassets.preserve_large_file_entries(files, db_path)
         self.assertEqual(count, 1)
         self.assertIn("b" * 40, files)
 
@@ -469,7 +469,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
             {sha1: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
         )
         files: dict = {}
-        count = self.generate_db._preserve_large_file_entries(files, db_path)
+        count = self.releaseassets.preserve_large_file_entries(files, db_path)
         self.assertEqual(count, 1)
         self.assertEqual(files[sha1]["path"], "bios/Sony/PS3/FW.PUP")
         self.assertEqual((self.tmp / "bios/Sony/PS3/FW.PUP").read_bytes(), b"firmware")
@@ -483,7 +483,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         db_path = self._write_db(
             {sha1: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
         )
-        self.generate_db._preserve_large_file_entries({}, db_path)
+        self.releaseassets.preserve_large_file_entries({}, db_path)
         self.assertEqual(list((self.tmp / "bios/Sony/PS3").iterdir()), [])
 
     def test_an_interrupted_restore_leaves_no_file_behind(self):
@@ -501,7 +501,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
 
         with mock.patch.object(largefiles.shutil, "copy2", interrupted), \
                 self.assertRaises(KeyboardInterrupt):
-            self.generate_db._preserve_large_file_entries({}, db_path)
+            self.releaseassets.preserve_large_file_entries({}, db_path)
         directory = self.tmp / "bios/Sony/PS3"
         self.assertEqual(list(directory.iterdir()), [])
 
@@ -512,7 +512,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         )
         files: dict = {}
         self.assertEqual(
-            self.generate_db._preserve_large_file_entries(files, db_path), 0
+            self.releaseassets.preserve_large_file_entries(files, db_path), 0
         )
         self.assertEqual(files, {})
 
@@ -523,7 +523,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         )
         files = {"a" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
         self.assertEqual(
-            self.generate_db._preserve_large_file_entries(files, db_path), 0
+            self.releaseassets.preserve_large_file_entries(files, db_path), 0
         )
         self.assertEqual(list(files), ["a" * 40])
 

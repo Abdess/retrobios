@@ -20,7 +20,7 @@ import yaml
 
 from model.platforms import _platform_config_cache, load_platform_config
 from model.profiles import load_emulator_profiles, emulator_profiles_cache
-import generate_db
+from collection.indexes import build_indexes
 from packs import manifest as packs_manifest
 from packs.extras import platform_region_groups
 from packs.coverage import verify_platform
@@ -56,7 +56,7 @@ class SlugPlatform(unittest.TestCase):
                 "md5": hashlib.md5(payload).hexdigest(),
                 "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "00000001",
             }
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         self.config = {
             "platform": "Slugs",
             "version": "2.1",
@@ -133,7 +133,7 @@ class RegionKeysForEveryClaimant(unittest.TestCase):
             files = {sha1: {"path": "bios/jp.bin", "name": "jp.bin", "size": 2, "sha1": sha1,
                             "md5": hashlib.md5(b"jp").hexdigest(),
                             "sha256": hashlib.sha256(b"jp").hexdigest(), "crc32": "00000001"}}
-            db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+            db = {"files": files, "indexes": build_indexes(files, {})}
             for name, extra in (("one", "    system: sys\n"), ("two", "")):
                 Path(f"emulators/{name}.yml").write_text(
                     f"emulator: {name}\ntype: libretro\nsystems: [sys]\ncores: [{name}]\n"
@@ -178,7 +178,7 @@ class FlatFirmwareFolder(unittest.TestCase):
                         "sha1": sha1, "md5": hashlib.md5(payload).hexdigest(),
                         "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "00000001",
                     }
-                db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+                db = {"files": files, "indexes": build_indexes(files, {})}
                 config = {
                     "platform": "Flat", "version": "2.1", "verification_mode": "md5",
                     "base_destination": "bios", "cores": ["psx"],
@@ -264,7 +264,7 @@ class UserProvidedIsNeverTakenFromTheCollection(unittest.TestCase):
             files = {sha1: {"path": "bios/Sony/scph5501.bin", "name": "scph5501.bin",
                             "size": 3, "sha1": sha1, "md5": hashlib.md5(b"psx").hexdigest(),
                             "sha256": hashlib.sha256(b"psx").hexdigest(), "crc32": "00000001"}}
-            db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+            db = {"files": files, "indexes": build_indexes(files, {})}
             Path("emulators/fake.yml").write_text(
                 "emulator: Fake\ntype: libretro\nsystems: [psx]\ncores: [fake]\n"
                 "files:\n  - name: scph5501.bin\n    storage: user_provided\n"
@@ -294,7 +294,7 @@ class OnePathCountsOnce(unittest.TestCase):
             files = {sha1: {"path": "bios/Commodore/rom.key", "name": "rom.key", "size": 3,
                             "sha1": sha1, "md5": hashlib.md5(b"key").hexdigest(),
                             "sha256": hashlib.sha256(b"key").hexdigest(), "crc32": "00000001"}}
-            db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+            db = {"files": files, "indexes": build_indexes(files, {})}
             for core, region in (("one", ""), ("two", "    region: [world]\n")):
                 Path(f"emulators/{core}.yml").write_text(
                     f"emulator: {core}\ntype: libretro\nsystems: [amiga]\ncores: [{core}]\n"

@@ -22,7 +22,7 @@ from pathlib import Path
 import yaml
 
 from model.platforms import _platform_config_cache
-import generate_db
+from collection.indexes import build_indexes
 from packs import archive
 from packs import platformpack
 from packs.verdicts import Status
@@ -47,7 +47,7 @@ class TwinDeclarationStatus(unittest.TestCase):
             "sha1": SHA1, "md5": hashlib.md5(PAYLOAD).hexdigest(),
             "sha256": hashlib.sha256(PAYLOAD).hexdigest(), "crc32": "00000001",
         }}
-        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
         Path("platforms/_registry.yml").write_text(
             yaml.dump({"platforms": {"twin": {"config": "twin.yml"}}})
         )
