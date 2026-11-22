@@ -8,6 +8,7 @@ import json
 import re
 import shlex
 from collections import Counter
+from pathlib import Path
 
 from core.text import series
 from model import siteinputs
@@ -20,7 +21,6 @@ from resolve.layout import runs_standalone, standalone_layout_path
 from resolve.standalone import standalone_set
 from resolve.validation import installed_everywhere, installed_with_emulator
 from sitegen import markup
-from core.paths import REPO_ROOT
 from installer_build.module import installer_module
 from sitegen.fields import search_excluded
 from sitegen.guides import fence, platform_args, terminal_tabs
@@ -42,11 +42,15 @@ def _release_packs_in(platforms_dir: str) -> frozenset[str]:
     return frozenset(list_release_pack_platforms(platforms_dir))
 
 
-@functools.cache
 def manifest_systems(platform: str) -> frozenset[str]:
     """The system ids a platform's install manifest records: --system
     refuses any other."""
-    manifest = REPO_ROOT / "install" / f"{platform}.json"
+    return _manifest_systems_in(str(siteinputs.manifests_dir()), platform)
+
+
+@functools.cache
+def _manifest_systems_in(manifests_dir: str, platform: str) -> frozenset[str]:
+    manifest = Path(manifests_dir) / f"{platform}.json"
     if not manifest.is_file():
         return frozenset()
     document = json.loads(manifest.read_text(encoding="utf-8"))
@@ -111,13 +115,17 @@ def install_commands(args: str = "", indent: str = "",
     return lines
 
 
-@functools.cache
 def _published_emulator_names() -> dict[str, dict[str, str]]:
     """Per published manifest, every name `--emulator` accepts there and the
     profile it stands for, as `install.py --list-emulators` prints them."""
+    return _published_emulator_names_in(str(siteinputs.manifests_dir()))
+
+
+@functools.cache
+def _published_emulator_names_in(manifests_dir: str) -> dict[str, dict[str, str]]:
     installer = installer_module()
     names: dict[str, dict[str, str]] = {}
-    for path in sorted((REPO_ROOT / "install").glob("*.json")):
+    for path in sorted(Path(manifests_dir).glob("*.json")):
         manifest = json.loads(path.read_text(encoding="utf-8"))
         names[path.stem] = installer.emulator_names(
             manifest, manifest.get("files") or [], manifest.get("omitted_files") or [])

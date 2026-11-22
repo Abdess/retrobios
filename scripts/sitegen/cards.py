@@ -12,6 +12,7 @@ from collections.abc import Callable
 
 from core.text import series
 from core.hashing import parse_hash_list
+from model import siteinputs
 from model.collection import profiles_on_disk
 from packs.crossref import FileConsumers
 from romrecipes.romsets import dat_snapshots, usable_recipe
@@ -374,7 +375,7 @@ def _romset_line(f: dict) -> str:
     when no recipe names the archive or the file is not on disk.
     """
     recipes = romset_releases().get(str(f.get("name", "")))
-    path = REPO_ROOT / str(f.get("path", ""))
+    path = siteinputs.collection_path(str(f.get("path", "")))
     if not recipes or not path.is_file():
         return ""
     try:

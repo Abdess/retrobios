@@ -626,7 +626,7 @@ def _write_navigation(run: _SiteRun, published_parts: dict[str, str]) -> None:
         sys_id for cov in coverages.values() for sys_id in cov["config"].get("systems", {})
     }
     titles = {sys_id: system_name(sys_id) for sys_id in sorted(system_ids)}
-    sitestarlight.picker_data(REPO_ROOT / "install", public / "data" / "picker", titles)
+    sitestarlight.picker_data(siteinputs.manifests_dir(), public / "data" / "picker", titles)
     total_pages = len(present)
     print(f"\nGenerated {total_pages} pages in {run.args.docs_dir}/")
     if stale:

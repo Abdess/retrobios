@@ -12,7 +12,6 @@ from xml.sax.saxutils import escape
 
 from model.registry import load_platform_registry
 from model.sources import source_yaml_file
-from core.paths import REPO_ROOT
 from core.text import count_text
 from model import siteinputs
 from sitegen import markup
@@ -529,9 +528,13 @@ def _mode_summary() -> str:
 MINUI_EXAMPLES = (("Sony PlayStation", "PS"), ("Game Boy Advance", "GBA"), ("Sega Genesis", "MD"))
 
 
-@cache
 def minui_files() -> dict[str, list[str]]:
-    manifest = json.loads((REPO_ROOT / "install" / "minui.json").read_text(encoding="utf-8"))
+    return _minui_files_in(str(siteinputs.manifests_dir()))
+
+
+@cache
+def _minui_files_in(manifests_dir: str) -> dict[str, list[str]]:
+    manifest = json.loads((Path(manifests_dir) / "minui.json").read_text(encoding="utf-8"))
     by_tag: dict[str, list[str]] = {}
     for entry in manifest.get("files", []):
         parts = str(entry.get("dest", "")).split("/")

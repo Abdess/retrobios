@@ -21,7 +21,6 @@ from model.registry import load_platform_registry
 from resolve.nativemode import digest_algorithm
 from installer_build.handhelds import GROUP_PAGE
 from sitegen import handheld as sitehandheld, markup
-from core.paths import REPO_ROOT
 from core.sizes import size_text
 from sitegen.guides import platform_args, terminal_tabs
 from sitegen.home import next_block
@@ -299,7 +298,7 @@ def _computer_first(name: str, guide: Guide) -> bool:
 def _ships_neogeo(name: str) -> bool:
     """Whether the setup's files hold `neogeo.zip`, the archive a reader most
     often unzips by mistake: arcade BIOS sets are read zipped."""
-    manifest = REPO_ROOT / "install" / f"{name}.json"
+    manifest = siteinputs.manifests_dir() / f"{name}.json"
     if not manifest.is_file():
         return False
     files = json.loads(manifest.read_text(encoding="utf-8")).get("files", [])

@@ -87,6 +87,41 @@ class TheGivenDatabase(_Inputs):
         other = {"name": "board.zip", "contents": [{"crc32": "deadbeef"}]}
         self.assertEqual(render._entry_archives(other, files, {"board.zip": [SHA1]}), set())
 
+    def test_archive_members_are_read_from_the_given_collection(self) -> None:
+        import zipfile
+        from unittest import mock
+
+        from sitegen import cards, lookup
+
+        archive = self.db.parent / "bios" / "X" / "set.zip"
+        archive.parent.mkdir(parents=True)
+        with zipfile.ZipFile(archive, "w") as zf:
+            zf.writestr("a.rom", b"given")
+        crc = f"{zipfile.ZipFile(archive).getinfo('a.rom').CRC:08x}"
+        entry = {"name": "set.zip", "path": "bios/X/set.zip"}
+        self.use(db=self.db)
+        records = lookup._archive_member_records(entry, SHA1, "/x/")
+        self.assertEqual([r["name"] for r in records], ["a.rom"])
+        recipes: dict[str, list] = {"set.zip": [((("a.rom", crc),), "mame", [])]}
+        with mock.patch.object(cards, "romset_releases", return_value=recipes):
+            self.assertNotEqual(cards._romset_line(entry), "")
+
+    def test_the_manifest_readers_follow_the_given_manifests(self) -> None:
+        manifests = self.db.parent / "install"
+        manifests.mkdir()
+        (manifests / "fixture.json").write_text(json.dumps({
+            "files": [{"dest": "Bios/PS/neogeo.zip", "systems": ["fixture-system"]}],
+            "data_directories": [{"ref": "tree", "files": {"a": {"sha1": SHA1}}}],
+        }))
+        (manifests / "minui.json").write_text(json.dumps({"files": [{"dest": "Bios/PS/a.bin"}]}))
+        self.use(db=self.db)
+        from sitegen import lookup
+
+        self.assertEqual(install.manifest_systems("fixture"), frozenset({"fixture-system"}))
+        self.assertTrue(guidepage._ships_neogeo("fixture"))
+        self.assertEqual(diagrams.minui_files(), {"PS": ["a.bin"]})
+        self.assertEqual(lookup.data_directory_members(), {"tree": {"a": {"sha1": SHA1}}})
+
 
 class TheGivenProfilesAndPlatforms(_Inputs):
     def setUp(self) -> None:
@@ -191,7 +226,8 @@ class NoPageModuleReadsTheRepositoryInputs(unittest.TestCase):
 
     def test_no_page_module_reads_the_repository_manifests(self) -> None:
         modules = [SCRIPTS / "sitegen" / f"{name}.py"
-                   for name in ("render", "platformfiles", "whichpack", "structured")]
+                   for name in ("render", "platformfiles", "whichpack", "structured", "install",
+                                "lookup", "build", "guidepage", "diagrams")]
         found = [
             f"{module.name}:{node.lineno}"
             for module in modules

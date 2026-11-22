@@ -113,11 +113,11 @@ def generate_files_page() -> str:
     ])
 
 
-def data_directory_members(install_dir: Path = REPO_ROOT / "install") -> dict[str, dict[str, dict]]:
+def data_directory_members(install_dir: Path | None = None) -> dict[str, dict[str, dict]]:
     """Each data directory's files with their sha1 and size, as the install
     manifests record them for the installer to check."""
     members: dict[str, dict[str, dict]] = {}
-    for path in sorted(install_dir.glob("*.json")):
+    for path in sorted((install_dir or siteinputs.manifests_dir()).glob("*.json")):
         manifest = json.loads(path.read_text(encoding="utf-8"))
         for tree in manifest.get("data_directories") or []:
             members.setdefault(str(tree.get("ref", "")), {}).update(tree.get("files") or {})
@@ -318,7 +318,7 @@ def retired_records(retired: dict[str, dict], files: dict, locations: list[dict]
 
 
 def _archive_member_records(entry: dict, sha1: str, url: str,
-                            root: Path = REPO_ROOT) -> list[dict]:
+                            root: Path | None = None) -> list[dict]:
     """The CRC32 of each member of a collection archive, read from its
     central directory.
 
@@ -326,7 +326,8 @@ def _archive_member_records(entry: dict, sha1: str, url: str,
     in a500.zip, 8484f426) found nothing: 26,014 of 33,403 members were in
     no record. The record leads to the archive's card and names it.
     """
-    path = root / str(entry.get("path", ""))
+    rel = str(entry.get("path", ""))
+    path = root / rel if root is not None else siteinputs.collection_path(rel)
     if not is_archive_path(path.name) or not path.is_file():
         return []
     try:
