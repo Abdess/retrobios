@@ -29,7 +29,14 @@
     "kept": 2021,
     "added": 77,
     "not_added": 1269,
-    "not_kept": 0
+    "not_kept": 0,
+    "hash_updated": 0,
+    "required_aligned": 41,
+    "hash_filled": 118,
+    "size_updated": 0,
+    "size_removed": 0,
+    "hash_cleared": 0,
+    "md5_lists": 0
   },
   "changes": [
     {

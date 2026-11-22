@@ -21,6 +21,7 @@ from .doubled import doubled_destinations
 from .landed import LandedChanges, landed_changes
 from .originals import collect_originals, unpinned, wanted_sources
 from model.database import load_database
+from model.exportchanges import change_phrases
 from model.platforms import load_platform_config, native_layer
 from model.profiles import load_emulator_profiles
 from model.registry import load_data_dir_registry, load_platform_registry
@@ -249,9 +250,10 @@ def build_export(
     landed, refused, lost = _entry_outcomes(exporter, systems)
 
     own_summary = exporter.outcome(systems, produced)
+    counts = _change_counts(report, changes, landed, refused, lost)
     summary = own_summary
     if summary is None:
-        summary = _landed_summary(report, changes, landed, lost)
+        summary = _landed_summary(counts)
     withheld = exporter.withheld()
     unwritten = _unwritten(refused, withheld, report)
     # Reported, never removed: the platform's file keeps every entry.
@@ -267,12 +269,7 @@ def build_export(
         "originals": wanted_sources(exporter, systems, scraped),
         "files": sorted(produced),
         "summary": summary,
-        "counts": None if own_summary is not None else {
-            "kept": report.files_kept,
-            "added": landed,
-            "not_added": refused,
-            "not_kept": lost,
-        },
+        "counts": None if own_summary is not None else counts,
         "changes": changes.records,
         "hashes_updated": applied,
         "hashes_filled": filled,
@@ -349,27 +346,29 @@ def _entry_outcomes(exporter: BaseExporter, systems: dict) -> tuple[int, int, in
     return landed, refused, lost
 
 
-def _landed_summary(report: Report, changes: LandedChanges, landed: int, lost: int) -> str:
-    # What the written file carries, in the terms the exports page uses.
+def _change_counts(
+    report: Report, changes: LandedChanges, landed: int, refused: int, lost: int
+) -> dict[str, int]:
+    """How many entries each kind of change touches, as the report stores them."""
+    return {
+        "kept": report.files_kept,
+        "added": landed,
+        "not_added": refused,
+        "not_kept": lost,
+        "hash_updated": len(changes.applied),
+        "required_aligned": changes.requirements,
+        "hash_filled": len(changes.filled),
+        "size_updated": len(changes.resized),
+        "size_removed": len(changes.unsized),
+        "hash_cleared": len(changes.cleared),
+        "md5_lists": changes.lists,
+    }
+
+
+def _landed_summary(counts: dict[str, int]) -> str:
+    # What the written file carries, the same changes the exports page names.
     # What it does not carry is counted on a line of its own below.
-    parts = [f"{report.files_kept} kept"]
-    landed_counts = (
-        (landed, "file", "", "added"),
-        (len(changes.applied), "hash", "", "updated to the emulator source"),
-        (changes.requirements, "required flag", "", "aligned with the code"),
-        (len(changes.filled), "hash", "", "added to an existing entry"),
-        (len(changes.resized), "size", "", "updated to the emulator source"),
-        (len(changes.unsized), "size", "", "removed"),
-        (len(changes.cleared), "hash", "", "removed"),
-        (lost, "entry", "entries", "removed, the format cannot state them"),
-        (changes.lists, "md5 list", "", "written, any listed value passes"),
-    )
-    parts += [
-        f"{count_text(number, noun, plural)} {verb}"
-        for number, noun, plural, verb in landed_counts
-        if number
-    ]
-    return ", ".join(parts)
+    return ", ".join([f"{counts['kept']} kept", *change_phrases(counts)])
 
 
 def _unwritten(refused: int, withheld: list[str], report: Report) -> list[str]:

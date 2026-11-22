@@ -184,6 +184,7 @@ COMMANDS = {
     "bundled_only.py": ("packs/bundledonly.py",),
     "export_native.py": (
         "exporter/runner.py", "exporter/native.py", "exporter/originals.py", "exporter/landed.py",
+        "model/exportchanges.py",
     ),
 }
 

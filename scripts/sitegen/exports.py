@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 
 from core.text import count_text
+from model.exportchanges import change_phrases
 from sitegen import markup
 
 EXPORTS_DIR = "exports"
@@ -95,24 +96,15 @@ def _lookup_only(block: list[str]) -> list[str]:
 def change_text(report: dict) -> str:
     """What the updated file changes, from the report's numbers.
 
-    The command line prints its own terse summary. The page states each
-    kind of change once, in plain terms, and leaves out what did not
-    happen. RetroPie's unit is a package, so its own sentence is kept.
+    The page names the changes the run's summary names, in plain terms,
+    and leaves out what did not happen. RetroPie's unit is a package, so
+    its own sentence is kept.
     """
     counts = report.get("counts")
     if not counts:
         return report["summary"]
-    parts = [f"{count_text(counts['kept'], 'entry', 'entries')} kept"]
-    extra = [
-        (counts["added"], "file", "files", "added"),
-        (len(report.get("hashes_updated") or []), "hash", "hashes", "updated"),
-        (report.get("required_aligned") or 0, "required flag", "required flags",
-         "aligned with the code"),
-        (len(report.get("hashes_filled") or []), "hash", "hashes", "added"),
-        (len(report.get("sizes_updated") or []), "size", "sizes", "updated"),
-    ]
-    parts += [f"{count_text(n, one, many)} {verb}" for n, one, many, verb in extra if n]
-    return ", ".join(parts)
+    kept = f"{count_text(counts['kept'], 'entry', 'entries')} kept"
+    return ", ".join([kept, *change_phrases(counts, plain=True)])
 
 
 # Beyond this many entries a reason's list folds away.
@@ -299,12 +291,6 @@ def generate_exports_page(reports: list[dict], names: dict[str, str]) -> str:
                 f"{count_text(counts['not_added'], 'other file')} the emulators read "
                 f"{'is' if counts['not_added'] == 1 else 'are'} not added, for the "
                 "reasons above.",
-                "",
-            ])
-        if counts.get("not_kept"):
-            lines.extend([
-                f"{count_text(counts['not_kept'], 'entry', 'entries')} of the original "
-                "cannot be written in this format and should be checked by hand.",
                 "",
             ])
         lines.extend(candidate_lines(report.get("removal_candidates") or []))

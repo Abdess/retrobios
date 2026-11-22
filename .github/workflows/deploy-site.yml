@@ -50,6 +50,7 @@ on:
       - "scripts/model/database.py"
       - "scripts/model/declarations.py"
       - "scripts/model/dumpcatalog.py"
+      - "scripts/model/exportchanges.py"
       - "scripts/model/guides.py"
       - "scripts/model/largefiles.py"
       - "scripts/model/mamerelease.py"

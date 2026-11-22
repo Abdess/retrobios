@@ -18,10 +18,18 @@ from pathlib import Path
 from exporter import native
 from exporter.landed import landed_changes
 from exporter.native import build_export, current_truth, write_report
+from model.exportchanges import CHANGE_KINDS
 from model.profiles import load_emulator_profiles
 from sitegen.exports import generate_exports_page, load_export_reports
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def _counts(**changed: int) -> dict:
+    """A report's counts with every kind of change at zero but *changed*."""
+    counts = {"kept": 0, "not_added": 0} | {kind.key: 0 for kind in CHANGE_KINDS}
+    counts.update(changed)
+    return counts
 
 
 def _report(platform: str, files: list[str], **changes: object) -> dict:
@@ -156,16 +164,42 @@ class ThePageAddressesMaintainersAsPeers(unittest.TestCase):
 
         report = _report("batocera", ["batocera-systems"],
                          hashes_updated=["a md5", "b md5"], required_aligned=3)
-        report["counts"] = {"kept": 692, "added": 253, "not_added": 10, "not_kept": 0}
+        report["counts"] = _counts(kept=692, added=253, not_added=10,
+                                   hash_updated=2, required_aligned=3)
         self.assertEqual(
             change_text(report),
             "692 entries kept, 253 files added, 2 hashes updated, "
             "3 required flags aligned with the code",
         )
 
+    def test_the_page_names_every_change_the_run_names(self):
+        """The page rebuilt the sentence from its own five kinds and left out
+        the sizes and hashes removed and the md5 lists the file carries."""
+        from exporter.native import _landed_summary
+        from sitegen.exports import change_text
+
+        counts = _counts(kept=519, **{kind.key: 1 for kind in CHANGE_KINDS})
+        report = _report("retroarch", ["System.dat"], counts=counts)
+        self.assertEqual(
+            _landed_summary(counts),
+            "519 kept, 1 file added, 1 hash updated to the emulator source, "
+            "1 required flag aligned with the code, 1 hash added to an existing entry, "
+            "1 size updated to the emulator source, 1 size removed, 1 hash removed, "
+            "1 entry removed, the format cannot state them, "
+            "1 md5 list written, any listed value passes",
+        )
+        self.assertEqual(
+            change_text(report),
+            "519 entries kept, 1 file added, 1 hash updated, "
+            "1 required flag aligned with the code, 1 hash added, 1 size updated, "
+            "1 size removed, 1 hash removed, "
+            "1 entry not written, the format cannot state them, "
+            "1 md5 list written, any listed value passes",
+        )
+
     def test_no_wording_that_judges_the_original(self):
         report = _report("batocera", ["batocera-systems"], hashes_updated=["a md5"])
-        report["counts"] = {"kept": 1, "added": 0, "not_added": 4, "not_kept": 1}
+        report["counts"] = _counts(kept=1, not_added=4, not_kept=1, hash_updated=1)
         page = generate_exports_page([report], {}).lower()
         for word in ("their file", "theirs", "corrected", "wrong", "drift", "left out"):
             self.assertNotIn(word, page)

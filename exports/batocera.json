@@ -11,7 +11,14 @@
     "kept": 692,
     "added": 172,
     "not_added": 2554,
-    "not_kept": 0
+    "not_kept": 0,
+    "hash_updated": 4,
+    "required_aligned": 0,
+    "hash_filled": 0,
+    "size_updated": 0,
+    "size_removed": 0,
+    "hash_cleared": 0,
+    "md5_lists": 0
   },
   "changes": [
     {
