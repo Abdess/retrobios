@@ -1055,12 +1055,32 @@ class AMismatchNamesTheDumpTheCollectionHolds(unittest.TestCase):
 
         db = {"files": {"s1": {"path": "bios/Microsoft/MSX/CLK/msx-japanese.rom"}},
               "indexes": {"by_sha256": {"ab" * 32: "s1"}, "by_crc32": {"84f68bf9": "s1"}}}
-        text = ("RetroBat says OK but ares says sha256 mismatch: got " + "cd" * 32
-                + ", accepted [" + "ab" * 32 + "]")
-        self.assertEqual(_held_accepted(text, db), "bios/Microsoft/MSX/CLK/msx-japanese.rom")
-        self.assertEqual(_held_accepted("xroar says crc32 mismatch: got 1, accepted [84f68bf9]", db),
-                         "bios/Microsoft/MSX/CLK/msx-japanese.rom")
-        self.assertEqual(_held_accepted("size mismatch: got 1, accepted [256]", db), "")
+        held = "bios/Microsoft/MSX/CLK/msx-japanese.rom"
+        self.assertEqual(_held_accepted({"sha256": ["AB" * 32]}, db), held)
+        self.assertEqual(_held_accepted({"crc32": ["00000000", "84f68bf9"]}, db), held)
+        self.assertEqual(_held_accepted({}, db), "")
+
+    def test_verify_carries_what_the_emulator_accepts(self):
+        """The accepted values travel as data: a reworded message cannot
+        empty the column."""
+        import hashlib
+        import tempfile
+        from pathlib import Path
+
+        from packs.verdicts import verify_entry_existence
+        from resolve.validation import build_validation_index
+
+        wanted = "84f68bf9"
+        index = build_validation_index({"xroar": {"files": [
+            {"name": "a.rom", "crc32": wanted, "validation": ["crc32"]}]}})
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "a.rom"
+            path.write_bytes(b"x")
+            for db in (None, {"files": {hashlib.sha1(b"x").hexdigest(): {"path": "a.rom"}},
+                              "indexes": {}}):
+                result = verify_entry_existence({"name": "a.rom"}, str(path), index, db)
+                self.assertIn("crc32 mismatch", result["discrepancy"])
+                self.assertEqual(result["accepted"], {"crc32": [wanted]})
 
 
 class ADataDirectoryFileCanBeLookedUp(unittest.TestCase):

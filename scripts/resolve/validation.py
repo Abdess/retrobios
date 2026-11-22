@@ -49,6 +49,36 @@ _CONTENT_REASONS = {
     "masked_sha1": "masked_sha1 mismatch: the cleared image is not the one the code names",
 }
 
+
+class Refusal(str):
+    """A hash check's refusal: the message for people, the accepted values as data.
+
+    ``accepted`` maps the algorithm to the values the check takes, in the
+    order the message lists them. Reports that look the dumps up read it,
+    never the message, which is free to change.
+    """
+
+    accepted: dict[str, list[str]]
+
+    def __new__(cls, message: str, accepted: Mapping[str, Sequence[str]]) -> Refusal:
+        refusal = super().__new__(cls, message)
+        refusal.accepted = {algo: list(values) for algo, values in accepted.items()}
+        return refusal
+
+
+def _hash_refusal(hash_type: str, got: str, accepted: Collection[str]) -> Refusal:
+    """The refusal of a hash check that does not take ``got``."""
+    values = sorted(accepted)
+    return Refusal(f"{hash_type} mismatch: got {got}, accepted [{','.join(values)}]",
+                   {hash_type: values})
+
+
+def accepted_hashes(reason: str | None) -> dict[str, list[str]]:
+    """The values a refused check accepts, by algorithm, empty when it
+    refused on anything but a hash."""
+    return dict(reason.accepted) if isinstance(reason, Refusal) else {}
+
+
 # All reproducible validation types.
 _HASH_CHECKS = frozenset({"crc32", "md5", "sha1", "adler32"})
 
@@ -134,8 +164,7 @@ def _rule_failure(
             if not hashes:
                 hashes.update(compute_hashes(local_path))
             if hashes[hash_type].lower() not in rule[hash_type]:
-                accepted = ",".join(sorted(rule[hash_type]))
-                return f"{hash_type} mismatch: got {hashes[hash_type]}, accepted [{accepted}]"
+                return _hash_refusal(hash_type, hashes[hash_type], rule[hash_type])
     if rule["adler32"] and "adler32" not in skip:
         if rule["adler32_byteswap"]:
             actual = _adler32_byteswapped(local_path)
@@ -417,7 +446,11 @@ def _merged_reason(reasons: list[str]) -> str:
     if len(parsed) == len(reasons) and len({(m.group(1), m.group(2)) for m in parsed}) == 1:
         accepted = sorted({v for m in parsed for v in m.group(3).split(",") if v},
                           key=lambda v: (len(v), v))
-        return f"{parsed[0].group(1)}: got {parsed[0].group(2)}, accepted [{','.join(accepted)}]"
+        message = f"{parsed[0].group(1)}: got {parsed[0].group(2)}, accepted [{','.join(accepted)}]"
+        algorithms = {algo for reason in reasons for algo in accepted_hashes(reason)}
+        if len(algorithms) == 1 and all(isinstance(reason, Refusal) for reason in reasons):
+            return Refusal(message, {algorithms.pop(): accepted})
+        return message
     return reasons[0]
 
 
@@ -544,13 +577,8 @@ def _merged_hash_failure(
             hash_type in checks and entry[hash_type]
             and hashes[hash_type].lower() not in entry[hash_type]
         ):
-            expected = ",".join(sorted(entry[hash_type]))
             emus = _emulators_for_check(hash_type, pe)
-            return (
-                f"{hash_type} mismatch: got {hashes[hash_type]}, "
-                f"accepted [{expected}]",
-                emus,
-            )
+            return _hash_refusal(hash_type, hashes[hash_type], entry[hash_type]), emus
     if entry["adler32"]:
         actual_adler = hashes["adler32"].lower()
         if entry.get("adler32_byteswap"):
@@ -1159,7 +1187,8 @@ def validated_choice(
     if better:
         return better, None
     reason, failing = failed
-    return local_path, f"{', '.join(failing)} says {reason}"
+    said = f"{', '.join(failing)} says {reason}"
+    return local_path, Refusal(said, reason.accepted) if isinstance(reason, Refusal) else said
 
 
 def existence_discrepancy(file_entry: dict, local_path: str, platform_display: str) -> str:

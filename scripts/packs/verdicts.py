@@ -6,6 +6,7 @@ from core.hashing import compute_hashes, md5sum, parse_hash_list
 from core.ziptools import check_inside_zip
 from resolve.nativemode import SIZE_AND_ANY_HASH, reads_file_contents
 from resolve.validation import (
+    accepted_hashes,
     check_file_validation,
     existence_discrepancy,
     frontend_digest_matches,
@@ -79,11 +80,15 @@ def verify_entry_existence(
             file_entry, local_path, db, validation_index, "bios", None,
             destination, owners,
         )
+        accepted = accepted_hashes(disagreement)
     else:
         check = check_file_validation(local_path, name, validation_index)
         disagreement = f"{', '.join(check[1])} says {check[0]}" if check else None
+        accepted = accepted_hashes(check[0]) if check else {}
     if disagreement:
         result["discrepancy"] = f"file present (OK) but {disagreement}"
+        if accepted:
+            result["accepted"] = accepted
     return result
 
 

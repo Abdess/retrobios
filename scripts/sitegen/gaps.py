@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import dataclasses
 import html
-import re
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
@@ -32,28 +31,27 @@ if TYPE_CHECKING:
 # Contributing page
 
 
-_ACCEPTED_RE = re.compile(r"\b(sha1|sha256|md5|crc32) mismatch: got \S+, accepted \[([^\]]*)\]")
-
-
-def _held_accepted(discrepancy: str, db: dict | None) -> str:
+def _held_accepted(accepted: dict[str, list[str]], db: dict | None) -> str:
     """Where the collection keeps a dump the emulator accepts, if it does.
 
     The table printed the hash the emulator wants and stopped there, while
     the collection held that exact dump for every one of the ten rows.
+    ``accepted`` is the verify detail's field, the values by algorithm.
     """
-    match = _ACCEPTED_RE.search(discrepancy or "")
-    if not match or not db:
+    if not accepted or not db:
         return ""
-    algo, accepted = match.group(1), match.group(2)
     indexes = db.get("indexes", {})
-    for value in re.split(r"[\s,]+", accepted.lower()):
-        if algo == "sha1":
-            sha1 = value if value in db.get("files", {}) else None
-        else:
-            sha1 = indexes.get(f"by_{algo}", {}).get(value)
-        path = db.get("files", {}).get(sha1 or "", {}).get("path")
-        if path:
-            return path
+    files = db.get("files", {})
+    for algo, values in accepted.items():
+        for value in values:
+            value = value.lower()
+            if algo == "sha1":
+                sha1 = value if value in files else None
+            else:
+                sha1 = indexes.get(f"by_{algo}", {}).get(value)
+            path = files.get(sha1 or "", {}).get("path")
+            if path:
+                return path
     return ""
 
 
@@ -165,6 +163,7 @@ def _render_problem_files(
             entry = mismatch_files.setdefault(fname, {
                 "name": fname, "platforms": [],
                 "discrepancy": p["discrepancy"],
+                "accepted": p.get("accepted") or {},
             })
             entry["platforms"].append(p["platform"])
 
@@ -251,7 +250,7 @@ def _render_problem_files(
             for fname in sorted(mismatch_files):
                 f = mismatch_files[fname]
                 plats = ", ".join(sorted(set(f["platforms"])))
-                held = _held_accepted(f["discrepancy"], db)
+                held = _held_accepted(f["accepted"], db)
                 cell = f"[{code_span(held)}]({fetch_url(held)})" if held else "-"
                 lines.append(f"| `{fname}` | {plats} | {_reason_cell(f['discrepancy'])} | {cell} |")
             lines.append("")
@@ -396,6 +395,7 @@ def _problem_record(pname: str, cov: dict, d: dict, entry: dict) -> dict:
         "category": d.get("category", "bios"),
         "reason": d.get("reason", ""),
         "discrepancy": d.get("discrepancy", ""),
+        "accepted": d.get("accepted") or {},
         "system": d.get("system", ""),
         # The untested table said "declared hash contradicted by the local
         # file" and named neither: the reader could not look for the dump
