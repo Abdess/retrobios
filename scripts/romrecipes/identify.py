@@ -10,6 +10,7 @@ from pathlib import Path
 
 from core.torrentzip import is_torrentzip
 from core.ziptools import zip_members
+from romrecipes.collection import on_disk
 from romrecipes.pins import container_entries
 from romrecipes.pool import AtomPool
 from romrecipes.romsets import Recipe
@@ -87,12 +88,14 @@ def _is_archive(path: Path) -> bool:
     return True
 
 
-def _local_paths(archive: str, db: dict) -> list[Path]:
+def _local_paths(archive: str, db: dict, root: Path) -> list[tuple[str, Path]]:
+    """(database path, file under *root*) of each readable archive named *archive*."""
     matches = db["indexes"]["by_name"].get(archive) or []
     if isinstance(matches, str):
         matches = [matches]
-    paths = [Path(db["files"][sha1]["path"]) for sha1 in matches if sha1 in db["files"]]
-    return [path for path in paths if path.is_file() and _is_archive(path)]
+    paths = [db["files"][sha1]["path"] for sha1 in matches if sha1 in db["files"]]
+    held = ((path, on_disk(root, path)) for path in paths)
+    return [(path, file) for path, file in held if file.is_file() and _is_archive(file)]
 
 
 def identify_report(
@@ -102,12 +105,12 @@ def identify_report(
     identified: list[dict] = []
     unidentified: list[dict] = []
     for archive, per_profile in sorted(recipes.items()):
-        for path in _local_paths(archive, db):
-            label = identify_archive(path, per_profile, pool)
+        for path, file in _local_paths(archive, db, pool.root):
+            label = identify_archive(file, per_profile, pool)
             record = {
                 "archive": archive,
-                "path": str(path),
-                "torrentzip": is_torrentzip(path),
+                "path": str(Path(path)),
+                "torrentzip": is_torrentzip(file),
             }
             if label:
                 record["recipe"] = label
@@ -187,10 +190,14 @@ def write_reconstructions(
         blob = pool.build(recipe)
         if blob is None:
             continue
-        siblings = _local_paths(archive, db)
-        parent = siblings[0].parent if siblings else bios_dir
-        destination = parent / ".variants" / f"{archive}.{entry['md5'][:8]}"
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_bytes(blob)
-        written.append(str(destination))
+        siblings = _local_paths(archive, db, pool.root)
+        name = f"{archive}.{entry['md5'][:8]}"
+        if siblings:
+            shown = Path(siblings[0][0]).parent / ".variants" / name
+            target = siblings[0][1].parent / ".variants" / name
+        else:
+            shown = target = bios_dir / ".variants" / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(blob)
+        written.append(str(shown))
     return written

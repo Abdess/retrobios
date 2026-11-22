@@ -11,6 +11,7 @@ from pathlib import Path
 from core.paths import REPO_ROOT
 from core.torrentzip import build_torrentzip
 from core.ziptools import is_archive_path, zip_members
+from romrecipes.collection import collection_root, on_disk
 from romrecipes.romsets import Recipe
 
 
@@ -26,6 +27,8 @@ class AtomPool:
     ) -> None:
         # crc32 -> (archive, member), or (file, None) for a loose ROM.
         self._index: dict[str, tuple[Path, str | None]] = {}
+        # Where every database path is read, by identification as by the pool.
+        self.root = collection_root(bios_dir)
         # (md5, size) of each build, kept across runs: TorrentZip bytes are a
         # function of the members alone, so a recipe hashed once is known
         # until the writer changes. Rebuilding the 1 221 archives took 70 s
@@ -48,13 +51,13 @@ class AtomPool:
                 self.unreadable.append(f"{archive}: {exc}")
         # Loose ROMs, by the crc32 the database already computed: nmk004.zip
         # needs nmk004.bin, which the collection holds only as a file.
-        root = bios_dir.resolve()
+        tree = bios_dir.resolve()
         for entry in ((db or {}).get("files") or {}).values():
             crc, path = str(entry.get("crc32") or "").lower(), entry.get("path", "")
             if not crc or not path or is_archive_path(path):
                 continue
-            loose = Path(path)
-            if root in loose.resolve().parents and loose.is_file():
+            loose = on_disk(self.root, path)
+            if tree in loose.resolve().parents and loose.is_file():
                 self._index.setdefault(crc, (loose, None))
 
     def __len__(self) -> int:

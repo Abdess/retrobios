@@ -9,9 +9,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from core.hashing import compute_hashes
-from core.paths import REPO_ROOT
 from core.torrentzip import write_torrentzip, zlib_ng_version
 from core.ziptools import is_archive_path, zip_members
+from romrecipes.collection import on_disk
 from romrecipes.members import member_sha1, member_opener
 
 
@@ -35,11 +35,11 @@ class AtomIndex:
     def from_collection(cls, ledger: dict[str, dict], db: dict, root: Path) -> AtomIndex:
         index = cls()
         for entry in (db.get("files") or {}).values():
-            path = root / entry.get("path", "")
+            path = on_disk(root, entry.get("path", ""))
             if not is_archive_path(entry.get("path", "")) and path.is_file():
                 index.loose.setdefault(entry["sha1"], path)
         for archive, record in sorted(ledger.items()):
-            path = root / archive
+            path = on_disk(root, archive)
             if not path.is_file():
                 continue
             for member in record.get("members", []):
@@ -97,7 +97,7 @@ def build_archive(
     record: dict,
     atoms: AtomIndex,
     output_dir: Path,
-    root: Path = REPO_ROOT,
+    root: Path,
     attempts: int = 2,
 ) -> BuildResult:
     """Build *record* from held members into *output_dir*, verified.
@@ -109,7 +109,7 @@ def build_archive(
     checked by its members only and never reported exact.
     """
     path = record["path"]
-    own = root / path
+    own = on_disk(root, path)
     sources: list[tuple[str, Source]] = []
     missing: list[dict] = []
     for member in record["members"]:
@@ -155,7 +155,7 @@ def build_archive(
     return BuildResult(path, "failed", detail=detail, own_members=own_members)
 
 
-def select(ledger: dict[str, dict], wanted: str, root: Path = REPO_ROOT) -> list[dict]:
+def select(ledger: dict[str, dict], wanted: str, root: Path) -> list[dict]:
     """Records named by a path (relative or absolute) or by a file name."""
     candidate = Path(wanted)
     if candidate.is_absolute():
@@ -169,11 +169,11 @@ def select(ledger: dict[str, dict], wanted: str, root: Path = REPO_ROOT) -> list
     return [record for path, record in sorted(ledger.items()) if Path(path).name == wanted]
 
 
-def build_targets(ledger: dict[str, dict], wanted: str | None) -> list[dict]:
-    """Every record in path order when *wanted* is None, else those it names."""
+def build_targets(ledger: dict[str, dict], wanted: str | None, root: Path) -> list[dict]:
+    """Every record in path order when *wanted* is None, else those it names under *root*."""
     if wanted is None:
         return [ledger[path] for path in sorted(ledger)]
-    return select(ledger, wanted)
+    return select(ledger, wanted, root)
 
 
 def build_records(

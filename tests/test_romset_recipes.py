@@ -1004,5 +1004,39 @@ class LooseRomsAreAtoms(unittest.TestCase):
             self.assertIsNotNone(pool.build([("nmk004.bin", loopback.crc(ROM_A))]))
 
 
+class DatabasePathsRootedAtTheCollection(unittest.TestCase):
+    """Database paths are relative (``bios/...``). The build read them under
+    the parent of --bios-dir, the pool and identification under the working
+    directory: a worktree copy lost every loose ROM and every archive."""
+
+    def test_the_pool_and_identification_read_under_the_bios_parent(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "copy"
+            bios = root / "bios"
+            (bios / "M").mkdir(parents=True)
+            (bios / "M" / "nmk004.bin").write_bytes(ROM_A)
+            recipe = [("nmk004.bin", loopback.crc(ROM_A))]
+            blob = build_torrentzip([("nmk004.bin", ROM_A)])
+            (bios / "M" / "set.zip").write_bytes(blob)
+            sha1 = hashlib.sha1(blob).hexdigest()
+            db = {
+                "files": {
+                    "x": {"path": "bios/M/nmk004.bin", "crc32": loopback.crc(ROM_A)},
+                    sha1: {"path": "bios/M/set.zip"},
+                },
+                "indexes": {"by_name": {"set.zip": [sha1]}},
+            }
+            elsewhere = Path(directory) / "elsewhere"
+            elsewhere.mkdir()
+            with contextlib.chdir(elsewhere):
+                pool = AtomPool(bios, None, db)
+                self.assertIn(loopback.crc(ROM_A), pool)
+                report = identify_report({"set.zip": {"v1": recipe}}, pool, db)
+            self.assertEqual(
+                [(r["path"], r["recipe"]) for r in report["identified"]],
+                [(str(Path("bios/M/set.zip")), "v1")],
+            )
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -142,26 +142,13 @@ class Fixture(unittest.TestCase):
     def capture(self, **kwargs) -> dict[str, dict]:
         records, failed = romrecipes_capture.capture(
             self.db, kwargs.get("previous", {}), kwargs.get("index", {}),
-            kwargs.get("pins", {}), workers=1, log=lambda _line: None,
+            kwargs.get("pins", {}), self.root, workers=1, log=lambda _line: None,
         )
         self.assertEqual(failed, {})
         return records
 
 
 class Capture(Fixture):
-    def setUp(self):
-        super().setUp()
-        self._cwd = Path.cwd()
-        import os
-
-        os.chdir(self.root)
-
-    def tearDown(self):
-        import os
-
-        os.chdir(self._cwd)
-        super().tearDown()
-
     def test_a_torrentzip_archive_is_exact_and_another_canonical(self):
         records = self.capture()
         exact, other = records["bios/set.zip"], records["bios/other.zip"]
@@ -237,12 +224,7 @@ class Capture(Fixture):
 class Build(Fixture):
     def setUp(self):
         super().setUp()
-        import os
-
-        self._cwd = Path.cwd()
-        os.chdir(self.root)
         self.ledger = self.capture()
-        os.chdir(self._cwd)
         self.atoms = romrecipes_build.AtomIndex.from_collection(self.ledger, self.db, self.root)
         self.out = self.root / "out"
 

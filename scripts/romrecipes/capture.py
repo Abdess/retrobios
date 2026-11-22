@@ -13,6 +13,7 @@ from typing import BinaryIO
 
 from core.hashing import parse_hash_list
 from core.torrentzip import has_torrentzip_comment, write_torrentzip, zlib_ng_version
+from romrecipes.collection import on_disk
 from romrecipes.ledger import database_archives, load_ledger, write_ledger
 from romrecipes.members import member_sha1, member_opener
 from romrecipes.pins import container_entries
@@ -89,10 +90,10 @@ def read_archive(path: Path, sha1: str) -> dict:
     return record
 
 
-def _read_job(job: tuple[str, str]) -> tuple[str, dict | str]:
-    path, sha1 = job
+def _read_job(job: tuple[str, str, Path]) -> tuple[str, dict | str]:
+    path, sha1, root = job
     try:
-        return path, read_archive(Path(path), sha1)
+        return path, read_archive(on_disk(root, path), sha1)
     except (OSError, zipfile.BadZipFile, UnicodeEncodeError) as exc:
         return path, f"{type(exc).__name__}: {exc}"
 
@@ -145,10 +146,11 @@ def capture(
     previous: dict[str, dict],
     index: dict[MemberList, set[str]],
     pins: dict[str, set[str]],
+    root: Path,
     workers: int = 4,
     log: Callable[[str], None] = print,
 ) -> tuple[dict[str, dict], dict[str, str]]:
-    """A record for every archive in *db*, and the archives that could not be read.
+    """A record for every archive in *db*, read under *root*, and those that could not be read.
 
     A previous record whose sha1 still names the file is kept as read: the
     container bytes fix the members. Sources and pins are recomputed every
@@ -158,13 +160,13 @@ def capture(
         raise ZlibNgError(zlib_ng_version())
     archives = database_archives(db)
     reused: dict[str, dict] = {}
-    jobs: list[tuple[str, str]] = []
+    jobs: list[tuple[str, str, Path]] = []
     for path, entry in sorted(archives.items()):
         old = previous.get(path)
         if old and old.get("sha1") == entry["sha1"] and old.get("members"):
             reused[path] = old
         else:
-            jobs.append((path, entry["sha1"]))
+            jobs.append((path, entry["sha1"], root))
     read: dict[str, dict] = {}
     failed: dict[str, str] = {}
     if jobs:
@@ -234,13 +236,19 @@ class CaptureRun:
 
 
 def capture_ledger(
-    archives: Path, db: dict, emulators_dir: str, dat_recipes: str, platforms_dir: str,
+    archives: Path,
+    db: dict,
+    root: Path,
+    emulators_dir: str,
+    dat_recipes: str,
+    platforms_dir: str,
 ) -> CaptureRun:
-    """Capture every archive of *db* against the ledger at *archives* and write it back."""
+    """Capture every archive of *db* under *root* against the ledger at *archives*, written back."""
     records, failed = capture(
         db,
         load_ledger(archives),
         recipe_index(emulators_dir, dat_recipes),
         container_pins(platforms_dir, emulators_dir),
+        root,
     )
     return CaptureRun(records, failed, write_ledger(records, archives))
