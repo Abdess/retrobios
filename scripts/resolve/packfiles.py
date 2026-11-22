@@ -1,6 +1,6 @@
 """Finding the bytes a pack entry names.
 
-Resolution proper lives in common. This layer adds what only a build
+Resolution proper lives in resolve.localfile. This layer adds what only a build
 needs: storage tiers, release assets for files too large to commit,
 and the offline switch that forbids reaching for the network."""
 
@@ -223,7 +223,7 @@ def resolve_file(
 ) -> tuple[str | None, str]:
     """Resolve a BIOS file with storage tiers and release asset fallback.
 
-    Wraps common.resolve_local_file() with pack-specific logic for
+    Wraps resolve_local_file() with pack-specific logic for
     storage tiers (external/user_provided), large file release assets,
     and MAME clone mapping (deduped ZIPs).
     """
@@ -284,7 +284,7 @@ def resolve_declaration(
     """The file a platform pack serves for one of the platform's declarations.
 
     Read by the builder, the install manifest, verify and the region pass.
-    verify resolved with common.resolve_local_file and put the slot override
+    verify resolved with resolve_local_file and put the slot override
     first: without the release-asset tier a gitignored file absent from bios/
     read as missing there while the pack shipped the cached asset.
     """
