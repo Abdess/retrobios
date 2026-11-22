@@ -100,8 +100,8 @@ COMMANDS = {
         "romrecipes/text.py", "romrecipes/runs.py",
     ),
     "provenance_report.py": ("acquire/provenance.py",),
-    "auto_fetch.py": ("acquire/fetch.py",),
-    "find_embedded.py": ("acquire/embedded.py",),
+    "auto_fetch.py": ("acquire/fetch.py", "acquire/fetchtext.py", "acquire/placement.py"),
+    "find_embedded.py": ("acquire/embedded.py", "acquire/placement.py"),
     "find_pinned_revision.py": ("acquire/history.py",),
     "check_freshness.py": (
         "freshness/findings.py", "freshness/platformdiff.py", "freshness/rescrape.py",

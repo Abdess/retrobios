@@ -26,7 +26,8 @@ from core.cli import add_repo_inputs, require_directory
 from model.database import load_database, load_optional_database
 from model.platforms import load_platform_config
 from model.safeparse import require_yaml
-from acquire.fetch import fetch_missing, find_missing, generate_issue_body, lookup_sha1s
+from acquire.fetch import find_missing, generate_issue_body
+from acquire.fetchtext import report_fetch, report_lookups
 
 yaml = require_yaml()
 
@@ -54,7 +55,7 @@ def main() -> None:
             parser.error("--sha1 looks for files by hash alone: it takes no "
                          "--platform, --all or --create-issues")
         db = load_optional_database(args.db) or {"files": {}}
-        sys.exit(lookup_sha1s(args.sha1, db, args.dry_run))
+        sys.exit(report_lookups(args.sha1, db, args.dry_run))
 
     db = load_database(args.db)
 
@@ -79,7 +80,7 @@ def main() -> None:
             continue
 
         print(f"  {len(missing)} missing files")
-        result = fetch_missing(missing, db, args.bios_dir, args.dry_run, args.platforms_dir)
+        result = report_fetch(missing, db, args.bios_dir, args.dry_run, args.platforms_dir)
 
         if result["still_missing"]:
             all_still_missing[config.get("platform") or platform] = result["still_missing"]

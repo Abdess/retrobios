@@ -15,7 +15,7 @@ import urllib.error
 from pathlib import Path
 from unittest import mock
 
-from acquire import fetch
+from acquire import fetch, fetchtext
 
 PAYLOAD = b"keyboard mcu"
 SHA1 = hashlib.sha1(PAYLOAD).hexdigest()
@@ -48,47 +48,51 @@ class SoftwareHeritageAnswersByContent(unittest.TestCase):
     def test_the_bytes_it_serves_are_kept_when_the_hash_holds(self):
         urlopen, asked = _serving({f"{fetch.SOFTWARE_HERITAGE}/sha1:{SHA1}/raw/": PAYLOAD})
         with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
-            data = fetch.step3b_software_heritage({"name": "D8039HLC.rom", "sha1": SHA1})
+            data = fetch.step3b_software_heritage({"name": "D8039HLC.rom", "sha1": SHA1}, [])
         self.assertEqual(data, PAYLOAD)
         self.assertEqual(asked, [f"{fetch.SOFTWARE_HERITAGE}/sha1:{SHA1}/raw/"])
 
     def test_other_bytes_under_the_hash_are_refused(self):
         urlopen, _asked = _serving({fetch.SOFTWARE_HERITAGE: b"something else"})
         with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
-            data = fetch.step3b_software_heritage({"name": "x", "sha1": SHA1})
+            data = fetch.step3b_software_heritage({"name": "x", "sha1": SHA1}, [])
         self.assertIsNone(data)
 
     def test_an_absent_file_is_not_counted_as_a_source_that_did_not_answer(self):
         urlopen, _asked = _serving({})
-        fetch._UNANSWERED.clear()
         with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
-            self.assertIsNone(fetch.step3b_software_heritage({"name": "x", "sha1": SHA1}))
-        self.assertEqual(fetch._UNANSWERED, [])
+            found = fetch.search({"name": "x", "sha1": SHA1}, fetch.SHA1_SOURCES)
+        self.assertEqual(found, fetch.SearchResult(None, None, ()))
 
 
 class LookupBySha1(unittest.TestCase):
     def setUp(self):
-        self.cwd = os.getcwd()
-        self.root = Path(tempfile.mkdtemp())
-        os.chdir(self.root)
-        self.addCleanup(os.chdir, self.cwd)
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.root = Path(directory.name)
+        self.acquire = self.root / "tmp" / "acquire"
 
     def test_a_found_file_goes_to_tmp_acquire_never_to_bios(self):
         urlopen, _asked = _serving({f"{fetch.SOFTWARE_HERITAGE}/sha1:{SHA1}/raw/": PAYLOAD})
-        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen), \
-                contextlib.redirect_stdout(io.StringIO()) as out:
-            code = fetch.lookup_sha1s([SHA1.upper()], {"files": {}})
-        self.assertEqual(code, 0)
-        self.assertEqual((self.root / "tmp" / "acquire" / SHA1).read_bytes(), PAYLOAD)
+        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+            [record] = fetch.lookup_sha1s([SHA1.upper()], {"files": {}},
+                                          acquire_dir=self.acquire)
+        self.assertEqual((record.outcome, record.source), ("found", "software_heritage"))
+        self.assertEqual((self.acquire / SHA1).read_bytes(), PAYLOAD)
         self.assertFalse((self.root / "bios").exists())
-        self.assertIn("found in Software Heritage", out.getvalue())
+        self.assertIn("found in Software Heritage", fetchtext.lookup_line(record))
+
+    def test_the_default_folder_is_under_the_repository(self):
+        from core.paths import REPO_ROOT
+
+        self.assertEqual(fetch.ACQUIRE_DIR, REPO_ROOT / "tmp" / "acquire")
 
     def test_a_held_file_is_named_and_not_fetched(self):
         urlopen, asked = _serving({})
         db = {"files": {SHA1: {"path": "bios/Commodore/Amiga/x.rom"}}}
         with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
-            code = fetch.lookup_sha1s([SHA1], db)
+            code = fetchtext.report_lookups([SHA1], db, acquire_dir=self.acquire)
         self.assertEqual((code, asked), (0, []))
         self.assertIn("already held at bios/Commodore/Amiga/x.rom", out.getvalue())
 
@@ -97,10 +101,33 @@ class LookupBySha1(unittest.TestCase):
         with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen), \
                 contextlib.redirect_stdout(io.StringIO()) as out, \
                 contextlib.redirect_stderr(io.StringIO()) as err:
-            code = fetch.lookup_sha1s([SHA1, "not-a-hash"], {"files": {}})
+            code = fetchtext.report_lookups([SHA1, "not-a-hash"], {"files": {}},
+                                            acquire_dir=self.acquire)
         self.assertEqual(code, 1)
-        self.assertIn(f"{SHA1}: not found", out.getvalue())
-        self.assertIn("not-a-hash: not a sha1", err.getvalue())
+        self.assertEqual(out.getvalue(), f"  {SHA1}: not found\n")
+        self.assertEqual(err.getvalue(), "  not-a-hash: not a sha1\n")
+
+
+class PlatformSearchLines(unittest.TestCase):
+    """The search returns records, the text module alone prints them."""
+
+    def test_a_file_kept_out_of_bios_says_why_before_where_it_went(self):
+        from acquire.placement import Placement
+
+        record = fetch.FetchRecord(
+            {"name": "neogeo.zip", "system": "snk-neogeo"}, "found", source="archive_org",
+            placed=Placement("tmp/acquire/ab", kept_out=True, folders=("bios/A/", "bios/B/")))
+        self.assertEqual(fetchtext.fetch_lines(record), [
+            "    No single bios/ folder for snk-neogeo (bios/A/, bios/B/): kept out of bios/",
+            "    [4] Found on archive.org, saved to: tmp/acquire/ab",
+        ])
+
+    def test_an_unanswered_source_makes_the_search_incomplete(self):
+        record = fetch.FetchRecord({"name": "x", "system": "s"}, "incomplete",
+                                   unanswered=("u: offline", "v: offline"))
+        self.assertEqual(fetch.fetch_summary([record])["stats"]["errors"], 1)
+        self.assertEqual(fetchtext.fetch_lines(record), [
+            "    [5] Search incomplete, 2 source(s) did not answer (first: u: offline)"])
 
 
 class AStalledOrLimitedSourceIsNoAnswer(unittest.TestCase):
@@ -116,8 +143,6 @@ class AStalledOrLimitedSourceIsNoAnswer(unittest.TestCase):
         self.addCleanup(patcher.stop)
         upstream._exhausted_hosts.clear()
         self.addCleanup(upstream._exhausted_hosts.clear)
-        fetch._UNANSWERED.clear()
-        self.addCleanup(fetch._UNANSWERED.clear)
 
     def test_a_stalled_read_is_recorded_and_the_search_goes_on(self):
         class _Stalled(_Answer):
@@ -127,9 +152,11 @@ class AStalledOrLimitedSourceIsNoAnswer(unittest.TestCase):
         def urlopen(request, timeout=None):
             return _Stalled()
 
+        unanswered: list[str] = []
         with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
-            self.assertIsNone(fetch.step3_search_public_repos({"name": "x.bin", "sha1": SHA1}))
-        self.assertEqual(len(fetch._UNANSWERED), len(fetch.PUBLIC_REPOS))
+            self.assertIsNone(fetch.step3_search_public_repos(
+                {"name": "x.bin", "sha1": SHA1}, unanswered))
+        self.assertEqual(len(unanswered), len(fetch.PUBLIC_REPOS))
 
     def test_a_rate_limit_is_waited_out(self):
         answers = [urllib.error.HTTPError("u", 429, "Too Many Requests", {}, None), PAYLOAD]
@@ -141,8 +168,8 @@ class AStalledOrLimitedSourceIsNoAnswer(unittest.TestCase):
             return _Answer(answer)
 
         with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
-            data = fetch.step3b_software_heritage({"name": "x", "sha1": SHA1})
-        self.assertEqual((data, fetch._UNANSWERED), (PAYLOAD, []))
+            found = fetch.search({"name": "x", "sha1": SHA1}, fetch.SHA1_SOURCES)
+        self.assertEqual(found, fetch.SearchResult(PAYLOAD, "software_heritage", ()))
 
     def test_the_destination_is_tried_when_the_name_is_too_large(self):
         asked: list[str] = []
@@ -156,7 +183,7 @@ class AStalledOrLimitedSourceIsNoAnswer(unittest.TestCase):
         with mock.patch.object(fetch, "MAX_DOWNLOAD", 32), \
                 mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
             data = fetch.step3_search_public_repos(
-                {"name": "x.bin", "destination": "sub/x.bin", "sha1": SHA1})
+                {"name": "x.bin", "destination": "sub/x.bin", "sha1": SHA1}, [])
         self.assertEqual(data, PAYLOAD)
         self.assertEqual(len(asked), 2)
 
@@ -166,10 +193,6 @@ class ArchiveOrgAnswersByHash(unittest.TestCase):
     downloaded the platform's name from it: an item storing the dump under
     another path was a 404, and the file went to the issue asking the public
     for it while --sha1 found it."""
-
-    def setUp(self):
-        fetch._UNANSWERED.clear()
-        self.addCleanup(fetch._UNANSWERED.clear)
 
     def _archive(self):
         import json
@@ -187,22 +210,23 @@ class ArchiveOrgAnswersByHash(unittest.TestCase):
         urlopen, asked = self._archive()
         with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
             data = fetch.step4_search_archive_org(
-                {"name": "scph1001.bin", "sha1": SHA1.upper()})
+                {"name": "scph1001.bin", "sha1": SHA1.upper()}, [])
         self.assertEqual(data, PAYLOAD)
         self.assertNotIn("https://archive.org/download/psx-bios/scph1001.bin", asked)
 
     def test_the_platform_search_and_the_sha1_search_agree(self):
         urlopen, _asked = self._archive()
         with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
-            by_platform = fetch.step4_search_archive_org({"name": "scph1001.bin", "sha1": SHA1})
-            by_sha1 = fetch.archive_org_by_sha1(SHA1)
+            by_platform = fetch.step4_search_archive_org(
+                {"name": "scph1001.bin", "sha1": SHA1}, [])
+            by_sha1 = fetch.archive_org_by_sha1(SHA1, [])
         self.assertEqual((by_platform, by_sha1), (PAYLOAD, PAYLOAD))
 
     def test_a_declared_md5_still_has_to_hold(self):
         urlopen, _asked = self._archive()
         with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
             data = fetch.step4_search_archive_org(
-                {"name": "scph1001.bin", "sha1": SHA1, "md5": "f" * 32})
+                {"name": "scph1001.bin", "sha1": SHA1, "md5": "f" * 32}, [])
         self.assertIsNone(data)
 
 

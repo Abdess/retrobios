@@ -19,7 +19,7 @@ from pathlib import Path
 from unittest import mock
 
 import find_embedded
-from acquire import embedded
+from acquire import embedded, placement
 
 ROM = bytes(random.Random(8039).randrange(256) for _ in range(2048))
 CRC = zlib.crc32(ROM)
@@ -49,6 +49,7 @@ class Command(unittest.TestCase):
 
     def run_cli(self, *argv: str) -> tuple[int, str]:
         with mock.patch.object(sys, "argv", ["find_embedded.py", *argv]), \
+                mock.patch.object(placement, "ACQUIRE_DIR", self.root / "tmp" / "acquire"), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
             code = find_embedded.main()
         return code, out.getvalue()

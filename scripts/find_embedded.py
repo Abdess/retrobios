@@ -24,7 +24,7 @@ import sys
 from pathlib import Path
 
 from acquire.embedded import offsets, sources
-from acquire.fetch import ACQUIRE_DIR
+from acquire.placement import keep_acquired
 
 
 def main() -> int:
@@ -58,10 +58,7 @@ def main() -> int:
             print(f"  {label} at {offset}: sha1 {sha1}"
                   + (" (confirmed)" if wanted_sha1 else " (crc32 only, give --sha1)"))
             if args.extract:
-                ACQUIRE_DIR.mkdir(parents=True, exist_ok=True)
-                out = ACQUIRE_DIR / sha1
-                out.write_bytes(window)
-                print(f"    written to {out}")
+                print(f"    written to {keep_acquired(window, sha1)}")
     if not confirmed and not candidates:
         print("Not found.")
     return 0 if confirmed or (candidates and not wanted_sha1) else 1

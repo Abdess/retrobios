@@ -7,15 +7,16 @@ import json
 import os
 import re
 import subprocess
-import sys
 import urllib.parse
+from dataclasses import dataclass, field
 from pathlib import Path
 
+from acquire.placement import ACQUIRE_DIR, Placement, keep_acquired, place_file
 from core import upstream
 from core.hashing import parse_hash_list
 from core.paths import EMULATORS_DIR, PLATFORMS_DIR, REPO_ROOT
 from resolve.localfile import held_record_for
-from resolve.review import load_platform_hashes, load_profile_hashes, placement
+from resolve.review import load_platform_hashes, load_profile_hashes
 
 MAX_DOWNLOAD = 100 * 1024 * 1024  # 100MB per file
 
@@ -183,41 +184,39 @@ def step2_scan_branches(entry: dict) -> bytes | None:
     return None
 
 
-# Sources that did not answer during the current file's search. A 404 is an
-# answer, the file is not there. Anything else leaves the question open: an
-# offline run used to report every file as needing a community contribution.
-_UNANSWERED: list[str] = []
+def _get(url: str, unanswered: list[str], timeout: float = 30) -> bytes | None:
+    """Body of a GET, None when there is none to check.
 
-
-def _get(url: str, timeout: float = 30) -> bytes | None:
-    """Body of a GET, None when there is none to check: a 404 and a body
-    over MAX_DOWNLOAD are answers, any other failure is recorded in
-    _UNANSWERED once the retries of core.upstream are spent."""
+    A 404 and a body over MAX_DOWNLOAD are answers, the file is not there.
+    Any other failure, once the retries of core.upstream are spent, leaves
+    the question open and is added to *unanswered*: an offline run used to
+    report every file as needing a community contribution.
+    """
     try:
         return upstream.fetch_body(
             url, timeout=timeout, max_bytes=MAX_DOWNLOAD, user_agent="retrobios-fetch/1.0"
         )
     except upstream.UpstreamError as exc:
-        _UNANSWERED.append(f"{url}: {exc}")
+        unanswered.append(f"{url}: {exc}")
     except ValueError:
         pass
     return None
 
 
-def _get_json(url: str) -> dict:
+def _get_json(url: str, unanswered: list[str]) -> dict:
     """A JSON object from a GET, {} when there is none."""
-    body = _get(url)
+    body = _get(url, unanswered)
     if body is None:
         return {}
     try:
         payload = json.loads(body)
     except json.JSONDecodeError as exc:
-        _UNANSWERED.append(f"{url}: {exc}")
+        unanswered.append(f"{url}: {exc}")
         return {}
     return payload if isinstance(payload, dict) else {}
 
 
-def step3_search_public_repos(entry: dict) -> bytes | None:
+def step3_search_public_repos(entry: dict, unanswered: list[str]) -> bytes | None:
     """Search public GitHub BIOS repos."""
     name = entry["name"]
     destination = entry.get("destination", name)
@@ -225,112 +224,177 @@ def step3_search_public_repos(entry: dict) -> bytes | None:
     names = [name, destination] if "/" in destination else [name]
     for url_template in PUBLIC_REPOS:
         for candidate in names:
-            data = _get(url_template.format(name=candidate))
+            data = _get(url_template.format(name=candidate), unanswered)
             if data is not None and verify_content(data, entry):
                 return data
     return None
 
 
-def step3b_software_heritage(entry: dict) -> bytes | None:
+def step3b_software_heritage(entry: dict, unanswered: list[str]) -> bytes | None:
     """Ask Software Heritage for the file by each accepted sha1, then
     sha256: its archive answers by content, whatever the file was named."""
-    for field in ("sha1", "sha256"):
-        for value in sorted(parse_hash_list(entry.get(field))):
-            data = _get(f"{SOFTWARE_HERITAGE}/{field}:{value}/raw/", timeout=60)
+    for field_name in ("sha1", "sha256"):
+        for value in sorted(parse_hash_list(entry.get(field_name))):
+            data = _get(f"{SOFTWARE_HERITAGE}/{field_name}:{value}/raw/", unanswered,
+                        timeout=60)
             if data is not None and verify_content(data, entry):
                 return data
     return None
 
 
-def archive_org_by_sha1(sha1: str) -> bytes | None:
+def archive_org_by_sha1(sha1: str, unanswered: list[str]) -> bytes | None:
     """The first archive.org file whose metadata names sha1, read and checked.
 
     The member is chosen by its recorded sha1, never by its name: an item
     may store the dump under any path (bios/SCPH1001.BIN for scph1001.bin).
     """
-    search = ("https://archive.org/advancedsearch.php?q="
-              f"{urllib.parse.quote(f'sha1:{sha1}')}&fl[]=identifier&output=json&rows=5")
-    docs = _get_json(search).get("response", {}).get("docs", [])
+    search_url = ("https://archive.org/advancedsearch.php?q="
+                  f"{urllib.parse.quote(f'sha1:{sha1}')}&fl[]=identifier&output=json&rows=5")
+    docs = _get_json(search_url, unanswered).get("response", {}).get("docs", [])
     for doc in docs:
         identifier = doc.get("identifier")
         if not identifier:
             continue
-        files = _get_json(f"https://archive.org/metadata/{identifier}/files").get("result", [])
+        files = _get_json(
+            f"https://archive.org/metadata/{identifier}/files", unanswered
+        ).get("result", [])
         for item in files:
             if str(item.get("sha1", "")).lower() != sha1:
                 continue
             url = (f"https://archive.org/download/{identifier}/"
                    f"{urllib.parse.quote(item['name'])}")
-            data = _get(url, timeout=60)
+            data = _get(url, unanswered, timeout=60)
             if data is not None and hashlib.sha1(data).hexdigest() == sha1:
                 return data
     return None
 
 
-def step4_search_archive_org(entry: dict) -> bytes | None:
+def step4_search_archive_org(entry: dict, unanswered: list[str]) -> bytes | None:
     """Search archive.org firmware collections by direct download, then
     every item by each accepted sha1."""
     name = entry["name"]
 
     for collection_id in ARCHIVE_ORG_COLLECTIONS:
         for path in [name, f"system/{name}", f"bios/{name}"]:
-            data = _get(f"https://archive.org/download/{collection_id}/{path}")
+            data = _get(f"https://archive.org/download/{collection_id}/{path}", unanswered)
             if data is not None and verify_content(data, entry):
                 return data
 
     for sha1 in sorted(parse_hash_list(entry.get("sha1"))):
-        data = archive_org_by_sha1(sha1)
+        data = archive_org_by_sha1(sha1, unanswered)
         if data is not None and verify_content(data, entry):
             return data
     return None
 
 
-def place_file(
-    data: bytes, entry: dict, bios_dir: str, db: dict,
-    platform_hashes: dict, profile_hashes: dict,
-) -> str:
-    """Write a fetched file where the review would accept it.
+@dataclass(frozen=True)
+class SearchResult:
+    """What one file's search found, where, and which sources did not answer."""
 
-    The folder is resolve.review.placement()'s, the rule validate_pr and the
-    wanted page read: a slug matched against folder names sent nintendo-ds
-    to Nintendo/3DS and snk-neogeo to a new Unknown/ folder. A system whose
-    folder is not settled leaves the file in tmp/acquire/, never in bios/.
+    data: bytes | None
+    source: str | None
+    unanswered: tuple[str, ...]
+
+
+# The sources a platform's missing file is searched in, in order.
+PLATFORM_SOURCES = ("branch", "public_repo", "software_heritage", "archive_org")
+# The sources a bare sha1 is searched in, in order.
+SHA1_SOURCES = ("software_heritage", "archive_org_sha1")
+
+
+def _ask(source: str, entry: dict, unanswered: list[str]) -> bytes | None:
+    """The verified bytes one source holds for an entry, None when it holds none."""
+    if source == "branch":
+        return step2_scan_branches(entry)
+    if source == "public_repo":
+        return step3_search_public_repos(entry, unanswered)
+    if source == "software_heritage":
+        return step3b_software_heritage(entry, unanswered)
+    if source == "archive_org":
+        return step4_search_archive_org(entry, unanswered)
+    if source == "archive_org_sha1":
+        return archive_org_by_sha1(entry["sha1"], unanswered)
+    raise ValueError(f"unknown source {source}")
+
+
+def search(entry: dict, sources: tuple[str, ...]) -> SearchResult:
+    """Ask each source in turn and stop at the first that serves the file."""
+    unanswered: list[str] = []
+    for source in sources:
+        data = _ask(source, entry, unanswered)
+        if data:
+            return SearchResult(data, source, tuple(unanswered))
+    return SearchResult(None, None, tuple(unanswered))
+
+
+@dataclass(frozen=True)
+class FetchRecord:
+    """The outcome of one missing file's search.
+
+    outcome is held, unverifiable, dry_run, found, incomplete or not_found.
     """
-    name = os.path.basename(entry["name"])
-    system = str(entry.get("system") or "")
-    root = Path(bios_dir)
 
-    def local(path: str) -> Path:
-        # placement() speaks repository paths, bios/<Manufacturer>/...
-        return root.joinpath(*path.rstrip("/").split("/")[1:])
+    entry: dict
+    outcome: str
+    held_at: str | None = None
+    source: str | None = None
+    placed: Placement | None = None
+    unanswered: tuple[str, ...] = ()
 
-    values = [
-        *parse_hash_list(entry.get("sha1")),
-        *parse_hash_list(entry.get("md5")),
-        *parse_hash_list(entry.get("sha256")),
-    ]
-    spot = placement(
-        values, name, db, platform_hashes, profile_hashes, declared=bool(values),
-        systems=[system] if system else [], exists=lambda path: local(path).exists(),
-    )
-    folders: tuple[str, ...] = spot.folders or ((spot.home,) if spot.home else ())
-    sha1 = hashlib.sha1(data).hexdigest()
-    if len(folders) != 1:
-        print(f"    No single bios/ folder for {system or name}"
-              + (f" ({', '.join(folders)})" if folders else "")
-              + ": kept out of bios/")
-        dest = ACQUIRE_DIR / sha1
-    else:
-        folder = local(folders[0])
-        dest = folder / (spot.name or name)
-        if dest.exists() and dest.read_bytes() != data:
-            # Another revision under the same name: the collection keeps it
-            # beside, never in place of, the file already there.
-            dest = folder / ".variants" / f"{dest.name}.{sha1[:8]}"
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    with open(dest, "wb") as f:
-        f.write(data)
-    return str(dest)
+
+@dataclass
+class FetchRun:
+    """Searches the missing files of one platform and places what it finds."""
+
+    db: dict
+    bios_dir: str
+    dry_run: bool = False
+    platforms_dir: str = PLATFORMS_DIR
+    emulators_dir: str = EMULATORS_DIR
+    acquire_dir: Path = ACQUIRE_DIR
+    _tables: list[dict] = field(default_factory=list)
+
+    def _place(self, data: bytes, entry: dict) -> Placement:
+        # Read once, and only when something was found to place.
+        if not self._tables:
+            self._tables.extend((load_platform_hashes(self.platforms_dir, self.db),
+                                 load_profile_hashes(self.emulators_dir, self.db)))
+        return place_file(data, entry, self.bios_dir, self.db, *self._tables,
+                          acquire_dir=self.acquire_dir)
+
+    def fetch(self, entry: dict) -> FetchRecord:
+        """Look for one file, from the database out to archive.org."""
+        existing = step1_crossref_db(entry, self.db)
+        if existing:
+            return FetchRecord(entry, "held", held_at=existing)
+        if not verifiable(entry):
+            # A file of that name could only ever be refused.
+            return FetchRecord(entry, "unverifiable")
+        if self.dry_run:
+            return FetchRecord(entry, "dry_run")
+        found = search(entry, PLATFORM_SOURCES)
+        if found.data:
+            return FetchRecord(entry, "found", source=found.source,
+                               placed=self._place(found.data, entry),
+                               unanswered=found.unanswered)
+        # Not looked for everywhere: no issue asks the community for it.
+        outcome = "incomplete" if found.unanswered else "not_found"
+        return FetchRecord(entry, outcome, unanswered=found.unanswered)
+
+
+# The count each outcome adds to, and the outcomes still open for contributions.
+_COUNTED = {"held": "found", "found": "found", "unverifiable": "unverifiable",
+            "dry_run": "not_found", "not_found": "not_found", "incomplete": "errors"}
+_STILL_MISSING = ("unverifiable", "dry_run", "not_found")
+
+
+def fetch_summary(records: list[FetchRecord]) -> dict:
+    """The counts a run reports and the files still open for contributions."""
+    stats = {"found": 0, "not_found": 0, "errors": 0, "unverifiable": 0}
+    for record in records:
+        stats[_COUNTED[record.outcome]] += 1
+    still_missing = [r.entry for r in records if r.outcome in _STILL_MISSING]
+    return {"stats": stats, "still_missing": still_missing}
 
 
 def fetch_missing(
@@ -340,125 +404,59 @@ def fetch_missing(
     dry_run: bool = False,
     platforms_dir: str = PLATFORMS_DIR,
     emulators_dir: str = EMULATORS_DIR,
+    acquire_dir: Path = ACQUIRE_DIR,
 ) -> dict:
-    """Run the 5-step auto-fetch pipeline for missing files."""
-    stats = {"found": 0, "not_found": 0, "errors": 0, "unverifiable": 0}
-    still_missing = []
-    tables: list[dict] = []
-
-    def place(data: bytes, entry: dict) -> str:
-        # Read once, and only when something was found to place.
-        if not tables:
-            tables.extend((load_platform_hashes(platforms_dir, db),
-                           load_profile_hashes(emulators_dir, db)))
-        return place_file(data, entry, bios_dir, db, *tables)
-
-    for entry in missing:
-        name = entry["name"]
-        _UNANSWERED.clear()
-        print(f"\n  Searching: {name} ({entry['system']})")
-
-        existing = step1_crossref_db(entry, db)
-        if existing:
-            print(f"    [1] Found in database at: {existing}")
-            stats["found"] += 1
-            continue
-
-        if not verifiable(entry):
-            # Searched, a file of that name could only ever be refused.
-            print("    [-] Cannot be verified from the network: declares no "
-                  "cryptographic hash. Not searched, nothing written")
-            still_missing.append(entry)
-            stats["unverifiable"] += 1
-            continue
-
-        if dry_run:
-            print("    [DRY RUN] Would search branches, repos, Software Heritage, archive.org")
-            still_missing.append(entry)
-            stats["not_found"] += 1
-            continue
-
-        data = step2_scan_branches(entry)
-        if data:
-            path = place(data, entry)
-            print(f"    [2] Found in branch, saved to: {path}")
-            stats["found"] += 1
-            continue
-
-        data = step3_search_public_repos(entry)
-        if data:
-            path = place(data, entry)
-            print(f"    [3] Found in public repo, saved to: {path}")
-            stats["found"] += 1
-            continue
-
-        data = step3b_software_heritage(entry)
-        if data:
-            path = place(data, entry)
-            print(f"    [3b] Found in Software Heritage, saved to: {path}")
-            stats["found"] += 1
-            continue
-
-        data = step4_search_archive_org(entry)
-        if data:
-            path = place(data, entry)
-            print(f"    [4] Found on archive.org, saved to: {path}")
-            stats["found"] += 1
-            continue
-
-        if _UNANSWERED:
-            # Not looked for everywhere: no issue asks the community for it.
-            print(
-                f"    [5] Search incomplete, {len(_UNANSWERED)} source(s) did not "
-                f"answer (first: {_UNANSWERED[0]})"
-            )
-            stats["errors"] += 1
-            continue
-        print("    [5] Not found, open for contributions")
-        still_missing.append(entry)
-        stats["not_found"] += 1
-
-    return {"stats": stats, "still_missing": still_missing}
+    """Search every missing file: the counts, the files still open and the records."""
+    run = FetchRun(db, bios_dir, dry_run, platforms_dir, emulators_dir, acquire_dir)
+    records = [run.fetch(entry) for entry in missing]
+    return {**fetch_summary(records), "records": records}
 
 
-ACQUIRE_DIR = Path("tmp") / "acquire"
+@dataclass(frozen=True)
+class LookupRecord:
+    """The outcome of one --sha1 lookup.
+
+    outcome is malformed, held, dry_run, not_found or found.
+    """
+
+    raw: str
+    sha1: str
+    outcome: str
+    held_at: str | None = None
+    source: str | None = None
+    size: int = 0
+    path: Path | None = None
+    unanswered: tuple[str, ...] = ()
 
 
-def lookup_sha1s(sha1s: list[str], db: dict, dry_run: bool = False) -> int:
-    """--sha1: each file looked for by its hash alone, without a platform.
-    Found bytes are verified, then saved as tmp/acquire/<sha1>, never into
-    bios/: placing a file is a decision the collection makes. 0 when every
-    one was found, 1 otherwise."""
-    missing = 0
-    for raw in sha1s:
-        sha1 = raw.strip().lower()
-        if not re.fullmatch(r"[0-9a-f]{40}", sha1):
-            print(f"  {raw}: not a sha1", file=sys.stderr)
-            missing += 1
-            continue
-        entry = {"name": sha1, "sha1": sha1, "system": ""}
-        _UNANSWERED.clear()
-        held = step1_crossref_db(entry, db)
-        if held:
-            print(f"  {sha1}: already held at {held}")
-            continue
-        if dry_run:
-            print(f"  {sha1}: would ask Software Heritage and archive.org")
-            continue
-        data = step3b_software_heritage(entry)
-        where = "Software Heritage"
-        if data is None:
-            data, where = archive_org_by_sha1(sha1), "archive.org"
-        if data is None:
-            note = f", {len(_UNANSWERED)} source(s) did not answer" if _UNANSWERED else ""
-            print(f"  {sha1}: not found{note}")
-            missing += 1
-            continue
-        ACQUIRE_DIR.mkdir(parents=True, exist_ok=True)
-        out = ACQUIRE_DIR / sha1
-        out.write_bytes(data)
-        print(f"  {sha1}: found in {where}, {len(data)} bytes, saved to {out}")
-    return 1 if missing else 0
+def lookup_sha1(raw: str, db: dict, dry_run: bool = False,
+                acquire_dir: Path = ACQUIRE_DIR) -> LookupRecord:
+    """--sha1: one file looked for by its hash alone, without a platform.
+
+    Found bytes are verified, then saved as <acquire_dir>/<sha1>, never into
+    bios/: placing a file is a decision the collection makes.
+    """
+    sha1 = raw.strip().lower()
+    if not re.fullmatch(r"[0-9a-f]{40}", sha1):
+        return LookupRecord(raw, sha1, "malformed")
+    entry = {"name": sha1, "sha1": sha1, "system": ""}
+    held = step1_crossref_db(entry, db)
+    if held:
+        return LookupRecord(raw, sha1, "held", held_at=held)
+    if dry_run:
+        return LookupRecord(raw, sha1, "dry_run")
+    found = search(entry, SHA1_SOURCES)
+    if found.data is None:
+        return LookupRecord(raw, sha1, "not_found", unanswered=found.unanswered)
+    out = keep_acquired(found.data, sha1, acquire_dir)
+    return LookupRecord(raw, sha1, "found", source=found.source, size=len(found.data),
+                        path=out, unanswered=found.unanswered)
+
+
+def lookup_sha1s(sha1s: list[str], db: dict, dry_run: bool = False,
+                 acquire_dir: Path = ACQUIRE_DIR) -> list[LookupRecord]:
+    """Each --sha1 looked up in turn."""
+    return [lookup_sha1(raw, db, dry_run, acquire_dir) for raw in sha1s]
 
 
 CONTRIBUTING_URL = "https://github.com/Abdess/retrobios/blob/main/CONTRIBUTING.md"

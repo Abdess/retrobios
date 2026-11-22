@@ -948,7 +948,7 @@ class AutoFetchReadsListsAndPlacesWithoutClobbering(unittest.TestCase):
         return {"system_folders": {system: {folder}}}, {}
 
     def test_the_review_folder_is_used_and_nothing_is_overwritten(self):
-        from scripts.acquire import fetch as acquire_fetch
+        from scripts.acquire import placement as acquire_placement
 
         with tempfile.TemporaryDirectory() as directory:
             bios = Path(directory)
@@ -956,45 +956,43 @@ class AutoFetchReadsListsAndPlacesWithoutClobbering(unittest.TestCase):
                 (bios / folder).mkdir(parents=True)
             held = bios / "Nintendo" / "N64" / "n64.psh"
             held.write_bytes(b"other revision")
-            placed = Path(acquire_fetch.place_file(
+            placed = Path(acquire_placement.place_file(
                 b"fetched", {"name": "n64.psh", "system": "nintendo-64"}, str(bios), {},
                 *self._tables("nintendo-64", "bios/Nintendo/N64/"),
-            ))
+            ).path)
             self.assertEqual(placed.parent.parent, bios / "Nintendo" / "N64")
             self.assertEqual(placed.parent.name, ".variants")
             self.assertEqual(held.read_bytes(), b"other revision")
 
     def test_a_slug_inside_another_folder_name_is_no_folder(self):
         """'ds' is in '3DS': the DS firmware went to Nintendo/3DS."""
-        from scripts.acquire import fetch as acquire_fetch
+        from scripts.acquire import placement as acquire_placement
 
         with tempfile.TemporaryDirectory() as directory:
             bios = Path(directory)
             for folder in ("Nintendo/3DS", "Nintendo/Nintendo DS"):
                 (bios / folder).mkdir(parents=True)
-            placed = Path(acquire_fetch.place_file(
+            placed = Path(acquire_placement.place_file(
                 b"fw", {"name": "firmware.bin", "system": "nintendo-ds"}, str(bios), {},
                 *self._tables("nintendo-ds", "bios/Nintendo/Nintendo DS/"),
-            ))
+            ).path)
             self.assertEqual(placed, bios / "Nintendo" / "Nintendo DS" / "firmware.bin")
 
     def test_an_unsettled_folder_stays_out_of_bios(self):
         """snk-neogeo went to a new bios/Unknown/snk-neogeo/."""
         import hashlib
-        from unittest import mock
 
-        from scripts.acquire import fetch as acquire_fetch
+        from scripts.acquire import placement as acquire_placement
 
         with tempfile.TemporaryDirectory() as directory:
             bios, acquired = Path(directory, "bios"), Path(directory, "acquire")
             bios.mkdir()
-            with mock.patch.object(acquire_fetch, "ACQUIRE_DIR", acquired), \
-                    contextlib.redirect_stdout(io.StringIO()):
-                placed = Path(acquire_fetch.place_file(
-                    b"set", {"name": "neogeo.zip", "system": "snk-neogeo"}, str(bios), {},
-                    {}, {},
-                ))
-            self.assertEqual(placed, acquired / hashlib.sha1(b"set").hexdigest())
+            placed = acquire_placement.place_file(
+                b"set", {"name": "neogeo.zip", "system": "snk-neogeo"}, str(bios), {},
+                {}, {}, acquire_dir=acquired,
+            )
+            self.assertTrue(placed.kept_out)
+            self.assertEqual(Path(placed.path), acquired / hashlib.sha1(b"set").hexdigest())
             self.assertEqual(list(bios.iterdir()), [])
 
 
@@ -6906,8 +6904,7 @@ class AnUnansweredSearchIsNotANotFound(unittest.TestCase):
         db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}}}
         with mock.patch("urllib.request.urlopen", refuse), \
                 mock.patch.object(acquire_fetch.upstream, "_sleep", lambda _s: None), \
-                mock.patch.object(acquire_fetch, "step2_scan_branches", lambda e: None), \
-                contextlib.redirect_stdout(io.StringIO()):
+                mock.patch.object(acquire_fetch, "step2_scan_branches", lambda e: None):
             return acquire_fetch.fetch_missing([entry], db, "bios")
 
     def test_offline_is_not_searched(self):
@@ -6969,13 +6966,12 @@ class AutoFetchProvesEveryHashItIsGiven(unittest.TestCase):
         with tempfile.TemporaryDirectory() as bios, \
                 mock.patch.object(urllib.request, "urlopen", lambda *a, **k: served), \
                 mock.patch.object(acquire_fetch, "step2_scan_branches",
-                                  lambda e: self.DATA), \
-                contextlib.redirect_stdout(io.StringIO()) as out:
+                                  lambda e: self.DATA):
             result = acquire_fetch.fetch_missing([crc], {"files": {}}, bios)
             self.assertEqual(list(Path(bios).rglob("*")), [])
         self.assertEqual(result["stats"]["found"], 0)
         self.assertEqual(result["stats"]["unverifiable"], 1)
-        self.assertIn("declares no cryptographic hash", out.getvalue())
+        self.assertEqual([r.outcome for r in result["records"]], ["unverifiable"])
 
     def test_a_held_sha256_is_found_in_the_database(self):
         from scripts.acquire import fetch as acquire_fetch
@@ -7005,13 +7001,14 @@ class AutoFetchProvesEveryHashItIsGiven(unittest.TestCase):
     def test_an_entry_without_a_hash_is_not_searched(self):
         from unittest import mock
 
-        from scripts.acquire import fetch as acquire_fetch
+        from acquire import fetch as acquire_fetch
+        from acquire import fetchtext
 
         entry = {"name": "DICROM.ROM", "system": "fujitsu-fm7"}
         out = io.StringIO()
         with mock.patch.object(acquire_fetch, "step2_scan_branches") as branches, \
                 contextlib.redirect_stdout(out):
-            result = acquire_fetch.fetch_missing([entry], {"files": {}}, "bios", dry_run=True)
+            result = fetchtext.report_fetch([entry], {"files": {}}, "bios", dry_run=True)
         branches.assert_not_called()
         self.assertEqual(result["stats"]["unverifiable"], 1)
         self.assertNotIn("Would search", out.getvalue())
