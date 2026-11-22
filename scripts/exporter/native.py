@@ -5,6 +5,7 @@ file from the platform's original, and a report lists every change."""
 
 from __future__ import annotations
 
+import contextlib
 import functools
 import json
 from dataclasses import dataclass, field
@@ -26,6 +27,7 @@ from model.platforms import load_platform_config, native_layer
 from model.profiles import load_emulator_profiles
 from model.registry import load_data_dir_registry, load_platform_registry
 from model.safeparse import yaml_load
+from packs.datadirs import hold_data_dirs
 from resolve.categories import removal_candidates
 from resolve.reconcile import Report, build_native_model
 from resolve.truth import generate_platform_truth
@@ -256,12 +258,16 @@ def build_export(
         summary = _landed_summary(counts)
     withheld = exporter.withheld()
     unwritten = _unwritten(refused, withheld, report)
-    # Reported, never removed: the platform's file keeps every entry.
-    candidates = removal_candidates(
-        systems, scraped, profiles, load_data_dir_registry(platforms_dir),
-    )
-    # Reported, never rewritten: both declarations stay as the platform wrote them.
-    doubled = doubled_in(scraped, platforms_dir)
+    data_registry = load_data_dir_registry(platforms_dir)
+    with contextlib.ExitStack() as held:
+        # Both are proved against data/: a refresh swapping a tree mid-walk
+        # listed entries only that tree holds as removable. Held here, every
+        # caller gets the guarantee, the freshness check included.
+        hold_data_dirs(held, data_registry)
+        # Reported, never removed: the platform's file keeps every entry.
+        candidates = removal_candidates(systems, scraped, profiles, data_registry)
+        # Reported, never rewritten: both declarations stay as the platform wrote them.
+        doubled = doubled_in(scraped, platforms_dir)
     messages = _export_messages(summary, unwritten, candidates, doubled, withheld, changes)
 
     return ExportResult(platform, True, messages, produced, exporter.file_modes(), {

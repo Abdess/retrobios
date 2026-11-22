@@ -728,5 +728,76 @@ class ADestinationDeclaredTwiceIsNamed(unittest.TestCase):
             "platform runs is known to read this file", page)
 
 
+class TheExportHoldsTheDataTrees(unittest.TestCase):
+    """Removal candidates and doubled destinations are proved against data/.
+    Only the export command took the shared hold, so the freshness check,
+    which builds the same export, read the trees while a refresh swapped
+    them and called a committed report stale."""
+
+    def test_both_are_computed_under_the_hold(self):
+        import contextlib
+        import json
+        from unittest import mock
+
+        from exporter.base_exporter import BaseExporter
+
+        class Plain(BaseExporter):
+            @staticmethod
+            def platform_name() -> str:
+                return "plat"
+
+            @staticmethod
+            def native_filename() -> str:
+                return "list.json"
+
+            def render(self, systems, report, originals, scraped=None):
+                return {"list.json": json.dumps(sorted(systems))}
+
+            def validate(self, systems, produced):
+                return []
+
+        held: list[str] = []
+
+        @contextlib.contextmanager
+        def tree_lock():
+            held.append("held")
+            try:
+                yield
+            finally:
+                held.remove("held")
+
+        def hold(stack, registry):
+            self.assertEqual(registry, {"tree": {"local_cache": "data/tree"}})
+            stack.enter_context(tree_lock())
+
+        def under_hold(name):
+            def check(*_args, **_kwargs):
+                self.assertEqual(held, ["held"], name)
+                return []
+            return check
+
+        truth = {"systems": {"psx": {"files": [{"name": "a.bin", "md5": "b" * 32}]}}}
+        scraped = {"systems": {"psx": {"native_id": "psx", "files": [
+            {"name": "a.bin", "destination": "a.bin", "native_system": "psx",
+             "md5": "a" * 32},
+        ]}}}
+        with tempfile.TemporaryDirectory() as scratch, \
+                mock.patch.object(native, "load_inputs", return_value=(truth, scraped)), \
+                mock.patch.object(native, "unpinned", return_value=[]), \
+                mock.patch.object(native, "load_data_dir_registry",
+                                  return_value={"tree": {"local_cache": "data/tree"}}), \
+                mock.patch.object(native, "hold_data_dirs", side_effect=hold) as holding, \
+                mock.patch.object(native, "removal_candidates",
+                                  side_effect=under_hold("removal_candidates")), \
+                mock.patch.object(native, "doubled_in", side_effect=under_hold("doubled_in")):
+            result = build_export(
+                "plat", Plain, Path(scratch), str(ROOT / "platforms"),
+                Path(scratch) / "cache", False,
+            )
+        self.assertTrue(result.ok, result.messages)
+        holding.assert_called_once()
+        self.assertEqual(held, [])
+
+
 if __name__ == "__main__":
     unittest.main()

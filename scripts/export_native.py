@@ -16,7 +16,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import contextlib
 import sys
 from pathlib import Path
 
@@ -27,8 +26,6 @@ from core.paths import TRUTH_DIR
 from exporter.originals import DEFAULT_CACHE
 from exporter.runner import run
 from model.cliargs import platform_arg, selected_platforms
-from model.registry import load_data_dir_registry
-from packs.datadirs import hold_data_dirs
 
 
 def main() -> None:
@@ -69,20 +66,15 @@ def main() -> None:
 
     platforms = selected_platforms(args)
 
-    with contextlib.ExitStack() as held:
-        if not args.refresh_cache:
-            # Removal candidates are proved against data/: a refresh swapping
-            # a tree mid-walk listed entries only that tree holds as removable.
-            hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
-        code = run(
-            platforms,
-            args.truth_dir,
-            args.output_dir,
-            args.platforms_dir,
-            args.upstream_dir,
-            args.fetch,
-            args.refresh_cache,
-        )
+    code = run(
+        platforms,
+        args.truth_dir,
+        args.output_dir,
+        args.platforms_dir,
+        args.upstream_dir,
+        args.fetch,
+        args.refresh_cache,
+    )
     sys.exit(code)
 
 

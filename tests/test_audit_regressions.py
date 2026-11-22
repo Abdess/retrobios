@@ -6785,8 +6785,10 @@ class ReportsHoldTheDataTrees(unittest.TestCase):
     def test_each_entry_point_holds_them(self):
         import ast
 
+        # export_native holds them in build_export, which the freshness
+        # check calls too (TheExportHoldsTheDataTrees in test_export_report).
         for script in ("generate_readme.py", "generate_site.py", "slots.py",
-                       "export_native.py", "cross_reference.py"):
+                       "cross_reference.py"):
             tree = ast.parse((ROOT / "scripts" / script).read_text(encoding="utf-8"))
             main = next(
                 node for node in tree.body
