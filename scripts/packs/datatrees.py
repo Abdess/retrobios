@@ -247,6 +247,49 @@ def data_directory_members(
                 yield src, full
 
 
+def carried_trees(
+    profile: dict, standalone: bool, required_only: bool, data_registry: dict | None,
+) -> Iterator[tuple[str, str | None, str]]:
+    """(registry key, cache folder or None when not cached, destination) of
+    each data tree an emulator pack carries for a profile.
+
+    A tree only one build reads follows that build, like a file, and one
+    declared ``required: false`` stays out of a required-only pack. The
+    destination sits below the build's own folder (``pack_structure``).
+    """
+    structure = profile.get("pack_structure")
+    prefix = structure.get("standalone" if standalone else "libretro", "") if structure else ""
+    for dd in deliverable(profile.get("data_directories", []), standalone):
+        if required_only and dd.get("required") is False:
+            continue
+        ref = dd.get("ref", "")
+        if not ref:
+            continue
+        cache = (data_registry or {}).get(ref, {}).get("local_cache", "")
+        dd_dest = dd.get("destination", "")
+        if prefix:
+            dd_dest = f"{prefix}/{dd_dest}" if dd_dest else prefix
+        yield ref, cache if cache and os.path.isdir(cache) else None, dd_dest
+
+
+def claimed_tree_files(
+    local_cache: str, dd_dest: str, placed: Placed,
+) -> Iterator[tuple[str, str]]:
+    """(source, destination) of each tree file an emulator pack writes.
+
+    A path another file already holds is skipped, the others are taken in
+    `placed`. The cache's shared lock is held while the caller reads what
+    is yielded: a refresh swaps the tree by rename, and a walk half done
+    read the old tree and wrote files of the new one.
+    """
+    with cache_lock(local_cache, shared=True):
+        for src, full in _tree_files(local_cache, dd_dest):
+            if placed.block(full):
+                continue
+            placed.take(full)
+            yield src, full
+
+
 def pack_data_tree(
     zf: zipfile.ZipFile | PackRecord,
     local_cache: str,
@@ -256,26 +299,16 @@ def pack_data_tree(
 ) -> int:
     """Write one data directory into an emulator pack, under its shared lock.
 
-    A refresh swaps the tree by rename. Without the lock a walk half done
-    read the old tree and wrote files of the new one. ``packed_at`` records
-    each member, so a later profile asking for the same bytes there is
-    served rather than reported missing.
+    ``packed_at`` records each member, so a later profile asking for the
+    same bytes there is served rather than reported missing.
     """
     added = 0
-    with cache_lock(local_cache, shared=True):
-        for root, _dirs, filenames in os.walk(local_cache):
-            for fname in filenames:
-                src = os.path.join(root, fname)
-                rel = os.path.relpath(src, local_cache)
-                full = f"{dd_dest}/{rel}" if dd_dest else rel
-                if placed.block(full):
-                    continue
-                placed.take(full)
-                # The installer writes a data tree member without the bit.
-                add_pack_member(zf, src, full, executable=False)
-                if packed_at is not None:
-                    packed_at[full.lower()] = src
-                added += 1
+    for src, full in claimed_tree_files(local_cache, dd_dest, placed):
+        # The installer writes a data tree member without the bit.
+        add_pack_member(zf, src, full, executable=False)
+        if packed_at is not None:
+            packed_at[full.lower()] = src
+        added += 1
     return added
 
 

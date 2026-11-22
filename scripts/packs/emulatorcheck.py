@@ -19,6 +19,7 @@ from model.profiles import (
 )
 from model.registry import load_data_dir_registry
 from packs.archive import Placed
+from packs.datatrees import carried_trees, claimed_tree_files
 from packs.emulatorentries import EmulatorPackEntries, EmulatorSelection, emulator_pack_entries
 from packs.verdicts import (
     RELEASE_ASSET_PENDING,
@@ -32,7 +33,6 @@ from packs.verdicts import (
 from resolve.validation import (
     build_validation_index,
     build_ground_truth,
-    deliverable,
     validated_choice,
     with_archive_members,
 )
@@ -184,53 +184,24 @@ class _EmulatorPack:
         self.placed[dest.lower()] = (path, owner, dest)
         self.taken.take(dest)
 
-    def occupy_trees(self, emu_name: str, profile: dict) -> None:
+    def carry_trees(self, emu_name: str, profile: dict) -> None:
         """The profile's data trees follow its files in the pack, which
         writes them even when the system filter leaves it no file:
         bluemsx's Machines/ tree holds msx-emu's coleco.rom path in a
-        --system colecovision pack."""
-        for dd in deliverable(profile.get("data_directories", []), self.standalone):
-            if self.required_only and dd.get("required") is False:
-                continue
-            cache = (self.data_registry or {}).get(dd.get("ref", ""), {}).get("local_cache", "")
-            if not cache or not os.path.isdir(cache):
-                continue
-            dd_dest = dd.get("destination", "")
-            structure = profile.get("pack_structure")
-            prefix = (
-                structure.get("standalone" if self.standalone else "libretro", "")
-                if structure else ""
-            )
-            if prefix:
-                dd_dest = f"{prefix}/{dd_dest}" if dd_dest else prefix
-            for root, _dirs, names in os.walk(cache):
-                for fname in names:
-                    src = os.path.join(root, fname)
-                    rel = os.path.relpath(src, cache).replace(os.sep, "/")
-                    self.occupy(f"{dd_dest}/{rel}" if dd_dest else rel, src, emu_name)
-
-    def note_data_dirs(self, profile: dict) -> None:
-        # Check data directories (only notice if not cached)
-        for dd in deliverable(
-            profile.get("data_directories", []), self.standalone
+        --system colecovision pack. A tree the cache lacks is noticed."""
+        for ref, cache, dd_dest in carried_trees(
+            profile, self.standalone, self.required_only, self.data_registry,
         ):
-            if self.required_only and dd.get("required") is False:
+            if cache is None:
+                self.data_dir_notices.append(ref)
                 continue
-            ref = dd.get("ref", "")
-            if not ref:
-                continue
-            if self.data_registry and ref in self.data_registry:
-                cache_path = self.data_registry[ref].get("local_cache", "")
-                if cache_path and os.path.isdir(cache_path):
-                    continue  # cached, no notice needed
-            self.data_dir_notices.append(ref)
+            for src, full in claimed_tree_files(cache, dd_dest, self.taken):
+                self.placed[full.lower()] = (src, emu_name, full)
 
     def verify_profile(
         self, emu_name: str, profile: dict, carried: EmulatorPackEntries,
     ) -> None:
         """Verify one profile's entries and add them to the report."""
-        self.note_data_dirs(profile)
-
         if not carried.carries_entries:
             self.details.append(
                 {
@@ -242,7 +213,7 @@ class _EmulatorPack:
                     "ground_truth": [],
                 }
             )
-            self.occupy_trees(emu_name, profile)
+            self.carry_trees(emu_name, profile)
             return
 
         # Each destination's outcome, settled by set once the profile is
@@ -251,7 +222,7 @@ class _EmulatorPack:
         placed_results = self._archive_results(emu_name, carried)
         self._place_loose(emu_name, self._loose_results(emu_name, carried), placed_results)
         self._settle(emu_name, profile, placed_results)
-        self.occupy_trees(emu_name, profile)
+        self.carry_trees(emu_name, profile)
 
     def _archive_results(self, emu_name: str, carried: EmulatorPackEntries) -> list[PlacedResult]:
         # Verify archives as units (e.g., neogeo.zip, aes.zip)

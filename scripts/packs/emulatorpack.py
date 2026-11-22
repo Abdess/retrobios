@@ -35,7 +35,7 @@ from packs.archive import (
     write_generated_member,
     writing_pack,
 )
-from packs.datatrees import pack_data_tree
+from packs.datatrees import carried_trees, pack_data_tree
 from packs.emulatorentries import EmulatorSelection, emulator_pack_entries
 from packs.extras import emulator_region_drops
 from packs.naming import (
@@ -45,7 +45,6 @@ from resolve import packfiles as packresolve
 from resolve.packfiles import download_external, resolve_file
 from resolve.validation import (
     build_validation_index,
-    deliverable,
     validated_choice,
     with_archive_members,
 )
@@ -128,7 +127,6 @@ class _EmulatorPackBuild:
             self.record.files.append(dest)
 
     def pack_profile(self, emu_name: str, profile: dict) -> None:
-        pack_structure = profile.get("pack_structure")
         carried = emulator_pack_entries(emu_name, profile, EmulatorSelection(
             self.db, self.standalone, self.all_profiles, self.validation_index,
             self.zip_contents, self.data_registry, system_ids=self.system_ids,
@@ -160,7 +158,7 @@ class _EmulatorPackBuild:
         for position, (_entries, _fills, report) in enumerate(outcomes):
             if report is not None and position not in excused:
                 report()
-        self._pack_trees(profile, pack_structure)
+        self._pack_trees(profile)
 
     def _pack_archive(self, own_entry: dict, archive_name: str, archive_dest: str) -> _Outcome:
         local_path, status = resolve_file(
@@ -336,32 +334,16 @@ class _EmulatorPackBuild:
             if os.path.exists(tmp_path):
                 os.unlink(tmp_path)
 
-    def _pack_trees(self, profile: dict, pack_structure: dict | None) -> None:
+    def _pack_trees(self, profile: dict) -> None:
         # The trees after the files, as in a platform pack: a dump the
         # profile declares wins over the copy a tree bundles at the same
         # path (Dolphin's real dsp_rom.bin over Sys/GC's free one).
-        # A tree only one build reads follows that build, like a file.
-        required_only = self.required_only
-        for dd in deliverable(
-            profile.get("data_directories", []), self.standalone
+        for ref_key, local_cache, dd_dest in carried_trees(
+            profile, self.standalone, self.required_only, self.data_registry,
         ):
-            if required_only and dd.get("required") is False:
-                continue
-            ref_key = dd.get("ref", "")
-            if not ref_key or not self.data_registry or ref_key not in self.data_registry:
-                if ref_key:
-                    self.data_dir_notices.append(ref_key)
-                continue
-            local_cache = self.data_registry[ref_key].get("local_cache", "")
-            if not local_cache or not os.path.isdir(local_cache):
+            if local_cache is None:
                 self.data_dir_notices.append(ref_key)
                 continue
-            dd_dest = dd.get("destination", "")
-            if pack_structure:
-                mode_key = "standalone" if self.standalone else "libretro"
-                prefix = pack_structure.get(mode_key, "")
-                if prefix:
-                    dd_dest = f"{prefix}/{dd_dest}" if dd_dest else prefix
             self.data_files += pack_data_tree(
                 self.zf, local_cache, dd_dest, self.placed, self.packed_at,
             )
