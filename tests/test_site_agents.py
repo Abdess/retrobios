@@ -30,11 +30,28 @@ class TheGuideLeadsToTheFewestFiles(unittest.TestCase):
         self.assertIn("\n## Setting up a device for its user\n", self.text)
 
     def test_every_command_installs_only_what_the_games_need(self) -> None:
-        commands = re.findall(r"`((?:curl|&) [^`]+)`", self.text)
+        commands = re.findall(r"`((?:curl |&\(\[scriptblock)[^`]+)`", self.text)
         self.assertGreaterEqual(len(commands), 3)
         for command in commands:
             with self.subTest(command=command):
                 self.assertIn("--for-games --required-only", command)
+
+    def test_the_commands_are_the_ones_the_pages_show(self) -> None:
+        from model.guides import install_command
+
+        for text in (self.text, siteagents.skill_md()):
+            for shell in ("sh", "powershell"):
+                with self.subTest(shell=shell, text=text[:20]):
+                    self.assertIn(install_command(shell, "--for-games --required-only") + " --",
+                                  text)
+
+    def test_the_webmcp_tool_writes_the_same_command(self) -> None:
+        from model.guides import install_command
+
+        tools = TOOLS.read_text(encoding="utf-8")
+        for shell in ("sh", "powershell"):
+            with self.subTest(shell=shell):
+                self.assertIn(f"'{install_command(shell, '-').removesuffix(' -')}'", tools)
 
     def test_each_setup_has_its_page(self) -> None:
         self.assertIn("(https://abdess.github.io/retrobios/platforms/batocera/)", self.text)
@@ -111,7 +128,7 @@ class TheSkillIsAnAgentSkill(unittest.TestCase):
         self.assertRegex(front["name"], r"^[a-z0-9-]{1,64}$")
         self.assertLessEqual(len(front["description"]), 1024)
         self.assertTrue(body.lstrip().startswith("# "))
-        for command in re.findall(r"`((?:curl|&) [^`]+)`", body):
+        for command in re.findall(r"`((?:curl |&\(\[scriptblock)[^`]+)`", body):
             with self.subTest(command=command):
                 self.assertIn("--for-games --required-only", command)
 

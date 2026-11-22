@@ -23,12 +23,13 @@ from core import upstream
 from core.artifacts import write_text_atomic
 from core.cli import SourceUnreadable
 from core.github import github_token
+from sitegen.config import REPO_SLUG, SITE_URL
 
 
 CONFIG = Path(os.environ.get("RETROBIOS_CONFIG", Path.home() / ".config" / "retrobios"))
-SITE_PROPERTY = "https://abdess.github.io/retrobios/"
+SITE_PROPERTY = SITE_URL
 GOATCOUNTER = "https://retrobios.goatcounter.com/api/v0"
-REPOSITORY = "Abdess/retrobios"
+REPOSITORY = REPO_SLUG
 SOURCES = ("gsc", "goatcounter", "github")
 USER_AGENT = "retrobios-site-insights"
 # GoatCounter builds an export in the background: it is asked for every

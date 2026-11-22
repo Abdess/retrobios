@@ -5,9 +5,9 @@ from __future__ import annotations
 import json
 
 from core import upstream
-from sitegen.agents import INDEXNOW_FILE, INDEXNOW_KEY, SITE
+from sitegen.agents import INDEXNOW_FILE, INDEXNOW_KEY, PUBLISHER, SITE
 
-HOST = "abdess.github.io"
+HOST = PUBLISHER
 # What one IndexNow request accepts.
 MAX_URLS = 10_000
 USER_AGENT = "retrobios-indexnow"

@@ -183,7 +183,7 @@ const setupFiles: Tool = {
 // options wiki/installer.md documents: the fewest files the games on the
 // card need, unless the user asks for everything.
 const SH = 'curl -fsSL https://abdess.github.io/retrobios/i | sh -s --';
-const PS = '& ([scriptblock]::Create((irm https://abdess.github.io/retrobios/i.ps1)))';
+const PS = '&([scriptblock]::Create((irm https://abdess.github.io/retrobios/i.ps1)))';
 
 const setupCommand: Tool = {
 	name: 'device_setup_command',

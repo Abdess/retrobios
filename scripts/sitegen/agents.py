@@ -19,12 +19,11 @@ import json
 from collections.abc import Callable
 from pathlib import Path
 
-from model.guides import PACKAGE_COMMAND
+from model.guides import PACKAGE_COMMAND, install_command
+from sitegen.config import SITE_ORIGIN, SITE_URL
 
-SITE = "https://abdess.github.io/retrobios/"
-PUBLISHER = "abdess.github.io"
-SH = "curl -fsSL https://abdess.github.io/retrobios/i | sh -s --"
-PS = "& ([scriptblock]::Create((irm https://abdess.github.io/retrobios/i.ps1)))"
+SITE = SITE_URL
+PUBLISHER = SITE_ORIGIN.removeprefix("https://")
 # What a folder put into a command may not hold, as agent-tools.ts refuses
 # it: PowerShell also ends a single-quoted string on the typographic quotes.
 REFUSED = "any quote, straight or typographic (' \" ‘ ’ ‚ ‛ “ ” „), a backtick or a control character"
@@ -34,6 +33,8 @@ QUOTING = (f"A folder goes in single quotes, attached to its option. One that ho
            "command and refuses such a folder.")
 
 UVX = PACKAGE_COMMAND
+# The options the agent steps install with: what the card's games need to start.
+GAMES = "--for-games --required-only"
 # EVENT_SCHEMA of install.py, and the schema generate_event_schema.py writes
 # from EVENT_KEYS, as the site publishes it. tests/test_site_agents.py holds
 # both to install.py.
@@ -108,9 +109,9 @@ def llms_txt(platforms: list[tuple[str, str]]) -> str:
         "without. `--yes` alone installs what the card's games need, optional files "
         "included, and `--all-files` the setup's whole list (gigabytes).",
         "",
-        f"1. Preview, nothing written: `{SH} --for-games --required-only --dry-run`",
-        f"2. Install, no questions: `{SH} --for-games --required-only --yes`",
-        f"3. On Windows (PowerShell): `{PS} --for-games --required-only --yes`",
+        f"1. Preview, nothing written: `{install_command('sh', GAMES + ' --dry-run')}`",
+        f"2. Install, no questions: `{install_command('sh', GAMES + ' --yes')}`",
+        f"3. On Windows (PowerShell): `{install_command('powershell', GAMES + ' --yes')}`",
         "",
         "- Run it on the device itself (its terminal or SSH), or on a computer with the device's "
         "card plugged in. The installer recognises the handheld systems on the card, among them "
@@ -215,8 +216,8 @@ def skill_md() -> str:
         "",
         "1. Ask where the games are: on the device itself (with its terminal or SSH), or on "
         "its card plugged into this computer.",
-        f"2. Preview, nothing is written: `{SH} --for-games --required-only --dry-run` "
-        f"(Windows PowerShell: `{PS} --for-games --required-only --dry-run`).",
+        f"2. Preview, nothing is written: `{install_command('sh', GAMES + ' --dry-run')}` "
+        f"(Windows PowerShell: `{install_command('powershell', GAMES + ' --dry-run')}`).",
         "3. Show the user the plan it prints: the setup found, the BIOS folder, the files and "
         "their size. Ask before going on if the setup or the folder is not the one expected.",
         "4. Install with the same command, `--yes` in place of `--dry-run`.",
