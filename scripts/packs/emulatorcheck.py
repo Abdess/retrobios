@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import os
-import sys
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
@@ -13,7 +12,6 @@ from core.ziptools import build_zip_contents_index
 from model.alternatives import set_requirements, settle_sets, slot_set_keys
 from model.database import sha1_at
 from model.profiles import (
-    ProfileSelectionError,
     load_emulator_profiles,
     no_profile_for_systems,
     profiles_for_systems,
@@ -45,6 +43,10 @@ from resolve.validation import (
 _REPO_PLATFORMS = str(REPO_ROOT / "platforms")
 
 
+class NoSystemProfileError(ValueError):
+    """No profile serves the systems asked for."""
+
+
 # Emulator/system mode verification
 
 
@@ -68,19 +70,6 @@ def _effective_validation_label(details: list[dict], validation_index: dict) -> 
     if not has_files:
         return "existence"
     return "+".join(sorted(all_checks))
-
-
-def _select_profiles(
-    profile_names: list[str],
-    all_profiles: dict,
-    standalone: bool,
-) -> list[tuple[str, dict]]:
-    """Resolve the named profiles, stopping the run on a bad name."""
-    try:
-        return select_emulator_profiles(profile_names, all_profiles, standalone)
-    except ProfileSelectionError as exc:
-        print(f"Error: {exc}", file=sys.stderr)
-        sys.exit(1)
 
 
 _HASH_CONTRADICTED = "declared hash contradicted by the local file"
@@ -541,11 +530,12 @@ def verify_emulator(
     `required_only` reports on the pack built with --required-only: a loose
     file or tree marked ``required: false`` is left out, and an archive when
     it and every member it carries are optional, as the builder leaves them.
+    A name no profile answers for raises ProfileSelectionError.
     """
     # Also load aliases for redirect messages
     all_profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
 
-    selected = _select_profiles(profile_names, all_profiles, standalone)
+    selected = select_emulator_profiles(profile_names, all_profiles, standalone)
     # The member index only answers a zipped_file entry, and decompressing
     # every archive took 23 of the 24 seconds of a run that had none.
     zip_contents = (
@@ -630,13 +620,16 @@ def verify_system(
     platforms_dir: str = _REPO_PLATFORMS,
     required_only: bool = False,
 ) -> dict:
-    """Verify files for all emulators supporting given system IDs."""
+    """Verify files for all emulators supporting given system IDs.
+
+    Raises NoSystemProfileError when no profile serves them, and
+    ProfileSelectionError as verify_emulator does.
+    """
     profiles = load_emulator_profiles(emulators_dir)
     matching = profiles_for_systems(profiles, system_ids, standalone)
 
     if not matching:
-        print(no_profile_for_systems(profiles, system_ids, standalone), file=sys.stderr)
-        sys.exit(1)
+        raise NoSystemProfileError(no_profile_for_systems(profiles, system_ids, standalone))
 
     return verify_emulator(
         matching, emulators_dir, db, standalone, regions=regions,

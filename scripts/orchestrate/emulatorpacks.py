@@ -57,7 +57,6 @@ def check_emulator_packs(
         ProfileSelectionError,
         load_emulator_profiles,
         profiles_for_systems,
-        select_emulator_profiles,
     )
     from model.systems import norm_system_id
     from core.ziptools import build_zip_contents_index
@@ -68,20 +67,24 @@ def check_emulator_packs(
     zip_contents = build_zip_contents_index(db)
     profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
 
-    def compare(names: list[str], standalone: bool, label: str, **narrowing: object) -> bool:
+    def compare(names: list[str], standalone: bool, label: str, **narrowing: object) -> bool | None:
+        """Whether the two sides agree, None when the profiles have no such build."""
         record = archive.PackRecord()
         # The pack is built offline: verify counts a release asset the cache
         # lacks the same way, missing, as the narrowed-pack step does.
         with packresolve.offline(), contextlib.redirect_stdout(io.StringIO()), \
                 contextlib.redirect_stderr(io.StringIO()):
+            try:
+                report = emulatorcheck.verify_emulator(
+                    names, emulators_dir, db, standalone, platforms_dir=platforms_dir,
+                    **narrowing,
+                )
+            except ProfileSelectionError:
+                return None
             emulatorpack.build_emulator_pack(
                 names, emulators_dir, db, "bios", "", standalone,
                 zip_contents=zip_contents, offline=True, platforms_dir=platforms_dir,
                 record=record, **narrowing,
-            )
-            report = emulatorcheck.verify_emulator(
-                names, emulators_dir, db, standalone, platforms_dir=platforms_dir,
-                **narrowing,
             )
         lines = set_difference_lines(
             label, set(report["pack_destinations"]), set(record.files)
@@ -96,14 +99,13 @@ def check_emulator_packs(
         if profiles[name].get("type") == "alias":
             continue  # selects the profile it names, compared under that name
         for standalone in (False, True):
-            try:
-                select_emulator_profiles([name], profiles, standalone)
-            except ProfileSelectionError:
-                continue
             for tag, narrowing in emulator_variants([profiles[name]], full):
-                compared += 1
                 label = f"{name}{' --standalone' if standalone else ''}{tag}"
-                all_ok = compare([name], standalone, label, **narrowing) and all_ok
+                equal = compare([name], standalone, label, **narrowing)
+                if equal is None:
+                    break  # the selection does not depend on the narrowing
+                compared += 1
+                all_ok = equal and all_ok
     print(f"  {compared} emulator packs compared, {'all equal' if all_ok else 'differences above'}")
     # A system pack builds every profile of the system together: a placement
     # rule that only goes wrong when two profiles share a path (the bluemsx
@@ -124,11 +126,12 @@ def check_emulator_packs(
             for tag, narrowing in emulator_variants(
                 [profiles[n] for n in matching if n in profiles], full
             ):
-                compared += 1
                 label = f"--system {sid}{' --standalone' if standalone else ''}{tag}"
-                systems_ok = compare(
-                    matching, standalone, label, system_ids=[sid], **narrowing
-                ) and systems_ok
+                equal = compare(matching, standalone, label, system_ids=[sid], **narrowing)
+                if equal is None:
+                    break
+                compared += 1
+                systems_ok = equal and systems_ok
     print(f"  {compared} system packs compared, "
           f"{'all equal' if systems_ok else 'differences above'}")
     return all_ok and systems_ok

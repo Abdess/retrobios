@@ -38,7 +38,7 @@ from core.ziptools import build_zip_contents_index, check_inside_zip, safe_extra
 from core.hashing import compute_hashes, md5_composite, parse_hash_list
 from model.declarations import expand_platform_declared_names
 from resolve.grouping import group_identical_platforms
-from model.profiles import load_emulator_profiles
+from model.profiles import ProfileSelectionError, load_emulator_profiles
 from model.platforms import load_platform_config
 from resolve.localfile import resolve_local_file
 from resolve.cores import resolve_platform_cores
@@ -1498,7 +1498,7 @@ class TestE2E(unittest.TestCase):
 
     def test_92_verify_emulator_libretro_only_rejects_standalone(self):
         """Libretro-only profile rejects --standalone."""
-        with self.assertRaises(SystemExit):
+        with self.assertRaises(ProfileSelectionError):
             verify_emulator(["test_hle"], self.emulators_dir, self.db, standalone=True)
 
     def test_92b_verify_emulator_game_type_rejects_standalone(self):
@@ -1511,7 +1511,7 @@ class TestE2E(unittest.TestCase):
         }
         with open(os.path.join(self.emulators_dir, "test_game.yml"), "w") as fh:
             yaml.dump(game, fh)
-        with self.assertRaises(SystemExit):
+        with self.assertRaises(ProfileSelectionError):
             verify_emulator(["test_game"], self.emulators_dir, self.db, standalone=True)
 
     def test_93_verify_emulator_alias_selects_its_profile(self):
@@ -1524,7 +1524,7 @@ class TestE2E(unittest.TestCase):
 
     def test_94_verify_emulator_launcher_rejected(self):
         """Launcher profile produces error."""
-        with self.assertRaises(SystemExit):
+        with self.assertRaises(ProfileSelectionError):
             verify_emulator(["test_launcher"], self.emulators_dir, self.db)
 
     def test_95_verify_emulator_validation_applied(self):

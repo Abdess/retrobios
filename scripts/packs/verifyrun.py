@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import sys
 
 from model.cliargs import (
     comma_list,
@@ -15,8 +16,9 @@ from model.cliargs import (
     work_from_repo_root,
 )
 from model.database import load_database
+from model.profiles import ProfileSelectionError
 from model.registry import load_data_dir_registry
-from packs.emulatorcheck import verify_emulator, verify_system
+from packs.emulatorcheck import NoSystemProfileError, verify_emulator, verify_system
 from packs.strictgate import exit_if_strict
 from packs.verifyoptions import check_mode, refuse_listing_narrowings
 from packs.verifyplatforms import PlatformRun, verify_platforms
@@ -24,19 +26,32 @@ from packs.verifyprint import print_emulator_run, print_platform_results
 
 
 def _run_emulator_mode(args: argparse.Namespace, db: dict, regions: list[str]) -> None:
-    print_emulator_run(args, verify_emulator(
-        comma_list(args.emulator), args.emulators_dir, db, args.standalone,
-        regions=regions, platforms_dir=args.platforms_dir,
-        required_only=args.required_only,
-    ))
+    try:
+        report = verify_emulator(
+            comma_list(args.emulator), args.emulators_dir, db, args.standalone,
+            regions=regions, platforms_dir=args.platforms_dir,
+            required_only=args.required_only,
+        )
+    except ProfileSelectionError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        sys.exit(1)
+    print_emulator_run(args, report)
 
 
 def _run_system_mode(args: argparse.Namespace, db: dict, regions: list[str]) -> None:
-    print_emulator_run(args, verify_system(
-        comma_list(args.system), args.emulators_dir, db, args.standalone,
-        regions=regions, platforms_dir=args.platforms_dir,
-        required_only=args.required_only,
-    ))
+    try:
+        report = verify_system(
+            comma_list(args.system), args.emulators_dir, db, args.standalone,
+            regions=regions, platforms_dir=args.platforms_dir,
+            required_only=args.required_only,
+        )
+    except NoSystemProfileError as exc:
+        print(exc, file=sys.stderr)
+        sys.exit(1)
+    except ProfileSelectionError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        sys.exit(1)
+    print_emulator_run(args, report)
 
 
 def _run_platform_mode(
