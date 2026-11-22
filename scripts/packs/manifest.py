@@ -12,7 +12,7 @@ from core.options import reject_unknown
 from core.paths import EMULATORS_DIR, REPO_ROOT, declared_destination, sanitize_pack_path
 from model.declarations import OUTER_ROOTS, declared_root, outer_layout
 from model.platforms import load_platform_config
-from model.profiles import load_emulator_profiles
+from model.profiles import installed_data_refs_in, load_emulator_profiles
 from model.registry import load_data_dir_registry, platform_registry_at
 from model.systems import platform_system_names
 from packs import slots
@@ -474,6 +474,7 @@ class _ManifestBuild:
             self.pack_systems, self.data_registry, self.platform_name, self.base_dest,
             self.placed, refs_out=data_refs, required_only=required_only,
             core_trees=core_trees,
+            installed=installed_data_refs_in(self.platform_name, self.emu_profiles),
             reclaim=reclaim, uncached_out=uncached,
         ))
         if opts.uncached_out is not None:

@@ -18,7 +18,7 @@ from core.ziptools import is_archive_path
 from model.alternatives import core_file_spares
 from model.declarations import OUTER_ROOTS, declared_root
 from model.platforms import load_platform_config
-from model.profiles import load_emulator_profiles
+from model.profiles import installed_data_refs_in, load_emulator_profiles
 from model.releaserecord import PACK_SUFFIX
 from packs import slots
 from packs.archive import (
@@ -936,6 +936,7 @@ class _PlatformPackBuild:
             pack_systems, plan.opts.data_registry, plan.platform_name, plan.base_dest,
             self.placed, required_only=required_only,
             core_trees=core_trees, uncached_out=uncached,
+            installed=installed_data_refs_in(plan.platform_name, plan.emu_profiles or {}),
         ):
             # The installer writes a data tree member without the bit.
             add_pack_member(self.zf, src, self._flat(full), executable=False)

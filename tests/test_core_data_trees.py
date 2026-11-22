@@ -13,12 +13,13 @@ from __future__ import annotations
 import tests
 
 import os
+import tempfile
 import unittest
 from pathlib import Path
 
 from model.database import load_database
 from model.platforms import load_platform_config
-from model.profiles import load_emulator_profiles, installed_data_refs
+from model.profiles import load_emulator_profiles, installed_data_refs_in
 from model.registry import load_data_dir_registry, list_registered_platforms
 from resolve.cores import resolve_platform_cores
 from resolve.standalone import platform_layouts, standalone_set
@@ -29,7 +30,7 @@ from resolve.validation import deliverable, read_from_system_dir
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-PROFILES = {
+PROFILES: dict[str, dict] = {
     "demo": {
         "emulator": "Demo",
         "type": "libretro",
@@ -124,6 +125,25 @@ class CoreDataTreesTest(unittest.TestCase):
     def test_no_registry_no_tree(self) -> None:
         self.assertEqual(datatrees.core_data_trees(CONFIG, PROFILES, "plat", None), [])
 
+    def test_the_run_profiles_decide_an_installed_tree(self) -> None:
+        """installed_on read from the repository's emulators/: a pack built
+        from other profiles dropped a tree the platform's systems declare."""
+        installed = installed_data_refs_in("plat", PROFILES)
+        self.assertEqual(installed, frozenset({"installed"}))
+        self.assertEqual(installed_data_refs_in("plat", {}), frozenset())
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "f.bin").write_bytes(b"x")
+            registry = {"installed": {"local_cache": tmp}}
+            systems = {"demo-system": {"data_directories": [{"ref": "installed"}]}}
+
+            def walk(refs: frozenset[str]) -> list[str]:
+                return [full for _src, full in datatrees.data_directory_members(
+                    systems, registry, "lakka", "", archive.Placed(False), installed=refs,
+                )]
+
+            self.assertEqual(walk(frozenset()), ["f.bin"])
+            self.assertEqual(walk(installed), [])
+
 
 class EveryReaderHasTheTreeOrAReason(unittest.TestCase):
     """Reads the repository: platforms/_data_dirs.yml against the profiles."""
@@ -142,7 +162,7 @@ class EveryReaderHasTheTreeOrAReason(unittest.TestCase):
                        in platform_layouts(core, profile, handed)):
                     continue
                 trees = [t for t in profile.get("data_directories") or [] if isinstance(t, dict)]
-                installed = installed_data_refs(platform)
+                installed = installed_data_refs_in(platform, profiles)
                 for tree in deliverable(trees, False, platform):
                     allowed = registry.get(tree.get("ref"), {}).get("for_platforms")
                     if tree.get("ref") in installed or not read_from_system_dir(tree):

@@ -16,7 +16,6 @@ from model.profilekinds import reads_own_files as reads_own_files
 from model.safeparse import require_yaml
 from model.sources import source_yaml_file
 from model.systems import norm_system_id, system_index
-from core.paths import REPO_ROOT
 
 
 # The content tests a profile can declare in ``validation:``, each run by
@@ -180,7 +179,7 @@ def source_yaml_paths(directory: str | Path) -> list[Path]:
     ]
 
 
-def installed_data_refs(platform: str, emulators_dir: str = "") -> frozenset[str]:
+def installed_data_refs_in(platform: str, profiles: Mapping[str, dict]) -> frozenset[str]:
     """Data directories a platform's own packages install beside the cores.
 
     The platform layer names trees for its systems (retroarch.yml carries
@@ -188,11 +187,9 @@ def installed_data_refs(platform: str, emulators_dir: str = "") -> frozenset[str
     core packages put both into the system directory themselves. A profile
     records that with installed_on on its data directory reference.
     """
-    emulators_dir = emulators_dir or os.path.join(
-        REPO_ROOT, "emulators")
     return frozenset(
         str(tree.get("ref", ""))
-        for profile in load_emulator_profiles(emulators_dir, skip_aliases=False).values()
+        for profile in profiles.values()
         for tree in profile.get("data_directories") or []
         if isinstance(tree, dict) and platform in (tree.get("installed_on") or [])
     )

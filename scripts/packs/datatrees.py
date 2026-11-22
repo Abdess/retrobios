@@ -13,7 +13,7 @@ from core.hashing import compute_hashes
 from core.options import reject_unknown
 from model.declarations import declared_root
 from model.registry import load_versions
-from model.profiles import entry_system_ids, installed_data_refs
+from model.profiles import entry_system_ids, installed_data_refs_in
 from model.systems import norm_system_id
 from packs.archive import PackRecord, Placed, add_pack_member
 from packs.datadirs import cache_lock, revisioned
@@ -55,7 +55,7 @@ def core_data_trees(
     the core (and the build's own folder, ``pack_structure``), as the
     emulator pack lays them out. Left out: a tree the platform's package
     installs, for this core or another reading the same tree
-    (``installed_data_refs``), one the build bundles or the platform never
+    (``installed_data_refs_in``), one the build bundles or the platform never
     opens (``deliverable``), and one whose registry entry names the
     platforms it serves (``for_platforms``) without this one. A standalone build reads its data below its own folder, which a
     tree's destination does not describe, so its trees stay out, as does a
@@ -66,7 +66,7 @@ def core_data_trees(
     """
     if not data_registry:
         return []
-    installed = installed_data_refs(platform_name)
+    installed = installed_data_refs_in(platform_name, profiles)
     handed = standalone_set(config, profiles)
     # Relative to base_destination, which the members are written under. A
     # platform with none writes its BIOS folder into every destination, and
@@ -146,15 +146,18 @@ class _TreeWalkOptions(TypedDict, total=False):
     required_only: bool
     core_trees: Iterable[dict]
     reclaim: dict[str, str] | None
+    installed: frozenset[str]
 
 
-def _carried_tree(dd: dict, data_registry: dict | None, platform_name: str) -> str | None:
+def _carried_tree(
+    dd: dict, data_registry: dict | None, platform_name: str, installed: frozenset[str],
+) -> str | None:
     """The cache folder of a tree reference the pack carries ("" when the
     cache does not hold it), or None for a tree the pack does not carry."""
     ref_key = dd.get("ref", "")
     if not ref_key or not data_registry or ref_key not in data_registry:
         return None
-    if ref_key in installed_data_refs(platform_name):
+    if ref_key in installed:
         return None
     entry = data_registry[ref_key]
     allowed = entry.get("for_platforms")
@@ -202,6 +205,10 @@ def data_directory_members(
     each tree the pack carries and the cache does not hold: the caller
     reports it and counts its run incomplete.
 
+    ``installed`` names the trees the platform's packages install
+    (installed_data_refs_in over the run's profiles): the walk leaves them
+    out.
+
     These are not BIOS and carry no hash of their own: they are whole
     trees an emulator reads, refreshed from upstream, so what ships is
     whatever the cache holds. The pack and the install manifest both read
@@ -215,12 +222,13 @@ def data_directory_members(
     reclaim = options.get("reclaim")
     required_only = options.get("required_only", False)
     core_trees = options.get("core_trees", ())
+    installed = options.get("installed", frozenset())
     # Data directories from _data_dirs.yml
     for systems, dd in _tree_references(pack_systems, core_trees):
         needed = dd.get("required") is not False
         if required_only and not needed:
             continue
-        local_path = _carried_tree(dd, data_registry, platform_name)
+        local_path = _carried_tree(dd, data_registry, platform_name, installed)
         if local_path is None:
             continue
         ref_key = dd.get("ref", "")

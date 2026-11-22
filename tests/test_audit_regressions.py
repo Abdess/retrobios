@@ -5641,20 +5641,16 @@ class BundledFilesAreNotToSource(unittest.TestCase):
     def test_a_tree_the_platform_installs_leaves_its_pack(self):
         """retroarch.yml names dolphin-sys and ppsspp-assets and Lakka
         inherits them, while Lakka's core packages install both trees."""
-        import tempfile
+        from model.profiles import installed_data_refs_in
 
-        import yaml as _yaml
-
-        from model.profiles import installed_data_refs
-
-        with tempfile.TemporaryDirectory() as tmp:
-            Path(tmp, "dolphin.yml").write_text(_yaml.safe_dump({
-                "emulator": "Dolphin", "type": "libretro", "files": [],
-                "data_directories": [{"ref": "dolphin-sys", "installed_on": ["lakka"]}]}))
-            self.assertEqual(installed_data_refs("lakka", tmp), frozenset({"dolphin-sys"}))
-            self.assertEqual(installed_data_refs("retroarch", tmp), frozenset())
+        profiles = {"dolphin": {
+            "emulator": "Dolphin", "type": "libretro", "files": [],
+            "data_directories": [{"ref": "dolphin-sys", "installed_on": ["lakka"]}]}}
+        self.assertEqual(installed_data_refs_in("lakka", profiles), frozenset({"dolphin-sys"}))
+        self.assertEqual(installed_data_refs_in("retroarch", profiles), frozenset())
         source = script_source("generate_pack.py")
-        self.assertIn("if ref_key in installed_data_refs(platform_name):", source)
+        self.assertIn("if ref_key in installed:", source)
+        self.assertIn("installed=installed_data_refs_in(plan.platform_name", source)
 
     def test_the_pack_builder_skips_it(self):
         source = (ROOT / "scripts" / "packs" / "extras.py").read_text(encoding="utf-8")
