@@ -42,9 +42,12 @@ from probes.host import (
     Host,
     Paths,
     Settings,
+    StillBusy,
     Unavailable,
     child_env,
+    run_when_idle,
     slug,
+    wait_for_load,
 )
 from probes.state import DONE, FAILED, PENDING, load_state, should_run
 
@@ -192,13 +195,11 @@ class Campaign:
         if free < self.settings.min_free_gb:
             raise Pause(f"disk: {free:.0f} GB free, the campaign stops under "
                         f"{self.settings.min_free_gb:.0f} GB")
-        waited = 0.0
-        while self.host.loadavg()[0] > self.host.max_load:
-            if waited >= self.settings.max_load_wait:
-                raise Pause(f"busy host: load stayed above {self.host.max_load:.1f} for "
-                            f"{int(waited)} s")
-            self.host.sleep(self.host.poll)
-            waited += self.host.poll
+        try:
+            wait_for_load(self.host, self.settings.max_load_wait, self.host.poll)
+        except StillBusy as exc:
+            raise Pause(f"busy host: load stayed above {exc.threshold:.1f} for "
+                        f"{int(exc.waited)} s") from None
 
     # -- one core_probe invocation -------------------------------------------
 
@@ -210,12 +211,14 @@ class Campaign:
         repeats = argv.count("--vary") or 1
         reps = int(argv[argv.index("--repeat") + 1]) if "--repeat" in argv else 1
         budget = self.settings.probe_timeout * repeats * reps + 120
-        attempt = busy = 0
+        attempt = 0
         while attempt < CRASH_ATTEMPTS:
             self.guard()
             try:
-                proc = self.host.run(command, capture_output=True, text=True, check=False,
-                                     timeout=budget, cwd=self.paths.root, env=child_env())
+                # Refused on a busy host: run_when_idle runs it again until the wait runs out.
+                proc = run_when_idle(command, self.settings.max_load_wait, timeout=budget,
+                                     cwd=self.paths.root, env=child_env(), clock=self.host.clock,
+                                     pause=self.host.sleep, runner=self.host.run)
             except subprocess.TimeoutExpired:
                 with log.open("a", encoding="utf-8") as handle:
                     handle.write(f"$ {' '.join(command)}\nkilled after {budget} s\n")
@@ -229,11 +232,8 @@ class Campaign:
                 except ValueError:
                     return ProbeResult(FAILED, reason="core_probe printed no record", log=str(log))
             if proc.returncode == core_probe.EXIT_BUSY:
-                # Refused on a busy host: wait for it to settle and run it again.
-                busy += 1
-                if busy >= CRASH_ATTEMPTS:
-                    raise Pause("busy host: core_probe refused to record three times")
-                continue
+                raise Pause(f"busy host: core_probe refused to record for "
+                            f"{int(self.settings.max_load_wait)} s")
             attempt += 1
             if proc.returncode == 2:
                 return ProbeResult(FAILED, reason=f"core_probe refused the run: "

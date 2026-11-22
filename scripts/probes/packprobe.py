@@ -8,12 +8,11 @@ import os
 import shutil
 import subprocess
 import sys
-import time
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
-from core_probe import (EXIT_BUSY, PROBE_LOCK_ENV, PROBE_LOCK_HELD_ENV, VERDICTS, default_max_load, head_commit,
+from core_probe import (EXIT_BUSY, PROBE_LOCK_ENV, PROBE_LOCK_HELD_ENV, VERDICTS, head_commit,
                         host_probe_lock, probe_lock_path)
 from core.paths import REPO_ROOT
 from core.statefile import now_iso
@@ -25,7 +24,8 @@ from model.targets import load_target_config
 from probes.content import Content, content_root, fetch_content, find_romfetch, load_content, load_file, ready_folder
 from probes.cores import buildbot_listing, cached_nightly
 from probes.entries import entry_dest
-from probes.host import CONTENT_FILE, PROBE_TIMEOUT, Unavailable, main_cache, run_group, run_when_idle
+from probes.host import (CONTENT_FILE, PROBE_TIMEOUT, Host, StillBusy, Unavailable, main_cache, run_group,
+                         run_when_idle, wait_for_load)
 from probes.packlayout import (
     Layout,
     ProbeFailure,
@@ -45,6 +45,7 @@ PACK_CONTENT_FILE = REPO_ROOT / "tests" / "campaign" / "pack_content.yml"
 
 MAX_ROUNDS = 6
 IDLE_WAIT = 1800
+IDLE_POLL = 30.0
 
 # The hardware target each platform is probed for: the one whose libretro
 # cores are the buildbot's x86_64 Linux builds, or the platform's only one.
@@ -257,17 +258,13 @@ def content_folder(content: Content, fetch: bool) -> Path:
 # One probe: a core, a game, a layout
 # --------------------------------------------------------------------------
 
-def wait_idle(limit: float = IDLE_WAIT, poll: float = 30.0) -> None:
+def wait_idle(host: Host, limit: float = IDLE_WAIT, poll: float = IDLE_POLL) -> None:
     """Wait for the load core_probe records under (core_probe.default_max_load).
     Extracting a pack loads the host itself for a minute or two."""
-    threshold = default_max_load()
-    waited = 0.0
-    while os.getloadavg()[0] > threshold:
-        if waited >= limit:
-            raise ProbeFailure(f"busy host: load {os.getloadavg()[0]:.2f} above {threshold} "
-                               f"for {int(waited)} s")
-        time.sleep(poll)
-        waited += poll
+    try:
+        wait_for_load(host, limit, poll)
+    except StillBusy as exc:
+        raise ProbeFailure(f"busy host: {exc}") from None
 
 
 def core_probe(argv: list[str], staged: set[str], layout: Layout, work: Path) -> tuple[int, dict | None, str]:
@@ -278,11 +275,13 @@ def core_probe(argv: list[str], staged: set[str], layout: Layout, work: Path) ->
     argfile.write_text("".join(f"--system-file\n{rel}={layout.root / rel}\n" for rel in sorted(staged)),
                        encoding="utf-8")
     command = [sys.executable, str(REPO_ROOT / "scripts" / "core_probe.py"), *argv, f"@{argfile}"]
+    host = Host()
     with host_probe_lock():
         if "--record" in argv:
-            wait_idle()
+            wait_idle(host)
         # core_probe takes the same lock unless told its caller holds it.
         proc = run_when_idle(command, IDLE_WAIT, timeout=PROBE_TIMEOUT * 2 + 120, runner=run_group,
+                             clock=host.clock, pause=host.sleep,
                              env={**os.environ, PROBE_LOCK_HELD_ENV: "1",
                                   PROBE_LOCK_ENV: str(probe_lock_path())})
     record = None

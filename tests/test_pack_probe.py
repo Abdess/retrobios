@@ -358,22 +358,21 @@ class Lock(unittest.TestCase):
 
 class LoadThreshold(unittest.TestCase):
     """pack_probe waits for the load core_probe records under, and the campaign
-    passes the same value: all three read core_probe.default_max_load."""
+    passes the same value: both read Host.max_load, core_probe.default_max_load."""
 
     def test_wait_and_campaign_follow_core_probe(self) -> None:
-        from unittest import mock
-
         import core_probe
         from probes import host
 
-        with mock.patch.object(os, "cpu_count", return_value=12):
-            threshold = core_probe.default_max_load()
-            self.assertEqual(host.Host(cpu_count=12).max_load, threshold)
-            with mock.patch.object(os, "getloadavg", return_value=(threshold, 0.0, 0.0)):
-                packprobe.wait_idle(limit=0, poll=0)
-            with mock.patch.object(os, "getloadavg", return_value=(threshold + 0.5, 0.0, 0.0)), \
-                    self.assertRaisesRegex(packprobe.ProbeFailure, f"above {threshold} "):
-                packprobe.wait_idle(limit=0, poll=0)
+        threshold = core_probe.default_max_load(12)
+
+        def at(load: float) -> host.Host:
+            return host.Host(cpu_count=12, loadavg=lambda: (load, 0.0, 0.0), sleep=lambda _: None)
+
+        self.assertEqual(at(0.0).max_load, threshold)
+        packprobe.wait_idle(at(threshold), limit=0, poll=0)
+        with self.assertRaisesRegex(packprobe.ProbeFailure, f"busy host: load .* above {threshold} "):
+            packprobe.wait_idle(at(threshold + 0.5), limit=0, poll=0)
 
 
 class RecordsNameNoLocalPath(unittest.TestCase):

@@ -93,7 +93,7 @@ BUSY_POLL = 15
 
 
 def run_when_idle(argv: Sequence[str], max_wait: float, *, timeout: float | None = None,
-                  env: dict[str, str] | None = None,
+                  env: dict[str, str] | None = None, cwd: Path = REPO_ROOT,
                   clock: Callable[[], float] = time.monotonic,
                   pause: Callable[[float], None] = time.sleep,
                   runner: Callable[..., subprocess.CompletedProcess] = run_group,
@@ -103,7 +103,7 @@ def run_when_idle(argv: Sequence[str], max_wait: float, *, timeout: float | None
     core_probe's own, and a timeout kills the run's whole process group."""
     started = clock()
     while True:
-        proc = runner(list(argv), cwd=REPO_ROOT, capture_output=True, text=True, timeout=timeout,
+        proc = runner(list(argv), cwd=cwd, capture_output=True, text=True, timeout=timeout,
                       **({"env": env} if env is not None else {}))
         if proc.returncode != core_probe.EXIT_BUSY or clock() - started >= max_wait:
             return proc
@@ -126,6 +126,27 @@ class Host:
     @property
     def max_load(self) -> float:
         return core_probe.default_max_load(self.cpu_count)
+
+
+class StillBusy(RuntimeError):
+    """The load stayed above core_probe's threshold for a whole wait."""
+
+    def __init__(self, load: float, threshold: float, waited: float) -> None:
+        super().__init__(f"load {load:.2f} above {threshold} for {int(waited)} s")
+        self.load = load
+        self.threshold = threshold
+        self.waited = waited
+
+
+def wait_for_load(host: Host, limit: float, poll: float) -> None:
+    """Wait while the host's load is above the threshold core_probe records
+    under, reading it every poll seconds, StillBusy after limit seconds."""
+    waited = 0.0
+    while (load := host.loadavg()[0]) > host.max_load:
+        if waited >= limit:
+            raise StillBusy(load, host.max_load, waited)
+        host.sleep(poll)
+        waited += poll
 
 
 def parse_budget(text: str) -> float:
