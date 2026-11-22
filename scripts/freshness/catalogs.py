@@ -111,18 +111,21 @@ def redump_datfile_version(code: str) -> str:
     disposition = upstream.open_retrying(
         request, lambda response: response.headers.get("Content-Disposition", ""), timeout=60
     )
-    named = game_dat_importer.DISPOSITION.search(disposition)
-    match = game_dat_importer.REDUMP_FILE.match(named["file"]) if named else None
-    if not match:
+    version = game_dat_importer.served_version(game_dat_importer.datfile_name(disposition) or "")
+    if not version:
         raise ValueError(f"{url} names no datfile")
-    return f"{match['date']} {match['time']}"
+    return version
 
 
 def _check_redump_games(offline: bool) -> Finding:
     """games/catalogs/redump/ against the datfiles redump.info serves now.
     A disc dumped since is not recognised by the games-on-card mode."""
     subject = REDUMP_GAMES
-    local = {doc.get("system"): str(doc.get("version", "")) for doc in _game_catalogs("redump")}
+    # The stamp of the file the import read, the one the server names now.
+    local = {
+        doc.get("system"): game_dat_importer.served_version(str((doc.get("archive") or {}).get("file", "")))
+        for doc in _game_catalogs("redump")
+    }
     newest = max(local.values(), default="")
     if offline:
         return Finding("catalogs", subject, SKIPPED, local=newest, detail="offline")

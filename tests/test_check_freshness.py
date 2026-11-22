@@ -534,8 +534,9 @@ class CatalogParsingTests(unittest.TestCase):
         had no row: only the BIOS snapshots of provenance/ were compared."""
         versions = {code: "2026-01-01 00-00-00" for code in game_dat_importer.REDUMP_DATS}
         versions["PSX"] = "2099-01-01 00-00-00"
-        local = [{"system": system, "version": "2026-01-01 00-00-00"}
-                 for _n, system, _f in game_dat_importer.REDUMP_DATS.values()]
+        local = [{"system": system,
+                  "archive": {"file": f"{name} - Datfile (1) (2026-01-01 00-00-00).zip"}}
+                 for name, system, _f in game_dat_importer.REDUMP_DATS.values()]
         with mock.patch("freshness.catalogs._game_catalogs", return_value=local), \
                 mock.patch("freshness.catalogs.redump_datfile_version", side_effect=versions.get):
             row = _check_redump_games(False)
@@ -546,6 +547,32 @@ class CatalogParsingTests(unittest.TestCase):
             for rebuilt, status in (("2026-11-02", OK), ("2026-11-04", STALE)):
                 with mock.patch("freshness.catalogs._no_intro_asset_date", return_value=rebuilt):
                     self.assertEqual(_check_nointro_games("", False).status, status)
+
+    def test_redump_compares_the_file_stamp_not_the_header(self):
+        """The header version and the file name stamp agree only because
+        redump writes the same stamp twice. Compared with the header, a
+        header that differed would keep every system STALE through any
+        refresh."""
+        stamp = "2026-11-01 16-08-06"
+        versions = {code: stamp for code in game_dat_importer.REDUMP_DATS}
+        local = [{"system": system, "version": "a header written another way",
+                  "archive": {"file": f"{name} - Datfile (5) ({stamp}).zip"}}
+                 for name, system, _f in game_dat_importer.REDUMP_DATS.values()]
+        with mock.patch("freshness.catalogs._game_catalogs", return_value=local), \
+                mock.patch("freshness.catalogs.redump_datfile_version", side_effect=versions.get):
+            self.assertEqual(_check_redump_games(False).status, OK)
+        self.assertEqual(game_dat_importer.datfile_name(
+            'attachment; filename="GC - Datfile (5) (2026-11-01 16-08-06).zip"'),
+            "GC - Datfile (5) (2026-11-01 16-08-06).zip")
+        self.assertIsNone(game_dat_importer.datfile_name("attachment"))
+        self.assertEqual(game_dat_importer.served_version("other.zip"), "")
+
+    def test_every_redump_catalog_records_a_stamped_file(self):
+        committed = sorted((REPO_ROOT / "games" / "catalogs" / "redump").glob("*.json"))
+        unstamped = [path.name for path in committed
+                     if not game_dat_importer.served_version(
+                         json.loads(path.read_text(encoding="utf-8"))["archive"]["file"])]
+        self.assertEqual(unstamped, [])
 
     def test_a_mirror_that_stopped_rebuilding_is_stale(self):
         """The mirror failed every daily rebuild from 2026-07-08, and both

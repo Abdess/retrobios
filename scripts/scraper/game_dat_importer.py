@@ -167,6 +167,22 @@ REDUMP_FILE = re.compile(
 )
 
 
+def datfile_name(disposition: str) -> str | None:
+    """The file name a redump.info Content-Disposition header gives a datfile."""
+    match = DISPOSITION.search(disposition)
+    return match["file"] if match else None
+
+
+def served_version(file: str) -> str:
+    """The version redump.info stamps in a datfile name, empty for another name.
+
+    The import records the name, and the freshness check reads the name the
+    server gives now: both sides compare this stamp, never the DAT header.
+    """
+    match = REDUMP_FILE.match(file)
+    return f"{match['date']} {match['time']}" if match else ""
+
+
 def name_regions(name: str) -> list[str] | None:
     """Region slugs of the first parenthesised group made only of territory
     words, or None when the name carries no such group or a word the
@@ -299,10 +315,10 @@ def fetch_redump(code: str, cache_dir: Path, offline: bool, refresh: bool) -> tu
     if offline:
         raise NotCachedError(f"{pack} is not cached")
     url = REDUMP_DATFILE_URL.format(code=code)
-    match = DISPOSITION.search(download(url, pack))
-    if not match:
+    file = datfile_name(download(url, pack))
+    if not file:
         raise RuntimeError(f"{url} answered without a datfile name")
-    meta = {"file": match["file"], "url": url, "fetched": _today()}
+    meta = {"file": file, "url": url, "fetched": _today()}
     write_text_atomic(str(meta_path), json.dumps(meta, indent=1) + "\n")
     return pack, meta
 
