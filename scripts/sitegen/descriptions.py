@@ -9,7 +9,6 @@ from collections.abc import Iterable
 from pathlib import Path
 
 from core.text import series
-from model import releaserecord
 from sitegen import measurements as sitemeasurements
 from sitegen.config import SITE_NAME
 
@@ -165,15 +164,9 @@ def page_description(markdown: str, relative: Path, title: str) -> str:
 
 def _section_description(markdown: str, relative: Path, title: str, browser: str,
                          lead: str) -> str | None:
-    """The description of a download, system, emulator or platform page,
-    or None for a page of another section."""
+    """The description of a system, emulator or platform page, or None for
+    a page of another section. A download page writes its own (getpages)."""
     key = relative.as_posix()
-    if key.startswith(f"{releaserecord.GET_DIR}/"):
-        size = re.search(r"^- (.+ to download\b.*?)\.?$", markdown, re.M)
-        if size:
-            return _shorten(f"{title}: the BIOS pack of this setup, {_plain_markdown(size[1])}. "
-                            "The address stays the same and always gives the latest ZIP.", 155)
-        return _shorten(_first_paragraph(lead) or title, 155)
     if key.startswith("systems/") and relative.stem != "index":
         return _system_description(markdown, browser)
     if key.startswith("emulators/") and relative.stem != "index":

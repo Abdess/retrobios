@@ -427,6 +427,20 @@ class GetPagesSitInYourSetup(unittest.TestCase):
         getpages.generate_get_page("retroarch")
         self.assertEqual(descriptions.PAGE_DATA["get/retroarch.md"], {"dateModified": "-".join(tag.groups())})
 
+    def test_every_get_page_writes_its_own_description(self):
+        """getpages and handheld own the description of a download page:
+        page_description has no branch of its own for one."""
+        from sitegen import handheld
+
+        saved = dict(descriptions.PAGE_DATA)
+        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))
+        pages = [getpages.generate_get_page("retroarch"), getpages.generate_get_index(),
+                 handheld.group_page(REPO_ROOT)]
+        for page in pages:
+            front = page.split("\n---\n", 1)[0]
+            self.assertRegex(front, r"(?m)^description: \"[^\"]+\"$")
+        self.assertNotIn("GET_DIR", (REPO_ROOT / "scripts/sitegen/descriptions.py").read_text(encoding="utf-8"))
+
     def test_no_page_is_left_out_of_every_tab(self):
         nav = _nav()
         present = _present(nav) | {"orphans/alone.md"}
