@@ -236,6 +236,27 @@ class EveryNarrowingIsCompared(unittest.TestCase):
         source = script_source("pipeline.py")
         self.assertIn("ok = check_narrowed_packs(", source)
 
+    def test_a_refused_pack_names_the_reason(self):
+        """The builder's refusal went into a discarded stdout: the step said
+        only that no pack was written."""
+        from unittest import mock
+
+        from orchestrate import narrowed
+        from packs import platformpack
+
+        refused = platformpack.PlatformPackOutcome(zip_path=None, refusal="no core runs x")
+        inputs = ({}, {}, {}, {}, [(["p"], "p")])
+        printed = io.StringIO()
+        with mock.patch.object(narrowed, "comparison_inputs", return_value=inputs), \
+                mock.patch.object(narrowed, "narrowed_variants",
+                                  return_value=[("--system x", {"system_filter": ["x"]})]), \
+                mock.patch("model.platforms.load_platform_config", return_value={}), \
+                mock.patch.object(platformpack, "build_platform_pack", return_value=refused), \
+                contextlib.redirect_stdout(printed):
+            self.assertFalse(narrowed.check_narrowed_packs())
+        self.assertIn("p --system x: the builder wrote no pack: no core runs x",
+                      printed.getvalue())
+
 
 class ThePipelineComparesPaths(unittest.TestCase):
     """Equal counts, other paths: the comparison fails and names both sides."""

@@ -135,7 +135,7 @@ def check_narrowed_packs(
                 name = f"{platform} {label}"
                 if report is None:
                     # The builder declines a system no core of the platform runs.
-                    print(f"  {name}: the builder wrote no pack")
+                    print(f"  {name}: the builder wrote no pack: {built.refusal}")
                     all_ok = False
                     continue
                 credited = set(report["pack_destinations"])
