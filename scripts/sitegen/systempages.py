@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 from model.collection import SECTION_LABELS, manufacturer_slug
 from model.composition import GAME_DATA_TOPS
-from packs.crossref import FileConsumers
+from packs.consumers import FileConsumers
 from sitegen import markup
 from sitegen.cards import icon_symbol
 from sitegen.config import date_line

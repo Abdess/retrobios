@@ -17,7 +17,7 @@ import zipfile
 from pathlib import Path
 
 from core.ziptools import build_zip_contents_index, zip_members
-from packs.crossref import _zip_members
+from packs.supplemental import archive_members
 from packs.integrity import _same_content
 from sitegen.cards import _release_name
 from sitegen.lookup import _archive_member_records
@@ -55,7 +55,7 @@ class VariantArchives(unittest.TestCase):
             zip_members(garbage)
 
     def test_the_gap_report_lists_the_members_of_a_copy(self):
-        found = dict(_zip_members(self.root / "bios"))
+        found = dict(archive_members(self.root / "bios"))
         self.assertEqual(found[str(self.variant)], ["a.rom", "only.rom"])
 
     def test_a_copy_answers_only_for_what_no_primary_holds(self):

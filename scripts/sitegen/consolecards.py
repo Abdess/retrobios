@@ -10,7 +10,7 @@ from model.collection import profiles_on_disk
 from model.composition import GAME_DATA_TOPS
 from model.guides import INSTALL_PS1, INSTALL_SH
 from model.profiles import entry_system_ids
-from packs.crossref import FileConsumers
+from packs.consumers import FileConsumers
 from sitegen.cards import emulator_display, romset_releases, system_file_card
 
 

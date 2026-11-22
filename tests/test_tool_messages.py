@@ -341,7 +341,7 @@ class TheGapHeadingAddsUp(unittest.TestCase):
     16 entries were set aside without a word."""
 
     def test_every_entry_is_counted_once(self):
-        from packs import crossref
+        from packs import crossref, crossreftext
 
         files = [
             {"name": "kick.rom", "required": True},
@@ -358,7 +358,7 @@ class TheGapHeadingAddsUp(unittest.TestCase):
                                       all_declared={"kick.rom": [(None, "kick.rom")]})
         data = report["emu"]
         self.assertEqual(
-            crossref.profile_breakdown(data),
+            crossreftext.profile_breakdown(data),
             "1 declared by platforms, 3 undeclared, 1 unsourceable, "
             "2 set aside (1 other versions of a slot, 1 outside the pack)",
         )

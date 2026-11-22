@@ -17,7 +17,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from packs import crossref
+from packs.consumers import FileConsumers
 from packs import slots
 from core.ziptools import build_zip_contents_index
 from model.database import load_database
@@ -37,7 +37,7 @@ class ReadersNameTheOwner(unittest.TestCase):
         cls.sha1_by_path = {r["path"]: s for s, r in cls.db["files"].items()}
 
     def test_the_site_credits_the_copy_the_pack_ships(self):
-        consumers = crossref.FileConsumers(
+        consumers = FileConsumers(
             self.db, build_zip_contents_index(self.db)
         )
         consumers.add_emulators(self.profiles)
@@ -97,7 +97,7 @@ class EachForkReadsItsOwnCopy(unittest.TestCase):
         self._tree.cleanup()
 
     def test_the_site_credits_each_owner_with_its_copy(self):
-        consumers = crossref.FileConsumers(self.db, data_dir_registry={})
+        consumers = FileConsumers(self.db, data_dir_registry={})
         consumers.add_emulators({
             owner: {"type": "standalone", "files": [{"name": self.NAME}]}
             for owner in self.sha1_of

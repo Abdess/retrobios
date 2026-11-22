@@ -14,7 +14,7 @@ from core.text import series
 from core.hashing import parse_hash_list
 from model import siteinputs
 from model.collection import profiles_on_disk
-from packs.crossref import FileConsumers
+from packs.consumers import FileConsumers
 from romrecipes.romsets import dat_snapshots, usable_recipe
 from sitegen import markup, wanted as sitewanted
 from core.paths import REPO_ROOT

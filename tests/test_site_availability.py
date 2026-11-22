@@ -76,7 +76,7 @@ class AHeldEntrySaysWhere(unittest.TestCase):
         import zipfile
 
         from sitegen import emulatorcards
-        from packs.crossref import FileConsumers, held_copy
+        from packs.consumers import FileConsumers, held_copy
 
         with tempfile.TemporaryDirectory() as tmp:
             data, bios = Path(tmp) / "data", Path(tmp) / "bios"

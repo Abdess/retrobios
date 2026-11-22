@@ -15,7 +15,7 @@ from model.collection import manufacturer_slug
 from model.registry import load_versions
 from model.systemnames import system_name
 from model.profiles import is_emulator
-from packs.crossref import FileConsumers
+from packs.consumers import FileConsumers
 from sitegen.cards import PROVENANCE_LABELS, emulator_card_anchor, emulator_file_anchors
 from sitegen.config import SITE_URL
 from core.paths import REPO_ROOT

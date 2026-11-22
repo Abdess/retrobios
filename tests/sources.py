@@ -36,6 +36,7 @@ COMMANDS = {
     "cross_reference.py": (
         "packs/crossref.py", "packs/crossrefscope.py", "packs/crossrefrun.py",
         "packs/crossreflaunchers.py", "packs/crossreftext.py", "packs/crossrefreport.py",
+        "packs/supplemental.py",
     ),
     "slots.py": ("packs/slots.py", "resolve/collisions.py", "packs/slotscan.py", "packs/slotreport.py"),
     "validate_pr.py": (

@@ -304,7 +304,7 @@ class AMemberNameIsNotALooseFile(unittest.TestCase):
     no archive member names, shipped nothing."""
 
     def test_verify_reads_undeclared_files_as_the_builder_does(self):
-        from packs import crossref
+        from packs import supplemental
 
         emulator_profiles_cache.clear()
         root = Path(tempfile.mkdtemp())
@@ -324,7 +324,7 @@ class AMemberNameIsNotALooseFile(unittest.TestCase):
         db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}, "by_crc32": {},
                                       "by_path_suffix": {}}}
         config = load_platform_config("fakeplat", str(root / "platforms"))
-        with mock.patch.object(crossref, "build_supplemental_index",
+        with mock.patch.object(supplemental, "build_supplemental_index",
                                lambda *a, **k: {"315-6146.bin"}):
             result = verify_platform(config, db, str(root / "emulators"))
         self.assertEqual(

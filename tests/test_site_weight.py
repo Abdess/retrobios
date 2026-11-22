@@ -21,7 +21,7 @@ from sitegen import systempages
 from sitegen import starlight as sitestarlight
 from sitegen import render as siterender
 from sitegen import markup
-from packs.crossref import FileConsumers
+from packs.consumers import FileConsumers
 
 
 def _file(name: str, index: int, console: str, maker: str = "Maker") -> dict:

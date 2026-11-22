@@ -13,7 +13,7 @@ from model.declarations import OUTER_ROOTS, declared_components, platform_declar
 from model.profiles import lists_files, load_emulator_profiles
 from model.systems import select_systems
 from packs import slots
-from packs.crossref import launcher_reads_not_held
+from packs.crossreflaunchers import launcher_reads_not_held
 from packs.gaps import find_exclusion_notes, find_undeclared_files
 from packs.verdicts import (
     RELEASE_ASSET_PENDING,

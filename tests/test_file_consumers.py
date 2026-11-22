@@ -15,7 +15,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from packs.crossref import FileConsumers, entry_target
+from packs.consumers import FileConsumers, entry_target
 from sitegen.systempages import generate_system_page
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

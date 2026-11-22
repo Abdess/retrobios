@@ -2,13 +2,9 @@
 
 from __future__ import annotations
 
-from packs.crossref import (
-    build_supplemental_index,
-    cross_reference,
-    global_report_scope,
-    platform_configs,
-)
+from packs.crossref import cross_reference, global_report_scope, platform_configs
 from packs.crossrefscope import TreeScope
+from packs.supplemental import build_supplemental_index
 from resolve.launchers import LauncherLayer, declared_destinations
 
 

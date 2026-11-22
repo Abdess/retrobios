@@ -8,7 +8,7 @@ from pathlib import Path
 from core.hashing import compute_hashes
 from model.platforms import load_platform_config
 from model.registry import list_registered_platforms
-from packs.crossref import FileConsumers
+from packs.consumers import FileConsumers
 from resolve.directories import expand_directory_entries
 
 

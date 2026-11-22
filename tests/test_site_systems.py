@@ -53,7 +53,7 @@ from sitegen import systempages
 from sitegen import systemsindex
 from sitegen import render as siterender
 from model import systemnames
-from packs.crossref import FileConsumers
+from packs.consumers import FileConsumers
 from sitegen import ogcards
 from sitegen.diagrams import wrap
 from core.anchors import toc_slug
@@ -1279,7 +1279,7 @@ class EachFileDownloadsFromItsCard(unittest.TestCase):
     fourth of a card's facts."""
 
     def test_the_card_title_holds_the_download(self) -> None:
-        from packs.crossref import FileConsumers
+        from packs.consumers import FileConsumers
 
         f = _naomi_file("apple2-asoft-auto.rom", "3", "bios/Apple/Apple II/apple2-asoft-auto.rom")
         title = next(line for line in sitegen_cards.system_file_card(f, FileConsumers({"files": {}}))

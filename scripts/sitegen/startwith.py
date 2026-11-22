@@ -7,7 +7,7 @@ from collections.abc import Iterator
 from dataclasses import dataclass
 
 from model.collection import SECTION_LABELS
-from packs.crossref import FileConsumers
+from packs.consumers import FileConsumers
 from sitegen import markup
 from sitegen.cards import ROMSET_FAQ, emulator_display, romset_releases
 from sitegen.consolecards import (

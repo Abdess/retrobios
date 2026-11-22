@@ -2,57 +2,35 @@
 
 from __future__ import annotations
 
-import io
 import dataclasses
-import json
-import sys
-import zipfile
 from collections import Counter
 from dataclasses import dataclass
-from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
 
-from core.hashing import parse_hash_list, stream_hashes
-from core.paths import BIOS_DIR, PLATFORMS_DIR, REPO_ROOT
-from core.ziptools import is_archive_path, zip_members
 from model.alternatives import set_keys, set_requirements, settle_sets
-from model.database import get_mame_clone_map, sha1_at
-from model.profiles import lists_files
+from model.database import get_mame_clone_map
 from model.declarations import OUTER_ROOTS
-from model.launcherrecords import record_emulators
 from model.platforms import load_platform_config
-from model.registry import list_registered_platforms, load_data_dir_registry
+from model.registry import list_registered_platforms
 from model.systems import norm_system_id
 from packs.gaps import gap_destination
+from packs.supplemental import SupplementalIndex, data_hit, declared_content
 from resolve.archives import archive_entry
 from resolve.content import content_fits, name_match_size_ok
-from resolve.directories import directory_members, expand_directory_entries
-from resolve.launchers import (
-    LauncherLayer,
-    record_directories as launcher_directories,
-    record_names as launcher_names,
-    bound_launchers,
-    catalogued_model_files,
-    held_record,
-    name_settings,
-    set_by,
-    setting_readers,
-    suffixed_stem,
-)
+from resolve.directories import directory_members
+from resolve.launchers import LauncherLayer, held_record
 from resolve.layout import system_dir_path
-from resolve.localfile import held_record_for, resolve_local_file
+from resolve.localfile import held_record_for
 from resolve.ownership import foreign_tree, owner_tokens
 from resolve.standalone import platform_layouts
 from resolve.validation import (
     case_folded_slots,
     declaration_settles,
-    inner_rom_check,
     installed_everywhere,
     installed_with_emulator,
     outside_gap_scope,
     read_from_save_dir,
     unread_on,
-    with_archive_members,
 )
 
 if TYPE_CHECKING:
@@ -109,101 +87,6 @@ def global_report_scope(
     }
 
 
-@dataclass(frozen=True)
-class SupplementalIndex:
-    """The names data/ and the ZIPs under bios/ hold, and where, for one pair of roots."""
-
-    names: frozenset[str]
-    data_root: str
-    bios_root: str
-
-    def __contains__(self, name: object) -> bool:
-        return name in self.names
-
-    def __bool__(self) -> bool:
-        return bool(self.names)
-
-    def locations(self) -> dict[str, list[tuple[str, str]]]:
-        """Each name's files and members under the same roots, read on first use."""
-        return _supplemental_locations(self.data_root, self.bios_root)
-
-
-def build_supplemental_index(
-    data_root: str = "data", bios_root: str = BIOS_DIR
-) -> SupplementalIndex:
-    """Index the filenames and directory names in data/ and inside bios/ ZIPs.
-
-    A directory is indexed only with its trailing slash: a bare name matched a
-    file entry of the same name, and BasiliskII's required `ROM` read as held
-    because cpcemu keeps a directory called ROM.
-    """
-    names: set[str] = set()
-    root_path = Path(data_root)
-    if root_path.is_dir():
-        for fpath in root_path.rglob("*"):
-            if fpath.name.startswith("."):
-                continue
-            if fpath.is_file():
-                names.add(fpath.name)
-                names.add(fpath.name.lower())
-            else:
-                names.add(fpath.name + "/")
-                names.add(fpath.name.lower() + "/")
-            if fpath.is_dir():
-                # Also index relative path from data/subdir/ for directory entries
-                parts = fpath.relative_to(root_path).parts
-                if len(parts) > 1:
-                    rel = "/".join(parts[1:])
-                    names.add(rel + "/")
-                    names.add(rel.lower() + "/")
-    bios_path = Path(bios_root)
-    if bios_path.is_dir():
-        # Index directory names for directory-type entries (e.g., "nestopia/samples/moepro/")
-        for dpath in bios_path.rglob("*"):
-            if dpath.is_dir() and not dpath.name.startswith("."):
-                names.add(dpath.name + "/")
-                names.add(dpath.name.lower() + "/")
-        names |= _zip_member_names(bios_path)
-    return SupplementalIndex(frozenset(names), data_root, str(bios_root))
-
-
-_zip_members_cache: dict[str, list[tuple[str, list[str]]]] = {}
-
-
-def _zip_members(bios_root: str | Path) -> list[tuple[str, list[str]]]:
-    """Each ZIP under bios/ with the files it holds, walked once per root.
-
-    An unreadable archive is reported and left out.
-    """
-    key = str(Path(bios_root))
-    if key in _zip_members_cache:
-        return _zip_members_cache[key]
-    found: list[tuple[str, list[str]]] = []
-    root = Path(bios_root)
-    # .variants/ copies (x.zip.1a2b3c4d) are archives too.
-    archives = sorted(
-        p for p in (root.rglob("*") if root.is_dir() else ())
-        if is_archive_path(p.name) and p.is_file()
-    )
-    for zpath in archives:
-        try:
-            members = [member.name for member in zip_members(zpath)]
-        except (zipfile.BadZipFile, OSError) as exc:
-            print(f"  WARNING: unreadable archive {zpath}: {exc}", file=sys.stderr)
-            continue
-        found.append((str(zpath), members))
-    _zip_members_cache[key] = found
-    return found
-
-
-def _zip_member_names(bios_path: Path) -> set[str]:
-    """Basenames of the files inside every ZIP under bios/, both cases."""
-    names: set[str] = set()
-    for _zpath, members in _zip_members(bios_path):
-        for member in members:
-            basename = member.rsplit("/", 1)[-1]
-            names.update((basename, basename.lower()))
-    return names
 
 
 def _resolve_source(
@@ -232,7 +115,7 @@ def _resolve_source(
     as held through pcem's et4000.BIN, which the pack and the installer
     refuse it.
     """
-    declared = _declared_content(file_entry or {})
+    declared = declared_content(file_entry or {})
     owners = owner_tokens(file_entry or {})
 
     def _can_be(sha1s: list | str) -> bool:
@@ -286,35 +169,11 @@ def _resolve_source(
             by_name_lower[canonical.lower()]
         ):
             return "bios"
-    if data_names and _data_hit(fname, basename, file_entry, data_names):
+    if data_names and data_hit(fname, basename, file_entry, data_names):
         return "data"
     return None
 
 
-def _data_hit(
-    fname: str, basename: str | None, file_entry: dict | None, data_names: SupplementalIndex
-) -> bool:
-    """Whether data/ or a ZIP holds the name: a directory entry looks for a
-    directory, a file entry for a file. A file entry that declares a hash is
-    held only by a copy carrying it: touchhle's LiberationMono-Regular.ttf
-    read as held because idtech4a++'s extras.zip has another font of that
-    name."""
-    looked_up = [fname, fname.lower()] + ([basename, basename.lower()] if basename else [])
-    if fname.endswith("/") or (file_entry or {}).get("type") == "directory":
-        looked_up = [name.rstrip("/") + "/" for name in looked_up]
-        return any(name in data_names for name in looked_up)
-    if not any(name in data_names for name in looked_up):
-        return False
-    declared = _declared_content(file_entry or {})
-    if not declared:
-        return True
-    return any(
-        _content_matches(location, declared)
-        for location in data_names.locations().get((basename or fname).lower(), ())
-    )
-
-
-_HASH_FIELDS = ("sha1", "md5", "sha256", "crc32")
 
 
 def _record_carries(sha1: str, record: dict, declared: dict[str, set[str]]) -> bool:
@@ -331,277 +190,7 @@ def _record_carries(sha1: str, record: dict, declared: dict[str, set[str]]) -> b
     )
 
 
-def _declared_content(file_entry: dict) -> dict[str, set[str]]:
-    """The hashes an entry declares, lowercased, by algorithm."""
-    declared: dict[str, set[str]] = {}
-    for field in _HASH_FIELDS:
-        found = set(parse_hash_list(file_entry.get(field)))
-        if found:
-            declared[field] = found
-    return declared
 
-
-_locations_cache: dict[tuple[str, str], dict[str, list[tuple[str, str]]]] = {}
-
-
-def _supplemental_locations(
-    data_root: str = "data", bios_root: str = BIOS_DIR
-) -> dict[str, list[tuple[str, str]]]:
-    """Where each name of the supplemental index sits: a data/ file, or a
-    member of a ZIP under bios/, keyed by lowercased basename."""
-    key = (data_root, bios_root)
-    if key in _locations_cache:
-        return _locations_cache[key]
-    found: dict[str, list[tuple[str, str]]] = {}
-    root = Path(data_root)
-    if root.is_dir():
-        for path in root.rglob("*"):
-            if path.is_file() and not path.name.startswith("."):
-                found.setdefault(path.name.lower(), []).append((str(path), ""))
-    for zpath, members in _zip_members(bios_root):
-        for member in members:
-            found.setdefault(member.rsplit("/", 1)[-1].lower(), []).append(
-                (zpath, member)
-            )
-    _locations_cache[key] = found
-    return found
-
-
-def _content_matches(location: tuple[str, str], declared: dict[str, set[str]]) -> bool:
-    """Whether the file or member at *location* carries a declared hash."""
-    path, member = location
-    try:
-        if member and set(declared) == {"crc32"}:
-            return any(
-                held.name == member and held.crc32 in declared["crc32"]
-                for held in zip_members(path)
-            )
-        if member:
-            with zipfile.ZipFile(path) as zf:
-                data = zf.read(member)
-        else:
-            data = Path(path).read_bytes()
-    except (zipfile.BadZipFile, KeyError, OSError) as exc:
-        print(f"  WARNING: cannot read {path} {member}: {exc}", file=sys.stderr)
-        return False
-    actual = stream_hashes(io.BytesIO(data), frozenset({"sha1", "md5", "sha256", "crc32"}))
-    return any(actual[field] in values for field, values in declared.items())
-
-
-_tree_cache: dict[tuple[str, str], list[str]] = {}
-
-
-def _trees(data_root: str, bios_root: str) -> list[str]:
-    """Every directory under data/ and bios/, as a path with a trailing slash."""
-    key = (data_root, bios_root)
-    if key not in _tree_cache:
-        _tree_cache[key] = sorted(
-            f"{path.as_posix()}/"
-            for root in (data_root, bios_root) if Path(root).is_dir()
-            for path in Path(root).rglob("*")
-            if path.is_dir()
-            and not any(p.startswith(".") for p in path.relative_to(root).parts)
-        )
-    return _tree_cache[key]
-
-
-def held_copy(
-    entry: dict, data_root: str = "data", bios_root: str = BIOS_DIR
-) -> tuple[str, str] | None:
-    """The data/ file, directory or bios/ ZIP member holding an entry.
-
-    The database indexes the files under bios/, and an entry held otherwise
-    (specmate.rom as a member of spectrum_opus.zip, Dolphin's fonts in its
-    data directory) read as held with no word of where. Returns (path,
-    member), the member empty for a file or a directory. A file entry that
-    declares a hash is held only by a copy carrying it, as _data_hit judges.
-    """
-    names = [entry.get("name", ""), entry.get("path") or "", *(entry.get("aliases") or [])]
-    names = [str(n) for n in names if n]
-    if entry.get("type") == "directory" or any(n.endswith("/") for n in names[:1]):
-        for name in names:
-            tail = "/" + name.strip("/") + "/"
-            for tree in _trees(data_root, bios_root):
-                if tree.endswith(tail):
-                    return tree, ""
-        return None
-    declared = _declared_content(entry)
-    locations = _supplemental_locations(data_root, bios_root)
-    for name in names:
-        for location in locations.get(name.rsplit("/", 1)[-1].lower(), ()):
-            if not declared or _content_matches(location, declared):
-                return location
-    return None
-
-
-class FileConsumers:
-    """Who reads each collected file, joined through the resolver.
-
-    The site joined database files to emulators and platforms by bare name:
-    each of the four pak0.pk3 of four games was attributed to every engine
-    reading a pak0.pk3. A consumer here is an entry that resolves to the
-    file by the evidence the pack uses, so a homonym is nobody's file.
-    """
-
-    def __init__(
-        self, db: dict, zip_contents: dict | None = None,
-        data_dir_registry: dict | None = None,
-    ) -> None:
-        self._db = db
-        self._zip_contents = zip_contents
-        # The builder resolves with the data trees: Dolphin's codehandler.bin
-        # comes from data/dolphin-sys, and without them the name step gave it
-        # Dolphin-MMJR's copy, which the site then said Dolphin reads.
-        self._data_dir_registry = (
-            data_dir_registry if data_dir_registry is not None
-            else load_data_dir_registry(
-                str(REPO_ROOT / PLATFORMS_DIR)
-            )
-        )
-        self.platforms: dict[str, set[str]] = {}
-        # Under which of its systems each platform declares a file, so a
-        # link can land on that section rather than the page top.
-        self.platform_systems: dict[str, dict[str, set[str]]] = {}
-        # Where each platform puts the file in its BIOS directory.
-        self.platform_destinations: dict[str, dict[str, set[str]]] = {}
-        self.emulators: dict[str, set[str]] = {}
-        # The entry that reads each file, by its position in the profile's
-        # files: a link lands on that entry's card, not the page top.
-        self.emulator_entries: dict[str, dict[str, int]] = {}
-        self.emulator_files: dict[str, list] = {}
-        # Where each platform's pack installs the file, its cores' files
-        # included: the platform's own list names a fraction of them.
-        self.installed: dict[str, dict[str, set[str]]] = {}
-
-    def sha1_of(self, entry: dict, dest: str = "", owner: str = "") -> str | None:
-        """The collected file an entry resolves to, or None.
-
-        A profile entry names its owner, as the builder does: without it the
-        name step chose another tree's copy, and the page credited the file
-        the pack does not ship.
-        """
-        if not entry.get("name"):
-            return None
-        if owner:
-            entry = {**entry, "source_profile": owner}
-        path, status = resolve_local_file(
-            entry, self._db, self._zip_contents, dest_hint=dest,
-            data_dir_registry=self._data_dir_registry,
-        )
-        if not path or status == "not_found":
-            return None
-        # Batocera pins naomi2.zip by the md5 of a ROM inside it: the resolver
-        # hands back the archive as a mismatch, and the member settles it as
-        # the builder does.
-        if status == "hash_mismatch" and not (
-            entry.get("zipped_file") and inner_rom_check(entry, path) == "ok"
-        ):
-            return None
-        return sha1_at(self._db, path)
-
-    def add_platforms(self, configs: dict[str, dict]) -> None:
-        for name, config in configs.items():
-            for system_id, system in config.get("systems", {}).items():
-                for entry in system.get("files", []):
-                    # No destination hint, as the builder, the manifest and
-                    # verify resolve a declaration: with one, RetroBat's 63
-                    # mame/hash lists credited another revision than the one
-                    # its manifest installs.
-                    sha1 = self.sha1_of(entry)
-                    if sha1:
-                        self.platforms.setdefault(sha1, set()).add(name)
-                        self.platform_systems.setdefault(sha1, {}).setdefault(
-                            name, set()
-                        ).add(system_id)
-                        where = str(entry.get("destination") or entry["name"])
-                        # EmuDeck matches by md5 alone: its entries carry a
-                        # system:md5 key, not a place in the folder.
-                        if ":" not in where:
-                            self.platform_destinations.setdefault(sha1, {}).setdefault(
-                                name, set()
-                            ).add(where)
-
-    def add_manifests(self, install_dir: str | Path) -> None:
-        """Read what each install manifest places, alternatives included."""
-        for path in sorted(Path(install_dir).glob("*.json")):
-            try:
-                manifest = json.loads(path.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError) as exc:
-                print(f"WARNING: {path}: {exc}", file=sys.stderr)
-                continue
-            platform = str(manifest.get("platform") or path.stem)
-            for entry in manifest.get("files") or []:
-                for sha1 in {entry.get("sha1"), *(
-                    alt.get("sha1") for alt in entry.get("alternatives") or []
-                )} - {None, ""}:
-                    self.installed.setdefault(sha1, {}).setdefault(
-                        platform, set()).add(str(entry.get("dest", "")))
-
-    def sha1_at(self, path: str) -> str | None:
-        """The file the database records at a collection path."""
-        return sha1_at(self._db, path)
-
-    def path_of(self, sha1: str) -> str:
-        """The collection path the database records for a file."""
-        return str(self._db.get("files", {}).get(sha1, {}).get("path", ""))
-
-    def directory_members(self, entry: dict) -> dict[str, str]:
-        """{destination: sha1} of the files a ``type: directory`` entry reads."""
-        if entry.get("type") != "directory":
-            return {}
-        return {
-            member["path"]: member["sha1"]
-            for member in expand_directory_entries([entry], self._db)
-            if member is not entry
-        }
-
-    def add_emulators(self, profiles: dict[str, dict]) -> None:
-        """Each file a profile entry resolves to, a directory's members included.
-
-        A directory entry was resolved by its own name and found nothing:
-        11,976 files under alephone's Plugins/, cdogs' and thextech's trees
-        named no emulator on their card.
-        """
-        for name, profile in profiles.items():
-            if profile.get("type") == "alias":
-                continue
-            files = profile.get("files") or []
-            self.emulator_files[name] = files
-            # A file a profile names keeps its own entry over the directory
-            # that also holds it.
-            order = sorted(
-                (i for i, entry in enumerate(files) if isinstance(entry, dict)),
-                key=lambda i: files[i].get("type") == "directory",
-            )
-            for index in order:
-                entry = files[index]
-                members = self.directory_members(entry)
-                if members:
-                    found = [
-                        self.sha1_of({**entry, "name": dest, "path": dest, "sha1": sha1},
-                                     dest, owner=name)
-                        for dest, sha1 in members.items()
-                    ]
-                else:
-                    found = [self.sha1_of(*entry_target(entry, files), owner=name)]
-                for sha1 in found:
-                    if sha1:
-                        self.emulators.setdefault(sha1, set()).add(name)
-                        self.emulator_entries.setdefault(sha1, {}).setdefault(name, index)
-
-
-def entry_target(entry: dict, files: list[dict]) -> tuple[dict, str]:
-    """The entry a profile entry resolves through, and its destination.
-
-    A ROM read inside an archive is the archive: FBNeo opens sm1.sm1 in
-    neogeo.zip, and resolved by its crc32 it credited a loose copy FBNeo
-    never opens, while no neogeo.zip card named FBNeo. The archive
-    members the profile reads decide between same-named copies, as in
-    the emulator pack and verify.
-    """
-    if entry.get("archive"):
-        return archive_entry(entry["archive"], files), ""
-    return with_archive_members(entry, files), entry.get("path") or ""
 
 
 def entry_index(db: dict, data_names: SupplementalIndex | None) -> dict:
@@ -708,13 +297,8 @@ def slot_key(f: dict, standalone: bool = False) -> tuple:
     )
 
 
-# Why an entry is left out of the comparison, in the order they are printed.
-SET_ASIDE = {
-    "other_versions": "other versions of a slot",
-    "not_read": "not read on this platform",
-    "outside_scope": "outside the pack",
-    "launcher": "filled by the platform's launcher",
-}
+# Why an entry is left out of the comparison, in the order reports print them.
+SET_ASIDE = ("other_versions", "not_read", "outside_scope", "launcher")
 
 
 GAP_SOURCES = ("bios", "data", "large_file", "missing", "bundled")
@@ -734,26 +318,6 @@ def gap_source_counts(data: dict) -> dict[str, int]:
             counts[source] += 1
     return counts
 
-
-def profile_breakdown(data: dict) -> str:
-    """Where each entry of a profile went, adding up to its file count.
-
-    The heading said 261 files, 7 declared and 238 undeclared, and the 16
-    others were nowhere: the versions a slot accepts, the entries the
-    platform never opens and the ones no pack carries.
-    """
-    # A report built without the per-entry tally (a fixture, a saved --json
-    # of an earlier run) falls back to its row counts.
-    parts = [f"{data.get('declared_files', data['platform_covered'])} declared by platforms",
-             f"{data.get('undeclared_files', data['gaps'])} undeclared"]
-    unsourceable = data.get("unsourceable_files", len(data.get("unsourceable") or []))
-    if unsourceable:
-        parts.append(f"{unsourceable} unsourceable")
-    aside = data.get("set_aside") or {}
-    detail = [f"{aside[key]} {label}" for key, label in SET_ASIDE.items() if aside.get(key)]
-    if detail:
-        parts.append(f"{sum(aside.values())} set aside ({', '.join(detail)})")
-    return ", ".join(parts)
 
 
 @dataclass
@@ -1131,267 +695,6 @@ def _settle_launcher_places(
     for data in report.values():
         data.update(_gap_counts(data["gap_details"]))
 
-
-# A package record names no file: it records what a package builds.
-_NAMELESS_KINDS = frozenset({"package"})
-
-# The folder of the platform's own launcher, as its scraper spells it: a
-# program the launcher runs from there (RetroBat's xbox-iso-vfs.exe) is part
-# of the platform, never a file to collect.
-PLATFORM_OWN_FOLDERS = frozenset({"<emulatorLauncher folder>"})
-
-
-def launcher_file_names(record: dict) -> list[str]:
-    """The concrete file names a launcher record reads, in code order.
-
-    The names are read as the launcher layer reads them (`launchers.record_names`):
-    a label after the name is dropped ("neocd_z.rom (CDZ)"), and a name with
-    `<` or without an extension is not a file name (a folder the record
-    links, an option value such as hatari2014's "default"). A name with a
-    `{X}` placeholder is a template: Batocera's hatari tries tos{L}.img for
-    every language and ROCKNIX links one memory card per slot and region,
-    so its expansions say which variants the code accepts, not which file is
-    owed. A wildcard is a pattern the emulator matches. `search_dir` is a
-    folder and never a name, whatever the kind.
-    """
-    if record.get("kind") in _NAMELESS_KINDS:
-        return []
-    return [
-        name for name in launcher_names({**record, "expands": {}}) if "*" not in name
-    ]
-
-
-def _profile_names(profiles: dict[str, dict]) -> tuple[dict[str, list[dict]], dict[str, list[dict]]]:
-    """Profile entries by each name and alias they answer to, exact and folded."""
-    exact: dict[str, list[dict]] = {}
-    folded: dict[str, list[dict]] = {}
-    for profile in profiles.values():
-        if not lists_files(profile):
-            continue
-        for entry in profile.get("files") or []:
-            names = {str(entry.get("name") or "")} | {str(a) for a in entry.get("aliases") or []}
-            for name in names - {""}:
-                base = name.rsplit("/", 1)[-1]
-                exact.setdefault(base, []).append(entry)
-                folded.setdefault(base.casefold(), []).append(entry)
-    return exact, folded
-
-
-class _NameHolder:
-    """Whether the collection holds a file under a launcher name.
-
-    A name is held when database.json carries a file under it or under an
-    alias it indexes, when a profile entry that answers to the name (as its
-    name or an alias) resolves, or when resolve_local_file finds it in a data
-    directory. The database answers for files kept as release assets, absent
-    from a checkout. A copy known only under another casing is returned
-    apart: a launcher that matches names exactly does not open it.
-    """
-
-    def __init__(
-        self, db: dict, profiles: dict[str, dict], data_dir_registry: dict | None
-    ) -> None:
-        self.db = db
-        self.registry = data_dir_registry
-        files = db.get("files", {})
-        self.by_name = {
-            name: sha1s
-            for name, sha1s in db.get("indexes", {}).get("by_name", {}).items()
-            if any(sha1 in files for sha1 in sha1s)
-        }
-        self.by_name_folded: dict[str, list[str]] = {}
-        for name in self.by_name:
-            self.by_name_folded.setdefault(name.casefold(), []).append(name)
-        self.exact, self.folded = _profile_names(profiles)
-        self._cache: dict[str, tuple[str, bool] | None] = {}
-
-    def _entry_held(self, entry: dict) -> bool:
-        names = [str(entry.get("name") or "")] + [str(a) for a in entry.get("aliases") or []]
-        if any(n.rsplit("/", 1)[-1] in self.by_name for n in names if n):
-            return True
-        path, _status = resolve_local_file(entry, self.db, data_dir_registry=self.registry)
-        return path is not None
-
-    def held(self, name: str) -> tuple[str, bool] | None:
-        """The name the collection holds *name* under, and whether its casing is exact."""
-        if name in self._cache:
-            return self._cache[name]
-        base = name.rsplit("/", 1)[-1]
-        found: tuple[str, bool] | None = None
-        stem = suffixed_stem(base)
-        if base in self.by_name or any(map(self._entry_held, self.exact.get(base, []))) or stem is not None and any(map(self._entry_held, self.exact.get(stem, []))):
-            found = (base, True)
-        else:
-            path, _status = resolve_local_file(
-                {"name": name}, self.db, data_dir_registry=self.registry
-            )
-            if path is not None:
-                found = (Path(path).name, Path(path).name == base)
-            elif base.casefold() in self.by_name_folded:
-                found = (self.by_name_folded[base.casefold()][0], False)
-            else:
-                entry = next(
-                    (e for e in self.folded.get(base.casefold(), []) if self._entry_held(e)),
-                    None,
-                )
-                if entry is not None:
-                    found = (str(entry.get("name") or ""), False)
-        self._cache[name] = found
-        return found
-
-
-def _held_by_setting(
-    name: str,
-    settings: dict,
-    readers: list[str],
-    profiles: dict[str, dict],
-    holder: _NameHolder,
-    db: dict,
-) -> bool:
-    """Whether the setting the name is written to reads a held file.
-
-    A placeholder read from the setting takes the held dump the
-    catalogues name after the model the launcher's name spells.
-    """
-    entries = [
-        entry
-        for key in readers
-        for entry in profiles[key].get("files") or []
-        if settings[name] and set_by(entry, settings[name])
-    ]
-    return any(holder._entry_held(entry) for entry in entries) or any(
-        "<" in str(entry.get("name", ""))
-        and any(
-            name_match_size_ok(entry, found.get("size"))
-            for found in catalogued_model_files(name, db)
-        )
-        for entry in entries
-    )
-
-
-def _unsourceable_names(readers: list[str], profiles: dict[str, dict]) -> dict[str, str]:
-    return {
-        str(n).rsplit("/", 1)[-1]: str(entry["unsourceable"])
-        for key in readers
-        for entry in profiles[key].get("files") or []
-        if entry.get("unsourceable")
-        for n in (entry.get("name"), *(entry.get("aliases") or []))
-        if n
-    }
-
-
-def _add_name_row(
-    by_key: dict[str, dict],
-    platform: str,
-    name: str,
-    found: tuple[str, bool] | None,
-    folds: bool,
-    reader: dict,
-    unsourceable: dict[str, str],
-) -> None:
-    """Add a launcher record to the row of a name the collection lacks."""
-    key = name.casefold() if folds else name
-    row = by_key.get(key)
-    if row is None:
-        row = by_key[key] = {
-            "platform": platform,
-            "name": name,
-            "emulators": [],
-            "readers": [],
-        }
-        if found:
-            row["held_as"] = found[0]
-    reason = unsourceable.get(name.rsplit("/", 1)[-1])
-    if reason and "unsourceable" not in row:
-        row["unsourceable"] = reason
-    if reader["emulator"] not in row["emulators"]:
-        row["emulators"].append(reader["emulator"])
-    if reader not in row["readers"]:
-        row["readers"].append(reader)
-
-
-def launcher_reads_not_held(
-    configs: dict[str, dict],
-    db: dict,
-    profiles: dict[str, dict],
-    data_dir_registry: dict | None = None,
-    emulator: str = "",
-) -> list[dict]:
-    """The file names a platform's launch code reads that the collection lacks.
-
-    One row per platform and name, with every record that reads it. A
-    launcher that matches case-insensitively, or runs on a filesystem that
-    folds case, is satisfied by a copy under another casing. Elsewhere such
-    a copy is reported with `held_as`, since the launcher does not open it
-    under the name it asks for. *emulator* keeps the records whose emulator
-    name designates that profile.
-
-    Three records ask for nothing the collection lacks. A search keeps the
-    first name it finds, so one held name fills it: RetroBat's Amiberry
-    launcher returns the first of kick34005.A500, kick34005.A500.rom and
-    amiga-os-130.rom that exists (Amiberry.Generator.cs:674-699). A copy
-    whose source lies outside the BIOS directory brings a file the platform
-    installs itself, from its own package or written by its own script
-    (RetroPie's lr-vecx copies $md_inst/system.bin), and so does a program
-    the launcher runs from its own folder. A file handed to the
-    setting a reader's profile entry is read from is that entry's file,
-    which the pack places under the launcher's name.
-    """
-    holder = _NameHolder(db, profiles, data_dir_registry)
-    every_profile = set(profiles)
-    rows: list[dict] = []
-    for platform, config in configs.items():
-        by_key: dict[str, dict] = {}
-        # A record resting on a config file it cannot prove reads nothing
-        # yet: it is reported apart (launcher_unproven).
-        for record in bound_launchers(config, profiles):
-            names = launcher_file_names(record)
-            if not names:
-                continue
-            readers = sorted({
-                key
-                for part in record_emulators(record)
-                for key in LauncherLayer._profiles_named(part, profiles, every_profile)
-            })
-            if not readers:
-                # RetroDECK names its frontend and the core option names the core.
-                readers = setting_readers(
-                    str(record.get("passes_to") or ""), profiles, every_profile
-                )
-            if emulator and emulator not in readers:
-                continue
-            folds = bool(record.get("case_insensitive") or config.get("case_insensitive_fs"))
-            base = str(config.get("base_destination") or "bios")
-            if record.get("kind") == "copies" and not launcher_directories(record, base):
-                continue
-            if str(record.get("search_dir") or "") in PLATFORM_OWN_FOLDERS:
-                continue
-            settings = name_settings(record, names)
-            by_model = {
-                name for name in names
-                if _held_by_setting(name, settings, readers, profiles, holder, db)
-            }
-            if record.get("kind") == "names_searched" and any(
-                (found := holder.held(name)) and (found[1] or folds) for name in names
-            ):
-                continue
-            reader = {
-                "emulator": str(record.get("emulator", "")),
-                "build": str(record.get("build", "")),
-                "kind": str(record.get("kind", "")),
-                "source_ref": str(record.get("source_ref", "")),
-                "profiles": readers,
-            }
-            # A name a reader's entry declares unsourceable is no gap: its
-            # row carries the reason and is counted apart.
-            unsourceable = _unsourceable_names(readers, profiles)
-            for name in names:
-                found = holder.held(name)
-                if found and (found[1] or folds) or name in by_model:
-                    continue
-                _add_name_row(by_key, platform, name, found, folds, reader, unsourceable)
-        rows.extend(by_key[key] for key in sorted(by_key, key=str.casefold))
-    return rows
 
 
 class ReportScope(TypedDict, total=False):

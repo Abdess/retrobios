@@ -18,7 +18,7 @@ from model.guides import (
 )
 from model.platforms import load_platform_config
 from model.registry import load_platform_registry
-from packs.crossref import FileConsumers
+from packs.consumers import FileConsumers
 from sitegen import markup, steps as sitesteps
 from sitegen.config import RELEASE_URL
 from sitegen.guidepage import NO_ZIP_FAQ, devices_meta, first_screen_words, get_page_link

@@ -20,7 +20,8 @@ from model import retired as model_retired
 from model.database import sha1_at
 from model.platforms import PLATFORMS_DIR_KEY
 from model.profiles import is_emulator
-from packs.crossref import FileConsumers, SupplementalIndex
+from packs.consumers import FileConsumers
+from packs.supplemental import SupplementalIndex
 from sitegen.apiitems import core_index_items, system_index_items
 from sitegen.config import DATA_LICENSE, REPO_URL, build_commit
 from core.paths import REPO_ROOT

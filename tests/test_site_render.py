@@ -184,7 +184,7 @@ class FileCardsLinkTheReadingEntry(unittest.TestCase):
         """The platform links landed on their section, the emulator links on
         the top of a page of a hundred entries."""
         from sitegen import cards
-        from packs.crossref import FileConsumers
+        from packs.consumers import FileConsumers
 
         consumers = FileConsumers({"files": {}})
         files = [{"name": "scph1001.bin"}, {"name": "scph5501.bin"},
@@ -213,7 +213,7 @@ class DirectoryMembersNameTheirEmulator(unittest.TestCase):
         from core.ziptools import build_zip_contents_index
         from model.database import load_database
         from model.profiles import load_emulator_profiles
-        from packs.crossref import FileConsumers
+        from packs.consumers import FileConsumers
 
         cls.db = load_database(str(REPO_ROOT / "database.json"))
         if cls.SHA1 not in cls.db.get("files", {}):
@@ -410,7 +410,7 @@ class TheSearchLandsOnTheCard(unittest.TestCase):
 
     def test_a_system_card_is_a_heading_with_its_anchor(self):
         from sitegen import cards
-        from packs.crossref import FileConsumers
+        from packs.consumers import FileConsumers
 
         entry = {"name": "a.bin", "sha1": "a" * 40, "md5": "b" * 32, "size": 3}
         lines = cards.system_file_card(entry, FileConsumers({"files": {}}))
@@ -426,7 +426,7 @@ class TheSearchSkipsLinkLists(unittest.TestCase):
 
     def test_a_system_card_keeps_its_name_and_skips_its_body(self):
         from sitegen import cards
-        from packs.crossref import FileConsumers
+        from packs.consumers import FileConsumers
 
         consumers = FileConsumers({"files": {}})
         sha1 = "a" * 40
@@ -447,7 +447,7 @@ class TheSearchSkipsLinkLists(unittest.TestCase):
 
     def test_a_game_data_card_skips_its_name_too(self):
         from sitegen import cards
-        from packs.crossref import FileConsumers
+        from packs.consumers import FileConsumers
 
         entry = {"name": "0.ogg", "sha1": "a" * 40, "size": 3}
         lines = cards.system_file_card(
@@ -520,7 +520,7 @@ class AMemberIsReadInItsArchive(unittest.TestCase):
         from sitegen import emulatorcards
         from resolve.archives import archive_entry
         from resolve.localfile import resolve_local_file
-        from packs.crossref import FileConsumers
+        from packs.consumers import FileConsumers
 
         db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
         profile = yaml.safe_load((REPO_ROOT / "emulators" / "fbneo.yml").read_text(encoding="utf-8"))

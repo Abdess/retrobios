@@ -3,7 +3,36 @@
 from __future__ import annotations
 
 from core.text import count_text
-from packs.crossref import gap_source_counts, profile_breakdown
+from packs.crossref import SET_ASIDE, gap_source_counts
+
+# How each reason an entry is left out of the comparison reads.
+SET_ASIDE_LABELS = {
+    "other_versions": "other versions of a slot",
+    "not_read": "not read on this platform",
+    "outside_scope": "outside the pack",
+    "launcher": "filled by the platform's launcher",
+}
+
+
+def profile_breakdown(data: dict) -> str:
+    """Where each entry of a profile went, adding up to its file count.
+
+    The heading said 261 files, 7 declared and 238 undeclared, and the 16
+    others were nowhere: the versions a slot accepts, the entries the
+    platform never opens and the ones no pack carries.
+    """
+    # A report built without the per-entry tally (a fixture, a saved --json
+    # of an earlier run) falls back to its row counts.
+    parts = [f"{data.get('declared_files', data['platform_covered'])} declared by platforms",
+             f"{data.get('undeclared_files', data['gaps'])} undeclared"]
+    unsourceable = data.get("unsourceable_files", len(data.get("unsourceable") or []))
+    if unsourceable:
+        parts.append(f"{unsourceable} unsourceable")
+    aside = data.get("set_aside") or {}
+    detail = [f"{aside[key]} {SET_ASIDE_LABELS[key]}" for key in SET_ASIDE if aside.get(key)]
+    if detail:
+        parts.append(f"{sum(aside.values())} set aside ({', '.join(detail)})")
+    return ", ".join(parts)
 
 
 def print_launcher_unproven(rows: list[dict]) -> None:

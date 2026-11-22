@@ -688,7 +688,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
 
         from sitegen import lookup
         from model.platforms import load_platform_config
-        from packs.crossref import FileConsumers
+        from packs.consumers import FileConsumers
         from core.ziptools import build_zip_contents_index
 
         root = Path(__file__).resolve().parents[1]
@@ -921,7 +921,7 @@ class AFileHasAnAddressByContent(unittest.TestCase):
                   / "site.ts").read_text()
         self.assertIn("api/v1/lookup/", script)
         self.assertIn("params.has('sha1')", script)
-        from packs.crossref import FileConsumers
+        from packs.consumers import FileConsumers
 
         card = "\n".join(cards.system_file_card(
             {"name": "x.rom", "sha1": "ab" * 20, "size": 1}, FileConsumers({"files": {}}),
@@ -937,7 +937,7 @@ class ACardNamesThePacksThatInstallIt(unittest.TestCase):
     def test_a_manifest_destination_reaches_the_card(self):
         import json as _json
 
-        from packs.crossref import FileConsumers
+        from packs.consumers import FileConsumers
         from sitegen.cards import _installed_places
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -1196,7 +1196,7 @@ class TheOneLinerIsWhereUsersLand(unittest.TestCase):
     def test_platform_and_system_pages(self):
         from sitegen import platformpage
         from sitegen import systempages
-        from packs.crossref import FileConsumers
+        from packs.consumers import FileConsumers
 
         cov = {"platform": "Batocera", "mode": "md5", "present": 0, "total": 0,
                "verified": 0, "missing": 0, "details": [], "config": {"systems": {}}}
@@ -1281,7 +1281,7 @@ class EveryPageLinksItsOwnData(unittest.TestCase):
         from sitegen import dataexports
         from sitegen import platformpage
         from sitegen import systempages
-        from packs.crossref import FileConsumers
+        from packs.consumers import FileConsumers
 
         cov = {"platform": "Batocera", "mode": "md5", "present": 0, "total": 0,
                "verified": 0, "missing": 0, "details": [], "config": {"systems": {}}}

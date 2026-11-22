@@ -4489,7 +4489,7 @@ class ASameNamedMemberIsNotTheFile(unittest.TestCase):
     while verify --emulator said missing."""
 
     def test_a_declared_hash_decides_a_member_or_data_hit(self):
-        from scripts.packs import crossref
+        from scripts.packs import supplemental
 
         tmp = Path(tempfile.mkdtemp())
         self.addCleanup(lambda: __import__("shutil").rmtree(tmp, True))
@@ -4498,14 +4498,14 @@ class ASameNamedMemberIsNotTheFile(unittest.TestCase):
         (tmp / "bios").mkdir()
         with zipfile.ZipFile(tmp / "bios" / "extras.zip", "w") as zf:
             zf.writestr("files/other.ttf", b"MEMBER FONT")
-        names = crossref.build_supplemental_index(str(tmp / "data"), str(tmp / "bios"))
+        names = supplemental.build_supplemental_index(str(tmp / "data"), str(tmp / "bios"))
         for fname, data in (("font.ttf", b"DATA FONT"), ("other.ttf", b"MEMBER FONT")):
             with self.subTest(name=fname):
                 held = {"name": fname, "sha1": hashlib.sha1(data).hexdigest()}
                 other = {"name": fname, "sha1": "0" * 40}
-                self.assertTrue(crossref._data_hit(fname, None, held, names))
-                self.assertFalse(crossref._data_hit(fname, None, other, names))
-                self.assertTrue(crossref._data_hit(fname, None, {"name": fname}, names))
+                self.assertTrue(supplemental.data_hit(fname, None, held, names))
+                self.assertFalse(supplemental.data_hit(fname, None, other, names))
+                self.assertTrue(supplemental.data_hit(fname, None, {"name": fname}, names))
 
 
 class AnEmptyTargetIsNotEveryCore(unittest.TestCase):
@@ -5832,7 +5832,7 @@ class CollectionCardsCarryFullHashes(unittest.TestCase):
     CRC32 or SHA256."""
 
     def test_every_hash_in_full(self):
-        from scripts.packs.crossref import FileConsumers
+        from scripts.packs.consumers import FileConsumers
         from scripts.sitegen.cards import system_file_card
 
         entry = {"name": "DUKE.RTS", "path": "bios/x/DUKE.RTS", "size": 10,
@@ -5886,7 +5886,7 @@ class AVariantCardSaysWhatToSaveItAs(unittest.TestCase):
     the storage name, and nothing said RetroBat looks for advision.zip."""
 
     def test_the_name_to_save_it_under(self):
-        from scripts.packs.crossref import FileConsumers
+        from scripts.packs.consumers import FileConsumers
         from scripts.sitegen.cards import system_file_card
 
         entry = {"name": "advision.zip", "size": 10, "sha1": "a" * 40,
@@ -6168,15 +6168,15 @@ class AHashListIsReadOneWay(unittest.TestCase):
     profile_sync looked the whole string up and called it missing."""
 
     def test_every_reader_splits_the_list(self):
-        from scripts.packs.crossref import _declared_content
+        from scripts.packs.supplemental import declared_content
         from scripts.core.hashing import parse_hash_list
         from scripts.profiling.citations import entry_hashes
 
         a, b = "a" * 64, "B" * 64
         entry = {"name": "BS-X.bin", "sha256": f"{a}, {b}", "crc32": "0xDEADBEEF"}
         self.assertEqual(parse_hash_list(entry["sha256"]), [a, b.lower()])
-        self.assertEqual(_declared_content(entry)["sha256"], {a, b.lower()})
-        self.assertEqual(_declared_content(entry)["crc32"], {"deadbeef"})
+        self.assertEqual(declared_content(entry)["sha256"], {a, b.lower()})
+        self.assertEqual(declared_content(entry)["crc32"], {"deadbeef"})
         self.assertEqual(set(entry_hashes(entry)), {a, b.lower(), "deadbeef"})
 
 

@@ -23,7 +23,8 @@ from model.guides import HANDHELD_GUIDE
 from model.profiles import is_emulator, lists_files, load_emulator_profiles
 from model.registry import list_registered_platforms, load_platform_registry
 from model.systemnames import program_names, set_console_sections, system_name
-from packs.crossref import FileConsumers, SupplementalIndex
+from packs.consumers import FileConsumers
+from packs.supplemental import SupplementalIndex
 from acquire.provenance import build_report, profile_needs
 from resolve.cores import resolve_platform_cores
 from resolve.review import load_platform_hashes, load_profile_hashes
@@ -191,7 +192,7 @@ class _SiteRun:
 def _load_site_run(args: argparse.Namespace, db: dict, docs: Path, public: Path) -> _SiteRun:
     """The registry, the coverage of every platform and the profiles."""
     from model.registry import load_data_dir_registry
-    from packs.crossref import build_supplemental_index
+    from packs.supplemental import build_supplemental_index
 
     registry = _load_registry(args.platforms_dir)
 

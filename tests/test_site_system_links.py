@@ -159,7 +159,7 @@ class AnIdNamesOneCardPerPage(unittest.TestCase):
     the same id, and the deployed site refused 20 pages."""
 
     def test_the_second_card_has_no_id(self):
-        from packs.crossref import FileConsumers
+        from packs.consumers import FileConsumers
 
         # Sega keeps small consoles on its page: Nintendo and Sony give every
         # console a page of its own (CONSOLE_PAGES).

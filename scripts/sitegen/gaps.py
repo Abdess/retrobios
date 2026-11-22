@@ -25,7 +25,7 @@ from sitegen.render import code_span, count_text, escape_tags
 from sitegen.sources import source_ref_markdown
 
 if TYPE_CHECKING:
-    from packs.crossref import SupplementalIndex
+    from packs.supplemental import SupplementalIndex
 
 
 # Contributing page

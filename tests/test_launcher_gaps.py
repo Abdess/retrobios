@@ -34,7 +34,7 @@ from model.platforms import load_platform_config
 from packs.crossreflaunchers import LAUNCHER_READS_KEY, LAUNCHER_UNPROVEN_KEY
 from packs.crossreftext import print_launcher_reads
 from packs.strictgate import platform_strict_failure
-from packs.crossref import launcher_file_names, launcher_reads_not_held
+from packs.crossreflaunchers import launcher_file_names, launcher_reads_not_held
 
 ROOT = Path(__file__).resolve().parent.parent
 
