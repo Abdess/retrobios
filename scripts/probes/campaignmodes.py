@@ -41,7 +41,8 @@ def run_mode(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
     if args.command == "references":
         return _references(campaign, args, only)
     if args.dry_run:
-        campaign.run(only, args.system, dry_run=True)
+        for line in campaign.describe(only, args.system):
+            print(line)
         return 0
     return _run_pass(campaign, args, only, paths)
 

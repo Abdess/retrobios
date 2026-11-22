@@ -758,14 +758,11 @@ class Campaign:
         systems = [s for s in unit.profile.get("systems") or () if not system or s == system]
         return [c for s in systems for c in self.content.get(s, ())]
 
-    def run(self, only: set[str], system: str | None, dry_run: bool = False,
-            commit_every: int = 0, commit: bool = False) -> Pass:
+    def run(self, only: set[str], system: str | None, commit_every: int = 0,
+            commit: bool = False) -> Pass:
         self.deadline = self.host.clock() + self.settings.budget
         current = self.current = Pass(started=now_iso())
         units = self.units(only, system)
-        if dry_run:
-            self.describe(units, system)
-            return current
         isolation = core_probe.sandbox_argv([])[1]
         if isolation != core_probe.SANDBOX and not self.settings.allow_unsandboxed:
             # Fail closed: no core and no build runs outside the sandbox.
@@ -849,18 +846,21 @@ class Campaign:
             raise Unavailable("standalone: no libretro core on the buildbot")
         return [self.cores.build(emulator, profile)]
 
-    def describe(self, units: list[Unit], system: str | None) -> None:
-        for unit in units:
+    def describe(self, only: set[str], system: str | None) -> list[str]:
+        """One line per unit a pass would run: its cores and content, or why it waits."""
+        lines = []
+        for unit in self.units(only, system):
             contents = self.unit_contents(unit, system)
             if unit.pending:
-                print(f"{unit.emulator}: pending, {unit.pending}")
+                lines.append(f"{unit.emulator}: pending, {unit.pending}")
             elif not contents:
-                print(f"{unit.emulator}: pending, no test content for "
-                      f"{', '.join(unit.profile.get('systems') or ())}")
+                lines.append(f"{unit.emulator}: pending, no test content for "
+                             f"{', '.join(unit.profile.get('systems') or ())}")
             else:
                 cores = sorted({str(c) for c in unit.profile.get("cores") or ()})
-                print(f"{unit.emulator}: cores {', '.join(cores)} on "
-                      f"{', '.join(c.name for c in contents)}")
+                lines.append(f"{unit.emulator}: cores {', '.join(cores)} on "
+                             f"{', '.join(c.name for c in contents)}")
+        return lines
 
     def counts(self) -> tuple[dict[str, int], dict[str, int], list[dict]]:
         counts = {DONE: 0, FAILED: 0, PENDING: 0}
@@ -915,11 +915,9 @@ class Campaign:
                 plan.append((subject, [path]))
         return plan
 
-    def commit_batch(self, dry_run: bool = False) -> list[str]:
+    def commit_batch(self) -> list[str]:
         plan = self.plan_commits(self.dirty_at_start)
-        if dry_run or not plan:
-            for subject, paths in plan:
-                print(f"would commit {subject!r}: {', '.join(paths)}")
+        if not plan:
             return []
         if gate(self.paths.root, [Path(p).stem for _, ps in plan for p in ps if p.startswith("emulators/")],
                 self.host) != 0:

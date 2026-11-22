@@ -1040,10 +1040,6 @@ class Findings(Workspace):
             self.assertEqual(jobs.check_subject(subject), [], subject)
         # A file someone had changed before the pass is left to them.
         self.assertEqual(self.c.plan_commits({"emulators/fake.yml"})[1:], [])
-        out = io.StringIO()
-        with contextlib.redirect_stdout(out):
-            self.assertEqual(self.c.commit_batch(dry_run=True), [])
-        self.assertIn("would commit 'chore: add campaign measurements'", out.getvalue())
 
 
 class ContentFile(Workspace):
