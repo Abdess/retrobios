@@ -15,6 +15,7 @@ import hashlib
 import os
 import tempfile
 import unittest
+import unittest.mock
 from pathlib import Path
 
 from resolve.reconcile import checked_hashes
@@ -90,6 +91,33 @@ class DataDirectoryReaders(unittest.TestCase):
         entry = self._entry(self.registry)
         self.assertEqual(entry["_cores"], ["armsx2", "lrps2"])
         self.assertNotIn("hash_conflict", entry)
+
+    def test_the_gaps_page_hands_truth_its_own_registry(self):
+        """The divergence table folded the checked-out repository's
+        _data_dirs.yml under generate_site --platforms-dir."""
+        from sitegen import gaps
+
+        coverages = {"plat": {"platform": "Plat", "config": self.config}}
+        rows = gaps._divergence_rows(
+            coverages, gaps.PlatformRegistries({}, self.registry), self.profiles, {},
+        )
+        self.assertEqual(len(rows), 1)
+        seen: list[dict] = []
+
+        def truth(*args, **kwargs):
+            seen.append(kwargs["data_registry"])
+            return generate_platform_truth(*args, **kwargs)
+
+        with unittest.mock.patch("resolve.truth.generate_platform_truth", truth):
+            gaps._divergence_rows(
+                coverages, gaps.PlatformRegistries({}, self.registry), self.profiles, {},
+            )
+        self.assertEqual(seen, [self.registry])
+
+    def test_truth_reads_no_registry_of_its_own(self):
+        with self.assertRaises(TypeError):
+            generate_platform_truth("plat", self.config, {}, self.profiles)  # type: ignore[call-arg]
+
 
 
 if __name__ == "__main__":

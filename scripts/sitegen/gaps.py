@@ -28,6 +28,14 @@ if TYPE_CHECKING:
     from packs.supplemental import SupplementalIndex
 
 
+@dataclass(frozen=True)
+class PlatformRegistries:
+    """The platform registry and the data directory registry of one run."""
+
+    platforms: dict = dataclasses.field(default_factory=dict)
+    data_dirs: dict = dataclasses.field(default_factory=dict)
+
+
 # Contributing page
 
 
@@ -474,14 +482,17 @@ def _corroboration_rows(coverages: dict) -> list[str]:
     return rows
 
 
-def _divergence_rows(coverages: dict, registry: dict | None, profiles: dict, db: dict) -> list[str]:
+def _divergence_rows(
+    coverages: dict, registries: PlatformRegistries, profiles: dict, db: dict,
+) -> list[str]:
     """Section 1b: platform lists vs emulator source, one row a platform."""
     from resolve.truth import diff_platform_truth, generate_platform_truth
 
     div_rows = []
     for pname, cov in _by_platform_name(coverages):
         truth_data = generate_platform_truth(
-            pname, cov["config"], (registry or {}).get(pname, {}), profiles, db
+            pname, cov["config"], registries.platforms.get(pname, {}), profiles, db,
+            data_registry=registries.data_dirs,
         )
         s = diff_platform_truth(truth_data, native_layer(cov["config"]))["summary"]
         if s["systems_compared"] == 0:
@@ -876,7 +887,7 @@ def generate_gap_analysis(
     coverages: dict,
     db: dict,
     data_names: SupplementalIndex | None = None,
-    registry: dict | None = None,
+    registries: PlatformRegistries | None = None,
     gap_report: dict | None = None,
     listing: SourceListing | None = None,
     catalogued: dict | None = None,
@@ -884,6 +895,7 @@ def generate_gap_analysis(
     """Generate a unified gap analysis page.
 
     ``listing`` says where the files to source go (SourceListing).
+    ``registries`` are the run's platform and data directory registries.
 
     ``catalogued`` is a provenance report built with the profiles' needs:
     a file the collection does not hold yet names the catalog or romset
@@ -951,7 +963,9 @@ def generate_gap_analysis(
         "",
     ])
 
-    lines.extend(_divergence_section(_divergence_rows(coverages, registry, profiles, db)))
+    lines.extend(_divergence_section(_divergence_rows(
+        coverages, registries or PlatformRegistries(), profiles, db,
+    )))
 
     lines.extend(_render_problem_files(tally.problems, tally.settled, db, tally.missing))
 

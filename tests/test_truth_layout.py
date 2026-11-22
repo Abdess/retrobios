@@ -47,12 +47,12 @@ class TruthFollowsRunsStandalone(unittest.TestCase):
 
     def test_no_standalone_cores_means_libretro_layout(self):
         config = {"cores": ["dual"], "systems": {}}
-        truth = generate_platform_truth("p", config, {}, {"dual": self.PROFILE})
+        truth = generate_platform_truth("p", config, {}, {"dual": self.PROFILE}, data_registry={})
         self.assertEqual(_names(truth), {"both.bin", "only_lr.bin"})
 
     def test_named_standalone_core_gets_its_files(self):
         config = {"cores": ["dual"], "standalone_cores": ["dual"], "systems": {}}
-        truth = generate_platform_truth("p", config, {}, {"dual": self.PROFILE})
+        truth = generate_platform_truth("p", config, {}, {"dual": self.PROFILE}, data_registry={})
         self.assertEqual(_names(truth), {"both.bin", "only_sa.bin"})
 
 
@@ -86,7 +86,7 @@ class AnArchiveStandsForItsMembers(unittest.TestCase):
     }
 
     def test_the_archive_is_the_file(self):
-        truth = generate_platform_truth("p", self.CONFIG, {}, self.PROFILES)
+        truth = generate_platform_truth("p", self.CONFIG, {}, self.PROFILES, data_registry={})
         bubsys = truth["systems"]["konami-bubsys"]["files"]
         self.assertEqual([f["name"] for f in bubsys], ["bubsys.zip"])
         self.assertEqual(
@@ -95,7 +95,7 @@ class AnArchiveStandsForItsMembers(unittest.TestCase):
         self.assertTrue(bubsys[0]["required"])
 
     def test_a_member_name_claims_no_other_system(self):
-        truth = generate_platform_truth("p", self.CONFIG, {}, self.PROFILES)
+        truth = generate_platform_truth("p", self.CONFIG, {}, self.PROFILES, data_registry={})
         dreamcast = truth["systems"]["sega-dreamcast"]["files"]
         self.assertEqual([(f["name"], f["size"]) for f in dreamcast], [("boot.bin", 2097152)])
         self.assertEqual(dreamcast[0]["_cores"], ["retrodream"])
@@ -115,7 +115,7 @@ class AnUnattributedEntryIsNotGuessed(unittest.TestCase):
 
     def truth(self, systems):
         config = {"cores": ["clk"], "systems": systems}
-        return generate_platform_truth("p", config, {}, {"clk": self.PROFILE})
+        return generate_platform_truth("p", config, {}, {"clk": self.PROFILE}, data_registry={})
 
     def test_several_candidate_systems_file_nothing(self):
         truth = self.truth({"amstrad-cpc": {"files": []}, "apple-ii": {"files": []}})
@@ -144,7 +144,7 @@ class EveryRevisionACoreAcceptsStays(unittest.TestCase):
 
     def truth(self, profiles):
         config = {"cores": list(profiles), "systems": {}}
-        return generate_platform_truth("p", config, {}, profiles)
+        return generate_platform_truth("p", config, {}, profiles, data_registry={})
 
     @staticmethod
     def entry(name, sha1):
@@ -244,7 +244,7 @@ class ADeclarationOnlyAttributesTheSameFile(unittest.TestCase):
     @staticmethod
     def truth(platform_systems: dict, profiles: dict) -> dict:
         config = {"cores": list(profiles), "systems": platform_systems}
-        return generate_platform_truth("p", config, {}, profiles)
+        return generate_platform_truth("p", config, {}, profiles, data_registry={})
 
     def test_a_same_named_rom_of_another_size_does_not_take_the_entry(self):
         fmsx = {"type": "libretro", "systems": ["microsoft-msx", "microsoft-msx2"],
@@ -364,7 +364,7 @@ class TruthRecordsWhoOpensByName(unittest.TestCase):
 
     def truth(self, profiles: dict) -> dict:
         config = {"cores": list(profiles), "systems": {"sony-playstation": {"files": []}}}
-        return generate_platform_truth("p", config, {}, profiles)
+        return generate_platform_truth("p", config, {}, profiles, data_registry={})
 
     def entries(self, truth: dict) -> list[dict]:
         return truth["systems"]["sony-playstation"]["files"]
@@ -388,10 +388,10 @@ class TruthRecordsWhoOpensByName(unittest.TestCase):
                 "files": [{"name": "sega_101.bin", "md5": "c" * 32}]}
         config = {"cores": ["ymir"], "standalone_cores": [],
                   "systems": {"sega-saturn": {"files": []}}}
-        libretro = generate_platform_truth("p", config, {}, {"ymir": ymir})
+        libretro = generate_platform_truth("p", config, {}, {"ymir": ymir}, data_registry={})
         self.assertEqual(libretro["systems"]["sega-saturn"]["files"][0]["_named_by"], ["ymir"])
         config["standalone_cores"] = ["ymir"]
-        standalone = generate_platform_truth("p", config, {}, {"ymir": ymir})
+        standalone = generate_platform_truth("p", config, {}, {"ymir": ymir}, data_registry={})
         self.assertEqual(standalone["systems"]["sega-saturn"]["files"][0]["_named_by"], [])
 
 
@@ -407,7 +407,7 @@ class TruthKnowsWhatTheEmulatorInstalls(unittest.TestCase):
         profile = {"type": profile_type, "systems": ["neogeo"], "files": files}
         config = {"cores": ["emu"], "standalone_cores": standalone or [],
                   "systems": {"neogeo": {"files": []}}}
-        return generate_platform_truth(platform, config, {}, {"emu": profile})
+        return generate_platform_truth(platform, config, {}, {"emu": profile}, data_registry={})
 
     @staticmethod
     def entry(truth: dict, name: str) -> dict:
@@ -472,7 +472,7 @@ class TheModelIsAFunctionOfItsInputs(unittest.TestCase):
         "                'systems': [f'maker-system-{n}'], 'files': []} for n in names}\n"
         "config = {'cores': names,\n"
         "          'systems': {f'maker-system-{n}': {'files': []} for n in names}}\n"
-        "print(json.dumps(generate_platform_truth('p', config, {}, profiles)))\n"
+        "print(json.dumps(generate_platform_truth('p', config, {}, profiles, data_registry={})))\n"
     )
 
     def _model(self, seed: str) -> str:
@@ -498,11 +498,11 @@ class TheModelIsAFunctionOfItsInputs(unittest.TestCase):
         }
         config = {"cores": self.NAMES,
                   "systems": {f"maker-system-{n}": {"files": []} for n in self.NAMES}}
-        expected = json.dumps(generate_platform_truth("p", config, {}, profiles))
+        expected = json.dumps(generate_platform_truth("p", config, {}, profiles, data_registry={}))
         shuffled = list(profiles.items())
         random.Random(7).shuffle(shuffled)
         self.assertEqual(
-            json.dumps(generate_platform_truth("p", config, {}, dict(shuffled))), expected
+            json.dumps(generate_platform_truth("p", config, {}, dict(shuffled), data_registry={})), expected
         )
 
 
@@ -521,7 +521,7 @@ class DatabaseSizeRefutesASameNamedDeclaration(unittest.TestCase):
                                        "system": "oric", "size": 16384, "md5": oric_md5}]}}
         config = {"cores": ["clk"], "systems": {"elektronika-bk": {"files": [
             {"name": "BASIC10.ROM", "md5": bk_md5}]}}}
-        truth = generate_platform_truth("p", config, {}, profiles, db=db)
+        truth = generate_platform_truth("p", config, {}, profiles, db=db, data_registry={})
         self.assertNotIn("basic10.rom", {
             f["name"] for f in truth["systems"].get("elektronika-bk", {}).get("files", [])})
 
@@ -535,7 +535,7 @@ class RegionFollowsEveryReader(unittest.TestCase):
 
     @staticmethod
     def _profile(name: str, region: list[str] | None) -> dict:
-        entry = {"name": "bios.bin", "system": "sega-stv", "md5": "a" * 32}
+        entry: dict = {"name": "bios.bin", "system": "sega-stv", "md5": "a" * 32}
         if region is not None:
             entry["region"] = region
         return {"emulator": name, "type": "libretro", "systems": ["sega-stv"],
@@ -543,7 +543,7 @@ class RegionFollowsEveryReader(unittest.TestCase):
 
     def _region(self, profiles: dict) -> object:
         config = {"cores": sorted(profiles), "systems": {"sega-stv": {"files": []}}}
-        truth = generate_platform_truth("p", config, {}, profiles)
+        truth = generate_platform_truth("p", config, {}, profiles, data_registry={})
         (entry,) = truth["systems"]["sega-stv"]["files"]
         self.assertNotIn("_region_void", entry)
         return entry.get("region")

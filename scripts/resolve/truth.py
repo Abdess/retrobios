@@ -13,7 +13,6 @@ from dataclasses import dataclass
 
 from model.declarations import OUTER_ROOTS
 from model.systems import norm_system_id
-from model.registry import load_data_dir_registry
 from resolve.standalone import platform_layouts, standalone_set as platform_standalone_set
 from resolve.cores import resolve_platform_cores
 from resolve.reconcile import contradicts, shares_hash
@@ -27,7 +26,6 @@ from resolve.validation import (
     read_from_system_dir,
     unread_on,
 )
-from core.paths import REPO_ROOT
 
 
 # Notes on how the model settled two cores: a caller that has no use for
@@ -540,9 +538,6 @@ def _declaration_verdict(entry: dict, declaration: dict, db: dict | None) -> str
     return "undecided"
 
 
-_REPO_PLATFORMS = REPO_ROOT / "platforms"
-
-
 def _fold_data_directory_readers(
     systems: dict,
     profiles: dict,
@@ -785,7 +780,8 @@ def generate_platform_truth(
     profiles: dict[str, dict],
     db: dict | None = None,
     target_cores: set[str] | None = None,
-    data_registry: dict | None = None,
+    *,
+    data_registry: dict,
 ) -> dict:
     """Generate ground-truth system data for a platform from emulator profiles.
 
@@ -797,8 +793,8 @@ def generate_platform_truth(
         profiles: all loaded emulator profiles
         db: optional database for hash enrichment
         target_cores: optional hardware target core filter
-        data_registry: the data directory registry (_data_dirs.yml), read
-                from the repository's platforms/ when not given
+        data_registry: the data directory registry (_data_dirs.yml) of the
+                caller's platforms directory
 
     Returns a dict with platform metadata, systems, and per-file details
     including which cores reference each file.
@@ -864,8 +860,7 @@ def generate_platform_truth(
 
     _fold_data_directory_readers(
         systems, profiles, sorted(cores_profiled), standalone_set, platform_name,
-        load_data_dir_registry(str(_REPO_PLATFORMS)) if data_registry is None
-        else data_registry,
+        data_registry,
     )
 
     for sys_data in systems.values():

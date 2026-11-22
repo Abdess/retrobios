@@ -74,7 +74,7 @@ from sitegen.emulatorpage import (
 )
 from sitegen.emulatorsindex import generate_emulators_index
 from sitegen.exports import generate_exports_page, load_export_reports
-from sitegen.gaps import SourceListing, generate_gap_analysis
+from sitegen.gaps import PlatformRegistries, SourceListing, generate_gap_analysis
 from sitegen.getpages import generate_get_index, generate_get_page
 from sitegen.guidepage import DEMO_ASSETS, generate_handheld_guide
 from sitegen.home import generate_explore_index, generate_home
@@ -483,7 +483,8 @@ def _write_gap_pages(run: _SiteRun, provenance_report: dict) -> None:
     write_if_changed(
         str(docs / "gaps.md"),
         tables_out_of_search(generate_gap_analysis(
-            profiles, coverages, db, run.suppl_names, run.registry, run.gap_report,
+            profiles, coverages, db, run.suppl_names,
+            PlatformRegistries(run.registry, run.data_registry), run.gap_report,
             SourceListing(gap_pages, placer), catalogued=provenance_report,
         )) + reference_next(),
     )

@@ -286,7 +286,7 @@ class OneSlotUnderSeveralNames(unittest.TestCase):
 
     def _files(self) -> dict[str, dict]:
         cores = ["kronos", "ymir", "other"]
-        model = generate_platform_truth("p", {"cores": cores}, {}, self.PROFILES)
+        model = generate_platform_truth("p", {"cores": cores}, {}, self.PROFILES, data_registry={})
         return {f["name"]: f for f in model["systems"]["sega-saturn"]["files"]}
 
     def test_a_reader_requiring_an_alias_requires_the_entry(self):
@@ -321,7 +321,7 @@ class OnlySystemDirectoryEntries(unittest.TestCase):
                 ],
             }
         }
-        result = generate_platform_truth("p", {"cores": ["core"]}, {}, profiles)
+        result = generate_platform_truth("p", {"cores": ["core"]}, {}, profiles, data_registry={})
         names = sorted(f["name"] for f in result["systems"]["sys"]["files"])
         self.assertEqual(names, ["bios.bin", "explicit.bin"])
 

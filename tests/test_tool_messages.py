@@ -827,7 +827,7 @@ class AHashConflictNamesBothCores(unittest.TestCase):
                    "files": [{"name": "a.bin", "system": "sony-playstation",
                               "md5": "a" * 32}]}
         model = truth.generate_platform_truth(
-            "p", {"cores": ["c"], "systems": {}}, {}, {"c": profile}
+            "p", {"cores": ["c"], "systems": {}}, {}, {"c": profile}, data_registry={}
         )
         entries = [f for s in model["systems"].values() for f in s.get("files", [])]
         self.assertTrue(entries)

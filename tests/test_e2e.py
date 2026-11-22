@@ -2755,6 +2755,31 @@ class TestE2E(unittest.TestCase):
         )])
         self.assertTrue(records[0].found)
 
+    def test_140b_lookup_hashes_never_downloads_a_release_asset(self):
+        """A release asset counted as held streamed the whole asset first."""
+        from unittest import mock
+
+        from resolve import packfiles
+
+        path = "bios/Mfr/Console/big.zip"
+        db = {
+            "files": {"sha1big": {"name": "big.zip", "md5": "md5big",
+                                  "sha1": "sha1big", "path": path}},
+            "indexes": {"by_md5": {"md5big": "sha1big"}, "by_crc32": {}},
+        }
+        seen: list[bool] = []
+
+        def fetch(_path, expected_sha1=None, offline=False):
+            seen.append(offline)
+
+        with mock.patch("model.largefiles.load_registered_paths", return_value=[path]), \
+                mock.patch.object(packfiles, "fetch_large_file", side_effect=fetch), \
+                mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
+                mock.patch.object(packfiles, "OFFLINE", False):
+            records = packfiles.lookup_hashes([("md5", "md5big")], db, "bios")
+        self.assertTrue(records[0].in_repo)
+        self.assertEqual(seen, [True])
+
     def test_141_lookup_hashes_not_found(self):
         """lookup_hashes reports unknown hashes, and the report counts them."""
         import contextlib
@@ -3504,6 +3529,7 @@ class TestE2E(unittest.TestCase):
             {},
             profiles,
             db=None,
+            data_registry={},
         )
 
         self.assertEqual(result["platform"], "testplat")
@@ -3560,7 +3586,7 @@ class TestE2E(unittest.TestCase):
         profiles = load_emulator_profiles(self.emulators_dir)
         config = {"cores": "all_libretro"}
 
-        result = generate_platform_truth("testplat", config, {}, profiles)
+        result = generate_platform_truth("testplat", config, {}, profiles, data_registry={})
         names = {fe["name"] for fe in result["systems"]["test-system"]["files"]}
 
         self.assertIn("both.bin", names)
@@ -3605,7 +3631,7 @@ class TestE2E(unittest.TestCase):
             "standalone_cores": ["dualcore"],
         }
 
-        result = generate_platform_truth("testplat", config, {}, profiles)
+        result = generate_platform_truth("testplat", config, {}, profiles, data_registry={})
         names = {fe["name"] for fe in result["systems"]["test-system"]["files"]}
 
         self.assertIn("sa_file.bin", names)
@@ -3654,7 +3680,7 @@ class TestE2E(unittest.TestCase):
         profiles = load_emulator_profiles(self.emulators_dir)
         config = {"cores": ["core_a", "core_b"]}
 
-        result = generate_platform_truth("testplat", config, {}, profiles)
+        result = generate_platform_truth("testplat", config, {}, profiles, data_registry={})
         sys_files = result["systems"]["test-system"]["files"]
         self.assertEqual(len(sys_files), 1)
 
@@ -3687,7 +3713,7 @@ class TestE2E(unittest.TestCase):
         profiles = load_emulator_profiles(self.emulators_dir)
         config = {"cores": ["profiled_core", "unprofiled_core"]}
 
-        result = generate_platform_truth("testplat", config, {}, profiles)
+        result = generate_platform_truth("testplat", config, {}, profiles, data_registry={})
         cov = result["_coverage"]
 
         self.assertEqual(cov["cores_profiled"], 1)
@@ -4502,7 +4528,7 @@ class TestE2E(unittest.TestCase):
 
         # Generate truth
         truth = generate_platform_truth(
-            "testplat", config, registry_entry, profiles, db=None
+            "testplat", config, registry_entry, profiles, db=None, data_registry={}
         )
 
         # Verify truth structure
