@@ -7,7 +7,6 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from installer.arguments import build_parser
 from installer.cards import (
     _card_boundary,
     _mount_name,
@@ -36,7 +35,13 @@ from installer.embedded import CARD_PLATFORMS, _a
 from installer.frontend_folders import _retroarch_config_at
 from installer.games import games_probe
 from installer.host_fs import _exists, _folder_writable, _is_dir, _nearest_folder, closed_folder
-from installer.install_record import RECORD_NARROWING, _RECORD_SAID, record_options, setup_record
+from installer.install_record import (
+    RECORD_NARROWING,
+    _RECORD_SAID,
+    record_options,
+    setup_record,
+    take_recorded_choice,
+)
 from installer.invocation import OFFLINE_VARIABLE
 from installer.lists import local_targets
 from installer.offline import LOCAL, OFFLINE_FLAG_VALUE
@@ -227,12 +232,17 @@ def _start_run(state: TuiState, run: str) -> list[tuple]:
 def _tui_record_take(state: TuiState) -> None:
     """The recorded choice made the screen's, as its options would make it."""
     setup = state.record or {}
-    try:
-        parsed = build_parser().parse_args(setup.get("choice") or [])
-    except SystemExit:
+    taken = take_recorded_choice(setup.get("choice") or [])
+    if taken is None:
         state.status = "The install record names options this installer lacks, so it is ignored."
         state.record = None
         return
+    parsed = taken.parsed
+    if taken.left_out:
+        # What the run takes, as line mode keeps it: the plan reads as the
+        # record's own choice again.
+        setup = state.record = {**setup, "choice": taken.choice}
+        state.status = f"Left out of the recorded choice: {', '.join(taken.left_out)}."
     state.cli_systems = list(parsed.system or [])
     state.cores = [token.strip() for value in parsed.core or [] for token in value.split(",")
                    if token.strip()]

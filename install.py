@@ -10368,6 +10368,33 @@ def drop_recorded(args: argparse.Namespace, plat: str, flag: str, why: str,
     print(f"  Left out of the recorded choice: {flag} ({why}).")
 
 
+class RecordedChoice(NamedTuple):
+    """A recorded choice as a run takes it: parsed, its words once the
+    parts that no longer apply are out, and those parts in words."""
+
+    parsed: argparse.Namespace
+    choice: list[str]
+    left_out: list[str]
+
+
+def take_recorded_choice(choice: list[str]) -> RecordedChoice | None:
+    """The recorded choice made the run's, None where this installer lacks
+    one of its options. A games folder that is gone gives the card's own."""
+    try:
+        parsed = build_parser().parse_args(choice)
+    except SystemExit:
+        return None
+    words, left_out = list(choice), []
+    if isinstance(parsed.for_games, Path) and not _is_dir(parsed.for_games):
+        parsed.for_games = True
+        options = [(flag, None if flag == "--for-games" else value)
+                   for flag, value in record_options(choice)]
+        words = [word for flag, value in options
+                 for word in ([flag] if value is None else [flag, value])]
+        left_out.append("its games folder (no longer there)")
+    return RecordedChoice(parsed, words, left_out)
+
+
 def apply_record(args: argparse.Namespace, plat: str, folder: Path) -> dict | None:
     """Take the choice recorded for plat in folder as the run's, as if its
     options had been typed: the plan's first choice. Returns the record,
@@ -10376,30 +10403,26 @@ def apply_record(args: argparse.Namespace, plat: str, folder: Path) -> dict | No
     say_record_problem(plat, folder, path, problem)
     if setup is None:
         return None
-    try:
-        parsed = build_parser().parse_args(setup["choice"])
-    except SystemExit:
+    taken = take_recorded_choice(setup["choice"])
+    if taken is None:
         say_record_problem(plat, folder, path,
                            f"The install record {path} names options this installer lacks")
         return None
+    parsed = taken.parsed
     for flag in RECORD_CHOICE:
         name = flag[2:].replace("-", "_")
         setattr(args, name, getattr(parsed, name))
     if args.for_games is not None:
         args.all_files = False
     args.from_record = True
-    options = record_options(setup["choice"])
+    options = record_options(taken.choice)
     if any(flag in RECORD_NARROWING for flag, _value in options):
         # Said where it narrows the list: the whole list again is the run
         # a person expects, and said nothing new.
         _RECORD_TAKEN[plat] = setup
     _INVOCATION.chosen[plat] = [option for option in options if option[0] != "--all-files"]
-    if isinstance(args.for_games, Path) and not _is_dir(args.for_games):
-        # The games folder recorded is gone: the card's own games are read.
-        _INVOCATION.chosen[plat] = [(flag, None if flag == "--for-games" else value)
-                                    for flag, value in _INVOCATION.chosen[plat]]
-        args.for_games = True
-        print("  Left out of the recorded choice: its games folder (no longer there).")
+    for part in taken.left_out:
+        print(f"  Left out of the recorded choice: {part}.")
     message = record_menu_words(setup)
     EVENTS.emit("record", platform=plat, folder=str(folder), path=str(path), status="applied",
                 choice=list(setup["choice"]), date=setup["written"],
@@ -16774,6 +16797,7 @@ def _fetch_file(job: _FileFetch) -> tuple[str, bool, str]:
     f = job.f
     reason: str = "download failed"
     refused = False
+    delay: float | None
     for attempt in range(1, MAX_RETRIES + 1):
         job.begin()
         try:
@@ -16806,7 +16830,10 @@ def _fetch_file(job: _FileFetch) -> tuple[str, bool, str]:
 
         except urllib.error.HTTPError as exc:
             reason = _http_attempt_failure(job, exc, attempt)
-            delay = _server_delay(exc, attempt)
+            # A 416 refused the partial copy, dropped above: the next attempt
+            # asks for the whole file.
+            delay = (_server_delay(exc, attempt) if exc.code == 416 and attempt < MAX_RETRIES
+                     else _retry_after_failure(exc, attempt, MAX_RETRIES))
 
         # http.client raises IncompleteRead (an HTTPException, not an
         # OSError) when a chunked transfer is cut, as a proxy re-encoding
@@ -16817,14 +16844,14 @@ def _fetch_file(job: _FileFetch) -> tuple[str, bool, str]:
                 print(f"    Attempt {attempt} failed: {exc}", file=sys.stderr)
             if not refused:
                 job.drop_private()
-            delay = _retry_delay(attempt, None)
+            delay = _retry_after_failure(exc, attempt, MAX_RETRIES)
 
         finally:
             if job.partial is not None:
                 job.partial.close()
 
         job.take_back()
-        if refused or reason == DRIVE_FULL:
+        if refused or reason == DRIVE_FULL or delay is None:
             return f["dest"], False, reason
         if attempt < MAX_RETRIES and delay and _stop.wait(delay):
             return f["dest"], False, "stopped"
@@ -28920,12 +28947,17 @@ def _start_run(state: TuiState, run: str) -> list[tuple]:
 def _tui_record_take(state: TuiState) -> None:
     """The recorded choice made the screen's, as its options would make it."""
     setup = state.record or {}
-    try:
-        parsed = build_parser().parse_args(setup.get("choice") or [])
-    except SystemExit:
+    taken = take_recorded_choice(setup.get("choice") or [])
+    if taken is None:
         state.status = "The install record names options this installer lacks, so it is ignored."
         state.record = None
         return
+    parsed = taken.parsed
+    if taken.left_out:
+        # What the run takes, as line mode keeps it: the plan reads as the
+        # record's own choice again.
+        setup = state.record = {**setup, "choice": taken.choice}
+        state.status = f"Left out of the recorded choice: {', '.join(taken.left_out)}."
     state.cli_systems = list(parsed.system or [])
     state.cores = [token.strip() for value in parsed.core or [] for token in value.split(",")
                    if token.strip()]

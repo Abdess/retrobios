@@ -48,7 +48,7 @@ JOURNEY_KEYS = {
     "one_system": (13, 14),
     "one_system_again": (1, 2),
     "what_is_missing": (4, 5),
-    "another_device": (20, 21),
+    "another_device": (19, 20),
 }
 
 # Words each journey's screens show by default, summed over the screens it
@@ -346,9 +346,8 @@ class Journeys(unittest.TestCase):
         term.wait("Which folder?", timeout=40)
         self.press(term, DOWN, "\r")
         term.wait("RetroBIOS: Type a path")
+        # One missing level is created without a question, as line mode does.
         self.press(term, "~/bios", "\r")
-        term.wait("Create the folder?")
-        self.press(term, "\r")
         screen = term.wait("files to download", timeout=40)
         self.assertIn("RetroBIOS: Batocera", screen)
         self.press(term, "\r")
@@ -674,6 +673,23 @@ class RecordReview(unittest.TestCase):
         proc = self.run_line("--check", "--events")
         self.assertEqual(events(proc, "record")[0]["status"], "unreadable")
         self.assertEqual(self.dests(proc), self.everything())
+
+    def test_a_games_folder_that_is_gone_gives_the_card_games_both_ways(self):
+        """Line mode read the card's games, the screen gave the child run the
+        folder that is gone, and its check ended on an error."""
+        gone = self.dest.parent / "roms-gone"
+        self.write(["--for-games", str(gone), "--system", "nintendo-gba"])
+        state = install.TuiState()
+        state.platform, state.dest = "retroarch", self.dest
+        install._tui_record_load(state)
+        self.assertIn(("--for-games", None), install.tui_flags(state))
+        self.assertNotIn(str(gone), [value for _flag, value in install.tui_flags(state)])
+        self.assertIn("its games folder (no longer there)", state.status)
+        self.assertTrue(install.tui_record_kept(state))
+        proc = self.run_line("--check")
+        self.assertIn("Left out of the recorded choice: its games folder (no longer there).",
+                      proc.stdout)
+        self.assertNotIn("does not exist", proc.stdout + proc.stderr)
 
     def test_a_recorded_option_that_cannot_apply_is_left_out(self):
         """A run nobody typed options for went on failing: the list has no
