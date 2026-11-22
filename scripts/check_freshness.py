@@ -55,7 +55,7 @@ from freshness.platforms import check_emulatorjs, check_platforms
 from freshness.profiles import check_profiles, check_source_paths
 from freshness.report import exit_code, render, unknown_areas_message
 from freshness.romfolders import check_romfolders
-from freshness.targets import check_targets
+from freshness.targets import check_lakka_release, check_targets
 from model.profiles import load_emulator_profiles
 
 
@@ -138,6 +138,7 @@ def main() -> int:
             )
         if "targets" in areas:
             findings.extend(check_targets(platforms_dir, workdir, profiles, args.jobs, args.offline))
+            findings.append(check_lakka_release(platforms_dir, args.cache_dir, args.offline))
     if "romfolders" in areas:
         findings.extend(check_romfolders(platforms_dir, args.cache_dir, args.offline))
     if "coreinfo" in areas:

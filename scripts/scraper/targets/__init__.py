@@ -12,6 +12,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 
 from model.safeparse import require_yaml
+from model.sources import source_yaml_file
 from model.sourcerevision import platform_revision
 
 # Every target scraper reads the network through the platform scrapers'
@@ -46,6 +47,22 @@ class BaseTargetScraper(ABC):
             Path(__file__).resolve().parents[3] / "platforms"
         )
         return platform_revision(directory / f"{platform}.yml")
+
+    @staticmethod
+    def pinned_version(platform: str, platforms_dir: str | None = None) -> str:
+        """The release tag platforms/<platform>.yml names in its own `version:`.
+
+        A platform that inherits its BIOS list (Lakka) has no source of its
+        own to pin: its file names the release by hand, and moving to a new
+        release is an edit of that field.
+        """
+        directory = Path(platforms_dir) if platforms_dir else (
+            Path(__file__).resolve().parents[3] / "platforms"
+        )
+        version = str((source_yaml_file(directory / f"{platform}.yml") or {}).get("version") or "")
+        if not version:
+            raise RuntimeError(f"platforms/{platform}.yml names no version")
+        return version
 
     def write_output(self, data: dict, output_path: str) -> None:
         """Write target data to YAML file."""

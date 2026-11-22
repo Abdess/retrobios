@@ -9,7 +9,10 @@ from __future__ import annotations
 
 import tests
 
+import tempfile
 import unittest
+from pathlib import Path
+from unittest import mock
 
 from scripts.scraper.targets import lakka_targets_scraper as lakka
 
@@ -93,6 +96,35 @@ class OptionsEvaluation(unittest.TestCase):
         text = 'case $TARGET_ARCH in\n  arm)\n    OPENGLES="mesa"\n    ;;\nesac\n'
         with self.assertRaises(lakka.ShellSubsetError):
             lakka.evaluate(text, {})
+
+
+def _files(url: str) -> str:
+    return CORES_MK if url.endswith(lakka.CORES_MK) else ""
+
+
+class Release(unittest.TestCase):
+    def test_the_release_is_the_one_lakka_yml_names(self):
+        """platforms/lakka.yml decides the release: a scraper that asked
+        for the latest one moved the cores away from the version it shows."""
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "lakka.yml").write_text("inherits: retroarch\nversion: v6.1\n")
+            self.assertEqual(lakka.Scraper.pinned_version("lakka", tmp), "v6.1")
+            Path(tmp, "lakka.yml").write_text("inherits: retroarch\n")
+            with self.assertRaises(RuntimeError):
+                lakka.Scraper.pinned_version("lakka", tmp)
+
+    def test_the_scrape_reads_at_that_release(self):
+        scraper = lakka.Scraper()
+        tree = [
+            {"path": "projects/Generic/options"},
+            {"path": "projects/Generic/devices/Generic/options"},
+        ]
+        with mock.patch.object(lakka.Scraper, "pinned_version", return_value="v6.1"), \
+                mock.patch.object(lakka, "fetch_text", side_effect=_files) as fetch, \
+                mock.patch.object(lakka, "github_tree", return_value=tree):
+            data = scraper.fetch_targets()
+        self.assertTrue(all("/v6.1/" in call.args[0] for call in fetch.call_args_list))
+        self.assertIn("/blob/v6.1/", data["source"])
 
 
 class Architecture(unittest.TestCase):

@@ -5215,6 +5215,10 @@ class TargetListsReadThePinnedRelease(unittest.TestCase):
                 )
                 self.assertNotIn("fetch_stable_tag()", source)
                 self.assertNotIn("fetch_github_latest_version(", source)
+        # Lakka inherits its BIOS list and pins the release in its own version:.
+        source = (ROOT / "scripts" / "scraper" / "targets" / "lakka_targets_scraper.py").read_text()
+        self.assertIn("self.pinned_version(PLATFORM_NAME)", source)
+        self.assertNotIn("fetch_github_latest_version(", source)
 
 
 

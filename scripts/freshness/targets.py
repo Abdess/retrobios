@@ -8,6 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
+from core import upstream
 from model.profiles import upstream_profile_index
 from model.sources import source_yaml_file
 from model.targets import apply_target_overrides, platform_overrides, read_target_overrides
@@ -17,6 +18,8 @@ from freshness.findings import (
 from freshness.platformdiff import diff_targets
 from freshness.rescrape import scrape_into_copy
 from freshness.scrapers import target_scrapers
+from scraper.targets import BaseTargetScraper
+from scraper.targets.lakka_targets_scraper import PLATFORM_NAME as LAKKA, REPO as LAKKA_REPO
 
 
 def profile_name_index(profiles: dict[str, dict]) -> dict[str, set[str]]:
@@ -131,6 +134,33 @@ def check_targets(
         for rows in pool.map(run, names):
             findings.extend(rows)
     return findings
+
+
+def check_lakka_release(platforms_dir: Path, cache_dir: str, offline: bool) -> Finding:
+    """The Lakka release platforms/lakka.yml pins against the newest one.
+
+    The target scraper reads the release lakka.yml names, so a rescrape
+    never moves it: only this row says Lakka published a newer one.
+    """
+    subject = f"{LAKKA} release"
+    try:
+        local = BaseTargetScraper.pinned_version(LAKKA, str(platforms_dir))
+    except (OSError, RuntimeError) as exc:
+        return Finding("targets", subject, ERROR, detail=str(exc))
+    if offline:
+        return Finding("targets", subject, SKIPPED, local=local, detail="offline")
+    repo = upstream.parse_repo(f"https://github.com/{LAKKA_REPO}")
+    try:
+        release = upstream.latest_release(repo, cache_dir) if repo else None
+    except upstream.UpstreamError as exc:
+        return Finding("targets", subject, UNKNOWN, local=local, detail=str(exc))
+    if release is None:
+        return Finding("targets", subject, UNKNOWN, local=local, detail="no release listed")
+    if release.tag == local:
+        return Finding("targets", subject, OK, local=local, remote=release.tag,
+                       detail="newest release")
+    return Finding("targets", subject, STALE, local=local, remote=release.tag,
+                   detail=f"edit version: in platforms/{LAKKA}.yml, then rescrape the targets")
 
 
 def _declared_cores(platform: str, platforms_dir: Path) -> list[str]:

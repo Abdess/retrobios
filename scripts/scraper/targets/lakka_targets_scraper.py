@@ -1,6 +1,6 @@
 """Scraper for Lakka per-device core availability.
 
-Sources (libretro/Lakka-LibreELEC, at the latest Lakka release tag):
+Sources (libretro/Lakka-LibreELEC, at the release platforms/lakka.yml names):
   - packages/lakka/libretro_cores/package.mk -- LIBRETRO_CORES, then the
     EXCLUDE_LIBRETRO_CORES each PROJECT/DEVICE and OPENGLES_SUPPORT add
   - projects/<PROJECT>/options and projects/<PROJECT>/devices/<DEVICE>/options
@@ -16,9 +16,8 @@ import re
 import sys
 from datetime import datetime, timezone
 
-
 from . import BaseTargetScraper, target_cli
-from ..base_scraper import fetch_github_latest_version, fetch_text, github_tree
+from ..base_scraper import fetch_text, github_tree
 
 PLATFORM_NAME = "lakka"
 
@@ -220,7 +219,7 @@ class Scraper(BaseTargetScraper):
         return found
 
     def fetch_targets(self) -> dict:
-        self.tag = fetch_github_latest_version(REPO)
+        self.tag = self.pinned_version(PLATFORM_NAME)
         cores_mk = self._raw(CORES_MK)
         targets: dict[str, dict] = {}
         for project, device in self._devices():

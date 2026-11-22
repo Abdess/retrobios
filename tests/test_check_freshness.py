@@ -60,6 +60,7 @@ from freshness.scrapers import rescrape_command, target_scrapers
 from freshness.targets import (
     _declared_cores,
     _unresolved_findings,
+    check_lakka_release,
     check_targets,
     profile_name_index,
     unresolved_target_cores,
@@ -763,6 +764,21 @@ class RepositoryWiringTests(unittest.TestCase):
         self.assertTrue(lakka.get("inherits"))
         self.assertNotIn("lakka", names)
         self.assertIn("retropie", names)
+
+    def test_a_newer_lakka_release_is_reported_not_followed(self):
+        """The target scraper reads the release lakka.yml names, so only
+        this row says Lakka published a newer one."""
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "lakka.yml").write_text("inherits: retroarch\nversion: v6.1\n")
+            for tag, status in (("v6.1", OK), ("v6.2", STALE)):
+                release = upstream.Release(tag, "2026-11-01", False)
+                with self.subTest(tag=tag), \
+                        mock.patch.object(upstream, "latest_release", return_value=release):
+                    row = check_lakka_release(Path(tmp), "", False)
+                    self.assertEqual((row.status, row.local, row.remote), (status, "v6.1", tag))
+            self.assertEqual(check_lakka_release(Path(tmp), "", True).status, SKIPPED)
+            Path(tmp, "lakka.yml").write_text("inherits: retroarch\n")
+            self.assertEqual(check_lakka_release(Path(tmp), "", True).status, ERROR)
 
     def test_render_counts_every_status_once(self):
         findings = [

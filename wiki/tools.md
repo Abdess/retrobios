@@ -742,6 +742,11 @@ newest release, or with its branch head when the project publishes none. A
 stale pin is moved by hand, then `python -m scripts.scraper.romfolders --setup
 NAME` reads the folders again.
 
+The `targets` area also compares the Lakka release `platforms/lakka.yml`
+names in `version:` with Lakka's newest release. The target scraper reads
+its core lists at that release and never moves it, so a newer release is
+`STALE` until the field is edited by hand and the targets are scraped again.
+
 The `profiles` area always checks `website/src/data/source-paths.json`
 against the profiles, offline: a recorded tree that no profile pins any more
 is `STALE` until `sitesources.py --fetch` runs again. It also reads each
