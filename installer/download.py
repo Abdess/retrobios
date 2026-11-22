@@ -36,7 +36,7 @@ from installer.host_fs import (
 )
 from installer.invocation import offline_requested
 from installer.local_check import _digest_file, _digest_handle, expected_hashes, unreachable_words
-from installer.network import _retry_delay, _server_delay, network_words
+from installer.network import _retry_after_failure, _server_delay, network_words
 from installer.offline import LOCAL, offline_words
 from installer.outcome import HttpReason, NetworkReason, OfflineReason, _transfer_failure
 from installer.pack_source import NOT_IN_PACK, _extract_from_pack
@@ -185,6 +185,7 @@ def _fetch_file(job: _FileFetch) -> tuple[str, bool, str]:
     f = job.f
     reason: str = "download failed"
     refused = False
+    delay: float | None
     for attempt in range(1, MAX_RETRIES + 1):
         job.begin()
         try:
@@ -217,7 +218,10 @@ def _fetch_file(job: _FileFetch) -> tuple[str, bool, str]:
 
         except urllib.error.HTTPError as exc:
             reason = _http_attempt_failure(job, exc, attempt)
-            delay = _server_delay(exc, attempt)
+            # A 416 refused the partial copy, dropped above: the next attempt
+            # asks for the whole file.
+            delay = (_server_delay(exc, attempt) if exc.code == 416 and attempt < MAX_RETRIES
+                     else _retry_after_failure(exc, attempt, MAX_RETRIES))
 
         # http.client raises IncompleteRead (an HTTPException, not an
         # OSError) when a chunked transfer is cut, as a proxy re-encoding
@@ -228,14 +232,14 @@ def _fetch_file(job: _FileFetch) -> tuple[str, bool, str]:
                 print(f"    Attempt {attempt} failed: {exc}", file=sys.stderr)
             if not refused:
                 job.drop_private()
-            delay = _retry_delay(attempt, None)
+            delay = _retry_after_failure(exc, attempt, MAX_RETRIES)
 
         finally:
             if job.partial is not None:
                 job.partial.close()
 
         job.take_back()
-        if refused or reason == DRIVE_FULL:
+        if refused or reason == DRIVE_FULL or delay is None:
             return f["dest"], False, reason
         if attempt < MAX_RETRIES and delay and _stop.wait(delay):
             return f["dest"], False, "stopped"

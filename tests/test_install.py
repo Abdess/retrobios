@@ -6418,6 +6418,27 @@ class ANetworkFailureNamesTheNetwork(unittest.TestCase):
             with self.subTest(error=error):
                 self.assertNotIsInstance(self._fail(error), install.NetworkReason)
 
+    def test_a_bios_file_follows_the_shared_retry_rule(self):
+        """A 404 on a BIOS file was asked three times, the file list once."""
+        cases = ((urllib.error.HTTPError("u", 404, "Not Found", None, None), 1),
+                 (urllib.error.HTTPError("u", 503, "Service Unavailable", None, None),
+                  install.MAX_RETRIES))
+        for error, expected in cases:
+            calls: list = []
+
+            def urlopen(*_args, _error=error, _calls=calls, **_kwargs):
+                _calls.append(1)
+                raise _error
+
+            entry = {"dest": "a.bin", "repo_path": "bios/a.bin", "size": 10,
+                     "sha256": "0" * 64}
+            with self.subTest(code=error.code), \
+                    unittest.mock.patch.object(install.urllib.request, "urlopen", urlopen), \
+                    unittest.mock.patch.object(install, "_retry_delay", return_value=0):
+                _dest, ok, _reason = install._download_one(entry, scratch_dir(self))
+                self.assertFalse(ok)
+                self.assertEqual(len(calls), expected)
+
     def test_the_summary_points_at_the_connection(self):
         failures = [("a.bin", install.NetworkReason("timed out")),
                     ("b.bin", install.NetworkReason("Connection reset by peer"))]
