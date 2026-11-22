@@ -27,6 +27,7 @@ Verification (batocera-systems at the release tag):
 from __future__ import annotations
 
 from model.sourcerevision import required_revision
+from model.launcherrecords import record_emulators
 from model.targets import not_cores
 from .base_scraper import fetch_github_latest_version, fetch_text
 from .batocera_scraper import (
@@ -124,7 +125,7 @@ class Scraper(CheckBiosScraper):
         # no ES core name: only a record of an emulator no image carries goes.
         launchers = [
             r for r in extract_launchers(RepoTree.github(REPO, required_revision(self.url, REPO)))
-            if not set(str(r["emulator"]).split(", ")) <= unbuilt
+            if not set(record_emulators(r)) <= unbuilt
         ]
         return {
             "platform": "EmuELEC",

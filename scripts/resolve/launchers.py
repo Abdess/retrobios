@@ -23,6 +23,7 @@ from dataclasses import dataclass
 from core.hashing import HASH_FIELDS, declared_hashes
 from model.database import record_at
 from model.declarations import CONFIGS_ROOT, ROMS_ROOT, declared_root, declared_slot, outer_layout
+from model.launcherrecords import emulator_names, record_emulators
 from model.profiles import lists_files, platform_builds, profile_names
 from resolve.content import name_match_size_ok
 from resolve.localfile import resolve_local_file
@@ -429,7 +430,7 @@ class ConfigEvidence:
 def _named_profiles(record: dict, profiles: Mapping[str, dict], platform: str) -> list[str]:
     """The profiles a record's emulator names, a platform's own build first."""
     found = []
-    for part in (e.strip() for e in str(record.get("emulator", "")).split(",")):
+    for part in record_emulators(record):
         named = [
             key for key, profile in profiles.items()
             if lists_files(profile) and part in profile_names(key, profile)
@@ -857,7 +858,7 @@ def handed_directories(
                             d.startswith(f"{(folder or '').lower()}/") for d in declared
                         ),
                     )
-                    for emulator in (e.strip() for e in str(record.get("emulator", "")).split(","))
+                    for emulator in record_emulators(record)
                 )
     return found
 
@@ -985,7 +986,7 @@ def executed_files(config: dict, profiles: Mapping[str, dict]) -> list[ExecutedF
                 ExecutedFile(
                     emulator, name.rsplit("/", 1)[-1], place, str(record.get("source_ref", ""))
                 )
-                for emulator in (e.strip() for e in str(record.get("emulator", "")).split(","))
+                for emulator in record_emulators(record)
             )
     return found
 
@@ -1297,7 +1298,7 @@ class LauncherLayer:
             standalone = place.build == "standalone"
             owners = {
                 key
-                for emulator in (e.strip() for e in place.emulator.split(","))
+                for emulator in emulator_names(place.emulator)
                 for key in self._profiles_named(emulator, profiles, relevant)
             }
             # RetroDECK names its frontend, retroarch, and the core option it

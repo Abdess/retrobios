@@ -13,6 +13,7 @@ from __future__ import annotations
 import re
 from collections.abc import Callable
 
+from model.launcherrecords import join_emulators
 from resolve.launcherrefs import is_feature_ref, split_ref
 from .csharp_source import (
     LauncherPatternMissing,
@@ -1423,7 +1424,7 @@ def _cxbx_mount(src: Source, emulators: list[str]) -> list[Record]:
     )
     iso_span = src.lines(iso.start(), iso.end())
     when = f'rom extension "{iso.group(1)}"'
-    emulator = ", ".join(emulators)
+    emulator = join_emulators(emulators)
     return [
         _record(
             emulator,
@@ -2853,7 +2854,7 @@ def capsimg(sources: dict[str, Source]) -> list[Record]:
         "capsimg gate",
     )
     block = src.block_at(gate.end())
-    [record] = _copies_if_absent(src, ", ".join(names), "libretro", block)
+    [record] = _copies_if_absent(src, join_emulators(names), "libretro", block)
     record["source_ref"] = source_ref(
         (src.path, [(src.line(cores.start()), core_lines[1]), src.statement_span(block)])
     )

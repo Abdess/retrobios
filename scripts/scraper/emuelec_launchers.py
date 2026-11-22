@@ -17,6 +17,7 @@ import re
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 
+from model.launcherrecords import join_emulators
 from .configgen_launchers import Launcher
 from .rocknix_launchers import fixed_paths
 from scraper.shell_launchers import (
@@ -111,7 +112,7 @@ class Runs:
         return self.by_script[name]
 
     def emulator(self, name: str) -> str:
-        return ", ".join(self.of(name).emulators)
+        return join_emulators(self.of(name).emulators)
 
     def ref(self, name: str) -> tuple[str, set[int]]:
         return (RUN_EMU, set(self.of(name).lines))

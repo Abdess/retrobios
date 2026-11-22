@@ -16,6 +16,7 @@ from pathlib import Path
 
 import yaml
 
+from model.launcherrecords import record_emulators
 from scraper import knulli_launchers as kl
 from scraper.configgen_sites import bios_sites, GenericSites
 from scraper.batocera_launchers import hatari, melonds
@@ -633,7 +634,7 @@ class PlatformFile(unittest.TestCase):
 
     def test_every_emulator_is_one_knulli_names(self):
         cores = {*self.config["cores"], *self.config.get("standalone_cores", [])}
-        named = {n for record in self.config["launchers"] for n in record["emulator"].split(", ")}
+        named = {n for record in self.config["launchers"] for n in record_emulators(record)}
         # RetroArch itself, and the MAME core names configgen tests that
         # KNULLI's es_systems.yml never offers.
         self.assertEqual(sorted(named - cores), ["mamevirtual", "mess", "retroarch"])

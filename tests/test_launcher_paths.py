@@ -297,6 +297,14 @@ class OnlyWhatABoardBuildsIsRun(unittest.TestCase):
         # Without a selection, every name counts, as before.
         self.assertIn("suyu", bs.configgen_cores(self.DEFAULTS, self.ES, set())[0])
 
+    def test_a_record_for_several_emulators_runs_when_one_is_built(self):
+        from scraper import batocera_scraper as bs
+
+        built = bs.boards_build(self.selection(set()), [])
+        for field in ("citron, mgba", "citron,mgba"):
+            with self.subTest(field=field):
+                self.assertEqual(len(bs.records_run([{"emulator": field}], built)), 1)
+
     def test_the_real_lists_name_only_what_a_board_builds(self):
         import yaml
 

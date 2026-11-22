@@ -19,6 +19,7 @@ from model.alternatives import set_keys, set_requirements, settle_sets
 from model.database import get_mame_clone_map, sha1_at
 from model.profiles import lists_files
 from model.declarations import OUTER_ROOTS
+from model.launcherrecords import record_emulators
 from model.platforms import load_platform_config
 from model.registry import list_registered_platforms, load_data_dir_registry
 from model.systems import norm_system_id
@@ -1349,8 +1350,8 @@ def launcher_reads_not_held(
                 continue
             readers = sorted({
                 key
-                for part in str(record.get("emulator", "")).split(",")
-                for key in LauncherLayer._profiles_named(part.strip(), profiles, every_profile)
+                for part in record_emulators(record)
+                for key in LauncherLayer._profiles_named(part, profiles, every_profile)
             })
             if not readers:
                 # RetroDECK names its frontend and the core option names the core.

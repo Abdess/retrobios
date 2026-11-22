@@ -17,6 +17,7 @@ from pathlib import Path
 
 import yaml
 
+from model.launcherrecords import record_emulators
 from scraper.batocera_configgen import CONFIGGEN, GENERATORS, IMPORTER, PATHS_MODULE, Configgen
 from scraper.batocera_launchers import (
     Launcher,
@@ -624,7 +625,7 @@ class PlatformRecords(unittest.TestCase):
         cores = {*self.config["cores"], *self.config.get("standalone_cores", [])}
         named = {
             name for record in self.config["launchers"]
-            for name in record["emulator"].split(", ")
+            for name in record_emulators(record)
         }
         self.assertEqual(sorted(named - cores), [])
 

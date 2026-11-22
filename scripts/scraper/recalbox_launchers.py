@@ -21,6 +21,7 @@ from dataclasses import dataclass, field
 from functools import partial
 from typing import Any
 
+from model.launcherrecords import emulator_names, join_emulators
 from .configgen_launchers import (
     Launcher,
     LauncherShapeError,
@@ -249,14 +250,14 @@ class Configgen:
         module = module.replace("/", ".")
         if module not in self._emulators:
             raise LauncherShapeError(f"{LAUNCHER}: no emulator loads {module}")
-        return ", ".join(self._emulators[module])
+        return join_emulators(self._emulators[module])
 
     def core(self, function: str) -> str:
         """The libretro cores fillCoresConfiguration hands to `function`."""
         cores = _handler_map(self.source(CORES), "fillCoresConfiguration", "specificCoreHandlers")
         if function not in cores:
             self.source(CORES).fail(f"no core is configured by {function}")
-        return ", ".join(cores[function])
+        return join_emulators(cores[function])
 
     def env(self, source: Source, scope: ast.AST | None = None) -> dict[str, Any]:
         """recalboxFiles, the module's class attributes and the strings
@@ -462,7 +463,7 @@ def system_directories(cg: Configgen) -> list[Launcher]:
                 words = ["core with no case of its own"] + ([condition] if condition else [])
                 condition = ", ".join(words)
             launchers.append(record(
-                ", ".join(cores) or ALL_CORES, condition, call,
+                join_emulators(cores) or ALL_CORES, condition, call,
                 [(pattern.lineno, pattern.lineno), (start, end_line(call))],
             ))
 
@@ -490,7 +491,7 @@ def system_directories(cg: Configgen) -> list[Launcher]:
 def core_directory(directories: list[Launcher], core: str) -> Launcher:
     """The unconditional system_directory record that applies to `core`."""
     for launcher in directories:
-        if core in launcher.emulator.split(", ") and launcher.depends_on_option is None:
+        if core in emulator_names(launcher.emulator) and launcher.depends_on_option is None:
             return launcher
     for launcher in directories:
         if launcher.emulator == ALL_CORES and launcher.depends_on_option == \

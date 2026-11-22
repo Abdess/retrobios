@@ -16,6 +16,7 @@ from pathlib import Path
 
 import yaml
 
+from model.launcherrecords import record_emulators
 from scraper import amberelec_launchers as al
 from scraper.configgen_launchers import LauncherShapeError
 
@@ -336,7 +337,7 @@ class PlatformFile(unittest.TestCase):
 
     def test_every_emulator_is_one_amberelec_names(self):
         cores = {*self.config["cores"], *self.config.get("standalone_cores", [])}
-        named = {n for record in self.config["launchers"] for n in record["emulator"].split(", ")}
+        named = {n for record in self.config["launchers"] for n in record_emulators(record)}
         # RetroArch and retrorun themselves, the two runners of every core.
         self.assertEqual(sorted(named - cores), ["retroarch", "retrorun"])
 

@@ -28,6 +28,7 @@ from typing import Any
 
 import yaml
 
+from model.launcherrecords import emulator_names, join_emulators
 from .batocera_launchers import (
     PATH_PATCHES,
     config_directories,
@@ -278,7 +279,7 @@ def core_file_options(cg: Configgen) -> list[Launcher]:
             src.fail(f"{setting} is not set under a core test")
         depends = setting if not conditions else f"{setting} (default by {', '.join(conditions)})"
         launchers.append(Launcher(
-            emulator=", ".join(_cores_of(holder.test)), build="libretro", kind="core_option",
+            emulator=join_emulators(_cores_of(holder.test)), build="libretro", kind="core_option",
             names=names, passes_to=f"core option {setting}", depends_on_option=depends,
             source_ref=src.ref([src.span(holder.test), _lines(chain)]),
         ))
@@ -476,14 +477,14 @@ def boot_disks(
         reader = _Reader(cg, src)
         module = spec.path.removesuffix(".py").replace("/", ".")
         emulator = (
-            ", ".join(_caller_cores(cg, spec.caller)) if spec.caller else cg.emulator(module)
+            join_emulators(_caller_cores(cg, spec.caller)) if spec.caller else cg.emulator(module)
         )
         if spec.caller and spec.feature[:2] == ("libretro", "cores"):
             # The option is offered for one core of the system: es_features
             # lists it under that core, the other cores the generator serves
             # never see it (KNULLI's macintosh offers mame alone).
             core = spec.feature[2]
-            if core not in emulator.split(", "):
+            if core not in emulator_names(emulator):
                 src.fail(f"es_features offers the option for {core}, which the generator does not serve")
             emulator = core
         found = 0

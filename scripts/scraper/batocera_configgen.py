@@ -9,6 +9,7 @@ import posixpath
 from collections.abc import Callable
 from typing import Any
 
+from model.launcherrecords import join_emulators
 from .configgen_launchers import LauncherShapeError, Source, _assigned_name, assigned_value
 
 
@@ -159,7 +160,7 @@ class Configgen:
     def emulator(self, module: str) -> str:
         """The name configgen loads `module` for (importer.get_generator)."""
         if module in self._generators:
-            return ", ".join(self._generators[module])
+            return join_emulators(self._generators[module])
         package, _, leaf = module.partition(".")
         if leaf == f"{package}Generator":
             return package

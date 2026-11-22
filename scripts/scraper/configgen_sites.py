@@ -13,6 +13,7 @@ import re
 from collections.abc import Iterator
 from dataclasses import dataclass, field
 
+from model.launcherrecords import join_emulators
 from .batocera_configgen import Configgen, _path_value
 from .configgen_launchers import Launcher, Source, _assigned_name, end_line
 
@@ -502,7 +503,7 @@ def bios_sites(cg: Configgen, spec: GenericSites) -> list[Launcher]:
             site.path = site.path[len(flag) + 1:]
         emulator = (
             spec.emulator
-            or ", ".join(site.cores or caller_cores)
+            or join_emulators(site.cores or caller_cores)
             or (cg.emulator(module) if spec.build == "standalone" else "")
         )
         if not emulator:

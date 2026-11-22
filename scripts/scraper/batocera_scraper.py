@@ -15,6 +15,7 @@ from collections.abc import Callable
 
 
 from model.database import load_database
+from model.launcherrecords import record_emulators
 from core.paths import DB_FILE, REPO_ROOT
 from model.targets import load_target_config, not_cores
 from core.hashing import cut_md5_owner
@@ -425,11 +426,11 @@ def boards_build(selection: BuildSelection, launchers: list[dict]) -> Callable[[
     /userdata/bios/pico-8/pico8) needs no package.
     """
     supplied = {
-        name.strip()
+        name
         for record in launchers
         if record.get("passes_to") == "exec"
         and str(record.get("search_dir") or "").startswith("/userdata/bios")
-        for name in str(record.get("emulator", "")).split(",")
+        for name in record_emulators(record)
     }
 
     def built(name: str) -> bool:
@@ -471,7 +472,7 @@ def records_run(launchers: list[dict], built: Callable[[str], bool]) -> list[dic
     (KNULLI's citron, pcsx2, shadps4): what they read is never read on the
     device, so the records do not describe the platform.
     """
-    return [r for r in launchers if any(built(n) for n in str(r["emulator"]).split(", "))]
+    return [r for r in launchers if any(built(n) for n in record_emulators(r))]
 
 
 class CheckBiosScraper(BaseScraper):

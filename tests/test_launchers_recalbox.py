@@ -18,6 +18,7 @@ from unittest import mock
 
 import yaml
 
+from model.launcherrecords import emulator_names, record_emulators
 from scraper import recalbox_scraper
 from scraper.recalbox_launchers import (
     ALL_CORES,
@@ -1352,7 +1353,7 @@ class SystemDirectoryPerCore(unittest.TestCase):
         self.assertEqual(overrides[0].source_ref, ref(RETROARCH, "516-519"))
 
     def test_the_cases_cover_the_match(self):
-        cores = {name for r in self.records for name in r.emulator.split(", ")}
+        cores = {name for r in self.records for name in emulator_names(r.emulator)}
         self.assertEqual(len(cores - {ALL_CORES}), 29)
 
     def test_dolphin_assets_directory(self):
@@ -1641,7 +1642,7 @@ class PlatformRecords(unittest.TestCase):
         cores = set(self.config["cores"]) | {ALL_CORES}
         named = {
             name for record in self.config["launchers"]
-            for name in record["emulator"].split(", ")
+            for name in record_emulators(record)
         }
         self.assertEqual(sorted(named - cores), [])
 

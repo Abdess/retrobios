@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from model.platforms import load_platform_config
+from model.launcherrecords import record_emulators
 from model.registry import list_registered_platforms
 from packs.crossref import launcher_reads_not_held
 from resolve.launchers import LauncherLayer, launcher_unproven
@@ -37,7 +38,7 @@ def launcher_rows(
         row for row in launcher_unproven(configs, all_profiles)
         if not emulator or any(
             emulator in LauncherLayer._profiles_named(part, all_profiles, set(all_profiles))
-            for part in row["emulator"].split(", ")
+            for part in record_emulators(row)
         )
     ]
     return launcher_reads, unproven

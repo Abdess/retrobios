@@ -19,6 +19,7 @@ import re
 from collections.abc import Callable, Iterable
 from typing import Any
 
+from model.launcherrecords import join_emulators
 from .configgen_launchers import (
     Launcher,
     LauncherShapeError,
@@ -939,7 +940,7 @@ def core_file_options(cg: Configgen) -> list[Launcher]:
             src.fail(f"{setting} has no literal default")
         depends = option if condition is None else f"{option} (default by {condition})"
         launchers.append(Launcher(
-            emulator=", ".join(cores[function_name]), build="libretro", kind="core_option",
+            emulator=join_emulators(cores[function_name]), build="libretro", kind="core_option",
             names=names, passes_to=f"core option {setting}", depends_on_option=depends,
             source_ref=src.ref([src.span(_outermost(function, call))]),
         ))
