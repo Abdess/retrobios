@@ -20,9 +20,9 @@ from unittest import mock
 import yaml
 
 from freshness import stalefindings
-from freshness.stalecommands import verify_command
+from freshness.stalecommands import AUTO_AREAS, MANUAL_AREAS, verify_command
 from freshness.stalefindings import load_findings
-from freshness.stalejob import AUTO_AREAS, LOG_DIR, MANUAL_AREAS, Job, JobResult
+from freshness.stalejob import LOG_DIR, Job, JobResult
 from freshness.staleplan import plan_jobs
 from freshness.stalereport import render
 from freshness.stalerun import run_job, run_jobs
@@ -186,6 +186,16 @@ class Planning(unittest.TestCase):
         jobs, surfaced, _ = self._plan(finding("ci", "install.py pin"))
         self.assertEqual([job.command[1:] for job in jobs], [["scripts/pin_installer.py"]])
         self.assertEqual(surfaced, [])
+
+    def test_the_help_lists_an_area_with_a_refresher_as_refreshed(self):
+        """--help listed ci for a human while its install.py pin row ran
+        scripts/pin_installer.py: both now read the planner's table."""
+        self.assertIn("ci", AUTO_AREAS)
+        self.assertNotIn("ci", MANUAL_AREAS)
+        for area in MANUAL_AREAS:
+            with self.subTest(area=area):
+                jobs, _, _ = self._plan(finding(area, "anything"))
+                self.assertEqual(jobs, [])
 
 
 class ProducedRows(unittest.TestCase):

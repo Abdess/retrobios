@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 from core.paths import REPO_ROOT
-from freshness.stalejob import AUTO_AREAS, MANUAL_AREAS
+from freshness.findings import AREAS
 
 CHECK_FRESHNESS = REPO_ROOT / "scripts" / "check_freshness.py"
 
@@ -16,7 +16,7 @@ CHECK_FRESHNESS = REPO_ROOT / "scripts" / "check_freshness.py"
 def run_check_freshness(areas: tuple[str, ...], extra: list[str]) -> list[dict]:
     """Run check_freshness.py --json and return its findings."""
     cmd = [sys.executable, str(CHECK_FRESHNESS), "--json"]
-    if areas and set(areas) != set(AUTO_AREAS + MANUAL_AREAS):
+    if areas and set(areas) != set(AREAS):
         cmd += ["--only", ",".join(areas)]
     cmd += extra
     try:

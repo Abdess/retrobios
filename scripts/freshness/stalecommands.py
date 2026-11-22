@@ -1,19 +1,29 @@
-"""The command that pulls the upstream of each stale subject, by area."""
+"""The commands that refresh each stale subject, by area, and the areas they reach."""
 
 from __future__ import annotations
 
 import sys
 from collections.abc import Callable
+from dataclasses import dataclass
 from functools import lru_cache
 
 from core.paths import DATA_DIRS_FILE, REPO_ROOT
 from model.registry import data_dir_registry_at
 from freshness.findings import (
-    FBNEO_RECIPES, INSTALLER_PIN, MAME_RECIPES, NO_INTRO_GAMES, REDUMP_GAMES, is_unprofiled_cores,
+    AREAS, FBNEO_RECIPES, INSTALLER_PIN, MAME_RECIPES, NO_INTRO_GAMES, REDUMP_GAMES,
+    is_unprofiled_cores,
 )
 from freshness.scrapers import rescrape_command
 
 DATA_DIRS_REGISTRY = REPO_ROOT / DATA_DIRS_FILE
+
+
+@dataclass(frozen=True)
+class Chain:
+    """The first command of a refresh and those run after it while each succeeds."""
+
+    command: list[str]
+    then: tuple[tuple[str, ...], ...] = ()
 
 
 @lru_cache(maxsize=1)
@@ -46,8 +56,36 @@ def export_refresh(platform: str) -> list[str]:
     return [sys.executable, "scripts/export_native.py", "--platform", platform]
 
 
-def _platform_command(subject: str, registry: dict[str, dict]) -> list[str] | None:
-    return rescrape_command("platforms", subject, f"platforms/{subject}.yml", registry)
+def _platform_chain(subject: str, registry: dict[str, dict]) -> Chain | None:
+    command = rescrape_command("platforms", subject, f"platforms/{subject}.yml", registry)
+    if command is None:
+        return None
+    # The truth reads the platform file: regenerated first, or the
+    # native refresh refuses it as older than the profiles.
+    return Chain(command, (
+        tuple(truth_refresh(subject)),
+        tuple(native_refresh(subject)),
+        tuple(export_refresh(subject)),
+        tuple(verify_command(subject)),
+    ))
+
+
+def native_chain(subject: str, registry: dict[str, dict] | None = None) -> Chain:
+    """The export of *subject* rebuilt: truth, original, then the export."""
+    # export_native refuses a truth older than the profiles, so the truth
+    # comes first and the original follows.
+    return Chain(
+        truth_refresh(subject),
+        (tuple(native_refresh(subject)), tuple(export_refresh(subject))),
+    )
+
+
+def _ci_chain(subject: str, registry: dict[str, dict]) -> Chain | None:
+    if subject != INSTALLER_PIN:
+        # PyPI versions and pinned actions are bumped by a human.
+        return None
+    # The pin is the hash of the committed install.py, nothing to judge.
+    return Chain([sys.executable, "scripts/pin_installer.py"])
 
 
 def _target_command(subject: str, registry: dict[str, dict]) -> list[str] | None:
@@ -103,30 +141,32 @@ def _catalog_command(subject: str, registry: dict[str, dict]) -> list[str] | Non
     return None
 
 
-_AREA_COMMANDS: dict[str, Callable[[str, dict[str, dict]], list[str] | None]] = {
-    "platforms": _platform_command,
-    "targets": _target_command,
-    "data": _data_command,
-    "catalogs": _catalog_command,
+def _single(
+    build: Callable[[str, dict[str, dict]], list[str] | None],
+) -> Callable[[str, dict[str, dict]], Chain | None]:
+    def chain(subject: str, registry: dict[str, dict]) -> Chain | None:
+        command = build(subject, registry)
+        return None if command is None else Chain(command)
+    return chain
+
+
+# The areas a command can refresh. A row of any other area, or one its
+# builder returns None for, is listed for a human.
+_AREA_CHAINS: dict[str, Callable[[str, dict[str, dict]], Chain | None]] = {
+    "platforms": _platform_chain,
+    "native": native_chain,
+    "targets": _single(_target_command),
+    "data": _single(_data_command),
+    "catalogs": _single(_catalog_command),
+    "ci": _ci_chain,
 }
+AUTO_AREAS = tuple(area for area in AREAS if area in _AREA_CHAINS)
+# A rom-folder pin is moved by hand in platforms/romfolders/_sources/,
+# then `python -m scripts.scraper.romfolders --setup NAME` reads it again.
+MANUAL_AREAS = tuple(area for area in AREAS if area not in _AREA_CHAINS)
 
 
-def command_for(
-    area: str, subject: str, registry: dict[str, dict]
-) -> list[str] | None:
-    """Map a stale finding to its refresh command, or None if manual."""
-    if area == "native":
-        # export_native refuses a truth older than the profiles, so the
-        # truth comes first and the original follows (Job.then).
-        return truth_refresh(subject)
-
-    if area == "ci" and subject == INSTALLER_PIN:
-        # The pin is the hash of the committed install.py, nothing to judge.
-        return [sys.executable, "scripts/pin_installer.py"]
-
-    builder = _AREA_COMMANDS.get(area)
-    if builder:
-        return builder(subject, registry)
-
-    # coreinfo, ci, profiles: never auto-refresh.
-    return None
+def refresh_chain(area: str, subject: str, registry: dict[str, dict]) -> Chain | None:
+    """The refresh of a stale finding, or None when a human resolves it."""
+    builder = _AREA_CHAINS.get(area)
+    return builder(subject, registry) if builder else None

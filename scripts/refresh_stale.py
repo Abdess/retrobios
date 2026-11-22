@@ -27,6 +27,9 @@ Mapping (stale -> command):
                             --source mame --fetch
     catalogs/fbneo recipes  python -m scripts.scraper.romset_dat_importer
                             --source fbneo --fetch
+    catalogs/no-intro games python -m scripts.scraper.game_dat_importer
+    catalogs/redump games   --source <source> --fetch --refresh --floor
+    ci/install.py pin       python scripts/pin_installer.py
 
 A platform that inherits from a rescraped one (retropie and lakka from
 retroarch) reads the parent's file: its jobs start once the parent's chain
@@ -34,8 +37,7 @@ has ended, and its export is rewritten even when no row named it.
 
 Surfaced only (no refresh): data rows that are not a _data_dirs.yml key
 (the registry itself, buildbot assets it does not track), coreinfo gaps, redump/no-intro/tosec packs,
-CI pins (PyPI, pinned actions, while scripts/pin_installer.py writes the
-install.py SHA-256 pin), profile_sync, rom-folder
+the other CI pins (PyPI, pinned actions), profile_sync, rom-folder
 pins (moved by hand, then python -m scripts.scraper.romfolders --setup NAME
 reads them again). Each needs
 a human read (new .info file, manual DAT download, PyPI version bump).
@@ -55,7 +57,8 @@ import sys
 from pathlib import Path
 
 from freshness.stalefindings import load_findings, run_check_freshness
-from freshness.stalejob import AUTO_AREAS, LOG_DIR, MANUAL_AREAS
+from freshness.stalecommands import AUTO_AREAS, MANUAL_AREAS
+from freshness.stalejob import LOG_DIR
 from freshness.staleplan import plan_jobs, platform_registry
 from freshness.stalereport import plan_payload, plan_text, render, results_payload
 from freshness.stalerun import github_token_env, run_jobs
@@ -66,7 +69,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--only",
         help="comma-separated areas to check: " + ",".join(AUTO_AREAS)
-        + " (refreshed), " + ",".join(MANUAL_AREAS) + " (listed for a human)",
+        + " (refreshed, a row no command covers is listed for a human), "
+        + ",".join(MANUAL_AREAS) + " (listed for a human)",
     )
     parser.add_argument(
         "--dry-run",

@@ -1,4 +1,4 @@
-"""The refresh job a stale row becomes, its result, and the areas refreshed or listed."""
+"""The refresh job a stale row becomes and its result."""
 
 from __future__ import annotations
 
@@ -10,10 +10,6 @@ from core.paths import REPO_ROOT
 
 LOG_DIR = REPO_ROOT / "tmp" / "refresh_stale"
 
-AUTO_AREAS = ("platforms", "native", "targets", "data", "catalogs")
-# A rom-folder pin is moved by hand in platforms/romfolders/_sources/,
-# then `python -m scripts.scraper.romfolders --setup NAME` reads it again.
-MANUAL_AREAS = ("romfolders", "coreinfo", "ci", "profiles")
 
 
 @dataclass(frozen=True)

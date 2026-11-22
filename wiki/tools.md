@@ -790,10 +790,12 @@ committed.
 | `targets/<name>` | the target scraper |
 | `data/<key>` | `refresh_data_dirs.py --key <key> --force` |
 | `catalogs/mame recipes`, `catalogs/fbneo recipes` | `scraper/romset_dat_importer.py --source <source> --fetch` |
+| `catalogs/no-intro games`, `catalogs/redump games` | `scraper/game_dat_importer.py --source <source> --fetch --refresh --floor` |
+| `ci/install.py pin` | `pin_installer.py` |
 
 Rows that need a decision are listed and never run: a buildbot core with no
-profile, a new `.info` file, the Redump, No-Intro and TOSEC packs, the CI
-pins, `profile_sync`, and a rom-folder pin (moved by hand in
+profile, a new `.info` file, the Redump, No-Intro and TOSEC packs, the other
+CI pins (PyPI, pinned actions), `profile_sync`, and a rom-folder pin (moved by hand in
 `platforms/romfolders/_sources/`, then `python -m scripts.scraper.romfolders
 --setup NAME` reads it again). `--dry-run --json` prints the plan as JSON.
 A failed scraper leaves its cached original

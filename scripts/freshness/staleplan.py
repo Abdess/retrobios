@@ -5,13 +5,7 @@ from __future__ import annotations
 import re
 
 from core.paths import REPO_ROOT
-from freshness.stalecommands import (
-    command_for,
-    export_refresh,
-    native_refresh,
-    truth_refresh,
-    verify_command,
-)
+from freshness.stalecommands import native_chain, refresh_chain
 from freshness.stalejob import LOG_DIR, Job
 from model.platforms import inheritance_chain
 from model.registry import load_platform_registry
@@ -74,7 +68,7 @@ def plan_jobs(
         for f in findings
         if f.get("status") == "STALE"
         and f.get("area") == "platforms"
-        and command_for("platforms", str(f.get("subject") or ""), registry)
+        and refresh_chain("platforms", str(f.get("subject") or ""), registry) is not None
     }
 
     for finding in findings:
@@ -93,12 +87,12 @@ def plan_jobs(
             ignored.append(finding)
             continue
 
-        command = command_for(area, subject, registry)
-        if command is None:
+        chain = refresh_chain(area, subject, registry)
+        if chain is None:
             surfaced.append(finding)
             continue
 
-        key = (area, " ".join(command))
+        key = (area, " ".join(chain.command))
         if key in seen:
             # Two findings funneling to the same command (e.g. mame recipes
             # listed twice) collapse to one job.
@@ -106,24 +100,12 @@ def plan_jobs(
         seen.add(key)
 
         log = LOG_DIR / f"{area}__{_slug(subject)}.log"
-        then: tuple[tuple[str, ...], ...] = ()
-        if area == "platforms":
-            # The truth reads the platform file: regenerated first, or the
-            # native refresh refuses it as older than the profiles.
-            then = (
-                tuple(truth_refresh(subject)),
-                tuple(native_refresh(subject)),
-                tuple(export_refresh(subject)),
-                tuple(verify_command(subject)),
-            )
-        elif area == "native":
-            then = (tuple(native_refresh(subject)), tuple(export_refresh(subject)))
         after: frozenset[str] = frozenset()
         if area in ("platforms", "native"):
             after = frozenset(_ancestors(subject, parents) & rescraped)
         jobs.append(
-            Job(area=area, subject=subject, command=command, log_path=log,
-                then=then, after=after)
+            Job(area=area, subject=subject, command=chain.command, log_path=log,
+                then=chain.then, after=after)
         )
 
     # The export of a child is built from its parent's file: rewritten once
@@ -133,12 +115,13 @@ def plan_jobs(
         after = frozenset(_ancestors(child, parents) & rescraped)
         if not after or child in covered:
             continue
+        chain = native_chain(child)
         jobs.append(Job(
             area="native",
             subject=child,
-            command=truth_refresh(child),
+            command=chain.command,
             log_path=LOG_DIR / f"native__{_slug(child)}.log",
-            then=(tuple(native_refresh(child)), tuple(export_refresh(child))),
+            then=chain.then,
             after=after,
         ))
 
