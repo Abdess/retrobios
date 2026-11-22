@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 
 from core.paths import PLATFORMS_DIR, REPO_ROOT
+from exporter.originals import DEFAULT_CACHE
 from model.registry import load_data_dir_registry
 
 
@@ -64,7 +65,7 @@ def refuse_offline_without_caches(
 
 def refuse_offline_export_without_originals(
     parser: argparse.ArgumentParser, args: argparse.Namespace,
-    cache: str = ".cache/upstream-native",
+    cache: str = DEFAULT_CACHE,
 ) -> None:
     """An offline run with --with-export needs each patched file cached.
 
