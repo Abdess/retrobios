@@ -340,8 +340,9 @@ def _narrowing_advice(plat: str, axis: str, flag: str, recorded: frozenset,
 def _narrow_to_emulators(
     names: list[str], manifest: dict, plat: str,
     files: list[dict], omitted: list[dict],
-) -> tuple[list[dict], list[dict]]:
-    """Keep what the named emulators read, as the pack built for them.
+) -> tuple[list[str], list[dict], list[dict]]:
+    """(names chosen, files, omitted): what the named emulators read, as the
+    pack built for them.
 
     An emulator page offers this as one command, so a name the platform
     does not run is refused rather than read as nothing to install.
@@ -355,7 +356,6 @@ def _narrow_to_emulators(
         chosen = resolve_choices(names, known, "emulator")
     except ValueError as exc:
         refuse_name(plat, f"Error: {plat}: {exc}")
-    before = len(files)
     files, omitted = narrow_to_cores(manifest, chosen, files, omitted)
     # A whole-platform install keeps the platform's files of a system no
     # core is mapped to. Here only the named emulators' systems are wanted.
@@ -370,8 +370,7 @@ def _narrow_to_emulators(
 
     files = [entry for entry in files if theirs(entry)]
     omitted = [entry for entry in omitted if theirs(entry)]
-    print(f"  Narrowed {before} to {len(files)} files to {', '.join(chosen)}")
-    return files, omitted
+    return chosen, files, omitted
 
 
 def _standalone_builds(

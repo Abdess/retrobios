@@ -32,7 +32,7 @@ from installer.destination import card_choice, dest_default
 from installer.detect_frontends import detect_frontends
 from installer.detection_notes import DETECTION_NOTES, detection_held
 from installer.detect_os import _enter_wsl, _wsl_dest, detect_os, detected_os
-from installer.from_folders import _open_local_sources, from_folder_problem
+from installer.from_folders import from_folder_refusal, open_list_and_pack, reset_local_sources
 from installer.host_fs import _DETECTION_REFUSED, refused_words
 from installer.install_record import choice_given
 from installer.invocation import _INVOCATION
@@ -874,19 +874,15 @@ def _tui_startup(args: argparse.Namespace) -> tuple[TuiState, list[tuple]] | Non
     if os_type == "wsl":
         _enter_wsl()
         _wsl_dest(args)
+    reset_local_sources(args)
+    open_list_and_pack(args)
     # The --from folders are read by each check, not here: indexing a large
     # card held the first frame back. Only whether each can be read is asked.
-    folders = getattr(args, "from") or []
-    setattr(args, "from", None)
-    try:
-        _open_local_sources(args)
-    finally:
-        setattr(args, "from", folders)
-    for folder in folders:
-        problem = from_folder_problem(str(folder))
-        if problem is not None:
-            print(f"Error: {screen_text(str(folder))} {problem[1]}: --from names the folder "
-                  "to copy BIOS files from.", file=sys.stderr)
+    for folder in getattr(args, "from") or []:
+        refusal = from_folder_refusal(str(folder))
+        if refusal is not None:
+            for line in refusal.lines:
+                print(line, file=sys.stderr)
             return None
     return tui_start(args, os_type)
 

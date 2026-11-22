@@ -803,12 +803,23 @@ def sources_line(
 
 
 def _open_local_sources(args: argparse.Namespace) -> None:
-    """Take the file list and the pack this run was given, and the platform
-    they are for when none is named."""
+    """Line mode's sources: the --from folders read, then the file list and
+    the pack this run was given."""
+    reset_local_sources(args)
+    open_from_folders(getattr(args, "from", None) or [])
+    open_list_and_pack(args)
+
+
+def reset_local_sources(args: argparse.Namespace) -> None:
+    """Forget the sources and failures a previous run in this process kept."""
     LOCAL.reset()
     LOCAL.jobs = getattr(args, "jobs", 8) or 8
     SAID_FAILED.clear()
-    _open_from_folders(getattr(args, "from", None) or [])
+
+
+def open_list_and_pack(args: argparse.Namespace) -> None:
+    """Take the file list and the pack this run was given, and the platform
+    they are for when none is named."""
     if args.manifest is not None:
         LOCAL.manifest = args.manifest
         named = local_manifest_platform(args.manifest)
@@ -889,16 +900,23 @@ def from_folder_problem(label: str) -> tuple[str, str] | None:
     return ("system", system) if system else None
 
 
-def _open_from_folders(folders: list[Path]) -> None:
+def from_folder_refusal(label: str) -> Refusal | None:
+    """The refusal of a folder named with --from that cannot be read, or None."""
+    problem = from_folder_problem(label)
+    if problem is None:
+        return None
+    reason, what = problem
+    message = f"{label} {what}: --from names the folder to copy BIOS files from"
+    return Refusal("from", reason, "", f"Error: {screen_text(message)}.", message=message)
+
+
+def open_from_folders(folders: list[Path]) -> None:
     """Read each folder named with --from, or stop on one that cannot be."""
     for folder in folders:
         label = str(folder)
-        problem = from_folder_problem(label)
-        if problem is not None:
-            reason, what = problem
-            message = f"{label} {what}: --from names the folder to copy BIOS files from"
-            raise Refusal("from", reason, "", f"Error: {screen_text(message)}.",
-                          message=message)
+        refusal = from_folder_refusal(label)
+        if refusal is not None:
+            raise refusal
         _read_from_folder(label)
 
 

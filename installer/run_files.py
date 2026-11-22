@@ -470,9 +470,11 @@ def _pass_emulators(run: _InstallRun, p: _PlatformPass) -> bool:
         _recorded_emulators(args, p.plat_name, p.manifest, p.files, p.omitted_files)
     if args.emulator:
         names = emulator_names(p.manifest, p.files, p.omitted_files)
-        p.files, p.omitted_files = _narrow_to_emulators(
+        before = len(p.files)
+        chosen, p.files, p.omitted_files = _narrow_to_emulators(
             args.emulator, p.manifest, p.plat_name, p.files, p.omitted_files
         )
+        detail(f"  Narrowed {before} to {len(p.files)} files to {', '.join(chosen)}")
         if args.standalone:
             p.files, p.omitted_files = _standalone_builds(
                 args.emulator, names, p.manifest, p.plat_name, p.files, p.omitted_files)

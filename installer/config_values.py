@@ -59,6 +59,9 @@ def _retroarch_cfg_dir(
 # System directory -> the retroarch.cfg it was read from and the directory
 # ':' expands to there, for finding the cores of the same installation.
 _RETROARCH_CONFIGS: dict[Path, tuple[Path, Path]] = {}
+# Set by detection once it has read the configs: a lookup after it finds
+# nothing more by detecting again.
+_CONFIGS_READ: list[bool] = []
 
 
 def _parse_retroarch_system_dir(

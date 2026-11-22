@@ -10,6 +10,7 @@ from collections.abc import Callable, Iterator
 from pathlib import Path
 
 from installer.config_values import (
+    _CONFIGS_READ,
     _parse_bash_var,
     _parse_json_path,
     _parse_ps1_var,
@@ -826,6 +827,8 @@ def _without_unnameable(found: list[tuple[str, Path]]) -> list[tuple[str, Path]]
 @_detection_guarded
 def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
     """Detect installed emulator platforms and their BIOS directories."""
+    if not _CONFIGS_READ:
+        _CONFIGS_READ.append(True)
     found: list[tuple[str, Path]] = []
     if os_type == "wsl":
         _note_windows_unasked()

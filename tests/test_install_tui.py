@@ -2110,7 +2110,7 @@ class CleanupSurvivesABrokenTerminal(unittest.TestCase):
         with mock.patch.object(install._TuiTerminal, "draw", breaking_draw), \
                 mock.patch.object(install.tempfile, "mkdtemp", return_value=str(work)), \
                 mock.patch.object(install, "tui_start", return_value=(fresh_state(), [])), \
-                mock.patch.object(install, "_open_local_sources"), \
+                mock.patch.object(install, "open_list_and_pack"), \
                 mock.patch.object(install, "detect_os", return_value="linux"), \
                 mock.patch.object(sys, "stdin", tty), mock.patch.object(sys, "stdout", out), \
                 mock.patch.object(sys, "stderr", out):
@@ -2502,7 +2502,7 @@ class WorkFolders(unittest.TestCase):
         out = io.StringIO()
         with mock.patch.object(install, "_TuiTerminal", self.Terminal), \
                 mock.patch.object(install, "tui_start", return_value=(state, [])), \
-                mock.patch.object(install, "_open_local_sources"), \
+                mock.patch.object(install, "open_list_and_pack"), \
                 mock.patch.object(install, "detect_os", return_value="linux"), \
                 mock.patch.object(install.tempfile, "mkdtemp", return_value=str(work)), \
                 mock.patch.object(sys, "stdout", out), mock.patch.object(sys, "stderr", out):
@@ -2542,7 +2542,7 @@ class WorkFolders(unittest.TestCase):
         with mock.patch.object(install.tempfile, "mkdtemp",
                                side_effect=OSError(errno.ENOSPC, "No space left")), \
                 mock.patch.object(install, "tui_start", return_value=(fresh_state(), [])), \
-                mock.patch.object(install, "_open_local_sources"), \
+                mock.patch.object(install, "open_list_and_pack"), \
                 mock.patch.object(install, "detect_os", return_value="linux"), \
                 mock.patch.object(sys, "stderr", err):
             self.assertEqual(install.run_tui(_args()), 1)
@@ -2578,7 +2578,7 @@ class WorkFolders(unittest.TestCase):
                         mock.patch.object(self.Terminal, "enter",
                                           lambda _t, entered=entered: entered.append(True)), \
                         mock.patch.object(install, "tui_start", side_effect=starting), \
-                        mock.patch.object(install, "_open_local_sources"), \
+                        mock.patch.object(install, "open_list_and_pack"), \
                         mock.patch.object(install, "_tui_fetch") as fetch, \
                         mock.patch.object(install, "detect_os", return_value="linux"), \
                         mock.patch.object(sys, "stdout", out), \
@@ -3449,7 +3449,7 @@ class IdleExit(unittest.TestCase):
         with mock.patch.object(install, "_TuiTerminal", Quiet), \
                 mock.patch.object(install.tempfile, "mkdtemp", return_value=str(work)), \
                 mock.patch.object(install, "tui_start", return_value=(state, [])), \
-                mock.patch.object(install, "_open_local_sources"), \
+                mock.patch.object(install, "open_list_and_pack"), \
                 mock.patch.object(install, "detect_os", return_value="linux"), \
                 mock.patch.dict(os.environ, {install.TUI_IDLE_ENV: "0.05"}), \
                 mock.patch.object(sys, "stdout", out), mock.patch.object(sys, "stderr", out):
@@ -4640,7 +4640,7 @@ class Crash(unittest.TestCase):
         out, err = io.StringIO(), io.StringIO()
         with mock.patch.object(install, "_TuiTerminal", self.FakeTerminal), \
                 mock.patch.object(install, "tui_start", return_value=(fresh_state(), [])), \
-                mock.patch.object(install, "_open_local_sources"), \
+                mock.patch.object(install, "open_list_and_pack"), \
                 mock.patch.object(install, "detect_os", return_value="linux"), \
                 mock.patch.object(sys, "stdout", out), mock.patch.object(sys, "stderr", err):
             code = install.run_tui(args)
@@ -5056,7 +5056,7 @@ class WindowsHasNoPosixModules(unittest.TestCase):
                 mock.patch.object(install, "_drop_closed_terminal"), \
                 mock.patch.object(install.tempfile, "mkdtemp", return_value=str(work)), \
                 mock.patch.object(install, "tui_start", return_value=(fresh_state(), [])), \
-                mock.patch.object(install, "_open_local_sources"), \
+                mock.patch.object(install, "open_list_and_pack"), \
                 mock.patch.object(install, "detect_os", return_value="windows"), \
                 mock.patch.object(sys, "stdin", console), \
                 mock.patch.object(sys, "stdout", console), \
@@ -16417,7 +16417,7 @@ class EmulatorChoiceMatchesTheEmulatorPack(unittest.TestCase):
                 args = install.build_parser().parse_args(argv[2:])
                 self.assertEqual(args.emulator, [emulator])
                 with contextlib.redirect_stdout(io.StringIO()):
-                    files, _omitted = install._narrow_to_emulators(
+                    _chosen, files, _omitted = install._narrow_to_emulators(
                         args.emulator, manifest, plat, manifest["files"],
                         manifest["omitted_files"])
                 installed = {entry["dest"]: entry["sha1"] for entry in files}

@@ -2076,6 +2076,9 @@ def _retroarch_cfg_dir(
 # System directory -> the retroarch.cfg it was read from and the directory
 # ':' expands to there, for finding the cores of the same installation.
 _RETROARCH_CONFIGS: dict[Path, tuple[Path, Path]] = {}
+# Set by detection once it has read the configs: a lookup after it finds
+# nothing more by detecting again.
+_CONFIGS_READ: list[bool] = []
 
 
 def _parse_retroarch_system_dir(
@@ -5910,6 +5913,8 @@ def _without_unnameable(found: list[tuple[str, Path]]) -> list[tuple[str, Path]]
 @_detection_guarded
 def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
     """Detect installed emulator platforms and their BIOS directories."""
+    if not _CONFIGS_READ:
+        _CONFIGS_READ.append(True)
     found: list[tuple[str, Path]] = []
     if os_type == "wsl":
         _note_windows_unasked()
@@ -6264,9 +6269,6 @@ def version_note(plat: str, bios_path: Path, manifest: dict) -> tuple[str, str, 
 
 # --- installer/frontend_folders.py -------------------------------------------
 
-_CONFIGS_READ: list[bool] = []
-
-
 def _retroarch_config_for(bios_path: Path) -> tuple[Path, Path] | None:
     """The retroarch.cfg whose system_directory is bios_path, and the
     folder ':' expands to there.
@@ -6280,13 +6282,11 @@ def _retroarch_config_for(bios_path: Path) -> tuple[Path, Path] | None:
     found = _retroarch_config_at(bios_path)
     if found is not None or _CONFIGS_READ:
         return found
-    _CONFIGS_READ.append(True)
     # Silent, the unsearched event too: this run searched for no setup, and
     # the event came after detect, the line it stands for never shown.
     _SETUP_SEARCH.quiet = True
     try:
-        with contextlib.redirect_stdout(io.StringIO()), \
-                contextlib.redirect_stderr(io.StringIO()):
+        with detection_held():
             detect_platforms(_INVOCATION.os_type or detect_os())
     finally:
         _SETUP_SEARCH.quiet = False
@@ -11010,8 +11010,9 @@ def _narrowing_advice(plat: str, axis: str, flag: str, recorded: frozenset,
 def _narrow_to_emulators(
     names: list[str], manifest: dict, plat: str,
     files: list[dict], omitted: list[dict],
-) -> tuple[list[dict], list[dict]]:
-    """Keep what the named emulators read, as the pack built for them.
+) -> tuple[list[str], list[dict], list[dict]]:
+    """(names chosen, files, omitted): what the named emulators read, as the
+    pack built for them.
 
     An emulator page offers this as one command, so a name the platform
     does not run is refused rather than read as nothing to install.
@@ -11025,7 +11026,6 @@ def _narrow_to_emulators(
         chosen = resolve_choices(names, known, "emulator")
     except ValueError as exc:
         refuse_name(plat, f"Error: {plat}: {exc}")
-    before = len(files)
     files, omitted = narrow_to_cores(manifest, chosen, files, omitted)
     # A whole-platform install keeps the platform's files of a system no
     # core is mapped to. Here only the named emulators' systems are wanted.
@@ -11040,8 +11040,7 @@ def _narrow_to_emulators(
 
     files = [entry for entry in files if theirs(entry)]
     omitted = [entry for entry in omitted if theirs(entry)]
-    print(f"  Narrowed {before} to {len(files)} files to {', '.join(chosen)}")
-    return files, omitted
+    return chosen, files, omitted
 
 
 def _standalone_builds(
@@ -12687,12 +12686,23 @@ def sources_line(
 
 
 def _open_local_sources(args: argparse.Namespace) -> None:
-    """Take the file list and the pack this run was given, and the platform
-    they are for when none is named."""
+    """Line mode's sources: the --from folders read, then the file list and
+    the pack this run was given."""
+    reset_local_sources(args)
+    open_from_folders(getattr(args, "from", None) or [])
+    open_list_and_pack(args)
+
+
+def reset_local_sources(args: argparse.Namespace) -> None:
+    """Forget the sources and failures a previous run in this process kept."""
     LOCAL.reset()
     LOCAL.jobs = getattr(args, "jobs", 8) or 8
     SAID_FAILED.clear()
-    _open_from_folders(getattr(args, "from", None) or [])
+
+
+def open_list_and_pack(args: argparse.Namespace) -> None:
+    """Take the file list and the pack this run was given, and the platform
+    they are for when none is named."""
     if args.manifest is not None:
         LOCAL.manifest = args.manifest
         named = local_manifest_platform(args.manifest)
@@ -12773,16 +12783,23 @@ def from_folder_problem(label: str) -> tuple[str, str] | None:
     return ("system", system) if system else None
 
 
-def _open_from_folders(folders: list[Path]) -> None:
+def from_folder_refusal(label: str) -> Refusal | None:
+    """The refusal of a folder named with --from that cannot be read, or None."""
+    problem = from_folder_problem(label)
+    if problem is None:
+        return None
+    reason, what = problem
+    message = f"{label} {what}: --from names the folder to copy BIOS files from"
+    return Refusal("from", reason, "", f"Error: {screen_text(message)}.", message=message)
+
+
+def open_from_folders(folders: list[Path]) -> None:
     """Read each folder named with --from, or stop on one that cannot be."""
     for folder in folders:
         label = str(folder)
-        problem = from_folder_problem(label)
-        if problem is not None:
-            reason, what = problem
-            message = f"{label} {what}: --from names the folder to copy BIOS files from"
-            raise Refusal("from", reason, "", f"Error: {screen_text(message)}.",
-                          message=message)
+        refusal = from_folder_refusal(label)
+        if refusal is not None:
+            raise refusal
         _read_from_folder(label)
 
 
@@ -22291,9 +22308,11 @@ def _pass_emulators(run: _InstallRun, p: _PlatformPass) -> bool:
         _recorded_emulators(args, p.plat_name, p.manifest, p.files, p.omitted_files)
     if args.emulator:
         names = emulator_names(p.manifest, p.files, p.omitted_files)
-        p.files, p.omitted_files = _narrow_to_emulators(
+        before = len(p.files)
+        chosen, p.files, p.omitted_files = _narrow_to_emulators(
             args.emulator, p.manifest, p.plat_name, p.files, p.omitted_files
         )
+        detail(f"  Narrowed {before} to {len(p.files)} files to {', '.join(chosen)}")
         if args.standalone:
             p.files, p.omitted_files = _standalone_builds(
                 args.emulator, names, p.manifest, p.plat_name, p.files, p.omitted_files)
@@ -31869,19 +31888,15 @@ def _tui_startup(args: argparse.Namespace) -> tuple[TuiState, list[tuple]] | Non
     if os_type == "wsl":
         _enter_wsl()
         _wsl_dest(args)
+    reset_local_sources(args)
+    open_list_and_pack(args)
     # The --from folders are read by each check, not here: indexing a large
     # card held the first frame back. Only whether each can be read is asked.
-    folders = getattr(args, "from") or []
-    setattr(args, "from", None)
-    try:
-        _open_local_sources(args)
-    finally:
-        setattr(args, "from", folders)
-    for folder in folders:
-        problem = from_folder_problem(str(folder))
-        if problem is not None:
-            print(f"Error: {screen_text(str(folder))} {problem[1]}: --from names the folder "
-                  "to copy BIOS files from.", file=sys.stderr)
+    for folder in getattr(args, "from") or []:
+        refusal = from_folder_refusal(str(folder))
+        if refusal is not None:
+            for line in refusal.lines:
+                print(line, file=sys.stderr)
             return None
     return tui_start(args, os_type)
 

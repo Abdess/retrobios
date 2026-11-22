@@ -4964,7 +4964,7 @@ class OneEmulatorsFilesInOneCommand(unittest.TestCase):
             {"dest": "ibm.rom", "cores": None, "systems": ["ibm-pc"]},
         ]
         with contextlib.redirect_stdout(io.StringIO()):
-            kept, _omitted = install._narrow_to_emulators(
+            _chosen, kept, _omitted = install._narrow_to_emulators(
                 ["PCem"], self.MANIFEST, "retroarch", files, [])
         self.assertEqual(sorted(e["dest"] for e in kept), ["ibm.rom", "pcem/ibmpc.bin"])
 

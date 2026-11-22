@@ -1,14 +1,13 @@
 """The folders a frontend names besides its BIOS folder: saves, roms, configs and emulators."""
 from __future__ import annotations
 
-import contextlib
-import io
 import os
 import re
 import sys
 from pathlib import Path, PurePosixPath
 
 from installer.config_values import (
+    _CONFIGS_READ,
     _RETROARCH_CONFIGS,
     _cfg_true,
     _config_keys,
@@ -18,6 +17,7 @@ from installer.config_values import (
 from installer.console import detail
 from installer.detect_frontends import detect_platforms
 from installer.detect_os import detect_os
+from installer.detection_notes import detection_held
 from installer.events import EVENTS
 from installer.host_fs import _SETUP_SEARCH, _is_dir
 from installer.invocation import _INVOCATION
@@ -36,8 +36,6 @@ from installer.paths import (
 )
 from installer.text import _plural
 
-_CONFIGS_READ: list[bool] = []
-
 
 def _retroarch_config_for(bios_path: Path) -> tuple[Path, Path] | None:
     """The retroarch.cfg whose system_directory is bios_path, and the
@@ -52,13 +50,11 @@ def _retroarch_config_for(bios_path: Path) -> tuple[Path, Path] | None:
     found = _retroarch_config_at(bios_path)
     if found is not None or _CONFIGS_READ:
         return found
-    _CONFIGS_READ.append(True)
     # Silent, the unsearched event too: this run searched for no setup, and
     # the event came after detect, the line it stands for never shown.
     _SETUP_SEARCH.quiet = True
     try:
-        with contextlib.redirect_stdout(io.StringIO()), \
-                contextlib.redirect_stderr(io.StringIO()):
+        with detection_held():
             detect_platforms(_INVOCATION.os_type or detect_os())
     finally:
         _SETUP_SEARCH.quiet = False

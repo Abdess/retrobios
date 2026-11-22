@@ -194,7 +194,7 @@ class RealListParity(unittest.TestCase):
                             str(REPO_ROOT / "bios"), tempfile.gettempdir(),
                             standalone=True, zip_contents=self.zip_contents,
                             offline=True, record=record)
-                        files, omitted = install._narrow_to_emulators(
+                        _chosen, files, omitted = install._narrow_to_emulators(
                             [profile], full, plat, full["files"], full["omitted_files"])
                     files, _omitted = install.standalone_layout(full, layouts, [profile],
                                                                 files, omitted)

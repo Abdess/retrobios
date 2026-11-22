@@ -768,7 +768,7 @@ class WhereTheSearchGoes(FromFolder):
         self.addCleanup(install.LOCAL.reset)
         with mock.patch.object(install, "MAX_SCANNED_FILES", 2), \
                 contextlib.redirect_stdout(io.StringIO()) as text:
-            install._open_from_folders([self.old])
+            install.open_from_folders([self.old])
         self.assertIn(f"Read the first 2 files of {self.old} only", text.getvalue())
         self.assertEqual([json.loads(line) for line in out.getvalue().splitlines()], [{
             "event": "scanned", "folder": str(self.old), "files": 2, "truncated": True,
