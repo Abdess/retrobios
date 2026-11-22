@@ -9,7 +9,19 @@ from pathlib import Path
 
 from core.paths import REPO_ROOT
 from freshness.scrapers import rescrape_command
-from scraper.base_scraper import DROPPED_PREFIX
+from scraper.base_scraper import DROPPED_PREFIX, ERROR_PREFIX
+
+
+def failure_cause(output: str, returncode: int) -> str:
+    """Why a scraper run failed: its error line, not the hint printed after it.
+
+    Output without that line (a traceback) gives its last line.
+    """
+    lines = output.strip().splitlines()
+    cause = next((line.removeprefix(ERROR_PREFIX) for line in lines if line.startswith(ERROR_PREFIX)), None)
+    if cause is not None:
+        return cause
+    return lines[-1] if lines else f"exit {returncode}"
 
 
 def scrape_into_copy(
@@ -36,8 +48,7 @@ def scrape_into_copy(
         check=False,
     )
     if proc.returncode != 0:
-        tail = (proc.stderr or proc.stdout).strip().splitlines()[-1:]
-        return target, tail[0] if tail else f"exit {proc.returncode}", []
+        return target, failure_cause(proc.stderr or proc.stdout, proc.returncode), []
     dropped = [
         line.removeprefix(DROPPED_PREFIX)
         for line in (proc.stderr or "").splitlines()

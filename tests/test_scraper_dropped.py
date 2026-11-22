@@ -20,7 +20,10 @@ from unittest import mock
 
 from freshness import platforms, rescrape
 from freshness.findings import OK, STALE, UNKNOWN
-from scraper.base_scraper import DROPPED_PREFIX, BiosRequirement, scraper_cli
+from scraper import base_scraper
+from scraper.base_scraper import (
+    DROPPED_PREFIX, BiosRequirement, exit_on_scrape_error, platform_config, scrape, scraper_cli,
+)
 from scripts.scraper import retrodeck_scraper, romm_scraper
 
 
@@ -91,9 +94,41 @@ class CliPrintsDrops(unittest.TestCase):
         self.assertEqual(stderr.getvalue(), f"{DROPPED_PREFIX}x.bin (s): MD5 conflict\n")
 
 
+class _Empty(_Dropping):
+    def fetch_requirements(self) -> list[BiosRequirement]:
+        return []
+
+
+class _NoFile(_Dropping):
+    def generate_platform_yaml(self) -> dict:
+        return {"systems": {"s": {"files": []}}}
+
+
+class ScrapeStep(unittest.TestCase):
+    """The scrape and the file it writes, reached without the command line."""
+
+    def test_an_empty_read_raises_its_cause(self) -> None:
+        with self.assertRaisesRegex(RuntimeError, "upstream returned no BIOS entry"):
+            scrape(_Empty)
+
+    def test_the_config_keeps_what_the_scraper_does_not_write(self) -> None:
+        scraper, reqs = scrape(_Dropping)
+        self.assertEqual(scraper.dropped, ["x.bin (s): MD5 conflict"])
+        with tempfile.TemporaryDirectory() as tmp:
+            existing = Path(tmp) / "p.yml"
+            existing.write_text("case_insensitive_fs: true\nsystems: {}\n")
+            config = platform_config(scraper, reqs, existing)
+        self.assertTrue(config["case_insensitive_fs"])
+        self.assertEqual(list(config["systems"]), ["s"])
+
+    def test_a_platform_without_files_raises(self) -> None:
+        with self.assertRaisesRegex(RuntimeError, "lists no file"):
+            platform_config(_NoFile(), [])  # type: ignore[arg-type]
+
+
 class FreshnessReadsDrops(unittest.TestCase):
-    def _scrape(self, stderr: str) -> tuple[Path, str | None, list[str]]:
-        done = subprocess.CompletedProcess([], 0, stdout="", stderr=stderr)
+    def _scrape(self, stderr: str, returncode: int = 0) -> tuple[Path, str | None, list[str]]:
+        done = subprocess.CompletedProcess([], returncode, stdout="", stderr=stderr)
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "src" / "p.yml"
             source.parent.mkdir()
@@ -106,6 +141,22 @@ class FreshnessReadsDrops(unittest.TestCase):
         _target, error, dropped = self._scrape(f"progress\n{DROPPED_PREFIX}x.bin (s): why\n")
         self.assertIsNone(error)
         self.assertEqual(dropped, ["x.bin (s): why"])
+
+    def test_a_failure_reports_its_cause_not_the_hint(self) -> None:
+        """The last stderr line is the hint printed after the cause: every
+        failure, an empty upstream read included, read as a network issue."""
+        stderr = io.StringIO()
+        with mock.patch("sys.stderr", stderr), self.assertRaises(SystemExit), \
+                mock.patch.object(base_scraper, "github_token", return_value="t"):
+            exit_on_scrape_error(RuntimeError("scripts.scraper.x: upstream returned no BIOS entry"))
+        _target, error, dropped = self._scrape(stderr.getvalue(), returncode=1)
+        self.assertEqual(error, "scripts.scraper.x: upstream returned no BIOS entry")
+        self.assertEqual(dropped, [])
+
+    def test_a_crash_reports_its_last_line(self) -> None:
+        _target, error, _dropped = self._scrape("Traceback\n  line\nKeyError: 'x'\n", returncode=1)
+        self.assertEqual(error, "KeyError: 'x'")
+        self.assertEqual(self._scrape("", returncode=2)[1], "exit 2")
 
     def test_an_unchanged_file_with_drops_is_unknown(self) -> None:
         def status(dropped: list[str], new_text: str) -> str:

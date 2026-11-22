@@ -152,6 +152,8 @@ def requirement_entry(req: BiosRequirement) -> dict:
 # file does not carry. The freshness rescrape reads them on exit 0, where the
 # diff of the rewritten file cannot show an entry that was never written.
 DROPPED_PREFIX = "dropped: "
+# The line that names why a scrape failed, read back by the freshness check.
+ERROR_PREFIX = "Error: "
 
 SCRAPER_AGENT = "retrobios-scraper/1.0"
 GITHUB_API = "https://api.github.com"
@@ -569,7 +571,7 @@ PlatformDumper.add_representer(str, _quoted_str)
 
 def exit_on_scrape_error(error: Exception) -> NoReturn:
     """Print what failed and what to try, then exit 1 without a traceback."""
-    print(f"Error: {error}", file=sys.stderr)
+    print(f"{ERROR_PREFIX}{error}", file=sys.stderr)
     refused = re.search(r"\b(403|429)\b|rate limit", str(error), re.I)
     if refused and not github_token():
         # A gh login is read on its own, so the hint is the login itself.
@@ -637,28 +639,49 @@ def _keep_existing(config: dict, output_path: Path) -> None:
                 sys_data[field_name] = old_sys[field_name]
 
 
-def _write_output(
-    scraper: BaseScraper, scraper_class: type, reqs: list[BiosRequirement], output: str
-) -> None:
+def scrape(scraper_class: type, revision: str | None = None) -> tuple[BaseScraper, list[BiosRequirement]]:
+    """Run one scraper and return it with what it read.
+
+    Raises OSError, ValueError or RuntimeError carrying the cause, an empty
+    read included. The entries upstream lists and the scraper leaves out
+    are on the scraper's `dropped`.
+    """
+    scraper = scraper_class(revision=revision) if revision is not None else scraper_class()
+    reqs = scraper.fetch_requirements()
+    if scraper.lists_files and not reqs:
+        # Written, an empty read became a platform with no system that
+        # verify and the pack count 0/0 and call consistent.
+        raise RuntimeError(f"{scraper_class.__module__}: upstream returned no BIOS entry")
+    return scraper, reqs
+
+
+def platform_config(
+    scraper: BaseScraper, reqs: list[BiosRequirement], existing: Path | None = None
+) -> dict:
+    """The platform file a scrape writes, merged into *existing* when given.
+
+    Raises OSError, ValueError or RuntimeError carrying the cause, a
+    platform that lists no file included.
+    """
     # Use scraper's generate_platform_yaml() if available (includes
     # platform metadata, cores list, standalone_cores, etc.)
     generate = getattr(scraper, "generate_platform_yaml", None)
-    if generate is not None:
-        try:
-            config = generate()
-        except (OSError, ValueError, RuntimeError) as e:
-            exit_on_scrape_error(e)
-    else:
-        config = _generic_config(reqs)
+    config = generate() if generate is not None else _generic_config(reqs)
     if scraper.lists_files and not any(
         (system or {}).get("files") for system in (config.get("systems") or {}).values()
     ):
-        exit_on_scrape_error(RuntimeError(
-            f"{scraper_class.__module__}: the generated platform lists no file"
-        ))
+        raise RuntimeError(f"{type(scraper).__module__}: the generated platform lists no file")
+    if existing is not None and existing.exists():
+        _keep_existing(config, existing)
+    return config
+
+
+def _write_output(scraper: BaseScraper, reqs: list[BiosRequirement], output: str) -> None:
     output_path = Path(output)
-    if output_path.exists():
-        _keep_existing(config, output_path)
+    try:
+        config = platform_config(scraper, reqs, output_path)
+    except (OSError, ValueError, RuntimeError) as e:
+        exit_on_scrape_error(e)
     # Written whole or not at all: a reader in the middle of a streamed
     # dump parsed a valid platform with a fraction of its systems.
     write_text_atomic(output_path, yaml.dump(
@@ -685,16 +708,9 @@ def scraper_cli(
     args = parser.parse_args()
 
     try:
-        scraper = scraper_class(revision=args.revision) if takes_revision else scraper_class()
-        reqs = scraper.fetch_requirements()
+        scraper, reqs = scrape(scraper_class, args.revision if takes_revision else None)
     except (OSError, ValueError, RuntimeError) as e:
         exit_on_scrape_error(e)
-    if scraper.lists_files and not reqs:
-        # Written, an empty read became a platform with no system that
-        # verify and the pack count 0/0 and call consistent.
-        exit_on_scrape_error(RuntimeError(
-            f"{scraper_class.__module__}: upstream returned no BIOS entry"
-        ))
     for reason in scraper.dropped:
         print(f"{DROPPED_PREFIX}{reason}", file=sys.stderr)
 
@@ -703,7 +719,7 @@ def scraper_cli(
     elif args.json:
         _print_json(reqs)
     elif args.output:
-        _write_output(scraper, scraper_class, reqs, args.output)
+        _write_output(scraper, reqs, args.output)
     else:
         print(f"Scraped {len(reqs)} requirements. Use --dry-run, --json, or --output.")
 
