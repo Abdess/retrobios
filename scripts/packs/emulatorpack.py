@@ -324,9 +324,12 @@ class _EmulatorPackBuild:
         try:
             # Built in memory, nothing is fetched: verify --emulator
             # cannot fetch either and reports the file missing.
-            if self.record is None and download_external(fe, tmp_path):
-                self._add(tmp_path, dest, None)
-                return (alternatives, True, None)
+            if self.record is None:
+                fetch = download_external(fe, tmp_path)
+                if fetch.fetched:
+                    self._add(tmp_path, dest, None)
+                    return (alternatives, True, None)
+                self.progress(f"    WARNING: {fe['name']}: {fetch.reason}")
             return (alternatives, False, functools.partial(
                 self.missing_files.append, fe["name"]
             ))

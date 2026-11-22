@@ -636,7 +636,12 @@ class _PlatformPackBuild:
         # filling it on a failed download made the two differ.
         self.placed.take(full_dest)
         try:
-            if self.plan.opts.record is None and download_external(file_entry, tmp_path):
+            # Built in memory, nothing is fetched: verify cannot fetch either.
+            fetch = (
+                download_external(file_entry, tmp_path)
+                if self.plan.opts.record is None else None
+            )
+            if fetch is not None and fetch.fetched:
                 extract = file_entry.get("extract", False)
                 if extract and tmp_path.endswith(".zip"):
                     extract_zip_to_archive(tmp_path, self._flat(full_dest), self.zf)
@@ -646,7 +651,10 @@ class _PlatformPackBuild:
                 self.total_files += 1
             else:
                 self.file_status[full_dest] = "missing"
-                self.file_reasons[full_dest] = "external download failed"
+                self.file_reasons[full_dest] = (
+                    fetch.reason if fetch is not None
+                    else "external file not fetched for an in-memory build"
+                )
         finally:
             if os.path.exists(tmp_path):
                 os.unlink(tmp_path)

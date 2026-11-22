@@ -12,6 +12,7 @@ import os
 import urllib.error
 from collections.abc import Iterator
 from dataclasses import dataclass
+from enum import Enum
 from pathlib import Path
 
 from core import upstream
@@ -52,30 +53,65 @@ def scratch_dir() -> str:
     return str(path)
 
 
+class ExternalOutcome(Enum):
+    """How a `storage: external` download ended."""
+
+    FETCHED = "fetched"
+    NO_URL = "no_url"
+    NO_HASH = "no_hash"
+    OFFLINE = "offline"
+    NETWORK_ERROR = "network_error"
+    MISMATCH = "mismatch"
+
+
+@dataclass(frozen=True)
+class ExternalFetch:
+    """The end of one external download, with what the caller reports.
+
+    ``detail`` is the URL and error for NETWORK_ERROR and the hash field for
+    MISMATCH."""
+
+    outcome: ExternalOutcome
+    detail: str = ""
+
+    @property
+    def fetched(self) -> bool:
+        return self.outcome is ExternalOutcome.FETCHED
+
+    @property
+    def reason(self) -> str:
+        """Why the file is not in the pack, empty once it is."""
+        return {
+            ExternalOutcome.FETCHED: "",
+            ExternalOutcome.NO_URL: "external file without a source_url",
+            ExternalOutcome.NO_HASH: "external file without a hash, download unverifiable",
+            ExternalOutcome.OFFLINE: "external file not fetched, the run is offline",
+            ExternalOutcome.NETWORK_ERROR: f"external download failed: {self.detail}",
+            ExternalOutcome.MISMATCH: f"external download fails its declared {self.detail}",
+        }[self.outcome]
+
+
 def download_external(
     file_entry: dict, dest_path: str, offline: bool | None = None
-) -> bool:
+) -> ExternalFetch:
     """Download a `storage: external` file, verify its hash, write dest_path.
 
     The run's network policy applies: under --offline nothing is fetched and
     the entry stays missing, as verify reports it. core.upstream.download
     streams the body to a scratch beside dest_path, retried on a transient
     failure, and dest_path is written only once the scratch hashes to the
-    declared value.
+    declared value. Nothing is printed: the caller reports the outcome.
     """
     url = file_entry.get("source_url")
     if not url:
-        return False
-    name = file_entry.get("name", url)
+        return ExternalFetch(ExternalOutcome.NO_URL)
     # The strongest field declared, every value it accepts: a stringified
     # list or a comma-joined field matched no digest at all.
     declared = next(iter(declared_hash_lists(file_entry, ("sha256", "sha1", "md5")).items()), None)
     if declared is None:
-        print(f"    WARNING: no hash for {name}, skipping unverifiable download")
-        return False
+        return ExternalFetch(ExternalOutcome.NO_HASH)
     if run_is_offline(offline):
-        print(f"    WARNING: {name} is external and the run is offline, not fetched")
-        return False
+        return ExternalFetch(ExternalOutcome.OFFLINE)
     algo, expected = declared[0], set(declared[1])
     Path(dest_path).parent.mkdir(parents=True, exist_ok=True)
     try:
@@ -85,12 +121,11 @@ def download_external(
         )
     except (urllib.error.URLError, OSError, http.client.HTTPException,
             upstream.UpstreamError, ValueError) as exc:
-        print(f"    WARNING: Failed to download {url}: {exc}")
-        return False
+        return ExternalFetch(ExternalOutcome.NETWORK_ERROR, f"{url}: {exc}")
     if served is None:
-        print(f"    WARNING: {algo.upper()} mismatch for {name}")
-        return False
-    return True
+        return ExternalFetch(ExternalOutcome.MISMATCH, algo.upper())
+    return ExternalFetch(ExternalOutcome.FETCHED)
+
 
 def _fetched_asset(path: str, sha1: str, file_entry: dict, offline: bool) -> str | None:
     """The release asset of a registered path, downloaded if allowed and
@@ -188,7 +223,8 @@ def lookup_hashes(
     hashes: list[tuple[str, str]], db: dict, bios_dir: str,
 ) -> list[HashLookup]:
     """One record per hash: the file the database names, and whether the
-    repository holds its bytes (at its path, or wherever resolution finds them)."""
+    repository holds its bytes (at its path, wherever resolution finds them,
+    or as a release asset). Nothing is downloaded to answer."""
     files_db = db.get("files", {})
     records: list[HashLookup] = []
     for hash_type, hash_val in hashes:
@@ -202,12 +238,11 @@ def lookup_hashes(
         path = entry.get("path", "")
         in_repo = bool(path) and os.path.exists(path)
         if not in_repo:
-            try:
-                fe_check = {"name": name, "sha1": sha1, "md5": md5}
-                local, status = resolve_file(fe_check, db, bios_dir, {})
-                in_repo = bool(local) and status != "not_found"
-            except (KeyError, OSError):
-                pass
+            fe_check = {"name": name, "sha1": sha1, "md5": md5}
+            local, status = resolve_file(fe_check, db, bios_dir, {}, offline=True)
+            in_repo = (bool(local) and status != "not_found") or bool(
+                release_asset_paths(fe_check, db)
+            )
         records.append(HashLookup(hash_type, hash_val, sha1, md5, name, path, in_repo))
     return records
 
