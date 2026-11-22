@@ -254,8 +254,7 @@ class OnlyWhatABoardBuildsIsRun(unittest.TestCase):
           emulator: mpv
           core: mpv
         """)
-    LAUNCHERS = [{"emulator": "lexaloffle", "kind": "fixed_name", "passes_to": "exec",
-                  "search_dir": "/userdata/bios"}]
+    BIOS_PROGRAMS = frozenset({"lexaloffle"})
 
     def selection(self, symbols: set[str]):
         from scraper.targets.batocera_targets_scraper import BuildSelection
@@ -275,7 +274,7 @@ class OnlyWhatABoardBuildsIsRun(unittest.TestCase):
         # not count for it.
         built = bs.boards_build(
             self.selection({"BR2_PACKAGE_KODI", "BR2_PACKAGE_MPV", "BR2_PACKAGE_CITRON_X"}),
-            self.LAUNCHERS,
+            self.BIOS_PROGRAMS,
         )
         cores, standalone, _dual = bs.configgen_cores(self.DEFAULTS, self.ES, set(), built)
         self.assertEqual(sorted(cores), ["kodi", "mgba", "mpv", "vox_official"])
@@ -297,10 +296,30 @@ class OnlyWhatABoardBuildsIsRun(unittest.TestCase):
         # Without a selection, every name counts, as before.
         self.assertIn("suyu", bs.configgen_cores(self.DEFAULTS, self.ES, set())[0])
 
+    def test_the_extractor_reports_programs_run_from_its_own_bios_root(self):
+        from scraper.batocera_launchers import Launcher, extraction
+
+        # A fork whose batoceraPaths puts the BIOS folder elsewhere: the
+        # report follows the root its code gives, not Batocera's.
+        launchers = [
+            Launcher(emulator="lexaloffle", build="standalone", kind="fixed_name",
+                     names=["pico-8/pico8"], source_ref="g.py:1",
+                     search_dir="/storage/bios", passes_to="exec"),
+            Launcher(emulator="flycast", build="standalone", kind="passes_path",
+                     names=[], source_ref="g.py:2", search_dir="/storage/bios/dc",
+                     passes_to="environment FLYCAST_BIOS_PATH"),
+            Launcher(emulator="other", build="standalone", kind="fixed_name",
+                     names=["x"], source_ref="g.py:3", search_dir="/userdata/bios",
+                     passes_to="exec"),
+        ]
+        found = extraction(launchers, "/storage/bios")
+        self.assertEqual(found.bios_programs, frozenset({"lexaloffle"}))
+        self.assertEqual([r["emulator"] for r in found.records], ["lexaloffle", "flycast", "other"])
+
     def test_a_record_for_several_emulators_runs_when_one_is_built(self):
         from scraper import batocera_scraper as bs
 
-        built = bs.boards_build(self.selection(set()), [])
+        built = bs.boards_build(self.selection(set()), frozenset())
         for field in ("citron, mgba", "citron,mgba"):
             with self.subTest(field=field):
                 self.assertEqual(len(bs.records_run([{"emulator": field}], built)), 1)

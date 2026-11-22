@@ -24,13 +24,14 @@ import posixpath
 import re
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any
 
 import yaml
 
 from model.launcherrecords import emulator_names, join_emulators
 from .batocera_launchers import (
     PATH_PATCHES,
+    Extraction,
+    extraction,
     config_directories,
     _render,
     _system_branches,
@@ -562,7 +563,7 @@ BATOCERA_SUBMODULE = "batocera"
 
 def extract_launchers(
     read: Callable[[str], str], batocera: Callable[[str], str] | None = None
-) -> list[dict[str, Any]]:
+) -> Extraction:
     """Every launcher record, read through `read(repo-relative path)`.
 
     `batocera` reads the batocera submodule at its pinned commit. The
@@ -580,7 +581,7 @@ def extract_launchers(
             lambda path: batocera(path.removeprefix(prefix)),
             tuple(prefix + patch for patch in PATH_PATCHES),
         )
-    return [launcher.entry() for launcher in launchers]
+    return extraction(launchers, cg.bios)
 
 
 __all__ = [

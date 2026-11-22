@@ -95,7 +95,7 @@ class Scraper(CheckBiosScraper):
         dropped = not_cores("batocera") | not_cores(PLATFORM_NAME)
         # The batocera.linux commit KNULLI's batocera submodule pins at the tag.
         revision = submodule_commit(REPO, BATOCERA_SUBMODULE, self.tag)
-        launchers = extract_launchers(
+        extracted = extract_launchers(
             lambda path: fetch_text(_RAW.format(ref=self.tag) + path),
             lambda path: fetch_text(_BATOCERA_RAW.format(ref=revision) + path),
         )
@@ -103,8 +103,8 @@ class Scraper(CheckBiosScraper):
         # scraper from the Kconfig of KNULLI's tree and its batocera and
         # buildroot submodules (boards_build).
         selection = BoardTargets().build_selection(self.tag)
-        built = boards_build(selection, launchers)
-        launchers = records_run(launchers, built)
+        built = boards_build(selection, extracted.bios_programs)
+        launchers = records_run(extracted.records, built)
         cores, standalone, dual = configgen_cores(defaults, es_systems, dropped, built)
         installable = installable_cores(selection, cores, standalone, dual)
         # Each system's own list (psx, es_systems.yml:640-653: libretro

@@ -17,9 +17,10 @@ from __future__ import annotations
 import ast
 import re
 from collections.abc import Callable, Iterable
+from dataclasses import dataclass
 from typing import Any
 
-from model.launcherrecords import join_emulators
+from model.launcherrecords import emulator_names, join_emulators
 from .configgen_launchers import (
     Launcher,
     LauncherShapeError,
@@ -1020,9 +1021,37 @@ EXTRACTORS: tuple[Callable[[Configgen], list[Launcher]], ...] = (
 )
 
 
-def extract_launchers(read: Callable[[str], str]) -> list[dict[str, Any]]:
+@dataclass(frozen=True)
+class Extraction:
+    """A configgen's launcher records, and the emulators it runs from the BIOS folder."""
+
+    records: list[dict[str, Any]]
+    # The emulators whose program the launcher runs from the BIOS folder
+    # (lexaloffle, /userdata/bios/pico-8/pico8): the user supplies it, no
+    # package builds it.
+    bios_programs: frozenset[str]
+
+
+def extraction(launchers: list[Launcher], bios: str) -> Extraction:
+    """The records of `launchers`, and those that run a program from `bios`."""
+    root = bios.rstrip("/")
+    return Extraction(
+        records=[launcher.entry() for launcher in launchers],
+        bios_programs=frozenset(
+            name
+            for launcher in launchers
+            if launcher.passes_to == "exec"
+            and launcher.search_dir is not None
+            and (launcher.search_dir.rstrip("/") == root
+                 or launcher.search_dir.startswith(f"{root}/"))
+            for name in emulator_names(launcher.emulator)
+        ),
+    )
+
+
+def extract_launchers(read: Callable[[str], str]) -> Extraction:
     """Every launcher record, read through `read(repo-relative path)`."""
     cg = Configgen(read)
     launchers = [launcher for extractor in EXTRACTORS for launcher in extractor(cg)]
     launchers += patched_paths(read)
-    return [launcher.entry() for launcher in launchers]
+    return extraction(launchers, cg.bios)

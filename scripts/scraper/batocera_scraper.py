@@ -11,7 +11,7 @@ from __future__ import annotations
 import ast
 import re
 import sys
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 
 
 from model.database import load_database
@@ -412,7 +412,9 @@ def configgen_cores(
     return sorted(cores - dropped), sorted(standalone - dropped), sorted(dual)
 
 
-def boards_build(selection: BuildSelection, launchers: list[dict]) -> Callable[[str], bool]:
+def boards_build(
+    selection: BuildSelection, bios_programs: Iterable[str]
+) -> Callable[[str], bool]:
     """Whether some board of a build runs an emulator.
 
     es_systems.yml ties each name to the packages that build it
@@ -422,16 +424,10 @@ def boards_build(selection: BuildSelection, launchers: list[dict]) -> Callable[[
     configgen-defaults.yml gives is built when a board selects the package
     of that name: the symbol its Config.in defines, else the one Buildroot
     derives from the folder (BR2_PACKAGE_<NAME>, package/pkg-generic.mk). A
-    program the launcher runs from the BIOS folder (lexaloffle,
-    /userdata/bios/pico-8/pico8) needs no package.
+    program the launcher runs from the BIOS folder (`bios_programs`, as
+    extract_launchers reports them) needs no package.
     """
-    supplied = {
-        name
-        for record in launchers
-        if record.get("passes_to") == "exec"
-        and str(record.get("search_dir") or "").startswith("/userdata/bios")
-        for name in record_emulators(record)
-    }
+    supplied = frozenset(bios_programs)
 
     def built(name: str) -> bool:
         if name in selection.emulators or name in supplied:
@@ -537,12 +533,12 @@ class Scraper(CheckBiosScraper):
         """Generate a platform YAML config dict from scraped data."""
         systems = self.platform_systems()
 
-        launchers = extract_launchers(
+        extracted = extract_launchers(
             lambda path: fetch_text(f"{_RAW_BASE}/{self.tag}/{path}")
         )
         selection = BoardTargets().build_selection(self.tag)
-        built = boards_build(selection, launchers)
-        launchers = records_run(launchers, built)
+        built = boards_build(selection, extracted.bios_programs)
+        launchers = records_run(extracted.records, built)
         cores, standalone, dual = self._fetch_cores(built)
         installable = installable_cores(selection, cores, standalone, dual)
         libretro_systems = es_systems_libretro_systems(
