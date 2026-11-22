@@ -109,6 +109,29 @@ class AUserProvidedSlot(_Fixture):
         self.assertEqual(report["pack_destinations"], [])
 
 
+class AHashSelectedPack(_Fixture):
+    """--from-md5 placed a declaration under the base destination only when
+    its path did not start with the same letters: Batocera's bios_CD_U.bin
+    went to the root of the pack, scph5501.bin to bios/."""
+
+    def test_every_declaration_lands_under_the_base_destination(self):
+        from packs.md5pack import generate_md5_pack
+
+        self._platform([
+            {"name": "sgb.sfc", "destination": "system_sgb.sfc"},
+            {"name": "program.rom", "destination": "program.rom"},
+        ])
+        hashes = [("md5", entry["md5"]) for entry in self.db["files"].values()
+                  if entry["name"] != "core.bin"]
+        outcome = generate_md5_pack(
+            hashes, self.db, str(self.bios), str(self.root / "out"),
+            platform_name="paths", platforms_dir=str(self.platforms),
+        )
+        with zipfile.ZipFile(outcome.zip_path) as zf:
+            members = set(zf.namelist())
+        self.assertEqual(members, {"system/system_sgb.sfc", "system/program.rom"})
+
+
 class AnEntryWithoutAFileTakesNoPath(unittest.TestCase):
     """EmuDeck's system:md5 entries name no file. verify credited the bare
     base destination as a pack path, and the comparison failed on ''."""

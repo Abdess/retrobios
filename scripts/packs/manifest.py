@@ -50,7 +50,7 @@ from packs.manifestentry import (
     record_unplaceable,
 )
 from packs.manifestselect import SelectionIndex
-from packs.paths import save_layout
+from packs.paths import platform_destination, save_layout
 from packs.scope import pack_sections, platform_list_version, system_titles
 from packs.standalone import standalone_copies, standalone_layouts
 from resolve.contentlayout import TARGET_KEY
@@ -255,12 +255,11 @@ class _ManifestBuild:
             for file_entry in system.get("files", []):
                 if opts.required_only and file_entry.get("required") is False:
                     continue
-                dest = sanitize_pack_path(file_entry.get("destination", file_entry["name"]))
+                dest, full_dest = platform_destination(file_entry, self.base_dest)
                 if not dest:
                     continue
                 if self.region_drops and dest in self.region_drops:
                     continue
-                full_dest = f"{self.base_dest}/{dest}" if self.base_dest else dest
                 yield sys_id, file_entry, dest, full_dest
 
     def declaration_order(self, full_dest: str) -> list[tuple[list[str], dict, str]]:

@@ -13,7 +13,7 @@ from model.profiles import load_emulator_profiles, select_emulator_profiles
 from model.releaserecord import PACK_SUFFIX
 from packs.archive import add_pack_member, writing_pack
 from packs.naming import file_name_part, pack_narrowings, selection_digest
-from packs.paths import resolve_destination
+from packs.paths import platform_destination, resolve_destination, under_base
 from resolve.packfiles import resolve_file, sha1_for_hash
 
 if TYPE_CHECKING:
@@ -168,10 +168,14 @@ def _md5_destination(entry: dict, layout: _Md5Layout, opts: _Md5Settings) -> str
             # its standalone_path, which --standalone has to reach.
             dest = resolve_destination(matched_fe, opts.standalone)
         else:
-            dest = matched_fe.get("destination", matched_fe.get("name", name))
+            # Where the platform pack and the installer put the declaration.
+            _dest, full_dest = platform_destination(matched_fe, layout.base_dest)
+            if full_dest:
+                return full_dest
 
-    if layout.base_dest and not dest.startswith(layout.base_dest):
-        return f"{layout.base_dest}/{dest}"
+    base = layout.base_dest
+    if base and dest != base and not dest.startswith(f"{base}/"):
+        return under_base(dest, base)
     return dest
 
 

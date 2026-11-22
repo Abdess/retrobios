@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING, TypedDict
 from model.registry import load_platform_registry
 from core.hashing import compute_hashes
 from core.options import reject_unknown
-from core.paths import EMULATORS_DIR, declared_destination, sanitize_pack_path
+from core.paths import EMULATORS_DIR, declared_destination
 from core.ziptools import is_archive_path
 from model.alternatives import core_file_spares
 from model.declarations import OUTER_ROOTS, declared_root
@@ -50,7 +50,7 @@ from packs.extras import (
 )
 from packs.naming import file_name_part, pack_narrowings, platform_pack_name, platform_pack_stem
 from packs.packcounts import PackCounts, pack_counts
-from packs.paths import flat_arcname, save_layout
+from packs.paths import flat_arcname, platform_destination, save_layout
 from packs.platformreport import print_platform_pack, print_split_packs
 from packs.readme import build_agnostic_rename_readme, build_readme, save_place
 from resolve import packfiles as packresolve, regions as resolve_regions, slot as slot_mod
@@ -559,13 +559,12 @@ class _PlatformPackBuild:
         plan, opts = self.plan, self.plan.opts
         if opts.required_only and file_entry.get("required") is False:
             return
-        dest = sanitize_pack_path(file_entry.get("destination", file_entry["name"]))
+        dest, full_dest = platform_destination(file_entry, plan.base_dest)
         if plan.region_drops and dest in plan.region_drops:
             return
         if not dest:
             self._judge_unnamed(sys_id, file_entry)
             return
-        full_dest = f"{plan.base_dest}/{dest}" if plan.base_dest else dest
         already_packed = self.placed.holds(full_dest)
 
         preferred = plan.preferred_entries.get(full_dest)

@@ -9,8 +9,27 @@ from __future__ import annotations
 from collections.abc import Iterable
 from dataclasses import dataclass
 
-from core.paths import comparable_destination, sanitize_pack_path
+from core.paths import comparable_destination, declared_destination, sanitize_pack_path
 from resolve.validation import read_from_save_dir
+
+
+def under_base(path: str, base_dest: str) -> str:
+    """A pack path below the platform's base destination, joined as a path."""
+    return f"{base_dest}/{path}" if base_dest else path
+
+
+def platform_destination(entry: dict, base_dest: str) -> tuple[str, str]:
+    """(destination, pack path) of a platform declaration.
+
+    The destination is the declared one, else the name, made safe. The pack
+    path puts it below the base destination. Both are empty for a
+    declaration that names no file. The platform pack, the install manifest
+    and the hash-selected pack all place a declaration here.
+    """
+    dest = declared_destination(entry)
+    if not dest:
+        return "", ""
+    return dest, under_base(dest, base_dest)
 
 
 @dataclass(frozen=True)
