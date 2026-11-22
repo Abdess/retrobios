@@ -96,5 +96,54 @@ class TwinDeclarationStatus(unittest.TestCase):
         self._check(self._config("zzz", "bbb"))
 
 
+
+class TheCoresChooseAfterARefusal(TwinDeclarationStatus):
+    """A refused declaration left "excluded" on the path, and the builder
+    then skipped the cores' choice for the next declaration: the pack held
+    the copy the name found while the installer placed the variant the core
+    accepts."""
+
+    ACCEPTED = b"the firmware the core checks, sixty-four bytes long........."
+
+    def test_the_pack_ships_the_variant_the_manifest_places(self):
+        from packs.manifest import generate_manifest
+
+        accepted_sha1 = hashlib.sha1(self.ACCEPTED).hexdigest()
+        Path("bios/Other").mkdir()
+        Path("bios/Other/fw.bin").write_bytes(self.ACCEPTED)
+        files = dict(self.db["files"])
+        files[accepted_sha1] = {
+            "path": "bios/Other/fw.bin", "name": "fw.bin", "size": len(self.ACCEPTED),
+            "sha1": accepted_sha1, "md5": hashlib.md5(self.ACCEPTED).hexdigest(),
+            "sha256": hashlib.sha256(self.ACCEPTED).hexdigest(), "crc32": "00000002",
+        }
+        self.db = {"files": files, "indexes": build_indexes(files, {})}
+        self.assertEqual(self.db["indexes"]["by_name"]["fw.bin"][0], SHA1)
+        profile = {
+            "emulator": "Core", "type": "libretro", "systems": ["bbb"],
+            "files": [{"name": "fw.bin", "size": len(self.ACCEPTED), "validation": ["size"]}],
+        }
+        Path("emulators/core.yml").write_text(yaml.dump(profile))
+        config = self._config("bbb", "aaa")
+        config["cores"] = ["core"]
+        config["version"] = "1"
+        Path("platforms/twin.yml").write_text(yaml.dump(config))
+        _platform_config_cache.clear()
+
+        record = archive.PackRecord()
+        with contextlib.redirect_stdout(io.StringIO()):
+            platformpack.generate_pack(
+                "twin", "platforms", self.db, "bios", "out",
+                emulators_dir="emulators", emu_profiles={"core": profile},
+                record=record, offline=True,
+            )
+        manifest = generate_manifest(
+            "twin", "platforms", self.db, "bios", "platforms/_registry.yml",
+            emulators_dir="emulators", emu_profiles={"core": profile}, offline=True,
+        )
+        served = {entry["dest"]: entry["sha1"] for entry in manifest["files"]}
+        self.assertEqual(served.get("fw.bin"), accepted_sha1)
+        self.assertEqual(record.sources.get("fw.bin"), "bios/Other/fw.bin")
+
 if __name__ == "__main__":
     unittest.main()

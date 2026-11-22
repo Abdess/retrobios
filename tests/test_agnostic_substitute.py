@@ -48,7 +48,7 @@ class AgnosticSubstitute(unittest.TestCase):
     def test_every_reader_calls_it_behind_the_existence_gate(self):
         builder = script_source("generate_pack.py")
         verify = script_source("verify.py")
-        self.assertEqual(builder.count("agnostic_substitute(file_entry, sys_id"), 2)
+        self.assertEqual(builder.count("agnostic_substitute(file_entry, sys_id"), 1)
         self.assertEqual(verify.count("agnostic_substitute(file_entry, sys_id"), 1)
         for source in (builder, verify):
             for call in re.finditer(r"agnostic_substitute\(file_entry, sys_id", source):

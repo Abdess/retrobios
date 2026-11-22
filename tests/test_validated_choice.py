@@ -85,16 +85,22 @@ class ValidatedChoice(unittest.TestCase):
 
     def test_pack_and_manifest_both_read_it(self):
         tree = ast.parse(script_source("generate_pack.py"))
-        callers = {
-            node.name
-            for node in ast.walk(tree)
-            if isinstance(node, ast.FunctionDef)
-            and any(
-                isinstance(call, ast.Call) and getattr(call.func, "id", None) == "validated_choice"
-                for call in ast.walk(node)
-            )
-        }
-        self.assertLessEqual({"build_platform_pack", "generate_manifest"}, callers)
+
+        def callers_of(name: str) -> set[str]:
+            return {
+                node.name
+                for node in ast.walk(tree)
+                if isinstance(node, ast.FunctionDef)
+                and any(
+                    isinstance(call, ast.Call) and getattr(call.func, "id", None) == name
+                    for call in ast.walk(node)
+                )
+            }
+
+        # A platform declaration is settled by one judge, which reads it on
+        # every copy shipped.
+        self.assertLessEqual({"build_platform_pack", "generate_manifest"}, callers_of("DeclarationJudge"))
+        self.assertIn("settle", callers_of("validated_choice"))
         # The manifest's core extras go through the builder's own lookup,
         # which reads validated_choice (packextras.ExtraResolver).
         resolvers = {
@@ -125,11 +131,11 @@ class ValidatedChoice(unittest.TestCase):
             node for node in ast.walk(tree)
             if isinstance(node, ast.FunctionDef) and node.name == "build_platform_pack"
         )
-        calls = [
-            call for call in ast.walk(builder)
-            if isinstance(call, ast.Call) and getattr(call.func, "id", None) == "validated_choice"
-        ]
-        self.assertGreaterEqual(len(calls), 1)
+        # The baseline goes through the judge the manifest reads too.
+        self.assertTrue(any(
+            isinstance(call, ast.Call) and getattr(call.func, "id", None) == "DeclarationJudge"
+            for call in ast.walk(builder)
+        ))
         # The core extras go through the lookup verify shares, which judges.
         self.assertTrue(any(
             isinstance(call, ast.Call) and getattr(call.func, "attr", None) == "resolve"

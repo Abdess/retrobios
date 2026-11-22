@@ -37,6 +37,7 @@ from packs.datatrees import (
     data_directory_members,
     pack_markers,
 )
+from packs.declsettle import DeclarationJudge, Settlement
 from packs.naming import system_display_name
 from packs.extras import (
     ExtraResolver,
@@ -58,23 +59,19 @@ from resolve.contentlayout import TARGET_KEY
 from resolve.cores import platform_scope_systems, system_scope_error
 from resolve.gamedata import GameDataCut, without_game_data
 from resolve.nativemode import (
-    digest_algorithm, hash_mismatch_excludes_file, platform_mode, reads_file_contents,
+    hash_mismatch_excludes_file, platform_mode, reads_file_contents,
 )
 from resolve.packfiles import (
     download_external,
     preferred_entries as _preferred_entries,
-    resolve_declaration,
     resolve_file,
 )
 from resolve.validation import (
     build_validation_index,
     parse_validation,
-    agnostic_substitute,
-    baseline_verdict,
     destination_owners,
     existence_discrepancy,
     extra_alternatives,
-    validated_choice,
 )
 
 if TYPE_CHECKING:
@@ -483,15 +480,13 @@ class PlatformPackOutcome:
 class _PlatformPackBuild:
     """One platform pack being written: its members and what each slot came to.
 
-    The four lookups are bound by build_platform_pack, the one place that
-    says how a platform file and a core extra are found and judged.
+    A platform file is settled by the DeclarationJudge the install manifest
+    reads too, and a core extra by the lookup build_platform_pack binds.
     """
 
     plan: _PlatformPlan
     zf: zipfile.ZipFile | PackRecord
-    resolve: Callable[[dict, str], tuple[str | None, str]]
-    verdict: Callable[[dict, str | None, str], tuple[str, str | None]]
-    judge: Callable[[dict, str | None, str], tuple[str | None, str | None]]
+    declarations: DeclarationJudge
     resolve_extra: Callable[[dict, str], tuple[str | None, str, str]]
     placed: Placed = field(init=False)
     total_files: int = 0
@@ -542,9 +537,8 @@ class _PlatformPackBuild:
         # judged by the member inside, and a frontend that hashes
         # one digest accepts a file another declared hash
         # contradicts, as verify judges it.
-        conflict_status, refusal = baseline_verdict(
-            file_entry, conflict_path, conflict_status, plan.verification_mode,
-            plan.config.get("hash_rule", ""),
+        conflict_status, refusal = self.declarations.verdict(
+            file_entry, conflict_path, conflict_status,
         )
         if conflict_status == "not_found":
             self.file_status[full_dest] = "missing"
@@ -579,19 +573,21 @@ class _PlatformPackBuild:
                 self._write_instructions(file_entry, full_dest)
             return
 
-        local_path, status = self.resolve(file_entry, full_dest)
-        if status == "external":
+        settled = self.declarations.settle(
+            file_entry, sys_id, dest, plan.slot_overrides.get(full_dest),
+        )
+        if settled.status == "external":
             self._pack_external(file_entry, full_dest)
             return
-        if status == "not_found":
-            local_path = self._agnostic_fallback(sys_id, file_entry, full_dest, already_packed)
-            if local_path is None:
-                return
-            status = "agnostic_fallback"
-            # Fall through to normal packing below
-        chosen = self._settle_declared(file_entry, full_dest, dest, local_path, status, already_packed)
-        if chosen is not None:
-            self._ship_declared(file_entry, full_dest, chosen, already_packed)
+        if settled.status == "not_found":
+            if not already_packed:
+                self.file_status[full_dest] = "missing"
+                self.file_reasons[full_dest] = "not found"
+            return
+        if settled.agnostic_dir and settled.resolved:
+            self._note_rename(file_entry, settled.resolved, settled.agnostic_dir)
+        if self._settle_declared(file_entry, full_dest, settled, already_packed) and settled.path:
+            self._ship_declared(file_entry, full_dest, settled.path, already_packed)
 
     def _judge_unnamed(self, sys_id: str, file_entry: dict) -> None:
         # EmuDeck-style entries (system:md5 whitelist, no filename).
@@ -605,7 +601,7 @@ class _PlatformPackBuild:
         )
         if held_status == "not_found" or not held:
             self.file_status[fkey] = "missing"
-        elif self.verdict(file_entry, held, held_status)[1]:
+        elif self.declarations.verdict(file_entry, held, held_status)[1]:
             self.file_status[fkey] = "excluded"
         else:
             self.file_status.setdefault(fkey, "ok")
@@ -655,68 +651,48 @@ class _PlatformPackBuild:
             if os.path.exists(tmp_path):
                 os.unlink(tmp_path)
 
-    def _agnostic_fallback(
-        self, sys_id: str, file_entry: dict, full_dest: str, already_packed: bool,
-    ) -> str | None:
-        # A filename-agnostic core takes any image of its system,
-        # renamed. Only an existence frontend accepts that.
+    def _note_rename(self, file_entry: dict, local_path: str, agnostic_path: str) -> None:
+        # A filename-agnostic core's substitute ships under the declared
+        # name: a note says which image it is.
         plan = self.plan
-        found = None
-        if not reads_file_contents(plan.verification_mode):
-            found = agnostic_substitute(file_entry, sys_id, plan.db, plan.platform_profiles)
-        if not found or not found[0]:
-            if not already_packed:
-                self.file_status[full_dest] = "missing"
-                self.file_reasons[full_dest] = "not found"
-            return None
-        local_path, agnostic_path = found
         original_name = os.path.basename(local_path)
         dest_name = file_entry.get("name", "")
-        if original_name != dest_name and agnostic_path:
-            alt_names = [
-                entry.get("name", "")
-                for entry in plan.db.get("files", {}).values()
-                if entry.get("path", "").startswith(agnostic_path)
-                and entry.get("name", "") and entry.get("name", "") != original_name
-            ]
-            readme_text = build_agnostic_rename_readme(dest_name, original_name, alt_names)
-            readme_name = f"RENAMED_{dest_name}.txt"
-            readme_full = f"{plan.base_dest}/{readme_name}" if plan.base_dest else readme_name
-            if readme_full not in self.placed.destinations:
-                write_generated_member(self.zf, self._flat(readme_full), readme_text)
-                self.placed.destinations.add(readme_full)
-        return local_path
+        if original_name == dest_name:
+            return
+        alt_names = [
+            entry.get("name", "")
+            for entry in plan.db.get("files", {}).values()
+            if entry.get("path", "").startswith(agnostic_path)
+            and entry.get("name", "") and entry.get("name", "") != original_name
+        ]
+        readme_text = build_agnostic_rename_readme(dest_name, original_name, alt_names)
+        readme_name = f"RENAMED_{dest_name}.txt"
+        readme_full = f"{plan.base_dest}/{readme_name}" if plan.base_dest else readme_name
+        if readme_full not in self.placed.destinations:
+            write_generated_member(self.zf, self._flat(readme_full), readme_text)
+            self.placed.destinations.add(readme_full)
 
     def _settle_declared(
-        self,
-        file_entry: dict,
-        full_dest: str,
-        dest: str,
-        local_path: str | None,
-        status: str,
-        already_packed: bool,
-    ) -> str | None:
-        """The copy a declaration ships once judged, or None when refused."""
+        self, file_entry: dict, full_dest: str, settled: Settlement, already_packed: bool,
+    ) -> bool:
+        """Record what a declaration came to, and whether its copy ships."""
         plan = self.plan
-        # The verdict the install manifest reads too: a member missing
-        # from a zipped_file archive, or a hash the frontend rejects.
-        status, refusal = self.verdict(file_entry, local_path, status)
-        if refusal:
+        if settled.refusal:
             # An earlier declaration of this path shipped a file this
             # one refuses: it is in the pack, untested as verify
             # counts it, not excluded.
             self.file_status[full_dest] = "untested" if already_packed else "excluded"
-            self.file_reasons[full_dest] = refusal
-            return None
+            self.file_reasons[full_dest] = settled.refusal
+            return False
         if not hash_mismatch_excludes_file(plan.verification_mode) and (
-            status == "hash_mismatch" and local_path
+            settled.status == "hash_mismatch" and settled.resolved
         ):
             # Existence platforms accept any file at the declared path:
             # their code never reads the bytes. An upstream hash that
             # contradicts a local dump is reported, not acted on.
             self.file_reasons.setdefault(
                 full_dest,
-                existence_discrepancy(file_entry, local_path, plan.platform_display),
+                existence_discrepancy(file_entry, settled.resolved, plan.platform_display),
             )
         if self.file_status.get(full_dest) == "missing":
             # An earlier declaration of this path found nothing, and this
@@ -726,16 +702,14 @@ class _PlatformPackBuild:
         self.file_status.setdefault(full_dest, "ok")
 
         # Emulator-level validation: informational only for platform packs.
-        # Platform verification (existence/md5) is the authority for pack status.
-        # Emulator checks are supplementary: logged but don't downgrade.
-        # When a discrepancy is found, try to find a file satisfying both.
-        if self.file_status.get(full_dest) == "ok":
-            local_path, disagreement = self.judge(file_entry, local_path, dest)
-            if disagreement:
-                self.file_reasons.setdefault(
-                    full_dest, f"{plan.platform_display} says OK but {disagreement}"
-                )
-        return local_path
+        # Platform verification (existence/md5) is the authority for pack
+        # status. The copy the cores chose ships whatever an earlier
+        # declaration of this path came to, as the installer places it.
+        if settled.disagreement and self.file_status.get(full_dest) == "ok":
+            self.file_reasons.setdefault(
+                full_dest, f"{plan.platform_display} says OK but {settled.disagreement}"
+            )
+        return True
 
     def _ship_declared(
         self, file_entry: dict, full_dest: str, local_path: str, already_packed: bool,
@@ -1092,28 +1066,11 @@ def build_platform_pack(
     if isinstance(plan, str):
         return PlatformPackOutcome(zip_path=None, refusal=plan)
 
-    def resolve(file_entry: dict, full_dest: str) -> tuple[str | None, str]:
-        return resolve_declaration(
-            file_entry,
-            db,
-            bios_dir,
-            plan.zip_contents,
-            opts.data_registry,
-            plan.slot_overrides.get(full_dest),
-            offline=opts.offline,
-        )
-
-    def verdict(file_entry: dict, local_path: str | None, status: str) -> tuple[str, str | None]:
-        return baseline_verdict(
-            file_entry, local_path, status, plan.verification_mode,
-            plan.config.get("hash_rule", ""),
-        )
-
-    def judge(file_entry: dict, local_path: str | None, dest: str) -> tuple[str | None, str | None]:
-        return validated_choice(
-            file_entry, local_path, db, plan.validation_index, bios_dir,
-            digest_algorithm(plan.verification_mode), dest, plan.validation_owners,
-        )
+    declarations = DeclarationJudge(
+        db, bios_dir, plan.zip_contents, opts.data_registry, opts.offline,
+        plan.verification_mode, plan.config.get("hash_rule", ""), plan.platform_profiles,
+        plan.validation_index, plan.validation_owners,
+    )
 
     extra_resolver = ExtraResolver(
         db, bios_dir, plan.zip_contents, opts.data_registry, plan.validation_index,
@@ -1127,7 +1084,7 @@ def build_platform_pack(
         contextlib.nullcontext(opts.record) if opts.record is not None
         else writing_pack(plan.zip_path)
     ) as zf:
-        build = _PlatformPackBuild(plan, zf, resolve, verdict, judge, resolve_extra)
+        build = _PlatformPackBuild(plan, zf, declarations, resolve_extra)
         build.run()
     if opts.counts is not None:
         opts.counts.append(pack_counts(plan.zip_path, build.file_status, build.core_count))

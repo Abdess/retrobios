@@ -25,6 +25,7 @@ COMMANDS = {
         "packs/packoptions.py", "packs/packmodes.py", "packs/packcounts.py",
         "packs/emulatorentries.py", "packs/integrity.py",
         "packs/hashinput.py", "packs/hashlookup.py", "packs/executable.py",
+        "packs/declsettle.py",
     ),
     "verify.py": (
         "packs/verdicts.py", "packs/gaps.py", "packs/coverage.py", "packs/emulatorcheck.py",

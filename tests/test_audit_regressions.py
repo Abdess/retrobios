@@ -1563,9 +1563,16 @@ class OneBaselineVerdict(unittest.TestCase):
             )
             body = ast.get_source_segment(source, function) or ""
             with self.subTest(function=name):
-                self.assertIn("baseline_verdict(", body)
-                self.assertIn("resolve_declaration(", body)
+                self.assertIn("DeclarationJudge(", body)
                 self.assertNotIn('"slot_arbitrated"', body)
+        judge = next(
+            node for node in tree.body
+            if isinstance(node, ast.ClassDef) and node.name == "DeclarationJudge"
+        )
+        body = ast.get_source_segment(source, judge) or ""
+        self.assertIn("baseline_verdict(", body)
+        self.assertIn("resolve_declaration(", body)
+        self.assertNotIn('"slot_arbitrated"', body)
 
     def test_verify_and_the_region_pass_resolve_as_the_builder(self):
         """verify called common.resolve_local_file and put the slot override
@@ -3911,7 +3918,7 @@ class APathConflictKeepsTheMainVerdict(unittest.TestCase):
         source = script_source("generate_pack.py")
         branch = source[source.index("Content ships under the conflicting shape"):]
         branch = branch[: branch.index("storage = file_entry.get")]
-        self.assertIn("baseline_verdict(", branch)
+        self.assertIn("self.declarations.verdict(", branch)
         self.assertNotIn('conflict_status == "hash_mismatch"', branch)
 
 

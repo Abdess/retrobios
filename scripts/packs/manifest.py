@@ -25,6 +25,7 @@ from packs.datatrees import (
     pack_markers,
     tree_readers,
 )
+from packs.declsettle import DeclarationJudge
 from packs.extras import (
     collect_emulator_extras,
     extra_region_key,
@@ -56,14 +57,11 @@ from packs.standalone import standalone_copies, standalone_layouts
 from resolve.contentlayout import TARGET_KEY
 from resolve.cores import filter_systems_by_target, resolve_platform_cores as _platform_cores
 from resolve.gamedata import GAME_DATA, is_game_data, platform_game_data, without_game_data
-from resolve.nativemode import digest_algorithm, platform_mode, reads_file_contents
-from resolve.packfiles import preferred_entries as _preferred_entries, resolve_declaration
+from resolve.nativemode import platform_mode
+from resolve.packfiles import preferred_entries as _preferred_entries
 from resolve.validation import (
     build_validation_index,
-    agnostic_substitute,
-    baseline_verdict,
     destination_owners,
-    validated_choice,
 )
 
 if TYPE_CHECKING:
@@ -718,43 +716,26 @@ def generate_manifest(
     )
     config, verification_mode = build.config, build.verification_mode
 
+    declarations = DeclarationJudge(
+        db, bios_dir, build.zip_contents, build.data_registry, opts.offline,
+        verification_mode, config.get("hash_rule", ""), build.manifest_profiles,
+        build.manifest_validation, build.manifest_owners,
+    )
+
     def settle(
         file_entry: dict, sys_id: str, dest: str, override: str | None
     ) -> tuple[str | None, str]:
         """The file served once the slot is settled, or None and why not."""
-        local_path, status = resolve_declaration(
-            file_entry,
-            db,
-            bios_dir,
-            build.zip_contents,
-            build.data_registry,
-            override,
-            offline=opts.offline,
-        )
-        if status == "not_found" and not reads_file_contents(verification_mode):
-            found = agnostic_substitute(file_entry, sys_id, db, build.manifest_profiles)
-            if found:
-                local_path, status = found[0], "agnostic_fallback"
-                if os.path.basename(local_path) != file_entry.get("name", ""):
-                    # The pack explains the rename in a note of its own.
-                    build.rename_notes.add(file_entry.get("name", ""))
-        # The builder's verdict: a hash platform omits what its frontend
-        # would reject, a zipped_file archive included when the member is
-        # missing whatever the outer resolution said. An existence
-        # platform never reads the bytes.
-        status, refusal = baseline_verdict(
-            file_entry, local_path, status, verification_mode,
-            config.get("hash_rule", ""),
-        )
-        if refusal or status in ("not_found", "external"):
-            return None, "hash_mismatch" if refusal else status
+        settled = declarations.settle(file_entry, sys_id, dest, override)
+        renamed = os.path.basename(settled.resolved or "") != file_entry.get("name", "")
+        if settled.agnostic_dir and renamed:
+            # The pack explains the rename in a note of its own.
+            build.rename_notes.add(file_entry.get("name", ""))
+        if not settled.ships:
+            return None, "hash_mismatch" if settled.refusal else settled.status
         # The variant the pack ships when an emulator rejects the
         # resolved file: the installer must place the same bytes.
-        local_path, _disagreement = validated_choice(
-            file_entry, local_path, db, build.manifest_validation, bios_dir,
-            digest_algorithm(verification_mode), dest, build.manifest_owners,
-        )
-        return local_path, status
+        return settled.path, settled.status
 
     if opts.source != "truth":
         build.list_baseline(settle)
