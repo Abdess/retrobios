@@ -34,6 +34,7 @@ from .base_scraper import (
     _print_dry_run,
     github_tree,
 )
+from .coreinfo_coverage import split_by_holding
 
 PLATFORM_NAME = "libretro_coreinfo"
 
@@ -314,16 +315,10 @@ def main() -> None:
     if args.compare_db:
         db = load_database(args.compare_db)
 
-        found = 0
-        missing = []
-        for r in reqs:
-            if r.name in db["indexes"]["by_name"] or r.md5 and r.md5 in db["indexes"]["by_md5"]:
-                found += 1
-            else:
-                missing.append(r)
+        found, missing = split_by_holding(reqs, db)
 
         print(f"Core-info: {len(reqs)} unique firmware paths")
-        print(f"Found in DB: {found}")
+        print(f"Found in DB: {len(found)}")
         print(f"Missing: {len(missing)}")
         if missing:
             print("\nMissing files:")

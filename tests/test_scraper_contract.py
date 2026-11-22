@@ -908,6 +908,65 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
             scraper.fetch_requirements()
 
 
+class CoreInfoCompareDbResolvesLikeTheCollection(unittest.TestCase):
+    """--compare-db counted a firmware held as soon as any homonym existed,
+    whatever md5 the .info notes gave, and a generic name written with its
+    directory (SGB1.sfc/program.rom) missing although the collection held it
+    at that path."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        self.db: dict = {"files": {}, "indexes": {
+            "by_md5": {}, "by_name": {}, "by_crc32": {}, "by_path_suffix": {},
+        }}
+
+    def tearDown(self) -> None:
+        self._tmp.cleanup()
+
+    def _hold(self, rel: str, data: bytes) -> str:
+        import hashlib
+
+        path = self.root / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+        sha1 = hashlib.sha1(data).hexdigest()
+        md5 = hashlib.md5(data).hexdigest()
+        self.db["files"][sha1] = {
+            "path": str(path), "name": path.name, "md5": md5, "sha1": sha1,
+            "size": len(data),
+        }
+        indexes = self.db["indexes"]
+        indexes["by_md5"][md5] = sha1
+        indexes["by_name"].setdefault(path.name, []).append(sha1)
+        if "/" in rel:
+            indexes["by_path_suffix"].setdefault(rel, []).append(sha1)
+        return md5
+
+    def test_a_homonym_does_not_hold_a_declared_md5(self):
+        from scraper.coreinfo_coverage import split_by_holding
+
+        self._hold("boot.rom", b"some other boot rom")
+        req = BiosRequirement(name="boot.rom", system="x", md5="0" * 32,
+                              destination="boot.rom")
+        self.assertEqual(split_by_holding([req], self.db), ([], [req]))
+
+    def test_a_generic_name_held_at_its_path_is_found(self):
+        from scraper.coreinfo_coverage import split_by_holding
+
+        self._hold("SGB1.sfc/program.rom", b"sgb1 program")
+        req = BiosRequirement(name="SGB1.sfc/program.rom", system="x",
+                              destination="SGB1.sfc/program.rom")
+        self.assertEqual(split_by_holding([req], self.db), ([req], []))
+
+    def test_the_declared_md5_is_found(self):
+        from scraper.coreinfo_coverage import split_by_holding
+
+        md5 = self._hold("bios.bin", b"the right dump")
+        req = BiosRequirement(name="bios.bin", system="x", md5=md5,
+                              destination="bios.bin")
+        self.assertEqual(split_by_holding([req], self.db), ([req], []))
+
 
 class EveryGitHubApiCallerSendsTheToken(unittest.TestCase):
     """romset_dat_importer and coreinfo_scraper called api.github.com with no
