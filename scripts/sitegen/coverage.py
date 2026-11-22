@@ -9,6 +9,7 @@ from pathlib import Path
 
 from core.cli import InputMissing
 from core.paths import DB_FILE, EMULATORS_DIR, REPO_ROOT
+from model import siteinputs
 from model.largefiles import LARGE_FILES_CACHE
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
@@ -117,8 +118,12 @@ def _coverage_inputs(db_path: Path, platforms_dir: str, emulators_dir: str) -> s
         digest.update(path.read_bytes() if path.is_file() else b"<absent>")
 
     add_file(db_path.resolve())
+    # The repository's manifests and bios/, and those beside a given database.
+    beside = db_path.resolve().parent
+    manifests = dict.fromkeys((REPO_ROOT / "install", siteinputs.manifests_dir().resolve()))
     for root, pattern in ((Path(platforms_dir), "*"), (Path(emulators_dir), "*.yml"),
-                          (REPO_ROOT / "scripts", "*.py"), (REPO_ROOT / "install", "*.json"),
+                          (REPO_ROOT / "scripts", "*.py"),
+                          *((folder, "*.json") for folder in manifests),
                           (REPO_ROOT / "recipes", "*.json")):
         for path in sorted(p for p in root.resolve().rglob(pattern) if p.is_file()):
             add_file(path)
@@ -132,11 +137,11 @@ def _coverage_inputs(db_path: Path, platforms_dir: str, emulators_dir: str) -> s
         if path.is_file():
             stat = path.stat()
             digest.update(f"{path.name}\0{stat.st_size}\0{stat.st_mtime_ns}\n".encode())
-    bios = REPO_ROOT / "bios"
-    for path in sorted(bios.rglob("*")):
-        if path.is_file():
-            stat = path.stat()
-            digest.update(f"{path.relative_to(bios)}\0{stat.st_size}\0{stat.st_mtime_ns}\n".encode())
+    for bios in dict.fromkeys((REPO_ROOT / "bios", beside / "bios")):
+        for path in sorted(bios.rglob("*")):
+            if path.is_file():
+                stat = path.stat()
+                digest.update(f"{path.relative_to(bios)}\0{stat.st_size}\0{stat.st_mtime_ns}\n".encode())
     return digest.hexdigest()
 
 

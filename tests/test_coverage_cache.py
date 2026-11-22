@@ -33,11 +33,12 @@ class CoverageCache(unittest.TestCase):
         self.db = self.work / "database.json"
         self.db.write_text("{}")
         self.calls: list[str] = []
-        patches = [
-            mock.patch.object(coverage, "COVERAGE_CACHE_DIR", self.work / "cache"),
-            mock.patch.object(coverage, "compute_coverage", self._compute),
-        ]
-        for patch in patches:
+        replaced: tuple[tuple[str, object], ...] = (
+            ("COVERAGE_CACHE_DIR", self.work / "cache"),
+            ("compute_coverage", self._compute),
+        )
+        for name, value in replaced:
+            patch = mock.patch.object(coverage, name, value)
             patch.start()
             self.addCleanup(patch.stop)
 
@@ -74,6 +75,25 @@ class CoverageCache(unittest.TestCase):
             lambda: (self.platforms / "alpha.yml").write_text("platform: Alpha 2\n"),
             lambda: self.db.write_text('{"files": {}}'),
             lambda: (self.emulators / "core.yml").write_text("emulator: core\n"),
+        ):
+            self.calls.clear()
+            change()
+            self._run()
+            self.assertEqual(self.calls, ["alpha", "beta"])
+
+    def test_a_change_in_the_given_collection_computes_again(self):
+        """A site built from another collection kept the coverage of its
+        first run after its bios/ or its manifests changed."""
+        from model import siteinputs
+
+        siteinputs.use(siteinputs.SiteInputs(db=self.db))
+        self.addCleanup(siteinputs.use, siteinputs.SiteInputs())
+        (self.work / "bios").mkdir()
+        (self.work / "install").mkdir()
+        self._run()
+        for change in (
+            lambda: (self.work / "bios" / "a.bin").write_bytes(b"a"),
+            lambda: (self.work / "install" / "alpha.json").write_text("{}"),
         ):
             self.calls.clear()
             change()
