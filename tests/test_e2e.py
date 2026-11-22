@@ -180,7 +180,7 @@ class TestE2E(unittest.TestCase):
     def _build_db(self) -> dict:
         files_db = {}
         by_md5 = {}
-        by_name = {}
+        by_name: dict[str, list[str]] = {}
         for key, info in self.files.items():
             name = os.path.basename(key)
             sha1 = info["sha1"]
@@ -197,7 +197,7 @@ class TestE2E(unittest.TestCase):
         alias_sha1 = self.files["alias_target.bin"]["sha1"]
         by_name.setdefault("alias_alt.bin", []).append(alias_sha1)
         # Build by_path_suffix for regional variant resolution
-        by_path_suffix = {}
+        by_path_suffix: dict[str, list[str]] = {}
         for key, info in self.files.items():
             if "/" in key:
                 # key is subdir/name, suffix is the subdir path
@@ -7145,7 +7145,7 @@ class AnArchiveIsAMemberOfASet(unittest.TestCase):
         previous = os.getcwd()
         os.chdir(root)
         self.addCleanup(os.chdir, previous)
-        self.db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {},
+        self.db: dict = {"files": {}, "indexes": {"by_md5": {}, "by_name": {},
                                             "by_crc32": {}, "by_path_suffix": {}}}
         rom = b"STV" * 64
         if held:
