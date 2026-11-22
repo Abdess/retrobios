@@ -15,10 +15,10 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from core import upstream
-from model.database import record_at, record_for_hash
-from model.largefiles import fetch_large_file
+from model.database import record_at, record_for_hash, sha1_at
+from model.largefiles import asset_candidates, asset_names, fetch_large_file
 from core.hashing import declared_hash_lists, file_digest
-from resolve.content import declared_hash_verdict
+from resolve.content import declared_hash_verdict, record_answers_declaration
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from core.paths import REPO_ROOT, declared_destination
 from core.ziptools import is_archive_path, readable_zip_member_crcs
@@ -92,40 +92,25 @@ def download_external(
         return False
     return True
 
-def _verified_asset(
-    name: str, declared: dict[str, list[str]], file_entry: dict, offline: bool
-) -> str | None:
-    """The release asset of that name, if it is a copy the entry accepts.
-
-    The store is asked once per accepted sha1 (or md5), since it keeps one
-    revision under a name. What it returns is held against every hash the
-    entry declares, sha256 and crc32 included.
-    """
-    attempts = (
-        [(sha1, "") for sha1 in declared.get("sha1", [])]
-        or [("", md5) for md5 in declared.get("md5", [])]
-        or [("", "")]
+def _fetched_asset(path: str, sha1: str, file_entry: dict, offline: bool) -> str | None:
+    """The release asset of a registered path, downloaded if allowed and
+    held to the record's sha1, then to every hash the entry declares."""
+    declared = declared_hash_lists(file_entry)
+    cached = fetch_large_file(path, expected_sha1=sha1, offline=offline)
+    if not cached:
+        return None
+    verdict = declared_hash_verdict(
+        cached,
+        has_strong_hash=bool(declared),
+        sha1_candidates=set(declared.get("sha1", [])),
+        sha256_candidates=set(declared.get("sha256", [])),
+        md5_list=declared.get("md5", []),
+        crc_candidates=set(declared.get("crc32", [])),
+        zipped_file=file_entry.get("zipped_file"),
+        declared_size=file_entry.get("size"),
+        file_entry=file_entry,
     )
-    for sha1, md5 in attempts:
-        cached = fetch_large_file(
-            name, expected_sha1=sha1, expected_md5=md5, offline=offline,
-        )
-        if not cached:
-            continue
-        verdict = declared_hash_verdict(
-            cached,
-            has_strong_hash=bool(declared),
-            sha1_candidates=set(declared.get("sha1", [])),
-            sha256_candidates=set(declared.get("sha256", [])),
-            md5_list=declared.get("md5", []),
-            crc_candidates=set(declared.get("crc32", [])),
-            zipped_file=file_entry.get("zipped_file"),
-            declared_size=file_entry.get("size"),
-            file_entry=file_entry,
-        )
-        if verdict != "hash_mismatch":
-            return cached
-    return None
+    return None if verdict == "hash_mismatch" else cached
 
 
 def run_is_offline(offline: bool | None = None) -> bool:
@@ -136,44 +121,43 @@ def run_is_offline(offline: bool | None = None) -> bool:
     )
 
 
-def pending_release_asset(
+def release_asset_paths(
     file_entry: dict, db: dict, registered: list[str] | None = None,
-) -> str | None:
-    """The release asset an online build fetches for an entry, if one does.
+) -> list[str]:
+    """The registered paths whose release asset answers an entry, best first.
 
-    The registered path whose database record carries what the entry
-    declares, read without a download: verify never fetches, and a release
-    asset the cache lacks was reported missing while an online build packed
-    it. ``registered`` is the .gitignore registry (load_registered_paths).
+    Decided on the database record, without a download: the builder fetches
+    the first that verifies (resolve_file), and verify, which never fetches,
+    counts the first as packed. ``registered`` is the .gitignore registry
+    (load_registered_paths).
     """
-    from model.largefiles import asset_candidates, asset_names, load_registered_paths
-
     name = file_entry.get("name", "")
     if not name or name.endswith("/") or file_entry.get("type") == "directory":
-        return None
+        # The asset store holds files, not trees.
+        return []
     declared = declared_hash_lists(file_entry)
     if file_entry.get("unsourceable") and not declared:
-        return None
-    if file_entry.get("zipped_file") and not declared:
-        return None
+        # The asset store is addressed by file name: with no hash to check,
+        # it would hand back the same-named file of another game, which is
+        # exactly what the flag forbids.
+        return []
     if registered is None:
+        # Looked up at call time, so a test's registry patch reaches it.
+        from model.largefiles import load_registered_paths
+
         registered = load_registered_paths()
-    assets = set(asset_candidates(name, registered))
-    if not assets:
-        return None
-    declared_size = file_entry.get("size")
-    for path, asset in sorted(asset_names(registered).items()):
+    by_asset: dict[str, str] = {}
+    for path, asset in asset_names(registered).items():
+        by_asset.setdefault(asset, path)
+    paths: list[str] = []
+    for asset in asset_candidates(name, registered):
+        path = by_asset.get(asset)
         record = record_at(db, path)
-        if asset not in assets or record is None:
-            continue
-        if isinstance(declared_size, int) and record.get("size") != declared_size:
-            continue
-        if all(
-            str(record.get(field, "")).lower() in values
-            for field, values in declared.items()
+        if path and record is not None and path not in paths and (
+            record_answers_declaration(record, file_entry, declared)
         ):
-            return path
-    return None
+            paths.append(path)
+    return paths
 
 
 def sha1_for_hash(hash_type: str, hash_val: str, db: dict) -> str | None:
@@ -261,22 +245,11 @@ def resolve_file(
 
     # Large files from GitHub release assets: tried when local file is
     # missing OR has a hash mismatch (wrong variant on disk)
-    name = file_entry.get("name", "")
-    if file_entry.get("type") == "directory" or name.endswith("/"):
-        # A tree the collection does not hold is missing, as verify says,
-        # since the asset store holds files, not trees.
-        return (path, status) if path else (None, "not_found")
-    declared = declared_hash_lists(file_entry)
-    if file_entry.get("unsourceable") and not declared:
-        # The asset store is addressed by file name: with no hash to check,
-        # it would hand back the same-named file of another game, which is
-        # exactly what the flag forbids.
-        return (path, status) if path else (None, "not_found")
-    cached = _verified_asset(
-        name, declared, file_entry, run_is_offline(offline),
-    )
-    if cached:
-        return cached, "release_asset"
+    for asset_path in release_asset_paths(file_entry, db):
+        sha1 = sha1_at(db, asset_path) or ""
+        cached = _fetched_asset(asset_path, sha1, file_entry, run_is_offline(offline))
+        if cached:
+            return cached, "release_asset"
 
     # Fall back to hash_mismatch local file if release asset unavailable
     if path:

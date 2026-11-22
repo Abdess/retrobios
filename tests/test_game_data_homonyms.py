@@ -281,42 +281,76 @@ class ReleaseAssetIsNotANameMatch(unittest.TestCase):
 class ReleaseAssetAnswersEveryDeclaredHash(unittest.TestCase):
     """The fallback passed only the first sha1 or md5 to the asset store: an
     entry declaring sha256 or crc32 alone got the same-named asset back
-    unchecked, and one accepting two sha1s lost a cached copy of the second."""
+    unchecked, and one accepting two sha1s lost a cached copy of the second.
+    The asset is chosen on its database record, then its bytes are held to
+    the declaration once fetched."""
 
-    def _resolve(self, entry: dict, cached_bytes: bytes):
+    def _resolve(self, entry: dict, record_bytes: bytes, cached_bytes: bytes):
         import tempfile
         from unittest import mock
 
         from resolve import packfiles as packresolve
 
-        db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_path_suffix": {}}}
+        registered = ["bios/Big/big.bin"]
+        sha1 = hashlib.sha1(record_bytes).hexdigest()
+        db = {
+            "files": {sha1: {
+                "path": registered[0], "name": "big.bin", "size": len(record_bytes),
+                "sha1": sha1, "md5": hashlib.md5(record_bytes).hexdigest(),
+                "sha256": hashlib.sha256(record_bytes).hexdigest(),
+            }},
+            "indexes": {"by_name": {}, "by_md5": {}, "by_path_suffix": {}},
+        }
         with tempfile.TemporaryDirectory() as tmp:
             cached = Path(tmp) / entry["name"]
             cached.write_bytes(cached_bytes)
+            asked: list[tuple[str, str]] = []
 
             def fetch(name, expected_sha1="", expected_md5="", offline=True):
-                digest = hashlib.sha1(cached_bytes).hexdigest()
-                return str(cached) if expected_sha1 in ("", digest) else None
+                asked.append((name, expected_sha1))
+                return str(cached)
 
-            with mock.patch.object(packresolve, "fetch_large_file", side_effect=fetch):
-                path, status = packresolve.resolve_file(entry, db, "bios", {}, offline=True)
+            with (
+                mock.patch("model.largefiles.load_registered_paths", return_value=registered),
+                mock.patch.object(packresolve, "fetch_large_file", side_effect=fetch),
+            ):
+                path, status = packresolve.resolve_file(entry, db, tmp, {}, offline=True)
+            for name, expected in asked:
+                self.assertEqual((name, expected), (registered[0], sha1))
             return (Path(path).name if path else None), status
 
     def test_a_sha256_alone_is_checked(self):
         wanted = hashlib.sha256(b"right").hexdigest()
-        self.assertEqual(
-            self._resolve({"name": "big.bin", "sha256": wanted}, b"wrong"),
-            (None, "not_found"),
-        )
-        self.assertEqual(
-            self._resolve({"name": "big.bin", "sha256": wanted}, b"right"),
-            ("big.bin", "release_asset"),
-        )
+        entry = {"name": "big.bin", "sha256": wanted}
+        self.assertEqual(self._resolve(entry, b"wrong", b"wrong"), (None, "not_found"))
+        self.assertEqual(self._resolve(entry, b"right", b"wrong"), (None, "not_found"))
+        self.assertEqual(self._resolve(entry, b"right", b"right"), ("big.bin", "release_asset"))
 
     def test_the_second_accepted_sha1_is_found(self):
         second = hashlib.sha1(b"second").hexdigest()
         entry = {"name": "big.bin", "sha1": [hashlib.sha1(b"first").hexdigest(), second]}
-        self.assertEqual(self._resolve(entry, b"second"), ("big.bin", "release_asset"))
+        self.assertEqual(
+            self._resolve(entry, b"second", b"second"), ("big.bin", "release_asset"),
+        )
+
+
+class ReleaseAssetSizeIsReadAsTheBuilderReadsIt(unittest.TestCase):
+    """fbneo declares donpachi.zip with an approximate size and no hash. The
+    builder accepted the fetched sample (a size counts only under
+    ``validation: [size]``) while verify refused the record over its exact
+    size and reported the file missing."""
+
+    def test_an_informative_size_rejects_nothing_and_a_validated_one_does(self):
+        from resolve import packfiles as packresolve
+
+        registered = ["bios/Other/fbneo/samples/donpachi.zip"]
+        db = {"files": {"a" * 40: {
+            "path": registered[0], "name": "donpachi.zip", "size": 208549253, "sha1": "a" * 40,
+        }}}
+        entry = {"name": "donpachi.zip", "size": 209000000, "storage": "release"}
+        self.assertEqual(packresolve.release_asset_paths(entry, db, registered), registered)
+        entry["validation"] = ["size"]
+        self.assertEqual(packresolve.release_asset_paths(entry, db, registered), [])
 
 
 class ForeignCopyYieldsToADataDirectory(unittest.TestCase):

@@ -155,15 +155,15 @@ class _EmulatorPack:
     content_ids: dict[str, str | None] = field(default_factory=dict)
 
     def pending(self, entry: dict, local_path: str | None, status: str) -> tuple[str | None, str]:
-        from resolve.packfiles import pending_release_asset, run_is_offline
+        from resolve.packfiles import release_asset_paths, run_is_offline
 
         # Read from disk and the cache, as _resolve_for_platform does: a
         # release asset the cache lacks is fetched by an online build
         # (generate_emulator_pack resolves with offline=offline).
         if status in ("not_found", "hash_mismatch") and not run_is_offline():
-            asset = pending_release_asset(entry, self.db)
-            if asset:
-                return asset, RELEASE_ASSET_PENDING
+            assets = release_asset_paths(entry, self.db)
+            if assets:
+                return assets[0], RELEASE_ASSET_PENDING
         return local_path, status
 
     def content_id(self, path: str | None) -> str | None:

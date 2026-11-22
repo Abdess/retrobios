@@ -326,7 +326,7 @@ class ExtraResolver:
 
     def resolve(self, fe: dict, dest: str) -> tuple[str | None, str, str]:
         """(local copy or None, resolver status, the core's disagreement)."""
-        from resolve.packfiles import pending_release_asset, resolve_file, run_is_offline
+        from resolve.packfiles import release_asset_paths, resolve_file, run_is_offline
         from resolve.validation import core_size_refusal, validated_choice
 
         local_path, status = resolve_file(
@@ -340,9 +340,9 @@ class ExtraResolver:
         ):
             # The asset the online builder fetches in resolve_file. Its record
             # answers the declaration, and there are no bytes on disk to check.
-            asset = pending_release_asset(fe, self.db)
-            if asset:
-                return asset, "release_asset", ""
+            assets = release_asset_paths(fe, self.db)
+            if assets:
+                return assets[0], "release_asset", ""
         if status in ("not_found", "external", "user_provided") or not local_path:
             return None, status, ""
         # The cores reading a moved layout's file are found under the

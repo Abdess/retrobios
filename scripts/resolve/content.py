@@ -322,3 +322,40 @@ def declared_hash_verdict(
     ):
         return "hash_mismatch"
     return "data_dir_hash_exact"
+
+
+def record_answers_declaration(
+    record: dict, file_entry: dict, declared: dict[str, list[str]],
+) -> bool:
+    """Whether a database record carries what declared_hash_verdict asks of the bytes.
+
+    The same rules read without the file: with no hash declared, a size
+    counts only under ``validation: [size]``, an md5 matches by prefix and
+    is skipped beside a zipped_file, a crc32 is bounded by the declared
+    size. What only the bytes tell (the ROM inside a zipped_file, Adler-32,
+    content tests) is left to declared_hash_verdict once they are there.
+    """
+    size = record.get("size")
+    if not declared:
+        return name_match_size_ok(file_entry, size if isinstance(size, int) else None)
+
+    def field(name: str) -> str:
+        return str(record.get(name, "")).lower()
+
+    if "sha1" in declared and field("sha1") not in declared["sha1"]:
+        return False
+    if "sha256" in declared and field("sha256") not in declared["sha256"]:
+        return False
+    if "md5" in declared and not file_entry.get("zipped_file") and not any(
+        field("md5").startswith(expected) for expected in declared["md5"]
+    ):
+        return False
+    if "crc32" in declared:
+        if field("crc32") not in declared["crc32"]:
+            return False
+        declared_size = file_entry.get("size")
+        if declared_size is not None:
+            allowed = declared_size if isinstance(declared_size, list) else [declared_size]
+            if size not in allowed:
+                return False
+    return True

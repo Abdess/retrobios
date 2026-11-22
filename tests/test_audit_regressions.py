@@ -1600,9 +1600,11 @@ class OneBaselineVerdict(unittest.TestCase):
                                    "name": "BIG.PUP", "sha1": sha1}},
                   "indexes": {"by_name": {"BIG.PUP": [sha1]}}}
             entry = {"name": "BIG.PUP", "sha1": sha1, "destination": "BIG.PUP"}
+            # The record's path is a registered release asset.
+            registered = [f"{directory}/absent/BIG.PUP"]
             with mock.patch.object(
                 packresolve, "fetch_large_file", return_value=str(cached)
-            ):
+            ), mock.patch("model.largefiles.load_registered_paths", return_value=registered):
                 found = _resolve_for_platform(
                     entry, "sys", db, {}, None, {"BIG.PUP": "bios/other.bin"},
                     "md5", {},

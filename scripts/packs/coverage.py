@@ -314,7 +314,7 @@ def _resolve_for_platform(
     disk and the large-file cache: verify never downloads. A frontend that
     never reads the bytes takes the filename-free core's own image.
     """
-    from resolve.packfiles import pending_release_asset, resolve_declaration, run_is_offline
+    from resolve.packfiles import release_asset_paths, resolve_declaration, run_is_offline
 
     override = slot_overrides.get(
         declared_destination(file_entry)
@@ -326,9 +326,9 @@ def _resolve_for_platform(
     if status in ("not_found", "hash_mismatch") and not run_is_offline():
         # Not in the cache, and the release holds a copy that answers the
         # declaration: an online build fetches and packs it (resolve_file).
-        asset = pending_release_asset(file_entry, db)
-        if asset:
-            return asset, RELEASE_ASSET_PENDING
+        assets = release_asset_paths(file_entry, db)
+        if assets:
+            return assets[0], RELEASE_ASSET_PENDING
     if status == "not_found" and not reads_file_contents(mode):
         found = agnostic_substitute(file_entry, sys_id, db, platform_profiles)
         if found:
