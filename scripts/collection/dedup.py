@@ -5,10 +5,11 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from collection.clonemap import clone_map_path, read_clone_map, record_clone_map
+from collection.clonemap import record_clone_map
 from collection.duplicates import plan_group_removals, scan_duplicates
 from collection.scan import primary_rank
 from core.sizes import size_text
+from model.database import CloneMapUnreadable, clone_map_path, read_clone_map
 
 
 def _remove_copies(canonical: str, true_dupes_to_remove: list[str], dry_run: bool) -> list[str]:
@@ -110,7 +111,12 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
     Returns dict of {sha1: {"canonical": path, "removed": [paths], "aliases": [names]}}
     """
     clone_path = clone_map_path(bios_dir)
-    previous = read_clone_map(clone_path)
+    # Read before anything is removed: the map is cumulative, and a run that
+    # stopped on an unreadable one after deleting clones would lose them.
+    try:
+        previous = read_clone_map(clone_path)
+    except CloneMapUnreadable as e:
+        raise SystemExit(f"{e} before deduplicating again") from e
 
     sha1_groups = scan_duplicates(bios_dir)
     results: dict[str, dict] = {}

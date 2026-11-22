@@ -3831,6 +3831,20 @@ class GeneratedModelsAreWrittenWhole(unittest.TestCase):
             # Stopped before removing anything.
             self.assertTrue((bios / "Arcade" / "MAME" / "setclone.zip").exists())
 
+    def test_the_pack_side_reads_the_same_bad_map_the_same_way(self):
+        from model import database
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "bios").mkdir()
+            (root / "_mame_clones.json").write_text("<<<<<<< HEAD")
+            with self.assertRaises(database.CloneMapUnreadable) as caught:
+                database.get_mame_clone_map(str(root / "bios"))
+            self.assertIn("Restore it from git", str(caught.exception))
+            (root / "_mame_clones.json").write_text("[]")
+            with self.assertRaises(database.CloneMapUnreadable):
+                database.get_mame_clone_map(str(root / "bios"))
+
 
 class APackNoteBesideItsSlotIsANote(unittest.TestCase):
     """The builder writes INSTRUCTIONS_<name>.txt beside the slot it

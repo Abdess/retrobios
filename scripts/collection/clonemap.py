@@ -1,41 +1,14 @@
-"""The MAME clone map _mame_clones.json: where it lives, reading, merging and writing it."""
+"""Merging and writing the MAME clone map _mame_clones.json."""
 
 from __future__ import annotations
 
 import json
-import os
 
 from core.artifacts import write_text_atomic
 
 
-def clone_map_path(bios_dir: str) -> str:
-    """The clone map beside the scanned tree.
-
-    That is where get_mame_clone_map() reads it for the real layout. A path
-    relative to the working directory let a scan of a fixture tree rewrite
-    the repository's own map.
-    """
-    return os.path.join(os.path.dirname(os.path.abspath(bios_dir)), "_mame_clones.json")
-
-
-def read_clone_map(clone_path: str) -> object:
-    """The clone map an earlier run wrote, {} when there is none."""
-    # Read before anything is removed: the map is cumulative, and a run that
-    # stopped on an unreadable one after deleting clones would lose them.
-    try:
-        with open(clone_path) as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {}
-    except json.JSONDecodeError as e:
-        raise SystemExit(
-            f"{clone_path} is not valid JSON ({e}). Restore it from git "
-            "before deduplicating again"
-        ) from e
-
-
 def record_clone_map(
-    mame_clones: dict[str, dict], previous: object, clone_path: str, dry_run: bool
+    mame_clones: dict[str, dict], previous: dict, clone_path: str, dry_run: bool
 ) -> None:
     """Write the clone map, merged with what earlier runs recorded."""
     # A group is only visible while both copies are on disk, and this run
@@ -43,7 +16,7 @@ def record_clone_map(
     # therefore erases every mapping an earlier run recorded, and the
     # canonical zip stops answering to the names it stands in for. The
     # older entries stay valid: their canonical file is still here.
-    if not dry_run and isinstance(previous, dict):
+    if not dry_run and previous:
         merged = dict(previous)
         merged.update(mame_clones)
         mame_clones = collapse_clone_chains(merged)

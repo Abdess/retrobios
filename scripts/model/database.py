@@ -6,7 +6,7 @@ import json
 import os
 from pathlib import Path
 
-from core.cli import InputMissing
+from core.cli import InputMissing, SourceUnreadable
 from core.hashing import cut_md5_owner
 from core.memo import DerivedView
 from core.paths import DB_FILE, REPO_ROOT
@@ -129,6 +129,38 @@ def record_for_hash(db: dict, kind: str, value: object) -> str | None:
 _mame_clone_map_cache: dict[str, dict[str, str]] = {}
 
 
+class CloneMapUnreadable(SourceUnreadable):
+    """_mame_clones.json exists but is not a JSON object."""
+
+
+def clone_map_path(bios_dir: str) -> str:
+    """The clone map beside the scanned tree.
+
+    dedup writes it there and get_mame_clone_map() reads it there. A path
+    relative to the working directory let a scan of a fixture tree rewrite
+    the repository's own map.
+    """
+    return os.path.join(os.path.dirname(os.path.abspath(bios_dir)), "_mame_clones.json")
+
+
+def read_clone_map(clone_path: str) -> dict:
+    """The {canonical: {clones, ...}} map an earlier run wrote, {} when there is none."""
+    try:
+        with open(clone_path) as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        return {}
+    except json.JSONDecodeError as e:
+        raise CloneMapUnreadable(
+            f"{clone_path} is not valid JSON ({e}). Restore it from git"
+        ) from e
+    if not isinstance(data, dict):
+        raise CloneMapUnreadable(
+            f"{clone_path} is not a JSON object. Restore it from git"
+        )
+    return data
+
+
 def get_mame_clone_map(bios_dir: str | None = None) -> dict[str, str]:
     """The MAME clone map (clone_name -> canonical_name) of a scanned tree.
 
@@ -138,19 +170,15 @@ def get_mame_clone_map(bios_dir: str | None = None) -> dict[str, str]:
     fell out of its packs. Without a tree the repository's own is read.
     """
     if bios_dir is None:
-        bios_dir = os.path.join(
-            REPO_ROOT, "bios"
-        )
-    clone_path = os.path.join(os.path.dirname(os.path.abspath(bios_dir)), "_mame_clones.json")
+        bios_dir = os.path.join(REPO_ROOT, "bios")
+    clone_path = clone_map_path(bios_dir)
     cached = _mame_clone_map_cache.get(clone_path)
     if cached is not None:
         return cached
-    clone_map: dict[str, str] = {}
-    if os.path.exists(clone_path):
-        with open(clone_path) as f:
-            data = json.load(f)
-        for canonical, info in data.items():
-            for clone in info.get("clones", []):
-                clone_map[clone] = canonical
+    clone_map = {
+        clone: canonical
+        for canonical, info in read_clone_map(clone_path).items()
+        for clone in info.get("clones", [])
+    }
     _mame_clone_map_cache[clone_path] = clone_map
     return clone_map

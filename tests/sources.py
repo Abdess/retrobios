@@ -48,7 +48,7 @@ COMMANDS = {
     "region_audit.py": ("resolve/regionaudit.py",),
     "dedup.py": (
         "model/nodedup.py", "collection/dedup.py", "collection/duplicates.py",
-        "collection/clonemap.py",
+        "collection/clonemap.py", "model/database.py",
     ),
     "release_record.py": ("model/releaserecord.py", "release/record.py"),
     "release_notes.py": ("release/notes.py",),
