@@ -114,17 +114,20 @@ class TheOneLinerFollowsTheRegistry(unittest.TestCase):
         self.assertIn("--romm-firmware", text)
 
     def test_the_commands_are_written_once(self):
-        """The address comes from install_base in platforms/_guides.yml, the
-        one the site's commands use."""
-        from model.guides import install_ps1, install_sh
+        """The address comes from install_base in platforms/_guides.yml, and
+        the one-liner from install_command, the ones the site's commands use."""
+        from model.guides import install_command
 
         source = (REPO_ROOT / "scripts" / "packs" / "readme.py").read_text(encoding="utf-8")
-        self.assertNotIn("raw.githubusercontent.com", source)
-        self.assertNotIn("abdess.github.io", source)
+        for spelled in ("raw.githubusercontent.com", "abdess.github.io", "curl -fsSL",
+                        "scriptblock", "| iex"):
+            self.assertNotIn(spelled, source)
         text = build_readme("retroarch", "RetroArch", "system", 1, 1,
                             detect=[{"os": "linux"}, {"os": "windows"}])
-        self.assertIn(install_sh(), text)
-        self.assertIn(install_ps1(), text)
+        self.assertIn(install_command("sh"), text)
+        self.assertIn(install_command("powershell"), text)
+        self.assertIn(install_command(
+            "powershell", "--platform retroarch --from-pack C:\\path\\to\\pack.zip"), text)
 
 
 class GuidesInstallFromTheZipInHand(unittest.TestCase):

@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, TypedDict
 
 from core.options import reject_unknown
 from model.region import label as region_label
-from model.guides import install_ps1, install_sh, pack_manual
+from model.guides import install_command, pack_manual
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack
@@ -32,10 +32,10 @@ def _from_pack(platform_name: str, posix: bool, windows: bool,
     lines = ["  Already have this ZIP? Add --from-pack and its path: the files",
              "  come from it, not from the network. For a pack in parts, name one part.", ""]
     if posix:
-        lines.append(f"    curl -fsSL {install_sh()} | sh -s -- {args} /path/to/pack.zip{dest[0]}")
+        lines.append(f"    {install_command('sh', f'{args} /path/to/pack.zip{dest[0]}')}")
     if windows:
-        lines.append(f"    &([scriptblock]::Create((irm {install_ps1()}))) {args} C:\\path\\to\\pack.zip"
-                     f"{dest[1]}")
+        pack = f"{args} C:\\path\\to\\pack.zip{dest[1]}"
+        lines.append(f"    {install_command('powershell', pack)}")
     return [*lines, ""]
 
 
@@ -45,14 +45,15 @@ def _card_section(platform_name: str, display: str) -> str:
     The installer runs on the computer the card is mounted on, and the card
     root is named: no folder on that computer is one the frontend reads.
     """
+    card_ps1 = f"--platform {platform_name} --dest E:\\"
     return (
         "  Option A: Automatic (recommended)\n"
         "  ---------------------------------\n"
         "  With the SD card mounted on a computer, name its root with --dest.\n"
         "  Linux and macOS: run this in a terminal:\n\n"
-        f"    curl -fsSL {install_sh()} | sh -s -- --platform {platform_name} --dest /path/to/card\n\n"
+        f"    {install_command('sh', f'--platform {platform_name} --dest /path/to/card')}\n\n"
         "  Windows: run this in PowerShell (E: being the card):\n\n"
-        f"    &([scriptblock]::Create((irm {install_ps1()}))) --platform {platform_name} --dest E:\\\n\n"
+        f"    {install_command('powershell', card_ps1)}\n\n"
         f"  The installer writes each file where {display} hands it to the core\n"
         "  and checks every file.\n\n"
         + "\n".join(_from_pack(platform_name, True, True, (" --dest /path/to/card", " --dest E:\\")))
@@ -100,9 +101,9 @@ def _automatic_section(
         else:
             labels = {"linux": "Linux", "darwin": "macOS"}
             where = f"{' and '.join(labels[name] for name in posix)}: run this in a terminal:"
-        lines += [f"  {where}", "", f"    curl -fsSL {install_sh()} | sh", ""]
+        lines += [f"  {where}", "", f"    {install_command('sh')}", ""]
     if "windows" in systems:
-        lines += ["  Windows: run this in PowerShell:", "", f"    irm {install_ps1()} | iex", ""]
+        lines += ["  Windows: run this in PowerShell:", "", f"    {install_command('powershell')}", ""]
     lines += [
         f"  The installer finds the {display} BIOS folder on this machine and",
         "  installs there, checking every file. --dest names another folder.",
@@ -119,9 +120,9 @@ def _automatic_section(
             "",
         ]
         if posix:
-            lines.append(f"    curl -fsSL {install_sh()} | sh -s -- --standalone-copies")
+            lines.append(f"    {install_command('sh', '--standalone-copies')}")
         if "windows" in systems:
-            lines.append(f"    &([scriptblock]::Create((irm {install_ps1()}))) --standalone-copies")
+            lines.append(f"    {install_command('powershell', '--standalone-copies')}")
         lines.append("")
     return "\n".join(lines) + "\n"
 
