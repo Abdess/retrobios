@@ -209,7 +209,7 @@ def space_remedy(short: int, plat: str, hint: Invocation | None, commands: bool 
                  card: bool = False, screen: bool = False, refused: bool = False) -> list[str]:
     """What makes room for a run its drive cannot hold, the one remedy of the
     plan and of the run's refusal (refused): on a card setup's own card, room
-    made there, another folder being one its system does not read; on the
+    made there, another folder being one its system does not read, and on the
     screen, its folder row. Line mode has no folder row, so it and the
     refusal name --dest, as the command once the platform is named. A second
     line is that command."""

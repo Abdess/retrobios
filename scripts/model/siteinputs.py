@@ -19,7 +19,7 @@ class SiteInputs:
     db: Path = REPO_ROOT / "database.json"
     emulators: Path = REPO_ROOT / "emulators"
     platforms: Path = REPO_ROOT / "platforms"
-    # The install manifests; None places them beside the database.
+    # The install manifests, or None to place them beside the database.
     manifests: Path | None = None
 
 

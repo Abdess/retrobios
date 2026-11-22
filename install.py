@@ -2691,7 +2691,7 @@ class MovedFolders:
     retrodeck.json paths.<folder>_path (config/retrodeck/retrodeck.json:3-23),
     and its manifest places files under bios/ and roms/ of the home folder.
     A root is looked up on first use, so a run given --dest that never
-    detects places files where a detecting run does; detection only fills
+    detects places files where a detecting run does. Detection only fills
     the cache ahead.
     """
 
@@ -21004,7 +21004,7 @@ def space_remedy(short: int, plat: str, hint: Invocation | None, commands: bool 
                  card: bool = False, screen: bool = False, refused: bool = False) -> list[str]:
     """What makes room for a run its drive cannot hold, the one remedy of the
     plan and of the run's refusal (refused): on a card setup's own card, room
-    made there, another folder being one its system does not read; on the
+    made there, another folder being one its system does not read, and on the
     screen, its folder row. Line mode has no folder row, so it and the
     refusal name --dest, as the command once the platform is named. A second
     line is that command."""

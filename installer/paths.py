@@ -180,7 +180,7 @@ class MovedFolders:
     retrodeck.json paths.<folder>_path (config/retrodeck/retrodeck.json:3-23),
     and its manifest places files under bios/ and roms/ of the home folder.
     A root is looked up on first use, so a run given --dest that never
-    detects places files where a detecting run does; detection only fills
+    detects places files where a detecting run does. Detection only fills
     the cache ahead.
     """
 
