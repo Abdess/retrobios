@@ -31,7 +31,8 @@ from pathlib import Path
 from unittest import mock
 
 from packs import parts as packs_parts
-from release import packfetch, packgroups, packinfo, transfer
+from release import latest, packfetch, packgroups, packinfo, transfer
+from release.downloaderror import DownloadError
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -522,6 +523,71 @@ class TestDownloadPython(DownloaderCase):
         self.assertIn("RETROBIOS_API", proc.stderr)
 
 
+    def test_a_missing_release_is_reported_on_stderr(self):
+        """The 404 message went to stdout, where a script reads platform names."""
+        self.server.index.unlink()
+        proc = self.run_cli("--list", expect_success=False)
+        self.assertEqual(proc.returncode, 1)
+        self.assertEqual(proc.stdout, "")
+        self.assertEqual(
+            proc.stderr,
+            "No releases found. The repository may not have any releases yet.\n",
+        )
+
+
+class TestDownloadLibrary(DownloaderCase):
+    """The release modules raise DownloadError and leave printing to the command."""
+
+    def fetch(self) -> tuple[list[Path], list[str]]:
+        release = latest.get_latest_release(self.server.base)
+        pack = packgroups.find_pack(release, self.platform)
+        assert pack is not None
+        lines: list[str] = []
+        staging = packfetch.make_staging(self.tmpdir)
+        with contextlib.redirect_stdout(io.StringIO()):
+            archives = packfetch.fetch_pack(
+                pack, staging, packfetch.fetch_checksums(release), lines.append
+            )
+        return archives, lines
+
+    def test_progress_lines_go_to_the_callback(self):
+        archives, lines = self.fetch()
+        self.assertEqual(len(archives), 1)
+        self.assertIn(f"Checking {self.pack_name}...", lines)
+        self.assertTrue(any(line.startswith("Downloading ") for line in lines))
+
+    def test_a_checksum_mismatch_raises(self):
+        self.server.corrupt_last_volume()
+        with self.assertRaises(DownloadError) as raised:
+            self.fetch()
+        self.assertIn("checksum mismatch", str(raised.exception))
+
+    def test_a_missing_release_raises(self):
+        self.server.index.unlink()
+        with self.assertRaises(DownloadError) as raised:
+            latest.get_latest_release(self.server.base)
+        self.assertIn("No releases found", str(raised.exception))
+
+    def test_a_plain_http_url_raises(self):
+        with self.assertRaises(DownloadError) as raised:
+            latest.checked_url("http://api.example.com/", "RETROBIOS_API")
+        self.assertEqual(
+            str(raised.exception),
+            "Error: RETROBIOS_API must use HTTPS, got 'http://api.example.com/'",
+        )
+        self.assertEqual(latest.checked_url("https://a.example/", "x"), "https://a.example")
+
+    def test_importing_the_library_ignores_the_endpoint_variable(self):
+        """A stray RETROBIOS_API ended any process importing release.transfer."""
+        env = dict(os.environ, RETROBIOS_API="http://api.example.com")
+        proc = subprocess.run(
+            ["python3", "-c", "from release import packfetch, transfer; print('imported')"],
+            cwd=REPO_ROOT / "scripts", env=env, capture_output=True, text=True,
+            timeout=60, check=False,
+        )
+        self.assertEqual((proc.returncode, proc.stdout), (0, "imported\n"), proc.stderr)
+
+
 @unittest.skipUnless(
     shutil.which("curl") and shutil.which("unzip"), "curl and unzip required"
 )
@@ -672,6 +738,19 @@ class TestZipPartsPython(ZipPartsTests, ZipPartsCase, TestDownloadPython):
 
 class TestZipPartsShell(ZipPartsTests, ZipPartsCase, TestDownloadShell):
     pass
+
+
+class TestZipPartsLibrary(ZipPartsCase, TestDownloadLibrary):
+    def test_progress_lines_go_to_the_callback(self):
+        archives, lines = self.fetch()
+        self.assertEqual(len(archives), 2)
+        self.assertTrue(any(line.startswith("Checking ") for line in lines))
+
+    def test_a_short_part_list_raises(self):
+        self.server.unlist_last_part()
+        with self.assertRaises(DownloadError) as raised:
+            self.fetch()
+        self.assertIn("lists 1 of 2 parts", str(raised.exception))
 
 
 

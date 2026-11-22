@@ -147,7 +147,7 @@ COMMANDS = {
     ),
     "download.py": (
         "release/latest.py", "release/packgroups.py", "release/transfer.py", "release/packfetch.py",
-        "release/packinfo.py",
+        "release/packinfo.py", "release/downloaderror.py",
     ),
     "cleanup_disk.py": ("devtools/diskcleanup.py",),
     "migrate.py": ("devtools/biosclassify.py", "devtools/biosmigrate.py"),
