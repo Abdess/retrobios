@@ -505,6 +505,8 @@ class _PlatformPackBuild:
     case_twins: list[str] = field(default_factory=list)
     # (registry key, cache path) of each data directory the cache lacks.
     uncached: list[tuple[str, str]] = field(default_factory=list)
+    # The archive path of each member taken from a data directory.
+    trees: list[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         self.placed = Placed(self.plan.case_insensitive)
@@ -919,10 +921,12 @@ class _PlatformPackBuild:
             core_trees=core_trees, uncached_out=uncached,
             installed=installed_data_refs_in(plan.platform_name, plan.emu_profiles or {}),
         ):
+            arcname = self._flat(full)
             # The installer writes a data tree member without the bit.
-            add_pack_member(self.zf, src, self._flat(full), executable=False)
+            add_pack_member(self.zf, src, arcname, executable=False)
+            self.trees.append(arcname)
             if isinstance(self.zf, PackRecord):
-                self.zf.trees.append(self._flat(full))
+                self.zf.trees.append(arcname)
             added += 1
         self.uncached.extend(uncached)
         if plan.opts.uncached_out is not None:
@@ -1095,7 +1099,9 @@ def build_platform_pack(
         build = _PlatformPackBuild(plan, zf, declarations, resolve_extra)
         build.run()
     if opts.counts is not None:
-        opts.counts.append(pack_counts(plan.zip_path, build.file_status, build.core_count))
+        opts.counts.append(
+            pack_counts(plan.zip_path, build.file_status, build.core_count, build.trees)
+        )
     return build.outcome()
 
 

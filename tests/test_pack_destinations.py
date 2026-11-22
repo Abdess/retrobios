@@ -291,12 +291,14 @@ class ThePipelineComparesPaths(unittest.TestCase):
         self.addCleanup(shutil.rmtree, root, True)
         zip_path = root / "Plat_BIOS_Pack.zip"
         with zipfile.ZipFile(zip_path, "w") as zf:
-            for name in ("a.bin", "b.bin", "README.txt", "INSTRUCTIONS_x.bin.txt"):
+            for name in ("a.bin", "b.bin", "README.txt", "INSTRUCTIONS_x.bin.txt", "tree/t.dat"):
                 zf.writestr(name, name)
         counts = root / "counts.json"
+        # The build records its tree members: set aside, never recomputed.
         counts.write_text(json.dumps([{
             "label": "plat", "platforms": ["plat"], "archive": str(zip_path),
             "ok": 2, "total": 2, "core_files": 0, "unsafe_excluded": 0,
+            "trees": ["tree/t.dat"],
         }]))
         for credited, expected in ((["a.bin", "b.bin"], True), (["a.bin", "c.bin"], False)):
             with self.subTest(credited=credited):
@@ -305,13 +307,8 @@ class ThePipelineComparesPaths(unittest.TestCase):
                     {"plat": {"platform": "plat", "label": "Plat", "ok": 2, "total": 2,
                               "core_files": 0, "pack_destinations": credited}}
                 ))
-                previous = os.getcwd()
-                os.chdir(REPO_ROOT)
-                try:
-                    with mock_tree_members(), contextlib.redirect_stdout(io.StringIO()) as out:
-                        ok = check_pack_destinations(str(destinations), str(counts))
-                finally:
-                    os.chdir(previous)
+                with contextlib.redirect_stdout(io.StringIO()) as out:
+                    ok = check_pack_destinations(str(destinations), str(counts))
                 self.assertIs(ok, expected, out.getvalue())
                 if not expected:
                     self.assertIn("verify only 1: c.bin", out.getvalue())
@@ -325,18 +322,6 @@ class ThePipelineComparesPaths(unittest.TestCase):
         self.assertIn("ok = check_emulator_packs(full=args.full_narrowings) and ok", source)
         self.assertIn('"--destinations", destinations_file', source)
         self.assertIn('"--counts",\n        counts_file,', source)
-
-
-@contextlib.contextmanager
-def mock_tree_members():
-    from orchestrate import compare
-
-    original = compare.tree_members
-    compare.tree_members = lambda *_args: {}
-    try:
-        yield
-    finally:
-        compare.tree_members = original
 
 
 class EveryEmulatorPackMatchesItsReport(unittest.TestCase):

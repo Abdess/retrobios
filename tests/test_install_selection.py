@@ -1437,26 +1437,29 @@ class ANativeNameSelectsOneSetEverywhere(unittest.TestCase):
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
             raise unittest.SkipTest("database.json is not built")
-        from orchestrate import compare
         from model.profiles import load_emulator_profiles
 
-        cls.compare = compare
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
         cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
 
-    def _packed(self, platform: str, systems: list[str]) -> set[str]:
+    def _packed(self, platform: str, systems: list[str]) -> tuple[set[str], set[str]]:
+        """The pack's members and those the build took from data directories."""
         import zipfile
 
+        from packs.packcounts import PackCounts
+
+        counts: list[PackCounts] = []
         with tempfile.TemporaryDirectory() as out:
             zip_path = platformpack.build_platform_pack(
                 platform, str(REPO_ROOT / "platforms"), self.db,
                 str(REPO_ROOT / "bios"), out,
                 emulators_dir=str(REPO_ROOT / "emulators"),
                 emu_profiles=self.profiles, system_filter=systems, offline=True,
+                counts=counts,
             ).zip_path
             with zipfile.ZipFile(zip_path) as zf:
-                infos = [i for i in zf.infolist() if not i.is_dir()]
-        return {i.filename: i.file_size for i in infos}
+                names = {i.filename for i in zf.infolist() if not i.is_dir()}
+        return names, set(counts[0].trees)
 
     def test_pack_verify_and_installer_agree(self):
         from model.platforms import load_platform_config
@@ -1477,12 +1480,10 @@ class ANativeNameSelectsOneSetEverywhere(unittest.TestCase):
                 )
                 self.assertEqual(report["systems"], [system_id])
                 credited = set(report["pack_destinations"])
-                trees = self.compare.tree_members(platform, str(REPO_ROOT / "platforms"))
-                members = self._packed(platform, chosen)
+                members, trees = self._packed(platform, chosen)
                 written = {
-                    name for name, size in members.items()
-                    if not is_pack_note(name)
-                    and not (trees.get(name) == size and name not in credited)
+                    name for name in members
+                    if not is_pack_note(name) and name not in trees - credited
                 }
                 self.assertTrue(written)
                 self.assertEqual(credited, written)

@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from core.paths import PLATFORMS_DIR
 from orchestrate import compare
 from orchestrate.labels import STEP_LABELS, step_title
 from packs.archive import is_pack_note
@@ -101,15 +100,13 @@ def check_consistency(
     return all_ok
 
 
-def check_pack_destinations(
-    destinations_file: str, counts_file: str, platforms_dir: str = PLATFORMS_DIR,
-) -> bool:
+def check_pack_destinations(destinations_file: str, counts_file: str) -> bool:
     """Compare the paths verify credits with the members of each archive.
 
     Equal counts hid a file credited on one side and another written on the
-    other. The trees and the notes are the archive's own: a tree member is
-    set aside when its path and size are the cached file's and verify does
-    not credit the path.
+    other. The trees and the notes are the archive's own: a member the
+    build recorded as taken from a data directory is set aside when verify
+    does not credit its path.
     """
     import zipfile
 
@@ -131,16 +128,13 @@ def check_pack_destinations(
             continue
         entry = credited_by[names[0]]
         credited = set(entry["pack_destinations"])
-        trees = compare.tree_members(entry["platform"], platforms_dir)
+        trees = set(pack["trees"]) - credited
         with zipfile.ZipFile(pack["archive"]) as zf:
             written = {
                 info.filename for info in zf.infolist()
                 if not info.is_dir()
                 and not is_pack_note(info.filename)
-                and not (
-                    trees.get(info.filename) == info.file_size
-                    and info.filename not in credited
-                )
+                and info.filename not in trees
             }
         lines = compare.set_difference_lines(label, credited, written)
         if lines:

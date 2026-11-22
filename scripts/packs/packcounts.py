@@ -14,7 +14,8 @@ class PackCounts:
     ``ok`` and ``total`` are the platform's declared files judged in the
     pack's verification mode, ``core_files`` what the pack takes from the
     cores' profiles, and ``unsafe_excluded`` the files left out because the
-    frontend would reject their hash.
+    frontend would reject their hash. ``trees`` names the archive members the
+    build took from its data directories, which verify does not credit.
     """
 
     archive: str
@@ -22,10 +23,13 @@ class PackCounts:
     total: int
     core_files: int
     unsafe_excluded: int
+    trees: tuple[str, ...]
 
 
-def pack_counts(archive: str, file_status: dict[str, str], core_files: int) -> PackCounts:
-    """A pack's counts from the verdict of each declared file."""
+def pack_counts(
+    archive: str, file_status: dict[str, str], core_files: int, trees: list[str],
+) -> PackCounts:
+    """A pack's counts from the verdict of each declared file and its tree members."""
     statuses = list(file_status.values())
     return PackCounts(
         archive=archive,
@@ -33,6 +37,7 @@ def pack_counts(archive: str, file_status: dict[str, str], core_files: int) -> P
         total=len(statuses),
         core_files=core_files,
         unsafe_excluded=statuses.count("excluded"),
+        trees=tuple(trees),
     )
 
 

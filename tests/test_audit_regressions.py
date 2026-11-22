@@ -1207,7 +1207,7 @@ class PipelineRegressions(unittest.TestCase):
         """One full pack as generate_pack.py --counts records it."""
         return {"label": label, "platforms": [label.lower().replace(" ", "")],
                 "archive": "pack.zip", "ok": ok, "total": total,
-                "core_files": core_files, "unsafe_excluded": unsafe_excluded}
+                "core_files": core_files, "unsafe_excluded": unsafe_excluded, "trees": []}
 
     def test_missing_pack_is_a_consistency_failure(self):
         verify = self._verified("RetroArch", 2, 2)

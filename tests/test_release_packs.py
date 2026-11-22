@@ -180,7 +180,7 @@ class APlatformWithoutAPackFailsNoCheck(unittest.TestCase):
     }
     PACKS = [{"label": "retroarch", "platforms": ["retroarch"],
               "archive": "dist/RetroArch_BIOS_Pack.zip", "ok": 10, "total": 10,
-              "core_files": 0, "unsafe_excluded": 0}]
+              "core_files": 0, "unsafe_excluded": 0, "trees": []}]
 
     def test_the_consistency_step_skips_a_setup_served_by_the_installer(self):
         from orchestrate.consistency import compare_counts
