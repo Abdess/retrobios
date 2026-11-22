@@ -298,33 +298,40 @@ def _listed_directories(
     return frozenset(found) if listed else None
 
 
+def pinned_sources(profiles: dict) -> list[tuple[upstream.Repo, str, frozenset[str]]]:
+    """Each tree source-paths.json records, as (repo, pin, paths to look up):
+    every tree a profile citing a path pins, then the platform build files
+    `pin_build` names, linked from a page too."""
+    found: list[tuple[upstream.Repo, str, frozenset[str]]] = []
+    for _name, profile in sorted(profiles.items()):
+        paths = frozenset(cited_paths(profile))
+        if paths:
+            found.extend((repo, pin, paths) for repo, pin in profile_trees(profile))
+        found.extend((repo, pin, frozenset({path})) for repo, pin, path in build_files(profile))
+    return found
+
+
+def pinned_trees(profiles: dict) -> set[str]:
+    """The tree keys source-paths.json records, read or not."""
+    return {tree_key(repo, pin) for repo, pin, _paths in pinned_sources(profiles)}
+
+
 def build_source_paths(
     profiles: dict, cache_dirs: list[Path], fetch: bool = False,
 ) -> tuple[dict[str, list[str]], list[str]]:
     """The cited paths each cached tree holds, and the trees not cached."""
     held: dict[str, set[str]] = {}
     unread: set[str] = set()
-    for _name, profile in sorted(profiles.items()):
-        paths = cited_paths(profile)
-        if not paths:
+    for repo, pin, paths in pinned_sources(profiles):
+        tree = _cached_tree(repo, pin, cache_dirs, fetch)
+        if tree is None:
+            tree = _listed_directories(repo, pin, set(paths), cache_dirs, fetch)
+        if tree is None:
+            unread.add(tree_key(repo, pin))
             continue
-        for repo, pin in profile_trees(profile):
-            tree = _cached_tree(repo, pin, cache_dirs, fetch)
-            if tree is None:
-                tree = _listed_directories(repo, pin, paths, cache_dirs, fetch)
-            if tree is None:
-                unread.add(tree_key(repo, pin))
-                continue
-            # Recorded even when it holds no cited path, so a pinned tree
-            # missing from the record is one no run has read.
-            held.setdefault(tree_key(repo, pin), set()).update(paths & tree)
-        for repo, pin, path in build_files(profile):
-            tree = (_cached_tree(repo, pin, cache_dirs, fetch)
-                    or _listed_directories(repo, pin, {path}, cache_dirs, fetch))
-            if tree is None:
-                unread.add(tree_key(repo, pin))
-                continue
-            held.setdefault(tree_key(repo, pin), set()).update({path} & tree)
+        # Recorded even when it holds no cited path, so a pinned tree
+        # missing from the record is one no run has read.
+        held.setdefault(tree_key(repo, pin), set()).update(paths & tree)
     return {key: sorted(paths) for key, paths in sorted(held.items())}, sorted(unread)
 
 

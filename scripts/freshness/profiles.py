@@ -18,16 +18,7 @@ def check_source_paths(profiles: dict) -> Finding:
     tries is recorded, read or not, so a lacking one was never tried."""
     from sitegen import sources as sitegen_sources
 
-    pinned = {
-        sitegen_sources.tree_key(repo, pin)
-        for profile in profiles.values() if sitegen_sources.cited_paths(profile)
-        for repo, pin in sitegen_sources.profile_trees(profile)
-    } | {
-        # The platform build files pin_build names, linked from a page too.
-        sitegen_sources.tree_key(repo, pin)
-        for profile in profiles.values()
-        for repo, pin, _path in sitegen_sources.build_files(profile)
-    }
+    pinned = sitegen_sources.pinned_trees(profiles)
     try:
         recorded = set(json.loads(sitegen_sources.SOURCE_PATHS.read_text(encoding="utf-8")))
     except (OSError, ValueError) as exc:
