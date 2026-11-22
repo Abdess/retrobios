@@ -149,10 +149,11 @@ class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
         def record(*_a, **kw):
             if kw.get("system_filter"):
                 asked.append(kw["system_filter"])
-            return
+            return platformpack.PlatformPackOutcome(zip_path=None)
 
         with tempfile.TemporaryDirectory() as out, \
-                mock.patch.object(platformpack, "generate_pack", record), \
+                mock.patch.object(platformpack, "build_platform_pack", record), \
+                mock.patch.object(platformpack, "print_split_packs"), \
                 mock.patch.object(platformpack, "collect_emulator_extras", return_value=[]), \
                 mock.patch.object(manifest, "collect_emulator_extras", return_value=[]):
             packs_platformpack.generate_split_packs(

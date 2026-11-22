@@ -26,7 +26,7 @@ import yaml
 
 from model.profiles import emulator_profiles_cache
 from model.platforms import load_platform_config
-from packs.platformpack import generate_pack
+from packs.platformpack import build_platform_pack, generate_pack
 from packs.coverage import verify_platform
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -83,11 +83,10 @@ class ACoreFileFillsAFreeDeclaration(unittest.TestCase):
             self.config, self.db, str(self.emulators),
         )
         out = self.root / "out"
-        with redirect_stdout(io.StringIO()):
-            zip_path = generate_pack(
-                "fakeplat", str(self.platforms), self.db, str(self.root / "bios"),
-                str(out), emulators_dir=str(self.emulators), offline=True,
-            )
+        zip_path = build_platform_pack(
+            "fakeplat", str(self.platforms), self.db, str(self.root / "bios"),
+            str(out), emulators_dir=str(self.emulators), offline=True,
+        ).zip_path
         with zipfile.ZipFile(zip_path) as zf:
             self.assertIn("zzz_absent.bin", zf.namelist())
         self.assertEqual(result["status_counts"], {"ok": 1})
@@ -133,11 +132,10 @@ class AFileDeclaredUnderAnotherName(unittest.TestCase):
         }))
         config = load_platform_config("fakeplat", str(root / "platforms"))
         result = verify_platform(config, db, str(root / "emulators"))
-        with redirect_stdout(io.StringIO()):
-            zip_path = generate_pack(
-                "fakeplat", str(root / "platforms"), db, str(root / "bios"),
-                str(root / "out"), emulators_dir=str(root / "emulators"), offline=True,
-            )
+        zip_path = build_platform_pack(
+            "fakeplat", str(root / "platforms"), db, str(root / "bios"),
+            str(root / "out"), emulators_dir=str(root / "emulators"), offline=True,
+        ).zip_path
         with zipfile.ZipFile(zip_path) as zf:
             self.assertIn("gs/ROM", zf.namelist())
         reported = [(u["name"], u["in_repo"]) for u in result["undeclared_files"]]

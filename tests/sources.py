@@ -17,7 +17,8 @@ SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 COMMANDS = {
     "generate_pack.py": (
         "packs/archive.py", "packs/naming.py", "packs/scope.py", "packs/datatrees.py",
-        "packs/platformpack.py", "packs/emulatorpack.py", "packs/md5pack.py", "packs/targets.py",
+        "packs/platformpack.py", "packs/platformreport.py", "packs/emulatorpack.py",
+        "packs/md5pack.py", "packs/targets.py",
         "packs/manifestentry.py", "packs/manifestcores.py", "packs/standalone.py",
         "packs/manifest.py", "packs/finalize.py", "packs/outputdir.py", "packs/variants.py",
         "packs/manifestrun.py", "packs/packcheck.py", "packs/runscope.py", "packs/platformrun.py",

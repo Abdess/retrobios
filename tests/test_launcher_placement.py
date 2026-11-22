@@ -27,7 +27,7 @@ from model.profiles import emulator_profiles_cache, load_emulator_profiles
 from model.platforms import load_platform_config
 from resolve.standalone import platform_layouts, standalone_set
 from packs.manifest import generate_manifest
-from packs.platformpack import generate_pack
+from packs.platformpack import build_platform_pack
 from packs.coverage import verify_platform
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -94,12 +94,11 @@ class ALinkMovesTheDestination(unittest.TestCase):
         }))
 
     def pack_names(self, platform: str, name: str = "kick13.rom") -> list[str]:
-        with redirect_stdout(io.StringIO()):
-            zip_path = generate_pack(
-                platform, str(self.platforms), self.db, str(self.root / "bios"),
-                str(self.root / "out" / platform), emulators_dir=str(self.emulators),
-                offline=True,
-            )
+        zip_path = build_platform_pack(
+            platform, str(self.platforms), self.db, str(self.root / "bios"),
+            str(self.root / "out" / platform), emulators_dir=str(self.emulators),
+            offline=True,
+        ).zip_path
         with zipfile.ZipFile(zip_path) as zf:
             return [n for n in zf.namelist() if n.rsplit("/", 1)[-1] == name]
 
@@ -387,12 +386,11 @@ class AProgramRunFromItsFolder(unittest.TestCase):
         }))
 
     def pack(self, platform: str) -> list[str]:
-        with redirect_stdout(io.StringIO()):
-            zip_path = generate_pack(
-                platform, str(self.platforms), self.db, str(self.root / "bios"),
-                str(self.root / "out" / platform), emulators_dir=str(self.emulators),
-                offline=True,
-            )
+        zip_path = build_platform_pack(
+            platform, str(self.platforms), self.db, str(self.root / "bios"),
+            str(self.root / "out" / platform), emulators_dir=str(self.emulators),
+            offline=True,
+        ).zip_path
         with zipfile.ZipFile(zip_path) as zf:
             return sorted(n for n in zf.namelist() if n.split("/")[-1].startswith("prog"))
 
@@ -626,12 +624,11 @@ class ASettingSetsTheBiosFolder(unittest.TestCase):
         }))
 
     def pack_names(self, platform: str) -> list[str]:
-        with redirect_stdout(io.StringIO()):
-            zip_path = generate_pack(
-                platform, str(self.platforms), self.db, str(self.root / "bios"),
-                str(self.root / "out" / platform), emulators_dir=str(self.emulators),
-                offline=True,
-            )
+        zip_path = build_platform_pack(
+            platform, str(self.platforms), self.db, str(self.root / "bios"),
+            str(self.root / "out" / platform), emulators_dir=str(self.emulators),
+            offline=True,
+        ).zip_path
         with zipfile.ZipFile(zip_path) as zf:
             return sorted(n for n in zf.namelist() if n.endswith((".bin", ".zip")))
 

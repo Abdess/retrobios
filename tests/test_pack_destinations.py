@@ -64,7 +64,7 @@ class _Fixture(unittest.TestCase):
     def _both(self) -> tuple[dict, set[str]]:
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
-        from packs.platformpack import generate_pack
+        from packs.platformpack import build_platform_pack
         from packs.coverage import verify_platform
 
         profiles = load_emulator_profiles(str(self.emulators))
@@ -72,12 +72,11 @@ class _Fixture(unittest.TestCase):
             load_platform_config("paths", str(self.platforms)), self.db,
             str(self.emulators), profiles,
         )
-        with contextlib.redirect_stdout(io.StringIO()):
-            zip_path = generate_pack(
-                "paths", str(self.platforms), self.db, str(self.bios),
-                str(self.root / "out"), emulators_dir=str(self.emulators),
-                emu_profiles=profiles, offline=True,
-            )
+        zip_path = build_platform_pack(
+            "paths", str(self.platforms), self.db, str(self.bios),
+            str(self.root / "out"), emulators_dir=str(self.emulators),
+            emu_profiles=profiles, offline=True,
+        ).zip_path
         with zipfile.ZipFile(zip_path) as zf:
             members = {n for n in zf.namelist() if n != "README.txt"}
         return report, members
@@ -131,7 +130,7 @@ class ARequiredOnlyPack(_Fixture):
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
         from packs.archive import PackRecord
-        from packs.platformpack import generate_pack
+        from packs.platformpack import build_platform_pack
         from packs.coverage import verify_platform
 
         (self.emulators / "coreemu.yml").write_text(yaml.safe_dump({
@@ -145,17 +144,16 @@ class ARequiredOnlyPack(_Fixture):
         )
         profiles = load_emulator_profiles(str(self.emulators))
         record = PackRecord()
-        with contextlib.redirect_stdout(io.StringIO()):
-            zip_path = generate_pack(
-                "paths", str(self.platforms), self.db, str(self.bios),
-                str(self.root / "out"), emulators_dir=str(self.emulators),
-                emu_profiles=profiles, offline=True, required_only=True,
-            )
-            generate_pack(
-                "paths", str(self.platforms), self.db, str(self.bios), "",
-                emulators_dir=str(self.emulators), emu_profiles=profiles,
-                offline=True, required_only=True, record=record,
-            )
+        zip_path = build_platform_pack(
+            "paths", str(self.platforms), self.db, str(self.bios),
+            str(self.root / "out"), emulators_dir=str(self.emulators),
+            emu_profiles=profiles, offline=True, required_only=True,
+        ).zip_path
+        build_platform_pack(
+            "paths", str(self.platforms), self.db, str(self.bios), "",
+            emulators_dir=str(self.emulators), emu_profiles=profiles,
+            offline=True, required_only=True, record=record,
+        )
         with zipfile.ZipFile(zip_path) as zf:
             members = set(zf.namelist())
         # The record names what the archive holds, nothing more or less.

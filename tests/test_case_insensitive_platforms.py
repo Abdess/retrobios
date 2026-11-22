@@ -9,9 +9,7 @@ from __future__ import annotations
 
 import tests
 
-import contextlib
 import hashlib
-import io
 import os
 import tempfile
 import unittest
@@ -95,11 +93,10 @@ class ThePackReadmeNamesTheSpellingsItLeavesOut(unittest.TestCase):
 
         platformpack.write_generated_member = capture
         self.addCleanup(setattr, platformpack, "write_generated_member", real)
-        with contextlib.redirect_stdout(io.StringIO()):
-            platformpack.generate_pack(
-                "p", "platforms", self.db, "bios", "", emulators_dir="emulators",
-                offline=True, record=archive.PackRecord(),
-            )
+        platformpack.build_platform_pack(
+            "p", "platforms", self.db, "bios", "", emulators_dir="emulators",
+            offline=True, record=archive.PackRecord(),
+        )
         return texts["README.txt"]
 
     def test_a_platform_also_on_linux_names_them(self):

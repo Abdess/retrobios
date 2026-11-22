@@ -1445,18 +1445,15 @@ class ANativeNameSelectsOneSetEverywhere(unittest.TestCase):
         cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
 
     def _packed(self, platform: str, systems: list[str]) -> set[str]:
-        import contextlib
-        import io
         import zipfile
 
-        with tempfile.TemporaryDirectory() as out, \
-                contextlib.redirect_stdout(io.StringIO()):
-            zip_path = platformpack.generate_pack(
+        with tempfile.TemporaryDirectory() as out:
+            zip_path = platformpack.build_platform_pack(
                 platform, str(REPO_ROOT / "platforms"), self.db,
                 str(REPO_ROOT / "bios"), out,
                 emulators_dir=str(REPO_ROOT / "emulators"),
                 emu_profiles=self.profiles, system_filter=systems, offline=True,
-            )
+            ).zip_path
             with zipfile.ZipFile(zip_path) as zf:
                 infos = [i for i in zf.infolist() if not i.is_dir()]
         return {i.filename: i.file_size for i in infos}

@@ -94,7 +94,7 @@ class ValidatedChoice(unittest.TestCase):
                 for call in ast.walk(node)
             )
         }
-        self.assertLessEqual({"generate_pack", "generate_manifest"}, callers)
+        self.assertLessEqual({"build_platform_pack", "generate_manifest"}, callers)
         # The manifest's core extras go through the builder's own lookup,
         # which reads validated_choice (packextras.ExtraResolver).
         resolvers = {
@@ -106,7 +106,7 @@ class ValidatedChoice(unittest.TestCase):
                 for call in ast.walk(node)
             )
         }
-        self.assertLessEqual({"generate_pack", "manifest_core_entries"}, resolvers)
+        self.assertLessEqual({"build_platform_pack", "manifest_core_entries"}, resolvers)
         extras = ast.parse((REPO_ROOT / "scripts" / "packs" / "extras.py").read_text(encoding="utf-8"))
         resolve = next(
             node for node in ast.walk(extras)
@@ -119,11 +119,11 @@ class ValidatedChoice(unittest.TestCase):
 
     def test_core_extras_are_judged_too(self):
         """The baseline loop judged a platform's own files while the core-extras loop
-        shipped whatever the name found. Both loops live in generate_pack."""
+        shipped whatever the name found. Both loops live in build_platform_pack."""
         tree = ast.parse(script_source("generate_pack.py"))
         builder = next(
             node for node in ast.walk(tree)
-            if isinstance(node, ast.FunctionDef) and node.name == "generate_pack"
+            if isinstance(node, ast.FunctionDef) and node.name == "build_platform_pack"
         )
         calls = [
             call for call in ast.walk(builder)

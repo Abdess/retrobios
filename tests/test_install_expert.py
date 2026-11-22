@@ -89,9 +89,8 @@ class RealListParity(unittest.TestCase):
         the list serves from the collection is no choice of either option."""
         base = self.config(plat).get("base_destination", "")
         record = archive.PackRecord()
-        with contextlib.redirect_stdout(io.StringIO()), \
-                contextlib.redirect_stderr(io.StringIO()):
-            platformpack.generate_pack(
+        with contextlib.redirect_stderr(io.StringIO()):
+            platformpack.build_platform_pack(
                 plat, str(REPO_ROOT / "platforms"), self.db, str(REPO_ROOT / "bios"),
                 tempfile.gettempdir(), emulators_dir=str(REPO_ROOT / "emulators"),
                 zip_contents=self.zip_contents, emu_profiles=self.profiles,

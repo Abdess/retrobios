@@ -68,12 +68,11 @@ def check_split_packs(
             )
             full = archive.PackRecord()
             parts: dict[str, archive.PackRecord] = {}
-            with contextlib.redirect_stdout(io.StringIO()), \
-                    contextlib.redirect_stderr(io.StringIO()):
-                platformpack.generate_pack(
+            with contextlib.redirect_stderr(io.StringIO()):
+                platformpack.build_platform_pack(
                     platform, platforms_dir, db, "bios", "", record=full, **args,
                 )
-                platformpack.generate_split_packs(
+                platformpack.build_split_packs(
                     platform, platforms_dir, db, "bios", "", records=parts, **args,
                 )
             lines = split_differences(full, parts, archive.same_bytes)

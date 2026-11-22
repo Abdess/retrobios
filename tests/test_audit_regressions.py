@@ -1558,7 +1558,7 @@ class OneBaselineVerdict(unittest.TestCase):
     def test_the_builder_and_the_manifest_read_the_same_rules(self):
         source = script_source("generate_pack.py")
         tree = ast.parse(source)
-        for name in ("generate_pack", "generate_manifest"):
+        for name in ("build_platform_pack", "generate_manifest"):
             function = next(
                 node for node in tree.body
                 if isinstance(node, ast.FunctionDef) and node.name == name

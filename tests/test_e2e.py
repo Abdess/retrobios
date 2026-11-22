@@ -2343,7 +2343,7 @@ class TestE2E(unittest.TestCase):
         """
         from orchestrate.consistency import check_consistency
         from packs.packcounts import PackCounts, write_pack_counts
-        from packs.platformpack import generate_pack
+        from packs.platformpack import build_platform_pack
         from packs.verifyoutput import write_pack_destinations
 
         profiles = load_emulator_profiles(self.emulators_dir)
@@ -2352,11 +2352,10 @@ class TestE2E(unittest.TestCase):
         groups, group_results = [], []
         for platform in ("test_existence", "test_md5"):
             sink: list[PackCounts] = []
-            with contextlib.redirect_stdout(io.StringIO()):
-                generate_pack(
-                    platform, self.platforms_dir, self.db, self.bios_dir, output_dir,
-                    emulators_dir=self.emulators_dir, emu_profiles=profiles, counts=sink,
-                )
+            build_platform_pack(
+                platform, self.platforms_dir, self.db, self.bios_dir, output_dir,
+                emulators_dir=self.emulators_dir, emu_profiles=profiles, counts=sink,
+            )
             self.assertEqual(len(sink), 1)
             packs.append((platform, [platform], sink[0]))
             config = load_platform_config(platform, self.platforms_dir)

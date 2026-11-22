@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import contextlib
-import io
 import os
 import tempfile
 import zipfile
@@ -37,7 +36,6 @@ from packs.datatrees import (
     core_data_trees,
     data_directory_members,
     pack_markers,
-    uncached_warning,
 )
 from packs.naming import system_display_name
 from packs.extras import (
@@ -53,6 +51,7 @@ from packs.extras import (
 from packs.naming import file_name_part, pack_narrowings, platform_pack_name, platform_pack_stem
 from packs.packcounts import PackCounts, pack_counts
 from packs.paths import flat_arcname, save_layout
+from packs.platformreport import print_platform_pack, print_split_packs
 from packs.readme import build_agnostic_rename_readme, build_readme, save_place
 from resolve import packfiles as packresolve, regions as resolve_regions, slot as slot_mod
 from resolve.contentlayout import TARGET_KEY
@@ -92,51 +91,6 @@ def _case_twin_pairs(
     }
     return sorted({(twin, held[twin.lower()]) for twin in twins if twin.lower() in held})
 
-
-def _report_pack_counts(
-    zip_path: str,
-    file_status: dict,
-    total_files: int,
-    core_count: int,
-    source: str,
-    verification_mode: str,
-    tree_count: int = 0,
-) -> None:
-    """Print the pack's counts line.
-
-    The pipeline's consistency check reads the same counts as data
-    (packs.packcounts), never this line.
-    """
-    files_ok = sum(1 for s in file_status.values() if s == "ok")
-    files_untested = sum(1 for s in file_status.values() if s == "untested")
-    files_excluded = sum(1 for s in file_status.values() if s == "excluded")
-    files_miss = sum(1 for s in file_status.values() if s == "missing")
-    total_checked = len(file_status)
-
-    parts = [f"{files_ok}/{total_checked} files OK"]
-    if files_untested:
-        parts.append(f"{files_untested} untested")
-    if files_excluded:
-        parts.append(f"{files_excluded} unsafe excluded")
-    if files_miss:
-        parts.append(f"{files_miss} missing")
-    if source == "platform":
-        print(
-            f"  {zip_path}: {total_files} files packed (platform baseline only), "
-            f"{', '.join(parts)} [{verification_mode}]"
-        )
-    elif source == "truth":
-        print(
-            f"  {zip_path}: {total_files} files packed (ground truth only), "
-            f"{core_count} from emulator profiles [{verification_mode}]"
-        )
-    else:
-        baseline = total_files - core_count - tree_count
-        trees = f"{tree_count} in core data trees + " if tree_count else ""
-        print(
-            f"  {zip_path}: {total_files} files packed ({baseline} baseline + "
-            f"{trees}{core_count} from cores), {', '.join(parts)} [{verification_mode}]"
-        )
 
 class _VariantOptions(TypedDict, total=False):
     """The keyword options of _select_variants."""
@@ -213,11 +167,6 @@ def _select_variants(
             config, emu_profiles, target_cores, region_groups, region_drops, held
         )
         region_drops = region_drops | slot_drops
-        if slot_undecidable:
-            print(
-                f"  {len(slot_undecidable)} slot(s) with no declared order: "
-                f"every candidate kept"
-            )
 
     return region_drops, region_fallbacks, slot_undecidable
 
@@ -267,8 +216,8 @@ def _matches_an_alternative(fe: dict, local_path: str, profiles: dict) -> bool:
     return False
 
 
-def _report_left_out(cut: GameDataCut, systems: set[str], cores: bool) -> None:
-    """Name the game data a --no-game-data build left out, and why.
+def _left_out_lines(cut: GameDataCut, systems: set[str], cores: bool) -> list[str]:
+    """The game data a --no-game-data build left out, and why, one line each.
 
     ``systems`` limits the platform layer to the systems this pack covers,
     and ``cores`` says whether this pack collected the core files itself:
@@ -279,8 +228,7 @@ def _report_left_out(cut: GameDataCut, systems: set[str], cores: bool) -> None:
         if (item.layer == "platform" and item.system in systems)
         or (item.layer == "core" and cores)
     ]
-    for line in GameDataCut(cut.config, cut.profiles, kept).report_lines():
-        print(f"  {line}")
+    return GameDataCut(cut.config, cut.profiles, kept).report_lines()
 
 
 class PackNarrowing(TypedDict, total=False):
@@ -399,9 +347,9 @@ def _plan_platform_pack(
     bios_dir: str,
     output_dir: str,
     opts: _PackSettings,
-) -> _PlatformPlan | None:
-    """The configuration, scope and checks a platform pack reads, or None
-    when the systems asked for leave nothing to build."""
+) -> _PlatformPlan | str:
+    """The configuration, scope and checks a platform pack reads, or the
+    reason the systems asked for leave nothing to build."""
     config = load_platform_config(platform_name, platforms_dir)
     if opts.target_name:
         config = {**config, TARGET_KEY: opts.target_name}
@@ -455,9 +403,7 @@ def _plan_platform_pack(
         config, emu_profiles or {}, opts.target_cores, opts.system_filter
     )
     if opts.system_filter and not pack_systems:
-        reason = system_scope_error(config, platform_name, opts.system_filter, opts.target_name)
-        print(f"  WARNING: {reason}")
-        return None
+        return system_scope_error(config, platform_name, opts.system_filter, opts.target_name)
     if opts.extras_only:
         # The part of a split that carries the core extras no platform system
         # owns: the platform's own files and trees went to the other parts.
@@ -510,15 +456,35 @@ def _settle_pack_choices(plan: _PlatformPlan) -> None:
     )
 
 
-_STATUS_LABELS = {"untested": "UNTESTED", "excluded": "EXCLUDED", "missing": "MISSING"}
+@dataclass
+class PlatformPackOutcome:
+    """What one platform pack build came to, as print_platform_pack reports it.
+
+    ``refusal`` is set, and ``zip_path`` None, when the systems asked for
+    leave nothing to build.
+    """
+
+    zip_path: str | None
+    refusal: str = ""
+    source: str = "full"
+    verification_mode: str = ""
+    total_files: int = 0
+    core_count: int = 0
+    tree_count: int = 0
+    file_status: dict[str, str] = field(default_factory=dict)
+    file_reasons: dict[str, str] = field(default_factory=dict)
+    core_discrepancies: list[str] = field(default_factory=list)
+    slot_undecidable: list[str] = field(default_factory=list)
+    uncached: list[tuple[str, str]] = field(default_factory=list)
+    left_out: list[str] = field(default_factory=list)
 
 
 @dataclass
 class _PlatformPackBuild:
     """One platform pack being written: its members and what each slot came to.
 
-    The four lookups are bound by generate_pack, the one place that says how
-    a platform file and a core extra are found and judged.
+    The four lookups are bound by build_platform_pack, the one place that
+    says how a platform file and a core extra are found and judged.
     """
 
     plan: _PlatformPlan
@@ -542,6 +508,8 @@ class _PlatformPackBuild:
     core_discrepancies: list[str] = field(default_factory=list)
     # Spellings left out as case twins of a packed file, for the README.
     case_twins: list[str] = field(default_factory=list)
+    # (registry key, cache path) of each data directory the cache lacks.
+    uncached: list[tuple[str, str]] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         self.placed = Placed(self.plan.case_insensitive)
@@ -974,8 +942,7 @@ class _PlatformPackBuild:
             if isinstance(self.zf, PackRecord):
                 self.zf.trees.append(self._flat(full))
             added += 1
-        for ref_key, local_path in uncached:
-            print(uncached_warning(ref_key, local_path))
+        self.uncached.extend(uncached)
         if plan.opts.uncached_out is not None:
             plan.opts.uncached_out.update(ref_key for ref_key, _path in uncached)
         return added
@@ -1055,23 +1022,29 @@ class _PlatformPackBuild:
                 "",
             )
 
-    def report(self) -> None:
+    def outcome(self) -> PlatformPackOutcome:
         plan, opts = self.plan, self.plan.opts
-        _report_pack_counts(
-            plan.zip_path, self.file_status, self.total_files, self.core_count, opts.source,
-            plan.verification_mode, tree_count=self.tree_count,
+        return PlatformPackOutcome(
+            zip_path=plan.zip_path,
+            source=opts.source,
+            verification_mode=plan.verification_mode,
+            total_files=self.total_files,
+            core_count=self.core_count,
+            tree_count=self.tree_count,
+            file_status=self.file_status,
+            file_reasons=self.file_reasons,
+            core_discrepancies=self.core_discrepancies,
+            slot_undecidable=plan.slot_undecidable,
+            uncached=self.uncached,
+            left_out=(
+                _left_out_lines(
+                    plan.cut,
+                    systems=set(plan.pack_systems) if opts.source != "truth" else set(),
+                    cores=opts.source != "platform" and opts.precomputed_extras is None,
+                )
+                if plan.cut is not None else []
+            ),
         )
-        if plan.cut is not None:
-            _report_left_out(
-                plan.cut,
-                systems=set(plan.pack_systems) if opts.source != "truth" else set(),
-                cores=opts.source != "platform" and opts.precomputed_extras is None,
-            )
-        for key, reason in sorted(self.file_reasons.items()):
-            label = _STATUS_LABELS.get(self.file_status.get(key, ""), "DISCREPANCY")
-            print(f"  {label}: {key}: {reason}")
-        for note in sorted(self.core_discrepancies):
-            print(f"  DISCREPANCY: {note}")
 
 
 def _platform_registry(platforms_dir: str) -> dict:
@@ -1079,15 +1052,15 @@ def _platform_registry(platforms_dir: str) -> dict:
     return load_platform_registry(platforms_dir)
 
 
-def generate_pack(
+def build_platform_pack(
     platform_name: str,
     platforms_dir: str,
     db: dict,
     bios_dir: str,
     output_dir: str,
     **options: Unpack[PackOptions],
-) -> str | None:
-    """Generate a ZIP pack for a platform.
+) -> PlatformPackOutcome:
+    """Build a ZIP pack for a platform. Its report is print_platform_pack's.
 
     ``no_game_data`` leaves out the platform's entries categorized as game
     data and the cores' ``category: game_data`` files, and names each one.
@@ -1110,13 +1083,14 @@ def generate_pack(
     ``uncached_out`` receives the data directories the pack carries and the
     cache does not hold: the pack is written without them.
 
-    Returns the path to the generated ZIP, or None on failure.
+    The outcome carries the ZIP path, or the refusal when the systems asked
+    for leave nothing to build.
     """
     reject_unknown("generate_pack", options, PackOptions.__optional_keys__)
     opts = _PackSettings(**options)
     plan = _plan_platform_pack(platform_name, platforms_dir, db, bios_dir, output_dir, opts)
-    if plan is None:
-        return None
+    if isinstance(plan, str):
+        return PlatformPackOutcome(zip_path=None, refusal=plan)
 
     def resolve(file_entry: dict, full_dest: str) -> tuple[str | None, str]:
         return resolve_declaration(
@@ -1155,10 +1129,26 @@ def generate_pack(
     ) as zf:
         build = _PlatformPackBuild(plan, zf, resolve, verdict, judge, resolve_extra)
         build.run()
-    build.report()
     if opts.counts is not None:
         opts.counts.append(pack_counts(plan.zip_path, build.file_status, build.core_count))
-    return plan.zip_path
+    return build.outcome()
+
+
+def generate_pack(
+    platform_name: str,
+    platforms_dir: str,
+    db: dict,
+    bios_dir: str,
+    output_dir: str,
+    **options: Unpack[PackOptions],
+) -> str | None:
+    """Build a platform pack (build_platform_pack) and print its report.
+
+    Returns the path to the generated ZIP, or None when nothing was built.
+    """
+    outcome = build_platform_pack(platform_name, platforms_dir, db, bios_dir, output_dir, **options)
+    print_platform_pack(outcome)
+    return outcome.zip_path
 
 
 def _group_systems_by_manufacturer(
@@ -1183,9 +1173,12 @@ class SplitOptions(PackNarrowing, total=False):
     uncached_out: set[str] | None
 
 
-def _split_extras(config: dict, db: dict, narrowing: PackNarrowing) -> list[dict]:
+def _split_extras(
+    config: dict, db: dict, narrowing: PackNarrowing,
+) -> tuple[list[dict], list[str]]:
     """The core extras of every part, collected once (expensive: scans 260+
-    emulator profiles), then distributed per group by system overlap."""
+    emulator profiles), then distributed per group by system overlap, and
+    the core game data the run leaves out, named once for all parts."""
     emu_profiles = narrowing["emu_profiles"] or {}
     source = narrowing["source"]
     target_cores = narrowing["target_cores"]
@@ -1206,12 +1199,26 @@ def _split_extras(config: dict, db: dict, narrowing: PackNarrowing) -> list[dict
         )
     else:
         all_extras = []
-    if cut is not None and source != "platform":
-        _report_left_out(cut, systems=set(), cores=True)
-    return all_extras
+    left_out = (
+        _left_out_lines(cut, systems=set(), cores=True)
+        if cut is not None and source != "platform" else []
+    )
+    return all_extras, left_out
 
 
-def generate_split_packs(
+@dataclass
+class SplitOutcome:
+    """What a --split build came to: the core game data left out, then each part."""
+
+    left_out: list[str] = field(default_factory=list)
+    parts: list[PlatformPackOutcome] = field(default_factory=list)
+
+    @property
+    def zip_paths(self) -> list[str]:
+        return [part.zip_path for part in self.parts if part.zip_path]
+
+
+def build_split_packs(
     platform_name: str,
     platforms_dir: str,
     db: dict,
@@ -1219,8 +1226,8 @@ def generate_split_packs(
     output_dir: str,
     group_by: str = "system",
     **options: Unpack[SplitOptions],
-) -> list[str]:
-    """Generate split packs (one ZIP per system or manufacturer).
+) -> SplitOutcome:
+    """Build split packs (one ZIP per system or manufacturer), printing nothing.
 
     The parts add up to the full pack: each is built against the full pack's
     own placement (``within``). ``records`` builds the parts in memory, keyed
@@ -1274,22 +1281,21 @@ def generate_split_packs(
         narrowing["emu_profiles"] = emu_profiles
     full = PackRecord()
     # The parts add up to the full pack: its trees are the run's account.
-    with contextlib.redirect_stdout(io.StringIO()):
-        generate_pack(
-            platform_name, platforms_dir, db, bios_dir, split_dir,
-            record=full, uncached_out=options.get("uncached_out"), **narrowing,
-        )
+    build_platform_pack(
+        platform_name, platforms_dir, db, bios_dir, split_dir,
+        record=full, uncached_out=options.get("uncached_out"), **narrowing,
+    )
 
-    def part(pack_name: str, scope: _PartScope) -> str | None:
+    def part(pack_name: str, scope: _PartScope) -> PlatformPackOutcome:
         record = PackRecord() if records is not None else None
-        zip_path = generate_pack(
+        built = build_platform_pack(
             platform_name, platforms_dir, db, bios_dir, split_dir,
             pack_name=pack_name, record=record, within=full.sources,
             **scope, **narrowing,
         )
-        if records is not None and record is not None and zip_path:
+        if records is not None and record is not None and built.zip_path:
             records[pack_name] = record
-        return zip_path
+        return built
     # The systems a core of the target runs: a part per declared system sent
     # each one the target drops to a refusal naming it as unknown.
     systems = platform_scope_systems(config, emu_profiles, narrowing["target_cores"])
@@ -1299,16 +1305,14 @@ def generate_split_packs(
     else:
         groups = {system_display_name(sid): [sid] for sid in systems}
 
-    all_extras = _split_extras(config, db, narrowing)
-    results = []
+    all_extras, left_out = _split_extras(config, db, narrowing)
+    outcome = SplitOutcome(left_out=left_out)
     for group_name, group_system_ids in sorted(groups.items()):
         group_extras = _extras_for_systems(all_extras, group_system_ids)
-        zip_path = part(
+        outcome.parts.append(part(
             f"{part_prefix}_{file_name_part(group_name, '_')}{PACK_SUFFIX}",
             {"system_filter": group_system_ids, "precomputed_extras": group_extras},
-        )
-        if zip_path:
-            results.append(zip_path)
+        ))
 
     # Extras whose system the platform does not declare, or that name none,
     # belong to no group: they go in a part of their own, or the parts would
@@ -1321,11 +1325,29 @@ def generate_split_packs(
     }
     undistributed = [fe for fe in all_extras if id(fe) not in distributed]
     if undistributed:
-        zip_path = part(
+        outcome.parts.append(part(
             f"{part_prefix}_Other_Cores{PACK_SUFFIX}",
             {"precomputed_extras": undistributed, "extras_only": True},
-        )
-        if zip_path:
-            results.append(zip_path)
+        ))
 
-    return results
+    return outcome
+
+
+def generate_split_packs(
+    platform_name: str,
+    platforms_dir: str,
+    db: dict,
+    bios_dir: str,
+    output_dir: str,
+    group_by: str = "system",
+    **options: Unpack[SplitOptions],
+) -> list[str]:
+    """Build split packs (build_split_packs) and print each part's report.
+
+    Returns the path of each part written.
+    """
+    outcome = build_split_packs(
+        platform_name, platforms_dir, db, bios_dir, output_dir, group_by, **options,
+    )
+    print_split_packs(outcome)
+    return outcome.zip_paths

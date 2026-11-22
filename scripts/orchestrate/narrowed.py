@@ -117,9 +117,8 @@ def check_narrowed_packs(
                     load_target_config(platform, target, platforms_dir) if target else None
                 )
                 record = archive.PackRecord()
-                with contextlib.redirect_stdout(io.StringIO()), \
-                        contextlib.redirect_stderr(io.StringIO()):
-                    built = platformpack.generate_pack(
+                with contextlib.redirect_stderr(io.StringIO()):
+                    built = platformpack.build_platform_pack(
                         platform, platforms_dir, db, "bios", "",
                         emulators_dir=emulators_dir, zip_contents=zip_contents,
                         data_registry=registry, emu_profiles=profiles,
@@ -131,7 +130,7 @@ def check_narrowed_packs(
                         emulators_dir, profiles, target_cores=target_cores,
                         data_dir_registry=registry,
                         **{k: v for k, v in narrowing.items() if k != "target_name"},
-                    ) if built else None
+                    ) if built.zip_path else None
                 compared += 1
                 name = f"{platform} {label}"
                 if report is None:
