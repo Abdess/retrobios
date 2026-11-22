@@ -457,7 +457,9 @@ def _removal_text(state: TuiState) -> list:
 
 def tui_action_outcome(state: TuiState) -> list:
     """What a More action did, in one line, then where."""
-    events = state.action_events
+    end = next((event for event in state.action_events if event.get("event") == "restore"),
+               None)
+    events = [event for event in state.action_events if event.get("event") != "restore"]
     done = [event for event in events if event.get("ok", True)]
     failed = [event for event in events if not event.get("ok", True)]
     size = format_size(sum(int(event.get("size") or 0) for event in done))
@@ -475,7 +477,26 @@ def tui_action_outcome(state: TuiState) -> list:
         lines.append(_styled(f"{_plural(len(failed), 'file')} failed.", "failure"))
         lines += _details([f"  {event.get('dest') or event.get('path')}: {event['reason']}"
                            for event in failed])
+    lines += _restore_end_lines(end)
     lines.append(_styled(f"{_FOLDER_LABEL}{_short_path(state.dest, state.home)}", "path"))
+    return lines
+
+
+def _restore_end_lines(end: dict | None) -> list:
+    """What a restore's end event adds to its outcome: why nothing went
+    back, where the files at their places were kept, and why the install
+    record was not updated."""
+    if end is None:
+        return []
+    message = str(end.get("message") or "")
+    lines: list = [_styled(message, "failure") if end.get("status") == "not_backup"
+                   else message] if message else []
+    lines += [f"Kept {_plural(int(item['files']), 'file')} that were in their place "
+              f"({format_size(int(item['bytes']))}) in {item['folder']}"
+              for item in end.get("kept") or []]
+    if end.get("problem"):
+        lines.append(_styled(f"The install record could not be updated ({end['problem']}).",
+                             "failure"))
     return lines
 
 

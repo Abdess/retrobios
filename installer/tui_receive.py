@@ -52,7 +52,7 @@ def _take_action_event(state: TuiState, event: dict) -> bool:
         state.removal = event
     elif kind == "backup" and state.run == "backups":
         state.backups = [*(state.backups or []), event]
-    elif kind in ("removed", "restored", "backup") and state.run in (
+    elif kind in ("removed", "restored", "restore", "backup") and state.run in (
             "remove", "restore", "delete_backup"):
         state.action_events.append(event)
     else:

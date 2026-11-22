@@ -44,6 +44,7 @@
         "removal_plan",
         "removed",
         "restored",
+        "restore",
         "backup",
         "pack",
         "end"
@@ -152,6 +153,9 @@
     },
     {
       "$ref": "#/$defs/restored"
+    },
+    {
+      "$ref": "#/$defs/restore"
     },
     {
       "$ref": "#/$defs/backup"
@@ -1218,7 +1222,11 @@
             "deleted",
             "not_deleted",
             "planned",
-            "failed"
+            "failed",
+            "not_backup",
+            "empty",
+            "done",
+            "not_done"
           ]
         },
         "choice": {
@@ -1373,6 +1381,66 @@
         }
       }
     },
+    "restore": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "folder",
+        "status",
+        "files",
+        "bytes",
+        "kept",
+        "problem",
+        "message"
+      ],
+      "properties": {
+        "event": {
+          "const": "restore"
+        },
+        "folder": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "applied",
+            "written",
+            "unreadable",
+            "not_written",
+            "listed",
+            "made",
+            "deleted",
+            "not_deleted",
+            "planned",
+            "failed",
+            "not_backup",
+            "empty",
+            "done",
+            "not_done"
+          ]
+        },
+        "files": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "kept": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "problem": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
     "backup": {
       "type": "object",
       "additionalProperties": false,
@@ -1421,7 +1489,11 @@
             "deleted",
             "not_deleted",
             "planned",
-            "failed"
+            "failed",
+            "not_backup",
+            "empty",
+            "done",
+            "not_done"
           ]
         },
         "message": {
@@ -1482,7 +1554,11 @@
             "deleted",
             "not_deleted",
             "planned",
-            "failed"
+            "failed",
+            "not_backup",
+            "empty",
+            "done",
+            "not_done"
           ]
         },
         "message": {

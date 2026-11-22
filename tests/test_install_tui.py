@@ -15676,6 +15676,26 @@ class MoreScreens(unittest.TestCase):
         press(state, "enter")
         self.assertEqual(state.exit_code, 1)
 
+    def test_a_put_back_says_why_it_is_not_done_and_where_files_were_kept(self):
+        folder = str(BACKUPS[0]["folder"])
+        state = backups_state("putback")
+        press(state, "enter", "enter")
+        install.tui_receive(state, ("event", state.run_id, {
+            "event": "restored", "folder": folder, "path": "/bios/scph5500.bin",
+            "size": 524288, "ok": True, "reason": ""}))
+        install.tui_receive(state, ("event", state.run_id, {
+            "event": "restore", "folder": folder, "status": "not_done", "files": 1,
+            "bytes": 524288, "kept": [{"folder": "/kept/20261122-101010", "files": 1,
+                                       "bytes": 4}],
+            "problem": "it is for /bios, which does not hold the files put back",
+            "message": ""}))
+        install.tui_receive(state, ("ended", state.run_id, 1, []))
+        text = screen_text(install.tui_view(state, 100, 30))
+        self.assertIn("Put back 1 file, 512.0 KB.", text)
+        self.assertIn("Kept 1 file that were in their place (4 B) in /kept/20261122-101010",
+                      text)
+        self.assertIn("The install record could not be updated (it is for /bios", text)
+
     def test_put_back_and_delete_name_the_backup_alone(self):
         folder = BACKUPS[0]["folder"]
         for purpose, run, argv in (

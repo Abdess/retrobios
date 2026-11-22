@@ -343,8 +343,10 @@ class Events(unittest.TestCase):
             folder = listed[1]["folder"]
             back = repo.events(repo.run("--restore", folder, "--events"))
             self.assertEqual([event["event"] for event in back],
-                             ["start", "restored", "restored", "end"])
+                             ["start", "restored", "restored", "restore", "end"])
             self.assertEqual(back[0]["mode"], "restore")
+            self.assertEqual((back[3]["status"], back[3]["files"], back[3]["problem"],
+                              back[3]["message"]), ("done", 2, "", ""))
             gone = repo.events(repo.run("--delete-backup", folder, "--events", "--yes"))
             self.assertEqual([event["event"] for event in gone], ["start", "backup", "end"])
             self.assertEqual((gone[1]["status"], gone[2]["code"]), ("deleted", 0))
@@ -688,11 +690,10 @@ class ReviewOfTheRemoval(unittest.TestCase):
             repo.root.rename(moved)
             try:
                 run = moved / install.BACKUP_DIR / backup["folder"].name
-                with contextlib.redirect_stdout(io.StringIO()), \
-                        contextlib.redirect_stderr(io.StringIO()) as err:
-                    code = install.restore_kept(run)
-                self.assertEqual(code, 1)
-                self.assertIn("The install record could not be updated", err.getvalue())
+                result = install.restore_backup(run)
+                self.assertEqual((result.status, result.code, result.failed),
+                                 ("not_done", 1, ()))
+                self.assertIn("which does not hold the files put back", result.problem)
                 self.assertTrue((moved / "dest" / "gba_bios.bin").is_file())
             finally:
                 moved.rename(repo.root)

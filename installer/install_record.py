@@ -620,82 +620,152 @@ def _update_record(folder: Path, plat: str,
     return "" if where is not None else failure
 
 
-def restore_kept(run: Path, dry_run: bool = False) -> int:
+class RestoreResult(NamedTuple):
+    """What --restore did with a backup run folder, for the lines and the events.
+
+    status: not_backup (the folder is no backup), empty (it holds no file),
+    planned (--dry-run), done, or not_done (a file failed or the record
+    could not be updated). dests are the places files went back to (would
+    go back to, planned), failed [(dest, reason)] those that did not, kept
+    the new backup folders the files at their places went to, as
+    KeptFiles.summary gives them, problem why the record was not updated.
+    """
+
+    run: Path
+    status: str
+    dests: tuple[Path, ...] = ()
+    size: int = 0
+    failed: tuple[tuple[Path, str], ...] = ()
+    kept: tuple[dict, ...] = ()
+    problem: str = ""
+
+    @property
+    def root(self) -> Path:
+        return self.run.parent.parent
+
+    @property
+    def code(self) -> int:
+        """0 when every file went back, 1 when one failed or the record was
+        not updated, 2 when the folder is no backup."""
+        if self.status == "not_backup":
+            return 2
+        return 1 if self.status == "not_done" else 0
+
+
+def _restore_one(run: Path, src: Path) -> tuple[Path, str]:
+    """Put the backup's src back at its place: (dest, "") once there, else
+    (dest, why not)."""
+    root = run.parent.parent
+    rel = PurePosixPath(*src.relative_to(run).parts)
+    dest = root / Path(*rel.parts)
+    try:
+        sha1 = _digest_file(src, ("sha1",))["sha1"]
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        # A file at the place that is not the backup's copy (a newer one,
+        # one the user put there) is moved aside first, into a new dated
+        # backup, as an install keeps what it replaces. Its first level
+        # is the folder the backup's holder sits in.
+        holder = (root / rel.parts[0], PurePosixPath(*rel.parts[1:])) \
+            if len(rel.parts) > 1 else (root, rel)
+        if not _recorded_copy(run, dest):
+            KEPT.keep(*holder, dest, {"sha1": sha1})
+        _clear_read_only(dest)
+        _replace_with_copy(src, dest)
+    except (OSError, _NotKept) as exc:
+        return dest, getattr(exc, "strerror", None) or str(exc)
+    return dest, ""
+
+
+def restore_backup(run: Path, dry_run: bool = False) -> RestoreResult:
     """Put every file of a backup run folder back where it was.
 
     run is a <holder>/<date-time> folder a run wrote, its holder named
     retrobios-backup. Each file goes to the same path below the holder's
     parent. A file there with other contents is moved into a new dated
     backup first, never lost. The install record of its folder is made to
-    say so. The backup is left in place. Returns the exit code:
-    0 when every file went back, 1 when one failed, 2 when the folder is no
-    backup.
+    say so. The backup is left in place. Each file put back, or not, is a
+    restored event as it happens.
     """
     run = Path(os.path.abspath(os.path.expanduser(str(run))))
     if not _is_backup_run(run):
-        print(f"Error: {run} is not a folder the installer kept files in.", file=sys.stderr)
-        print(f"  Name one of the dated folders inside a {BACKUP_DIR} folder, as "
-              "--backups lists them.", file=sys.stderr)
-        return 2
-    root = run.parent.parent
+        return RestoreResult(run, "not_backup")
     files = _backup_files(run)
     if not files:
-        print(f"{run} holds no file. Nothing to put back.")
-        return 0
-    restored = size = failed = 0
+        return RestoreResult(run, "empty")
+    root = run.parent.parent
+    if dry_run:
+        return RestoreResult(run, "planned",
+                             tuple(root / Path(*src.relative_to(run).parts) for src in files),
+                             sum(src.stat().st_size for src in files))
+    size = 0
     put_back: list[Path] = []
+    failed: list[tuple[Path, str]] = []
     KEPT.reset()
     for src in files:
-        rel = PurePosixPath(*src.relative_to(run).parts)
-        dest = root / Path(*rel.parts)
         length = src.stat().st_size
-        if dry_run:
-            print(f"  would put back {dest}")
-            restored += 1
-            size += length
+        dest, reason = _restore_one(run, src)
+        EVENTS.emit("restored", folder=str(run), path=str(dest), size=length,
+                    ok=not reason, reason=reason)
+        if reason:
+            failed.append((dest, reason))
             continue
-        try:
-            sha1 = _digest_file(src, ("sha1",))["sha1"]
-            dest.parent.mkdir(parents=True, exist_ok=True)
-            # A file at the place that is not the backup's copy (a newer one,
-            # one the user put there) is moved aside first, into a new dated
-            # backup, as an install keeps what it replaces. Its first level
-            # is the folder the backup's holder sits in.
-            holder = (root / rel.parts[0], PurePosixPath(*rel.parts[1:])) \
-                if len(rel.parts) > 1 else (root, rel)
-            if not _recorded_copy(run, dest):
-                KEPT.keep(*holder, dest, {"sha1": sha1})
-            _clear_read_only(dest)
-            _replace_with_copy(src, dest)
-        except (OSError, _NotKept) as exc:
-            reason = getattr(exc, "strerror", None) or str(exc)
-            print(f"  failed: {dest} ({reason})", file=sys.stderr)
-            EVENTS.emit("restored", folder=str(run), path=str(dest), size=length, ok=False,
-                        reason=reason)
-            failed += 1
-            continue
-        EVENTS.emit("restored", folder=str(run), path=str(dest), size=length, ok=True,
-                    reason="")
         put_back.append(dest)
-        restored += 1
         size += length
-    if dry_run:
-        print(f"\nWould put back {_plural(restored, 'file')} ({format_size(size)}) "
-              f"under {root}. Nothing was written.")
-        return 0
     problem = _record_after_restore(run, put_back)
-    print(f"\nPut back {_plural(restored, 'file')} ({format_size(size)}) under {root}.")
-    for item in KEPT.summary():
+    return RestoreResult(run, "not_done" if failed or problem else "done", tuple(put_back),
+                         size, tuple(failed), tuple(KEPT.summary()), problem)
+
+
+def restore_message(result: RestoreResult) -> str:
+    """Why a restore put nothing back, in one sentence, else ""."""
+    if result.status == "not_backup":
+        return f"{result.run} is not a folder the installer kept files in."
+    if result.status == "empty":
+        return f"{result.run} holds no file. Nothing to put back."
+    return ""
+
+
+def say_restore(result: RestoreResult) -> None:
+    """--restore's outcome in lines."""
+    if result.status == "not_backup":
+        print(f"Error: {restore_message(result)}", file=sys.stderr)
+        print(f"  Name one of the dated folders inside a {BACKUP_DIR} folder, as "
+              "--backups lists them.", file=sys.stderr)
+        return
+    if result.status == "empty":
+        print(restore_message(result))
+        return
+    if result.status == "planned":
+        for dest in result.dests:
+            print(f"  would put back {dest}")
+        print(f"\nWould put back {_plural(len(result.dests), 'file')} "
+              f"({format_size(result.size)}) under {result.root}. Nothing was written.")
+        return
+    for dest, reason in result.failed:
+        print(f"  failed: {dest} ({reason})", file=sys.stderr)
+    print(f"\nPut back {_plural(len(result.dests), 'file')} ({format_size(result.size)}) "
+          f"under {result.root}.")
+    for item in result.kept:
         # The files that sat at those places, never lost.
         print(f"Kept {_plural(item['files'], 'file')} that were in their place "
               f"({format_size(item['bytes'])}) in {item['folder']}")
-    if failed:
-        print(f"{_plural(failed, 'file')} could not be put back.", file=sys.stderr)
-    if problem:
-        print(f"The install record could not be updated ({problem}).", file=sys.stderr)
-    print(f"The copies are still in {run}. To free the space: {_INVOCATION.launcher()} "
-          f"--delete-backup {_INVOCATION.word(str(run))}")
-    return 1 if failed or problem else 0
+    if result.failed:
+        print(f"{_plural(len(result.failed), 'file')} could not be put back.", file=sys.stderr)
+    if result.problem:
+        print(f"The install record could not be updated ({result.problem}).", file=sys.stderr)
+    print(f"The copies are still in {result.run}. To free the space: "
+          f"{_INVOCATION.launcher()} --delete-backup {_INVOCATION.word(str(result.run))}")
+
+
+def restore_kept(run: Path, dry_run: bool = False) -> int:
+    """--restore: put a backup back, say it in lines and as a restore
+    event, and return the exit code."""
+    result = restore_backup(run, dry_run)
+    say_restore(result)
+    EVENTS.emit("restore", folder=str(result.run), status=result.status,
+                files=len(result.dests), bytes=result.size, kept=list(result.kept),
+                problem=result.problem, message=restore_message(result))
+    return result.code
 
 
 def _below(folder: Path, dest: str) -> tuple[Path | None, str]:

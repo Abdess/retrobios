@@ -183,6 +183,15 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     "removed": ("platform", "dest", "size", "ok", "reason", "moved_to"),
     # Each file --restore put back from the backup folder to path.
     "restored": ("folder", "path", "size", "ok", "reason"),
+    # --restore, once it ends: status not_backup (the folder is no backup,
+    # code 2), empty (it holds no file), planned (--dry-run), done, or
+    # not_done (a file failed, or the install record could not be updated:
+    # problem says why). files and bytes are those put back (would be,
+    # planned), kept [{"folder", "files", "bytes"}] the new backup folders
+    # the files at their places were moved into, as in summary. message
+    # says why nothing went back. A kind of its own, since schema 1 never
+    # adds a key to restored.
+    "restore": ("folder", "status", "files", "bytes", "kept", "problem", "message"),
     # A backup folder: listed by --backups, made by --remove --backup, or
     # deleted (not_deleted when a file stayed) by --delete-backup. date is
     # when it was made (local time), source remove for a removal's, install

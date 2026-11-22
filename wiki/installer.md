@@ -922,7 +922,7 @@ anything is removed.
 Exit codes: `0` once done, `1` when a file or the record could not be
 written, `2` when nothing was done (no record, nothing to remove, no `--yes`
 without a terminal, or no at the question). With `--events` the run writes
-`removal_plan`, `removed`, `backup` and `restored` events, see
+`removal_plan`, `removed`, `backup`, `restored` and `restore` events, see
 [Machine-readable events](#machine-readable-events).
 
 ## Making a pack { #making-a-pack }
@@ -2256,13 +2256,14 @@ other schemas under `api/v1/schemas/`.
 | `removal_plan` | `platform`, `folder`, `files`, `bytes`, `systems`, `dests`, `kept`, `gone`, `backup`, `message` | With `--remove`, before anything is removed, and all a `--dry-run` writes: `dests` the files that go in record order, `bytes` the space they free, `systems` those losing a file, `kept` a `{dest, reason}` for each file left (`shared`, `changed`, `link`, `not_a_file`, `outside`, `not_servable`, `unreadable`, `not_recorded`), `gone` the recorded files no longer there, `backup` whether they are moved rather than deleted. With `files` 0 and a `message` when nothing is removed before a plan: no record says what is the installer's, the folder is not there, or a `--file` lies outside it |
 | `removed` | `platform`, `dest`, `size`, `ok`, `reason`, `moved_to` | Each file `--remove` took. `ok` is false, with `reason`, for a file that stays. `moved_to` is its place in the backup with `--backup`, empty otherwise |
 | `restored` | `folder`, `path`, `size`, `ok`, `reason` | Each file `--restore` put back from the backup `folder` to `path` |
+| `restore` | `folder`, `status`, `files`, `bytes`, `kept`, `problem`, `message` | Once `--restore` ends: `status` is `not_backup` (code 2), `empty`, `planned` with `--dry-run`, `done`, or `not_done` when a file failed or the install record could not be updated (`problem` says why). `files` and `bytes` are those put back, `kept` the new backup folders the files at their places went to, as in `summary`. `message` says why nothing went back |
 | `backup` | `folder`, `date`, `files`, `bytes`, `source`, `status`, `message` | A backup folder: `status` is `listed` by `--backups`, `made` by `--remove --backup`, `deleted` or `not_deleted` by `--delete-backup`. `date` is when it was made, local time. `source` is `remove` for a removal's backup and `install` for the files an install replaced |
 | `pack` | `platform`, `path`, `files`, `bytes`, `size`, `parts`, `status`, `message` | With `--pack`, once: `status` is `planned` with `--dry-run`, `written` once every part is in place, `failed` when no pack was written (`message` says why). `files` and `bytes` count the pack's members, each file stored once, `size` what the written files take on disk (0 unless `written`), `parts` each file written or to be written, the pack alone when it is one ZIP |
 | `end` | `code` | Last line, with the exit status the process returns (see [Exit status](#exit-status)) |
 
 <!-- /generated: events -->
 
-Schema 1 can gain a kind (`found` came with `--from`, `declared` with `--declared-only`, `unsearched` with the search that goes on past a closed folder, `app` with `--add-app`, `data` with the size of the data trees, `space` with the space the run writes, `version` with the list's version, `record` with the install record, `removal_plan`, `removed`, `restored` and `backup` with removal, `pack` with `--pack`), never a key of an
+Schema 1 can gain a kind (`found` came with `--from`, `declared` with `--declared-only`, `unsearched` with the search that goes on past a closed folder, `app` with `--add-app`, `data` with the size of the data trees, `space` with the space the run writes, `version` with the list's version, `record` with the install record, `removal_plan`, `removed`, `restored`, `restore` and `backup` with removal, `pack` with `--pack`), never a key of an
 existing kind: a reader skips a kind it does not know. An option refused
 before the run starts (`install.py: error:`, code 2) writes
 no event at all. A program reads a missing `end` as that case, or as a

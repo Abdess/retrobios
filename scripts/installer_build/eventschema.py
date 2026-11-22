@@ -27,13 +27,14 @@ KEY_TYPES: dict[str, dict] = {
     **dict.fromkeys((
         "installer", "os", "os_name", "stage", "reason", "platform", "message",
         "folder", "dest", "system", "name", "bios_dir", "path", "member",
-        "list_version", "installed_version", "board", "core", "date", "moved_to",
+        "list_version", "installed_version", "board", "core", "date", "moved_to", "problem",
     ), _TEXT),
     "mode": {"enum": ["install", "check", "dry-run", "list", "remove", "restore", "pack"]},
     "source": {"enum": ["remove", "install"]},
     "state": {"enum": ["present", "wrong_hash", "missing"]},
     "status": {"enum": ["applied", "written", "unreadable", "not_written", "listed", "made",
-                        "deleted", "not_deleted", "planned", "failed"]},
+                        "deleted", "not_deleted", "planned", "failed", "not_backup",
+                        "empty", "done", "not_done"]},
     **dict.fromkeys((
         "files", "files_done", "files_total", "bytes", "bytes_done", "bytes_total",
         "bytes_local", "bytes_network", "size", "present", "missing", "wrong_hash",
