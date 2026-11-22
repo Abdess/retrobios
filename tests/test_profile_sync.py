@@ -5258,7 +5258,10 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
     the site's freshness test red until someone ran sitesources by hand."""
 
     def _args(self, **kw):
-        base = {"dry_run": False, "offline": False, "emulators_dir": "emulators"}
+        base = {
+            "dry_run": False, "offline": False,
+            "emulators_dir": str(profiling_sourcepaths.REPO_ROOT / "emulators"), "cache_dir": ".cache/upstream",
+        }
         return argparse.Namespace(**{**base, **kw})
 
     def test_only_a_real_online_write_refreshes(self):
@@ -5296,11 +5299,40 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
             profile.write_text('emulator: P\nsource_commit: "new"\n', encoding="utf-8")
             with mock.patch.object(sources, "build_source_paths", return_value=({}, [])) as built, \
                     mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
+                    mock.patch.object(profiling_sourcepaths, "REPO_ROOT", Path(tmp).parent), \
+                    mock.patch.object(profiling_sourcepaths, "EMULATORS_DIR", Path(tmp).name), \
                     mock.patch.object(sources, "write_if_changed"), \
                     contextlib.redirect_stderr(io.StringIO()), \
                     contextlib.redirect_stdout(io.StringIO()):
                 profiling_sourcepaths.refresh_source_paths(self._args(emulators_dir=tmp), {"p"})
             self.assertEqual(built.call_args[0][0]["p"]["source_commit"], "new")
+
+    def test_another_profile_tree_leaves_the_record_alone(self):
+        # Rebuilt from a one-profile copy, the record went from 701 trees to 1.
+        from unittest import mock
+
+        from sitegen import sources
+
+        with tempfile.TemporaryDirectory() as tmp, \
+                mock.patch.object(sources, "refresh_record") as refreshed, \
+                mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
+                contextlib.redirect_stderr(io.StringIO()) as err:
+            profiling_sourcepaths.refresh_source_paths(self._args(emulators_dir=tmp), {"p"})
+        self.assertFalse(refreshed.called)
+        self.assertIn(f"sitesources.py --fetch --emulators-dir {tmp}", err.getvalue())
+
+    def test_the_run_cache_and_the_record_path_are_passed(self):
+        from unittest import mock
+
+        from sitegen import sources
+
+        with mock.patch.object(sources, "refresh_record", return_value=({}, [])) as refreshed, \
+                mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
+                mock.patch.object(profiling_sourcepaths, "load_emulator_profiles", return_value={}), \
+                contextlib.redirect_stderr(io.StringIO()):
+            profiling_sourcepaths.refresh_source_paths(self._args(cache_dir="tmp/c"), {"x"})
+        self.assertEqual(refreshed.call_args.args[1], [Path("tmp/c")])
+        self.assertEqual(refreshed.call_args.kwargs["output"], sources.SOURCE_PATHS)
 
     def test_the_record_waits_for_a_run_holding_the_repository(self):
         """profile_sync rewrote source-paths.json without the repository

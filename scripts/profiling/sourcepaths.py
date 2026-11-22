@@ -9,6 +9,7 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
 
+from core.paths import EMULATORS_DIR, REPO_ROOT
 from model.profiles import load_emulator_profiles
 
 
@@ -34,9 +35,20 @@ def refresh_source_paths(args: argparse.Namespace, written: set[str]) -> None:
     Each bump left website/src/data/source-paths.json behind its pins, and
     the site's freshness test stayed red until someone ran sitesources.py
     --fetch by hand. A run that writes nothing, or makes no request, leaves
-    it alone.
+    it alone. The record describes the repository's profiles: a pass over
+    another tree prints the command for it instead of reducing the record
+    to the trees that tree cites.
     """
     if not written or args.dry_run or args.offline or os.environ.get("RETROBIOS_OFFLINE"):
+        return
+    if Path(args.emulators_dir).resolve() != (REPO_ROOT / EMULATORS_DIR).resolve():
+        print(
+            f"source paths not refreshed: {args.emulators_dir} is not the repository's "
+            f"{EMULATORS_DIR}/: run python scripts/sitesources.py --fetch "
+            f"--emulators-dir {args.emulators_dir} --cache-dir {args.cache_dir} "
+            "--output <record> to record them",
+            file=sys.stderr,
+        )
         return
     from core.artifacts import ArtifactLockBusy
     from model.profiles import emulator_profiles_cache
@@ -48,7 +60,9 @@ def refresh_source_paths(args: argparse.Namespace, written: set[str]) -> None:
     emulator_profiles_cache.clear()
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
     try:
-        held, unread = sources.refresh_record(profiles, [sources.TREE_CACHE], fetch=True)
+        held, unread = sources.refresh_record(
+            profiles, [Path(args.cache_dir)], fetch=True, output=sources.SOURCE_PATHS,
+        )
     except ArtifactLockBusy as exc:
         # The profiles are written: only the record waits for the other run.
         print(
