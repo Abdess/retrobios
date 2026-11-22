@@ -10,6 +10,7 @@ import yaml
 from core.statefile import now_iso
 from model import measurements as mr
 from probes import rules
+from probes.findings import OPEN_STATUSES, latest_findings
 from probes.profileedit import write_fields
 from probes.state import DONE, FAILED, PENDING
 
@@ -69,11 +70,8 @@ def render_status(report: dict) -> str:
 
 
 def open_findings(root: Path, everything: bool = False) -> list[dict]:
-    latest: dict[str, dict] = {}
-    for line in mr.read_campaign(root, mr.FINDINGS):
-        latest[line["key"]] = line
-    return [line for key, line in sorted(latest.items())
-            if everything or line["status"] in ("open", "flagged")]
+    return [line for key, line in sorted(latest_findings(root).items())
+            if everything or line["status"] in OPEN_STATUSES]
 
 
 REVIEWED = ("applied", "rejected")
@@ -92,11 +90,10 @@ def review_finding(root: Path, key: str, status: str, reason: str,
         raise ValueError(f"status {status!r}: one of {', '.join(REVIEWED)}")
     if not reason.strip():
         raise ValueError("a review names its reason")
-    latest = {line["key"]: line for line in mr.read_campaign(root, mr.FINDINGS)}
-    finding = latest.get(key)
+    finding = latest_findings(root).get(key)
     if finding is None:
         raise ValueError(f"no finding {key}")
-    if finding["status"] not in ("open", "flagged"):
+    if finding["status"] not in OPEN_STATUSES:
         raise ValueError(f"{key} is {finding['status']}, not open")
     if updates and status != "applied":
         raise ValueError("only an applied review changes the profile")

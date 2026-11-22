@@ -162,6 +162,7 @@ COMMANDS = {
         "probes/campaign.py", "probes/host.py", "probes/content.py", "probes/cores.py",
         "probes/rules.py", "probes/state.py", "probes/gate.py", "probes/reports.py",
         "probes/profileedit.py", "probes/entries.py", "probes/campaignmodes.py",
+        "probes/findings.py",
     ),
     "standalone_probe.py": (
         "probes/standaloneemulators.py", "probes/appimage.py", "probes/xvfb.py",

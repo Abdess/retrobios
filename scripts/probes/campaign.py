@@ -37,6 +37,7 @@ from probes.entries import (
     region_matches,
     regions_of,
 )
+from probes.findings import OPEN_STATUSES, latest_findings
 from probes.gate import gate
 from probes.host import (
     Host,
@@ -629,16 +630,10 @@ class Campaign:
     def finding_key(self, emulator: str, content: Content, entry: dict, verdict: rules.Verdict) -> str:
         return f"{emulator}/{content.system}/{entry['name']}/{verdict.field}"
 
-    def latest_findings(self) -> dict[str, dict]:
-        latest: dict[str, dict] = {}
-        for line in mr.read_campaign(self.paths.root, mr.FINDINGS):
-            latest[line["key"]] = line
-        return latest
-
     def finding(self, emulator: str, content: Content, core: Core, entry: dict,
                 verdict: rules.Verdict, status: str, says: object, extra: str = "") -> None:
         key = self.finding_key(emulator, content, entry, verdict)
-        previous = self.latest_findings().get(key)
+        previous = latest_findings(self.paths.root).get(key)
         if previous and previous["status"] == status and previous["rule"] == verdict.rule \
                 and previous["run_shows"] == verdict.value and previous["profile_says"] == says \
                 and previous["evidence"] == list(verdict.evidence):
@@ -669,8 +664,8 @@ class Campaign:
 
     def resolve(self, emulator: str, content: Content, core: Core, entry: dict,
                 verdict: rules.Verdict, says: object) -> None:
-        previous = self.latest_findings().get(self.finding_key(emulator, content, entry, verdict))
-        if previous and previous["status"] in ("open", "flagged"):
+        previous = latest_findings(self.paths.root).get(self.finding_key(emulator, content, entry, verdict))
+        if previous and previous["status"] in OPEN_STATUSES:
             self.finding(emulator, content, core, entry, verdict, "resolved", says)
 
     def library_version(self, emulator: str, ids: Sequence[str]) -> str | None:
