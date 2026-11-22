@@ -31,6 +31,8 @@ from collections.abc import Iterable
 from configparser import ConfigParser
 from pathlib import PurePosixPath
 
+from model.romfolders import format_ref
+
 from . import Fetcher, SourceError, register
 
 _LIBRETRO = re.compile(r"([A-Za-z0-9_+.\-${}]+?)_libretro\.so")
@@ -41,13 +43,6 @@ def line_of(text: str, needle: str, start: int = 0) -> int:
     """1-based line of the first needle at or after start, 0 when absent."""
     idx = text.find(needle, start)
     return text.count("\n", 0, idx) + 1 if idx >= 0 else 0
-
-
-def ref(key: str, path: str, line: int | str | None = None) -> str:
-    """A source_ref part. A space in a path is written %20, as in a URL:
-    the ref grammar ends a path at the first space."""
-    path = path.replace("%", "%25").replace(" ", "%20")
-    return f"{key} {path}:{line}" if line else f"{key} {path}"
 
 
 def extensions(raw: str | Iterable[str] | None) -> list[str]:
@@ -117,7 +112,7 @@ def parse_onion(spec: dict, fetcher: Fetcher) -> list[dict]:
         script = fetcher.optional_text(key, script_path) or ""
         packages.setdefault(_rompath_folder(config.get("rompath", "")), []).append({
             "layer": layer, "package": package, "config": config,
-            "core": libretro_core(script), "ref": ref(key, path, line_of(text, '"rompath"')),
+            "core": libretro_core(script), "ref": format_ref(key, path, line_of(text, '"rompath"')),
             "script": script_path,
         })
     rows = []
@@ -169,7 +164,7 @@ def parse_spruce(spec: dict, fetcher: Fetcher) -> list[dict]:
             "aliases": [str(a) for a in config.get("alternativeFolderNames") or []],
             "extensions": extensions(config.get("extlist")),
             "core": config.get("default_emulator"),
-            "source_ref": ref(key, path, line_of(text, '"default_emulator"') or 1),
+            "source_ref": format_ref(key, path, line_of(text, '"default_emulator"') or 1),
             "note": ". ".join(notes),
         })
     return rows
@@ -200,7 +195,7 @@ def parse_crossmix(spec: dict, fetcher: Fetcher) -> list[dict]:
             "extensions": extensions(config.get("extlist")),
             "core": core,
             "emulator": "retroarch" if core else "standalone",
-            "source_ref": ref(key, path, line_of(text, '"rompath"') or 1),
+            "source_ref": format_ref(key, path, line_of(text, '"rompath"') or 1),
             "note": note if core else f"{note}, names no libretro core",
         })
     return rows
@@ -247,7 +242,7 @@ def parse_koriki(spec: dict, fetcher: Fetcher) -> list[dict]:
             "extensions": extensions(body.get("romExts")),
             "core": core or (execs[0] if execs else None),
             "emulator": "retroarch" if core else "standalone",
-            "source_ref": ref(key, path, line_of(text, f"[{section}]")),
+            "source_ref": format_ref(key, path, line_of(text, f"[{section}]")),
             "note": note,
         })
     return rows
@@ -328,7 +323,7 @@ def parse_allium(spec: dict, fetcher: Fetcher) -> list[dict]:
             "extensions": extensions(console.get("extensions")),
             "core": core or first,
             "emulator": "retroarch" if core else "standalone",
-            "source_ref": ref(key, params["consoles"], console["__line__"]),
+            "source_ref": format_ref(key, params["consoles"], console["__line__"]),
             "note": "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension wins over its folder",
         })
     return rows
@@ -369,7 +364,7 @@ def parse_minui(spec: dict, fetcher: Fetcher) -> list[dict]:
         script = fetcher.text(key, path)
         core = libretro_core(script)
         line = line_of(script, "EMU_EXE=") or line_of(script, "_libretro.so") or 1
-        paks.setdefault(match.group(1), {})[_pak_device(path)] = (core or "", ref(key, path, line))
+        paks.setdefault(match.group(1), {})[_pak_device(path)] = (core or "", format_ref(key, path, line))
     rows = []
     for tag, devices in sorted(paks.items()):
         counts: dict[str, int] = {}
@@ -430,7 +425,7 @@ def parse_plumos(spec: dict, fetcher: Fetcher) -> list[dict]:
             "extensions": extensions(system.get("extensions")),
             "core": core or None,
             "emulator": kind or None,
-            "source_ref": ref(key, params["path"], line),
+            "source_ref": format_ref(key, params["path"], line),
             "note": ". ".join(notes),
         })
     return rows
@@ -466,7 +461,7 @@ def parse_muos(spec: dict, fetcher: Fetcher) -> list[dict]:
             "aliases": friendly,
             "core": core,
             "emulator": "retroarch" if so else "external",
-            "source_ref": ref(key, params["path"], line_of(text, json.dumps(system) + ":")),
+            "source_ref": format_ref(key, params["path"], line_of(text, json.dumps(system) + ":")),
             "note": "a folder matches when its name, lowercased without ' -_+', is one of the friendly names",
         })
     return rows
@@ -493,7 +488,7 @@ def parse_gmenu2x(spec: dict, fetcher: Fetcher) -> list[dict]:
             "extensions": extensions(fields.get("selectorfilter")),
             "core": link["core"],
             "emulator": "standalone",
-            "source_ref": ref(link["source"], link["path"], line_of(text, "selectordir=")),
+            "source_ref": format_ref(link["source"], link["path"], line_of(text, "selectordir=")),
             "note": f"gmenu2x link of the {link['core']} package",
         }
     key = params["source"]
@@ -503,7 +498,7 @@ def parse_gmenu2x(spec: dict, fetcher: Fetcher) -> list[dict]:
             continue
         rows[parts[0]] = {
             "folder": parts[0],
-            "source_ref": ref(key, f"{params['shipped_roms']}/{parts[0]}"),
+            "source_ref": format_ref(key, f"{params['shipped_roms']}/{parts[0]}"),
             "note": "folder the image ships. Its emulator link lives in a release package no repository holds",
         }
     return list(rows.values())
@@ -521,7 +516,7 @@ def parse_mister(spec: dict, fetcher: Fetcher) -> list[dict]:
         {
             "folder": folder,
             "emulator": "mister-core",
-            "source_ref": ref(key, f"games/{folder}/"),
+            "source_ref": format_ref(key, f"games/{folder}/"),
             "arcade": folder in arcade or None,
             "note": params["arcade_note"] if folder in arcade else None,
         }
@@ -573,9 +568,9 @@ def parse_romm(spec: dict, fetcher: Fetcher) -> list[dict]:
         if found:
             note = None if slug in stable else "core only with EmulatorJS nightly cores"
             rows.append({"folder": slug, "core": found[0][0], "emulator": "emulatorjs",
-                         "source_ref": ref(key, params["cores_map"], found[1]), "note": note})
+                         "source_ref": format_ref(key, params["cores_map"], found[1]), "note": note})
         else:
-            rows.append({"folder": slug, "source_ref": ref(key, params["bios_fixture"]),
+            rows.append({"folder": slug, "source_ref": format_ref(key, params["bios_fixture"]),
                          "note": "no EmulatorJS core, RomM keeps BIOS for it"})
     return rows
 
@@ -613,11 +608,11 @@ def parse_bizhawk(spec: dict, fetcher: Fetcher) -> list[dict]:
             continue
         sids = [match.group(1)] if match.group(1) else combined.get(match.group(2), [])
         exts: list[str] = []
-        refs = [ref(key, params["paths"], number)]
+        refs = [format_ref(key, params["paths"], number)]
         for sid in sids:
             if sid in ext_fields:
                 exts.extend(ext_fields[sid][0])
-                refs.append(ref(key, params["rom_loader"], ext_fields[sid][1]))
+                refs.append(format_ref(key, params["rom_loader"], ext_fields[sid][1]))
         cores = [preferred[s] for s in sids if s in preferred]
         note = "the open dialog starts here, nothing is scanned"
         if cores:

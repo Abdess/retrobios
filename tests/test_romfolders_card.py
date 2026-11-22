@@ -13,7 +13,7 @@ import json
 import unittest
 from pathlib import Path
 
-from model.romfolders import source_refs, split_refs
+from model.romfolders import format_ref, source_refs, split_refs
 from model.safeparse import yaml_load
 from scraper.romfolders import SourceError, dump_setup, load_sources, scrape_setup
 from scraper.romfolders.card import (
@@ -31,7 +31,6 @@ from scraper.romfolders.card import (
     parse_romm,
     parse_spruce,
     parse_toml_subset,
-    ref,
 )
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -85,8 +84,19 @@ class LaunchScriptTests(unittest.TestCase):
         self.assertIsNone(libretro_core("./drastic \"$1\"\n"))
 
     def test_space_in_a_cited_path_is_escaped(self) -> None:
-        part = ref("os", "Emu/Commodore - Amiga/config.json", 3)
+        part = format_ref("os", "Emu/Commodore - Amiga/config.json", 3)
         self.assertEqual(split_refs(part), [("os", "Emu/Commodore%20-%20Amiga/config.json", "3")])
+
+    def test_every_written_ref_reads_back(self) -> None:
+        cases = {
+            ("os", "Emu/A B/config.json", (3,)): ("os", "Emu/A%20B/config.json", "3"),
+            ("os", "a/100%/b.cfg", ()): ("os", "a/100%25/b.cfg", None),
+            ("os", "conf/x.conf", (4, None, "7-9")): ("os", "conf/x.conf", "4,7-9"),
+            ("os", "games/A B/", (0, "")): ("os", "games/A%20B/", None),
+        }
+        for (key, path, lines), expected in cases.items():
+            with self.subTest(path=path, lines=lines):
+                self.assertEqual(split_refs(format_ref(key, path, *lines)), [expected])
 
 
 class ParserTests(unittest.TestCase):

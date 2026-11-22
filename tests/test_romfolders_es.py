@@ -142,6 +142,18 @@ class EsXmlFormat(unittest.TestCase):
         self.assertEqual(self.rows["psx"]["source_ref"], "os es_systems.cfg:4")
         self.assertEqual(self.rows["advision"]["source_ref"], "os es_systems.cfg:20")
 
+    def test_space_in_a_cited_path_reads_back(self) -> None:
+        class SpacedFetcher(FixtureFetcher):
+            def optional_text(self, key: str, path: str) -> str | None:
+                return super().optional_text(key, path.removeprefix("Board A/"))
+
+        spec = {"name": "Fixture", "platform": "", "format": "es-xml",
+                "params": {**self.params, "file": "Board A/es_systems.cfg"}}
+        doc = scrape_setup("fixture", spec, SpacedFetcher(FIXTURES / "xml"))
+        self.assertEqual(by_folder(doc)["psx"]["source_ref"], "os Board%20A/es_systems.cfg:4")
+        for row in doc["folders"]:
+            self.assertTrue(split_refs(row["source_ref"]))
+
 
 class EsJsonFormat(unittest.TestCase):
     def test_flagged_default_and_ignored_system(self) -> None:

@@ -31,6 +31,15 @@ SOURCES_DIR = ROMFOLDERS_DIR / "_sources"
 _REF_PART = re.compile(r"^(?P<key>[a-z0-9][a-z0-9-]*) (?P<path>\S+?)(?::(?P<lines>\d+(?:-\d+)?(?:,\d+(?:-\d+)?)*))?$")
 
 
+def format_ref(key: str, path: str, *lines: int | str | None) -> str:
+    """One source_ref part that split_refs reads back. A space in the path is
+    written %20, as in a URL, since the grammar ends a path at the first space.
+    Absent lines (None, empty, 0) are left out, the others joined by commas."""
+    path = path.replace("%", "%25").replace(" ", "%20")
+    kept = [str(n) for n in lines if n not in (None, "", 0)]
+    return f"{key} {path}:{','.join(kept)}" if kept else f"{key} {path}"
+
+
 def split_refs(source_ref: str) -> list[tuple[str, str, str | None]]:
     """Each (source key, path, lines) a source_ref names, or ValueError."""
     parts: list[tuple[str, str, str | None]] = []

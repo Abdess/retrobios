@@ -31,16 +31,12 @@ import shlex
 from collections import Counter
 from collections.abc import Iterator
 
+from model.romfolders import format_ref
 from model.safeparse import parse_untrusted_xml, yaml_load_upstream
 
 from ..retropie_modules import PLATFORM_FLAGS, module_enabled, module_fields
 from ..recalbox_romfs import Defconfig, defconfig_boards, read_system_ini
 from . import Fetcher, SourceError, register
-
-
-def _ref(key: str, path: str, *lines: int | str | None) -> str:
-    kept = [str(n) for n in lines if n not in (None, "")]
-    return f"{key} {path}:{','.join(kept)}" if kept else f"{key} {path}"
 
 
 def _board(core: str | None, emulator: str | None, source_ref: str) -> dict:
@@ -172,10 +168,10 @@ def batocera_es(spec: dict, fetcher: Fetcher) -> list[dict]:
             override = data.get(name) or {}
             b_emu, b_core = override.get("emulator", emulator), override.get("core", core)
             if (b_emu, b_core) != (emulator, core) and b_core:
-                board_defaults[board] = _board(b_core, b_emu, _ref(key, real, lines.get(name)))
-        refs = [_ref(key, es_path, es_lines.get(name))]
+                board_defaults[board] = _board(b_core, b_emu, format_ref(key, real, lines.get(name)))
+        refs = [format_ref(key, es_path, es_lines.get(name))]
         if name in def_lines:
-            refs.append(_ref(key, def_path, def_lines[name]))
+            refs.append(format_ref(key, def_path, def_lines[name]))
         rows.append({
             "folder": str(folder),
             "name": name,
@@ -325,7 +321,7 @@ def _xml_rows(text: str, key: str, path: str, params: dict) -> list[dict]:
             "extensions": _extensions(system.findtext("extension")),
             "core": core or emulator,
             "emulator": emulator,
-            "source_ref": _ref(key, path, row["line"]),
+            "source_ref": format_ref(key, path, row["line"]),
             "offers": _offers(
                 [{"emulator": e, "core": c} for e, cores in emulators for c, _d in cores or [(e, False)]],
                 core, emulator),
@@ -364,7 +360,7 @@ def es_json(spec: dict, fetcher: Fetcher) -> list[dict]:
             "extensions": _extensions(system.get("extensions")),
             "core": core or emulator,
             "emulator": emulator,
-            "source_ref": _ref(key, path, row["line"]),
+            "source_ref": format_ref(key, path, row["line"]),
             "offers": _offers(
                 [{"emulator": e, "core": c} for e, cores in emulators for c, _d in cores or [(e, False)]],
                 core, emulator),
@@ -509,13 +505,13 @@ def elec_conf(spec: dict, fetcher: Fetcher) -> list[dict]:
             board = _board_key(c["branches"])
             if c is not pick and board and (c["emulator"], c["core"]) != (
                     pick and pick["emulator"], pick and pick["core"]):
-                board_defaults[board] = _board(c["core"], c["emulator"], _ref(key, package, c["line"]))
+                board_defaults[board] = _board(c["core"], c["emulator"], format_ref(key, package, c["line"]))
         refs = [
-            _ref(key, conf_path, value_lines.get("SYSTEM_PATH"), value_lines.get("SYSTEM_EXTENSION")),
-            _ref(key, package, *lines),
+            format_ref(key, conf_path, value_lines.get("SYSTEM_PATH"), value_lines.get("SYSTEM_EXTENSION")),
+            format_ref(key, package, *lines),
         ]
         if pick:
-            refs.append(_ref(key, package, pick["line"]))
+            refs.append(format_ref(key, package, pick["line"]))
         note = None
         if pick and pick["branches"] and not _board_key(pick["branches"]) and pick["branches"][-1][1] != "*":
             note = "default core chosen under a build condition: " + ", ".join(
@@ -531,7 +527,7 @@ def elec_conf(spec: dict, fetcher: Fetcher) -> list[dict]:
             "offers": _offers([
                 {"emulator": c["emulator"], "core": c["core"],
                  "when": ", ".join(f"{v} {p}".strip() for v, p in c["branches"]),
-                 "source_ref": _ref(key, package, c["line"])}
+                 "source_ref": format_ref(key, package, c["line"])}
                 for c in mine
             ], pick["core"] if pick else None, pick["emulator"] if pick else None),
             "arcade": values.get("SYSTEM_HARDWARE") == "arcade" or None,
@@ -666,7 +662,7 @@ def _searched_by(commands: list[tuple[str, str, int | None]], key: str, path: st
             row["machines"] = record["machines"]
         if record["any_machine"]:
             row["any_machine"] = True
-        row["source_ref"] = _ref(key, path, *record["lines"])
+        row["source_ref"] = format_ref(key, path, *record["lines"])
         rows.append(row)
     return rows
 
@@ -709,7 +705,7 @@ def esde(spec: dict, fetcher: Fetcher) -> list[dict]:
             ]
             systems[name] = {
                 "folder": folder, "extensions": extensions, "commands": commands,
-                "ref": _ref(key, path, lines.get(name)),
+                "ref": format_ref(key, path, lines.get(name)),
                 "searched_by": _searched_by(placed, key, path),
                 "placed": [(*c, key, path) for c in placed],
             }
@@ -728,14 +724,14 @@ def esde(spec: dict, fetcher: Fetcher) -> list[dict]:
         if name in alternatives:
             label, line = alternatives[name]
             match = next((c for c in commands if c[0] == label), None)
-            refs.append(_ref(alt["source"], alt["path"], line))
+            refs.append(format_ref(alt["source"], alt["path"], line))
             if match:
                 chosen = match
             else:
                 note = f"alternative emulator '{label}' names no command of this system"
         emulator, core = command_core(chosen[1])
         offers = _offers([
-            {"emulator": e, "core": c, "source_ref": _ref(key_, path_, line)}
+            {"emulator": e, "core": c, "source_ref": format_ref(key_, path_, line)}
             for _label, command, line, key_, path_ in system["placed"]
             for e, c in [command_core(command)] if e
         ], core, emulator)
@@ -838,8 +834,8 @@ def recalbox(spec: dict, fetcher: Fetcher) -> list[dict]:
                 cores.append({
                     "core": core, "emulator": emulator, "priority": int(priority or "255"),
                     "source_ref": "; ".join([
-                        _ref(key, path, priority_line, core_line),
-                        _ref(key, config_path, enabled[package]),
+                        format_ref(key, path, priority_line, core_line),
+                        format_ref(key, config_path, enabled[package]),
                     ]),
                 })
             if cores:
@@ -861,7 +857,7 @@ def recalbox(spec: dict, fetcher: Fetcher) -> list[dict]:
             "files": sorted(names),
             "core": core,
             "emulator": emulator,
-            "source_ref": "; ".join([_ref(key, path, lines.get("system/roms.folder")), first["source_ref"]]),
+            "source_ref": "; ".join([format_ref(key, path, lines.get("system/roms.folder")), first["source_ref"]]),
             "board_defaults": board_defaults,
             "arcade": sections.get("properties", {}).get("type") == "arcade" or None,
             "note": "an extension ending in ! is an archive the frontend does not open" if archive else None,
@@ -950,11 +946,11 @@ def retropie(spec: dict, fetcher: Fetcher) -> list[dict]:
                 defaults.setdefault(system, (emu, module["path"], line))
     rows: list[dict] = []
     for system, (raw, line) in sorted(exts.items()):
-        refs = [_ref(key, cfg_path, line)]
+        refs = [format_ref(key, cfg_path, line)]
         core = None
         if system in defaults:
             core, path, call = defaults[system]
-            refs.append(_ref(key, path, call))
+            refs.append(format_ref(key, path, call))
         emulator = "retroarch" if core and core.startswith("lr-") else core
         rows.append({
             "folder": system,
