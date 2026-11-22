@@ -24,7 +24,7 @@ from unittest import mock
 import install
 from sitegen import bootstrap as sitebootstrap
 from model import guides
-from model.guides import INSTALL_BASE, INSTALL_PS1, INSTALL_SH, install_command
+from model.guides import install_base, install_ps1, install_sh, install_command
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -153,29 +153,29 @@ class DocumentedCommands(unittest.TestCase):
         config = (WEBSITE / "astro.config.mjs").read_text(encoding="utf-8")
         site = re.search(r"const SITE = '([^']+)'", config).group(1)
         base = re.search(r"const BASE = '([^']+)'", config).group(1)
-        self.assertEqual(f"{INSTALL_BASE}/", site + base)
-        self.assertEqual(INSTALL_SH, f"{site}{base}{guides.SH_NAME}")
-        self.assertEqual(INSTALL_PS1, f"{site}{base}{guides.PS1_NAME}")
-        self.assertEqual(install.BOOTSTRAP_URL, INSTALL_SH)
-        self.assertEqual(f"{install.BOOTSTRAP_URL}.ps1", INSTALL_PS1)
+        self.assertEqual(f"{install_base()}/", site + base)
+        self.assertEqual(install_sh(), f"{site}{base}{guides.SH_NAME}")
+        self.assertEqual(install_ps1(), f"{site}{base}{guides.PS1_NAME}")
+        self.assertEqual(install.BOOTSTRAP_URL, install_sh())
+        self.assertEqual(f"{install.BOOTSTRAP_URL}.ps1", install_ps1())
 
     def test_the_installer_hints_give_the_short_command(self):
         with mock.patch.dict(os.environ, {"RETROBIOS_BOOTSTRAP": "sh"}):
-            self.assertEqual(install.Invocation().launcher(), f"curl -fsSL {INSTALL_SH} | sh -s --")
+            self.assertEqual(install.Invocation().launcher(), f"curl -fsSL {install_sh()} | sh -s --")
         with mock.patch.dict(os.environ, {"RETROBIOS_BOOTSTRAP": "ps1"}):
             self.assertEqual(install.Invocation().launcher(),
-                             f"&([scriptblock]::Create((irm {INSTALL_PS1})))")
+                             f"&([scriptblock]::Create((irm {install_ps1()})))")
 
     def test_every_page_a_user_copies_from_gives_the_short_command(self):
         sources = {
             "wiki/installer.md": [install_command("sh"), install_command("powershell")],
             "wiki/first-install.md": [install_command("sh"), install_command("powershell")],
-            "wiki/faq.md": [f"curl -fsSL {INSTALL_SH} | sh -s -- --dry-run"],
+            "wiki/faq.md": [f"curl -fsSL {install_sh()} | sh -s -- --dry-run"],
             "wiki/troubleshooting.md": [install_command("sh", "--check")],
             "wiki/tools.md": [install_command("sh"), install_command("powershell")],
-            "website/src/components/FilePicker.astro": [f"'curl -fsSL {INSTALL_SH} | sh -s --'"],
-            "scripts/download.sh": [f"curl -fsSL {INSTALL_SH} | sh -s -- --platform <name>"],
-            "scripts/release/packinfo.py": [f"curl -fsSL {INSTALL_SH} | sh -s -- --platform <name>"],
+            "website/src/components/FilePicker.astro": [f"'curl -fsSL {install_sh()} | sh -s --'"],
+            "scripts/download.sh": [f"curl -fsSL {install_sh()} | sh -s -- --platform <name>"],
+            "scripts/release/packinfo.py": [f"curl -fsSL {install_sh()} | sh -s -- --platform <name>"],
         }
         for rel, commands in sources.items():
             text = (REPO_ROOT / rel).read_text(encoding="utf-8")
@@ -202,7 +202,7 @@ class DocumentedCommands(unittest.TestCase):
     def test_no_command_drops_the_scheme(self):
         """A first request in clear text lets anyone on the way serve another
         script, which the installer's pin cannot catch: the pin is in it."""
-        bare = INSTALL_BASE.removeprefix("https://")
+        bare = install_base().removeprefix("https://")
         for page in sorted((REPO_ROOT / "wiki").glob("*.md")):
             text = page.read_text(encoding="utf-8")
             with self.subTest(page=page.name):
@@ -258,11 +258,11 @@ class GeneratedSurfaces(unittest.TestCase):
         from sitegen import consolecards
 
         tail = " | sh -s -- --check"
-        self.assertEqual(consolecards.install_box_weight([f"curl -fsSL {INSTALL_SH}{tail}"]),
+        self.assertEqual(consolecards.install_box_weight([f"curl -fsSL {install_sh()}{tail}"]),
                          len("curl -fsSL ") + 66 + len(tail) + 1)
-        line = f"&([scriptblock]::Create((irm {INSTALL_PS1}))) --check"
+        line = f"&([scriptblock]::Create((irm {install_ps1()}))) --check"
         self.assertEqual(consolecards.install_box_weight([line]),
-                         len(line) - len(INSTALL_PS1) + 67 + 1)
+                         len(line) - len(install_ps1()) + 67 + 1)
 
     def test_the_readme_shows_the_short_form(self):
         readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
@@ -274,7 +274,7 @@ class GeneratedSurfaces(unittest.TestCase):
     @unittest.skipUnless(DOCS.is_dir(), "site not generated")
     def test_the_site_shows_the_short_form(self):
         pages = {path: path.read_text(encoding="utf-8") for path in DOCS.rglob("*.md*")}
-        self.assertTrue(any(INSTALL_SH in text for text in pages.values()))
+        self.assertTrue(any(install_sh() in text for text in pages.values()))
         long_form = sorted(str(path.relative_to(DOCS)) for path, text in pages.items()
                            if OLD_SH in text or OLD_PS1 in text)
         self.assertEqual(long_form, ["wiki/installer.md"])

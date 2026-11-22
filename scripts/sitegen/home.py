@@ -7,7 +7,7 @@ import html
 from core.paths import PLATFORMS_DIR
 from core.sizes import size_text
 from model.composition import compute_composition
-from model.guides import DEVICE_GROUPS, GROUP_TILES, GUIDES, Guide, TRUST_ITEMS, setup_count
+from model.guides import device_groups, group_tiles, platform_guides, Guide, trust_items, setup_count
 from model.profiles import unique_emulator_profiles
 from model.registry import load_platform_registry
 from sitegen import markup
@@ -47,13 +47,14 @@ def _tiles(registry: dict, members: list[str], display: dict[str, str], prefix: 
     """The setup tiles of one device group: logo, name and the hardware it
     runs on, then the group's other tiles: a kind of device that runs one of
     the setups (Android handhelds, Linux handhelds)."""
+    guides = platform_guides()
     return markup.platform_tiles([
         *((display[name], f"{prefix}platforms/{name}.md",
            str(registry.get(name, {}).get("logo") or ""),
-           GUIDES[name].runs_on or runs_on_text(registry.get(name, {}), GUIDES[name]))
+           guides[name].runs_on or runs_on_text(registry.get(name, {}), guides[name]))
           for name in members),
         *((tile.name, f"{prefix}{tile.link}", tile.logo, tile.text)
-          for tile in GROUP_TILES.get(group, ())),
+          for tile in group_tiles().get(group, ())),
     ], eager=eager)
 
 
@@ -64,9 +65,9 @@ def setup_picker(registry: dict, display: dict[str, str], prefix: str = "") -> l
     page: the 19 logos were most of the bytes of the home page."""
     lines: list[str] = []
     alone: list[str] = []
-    for group, (label, _description) in DEVICE_GROUPS.items():
+    for group, (label, _description) in device_groups().items():
         members = group_keys(registry, group, display)
-        if len(members) == 1 and not GROUP_TILES.get(group):
+        if len(members) == 1 and not group_tiles().get(group):
             alone += members
         elif members:
             eager = 0 if lines else markup.FIRST_ROW_TILES
@@ -136,7 +137,7 @@ def generate_home(
         *setup_picker(registry, display),
         "## Is it safe?",
         "",
-        *(f"- {item}" for item in TRUST_ITEMS),
+        *(f"- {item}" for item in trust_items()),
         "",
         "[How the command is checked](wiki/faq.md#is-piping-the-installer-into-a-shell-safe). "
         "Details: [Is it legal?](wiki/legal.md)",

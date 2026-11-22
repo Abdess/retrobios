@@ -18,7 +18,7 @@ from pathlib import Path
 
 from sitegen import diagrams
 from sitegen import steps as sitesteps
-from model.guides import TERMINALS
+from model.guides import terminals
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -49,7 +49,7 @@ class EachDrawingNamesItsSteps(unittest.TestCase):
 
     def test_the_drawing_and_the_text_name_the_same_keys(self):
         for tab, (_title, steps) in sitesteps.STEPS.items():
-            text = TERMINALS[tab][1].replace("**", "")
+            text = terminals()[tab][1].replace("**", "")
             keys = {step.word for step in steps if step.icon == "keys"}
             with self.subTest(tab=tab):
                 for word in keys:

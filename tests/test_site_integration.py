@@ -90,10 +90,10 @@ class PlatformLogos(unittest.TestCase):
         self.assertTrue(self.registry["minui"]["logo_flip"])
 
     def test_every_logo_copy_has_a_registry_or_tile_logo(self):
-        from model.guides import GROUP_TILES
+        from model.guides import group_tiles
 
         tiles = {re.sub(r"[^a-z0-9]+", "-", tile.name.lower()).strip("-"): tile.logo
-                 for group in GROUP_TILES.values() for tile in group}
+                 for group in group_tiles().values() for tile in group}
         sources = json.loads((REPO_ROOT / "docs_assets" / "logos" / "sources.json").read_text())
         for entry in sources["images"]:
             with self.subTest(platform=entry["platform"]):

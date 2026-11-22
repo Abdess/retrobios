@@ -10,11 +10,11 @@ from model import releaserecord
 from model import siteinputs
 from model.collection import profiles_on_disk
 from model.guides import (
-    GUIDES,
+    platform_guides,
     Guide,
     HandheldGuide,
     HandheldSystem,
-    TERMINALS,
+    terminals,
     detected_systems as _detected_systems,
 )
 from model.registry import load_platform_registry
@@ -258,7 +258,7 @@ def setup_routes(name: str, display: str, page_link: bool = False) -> list[str]:
     computer, the card from a computer when the device has no network, and
     the device's own terminal. *page_link* adds the get/ page, on the setup
     page only."""
-    guide = GUIDES[name]
+    guide = platform_guides()[name]
     share = _network_share(name, guide)
     card = _card_route(name, display, guide)
     shared = _get_page_line(name, display) if page_link else []
@@ -371,7 +371,7 @@ def _guide_install(name: str, guide: Guide, heading: str) -> list[str]:
             "**E:**. Put the card's path after `--dest`.",
             "",
         ]
-    device = guide.terminal or f"{TERMINALS['device'][1]} {DEVICE_TERMINAL_FALLBACK}"
+    device = guide.terminal or f"{terminals()['device'][1]} {DEVICE_TERMINAL_FALLBACK}"
     return [
         *lines,
         *terminal_tabs(guide.run, platform_args(name, guide), how={"device": device}),
@@ -431,7 +431,7 @@ def generate_handheld_guide(guide: HandheldGuide) -> str:
 
     A handheld owner starts from the device name. The systems were named
     only in a closed note, with a path seen from inside the device."""
-    uses = GUIDES[guide.uses]
+    uses = platform_guides()[guide.uses]
     display = platform_display(guide.uses)
     args = {"windows": f"--platform {guide.uses} --dest E:\\BIOS",
             "macos": f"--platform {guide.uses} --dest /path/to/card/BIOS",
@@ -479,7 +479,7 @@ def platform_guide(name: str, display: str, cov: dict, registry: dict, no_list: 
 
     A system that runs only on its own device puts the computer route
     (download, unzip into the network folder) before the command."""
-    guide = GUIDES[name]
+    guide = platform_guides()[name]
     entry = registry.get(name, {})
     extract_to = entry.get("extract_to")
     # An app's page opens on the command: one line to paste is the shortest

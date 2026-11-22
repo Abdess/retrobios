@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import re
 
-from model.guides import GUIDES
+from model.guides import platform_guides
 from model.systemnames import system_name
 from resolve.nativemode import check_label, reads_file_contents
 from sitegen import markup
@@ -146,11 +146,12 @@ def _platform_head(name: str, cov: dict, registry: dict, no_list: bool) -> list[
         "",
     ]
 
-    summary = GUIDES[name].summary if name in GUIDES else ""
+    guide = platform_guides().get(name)
+    summary = guide.summary if guide else ""
     if summary:
         lines += [summary + (f" [{display} website]({homepage})." if homepage else ""), ""]
 
-    if name in GUIDES:
+    if guide:
         lines += platform_guide(name, display, cov, registry, no_list)
     lines += [
         "## Reference: every file by system { #reference-every-file-by-system }",
@@ -159,7 +160,7 @@ def _platform_head(name: str, cov: dict, registry: dict, no_list: bool) -> list[
         "",
         "For checking the work: counts, the list's source and each file's hashes.",
         "",
-        *(line for note in (GUIDES[name].reference_notes if name in GUIDES else ())
+        *(line for note in (guide.reference_notes if guide else ())
           for line in (note, "")),
     ]
     if no_list:
@@ -197,7 +198,7 @@ def generate_platform_page(
                   "| Detail | Value |", "|---|---|"])
     lines.extend(_platform_meta_rows(name, config, cov["mode"], registry))
     lines.extend(["", "</div>"])
-    if name not in GUIDES:
+    if name not in platform_guides():
         detect = (registry.get(name, {}).get("install") or {}).get("detect") or []
         on_card = any(rule.get("method") == "card_marker" for rule in detect)
         lines.extend(["", *platform_install_block(name, display, on_card)])

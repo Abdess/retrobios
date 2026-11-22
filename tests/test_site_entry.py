@@ -95,7 +95,7 @@ class TrustItemsSayWhereItWrites(unittest.TestCase):
                    for entry in json.loads(path.read_text(encoding="utf-8")).get("files", []))
         ]
         self.assertTrue(saves, "no manifest files an entry under root: save")
-        text = " ".join(guides.TRUST_ITEMS).lower()
+        text = " ".join(guides.trust_items()).lower()
         self.assertNotIn("only in your bios folder", text)
         self.assertIn("save folder", text)
         self.assertIn("--restore", text)
@@ -103,7 +103,7 @@ class TrustItemsSayWhereItWrites(unittest.TestCase):
     def test_home_shows_the_same_items(self):
         # A term's first use on the page carries its gloss.
         home = re.sub(r"</?abbr[^>]*>", "", _page("index.md"))
-        for item in guides.TRUST_ITEMS:
+        for item in guides.trust_items():
             self.assertIn(f"- {item}", home)
         self.assertNotIn("only in your BIOS folder", home)
 
@@ -156,7 +156,7 @@ class SetupTiles(unittest.TestCase):
         for name in ("index.md", "which-pack.md"):
             text = _page(name)
             with self.subTest(page=name):
-                extra = sum(len(tiles) for tiles in guides.GROUP_TILES.values())
+                extra = sum(len(tiles) for tiles in guides.group_tiles().values())
                 self.assertEqual(text.count('class="rb-card rb-tile"'), len(REGISTRY) + extra)
                 for key in REGISTRY:
                     self.assertIn(f'href="/retrobios/platforms/{key}/"', text)
@@ -177,7 +177,7 @@ class SetupTiles(unittest.TestCase):
         home = _page("index.md")
         display = {k: load_platform_config(k, str(REPO_ROOT / "platforms")).get("platform", k)
                    for k in REGISTRY}
-        for group, (label, _description) in guides.DEVICE_GROUPS.items():
+        for group, (label, _description) in guides.device_groups().items():
             members = [k for k in REGISTRY if REGISTRY[k].get("device_group") == group]
             if len(members) == 1:
                 with self.subTest(group=group):
@@ -185,9 +185,9 @@ class SetupTiles(unittest.TestCase):
                     self.assertIn(f">{display[members[0]]}</strong>", home)
 
     def test_hardware_is_named_and_cited(self):
-        self.assertIn("Raspberry Pi", guides.GUIDES["batocera"].summary)
-        self.assertIn("Raspberry Pi", guides.DEVICE_GROUPS["gaming-os"][0])
-        self.assertIn("Anbernic", guides.DEVICE_GROUPS["handheld"][0])
+        self.assertIn("Raspberry Pi", guides.platform_guides()["batocera"].summary)
+        self.assertIn("Raspberry Pi", guides.device_groups()["gaming-os"][0])
+        self.assertIn("Anbernic", guides.device_groups()["handheld"][0])
         lines = GUIDES_YAML.splitlines()
         for number, line in enumerate(lines):
             if re.match(r"    (runs_on|terminal):", line):
@@ -233,7 +233,7 @@ class GuideRoutes(unittest.TestCase):
         text = _page("platforms/batocera.md")
         self.assertLess(text.index("## From a computer"), text.index("## On the device"))
         self.assertIn("{ #install }", "\n".join(guidepage._guide_install(
-            "batocera", guides.GUIDES["batocera"], "## On the device { #install }")))
+            "batocera", guides.platform_guides()["batocera"], "## On the device { #install }")))
         self.assertIn("Unzip them all into the network folder above", text)
 
     def test_a_computer_app_keeps_the_command_first(self):
@@ -241,8 +241,8 @@ class GuideRoutes(unittest.TestCase):
         self.assertLess(text.index("## Install"), text.index("## Download"))
 
     def test_each_device_tab_says_how_to_open_its_terminal(self):
-        shared = guides.TERMINALS["device"][1]
-        for name, guide in guides.GUIDES.items():
+        shared = guides.terminals()["device"][1]
+        for name, guide in guides.platform_guides().items():
             if "device" not in guide.run:
                 continue
             with self.subTest(platform=name):
@@ -265,7 +265,7 @@ class GuideRoutes(unittest.TestCase):
 
 class PackManualReadsThePageFolders(unittest.TestCase):
     def test_every_path_in_a_pack_manual_is_a_folder_of_its_page(self):
-        for name, guide in guides.GUIDES.items():
+        for name, guide in guides.platform_guides().items():
             if not guide.pack_manual:
                 continue
             known = " ".join(path.replace("`", "") for _w, path in guides.folder_list(name))
@@ -326,7 +326,7 @@ class CommandBlocks(unittest.TestCase):
         self.assertEqual(sorted(set(sh_args)), sorted(set(ps_args)))
         self.assertEqual(len(set(sh_args)), 2)
         self.assertIn('```powershell title="PowerShell"', block)
-        for key, guide in guides.GUIDES.items():
+        for key, guide in guides.platform_guides().items():
             if "windows" in guide.run:
                 with self.subTest(platform=key):
                     self.assertIn("/i.ps1", _guide_part(_page(f"platforms/{key}.md")))
@@ -360,7 +360,7 @@ class HomeLinksTheOtherTasks(unittest.TestCase):
         self.assertLess(home.index("/retrobios/wiki/troubleshooting/"), home.index("## Is it needed? { #do-i-need-it }"))
 
 
-GUIDE = guides.HANDHELD_GUIDE
+GUIDE = guides.handheld_guide()
 
 
 def _plain_guide_part(text: str) -> str:
@@ -376,7 +376,7 @@ def _display(key: str) -> str:
 
 class HandheldWayIn(unittest.TestCase):
     def test_android_and_linux_tiles_on_home_and_get_your_files(self):
-        tiles = guides.GROUP_TILES.get("handheld", ())
+        tiles = guides.group_tiles().get("handheld", ())
         self.assertEqual([tile.name for tile in tiles],
                          ["Android", "Linux handhelds", "iPhone and iPad"])
         for name in ("index.md", "which-pack.md"):
@@ -432,7 +432,7 @@ class HandheldWayIn(unittest.TestCase):
         data = {"page": "x", "title": "X", "summary": "S", "uses": "retroarch",
                 "systems": [{"name": "Onion"}]}
         with self.assertRaises(guides.GuideError):
-            guides._handheld_guide(data, REGISTRY, guides.GUIDES, "x")
+            guides._handheld_guide(data, REGISTRY, guides.platform_guides(), "x")
 
     def test_devices_are_a_search_field_with_no_text(self):
         text = _page(GUIDE.path)
@@ -450,7 +450,7 @@ class HandheldWayIn(unittest.TestCase):
         setup = next(tab["Setups"] for tab in nav if "Setups" in tab)
         groups = {next(iter(item)): next(iter(item.values()))
                   for item in setup if isinstance(item, dict)}
-        label = guides.DEVICE_GROUPS["handheld"][0]
+        label = guides.device_groups()["handheld"][0]
         self.assertIn({GUIDE.title: GUIDE.path}, groups[label])
 
     def test_the_guide_fills_the_card_and_never_its_root(self):
@@ -672,7 +672,7 @@ class DownloadLine(unittest.TestCase):
         self.assertRegex(line, r"\[SHA256SUMS\.txt\]\([^)]+\) and its \[signature\]\([^)]+\)\.$")
 
 
-HANDHELDS = guides.HANDHELD_GUIDE
+HANDHELDS = guides.handheld_guide()
 OFFLINE_ANCHOR = "#without-a-network-offline-install"
 
 
@@ -686,7 +686,7 @@ def _with_zip(name: str) -> bool:
     return bool(pack and pack.get("assets"))
 
 
-SETUPS = [name for name in guides.GUIDES if name in REGISTRY]
+SETUPS = [name for name in guides.platform_guides() if name in REGISTRY]
 
 
 class NoZipNoUnzipText(unittest.TestCase):
@@ -742,9 +742,9 @@ class NoZipNoUnzipText(unittest.TestCase):
 
     def test_the_network_route_needs_a_share_and_no_zip(self):
         for name in SETUPS:
-            share = guidepage._network_share(name, guides.GUIDES[name])
+            share = guidepage._network_share(name, guides.platform_guides()[name])
             with self.subTest(setup=name):
-                if _with_zip(name) or guides.GUIDES[name].run != ("device",):
+                if _with_zip(name) or guides.platform_guides()[name].run != ("device",):
                     self.assertEqual(share, "")
                 if share:
                     self.assertTrue(share.startswith("\\\\"))
@@ -818,7 +818,7 @@ class EntryCopy(unittest.TestCase):
 
     def test_the_setup_index_lists_the_handheld_tiles(self):
         text = _plain_page("platforms/index.md")
-        for tile in guides.GROUP_TILES["handheld"]:
+        for tile in guides.group_tiles()["handheld"]:
             target = tile.link.removesuffix(".md").replace(".md#", "/#")
             with self.subTest(tile=tile.name):
                 self.assertIn(f"**[{tile.name}](/retrobios/{target}", text.replace("/)", ")"))
@@ -827,7 +827,7 @@ class EntryCopy(unittest.TestCase):
 
 class IphoneAndIpad(unittest.TestCase):
     def test_a_tile_in_the_handheld_group(self):
-        tile = next(t for t in guides.GROUP_TILES["handheld"] if t.name == "iPhone and iPad")
+        tile = next(t for t in guides.group_tiles()["handheld"] if t.name == "iPhone and iPad")
         self.assertEqual(tile.link, "which-pack.md#iphone-and-ipad")
         for name in ("index.md", "which-pack.md"):
             with self.subTest(page=name):
@@ -884,18 +884,18 @@ class GetPagesGiveTheSetupsOwnRoutes(unittest.TestCase):
 
     def test_a_card_setup_names_the_card(self):
         for name in SETUPS:
-            if not guides.GUIDES[name].on_card:
+            if not guides.platform_guides()[name].on_card:
                 continue
             with self.subTest(setup=name):
                 for command in COMMAND.findall(_plain_page(f"get/{name}.md")):
                     self.assertIn("--dest ", command)
 
     def test_no_tab_for_a_system_the_setup_does_not_run_from(self):
-        labels = {key: entry[0] for key, entry in guides.TERMINALS.items()}
+        labels = {key: entry[0] for key, entry in guides.terminals().items()}
         for name in SETUPS:
             if _with_zip(name):
                 continue
-            guide = guides.GUIDES[name]
+            guide = guides.platform_guides()[name]
             allowed = {labels[key] for key in guide.run}
             allowed |= {labels[key] for key in guide.card_run or ("windows", "macos", "linux")}
             if guidepage._network_share(name, guide):
@@ -938,7 +938,7 @@ class CheckNeedsTheFiles(unittest.TestCase):
 class ARouteWithoutANetwork(unittest.TestCase):
     def test_every_setup_page_has_the_offline_line_or_the_card_route(self):
         for name in SETUPS:
-            guide = guides.GUIDES[name]
+            guide = guides.platform_guides()[name]
             text = _guide_part(_plain_page(f"platforms/{name}.md"))
             with self.subTest(setup=name):
                 if _with_zip(name):
@@ -951,7 +951,7 @@ class ARouteWithoutANetwork(unittest.TestCase):
 
     def test_every_device_setup_with_no_zip_links_the_card_answer(self):
         for name in SETUPS:
-            guide = guides.GUIDES[name]
+            guide = guides.platform_guides()[name]
             if _with_zip(name) or guide.run != ("device",):
                 continue
             extract_to = REGISTRY[name]["extract_to"]
@@ -968,7 +968,7 @@ class ARouteWithoutANetwork(unittest.TestCase):
         self.assertLess(text.index("## From a computer"), text.index("## On the device"))
 
     def test_retropie_card_is_read_from_linux_only(self):
-        self.assertEqual(guides.GUIDES["retropie"].card_run, ("linux",))
+        self.assertEqual(guides.platform_guides()["retropie"].card_run, ("linux",))
         text = _plain_page("platforms/retropie.md")
         card = text.split("No network?", 1)[1].split("## On the device", 1)[0]
         # One system, so no tab bar: its label leads the command.
@@ -981,7 +981,7 @@ class ARouteWithoutANetwork(unittest.TestCase):
         folder neither can open."""
         for name in ("lakka", "retropie"):
             with self.subTest(setup=name):
-                self.assertEqual(guides.GUIDES[name].card_run, ("linux",))
+                self.assertEqual(guides.platform_guides()[name].card_run, ("linux",))
                 card = _plain_page(f"platforms/{name}.md").split("No network?", 1)[1]
                 card = card.split("## On the device", 1)[0]
                 self.assertEqual(_tab_labels(card), set())
@@ -1039,7 +1039,7 @@ class GetPagesSayWhatTheyHold(unittest.TestCase):
 
 class HandheldRowsSayWhere(unittest.TestCase):
     def test_retrooz_names_its_folder_with_a_pinned_source(self):
-        system = next(s for s in guides.HANDHELD_GUIDE.systems if s.name == "RetroOZ")
+        system = next(s for s in guides.handheld_guide().systems if s.name == "RetroOZ")
         self.assertIn("`/roms/bios`", system.folder)
         self.assertRegex(system.folder_source, r"/wiki/Home/[0-9a-f]{40}$")
         row = next(line for line in _plain_page("platforms/linux-handhelds.md").splitlines()
@@ -1053,7 +1053,7 @@ class GetIndex(unittest.TestCase):
         for name in SETUPS:
             with self.subTest(setup=name):
                 self.assertIn(f"(/retrobios/get/{name}/)", text)
-        for label, _description in guides.DEVICE_GROUPS.values():
+        for label, _description in guides.device_groups().values():
             self.assertIn(f"## {label}", text)
 
 

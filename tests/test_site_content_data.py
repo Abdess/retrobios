@@ -13,6 +13,8 @@ import tests
 import ast
 import re
 import shutil
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -21,9 +23,9 @@ import yaml
 
 from sitegen import decorate
 from sitegen import nav as sitegen_nav
-from model import guides
+from model import guides, siteinputs
 from core.cli import SourceUnreadable
-from model.guides import GUIDES, GuideError, load_guides
+from model.guides import platform_guides, GuideError, load_guides
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -51,7 +53,7 @@ class GuidesLiveInYaml(unittest.TestCase):
     def test_every_registered_platform_has_a_guide_in_the_file(self):
         written = yaml.safe_load(_guides_text())["guides"]
         self.assertEqual(sorted(written), sorted(_registry()))
-        self.assertEqual(sorted(GUIDES), sorted(_registry()))
+        self.assertEqual(sorted(platform_guides()), sorted(_registry()))
 
     def test_a_platform_without_a_guide_is_named(self):
         data = yaml.safe_load(_guides_text())
@@ -88,7 +90,7 @@ class GuidesLiveInYaml(unittest.TestCase):
         registry = _registry()
         written = yaml.safe_load(_guides_text())["guides"]["batocera"]["folders"][0]
         self.assertNotIn("path", written)
-        self.assertEqual(GUIDES["batocera"].folders[0],
+        self.assertEqual(platform_guides()["batocera"].folders[0],
                          (written["where"], f"`{registry['batocera']['extract_to']}`"))
 
     def test_a_folder_row_without_path_needs_an_extract_folder(self):
@@ -108,6 +110,41 @@ class GuidesLiveInYaml(unittest.TestCase):
         self.assertTrue(manual.startswith("  Option B: Manual\n  ----------------\n"))
         self.assertTrue(manual.endswith("  4. Overwrite if asked\n\n"))
         self.assertEqual(guides.pack_manual("minui"), "")
+
+
+class GuidesLoadOnFirstUse(unittest.TestCase):
+    """The guides were read and checked at import, from the repository's
+    platforms folder: a pack build died on a registry entry with no guide
+    before parsing its options, and a site run on another collection took
+    the repository's guides."""
+
+    def test_importing_the_pack_builder_reads_no_guide(self):
+        script = ("import sys\n"
+                  "opened = []\n"
+                  "sys.addaudithook(lambda event, args: opened.append(str(args[0]))"
+                  " if event == 'open' else None)\n"
+                  "import packs.platformpack, sitegen.build\n"
+                  "print([path for path in opened if path.endswith(('_guides.yml', '_registry.yml'))])\n")
+        result = subprocess.run([sys.executable, "-c", script], cwd=REPO_ROOT / "scripts",
+                                capture_output=True, text=True, check=True)
+        self.assertEqual(result.stdout.strip(), "[]")
+
+    def test_the_guides_follow_the_platforms_folder_of_the_run(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            for name in ("_registry.yml", "_guides.yml"):
+                (folder / name).write_text(
+                    (REPO_ROOT / "platforms" / name).read_text(encoding="utf-8"), encoding="utf-8")
+            data = yaml.safe_load(_guides_text())
+            data["install_base"] = "https://example.org/x"
+            (folder / "_guides.yml").write_text(yaml.safe_dump(data), encoding="utf-8")
+            before = siteinputs.current()
+            siteinputs.use(siteinputs.SiteInputs(platforms=folder))
+            try:
+                self.assertEqual(guides.install_sh(), f"https://example.org/x/{guides.SH_NAME}")
+            finally:
+                siteinputs.use(before)
+        self.assertNotEqual(guides.install_base(), "https://example.org/x")
 
 
 # A table of prose keyed by platform: what the guides file replaced.

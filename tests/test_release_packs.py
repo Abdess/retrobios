@@ -270,7 +270,7 @@ class EverySurfaceSaysWhy(unittest.TestCase):
         with contextlib.chdir(REPO_ROOT):
             block = guidepage.pack_buttons("knulli")
             guide = guidepage._guide_download(
-                "knulli", "KNULLI", guides.GUIDES["knulli"], None, "## Download")
+                "knulli", "KNULLI", guides.platform_guides()["knulli"], None, "## Download")
         self.assertIn(line, block)
         self.assertIn(guidepage.NO_ZIP_FAQ, block)
         self.assertIn(line, "\n".join(guide))

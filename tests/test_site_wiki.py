@@ -46,7 +46,7 @@ from pathlib import Path
 import yaml
 
 from sitegen import diagrams, ogcards, pageprep
-from model.guides import INSTALL_SH
+from model.guides import install_sh
 from tests import sitepages
 from installer_build import port
 from installer_build.module import installer_module
@@ -133,7 +133,7 @@ class InstallCommandsHaveEveryForm(unittest.TestCase):
     def test_a_windows_path_replaces_the_unix_one(self):
         page = (
             "<!-- os-tabs windows: --platform retroarch --dest E:\\x -->\n```sh\n"
-            f"curl -fsSL {INSTALL_SH} \\\n  | sh -s -- --platform retroarch --dest /a/b\n```\n"
+            f"curl -fsSL {install_sh()} \\\n  | sh -s -- --platform retroarch --dest /a/b\n```\n"
         )
         text = pageprep.expand_commands(page)
         windows, rest = text.split('<TabItem label="macOS">', 1)
@@ -1054,7 +1054,7 @@ class OsTabsTakeOptionsPerSystem(unittest.TestCase):
     """The marker gives any tab its own options, and refuses words it cannot read."""
 
     PAGE = ("<!-- os-tabs windows: --dest E:\\x macos: --dest /m steamdeck: --dest /d -->\n"
-            f"```sh\ncurl -fsSL {INSTALL_SH} | sh -s -- --dest /l\n```\n")
+            f"```sh\ncurl -fsSL {install_sh()} | sh -s -- --dest /l\n```\n")
 
     def test_each_named_tab_uses_its_own(self):
         parts = re.split(r'<TabItem label="([^"]+)">', pageprep.expand_commands(self.PAGE))

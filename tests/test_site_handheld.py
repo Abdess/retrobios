@@ -108,7 +108,7 @@ class WhereEachSystemFindsItsFile(unittest.TestCase):
         from sitegen import getpages
         from sitegen import guidepage
 
-        guide = guides.HANDHELD_GUIDE
+        guide = guides.handheld_guide()
         self.assertEqual(handhelds.GROUP_PAGE, guide.page)
         with contextlib.chdir(REPO_ROOT):
             self.assertIn(f"(../get/{handhelds.GROUP_PAGE}.md)",

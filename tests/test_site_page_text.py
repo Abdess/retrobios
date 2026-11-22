@@ -25,7 +25,7 @@ from pathlib import Path
 from sitegen import diagrams
 from sitegen import entries as siteentries
 from sitegen import steps as sitesteps
-from model.guides import TERMINALS
+from model.guides import terminals
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -166,7 +166,7 @@ class PageReadsOnce:
         for name, page in self.pages.items():
             text = _letters(page.text)
             for tab, (title, steps) in sitesteps.STEPS.items():
-                prose = _letters(TERMINALS[tab][1])
+                prose = _letters(terminals()[tab][1])
                 with self.subTest(page=name, tab=tab):
                     self.assertLessEqual(text.count(prose), 1)
                     self.assertNotIn(_letters(title), text)

@@ -19,7 +19,7 @@ from model.collection import group_by_manufacturer, manufacturer_slug
 from model.composition import compute_composition
 from model.database import load_database
 from model.dumpcatalog import load_provenance_snapshots
-from model.guides import HANDHELD_GUIDE
+from model.guides import handheld_guide
 from model.profiles import is_emulator, lists_files, load_emulator_profiles
 from model.registry import list_registered_platforms, load_platform_registry
 from model.systemnames import program_names, set_console_sections, system_name
@@ -337,8 +337,9 @@ def _write_platform_pages(run: _SiteRun) -> dict[str, str]:
         str(docs / "platforms" / "index.md"),
         generate_platform_index(coverages, run.registry),
     )
-    if HANDHELD_GUIDE:
-        write_if_changed(str(docs / HANDHELD_GUIDE.path), generate_handheld_guide(HANDHELD_GUIDE))
+    handhelds = handheld_guide()
+    if handhelds:
+        write_if_changed(str(docs / handhelds.path), generate_handheld_guide(handhelds))
     published_parts = load_published_parts()
     for name, cov in coverages.items():
         # The emulators this platform runs, not every one of the system.

@@ -729,7 +729,7 @@ class InstallBlockWhereItWorks(unittest.TestCase):
     def test_no_os_tab_outside_the_data_root(self) -> None:
         if not _generated():
             self.skipTest("site pages not generated")
-        labels = {key: guides.TERMINALS[key][0] for key in guides.TERMINALS}
+        labels = {key: guides.terminals()[key][0] for key in guides.terminals()}
         for name, profile in _profiles_with_data_root().items():
             allowed = {labels["device"]}
             for key in profile["data_root"]:

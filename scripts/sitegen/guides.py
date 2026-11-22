@@ -13,7 +13,7 @@ from __future__ import annotations
 
 
 from sitegen import markup
-from model.guides import Guide, TERMINALS, TRUST_ITEMS, install_command
+from model.guides import Guide, terminals, trust_items, install_command
 
 
 # The title over each command block, by the shell it is written for.
@@ -42,7 +42,7 @@ def terminal_tabs(
     after its text and after its command (sitegen.steps.install_box)."""
     items = []
     for key in tabs:
-        label, shared, shell = TERMINALS[key]
+        label, shared, shell = terminals()[key]
         if len(tabs) == 1 and key in PLACES:
             label = ""  # one place, which the text around already names
         text = (how or {}).get(key) or shared
@@ -70,7 +70,7 @@ def platform_args(name: str, guide: Guide) -> dict[str, str]:
 def trust_box(prefix: str, indent: str = "") -> list[str]:
     """Is it safe, under every command on a guide page: the trust items."""
     return markup.details("note", "Is it safe?", [
-        *(f"- {item}" for item in TRUST_ITEMS),
+        *(f"- {item}" for item in trust_items()),
         "",
         f"[Read the script first]({prefix}wiki/faq.md#is-piping-the-installer-into-a-shell-safe)",
     ], indent)

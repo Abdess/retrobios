@@ -13,7 +13,7 @@ from pathlib import Path
 from core.text import series
 from model import siteinputs
 from model.collection import profiles_in
-from model.guides import GUIDES, TERMINALS, install_command
+from model.guides import platform_guides, terminals, install_command
 from model.platforms import load_platform_config
 from model.registry import list_release_pack_platforms
 from model.profiles import reads_own_files
@@ -99,7 +99,7 @@ def install_commands(args: str = "", indent: str = "",
     download page and the platform, system and emulator pages, so none of
     them loses the Android or Windows form.
 
-    ``oses`` names the terminals (keys of TERMINALS) the command runs in,
+    ``oses`` names the terminals (keys of terminals()) the command runs in,
     written as the synced OS tabs: MAME4droid runs on Android only, and its
     page offered a PowerShell command. None keeps the three blocks.
     """
@@ -159,7 +159,7 @@ def emulator_install_route(name: str, profile: dict) -> tuple[str, list[str], tu
     standalone = profile.get("type") == "standalone"
     accepted: dict[str, set[str]] = {}
     for platform, names in _published_emulator_names().items():
-        if platform not in GUIDES:
+        if platform not in platform_guides():
             continue
         # Decided per setup, as the manifest decides it: Batocera's hcl
         # package leaves out the 667 files every other setup's install brings.
@@ -167,7 +167,7 @@ def emulator_install_route(name: str, profile: dict) -> tuple[str, list[str], tu
             continue
         if standalone and not runs_standalone(name, profile, _standalone_cores(platform)):
             continue
-        if any("--dest" in args for args in platform_args(platform, GUIDES[platform]).values()):
+        if any("--dest" in args for args in platform_args(platform, platform_guides()[platform]).values()):
             continue
         own = {n for n, target in names.items() if target == name}
         if own:
@@ -179,15 +179,16 @@ def emulator_install_route(name: str, profile: dict) -> tuple[str, list[str], tu
     candidates = set().union(*accepted.values())
     command = min(candidates, key=lambda n: (
         -sum(n in own for own in accepted.values()), n != name, n))
-    order = list(GUIDES)
+    guides = platform_guides()
+    order = list(guides)
     setups = sorted((p for p, own in accepted.items() if command in own), key=order.index)
-    terminals = {key for setup in setups for key in GUIDES[setup].run}
+    runs_in = {key for setup in setups for key in guides[setup].run}
     if isinstance(profile.get("data_root"), dict):
         # Only the systems the program is built for (Cemu has no Android
         # build). A device setup runs it itself: its terminal stays.
-        terminals &= {"device", *(t for key in profile["data_root"]
+        runs_in &= {"device", *(t for key in profile["data_root"]
                                    for t in _DATA_ROOT_TERMINALS.get(key, ()))}
-    oses = tuple(key for key in _COMMAND_TERMINALS if key in terminals)
+    oses = tuple(key for key in _COMMAND_TERMINALS if key in runs_in)
     if not oses:
         return "", [], ()
     return command, setups, oses
@@ -452,7 +453,8 @@ def _default_setup(declared: list[tuple[str, str]]) -> tuple[str, str]:
     most systems overall, then one the release publishes a ZIP for.
     """
     def reach(pair: tuple[str, str]) -> tuple[int, int, bool]:
-        runs = GUIDES[pair[0]].run if pair[0] in GUIDES else ()
+        guide = platform_guides().get(pair[0])
+        runs = guide.run if guide else ()
         return (len(set(runs) & set(INSTALL_PICKER_OSES)), len(runs), has_release_pack(pair[0]))
 
     return max(declared, key=reach)
@@ -482,7 +484,7 @@ def _install_picker(declared: list[tuple[str, str]]) -> list[str]:
                       quote=False)
         + "</option>"
         for platform, system in declared)
-    args = {key: _install_args(*lead, TERMINALS[key][2]) for key in INSTALL_PICKER_OSES}
+    args = {key: _install_args(*lead, terminals()[key][2]) for key in INSTALL_PICKER_OSES}
     return [
         "Each platform names the system its own way.",
         "",

@@ -60,11 +60,11 @@ class ReadmeRegressions(unittest.TestCase):
 
     def test_advertised_bootstrap_urls_are_the_shipped_ones(self):
         from sitegen import bootstrap as sitebootstrap
-        from model.guides import INSTALL_BASE
+        from model.guides import install_base
 
         quick_install = self._quick_install()
         for name in sitebootstrap.SOURCES:
-            url = f"{INSTALL_BASE}/{name}"
+            url = f"{install_base()}/{name}"
             self.assertIn(f"{url} |", quick_install, f"{name} bootstrap URL missing")
         # The site serves each bootstrap with install.py read from the
         # commit it was built from, the raw form from main.
@@ -891,11 +891,11 @@ class PackReadmesSayWhatTheInstallerDoes(unittest.TestCase):
         return text[text.index("INSTALLATION"):text.index("TROUBLESHOOTING")]
 
     def test_retroarch_offers_the_windows_installer(self):
-        from model.guides import INSTALL_PS1, INSTALL_SH
+        from model.guides import install_ps1, install_sh
 
         guide = self._guide("retroarch")
-        self.assertIn(f"{INSTALL_SH} | sh", guide)
-        self.assertIn(f"{INSTALL_PS1} | iex", guide)
+        self.assertIn(f"{install_sh()} | sh", guide)
+        self.assertIn(f"{install_ps1()} | iex", guide)
 
     def test_emudeck_keys_match_the_registry_and_the_flag(self):
         import re
@@ -918,10 +918,10 @@ class PackReadmesSayWhatTheInstallerDoes(unittest.TestCase):
 
     def test_retropie_never_sends_a_pc_to_the_linux_partition(self):
         guide = self._guide("retropie")
-        from model.guides import INSTALL_SH
+        from model.guides import install_sh
 
         self.assertNotIn("Put the SD card in your PC", guide)
-        self.assertIn(f"{INSTALL_SH} | sh", guide)
+        self.assertIn(f"{install_sh()} | sh", guide)
 
 
 class AutoFetchReadsListsAndPlacesWithoutClobbering(unittest.TestCase):

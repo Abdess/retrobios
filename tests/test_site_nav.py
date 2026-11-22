@@ -43,7 +43,7 @@ from core import anchors as core_anchors
 from model.registry import list_registered_platforms, load_platform_registry
 from model.platforms import load_platform_config
 
-from model.guides import DEVICE_GROUPS
+from model.guides import device_groups
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -82,7 +82,7 @@ def _index_anchors(markdown: str) -> set[str]:
 
 
 ANCHORS = {
-    "platforms/index.md": {core_anchors.toc_slug(label) for label, _ in DEVICE_GROUPS.values()},
+    "platforms/index.md": {core_anchors.toc_slug(label) for label, _ in device_groups().values()},
     "systems/index.md": {"consoles-and-computers"},
     "emulators/index.md": _index_anchors(emulatorsindex.generate_emulators_index({
         "duckstation": {"emulator": "DuckStation", "systems": ["sony-playstation"]},
@@ -476,9 +476,10 @@ def _moved_platform_pages() -> list[Path]:
         return []
     # A guide page sits beside the setups (platforms/linux-handhelds) without
     # being a list moved off one of them.
-    from model.guides import HANDHELD_GUIDE
+    from model.guides import handheld_guide
 
-    guides = {Path(HANDHELD_GUIDE.path).stem} if HANDHELD_GUIDE else set()
+    handhelds = handheld_guide()
+    guides = {Path(handhelds.path).stem} if handhelds else set()
     return [path for path in sorted(folder.glob("*.md*"))
             if path.stem not in platforms and path.stem != "index" and path.stem not in guides]
 

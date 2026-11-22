@@ -22,7 +22,7 @@ from sitegen import whichpack
 from tests import sitepages
 from model.registry import list_registered_platforms, load_platform_registry
 from model.platforms import load_platform_config
-from model.guides import DEVICE_GROUPS, GROUP_ANCHORS, GUIDES
+from model.guides import device_groups, group_anchors, platform_guides
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -83,11 +83,11 @@ class EveryPlatformOnThePicker(unittest.TestCase):
         registry = load_platform_registry(str(REPO_ROOT / "platforms"))
         for key in _registered():
             with self.subTest(platform=key):
-                self.assertIn(registry[key].get("device_group"), DEVICE_GROUPS)
-                self.assertIn(key, GUIDES)
+                self.assertIn(registry[key].get("device_group"), device_groups())
+                self.assertIn(key, platform_guides())
 
     def test_every_group_has_an_anchor(self):
-        self.assertEqual(set(GROUP_ANCHORS), set(DEVICE_GROUPS))
+        self.assertEqual(set(group_anchors()), set(device_groups()))
 
     def test_every_platform_has_a_row(self):
         page = _which_pack()
@@ -130,16 +130,16 @@ class EveryPlatformOnThePicker(unittest.TestCase):
         groups = {next(iter(item)): next(iter(item.values()))
                   for item in setup if isinstance(item, dict)}
         for key in coverages:
-            label = DEVICE_GROUPS[registry[key]["device_group"]][0]
+            label = device_groups()[registry[key]["device_group"]][0]
             with self.subTest(platform=key):
                 self.assertIn({coverages[key]["platform"]: f"platforms/{key}.md"}, groups[label])
 
     def test_handheld_systems_that_run_retroarch_are_named(self):
         """muOS, ArkOS and the rest are detected as RetroArch by the
         installer and were named on no page a user reads."""
-        from model.guides import HANDHELD_GUIDE
+        from model.guides import handheld_guide
 
-        page = guidepage.generate_handheld_guide(HANDHELD_GUIDE)
+        page = guidepage.generate_handheld_guide(handheld_guide())
         self.assertIn("| muOS |", page)
         self.assertIn("`MUOS/bios` on the card", page)
         self.assertNotIn("| TrimUI |", page)

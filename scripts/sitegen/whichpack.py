@@ -7,13 +7,13 @@ from core.sizes import size_text
 from core.ziptools import build_zip_contents_index
 from model import siteinputs
 from model.guides import (
-    ALSO_RUNS,
-    DEVICE_GROUPS,
-    GROUP_ANCHORS,
-    GUIDES,
+    also_runs,
+    device_groups,
+    group_anchors,
+    platform_guides,
     Guide,
     PACKAGE_COMMAND,
-    TERMINALS,
+    terminals,
     install_command,
 )
 from model.platforms import load_platform_config
@@ -106,7 +106,7 @@ def _folder_row(key: str, display: dict[str, str], registry: dict, record: dict,
     """One setup's row: where it runs, its BIOS folder and its ZIP. A setup
     whose ZIP holds its own top folder says where to unzip it, and the
     BIOS folder itself when it has no ZIP to unzip."""
-    guide = GUIDES[key]
+    guide = platform_guides()[key]
     pack = releaserecord.pack_for(key, record)
     zipped = bool(pack and pack.get("assets"))
     folder = (f"Unzip into `{own_root[key]}`" if key in own_root and zipped
@@ -124,23 +124,23 @@ def _folder_tables(registry: dict, record: dict, display: dict[str, str]) -> lis
     header = ["| Setup | Runs on | BIOS folder | ZIP |", "|-------|---------|-------------|-----|"]
     lines: list[str] = []
     alone: list[str] = []
-    for group, (label, _description) in DEVICE_GROUPS.items():
+    for group, (label, _description) in device_groups().items():
         members = group_keys(registry, group, display)
-        if len(members) == 1 and not ALSO_RUNS.get(group):
+        if len(members) == 1 and not also_runs().get(group):
             alone += members
             continue
         if not members:
             continue
-        lines += [f'<span id="{GROUP_ANCHORS[group]}"></span>**{label}**', "", *header]
+        lines += [f'<span id="{group_anchors()[group]}"></span>**{label}**', "", *header]
         lines += [_folder_row(key, display, registry, record, own_root) for key in members]
         lines += [
             f"| {setup} | {runs_on} | {folder}, same as "
             f"[{display[uses]}](platforms/{uses}.md) | {_pack_cell(uses, record)} |"
-            for setup, _summary, uses, runs_on, folder in ALSO_RUNS.get(group, ())
+            for setup, _summary, uses, runs_on, folder in also_runs().get(group, ())
         ]
         lines.append("")
     if alone:
-        anchors = "".join(f'<span id="{GROUP_ANCHORS[registry[key]["device_group"]]}"></span>'
+        anchors = "".join(f'<span id="{group_anchors()[registry[key]["device_group"]]}"></span>'
                           for key in alone)
         lines += [f"{anchors}**Other setups**", "", *header,
                   *(_folder_row(key, display, registry, record, own_root) for key in alone), ""]
@@ -261,7 +261,7 @@ def generate_which_pack() -> str:
         *trust_box(""),
         "**Check the folder later.** Add `--check`. It changes nothing.",
         "",
-        *terminal_tabs(all_tabs, dict.fromkeys(TERMINALS, "--check"), steps=False),
+        *terminal_tabs(all_tabs, dict.fromkeys(terminals(), "--check"), steps=False),
         *markup.details("note", "Fill an SD card from a computer", [
             "Name the setup and the BIOS folder on the card. For RetroArch on a "
             "Nintendo Switch:",

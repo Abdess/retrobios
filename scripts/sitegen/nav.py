@@ -8,7 +8,7 @@ from pathlib import Path
 
 from model.collection import manufacturer_slug
 from model.composition import GAME_DATA_TOPS
-from model.guides import DEVICE_GROUPS, GROUP_TILES, HANDHELD_GUIDE
+from model.guides import device_groups, group_tiles, handheld_guide
 from model.profiles import unique_emulator_profiles
 from sitegen import measurements as sitemeasurements, starlight as sitestarlight
 from core.paths import REPO_ROOT
@@ -71,16 +71,17 @@ def _system_nav(manufacturers: dict) -> list:
 def _platform_nav(coverages: dict, registry: dict) -> list:
     """Platforms by the kind of device they run on, as on the device picker."""
     nav: list = ["platforms/index.md"]
-    for group, (label, _description) in DEVICE_GROUPS.items():
+    handhelds = handheld_guide()
+    for group, (label, _description) in device_groups().items():
         members = [
             {coverages[name]["platform"]: f"platforms/{name}.md"}
             for name in sorted(coverages, key=lambda n: coverages[n]["platform"].casefold())
             if registry.get(name, {}).get("device_group") == group
         ]
         # The handheld guide sits with the group whose tile leads to it.
-        members += [{HANDHELD_GUIDE.title: HANDHELD_GUIDE.path}
-                    for tile in GROUP_TILES.get(group, ())
-                    if HANDHELD_GUIDE and tile.link == HANDHELD_GUIDE.path]
+        members += [{handhelds.title: handhelds.path}
+                    for tile in group_tiles().get(group, ())
+                    if handhelds and tile.link == handhelds.path]
         if members:
             nav.append({label: members})
     return nav

@@ -104,10 +104,10 @@ FENCE_TITLES = {"sh": "Terminal", "powershell": "PowerShell"}
 
 def _installer_args(body: str) -> str:
     """The options of a one-line install command, continuation lines joined."""
-    from model.guides import INSTALL_SH
+    from model.guides import install_sh
 
     line = " ".join(part.strip().rstrip("\\").strip() for part in body.splitlines())
-    match = re.fullmatch(rf"curl -fsSL {re.escape(INSTALL_SH)} \| sh(?: -s -- (.+))?", line)
+    match = re.fullmatch(rf"curl -fsSL {re.escape(install_sh())} \| sh(?: -s -- (.+))?", line)
     if not match:
         raise ValueError(f"an os-tabs block holds no install command: {line!r}")
     return match.group(1) or ""
@@ -127,7 +127,7 @@ def expand_commands(markdown: str) -> str:
     gives a tab its own options, for a folder that differs there."""
     if "os-tabs" not in markdown:
         return markdown
-    from model.guides import TERMINALS, install_command
+    from model.guides import terminals, install_command
 
     def replace(match: re.Match[str]) -> str:
         indent = match.group("indent")
@@ -135,7 +135,7 @@ def expand_commands(markdown: str) -> str:
         own_args = _own_args(match.group("own"))
         items = []
         for key in OS_TAB_KEYS:
-            label, _how, shell = TERMINALS[key]
+            label, _how, shell = terminals()[key]
             own = own_args.get(key) or args
             items.append((label, [f'```{shell} title="{FENCE_TITLES[shell]}"',
                                   install_command(shell, own), "```"]))

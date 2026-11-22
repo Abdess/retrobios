@@ -7,7 +7,7 @@ import re
 
 from model import releaserecord
 from model import siteinputs
-from model.guides import DEVICE_GROUPS, GROUP_TILES, GUIDES, HANDHELD_GUIDE
+from model.guides import device_groups, group_tiles, platform_guides, handheld_guide
 from model.platforms import load_platform_config
 from model.registry import load_platform_registry
 from installer_build.handhelds import GROUP_PAGE
@@ -38,7 +38,8 @@ def _unzip_into(platform_name: str, display: str, extract_to: str | None, parts:
     what = "them all" if parts > 1 else "it"
     if not setup_relative(extract_to):
         return [f"- Unzip {what} into {folder_words(display, extract_to)}.", ""]
-    lead = GUIDES[platform_name].lead if platform_name in GUIDES else ""
+    guide = platform_guides().get(platform_name)
+    lead = guide.lead if guide else ""
     return [
         f"- Unzip {what} into {folder_words(display, extract_to)}. "
         f"[Where is it?](../platforms/{platform_name}.md#where-the-files-go)",
@@ -157,7 +158,8 @@ def generate_get_index() -> str:
         "# BIOS files by setup", "",
         "One page per setup. Its address stays the same, so it is the one to share.", "",
     ]
-    for group, (label, _description) in DEVICE_GROUPS.items():
+    handhelds = handheld_guide()
+    for group, (label, _description) in device_groups().items():
         names = [name for name, entry in registry.items() if entry.get("device_group") == group]
         if not names:
             continue
@@ -167,8 +169,8 @@ def generate_get_index() -> str:
             lines.append(f"- [{get_page_title(name, display)}]({name}.md)")
         # The handheld app sits with the group whose tile leads to the
         # handheld guide.
-        if any(HANDHELD_GUIDE and tile.link == HANDHELD_GUIDE.path
-               for tile in GROUP_TILES.get(group, ())):
+        if any(handhelds and tile.link == handhelds.path
+               for tile in group_tiles().get(group, ())):
             lines.append(f"- [{sitehandheld.GROUP_TITLE}]({GROUP_PAGE}.md)")
         lines.append("")
     return "\n".join(lines)

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from model import releaserecord
-from model.guides import DEVICE_GROUPS, GROUP_TILES, GUIDES
+from model.guides import device_groups, group_tiles, platform_guides
 from resolve.nativemode import check_label
 from sitegen import markup
 from sitegen.guidepage import NO_ZIP_FAQ
@@ -25,7 +25,7 @@ def generate_platform_index(coverages: dict, registry: dict | None = None) -> st
         "Each setup's page gives the folder and the command.",
         "",
     ]
-    for group, (label, _description) in DEVICE_GROUPS.items():
+    for group, (label, _description) in device_groups().items():
         members = group_members(coverages, registry, group)
         if not members:
             continue
@@ -34,10 +34,10 @@ def generate_platform_index(coverages: dict, registry: dict | None = None) -> st
         # follow, as on the home tiles.
         lines += [f"## {label}", ""]
         lines += markup.card_grid([
-            *((f"[{coverages[name]['platform']}]({name}.md)", [GUIDES[name].summary])
+            *((f"[{coverages[name]['platform']}]({name}.md)", [platform_guides()[name].summary])
               for name in members),
             *((f"[{tile.name}](../{tile.link})", [tile.text])
-              for tile in GROUP_TILES.get(group, ())),
+              for tile in group_tiles().get(group, ())),
         ])
     lines += [
         f"Comparing setups? [Every setup side by side](../{SETUP_TABLE_LINK})",

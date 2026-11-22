@@ -11,7 +11,7 @@ from pathlib import Path
 from core.paths import DB_FILE, PLATFORMS_DIR, REPO_ROOT
 from model.collection import group_by_manufacturer
 from model.database import load_database
-from model.guides import GROUP_TILES, GUIDES
+from model.guides import group_tiles, platform_guides
 from model.registry import load_platform_registry
 from scraper.base_scraper import FetchError, fetch_bytes
 from sitegen.imagenormalize import (
@@ -53,10 +53,10 @@ def fetch_logos() -> Iterator[tuple[str, str]]:
     entries = []
     # The tiles of a kind of device (Android handhelds) beside the setups
     # carry a logo too, named after the tile.
-    sources = [(name, entry.get("logo"), entry, GUIDES.get(name))
+    sources = [(name, entry.get("logo"), entry, platform_guides().get(name))
                for name, entry in sorted(platforms.items())]
     sources += [(re.sub(r"[^a-z0-9]+", "-", tile.name.lower()).strip("-"), tile.logo, {}, tile)
-                for tiles in GROUP_TILES.values() for tile in tiles]
+                for tiles in group_tiles().values() for tile in tiles]
     for name, url, entry, guide in sources:
         if not url:
             # No logo of its own: the tile shows initials, and an old copy

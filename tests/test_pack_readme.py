@@ -116,15 +116,15 @@ class TheOneLinerFollowsTheRegistry(unittest.TestCase):
     def test_the_commands_are_written_once(self):
         """The address comes from install_base in platforms/_guides.yml, the
         one the site's commands use."""
-        from packs import readme as packreadme
-        from model import guides
-        from model.guides import INSTALL_BASE
+        from model.guides import install_ps1, install_sh
 
         source = (REPO_ROOT / "scripts" / "packs" / "readme.py").read_text(encoding="utf-8")
         self.assertNotIn("raw.githubusercontent.com", source)
         self.assertNotIn("abdess.github.io", source)
-        self.assertEqual(packreadme.INSTALL_SH, f"{INSTALL_BASE}/{guides.SH_NAME}")
-        self.assertEqual(packreadme.INSTALL_PS1, f"{INSTALL_BASE}/{guides.PS1_NAME}")
+        text = build_readme("retroarch", "RetroArch", "system", 1, 1,
+                            detect=[{"os": "linux"}, {"os": "windows"}])
+        self.assertIn(install_sh(), text)
+        self.assertIn(install_ps1(), text)
 
 
 class GuidesInstallFromTheZipInHand(unittest.TestCase):

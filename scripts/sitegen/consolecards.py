@@ -8,7 +8,7 @@ from typing import TypeVar
 from core.text import series
 from model.collection import profiles_on_disk
 from model.composition import GAME_DATA_TOPS
-from model.guides import INSTALL_PS1, INSTALL_SH
+from model.guides import install_ps1, install_sh
 from model.profiles import entry_system_ids
 from packs.consumers import FileConsumers
 from sitegen.cards import emulator_display, romset_releases, system_file_card
@@ -41,14 +41,16 @@ SYSTEM_SUMMARY_HTML = 500_000
 # bootstrap, 66 characters (67 for PowerShell). A box is weighed with its
 # address at that length, so the shorter site address moves no console off
 # or onto a summary and no card changes address.
-FITTED_ADDRESS_CHARS = {INSTALL_PS1: 67, INSTALL_SH: 66}
+FITTED_ADDRESS_CHARS = {"ps1": 67, "sh": 66}
 
 
 def install_box_weight(lines: list[str]) -> int:
+    fitted_chars = {install_ps1(): FITTED_ADDRESS_CHARS["ps1"],
+                    install_sh(): FITTED_ADDRESS_CHARS["sh"]}
     weight = 0
     for line in lines:
         weight += len(line) + 1
-        for address, fitted in FITTED_ADDRESS_CHARS.items():
+        for address, fitted in fitted_chars.items():
             found = line.count(address)
             line = line.replace(address, "")
             weight += found * (fitted - len(address))

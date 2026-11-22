@@ -2,22 +2,22 @@
 
 from __future__ import annotations
 
+import functools
 import re
 import textwrap
 from dataclasses import dataclass, fields
 from pathlib import Path
 
+from model import siteinputs
 from model.registry import load_platform_registry
-from core.paths import REPO_ROOT
 from model.sources import source_yaml
 
 
 SH_NAME = "i"
 PS1_NAME = "i.ps1"
-
-
-PLATFORMS_DIR = REPO_ROOT / "platforms"
-GUIDES_FILE = PLATFORMS_DIR / "_guides.yml"
+GUIDES_NAME = "_guides.yml"
+# The same installer from PyPI (scripts/build_pypi.py builds the package).
+PACKAGE_COMMAND = "uvx retrobios"
 
 
 class GuideError(ValueError):
@@ -182,7 +182,7 @@ def _folder_rows(value: object, extract_to: str, where: str) -> tuple[tuple[str,
 
 
 def _guide(name: str, data: object, extract_to: str, terminals: dict) -> Guide:
-    where = f"{GUIDES_FILE.name}: guides.{name}"
+    where = f"{GUIDES_NAME}: guides.{name}"
     if not isinstance(data, dict):
         raise GuideError(f"{where}: expected a mapping")
     _unknown(data, _GUIDE_KEYS, where)
@@ -336,7 +336,7 @@ def _group_tiles(raw: list, at: str) -> tuple[Tile, ...]:
     return tuple(group_tiles)
 
 
-def load_guides(path: Path = GUIDES_FILE, registry: dict | None = None) -> dict:
+def load_guides(path: Path, registry: dict | None = None) -> dict:
     """The guides file, checked against the registry.
 
     Every registered platform has a guide and a device group the file
@@ -344,7 +344,7 @@ def load_guides(path: Path = GUIDES_FILE, registry: dict | None = None) -> dict:
     never built from half a guide.
     """
     if registry is None:
-        registry = load_platform_registry(PLATFORMS_DIR, required=True)
+        registry = load_platform_registry(path.parent, required=True)
     with open(path, encoding="utf-8") as handle:
         data = source_yaml(handle) or {}
     if not isinstance(data, dict):
@@ -404,32 +404,70 @@ def load_guides(path: Path = GUIDES_FILE, registry: dict | None = None) -> dict:
     }
 
 
-_LOADED = load_guides()
-INSTALL_BASE: str = _LOADED["install_base"]
-# The bootstraps the site serves (sitegen/bootstrap.py writes them).
-INSTALL_SH: str = f"{INSTALL_BASE}/{SH_NAME}"
-INSTALL_PS1: str = f"{INSTALL_BASE}/{PS1_NAME}"
-# The same installer from PyPI (scripts/build_pypi.py builds the package).
-PACKAGE_COMMAND = "uvx retrobios"
-DEVICE_GROUPS: dict[str, tuple[str, str]] = _LOADED["device_groups"]
-GROUP_ANCHORS: dict[str, str] = _LOADED["group_anchors"]
-ALSO_RUNS: dict[str, tuple[tuple[str, str, str, str, str], ...]] = _LOADED["also_runs"]
-GROUP_TILES: dict[str, tuple[Tile, ...]] = _LOADED["tiles"]
-HANDHELD_GUIDE: HandheldGuide | None = _LOADED["handheld_guide"]
-TERMINALS: dict[str, tuple[str, str, str]] = _LOADED["terminals"]
-TRUST_ITEMS: tuple[str, ...] = _LOADED["trust_items"]
-GUIDES: dict[str, Guide] = _LOADED["guides"]
-_REGISTRY: dict = _LOADED["registry"]
+@functools.cache
+def _guides_in(platforms: Path) -> dict:
+    return load_guides(platforms / GUIDES_NAME)
+
+
+def loaded() -> dict:
+    """The guides of the platforms folder the run describes, read on first use."""
+    return _guides_in(siteinputs.current().platforms)
+
+
+def platform_guides() -> dict[str, Guide]:
+    return loaded()["guides"]
+
+
+def install_base() -> str:
+    return loaded()["install_base"]
+
+
+def install_sh() -> str:
+    """The sh bootstrap the site serves (sitegen/bootstrap.py writes it)."""
+    return f"{install_base()}/{SH_NAME}"
+
+
+def install_ps1() -> str:
+    """The PowerShell bootstrap the site serves."""
+    return f"{install_base()}/{PS1_NAME}"
+
+
+def device_groups() -> dict[str, tuple[str, str]]:
+    return loaded()["device_groups"]
+
+
+def group_anchors() -> dict[str, str]:
+    return loaded()["group_anchors"]
+
+
+def also_runs() -> dict[str, tuple[tuple[str, str, str, str, str], ...]]:
+    return loaded()["also_runs"]
+
+
+def group_tiles() -> dict[str, tuple[Tile, ...]]:
+    return loaded()["tiles"]
+
+
+def handheld_guide() -> HandheldGuide | None:
+    return loaded()["handheld_guide"]
+
+
+def terminals() -> dict[str, tuple[str, str, str]]:
+    return loaded()["terminals"]
+
+
+def trust_items() -> tuple[str, ...]:
+    return loaded()["trust_items"]
 
 
 def folder_list(name: str, registry: dict | None = None) -> list[tuple[str, str]]:
     """Every folder a guide names, as (where, path): the common ones, the
     rarer builds, and the systems the registry detects when the guide says so."""
-    guide = GUIDES[name]
+    guide = platform_guides()[name]
     rows = [*guide.folders, *guide.more_folders]
     if guide.more_folders_detected:
         rows += [(system, f"`{folder}`")
-                 for system, folder in detected_systems(registry or _REGISTRY, name)]
+                 for system, folder in detected_systems(registry or loaded()["registry"], name)]
     return rows
 
 
@@ -442,12 +480,12 @@ def _plain_folders(name: str) -> str:
 def setup_count() -> int:
     """Setups the site covers: every registered platform, since each keeps
     its page, its pack and its command. The one count every page states."""
-    return len(GUIDES)
+    return len(platform_guides())
 
 
 def pack_manual(name: str) -> str:
     """The manual part of a pack README, indented as the README is, or empty."""
-    guide = GUIDES.get(name)
+    guide = platform_guides().get(name)
     if not guide or not guide.pack_manual:
         return ""
     text = guide.pack_manual.rstrip("\n")
@@ -465,7 +503,7 @@ def install_command(shell: str, args: str = "") -> str:
     takes none.
     """
     if shell == "sh":
-        return f"curl -fsSL {INSTALL_SH} | sh" + (f" -s -- {args}" if args else "")
+        return f"curl -fsSL {install_sh()} | sh" + (f" -s -- {args}" if args else "")
     if args:
-        return f"&([scriptblock]::Create((irm {INSTALL_PS1}))) {args}"
-    return f"irm {INSTALL_PS1} | iex"
+        return f"&([scriptblock]::Create((irm {install_ps1()}))) {args}"
+    return f"irm {install_ps1()} | iex"
