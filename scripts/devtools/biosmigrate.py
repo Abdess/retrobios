@@ -139,7 +139,7 @@ def migrate_local(
             continue
 
         new_path = target / manufacturer / console
-        files = [f for f in old_path.iterdir() if f.is_file()]
+        files = [f for f in sorted(old_path.iterdir()) if f.is_file()]
 
         if not files:
             continue
