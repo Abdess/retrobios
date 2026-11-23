@@ -11,6 +11,7 @@ from model.alternatives import set_keys, set_requirements, settle_sets
 from model.database import get_mame_clone_map
 from model.declarations import OUTER_ROOTS
 from model.platforms import load_platform_config
+from model.profilekinds import is_emulator
 from model.registry import list_registered_platforms
 from model.systems import norm_system_id
 from packs.gaps import gap_destination
@@ -85,6 +86,30 @@ def global_report_scope(
         "folded_slots": folded,
         "declared_contents": merged_platform_declared_contents(configs, db),
     }
+
+
+def emulator_profiles(profiles: dict[str, dict]) -> dict[str, dict]:
+    """The profiles a gap report compares: neither aliases nor test cores."""
+    return {key: profile for key, profile in profiles.items() if is_emulator(profile)}
+
+
+def whole_tree_gaps(
+    configs: list[dict], db: dict, profiles: dict[str, dict],
+    data_names: SupplementalIndex | None = None,
+    compared: dict[str, dict] | None = None,
+) -> dict:
+    """Each emulator of *compared* (every one of *profiles* by default) with
+    the files no platform of *configs* declares.
+
+    The command line without --platform, the site's gap page and the gaps
+    export read this one report. *profiles* is every profile of the run: the
+    standalone layout is proven against them.
+    """
+    declared, scope = global_report_scope(configs, db, profiles)
+    return cross_reference(
+        emulator_profiles(profiles if compared is None else compared),
+        declared, db, data_names, **scope,
+    )
 
 
 

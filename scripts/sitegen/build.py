@@ -24,6 +24,7 @@ from model.profiles import is_emulator, lists_files, load_emulator_profiles
 from model.registry import list_registered_platforms, load_platform_registry
 from model.systemnames import program_names, set_console_sections, system_name
 from packs.consumers import FileConsumers
+from packs.crossref import whole_tree_gaps
 from packs.supplemental import SupplementalIndex
 from acquire.provenance import build_report, profile_needs
 from resolve.cores import resolve_platform_cores
@@ -46,7 +47,6 @@ from core.paths import REPO_ROOT
 from sitegen.crossref import generate_cross_reference
 from sitegen.dataexports import (
     source_commit,
-    build_emulator_gap_report,
     generate_data_exports,
     generate_stats,
     system_export_item,
@@ -663,7 +663,8 @@ def generate_site(args: argparse.Namespace) -> None:
 
     # Computed once: the gap analysis page and the published gaps export must
     # report the same files.
-    run.gap_report = build_emulator_gap_report(profiles, coverages, db, run.suppl_names)
+    run.gap_report = whole_tree_gaps(
+        [cov["config"] for cov in coverages.values()], db, profiles, run.suppl_names)
     # Built once, the derivable dumps taken out once: the provenance page and
     # the CSV it links to must list the same dumps.
     dumps = wanted_dumps(

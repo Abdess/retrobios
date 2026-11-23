@@ -21,7 +21,6 @@ from model.database import sha1_at
 from model.platforms import PLATFORMS_DIR_KEY
 from model.profiles import is_emulator
 from packs.consumers import FileConsumers
-from packs.supplemental import SupplementalIndex
 from sitegen.apiitems import core_index_items, system_index_items
 from sitegen.config import DATA_LICENSE, REPO_URL, build_commit
 from core.paths import REPO_ROOT
@@ -235,29 +234,6 @@ def _emulator_export_items(profiles: dict) -> list[dict]:
         {"id": key, "profile": profile}
         for key, profile in sorted(profiles.items())
     ]
-
-
-def build_emulator_gap_report(
-    profiles: dict,
-    coverages: dict,
-    db: dict,
-    data_names: SupplementalIndex | None = None,
-) -> dict:
-    """Files a core loads that no platform declares, per emulator profile.
-
-    The gap analysis page and the published gaps export must not compute this
-    twice and drift. Both read this one report.
-    """
-    from packs.crossref import cross_reference as run_cross_reference, global_report_scope
-
-    declared, scope = global_report_scope(
-        [cov["config"] for cov in coverages.values()], db, profiles)
-    unique_profiles = {
-        k: v
-        for k, v in profiles.items()
-        if is_emulator(v)
-    }
-    return run_cross_reference(unique_profiles, declared, db, data_names=data_names, **scope)
 
 
 def _gap_export_rows(

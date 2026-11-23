@@ -12,14 +12,13 @@ from core.text import series
 from model.database import sha1_at
 from model.platforms import native_layer
 from model.profiles import is_emulator
-from packs.crossref import gap_source_counts
+from packs.crossref import gap_source_counts, whole_tree_gaps
 from resolve.cores import resolve_platform_cores
 from resolve.nativemode import check_label
 from resolve.sendable import sendable
 from sitegen import markup, wanted as sitewanted
 from sitegen.cards import PROVENANCE_LABELS, fetch_url
 from sitegen.config import date_line
-from sitegen.dataexports import build_emulator_gap_report
 from sitegen.emulatorsindex import content_check_ceiling
 from sitegen.parts import list_pages
 from sitegen.render import code_span, count_text, escape_tags
@@ -996,7 +995,8 @@ def generate_gap_analysis(
     # ---- Section 3: Core complement (cross-reference provenance) ----
 
     if gap_report is None:
-        gap_report = build_emulator_gap_report(profiles, coverages, db, data_names)
+        gap_report = whole_tree_gaps(
+            [cov["config"] for cov in coverages.values()], db, profiles, data_names)
     report_all = gap_report
     src_totals, total_undeclared, emulator_gaps = _undeclared_gaps(report_all)
 
