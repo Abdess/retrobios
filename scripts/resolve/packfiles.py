@@ -150,10 +150,7 @@ def _fetched_asset(path: str, sha1: str, file_entry: dict, offline: bool) -> str
 
 def run_is_offline(offline: bool | None = None) -> bool:
     """Whether this run fetches nothing: --offline, or RETROBIOS_OFFLINE."""
-    return bool(
-        (OFFLINE if offline is None else offline)
-        or os.environ.get("RETROBIOS_OFFLINE")
-    )
+    return upstream.run_is_offline(OFFLINE if offline is None else offline)
 
 
 def release_asset_paths(

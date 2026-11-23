@@ -27,6 +27,7 @@ from pathlib import Path
 from typing import Callable, Mapping, Protocol, TypeVar
 
 from core.artifacts import atomic_scratch, write_text_atomic
+from core.offline import OFFLINE_ENV, run_is_offline
 
 USER_AGENT = "retrobios-profile-sync/1.0"
 # Where fetched upstream files live, shared by every reader of this cache.
@@ -121,6 +122,10 @@ class NotCachedError(UpstreamError):
     Distinct from absence: returning None made profile_sync report a file
     that exists as GONE, "absent at HEAD, no rename found".
     """
+
+
+class OfflineError(NotCachedError):
+    """A request a run that fetches nothing (RETROBIOS_OFFLINE) would have sent."""
 
 
 class TruncatedListingError(UpstreamError):
@@ -379,9 +384,12 @@ def open_retrying(
     limit is waited out, and a host that outlasts the waits is not asked
     again in this process. What ends the attempts is raised as urllib gave
     it, except a host that does not resolve (GoneError) and a host muted
-    earlier (RateLimitError).
+    earlier (RateLimitError). A run that fetches nothing (run_is_offline)
+    raises OfflineError before anything goes out.
     """
     url = request.full_url
+    if run_is_offline():
+        raise OfflineError(f"{url}: {OFFLINE_ENV} is set, nothing is fetched")
     host = urllib.parse.urlsplit(url).hostname or ""
     if host in _exhausted_hosts:
         raise RateLimitError(f"{url}: {host} rate limited earlier in this run", host)
@@ -554,6 +562,7 @@ def fetch_file(
     Offline, a path the cache never stored raises NotCachedError: nothing
     is known about it, which is not the same as knowing it is absent.
     """
+    offline = run_is_offline(offline)
     target = cache_path(cache_dir, repo, sha, path)
     if target.is_file():
         text = target.read_text(encoding="utf-8")
@@ -585,7 +594,7 @@ def _require_cached(url: str, cache_dir: str, offline: bool, what: str) -> None:
     cached_api answers None both for a resource the forge does not have and for
     one never asked, and only the first is a fact.
     """
-    if offline and not _api_target(url, cache_dir).is_file():
+    if run_is_offline(offline) and not _api_target(url, cache_dir).is_file():
         raise NotCachedError(f"{what} is not in the offline cache")
 
 
@@ -600,6 +609,7 @@ def cached_api(
     ``absent_max_age`` bounds a cached absence alone, for a resource that
     can appear but, once there, does not change.
     """
+    offline = run_is_offline(offline)
     target = _api_target(url, cache_dir)
     if target.is_file():
         raw = target.read_text(encoding="utf-8")
@@ -626,6 +636,7 @@ def fetch_page(url: str, cache_dir: str, offline: bool) -> str | None:
     None is a page the site answers absent. Offline, a page the cache never
     stored raises NotCachedError, as every other read of this module does.
     """
+    offline = run_is_offline(offline)
     key = hashlib.sha256(url.encode()).hexdigest()
     target = Path(cache_dir) / "_pages" / f"{key}.txt"
     if target.is_file():
@@ -819,6 +830,7 @@ def _github_graphql(
     """
     from core.github import github_token
 
+    offline = run_is_offline(offline)
     body = json.dumps({"query": query, "variables": variables}, sort_keys=True)
     target = Path(cache_dir) / "_api" / f"{hashlib.sha256(body.encode()).hexdigest()}.json"
     if target.is_file():
@@ -1162,7 +1174,7 @@ def cache_gitlab_directory(
     index = cache_path(cache_dir, repo, sha, f".archives/{directory}.json")
     if index.is_file():
         return set(json.loads(index.read_text(encoding="utf-8")))
-    if offline or repo.family != "gitlab":
+    if run_is_offline(offline) or repo.family != "gitlab":
         return None
     try:
         files = _gitlab_archive_files(repo, sha, directory)
@@ -1434,6 +1446,7 @@ def _has_commit(clone: Path, sha: str) -> bool:
 
 def _graph(repo: Repo, sha: str, cache_dir: str, offline: bool) -> Path:
     """A clone holding sha and every tag, fetched again once tags may have moved."""
+    offline = run_is_offline(offline)
     clone = clone_dir(cache_dir, repo)
     url = f"https://{repo.host}/{repo.slug}.git"
     if not (clone / "HEAD").is_file():

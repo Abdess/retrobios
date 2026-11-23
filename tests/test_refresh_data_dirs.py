@@ -49,6 +49,7 @@ class _Response(io.BytesIO):
         return False
 
 
+@tests.ONLINE
 class RefreshConcurrency(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -412,6 +413,7 @@ class ASourceThatMovesIsPinnedOrFollowed(unittest.TestCase):
                     self.assertIn("{version}", entry["source_path"])
 
 
+@tests.ONLINE
 class TheRemoteCommitComesFromTheForgeClient(unittest.TestCase):
     """get_remote_sha read a GitLab subgroup as its first two segments,
     asked the branches endpoint (no tag, no encoded name), sent the token to

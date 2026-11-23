@@ -149,6 +149,7 @@ class SourceRevisionReadsEveryShape(unittest.TestCase):
                 platform_revision(path)
 
 
+@tests.ONLINE
 class TheTokenGoesToGitHubOnly(unittest.TestCase):
     def setUp(self):
         patcher = mock.patch.dict(os.environ, {"GITHUB_TOKEN": "t0k"})
@@ -174,6 +175,7 @@ class TheTokenGoesToGitHubOnly(unittest.TestCase):
         self.assertEqual(opener.seen[0].get_header("Authorization"), "Bearer t0k")
 
 
+@tests.ONLINE
 class FetchFailures(unittest.TestCase):
     def test_the_status_is_kept(self):
         with mock.patch("urllib.request.urlopen", _answer(403)), \
@@ -195,6 +197,7 @@ class FetchFailures(unittest.TestCase):
             fetch_bytes("https://x.example/f", max_bytes=5)
 
 
+@tests.ONLINE
 class GitHubAnswers(unittest.TestCase):
     def test_a_truncated_tree_raises(self):
         with mock.patch("urllib.request.urlopen", _answer({"tree": [], "truncated": True})), \
@@ -229,6 +232,7 @@ class GitHubAnswers(unittest.TestCase):
             self.assertEqual(fetch_github_latest_version("o/r"), "v9")
 
 
+@tests.ONLINE
 class Downloads(unittest.TestCase):
     def test_written_whole_with_its_disposition(self):
         with tempfile.TemporaryDirectory() as tmp:

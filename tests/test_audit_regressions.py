@@ -6894,6 +6894,7 @@ class ABrokenRegistryIsNotAnEmptyOne(unittest.TestCase):
             self.assertIn("rocknix", str(caught.exception))
 
 
+@tests.ONLINE
 class AnUnansweredSearchIsNotANotFound(unittest.TestCase):
     """auto_fetch caught every network error and reported the file as
     needing a community contribution: offline, each file became an issue

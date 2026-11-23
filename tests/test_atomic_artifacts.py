@@ -137,6 +137,7 @@ class EveryWriterGoesThroughIt(unittest.TestCase):
             )
 
 
+@tests.ONLINE
 class TheNativeIndexKeepsEveryPlatform(unittest.TestCase):
     """Native originals refresh platform by platform, in parallel. Each run
     rewrote the whole URL index it had read before downloading, and the last

@@ -2,8 +2,9 @@
 
 The CI job sets RETROBIOS_OFFLINE, but a local run of the documented command
 did not, and e2e fixtures queried the large-files release and wrote its
-answers into the shared .cache/large. A test that serves its own assets
-clears the variable for itself.
+answers into the shared .cache/large. A test that serves its own assets,
+or fakes the network core.upstream reaches, clears the variable for itself
+(ONLINE).
 
 Scratch files go under the repository's tmp/, which git does not track: a
 fresh clone has none, and a module run alone raised FileNotFoundError on a
@@ -18,8 +19,12 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 os.environ.setdefault("RETROBIOS_OFFLINE", "1")
+# A test or a test class that fakes the network runs as a run that fetches:
+# under RETROBIOS_OFFLINE, core.upstream refuses every request before it goes out.
+ONLINE = mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""})
 # The modules under test import each other by bare name (common, verify), as
 # the scripts do when run from scripts/, and install.py sits at the root.
 _REPOSITORY = Path(__file__).resolve().parent.parent

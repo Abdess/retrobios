@@ -83,6 +83,7 @@ def _serve_batocera(boards: list[str], refuse_board: bool):
     return urlopen
 
 
+@tests.ONLINE
 class FailedRequestsStopTheScrape(unittest.TestCase):
     def test_every_scraper_raises(self):
         for module in (
@@ -400,6 +401,7 @@ class DownloadedCoresReachTheirBoards(unittest.TestCase):
         self.assertEqual(resolved, {"amiberry": {"amiberry"}, "amiberry, mgba": set()})
 
 
+@tests.ONLINE
 class KnulliPerBoard(unittest.TestCase):
     """KNULLI builds per board on Batocera's model from its own tree:
     configs/knulli-*.board, package/system/knulli-system/Config.in and
@@ -773,6 +775,7 @@ def _retropie_tarball(modules: dict[str, str]) -> bytes:
     return buffer.getvalue()
 
 
+@tests.ONLINE
 class TargetsReadThePlatformRevision(unittest.TestCase):
     """A target list read on master filtered packages by flags the pinned
     package list does not have: every request names the platform's pin."""

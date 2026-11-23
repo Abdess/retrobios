@@ -22,6 +22,7 @@ on:
       - "scripts/core/github.py"
       - "scripts/core/hashing.py"
       - "scripts/core/memo.py"
+      - "scripts/core/offline.py"
       - "scripts/core/options.py"
       - "scripts/core/paths.py"
       - "scripts/core/romdir.py"

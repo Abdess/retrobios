@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import os
 import re
 import sys
 from collections.abc import Callable
@@ -155,7 +154,7 @@ def fetch_contributors() -> list[dict]:
     """Contributors from the GitHub API, bots and the owner left out. Empty
     when the API cannot be read, or under RETROBIOS_OFFLINE: the caller then
     keeps the published list."""
-    if os.environ.get("RETROBIOS_OFFLINE"):
+    if upstream.run_is_offline():
         return []
     url = f"https://api.github.com/repos/{REPO}/contributors"
     try:

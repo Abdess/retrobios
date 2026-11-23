@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 import argparse
-import os
 import sys
 from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
 
+from core.offline import run_is_offline
 from core.paths import EMULATORS_DIR, REPO_ROOT
 from model.profiles import load_emulator_profiles
 
@@ -39,7 +39,7 @@ def refresh_source_paths(args: argparse.Namespace, written: set[str]) -> None:
     another tree prints the command for it instead of reducing the record
     to the trees that tree cites.
     """
-    if not written or args.dry_run or args.offline or os.environ.get("RETROBIOS_OFFLINE"):
+    if not written or args.dry_run or run_is_offline(args.offline):
         return
     if Path(args.emulators_dir).resolve() != (REPO_ROOT / EMULATORS_DIR).resolve():
         print(

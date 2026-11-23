@@ -46,6 +46,7 @@ def _opener(failure):
     return urlopen
 
 
+@tests.ONLINE
 class ManifestErrors(unittest.TestCase):
     def fetch(self, failure):
         # A 503 is retried after a wait: the waits are skipped, not the retries.

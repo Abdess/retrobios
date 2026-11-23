@@ -8,6 +8,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 from core.cli import InputMissing
+from core.offline import run_is_offline
 from core.paths import DB_FILE, EMULATORS_DIR, REPO_ROOT
 from model import siteinputs
 from model.largefiles import LARGE_FILES_CACHE
@@ -130,7 +131,7 @@ def _coverage_inputs(db_path: Path, platforms_dir: str, emulators_dir: str) -> s
     for path in (REPO_ROOT / ".gitignore", REPO_ROOT / "_mame_clones.json",
                  REPO_ROOT / VERSIONS_FILE):
         add_file(path)
-    digest.update(b"offline\0" + (b"1" if os.environ.get("RETROBIOS_OFFLINE") else b"0") + b"\n")
+    digest.update(b"offline\0" + (b"1" if run_is_offline() else b"0") + b"\n")
     large = Path(LARGE_FILES_CACHE).resolve()
     digest.update(str(large).encode() + b"\0")
     for path in sorted(large.glob("*")) if large.is_dir() else ():

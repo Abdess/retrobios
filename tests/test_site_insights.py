@@ -243,6 +243,7 @@ def goat_export(hourly: list[tuple[str, str, str, int]]) -> bytes:
     return buffer.getvalue()
 
 
+@tests.ONLINE
 class GoatCounterExport(unittest.TestCase):
     FIRST = dt.datetime(2026, 10, 20, tzinfo=dt.timezone.utc)
     AFTER = dt.datetime(2026, 11, 17, tzinfo=dt.timezone.utc)

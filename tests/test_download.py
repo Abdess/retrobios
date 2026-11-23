@@ -392,6 +392,11 @@ class DownloaderCase(unittest.TestCase):
     platform_label = "Batocera 43.1"
 
     def setUp(self):
+        # The downloaders fetch from the loopback release, in this process
+        # and in the commands env() starts.
+        online = mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""})
+        online.start()
+        self.addCleanup(online.stop)
         self.server = ReleaseServer(
             self.pack_name, self.payload, self.volumes, self.zip_parts
         )
@@ -756,6 +761,7 @@ class TestZipPartsLibrary(ZipPartsCase, TestDownloadLibrary):
 
 
 
+@tests.ONLINE
 class AProgressBarOnlyOnATerminal(unittest.TestCase):
     """Redirected to a log, download.py wrote a carriage-return redraw per
     64 KiB block: one line of nearly 3 MB for a 2 GiB part."""
@@ -819,6 +825,7 @@ class AProgressBarOnlyOnATerminal(unittest.TestCase):
         self.assertEqual(answers, [])
 
 
+@tests.ONLINE
 class ATransferFailureIsADownloadError(unittest.TestCase):
     """download_file printed its own lines and raised a bare ValueError on a
     short stream, so download.py, which catches DownloadError, ended in a

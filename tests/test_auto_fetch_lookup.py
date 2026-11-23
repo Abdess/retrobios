@@ -44,6 +44,7 @@ def _serving(payloads: dict[str, bytes]):
     return urlopen, asked
 
 
+@tests.ONLINE
 class SoftwareHeritageAnswersByContent(unittest.TestCase):
     def test_the_bytes_it_serves_are_kept_when_the_hash_holds(self):
         urlopen, asked = _serving({f"{fetch.SOFTWARE_HERITAGE}/sha1:{SHA1}/raw/": PAYLOAD})
@@ -65,6 +66,7 @@ class SoftwareHeritageAnswersByContent(unittest.TestCase):
         self.assertEqual(found, fetch.SearchResult(None, None, ()))
 
 
+@tests.ONLINE
 class LookupBySha1(unittest.TestCase):
     def setUp(self):
         directory = tempfile.TemporaryDirectory()
@@ -130,6 +132,7 @@ class PlatformSearchLines(unittest.TestCase):
             "    [5] Search incomplete, 2 source(s) did not answer (first: u: offline)"])
 
 
+@tests.ONLINE
 class AStalledOrLimitedSourceIsNoAnswer(unittest.TestCase):
     """A timeout during the read is a TimeoutError, not a URLError: it
     escaped every handler and ended the search for every remaining file.
@@ -188,6 +191,7 @@ class AStalledOrLimitedSourceIsNoAnswer(unittest.TestCase):
         self.assertEqual(len(asked), 2)
 
 
+@tests.ONLINE
 class ArchiveOrgAnswersByHash(unittest.TestCase):
     """The platform search asked archive.org for the first item and then
     downloaded the platform's name from it: an item storing the dump under

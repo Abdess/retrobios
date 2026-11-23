@@ -244,6 +244,7 @@ class TestHttpFailure(unittest.TestCase):
         self.assertNotIsInstance(failure, upstream.RateLimitError)
 
 
+@tests.ONLINE
 class TestFetchRetry(unittest.TestCase):
     """Transient network failures are retried, definitive answers are not."""
 
@@ -401,6 +402,7 @@ class TestFetchRetry(unittest.TestCase):
         self.assertEqual((self.calls, self.slept), (1, []))
 
 
+@tests.ONLINE
 class TestGoneUpstream(unittest.TestCase):
     """A forge that will not come back is a fact, not a failure to retry.
 
@@ -480,6 +482,41 @@ class TestGoneUpstream(unittest.TestCase):
         self.assertEqual(self.calls, upstream.RETRIES)
 
 
+
+class TheOfflineSwitchHoldsAtTheGateway(unittest.TestCase):
+    """RETROBIOS_OFFLINE is read by core.upstream itself: a caller that did
+    not pass offline=True made the request anyway, untokened."""
+
+    def setUp(self):
+        patcher = mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": "1"})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_the_rule_is_the_flag_or_the_variable(self):
+        self.assertTrue(upstream.run_is_offline(False))
+        self.assertTrue(upstream.run_is_offline(None))
+        with mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}):
+            self.assertFalse(upstream.run_is_offline())
+            self.assertTrue(upstream.run_is_offline(True))
+
+    def test_no_request_goes_out(self):
+        with mock.patch.object(urllib.request, "urlopen", side_effect=_no_network) as urlopen:
+            with self.assertRaises(upstream.OfflineError):
+                upstream.fetch_body("https://api.github.com/rate_limit", accept_json=True)
+            with self.assertRaises(upstream.NotCachedError):
+                upstream.download("https://host/x", tests.scratch_dir(self) / "x")
+        urlopen.assert_not_called()
+
+    def test_the_cache_answers_as_an_offline_run(self):
+        cache = str(tests.scratch_dir(self))
+        with mock.patch.object(upstream, "http_json", side_effect=_no_network), \
+                mock.patch.object(upstream, "http_text", side_effect=_no_network):
+            self.assertIsNone(upstream.cached_api("https://api.github.com/x", cache, False))
+            with self.assertRaises(upstream.NotCachedError):
+                upstream.fetch_file(parse_repo("https://github.com/o/n"), "abc", "a.c", cache)
+
+
+@tests.ONLINE
 class TestCache(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -565,6 +602,7 @@ class TestCacheCollision(unittest.TestCase):
             self.assertTrue((base / "C64DTV").is_file())
 
 
+@tests.ONLINE
 class TestRevisions(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -717,6 +755,7 @@ class TestRevisions(unittest.TestCase):
             upstream.resolve_head(self.repo, self.dir)
 
 
+@tests.ONLINE
 class TestCompare(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -885,6 +924,7 @@ class TestCompare(unittest.TestCase):
         self.assertEqual(upstream.tag_commit(self.repo, "v2.0", self.dir), "rel")
 
 
+@tests.ONLINE
 class TestGitlabTree(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -950,6 +990,7 @@ class TestGitlabTree(unittest.TestCase):
         self.assertEqual(upstream.list_gitlinks(self.repo, "sha", self.dir), {"core": "c" * 40})
 
 
+@tests.ONLINE
 class TestGiteaCommitAt(unittest.TestCase):
     """Gitea and Forgejo ignore `until` and answer with the tip: the date
     pin of a Codeberg view was the tip of the day of the first fetch."""
@@ -992,6 +1033,7 @@ class TestGiteaCommitAt(unittest.TestCase):
 
 
 
+@tests.ONLINE
 class TestCurrentSlug(unittest.TestCase):
     """The name a forge answers under, read from the repository payload."""
 
@@ -1041,6 +1083,7 @@ class TestNewestTag(unittest.TestCase):
         self.assertEqual(upstream.newest_tag(self.repo, self.tmp.name), "2.5")
 
 
+@tests.ONLINE
 class TestNamedTagCommit(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -1063,6 +1106,7 @@ class TestNamedTagCommit(unittest.TestCase):
         self.assertTrue(asked[0].endswith("/repository/tags/1.2.35"))
 
 
+@tests.ONLINE
 class TestForkBase(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -1104,6 +1148,7 @@ def _tarball(files: dict[str, str]) -> bytes:
     return buf.getvalue()
 
 
+@tests.ONLINE
 class TestGitlabDirectoryArchive(unittest.TestCase):
     """One archive request fills the per-file cache of a GitLab directory."""
 

@@ -246,7 +246,7 @@ def _fetch_asset(
     # shared cache filled the runner's disk and changed what later tests
     # resolved. Decided once, so the release check of a cached copy obeys it
     # as the download does.
-    offline = offline or bool(os.environ.get("RETROBIOS_OFFLINE"))
+    offline = upstream.run_is_offline(offline)
     cached = os.path.join(dest_dir, name)
     # Between the existence test and the hash, a concurrent run can drop the
     # same stale entry: the file is gone by the time this one reads it, and

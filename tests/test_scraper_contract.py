@@ -143,6 +143,7 @@ class TestConnection(unittest.TestCase):
             _StubScraper(error=KeyError("bug")).test_connection()
 
 
+@tests.ONLINE
 class RateLimitedForge(unittest.TestCase):
     """GitLab answered 429 midway through Recalbox's system.ini files and
     the whole scrape stopped."""
@@ -257,6 +258,7 @@ class RecalboxReadsItsSystemsInBatches(unittest.TestCase):
         self.assertEqual(len(cores), 120)
 
 
+@tests.ONLINE
 class AnEmptyRecalboxListingStopsTheTargets(unittest.TestCase):
     """The targets scraper kept its own copy of the systems listing, without
     the empty check: an empty answer wrote every board with no core."""
@@ -749,6 +751,7 @@ class EveryTargetCoreReachesAProfile(unittest.TestCase):
                     self.assertEqual(unresolved, {})
 
 
+@tests.ONLINE
 class UnreadableReleaseStopsTheScrape(unittest.TestCase):
     """A failed tag lookup fell back to master, or to an empty or invented
     version. BizHawk, RomM, Batocera and Recalbox then wrote a YAML read from
@@ -968,6 +971,7 @@ class CoreInfoCompareDbResolvesLikeTheCollection(unittest.TestCase):
         self.assertEqual(split_by_holding([req], self.db), ([req], []))
 
 
+@tests.ONLINE
 class EveryGitHubApiCallerSendsTheToken(unittest.TestCase):
     """romset_dat_importer and coreinfo_scraper called api.github.com with no
     token: past the anonymous quota, --fetch failed with 403 while

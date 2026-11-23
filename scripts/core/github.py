@@ -5,6 +5,8 @@ from __future__ import annotations
 import functools
 import os
 
+from core.offline import run_is_offline
+
 
 @functools.lru_cache(maxsize=1)
 def _gh_cli_token() -> str:
@@ -41,7 +43,7 @@ def github_token() -> str:
     call and never ask gh.
     """
     token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN") or ""
-    if token or os.environ.get("RETROBIOS_OFFLINE"):
+    if token or run_is_offline():
         return token
     token = _gh_cli_token()
     if token:

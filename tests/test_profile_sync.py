@@ -3857,6 +3857,7 @@ class APassedReleaseUnderAnUntaggedVersion(unittest.TestCase):
         self.assertIsNone(version_warning(version, "head"))
 
 
+@tests.ONLINE
 class TestAncestry(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
