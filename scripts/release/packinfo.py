@@ -25,9 +25,9 @@ def exit_without_pack(platform: str, release: dict) -> NoReturn:
     sys.exit(1)
 
 
-def show_info(platform: str, release: dict) -> None:
-    """Show pack information for a platform."""
-    pack = find_pack(release, platform)
+def show_info(platform: str, release: dict, record: dict) -> None:
+    """Show pack information for a platform, the record naming its pack."""
+    pack = find_pack(release, platform, record)
     if not pack:
         exit_without_pack(platform, release)
 

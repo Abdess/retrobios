@@ -5,8 +5,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
-from core.paths import REPO_ROOT
-from model.releaserecord import PACK_SUFFIX, RECORD, load_record, match_key, pack_label, recorded_pack
+from model.releaserecord import PACK_SUFFIX, match_key, pack_label, recorded_pack
 from packs.parts import part_of
 
 _VOLUME_RE = re.compile(rf"^(?P<base>.+{re.escape(PACK_SUFFIX)})\.(?P<index>\d+)$")
@@ -69,16 +68,15 @@ def list_platforms(release: dict) -> list[str]:
     return sorted(pack.platform for pack in group_packs(release))
 
 
-def find_pack(release: dict, platform: str) -> Pack | None:
+def find_pack(release: dict, platform: str, record: dict) -> Pack | None:
     """Find the pack for a platform name.
 
-    release.json names the platforms each pack serves, and is read when it
-    records this release. Otherwise the platform is matched against the pack
+    The record (release.json) names the platforms each pack serves, and is
+    read when it records this release. Otherwise the platform is matched against the pack
     names, the shortest first: RetroArch_v1.22.2 is the full pack, and
     RetroArch_v1.22.2_AndroidArm64V8A one target's.
     """
     packs = group_packs(release)
-    record = load_record(REPO_ROOT / RECORD)
     if record.get("tag") and record.get("tag") == release.get("tag_name"):
         name = recorded_pack(platform, record)
         return next((pack for pack in packs if pack.name == name), None)

@@ -71,7 +71,7 @@ class TestPackGrouping(unittest.TestCase):
         """--info printed "not found" and exited 0."""
         release = _release(["EmuDeck_2.3.8_BIOS_Pack.zip"])
         with contextlib.redirect_stdout(io.StringIO()) as out, self.assertRaises(SystemExit) as caught:
-            packinfo.show_info("emudek", release)
+            packinfo.show_info("emudek", release, {})
         self.assertEqual(caught.exception.code, 1)
         self.assertIn("EmuDeck", out.getvalue())
 
@@ -176,18 +176,18 @@ class TestPackGrouping(unittest.TestCase):
         self.assertEqual(len(names), 5)
 
     def test_find_pack_resolves_a_split_platform(self):
-        pack = packgroups.find_pack(_release(RELEASE_ASSETS), "batocera")
+        pack = packgroups.find_pack(_release(RELEASE_ASSETS), "batocera", {})
         self.assertIsNotNone(pack)
         self.assertEqual(pack.name, "Batocera_43.1_BIOS_Pack.zip")
         self.assertEqual(len(pack.parts), 2)
 
     def test_find_pack_maps_retroarch_to_the_lakka_asset(self):
-        pack = packgroups.find_pack(_release(RELEASE_ASSETS), "retroarch")
+        pack = packgroups.find_pack(_release(RELEASE_ASSETS), "retroarch", {})
         self.assertEqual(pack.name, "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip")
 
     def test_find_pack_prefers_the_full_pack_to_a_target_pack(self):
         names = ["RetroArch_v1.22.2_AndroidArm64V8A_BIOS_Pack.zip", "RetroArch_v1.22.2_BIOS_Pack.zip"]
-        pack = packgroups.find_pack(_release(names), "retroarch")
+        pack = packgroups.find_pack(_release(names), "retroarch", {})
         self.assertEqual(pack.name, "RetroArch_v1.22.2_BIOS_Pack.zip")
 
     def test_find_pack_reads_the_record_of_this_release(self):
@@ -197,22 +197,21 @@ class TestPackGrouping(unittest.TestCase):
         }}
         release = {**_release(["RetroArch_Lakka_v1.22.2_BIOS_Pack.zip",
                                "RetroArch_v1.22.2_BIOS_Pack.zip"]), "tag_name": "v1"}
-        with mock.patch.object(packgroups, "load_record", return_value=record):
-            self.assertEqual(packgroups.find_pack(release, "lakka").name,
-                             "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip")
-            self.assertIsNone(packgroups.find_pack(release, "batocera"))
-        with mock.patch.object(packgroups, "load_record", return_value={**record, "tag": "v0"}):
-            self.assertEqual(packgroups.find_pack(release, "lakka").name,
-                             "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip")
+        self.assertEqual(packgroups.find_pack(release, "lakka", record).name,
+                         "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip")
+        self.assertIsNone(packgroups.find_pack(release, "batocera", record))
+        self.assertEqual(packgroups.find_pack(release, "lakka", {**record, "tag": "v0"}).name,
+                         "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip")
 
     def test_find_pack_returns_none_for_an_unknown_platform(self):
-        self.assertIsNone(packgroups.find_pack(_release(RELEASE_ASSETS), "nintendo"))
+        self.assertIsNone(packgroups.find_pack(_release(RELEASE_ASSETS), "nintendo", {}))
 
     def test_find_pack_resolves_a_platform_id_that_drops_separators(self):
         # The platform is `misterfpga` everywhere else, but the asset is MiSTer_FPGA.
         pack = packgroups.find_pack(
             _release(RELEASE_ASSETS + ["MiSTer_FPGA_2026-08-29_BIOS_Pack.zip"]),
             "misterfpga",
+            {},
         )
         self.assertIsNotNone(pack)
         self.assertEqual(pack.name, "MiSTer_FPGA_2026-08-29_BIOS_Pack.zip")
@@ -545,7 +544,7 @@ class TestDownloadLibrary(DownloaderCase):
 
     def fetch(self) -> tuple[list[Path], list[str]]:
         release = latest.get_latest_release(self.server.base)
-        pack = packgroups.find_pack(release, self.platform)
+        pack = packgroups.find_pack(release, self.platform, {})
         assert pack is not None
         lines: list[str] = []
         staging = packfetch.make_staging(self.tmpdir)

@@ -27,8 +27,10 @@ import urllib.error
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
+from core.paths import REPO_ROOT
 from core.upstream import UpstreamError
 from core.ziptools import safe_extract_zip
+from model.releaserecord import RECORD, load_record
 from release.downloaderror import DownloadError
 from release.latest import DEFAULT_API, checked_url, get_latest_release
 from release.packfetch import fetch_checksums, fetch_pack, make_staging
@@ -92,14 +94,15 @@ def main() -> None:
             print(f"Error fetching release info: {e}", file=sys.stderr)
             sys.exit(1)
 
+        record = load_record(REPO_ROOT / RECORD)
         if args.info:
-            show_info(args.platform, release)
+            show_info(args.platform, release, record)
             return
 
         if not args.dest:
             parser.error("Destination directory required")
 
-        pack = find_pack(release, args.platform)
+        pack = find_pack(release, args.platform, record)
         if not pack:
             exit_without_pack(args.platform, release)
 
