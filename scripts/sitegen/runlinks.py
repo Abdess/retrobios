@@ -7,7 +7,6 @@ import urllib.parse
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 
-from core.paths import REPO_ROOT
 from model import siteinputs
 from model.collection import card_moves
 from model.systemnames import (
@@ -19,10 +18,8 @@ from model.systemnames import (
 )
 from sitegen import markup
 from sitegen.arcadeboards import ArcadeBoards, read_arcade_boards
+from sitegen.pageprep import ICON_DIR
 from sitegen.render import SYSTEM_ICON_BASE, board_slug, console_anchor, console_icon_name
-
-# Local copies of the upstream icons, named as upstream names them.
-ICON_DIR = REPO_ROOT / "docs_assets" / "system-icons"
 
 
 @dataclass

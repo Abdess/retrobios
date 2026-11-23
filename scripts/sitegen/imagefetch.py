@@ -23,10 +23,9 @@ from sitegen.imagenormalize import (
     shrink_embedded,
     square_image,
 )
+from sitegen.pageprep import ICON_DIR, LOGO_DIR
 from sitegen.render import SYSTEM_ICON_BASE, console_icon_name
 
-LOGO_DIR = REPO_ROOT / "docs_assets" / "logos"
-ICON_DIR = REPO_ROOT / "docs_assets" / "system-icons"
 AVATAR_HOST = "avatars.githubusercontent.com"
 USER_AGENT = "retrobios-site-images"
 
