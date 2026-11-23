@@ -87,7 +87,7 @@ class TheGivenDatabase(_Inputs):
     def test_board_election_opens_the_given_collection_archive(self) -> None:
         import zipfile
 
-        from sitegen import render
+        from sitegen import arcadeboards
 
         archive = self.db.parent / "bios" / "X" / "board.zip"
         archive.parent.mkdir(parents=True)
@@ -97,9 +97,9 @@ class TheGivenDatabase(_Inputs):
         files = {SHA1: {"path": "bios/X/board.zip"}}
         entry = {"name": "board.zip", "contents": [{"crc32": crc}]}
         self.use(db=self.db)
-        self.assertEqual(render._entry_archives(entry, files, {"board.zip": [SHA1]}), {SHA1})
+        self.assertEqual(arcadeboards.entry_archives(entry, files, {"board.zip": [SHA1]}), {SHA1})
         other = {"name": "board.zip", "contents": [{"crc32": "deadbeef"}]}
-        self.assertEqual(render._entry_archives(other, files, {"board.zip": [SHA1]}), set())
+        self.assertEqual(arcadeboards.entry_archives(other, files, {"board.zip": [SHA1]}), set())
 
     def test_archive_members_are_read_from_the_given_collection(self) -> None:
         import zipfile

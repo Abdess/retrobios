@@ -11,6 +11,7 @@ from unittest import mock
 
 import yaml
 
+from sitegen import arcadeboards
 from sitegen import render as siterender
 from model import systemnames
 
@@ -570,9 +571,9 @@ class TheArcadeCacheHoldsItsDatabase(unittest.TestCase):
         return {"files": {}, "indexes": {"by_path_suffix": {"Arcade/x.zip": [sha1]}}}
 
     def test_a_new_database_at_a_reused_address_is_read_again(self):
-        self.addCleanup(siterender._arcade_suffixes.clear)
+        self.addCleanup(arcadeboards._arcade_suffixes.clear)
         first = self._db("a" * 40)
-        self.assertTrue(siterender._in_arcade("a" * 40, first))
+        self.assertTrue(arcadeboards.in_arcade("a" * 40, first))
         address = id(first)
         del first
         # CPython hands a freed dict's address to a later one of its size,
@@ -584,8 +585,8 @@ class TheArcadeCacheHoldsItsDatabase(unittest.TestCase):
             del second
         else:
             second = self._db("b" * 40)
-        self.assertTrue(siterender._in_arcade("b" * 40, second))
-        self.assertFalse(siterender._in_arcade("a" * 40, second))
+        self.assertTrue(arcadeboards.in_arcade("b" * 40, second))
+        self.assertFalse(arcadeboards.in_arcade("a" * 40, second))
 
 
 if __name__ == "__main__":

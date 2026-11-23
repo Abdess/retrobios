@@ -22,7 +22,9 @@ from model.collection import (
 console_anchors: dict[tuple[str, str], str] = {}
 
 
-boards_built = [False]
+# How many times set_console_sections installed sections: what a page
+# derives from them (the arcade boards) is stale once it moves.
+sections_generation = [0]
 
 
 # Every (manufacturer, console) section the system pages carry.
@@ -135,8 +137,7 @@ def set_console_sections(
     known_program_names.clear()
     known_program_names.update(name.casefold() for name in programs)
     _sections_installed[0] = True
-    # Which ids are boards depends on which have a section elsewhere.
-    boards_built[0] = False
+    sections_generation[0] += 1
 
 
 _sections_installed = [False]
@@ -229,6 +230,36 @@ def heading_name(mfr: str, console: str) -> str:
     if console.casefold().startswith(mfr.split()[0].casefold()):
         return console
     return f"{mfr} {console}"
+
+
+# Of the program tops, the one whose headings never name a system, even read
+# whole. An Arcade heading can (Namco System 246), an Other one cannot.
+_NAMELESS_TOPS = frozenset({"Other"})
+
+
+def section_without_boards(sys_id: str) -> tuple[str, str] | None:
+    """The console section a system id leads to before arcade boards, as
+    (manufacturer slug, console): what the folders and the reviewed parents
+    give."""
+    own = own_section(sys_id)
+    if own is not None:
+        return manufacturer_slug(own[0]), own[1]
+    parent = SYSTEM_PARENTS.get(sys_id)
+    if parent is not None and parent in section_pairs:
+        return manufacturer_slug(parent[0]), parent[1]
+    try:
+        name = system_name(sys_id)
+    except KeyError:
+        return None
+    places = sections_by_name.get(name.casefold(), set())
+    if len(places) != 1:
+        return None
+    mfr, console = next(iter(places))
+    if mfr in _NAMELESS_TOPS or (
+        mfr in PROGRAM_TOPS and console.casefold() in known_program_names
+    ):
+        return None
+    return manufacturer_slug(mfr), console
 
 
 def system_name(sys_id: str) -> str:

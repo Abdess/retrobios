@@ -143,6 +143,7 @@ on:
       - "scripts/sitegen/__init__.py"
       - "scripts/sitegen/agents.py"
       - "scripts/sitegen/apiitems.py"
+      - "scripts/sitegen/arcadeboards.py"
       - "scripts/sitegen/bootstrap.py"
       - "scripts/sitegen/build.py"
       - "scripts/sitegen/cards.py"

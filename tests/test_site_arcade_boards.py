@@ -2,8 +2,8 @@
 
 The Arcade pages were cut by storage folder, so NAOMI, ZN-1, PGM and the
 other boards had no section and stayed plain on 987 emulator rows.
-siterender.arcade_board() names the board each set archive is the BIOS of,
-read from the profiles, and system_section() leads every id of that board
+sitegen.arcadeboards elects the board each set archive is the BIOS of,
+read from the profiles, and siterender.arcade_board() names it, and system_section() leads every id of that board
 to ``systems/arcade-<board_slug>/#<board_slug>``, the section the system
 pages write. The 28 ids that systems.json gave files and no page either
 link or carry their reason below.
@@ -20,6 +20,7 @@ import zipfile
 from pathlib import Path
 
 
+from sitegen import arcadeboards
 from sitegen import render as siterender
 from model import systemnames
 from core.anchors import toc_slug
@@ -67,8 +68,7 @@ STAYS_PLAIN = {
 
 def _reset() -> None:
     """Back to the repository's sections and boards, none written."""
-    siterender._arcade_source[0] = None
-    systemnames.boards_built[0] = False
+    siterender._arcade[0] = None
     systemnames._sections_installed[0] = False
     siterender.reset_console_pages()
 
@@ -238,16 +238,17 @@ class BoardRules(unittest.TestCase):
             archive.writestr("rom.bin", crc_member)
         return str(path)
 
-    def _install(self, entries: dict[str, list[dict]], files: dict[str, str]) -> None:
+    def _install(self, entries: dict[str, list[dict]], files: dict[str, str],
+                 suffixes: dict[str, list[str]] | None = None) -> None:
         """``files``: sha1 -> path. Names are the paths' base names."""
         db = {
             "files": {sha1: {"path": path, "name": Path(path).name} for sha1, path in files.items()},
-            "indexes": {"by_name": {}, "by_path_suffix": {}},
+            "indexes": {"by_name": {}, "by_path_suffix": dict(suffixes or {})},
         }
         for sha1, path in files.items():
             db["indexes"]["by_name"].setdefault(Path(path).name, []).append(sha1)
         profiles = {key: {"systems": [], "files": rows} for key, rows in entries.items()}
-        siterender.set_arcade_boards(profiles, db)
+        siterender.use_arcade_boards(arcadeboards.elect_arcade_boards(profiles, db))
 
     def test_folder_decides_nothing(self) -> None:
         self._install(
@@ -300,11 +301,9 @@ class BoardRules(unittest.TestCase):
             {"core": [{"name": "good.zip", "category": "bios_zip", "system": "igs-pgm",
                        "contents": [{"name": "rom.bin", "crc32": crc}]}]},
             {"e" * 40: good, "f" * 40: bad},
+            # Both copies filed under Arcade, as by_path_suffix records it.
+            {"Arcade/MAME/good.zip": ["e" * 40], "Arcade/FBNeo/good.zip": ["f" * 40]},
         )
-        # Both copies filed under Arcade, as by_path_suffix records it.
-        db = siterender._arcade_source[0][1]
-        db["indexes"]["by_path_suffix"] = {
-            "Arcade/MAME/good.zip": ["e" * 40], "Arcade/FBNeo/good.zip": ["f" * 40]}
         self.assertEqual(siterender.arcade_board("e" * 40), "igs-pgm")
         self.assertIsNone(siterender.arcade_board("f" * 40))
 

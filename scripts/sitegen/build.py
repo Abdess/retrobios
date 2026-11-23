@@ -87,6 +87,7 @@ from sitegen.lookup import (
 )
 from sitegen.nav import overview_anchors, generate_nav
 from sitegen.parts import PUBLISHED_PARTS_FILE, load_published_parts, record_parts
+from sitegen.arcadeboards import elect_arcade_boards
 from sitegen.places import system_pages_from_data
 from sitegen.platformfiles import EXPORTED
 from sitegen.platformindex import SETUP_TABLE_PAGE, generate_platform_index, with_setup_table
@@ -109,6 +110,7 @@ from sitegen.render import (
     reset_console_pages,
     set_system_page_map,
     split_system_stems,
+    use_arcade_boards,
 )
 from sitegen.structured import (
     dataset_structured_data,
@@ -671,6 +673,9 @@ def generate_site(args: argparse.Namespace) -> None:
     # The plan names systems: the sections must be this run's data first.
     run.manufacturers = group_by_manufacturer(db)
     set_console_sections(run.manufacturers, program_names(profiles))
+    # Which archive is which board's depends on the sections: elected once
+    # they are this run's.
+    use_arcade_boards(elect_arcade_boards(profiles, db))
     plan_emulator_pages(profiles, run.file_held)
     # Build system_id -> manufacturer page map (needed by all generators)
     print("Building system cross-reference map...")
