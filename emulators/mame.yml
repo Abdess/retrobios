@@ -204,6 +204,11 @@ data_root:
     source_ref: "src/emu/emuopts.cpp:43-55, src/osd/sdl/sdlopts.cpp:27-35, 107-116"
     note: "A mame.ini in ~/.mame can point rompath and the other search paths elsewhere"
 
+outside_data_root:
+  - files: ["*"]
+    note: "the app reads every set under roms/ of its working directory, the rompath default"
+    source_ref: "src/emu/emuopts.cpp:43-55"
+
 notes: |
   Rolling release tracking mamedev/mame upstream (0.289 at the pinned commits).
   The archives below are the BIOS root sets, the ROM sets of the machines of the

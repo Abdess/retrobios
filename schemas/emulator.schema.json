@@ -1245,6 +1245,32 @@
       },
       "description": "For a project published outside any forge, the page that announces its releases. profile_sync --check-version compares the version read there with core_version."
     },
+    "outside_data_root": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["files", "note", "source_ref"],
+        "properties": {
+          "files": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1},
+            "description": "The entries concerned: a name, a path or standalone_path prefix ending in /, or * for every file."
+          },
+          "systems": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"enum": ["android", "ios", "windows", "macos", "linux"]},
+            "description": "The data_root keys the rule holds on. Absent: every one."
+          },
+          "note": {"type": "string", "minLength": 1},
+          "source_ref": {"type": "string", "minLength": 1}
+        }
+      },
+      "description": "Entries the standalone app does not read from data_root joined to their standalone_path (or path): the folder it opens is another one, beside the program, the working directory or a folder of its own."
+    },
     "upstream_gone": {
       "type": "string",
       "description": "Why the declared upstream can no longer be reached, when that is settled rather than transient. Records the death instead of leaving the profile failing every pass. profile_sync reports the contradiction if the forge answers again."

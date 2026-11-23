@@ -47,6 +47,7 @@ from sitegen import lookup
 from sitegen import render as siterender
 from model import systemnames
 from sitegen import validate
+from resolve import layout
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -591,52 +592,92 @@ def _alternatives(root: str) -> list[str]:
     return [part.strip().rstrip("/") for part in root.split(", else ")]
 
 
-class FolderOnlyTable(unittest.TestCase):
-    """The entries whose joined path is not the app's folder: one table in
-    the generator, each row with its reason, and it cannot rot."""
+def _outside_rules() -> list[tuple[str, dict, list[str], tuple[str, ...]]]:
+    """Each outside_data_root rule: profile name, profile, files, data_root keys."""
+    rules = []
+    for name, profile in _profiles_with_data_root().items():
+        for rule in profile.get("outside_data_root") or ():
+            keys = tuple(rule.get("systems") or profile["data_root"])
+            rules.append((name, profile, list(rule["files"]), keys))
+    return rules
 
-    def test_every_row_names_a_profile_and_entries_that_exist(self) -> None:
-        roots = _profiles_with_data_root()
-        for profile_name, patterns, keys, reason in sitegen_install.FOLDER_ONLY:
-            with self.subTest(profile=profile_name, patterns=patterns):
-                self.assertIn(profile_name, roots, "no profile with data_root by that name")
-                self.assertTrue(reason.strip())
-                entries = _entries(roots[profile_name])
-                for pattern in patterns:
-                    self.assertTrue(
-                        any(sitegen_install.folder_only_matches(pattern, f) for f in entries),
-                        f"{pattern!r} names no entry of {profile_name}")
-                self.assertLessEqual(set(keys), set(roots[profile_name]["data_root"]))
+
+def _listed(files: list[str], entry: dict) -> bool:
+    return bool(layout.outside_data_root({"outside_data_root": [{"files": files}]}, entry))
+
+
+class OutsideDataRoot(unittest.TestCase):
+    """The entries whose joined path is not the app's folder: a rule in each
+    profile, with its proof, and it cannot rot."""
+
+    def test_every_rule_names_entries_that_exist(self) -> None:
+        for profile_name, profile, files, keys in _outside_rules():
+            with self.subTest(profile=profile_name, files=files):
+                entries = _entries(profile)
+                for pattern in files:
+                    self.assertTrue(any(_listed([pattern], f) for f in entries),
+                                    f"{pattern!r} names no entry of {profile_name}")
+                self.assertLessEqual(set(keys), set(profile["data_root"]))
+
+    def test_every_rule_changes_a_place(self) -> None:
+        # A rule over entries that have no place under data_root says nothing.
+        for profile_name, profile, files, _keys in _outside_rules():
+            bare = {k: v for k, v in profile.items() if k != "outside_data_root"}
+            with self.subTest(profile=profile_name, files=files):
+                self.assertTrue(any(_listed(files, f) and layout.data_root_place(bare, f)
+                                    for f in _entries(profile)))
 
     def test_a_listed_entry_is_never_joined_to_the_root(self) -> None:
-        roots = _profiles_with_data_root()
-        for profile_name, patterns, keys, _reason in sitegen_install.FOLDER_ONLY:
-            profile = roots[profile_name]
+        for profile_name, profile, files, keys in _outside_rules():
             for entry in _entries(profile):
-                if not any(sitegen_install.folder_only_matches(p, entry) for p in patterns):
+                if not _listed(files, entry):
                     continue
                 raw = {str(entry.get(k) or "") for k in ("path", "standalone_path")} - {""}
-                for key in keys or tuple(profile["data_root"]):
+                for key in keys:
                     with self.subTest(profile=profile_name, entry=entry.get("name"), key=key):
-                        self.assertEqual(sitegen_install.standalone_place(profile_name, profile, entry, key), "")
-                        self.assertEqual(sitegen_install.standalone_place(profile_name, profile, entry), "")
-                        block = "\n".join(sitegen_install.data_folder_block(profile_name, profile))
+                        self.assertEqual(sitegen_install.standalone_place(profile, entry, key), "")
+                        self.assertEqual(sitegen_install.standalone_place(profile, entry), "")
+                        block = "\n".join(sitegen_install.data_folder_block(profile))
                         for root in _alternatives(str(profile["data_root"][key]["path"])):
                             for place in raw:
                                 self.assertNotIn(f"{root}/{place}", block)
 
+    def test_the_installer_copies_where_the_site_places(self) -> None:
+        # Cemu's shared fonts: the site gave the data folder alone, the
+        # manifests copied them under the user data path the app never reads.
+        from packs.standalone import _DATA_ROOT_SYSTEMS, _copy_source, _data_root_target, _profile_copies
+
+        for profile_name, profile in _profiles_with_data_root().items():
+            for entry in _entries(profile):
+                dest = str(entry.get("path") or entry.get("name"))
+                if _copy_source(entry, {dest: [dest]}, None, profile_name) is None \
+                        or sitegen_install.comes_with_app(entry):
+                    continue
+                copies = _profile_copies({profile_name: {**profile, "files": [entry]}}, [dest], [])
+                got = {system: targets for copy in copies for system, targets in copy["targets"].items()}
+                wanted = {}
+                for key, root in profile["data_root"].items():
+                    system = _DATA_ROOT_SYSTEMS.get(key)
+                    target = system and _data_root_target(system, str(root.get("path", "")))
+                    place = sitegen_install.standalone_place(profile, entry, key)
+                    if not target or not place:
+                        continue
+                    folder = place.rpartition("/")[0]
+                    sep = "\\" if system == "windows" else "/"
+                    wanted[system] = [target + (sep + folder.replace("/", sep) if folder else "")]
+                with self.subTest(profile=profile_name, entry=entry.get("name")):
+                    self.assertEqual(got, wanted)
+
     def test_built_pages_print_no_joined_path_for_a_listed_entry(self) -> None:
         if not _generated():
             self.skipTest("site pages not generated")
-        roots = _profiles_with_data_root()
-        for profile_name, patterns, keys, _reason in sitegen_install.FOLDER_ONLY:
-            profile = roots[profile_name]
+        for profile_name, profile, files, keys in _outside_rules():
             pages = [p.read_text(encoding="utf-8")
                      for p in EMULATORS.glob(f"{profile_name}*.md*")]
             for entry in _entries(profile):
-                if not any(sitegen_install.folder_only_matches(p, entry) for p in patterns):
+                if not _listed(files, entry):
                     continue
-                for key in keys or tuple(profile["data_root"]):
+                for key in keys:
                     for root in _alternatives(str(profile["data_root"][key]["path"])):
                         for place in {entry.get("path"), entry.get("standalone_path")} - {None, ""}:
                             joined = f"{root}/{place}"
@@ -662,7 +703,7 @@ class DataFolderPrinted(unittest.TestCase):
         # The installed firmware sits in bis/, so the keys name system/ alone.
         profile = _profile("ryujinx")
         keys = [f for f in profile["files"] if str(f.get("name", "")).endswith(".keys")]
-        block = "\n".join(sitegen_install.data_folder_block("ryujinx", profile, keys))
+        block = "\n".join(sitegen_install.data_folder_block(profile, keys))
         self.assertIn("`%APPDATA%/Ryujinx/system/`", block)
         self.assertIn("`~/Library/Application Support/Ryujinx/system/`", block)
         self.assertEqual(_tab_labels(block), {"Windows", "macOS", "Linux"})
@@ -676,19 +717,19 @@ class DataFolderPrinted(unittest.TestCase):
         self.assertNotIn("app's own data folder", steps)
 
     def test_one_system_is_a_line_not_a_tab(self) -> None:
-        block = "\n".join(sitegen_install.data_folder_block("mame4droid", _profile("mame4droid")))
+        block = "\n".join(sitegen_install.data_folder_block(_profile("mame4droid")))
         self.assertTrue(block.startswith("On Android: `Android/data/com.seleuco.mame4droid/files/`"))
         self.assertNotIn("<Tabs", block)
 
     def test_an_entry_found_by_name_or_shipped_is_not_placed(self) -> None:
         profile = {"type": "standalone", "data_root": {"linux": {"path": "~/x", "source_ref": "a"}}}
-        self.assertEqual(sitegen_install.standalone_place("x", profile, {"name": "a.bin"}), "")
-        self.assertEqual(sitegen_install.standalone_place("x", profile, {"name": "a", "path": "a", "bundled": True}),
+        self.assertEqual(sitegen_install.standalone_place(profile, {"name": "a.bin"}), "")
+        self.assertEqual(sitegen_install.standalone_place(profile, {"name": "a", "path": "a", "bundled": True}),
                          "")
-        self.assertEqual(sitegen_install.standalone_place("x", profile, {"name": "a", "path": "b/a"}), "b/a")
+        self.assertEqual(sitegen_install.standalone_place(profile, {"name": "a", "path": "b/a"}), "b/a")
         dual = {**profile, "type": "standalone + libretro"}
-        self.assertEqual(sitegen_install.standalone_place("x", dual, {"name": "a", "path": "core/a"}), "")
-        self.assertEqual(sitegen_install.standalone_place("x", dual, {"name": "a", "path": "c/a",
+        self.assertEqual(sitegen_install.standalone_place(dual, {"name": "a", "path": "core/a"}), "")
+        self.assertEqual(sitegen_install.standalone_place(dual, {"name": "a", "path": "c/a",
                                                          "standalone_path": "a"}), "a")
 
     def test_the_metadata_card_has_a_row_per_system(self) -> None:

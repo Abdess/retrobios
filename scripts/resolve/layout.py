@@ -207,6 +207,45 @@ def standalone_layout_path(entry: dict, profile: dict) -> str | None:
     return entry.get("path") or None
 
 
+def _names_entry(pattern: str, entry: dict) -> bool:
+    """Whether an ``outside_data_root`` pattern names this entry: ``*``, a
+    path or standalone_path prefix ending in ``/``, or a name."""
+    if pattern == "*":
+        return True
+    if pattern.endswith("/"):
+        return any(str(entry.get(key) or "").startswith(pattern)
+                   for key in ("path", "standalone_path"))
+    return entry.get("name") == pattern
+
+
+def outside_data_root(profile: dict, entry: dict) -> set[str]:
+    """The data_root keys on which the app reads this entry from another
+    folder than data_root: every key ({"*"}), some, or none."""
+    keys: set[str] = set()
+    for rule in profile.get("outside_data_root") or ():
+        if any(_names_entry(pattern, entry) for pattern in rule.get("files") or ()):
+            keys |= set(rule.get("systems") or ()) or {"*"}
+    return keys
+
+
+def data_root_place(profile: dict, entry: dict, key: str = "") -> str:
+    """The path under data_root where the standalone app reads this entry, or "".
+
+    Nothing for a profile without data_root, an entry the libretro core alone
+    reads, or one the profile's ``outside_data_root`` lists (on ``key``, or on
+    any key when ``key`` is empty). The site prints this place and the
+    installer copies the file there, so both read it here.
+    """
+    if not isinstance(entry, dict) or not profile.get("data_root"):
+        return ""
+    if entry.get("mode") == "libretro":
+        return ""
+    excluded = outside_data_root(profile, entry)
+    if "*" in excluded or (key in excluded if key else excluded):
+        return ""
+    return str(standalone_layout_path(entry, profile) or "")
+
+
 def standalone_destination(
     entry: dict, profile: dict, bindings: dict[str, tuple[str, str]]
 ) -> tuple[str, str] | None:

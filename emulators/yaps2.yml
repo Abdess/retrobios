@@ -37,6 +37,11 @@ data_root:
     source_ref: "pcsx2/Pcsx2Config.cpp:2205-2225,2227-2302"
     note: "portable.ini or portable.txt beside the binary puts it there instead, and a custom data path in the settings takes its YAPS2 subfolder"
 
+outside_data_root:
+  - files: ["resources/"]
+    note: "the resources folder is read from beside the binary, or from share/PCSX2 of a package install"
+    source_ref: "pcsx2/Pcsx2Config.cpp:2159-2204, cmake/BuildParameters.cmake:251-257"
+
 notes: |
   PlayStation 2 emulator, a GPL-3.0 fork of PCSX2 for arm64 Linux handhelds:
   native AArch64 EE, IOP and VU recompilers, a persisted VU program cache,

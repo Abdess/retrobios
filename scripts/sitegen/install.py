@@ -17,7 +17,7 @@ from model.guides import platform_guides, terminals, install_command
 from model.platforms import load_platform_config
 from model.registry import list_release_pack_platforms
 from model.profiles import reads_own_files
-from resolve.layout import runs_standalone, standalone_layout_path
+from resolve.layout import data_root_place, runs_standalone
 from resolve.standalone import standalone_set
 from resolve.validation import installed_everywhere, installed_with_emulator
 from sitegen import markup
@@ -240,83 +240,15 @@ def install_block(name: str, profile: dict) -> list[str]:
     ]))
 
 
-# Entries whose folder the app opens is not data_root joined to their
-# standalone_path (or path): the pack builder still places them by that
-# field, so the joined path names a place the app never reads. Their page
-# gives the data folder alone. A row names the profile, the entries (a name,
-# a path prefix ending in "/", or "*" for every file) and, when the rule
-# holds on some systems only, the data_root keys it covers.
-FOLDER_ONLY: tuple[tuple[str, tuple[str, ...], tuple[str, ...], str], ...] = (
-    ("amiberry", ("*",), (),
-     "the app reads every ROM, Kickstarts included, under ROMs/ of its folder"),
-    ("fsuae", ("fsuae/Kickstarts/",), (),
-     "the app reads Kickstarts from ROMs/Kickstart/ of its folder"),
-    ("citra", ("Citra/sysdata/",), (),
-     "the app reads its keys and shared fonts from sysdata/ of its folder"),
-    ("ymir", ("*",), (),
-     "the app reads its IPL, cartridge and CD-block ROMs from roms/ipl/, roms/cart/ and roms/cdb/"),
-    ("mame", ("*",), (),
-     "the app reads every set under roms/ of its working directory"),
-    ("eka2l1", ("data/",), ("ios",),
-     "on iOS the data folder is the data-storage folder itself, so data/ would be one level too deep"),
-    ("aethersx2", ("resources/", "eeprom.dat", "flash.dat"), (),
-     "resources sit beside the program, and eeprom.dat and flash.dat in the working directory"),
-    ("cemu", ("resources/sharedFonts/",), (),
-     "the shared fonts are read from the program's data path"),
-    ("cxbx-reloaded", ("hlsl/",), (),
-     "the shaders are read from beside the program"),
-    ("ppsspp-1.5.4", ("ppsspp-1.5.4/assets/",), (),
-     "the assets tree is read from beside the program"),
-    ("yaps2", ("resources/",), (),
-     "resources are read from beside the program"),
-    ("hatari", ("tos.img", "tos.sym"), (),
-     "the TOS image is read from the install data directory"),
-    ("armsx2", ("proverb.zip",), ("android",),
-     "the Android app keeps the arcade boot programs in its internal storage"),
-    ("armsx2", ("eeprom.dat", "flash.dat"), (),
-     "eeprom.dat and flash.dat are read from the working directory"),
-    ("kenji-nx", ("drivers/",), (),
-     "a driver archive is unpacked under drivers/, a layout not confirmed in the source"),
-)
-
-
-def folder_only_matches(pattern: str, entry: dict) -> bool:
-    """Whether a FOLDER_ONLY pattern names this entry."""
-    if pattern == "*":
-        return True
-    if pattern.endswith("/"):
-        return any(str(entry.get(key) or "").startswith(pattern)
-                   for key in ("path", "standalone_path"))
-    return entry.get("name") == pattern
-
-
-def _folder_only(name: str, entry: dict) -> set[str]:
-    """The data_root keys on which this entry's joined path is not the app's
-    folder: every key ({"*"}), some, or none."""
-    keys: set[str] = set()
-    for profile, patterns, only, _reason in FOLDER_ONLY:
-        if profile == name and any(folder_only_matches(p, entry) for p in patterns):
-            keys |= set(only) or {"*"}
-    return keys
-
-
-def standalone_place(name: str, profile: dict, entry: dict, key: str = "") -> str:
+def standalone_place(profile: dict, entry: dict, key: str = "") -> str:
     """Where under the data folder the app reads this entry, or "".
 
-    Only what the app opens there: a lone app's ``standalone_path`` or
-    ``path``, a dual profile's ``standalone_path`` or the ``path`` of an
-    entry its standalone build alone reads. Nothing for an entry found by
-    name, one the app ships, one the libretro core alone reads, or one
-    FOLDER_ONLY lists (on ``key``, or on any key when ``key`` is empty).
+    The place the installer copies the file to (resolve.layout.data_root_place),
+    and nothing for an entry the app ships.
     """
-    if not isinstance(entry, dict) or not profile.get("data_root"):
+    if not isinstance(entry, dict) or comes_with_app(entry):
         return ""
-    if entry.get("mode") == "libretro" or comes_with_app(entry):
-        return ""
-    excluded = _folder_only(name, entry)
-    if "*" in excluded or (key in excluded if key else excluded):
-        return ""
-    return str(standalone_layout_path(entry, profile) or "")
+    return data_root_place(profile, entry, key)
 
 
 OS_LABELS = {"windows": "Windows", "macos": "macOS", "linux": "Linux",
@@ -340,7 +272,7 @@ def under_root(root: str, folder: str) -> str:
     return ", else ".join(shown)
 
 
-def _data_root_folder(name: str, profile: dict, key: str, entries: list[dict]) -> str:
+def _data_root_folder(profile: dict, key: str, entries: list[dict]) -> str:
     """The one folder under the root that every entry the app reads sits
     in, or "": VICE places 3 of its 322 files in DRIVES/, and naming that
     folder would send the other 319 there."""
@@ -349,14 +281,14 @@ def _data_root_folder(name: str, profile: dict, key: str, entries: list[dict]) -
         mode = f.get("mode")
         if mode == "libretro" or comes_with_app(f):
             continue
-        place = standalone_place(name, profile, f, key)
+        place = standalone_place(profile, f, key)
         if not place:
             return ""
         folders.add(place.rpartition("/")[0])
     return folders.pop() if len(folders) == 1 else ""
 
 
-def data_folder_block(name: str, profile: dict, entries: list[dict] | None = None) -> list[str]:
+def data_folder_block(profile: dict, entries: list[dict] | None = None) -> list[str]:
     """The app's data folder, one tab per system it runs on, each with the
     code that names it and its note: 61 profiles cite it and no page showed
     it. ``entries`` are the files the folder is for: when they all sit in
@@ -372,7 +304,7 @@ def data_folder_block(name: str, profile: dict, entries: list[dict] | None = Non
         if not isinstance(root, dict) or not root.get("path"):
             continue
         path = str(root["path"])
-        line = under_root(path, _data_root_folder(name, profile, key, entries))
+        line = under_root(path, _data_root_folder(profile, key, entries))
         if key == "android" and path.startswith("Android/data/"):
             line += ", on the internal storage."
         body = [line]

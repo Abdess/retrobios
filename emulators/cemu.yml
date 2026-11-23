@@ -48,6 +48,11 @@ data_root:
     source_ref: "upstream src/gui/wxgui/CemuApp.cpp:127-171"
     note: "portable/ next to the executable or the AppImage when that folder exists. Configuration sits in $XDG_CONFIG_HOME/Cemu, else ~/.config/Cemu"
 
+outside_data_root:
+  - files: ["resources/sharedFonts/"]
+    note: "the shared fonts are read from the data path, beside the program, not from the user data path"
+    source_ref: "source src/Cafe/CafeSystem.cpp:292, source src/Cafe/CafeSystem.cpp:329-334"
+
 notes: |
   Wii U emulator. The libretro core is a fork of the Cemu tree with the wx
   application removed, kept merged with upstream, with the frontend glue in

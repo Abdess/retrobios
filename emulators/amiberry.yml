@@ -42,6 +42,11 @@ data_root:
     path: "Documents/Amiberry"
     source_ref: "src/osdep/amiberry.cpp:9388-9396, src/osdep/amiberry.cpp:13540-13577, src/osdep/amiberry.cpp:4960-4963, src/osdep/amiberry.cpp:13622"
 
+outside_data_root:
+  - files: ["*"]
+    note: "the app reads every ROM, Kickstarts included, under ROMs/ of its folder, the rom_path default"
+    source_ref: "src/osdep/amiberry.cpp:8485, 13622, 4960-4963, src/osdep/amiberry_gui.cpp:431-462"
+
 notes: |
   Amiberry is an Amiga emulator based on WinUAE, available as both standalone
   and libretro core. No built-in kickstart: requires a real Kickstart ROM or

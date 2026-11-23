@@ -48,6 +48,12 @@ data_root:
     source_ref: "source pcsx2/Pcsx2Config.cpp:2523-2530, pcsx2/Pcsx2Config.cpp:2540-2560, pcsx2/Pcsx2Config.cpp:2567-2589"
     note: "portable.ini or portable.txt beside the binary makes its folder the root"
 
+outside_data_root:
+  - files: ["proverb.zip"]
+    systems: [android]
+    note: "the Android app keeps the arcade boot programs in arcade/ of its internal storage"
+    source_ref: "source platforms/android/app/src/main/java/com/armsx2/arcade/ArcadeLibrary.kt:33-36"
+
 pin_build:
   - platform: rocknix
     repo: "https://github.com/ROCKNIX/distribution"

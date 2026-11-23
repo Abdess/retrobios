@@ -52,6 +52,12 @@ data_root:
     path: "$XDG_DATA_HOME/EKA2L1, else ~/.local/share/EKA2L1"
     source_ref: "src/emu/qt/src/main.cpp:105-126"
 
+outside_data_root:
+  - files: ["data/"]
+    systems: [ios]
+    note: "on iOS the data folder is the data-storage folder itself, so data/ would be one level too deep"
+    source_ref: "src/emu/ios/App/EKA2L1Bridge.swift:7-9, src/emu/ios/Bridge/IosEmulator.mm:1068-1070"
+
 notes: |
   Symbian OS and N-Gage emulator: the EKA1 and EKA2 kernels are emulated and
   the critical application servers and libraries reimplemented in C++, while

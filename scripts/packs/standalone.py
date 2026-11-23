@@ -9,6 +9,7 @@ from core.paths import REPO_ROOT
 from packs.archive import PackRecord
 from packs.emulatorpack import build_emulator_pack
 from packs.manifestentry import manifest_entry
+from resolve.layout import data_root_place
 
 
 def _placed_copies(copies: list[dict], dests: list[str]) -> list[dict]:
@@ -78,10 +79,11 @@ def _one_content(held: list[str], entries: dict[str, dict], emulator: str) -> li
     return [min(own or held, key=lambda dest: (dest.count("/"), len(dest), dest))]
 
 
-def _profile_roots(profile: dict) -> dict[str, str]:
-    """The data_root of each system the profile names a findable place for."""
+def _profile_roots(profile: dict) -> dict[str, tuple[str, str]]:
+    """The data_root key and copy target of each system the profile names a
+    findable place for."""
     return {
-        _DATA_ROOT_SYSTEMS[key]: target
+        _DATA_ROOT_SYSTEMS[key]: (key, target)
         for key, value in (profile.get("data_root") or {}).items()
         if key in _DATA_ROOT_SYSTEMS and isinstance(value, dict)
         and (target := _data_root_target(_DATA_ROOT_SYSTEMS[key], value.get("path", "")))
@@ -157,9 +159,13 @@ def _profile_copies(
             source = _copy_source(entry, by_tail, entries, profile_name)
             if source is None:
                 continue
-            where = PurePosixPath(entry["standalone_path"])
             placed: dict[str, list[str]] = {}
-            for system, root in roots.items():
+            for system, (key, root) in roots.items():
+                # The app reads the file there, else no copy on this system.
+                place = data_root_place(profile, entry, key)
+                if not place:
+                    continue
+                where = PurePosixPath(place)
                 sep = "\\" if system == "windows" else "/"
                 target = root if str(where.parent) == "." else (
                     root + sep + str(where.parent).replace("/", sep))
@@ -168,8 +174,9 @@ def _profile_copies(
             if not placed:
                 continue
             copy = {"file": source, "targets": placed}
-            if where.name != PurePosixPath(source).name:
-                copy["as"] = where.name
+            name = PurePosixPath(entry["standalone_path"]).name
+            if name != PurePosixPath(source).name:
+                copy["as"] = name
             copies.append(copy)
     return copies
 

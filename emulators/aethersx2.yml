@@ -39,6 +39,11 @@ data_root:
     source_ref: "aethersx2 v1.5-3606 usr/share/aethersx2 0x9b83f0-0x9b8798"
     note: "portable.ini beside the binary puts it there instead"
 
+outside_data_root:
+  - files: ["resources/"]
+    note: "the resources folder is read from beside the program"
+    source_ref: "AetherSX2-release AetherSX2.app/Contents/Resources, aethersx2 v1.5-3668 xyz.aethersx2.android assets"
+
 notes: |
   PlayStation 2 emulator for ARM, built on PCSX2 and carrying its own AArch64
   recompilers. The application itself is closed source. The PCSX2-derived files

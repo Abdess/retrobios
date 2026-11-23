@@ -37,6 +37,11 @@ data_root:
     source_ref: "src/Ryujinx.Common/Configuration/AppDataManager.cs:11-12, 52-82"
     note: "A portable folder beside the executable or beside the app bundle is used instead when it exists."
 
+outside_data_root:
+  - files: ["drivers/"]
+    note: "a driver archive is unpacked into a folder named after it under drivers/, the zip itself is not read there"
+    source_ref: "src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/VulkanDriverViewModel.kt:13-167"
+
 notes: |
   Nintendo Switch emulator in C#, a fork of the Ryujinx line maintained by
   KeatonTheBot. Two builds come out of one repository: the desktop Avalonia

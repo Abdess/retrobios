@@ -366,7 +366,7 @@ def _card_place_details(f: dict, profile: dict, owner: str, data_href: str) -> l
     fsystem = f.get("system", "")
     # Where the app reads it under its data folder, said beside the path:
     # Ryujinx's card read "Path: system/prod.keys" with no root.
-    place = standalone_place(owner, profile, f) if owner else ""
+    place = standalone_place(profile, f) if owner else ""
     under = f", in [the data folder]({data_href})"
     standalone_path = f.get("standalone_path", "")
     if (fpath and fpath != fname) or (place and place == fpath):

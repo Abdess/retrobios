@@ -556,10 +556,10 @@ def _any_name_steps(emu_name: str, profile: dict, entry: dict, href: str,
         get = f"Get one from the {named_system_link(profile['systems'][0], '../')} files."
     steps = [get]
     folders: list[str] = []
-    if profile.get("type") == "standalone" and standalone_place(name, profile, entry):
+    if profile.get("type") == "standalone" and standalone_place(profile, entry):
         steps.append("Put it in this folder:")
         folders = ['<div id="data-folder" class="rb-anchor"></div>', "",
-                   *data_folder_block(name, profile, [entry])]
+                   *data_folder_block(profile, [entry])]
     else:
         folder = _any_name_folder(profile, entry)
         if folder:
@@ -583,13 +583,13 @@ def _data_folder_intro(name: str, profile: dict) -> list[str]:
     if not profile.get("data_root"):
         return []
     files = [f for f in profile.get("files") or [] if isinstance(f, dict)]
-    placed = [f for f in files if standalone_place(name, profile, f)]
+    placed = [f for f in files if standalone_place(profile, f)]
     subject = ("The app" if profile.get("type") == "standalone"
                else "Run on its own, the app")
     lead = (f"{subject} reads its files from this folder:" if placed
             else f"{subject} keeps its data in this folder:")
     return ['<div id="data-folder" class="rb-anchor"></div>', "", lead, "",
-            *data_folder_block(name, profile, files)]
+            *data_folder_block(profile, files)]
 
 
 def _emulator_intro(emu_name: str, profile: dict, href: str = "", name: str = "") -> str:
