@@ -4380,7 +4380,6 @@ class OfflineToggleStalesTheCheck(unittest.TestCase):
                 state.checked_flags = install.tui_flags(state)
                 self.assertIn(("--offline", None), state.checked_flags)
                 self.assertEqual(install._option_offline(state, 0), [("offline", False)])
-                install.set_offline(False)
                 self.assertNotIn(("--offline", None), install.tui_flags(state))
                 self.assertEqual(install._begin_install(state), [("run", "confirm")])
 
@@ -5436,9 +5435,8 @@ class AppOnTheCard(unittest.TestCase):
         for name, state in cases.items():
             with self.subTest(case=name):
                 self.assertEqual(install.tui_rows(state), [])
-        os.environ[install.OFFLINE_VARIABLE] = "1"
+        offline.offline = True
         self.assertEqual(install.tui_rows(offline), [])
-        os.environ.pop(install.OFFLINE_VARIABLE)
         _title, lines = install.tui_outcome(cases["no launcher"])
         self.assertIn(install.no_python_words("Onion"), lines)
 
@@ -5468,6 +5466,17 @@ class AppOnTheCard(unittest.TestCase):
         plain = _installed_state(SYSTEM_DIR)
         plain.stack = ["plan", "options"]
         self.assertFalse(any(row.action == "addapp" for row in install.tui_rows(plain)))
+
+    def test_offline_on_the_screen_drops_the_flag_before_its_effect(self):
+        _root, bios = _app_card(self, "muOS")
+        state = _installed_state(bios)
+        state.add_app = True
+        with mock.patch.dict(os.environ):
+            os.environ.pop(install.OFFLINE_VARIABLE, None)
+            state.offline = True
+            argv = install.tui_argv(state, "install", "py", "install.py")
+        self.assertIn("--offline", argv)
+        self.assertNotIn("--add-app", argv)
 
     def test_the_command_line_flag_ticks_the_row(self):
         _root, bios = _app_card(self, "ROCKNIX")

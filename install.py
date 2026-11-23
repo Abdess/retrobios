@@ -24590,7 +24590,8 @@ def _tui_app_ready(state: TuiState) -> bool:
     """Whether the RetroBIOS app can go on this card: its system has one,
     and the run may use the network to fetch it."""
     card = _tui_card(state)
-    return card is not None and card.place is not None and not LOCAL.offline
+    return card is not None and card.place is not None and not (
+        state.offline or LOCAL.pack is not None)
 
 
 def _tui_installed(state: TuiState) -> bool:
@@ -30224,8 +30225,8 @@ def _option_offline(state: TuiState, step: int) -> list[tuple]:
         state.status = _styled("Open Device once first: without the internet the "
                                "board list has to be read already.", "refusal")
         return []
-    # Set in this process by the effect, as --offline sets it: the
-    # runs started next inherit it, and their command names it.
+    # The screens read state.offline. The effect carries the choice to
+    # this process's own fetches and to the runs started next.
     state.offline = on
     return [("offline", on)]
 
@@ -30336,15 +30337,6 @@ def use_tui_pack(pack: PackSource) -> None:
     if LOCAL.pack is not None and LOCAL.pack is not pack:
         LOCAL.pack.close()
     LOCAL.pack = pack
-
-
-def set_offline(on: bool) -> None:
-    """Without the internet on or off for this process and the runs it
-    starts, as --offline sets it."""
-    if on:
-        os.environ[OFFLINE_VARIABLE] = OFFLINE_FLAG_VALUE
-    else:
-        os.environ.pop(OFFLINE_VARIABLE, None)
 
 
 def _open_from_browser(state: TuiState) -> list[tuple]:
@@ -31841,6 +31833,15 @@ def tui_suspend(runs: list[_EngineRun], whole: bool) -> None:
         os.kill(os.getpid(), signal.SIGSTOP)
     for run in runs:
         run.pause(False)
+
+
+def set_offline(on: bool) -> None:
+    """Without the internet on or off for this process and the runs it
+    starts, as --offline sets it."""
+    if on:
+        os.environ[OFFLINE_VARIABLE] = OFFLINE_FLAG_VALUE
+    else:
+        os.environ.pop(OFFLINE_VARIABLE, None)
 
 
 class _TuiSignals:

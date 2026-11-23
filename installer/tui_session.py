@@ -35,8 +35,8 @@ from installer.detect_os import _enter_wsl, _wsl_dest, detect_os, detected_os
 from installer.from_folders import from_folder_refusal, open_list_and_pack, reset_local_sources
 from installer.host_fs import _DETECTION_REFUSED, refused_words
 from installer.install_record import choice_given
-from installer.invocation import _INVOCATION
-from installer.offline import LOCAL
+from installer.invocation import _INVOCATION, OFFLINE_VARIABLE
+from installer.offline import LOCAL, OFFLINE_FLAG_VALUE
 from installer.outcome import LINE_SAVE_REMEDY
 from installer.platforms import normalize_platform
 from installer.regions import resolve_regions
@@ -50,7 +50,6 @@ from installer.tui_actions import (
     _platform_focus,
     _take_card,
     open_tui_pack,
-    set_offline,
     tui_interrupt,
     use_tui_pack,
 )
@@ -542,6 +541,15 @@ def tui_suspend(runs: list[_EngineRun], whole: bool) -> None:
         os.kill(os.getpid(), signal.SIGSTOP)
     for run in runs:
         run.pause(False)
+
+
+def set_offline(on: bool) -> None:
+    """Without the internet on or off for this process and the runs it
+    starts, as --offline sets it."""
+    if on:
+        os.environ[OFFLINE_VARIABLE] = OFFLINE_FLAG_VALUE
+    else:
+        os.environ.pop(OFFLINE_VARIABLE, None)
 
 
 class _TuiSignals:

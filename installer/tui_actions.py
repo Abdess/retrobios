@@ -42,9 +42,8 @@ from installer.install_record import (
     setup_record,
     take_recorded_choice,
 )
-from installer.invocation import OFFLINE_VARIABLE
 from installer.lists import local_targets
-from installer.offline import LOCAL, OFFLINE_FLAG_VALUE
+from installer.offline import LOCAL
 from installer.pack import _listed
 from installer.pack_source import PackSource
 from installer.paths import shown_path
@@ -1211,8 +1210,8 @@ def _option_offline(state: TuiState, step: int) -> list[tuple]:
         state.status = _styled("Open Device once first: without the internet the "
                                "board list has to be read already.", "refusal")
         return []
-    # Set in this process by the effect, as --offline sets it: the
-    # runs started next inherit it, and their command names it.
+    # The screens read state.offline. The effect carries the choice to
+    # this process's own fetches and to the runs started next.
     state.offline = on
     return [("offline", on)]
 
@@ -1323,15 +1322,6 @@ def use_tui_pack(pack: PackSource) -> None:
     if LOCAL.pack is not None and LOCAL.pack is not pack:
         LOCAL.pack.close()
     LOCAL.pack = pack
-
-
-def set_offline(on: bool) -> None:
-    """Without the internet on or off for this process and the runs it
-    starts, as --offline sets it."""
-    if on:
-        os.environ[OFFLINE_VARIABLE] = OFFLINE_FLAG_VALUE
-    else:
-        os.environ.pop(OFFLINE_VARIABLE, None)
 
 
 def _open_from_browser(state: TuiState) -> list[tuple]:

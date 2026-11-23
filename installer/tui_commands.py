@@ -150,7 +150,8 @@ def _tui_app_ready(state: TuiState) -> bool:
     """Whether the RetroBIOS app can go on this card: its system has one,
     and the run may use the network to fetch it."""
     card = _tui_card(state)
-    return card is not None and card.place is not None and not LOCAL.offline
+    return card is not None and card.place is not None and not (
+        state.offline or LOCAL.pack is not None)
 
 
 def _tui_installed(state: TuiState) -> bool:
