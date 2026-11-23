@@ -40,16 +40,8 @@ from sitegen.install import (
     data_root_words,
     standalone_place,
 )
-from sitegen.render import (
-    SHORT_HASH,
-    WIKI_SRC_DIR,
-    card_anchor,
-    code_span,
-    count_text,
-    escape_tags,
-    card_page,
-    console_href,
-)
+from sitegen.render import SHORT_HASH, WIKI_SRC_DIR, card_anchor, code_span, count_text, escape_tags
+from sitegen.runlinks import card_page, console_href
 from sitegen.sources import (
     source_permalink,
     source_ref_markdown,
@@ -63,12 +55,12 @@ from sitegen.sources import (
 
 
 def named_system_link(sys_id: str, prefix: str = "") -> str:
-    """A system by its display name, linked where _system_link links it.
+    """A system by its display name, linked where runlinks.system_link links it.
 
     The emulator pages printed the id ("sony-playstation") where every
     other page says "Sony PlayStation". The id stays in the address only.
     """
-    from sitegen.render import system_section
+    from sitegen.runlinks import system_section
 
     name = system_name(sys_id).replace("[", r"\[").replace("]", r"\]")
     section = system_section(sys_id)

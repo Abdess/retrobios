@@ -52,6 +52,7 @@ from sitegen import startwith
 from sitegen import systempages
 from sitegen import systemsindex
 from sitegen import render as siterender
+from sitegen import runlinks
 from model import systemnames
 from packs.consumers import FileConsumers
 from sitegen import ogcards
@@ -292,13 +293,13 @@ class ConsoleHeadingsStartWithTheName(unittest.TestCase):
 
     def test_no_icon_even_when_one_exists(self):
         icon = siterender.console_icon_name("Sony", "PlayStation")
-        with mock.patch.dict(siterender._icon_available, {icon: True}):
+        with mock.patch.dict(runlinks.current().icons, {icon: True}):
             self.assertEqual(startwith.console_heading("Sony", "PlayStation"),
                              "## PlayStation { #playstation }")
 
     def test_no_icon_no_image(self):
         icon = siterender.console_icon_name("Nobody", "Nothing")
-        with mock.patch.dict(siterender._icon_available, {icon: False}):
+        with mock.patch.dict(runlinks.current().icons, {icon: False}):
             self.assertEqual(startwith.console_heading("Nobody", "Nothing"), "## Nothing { #nothing }")
 
 
@@ -307,8 +308,8 @@ class TheSystemsIndexListsConsoles(unittest.TestCase):
     be known to be under Sony."""
 
     def test_one_row_per_console_by_its_name(self):
-        siterender.reset_console_pages()
-        self.addCleanup(siterender.reset_console_pages)
+        runlinks.reset_console_pages()
+        self.addCleanup(runlinks.reset_console_pages)
         groups = {
             "Sony": {"PlayStation": [_sony_file("a.bin", "a")], "PlayStation 2": [_sony_file("b.bin", "b")]},
             "Other": {"ScummVM": [_sony_file("c.bin", "c")]},
@@ -650,10 +651,9 @@ class InstallBoxesCountTowardTheSummary(unittest.TestCase):
     and the page passed its 600 KB budget once the DS files were refiled."""
 
     def setUp(self) -> None:
-        from sitegen import render as siterender
 
-        siterender.reset_console_pages()
-        self.addCleanup(siterender.reset_console_pages)
+        runlinks.reset_console_pages()
+        self.addCleanup(runlinks.reset_console_pages)
         self.consoles = {
             name: [_file_at(f"{name}{i}.bin", "0123456789"[index * 3 + i],
                          f"bios/Maker/{name}/{name}{i}.bin") for i in range(3)]
@@ -874,7 +874,7 @@ class CardsNameEmulatorsByName(unittest.TestCase):
 class PartPagesKnowWhereTheyAre(unittest.TestCase):
     def tearDown(self) -> None:
         # system_pages records where consoles went, for every later page.
-        siterender.reset_console_pages()
+        runlinks.reset_console_pages()
 
     """6.7: 128 system pages had no parent, parts were "part 3 of 5"."""
 
@@ -923,7 +923,7 @@ def _consoles(page: str) -> list[str]:
 class ConsolesFieldNamesMachinesOnce(unittest.TestCase):
     def tearDown(self) -> None:
         # system_pages records where consoles went, for every later page.
-        siterender.reset_console_pages()
+        runlinks.reset_console_pages()
 
     """The consoles search field: only machine sections, and a console
     with a page of its own is that page's, or "dolphin" found Other and
@@ -947,7 +947,7 @@ class ConsolesFieldNamesMachinesOnce(unittest.TestCase):
         self.assertIn("sega-saturn", pages)
         self.assertEqual(_consoles(pages["sega"][0]), ["Pico"])
         self.assertEqual(_consoles(pages["sega-saturn"][0]), ["Saturn"])
-        self.addCleanup(siterender.reset_console_pages)
+        self.addCleanup(runlinks.reset_console_pages)
         sony = systempages.system_pages("Sony", {"PlayStation": big, "PocketStation": small},
                                consumers, budget=one * 12)
         self.assertEqual(_consoles(sony["sony"][0]), [])
@@ -1147,7 +1147,7 @@ class ABoardIsAnArcadeMachine(unittest.TestCase):
     """6.4: computers, a sound chip and a toy had board pages."""
 
     def test_no_board_has_a_parent_outside_arcade(self) -> None:
-        wrong = sorted(board for board in siterender.arcade_boards()
+        wrong = sorted(board for board in runlinks.arcade_boards()
                        if board in systemnames.SYSTEM_PARENTS)
         self.assertEqual(wrong, [])
 
@@ -1185,14 +1185,14 @@ class TheDreamcastBoardsAreFiledByBoard(unittest.TestCase):
         self.assertEqual(missing, [])
 
     def test_the_dreamcast_arcade_id_leads_to_naomi(self) -> None:
-        siterender.reset_console_pages()
-        for board in siterender.arcade_boards():
-            siterender.record_board_section(board)
+        runlinks.reset_console_pages()
+        for board in runlinks.arcade_boards():
+            runlinks.record_board_section(board)
         try:
-            self.assertEqual(siterender.system_section("sega-dreamcast-arcade"),
+            self.assertEqual(runlinks.system_section("sega-dreamcast-arcade"),
                              ("arcade", "Sega NAOMI"))
         finally:
-            siterender.reset_console_pages()
+            runlinks.reset_console_pages()
 
 
 class EnginesGoByEngine(unittest.TestCase):

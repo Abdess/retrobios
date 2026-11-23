@@ -3,7 +3,7 @@
 The Arcade pages were cut by storage folder, so NAOMI, ZN-1, PGM and the
 other boards had no section and stayed plain on 987 emulator rows.
 sitegen.arcadeboards elects the board each set archive is the BIOS of,
-read from the profiles, and siterender.arcade_board() names it, and system_section() leads every id of that board
+read from the profiles, and runlinks.arcade_board() names it, and system_section() leads every id of that board
 to ``systems/arcade-<board_slug>/#<board_slug>``, the section the system
 pages write. The 28 ids that systems.json gave files and no page either
 link or carry their reason below.
@@ -22,6 +22,7 @@ from pathlib import Path
 
 from sitegen import arcadeboards
 from sitegen import render as siterender
+from sitegen import runlinks
 from model import systemnames
 from core.anchors import toc_slug
 
@@ -68,15 +69,15 @@ STAYS_PLAIN = {
 
 def _reset() -> None:
     """Back to the repository's sections and boards, none written."""
-    siterender._arcade[0] = None
+    runlinks.current().arcade = None
     systemnames._sections_installed[0] = False
-    siterender.reset_console_pages()
+    runlinks.reset_console_pages()
 
 
 def _write_every_board() -> None:
     """What the system pages do once they give each board a section."""
-    for board in siterender.arcade_boards():
-        siterender.record_board_section(board)
+    for board in runlinks.arcade_boards():
+        runlinks.record_board_section(board)
 
 
 @unittest.skipUnless((REPO_ROOT / "database.json").exists(), "database.json is not built")
@@ -97,7 +98,7 @@ class Boards(unittest.TestCase):
         return self.db["indexes"]["by_name"][name]
 
     def test_named_boards_exist(self) -> None:
-        boards = siterender.arcade_boards()
+        boards = runlinks.arcade_boards()
         names = set(boards.values())
         for sys_id, name in NAMED_BOARDS.items():
             with self.subTest(sys_id=sys_id):
@@ -119,7 +120,7 @@ class Boards(unittest.TestCase):
         for name, board in expect.items():
             for sha1 in self._copies(name):
                 with self.subTest(name=name, path=self.db["files"][sha1]["path"]):
-                    self.assertEqual(siterender.arcade_board(sha1), board)
+                    self.assertEqual(runlinks.arcade_board(sha1), board)
 
     def test_no_board(self) -> None:
         """neogeo.zip and cd32.zip are the BIOS of machines with a section of
@@ -127,10 +128,10 @@ class Boards(unittest.TestCase):
         for name in ("neogeo.zip", "cd32.zip", "mie.zip", "jvs13551.zip"):
             for sha1 in self._copies(name):
                 with self.subTest(name=name, path=self.db["files"][sha1]["path"]):
-                    self.assertIsNone(siterender.arcade_board(sha1))
+                    self.assertIsNone(runlinks.arcade_board(sha1))
 
     def test_slug_contract(self) -> None:
-        boards = siterender.arcade_boards()
+        boards = runlinks.arcade_boards()
         slugs = {siterender.board_slug(board) for board in boards}
         self.assertEqual(len(slugs), len(boards), "two boards share a slug")
         for board, name in boards.items():
@@ -141,7 +142,7 @@ class Boards(unittest.TestCase):
                 # The board's page is its section: no heading repeats its
                 # title.
                 self.assertEqual(
-                    siterender.console_href(*siterender.system_section(board)),
+                    runlinks.console_href(*runlinks.system_section(board)),
                     f"systems/arcade-{slug}.md")
 
     def test_aliases_share_a_board(self) -> None:
@@ -158,15 +159,15 @@ class Boards(unittest.TestCase):
             with self.subTest(alias=alias):
                 self.assertEqual(siterender.board_slug(alias), siterender.board_slug(board))
                 self.assertEqual(
-                    siterender.system_section(alias), siterender.system_section(board))
+                    runlinks.system_section(alias), runlinks.system_section(board))
 
     def test_machines_keep_their_section(self) -> None:
-        self.assertEqual(siterender.system_section("snk-neogeo-mvs"), ("snk", "Neo Geo"))
-        self.assertEqual(siterender.system_section("sega-hikaru"), ("sega", "Hikaru"))
-        self.assertEqual(siterender.system_section("arcade"), ("arcade", "Arcade"))
+        self.assertEqual(runlinks.system_section("snk-neogeo-mvs"), ("snk", "Neo Geo"))
+        self.assertEqual(runlinks.system_section("sega-hikaru"), ("sega", "Hikaru"))
+        self.assertEqual(runlinks.system_section("arcade"), ("arcade", "Arcade"))
 
     def test_systems_json_gaps(self) -> None:
-        plain = sorted(i for i in SYSTEMS_JSON_GAPS if siterender.system_section(i) is None)
+        plain = sorted(i for i in SYSTEMS_JSON_GAPS if runlinks.system_section(i) is None)
         self.assertEqual(plain, sorted(STAYS_PLAIN))
 
     def test_parents_named_by_the_plan(self) -> None:
@@ -178,7 +179,7 @@ class Boards(unittest.TestCase):
         }
         for sys_id, section in expect.items():
             with self.subTest(sys_id=sys_id):
-                self.assertEqual(siterender.system_section(sys_id), section)
+                self.assertEqual(runlinks.system_section(sys_id), section)
 
 
 @unittest.skipUnless((REPO_ROOT / "database.json").exists(), "database.json is not built")
@@ -191,32 +192,32 @@ class LinksWaitForTheSection(unittest.TestCase):
         self.addCleanup(_reset)
 
     def test_unwritten_board_stays_plain(self) -> None:
-        self.assertIsNone(siterender.system_section("igs-pgm"))
-        self.assertIsNone(siterender.system_section("naomi2"))
-        self.assertEqual(siterender.console_href("arcade", "IGS PolyGame Master"),
+        self.assertIsNone(runlinks.system_section("igs-pgm"))
+        self.assertIsNone(runlinks.system_section("naomi2"))
+        self.assertEqual(runlinks.console_href("arcade", "IGS PolyGame Master"),
                          "systems/arcade.md#igs-polygame-master")
 
     def test_written_board_links_and_takes_its_cards(self) -> None:
-        siterender.record_board_section("igs-pgm")
-        self.assertEqual(siterender.system_section("igs-pgm"),
+        runlinks.record_board_section("igs-pgm")
+        self.assertEqual(runlinks.system_section("igs-pgm"),
                          ("arcade", "IGS PolyGame Master"))
-        self.assertIsNone(siterender.system_section("sega-naomi"))
+        self.assertIsNone(runlinks.system_section("sega-naomi"))
         sha1 = next(s for s, e in json.loads(
             (REPO_ROOT / "database.json").read_text(encoding="utf-8"))["files"].items()
             if e["path"] == "bios/Arcade/Arcade/pgm.zip")
-        self.assertEqual(siterender.card_page("bios/Arcade/Arcade/pgm.zip", sha1),
+        self.assertEqual(runlinks.card_page("bios/Arcade/Arcade/pgm.zip", sha1),
                          "arcade-igs-polygame-master")
-        siterender.reset_console_pages()
-        self.assertIsNone(siterender.system_section("igs-pgm"))
+        runlinks.reset_console_pages()
+        self.assertIsNone(runlinks.system_section("igs-pgm"))
 
     def test_an_alias_records_its_board(self) -> None:
-        siterender.record_board_section("sega-atomiswave")
-        self.assertEqual(siterender.system_section("sammy-atomiswave"),
+        runlinks.record_board_section("sega-atomiswave")
+        self.assertEqual(runlinks.system_section("sammy-atomiswave"),
                          ("arcade", "Sammy Atomiswave"))
 
     def test_no_board_refused(self) -> None:
         with self.assertRaises(KeyError):
-            siterender.record_board_section("sony-playstation")
+            runlinks.record_board_section("sony-playstation")
 
 
 class BoardRules(unittest.TestCase):
@@ -248,15 +249,15 @@ class BoardRules(unittest.TestCase):
         for sha1, path in files.items():
             db["indexes"]["by_name"].setdefault(Path(path).name, []).append(sha1)
         profiles = {key: {"systems": [], "files": rows} for key, rows in entries.items()}
-        siterender.use_arcade_boards(arcadeboards.elect_arcade_boards(profiles, db))
+        runlinks.use_arcade_boards(arcadeboards.elect_arcade_boards(profiles, db))
 
     def test_folder_decides_nothing(self) -> None:
         self._install(
             {"core": [{"name": "pgm.zip", "category": "bios_zip", "system": "igs-pgm"}]},
             {"a" * 40: "bios/Arcade/MAME/pgm.zip", "b" * 40: "bios/Other/x/pgm.zip"},
         )
-        self.assertEqual(siterender.arcade_board("a" * 40), "igs-pgm")
-        self.assertEqual(siterender.arcade_board("b" * 40), "igs-pgm")
+        self.assertEqual(runlinks.arcade_board("a" * 40), "igs-pgm")
+        self.assertEqual(runlinks.arcade_board("b" * 40), "igs-pgm")
 
     def test_tie_is_no_board(self) -> None:
         self._install(
@@ -266,7 +267,7 @@ class BoardRules(unittest.TestCase):
             },
             {"c" * 40: "bios/Arcade/MAME/dev.zip"},
         )
-        self.assertIsNone(siterender.arcade_board("c" * 40))
+        self.assertIsNone(runlinks.arcade_board("c" * 40))
 
     def test_majority_wins(self) -> None:
         self._install(
@@ -277,7 +278,7 @@ class BoardRules(unittest.TestCase):
             },
             {"c" * 40: "bios/Arcade/MAME/dev.zip"},
         )
-        self.assertEqual(siterender.arcade_board("c" * 40), "igs-pgm")
+        self.assertEqual(runlinks.arcade_board("c" * 40), "igs-pgm")
 
     def test_machine_set_is_no_board(self) -> None:
         self._install(
@@ -287,7 +288,7 @@ class BoardRules(unittest.TestCase):
             },
             {"d" * 40: "bios/Arcade/MAME/neogeo.zip"},
         )
-        self.assertIsNone(siterender.arcade_board("d" * 40))
+        self.assertIsNone(runlinks.arcade_board("d" * 40))
 
     def test_contents_reject_a_homonym(self) -> None:
         good = self._zip("good.zip", b"good")
@@ -304,8 +305,8 @@ class BoardRules(unittest.TestCase):
             # Both copies filed under Arcade, as by_path_suffix records it.
             {"Arcade/MAME/good.zip": ["e" * 40], "Arcade/FBNeo/good.zip": ["f" * 40]},
         )
-        self.assertEqual(siterender.arcade_board("e" * 40), "igs-pgm")
-        self.assertIsNone(siterender.arcade_board("f" * 40))
+        self.assertEqual(runlinks.arcade_board("e" * 40), "igs-pgm")
+        self.assertIsNone(runlinks.arcade_board("f" * 40))
 
     def test_no_copy_under_arcade_no_section(self) -> None:
         """A board with no set under Arcade has no section there to lead to."""
@@ -313,9 +314,9 @@ class BoardRules(unittest.TestCase):
             {"core": [{"name": "pgm.zip", "category": "bios_zip", "system": "igs-pgm"}]},
             {"a" * 40: "bios/IGS/PGM/pgm.zip"},
         )
-        self.assertIsNone(siterender.arcade_board("a" * 40))
+        self.assertIsNone(runlinks.arcade_board("a" * 40))
         with self.assertRaises(KeyError):
-            siterender.record_board_section("igs-pgm")
+            runlinks.record_board_section("igs-pgm")
 
 
 if __name__ == "__main__":

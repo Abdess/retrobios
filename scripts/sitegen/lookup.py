@@ -20,7 +20,8 @@ from sitegen.cards import PROVENANCE_LABELS, emulator_card_anchor, emulator_file
 from sitegen.config import SITE_URL
 from core.paths import REPO_ROOT
 from core.ziptools import is_archive_path, zip_members
-from sitegen.render import card_anchor, code_span, slugify_anchor, card_page, emulator_card_page
+from sitegen.render import card_anchor, code_span, slugify_anchor
+from sitegen.runlinks import card_page, emulator_card_page
 from sitegen.write import write_if_changed
 
 

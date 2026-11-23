@@ -44,7 +44,7 @@ from sitegen import emulatorpage
 from sitegen import emulatorsindex
 from sitegen import install as sitegen_install
 from sitegen import lookup
-from sitegen import render as siterender
+from sitegen import runlinks
 from model import systemnames
 from sitegen import validate
 from resolve import layout
@@ -217,11 +217,8 @@ class TheSummaryLineIsProse(unittest.TestCase):
 class TheIndexNamesEmulatorsAndSystems(unittest.TestCase):
     def test_columns_and_counts(self):
         # Pages another test split off would send the console elsewhere.
-        siterender.reset_console_pages()
-        self.addCleanup(siterender.reset_console_pages)
-        saved = dict(siterender.system_page_map)
-        self.addCleanup(siterender.set_system_page_map, saved)
-        siterender.set_system_page_map({"sony-playstation": ("sony", "PlayStation")})
+        self.addCleanup(runlinks.use, runlinks.current())
+        runlinks.use(runlinks.LinkTables(system_pages={"sony-playstation": ("sony", "PlayStation")}))
         page = emulatorsindex.generate_emulators_index({
             "duckstation": {"emulator": "DuckStation", "core_classification": "official_port",
                             "systems": ["sony-playstation"], "files": _files(3)},

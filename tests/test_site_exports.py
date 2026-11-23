@@ -1218,14 +1218,14 @@ class TheOneLinerIsWhereUsersLand(unittest.TestCase):
 
     def test_a_system_is_offered_only_where_the_manifest_records_it(self):
         from sitegen import cards
-        from sitegen import render as siterender
+        from sitegen import runlinks
 
         from model import systemnames
 
         systemnames.set_console_sections({("Sony", "PlayStation")})
         self.addCleanup(systemnames._sections_installed.__setitem__, 0, False)
-        siterender.reset_console_pages()
-        self.addCleanup(siterender.reset_console_pages)
+        runlinks.reset_console_pages()
+        self.addCleanup(runlinks.reset_console_pages)
         # "playstation" leads to the same section, but the manifest records
         # retroarch's own spelling only.
         cov = {"retroarch": {"config": {"systems": {"sony-playstation": {}, "playstation": {}}}}}

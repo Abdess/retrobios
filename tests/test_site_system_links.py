@@ -24,7 +24,7 @@ from sitegen import startwith
 from sitegen import systempages
 from sitegen import systemsindex
 from sitegen import whichpack
-from sitegen import render as siterender
+from sitegen import runlinks
 from model import systemnames
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -352,7 +352,7 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
 
         linked = 0
         for sys_id in self.ids:
-            link = siterender._system_link(sys_id)
+            link = runlinks.system_link(sys_id)
             match = re.fullmatch(r"\[[^\]]*\]\(systems/(?P<page>[^)#]+)\.md(?:#(?P<anchor>[^)]+))?\)", link)
             if not match:
                 self.assertEqual(link, sys_id)
@@ -363,7 +363,7 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
                 self.assertIn(page, self.headings)
                 if match["anchor"]:
                     self.assertIn(match["anchor"], self.headings[page])
-                    slug, console = siterender.system_section(sys_id)
+                    slug, console = runlinks.system_section(sys_id)
                     # The Arcade folder of sets no board claims is headed by
                     # what it holds, its id staying the folder's.
                     if slug == "arcade":
@@ -374,7 +374,7 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
     def test_a_system_without_a_section_of_its_name_is_not_sent_elsewhere(self):
         for sys_id in ("emerson-arcadia-2001", "sega-naomi"):
             with self.subTest(system=sys_id):
-                link = siterender._system_link(sys_id)
+                link = runlinks.system_link(sys_id)
                 self.assertNotIn("#saturn", link)
                 self.assertNotIn("#dreamcast", link)
 

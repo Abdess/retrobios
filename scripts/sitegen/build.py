@@ -35,6 +35,7 @@ from sitegen import (
     diagrams,
     handheld as sitehandheld,
     measurements as sitemeasurements,
+    runlinks,
     starlight as sitestarlight,
     steps as sitesteps,
     wanted as sitewanted,
@@ -97,11 +98,9 @@ from sitegen.reference import (
     generate_wiki_data_model,
     reference_next,
 )
-from sitegen.render import (
-    WIKI_SRC_DIR,
-    console_icon_name,
-    percent_text,
-    system_page_map,
+from sitegen.render import WIKI_SRC_DIR, console_icon_name, percent_text
+from sitegen.runlinks import (
+    ICON_DIR,
     prime_system_icons,
     reset_console_pages,
     set_system_page_map,
@@ -249,17 +248,20 @@ def _write_home_pages(run: _SiteRun) -> dict:
 
 def _write_system_pages(run: _SiteRun) -> None:
     """The system pages, each manufacturer's, and their API items."""
-    from sitegen.render import link_coverage, system_ids
+    from sitegen.render import system_ids
+    from sitegen.runlinks import link_coverage
 
     docs, public, db = run.docs, run.public, run.db
     manufacturers = run.manufacturers
     print("Generating system pages...")
 
-    prime_system_icons({
+    missing = prime_system_icons({
         console_icon_name(mfr, console)
         for mfr, consoles in manufacturers.items()
         for console in consoles
     })
+    if missing:
+        print(f"  {missing} systems have no icon in {ICON_DIR.relative_to(ICON_DIR.parents[1])}")
 
     # The arcade boards are recorded before any page links one, the
     # system pages and their install commands first among them.
@@ -301,7 +303,7 @@ def _write_measurements(run: _SiteRun) -> sitemeasurements.Built:
     print("Compiling the measurements...")
     measured = sitemeasurements.build(
         run.public, emulators_dir=Path(run.args.emulators_dir), repo=REPO_URL,
-        system_names={sys_id: system_name(sys_id) for sys_id in sorted(set(system_page_map))},
+        system_names={sys_id: system_name(sys_id) for sys_id in sorted(set(runlinks.current().system_pages))},
     )
     for path in measured.paths:
         record_written(path)
@@ -627,7 +629,7 @@ def _write_navigation(run: _SiteRun, published_parts: dict[str, str]) -> None:
                                 sort_keys=True) + "\n")
     write_if_changed(str(generated / "lastmod.json"),
                      json.dumps(dict(sorted(lastmod.items())), indent=1) + "\n")
-    system_ids = set(system_page_map) | {
+    system_ids = set(runlinks.current().system_pages) | {
         sys_id for cov in coverages.values() for sys_id in cov["config"].get("systems", {})
     }
     titles = {sys_id: system_name(sys_id) for sys_id in sorted(system_ids)}
@@ -646,6 +648,8 @@ def generate_site(args: argparse.Namespace) -> None:
         emulators=Path(args.emulators_dir).resolve(),
         platforms=Path(args.platforms_dir).resolve(),
     ))
+    # Where this run puts systems, consoles and cards, nothing of a run before.
+    runlinks.use(runlinks.LinkTables())
     db = load_database(args.db)
     docs = Path(args.docs_dir)
     # Files the site serves as they are (data, downloads, images), in the
@@ -682,7 +686,7 @@ def generate_site(args: argparse.Namespace) -> None:
     set_system_page_map(
         system_pages_from_data(run.manufacturers, coverages, db, profiles)
     )
-    print(f"  {len(system_page_map)} system IDs mapped to pages")
+    print(f"  {len(runlinks.current().system_pages)} system IDs mapped to pages")
     _write_system_pages(run)
 
     measured = _write_measurements(run)

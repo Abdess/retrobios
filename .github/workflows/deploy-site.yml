@@ -190,6 +190,7 @@ on:
       - "scripts/sitegen/reference.py"
       - "scripts/sitegen/releasepacks.py"
       - "scripts/sitegen/render.py"
+      - "scripts/sitegen/runlinks.py"
       - "scripts/sitegen/sources.py"
       - "scripts/sitegen/starlight.py"
       - "scripts/sitegen/startwith.py"

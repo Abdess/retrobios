@@ -18,7 +18,8 @@ from sitegen.pageregistry import PageRegistry
 from sitegen.emulatorcards import snippet_noun
 from sitegen.install import comes_with_app
 from sitegen.lookup import data_member_digests, hash_pairs
-from sitegen.render import card_anchor, system_section
+from sitegen.render import card_anchor
+from sitegen.runlinks import system_section
 from sitegen.write import write_if_changed
 
 

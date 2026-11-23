@@ -19,7 +19,7 @@ from sitegen import nav as sitegen_nav
 from sitegen import platformfiles
 from sitegen import systempages
 from sitegen import starlight as sitestarlight
-from sitegen import render as siterender
+from sitegen import runlinks
 from sitegen import markup
 from packs.consumers import FileConsumers
 
@@ -32,8 +32,8 @@ def _file(name: str, index: int, console: str, maker: str = "Maker") -> dict:
 
 class ASystemPageOverItsBudgetIsSplit(unittest.TestCase):
     def setUp(self) -> None:
-        siterender.reset_console_pages()
-        self.addCleanup(siterender.reset_console_pages)
+        runlinks.reset_console_pages()
+        self.addCleanup(runlinks.reset_console_pages)
         self.consoles = {
             "Big": [_file(f"big{i:03d}.bin", i, "Big") for i in range(60)],
             "Small": [_file("small.bin", 900, "Small")],
@@ -67,10 +67,10 @@ class ASystemPageOverItsBudgetIsSplit(unittest.TestCase):
         held = [f["sha1"] for stem in parts for f in pages[stem][1]["Big"]]
         self.assertEqual(sorted(held), sorted(f["sha1"] for f in self.consoles["Big"]))
         last = self.consoles["Big"][-1]
-        self.assertEqual(siterender.card_page(last["path"], last["sha1"]), parts[-1])
+        self.assertEqual(runlinks.card_page(last["path"], last["sha1"]), parts[-1])
         small = self.consoles["Small"][0]
-        self.assertEqual(siterender.card_page(small["path"], small["sha1"]), "maker")
-        self.assertEqual(siterender.console_href("maker", "Big"), "systems/maker.md#big")
+        self.assertEqual(runlinks.card_page(small["path"], small["sha1"]), "maker")
+        self.assertEqual(runlinks.console_href("maker", "Big"), "systems/maker.md#big")
 
     def test_a_console_on_one_page_is_linked_directly(self):
         self.consoles["Big"] = self.consoles["Big"][:12]
@@ -80,7 +80,7 @@ class ASystemPageOverItsBudgetIsSplit(unittest.TestCase):
         pages = self._pages(len(whole) - 1)
         self.assertIn("maker-big", pages)
         self.assertNotIn("maker-big-2", pages)
-        self.assertEqual(siterender.console_href("maker", "Big", "../"),
+        self.assertEqual(runlinks.console_href("maker", "Big", "../"),
                          "../systems/maker-big.md")
 
 
@@ -109,8 +109,8 @@ class AnEmulatorWithTooManyCardsIsSplit(unittest.TestCase):
         files = [{"name": f"set{i:04d}.zip"} for i in range(emulatorpage.EMULATOR_CARDS_PER_PAGE + 1)]
         emulatorpage.plan_emulator_pages({"big": {"files": files}})
         anchors = cards.emulator_file_anchors(files)
-        self.assertEqual(siterender.emulator_card_page("big", anchors[-1]), "big-files-2")
-        self.assertEqual(siterender.emulator_card_page("other", "file-x"), "other")
+        self.assertEqual(runlinks.emulator_card_page("big", anchors[-1]), "big-files-2")
+        self.assertEqual(runlinks.emulator_card_page("other", "file-x"), "other")
 
 
 class APlatformSystemOverItsBudgetMoves(unittest.TestCase):

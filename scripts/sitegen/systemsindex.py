@@ -6,7 +6,8 @@ from model.collection import SECTION_LABELS, profiles_on_disk, manufacturer_slug
 from model.composition import GAME_DATA_TOPS
 from model.profiles import is_emulator
 from sitegen import starlight as sitestarlight
-from sitegen.render import count_text, console_href
+from sitegen.render import count_text
+from sitegen.runlinks import console_href
 from sitegen.startwith import section_label
 
 

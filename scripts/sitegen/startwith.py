@@ -129,7 +129,7 @@ def _section_reads(
     """The reads of each file the section names, by sha1, and the files the
     start line may name: the section's primaries, then the Arcade files
     its systems require."""
-    from sitegen.render import system_section
+    from sitegen.runlinks import system_section
 
     held = {str(f.get("sha1", "")) for f in files}
     primaries = [f for f in files if "/.variants/" not in f["path"]]

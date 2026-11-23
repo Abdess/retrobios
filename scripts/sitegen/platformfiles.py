@@ -36,9 +36,8 @@ from sitegen.render import (
     count_text,
     emulator_link,
     escape_tags,
-    card_page,
-    console_href,
 )
+from sitegen.runlinks import card_page, console_href
 
 
 def _collection_sha1(path: str) -> str:
@@ -63,7 +62,7 @@ def _system_heading_link(sys_id: str, prefix: str = "") -> str:
 
 def _system_named_link(sys_id: str, prefix: str = "") -> str:
     """A system's name, linked to the section system_section gives."""
-    from sitegen.render import system_section
+    from sitegen.runlinks import system_section
 
     name = escape_tags(system_name(sys_id))
     section = system_section(sys_id)

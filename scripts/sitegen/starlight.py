@@ -419,34 +419,6 @@ def file_names_meta(body: str) -> str:
     return search_field("files", list(parts.values()))
 
 
-# systems/ page -> the platforms' own ids for the consoles it holds, built
-# on the first system page, once the generator has installed the sections.
-_page_aliases: dict[str, list[str]] = {}
-_page_aliases_built = [False]
-
-
-def page_aliases(rel: str) -> list[str]:
-    """The names the platforms file the consoles of a system page under
-    (psx, dreamcast, gba), from sitegen.render.system_search_aliases(): "psx
-    bios" finds the PlayStation page though the page never says psx."""
-    if not _page_aliases_built[0]:
-        from sitegen import render as siterender
-
-        by_page: dict[str, set[str]] = {}
-        for sys_id in list(siterender.system_page_map):
-            section = siterender.system_section(sys_id)
-            names = siterender.system_search_aliases(sys_id)
-            if not section or not names:
-                continue
-            target = siterender.console_href(*section).partition("#")[0]
-            by_page.setdefault(urllib.parse.unquote(target), set()).update(names)
-        _page_aliases.clear()
-        _page_aliases.update({page: sorted(names, key=str.casefold)
-                              for page, names in by_page.items()})
-        _page_aliases_built[0] = bool(siterender.system_page_map)
-    return list(_page_aliases.get(rel, []))
-
-
 def field_words(value: object) -> list[str]:
     """The words of a front matter search field: a list, or one string
     with its words or phrases split at commas."""
@@ -585,6 +557,8 @@ def _page_body(rel: str, markdown: str, terms: dict[str, str], authored: dict,
     body = _NEXT_STEPS.sub(
         lambda match: f"<div data-pagefind-ignore>\n\n{match[0].rstrip()}\n\n</div>\n\n", body, count=1)
     if rel.startswith("systems/"):
+        from sitegen.runlinks import page_aliases
+
         body += file_names_meta(body) + search_field("aliases", page_aliases(rel))
     consoles = field_words(authored.get("consoles"))
     body += search_field("consoles", consoles)

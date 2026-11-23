@@ -13,6 +13,7 @@ import yaml
 
 from sitegen import arcadeboards
 from sitegen import render as siterender
+from sitegen import runlinks
 from model import systemnames
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -24,9 +25,8 @@ class IconsComeFromTheLocalCopies(unittest.TestCase):
     in docs_assets/system-icons and makes no request."""
 
     def setUp(self) -> None:
-        saved = dict(siterender._icon_available)
-        self.addCleanup(lambda: (siterender._icon_available.clear(),
-                                 siterender._icon_available.update(saved)))
+        self.addCleanup(runlinks.use, runlinks.current())
+        runlinks.use(runlinks.LinkTables())
 
     def test_availability_is_the_folder(self):
         tmp = tempfile.TemporaryDirectory()
@@ -34,13 +34,12 @@ class IconsComeFromTheLocalCopies(unittest.TestCase):
         folder = Path(tmp.name) / "docs_assets" / "system-icons"
         folder.mkdir(parents=True)
         (folder / "A - One.png").write_bytes(b"png")
-        with mock.patch.object(siterender, "ICON_DIR", folder), \
-                mock.patch("builtins.print"):
-            siterender.prime_system_icons({"A - One", "B - Two"})
-        self.assertTrue(siterender._icon_available["A - One"])
-        self.assertFalse(siterender._icon_available["B - Two"])
-        self.assertEqual(siterender.system_icon_markdown("B", "Two"), "")
-        self.assertIn("A%20-%20One.png", siterender.system_icon_markdown("A", "One"))
+        with mock.patch.object(runlinks, "ICON_DIR", folder):
+            self.assertEqual(runlinks.prime_system_icons({"A - One", "B - Two"}), 1)
+        self.assertTrue(runlinks.current().icons["A - One"])
+        self.assertFalse(runlinks.current().icons["B - Two"])
+        self.assertEqual(runlinks.system_icon_markdown("B", "Two"), "")
+        self.assertIn("A%20-%20One.png", runlinks.system_icon_markdown("A", "One"))
 
     def test_no_request_is_made(self):
         self.assertNotIn("urllib.request", (REPO_ROOT / "scripts" / "sitegen" / "render.py").read_text())

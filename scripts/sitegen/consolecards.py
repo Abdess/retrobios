@@ -201,7 +201,7 @@ _SECTION_ENTRIES: dict[int, tuple[object, dict[tuple[str, str], list]]] = {}
 def entries_by_section(consumers: FileConsumers) -> dict[tuple[str, str], list]:
     """Each console section with the (sha1, emulator, entry, system) whose
     system leads to it, read once per build."""
-    from sitegen.render import system_section
+    from sitegen.runlinks import system_section
 
     cached = _SECTION_ENTRIES.get(id(consumers))
     if cached is not None and cached[0] is consumers:

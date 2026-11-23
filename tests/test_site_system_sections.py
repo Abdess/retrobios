@@ -24,7 +24,8 @@ from collections.abc import Iterable
 from pathlib import Path
 
 from sitegen import render as siterender
-from model import systemnames
+from sitegen import runlinks
+from model import siteinputs, systemnames
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -164,7 +165,7 @@ class SystemLinks(unittest.TestCase):
             # The system pages give every arcade board a section of its own
             # and record it. The built pages are checked by
             # test_site_built_gate.
-            siterender.reset_console_pages()
+            runlinks.reset_console_pages()
             # The sections as the system pages hold them: each board, the
             # sets a reviewed machine owns under that machine.
             cls.sections = arcade_board_sections(cls.manufacturers)
@@ -184,17 +185,17 @@ class SystemLinks(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        siterender.reset_console_pages()
+        runlinks.reset_console_pages()
 
     def test_every_id_with_files_links(self) -> None:
-        linked, total = siterender.link_coverage(self.ids)
+        linked, total = runlinks.link_coverage(self.ids)
         with_files = set(self.held)
         print(f"\n  {linked} of {total} system ids linked, "
               f"{len(with_files - set(UNLINKED))} of {len(with_files)} with files, "
               f"{len(self.ids - with_files)} with no file")
         plain = sorted(
             sys_id for sys_id in with_files - set(UNLINKED)
-            if siterender.system_section(sys_id) is None
+            if runlinks.system_section(sys_id) is None
         )
         self.assertEqual(plain, [], "link these or name them in UNLINKED with the reason")
 
@@ -213,23 +214,23 @@ class SystemLinks(unittest.TestCase):
             for platform, sys_id in pairs
         }
         wrong = sorted(
-            (pair, place, siterender.system_section(pair[1]))
+            (pair, place, runlinks.system_section(pair[1]))
             for pair, place in placed.items()
-            if siterender.system_section(pair[1]) != place
+            if runlinks.system_section(pair[1]) != place
         )
         self.assertEqual(wrong, [])
         unplaced = sorted(
             (name, sys_id)
             for name, cov in self.coverages.items()
             for sys_id in set(cov["config"].get("systems") or {}) & manifest_systems(name)
-            if siterender.system_section(sys_id) and (name, sys_id) not in placed
+            if runlinks.system_section(sys_id) and (name, sys_id) not in placed
         )
         self.assertEqual(unplaced, [])
 
     def test_unlinked_list_is_current(self) -> None:
         stale = sorted(
             sys_id for sys_id in UNLINKED
-            if sys_id not in self.held or siterender.system_section(sys_id) is not None
+            if sys_id not in self.held or runlinks.system_section(sys_id) is not None
         )
         self.assertEqual(stale, [])
 
@@ -250,7 +251,7 @@ class SystemLinks(unittest.TestCase):
                 mfr == "Arcade" and console.casefold() in systemnames.known_program_names
             ):
                 continue
-            if siterender.system_section(sys_id) is None:
+            if runlinks.system_section(sys_id) is None:
                 missed.append(sys_id)
         self.assertEqual(missed, [])
 
@@ -291,22 +292,22 @@ class SystemLinks(unittest.TestCase):
         }
         for sys_id, section in expect.items():
             with self.subTest(sys_id=sys_id):
-                self.assertEqual(siterender.system_section(sys_id), section)
+                self.assertEqual(runlinks.system_section(sys_id), section)
 
     def test_arcade_heading_by_exact_name(self) -> None:
         self.assertEqual(
-            siterender.system_section("namco-system246"), ("arcade", "Namco System 246"))
+            runlinks.system_section("namco-system246"), ("arcade", "Namco System 246"))
         # A board leads to its own section, never a folder of copies a core
         # loads (Arcade > FBNeo).
-        self.assertEqual(siterender.system_section("sega-naomi"), ("arcade", "Sega NAOMI"))
+        self.assertEqual(runlinks.system_section("sega-naomi"), ("arcade", "Sega NAOMI"))
         self.assertEqual(
-            siterender.system_section("igs-pgm"), ("arcade", "IGS PolyGame Master"))
+            runlinks.system_section("igs-pgm"), ("arcade", "IGS PolyGame Master"))
 
     def test_folder_votes_stay_out(self) -> None:
         """A copy filed with another machine names no section: the Arcadia
         stays plain, NAOMI 2 goes to its board, never to the Dreamcast."""
-        self.assertIsNone(siterender.system_section("emerson-arcadia-2001"))
-        self.assertEqual(siterender.system_section("naomi2"), ("arcade", "Sega NAOMI 2"))
+        self.assertIsNone(runlinks.system_section("emerson-arcadia-2001"))
+        self.assertEqual(runlinks.system_section("naomi2"), ("arcade", "Sega NAOMI 2"))
         for sys_id in ("emerson-arcadia-2001", "naomi2"):
             with self.subTest(sys_id=sys_id):
                 self.assertNotIn(sys_id, systemnames.SYSTEM_PARENTS)
@@ -322,13 +323,13 @@ class SystemLinks(unittest.TestCase):
 class SearchAliases(unittest.TestCase):
 
     def test_platform_names(self) -> None:
-        self.assertIn("psx", siterender.system_search_aliases("sony-playstation"))
-        self.assertIn("dc", siterender.system_search_aliases("sega-dreamcast"))
-        self.assertIn("gba", siterender.system_search_aliases("nintendo-gba"))
+        self.assertIn("psx", runlinks.system_search_aliases("sony-playstation"))
+        self.assertIn("dc", runlinks.system_search_aliases("sega-dreamcast"))
+        self.assertIn("gba", runlinks.system_search_aliases("nintendo-gba"))
 
     def test_one_typed_word_per_name(self) -> None:
-        siterender.system_search_aliases("sony-playstation")
-        for sys_id, names in siterender._search_aliases.items():
+        runlinks.system_search_aliases("sony-playstation")
+        for sys_id, names in runlinks._search_aliases[str(siteinputs.current().platforms)].items():
             with self.subTest(sys_id=sys_id):
                 self.assertNotIn(sys_id, names)
                 self.assertEqual(len({n.casefold() for n in names}), len(names))
@@ -336,7 +337,24 @@ class SearchAliases(unittest.TestCase):
                     self.assertNotRegex(name, r"[\s,]")
 
     def test_unknown_id(self) -> None:
-        self.assertEqual(siterender.system_search_aliases("no-such-system"), [])
+        self.assertEqual(runlinks.system_search_aliases("no-such-system"), [])
+
+    def test_page_aliases_follow_the_run(self) -> None:
+        """Built once and never dropped, a second run's pages carried the
+        first run's names, and a console split after the first call kept
+        its names on the manufacturer's page."""
+        self.addCleanup(runlinks.use, runlinks.current())
+        runlinks.use(runlinks.LinkTables())
+        runlinks.set_system_page_map({"sony-playstation": ("sony", "PlayStation")})
+        self.assertIn("psx", runlinks.page_aliases("systems/sony.md"))
+        runlinks.record_console_pages("sony", "PlayStation", ["sony-playstation"], [[]])
+        self.assertEqual(runlinks.page_aliases("systems/sony.md"), [])
+        self.assertIn("psx", runlinks.page_aliases("systems/sony-playstation.md"))
+        runlinks.use(runlinks.LinkTables())
+        runlinks.set_system_page_map({"nintendo-gba": ("nintendo", "Game Boy Advance")})
+        self.assertEqual(runlinks.page_aliases("systems/sony.md"), [])
+        self.assertEqual(runlinks.page_aliases("systems/sony-playstation.md"), [])
+        self.assertIn("gba", runlinks.page_aliases("systems/nintendo.md"))
 
 
 class BuildCount(unittest.TestCase):

@@ -12,7 +12,8 @@ from model.profiles import is_emulator
 from sitegen.config import SITE_URL
 from core.hashing import parse_hash_list
 from sitegen.lookup import site_path
-from sitegen.render import card_anchor, console_href
+from sitegen.render import card_anchor
+from sitegen.runlinks import console_href
 
 
 def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
@@ -25,7 +26,8 @@ def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
     takes the card of its first file, else the page of the emulator naming
     it: 28 such ids sent their hashes to no page.
     """
-    from sitegen.render import card_page, system_ids, system_section
+    from sitegen.render import system_ids
+    from sitegen.runlinks import card_page, system_section
 
     files = db.get("files") or {}
     by_md5 = (db.get("indexes") or {}).get("by_md5") or {}

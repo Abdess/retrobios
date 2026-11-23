@@ -47,15 +47,8 @@ from sitegen.install import (
 )
 from sitegen.lookup import data_directory_origin, data_tree_pages
 from sitegen.pageregistry import PageRegistry
-from sitegen.render import (
-    admonition_body,
-    card_anchor,
-    code_span,
-    count_text,
-    escape_tags,
-    card_page,
-    record_emulator_cards,
-)
+from sitegen.render import admonition_body, card_anchor, code_span, count_text, escape_tags
+from sitegen.runlinks import card_page, record_emulator_cards
 from sitegen.sources import source_ref_markdown, link_prose_citations, revision_markdown
 from sitegen.parts import even_runs, weighted_runs
 from sitegen.structured import emulator_file_aliases

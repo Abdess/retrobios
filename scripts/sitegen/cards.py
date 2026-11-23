@@ -22,9 +22,8 @@ from core.ziptools import zip_members
 from model.mamerelease import tag_version
 from sitegen.fields import search_excluded
 from sitegen.install import manifest_systems, platform_display
-from sitegen.render import (
-    SHORT_HASH, card_anchor, code_span, count_text, emulator_card_page, system_section,
-)
+from sitegen.render import SHORT_HASH, card_anchor, code_span, count_text
+from sitegen.runlinks import emulator_card_page, system_section
 
 
 def emulator_file_anchors(files: list[dict]) -> list[str]:
