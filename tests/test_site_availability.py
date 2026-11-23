@@ -94,8 +94,9 @@ class AHeldEntrySaysWhere(unittest.TestCase):
             self.assertIsNone(held_copy({"name": "specmate.rom", "sha1": "0" * 40}, **roots))
             self.assertEqual(held_copy({"name": "font_western.bin"}, **roots),
                              (str(data / "dolphin-sys/GC/font_western.bin"), ""))
-            self.assertEqual(held_copy({"name": "GC/", "type": "directory"}, **roots),
-                             (f"{(data / 'dolphin-sys/GC').as_posix()}/", ""))
+            # A directory is held by the files directory_members finds, never
+            # by a folder of its name.
+            self.assertIsNone(held_copy({"name": "GC/", "type": "directory"}, **roots))
 
         consumers = FileConsumers({"files": {"z" * 40: {
             "path": "bios/Arcade/MAME/spectrum_opus.zip"}}}, data_dir_registry={})

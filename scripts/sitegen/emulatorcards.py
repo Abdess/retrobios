@@ -794,7 +794,7 @@ def _emulator_card_folds(
 
 def _held_copy_line(copy: tuple[str, str], sources: CardSources) -> str:
     """Where a copy the database does not index sits: a ZIP member under
-    bios/, or a file or tree of a data directory the packs fetch."""
+    bios/, or a file of a data directory the packs fetch."""
     consumers = sources.consumers
     path, member = copy
     parts = path.rstrip("/").split("/")
@@ -807,9 +807,6 @@ def _held_copy_line(copy: tuple[str, str], sources: CardSources) -> str:
         return f"Collection copy: member {code_span(member)} of {archive}"
     if parts[0] == "data" and len(parts) >= 2:
         ref, inside = parts[1], "/".join(parts[2:])
-        if path.endswith("/"):
-            where = code_span(inside + "/") if inside else "the tree"
-            return f"Collection copy: {where} in the {code_span(ref)} data directory"
         info = (sources.data_members.get(ref) or {}).get(inside) or {}
         shown = code_span(inside)
         if info.get("sha1"):

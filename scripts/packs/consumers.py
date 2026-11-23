@@ -16,42 +16,24 @@ from resolve.localfile import resolve_local_file
 from resolve.validation import inner_rom_check, with_archive_members
 
 
-_tree_cache: dict[tuple[str, str], list[str]] = {}
-
-
-def _trees(data_root: str, bios_root: str) -> list[str]:
-    """Every directory under data/ and bios/, as a path with a trailing slash."""
-    key = (data_root, bios_root)
-    if key not in _tree_cache:
-        _tree_cache[key] = sorted(
-            f"{path.as_posix()}/"
-            for root in (data_root, bios_root) if Path(root).is_dir()
-            for path in Path(root).rglob("*")
-            if path.is_dir()
-            and not any(p.startswith(".") for p in path.relative_to(root).parts)
-        )
-    return _tree_cache[key]
-
-
 def held_copy(
     entry: dict, data_root: str = "data", bios_root: str = BIOS_DIR
 ) -> tuple[str, str] | None:
-    """The data/ file, directory or bios/ ZIP member holding an entry.
+    """The data/ file or bios/ ZIP member holding a file entry.
 
     The database indexes the files under bios/, and an entry held otherwise
     (specmate.rom as a member of spectrum_opus.zip, Dolphin's fonts in its
     data directory) read as held with no word of where. Returns (path,
-    member), the member empty for a file or a directory. A file entry that
-    declares a hash is held only by a copy carrying it, as data_hit judges.
+    member), the member empty for a file. A file entry that declares a hash
+    is held only by a copy carrying it, as data_hit judges. A directory
+    entry is never answered here: its copies are the files
+    FileConsumers.directory_members finds, the ones verify and the pack
+    read, and a folder of the same name elsewhere held another emulator's
+    tree (SuperTux's data/ named MAME's plugins/data/).
     """
     names = [entry.get("name", ""), entry.get("path") or "", *(entry.get("aliases") or [])]
     names = [str(n) for n in names if n]
     if entry.get("type") == "directory" or any(n.endswith("/") for n in names[:1]):
-        for name in names:
-            tail = "/" + name.strip("/") + "/"
-            for tree in _trees(data_root, bios_root):
-                if tree.endswith(tail):
-                    return tree, ""
         return None
     declared = declared_content(entry)
     locations = supplemental_locations(data_root, bios_root)

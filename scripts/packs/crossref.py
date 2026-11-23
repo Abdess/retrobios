@@ -248,12 +248,14 @@ def entry_source(f: dict, index: dict) -> str | None:
     fname = f.get("name", "")
     path_field = f.get("path") or ""
     # A directory is held when the collection holds files under it, the rule
-    # the pack and verify --emulator expand it by: a bare-name lookup missed
-    # cdogs' .wolf3d/, whose 695 files every pack carries.
-    if f.get("type") == "directory" and directory_members(
-        {"indexes": {"by_path_suffix": by_path_suffix}}, path_field or fname
-    ):
-        return "bios"
+    # the pack and verify --emulator expand it by, and by nothing else: a
+    # bare-name lookup missed cdogs' .wolf3d/, whose 695 files every pack
+    # carries, and called SuperTux's data/ held by MAME's plugins/data/.
+    if f.get("type") == "directory" or fname.endswith("/"):
+        members = directory_members(
+            {"indexes": {"by_path_suffix": by_path_suffix}}, path_field or fname
+        )
+        return "bios" if members else None
     found = None
     for candidate in [fname, *([path_field] if path_field != fname else []),
                       *(f.get("aliases") or [])]:

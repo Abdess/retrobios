@@ -35,38 +35,21 @@ class SupplementalIndex:
 def build_supplemental_index(
     data_root: str = "data", bios_root: str = BIOS_DIR
 ) -> SupplementalIndex:
-    """Index the filenames and directory names in data/ and inside bios/ ZIPs.
+    """Index the filenames in data/ and inside bios/ ZIPs.
 
-    A directory is indexed only with its trailing slash: a bare name matched a
-    file entry of the same name, and BasiliskII's required `ROM` read as held
-    because cpcemu keeps a directory called ROM.
+    No directory is indexed: whether the collection holds a directory entry
+    is resolve.directories.directory_members alone. A folder name proved
+    nothing, and SuperTux's data/ read as held by MAME's plugins/data/.
     """
     names: set[str] = set()
     root_path = Path(data_root)
     if root_path.is_dir():
         for fpath in root_path.rglob("*"):
-            if fpath.name.startswith("."):
-                continue
-            if fpath.is_file():
+            if not fpath.name.startswith(".") and fpath.is_file():
                 names.add(fpath.name)
                 names.add(fpath.name.lower())
-            else:
-                names.add(fpath.name + "/")
-                names.add(fpath.name.lower() + "/")
-            if fpath.is_dir():
-                # Also index relative path from data/subdir/ for directory entries
-                parts = fpath.relative_to(root_path).parts
-                if len(parts) > 1:
-                    rel = "/".join(parts[1:])
-                    names.add(rel + "/")
-                    names.add(rel.lower() + "/")
     bios_path = Path(bios_root)
     if bios_path.is_dir():
-        # Index directory names for directory-type entries (e.g., "nestopia/samples/moepro/")
-        for dpath in bios_path.rglob("*"):
-            if dpath.is_dir() and not dpath.name.startswith("."):
-                names.add(dpath.name + "/")
-                names.add(dpath.name.lower() + "/")
         names |= _zip_member_names(bios_path)
     return SupplementalIndex(frozenset(names), data_root, str(bios_root))
 
@@ -113,15 +96,14 @@ def _zip_member_names(bios_path: Path) -> set[str]:
 def data_hit(
     fname: str, basename: str | None, file_entry: dict | None, data_names: SupplementalIndex
 ) -> bool:
-    """Whether data/ or a ZIP holds the name: a directory entry looks for a
-    directory, a file entry for a file. A file entry that declares a hash is
-    held only by a copy carrying it: touchhle's LiberationMono-Regular.ttf
-    read as held because idtech4a++'s extras.zip has another font of that
-    name."""
-    looked_up = [fname, fname.lower()] + ([basename, basename.lower()] if basename else [])
+    """Whether data/ or a ZIP holds a file of the name. A directory entry is
+    never held here (directory_members decides it). A file entry that
+    declares a hash is held only by a copy carrying it: touchhle's
+    LiberationMono-Regular.ttf read as held because idtech4a++'s extras.zip
+    has another font of that name."""
     if fname.endswith("/") or (file_entry or {}).get("type") == "directory":
-        looked_up = [name.rstrip("/") + "/" for name in looked_up]
-        return any(name in data_names for name in looked_up)
+        return False
+    looked_up = [fname, fname.lower()] + ([basename, basename.lower()] if basename else [])
     if not any(name in data_names for name in looked_up):
         return False
     declared = declared_content(file_entry or {})

@@ -24,7 +24,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _index(**over) -> dict:
-    base = {
+    base: dict = {
         "by_name": {}, "by_name_lower": {}, "by_path_suffix": {}, "by_md5": {},
         "by_sha256": {}, "by_crc32": {}, "db_files": {}, "data_names": set(),
     }
@@ -82,7 +82,19 @@ class GapReportSources(unittest.TestCase):
             names = build_supplemental_index(str(Path(tmp) / "data"), str(Path(tmp) / "bios"))
         self.assertIsNone(entry_source({"name": "ROM"}, _index(data_names=names)))
         directory = {"name": "ROM", "type": "directory"}
-        self.assertEqual(entry_source(directory, _index(data_names=names)), "data")
+        self.assertIsNone(entry_source(directory, _index(data_names=names)))
+
+    def test_a_folder_name_does_not_hold_a_directory(self):
+        """SuperTux's data/ read as held by MAME's plugins/data/ while verify
+        and the pack, which read directory_members, called it missing."""
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "bios" / "Arcade" / "MAME" / "plugins" / "data").mkdir(parents=True)
+            names = build_supplemental_index(str(Path(tmp) / "data"), str(Path(tmp) / "bios"))
+        entry = {"name": "SuperTux data", "path": "data/", "type": "directory"}
+        self.assertIsNone(entry_source(entry, _index(data_names=names)))
+        held = _index(data_names=names, by_path_suffix={
+            "data/levels/a.stl": ["a" * 40], "supertux/data/levels/a.stl": ["a" * 40]})
+        self.assertEqual(entry_source(entry, held), "bios")
 
     def test_a_system_spelled_otherwise_is_still_declared(self):
         profiles = {"gpgx": {"emulator": "gpgx", "systems": ["sega-megacd"],
