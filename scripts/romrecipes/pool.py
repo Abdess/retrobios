@@ -9,7 +9,7 @@ import zipfile
 from pathlib import Path
 
 from core.paths import REPO_ROOT
-from core.torrentzip import build_torrentzip
+from core.torrentzip import build_torrentzip, writer_identity, zlib_ng_version
 from core.ziptools import is_archive_path, zip_members
 from romrecipes.collection import collection_root, on_disk
 from romrecipes.romsets import Recipe
@@ -88,8 +88,12 @@ class AtomPool:
         return known[0], known[1]
 
     def save_digests(self) -> None:
-        """Write the digest cache back, when this run learned anything."""
-        if self._digest_cache is None or not self._digests_changed:
+        """Write the digest cache back, when this run learned anything.
+
+        Never under zlib-ng: its bytes are not TorrentZip, the rule capture
+        and build apply too.
+        """
+        if self._digest_cache is None or not self._digests_changed or zlib_ng_version():
             return
         from core.artifacts import write_text_atomic
 
@@ -112,16 +116,13 @@ class AtomPool:
 
 
 DIGEST_CACHE = REPO_ROOT / ".cache" / "romset_digests.json"
-# The writer's own source is part of every key: a change to how TorrentZip
-# bytes are laid out invalidates every digest it produced.
-_WRITER = hashlib.sha256(
-    (REPO_ROOT / "scripts" / "core" / "torrentzip.py").read_bytes()
-).hexdigest()[:16]
 
 
 def _recipe_key(recipe: Recipe) -> str:
+    # The writer's source and deflate are part of every key: a change to
+    # either invalidates every digest the other produced.
     members = json.dumps([[name, crc.lower()] for name, crc in recipe])
-    return hashlib.sha256(f"{_WRITER}:{members}".encode()).hexdigest()
+    return hashlib.sha256(f"{writer_identity()}:{members}".encode()).hexdigest()
 
 
 def _read_digests(path: Path | None) -> dict[str, list]:

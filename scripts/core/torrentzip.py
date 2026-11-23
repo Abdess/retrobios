@@ -80,6 +80,18 @@ def zlib_ng_version(module: object = zlib) -> str | None:
     return runtime if "zlib-ng" in runtime.lower() else None
 
 
+@functools.cache
+def writer_identity(module: object = zlib) -> str:
+    """What the bytes of a build hang on besides its members: this writer's source and its deflate.
+
+    A digest recorded under one identity says nothing about a build under
+    another, and only stock zlib gives TorrentZip bytes.
+    """
+    source = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:16]
+    ng = zlib_ng_version(module)
+    return f"{source}:zlib-ng {ng}" if ng else f"{source}:zlib"
+
+
 def _deflate(stream: Source) -> tuple[bytes, Written]:
     compressor = zlib.compressobj(9, zlib.DEFLATED, -15)
     blob = bytearray()

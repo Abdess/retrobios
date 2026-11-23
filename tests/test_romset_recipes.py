@@ -819,6 +819,29 @@ class BuildDigestsOutliveTheRun(unittest.TestCase):
                 self.assertEqual(second.digest(recipe), digest)
             self.assertIsNone(second.digest([("x.rom", "deadbeef")]))
 
+    def test_a_zlib_ng_run_never_writes_the_cache(self):
+        from unittest import mock
+
+        with tempfile.TemporaryDirectory() as tmp:
+            bios = Path(tmp) / "bios"
+            bios.mkdir()
+            with zipfile.ZipFile(bios / "source.zip", "w") as archive:
+                archive.writestr("a.rom", ROM_A)
+            cache = Path(tmp) / "digests.json"
+            pool = AtomPool(bios, cache)
+            with mock.patch("romrecipes.pool.zlib_ng_version", return_value="2.2.4"):
+                pool.digest([("a.rom", loopback.crc(ROM_A))])
+                pool.save_digests()
+            self.assertFalse(cache.exists())
+
+    def test_the_deflate_is_part_of_the_writer_identity(self):
+        from core.torrentzip import writer_identity
+
+        stock = writer_identity(type("Stock", (), {"ZLIB_RUNTIME_VERSION": "1.3.1"}))
+        ng = writer_identity(type("Ng", (), {"ZLIB_RUNTIME_VERSION": "2.2.4.zlib-ng"}))
+        self.assertTrue(stock.endswith(":zlib"))
+        self.assertNotEqual(stock, ng)
+
 class WriteRunsTheReportItWrites(unittest.TestCase):
     """--identify --write ran the identification only: the reconstructions
     --write saves come from the missing-pins report, which did not run."""
