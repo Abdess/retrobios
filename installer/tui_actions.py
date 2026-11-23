@@ -29,6 +29,7 @@ from installer.destination import (
     dest_drive,
     missing_folder,
     mounted_cards_of,
+    on_its_card,
 )
 from installer.detect_os import _DETECTED_OS, _FROM_CARD, detected_os, detected_shown
 from installer.embedded import CARD_PLATFORMS, _a
@@ -763,9 +764,13 @@ def _tui_folder_facts(state: TuiState) -> dict:
         free = None
     cores = (installed_cores(core_dirs(state.platform, dest))
              if state.platform in CORE_PLATFORMS else [])
-    # The retroarch.cfg that names dest, said under it on the plan.
+    # The retroarch.cfg that names dest, said under it on the plan. Whether
+    # dest is the card of its system is read here with the rest, never by
+    # a frame: a card pulled out moved the plan rows under the focus.
     return {"free": free, "writable": _folder_writable(dest), "cores": cores,
-            "config": _retroarch_config_at(dest)}
+            "config": _retroarch_config_at(dest),
+            "on_card": on_its_card(state.platform, dest,
+                                   state.card_bound[0] if state.card_bound else "")}
 
 
 def _row_folder(row: TuiRow) -> Path:

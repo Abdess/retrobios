@@ -25129,11 +25129,9 @@ def _tui_card_bound(state: TuiState) -> tuple[str, str] | None:
 def _on_its_card(state: TuiState) -> bool:
     """Whether the BIOS folder is on the SD card of the setup it is for, a
     system that reads that card alone: room is made there, another folder
-    being one it never reads."""
-    if state.dest is None:
-        return False
-    return on_its_card(state.platform, state.dest,
-                       state.card_bound[0] if state.card_bound else "")
+    being one it never reads. Read with the folder facts at the end of the
+    check, so every frame of the plan and the result shows the same rows."""
+    return state.dest is not None and bool(state.facts.get("on_card"))
 
 
 def _dest_card(state: TuiState) -> Path | None:
@@ -29796,9 +29794,13 @@ def _tui_folder_facts(state: TuiState) -> dict:
         free = None
     cores = (installed_cores(core_dirs(state.platform, dest))
              if state.platform in CORE_PLATFORMS else [])
-    # The retroarch.cfg that names dest, said under it on the plan.
+    # The retroarch.cfg that names dest, said under it on the plan. Whether
+    # dest is the card of its system is read here with the rest, never by
+    # a frame: a card pulled out moved the plan rows under the focus.
     return {"free": free, "writable": _folder_writable(dest), "cores": cores,
-            "config": _retroarch_config_at(dest)}
+            "config": _retroarch_config_at(dest),
+            "on_card": on_its_card(state.platform, dest,
+                                   state.card_bound[0] if state.card_bound else "")}
 
 
 def _row_folder(row: TuiRow) -> Path:

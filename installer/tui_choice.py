@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, NamedTuple
 from installer.cards import card_bound
 from installer.choices import available_choices, core_files, emulator_names
 from installer.datadirs import select_data_directories
-from installer.destination import dest_drive, on_its_card, shown_bios_folder
+from installer.destination import dest_drive, shown_bios_folder
 from installer.embedded import CARD_PLATFORMS
 from installer.frontend_folders import save_directory_for, save_where_words
 from installer.games import GAMES_REASONS
@@ -384,11 +384,9 @@ def _tui_card_bound(state: TuiState) -> tuple[str, str] | None:
 def _on_its_card(state: TuiState) -> bool:
     """Whether the BIOS folder is on the SD card of the setup it is for, a
     system that reads that card alone: room is made there, another folder
-    being one it never reads."""
-    if state.dest is None:
-        return False
-    return on_its_card(state.platform, state.dest,
-                       state.card_bound[0] if state.card_bound else "")
+    being one it never reads. Read with the folder facts at the end of the
+    check, so every frame of the plan and the result shows the same rows."""
+    return state.dest is not None and bool(state.facts.get("on_card"))
 
 
 def _dest_card(state: TuiState) -> Path | None:

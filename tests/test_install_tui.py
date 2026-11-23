@@ -9237,6 +9237,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
             state = checked_state({"free": 1024, "writable": True, "cores": []})
             state.dest = onion / "BIOS"
             install._DETECTED_OS[("retroarch", state.dest)] = "Onion"
+            state.facts = install._tui_folder_facts(state)
             plan = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
         menu = text[:text.index("Enter)")]
         self.assertIn("Not enough free space: 4.0 KB needed, 1.0 KB free. Free some space "
@@ -9815,6 +9816,7 @@ class PacksWordingAndDocs(unittest.TestCase):
         state.dest = onion / "BIOS"
         with mock.patch.object(install, "_mounted_cards", return_value=[onion]), \
                 mock.patch.dict(install._DETECTED_OS, {("retroarch", onion / "BIOS"): "Onion"}):
+            state.facts = {**install._tui_folder_facts(state), "free": 1024}
             plan = " ".join(install.tui_view(state, 120, 40))
             self.assertIn("Free some space on the card first.", plan)
             rows = install.tui_rows(state)
@@ -10801,12 +10803,13 @@ class CardNamesAndHelp(_CardFixtures, unittest.TestCase):
     # a list or a pack that records some axes only.
 
     def test_a_card_plan_offers_one_remedy_first(self):
-        for facts, locked in (({"free": 50 * 1024 ** 3, "writable": False, "cores": []}, True),
-                              ({"free": 10, "writable": True, "cores": []}, False)):
+        for facts, locked in (({"free": 50 * 1024 ** 3, "writable": False, "cores": [],
+                                "on_card": True}, True),
+                              ({"free": 10, "writable": True, "cores": [], "on_card": True},
+                               False)):
             with self.subTest(locked=locked):
                 state = checked_state(facts)
-                with mock.patch.object(install, "_on_its_card", return_value=True), \
-                        mock.patch.object(install, "_on_read_only_mount", return_value=locked):
+                with mock.patch.object(install, "_on_read_only_mount", return_value=locked):
                     rows = install.tui_rows(state)
                     text = " ".join(" ".join(install.tui_view(state, 80, 24)).split())
                     effects = install.tui_update(state, Key("enter"))
@@ -10814,6 +10817,28 @@ class CardNamesAndHelp(_CardFixtures, unittest.TestCase):
                 self.assertEqual("install" in [row.action for row in rows], not locked)
                 self.assertNotIn("choose another one", text)
                 self.assertEqual(effects, [("run", "check")])
+
+    def test_a_card_pulled_out_leaves_the_plan_rows_in_place(self):
+        """The plan read the mounted drives on every frame: a card pulled
+        out while the plan was open moved Check again from under the
+        focus, and Enter chose another folder."""
+        card = self.root / "media" / "ONION"
+        make_card(card, "Onion")
+        facts = {"free": 10, "writable": True, "cores": []}
+        state = checked_state(facts)
+        state.platform, state.card_bound = "retroarch", ("Onion", "BIOS")
+        state.dest = card / "BIOS"
+        with mock.patch.object(install, "_mounted_cards", return_value=[card]):
+            state.facts = {**install._tui_folder_facts(state), "free": 10}
+        self.assertTrue(state.facts["on_card"])
+        before = [row.action for row in install.tui_rows(state)]
+        self.assertEqual(before[0], "recheck")
+        with mock.patch.object(install, "_mounted_cards", return_value=[]) as scan, \
+                mock.patch.object(install, "_on_read_only_mount", return_value=False):
+            install.tui_view(state, 80, 24)
+            after = [row.action for row in install.tui_rows(state)]
+        self.assertEqual(scan.call_count, 0)
+        self.assertEqual(after, before)
 
     def test_options_offer_no_downloads_when_nothing_is_downloaded(self):
         """Parallel downloads offered for an install from a pack."""
