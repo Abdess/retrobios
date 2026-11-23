@@ -24,7 +24,7 @@ from unittest import mock
 import install
 from sitegen import bootstrap as sitebootstrap
 from model import guides
-from model.guides import install_base, install_ps1, install_sh, install_command
+from sitegen.guidedata import install_base, install_ps1, install_sh, install_command
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

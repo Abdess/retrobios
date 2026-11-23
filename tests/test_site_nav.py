@@ -43,7 +43,7 @@ from core import anchors as core_anchors
 from model.registry import list_registered_platforms, load_platform_registry
 from model.platforms import load_platform_config
 
-from model.guides import device_groups
+from sitegen.guidedata import device_groups
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -476,7 +476,7 @@ def _moved_platform_pages() -> list[Path]:
         return []
     # A guide page sits beside the setups (platforms/linux-handhelds) without
     # being a list moved off one of them.
-    from model.guides import handheld_guide
+    from sitegen.guidedata import handheld_guide
 
     handhelds = handheld_guide()
     guides = {Path(handhelds.path).stem} if handhelds else set()

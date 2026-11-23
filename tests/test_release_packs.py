@@ -262,7 +262,7 @@ class TheTablesFollowTheField(unittest.TestCase):
 
 class EverySurfaceSaysWhy(unittest.TestCase):
     def test_a_setup_page_says_no_zip_with_the_command_beside_it(self):
-        from model import guides
+        from sitegen import guidedata
         from sitegen import guidepage
 
         line = guidepage.no_zip_line("KNULLI")
@@ -270,7 +270,7 @@ class EverySurfaceSaysWhy(unittest.TestCase):
         with contextlib.chdir(REPO_ROOT):
             block = guidepage.pack_buttons("knulli")
             guide = guidepage._guide_download(
-                "knulli", "KNULLI", guides.platform_guides()["knulli"], None, "## Download")
+                "knulli", "KNULLI", guidedata.platform_guides()["knulli"], None, "## Download")
         self.assertIn(line, block)
         self.assertIn(guidepage.NO_ZIP_FAQ, block)
         self.assertIn(line, "\n".join(guide))

@@ -5,11 +5,14 @@ goes, and which ones the user has to rename."""
 
 from __future__ import annotations
 
+import os
+from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
 
 from core.options import reject_unknown
+from core.paths import PLATFORMS_DIR, REPO_ROOT
 from model.region import label as region_label
-from model.guides import install_command, pack_manual
+from model.guides import GUIDES_NAME, install_base, install_command, pack_manual
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack
@@ -24,7 +27,16 @@ def _detect_systems(detect: list[dict]) -> list[str]:
     return [name for name in order if name in seen]
 
 
-def _from_pack(platform_name: str, posix: bool, windows: bool,
+def _guides_dir(platforms_dir: str | os.PathLike[str]) -> Path:
+    """The folder whose guides describe a pack: the run's own platforms
+    folder, or the repository's when that folder holds no guides file (a
+    test tree, a partial copy), the one other place the install address is
+    written."""
+    folder = Path(platforms_dir)
+    return folder if (folder / GUIDES_NAME).is_file() else REPO_ROOT / PLATFORMS_DIR
+
+
+def _from_pack(platform_name: str, posix: bool, windows: bool, base: str,
                dest: tuple[str, str] = ("", "")) -> list[str]:
     """The same command, reading the files from the ZIP in hand. The
     one-liner alone downloads every file again."""
@@ -32,14 +44,14 @@ def _from_pack(platform_name: str, posix: bool, windows: bool,
     lines = ["  Already have this ZIP? Add --from-pack and its path: the files",
              "  come from it, not from the network. For a pack in parts, name one part.", ""]
     if posix:
-        lines.append(f"    {install_command('sh', f'{args} /path/to/pack.zip{dest[0]}')}")
+        lines.append(f"    {install_command('sh', f'{args} /path/to/pack.zip{dest[0]}', base=base)}")
     if windows:
         pack = f"{args} C:\\path\\to\\pack.zip{dest[1]}"
-        lines.append(f"    {install_command('powershell', pack)}")
+        lines.append(f"    {install_command('powershell', pack, base=base)}")
     return [*lines, ""]
 
 
-def _card_section(platform_name: str, display: str) -> str:
+def _card_section(platform_name: str, display: str, base: str) -> str:
     """The one-line install for a frontend whose files live on its SD card.
 
     The installer runs on the computer the card is mounted on, and the card
@@ -51,12 +63,13 @@ def _card_section(platform_name: str, display: str) -> str:
         "  ---------------------------------\n"
         "  With the SD card mounted on a computer, name its root with --dest.\n"
         "  Linux and macOS: run this in a terminal:\n\n"
-        f"    {install_command('sh', f'--platform {platform_name} --dest /path/to/card')}\n\n"
+        f"    {install_command('sh', f'--platform {platform_name} --dest /path/to/card', base=base)}\n\n"
         "  Windows: run this in PowerShell (E: being the card):\n\n"
-        f"    {install_command('powershell', card_ps1)}\n\n"
+        f"    {install_command('powershell', card_ps1, base=base)}\n\n"
         f"  The installer writes each file where {display} hands it to the core\n"
         "  and checks every file.\n\n"
-        + "\n".join(_from_pack(platform_name, True, True, (" --dest /path/to/card", " --dest E:\\")))
+        + "\n".join(_from_pack(platform_name, True, True, base,
+                                (" --dest /path/to/card", " --dest E:\\")))
         + "\n"
     )
 
@@ -79,6 +92,7 @@ def _card_manual(display: str) -> str:
 
 def _automatic_section(
     platform_name: str, display: str, detect: list[dict], standalone_copies: list[dict] | None,
+    base: str,
 ) -> str:
     """The one-line install, for every system the registry detects the
     platform on. Written per platform by hand, it left ROCKNIX and MiSTer
@@ -101,14 +115,15 @@ def _automatic_section(
         else:
             labels = {"linux": "Linux", "darwin": "macOS"}
             where = f"{' and '.join(labels[name] for name in posix)}: run this in a terminal:"
-        lines += [f"  {where}", "", f"    {install_command('sh')}", ""]
+        lines += [f"  {where}", "", f"    {install_command('sh', base=base)}", ""]
     if "windows" in systems:
-        lines += ["  Windows: run this in PowerShell:", "", f"    {install_command('powershell')}", ""]
+        lines += ["  Windows: run this in PowerShell:", "",
+                  f"    {install_command('powershell', base=base)}", ""]
     lines += [
         f"  The installer finds the {display} BIOS folder on this machine and",
         "  installs there, checking every file. --dest names another folder.",
         "",
-        *_from_pack(platform_name, bool(posix), "windows" in systems),
+        *_from_pack(platform_name, bool(posix), "windows" in systems, base),
     ]
     # On a desktop: an emulator folder under the home of a console's own
     # system is not one its frontend reads.
@@ -120,9 +135,9 @@ def _automatic_section(
             "",
         ]
         if posix:
-            lines.append(f"    {install_command('sh', '--standalone-copies')}")
+            lines.append(f"    {install_command('sh', '--standalone-copies', base=base)}")
         if "windows" in systems:
-            lines.append(f"    {install_command('powershell', '--standalone-copies')}")
+            lines.append(f"    {install_command('powershell', '--standalone-copies', base=base)}")
         lines.append("")
     return "\n".join(lines) + "\n"
 
@@ -213,6 +228,7 @@ class ReadmeOptions(TypedDict, total=False):
     save_where: str
     save_by_system: bool
     case_twins: list[tuple[str, str]] | None
+    platforms_dir: str
 
 
 def build_readme(
@@ -235,6 +251,8 @@ def build_readme(
     packed file, with the one it holds: given for a platform that also runs
     where names keep their case (EmuDeck and RetroArch on Linux), where the
     core asking for the other spelling finds nothing.
+    ``platforms_dir`` is the run's platforms folder, whose guides give the
+    manual and the install address (the repository's when not given).
     """
     reject_unknown("build_readme", options, ReadmeOptions.__optional_keys__)
     regions = options.get("regions")
@@ -295,21 +313,23 @@ def _install_guide(
     platform_name: str, platform_display: str, base_dest: str, options: ReadmeOptions
 ) -> str:
     """The installation steps, the case twins and the save folder."""
+    guides_dir = _guides_dir(options.get("platforms_dir") or REPO_ROOT / PLATFORMS_DIR)
+    base = install_base(guides_dir)
     detect = list(options.get("detect") or [])
     bios_paths = [str(rule.get("bios_path", "")) for rule in detect]
     if any(rule.get("method") == "card_marker" for rule in detect):
         guide = (
             "INSTALLATION GUIDE\n\n"
-            + _card_section(platform_name, platform_display)
+            + _card_section(platform_name, platform_display, base)
             + _card_manual(platform_display)
         )
     else:
         guide = (
             "INSTALLATION GUIDE\n\n"
             + _automatic_section(
-                platform_name, platform_display, detect, options.get("standalone_copies")
+                platform_name, platform_display, detect, options.get("standalone_copies"), base
             )
-            + (pack_manual(platform_name) or _generic_manual(bios_paths))
+            + (pack_manual(platform_name, guides_dir) or _generic_manual(bios_paths))
         )
 
     case_twins = options.get("case_twins")

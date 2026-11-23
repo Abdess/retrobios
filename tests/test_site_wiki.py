@@ -46,7 +46,7 @@ from pathlib import Path
 import yaml
 
 from sitegen import diagrams, ogcards, pageprep
-from model.guides import install_sh
+from sitegen.guidedata import install_sh
 from tests import sitepages
 from installer_build import port
 from installer_build.module import installer_module

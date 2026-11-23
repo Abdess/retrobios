@@ -928,7 +928,7 @@ class RetroArchWindowsSystemFolder(unittest.TestCase):
         source = inspect.getsource(install)
         self.assertIn('ra_dir or exe_dir / "system"', source)
         self.assertTrue(str(install._os_default_dests("windows")["retroarch"]).replace("\\", "/").endswith("/system"))
-        from model.guides import platform_guides
+        from sitegen.guidedata import platform_guides
 
         guide = platform_guides()["retroarch"]
         section = "\n".join([*(path for _label, path in guide.folders), *guide.notes])
@@ -941,7 +941,7 @@ class RetroArchWindowsSystemFolder(unittest.TestCase):
         (platform_darwin.m), Application Support only for a portable or
         Steam build, and install.py looks there in that order."""
         import install
-        from model.guides import platform_guides
+        from sitegen.guidedata import platform_guides
 
         source = inspect.getsource(install._macos_retroarch_base)
         self.assertIn('Path.home() / "Documents" / "RetroArch"', source)
@@ -1645,7 +1645,7 @@ def unserved_one_liners(page: str, text: str) -> list[str]:
     address of the repository stays as the fallback of the One line
     section, and must name a bootstrap the repository holds."""
     from sitegen import bootstrap as sitebootstrap
-    from model.guides import install_base
+    from sitegen.guidedata import install_base
 
     served = {f"{install_base()}/{name}" for name in sitebootstrap.SOURCES}
     fallback = _section(text, "One line") if page == "installer.md" else ""

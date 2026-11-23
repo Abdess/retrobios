@@ -19,7 +19,8 @@ from core.sizes import size_text
 from core import upstream
 from installer_build.module import installer_module
 from model.composition import compute_composition, count_catalog_matched
-from model.guides import PACKAGE_COMMAND, install_command
+from model.guides import PACKAGE_COMMAND
+from sitegen.guidedata import install_command
 from model.largefiles import load_registered_paths
 from model.profiles import load_emulator_profiles, unique_emulator_profiles
 from model.registry import list_registered_platforms

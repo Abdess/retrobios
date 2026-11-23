@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import re
 
-from model.guides import platform_guides
+from sitegen.guidedata import platform_guides
 from model.systemnames import system_name
 from resolve.nativemode import check_label, reads_file_contents
 from sitegen import markup

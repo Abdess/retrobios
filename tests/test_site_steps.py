@@ -18,7 +18,7 @@ from pathlib import Path
 
 from sitegen import diagrams
 from sitegen import steps as sitesteps
-from model.guides import terminals
+from sitegen.guidedata import terminals
 
 ROOT = Path(__file__).resolve().parent.parent
 

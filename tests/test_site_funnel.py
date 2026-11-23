@@ -22,7 +22,7 @@ from sitegen import whichpack
 from tests import sitepages
 from model.registry import list_registered_platforms, load_platform_registry
 from model.platforms import load_platform_config
-from model.guides import device_groups, group_anchors, platform_guides
+from sitegen.guidedata import device_groups, group_anchors, platform_guides
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -137,7 +137,7 @@ class EveryPlatformOnThePicker(unittest.TestCase):
     def test_handheld_systems_that_run_retroarch_are_named(self):
         """muOS, ArkOS and the rest are detected as RetroArch by the
         installer and were named on no page a user reads."""
-        from model.guides import handheld_guide
+        from sitegen.guidedata import handheld_guide
 
         page = guidepage.generate_handheld_guide(handheld_guide())
         self.assertIn("| muOS |", page)

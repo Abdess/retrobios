@@ -87,7 +87,7 @@ class ThePackGuideNamesTheInstallerDefault(unittest.TestCase):
 
         # The pack guide text is data (platforms/_guides.yml): read what the
         # pack README prints, not the source of the script that prints it.
-        guide = pack_manual("retrobat")
+        guide = pack_manual("retrobat", PLATFORMS)
         self.assertEqual(first, "C:\\RetroBat\\bios")
         self.assertIn("(default: C:\\RetroBat\\bios\\)", guide)
 

@@ -7,7 +7,7 @@ import re
 
 from model import releaserecord
 from model import siteinputs
-from model.guides import device_groups, group_tiles, platform_guides, handheld_guide
+from sitegen.guidedata import device_groups, group_tiles, platform_guides, handheld_guide
 from model.platforms import load_platform_config
 from model.registry import load_platform_registry
 from installer_build.handhelds import GROUP_PAGE

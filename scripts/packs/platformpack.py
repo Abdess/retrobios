@@ -974,6 +974,7 @@ class _PlatformPackBuild:
         readme_text = build_readme(
             plan.platform_name, plan.platform_display, plan.base_dest, self.total_files,
             len(plan.pack_systems),
+            platforms_dir=plan.platforms_dir,
             source=opts.source,
             contributors=registry.get("contributed_by", []),
             regions=opts.regions,

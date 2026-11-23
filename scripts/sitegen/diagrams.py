@@ -405,7 +405,7 @@ def _setups_in(platforms_dir: str) -> tuple[str, ...]:
 
 def setups_named(named: list[str]) -> str:
     """*named*, then how many other setups there are: "A, B and 15 more"."""
-    from model.guides import setup_count
+    from sitegen.guidedata import setup_count
 
     others = setup_count() - len(named)
     return ", ".join(named) + (f" and {others} more" if others else "")

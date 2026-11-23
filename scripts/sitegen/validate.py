@@ -419,7 +419,7 @@ def _check_get_pages(
     """
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from model import releaserecord
-    from model.guides import install_sh
+    from model.guides import install_base, install_sh
     from model.registry import list_registered_platforms, list_release_pack_platforms
 
     if not (platforms_dir / "_registry.yml").is_file():
@@ -444,7 +444,7 @@ def _check_get_pages(
             packs = [a for a in assets if "_BIOS_Pack" in a]
             if packs:
                 issues.append(f"{rel}: links a pack for a setup without one: {packs[0]}")
-            if f"{install_sh()} | sh" not in (site / rel).read_text(encoding="utf-8"):
+            if f"{install_sh(install_base(platforms_dir))} | sh" not in (site / rel).read_text(encoding="utf-8"):
                 issues.append(f"{rel}: gives no install command")
     return issues
 

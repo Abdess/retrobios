@@ -37,7 +37,7 @@ class TheGuideLeadsToTheFewestFiles(unittest.TestCase):
                 self.assertIn("--for-games --required-only", command)
 
     def test_the_commands_are_the_ones_the_pages_show(self) -> None:
-        from model.guides import install_command
+        from sitegen.guidedata import install_command
 
         for text in (self.text, siteagents.skill_md()):
             for shell in ("sh", "powershell"):
@@ -46,7 +46,7 @@ class TheGuideLeadsToTheFewestFiles(unittest.TestCase):
                                   text)
 
     def test_the_webmcp_tool_writes_the_same_command(self) -> None:
-        from model.guides import install_command
+        from sitegen.guidedata import install_command
 
         tools = TOOLS.read_text(encoding="utf-8")
         for shell in ("sh", "powershell"):

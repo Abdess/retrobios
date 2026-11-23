@@ -24,8 +24,10 @@ import yaml
 from sitegen import decorate
 from sitegen import nav as sitegen_nav
 from model import guides, siteinputs
+from sitegen import guidedata
 from core.cli import SourceUnreadable
-from model.guides import platform_guides, GuideError, load_guides
+from model.guides import GuideError, load_guides
+from sitegen.guidedata import platform_guides
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -106,10 +108,10 @@ class GuidesLiveInYaml(unittest.TestCase):
             self._load(_guides_text(), registry)
 
     def test_the_pack_readme_keeps_its_indent(self):
-        manual = guides.pack_manual("retrobat")
+        manual = guides.pack_manual("retrobat", REPO_ROOT / "platforms")
         self.assertTrue(manual.startswith("  Option B: Manual\n  ----------------\n"))
         self.assertTrue(manual.endswith("  4. Overwrite if asked\n\n"))
-        self.assertEqual(guides.pack_manual("minui"), "")
+        self.assertEqual(guides.pack_manual("minui", REPO_ROOT / "platforms"), "")
 
 
 class GuidesLoadOnFirstUse(unittest.TestCase):
@@ -141,10 +143,31 @@ class GuidesLoadOnFirstUse(unittest.TestCase):
             before = siteinputs.current()
             siteinputs.use(siteinputs.SiteInputs(platforms=folder))
             try:
-                self.assertEqual(guides.install_sh(), f"https://example.org/x/{guides.SH_NAME}")
+                self.assertEqual(guidedata.install_sh(), f"https://example.org/x/{guides.SH_NAME}")
             finally:
                 siteinputs.use(before)
-        self.assertNotEqual(guides.install_base(), "https://example.org/x")
+        self.assertNotEqual(guidedata.install_base(), "https://example.org/x")
+
+    def test_the_pack_readme_follows_the_platforms_folder_of_the_pack(self):
+        """The pack README took its manual and its commands from the site's
+        inputs, the repository's, while the rest of the pack came from
+        --platforms-dir."""
+        from packs.readme import build_readme
+
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            (folder / "_registry.yml").write_text(
+                (REPO_ROOT / "platforms" / "_registry.yml").read_text(encoding="utf-8"),
+                encoding="utf-8")
+            data = yaml.safe_load(_guides_text())
+            data["install_base"] = "https://example.org/x"
+            data["guides"]["retrobat"]["pack_manual"] = "  Copy by hand.\n"
+            (folder / "_guides.yml").write_text(yaml.safe_dump(data), encoding="utf-8")
+            text = build_readme("retrobat", "RetroBat", "bios", 1, 1,
+                                detect=[{"os": "windows"}], platforms_dir=str(folder))
+        self.assertIn("irm https://example.org/x/i.ps1 | iex", text)
+        self.assertIn("  Copy by hand.\n", text)
+        self.assertNotIn(guidedata.install_base(), text)
 
 
 # A table of prose keyed by platform: what the guides file replaced.

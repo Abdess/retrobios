@@ -6,13 +6,12 @@ from model import releaserecord
 from core.sizes import size_text
 from core.ziptools import build_zip_contents_index
 from model import siteinputs
-from model.guides import (
+from model.guides import Guide, PACKAGE_COMMAND
+from sitegen.guidedata import (
     also_runs,
     device_groups,
     group_anchors,
     platform_guides,
-    Guide,
-    PACKAGE_COMMAND,
     terminals,
     install_command,
 )

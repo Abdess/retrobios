@@ -7,7 +7,8 @@ import html
 from core.paths import PLATFORMS_DIR
 from core.sizes import size_text
 from model.composition import compute_composition
-from model.guides import device_groups, group_tiles, platform_guides, Guide, trust_items, setup_count
+from model.guides import Guide
+from sitegen.guidedata import device_groups, group_tiles, platform_guides, trust_items, setup_count
 from model.profiles import unique_emulator_profiles
 from model.registry import load_platform_registry
 from sitegen import markup

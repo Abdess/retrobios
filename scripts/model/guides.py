@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 import functools
+import os
 import re
 import textwrap
 from dataclasses import dataclass, fields
 from pathlib import Path
 
-from model import siteinputs
 from model.registry import load_platform_registry
 from model.sources import source_yaml
 
@@ -409,101 +409,67 @@ def _guides_in(platforms: Path) -> dict:
     return load_guides(platforms / GUIDES_NAME)
 
 
-def loaded() -> dict:
-    """The guides of the platforms folder the run describes, read on first use."""
-    return _guides_in(siteinputs.current().platforms)
+def loaded(platforms: str | os.PathLike[str]) -> dict:
+    """The guides of a platforms folder, read once per folder."""
+    return _guides_in(Path(platforms))
 
 
-def platform_guides() -> dict[str, Guide]:
-    return loaded()["guides"]
+def install_base(platforms: str | os.PathLike[str]) -> str:
+    return loaded(platforms)["install_base"]
 
 
-def install_base() -> str:
-    return loaded()["install_base"]
+def install_sh(base: str) -> str:
+    """The sh bootstrap the site at *base* serves (sitegen/bootstrap.py writes it)."""
+    return f"{base}/{SH_NAME}"
 
 
-def install_sh() -> str:
-    """The sh bootstrap the site serves (sitegen/bootstrap.py writes it)."""
-    return f"{install_base()}/{SH_NAME}"
+def install_ps1(base: str) -> str:
+    """The PowerShell bootstrap the site at *base* serves."""
+    return f"{base}/{PS1_NAME}"
 
 
-def install_ps1() -> str:
-    """The PowerShell bootstrap the site serves."""
-    return f"{install_base()}/{PS1_NAME}"
-
-
-def device_groups() -> dict[str, tuple[str, str]]:
-    return loaded()["device_groups"]
-
-
-def group_anchors() -> dict[str, str]:
-    return loaded()["group_anchors"]
-
-
-def also_runs() -> dict[str, tuple[tuple[str, str, str, str, str], ...]]:
-    return loaded()["also_runs"]
-
-
-def group_tiles() -> dict[str, tuple[Tile, ...]]:
-    return loaded()["tiles"]
-
-
-def handheld_guide() -> HandheldGuide | None:
-    return loaded()["handheld_guide"]
-
-
-def terminals() -> dict[str, tuple[str, str, str]]:
-    return loaded()["terminals"]
-
-
-def trust_items() -> tuple[str, ...]:
-    return loaded()["trust_items"]
-
-
-def folder_list(name: str, registry: dict | None = None) -> list[tuple[str, str]]:
+def folder_list(name: str, platforms: str | os.PathLike[str],
+                registry: dict | None = None) -> list[tuple[str, str]]:
     """Every folder a guide names, as (where, path): the common ones, the
     rarer builds, and the systems the registry detects when the guide says so."""
-    guide = platform_guides()[name]
+    data = loaded(platforms)
+    guide = data["guides"][name]
     rows = [*guide.folders, *guide.more_folders]
     if guide.more_folders_detected:
         rows += [(system, f"`{folder}`")
-                 for system, folder in detected_systems(registry or loaded()["registry"], name)]
+                 for system, folder in detected_systems(registry or data["registry"], name)]
     return rows
 
 
-def _plain_folders(name: str) -> str:
-    rows = folder_list(name)
+def _plain_folders(name: str, platforms: str | os.PathLike[str]) -> str:
+    rows = folder_list(name, platforms)
     width = max(len(where) for where, _path in rows) + 1
     return "\n".join(f"{where + ':':<{width}} {path.replace('`', '')}" for where, path in rows)
 
 
-def setup_count() -> int:
-    """Setups the site covers: every registered platform, since each keeps
-    its page, its pack and its command. The one count every page states."""
-    return len(platform_guides())
-
-
-def pack_manual(name: str) -> str:
+def pack_manual(name: str, platforms: str | os.PathLike[str]) -> str:
     """The manual part of a pack README, indented as the README is, or empty."""
-    guide = platform_guides().get(name)
+    guide = loaded(platforms)["guides"].get(name)
     if not guide or not guide.pack_manual:
         return ""
     text = guide.pack_manual.rstrip("\n")
     if "{folders}" in text:
         indent = next(line[: len(line) - len(line.lstrip())]
                       for line in text.splitlines() if "{folders}" in line)
-        text = text.replace("{folders}", textwrap.indent(_plain_folders(name), indent).lstrip())
+        text = text.replace("{folders}",
+                            textwrap.indent(_plain_folders(name, platforms), indent).lstrip())
     return textwrap.indent(text, "  ") + "\n\n"
 
 
-def install_command(shell: str, args: str = "") -> str:
-    """The one-liner for a shell, with installer options when given.
+def install_command(shell: str, args: str = "", *, base: str) -> str:
+    """The one-liner for a shell, with installer options when given, from
+    the site at *base*.
 
     PowerShell passes options only through a scriptblock: `irm ... | iex`
     takes none.
     """
     if shell == "sh":
-        return f"curl -fsSL {install_sh()} | sh" + (f" -s -- {args}" if args else "")
+        return f"curl -fsSL {install_sh(base)} | sh" + (f" -s -- {args}" if args else "")
     if args:
-        return f"&([scriptblock]::Create((irm {install_ps1()}))) {args}"
-    return f"irm {install_ps1()} | iex"
+        return f"&([scriptblock]::Create((irm {install_ps1(base)}))) {args}"
+    return f"irm {install_ps1(base)} | iex"

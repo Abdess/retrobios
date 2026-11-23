@@ -104,11 +104,11 @@ class WhereEachSystemFindsItsFile(unittest.TestCase):
     def test_the_group_page_sits_with_the_handheld_guide(self):
         """It shares the guide's name, so the sidebar files it with it, and
         the guide a muOS or ArkOS owner lands on links it."""
-        from model import guides
+        from sitegen import guidedata
         from sitegen import getpages
         from sitegen import guidepage
 
-        guide = guides.handheld_guide()
+        guide = guidedata.handheld_guide()
         self.assertEqual(handhelds.GROUP_PAGE, guide.page)
         with contextlib.chdir(REPO_ROOT):
             self.assertIn(f"(../get/{handhelds.GROUP_PAGE}.md)",

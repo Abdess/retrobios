@@ -116,7 +116,7 @@ class TheOneLinerFollowsTheRegistry(unittest.TestCase):
     def test_the_commands_are_written_once(self):
         """The address comes from install_base in platforms/_guides.yml, and
         the one-liner from install_command, the ones the site's commands use."""
-        from model.guides import install_command
+        from sitegen.guidedata import install_command
 
         source = (REPO_ROOT / "scripts" / "packs" / "readme.py").read_text(encoding="utf-8")
         for spelled in ("raw.githubusercontent.com", "abdess.github.io", "curl -fsSL",

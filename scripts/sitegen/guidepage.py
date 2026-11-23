@@ -10,13 +10,12 @@ from model import releaserecord
 from model import siteinputs
 from model.collection import profiles_on_disk
 from model.guides import (
-    platform_guides,
     Guide,
     HandheldGuide,
     HandheldSystem,
-    terminals,
     detected_systems as _detected_systems,
 )
+from sitegen.guidedata import platform_guides, terminals
 from model.registry import load_platform_registry
 from resolve.nativemode import digest_algorithm
 from installer_build.handhelds import GROUP_PAGE

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from model import releaserecord
-from model.guides import device_groups, group_tiles, platform_guides
+from sitegen.guidedata import device_groups, group_tiles, platform_guides
 from resolve.nativemode import check_label
 from sitegen import markup
 from sitegen.guidepage import NO_ZIP_FAQ

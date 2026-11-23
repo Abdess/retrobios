@@ -8,7 +8,7 @@ from pathlib import Path
 
 from model.collection import manufacturer_slug
 from model.composition import GAME_DATA_TOPS
-from model.guides import device_groups, group_tiles, handheld_guide
+from sitegen.guidedata import device_groups, group_tiles, handheld_guide
 from model.profiles import unique_emulator_profiles
 from sitegen import measurements as sitemeasurements, starlight as sitestarlight
 from core.paths import REPO_ROOT

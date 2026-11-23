@@ -13,7 +13,7 @@ from pathlib import Path
 from core.text import series
 from model import siteinputs
 from model.collection import profiles_in
-from model.guides import platform_guides, terminals, install_command
+from sitegen.guidedata import platform_guides, terminals, install_command
 from model.platforms import load_platform_config
 from model.registry import list_release_pack_platforms
 from model.profiles import reads_own_files

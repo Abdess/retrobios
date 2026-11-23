@@ -11,7 +11,7 @@ from pathlib import Path
 from core.paths import DB_FILE, PLATFORMS_DIR, REPO_ROOT
 from model.collection import group_by_manufacturer
 from model.database import load_database
-from model.guides import group_tiles, platform_guides
+from sitegen.guidedata import group_tiles, platform_guides
 from model.registry import load_platform_registry
 from scraper.base_scraper import FetchError, fetch_bytes
 from sitegen.imagenormalize import (

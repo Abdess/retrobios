@@ -19,7 +19,8 @@ import json
 from collections.abc import Callable
 from pathlib import Path
 
-from model.guides import PACKAGE_COMMAND, install_command
+from model.guides import PACKAGE_COMMAND
+from sitegen.guidedata import install_command
 from sitegen.config import SITE_ORIGIN, SITE_URL
 
 SITE = SITE_URL

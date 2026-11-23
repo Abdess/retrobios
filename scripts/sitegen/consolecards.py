@@ -8,7 +8,7 @@ from typing import TypeVar
 from core.text import series
 from model.collection import profiles_on_disk
 from model.composition import GAME_DATA_TOPS
-from model.guides import install_ps1, install_sh
+from sitegen.guidedata import install_ps1, install_sh
 from model.profiles import entry_system_ids
 from packs.consumers import FileConsumers
 from sitegen.cards import emulator_display, romset_releases, system_file_card

@@ -104,7 +104,7 @@ FENCE_TITLES = {"sh": "Terminal", "powershell": "PowerShell"}
 
 def _installer_args(body: str) -> str:
     """The options of a one-line install command, continuation lines joined."""
-    from model.guides import install_sh
+    from sitegen.guidedata import install_sh
 
     line = " ".join(part.strip().rstrip("\\").strip() for part in body.splitlines())
     match = re.fullmatch(rf"curl -fsSL {re.escape(install_sh())} \| sh(?: -s -- (.+))?", line)
@@ -127,7 +127,7 @@ def expand_commands(markdown: str) -> str:
     gives a tab its own options, for a folder that differs there."""
     if "os-tabs" not in markdown:
         return markdown
-    from model.guides import terminals, install_command
+    from sitegen.guidedata import terminals, install_command
 
     def replace(match: re.Match[str]) -> str:
         indent = match.group("indent")

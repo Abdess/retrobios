@@ -167,6 +167,7 @@ on:
       - "scripts/sitegen/fields.py"
       - "scripts/sitegen/gaps.py"
       - "scripts/sitegen/getpages.py"
+      - "scripts/sitegen/guidedata.py"
       - "scripts/sitegen/guidepage.py"
       - "scripts/sitegen/guides.py"
       - "scripts/sitegen/handheld.py"

@@ -37,7 +37,7 @@ import yaml
 import tempfile
 import json
 
-from model import guides
+from sitegen import guidedata
 from sitegen import cards
 from sitegen import emulatorcards
 from sitegen import emulatorpage
@@ -762,7 +762,7 @@ class InstallBlockWhereItWorks(unittest.TestCase):
     def test_no_os_tab_outside_the_data_root(self) -> None:
         if not _generated():
             self.skipTest("site pages not generated")
-        labels = {key: guides.terminals()[key][0] for key in guides.terminals()}
+        labels = {key: guidedata.terminals()[key][0] for key in guidedata.terminals()}
         for name, profile in _profiles_with_data_root().items():
             allowed = {labels["device"]}
             for key in profile["data_root"]:

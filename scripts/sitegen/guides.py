@@ -13,7 +13,8 @@ from __future__ import annotations
 
 
 from sitegen import markup
-from model.guides import Guide, terminals, trust_items, install_command
+from model.guides import Guide
+from sitegen.guidedata import terminals, trust_items, install_command
 
 
 # The title over each command block, by the shell it is written for.

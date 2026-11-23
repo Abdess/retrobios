@@ -8,7 +8,7 @@ from collections.abc import Callable
 
 from core.text import series
 from core.sizes import size_text
-from model.guides import install_command
+from model.guides import install_base, install_command
 from model.platforms import load_platform_config
 from model.releaserecord import pack_label, pack_owner
 from model.registry import (
@@ -186,6 +186,7 @@ def render(record: dict, platforms_dir: str, whats_new: str,
     packs = record.get("packs", {})
     folders = _extract_folders(record, platforms_dir)
     tag = str(record.get("tag", ""))
+    base = install_base(platforms_dir)
     lines = [
         "### Get the BIOS files",
         "",
@@ -193,12 +194,12 @@ def render(record: dict, platforms_dir: str, whats_new: str,
         "",
         "**Linux, macOS, Steam Deck**",
         "```sh",
-        install_command("sh"),
+        install_command("sh", base=base),
         "```",
         "",
         "**Windows**",
         "```powershell",
-        install_command("powershell"),
+        install_command("powershell", base=base),
         "```",
         "",
         f"**On a handheld**: [get the app for the system]({SITE}{HANDHELD_PAGE}).",
