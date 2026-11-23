@@ -121,6 +121,26 @@ class PackIntegrityChecksTheMember(unittest.TestCase):
         self.assertIsNone(self._verdict(members, {**entry, "md5": ["0" * 32, md5.upper()]}))
         self.assertIsNotNone(self._verdict(members, {**entry, "md5": md5[:29]}))
 
+    def test_an_unreadable_nested_archive_is_the_reason(self):
+        """A composite entry over a member that is no ZIP reported a container
+        md5 mismatch, a comparison Recalbox never makes, and printed the real
+        cause to stderr where no caller of the errors list saw it."""
+        import contextlib
+        import io
+
+        from packs.integrity import _check_member_hash
+
+        pack = io.BytesIO()
+        with zipfile.ZipFile(pack, "w") as zf:
+            zf.writestr("bios/dragon32.zip", b"not a zip")
+        entry = {"name": "dragon32.zip", "md5": "0" * 32, "zip_digest": "composite"}
+        stderr = io.StringIO()
+        with zipfile.ZipFile(pack) as zf, contextlib.redirect_stderr(stderr):
+            error = _check_member_hash(zf, "bios/dragon32.zip", entry, "md5")
+        self.assertIsNotNone(error)
+        self.assertIn("bios/dragon32.zip: unreadable nested archive (", error)
+        self.assertEqual(stderr.getvalue(), "")
+
 
 class TheMemberIndexIsCachedByContent(unittest.TestCase):
     """Each pipeline step that resolves a zipped_file decompressed all 54 845

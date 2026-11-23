@@ -339,22 +339,26 @@ def _check_member_hash(
     with zf.open(member) as f:
         computed = stream_hashes(f, frozenset({"md5", "sha1", "crc32"}))
 
+    unreadable: list[Exception] = []
+
     def composite() -> str | None:
         # Recalbox's Md5Composite, over the sorted members of a ZIP.
         if not member.endswith(".zip"):
             return None
-        import io
-
         try:
             return md5_composite_of(io.BytesIO(zf.read(member)))
         except (zipfile.BadZipFile, OSError) as exc:
-            print(f"  {member}: no member digest ({exc})", file=sys.stderr)
+            unreadable.append(exc)
             return None
 
     if digest_verdict(
         file_entry, zf.getinfo(member).file_size, lambda: computed, mode, rule, composite
     ):
         return None
+    # Only a composite-only entry has the member digest as its one answer:
+    # elsewhere the container md5 is the comparison that failed.
+    if unreadable and file_entry.get("zip_digest") == "composite":
+        return f"{member}: unreadable nested archive ({unreadable[0]})"
     return f"{member}: {mode} {computed[mode]} != declared {declared}"
 
 def _repo_satisfies_declaration(
