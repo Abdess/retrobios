@@ -10,6 +10,7 @@ from installer.detect_os import detected_os
 from installer.failure_causes import (
     Failure,
     event_records,
+    failed_lines,
     failure_records,
     failure_remedies,
     retry_helps,
@@ -244,28 +245,6 @@ def _outcome_placed(state: TuiState, counts: _OutcomeCounts, title: str) -> list
     return lines
 
 
-def _failure_lines(failed: list[Failure]) -> list[str]:
-    """Each file that failed with its reason, a reason shared by many said once."""
-    lines: list[str] = []
-    causes: dict[str, list[str]] = {}
-    for failure in failed:
-        causes.setdefault(failure.reason, []).append(failure.dest)
-    shown = 0
-    for reason, dests in causes.items():
-        if len(dests) > 3:
-            # A read-only folder fails every file alike: said once.
-            lines.append(f"  {len(dests)} files failed, all for one reason: "
-                         f"{reason or 'none given'}.")
-            continue
-        for dest in dests:
-            if shown < 20:
-                lines.append(f"  failed: {dest}" + (f" ({reason})" if reason else ""))
-            shown += 1
-    if shown > 20:
-        lines.append(f"  ... and {shown - 20} more")
-    return lines
-
-
 def _remedy_lines(state: TuiState, failed: list[Failure]) -> list[str]:
     """What to do about each cause, the words line mode gives: the screen
     ended a mirror's 404 or a proxy's refusal on "Run it again"."""
@@ -356,7 +335,7 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
     title, head = _outcome_head(state, counts)
     lines = _outcome_counted(state, counts, title, head)
     lines += _outcome_placed(state, counts, title)
-    lines += _failure_lines(counts.failed)
+    lines += failed_lines(counts.failed)
     lines += _remedy_lines(state, counts.failed)
     if title == "Finished with errors":
         lines += _retry_lines(counts.failed)

@@ -11660,6 +11660,31 @@ def split_offline(records: list[Failure]) -> tuple[list[Failure], list[Failure]]
             [record for record in records if record.kind == "offline"])
 
 
+FAILED_LINES_CAP = 10
+
+
+def failed_lines(records: list[Failure], said: Iterable[str] = ()) -> list[str]:
+    """The failed files in both modes: a reason two files or more share is
+    said once with their count, so each cause reads once like its remedy, and
+    at most FAILED_LINES_CAP lines. said: files the progress already named."""
+    causes: dict[str, list[str]] = {}
+    for record in records:
+        causes.setdefault(record.reason, []).append(record.dest)
+    named = set(said)
+    entries: list[tuple[str, int]] = []
+    for reason, dests in causes.items():
+        if reason and len(dests) > 1:
+            # A read-only folder fails every file alike: said once.
+            entries.append((f"  failed: {_plural(len(dests), 'file')} ({reason}), "
+                            f"first {dests[0]}", len(dests)))
+            continue
+        entries += [(f"  failed: {dest}" + (f" ({reason})" if reason else ""), 1)
+                    for dest in dests if dest not in named]
+    lines = [line for line, _count in entries[:FAILED_LINES_CAP]]
+    more = sum(count for _line, count in entries[FAILED_LINES_CAP:])
+    return lines + ([f"  ... and {more} more"] if more else [])
+
+
 def _http_failure_lines(records: list[Failure]) -> list[str]:
     """The address the first refused file was asked at, and what chose it:
     a mirror named with RETROBIOS_BASE_URL that holds the lists and not yet
@@ -16467,21 +16492,11 @@ class _Ending(NamedTuple):
 
 
 def _say_failures(say: Callable[..., None], failures: list[Failure]) -> None:
-    """The failed files the progress has not named, one cause said once."""
-    reasons = {record.reason for record in failures}
+    """The failed files the progress has not named, as the screen lists them."""
     # A failure the progress already named on its FAILED line is not named
     # again: line mode listed each one twice.
-    unsaid = [record for record in failures if record.dest not in SAID_FAILED]
-    if failures and len(failures) > 1 and len(reasons) == 1 and reasons != {""}:
-        # One cause, said once: a read-only folder listed ten of its files
-        # and "... and 266 more" above the advice that fixes them all.
-        said = f", first {unsaid[0].dest}" if unsaid else ""
-        say(f"  failed: {_plural(len(failures), 'file')} ({reasons.pop()}){said}")
-    else:
-        for dest, reason, _kind, _url in unsaid[:10]:
-            say(f"  failed: {dest}" + (f" ({reason})" if reason else ""))
-        if len(unsaid) > 10:
-            say(f"  ... and {len(unsaid) - 10} more")
+    for line in failed_lines(failures, SAID_FAILED):
+        say(line)
 
 
 def _failure_advice(
@@ -27824,28 +27839,6 @@ def _outcome_placed(state: TuiState, counts: _OutcomeCounts, title: str) -> list
     return lines
 
 
-def _failure_lines(failed: list[Failure]) -> list[str]:
-    """Each file that failed with its reason, a reason shared by many said once."""
-    lines: list[str] = []
-    causes: dict[str, list[str]] = {}
-    for failure in failed:
-        causes.setdefault(failure.reason, []).append(failure.dest)
-    shown = 0
-    for reason, dests in causes.items():
-        if len(dests) > 3:
-            # A read-only folder fails every file alike: said once.
-            lines.append(f"  {len(dests)} files failed, all for one reason: "
-                         f"{reason or 'none given'}.")
-            continue
-        for dest in dests:
-            if shown < 20:
-                lines.append(f"  failed: {dest}" + (f" ({reason})" if reason else ""))
-            shown += 1
-    if shown > 20:
-        lines.append(f"  ... and {shown - 20} more")
-    return lines
-
-
 def _remedy_lines(state: TuiState, failed: list[Failure]) -> list[str]:
     """What to do about each cause, the words line mode gives: the screen
     ended a mirror's 404 or a proxy's refusal on "Run it again"."""
@@ -27936,7 +27929,7 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
     title, head = _outcome_head(state, counts)
     lines = _outcome_counted(state, counts, title, head)
     lines += _outcome_placed(state, counts, title)
-    lines += _failure_lines(counts.failed)
+    lines += failed_lines(counts.failed)
     lines += _remedy_lines(state, counts.failed)
     if title == "Finished with errors":
         lines += _retry_lines(counts.failed)

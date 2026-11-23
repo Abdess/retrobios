@@ -2319,7 +2319,29 @@ class TicksBarAndPaths(unittest.TestCase):
         _title, lines = install.tui_outcome(state)
         self.assertEqual([line for line in lines if "failed" in line],
                          ["Nothing was installed: 50 files failed.",
-                          "  50 files failed, all for one reason: folder not writable."])
+                          "  failed: 50 files (folder not writable), first f0.bin"])
+
+    def test_failures_read_alike_in_both_modes(self):
+        """The screen grouped a reason past three files and capped at 20
+        lines, line mode grouped one shared reason and capped at 10."""
+        failed = ([{"dest": f"ro{n}.bin", "reason": "folder not writable"} for n in range(5)]
+                  + [{"dest": "a.bin", "reason": "HTTP 404"}]
+                  + [{"dest": f"cut{n}.bin", "reason": f"timed out {n}"} for n in range(12)])
+        state = checked_state()
+        state.stack.append("result")
+        state.code = 1
+        state.summary = {"installed": 1, "up_to_date": 0, "failed": failed}
+        _title, lines = install.tui_outcome(state)
+        screen = [line for line in lines if line.startswith(("  failed:", "  ..."))]
+        said: list[str] = []
+        records = install.event_records(failed)
+        with mock.patch.object(install, "SAID_FAILED", set()):
+            install._say_failures(said.append, records)
+        self.assertEqual(screen, said)
+        self.assertEqual(said[0], "  failed: 5 files (folder not writable), first ro0.bin")
+        self.assertEqual(said[1], "  failed: a.bin (HTTP 404)")
+        self.assertEqual(len(said), install.FAILED_LINES_CAP + 1)
+        self.assertEqual(said[-1], "  ... and 4 more")
 
     def test_folder_inside_a_card_offers_its_root(self):
         card = Path(tempfile.mkdtemp())

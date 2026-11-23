@@ -96,6 +96,31 @@ def split_offline(records: list[Failure]) -> tuple[list[Failure], list[Failure]]
             [record for record in records if record.kind == "offline"])
 
 
+FAILED_LINES_CAP = 10
+
+
+def failed_lines(records: list[Failure], said: Iterable[str] = ()) -> list[str]:
+    """The failed files in both modes: a reason two files or more share is
+    said once with their count, so each cause reads once like its remedy, and
+    at most FAILED_LINES_CAP lines. said: files the progress already named."""
+    causes: dict[str, list[str]] = {}
+    for record in records:
+        causes.setdefault(record.reason, []).append(record.dest)
+    named = set(said)
+    entries: list[tuple[str, int]] = []
+    for reason, dests in causes.items():
+        if reason and len(dests) > 1:
+            # A read-only folder fails every file alike: said once.
+            entries.append((f"  failed: {_plural(len(dests), 'file')} ({reason}), "
+                            f"first {dests[0]}", len(dests)))
+            continue
+        entries += [(f"  failed: {dest}" + (f" ({reason})" if reason else ""), 1)
+                    for dest in dests if dest not in named]
+    lines = [line for line, _count in entries[:FAILED_LINES_CAP]]
+    more = sum(count for _line, count in entries[FAILED_LINES_CAP:])
+    return lines + ([f"  ... and {more} more"] if more else [])
+
+
 def _http_failure_lines(records: list[Failure]) -> list[str]:
     """The address the first refused file was asked at, and what chose it:
     a mirror named with RETROBIOS_BASE_URL that holds the lists and not yet
