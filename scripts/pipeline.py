@@ -70,7 +70,7 @@ from orchestrate.guards import (
 from orchestrate.locks import hold_outputs
 from orchestrate.prepare import database_steps, refresh_steps, truth_steps
 from orchestrate.results import StepResults, print_summary
-from orchestrate.runner import pack_output_dir
+from orchestrate.runner import enter_repo_root, pack_output_dir
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -134,6 +134,8 @@ def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
     refuse_unapplied_flags(parser, args)
+    args.output_dir = pack_output_dir(args.output_dir)
+    enter_repo_root()
     refuse_offline_without_caches(parser, args)
     refuse_offline_export_without_originals(parser, args)
     if not args.offline:
@@ -141,7 +143,6 @@ def main() -> None:
         # scrapers and refresh_data_dirs went anonymous unless the user had
         # exported GITHUB_TOKEN by hand, though gh was logged in.
         github_token()
-    args.output_dir = pack_output_dir(args.output_dir)
     held = hold_outputs(args)
 
     total_start = time.monotonic()

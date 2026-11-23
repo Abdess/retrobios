@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import contextlib
 import os
 import subprocess
 import time
 from pathlib import Path
+from typing import Iterator
 
 from core.paths import REPO_ROOT
 from orchestrate.labels import step_title
@@ -22,6 +24,30 @@ def pack_output_dir(typed: str | None) -> str:
     if typed is None:
         return str(REPO_ROOT / "dist")
     return str(Path(typed).resolve())
+
+
+def enter_repo_root() -> None:
+    """Move the run to the repository root, where every step reads its inputs.
+
+    The child steps already ran there, while the steps run in this process
+    read platforms/, database.json and bios/ from the caller's directory:
+    started from scripts/, the offline refusal found no registry and stayed
+    silent, verify held no data directory, and step 5 stopped on a missing
+    registry after every pack was built. Called once the typed
+    --output-dir is resolved, since that one is read from where it was typed.
+    """
+    os.chdir(REPO_ROOT)
+
+
+@contextlib.contextmanager
+def at_repo_root() -> Iterator[None]:
+    """Run the block from the repository root, then go back to the caller's directory."""
+    previous = os.getcwd()
+    os.chdir(REPO_ROOT)
+    try:
+        yield
+    finally:
+        os.chdir(previous)
 
 
 def run(cmd: list[str], label: str) -> tuple[bool, str]:

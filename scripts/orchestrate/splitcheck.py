@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 from core.paths import DB_FILE, EMULATORS_DIR, PLATFORMS_DIR
 from orchestrate.compare import comparison_inputs
 from orchestrate.labels import STEP_LABELS, step_title
+from orchestrate.runner import at_repo_root
 from packs.archive import is_pack_note
 
 if TYPE_CHECKING:
@@ -40,6 +41,7 @@ def split_differences(
     return lines
 
 
+@at_repo_root()
 def check_split_packs(
     emulators_dir: str = EMULATORS_DIR, platforms_dir: str = PLATFORMS_DIR,
     db_path: str = DB_FILE,

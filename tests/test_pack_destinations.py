@@ -332,17 +332,76 @@ class EveryEmulatorPackMatchesItsReport(unittest.TestCase):
             self.skipTest("database.json is not built")
         from orchestrate.emulatorpacks import check_emulator_packs
 
+        # Run from elsewhere: the step resolves its inputs at the repository
+        # root, as the pipeline's child steps do.
         previous = os.getcwd()
-        os.chdir(REPO_ROOT)
-        try:
-            with contextlib.redirect_stdout(io.StringIO()) as out:
-                ok = check_emulator_packs()
-        finally:
-            os.chdir(previous)
+        with tempfile.TemporaryDirectory() as elsewhere:
+            os.chdir(elsewhere)
+            try:
+                with contextlib.redirect_stdout(io.StringIO()) as out:
+                    ok = check_emulator_packs()
+            finally:
+                os.chdir(previous)
         self.assertTrue(ok, out.getvalue())
         # Packs of several profiles too: a placement rule that only goes
         # wrong when two profiles share a path never meets in one profile.
         self.assertIn("system packs compared, all equal", out.getvalue())
+
+
+class EveryStepReadsFromTheRepositoryRoot(unittest.TestCase):
+    """Started from scripts/, the steps run in the pipeline's own process read
+    platforms/ and database.json there: the offline refusal saw no registry,
+    and step 5 stopped on it after every pack was built."""
+
+    def test_the_run_moves_to_the_root_once_the_output_dir_is_read(self):
+        import sys
+        from unittest import mock
+
+        from scripts import pipeline
+
+        seen: dict[str, str] = {}
+
+        def stop(_parser, args):
+            seen["cwd"] = os.getcwd()
+            seen["output_dir"] = args.output_dir
+            raise SystemExit(0)
+
+        previous = os.getcwd()
+        self.addCleanup(os.chdir, previous)
+        with tempfile.TemporaryDirectory() as elsewhere:
+            os.chdir(elsewhere)
+            argv = ["pipeline.py", "--offline", "--skip-docs", "--output-dir", "out"]
+            with mock.patch.object(sys, "argv", argv), \
+                    mock.patch.object(pipeline, "refuse_offline_without_caches", stop), \
+                    self.assertRaises(SystemExit):
+                pipeline.main()
+            typed_from = Path(elsewhere).resolve()
+        self.assertEqual(Path(seen["cwd"]), REPO_ROOT)
+        self.assertEqual(Path(seen["output_dir"]), typed_from / "out")
+
+    def test_the_step_five_checks_read_from_the_root(self):
+        from unittest import mock
+
+        from orchestrate import narrowed, splitcheck
+
+        previous = os.getcwd()
+        self.addCleanup(os.chdir, previous)
+        for module, check in ((narrowed, narrowed.check_narrowed_packs),
+                              (splitcheck, splitcheck.check_split_packs)):
+            with self.subTest(check=check.__name__), tempfile.TemporaryDirectory() as elsewhere:
+                os.chdir(elsewhere)
+                seen: list[str] = []
+
+                def inputs(*_args, seen=seen):
+                    seen.append(os.getcwd())
+                    return {}, {}, {}, {}, []
+
+                with mock.patch.object(module, "comparison_inputs", inputs), \
+                        contextlib.redirect_stdout(io.StringIO()):
+                    check()
+                self.assertEqual([Path(c) for c in seen], [REPO_ROOT])
+                self.assertEqual(Path(os.getcwd()), Path(elsewhere).resolve())
+                os.chdir(previous)
 
 
 if __name__ == "__main__":

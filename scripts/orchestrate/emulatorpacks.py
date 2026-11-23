@@ -9,6 +9,7 @@ from core.paths import DB_FILE, EMULATORS_DIR, PLATFORMS_DIR
 from model.profiles import reads_own_files
 from orchestrate.compare import set_difference_lines
 from orchestrate.labels import STEP_LABELS, step_title
+from orchestrate.runner import at_repo_root
 from orchestrate.narrowed import matrix_coverage
 
 # The narrowings an emulator or system pack takes, compared by
@@ -37,6 +38,7 @@ def emulator_variants(profiles: list[dict], full: bool) -> list[tuple[str, dict]
     return variants
 
 
+@at_repo_root()
 def check_emulator_packs(
     emulators_dir: str = EMULATORS_DIR, platforms_dir: str = PLATFORMS_DIR,
     db_path: str = DB_FILE, full: bool = False,
