@@ -18,8 +18,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from core.paths import BIOS_DIR
+from core.collectionfiles import collection_files
 from core.hashing import file_digest
+from core.paths import BIOS_DIR
 from resolve.ownership import maker_of_relative
 
 
@@ -69,12 +70,12 @@ def scan(bios_dir: str = BIOS_DIR) -> list[Duplicate]:
 
     Only files that share a size can share a content, so a size held by one
     file is never read: hashing the whole tree read 18 GB on every pipeline.
+    The walk is the database scan's: a copy under `.cache/` is no identity.
     """
     by_size: dict[int, list[Path]] = {}
     root = Path(bios_dir)
-    for path in sorted(root.rglob("*")):
-        if path.is_file():
-            by_size.setdefault(path.stat().st_size, []).append(path)
+    for path in collection_files(root):
+        by_size.setdefault(path.stat().st_size, []).append(path)
     by_content: dict[str, list[Path]] = {}
     for paths in by_size.values():
         if len(paths) < 2:

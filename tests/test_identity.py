@@ -53,6 +53,14 @@ class TestCrossVendorDuplicates(unittest.TestCase):
         self._write("Sinclair/ZX Spectrum/48.rom", b"rom")
         self.assertEqual(self._scan(), [])
 
+    def test_a_copy_outside_the_collection_is_no_identity(self):
+        # The database scan leaves .cache/ and hidden files out: a stray
+        # copy there is not a second name for the dump.
+        self._write("Commodore/Amiga/kickstart.rom", b"kick")
+        self._write(".cache/Sega/cartridge.bin", b"kick")
+        self._write("Sega/Saturn/.cartridge.bin", b"kick")
+        self.assertEqual(self._scan(), [])
+
     def test_an_explained_crossing_is_silent(self):
         self._write("Magnavox/Odyssey2/o2rom.bin", b"odyssey")
         self._write("Philips/Videopac/O2.bin", b"odyssey")
