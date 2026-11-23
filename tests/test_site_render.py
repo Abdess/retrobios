@@ -7,6 +7,7 @@ import tests
 import tempfile
 import unittest
 from pathlib import Path
+from typing import TYPE_CHECKING
 from unittest import mock
 
 import yaml
@@ -15,6 +16,9 @@ from sitegen import arcadeboards
 from sitegen import render as siterender
 from sitegen import runlinks
 from model import systemnames
+
+if TYPE_CHECKING:
+    from packs.consumers import FileConsumers
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -188,6 +192,9 @@ class DirectoryMembersNameTheirEmulator(unittest.TestCase):
     emulator on their card, and the directory card linked none of them."""
 
     SHA1 = "c63078a6c9ccaca7339a726a5d39410983933070"
+    db: dict
+    profile: dict
+    consumers: FileConsumers
 
     @classmethod
     def setUpClass(cls) -> None:
