@@ -101,32 +101,6 @@ class ValidationResult:
     def status(self) -> str:
         return "FAIL" if not self.passed else "REVIEW" if self.outcome else "PASS"
 
-    def to_markdown(self) -> str:
-        status = self.status
-        lines = [f"### {status} `{self.filename}`"]
-        lines.append("")
-        lines.append(f"- **Path**: `{self.filepath}`")
-        # A path refused before it was read has no size or digest to show:
-        # empty fields read as an empty file contributed.
-        if self.sha1:
-            lines.append(f"- **Size**: {self.size:,} bytes")
-            lines.append(f"- **SHA1**: `{self.sha1}`")
-            lines.append(f"- **MD5**: `{self.md5}`")
-            lines.append(f"- **CRC32**: `{self.crc32}`")
-        lines.append("")
-
-        for status_str, message in self.checks:
-            if status_str == "PASS":
-                lines.append(f"- Pass: {message}")
-            elif status_str == "FAIL":
-                lines.append(f"- Fail: {message}")
-            elif status_str == "WARN":
-                lines.append(f"- Warning: {message}")
-            else:
-                lines.append(f"- Info: {message}")
-
-        return "\n".join(lines)
-
 
 def _note_sizes(sizes: dict[str, list], names: list[str], entry: dict) -> None:
     """Record the sizes an entry accepts under each of its names.
