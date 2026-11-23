@@ -5,10 +5,11 @@ from __future__ import annotations
 import argparse
 import sys
 import time
+from collections.abc import Sequence
 
 from core import upstream
 from profiling.reports import ProfileReport, triage_state
-from profiling.version_basis import version_repo
+from profiling.version_basis import version_repo, version_tags
 from profiling.versions import VersionReport, check_version
 
 
@@ -23,7 +24,7 @@ PIN_WEIGHT = 50
 
 
 def drift_score(
-    report: ProfileReport, version: VersionReport | None, commits: int
+    report: ProfileReport, versions: Sequence[VersionReport], commits: int
 ) -> int:
     """Rank profiles by how far they have drifted from their pin."""
     counts = report.counts or {}
@@ -34,9 +35,10 @@ def drift_score(
         DRIFT_WEIGHTS["SHIFTED" if line.startswith("would recale") else "AMBIGUOUS"]
         for line in report.stale_prose or ()
     )
-    if (
-        version is not None and not version.tag_matches_declared
-        and version.latest_release and version.latest_release != version.declared
+    if any(
+        not version.tag_matches_declared
+        and version.latest_release and version.latest_release != version.named
+        for version in versions
     ):
         score += 10
     # A pin off its branch or a repository answering under another name is
@@ -110,17 +112,19 @@ def _score(
     """Append one profile's drift score to ``ranked``. True when its commit
     count was read on a sample of the paths it cites."""
     profile = selected[report.name]
-    version = None
+    versions: list[VersionReport] = []
     commits = 0
     refused = ""
     sampled = False
-    repo = version_repo(profile)[0]
-    if report.head and repo is not None:
+    if report.head and version_repo(profile)[0] is not None:
         # Each cited path counted in the repository the resolver settled it
         # in, between that repository's own pin and HEAD.
         sources = report.cited_sources
         try:
-            version = check_version(profile, repo, args.cache_dir, args.offline)
+            for named in version_tags(profile):
+                version = check_version(named, args.cache_dir, args.offline)
+                if version is not None:
+                    versions.append(version)
             for source in sources[:TRIAGE_PATH_SAMPLE]:
                 commits += upstream.commits_touching(
                     source.repo, source.path, source.pin, args.cache_dir, args.offline,
@@ -132,5 +136,5 @@ def _score(
             refused = "commit history unreachable"
             print(f"{report.name}: {exc}", file=sys.stderr)
         sampled = len(sources) > TRIAGE_PATH_SAMPLE and not refused
-    ranked.append((drift_score(report, version, commits), report, refused))
+    ranked.append((drift_score(report, versions, commits), report, refused))
     return sampled

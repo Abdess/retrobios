@@ -301,6 +301,77 @@ class TheVersionRepositoryIsTheBasisRepository(unittest.TestCase):
         self.assertIn("the pin resolved to uppin", report.version_warning)
 
 
+class TheTagCoreVersionNames(unittest.TestCase):
+    """armsx2 declared 2.9.2-77-gfc4ab0b over tag 2.9.2: --check-version
+    asked for a tag named after the whole string, found none, and never said
+    that 2.10.0 was out. jgenesis asked for the tag "{'standalone': ...}"."""
+
+    DESCRIBED = {
+        "source": "https://github.com/o/n",
+        "core_version": "2.9.2-77-gfc4ab0b",
+        "version_basis": {"kind": "tag", "tag": "2.9.2", "distance": 77},
+    }
+
+    def _attach(self, profile, tags):
+        from profiling import run as profiling_run
+
+        report = ProfileReport(name="p", repo="o/n", host="github.com",
+                               pin="fc4ab0b" + "0" * 33, head="head")
+        args = mock.Mock(cache_dir="cache", offline=True)
+        asked = []
+
+        def tag_commit(repo, tag, *_a, **_k):
+            asked.append(tag)
+            return tags.get(tag)
+
+        def ancestry(repo, base, head, *_a, **_k):
+            # The tag 2.9.2 sits 77 commits before the pin, the release
+            # 2.10.0 after both.
+            return {("tag292", report.pin): (77, 0), ("tag292", "rel210"): (5, 0),
+                    (report.pin, "rel210"): (3, 0)}.get((base, head))
+
+        with mock.patch.object(upstream, "latest_release",
+                               return_value=upstream.Release("2.10.0", "2026-11-01", False)), \
+                mock.patch.object(upstream, "newest_tag", return_value="2.10.0"), \
+                mock.patch.object(upstream, "tag_commit", side_effect=tag_commit), \
+                mock.patch.object(upstream, "ancestry", side_effect=ancestry):
+            profiling_run._attach_version(args, profile, report)
+        return report, asked
+
+    def test_a_tag_basis_names_its_tag(self):
+        [named] = version_basis.version_tags(self.DESCRIBED)
+        self.assertEqual((named.declared, named.tag, named.distance),
+                         ("2.9.2-77-gfc4ab0b", "2.9.2", 77))
+
+    def test_a_mode_keyed_version_names_one_tag_per_build(self):
+        profile = {"source": "https://github.com/o/n",
+                   "core_version": {"standalone": "v1.1", "libretro": "v0.9"}}
+        self.assertEqual([(n.mode, n.tag) for n in version_basis.version_tags(profile)],
+                         [("standalone", "v1.1"), ("libretro", "v0.9")])
+        same = dict(profile, core_version={"standalone": "0.14.1", "libretro": "0.14.1"})
+        self.assertEqual([n.tag for n in version_basis.version_tags(same)], ["0.14.1"])
+
+    def test_a_release_after_the_described_pin_is_named(self):
+        report, asked = self._attach(self.DESCRIBED, {"2.9.2": "tag292", "2.10.0": "rel210"})
+        self.assertEqual(asked[0], "2.9.2")
+        self.assertEqual(report.version.tag_commit, "tag292")
+        self.assertIn("release 2.10.0 is newer than core_version 2.9.2-77-gfc4ab0b",
+                      report.version_warning)
+
+    def test_the_stated_distance_is_no_warning(self):
+        report, _ = self._attach(self.DESCRIBED, {"2.9.2": "tag292"})
+        self.assertIsNone(report.version_warning)
+
+    def test_the_page_is_held_against_the_build_it_announces(self):
+        from profiling import versions
+
+        profile = {"core_version": {"standalone": "20260807-10669", "libretro": "1.0.0"}}
+        self.assertEqual(versions.page_declared(profile, "20260807-10669"), "20260807-10669")
+        self.assertEqual(versions.page_declared(profile, "20261101-10700"), "20260807-10669")
+        self.assertEqual(versions.page_declared({"core_version": "4.40"}, "4.50"), "4.40")
+        self.assertIsNone(versions.page_declared({}, "4.50"))
+
+
 class AnAdvanceReadsTheVersionAgain(unittest.TestCase):
     """A pin never moves without its version: read again, or refused."""
 

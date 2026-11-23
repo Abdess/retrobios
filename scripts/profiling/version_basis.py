@@ -111,6 +111,48 @@ def version_repo(
     return upstream.parse_repo(_by_mode(profile, field, mode) or ""), field
 
 
+@dataclass(frozen=True)
+class VersionTag:
+    """The tag core_version names for one build mode, and where it lives."""
+
+    mode: str
+    declared: str
+    tag: str
+    distance: int
+    repo: upstream.Repo | None
+    field: str
+
+
+def version_tags(profile: dict) -> list[VersionTag]:
+    """Which tag core_version names, for each build mode and repository.
+
+    A tag basis holds the tag apart from core_version, which writes git
+    describe's long form past it (armsx2 2.9.2-77-gfc4ab0b names tag 2.9.2).
+    Any other basis names the tag by core_version itself. Builds naming the
+    same tag in the same repository are one answer.
+    """
+    found = bases(profile)
+    value = profile.get("core_version")
+    modes = list(found) or ([str(mode) for mode in value] if isinstance(value, dict) else [""])
+    answers: list[VersionTag] = []
+    seen: set[tuple] = set()
+    for mode in modes:
+        stated = declared(profile, mode)
+        if not stated:
+            continue
+        basis = found.get(mode)
+        tag, distance = stated, 0
+        if basis and basis.get("kind") == "tag" and basis.get("tag"):
+            tag, distance = str(basis["tag"]), int(basis.get("distance") or 0)
+        repo, field = version_repo(profile, mode, basis)
+        key = (repo.host, repo.slug) if repo else None, field, stated, tag
+        if key in seen:
+            continue
+        seen.add(key)
+        answers.append(VersionTag(mode, stated, tag, distance, repo, field))
+    return answers
+
+
 def is_placeholder(value: object) -> bool:
     """A VCS or branch word standing for a version, alone or annotated
     ("SVN (2015 snapshot)"). The schema refuses the same strings."""

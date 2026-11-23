@@ -4398,12 +4398,12 @@ class TriageSurvivesAForgeRefusal(unittest.TestCase):
             profiling_reports.ProfileReport(name="vice", pin="c" * 40, head="d" * 40),
         ]
         selected = {
-            "eden": {"source": "https://git.eden-emu.dev/eden-emu/eden"},
-            "vice": {"source": "https://github.com/libretro/vice-libretro"},
+            "eden": {"source": "https://git.eden-emu.dev/eden-emu/eden", "core_version": "1"},
+            "vice": {"source": "https://github.com/libretro/vice-libretro", "core_version": "1"},
         }
 
-        def check_version(profile, *_args):
-            if "eden" in profile["source"]:
+        def check_version(named, *_args):
+            if "eden" in named.repo.slug:
                 raise triage.upstream.UpstreamError("HTTP 403")
             return
 

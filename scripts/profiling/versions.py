@@ -6,6 +6,7 @@ import re
 from dataclasses import dataclass
 
 from core import upstream
+from profiling.version_basis import VersionTag, declared
 
 
 @dataclass(frozen=True)
@@ -16,26 +17,37 @@ class VersionReport:
     release_date: str | None
     tag_matches_declared: bool
     tag_commit: str | None
+    # The tag core_version names and the commits the pin sits past it: a tag
+    # basis writes 2.9.2-77-gfc4ab0b for tag 2.9.2 at distance 77.
+    tag: str = ""
+    distance: int = 0
+
+    @property
+    def named(self) -> str:
+        """The tag name core_version stands for."""
+        return self.tag or self.declared
 
 
 def check_version(
-    profile: dict, repo: upstream.Repo, cache_dir: str, offline: bool
+    named: VersionTag, cache_dir: str, offline: bool
 ) -> VersionReport | None:
     """Declared core_version against the latest upstream tag and release."""
-    declared = str(profile.get("core_version") or "")
-    if not declared:
+    repo = named.repo
+    if repo is None or not named.declared:
         return None
     release = upstream.latest_release(repo, cache_dir, offline)
     # Asked by name: the first page of tags misses a release that a project
     # publishing nightlies has pushed past a hundred newer tags.
-    commit = upstream.tag_commit(repo, declared, cache_dir, offline)
+    commit = upstream.tag_commit(repo, named.tag, cache_dir, offline)
     return VersionReport(
-        declared,
+        named.declared,
         upstream.newest_tag(repo, cache_dir, offline),
         release.tag if release else None,
         release.date if release else None,
         commit is not None,
         commit,
+        named.tag,
+        named.distance,
     )
 
 
@@ -66,6 +78,21 @@ def page_version(
     return (match.group(1), None) if match else (None, "pattern not found")
 
 
+def page_declared(profile: dict, announced: str | None) -> str | None:
+    """The core_version a version_source page is held against.
+
+    A core_version keyed by build mode states one version per build, and the
+    page announces one of them (eduke32's synthesis page, its standalone).
+    The build the page names is the one compared, else the first declared.
+    """
+    value = profile.get("core_version")
+    modes = [str(mode) for mode in value] if isinstance(value, dict) else [""]
+    stated = [version for mode in modes if (version := declared(profile, mode))]
+    if announced in stated:
+        return announced
+    return stated[0] if stated else None
+
+
 def version_warning(
     report: VersionReport | None,
     pin: str | None,
@@ -90,6 +117,9 @@ def version_warning(
             f"{pin[:7]} already contains release {passed_release}"
         )
     if not report.tag_commit or report.tag_commit == pin:
+        return None
+    if report.distance and relation == (report.distance, 0):
+        # The distance core_version states: the build it says it is.
         return None
     where = ""
     if relation is not None:
@@ -171,7 +201,7 @@ def newer_release(
     published = published_version(version)
     if not version or not pin or not version.tag_commit or not published:
         return None
-    if published == version.declared:
+    if published == version.named:
         return None
     commit = upstream.tag_commit(repo, published, cache_dir, offline)
     if not commit or commit == pin:
@@ -202,9 +232,9 @@ def latest_passed_release(
     published = published_version(version)
     if not version or not pin or not published:
         return None
-    if published == version.declared:
+    if published == version.named:
         return None
-    if not version.tag_commit and not _later_number(published, version.declared):
+    if not version.tag_commit and not _later_number(published, version.named):
         # No tag to order them: only a release numbered past the declared
         # version says it is older. "latest", "continuous" or 1.53 under a
         # declared 1.61 say nothing.

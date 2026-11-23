@@ -3709,6 +3709,10 @@ class TestCheckVersion(unittest.TestCase):
         )
         upstream.tag_commit = upstream.resolve_tag_commit
 
+    def _check(self, declared, tag=None):
+        named = version_basis.VersionTag("", declared, tag or declared, 0, self.repo, "source")
+        return check_version(named, self.dir, False)
+
     def tearDown(self):
         (
             upstream.latest_release,
@@ -3719,43 +3723,43 @@ class TestCheckVersion(unittest.TestCase):
         self.tmp.cleanup()
 
     def test_reports_declared_and_latest(self):
-        result = check_version({"core_version": "v3.0.0"}, self.repo, self.dir, False)
+        result = self._check("v3.0.0")
         self.assertEqual(result.declared, "v3.0.0")
         self.assertEqual(result.latest_release, "v3.1.2")
         self.assertEqual(result.release_date, "2026-06-14")
 
     def test_detects_declared_version_is_a_tag(self):
-        result = check_version({"core_version": "v3.0.0"}, self.repo, self.dir, False)
+        result = self._check("v3.0.0")
         self.assertTrue(result.tag_matches_declared)
         self.assertEqual(result.tag_commit, "tagsha")
 
     def test_declared_version_not_a_tag(self):
-        result = check_version({"core_version": "5.2"}, self.repo, self.dir, False)
+        result = self._check("5.2")
         self.assertFalse(result.tag_matches_declared)
         self.assertIsNone(result.tag_commit)
 
     def test_none_without_core_version(self):
-        self.assertIsNone(check_version({}, self.repo, self.dir, False))
+        self.assertIsNone(self._check(""))
 
     def test_warning_when_tag_commit_differs_from_pin(self):
-        result = check_version({"core_version": "v3.0.0"}, self.repo, self.dir, False)
+        result = self._check("v3.0.0")
         self.assertIsNotNone(version_warning(result, "otherpin"))
 
     def test_no_warning_when_tag_commit_matches_pin(self):
-        result = check_version({"core_version": "v3.0.0"}, self.repo, self.dir, False)
+        result = self._check("v3.0.0")
         self.assertIsNone(version_warning(result, "tagsha"))
 
     def test_warning_says_which_side_of_the_tag_the_pin_is(self):
         # 52 warnings read alike: a build after its release and a pin older
         # than the release it claims could not be told apart.
-        result = check_version({"core_version": "v3.0.0"}, self.repo, self.dir, False)
+        result = self._check("v3.0.0")
         self.assertIn("4 commits after the tag", version_warning(result, "p", (4, 0)))
         self.assertIn("core_version is later than the code",
                       version_warning(result, "p", (0, 9)))
         self.assertIn("off the tag's history", version_warning(result, "p", (2, 3)))
 
     def test_warning_names_a_release_the_pin_already_contains(self):
-        result = check_version({"core_version": "v3.0.0"}, self.repo, self.dir, False)
+        result = self._check("v3.0.0")
         warning = version_warning(result, "tagsha", None, "v3.1.0")
         self.assertIn("already contains release v3.1.0", warning)
 
@@ -4038,23 +4042,23 @@ class TestDriftScore(unittest.TestCase):
     def test_review_statuses_dominate(self):
         heavy = ProfileReport(name="a", entries=[], counts={"GONE": 1})
         light = ProfileReport(name="b", entries=[], counts={"SHIFTED": 20})
-        self.assertGreater(drift_score(heavy, None, 0), drift_score(light, None, 0))
+        self.assertGreater(drift_score(heavy, [], 0), drift_score(light, [], 0))
 
     def test_version_mismatch_adds_weight(self):
         report = ProfileReport(name="a", entries=[], counts={})
         stale = VersionReport("v1.0", "v2.0", "v2.0", "2026-06-01", False, None)
         current = VersionReport("v2.0", "v2.0", "v2.0", "2026-06-01", True, None)
         self.assertGreater(
-            drift_score(report, stale, 0), drift_score(report, current, 0)
+            drift_score(report, [stale], 0), drift_score(report, [current], 0)
         )
 
     def test_commit_count_is_a_light_signal(self):
         report = ProfileReport(name="a", entries=[], counts={})
-        self.assertGreater(drift_score(report, None, 100), drift_score(report, None, 0))
+        self.assertGreater(drift_score(report, [], 100), drift_score(report, [], 0))
 
     def test_clean_profile_scores_zero(self):
         report = ProfileReport(name="a", entries=[], counts={"ANCHORED": 5})
-        self.assertEqual(drift_score(report, None, 0), 0)
+        self.assertEqual(drift_score(report, [], 0), 0)
 
     def test_a_pin_to_set_again_outranks_a_gone_ref(self):
         """pcem ranked last at 0 with "1 to review, 1 orphaned pin": its
@@ -4066,7 +4070,7 @@ class TestDriftScore(unittest.TestCase):
                               moved_repos=["a/b answers as c/b"])
         for report in (orphaned, moved):
             with self.subTest(name=report.name):
-                self.assertGreater(drift_score(report, None, 0), drift_score(gone, None, 0))
+                self.assertGreater(drift_score(report, [], 0), drift_score(gone, [], 0))
 
 
 class TestCollectCitations(unittest.TestCase):

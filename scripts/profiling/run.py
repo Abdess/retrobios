@@ -26,11 +26,13 @@ from profiling.reports import (
 from profiling.resolver import build_report
 from profiling.sourcepaths import record_write
 from profiling.triage import PROGRESS_SECONDS, Progress, print_interrupted, print_triage
-from profiling.version_basis import version_repo
+from profiling.version_basis import VersionTag, version_tags
 from profiling.versions import (
-    newer_release,
-    latest_passed_release,
+    VersionReport,
     check_version,
+    latest_passed_release,
+    newer_release,
+    page_declared,
     page_version,
     version_warning,
 )
@@ -277,32 +279,21 @@ def _version_pin(report: ProfileReport, repo: upstream.Repo, field: str) -> str 
     return None
 
 
-def _attach_version(
-    args: argparse.Namespace, profile: dict, report: ProfileReport
-) -> None:
-    """Record core_version against the forge's latest tag and release.
-
-    Kept on the report rather than printed, so --json carries it as the text
-    report does. A forge that refuses is named on the profile's own line
-    (version_unread).
-    """
-    repo, field = version_repo(profile) if report.head else (None, "")
+def _version_of(
+    args: argparse.Namespace, profile: dict, report: ProfileReport, named: VersionTag,
+) -> tuple[VersionReport | None, str | None]:
+    """One build's core_version against its repository: the report and the
+    warning. A refused tag ancestry is named on version_unread."""
+    repo = named.repo
     if repo is None:
-        return
-    pin = _version_pin(report, repo, field)
+        return None, None
+    pin = _version_pin(report, repo, named.field)
     # A held upstream (yaps2 synced to PCSX2 342db515) is not one a newer
     # release of that project asks to profile again, as a held pin is not.
-    frozen_by = "upstream_frozen" if field == "upstream" else "pin_frozen"
-    try:
-        report.version = check_version(profile, repo, args.cache_dir, args.offline)
-    except upstream.RateLimitError:
-        raise
-    except upstream.UpstreamError as exc:
-        report.version_unread = f"version check skipped: {exc}"
-        return
+    frozen_by = "upstream_frozen" if named.field == "upstream" else "pin_frozen"
+    version = check_version(named, args.cache_dir, args.offline)
     relation = None
     passed = None
-    version = report.version
     try:
         if version and version.tag_commit and pin and version.tag_commit != pin:
             relation = upstream.ancestry(
@@ -317,11 +308,41 @@ def _attach_version(
     except upstream.UpstreamError as exc:
         report.version_unread = f"tag ancestry unread: {exc}"
         newer = None
-    report.version_warning = version_warning(version, pin, relation, passed) or (
+    warning = version_warning(version, pin, relation, passed) or (
         f"{'release' if version.latest_release else 'tag'} {newer} is newer than core_version {version.declared} and the pin: "
         f"profile it, or hold the pin with {frozen_by} and the reason"
         if newer and version else None
     )
+    return version, warning
+
+
+def _attach_version(
+    args: argparse.Namespace, profile: dict, report: ProfileReport
+) -> None:
+    """Record core_version against the forge's latest tag and release.
+
+    Kept on the report rather than printed, so --json carries it as the text
+    report does. A forge that refuses is named on the profile's own line
+    (version_unread). Each build's tag is read in its own repository, and a
+    warning names its build when the builds name different tags.
+    """
+    if not report.head:
+        return
+    named_tags = [named for named in version_tags(profile) if named.repo is not None]
+    warnings: list[str] = []
+    for named in named_tags:
+        try:
+            version, warning = _version_of(args, profile, report, named)
+        except upstream.RateLimitError:
+            raise
+        except upstream.UpstreamError as exc:
+            report.version_unread = f"version check skipped: {exc}"
+            return
+        if report.version is None:
+            report.version = version
+        if warning:
+            warnings.append(f"{named.mode}: {warning}" if len(named_tags) > 1 else warning)
+        report.version_warning = "; ".join(warnings) or None
 
 
 def read_one_profile(
@@ -444,10 +465,10 @@ def _build_full_report(
     if not report.skipped and profile_path.is_file():
         report.stale_prose = _read_stale_prose(name, profile_path, args, failed)
     if args.check_version and profile.get("version_source"):
-        report.declared_version = str(profile.get("core_version") or "") or None
         report.page_version, report.page_version_unread = page_version(
             profile, args.cache_dir, args.offline
         )
+        report.declared_version = page_declared(profile, report.page_version)
         report.no_genuine_copy = str(
             profile["version_source"].get("no_genuine_copy") or "") or None
     if args.check_version:
