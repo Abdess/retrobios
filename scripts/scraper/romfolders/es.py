@@ -31,7 +31,7 @@ import shlex
 from collections import Counter
 from collections.abc import Iterator
 
-from model.romfolders import format_ref
+from model.romfolders import DEFAULT_ROW_SOURCE, format_ref
 from model.safeparse import parse_untrusted_xml, yaml_load_upstream
 
 from ..retropie_modules import PLATFORM_FLAGS, module_enabled, module_fields
@@ -135,7 +135,7 @@ def batocera_es(spec: dict, fetcher: Fetcher) -> list[dict]:
     ConfiggenDefaults.get).
     """
     params = spec["params"]
-    key = params.get("source", "os")
+    key = params.get("source", DEFAULT_ROW_SOURCE)
     es_path = params["es_systems"]
     es_text = fetcher.text(key, es_path)
     systems = yaml_load_upstream(es_text)
@@ -259,7 +259,7 @@ def es_xml(spec: dict, fetcher: Fetcher) -> list[dict]:
     installs instead (dArkOS copies es_systems.cfg.<chipset>): a system whose
     default differs there gets that board's default."""
     params = spec["params"]
-    key = params.get("source", "os")
+    key = params.get("source", DEFAULT_ROW_SOURCE)
     rows = _xml_rows(fetcher.text(key, params["file"]), key, params["file"], params)
     for board, path in sorted((params.get("boards") or {}).items()):
         other = {r["name"]: r for r in _xml_rows(fetcher.text(key, path), key, path, params)}
@@ -334,7 +334,7 @@ def _xml_rows(text: str, key: str, path: str, params: dict) -> list[dict]:
 @register("es-json")
 def es_json(spec: dict, fetcher: Fetcher) -> list[dict]:
     params = spec["params"]
-    key = params.get("source", "os")
+    key = params.get("source", DEFAULT_ROW_SOURCE)
     path = params["file"]
     text = fetcher.text(key, path)
     lines = _all_lines(text, r'^\s{4,6}"name":\s*"([^"]+)"')
@@ -476,7 +476,7 @@ def elec_conf(spec: dict, fetcher: Fetcher) -> list[dict]:
     add_emu_core says true: unconditional, else the `*)` branch of a
     device case, the branches for named devices going to board_defaults."""
     params = spec["params"]
-    key = params.get("source", "os")
+    key = params.get("source", DEFAULT_ROW_SOURCE)
     package = params["package"]
     cores, systems = _package_calls(fetcher.text(key, package))
     if not systems:
@@ -797,7 +797,7 @@ def recalbox(spec: dict, fetcher: Fetcher) -> list[dict]:
     A `.ext!` extension is an archive the frontend hands over unopened, and
     a `files:` list names whole files instead of extensions."""
     params = spec["params"]
-    key = params.get("source", "os")
+    key = params.get("source", DEFAULT_ROW_SOURCE)
     boards = _recalbox_boards(fetcher, key, params["configs_dir"])
     rows: list[dict] = []
     fetcher.cache_directory(key, params["systems_dir"])
@@ -915,7 +915,7 @@ def retropie(spec: dict, fetcher: Fetcher) -> list[dict]:
     system no basic-install module serves gets its folder from an optional
     module, so the first opt, then exp, module stands as its default."""
     params = spec["params"]
-    key = params.get("source", "os")
+    key = params.get("source", DEFAULT_ROW_SOURCE)
     cfg_path = params["platforms_cfg"]
     cfg = fetcher.text(key, cfg_path)
     exts: dict[str, tuple[str, int]] = {}

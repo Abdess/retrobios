@@ -13,7 +13,7 @@ import json
 import unittest
 from pathlib import Path
 
-from model.romfolders import format_ref, source_refs, split_refs
+from model.romfolders import format_ref, row_sources, source_refs, split_refs
 from model.safeparse import yaml_load
 from scraper.romfolders import SourceError, dump_setup, load_sources, scrape_setup
 from scraper.romfolders.card import (
@@ -287,6 +287,27 @@ class CommittedSetupTests(unittest.TestCase):
                 self.assertEqual(doc["folders"], [], setup)
             else:
                 self.assertGreater(len(doc["folders"]), 0, setup)
+
+
+class RowSourceTests(unittest.TestCase):
+    """Which declared source a setup's rows are read from is decided once,
+    for the parsers and for the freshness check of the pins."""
+
+    def test_params_source_then_nested_sources(self) -> None:
+        spec = {"params": {"source": "os", "links": [{"source": "gpsp", "path": "a.lnk"}]}}
+        self.assertEqual(row_sources(spec), ["os", "gpsp"])
+
+    def test_nested_sources_only(self) -> None:
+        spec = {"params": {"systems": {"source": "esde"}, "custom": [{"source": "os"}],
+                           "alternatives": {"source": "os"}}}
+        self.assertEqual(row_sources(spec), ["esde", "os"])
+
+    def test_default_without_a_named_source(self) -> None:
+        self.assertEqual(row_sources({"params": {"file": "es_systems.cfg"}}), ["os"])
+        self.assertEqual(row_sources({}), ["os"])
+
+    def test_mister_rows_come_from_the_distribution(self) -> None:
+        self.assertEqual(row_sources(load_sources(ROOT / "platforms" / "romfolders" / "_sources")["misterfpga"]), ["dist"])
 
 
 if __name__ == "__main__":

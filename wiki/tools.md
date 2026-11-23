@@ -738,7 +738,10 @@ The `romfolders` area compares each pin of `platforms/romfolders/_sources/`.
 A setup that is a registered platform must be read at the revision its
 platform file was scraped at, which needs no network unless one side names a
 tag and the other a commit. Any other setup is compared with its project's
-newest release, or with its branch head when the project publishes none. A
+newest release, or with its branch head when the project publishes none. The
+setup's own pin (`os`, else the first source) is compared, and so is every
+source its folders are read from (MiSTer's `dist`, the ES-DE list of EmuDeck
+and RetroDECK), each as a row `setup:source`. A
 stale pin is moved by hand, then `python -m scripts.scraper.romfolders --setup
 NAME` reads the folders again.
 

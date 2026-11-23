@@ -55,7 +55,7 @@ from freshness.platformdiff import diff_platform, diff_targets
 from freshness.platforms import _scrapable_platforms, emulatorjs_pin
 from freshness.profiles import check_profiles, summarize_profile_sync
 from freshness.report import exit_code, render, unknown_areas_message
-from freshness.romfolders import check_romfolders, romfolder_pin_drift, romfolder_sources
+from freshness.romfolders import check_romfolders, romfolder_pin_drift, romfolder_sources, watched_sources
 from freshness.scrapers import rescrape_command, target_scrapers
 from freshness.targets import (
     _declared_cores,
@@ -525,8 +525,34 @@ class RomFolderPins(unittest.TestCase):
     def test_the_committed_setups_agree_with_their_platform_files(self):
         platforms = REPO_ROOT / "platforms"
         drift = [d for setup, doc in romfolder_sources(platforms).items()
-                 if (d := romfolder_pin_drift(setup, doc, platforms))]
+                 for key in watched_sources(doc)
+                 if (d := romfolder_pin_drift(setup, doc["sources"][key], platforms))]
         self.assertEqual(drift, [])
+
+    def test_the_source_the_rows_come_from_is_compared(self):
+        """MiSTer's folders are the games/ tree of Distribution_MiSTer
+        (`params.source: dist`), and only Main_MiSTer, declared first, was
+        compared: a new core folder never made the setup stale."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._tree(tmp, "https://github.com/o/r/tree/" + "a" * 40,
+                              "    commit: " + "a" * 40 + "\n")
+            (root / "romfolders" / "_sources" / "card.yml").write_text(
+                "params:\n  source: dist\nsources:\n"
+                "  main:\n    repo: https://github.com/m/main\n    commit: " + "d" * 40 + "\n"
+                "  dist:\n    repo: https://github.com/m/dist\n    commit: " + "e" * 40 + "\n")
+            heads = {"m/main": "d" * 40, "m/dist": "f" * 40}
+            with mock.patch.object(upstream, "commit_date", return_value="2026-10-01T00:00:00"), \
+                    mock.patch.object(upstream, "latest_release", return_value=None), \
+                    mock.patch.object(upstream, "resolve_head", side_effect=lambda repo, _c: heads.get(repo.slug)), \
+                    mock.patch.object(upstream, "ancestry", return_value=(5, 0)):
+                rows = {f.subject: f for f in check_romfolders(root, "", False)}
+        self.assertEqual(rows["card"].status, OK)
+        self.assertEqual((rows["card:dist"].status, rows["card:dist"].detail),
+                         (STALE, "5 commits behind the branch head"))
+
+    def test_the_committed_mister_setup_watches_its_distribution(self):
+        doc = romfolder_sources(REPO_ROOT / "platforms")["misterfpga"]
+        self.assertEqual(watched_sources(doc), ["main", "dist"])
 
 
 class CatalogParsingTests(unittest.TestCase):

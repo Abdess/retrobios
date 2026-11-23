@@ -65,6 +65,23 @@ def source_refs(doc: dict) -> Iterator[str]:
             yield from (item["source_ref"] for item in row.get(key) or () if item.get("source_ref"))
 
 
+# The source a parser reads its rows from when `params` names none.
+DEFAULT_ROW_SOURCE = "os"
+
+
+def row_sources(spec: dict) -> list[str]:
+    """The declared source keys a setup's rows are read from, in order:
+    `params.source`, then each `source` nested in `params` (an ES-DE
+    system list, a custom file, a linked selector), else the default."""
+    params = spec.get("params") or {}
+    keys = [params["source"]] if isinstance(params.get("source"), str) else []
+    for value in params.values():
+        items = value if isinstance(value, list) else [value]
+        keys += [item["source"] for item in items
+                 if isinstance(item, dict) and isinstance(item.get("source"), str)]
+    return list(dict.fromkeys(keys)) or [DEFAULT_ROW_SOURCE]
+
+
 def setup_paths(directory: Path = ROMFOLDERS_DIR) -> list[Path]:
     """The setup files of a directory, without the sources file."""
     return sorted(p for p in Path(directory).glob("*.yml") if not p.name.startswith("_"))
