@@ -19,7 +19,7 @@ from installer.paths import SavePlace, spelled
 from installer.plan_words import NO_CORE_FILES, _core_sized, emptied_words
 from installer.platforms import _tui_system_label, system_title
 from installer.regions import region_title
-from installer.removal import _served
+from installer.removal import recorded_systems
 from installer.tally import tally
 from installer.text import _names_and, _plural, agree
 from installer.tui_commands import _core_base, _tui_system_flags, _tui_systems_chosen, tui_flags, tui_run_files
@@ -541,13 +541,10 @@ def _ticked_estimate(state: TuiState) -> tuple[int, int]:
 def tui_removal_systems(state: TuiState) -> list[tuple[str, int, int]]:
     """(system, files, bytes) of each system the install record holds files
     of, by the list's systems, in the order Choose systems lists them."""
-    if state.record is None or state.manifest is None:
+    if state.record is None or state.manifest is None or state.dest is None:
         return []
-    served = _served(state.manifest, False)
     held: dict[str, list[int]] = {}
-    for item in state.record.get("files") or []:
-        systems = served.get((str(item.get("root") or ""), str(item["dest"])),
-                             (set(), [], set(), False))[1]
+    for item, systems in recorded_systems(state.record, state.manifest, state.dest):
         for system in systems or [OTHER_SYSTEMS]:
             tally = held.setdefault(system, [0, 0])
             tally[0] += 1

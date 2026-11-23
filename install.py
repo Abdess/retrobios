@@ -20177,6 +20177,24 @@ def _served(manifest: dict, fold: bool) -> dict[tuple[str, str], tuple]:
     return served
 
 
+def _recorded_served(setup: dict, manifest: dict, fold: bool
+                     ) -> list[tuple[dict, tuple[str, str], tuple]]:
+    """Each file a setup's record holds, with its place as the drive opens
+    it and what the list serves there, by the one rule removal reads."""
+    served = _served(manifest, fold)
+    places = [(item, (str(item.get("root") or ""), _drive_key(str(item["dest"]), fold)))
+              for item in setup.get("files") or []]
+    return [(item, place, served.get(place, (set(), [], set(), False)))
+            for item, place in places]
+
+
+def recorded_systems(setup: dict, manifest: dict, folder: Path) -> list[tuple[dict, list[str]]]:
+    """Each file a setup's record holds, with the list's systems of it: a
+    drive that folds case finds a recased dest under the list's spelling."""
+    return [(item, list(found[1]))
+            for item, _place, found in _recorded_served(setup, manifest, not keeps_case(folder))]
+
+
 def _choice_names(options: list[tuple[str, str | None]], flag: str) -> list[str]:
     return [name.strip() for option, value in options if option == flag
             for name in (value or "").split(",") if name.strip()]
@@ -20342,15 +20360,12 @@ def plan_removal(
     folder = Path(os.path.abspath(folder))
     setup = record["setups"][plat]
     fold = not keeps_case(folder)
-    served = _served(manifest, fold)
     scope = _removal_scope(plat, record, manifest, fold, systems=systems, cores=cores,
                            emulators=emulators, files=files)
     planned_entries: dict[str, list] = {"remove": [], "kept": [], "gone": []}
     picked: set[str] = set()
     planned: set[tuple[str, str]] = set()
-    for item in setup.get("files") or []:
-        key = (str(item.get("root") or ""), scope.norm(str(item["dest"])))
-        found = served.get(key, (set(), [], set(), False))
+    for item, key, found in _recorded_served(setup, manifest, fold):
         if not _removal_takes(scope, found, str(item["dest"])):
             continue
         if key in planned:
@@ -25286,13 +25301,10 @@ def _ticked_estimate(state: TuiState) -> tuple[int, int]:
 def tui_removal_systems(state: TuiState) -> list[tuple[str, int, int]]:
     """(system, files, bytes) of each system the install record holds files
     of, by the list's systems, in the order Choose systems lists them."""
-    if state.record is None or state.manifest is None:
+    if state.record is None or state.manifest is None or state.dest is None:
         return []
-    served = _served(state.manifest, False)
     held: dict[str, list[int]] = {}
-    for item in state.record.get("files") or []:
-        systems = served.get((str(item.get("root") or ""), str(item["dest"])),
-                             (set(), [], set(), False))[1]
+    for item, systems in recorded_systems(state.record, state.manifest, state.dest):
         for system in systems or [OTHER_SYSTEMS]:
             tally = held.setdefault(system, [0, 0])
             tally[0] += 1

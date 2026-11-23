@@ -501,6 +501,22 @@ class AFoldingDrive(unittest.TestCase):
         self.assertEqual([(item["reason"], item["what"]) for item in removal.kept],
                          [("shared", "Lakka")])
 
+    def test_remove_by_system_counts_a_recased_file_as_the_plan_takes_it(self):
+        record = _record(self.folder, [_item("SCPH5501.BIN", self.payload)])
+        state = install.TuiState()
+        state.dest = self.folder
+        state.record = record["setups"]["retroarch"]
+        state.manifest = _served(("scph5501.bin", self.payload))
+        with mock.patch.object(install, "keeps_case", return_value=False):
+            shown = install.tui_removal_systems(state)
+            removal = install.plan_removal("retroarch", self.folder, record, state.manifest,
+                                           systems=["nintendo-gba"])
+        self.assertEqual(shown, [("nintendo-gba", 1, len(self.payload))])
+        self.assertEqual([entry["dest"] for entry in removal.remove], ["SCPH5501.BIN"])
+        with mock.patch.object(install, "keeps_case", return_value=True):
+            self.assertEqual([system for system, _count, _size
+                              in install.tui_removal_systems(state)], [install.OTHER_SYSTEMS])
+
     def test_the_removal_runs_on_a_folding_drive(self):
         removal = self.plan(False)
         record = _record(self.folder, [_item("SCPH5501.BIN", self.payload)])
