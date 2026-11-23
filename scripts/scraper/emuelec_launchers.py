@@ -19,11 +19,11 @@ from dataclasses import dataclass, field
 
 from model.launcherrecords import join_emulators
 from .configgen_launchers import Launcher
-from .rocknix_launchers import fixed_paths
 from scraper.shell_launchers import (
     config_placement,
     describe_keys,
     apply_evidence,
+    fixed_paths,
     first_boot_placement,
     LauncherPatternMissing,
     Link,

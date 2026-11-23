@@ -26,6 +26,8 @@ from scraper.shell_launchers import (
     link_record,
     RepoTree,
     Script,
+    FixedPaths,
+    fixed_paths,
     Setting,
     settings,
     source_ref,
@@ -140,32 +142,6 @@ def per_device(
 
 def _file_under(value: str, root: str) -> bool:
     return value.startswith(root.rstrip("/") + "/")
-
-
-@dataclass(frozen=True)
-class FixedPaths:
-    """Keys of a config that name a file under one directory."""
-
-    keys: tuple[tuple[str, str], ...]
-    names: tuple[str, ...]
-    search_dir: str
-
-
-def fixed_paths(
-    found: list[Setting], keys: list[tuple[str, str]], path: str
-) -> tuple[FixedPaths, set[int]]:
-    """The values of keys, as names relative to the directory they share."""
-    by_key = {(s.section, s.key): s for s in found}
-    missing = [k for k in keys if k not in by_key]
-    if missing:
-        raise LauncherPatternMissing(path, f"key {missing[0][1]}")
-    values = [by_key[k].value for k in keys if by_key[k].value]
-    lines = {by_key[k].line for k in keys}
-    if not values:
-        return FixedPaths(tuple(keys), (), ""), lines
-    folder = posixpath.commonpath([posixpath.dirname(v) for v in values])
-    names = tuple(posixpath.relpath(v, folder) for v in values)
-    return FixedPaths(tuple(keys), names, folder), lines
 
 
 def bios_keys(tree: RepoTree, paths: list[str], root: str = BIOS_ROOT) -> list[tuple[str, str]]:
