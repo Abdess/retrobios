@@ -15,6 +15,7 @@ from model.profiles import is_emulator
 from packs.crossref import gap_source_counts
 from resolve.cores import resolve_platform_cores
 from resolve.nativemode import check_label
+from resolve.sendable import sendable
 from sitegen import markup, wanted as sitewanted
 from sitegen.cards import PROVENANCE_LABELS, fetch_url
 from sitegen.config import date_line
@@ -96,13 +97,29 @@ def _hash_cell(hashes: dict[str, list[str]]) -> str:
     )
 
 
+def catalog_listings(report: dict | None, labels: dict[str, str]) -> dict[tuple[str, str], list[tuple[str, str]]]:
+    """(profile, file name casefolded) -> (catalog or romset, the name it
+    lists the file under), from a provenance report built with the
+    profiles' needs: the "Listed in" column of the gaps page."""
+    out: dict[tuple[str, str], list[tuple[str, str]]] = {}
+    for source, data in sorted((report or {}).items()):
+        label = labels.get(source, source)
+        for entry in data.get("missing", []):
+            where = [(label, str(entry.get("name", "")))]
+            where += [(str(hit["source"]), str(hit["archive"])) for hit in entry.get("romsets", [])]
+            for need in entry.get("needed_by", []):
+                held = out.setdefault((need["emulator"], str(need["name"]).casefold()), [])
+                held += [w for w in where if w not in held]
+    return out
+
+
 def _catalogued_needs(report: dict | None) -> dict[tuple[str, str], list[str]]:
     """(profile, file name casefolded) -> where a dump catalog or an
     imported romset lists that file, from a provenance report built with
     the profiles' needs."""
     return {
         need: [f"{escape_tags(where)} `{escape_tags(name)}`" for where, name in listed]
-        for need, listed in sitewanted.catalog_listings(report, PROVENANCE_LABELS).items()
+        for need, listed in catalog_listings(report, PROVENANCE_LABELS).items()
     }
 
 
@@ -783,6 +800,9 @@ def _not_collected_section(report_all: dict, profiles: dict, catalogued: dict | 
             "emu_key": emu_name,
             "reason": u["reason"],
             "source_ref": u.get("source_ref", ""),
+            # The wanted page's own rule, on the entries behind the row.
+            "wanted": any(sendable(entry, str(u["reason"])) for entry in sitewanted.gap_entries(
+                profiles.get(emu_name) or {}, str(u["name"]), "", True)),
         }
         for emu_name, data in sorted(report_all.items())
         for u in data.get("unsourceable", [])
@@ -797,8 +817,11 @@ def _not_collected_section(report_all: dict, profiles: dict, catalogued: dict | 
         "## Not collected yet",
         "",
         f"{len(all_unsourceable)} files the collection does not hold. A file "
-        "with the same name is never served in their place. Each is still "
-        "wanted, and the last column names a catalog or romset that lists it.",
+        "with the same name is never served in their place. The [wanted "
+        f"page](wanted.md) asks for the {sum(u['wanted'] for u in all_unsourceable)} "
+        "marked wanted. No one can send the others: a name the code builds, a "
+        "file no copy of which can be shared, game data, or a file the emulator "
+        "installs itself. \"Listed in\" names a catalog or romset that lists a file.",
         "",
     ]
     rows = []
@@ -807,15 +830,16 @@ def _not_collected_section(report_all: dict, profiles: dict, catalogued: dict | 
         rows.append(
             f"| `{u['name']}` | {u['emulator']} | {_reason_cell(u['reason'])} "
             f"| {source_ref_markdown(profiles[u['emu_key']], u['source_ref'])} "
-            f"| {', '.join(where) or '-'} |"
+            f"| {', '.join(where) or '-'} | {'yes' if u['wanted'] else 'no'} |"
         )
     lines.extend(_moved_table(
         NOT_COLLECTED_STEM, "Files not collected yet",
         f"{count_text(len(rows), 'file')} the collection does not hold, each with the "
-        "emulator that loads it, why it is not collected and the catalog or romset "
-        "that lists it. Part of [What the packs do not hold](gaps.md#not-collected-yet).",
-        ["| File | Emulator | Reason | Source ref | Listed in |",
-         "|------|----------|--------|-----------|-----------|"],
+        "emulator that loads it, why it is not collected, the catalog or romset "
+        "that lists it and whether the [wanted page](wanted.md) asks for it. Part of "
+        "[What the packs do not hold](gaps.md#not-collected-yet).",
+        ["| File | Emulator | Reason | Source ref | Listed in | Wanted |",
+         "|------|----------|--------|-----------|-----------|--------|"],
         rows, "file", moved))
     return lines
 

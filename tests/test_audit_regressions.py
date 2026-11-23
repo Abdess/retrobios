@@ -5804,11 +5804,12 @@ class UnsourceableCardSaysWhy(unittest.TestCase):
             "needed_by": [{"emulator": "xm7", "name": "KANJI2.ROM", "required": True}],
         }]}}
         page = generate_gap_analysis(
-            {"xm7": {"emulator": "XM7", "files": []}}, {}, {"files": {}, "indexes": {}},
-            gap_report=report, catalogued=catalogued)
+            {"xm7": {"emulator": "XM7", "files": [{"name": "KANJI2.ROM",
+                                                   "unsourceable": "no dump distributed"}]}},
+            {}, {"files": {}, "indexes": {}}, gap_report=report, catalogued=catalogued)
         self.assertIn("## Not collected yet", page)
         self.assertIn('<span id="acknowledged-gaps"></span>', page)
-        self.assertIn("| No-Intro `KANJI2.rom`, mame `fm7740sx.zip` |", page)
+        self.assertIn("| No-Intro `KANJI2.rom`, mame `fm7740sx.zip` | yes |", page)
         self.assertNotIn("Acknowledged", page)
         self.assertNotIn("verified from source code", page)
 

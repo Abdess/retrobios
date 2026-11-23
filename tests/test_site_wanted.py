@@ -28,7 +28,7 @@ from pathlib import Path
 from sitegen import gaps
 from sitegen import lookup
 from sitegen import wanted as sitewanted
-from resolve import review
+from resolve import review, sendable
 import yaml
 from model.database import load_database
 from tests.test_site_pronouns import pronouns
@@ -221,6 +221,27 @@ class TheListHoldsWhatTheGapsReportLacks(_World):
         names = [d["name"] for d in sitewanted.wanted_declarations({}, coverages, {})]
         self.assertNotIn("v.bin", names)
 
+    def test_the_gaps_page_marks_what_the_wanted_page_asks_for(self):
+        """The gaps page said every file not collected yet was still wanted,
+        while the wanted page leaves out a pattern and a file no copy of
+        which can be shared: 125 rows a contributor could not find there."""
+        rows = [{"name": "kanji.rom", "reason": "no public dump located", "source_ref": ""},
+                {"name": "default.lua", "reason": "script the user writes", "source_ref": ""},
+                {"name": "<serial>.txt", "reason": "no public dump located", "source_ref": ""}]
+        profile = {"emulator": "E", "files": [{"name": row["name"], "unsourceable": row["reason"]}
+                                              for row in rows]}
+        report = {"e": {"emulator": "E", "gaps": 0, "gap_missing": 0, "gap_bios": 0,
+                        "unsourceable": rows, "gap_details": []}}
+        page = gaps.generate_gap_analysis({"e": profile}, {}, {"files": {}, "indexes": {}},
+                                          gap_report=report)
+        self.assertIn("asks for the 1 marked wanted", page)
+        self.assertIn("| `kanji.rom` | E |", page)
+        marks = {line.split("`")[1]: line.rsplit("|", 2)[1].strip()
+                 for line in page.splitlines() if line.startswith("| `")}
+        self.assertEqual(marks, {"kanji.rom": "yes", "default.lua": "no", "<serial>.txt": "no"})
+        listed = [d["name"] for d in sitewanted.wanted_declarations({"e": profile}, {}, report)]
+        self.assertEqual(listed, [name for name, mark in marks.items() if mark == "yes"])
+
     def test_a_file_the_emulator_installs_is_not_wanted(self):
         """Amiberry's standalone release installs whdboot/boot-data.zip, its
         libretro core does not: only the core's entry can be a gap."""
@@ -262,14 +283,14 @@ class TheListHoldsWhatTheGapsReportLacks(_World):
             reasons[name] = str(found[0]["unsourceable"])
         for name, reason in reasons.items():
             with self.subTest(name=name):
-                self.assertFalse(sitewanted.shareable(reason), reason)
+                self.assertFalse(sendable.shareable(reason), reason)
         for reason in ("no public dump located (2026-10-04), and a same-named ROM of another set "
                        "must not stand in",
                        "retail data the collection does not hold, and a same-named file of another "
                        "game must not stand in",
                        "ships inside the Ghostship release, and the collection does not hold it"):
             with self.subTest(reason=reason):
-                self.assertTrue(sitewanted.shareable(reason))
+                self.assertTrue(sendable.shareable(reason))
 
     def test_more_readers_come_first(self):
         records = [{"name": "a", "required": False, "readers": {("emulator", "e", "E")}},
