@@ -19,6 +19,7 @@ from installer.choices import (
     _requested_narrowing,
     _standalone_builds,
     available_choices,
+    core_files,
     emulator_names,
     records_selection,
 )
@@ -54,7 +55,6 @@ from installer.lists import ListFailure, fetch_manifest, fetch_targets, load_tar
 from installer.manifest import GAME_DATA
 from installer.narrowing import (
     _chosen,
-    _filter_by_target,
     board_target,
     designated_cores,
     find_by_hash,
@@ -117,11 +117,7 @@ def _print_choices(
     labels = {name: _system_label(name, manifest) if systems else name for name in names}
     width = min(max(len(label) for label in labels.values()), 40)
     for name in names:
-        held = (
-            [f for f in files if _chosen(f, {name})]
-            if systems
-            else _filter_by_target([f for f in files if f.get("cores") is not None], [name])
-        )
+        held = [f for f in files if _chosen(f, {name})] if systems else core_files(files, name)
         print(f"  {labels[name]:<{width}}  "
               f"{_system_sized(held) if systems else _core_sized(held)}")
 
