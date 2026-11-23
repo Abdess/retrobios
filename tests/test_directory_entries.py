@@ -28,7 +28,7 @@ except ImportError:
 from model.profiles import load_emulator_profiles, emulator_profiles_cache
 from resolve.directories import directory_members
 from collection.indexes import build_indexes
-from collection.scan import should_skip
+from core.collectionfiles import should_skip
 from packs import emulatorpack
 from packs import manifest as packs_manifest
 from packs import platformpack

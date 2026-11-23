@@ -49,7 +49,8 @@ COMMANDS = {
     "retired_files.py": ("model/retired.py", "collection/retiredhistory.py"),
     "region_audit.py": ("resolve/regionaudit.py",),
     "dedup.py": (
-        "model/nodedup.py", "collection/dedup.py", "collection/duplicates.py",
+        "model/nodedup.py", "collection/dedup.py",
+        "collection/duplicates.py", "core/collectionfiles.py",
         "collection/clonemap.py", "model/database.py",
     ),
     "release_record.py": ("model/releaserecord.py", "release/record.py"),
@@ -134,7 +135,8 @@ COMMANDS = {
         "schemas/romfolders.py", "schemas/games.py", "schemas/run.py",
     ),
     "generate_db.py": (
-        "collection/scan.py", "collection/hashcache.py", "collection/releaseassets.py",
+        "collection/scan.py", "core/collectionfiles.py", "collection/hashcache.py",
+        "collection/releaseassets.py",
         "collection/declared.py", "collection/aliases.py", "collection/indexes.py",
         "collection/record.py", "collection/run.py",
     ),

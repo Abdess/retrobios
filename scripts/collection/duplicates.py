@@ -7,6 +7,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from collection.scan import primary_rank
+from core.collectionfiles import collection_files
 from core.hashing import compute_hashes
 from model.nodedup import in_nodedup_dir
 
@@ -18,7 +19,10 @@ def _is_mame_dir(path: str) -> bool:
 
 
 def scan_duplicates(bios_dir: str) -> dict[str, list[str]]:
-    """Files grouped by SHA1, excluding no-dedup directories.
+    """Collection files grouped by SHA1, excluding no-dedup directories.
+
+    The walk is the database scan's: a copy the index never sees (under
+    `.cache/`, a hidden file) is no candidate to keep or to remove.
 
     Two equal files have the same size, so only files that share a size are
     read, and for the sha1 alone: hashing the whole tree with every digest
@@ -26,12 +30,12 @@ def scan_duplicates(bios_dir: str) -> dict[str, list[str]]:
     size is in no group of two and is left out.
     """
     by_size: dict[int, list[str]] = defaultdict(list)
-    for root, _dirs, files in os.walk(bios_dir):
-        for name in files:
-            path = os.path.join(root, name)
-            if in_nodedup_dir(path):
-                continue
-            by_size[os.path.getsize(path)].append(path)
+    root = Path(bios_dir)
+    for found in collection_files(root):
+        path = os.path.join(bios_dir, found.relative_to(root))
+        if in_nodedup_dir(path):
+            continue
+        by_size[os.path.getsize(path)].append(path)
 
     sha1_to_paths: dict[str, list[str]] = defaultdict(list)
     for paths in by_size.values():

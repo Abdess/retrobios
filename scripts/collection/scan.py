@@ -1,32 +1,19 @@
-"""The walk of bios/: which files count, their digests, and which copy of a content is primary."""
+"""The walk of bios/: each collection file's digests, and which copy of a content is primary."""
 
 from __future__ import annotations
 
 import sys
 from pathlib import Path
 
+from core.collectionfiles import collection_files
 from core.hashing import compute_hashes
 from resolve.localfile import variant_base_name
-
-SKIP_PATTERNS = {".git", ".github", "__pycache__", ".cache", ".DS_Store", "desktop.ini"}
 
 # Every digest database.json publishes per file, in the order compute_hashes
 # returns them. The schema requires all five, so a cache entry missing any of
 # them cannot serve a database entry, and the order is fixed here so a warm
 # cache serialises an entry exactly like a fresh hash does.
 CACHED_HASHES = ("sha1", "md5", "sha256", "crc32", "adler32")
-
-
-def should_skip(path: Path) -> bool:
-    """Whether a path stays out of the collection.
-
-    Tooling directories and hidden files do. A hidden directory inside the
-    collection does not: `.variants/` holds alternate dumps, and an engine
-    tree can carry one of its own (C-Dogs SDL reads `data/.wolf3d/`).
-    """
-    if any(part in SKIP_PATTERNS for part in path.parts):
-        return True
-    return path.name.startswith(".")
 
 
 def _canonical_name(filepath: Path) -> str:
@@ -135,12 +122,7 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
     new_cache = {}
     root = Path(bios_dir.name)
 
-    for filepath in sorted(bios_dir.rglob("*")):
-        if not filepath.is_file():
-            continue
-        if should_skip(filepath.relative_to(bios_dir)):
-            continue
-
+    for filepath in collection_files(bios_dir):
         rel_path = str(filepath.relative_to(bios_dir.parent))
         stat = filepath.stat()
         mtime = stat.st_mtime
