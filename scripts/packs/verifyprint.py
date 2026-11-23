@@ -29,7 +29,7 @@ def print_platform_results(args: argparse.Namespace, results: PlatformResults) -
             print_platform_result(result, group, verbose=args.verbose)
             print()
         if len(group_results) > 1:
-            print(overall_summary(group_results))
+            print(overall_summary(group_results, args.verbose))
 
     if args.destinations:
         write_pack_destinations(args.destinations, results.groups, group_results)

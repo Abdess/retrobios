@@ -539,6 +539,27 @@ class TheVerifySummaryCountsDiscrepancies(unittest.TestCase):
         ])
         self.assertIn("1 discrepancy (RetroArch 1)", summary)
 
+    def test_the_count_follows_what_the_body_printed(self):
+        """A game data entry missing is named only under --verbose: without
+        it the discrepancy on the same name is printed, and counted."""
+        import contextlib
+        import io
+
+        from packs import report
+
+        details = [
+            {"system": "s", "name": "a", "status": verdicts.Status.MISSING,
+             "category": "game_data"},
+            {"system": "s", "name": "a", "status": verdicts.Status.OK, "discrepancy": "x"},
+        ]
+        for verbose, printed in ((False, 1), (True, 0)):
+            with contextlib.redirect_stdout(io.StringIO()) as out:
+                report._print_detail_entries(details, verbose)
+            self.assertEqual(out.getvalue().count("DISCREPANCY:"), printed)
+            summary = verifysummary.overall_summary(
+                [({"severity_counts": {}, "details": details}, ["X"])], verbose)
+            self.assertIn(f"{printed} discrepanc", summary)
+
     def test_a_shared_destination_names_the_path_and_both_sides(self):
         result = {"name": "disk.rom", "status": verdicts.Status.UNTESTED}
         entry = {"name": "disk.rom", "md5": "793f8678" + "0" * 24}

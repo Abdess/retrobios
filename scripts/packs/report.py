@@ -57,24 +57,9 @@ def _print_ground_truth(gt: list[dict], verbose: bool) -> None:
         print(f"    {_format_ground_truth_aggregate(gt)}")
 
 
-def discrepancy_keys(details: list[dict]) -> set[str]:
-    """The DISCREPANCY lines _print_detail_entries prints for these details.
-
-    A file already reported MISSING or UNTESTED on its own ground is not
-    printed again as a discrepancy, and is not counted as one either.
-    """
-    shown = {
-        f"{d['system']}/{d['name']}"
-        for d in details
-        if d["status"] == Status.MISSING
-        or (d["status"] == Status.UNTESTED and not d.get("discrepancy"))
-    }
-    return {
-        key
-        for d in details
-        if d.get("discrepancy")
-        and (key := f"{d['system']}/{d['name']}") not in shown
-    }
+def discrepancy_keys(details: list[dict], verbose: bool = False) -> set[str]:
+    """The DISCREPANCY lines _print_detail_entries prints for these details."""
+    return {key for kind, key, _d in shown_details(details, verbose) if kind == "discrepancy"}
 
 
 # A platform entry that is not firmware, as the report names it.
@@ -116,84 +101,81 @@ def _print_category_evidence(detail: dict) -> None:
         print(f"      {category_evidence_text(evidence)}")
 
 
-def _print_detail_entries(details: list[dict], seen: set[str], verbose: bool) -> None:
-    """Print UNTESTED, MISSING, and DISCREPANCY entries from verification details."""
-    _print_untested_details(details, seen, verbose)
-    _print_missing_details(details, seen, verbose)
-    _print_discrepancy_details(details, seen, verbose)
-    if verbose:
-        _print_ok_details(details, seen)
+def shown_details(details: list[dict], verbose: bool) -> list[tuple[str, str, dict]]:
+    """Which details the report prints, as (kind, system/name, detail).
 
+    Kinds come in print order: untested, missing, discrepancy, then ok under
+    --verbose. A key is printed once. A file already reported MISSING or
+    UNTESTED on its own ground is not printed again as a discrepancy, but a
+    MISSING entry that is not firmware is named only under --verbose, and
+    without it the discrepancy on the same key is still printed. The
+    printer and the closing count both read this list.
+    """
+    seen: set[str] = set()
+    shown: list[tuple[str, str, dict]] = []
 
-def _print_untested_details(details: list[dict], seen: set[str], verbose: bool) -> None:
-    for d in details:
-        if d["status"] != Status.UNTESTED:
-            continue
-        if d.get("discrepancy"):
-            # Reported below with the ground for it: a declaration
-            # unmet at a path another declaration holds.
-            continue
+    def take(kind: str, d: dict) -> None:
         key = f"{d['system']}/{d['name']}"
-        if key in seen:
-            continue
-        seen.add(key)
-        req = "required" if d.get("required", True) else "optional"
-        hle = ", HLE available" if d.get("hle_fallback") else ""
-        reason = d.get("reason", "")
-        print(f"  UNTESTED ({req}{hle}): {key}: {reason}")
-        _print_ground_truth(d.get("ground_truth", []), verbose)
-
-
-def _print_missing_details(details: list[dict], seen: set[str], verbose: bool) -> None:
-    for d in details:
-        if d["status"] != Status.MISSING:
-            continue
-        key = f"{d['system']}/{d['name']}"
-        if key in seen:
-            continue
-        label = NOT_FIRMWARE.get(d.get("category", BIOS))
-        if label:
-            # Counted on their own line, named on request.
-            if verbose:
-                seen.add(key)
-                print(f"  MISSING ({label}): {key}")
-                _print_category_evidence(d)
-            continue
-        seen.add(key)
-        req = "required" if d.get("required", True) else "optional"
-        hle = ", HLE available" if d.get("hle_fallback") else ""
-        print(f"  MISSING ({req}{hle}): {key}")
-        if verbose:
-            _print_category_evidence(d)
-        _print_ground_truth(d.get("ground_truth", []), verbose)
-
-
-def _print_discrepancy_details(details: list[dict], seen: set[str], verbose: bool) -> None:
-    for d in details:
-        disc = d.get("discrepancy")
-        if disc:
-            key = f"{d['system']}/{d['name']}"
-            if key in seen:
-                continue
+        if key not in seen:
             seen.add(key)
+            shown.append((kind, key, d))
+
+    for d in details:
+        # An UNTESTED entry with a discrepancy is reported below with the
+        # ground for it: a declaration unmet at a path another holds.
+        if d["status"] == Status.UNTESTED and not d.get("discrepancy"):
+            take("untested", d)
+    for d in details:
+        # Not firmware: counted on their own line, named on request.
+        if d["status"] == Status.MISSING and (
+            verbose or d.get("category", BIOS) not in NOT_FIRMWARE
+        ):
+            take("missing", d)
+    for d in details:
+        if d.get("discrepancy"):
+            take("discrepancy", d)
+    if verbose:
+        for d in details:
+            if d["status"] == Status.OK:
+                take("ok", d)
+    return shown
+
+
+def _print_detail_entries(details: list[dict], verbose: bool) -> None:
+    """Print UNTESTED, MISSING, and DISCREPANCY entries from verification details."""
+    for kind, key, d in shown_details(details, verbose):
+        if kind == "ok":
+            _print_ok_detail(key, d)
+            continue
+        if kind == "discrepancy":
+            disc = d["discrepancy"]
             print(f"  DISCREPANCY: {key}: {disc}")
             _print_ground_truth(d.get("ground_truth", []), verbose)
+            continue
+        label = NOT_FIRMWARE.get(d.get("category", BIOS)) if kind == "missing" else None
+        if label:
+            print(f"  MISSING ({label}): {key}")
+            _print_category_evidence(d)
+            continue
+        req = "required" if d.get("required", True) else "optional"
+        hle = ", HLE available" if d.get("hle_fallback") else ""
+        if kind == "untested":
+            reason = d.get("reason", "")
+            print(f"  UNTESTED ({req}{hle}): {key}: {reason}")
+        else:
+            print(f"  MISSING ({req}{hle}): {key}")
+            if verbose:
+                _print_category_evidence(d)
+        _print_ground_truth(d.get("ground_truth", []), verbose)
 
 
-def _print_ok_details(details: list[dict], seen: set[str]) -> None:
-    for d in details:
-        if d["status"] != Status.OK:
-            continue
-        key = f"{d['system']}/{d['name']}"
-        if key in seen:
-            continue
-        seen.add(key)
-        gt = d.get("ground_truth", [])
-        if gt:
-            req = "required" if d.get("required", True) else "optional"
-            print(f"  OK ({req}): {key}")
-            for line in _format_ground_truth_verbose(gt):
-                print(f"    {line}")
+def _print_ok_detail(key: str, d: dict) -> None:
+    gt = d.get("ground_truth", [])
+    if gt:
+        req = "required" if d.get("required", True) else "optional"
+        print(f"  OK ({req}): {key}")
+        for line in _format_ground_truth_verbose(gt):
+            print(f"    {line}")
 
 
 def _print_undeclared_entry(
@@ -465,8 +447,7 @@ def print_platform_result(
     _print_release_assets(result["details"])
     _print_platform_notices(result, verbose)
 
-    seen_details: set[str] = set()
-    _print_detail_entries(result["details"], seen_details, verbose)
+    _print_detail_entries(result["details"], verbose)
     _print_undeclared_section(result, verbose)
     _print_launcher_reads(result, verbose)
     _print_launcher_unproven(result, verbose)

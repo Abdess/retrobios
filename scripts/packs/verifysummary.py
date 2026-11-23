@@ -8,13 +8,16 @@ from packs.shares import core_required_missing, split_undeclared
 from packs.verdicts import Severity
 
 
-def overall_summary(group_results: list[tuple[dict, list[str]]]) -> str:
+def overall_summary(
+    group_results: list[tuple[dict, list[str]]], verbose: bool = False
+) -> str:
     """The closing lines of a multi-platform run, worst severity first.
 
     Each count names the platforms carrying it, and the core files a core
     cannot run without are counted too: a reader of the summary alone used
     to conclude nothing required was missing, and could not tell where the
-    one warning was without reading the whole output.
+    one warning was without reading the whole output. `verbose` is the
+    run's, so the discrepancies counted are the ones the body printed.
     """
     platforms = sum(len(group) for _, group in group_results)
 
@@ -40,7 +43,7 @@ def overall_summary(group_results: list[tuple[dict, list[str]]]) -> str:
     # Shipped files whose bytes contradict a declaration or a core's own
     # check: the body printed 19 of them under a last line that read clean.
     counts = {
-        " / ".join(group): len(discrepancy_keys(r.get("details", [])))
+        " / ".join(group): len(discrepancy_keys(r.get("details", []), verbose))
         for r, group in group_results
     }
     total = sum(counts.values())
