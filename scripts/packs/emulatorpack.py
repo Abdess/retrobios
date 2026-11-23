@@ -31,6 +31,7 @@ from packs.archive import (
     Placed,
     add_pack_member,
     add_zip_to_pack,
+    instructions_note,
     same_bytes,
     write_generated_member,
     writing_pack,
@@ -195,13 +196,9 @@ class _EmulatorPackBuild:
         # Instructions, not a file: written beside the slot the
         # user fills, and counted apart from what the pack holds.
         self.placed.take(dest)
-        instr = provided.get("instructions", "Please provide this file manually.")
+        instr_name, text = instructions_note(provided)
         folder = dest.rsplit("/", 1)[0] + "/" if "/" in dest else ""
-        write_generated_member(
-            self.zf,
-            f"{folder}INSTRUCTIONS_{provided['name']}.txt",
-            f"File needed: {provided['name']}\n\n{instr}\n",
-        )
+        write_generated_member(self.zf, f"{folder}{instr_name}", text)
         # verify --emulator counts an unsourceable one as such.
         (self.unsourceable_files if provided.get("unsourceable") else self.instruction_files).append(
             provided["name"]

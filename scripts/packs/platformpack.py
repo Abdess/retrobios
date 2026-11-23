@@ -28,6 +28,7 @@ from packs.archive import (
     add_pack_member,
     add_zip_to_pack,
     extract_zip_to_archive,
+    instructions_note,
     same_bytes,
     write_generated_member,
     writing_pack,
@@ -612,18 +613,11 @@ class _PlatformPackBuild:
         base_dest = self.plan.base_dest
         self.placed.take(full_dest)
         self.file_status.setdefault(full_dest, "ok")
-        instructions = file_entry.get(
-            "instructions", "Please provide this file manually."
-        )
-        instr_name = f"INSTRUCTIONS_{file_entry['name']}.txt"
+        instr_name, text = instructions_note(file_entry)
         instr_path = (
             f"{base_dest}/{instr_name}" if base_dest else instr_name
         )
-        write_generated_member(
-            self.zf,
-            self._flat(instr_path),
-            f"File needed: {file_entry['name']}\n\n{instructions}\n",
-        )
+        write_generated_member(self.zf, self._flat(instr_path), text)
         self.total_files += 1
 
     def _pack_external(self, file_entry: dict, full_dest: str) -> None:

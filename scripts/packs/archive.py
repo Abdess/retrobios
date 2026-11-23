@@ -147,6 +147,13 @@ def is_pack_note(name: str) -> bool:
     )
 
 
+def instructions_note(file_entry: dict) -> tuple[str, str]:
+    """The member name and text of the note written in a user_provided slot's place."""
+    name = file_entry["name"]
+    instructions = file_entry.get("instructions", "Please provide this file manually.")
+    return f"INSTRUCTIONS_{name}.txt", f"File needed: {name}\n\n{instructions}\n"
+
+
 @dataclass
 class Placed:
     """The destinations a build has taken, and the folders they open.

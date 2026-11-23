@@ -16,7 +16,7 @@ from model.profiles import installed_data_refs_in, load_emulator_profiles
 from model.registry import load_data_dir_registry, platform_registry_at
 from model.systems import platform_system_names
 from packs import slots
-from packs.archive import CASE_FOLDING_OS, PACK_DOCUMENTS, Placed
+from packs.archive import CASE_FOLDING_OS, PACK_DOCUMENTS, Placed, instructions_note
 from packs.datatrees import (
     data_directory_members,
     in_data_cache,
@@ -334,12 +334,7 @@ class _ManifestBuild:
         )
         # The pack writes the instructions in the slot's place
         # and holds it: one more member than the files listed.
-        instructions = file_entry.get(
-            "instructions", "Please provide this file manually."
-        )
-        self.pack_only_sizes.append(len(
-            f"File needed: {file_entry['name']}\n\n{instructions}\n".encode()
-        ))
+        self.pack_only_sizes.append(len(instructions_note(file_entry)[1].encode()))
         self.placed.take(full_dest)
 
     def _list_declared(
