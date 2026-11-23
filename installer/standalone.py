@@ -202,7 +202,8 @@ def _install_standalone_folders(run: _InstallRun) -> bool:
             print(f"  {EVERYTHING_IN_PLACE}")
             continue
         size = sum(entry.get("size", 0) for entry in to_download)
-        _check_free_space(folder, size, code=1 if run.total_downloaded else 2)
+        with run.writes(len(to_download)):
+            _check_free_space(folder, size, code=1 if run.total_downloaded else 2)
         progress = Progress(len(to_download), size, term)
         failed, interrupted = download_files(
             to_download, folder, jobs=args.jobs, verbose=args.verbose,

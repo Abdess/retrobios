@@ -4,6 +4,8 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
 from typing import TYPE_CHECKING, NoReturn, TextIO
 
@@ -108,6 +110,20 @@ class _InstallRun:
         # No setup found, the standalone emulator folders filled instead:
         # the run still ends on its summary, exit code and result.
         self.standalone_only = False
+        # A step about to write was reached: a refusal from then on still
+        # ends on the summary of what the run installed before it.
+        self.writing = False
+
+    @contextmanager
+    def writes(self, pending: int) -> Iterator[None]:
+        """The checks before a step writes, pending the files it would
+        write, counted as still to install when a refusal stops it."""
+        self.writing = True
+        try:
+            yield
+        except Refusal:
+            self.files_pending += pending
+            raise
 
 
 def _start_install(args: argparse.Namespace, real_stdout: TextIO) -> _InstallRun:

@@ -52,6 +52,7 @@ import weakref
 import xml.etree.ElementTree as ET
 import zipfile
 from collections.abc import Callable, Collection, Iterable, Iterator, Mapping
+from contextlib import contextmanager
 from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import IO, Any, BinaryIO, ContextManager, NamedTuple, NoReturn, TextIO
 
@@ -23114,7 +23115,8 @@ def _install_standalone_folders(run: _InstallRun) -> bool:
             print(f"  {EVERYTHING_IN_PLACE}")
             continue
         size = sum(entry.get("size", 0) for entry in to_download)
-        _check_free_space(folder, size, code=1 if run.total_downloaded else 2)
+        with run.writes(len(to_download)):
+            _check_free_space(folder, size, code=1 if run.total_downloaded else 2)
         progress = Progress(len(to_download), size, term)
         failed, interrupted = download_files(
             to_download, folder, jobs=args.jobs, verbose=args.verbose,
@@ -23320,6 +23322,20 @@ class _InstallRun:
         # No setup found, the standalone emulator folders filled instead:
         # the run still ends on its summary, exit code and result.
         self.standalone_only = False
+        # A step about to write was reached: a refusal from then on still
+        # ends on the summary of what the run installed before it.
+        self.writing = False
+
+    @contextmanager
+    def writes(self, pending: int) -> Iterator[None]:
+        """The checks before a step writes, pending the files it would
+        write, counted as still to install when a refusal stops it."""
+        self.writing = True
+        try:
+            yield
+        except Refusal:
+            self.files_pending += pending
+            raise
 
 
 def _start_install(args: argparse.Namespace, real_stdout: TextIO) -> _InstallRun:
@@ -24004,39 +24020,29 @@ def _pass_download_head(run: _InstallRun, p: _PlatformPass, fetched: list[dict],
 
 def _pass_make_folder(run: _InstallRun, p: _PlatformPass, written: int) -> bool:
     """The space checked and the BIOS folder made. True when it was created."""
-    args, plat_name, bios_path = run.args, p.plat_name, p.bios_path
-    # Checked before the folder is created: a run stopped for space
-    # left an empty BIOS folder behind. The data trees count too,
-    # written after the files on the same drive.
-    _check_free_space(bios_path, written, plat_name,
-                      1 if run.total_downloaded else 2, on_its_card(plat_name, bios_path))
-    p.space_checked = True
-    created = not bios_path.exists()
-    try:
-        bios_path.mkdir(parents=True, exist_ok=True)
-    except OSError as exc:
-        sys.stdout.flush()
-        # Said to a script too: the run ended on code 2 with no error
-        # and no summary, what was installed before it unsaid.
-        EVENTS.emit("error", stage="dest", reason="not_writable", platform=plat_name,
-                    message=f"{bios_path} cannot be created: {exc.strerror}")
-        if run.failures:
-            EVENTS.emit("failures", failed=failure_events(run.failures))
-        EVENTS.emit(
-            "summary", mode=_event_mode(args), installed=run.total_downloaded,
-            up_to_date=run.total_up_to_date, pending=run.files_pending + len(p.to_download),
-            failed=[{"dest": dest, "reason": str(reason)} for dest, reason in run.failures],
-            skipped=_skipped(run.omitted_seen), left_out=_left_out_events(run.left_out_seen),
-            kept=KEPT.summary(), interrupted=False,
-        )
-        print(f"\nCannot create {bios_path}.", file=sys.stderr)
-        print(f"  {exc.strerror}.", file=sys.stderr)
-        print(_write_advice(bios_path, bios_path in run.assumed_dests, plat_name),
-              file=sys.stderr)
-        # The documented code for a folder that cannot be written,
-        # as when it exists read-only. 1 once an earlier platform
-        # of the run installed something.
-        sys.exit(1 if run.total_downloaded else 2)
+    plat_name, bios_path = p.plat_name, p.bios_path
+    with run.writes(len(p.to_download)):
+        # Checked before the folder is created: a run stopped for space
+        # left an empty BIOS folder behind. The data trees count too,
+        # written after the files on the same drive.
+        _check_free_space(bios_path, written, plat_name,
+                          1 if run.total_downloaded else 2, on_its_card(plat_name, bios_path))
+        p.space_checked = True
+        created = not bios_path.exists()
+        try:
+            bios_path.mkdir(parents=True, exist_ok=True)
+        except OSError as exc:
+            sys.stdout.flush()
+            # The documented code for a folder that cannot be written,
+            # as when it exists read-only. 1 once an earlier platform
+            # of the run installed something.
+            raise Refusal(
+                "dest", "not_writable", plat_name,
+                f"\nCannot create {bios_path}.", f"  {exc.strerror}.",
+                _write_advice(bios_path, bios_path in run.assumed_dests, plat_name),
+                code=1 if run.total_downloaded else 2,
+                message=f"{bios_path} cannot be created: {exc.strerror}",
+            ) from None
     if created:
         detail(f"  Created {shown_path(bios_path)}")
     return created
@@ -24210,9 +24216,10 @@ def _pass_data_trees(run: _InstallRun, p: _PlatformPass) -> None:
     if writable and not p.space_checked:
         # With every BIOS file in place, the trees alone: checked
         # before the first archive is written.
-        _check_free_space(p.bios_path, bytes_written([], writable), p.plat_name,
-                          1 if run.total_downloaded else 2,
-                          on_its_card(p.plat_name, p.bios_path))
+        with run.writes(sum(len(state[1]) for _entry, state in writable)):
+            _check_free_space(p.bios_path, bytes_written([], writable), p.plat_name,
+                              1 if run.total_downloaded else 2,
+                              on_its_card(p.plat_name, p.bios_path))
     if writable:
         detail("\nData directories:")
     for entry, state in writable:
@@ -24332,6 +24339,22 @@ def _install_setup(run: _InstallRun, plat_name: str, bios_path: Path) -> bool:
     return p is not None and _apply_setup_files(run, p)
 
 
+def _emit_summary(run: _InstallRun) -> None:
+    """The failures and summary events of what the run did, at its end or
+    where a refusal stopped it."""
+    args = run.args
+    if run.failures:
+        EVENTS.emit("failures", failed=failure_events(run.failures))
+    EVENTS.emit(
+        "summary", mode=_event_mode(args), installed=run.total_downloaded,
+        up_to_date=run.total_verified if args.check or args.dry_run else run.total_up_to_date,
+        pending=run.check_pending if args.check else run.files_pending,
+        failed=[{"dest": dest, "reason": str(reason)} for dest, reason in run.failures],
+        skipped=_skipped(run.omitted_seen), left_out=_left_out_events(run.left_out_seen),
+        kept=KEPT.summary(), interrupted=run.total_interrupted,
+    )
+
+
 def _finish_install(run: _InstallRun, real_stdout: TextIO) -> None:
     """The run's summary event, its exit code and its result."""
     args, platforms = run.args, run.platforms
@@ -24340,16 +24363,7 @@ def _finish_install(run: _InstallRun, real_stdout: TextIO) -> None:
         # The matches are the answer: nothing was installed.
         sys.exit(4 if getattr(args, "find_failed", False) else 0)
     if not run.listing:
-        if run.failures:
-            EVENTS.emit("failures", failed=failure_events(run.failures))
-        EVENTS.emit(
-            "summary", mode=_event_mode(args), installed=run.total_downloaded,
-            up_to_date=run.total_verified if args.check or args.dry_run else run.total_up_to_date,
-            pending=run.check_pending if args.check else run.files_pending,
-            failed=[{"dest": dest, "reason": str(reason)} for dest, reason in run.failures],
-            skipped=_skipped(run.omitted_seen), left_out=_left_out_events(run.left_out_seen),
-            kept=KEPT.summary(), interrupted=run.total_interrupted,
-        )
+        _emit_summary(run)
     # A check scripted as `--check && launch` reads the exit code only. Its
     # own code, 3: with 1, a check that found files missing could not be
     # told from a check that never ran (a list refused, a --from missing).
@@ -24391,15 +24405,21 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     """One run of the installer, once the options are read, a refusal
     reported where it ends the run: its error event before end, its lines
     before what the unwinding run says."""
+    run = None
     try:
-        _install_run(args, real_stdout)
+        run = _start_install(args, real_stdout)
+        _install_run(run, real_stdout)
     except Refusal as refusal:
         refusal.report()
+        # A stop once a step began writing reports what the run installed
+        # before it, whatever stopped it.
+        if run is not None and run.writing and not run.listing:
+            _emit_summary(run)
         raise
 
 
-def _install_run(args: argparse.Namespace, real_stdout: TextIO) -> None:
-    run = _start_install(args, real_stdout)
+def _install_run(run: _InstallRun, real_stdout: TextIO) -> None:
+    args = run.args
 
     # Early exit for listing
     if args.list_platforms:

@@ -10635,6 +10635,33 @@ class ScreenRowsAndFilters(unittest.TestCase):
         self.assertEqual((events[-3]["stage"], events[-3]["reason"]), ("dest", "not_writable"))
         self.assertEqual(events[-1]["code"], 2)
 
+    def test_a_full_drive_ends_on_an_error_and_a_summary(self):
+        """The space refusal ended on error then end: a script learned
+        nothing of what the run installed, where a folder that could not
+        be created gave it a summary."""
+        import subprocess
+
+        from tests.test_install_offline import PAYLOAD, _offline_env, _pack
+
+        pack = _pack(self.root, "RetroArch_v1_BIOS_Pack.zip", PAYLOAD)
+        argv = ["install.py", "--platform", "retroarch", "--dest", str(self.root / "system"),
+                "--from-pack", str(pack), "--events"]
+        program = ("import runpy, shutil, sys, types\n"
+                   "shutil.disk_usage = lambda _p: types.SimpleNamespace(free=1)\n"
+                   f"sys.argv = {argv!r}\n"
+                   f"runpy.run_path({str(REPO_ROOT / 'install.py')!r}, run_name='__main__')\n")
+        proc = subprocess.run([sys.executable, "-c", program], env=_offline_env(),
+                              capture_output=True, text=True, timeout=120, check=False,
+                              stdin=subprocess.DEVNULL)
+        events = [json.loads(line) for line in proc.stdout.splitlines()]
+        kinds = [event["event"] for event in events]
+        self.assertEqual(kinds[-3:], ["error", "summary", "end"], proc.stderr)
+        self.assertEqual((events[-3]["stage"], events[-3]["reason"]), ("space", "drive_full"))
+        self.assertEqual(events[-2]["installed"], 0)
+        self.assertGreater(events[-2]["pending"], 0)
+        self.assertEqual(events[-1]["code"], 2)
+        self.assertFalse((self.root / "system").exists())
+
 
 class EdgesTheMutantsFound(unittest.TestCase):
     """Changes to the code that every test let through: the survivors of a
