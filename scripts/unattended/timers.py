@@ -27,7 +27,9 @@ def render_units(
             f"WorkingDirectory={repo}\n"
             "Environment=RETROBIOS_AUTO=1\n"
             f"ExecStart={python} {repo / 'scripts' / 'autorun.py'} run %i{flags}\n"
-            "TimeoutStartSec=6h\n"
+            # Each job's own `timeout` is its only limit: Runner stops the
+            # step and records the run, where a kill from systemd left none.
+            "TimeoutStartSec=infinity\n"
             "Nice=10\n"
             "IOSchedulingClass=idle\n"
             "SuccessExitStatus=75\n"

@@ -465,6 +465,7 @@ def run_job(ctx: Context, name: str) -> tuple[str, str]:
     runner = Runner(ctx, job, state)
     started, clock = now_iso(), ctx.host.clock()
     lock = global_lock(ctx.lock_path) if job.lock else contextlib.nullcontext()
+    interrupted: SystemExit | None = None
     try:
         with lock:
             runner.note(f"start {name}")
@@ -474,6 +475,11 @@ def run_job(ctx: Context, name: str) -> tuple[str, str]:
                 result, detail = exc.result, exc.detail
             except OSError as exc:
                 result, detail = FAILED, f"{type(exc).__name__}: {exc}"
+            except SystemExit as exc:
+                # SIGTERM or SIGHUP (core.cli.run_cli): the run is recorded
+                # as failed, then the process ends with the signal's status.
+                interrupted = exc
+                result, detail = FAILED, f"interrupted, exit status {exc.code}"
     except LockBusy as exc:
         result, detail = DEFERRED, str(exc)
     runner.note(f"end {name}: {result} {detail}")
@@ -500,6 +506,8 @@ def run_job(ctx: Context, name: str) -> tuple[str, str]:
         set_alert(state, f"job:{name}", bool(alert), str(alert or ""), now_iso())
     prune_logs(ctx.home / "logs")
     save_state(ctx.state_path, state)
+    if interrupted is not None:
+        raise interrupted
     return result, detail
 
 

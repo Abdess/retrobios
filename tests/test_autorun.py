@@ -211,6 +211,19 @@ class Guards(Scratch):
         self.assertEqual(record["consecutive_failures"], 2)
         self.assertIsNone(record["last_success"])
 
+    def test_a_run_ended_by_a_signal_is_recorded_then_exits(self):
+        """systemd's SIGTERM reached run_job as SystemExit and passed the
+        record: the run left no result, no failure count and no alert."""
+        ctx = self.context({"x": {"worktree": False, "min_free_gb": 0, "steps": []}})
+        with unittest.mock.patch.object(runner.Runner, "execute", side_effect=SystemExit(143)), \
+                self.assertRaises(SystemExit) as caught:
+            runner.run_job(ctx, "x")
+        self.assertEqual(caught.exception.code, 143)
+        record = self.state(ctx)["jobs"]["x"]
+        self.assertEqual(record["result"], unattended_jobs.FAILED)
+        self.assertEqual(record["detail"], "interrupted, exit status 143")
+        self.assertEqual(record["consecutive_failures"], 1)
+
 
 class StepEnvironment(Scratch):
     """A step can run third-party code: it never inherits a token or a password."""
@@ -676,6 +689,14 @@ class Units(Scratch):
         self.assertIn("Unit=retrobios@nightly.service\n", timer)
         pushed = unattended_timers.render_units(jobs, Path("/r"), "py", push=True)["retrobios@.service"]
         self.assertIn("run %i --push\n", pushed)
+
+    def test_the_unit_leaves_the_time_limit_to_each_job(self):
+        """A fixed TimeoutStartSec=6h cut a job given 12 h, and killed a 6 h
+        job before Runner, whose clock starts later, could record it."""
+        jobs = unattended_jobs.parse_jobs({"jobs": {
+            "long": {"schedule": "daily", "timeout": 43200}}})
+        service = unattended_timers.render_units(jobs, Path("/r"), "py")["retrobios@.service"]
+        self.assertIn("TimeoutStartSec=infinity\n", service)
 
     def test_units_are_written_and_enabled_only_when_asked(self):
         units = unattended_timers.render_units(unattended_jobs.load_jobs(), Path("/r"), "py")

@@ -879,7 +879,8 @@ python scripts/autorun.py install-timers --enable
 `install-timers` writes `retrobios@.service` and one `retrobios-<job>.timer`
 per scheduled job into `--unit-dir` (default `~/.config/systemd/user`).
 `--enable` also runs `systemctl --user daemon-reload` and enables the timers.
-`--with-push` writes units whose jobs run with `--push`.
+`--with-push` writes units whose jobs run with `--push`. The service sets no time
+limit of its own: a job's `timeout` ends it, and the run is recorded.
 
 ### cleanup_disk.py
 
