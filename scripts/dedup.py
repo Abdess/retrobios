@@ -26,26 +26,41 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 from collection.dedup import deduplicate
+from collection.deduptext import report_lines
 from core.cli import add_repo_inputs, require_directory
+from model.database import CloneMapUnreadable
 
 
-def main() -> None:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Deduplicate bios/ directory")
     parser.add_argument(
         "--dry-run", action="store_true", help="Preview without deleting"
     )
     add_repo_inputs(parser, "bios")
-    args = parser.parse_args()
+    return parser
+
+
+def main() -> int:
+    args = build_parser().parse_args()
     require_directory(args.bios_dir)
 
     print(f"Scanning {args.bios_dir}/ for duplicates...")
     if args.dry_run:
         print("(DRY RUN)\n")
 
-    deduplicate(args.bios_dir, dry_run=args.dry_run)
+    try:
+        result = deduplicate(args.bios_dir, dry_run=args.dry_run)
+    except CloneMapUnreadable as e:
+        raise SystemExit(f"{e} before deduplicating again") from e
+    for line in report_lines(result):
+        print(line)
 
-    if not args.dry_run:
+    if result.total_removed and not args.dry_run:
         print("\nRun 'python scripts/generate_db.py --force' to rebuild database.")
+    if result.failed:
+        print(f"ERROR: {len(result.failed)} copies could not be removed", file=sys.stderr)
+        return 1
+    return 0
 
 
 if __name__ == "__main__":

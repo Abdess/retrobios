@@ -3831,7 +3831,9 @@ class GeneratedModelsAreWrittenWhole(unittest.TestCase):
             data = (bios / "Arcade" / "MAME" / "set.zip").read_bytes()
             (bios / "Arcade" / "MAME" / "setclone.zip").write_bytes(data)
             (root / "_mame_clones.json").write_text("<<<<<<< HEAD")
-            with self.assertRaises(SystemExit):
+            from model.database import CloneMapUnreadable
+
+            with self.assertRaises(CloneMapUnreadable):
                 dedup.deduplicate(str(bios), dry_run=False)
             # Stopped before removing anything.
             self.assertTrue((bios / "Arcade" / "MAME" / "setclone.zip").exists())

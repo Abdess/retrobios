@@ -49,7 +49,7 @@ COMMANDS = {
     "retired_files.py": ("model/retired.py", "collection/retiredhistory.py"),
     "region_audit.py": ("resolve/regionaudit.py",),
     "dedup.py": (
-        "model/nodedup.py", "collection/dedup.py",
+        "model/nodedup.py", "collection/dedup.py", "collection/deduptext.py",
         "collection/duplicates.py", "core/collectionfiles.py",
         "collection/clonemap.py", "model/database.py",
     ),

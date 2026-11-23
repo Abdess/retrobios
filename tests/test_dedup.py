@@ -11,14 +11,12 @@ from __future__ import annotations
 
 import tests
 
-import contextlib
-import io
 import os
 import tempfile
 import unittest
 from pathlib import Path
 
-from collection import clonemap, dedup, duplicates
+from collection import clonemap, dedup, deduptext, duplicates
 from collection.scan import primary_rank, scan_bios_dir
 from model import nodedup
 
@@ -38,9 +36,8 @@ class _Bios(unittest.TestCase):
         path.write_bytes(data)
         return path
 
-    def run_dedup(self, dry_run: bool = False) -> dict:
-        with contextlib.redirect_stdout(io.StringIO()):
-            return dedup.deduplicate(str(self.bios), dry_run=dry_run)
+    def run_dedup(self, dry_run: bool = False) -> dedup.DedupResult:
+        return dedup.deduplicate(str(self.bios), dry_run=dry_run)
 
     def existing(self) -> set[str]:
         return {
@@ -83,7 +80,7 @@ class TrueDuplicates(_Bios):
         self.write("Sega/Dreamcast/naomi.zip")
         results = self.run_dedup()
         self.assertEqual(len(self.existing()), 1)
-        removed = [r for entry in results.values() for r in entry["removed"]]
+        removed = [r for entry in results.groups.values() for r in entry.removed]
         self.assertEqual(len(removed), 1)
 
     def test_the_shorter_path_is_kept(self):
@@ -127,10 +124,8 @@ class TrueDuplicates(_Bios):
         self.assertEqual(len(self.existing()), 2)
 
     def report(self) -> str:
-        out = io.StringIO()
-        with contextlib.redirect_stdout(out):
-            dedup.deduplicate(str(self.bios), dry_run=True)
-        return out.getvalue()
+        result = dedup.deduplicate(str(self.bios), dry_run=True)
+        return "\n".join(deduptext.report_lines(result))
 
     def test_a_removed_variant_is_not_reported_as_a_mame_clone(self):
         # The run printed "MAME clones: ['x.bin.1234']" for a variant copy,
@@ -158,7 +153,7 @@ class TrueDuplicates(_Bios):
 
     def test_a_lone_file_is_left_alone(self):
         self.write("Sony/PS/only.bin")
-        self.assertEqual(self.run_dedup(), {})
+        self.assertEqual(self.run_dedup().groups, {})
         self.assertEqual(len(self.existing()), 1)
 
 
@@ -198,7 +193,7 @@ class DryRun(_Bios):
         results = self.run_dedup(dry_run=True)
         self.assertEqual(self.existing(), before, "dry run removed a file")
         self.assertTrue(
-            any(entry["removed"] for entry in results.values()),
+            any(entry.removed for entry in results.groups.values()),
             "dry run should still report what it would remove",
         )
 
@@ -206,12 +201,12 @@ class DryRun(_Bios):
         self.write("Arcade/MAME/naomi.zip")
         self.write("Sega/Dreamcast/naomi.zip")
         planned = {
-            r for entry in self.run_dedup(dry_run=True).values()
-            for r in entry["removed"]
+            r for entry in self.run_dedup(dry_run=True).groups.values()
+            for r in entry.removed
         }
         done = {
-            r for entry in self.run_dedup(dry_run=False).values()
-            for r in entry["removed"]
+            r for entry in self.run_dedup(dry_run=False).groups.values()
+            for r in entry.removed
         }
         self.assertEqual(planned, done)
 
@@ -351,6 +346,80 @@ class DedupKeepsTheIndexedCopy(_Bios):
 
     def test_equal_copies_keep_the_first_walked(self):
         self.assert_kept_is_primary("Arcade/MAME/naomi.zip", "Sega/Dreamcast/naomi.zip")
+
+
+class OnlyCollectionFilesAreCandidates(_Bios):
+    """The dedup walked bios/.cache/ and hidden files, which the database
+    scan leaves out, and the shared rank could keep that copy: a real run
+    deleted the only copy the index, manifests and packs knew."""
+
+    def test_a_copy_under_a_skipped_directory_is_never_kept(self):
+        self.write("Sony/PlayStation/scph1001.bin")
+        self.write(".cache/scph1001.bin")
+        result = self.run_dedup(dry_run=True)
+        self.assertEqual(result.groups, {})
+
+    def test_the_dedup_walks_the_files_the_scan_indexes(self):
+        for relative in ("Sony/PS/a.bin", ".cache/a.bin", "Sony/.hidden.bin",
+                         "Sony/PS/.variants/a.bin.1234"):
+            self.write(relative)
+        files, aliases, _cache = scan_bios_dir(self.bios, {}, True)
+        indexed = {entry["path"] for entry in files.values()} | {
+            alias["path"] for group in aliases.values() for alias in group
+        }
+        walked = {
+            os.path.relpath(path, self.bios.parent)
+            for paths in duplicates.scan_duplicates(str(self.bios)).values()
+            for path in paths
+        }
+        self.assertEqual(walked, indexed)
+
+
+@unittest.skipIf(os.name == "nt" or os.geteuid() == 0, "needs POSIX permissions")
+class AFailedRemovalIsReported(_Bios):
+    """A copy that os.remove refused was printed as a warning, counted as
+    removed by its group line, and the command exited 0 and asked for a
+    database rebuild."""
+
+    def setUp(self):
+        super().setUp()
+        self.write("A/f.bin")
+        self.locked = self.write("B/X/f.bin").parent
+        self.locked.chmod(0o555)
+
+    def tearDown(self):
+        self.locked.chmod(0o755)
+        super().tearDown()
+
+    def test_the_failure_is_in_the_result_not_in_removed(self):
+        result = self.run_dedup()
+        (group,) = result.groups.values()
+        self.assertEqual(group.removed, [])
+        self.assertEqual([f.path for f in group.failed], [str(self.locked / "f.bin")])
+        self.assertEqual(result.total_removed, 0)
+
+    def test_the_report_counts_what_was_removed(self):
+        report = "\n".join(deduptext.report_lines(self.run_dedup()))
+        self.assertIn("WARNING: cannot remove", report)
+        self.assertIn("Removed 0 copies", report)
+        self.assertNotIn("Removed 1 copies", report)
+
+    def test_the_command_exits_non_zero_without_the_rebuild_hint(self):
+        import contextlib
+        import io
+        import sys
+        from unittest import mock
+
+        import dedup as command
+
+        out, err = io.StringIO(), io.StringIO()
+        argv = ["dedup.py", "--bios-dir", str(self.bios)]
+        with mock.patch.object(sys, "argv", argv), contextlib.redirect_stdout(out), \
+                contextlib.redirect_stderr(err):
+            code = command.main()
+        self.assertEqual(code, 1)
+        self.assertIn("1 copies could not be removed", err.getvalue())
+        self.assertNotIn("generate_db.py", out.getvalue())
 
 
 class TheNoDedupListIsPinned(unittest.TestCase):

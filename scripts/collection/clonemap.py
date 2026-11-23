@@ -9,26 +9,21 @@ from core.artifacts import write_text_atomic
 
 def record_clone_map(
     mame_clones: dict[str, dict], previous: dict, clone_path: str, dry_run: bool
-) -> None:
-    """Write the clone map, merged with what earlier runs recorded."""
+) -> dict[str, dict]:
+    """Write the clone map, merged with what earlier runs recorded, and return it."""
     # A group is only visible while both copies are on disk, and this run
     # has just deleted the clone. Writing only what was seen this time
     # therefore erases every mapping an earlier run recorded, and the
     # canonical zip stops answering to the names it stands in for. The
     # older entries stay valid: their canonical file is still here.
-    if not dry_run and previous:
+    if dry_run:
+        return mame_clones
+    if previous:
         merged = dict(previous)
         merged.update(mame_clones)
         mame_clones = collapse_clone_chains(merged)
-    if dry_run:
-        print(f"\nWould write MAME clone map: {clone_path}")
-    else:
-        write_text_atomic(clone_path, json.dumps(mame_clones, indent=2, sort_keys=True))
-        print(f"\nWrote MAME clone map: {clone_path}")
-    print(
-        f"  {len(mame_clones)} canonical ZIPs with "
-        f"{sum(len(v['clones']) for v in mame_clones.values())} clones"
-    )
+    write_text_atomic(clone_path, json.dumps(mame_clones, indent=2, sort_keys=True))
+    return mame_clones
 
 
 def collapse_clone_chains(clone_map: dict[str, dict]) -> dict[str, dict]:
