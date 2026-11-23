@@ -16,11 +16,11 @@ from model.guides import (
     terminals,
     install_command,
 )
-from model.platforms import load_platform_config
 from model.registry import load_platform_registry
 from packs.consumers import FileConsumers
 from sitegen import markup, steps as sitesteps
 from sitegen.config import RELEASE_URL
+from sitegen.extraction import own_root_packs
 from sitegen.guidepage import NO_ZIP_FAQ, devices_meta, first_screen_words, get_page_link
 from sitegen.guides import fence, terminal_tabs, trust_box
 from sitegen.home import group_keys, next_block, runs_on_text, setup_picker
@@ -89,16 +89,9 @@ def _pack_cell(name: str, record: dict, prefix: str = "") -> str:
 
 
 def _own_root_folders(registry: dict) -> dict[str, str]:
-    """Platforms whose pack holds its own top folder, with where it unzips.
-
-    The same rule as extract_notes: a list written from an empty base
-    destination carries its root in every path."""
-    folders = {}
-    for key, entry in registry.items():
-        config = load_platform_config(key, str(siteinputs.current().platforms))
-        if config.get("base_destination") == "" and entry.get("extract_to"):
-            folders[key] = entry["extract_to"]
-    return folders
+    """Platforms whose pack holds its own top folder, with where it unzips."""
+    packs = own_root_packs(str(siteinputs.current().platforms))
+    return {key: folder for key, (_root, folder) in packs.items() if key in registry}
 
 
 def _folder_row(key: str, display: dict[str, str], registry: dict, record: dict,

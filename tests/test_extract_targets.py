@@ -17,7 +17,7 @@ from pathlib import Path
 
 from model.platforms import load_platform_config
 from model.registry import load_platform_registry
-from sitegen.extraction import extract_notes, extract_targets
+from sitegen.extraction import extract_notes, extract_targets, own_root_packs
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -48,6 +48,20 @@ class ExtractTargets(unittest.TestCase):
         )
         self.assertTrue(rooted)
         self.assertEqual(explained, rooted)
+
+    def test_guide_and_which_pack_unzip_the_same_packs(self):
+        """The guide's notes and the which-pack rows chose the packs with two
+        copies of one rule: both now format from own_root_packs."""
+        from sitegen import whichpack
+
+        packs = own_root_packs(PLATFORMS)
+        rows = whichpack._own_root_folders(load_platform_registry(PLATFORMS))
+        self.assertEqual(rows, {key: folder for key, (_root, folder) in packs.items()})
+        notes = extract_notes(PLATFORMS)
+        self.assertEqual(len(notes), len(packs))
+        for note, (root, folder) in zip(notes, packs.values()):
+            self.assertIn(f"`{root}/`", note)
+            self.assertTrue(note.endswith(f"Unzip it into `{folder}`."))
 
     def test_no_generator_keeps_its_own_table(self):
         """The which-pack page describes setups per OS, and these two were the
