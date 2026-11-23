@@ -56,6 +56,15 @@ class Entries(unittest.TestCase):
         self.assertEqual(plan["own"], {})
         self.assertNotIn("scph5502.bin", plan["full"])
 
+    def test_requested_plan_keeps_the_order_and_defers_the_pack(self) -> None:
+        entries = regioncheck.region_entries(PROFILE, "sony-playstation")
+        def local(entry: dict) -> Path:
+            return Path("/bios") / entry["name"]
+
+        plan = regioncheck.requested_plan(["others", "pack", "full"], entries, "japan", local)
+        staged = regioncheck.plan_variants(entries, "japan", local)
+        self.assertEqual(plan, [("others", staged["others"]), ("pack", None), ("full", staged["full"])])
+
     def test_subject_names_core_game_and_variant(self) -> None:
         slug = regioncheck.subject("mednafen_psx", "Puzzle Bobble 2 (Japan)", "own")
         self.assertEqual(slug, "region-mednafen_psx-puzzle-bobble-2-japan-own")
@@ -202,21 +211,22 @@ class ContentChecked(unittest.TestCase):
         (folder / "identity.json").write_text(json.dumps({"status": "verified", "files": [
             {"name": "game.bin", "size": 4, "sha1": hashlib.sha1(b"good").hexdigest()}]}), encoding="utf-8")
 
-    def run_region(self) -> tuple[int, list]:
+    def run_region(self, variants: list[str] | None = None) -> tuple[int, list]:
         import argparse
         from unittest import mock
 
         args = argparse.Namespace(emulator="beetle_psx", system="sony-playstation", core="core.so",
-                                  core_artifact=None, content_dir=str(self.root), variants=None,
+                                  core_artifact=None, content_dir=str(self.root), variants=variants,
                                   timeout=1, max_load_wait=1)
         with mock.patch("model.profiles.load_emulator_profiles", return_value={"beetle_psx": PROFILE}), \
                 mock.patch.object(regioncheck, "load_content",
                                   return_value={"sony-playstation": [self.game]}), \
                 mock.patch.object(regioncheck, "local_resolver", return_value=lambda e: None), \
-                mock.patch.object(regioncheck, "pack_files", return_value={}), \
+                mock.patch.object(regioncheck, "pack_files", return_value={}) as packs, \
                 mock.patch.object(regioncheck, "run_when_idle") as runs:
             runs.return_value.returncode = 0
             code = regioncheck.run(args)
+        self.pack_builds = packs.call_count
         return code, runs.call_args_list
 
     def test_altered_game_is_refused(self) -> None:
@@ -229,6 +239,12 @@ class ContentChecked(unittest.TestCase):
         code, runs = self.run_region()
         self.assertEqual(code, 0)
         self.assertEqual(len(runs), len(regioncheck.VARIANTS))
+        self.assertEqual(self.pack_builds, 1)
+
+    def test_no_pack_build_without_the_pack_variant(self) -> None:
+        self.write_game(b"good")
+        code, runs = self.run_region(["full", "own"])
+        self.assertEqual((code, len(runs), self.pack_builds), (0, 2, 0))
 
     def test_default_caches_are_the_main_checkout_cache(self) -> None:
         """A linked worktree holds no .cache: the default reads the main checkout's."""

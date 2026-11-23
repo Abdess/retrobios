@@ -55,6 +55,14 @@ def plan_variants(entries: Iterable[dict], region: str,
     return {"full": full, "own": own, "others": others}
 
 
+def requested_plan(labels: Iterable[str], entries: Iterable[dict], region: str,
+                   local: Callable[[dict], Path | None]) -> list[tuple[str, dict[str, Path] | None]]:
+    """The requested variants in run order with their staged files. `pack`
+    carries None: its files come from a generate_pack build."""
+    staged = plan_variants(entries, region, local)
+    return [(label, None if label == "pack" else staged[label]) for label in labels]
+
+
 def subject(core: str, game: str, variant: str) -> str:
     words = re.findall(r"[a-z0-9]+", game.lower())
     return f"region-{core.lower().replace('-', '_')}-{'-'.join(words)[:60].strip('-')}-{variant}"
@@ -238,9 +246,10 @@ def run(args: argparse.Namespace) -> int:
             failures += 1
             continue
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as scratch:
-            variants = plan_variants(entries, game.region, local)
-            variants["pack"] = pack_files(args.emulator, game.region, Path(scratch))
-            for label in args.variants or VARIANTS:
+            plan = requested_plan(args.variants or VARIANTS, entries, game.region, local)
+            pack = (pack_files(args.emulator, game.region, Path(scratch))
+                    if any(files is None for _, files in plan) else {})
+            for label, staged in plan:
                 argv = [sys.executable, str(REPO_ROOT / "scripts" / "core_probe.py"), "run",
                         "--core", str(core), "--content", str(load), "--content-label", game.name,
                         "--frames", str(game.frames),
@@ -250,7 +259,7 @@ def run(args: argparse.Namespace) -> int:
                         "--require-sandbox", "--timeout", str(args.timeout)]
                 if url:
                     argv += ["--core-artifact", url]
-                for dest, src in sorted(variants[label].items()):
+                for dest, src in sorted((pack if staged is None else staged).items()):
                     argv += ["--system-file", f"{dest}={src}"]
                 proc = run_when_idle(argv, args.max_load_wait, timeout=args.timeout * 2 + 120)
                 status = "recorded" if proc.returncode == 0 else f"exit {proc.returncode}"
