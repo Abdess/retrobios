@@ -34,6 +34,7 @@ from core import statefile
 from collection import integrity as bib
 from collection.gitrestore import GitFailed
 from devtools import diskcleanup as cd
+from devtools import testrunner
 from release import sync
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -350,6 +351,32 @@ class Retry(Scratch):
         run, calls = self._runs(runner.Outcome(1, "KeyError: 'x'"), runner.Outcome(0))
         self.assertEqual(runner.run_with_retry(run, (0,), lambda: None).returncode, 1)
         self.assertEqual(len(calls), 1)
+
+    def test_an_abort_is_retried_like_a_segfault(self):
+        run, calls = self._runs(runner.Outcome(-6), runner.Outcome(0))
+        self.assertEqual(runner.run_with_retry(run, (0,), lambda: None).returncode, 0)
+        self.assertEqual(len(calls), 2)
+
+    def test_the_test_runner_reruns_what_autorun_retries(self):
+        """run_tests reran only signal kills: a module failing with exit 1 on
+        'SystemError: unknown opcode' was reported FAILED, where an autorun
+        step failing the same way ran again."""
+        logs = self.tmp / "logs"
+        logs.mkdir()
+        cases = {"tests.test_misread": (1, "SystemError: unknown opcode 220\n"),
+                 "tests.test_signal": (-11, ""),
+                 "tests.test_real": (1, "AssertionError: 1 != 2\n")}
+        results = []
+        for module, (code, text) in cases.items():
+            log = logs / f"{module}.log"
+            log.write_text(text, encoding="utf-8")
+            results.append(testrunner.Result(module, code, 1.0, log=log))
+        again = testrunner.Result("x", 0, 1.0)
+        with unittest.mock.patch.object(testrunner, "run_module", return_value=again) as rerun:
+            testrunner.rerun_crashed(results, {}, logs, lambda _line: None)
+        self.assertEqual(sorted(c.args[0] for c in rerun.call_args_list),
+                         ["tests.test_misread", "tests.test_signal"])
+        self.assertEqual([r.passed for r in results], [True, True, False])
 
     def test_a_real_segfault_runs_again_and_the_job_passes(self):
         crash = ("import os, signal, pathlib\n"

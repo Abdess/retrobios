@@ -13,6 +13,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 
+from core.hostguard import host_misread
 from core.paths import REPO_ROOT as ROOT
 
 TESTS = ROOT / "tests"
@@ -116,9 +117,9 @@ def run_all(order: Iterable[str], jobs: int, env: dict[str, str], logs: Path,
 
 def rerun_crashed(results: Iterable[Result], env: dict[str, str], logs: Path,
                   say: Callable[[str], None]) -> None:
-    """A module a signal killed is the host's doing until it fails alone."""
+    """A module the host misread is the host's doing until it fails alone."""
     for result in results:
-        if result.code < 0:
+        if result.code != 0 and host_misread(result.code, _log_text(result)):
             say(f"  again, alone: {result.module}")
             again = run_module(result.module, env, logs)
             result.crashed_then = again.code
@@ -126,9 +127,14 @@ def rerun_crashed(results: Iterable[Result], env: dict[str, str], logs: Path,
                 again.tests, again.failures, again.errors, again.skipped)
 
 
+def _log_text(result: Result) -> str:
+    return result.log.read_text(encoding="utf-8", errors="replace") if result.log else ""
+
+
 def save_durations(durations: dict[str, float], results: Iterable[Result]) -> None:
     """The timings of this run over the previous ones, a crashed run left out."""
-    timed = {**durations, **{r.module: round(r.seconds, 1) for r in results if r.code >= 0}}
+    timed = {**durations, **{r.module: round(r.seconds, 1) for r in results
+                             if r.crashed_then is None}}
     DURATIONS.write_text(json.dumps(timed, indent=1, sort_keys=True), encoding="utf-8")
 
 

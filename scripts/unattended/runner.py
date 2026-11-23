@@ -18,7 +18,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from core.artifacts import TIMESTAMP_KEYS
-from core.hostguard import LockBusy, free_gb, global_lock, lock_busy
+from core.hostguard import LockBusy, free_gb, global_lock, host_misread, lock_busy
 from core.paths import AUTORUN_DIR, AUTORUN_WORKTREE
 from core.statefile import now_iso, save_state
 from unattended.breaker import may_push, refresh_breaker
@@ -37,8 +37,6 @@ from unattended.worktree import (
 
 ALERT_FREE_GB = 100
 LOG_DAYS = 30
-SEGFAULT_CODES = (139, -11)
-HOST_MISREAD_MARKERS = ("SystemError", "unknown opcode")
 
 
 @dataclass
@@ -99,13 +97,6 @@ def wait_for_load(host: Host, max_wait: float) -> bool:
         if left <= 0:
             return False
         host.sleep(min(host.poll, left))
-
-
-def host_misread(returncode: int, text: str) -> bool:
-    """A failure this host's CPU produces under load, worth one idle retry."""
-    if returncode in SEGFAULT_CODES:
-        return True
-    return returncode != 0 and any(marker in text for marker in HOST_MISREAD_MARKERS)
 
 
 # Running commands

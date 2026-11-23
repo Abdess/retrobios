@@ -24,7 +24,8 @@ python -m unittest discover -s tests -t . -v
 ```
 
 Or run it as parallel processes, one per module, each with its own
-scratch folder. A module a host crash kills runs again alone at the end:
+scratch folder. A module a host crash kills, or that fails with `SystemError`
+or "unknown opcode", runs again alone at the end:
 
 ```bash
 python scripts/run_tests.py            # a few modules at a time

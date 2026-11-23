@@ -829,7 +829,7 @@ commit.
 | Lock | One host-wide `flock` on `~/.local/state/retrobios/auto.lock` (`RETROBIOS_AUTO_LOCK` moves it). A job that finds it held is `deferred`. |
 | Load | Waits while the 1-minute load is above a quarter of the CPUs, up to `max_load_wait` seconds, then `deferred`. |
 | Disk | Below the job's `min_free_gb` the job is `refused`. Under 100 GB free the `disk` alert is raised. |
-| Retry | Exit 139 (or signal 11), `SystemError` or "unknown opcode" is run again once on an idle host. A second failure is a failure. |
+| Retry | A signal kill, exit 139, `SystemError` or "unknown opcode" is run again once on an idle host, the rule `run_tests.py` applies to a test module. A second failure is a failure. |
 | Environment | A step, gate or recomputation inherits `PATH`, `HOME`, `LANG`, `LC_*`, `TZ` and `TMPDIR`, the runner's own markers and the variables its `env:` key names. A name with `TOKEN`, `SECRET` or `PASS` in it, `GH_TOKEN` and the RomStation account are dropped even when named, and a step naming one is refused when the registry loads. `GITHUB_TOKEN` goes to the push, the `gh` calls that read CI, and a step marked `github_token: true`. The registry accepts that key only on `python scripts/check_freshness.py`, `python scripts/refresh_stale.py` and `python -m scripts.scraper.*` tracked in this repository, and never in the `campaign` job. |
 | Double computation | Each `twice` entry recomputes an artifact the gate wrote and compares both, timestamps aside. A difference is recomputed once on an idle host, then the job fails with the `host-integrity` alert. |
 

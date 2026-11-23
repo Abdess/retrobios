@@ -1,4 +1,4 @@
-"""Host-wide guards every heavy job shares: the automation lock and free disk space."""
+"""Host-wide guards every heavy job shares: the automation lock, free disk space and the misread rule."""
 
 from __future__ import annotations
 
@@ -12,6 +12,9 @@ from pathlib import Path
 DEFAULT_LOCK = Path.home() / ".local" / "state" / "retrobios" / "auto.lock"
 LOCK_ENV = "RETROBIOS_AUTO_LOCK"
 LOCK_HELD_ENV = "RETROBIOS_AUTO_LOCK_HELD"
+# A segfault as a shell reports it. Python reports the signal as -11.
+SHELL_SEGFAULT = 139
+HOST_MISREAD_MARKERS = ("SystemError", "unknown opcode")
 
 
 class LockBusy(RuntimeError):
@@ -49,3 +52,12 @@ def lock_busy(path: Path) -> bool:
 
 def free_gb(path: Path) -> float:
     return shutil.disk_usage(path).free / 1024 ** 3
+
+
+def host_misread(returncode: int, text: str) -> bool:
+    """A failure this host's CPU produces under load, worth one retry: a signal
+    kill, a segfault a shell reported, or an error sound hardware never raises.
+    """
+    if returncode < 0 or returncode == SHELL_SEGFAULT:
+        return True
+    return returncode != 0 and any(marker in text for marker in HOST_MISREAD_MARKERS)

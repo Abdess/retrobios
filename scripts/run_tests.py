@@ -15,8 +15,9 @@ tmp/test-durations.json, from the previous run, and a module never timed is
 weighed by its size.
 
 The host computes wrong and Python segfaults under load: a module killed by
-a signal is run again alone at the end, and reported as passing only if that
-run passes. Every module's output is kept in its own log, and the summary
+a signal, or failing with an error sound hardware never raises (SystemError,
+unknown opcode), is run again alone at the end, and reported as passing only
+if that run passes. Every module's output is kept in its own log, and the summary
 counts the tests, the failures and the skips, a skip being no proof.
 """
 
@@ -73,7 +74,9 @@ def main() -> int:
           f"{time.monotonic() - started:.0f} s, {skipped} skipped")
     for result in crashed:
         outcome = "passed" if result.crashed_then == 0 else "failed"
-        print(f"  {result.module}: killed by signal {-result.code}, then {outcome} alone")
+        why = (f"killed by signal {-result.code}" if result.code < 0
+               else f"exit {result.code} on a host misread")
+        print(f"  {result.module}: {why}, then {outcome} alone")
     for result in failed:
         print(f"FAILED {result.module}: {result.failures} failures, {result.errors} errors "
               f"(code {result.code if result.crashed_then is None else result.crashed_then}), "
