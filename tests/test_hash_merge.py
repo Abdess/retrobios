@@ -8,6 +8,7 @@ import copy
 import tempfile
 import unittest
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -28,7 +29,7 @@ def _refresh_mame(path: Path, hashes: dict) -> None:
 
 
 def _make_mame_profile(**overrides: object) -> dict:
-    base = {
+    base: dict[str, Any] = {
         "emulator": "MAME",
         "core_version": "0.285",
         "files": [
@@ -54,7 +55,7 @@ def _make_mame_profile(**overrides: object) -> dict:
 
 
 def _make_mame_hashes(**overrides: object) -> dict:
-    base = {
+    base: dict[str, Any] = {
         "source": "mamedev/mame",
         "version": "0.286",
         "commit": "abc123",
@@ -82,7 +83,7 @@ def _make_mame_hashes(**overrides: object) -> dict:
 
 
 def _make_fbneo_profile(**overrides: object) -> dict:
-    base = {
+    base: dict[str, Any] = {
         "emulator": "FinalBurn Neo",
         "core_version": "v1.0.0.02",
         "files": [
@@ -106,7 +107,7 @@ def _make_fbneo_profile(**overrides: object) -> dict:
 
 
 def _make_fbneo_hashes(**overrides: object) -> dict:
-    base = {
+    base: dict[str, Any] = {
         "source": "finalburnneo/FBNeo",
         "version": "v1.0.0.03",
         "commit": "def456",
