@@ -105,6 +105,9 @@ class _InstallRun:
         self.categorized = False
         # The BIOS folders read for misplaced files, one per platform.
         self.bios_indexes: list[FolderIndex] = []
+        # No setup found, the standalone emulator folders filled instead:
+        # the run still ends on its summary, exit code and result.
+        self.standalone_only = False
 
 
 def _start_install(args: argparse.Namespace, real_stdout: TextIO) -> _InstallRun:
@@ -303,7 +306,8 @@ def _detect_named_setup(run: _InstallRun, named: str) -> list[tuple[str, Path]]:
 
 def _nothing_detected(run: _InstallRun) -> bool:
     """No setup found and none named: the standalone folders, a question or
-    a stop. True when the run is over."""
+    a stop. True when no setup is left to install (run.standalone_only
+    then says the run still ends on its result)."""
     args, os_type = run.args, run.os_type
     # The screen's words where a person answers: "platform" was said
     # nowhere else.
@@ -315,9 +319,8 @@ def _nothing_detected(run: _InstallRun) -> bool:
     # PCSX2 was sent to RetroArch's folder, which nothing here reads.
     narrowing = (args.system or args.core or args.emulator or args.region
                  or args.target or args.installed_cores or args.declared_only)
-    if not run.listing and not narrowing and _install_standalone_folders(
-        args, os_type, run.term, run.interactive
-    ):
+    if not run.listing and not narrowing and _install_standalone_folders(run):
+        run.standalone_only = True
         return True
     if not run.interactive or run.listing:
         asked = next((flag for flag, on in (

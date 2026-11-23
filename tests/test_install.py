@@ -6399,6 +6399,27 @@ class StandaloneEmulatorsWithoutAPlatformAreServed(unittest.TestCase, _LoopbackR
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("Every file on the list is in place.", proc.stdout)
 
+    def test_the_run_ends_on_its_summary(self):
+        """--check --events gave code 3 and only start, detect and end: no
+        summary, so no pending, installed or failed to read."""
+        proc = _install_run(self.env, "--no-input", "--check", "--events")
+        self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
+        events = [json.loads(line) for line in proc.stdout.splitlines()
+                  if line.startswith("{")]
+        summary = [event for event in events if event["event"] == "summary"]
+        self.assertEqual(len(summary), 1, events)
+        self.assertEqual(summary[0]["mode"], "check")
+        self.assertGreater(summary[0]["pending"], 0)
+        self.assertEqual(events[-1], {"event": "end", "code": 3})
+        proc = _install_run(self.env, "--no-input", "--events")
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        events = [json.loads(line) for line in proc.stdout.splitlines()
+                  if line.startswith("{")]
+        summary = [event for event in events if event["event"] == "summary"]
+        self.assertEqual(len(summary), 1, events)
+        self.assertGreater(summary[0]["installed"], 0)
+        self.assertEqual(summary[0]["pending"], 0)
+
     def test_no_emulator_folder_keeps_the_hint(self):
         self.duckstation.rmdir()
         proc = _install_run(self.env, "--no-input")

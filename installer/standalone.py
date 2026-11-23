@@ -4,7 +4,6 @@ from __future__ import annotations
 import argparse
 import os
 import shutil
-import sys
 from pathlib import Path, PurePosixPath
 from typing import TYPE_CHECKING
 
@@ -15,13 +14,14 @@ from installer.host_fs import NOT_WRITABLE, _closed_to_this_user, _exists, _is_d
 from installer.invocation import offline_requested
 from installer.lists import fetch_manifest
 from installer.local_check import check_local, unreachable_words
-from installer.outcome import EVERYTHING_IN_PLACE, OutcomeDetails, _check_fetch_line, _report_outcome
+from installer.outcome import EVERYTHING_IN_PLACE, _check_fetch_line
 from installer.paths import _destination_path, _within
 from installer.plan import _check_free_space, _print_plan
 from installer.plan_words import _sized
 from installer.safe_replace import KEPT, NOT_KEPT, _NotKept, plan_kept
 
 if TYPE_CHECKING:
+    from installer.run_setups import _InstallRun
     from installer.terminal import Terminal
 
 
@@ -137,14 +137,14 @@ def _check_standalone_folder(to_download: list[dict], mismatched: list[dict],
 
 
 def preview_standalone(plan: list[tuple[Path, list[dict]]], args: argparse.Namespace,
-                       term: Terminal) -> int:
+                       term: Terminal) -> tuple[int, int]:
     """--check or --dry-run over the emulator folders of a standalone plan:
     what each holds and lacks, or what a run would write. The count of the
-    files not in place."""
-    pending = 0
+    files not in place, and of those in place."""
+    pending = in_place = 0
     for folder, entries in plan:
         print(f"\n{folder}:")
-        to_download, _up_to_date, mismatched = check_local(entries, folder, jobs=args.jobs)
+        to_download, up_to_date, mismatched = check_local(entries, folder, jobs=args.jobs)
         to_download.extend(mismatched)
         if args.check:
             _check_standalone_folder(to_download, mismatched, args.verbose)
@@ -152,17 +152,18 @@ def preview_standalone(plan: list[tuple[Path, list[dict]]], args: argparse.Names
             _print_plan(to_download, folder, term, kept=plan_kept(mismatched, folder),
                         verbose=args.verbose)
         pending += len(to_download)
-    return pending
+        in_place += len(up_to_date)
+    return pending, in_place
 
 
-def _install_standalone_folders(
-    args: argparse.Namespace, os_type: str, term: Terminal, interactive: bool,
-) -> bool:
-    """Fill the standalone emulator folders found here, with no platform.
+def _install_standalone_folders(run: _InstallRun) -> bool:
+    """Fill the standalone emulator folders found here, with no platform,
+    their counts kept in the run's totals: the run ends as every run does.
 
     False when this machine has none, the run then going on to the platform
     question or hint.
     """
+    args, os_type, term = run.args, run.os_type, run.term
     if offline_requested():
         # Their folders are named by file lists this run cannot fetch: the
         # first refusal ended an --offline run that asked nothing of EmuDeck
@@ -177,48 +178,44 @@ def _install_standalone_folders(
     print("  Found standalone emulator folders:")
     for folder, entries in plan:
         print(f"    {folder}  {_sized(entries)}")
-    if interactive and not (args.check or args.dry_run or args.yes) and not _confirm(
+    if run.interactive and not (args.check or args.dry_run or args.yes) and not _confirm(
         "\nInstall the BIOS files these emulators read into their folders? [Y/n] "
     ):
         return False
+    run.installed_paths = [folder for folder, _entries in plan]
     if args.check or args.dry_run:
-        pending = preview_standalone(plan, args, term)
-        if args.check and pending:
-            print("\n" + _check_fetch_line(pending, "its folder"))
-            sys.exit(3)
+        pending, in_place = preview_standalone(plan, args, term)
+        if args.check:
+            run.check_pending += pending
+            run.total_verified += in_place
+            if pending:
+                print("\n" + _check_fetch_line(pending, "its folder"))
+        else:
+            run.files_pending += pending
         return True
-    downloaded = up_to_date_count = errors = 0
-    failures: list[tuple[str, str]] = []
-    transferred, seconds = 0, 0.0
-    interrupted = False
     for folder, entries in plan:
         print(f"\n{folder}:")
         to_download, up_to_date, mismatched = check_local(entries, folder, jobs=args.jobs)
         to_download.extend(mismatched)
-        up_to_date_count += len(up_to_date)
+        run.total_up_to_date += len(up_to_date)
         if not to_download:
             print(f"  {EVERYTHING_IN_PLACE}")
             continue
         size = sum(entry.get("size", 0) for entry in to_download)
-        _check_free_space(folder, size, code=1 if downloaded else 2)
+        _check_free_space(folder, size, code=1 if run.total_downloaded else 2)
         progress = Progress(len(to_download), size, term)
         failed, interrupted = download_files(
             to_download, folder, jobs=args.jobs, verbose=args.verbose,
             term=term, progress=progress,
         )
-        downloaded += progress.installed
-        errors += len(failed)
-        failures.extend((str(folder / dest), reason) for dest, reason in failed)
-        transferred += progress.transferred()
-        seconds += progress.elapsed()
+        run.total_downloaded += progress.installed
+        run.total_errors += len(failed)
+        run.failures.extend((str(folder / dest), reason) for dest, reason in failed)
+        run.total_bytes += progress.transferred()
+        run.total_seconds += progress.elapsed()
         if interrupted:
+            run.total_interrupted = True
             break
-    _report_outcome(
-        [folder for folder, _entries in plan], downloaded, up_to_date_count, errors,
-        0, interrupted,
-        details=OutcomeDetails(failures=failures, transferred=transferred, seconds=seconds),
-        term=term,
-    )
     return True
 
 

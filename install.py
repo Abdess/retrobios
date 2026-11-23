@@ -23049,14 +23049,14 @@ def _check_standalone_folder(to_download: list[dict], mismatched: list[dict],
 
 
 def preview_standalone(plan: list[tuple[Path, list[dict]]], args: argparse.Namespace,
-                       term: Terminal) -> int:
+                       term: Terminal) -> tuple[int, int]:
     """--check or --dry-run over the emulator folders of a standalone plan:
     what each holds and lacks, or what a run would write. The count of the
-    files not in place."""
-    pending = 0
+    files not in place, and of those in place."""
+    pending = in_place = 0
     for folder, entries in plan:
         print(f"\n{folder}:")
-        to_download, _up_to_date, mismatched = check_local(entries, folder, jobs=args.jobs)
+        to_download, up_to_date, mismatched = check_local(entries, folder, jobs=args.jobs)
         to_download.extend(mismatched)
         if args.check:
             _check_standalone_folder(to_download, mismatched, args.verbose)
@@ -23064,17 +23064,18 @@ def preview_standalone(plan: list[tuple[Path, list[dict]]], args: argparse.Names
             _print_plan(to_download, folder, term, kept=plan_kept(mismatched, folder),
                         verbose=args.verbose)
         pending += len(to_download)
-    return pending
+        in_place += len(up_to_date)
+    return pending, in_place
 
 
-def _install_standalone_folders(
-    args: argparse.Namespace, os_type: str, term: Terminal, interactive: bool,
-) -> bool:
-    """Fill the standalone emulator folders found here, with no platform.
+def _install_standalone_folders(run: _InstallRun) -> bool:
+    """Fill the standalone emulator folders found here, with no platform,
+    their counts kept in the run's totals: the run ends as every run does.
 
     False when this machine has none, the run then going on to the platform
     question or hint.
     """
+    args, os_type, term = run.args, run.os_type, run.term
     if offline_requested():
         # Their folders are named by file lists this run cannot fetch: the
         # first refusal ended an --offline run that asked nothing of EmuDeck
@@ -23089,48 +23090,44 @@ def _install_standalone_folders(
     print("  Found standalone emulator folders:")
     for folder, entries in plan:
         print(f"    {folder}  {_sized(entries)}")
-    if interactive and not (args.check or args.dry_run or args.yes) and not _confirm(
+    if run.interactive and not (args.check or args.dry_run or args.yes) and not _confirm(
         "\nInstall the BIOS files these emulators read into their folders? [Y/n] "
     ):
         return False
+    run.installed_paths = [folder for folder, _entries in plan]
     if args.check or args.dry_run:
-        pending = preview_standalone(plan, args, term)
-        if args.check and pending:
-            print("\n" + _check_fetch_line(pending, "its folder"))
-            sys.exit(3)
+        pending, in_place = preview_standalone(plan, args, term)
+        if args.check:
+            run.check_pending += pending
+            run.total_verified += in_place
+            if pending:
+                print("\n" + _check_fetch_line(pending, "its folder"))
+        else:
+            run.files_pending += pending
         return True
-    downloaded = up_to_date_count = errors = 0
-    failures: list[tuple[str, str]] = []
-    transferred, seconds = 0, 0.0
-    interrupted = False
     for folder, entries in plan:
         print(f"\n{folder}:")
         to_download, up_to_date, mismatched = check_local(entries, folder, jobs=args.jobs)
         to_download.extend(mismatched)
-        up_to_date_count += len(up_to_date)
+        run.total_up_to_date += len(up_to_date)
         if not to_download:
             print(f"  {EVERYTHING_IN_PLACE}")
             continue
         size = sum(entry.get("size", 0) for entry in to_download)
-        _check_free_space(folder, size, code=1 if downloaded else 2)
+        _check_free_space(folder, size, code=1 if run.total_downloaded else 2)
         progress = Progress(len(to_download), size, term)
         failed, interrupted = download_files(
             to_download, folder, jobs=args.jobs, verbose=args.verbose,
             term=term, progress=progress,
         )
-        downloaded += progress.installed
-        errors += len(failed)
-        failures.extend((str(folder / dest), reason) for dest, reason in failed)
-        transferred += progress.transferred()
-        seconds += progress.elapsed()
+        run.total_downloaded += progress.installed
+        run.total_errors += len(failed)
+        run.failures.extend((str(folder / dest), reason) for dest, reason in failed)
+        run.total_bytes += progress.transferred()
+        run.total_seconds += progress.elapsed()
         if interrupted:
+            run.total_interrupted = True
             break
-    _report_outcome(
-        [folder for folder, _entries in plan], downloaded, up_to_date_count, errors,
-        0, interrupted,
-        details=OutcomeDetails(failures=failures, transferred=transferred, seconds=seconds),
-        term=term,
-    )
     return True
 
 
@@ -23320,6 +23317,9 @@ class _InstallRun:
         self.categorized = False
         # The BIOS folders read for misplaced files, one per platform.
         self.bios_indexes: list[FolderIndex] = []
+        # No setup found, the standalone emulator folders filled instead:
+        # the run still ends on its summary, exit code and result.
+        self.standalone_only = False
 
 
 def _start_install(args: argparse.Namespace, real_stdout: TextIO) -> _InstallRun:
@@ -23518,7 +23518,8 @@ def _detect_named_setup(run: _InstallRun, named: str) -> list[tuple[str, Path]]:
 
 def _nothing_detected(run: _InstallRun) -> bool:
     """No setup found and none named: the standalone folders, a question or
-    a stop. True when the run is over."""
+    a stop. True when no setup is left to install (run.standalone_only
+    then says the run still ends on its result)."""
     args, os_type = run.args, run.os_type
     # The screen's words where a person answers: "platform" was said
     # nowhere else.
@@ -23530,9 +23531,8 @@ def _nothing_detected(run: _InstallRun) -> bool:
     # PCSX2 was sent to RetroArch's folder, which nothing here reads.
     narrowing = (args.system or args.core or args.emulator or args.region
                  or args.target or args.installed_cores or args.declared_only)
-    if not run.listing and not narrowing and _install_standalone_folders(
-        args, os_type, run.term, run.interactive
-    ):
+    if not run.listing and not narrowing and _install_standalone_folders(run):
+        run.standalone_only = True
         return True
     if not run.interactive or run.listing:
         asked = next((flag for flag, on in (
@@ -24269,7 +24269,7 @@ def _pass_standalone_preview(run: _InstallRun, p: _PlatformPass) -> None:
     if not plan:
         return
     print("\nStandalone emulators:")
-    pending = preview_standalone(plan, run.args, run.term)
+    pending, _in_place = preview_standalone(plan, run.args, run.term)
     if run.args.check:
         run.check_pending += pending
     else:
@@ -24407,6 +24407,8 @@ def _install_run(args: argparse.Namespace, real_stdout: TextIO) -> None:
         return
 
     if _detect_setups(run):
+        if run.standalone_only:
+            _finish_install(run, real_stdout)
         return
     _choose_setups(run)
 

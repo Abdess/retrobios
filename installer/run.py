@@ -672,7 +672,7 @@ def _pass_standalone_preview(run: _InstallRun, p: _PlatformPass) -> None:
     if not plan:
         return
     print("\nStandalone emulators:")
-    pending = preview_standalone(plan, run.args, run.term)
+    pending, _in_place = preview_standalone(plan, run.args, run.term)
     if run.args.check:
         run.check_pending += pending
     else:
@@ -810,6 +810,8 @@ def _install_run(args: argparse.Namespace, real_stdout: TextIO) -> None:
         return
 
     if _detect_setups(run):
+        if run.standalone_only:
+            _finish_install(run, real_stdout)
         return
     _choose_setups(run)
 
