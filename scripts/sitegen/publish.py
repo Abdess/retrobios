@@ -6,7 +6,7 @@ import json
 import shutil
 from pathlib import Path
 
-from model import releaserecord
+from model import releaserecord, siteinputs
 from core.paths import REPO_ROOT
 from sitegen.write import record_written, write_if_changed
 
@@ -33,12 +33,15 @@ def publish_manifests(api: Path) -> list[tuple]:
     pack installs: Batocera's list holds 353 files, its pack 14,508. The
     only copy was install/<platform>.json on the repository's main branch,
     which no page named. Copied byte for byte: the SHA256 the catalog gives
-    is the repository file's.
+    is the repository file's. Read from the folder the pages link from
+    (siteinputs.manifests_dir), so a run on another collection serves the
+    manifests its pages and DATs describe.
     """
+    manifests = siteinputs.manifests_dir()
     folder = api / "manifests"
     folder.mkdir(parents=True, exist_ok=True)
     assets: list[tuple] = []
-    for source in sorted((REPO_ROOT / "install").glob("*.json")):
+    for source in sorted(manifests.glob("*.json")):
         target = folder / source.name
         shutil.copy2(source, target)
         record_written(target)
@@ -48,7 +51,7 @@ def publish_manifests(api: Path) -> list[tuple]:
     # api/v1/targets/ answered 404.
     targets = api / "targets"
     targets.mkdir(parents=True, exist_ok=True)
-    for source in sorted((REPO_ROOT / "install" / "targets").glob("*.json")):
+    for source in sorted((manifests / "targets").glob("*.json")):
         shutil.copy2(source, targets / source.name)
         record_written(targets / source.name)
         assets.append((targets / source.name, f"Target list: {source.stem}",

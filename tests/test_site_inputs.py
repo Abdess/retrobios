@@ -70,6 +70,20 @@ class TheGivenDatabase(_Inputs):
         (self.db.parent / "install" / "retroarch.json").write_text("{}")
         self.assertIn("install manifest", platformfiles.platform_data_links("retroarch"))
 
+    def test_the_published_manifests_are_the_ones_the_pages_link(self) -> None:
+        from sitegen.publish import publish_manifests
+
+        given = self.db.parent / "install"
+        (given / "targets").mkdir(parents=True)
+        (given / "onlyhere.json").write_text('{"given": 1}')
+        (given / "targets" / "onlyhere.json").write_text('{"given": 2}')
+        api = self.db.parent / "api"
+        self.use(db=self.db)
+        publish_manifests(api)
+        self.assertEqual(sorted(p.name for p in (api / "manifests").iterdir()), ["onlyhere.json"])
+        self.assertEqual((api / "manifests" / "onlyhere.json").read_text(), '{"given": 1}')
+        self.assertEqual(sorted(p.name for p in (api / "targets").iterdir()), ["onlyhere.json"])
+
     def test_board_election_opens_the_given_collection_archive(self) -> None:
         import zipfile
 
@@ -227,7 +241,7 @@ class NoPageModuleReadsTheRepositoryInputs(unittest.TestCase):
     def test_no_page_module_reads_the_repository_manifests(self) -> None:
         modules = [SCRIPTS / "sitegen" / f"{name}.py"
                    for name in ("render", "platformfiles", "whichpack", "structured", "install",
-                                "lookup", "build", "guidepage", "diagrams")]
+                                "lookup", "build", "guidepage", "diagrams", "publish")]
         found = [
             f"{module.name}:{node.lineno}"
             for module in modules
