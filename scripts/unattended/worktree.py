@@ -4,13 +4,13 @@ may carry, and the push.
 
 from __future__ import annotations
 
-import fnmatch
 import os
 import shutil
 import subprocess
 from collections.abc import Callable, Sequence
 from pathlib import Path
 
+from core.generated import matches_any
 from core.gitclone import GitRefused
 from core.gitclone import main_checkout as gitclone_main_checkout
 from core.paths import REPO_ROOT
@@ -54,16 +54,8 @@ def changed_files(worktree: Path) -> list[str]:
     return sorted(set(paths))
 
 
-def path_matches(pattern: str, path: str) -> bool:
-    """A glob whose `*` stays inside one path segment."""
-    parts, segments = pattern.split("/"), path.split("/")
-    return len(parts) == len(segments) and all(
-        fnmatch.fnmatchcase(s, p) for p, s in zip(parts, segments)
-    )
-
-
 def plan_commit(changed: Sequence[str], patterns: Sequence[str]) -> list[str]:
-    return sorted(p for p in changed if any(path_matches(g, p) for g in patterns))
+    return sorted(p for p in changed if matches_any(p, patterns))
 
 
 def commit_paths(worktree: Path, files: Sequence[str], rule: CommitRule) -> str:

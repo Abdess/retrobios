@@ -27,6 +27,7 @@ from unattended import runner
 from unattended import timers as unattended_timers
 from unattended import worktree as unattended_worktree
 from core import childenv
+from core import generated
 from core.hashing import file_digest
 from core import hostguard
 from core import statefile
@@ -522,9 +523,9 @@ class Origin(Scratch):
 
 class Commits(Origin):
     def test_globs_stay_inside_one_segment(self):
-        self.assertTrue(unattended_worktree.path_matches("install/*.json", "install/a.json"))
-        self.assertFalse(unattended_worktree.path_matches("install/*.json", "install/targets/a.json"))
-        self.assertFalse(unattended_worktree.path_matches("install/*.json", "x/install/a.json"))
+        self.assertTrue(generated.path_matches("install/*.json", "install/a.json"))
+        self.assertFalse(generated.path_matches("install/*.json", "install/targets/a.json"))
+        self.assertFalse(generated.path_matches("install/*.json", "x/install/a.json"))
 
     def test_the_dry_run_names_only_matching_files_and_stages_nothing(self):
         wt = self.worktree()
@@ -723,12 +724,28 @@ class Cleanup(Origin):
 
     def test_generated_files_are_the_ones_a_run_rewrites(self):
         """mkdocs.yml stayed in the list after the site moved to Starlight,
-        while CONTRIBUTING.md and website/src/data/*.json were left out."""
+        while CONTRIBUTING.md and website/src/data/*.json were left out, and
+        derivable.json and wiki/installer.md kept a worktree holding nothing
+        but a pipeline run's output."""
         for path in ("README.md", "CONTRIBUTING.md", "database.json", "install/retroarch.json",
-                     "exports/batocera.json", "website/src/data/source-paths.json"):
-            self.assertTrue(cd.GENERATED.match(path), path)
+                     "exports/batocera.json", "website/src/data/source-paths.json",
+                     "derivable.json", "retired.json", "wiki/installer.md",
+                     "install/standalone/batocera.json", "install/games/systems/x.json"):
+            self.assertTrue(generated.is_generated(path), path)
         for path in ("mkdocs.yml", "website/src/data/x/y.json", "scripts/verify.py"):
-            self.assertFalse(cd.GENERATED.match(path), path)
+            self.assertFalse(generated.is_generated(path), path)
+
+    def test_the_nightly_commits_every_collection_record(self):
+        """The nightly's regenerate rule is the list the cleanup trusts: a
+        path one names and the other omits keeps a worktree or fails a run."""
+        rules = [rule for job in unattended_jobs.load_jobs().values() for rule in job.commits
+                 if rule.subject == "chore: regenerate collection records"]
+        self.assertEqual(len(rules), 1)
+        self.assertEqual(rules[0].paths, generated.COLLECTION_RECORDS)
+        nightly = next(job for job in unattended_jobs.load_jobs().values()
+                       if rules[0] in job.commits)
+        self.assertTrue(unattended_worktree.plan_commit(
+            ["recipes/archives.json"], [p for r in nightly.commits for p in r.paths]))
 
     def test_worktree_and_tmp_rules(self):
         old_clean = self._worktree("old-clean", 100)

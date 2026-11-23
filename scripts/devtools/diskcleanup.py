@@ -4,19 +4,15 @@ from __future__ import annotations
 
 import contextlib
 import os
-import re
 import shutil
 import subprocess
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
+from core.generated import is_generated
 from core.paths import AUTORUN_WORKTREE
 
-GENERATED = re.compile(
-    r"^(database\.json|install/.*\.json|exports/.*\.json|README\.md|CONTRIBUTING\.md"
-    r"|website/src/data/[^/]+\.json)$"
-)
 KEPT_TMP = ("acquire",)
 ALERT_GB = 100
 
@@ -80,7 +76,7 @@ def real_changes(worktree: Path) -> list[str]:
         if len(line) < 4 or line[:2].strip() == "D":
             continue
         path = line[3:].split(" -> ")[-1].strip('"')
-        if not GENERATED.match(path):
+        if not is_generated(path):
             paths.append(path)
     return paths
 
