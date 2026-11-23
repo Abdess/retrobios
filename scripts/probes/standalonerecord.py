@@ -23,11 +23,8 @@ RECORD_VERSION = 4
 OBSERVABLES = ("verdict", "screens", "frame_hashes", "uniform_frames")
 SCRIPT = "scripts/standalone_probe.py"
 SCRIPT_PATH = REPO_ROOT / SCRIPT
-# The files that hold the code of a run: a record from a checkout where one
-# of them differs from the commit says so.
-CODE_FILES = (SCRIPT, "scripts/probes/standaloneemulators.py", "scripts/probes/appimage.py",
-              "scripts/probes/xvfb.py", "scripts/probes/standalonerun.py",
-              "scripts/probes/standalonerecord.py", "scripts/probes/standalonemodes.py")
+SCRIPTS_DIR = REPO_ROOT / "scripts"
+CORE_PROBE = "scripts/core_probe.py"
 
 
 class RunFailed(Exception):
@@ -39,13 +36,29 @@ class Busy(Exception):
     """The host's load is past the threshold a recorded run accepts."""
 
 
+def code_files() -> list[str]:
+    """The files that hold the code of a run: every module of the checkout's
+    scripts/ the process has loaded, as paths from the checkout root."""
+    files = {SCRIPT, CORE_PROBE}
+    for module in list(sys.modules.values()):
+        name = getattr(module, "__file__", None)
+        if not name:
+            continue
+        path = Path(name).resolve()
+        if path.is_relative_to(SCRIPTS_DIR):
+            files.add(path.relative_to(REPO_ROOT).as_posix())
+    return sorted(files)
+
+
 def frontend_identity() -> dict:
-    """core_probe's frontend identity of the command, modified when any file
-    that holds the run's code differs from the commit."""
+    """core_probe's frontend identity of the command, with core_probe's own
+    sha256, modified when any file that holds the run's code differs from the
+    commit."""
     identity = cp.frontend_identity(SCRIPT_PATH, SCRIPT)
+    identity["core_probe_sha256"] = cp.file_digest(cp.SCRIPT_PATH, "sha256")
     if identity["script_modified"] is False:
         try:
-            status = subprocess.run(["git", "status", "--porcelain", "--", *CODE_FILES], cwd=REPO_ROOT,
+            status = subprocess.run(["git", "status", "--porcelain", "--", *code_files()], cwd=REPO_ROOT,
                                     capture_output=True, text=True, check=True).stdout
         except (OSError, subprocess.CalledProcessError) as exc:
             print(f"WARNING: frontend state unknown, git failed: {exc}", file=sys.stderr)

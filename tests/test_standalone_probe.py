@@ -185,14 +185,32 @@ class Frontend(unittest.TestCase):
         changed = mock.Mock(stdout=" M scripts/probes/xvfb.py\n")
         with mock.patch.object(cp, "frontend_identity", return_value=dict(clean)), \
                 mock.patch.object(standalonerecord.subprocess, "run", return_value=changed) as run:
-            self.assertTrue(standalonerecord.frontend_identity()["script_modified"])
-        self.assertEqual(run.call_args.args[0][4:], list(standalonerecord.CODE_FILES))
+            identity = standalonerecord.frontend_identity()
+        self.assertTrue(identity["script_modified"])
+        self.assertEqual(identity["core_probe_sha256"], cp.file_digest(ROOT / "scripts/core_probe.py", "sha256"))
+        self.assertEqual(run.call_args.args[0][4:], standalonerecord.code_files())
 
-    def test_the_code_files_are_the_modules_of_the_command(self) -> None:
+    def test_the_code_files_are_every_module_the_command_imports(self) -> None:
+        import json
+        import subprocess
+        import sys
+
         from tests.sources import script_paths
 
-        self.assertEqual({ROOT / name for name in standalonerecord.CODE_FILES},
-                         set(script_paths("standalone_probe.py")))
+        probe = ("import json, standalone_probe\n"
+                 "from probes.standalonerecord import SCRIPTS_DIR, code_files\n"
+                 "from pathlib import Path\n"
+                 "loaded = sorted(str(Path(m.__file__).resolve()) for m in list(sys.modules.values())\n"
+                 "                if getattr(m, '__file__', None)\n"
+                 "                and Path(m.__file__).resolve().is_relative_to(SCRIPTS_DIR))\n"
+                 "print(json.dumps([code_files(), loaded]))\n")
+        out = subprocess.run([sys.executable, "-c", "import sys\n" + probe], cwd=ROOT / "scripts",
+                             capture_output=True, text=True, check=True).stdout
+        files, loaded = json.loads(out)
+        named = {ROOT / name for name in files}
+        self.assertLessEqual({Path(path) for path in loaded}, named)
+        self.assertLessEqual(set(script_paths("standalone_probe.py")), named)
+        self.assertLessEqual({ROOT / "scripts/core_probe.py", ROOT / "scripts/probes/host.py"}, named)
 
 
 class HostLock(unittest.TestCase):

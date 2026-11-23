@@ -170,6 +170,10 @@
         },
         "script_sha256": {
           "$ref": "#/$defs/sha256"
+        },
+        "core_probe_sha256": {
+          "$ref": "#/$defs/sha256",
+          "description": "standalone_probe.py: the sha256 of scripts/core_probe.py, whose code judges the run."
         }
       }
     },
