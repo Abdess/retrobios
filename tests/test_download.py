@@ -31,7 +31,7 @@ from pathlib import Path
 from unittest import mock
 
 from packs import parts as packs_parts
-from release import latest, packfetch, packgroups, packinfo, transfer
+from release import latest, packfetch, packgroups, packinfo, progressbar, transfer
 from release.downloaderror import DownloadError
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -250,14 +250,14 @@ class TestProgressLineWidth(unittest.TestCase):
         for columns in (20, 40, 80, 120, 200):
             for done in (0, 1_000_000_000, 2_000_000_000):
                 with self.subTest(columns=columns, done=done):
-                    line = transfer.progress_line("part 1/2 ", done, 2_000_000_000, columns)
+                    line = progressbar.progress_line("part 1/2 ", done, 2_000_000_000, columns)
                     self.assertLess(len(line), columns)
                     self.assertIn("%", line)
 
     def test_the_figures_read_like_the_site(self):
         """The bar counted decimal megabytes (8,127 MB) where --info and the
         site gave the same pack as 7.6 GB."""
-        line = transfer.progress_line("", 1024**3, 8_127_352_876, 200)
+        line = progressbar.progress_line("", 1024**3, 8_127_352_876, 200)
         self.assertTrue(line.endswith(" 13% (1.0 GB/7.6 GB)"), line)
 
 
@@ -544,10 +544,12 @@ class TestDownloadLibrary(DownloaderCase):
         assert pack is not None
         lines: list[str] = []
         staging = packfetch.make_staging(self.tmpdir)
-        with contextlib.redirect_stdout(io.StringIO()):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
             archives = packfetch.fetch_pack(
                 pack, staging, packfetch.fetch_checksums(release), lines.append
             )
+        self.assertEqual(out.getvalue(), "")
         return archives, lines
 
     def test_progress_lines_go_to_the_callback(self):
@@ -779,10 +781,12 @@ class AProgressBarOnlyOnATerminal(unittest.TestCase):
                 mock.patch.object(transfer.urllib.request, "urlopen",
                                   lambda *a, **k: Body(b"x" * 200_000)), \
                 contextlib.redirect_stdout(out):
+            bar = progressbar.ProgressBar()
+            bar.start("a.zip ")
             transfer.download_file("https://example.com/a.zip",
-                                   _Path(directory) / "a.zip", 200_000, "a.zip ")
-        self.assertNotIn("\r", out.getvalue())
-        self.assertEqual(out.getvalue().count("\n"), 1)
+                                   _Path(directory) / "a.zip", 200_000, bar.update)
+            bar.finish()
+        self.assertEqual(out.getvalue(), "  a.zip 200,000 bytes\n")
 
     def test_a_cut_stream_is_fetched_again_from_the_start(self):
         """One reset midway through a 2 GiB part failed the whole download."""
@@ -810,9 +814,52 @@ class AProgressBarOnlyOnATerminal(unittest.TestCase):
                 mock.patch.object(upstream, "_sleep", lambda _s: None), \
                 contextlib.redirect_stdout(io.StringIO()):
             target = Path(directory) / "a.zip"
-            transfer.download_file("https://example.com/a.zip", target, 6, "a.zip ")
+            transfer.download_file("https://example.com/a.zip", target, 6)
             self.assertEqual(target.read_bytes(), b"packed")
         self.assertEqual(answers, [])
+
+
+class ATransferFailureIsADownloadError(unittest.TestCase):
+    """download_file printed its own lines and raised a bare ValueError on a
+    short stream, so download.py, which catches DownloadError, ended in a
+    traceback. A transport failure after the retries escaped the same way."""
+
+    class Body(io.BytesIO):
+        headers = {"Content-Length": "10"}
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+    def test_a_short_stream_raises_and_prints_nothing(self):
+        out = io.StringIO()
+        with tempfile.TemporaryDirectory() as directory, \
+                mock.patch.object(transfer.urllib.request, "urlopen",
+                                  lambda *a, **k: self.Body(b"x" * 10)), \
+                contextlib.redirect_stdout(out), \
+                self.assertRaises(DownloadError) as raised:
+            transfer.download_file("https://example.com/a.zip", Path(directory) / "a.zip", 20)
+        self.assertEqual(out.getvalue(), "")
+        self.assertEqual(
+            str(raised.exception), "Error: downloaded 10 bytes of a.zip, expected 20."
+        )
+
+    def test_a_transport_failure_raises(self):
+        from core import upstream
+
+        def refuse(*_a, **_k):
+            raise ConnectionResetError("reset by peer")
+
+        with tempfile.TemporaryDirectory() as directory, \
+                mock.patch.object(transfer.urllib.request, "urlopen", refuse), \
+                mock.patch.object(upstream, "_sleep", lambda _s: None), \
+                self.assertRaises(DownloadError) as raised:
+            transfer.download_file("https://example.com/a.zip", Path(directory) / "a.zip", 20)
+        self.assertEqual(
+            str(raised.exception), "Error: downloading a.zip failed: reset by peer"
+        )
 
 
 class TheShellDownloaderSendsTheToken(unittest.TestCase):

@@ -6,13 +6,13 @@ import shutil
 import tempfile
 import urllib.request
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Protocol
 
 from core.hashing import compute_hashes, parse_sha256sums
 from core.upstream import open_retrying
 from release.downloaderror import DownloadError
 from release.latest import checked_url
-from release.transfer import download_file
+from release.transfer import TRANSFER_ERRORS, download_file
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -25,6 +25,16 @@ MAX_CHECKSUMS_BYTES = 1 << 20
 CHUNK = 1 << 20
 
 
+class Meter(Protocol):
+    """What draws a part's progress: the command's own presentation."""
+
+    def start(self, label: str) -> None: ...
+
+    def update(self, done: int, total: int) -> None: ...
+
+    def finish(self) -> None: ...
+
+
 def fetch_checksums(release: dict) -> dict[str, str]:
     """Read the published SHA-256 of each pack, keyed by archive name."""
     for asset in release.get("assets", []):
@@ -34,9 +44,11 @@ def fetch_checksums(release: dict) -> dict[str, str]:
         req = urllib.request.Request(
             url, headers={"User-Agent": "retrobios-downloader/1.0"}
         )
-        body = open_retrying(
-            req, lambda resp: resp.read(MAX_CHECKSUMS_BYTES), 60
-        ).decode("utf-8", "replace")
+        try:
+            raw = open_retrying(req, lambda resp: resp.read(MAX_CHECKSUMS_BYTES), 60)
+        except TRANSFER_ERRORS as exc:
+            raise DownloadError(f"Error: reading {CHECKSUMS_ASSET} failed: {exc}") from exc
+        body = raw.decode("utf-8", "replace")
         # A file that is not sha256sum output refuses the download: read
         # leniently, a `*name` line matched nothing and the pack went
         # unchecked.
@@ -85,12 +97,30 @@ def _check(archive: Path, checksums: dict[str, str], say: Callable[[str], None])
         )
 
 
+def _download_part(part: dict, target: Path, label: str, meter: Meter | None) -> None:
+    """Download one part, its progress drawn by *meter* when there is one."""
+    url, size = part["browser_download_url"], part.get("size", 0)
+    if meter is None:
+        download_file(url, target, size)
+        return
+    meter.start(label)
+    try:
+        download_file(url, target, size, meter.update)
+    finally:
+        meter.finish()
+
+
 def fetch_pack(
-    pack: Pack, staging: Path, checksums: dict[str, str], say: Callable[[str], None]
+    pack: Pack,
+    staging: Path,
+    checksums: dict[str, str],
+    say: Callable[[str], None],
+    meter: Meter | None = None,
 ) -> list[Path]:
     """Download a pack and return the archives to extract, each one checked.
 
-    Each progress line goes to *say*, and a failure raises DownloadError.
+    Each progress line goes to *say*, each part's byte count to *meter*, and
+    a failure raises DownloadError.
     """
     if len(pack.parts) != pack.expected_parts:
         raise DownloadError(
@@ -103,7 +133,7 @@ def fetch_pack(
         label = f"part {index}/{len(pack.parts)} " if len(pack.parts) > 1 else ""
         target = staging / part["name"]
         say(f"Downloading {part['name']} ({part.get('size', 0):,} bytes)...")
-        download_file(part["browser_download_url"], target, part.get("size", 0), label)
+        _download_part(part, target, label, meter)
         volumes.append(target)
 
     if pack.joined:

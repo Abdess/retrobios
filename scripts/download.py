@@ -34,6 +34,7 @@ from release.latest import DEFAULT_API, checked_url, get_latest_release
 from release.packfetch import fetch_checksums, fetch_pack, make_staging
 from release.packgroups import find_pack, list_platforms
 from release.packinfo import exit_without_pack, show_info
+from release.progressbar import ProgressBar
 
 FETCH_ERRORS = (
     urllib.error.URLError, OSError, http.client.HTTPException, UpstreamError,
@@ -107,7 +108,9 @@ def main() -> None:
 
         staging = make_staging(dest)
         try:
-            archives = fetch_pack(pack, staging, fetch_checksums(release), print)
+            archives = fetch_pack(
+                pack, staging, fetch_checksums(release), print, ProgressBar()
+            )
             print(f"Extracting to {dest}/...")
             for archive in archives:
                 safe_extract_zip(str(archive), str(dest))
