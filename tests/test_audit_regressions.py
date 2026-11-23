@@ -5629,6 +5629,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
     def test_a_view_naming_no_setup_keeps_what_one_package_leaves_out(self):
         """touchHLE panics without its fonts on ROCKNIX: the emulator page,
         the global gap report and the wanted list all still ask for them."""
+        from acquire.provenance import profile_needs
         from packs.crossref import cross_reference
         from resolve.validation import installed_everywhere
         from sitegen.install import comes_with_app
@@ -5642,6 +5643,12 @@ class BundledFilesAreNotToSource(unittest.TestCase):
                                  "systems": ["apple-ios"], "files": [font]}}
         report = cross_reference(profiles, {}, {"files": {}, "indexes": {}})
         self.assertFalse(report["touchhle"]["gap_details"][0]["bundled"])
+        sized = {**font, "size": 312132}
+        needs = profile_needs({"touchhle": {"files": [sized]}}, {"files": {}, "indexes": {}})
+        self.assertIn("liberationmono-regular.ttf", needs["by_name"])
+        everywhere = {**sized, "not_bundled_on": []}
+        needs = profile_needs({"touchhle": {"files": [everywhere]}}, {"files": {}, "indexes": {}})
+        self.assertEqual(needs["by_name"], {})
 
     def test_every_platform_named_is_registered(self):
         from model.registry import list_registered_platforms

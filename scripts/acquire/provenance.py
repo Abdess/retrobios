@@ -13,6 +13,7 @@ from core.hashing import parse_hash_list
 from core.paths import REPO_ROOT
 from core.ziptools import is_archive_path, zip_members
 from resolve.content import size_fits
+from resolve.validation import installed_everywhere
 
 
 HASH_FIELDS = ("sha1", "md5", "sha256")
@@ -67,7 +68,7 @@ def profile_needs(profiles: dict, db: dict) -> dict:
                 continue
             # Installed with the emulator, so not an acquisition target,
             # unless a platform package leaves it out.
-            if entry.get("bundled") and not entry.get("not_bundled_on"):
+            if installed_everywhere(entry):
                 continue
             need = {"emulator": emulator, "name": name,
                     "required": bool(entry.get("required"))}

@@ -10,6 +10,7 @@ from model.platforms import load_platform_config
 from model.registry import list_registered_platforms
 from packs.consumers import FileConsumers
 from resolve.directories import expand_directory_entries
+from resolve.validation import installed_everywhere
 
 
 def _entries(profile: dict, db: dict) -> list[dict]:
@@ -52,7 +53,7 @@ def bundled_only(db: dict, profiles: dict, platforms_dir: str, install_dir: Path
             # A platform whose package leaves the file out (not_bundled_on:
             # AmberELEC's amiberry 7.1.1 has no AROS ROMs) brings it from
             # the collection.
-            if entry.get("bundled") and not entry.get("not_bundled_on"):
+            if installed_everywhere(entry):
                 bundled.setdefault(sha1, set()).add(emulator)
             else:
                 needed.add(sha1)
