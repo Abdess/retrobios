@@ -35,6 +35,7 @@ from sitegen import decorate
 from sitegen import descriptions
 from sitegen import emulatorcards
 from sitegen import getpages
+from sitegen.pageregistry import PageRegistry
 from sitegen import structured
 from sitegen import starlight as sitestarlight
 from sitegen import validate
@@ -203,9 +204,8 @@ class PartPages(unittest.TestCase):
             path = Path(tmp) / "emulators" / "mame-files-3.md"
             path.parent.mkdir()
             path.write_text(page, encoding="utf-8")
-            descriptions.PART_PAGES.add("emulators/mame-files-3.md")
-            self.addCleanup(descriptions.PART_PAGES.discard, "emulators/mame-files-3.md")
-            decorate.decorate_markdown_pages(Path(tmp))
+            decorate.decorate_markdown_pages(
+                Path(tmp), PageRegistry(part_pages={"emulators/mame-files-3.md"}))
             front = _front(path.read_text(encoding="utf-8"))
         self.assertEqual(front["searchWeight"], 0.5)
         self.assertEqual(front["prev"], {"label": "MAME files, part 2 of 8",
@@ -227,52 +227,43 @@ class PartPages(unittest.TestCase):
 
 class Descriptions(unittest.TestCase):
     def test_titles_say_bios_files(self) -> None:
-        saved = dict(descriptions.PAGE_DATA)
-        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))
-        descriptions.PAGE_DATA["emulators/duckstation.md"] = {"hasPart": [{"name": "scph5501.bin"}]}
-        self.assertEqual(descriptions.page_browser_title(Path("emulators/duckstation.md"), "DuckStation"),
+        pages = PageRegistry(page_data={"emulators/duckstation.md": {"hasPart": [{"name": "scph5501.bin"}]}})
+        self.assertEqual(descriptions.page_browser_title(Path("emulators/duckstation.md"), "DuckStation", pages),
                          "DuckStation BIOS files")
         self.assertEqual(descriptions.page_browser_title(Path("systems/sega.md"), "Sega"), "Sega BIOS files")
         self.assertEqual(descriptions.page_browser_title(Path("systems/sega-dreamcast.md"), "Sega: Dreamcast"),
                          "Dreamcast BIOS files (Sega)")
 
     def test_an_emulator_page_is_described_by_its_intro(self) -> None:
-        saved = dict(descriptions.PAGE_DATA)
-        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))
-        descriptions.PAGE_DATA["emulators/duckstation.md"] = {"hasPart": [{"name": "scph5501.bin"}]}
+        pages = PageRegistry(page_data={"emulators/duckstation.md": {"hasPart": [{"name": "scph5501.bin"}]}})
         body = ("# DuckStation\n\nDuckStation emulates Sony PlayStation. It picks the BIOS for "
                 "the game's region.\n\n<details>\n\nThe installer finds the platform.\n")
-        text = descriptions.page_description(body, Path("emulators/duckstation.md"), "DuckStation")
+        text = descriptions.page_description(body, Path("emulators/duckstation.md"), "DuckStation", pages)
         self.assertTrue(text.startswith("DuckStation emulates Sony PlayStation."))
         self.assertNotIn("source-pinned", text)
 
     def test_a_page_whose_files_come_with_the_app_promises_none(self) -> None:
         """DaedalusX64's three files come with the app. The result read
         "DaedalusX64 BIOS files" over "DaedalusX64 emulates Nintendo 64."."""
-        saved, shipped = dict(descriptions.PAGE_DATA), set(descriptions.NOTHING_TO_FETCH)
-        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved),
-                                 descriptions.NOTHING_TO_FETCH.clear(), descriptions.NOTHING_TO_FETCH.update(shipped)))
+        pages = PageRegistry()
         with open(REPO_ROOT / "emulators" / "daedalusx64.yml", encoding="utf-8") as handle:
-            structured.record_emulator_page("daedalusx64", yaml.safe_load(handle))
+            structured.record_emulator_page("daedalusx64", yaml.safe_load(handle), pages)
         key = Path("emulators/daedalusx64.md")
-        self.assertEqual(descriptions.page_browser_title(key, "DaedalusX64"), "DaedalusX64 emulator")
+        self.assertEqual(descriptions.page_browser_title(key, "DaedalusX64", pages), "DaedalusX64 emulator")
         body = "# DaedalusX64\n\nDaedalusX64 emulates Nintendo 64.\n"
-        self.assertEqual(descriptions.page_description(body, key, "DaedalusX64"),
+        self.assertEqual(descriptions.page_description(body, key, "DaedalusX64", pages),
                          "DaedalusX64 emulates Nintendo 64. Every file it reads comes with the app.")
 
     def test_an_emulator_snippet_names_the_files_searched_for(self) -> None:
         """"gba_bios.bin" and "dreamcast bios" landed on pages described as
         "It reads 4 files, none of them required": fewer than 1 in 70 clicked."""
-        saved, snippets = dict(descriptions.PAGE_DATA), dict(descriptions.EMULATOR_SNIPPETS)
-        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved),
-                                 descriptions.EMULATOR_SNIPPETS.clear(),
-                                 descriptions.EMULATOR_SNIPPETS.update(snippets)))
+        pages = PageRegistry()
         with open(REPO_ROOT / "emulators" / "flycast.yml", encoding="utf-8") as handle:
-            structured.record_emulator_page("flycast", yaml.safe_load(handle))
+            structured.record_emulator_page("flycast", yaml.safe_load(handle), pages)
         key = Path("emulators/flycast.md")
         body = ("# Flycast\n\nFlycast emulates Sega Dreamcast. It reads 10 files, 4 of them "
                 "required: without a required file it does not start games.\n")
-        text = descriptions.page_description(body, key, "Flycast")
+        text = descriptions.page_description(body, key, "Flycast", pages)
         self.assertTrue(text.startswith("Sega Dreamcast BIOS for Flycast: dc_boot.bin, "), text)
         self.assertLessEqual(len(text), 155)
         self.assertFalse(text.endswith("..."), text)
@@ -304,35 +295,27 @@ class Descriptions(unittest.TestCase):
         self.assertEqual(noun([]), "BIOS files")
 
     def test_titles_follow_the_profiles(self) -> None:
-        saved, nouns = dict(descriptions.PAGE_DATA), dict(descriptions.TITLE_NOUNS)
-        snippets, shipped = dict(descriptions.EMULATOR_SNIPPETS), set(descriptions.NOTHING_TO_FETCH)
-        self.addCleanup(lambda: (
-            descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved),
-            descriptions.TITLE_NOUNS.clear(), descriptions.TITLE_NOUNS.update(nouns),
-            descriptions.EMULATOR_SNIPPETS.clear(), descriptions.EMULATOR_SNIPPETS.update(snippets),
-            descriptions.NOTHING_TO_FETCH.clear(), descriptions.NOTHING_TO_FETCH.update(shipped)))
+        pages = PageRegistry()
         expected = {"eden": ("Eden", "Eden keys"), "vita3k": ("Vita3K", "Vita3K firmware"),
                     "rpcs3": ("RPCS3", "RPCS3 firmware"), "mgba": ("mGBA", "mGBA BIOS files"),
                     "citra": ("Citra", "Citra keys and BIOS files")}
         for name, (title, browser) in expected.items():
             with open(REPO_ROOT / "emulators" / f"{name}.yml", encoding="utf-8") as handle:
-                structured.record_emulator_page(name, yaml.safe_load(handle))
+                structured.record_emulator_page(name, yaml.safe_load(handle), pages)
             with self.subTest(emulator=name):
-                self.assertEqual(descriptions.page_browser_title(Path(f"emulators/{name}.md"), title),
+                self.assertEqual(descriptions.page_browser_title(Path(f"emulators/{name}.md"), title, pages),
                                  browser)
-        descriptions.TITLE_NOUNS["systems/sony-playstation-vita.md"] = "firmware"
+        pages.title_nouns["systems/sony-playstation-vita.md"] = "firmware"
         self.assertEqual(descriptions.page_browser_title(
-            Path("systems/sony-playstation-vita.md"), "Sony: PlayStation Vita"),
+            Path("systems/sony-playstation-vita.md"), "Sony: PlayStation Vita", pages),
             "PlayStation Vita firmware (Sony)")
 
     def test_an_any_name_snippet_says_what_to_do(self) -> None:
-        saved = dict(descriptions.PAGE_DATA)
-        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))
-        descriptions.PAGE_DATA["emulators/aethersx2.md"] = {"hasPart": [{"name": "ps2.bin"}]}
+        pages = PageRegistry(page_data={"emulators/aethersx2.md": {"hasPart": [{"name": "ps2.bin"}]}})
         body = ("# AetherSX2\n\nAetherSX2 needs one Sony PlayStation 2 BIOS file, any region."
                 "\n\n1. Download [`ps2.bin`](../x/).\n2. Put it in this folder:\n")
         self.assertEqual(
-            descriptions.page_description(body, Path("emulators/aethersx2.md"), "AetherSX2"),
+            descriptions.page_description(body, Path("emulators/aethersx2.md"), "AetherSX2", pages),
             "AetherSX2 needs one Sony PlayStation 2 BIOS file, any region. Download one "
             "from this page and put it in the folder it shows. Any file name works.")
 
@@ -341,7 +324,8 @@ class Descriptions(unittest.TestCase):
         body = ("# Hydra Castle Labyrinth\n\n<details>\n<summary>Technical notes</summary>\n\n"
                 "Open-source port of E. Hashimoto's 2008 freeware Metroidvania. It reads "
                 "its data folder.\n\n</details>\n")
-        text = descriptions._emulator_description(body, "emulators/hcl.md", "Hydra Castle Labyrinth", "")
+        text = descriptions._emulator_description(body, "emulators/hcl.md", "Hydra Castle Labyrinth", "",
+                                               PageRegistry())
         self.assertTrue(text.startswith("Hydra Castle Labyrinth: open-source port of E. "
                                         "Hashimoto's 2008 freeware Metroidvania."), text)
         self.assertNotIn("It reads", text)
@@ -420,20 +404,15 @@ class GetPagesSitInYourSetup(unittest.TestCase):
 
     def test_a_get_page_is_dated_by_its_release(self):
         """The sitemap gave no date to the pages that change only with a release."""
-        saved = dict(descriptions.PAGE_DATA)
-        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))
         record = json.loads((REPO_ROOT / "release.json").read_text(encoding="utf-8"))
         tag = re.fullmatch(r"v(\d{4})\.(\d{2})\.(\d{2})", record["tag"])
-        getpages.generate_get_page("retroarch")
-        self.assertEqual(descriptions.PAGE_DATA["get/retroarch.md"], {"dateModified": "-".join(tag.groups())})
+        self.assertEqual(getpages.get_page_data("retroarch"), {"dateModified": "-".join(tag.groups())})
 
     def test_every_get_page_writes_its_own_description(self):
         """getpages and handheld own the description of a download page:
         page_description has no branch of its own for one."""
         from sitegen import handheld
 
-        saved = dict(descriptions.PAGE_DATA)
-        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))
         pages = [getpages.generate_get_page("retroarch"), getpages.generate_get_index(),
                  handheld.group_page(REPO_ROOT)]
         for page in pages:

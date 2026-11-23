@@ -48,6 +48,7 @@ from sitegen import render as siterender
 from model import systemnames
 from sitegen import validate
 from resolve import layout
+from sitegen.pageregistry import PageRegistry
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -365,12 +366,10 @@ class LongPagesFold(unittest.TestCase):
 
 class DataDirectoryPagesStayOutOfSearch(unittest.TestCase):
     def test_front_matter(self):
-        saved = dict(emulatorcards.DATA_MEMBERS), dict(emulatorpage.DATA_READERS)
-        self.addCleanup(lambda: (emulatorcards.DATA_MEMBERS.clear(), emulatorcards.DATA_MEMBERS.update(saved[0]),
-                                 emulatorpage.DATA_READERS.clear(), emulatorpage.DATA_READERS.update(saved[1])))
-        emulatorcards.DATA_MEMBERS["dolphin-sys"] = {"a.bin": {"sha1": "a" * 40, "size": 1}}
-        emulatorpage.DATA_READERS["dolphin-sys"] = [("dolphin-mmjr", "Dolphin MMJR"), ("dolphin", "Dolphin")]
-        page = emulatorpage._data_tree_page("dolphin-sys", {}, [("data-dolphin-sys", ["a.bin"])], 0)
+        registry = PageRegistry(
+            data_members={"dolphin-sys": {"a.bin": {"sha1": "a" * 40, "size": 1}}},
+            data_readers={"dolphin-sys": [("dolphin-mmjr", "Dolphin MMJR"), ("dolphin", "Dolphin")]})
+        page = emulatorpage._data_tree_page("dolphin-sys", {}, [("data-dolphin-sys", ["a.bin"])], 0, registry)
         front = yaml.safe_load(page.split("---\n")[1])
         self.assertEqual(front["search"], "exclude")
         self.assertEqual(front["parent"], {"label": "Dolphin", "link": "dolphin.md"})
@@ -487,14 +486,10 @@ class PartsKnowWhereTheySit(unittest.TestCase):
         ref = "x-sys"
         members = {f"f{i:05d}": {"size": 1, "sha1": f"{i:040x}"}
                    for i in range(lookup.DATA_TREE_ROWS_PER_PAGE * 2 + 1)}
-        emulatorcards.DATA_MEMBERS[ref] = members
-        emulatorpage.DATA_READERS[ref] = [("x", "X")]
-        try:
-            pages = lookup.data_tree_pages(ref, members)
-            self.assertEqual(len(pages), 3)
-            middle = _front(emulatorpage._data_tree_page(ref, {}, pages, 1))
-        finally:
-            del emulatorcards.DATA_MEMBERS[ref], emulatorpage.DATA_READERS[ref]
+        registry = PageRegistry(data_members={ref: members}, data_readers={ref: [("x", "X")]})
+        pages = lookup.data_tree_pages(ref, members)
+        self.assertEqual(len(pages), 3)
+        middle = _front(emulatorpage._data_tree_page(ref, {}, pages, 1, registry))
         self.assertEqual(middle["parent"], {"label": "X", "link": "x.md"})
         self.assertEqual(middle["prev"]["link"], f"{pages[0][0]}.md")
         self.assertEqual(middle["next"]["link"], f"{pages[2][0]}.md")

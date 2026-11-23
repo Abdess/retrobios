@@ -15,6 +15,7 @@ from sitegen import decorate
 from sitegen import descriptions
 from sitegen import emulatorpage
 from sitegen import structured
+from sitegen.pageregistry import PageRegistry
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -134,14 +135,12 @@ class WhatASearchSnippetSays(unittest.TestCase):
     def test_a_core_loading_no_file_promises_no_hash(self):
         """152 pages of cores that load no file announced paths and hashes."""
         rel = Path("emulators/lutro.md")
-        saved = dict(descriptions.PAGE_DATA)
-        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))
-        descriptions.PAGE_DATA[rel.as_posix()] = {}
-        text = descriptions.page_description("# Lutro\n", rel, "Lutro")
+        pages = PageRegistry(page_data={rel.as_posix(): {}})
+        text = descriptions.page_description("# Lutro\n", rel, "Lutro", pages)
         self.assertNotIn("hashes", text)
         self.assertIn("It needs no BIOS or firmware file.", text)
-        descriptions.PAGE_DATA[rel.as_posix()] = {"hasPart": [{"name": "a.bin"}]}
-        self.assertNotIn("needs no BIOS", descriptions.page_description("# Lutro\n", rel, "Lutro"))
+        pages.page_data[rel.as_posix()] = {"hasPart": [{"name": "a.bin"}]}
+        self.assertNotIn("needs no BIOS", descriptions.page_description("# Lutro\n", rel, "Lutro", pages))
 
     def test_a_long_paragraph_is_cut_at_a_word(self):
         plain = ("files/?sha1= is the address that does not move: it opens the card "

@@ -11,6 +11,7 @@ from pathlib import Path
 from core.text import series
 from sitegen import measurements as sitemeasurements
 from sitegen.config import SITE_NAME
+from sitegen.pageregistry import PageRegistry
 
 
 def page_title(markdown: str, path: Path) -> str:
@@ -21,8 +22,10 @@ def page_title(markdown: str, path: Path) -> str:
     return path.stem.replace("-", " ").title()
 
 
-def page_browser_title(relative: Path, title: str) -> str:
-    """Return a concise, unique browser/search title for a generated page."""
+def page_browser_title(relative: Path, title: str, pages: PageRegistry | None = None) -> str:
+    """Return a concise, unique browser/search title for a generated page.
+    ``pages`` is what the build recorded about its pages."""
+    pages = pages or PageRegistry()
     key = relative.as_posix()
     index_titles = {
         # Material appends " - RetroBIOS": the home title says what the site
@@ -38,7 +41,7 @@ def page_browser_title(relative: Path, title: str) -> str:
         return index_titles[key]
     # A console page is filed with the parts of its manufacturer's page, and
     # titled "Sega: Dreamcast". A part names its range of files.
-    part = key in PART_PAGES and (
+    part = key in pages.part_pages and (
         not key.startswith("systems/") or ": " not in title
         or re.search(r", part \d+ of \d+$", title))
     if part:
@@ -46,12 +49,13 @@ def page_browser_title(relative: Path, title: str) -> str:
     # The words a web search for a console or an emulator types: "dreamcast
     # bios", "duckstation bios". The h1 and the sidebar keep the name.
     if key.startswith("emulators/"):
-        has_files = PAGE_DATA.get(key, {}).get("hasPart") and key not in NOTHING_TO_FETCH
+        has_files = pages.page_data.get(key, {}).get("hasPart") and key not in pages.nothing_to_fetch
         # Lexaloffle, QEMU and ScummVM name a system page too.
-        own = " emulator" if f"systems/{relative.name}" in PAGE_DATA else ""
-        return f"{title}{own} {TITLE_NOUNS.get(key, BIOS_FILES)}" if has_files else f"{title} emulator"
+        own = " emulator" if f"systems/{relative.name}" in pages.page_data else ""
+        return (f"{title}{own} {pages.title_nouns.get(key, BIOS_FILES)}" if has_files
+                else f"{title} emulator")
     if key.startswith("systems/"):
-        noun = TITLE_NOUNS.get(key, BIOS_FILES)
+        noun = pages.title_nouns.get(key, BIOS_FILES)
         maker, _, console = title.partition(": ")
         return f"{console} {noun} ({maker})" if console else f"{title} {noun}"
     return title
@@ -118,7 +122,9 @@ def _shorten(plain: str, limit: int = 157) -> str:
     return cut.rstrip(" ,;:-(.") + "..."
 
 
-def page_description(markdown: str, relative: Path, title: str) -> str:
+def page_description(markdown: str, relative: Path, title: str,
+                     pages: PageRegistry | None = None) -> str:
+    pages = pages or PageRegistry()
     key = relative.as_posix()
     specific = {
         "index.md": "The BIOS files emulators need, for RetroArch, Batocera, EmuDeck and more: the folder they go in, one command that installs and checks them, and packs to download.",
@@ -137,16 +143,16 @@ def page_description(markdown: str, relative: Path, title: str) -> str:
         return specific[key]
     # What a search engine shows is the page's own first sentence: 707 pages
     # shared five templates of level 3 words ("source-pinned", "provenance").
-    browser = page_browser_title(relative, title)
+    browser = page_browser_title(relative, title, pages)
     held = re.search(r"\bThis part holds (.+?)\.(?: |$)", markdown, re.M)
-    if key in PART_PAGES and held:
+    if key in pages.part_pages and held:
         return _shorten(f"{browser}. This part holds {_plain_markdown(held[1])}.", 155)
     lead = _lead(markdown)
-    if key in PART_PAGES and re.search(r"\bpart \d+ of \d+", title):
+    if key in pages.part_pages and re.search(r"\bpart \d+ of \d+", title):
         # The parts of one list open on the same sentence.
         first = _first_paragraph(lead) or _first_paragraph(markdown)
         return _shorten(f"{title}. {first}", 155)
-    described = _section_description(markdown, relative, title, browser, lead)
+    described = _section_description(markdown, relative, title, browser, lead, pages)
     if described is not None:
         return described
     first = _first_paragraph(lead, minimum=35)
@@ -163,14 +169,14 @@ def page_description(markdown: str, relative: Path, title: str) -> str:
 
 
 def _section_description(markdown: str, relative: Path, title: str, browser: str,
-                         lead: str) -> str | None:
+                         lead: str, pages: PageRegistry) -> str | None:
     """The description of a system, emulator or platform page, or None for
     a page of another section. A download page writes its own (getpages)."""
     key = relative.as_posix()
     if key.startswith("systems/") and relative.stem != "index":
         return _system_description(markdown, browser)
     if key.startswith("emulators/") and relative.stem != "index":
-        return _emulator_description(markdown, key, title, _first_paragraph(lead))
+        return _emulator_description(markdown, key, title, _first_paragraph(lead), pages)
     if key.startswith("platforms/") and relative.stem != "index":
         # The summary ends on a link to the platform's site, whose label
         # alone was left: "A system for handhelds. ROCKNIX website."
@@ -186,7 +192,8 @@ def _lead(markdown: str) -> str:
     return re.split(r"^(?:## |<details|<section)", markdown, maxsplit=1, flags=re.M)[0]
 
 
-def _emulator_description(markdown: str, key: str, title: str, intro: str) -> str:
+def _emulator_description(markdown: str, key: str, title: str, intro: str,
+                          pages: PageRegistry) -> str:
     """An emulator page by its intro sentence ("DuckStation emulates Sony
     PlayStation. It picks the BIOS for the game's region: ..."), or by
     its profile table when the profile names no system."""
@@ -208,10 +215,10 @@ def _emulator_description(markdown: str, key: str, title: str, intro: str) -> st
     elif title not in intro:
         # "It reads 1 file": the profile names no system to open on.
         intro = f"{title}: {intro[:1].lower()}{intro[1:]}"
-    if key in NOTHING_TO_FETCH:
+    if key in pages.nothing_to_fetch:
         return _shorten(f"{intro} Every file it reads comes with the app.", 155)
-    if PAGE_DATA.get(key, {}).get("hasPart"):
-        return _shorten(_files_snippet(markdown, key, title, intro), 155)
+    if pages.page_data.get(key, {}).get("hasPart"):
+        return _shorten(_files_snippet(markdown, title, intro, pages.emulator_snippets.get(key)), 155)
     # An alias page sends the reader to the core whose files it shares.
     if "uses the same firmware as" in intro:
         return _shorten(intro, 155)
@@ -221,7 +228,8 @@ def _emulator_description(markdown: str, key: str, title: str, intro: str) -> st
     return _shorten(f"{intro} {needs}", 155)
 
 
-def _files_snippet(markdown: str, key: str, title: str, intro: str) -> str:
+def _files_snippet(markdown: str, title: str, intro: str,
+                   snippet: tuple[str, list[str], int, str] | None) -> str:
     """The snippet of an emulator page with files to get.
 
     A search for "gba_bios.bin" or "scph5500.bin" landed on a page described
@@ -236,7 +244,6 @@ def _files_snippet(markdown: str, key: str, title: str, intro: str) -> str:
         head = f"{intro.split(' any region.')[0]} any region."
         forms = [f"{head} {step} Any file name works.", f"{head} {step}"]
         return next((form for form in forms if len(form) <= 155), intro)
-    snippet = EMULATOR_SNIPPETS.get(key)
     if not snippet or not snippet[1] or "It reads " not in intro:
         return intro
     system, names, required, noun = snippet
@@ -315,21 +322,3 @@ def _system_description(markdown: str, browser: str) -> str:
                         "emulators that read them.", 155)
     return _shorten(f"{browser}, one card per file with its hashes and the emulators "
                     "that read it.", 155)
-
-
-# Structured data a page generator knows beyond its text, by page path
-# relative to docs/: read by decorate_markdown_pages.
-PAGE_DATA: dict[str, dict] = {}
-# Emulator pages whose every file comes with the app: no "BIOS files" in
-# their title, and their description says so (DaedalusX64, ZEsarUX).
-NOTHING_TO_FETCH: set[str] = set()
-# The first system, the file names, the count of required names and the
-# word for them ("BIOS" or "files") of each emulator page, for its snippet.
-EMULATOR_SNIPPETS: dict[str, tuple[str, list[str], int, str]] = {}
-# The noun of the title of an emulator or system page, by page path
-# relative to docs/ (title_noun): "BIOS files" when absent.
-TITLE_NOUNS: dict[str, str] = {}
-# Pages that hold part of a page too long for one (a console of a split
-# manufacturer, a run of an emulator's cards), by path relative to docs/:
-# their H1 already says what they are.
-PART_PAGES: set[str] = set()

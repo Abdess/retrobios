@@ -6,7 +6,8 @@ import html
 import os
 import re
 import urllib.parse
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Mapping
+import dataclasses
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -499,14 +500,23 @@ def _card_reading_details(f: dict, profile: dict) -> list[str]:
     return details
 
 
+@dataclass(frozen=True)
+class CardSources:
+    """What a card reads besides its profile: who reads each collected file,
+    and each data directory's members by ref."""
+
+    consumers: FileConsumers
+    data_members: Mapping[str, dict[str, dict]] = dataclasses.field(default_factory=dict)
+
+
 def _card_copy_line(
-    f: dict, consumers: FileConsumers, held: str, sha1: str, in_repo: bool, details: list[str],
+    f: dict, sources: CardSources, held: str, sha1: str, in_repo: bool, details: list[str],
 ) -> list[str]:
     """Which collection copy answers the entry. `details` are the lines said
     before, read for copies already named."""
     parts = held.split("/")
     if len(parts) >= 3 and parts[0] == "bios" and f.get("archive"):
-        return [_held_copy_line((held, f["name"]), consumers)]
+        return [_held_copy_line((held, f["name"]), sources)]
     if len(parts) >= 3 and parts[0] == "bios":
         # Which copy answers this entry, linked to its collection card
         # (provenance, every hash, download): an entry declaring no hash
@@ -519,25 +529,26 @@ def _card_copy_line(
     if in_repo and not any(d.startswith("Collection copies:") for d in details):
         copy = held_copy(f)
         if copy:
-            return [_held_copy_line(copy, consumers)]
+            return [_held_copy_line(copy, sources)]
     return []
 
 
 def _card_copy_details(
-    f: dict, profile: dict, consumers: FileConsumers | None, owner: str, in_repo: bool,
+    f: dict, profile: dict, sources: CardSources | None, owner: str, in_repo: bool,
     details: list[str],
 ) -> list[str]:
     """The collection copy that answers the entry and the setups that list
     it. `details` are the lines said before."""
-    if not consumers:
+    if not sources:
         return []
+    consumers = sources.consumers
     added = []
     if f.get("type") == "directory":
         added.extend(_directory_copies(f, consumers))
     sha1 = consumers.sha1_of(
         *entry_target(f, profile.get("files") or []), owner=owner)
     held = consumers.path_of(sha1) if sha1 and in_repo else ""
-    added.extend(_card_copy_line(f, consumers, held, sha1, in_repo, details + added))
+    added.extend(_card_copy_line(f, sources, held, sha1, in_repo, details + added))
     plat_links = platform_links(sha1, consumers) if sha1 else []
     if plat_links and markup.starlight():
         # Grouped by where the setups put the file, as the system card
@@ -603,7 +614,7 @@ def _card_heading(f: dict, profile: dict, in_repo: bool, anchor: str, layout: Ca
 def render_emulator_file(
     f: dict,
     profile: dict,
-    consumers: FileConsumers | None,
+    sources: CardSources | None,
     files: list,
     _file_available: Callable[[dict], bool],
     anchor: str = "",
@@ -631,7 +642,7 @@ def render_emulator_file(
     details.extend(_card_size_details(f))
     details.extend(_card_hash_details(f))
     details.extend(_card_reading_details(f, profile))
-    details.extend(_card_copy_details(f, profile, consumers, owner, in_repo, details))
+    details.extend(_card_copy_details(f, profile, sources, owner, in_repo, details))
     details.extend(_card_extra_details(f))
 
     if markup.starlight():
@@ -789,9 +800,10 @@ def _emulator_card_folds(
     return lines
 
 
-def _held_copy_line(copy: tuple[str, str], consumers: FileConsumers) -> str:
+def _held_copy_line(copy: tuple[str, str], sources: CardSources) -> str:
     """Where a copy the database does not index sits: a ZIP member under
     bios/, or a file or tree of a data directory the packs fetch."""
+    consumers = sources.consumers
     path, member = copy
     parts = path.rstrip("/").split("/")
     if member:
@@ -806,7 +818,7 @@ def _held_copy_line(copy: tuple[str, str], consumers: FileConsumers) -> str:
         if path.endswith("/"):
             where = code_span(inside + "/") if inside else "the tree"
             return f"Collection copy: {where} in the {code_span(ref)} data directory"
-        info = (DATA_MEMBERS.get(ref) or {}).get(inside) or {}
+        info = (sources.data_members.get(ref) or {}).get(inside) or {}
         shown = code_span(inside)
         if info.get("sha1"):
             shown = (f'<a href="../../files/?sha1={info["sha1"]}">'
@@ -1058,8 +1070,6 @@ def render_metadata_rows(profile: dict) -> list[str]:
     return lines
 
 
-# Data directory members and revisions, read once per build.
-DATA_MEMBERS: dict[str, dict[str, dict]] = {}
 
 
 def any_name_bios(profile: dict) -> dict | None:

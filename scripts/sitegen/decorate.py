@@ -14,7 +14,8 @@ from model.database import load_database
 from sitegen import markup, measurements as sitemeasurements, starlight as sitestarlight
 from sitegen.config import SITE_NAME, SITE_URL, yaml
 from core.paths import REPO_ROOT
-from sitegen.descriptions import PAGE_DATA, page_browser_title, page_description, page_title
+from sitegen.descriptions import page_browser_title, page_description, page_title
+from sitegen.pageregistry import PageRegistry
 from sitegen.pageprep import prepare_page, unresolved_images
 from sitegen.render import CARD_ANCHOR, WIKI_SRC_DIR, card_anchor
 from sitegen.write import undecorated, write_decorated
@@ -50,21 +51,21 @@ LEVELS = {
 SEARCH_WEIGHT = {"start": 10, "setup": 1.5, "reference": 0.5, "contribute": 0.5, "part": 0.5}
 SYSTEM_PAGE_WEIGHT = 5
 DEEP_GUIDE_WEIGHT = 0.5
-SEARCH_DEMOTED: set[str] = set()
 # A tool page a reader reaches by a task, not its name: "check my dump",
 # "md5 check" found emulator pages and never the page that checks a file.
 SEARCH_WEIGHT_OF_PAGE = {"files/index.md": 2}
 DEMOTED_WEIGHT = 0.5
 
 
-def search_weight(relative: Path, level: str) -> float | None:
+def search_weight(relative: Path, level: str, demoted: set[str] | frozenset[str] = frozenset()) -> float | None:
     """The search weight of a page, None for the default. A part page
-    states its own in its front matter: search_weight(path, "part")."""
+    states its own in its front matter: search_weight(path, "part").
+    ``demoted`` pages answer a name after the page that owns it."""
     if level == "part":
         return SEARCH_WEIGHT["part"]
     if relative.as_posix() in SEARCH_WEIGHT_OF_PAGE:
         return SEARCH_WEIGHT_OF_PAGE[relative.as_posix()]
-    if relative.as_posix() in SEARCH_DEMOTED:
+    if relative.as_posix() in demoted:
         return DEMOTED_WEIGHT
     if relative.parts[0] == "systems":
         return SYSTEM_PAGE_WEIGHT
@@ -131,13 +132,15 @@ def _cards_elsewhere(markdown: str) -> str:
     return markdown
 
 
-def decorate_markdown_pages(docs: Path) -> dict[str, str]:
+def decorate_markdown_pages(docs: Path, pages: PageRegistry | None = None) -> dict[str, str]:
     """Add per-page descriptions and machine-readable structured data.
 
     Under Starlight each page is written in its final form (front matter,
     site addresses, pinned heading ids) and the dates a page states are
-    returned by address, for the sitemap.
+    returned by address, for the sitemap. ``pages`` is what the build
+    recorded about its pages.
     """
+    pages = pages or PageRegistry()
     lastmod: dict[str, str] = {}
     terms = sitestarlight.glossary_terms(REPO_ROOT / WIKI_SRC_DIR / "glossary.md")
     # The console words of every system page, decorated or not: a console
@@ -170,8 +173,8 @@ def decorate_markdown_pages(docs: Path) -> dict[str, str]:
         level = authored.get("level") or page_level(relative)
 
         title = page_title(markdown, relative)
-        browser_title = page_browser_title(relative, title)
-        description = str(authored.get("description") or page_description(markdown, relative, title))
+        browser_title = page_browser_title(relative, title, pages)
+        description = str(authored.get("description") or page_description(markdown, relative, title, pages))
         if relative.name == "index.md":
             page_path = "" if len(relative.parts) == 1 else "/".join(relative.parts[:-1]) + "/"
         else:
@@ -193,7 +196,7 @@ def decorate_markdown_pages(docs: Path) -> dict[str, str]:
                 "name": SITE_NAME,
                 "url": SITE_URL,
             },
-            **PAGE_DATA.get(relative.as_posix(), {}),
+            **pages.page_data.get(relative.as_posix(), {}),
         }
         if schema_type == "WebSite":
             # The home page is the site: named as the site, part of nothing.
@@ -202,7 +205,7 @@ def decorate_markdown_pages(docs: Path) -> dict[str, str]:
         target, text = sitestarlight.render_page(
             relative.as_posix(), markdown, sitestarlight.PageMeta(
                 level=level,
-                weight=search_weight(relative, level),
+                weight=search_weight(relative, level, pages.search_demoted),
                 browser_title=browser_title,
                 description=description, structured=structured, terms=terms,
                 search=authored.get("search") != "exclude",

@@ -182,15 +182,13 @@ class SiteReferenceContracts(unittest.TestCase):
         self.assertNotIn("\n    #if FEATURE", rendered)
 
     def test_browser_titles_distinguish_emulators_from_system_pages(self):
-        from unittest import mock
+        from sitegen.pageregistry import PageRegistry
 
-        from sitegen import descriptions
-
-        pages = {"systems/qemu.md": {}, "emulators/qemu.md": {"hasPart": [{"name": "a"}]}}
-        with mock.patch.dict(descriptions.PAGE_DATA, pages, clear=True):
-            self.assertEqual(page_browser_title(Path("emulators/qemu.md"), "QEMU"),
-                             "QEMU emulator BIOS files")
-            self.assertEqual(page_browser_title(Path("systems/qemu.md"), "QEMU"), "QEMU BIOS files")
+        pages = PageRegistry(page_data={"systems/qemu.md": {},
+                                        "emulators/qemu.md": {"hasPart": [{"name": "a"}]}})
+        self.assertEqual(page_browser_title(Path("emulators/qemu.md"), "QEMU", pages),
+                         "QEMU emulator BIOS files")
+        self.assertEqual(page_browser_title(Path("systems/qemu.md"), "QEMU", pages), "QEMU BIOS files")
 
     ACCEPTED = (
         ("md5", "c87a52c277f7952b41c639fc7bf0a43b"),
@@ -589,17 +587,15 @@ class OnlyAPinnedProfileClaimsAPin(unittest.TestCase):
     """Redream, with no revision at all, was described as source-pinned."""
 
     def test_the_description_follows_the_pin(self):
-        from unittest import mock
-
         from sitegen import descriptions
+        from sitegen.pageregistry import PageRegistry
 
-        pages = {
+        pages = PageRegistry(page_data={
             "emulators/pinned.md": {"about": {"version": "a" * 40}},
             "emulators/redream.md": {},
-        }
-        with mock.patch.dict(descriptions.PAGE_DATA, pages, clear=True):
-            pinned = descriptions.page_description("", Path("emulators/pinned.md"), "P")
-            loose = descriptions.page_description("", Path("emulators/redream.md"), "R")
+        })
+        pinned = descriptions.page_description("", Path("emulators/pinned.md"), "P", pages)
+        loose = descriptions.page_description("", Path("emulators/redream.md"), "R", pages)
         # A search snippet is level 0: the pin is on the page, not in it.
         self.assertNotIn("source-pinned", pinned)
         self.assertNotIn("source-pinned", loose)

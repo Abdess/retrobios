@@ -52,21 +52,17 @@ from sitegen.dataexports import (
     write_single_item,
 )
 from sitegen.datapage import generate_data_page
-from sitegen.decorate import SEARCH_DEMOTED, front_matter, decorate_markdown_pages
-from sitegen.descriptions import PAGE_DATA, PART_PAGES, TITLE_NOUNS, title_noun
+from sitegen.pageregistry import PageRegistry
+from sitegen.decorate import front_matter, decorate_markdown_pages
+from sitegen.descriptions import title_noun
 from sitegen.emulatorcards import (
     ARCHIVE_RECIPES_PAGE,
     ROMSET_FAQ_PAGE,
-    DATA_MEMBERS,
     emulator_setups,
     with_archive_counts,
     with_romset_table,
 )
 from sitegen.emulatorpage import (
-    DATA_READERS,
-    DATA_REVISIONS,
-    EMULATOR_SETUPS,
-    MEASUREMENT_ITEMS,
     availability_check,
     emulator_pages,
     emulator_parts,
@@ -75,7 +71,7 @@ from sitegen.emulatorpage import (
 from sitegen.emulatorsindex import generate_emulators_index
 from sitegen.exports import generate_exports_page, load_export_reports
 from sitegen.gaps import PlatformRegistries, SourceListing, generate_gap_analysis
-from sitegen.getpages import generate_get_index, generate_get_page
+from sitegen.getpages import generate_get_index, generate_get_page, get_page_data
 from sitegen.guidepage import DEMO_ASSETS, generate_handheld_guide
 from sitegen.home import generate_explore_index, generate_home
 from sitegen.lookup import (
@@ -189,6 +185,8 @@ class _SiteRun:
     gap_report: dict = dataclasses.field(default_factory=dict)
     file_held: Callable[[dict], bool] = bool
     manufacturers: dict = dataclasses.field(default_factory=dict)
+    # What the pages record for the pages written after them and the decorator.
+    pages: PageRegistry = dataclasses.field(default_factory=PageRegistry)
 
 
 def _load_site_run(args: argparse.Namespace, db: dict, docs: Path, public: Path) -> _SiteRun:
@@ -281,11 +279,11 @@ def _write_system_pages(run: _SiteRun) -> None:
         slug = mfr.lower().replace(" ", "-")
         pages = system_pages(mfr, consoles, run.consumers, console_installs.get(slug))
         for stem, (page, held) in pages.items():
-            PAGE_DATA[f"systems/{stem}.md"] = system_structured_data(stem, held)
-            TITLE_NOUNS[f"systems/{stem}.md"] = title_noun(
+            run.pages.page_data[f"systems/{stem}.md"] = system_structured_data(stem, held)
+            run.pages.title_nouns[f"systems/{stem}.md"] = title_noun(
                 str(entry.get("name", "")) for entries in held.values() for entry in entries)
             if stem != slug:
-                PART_PAGES.add(f"systems/{stem}.md")
+                run.pages.part_pages.add(f"systems/{stem}.md")
             write_if_changed(str(docs / "systems" / f"{stem}.md"), page)
         write_single_item(
             public / "api" / "v1" / "systems" / f"{slug}.json", "systems",
@@ -307,8 +305,7 @@ def _write_measurements(run: _SiteRun) -> sitemeasurements.Built:
     )
     for path in measured.paths:
         record_written(path)
-    MEASUREMENT_ITEMS.clear()
-    MEASUREMENT_ITEMS.update(sitemeasurements.by_emulator(measured.index))
+    run.pages.measurement_items = sitemeasurements.by_emulator(measured.index)
     print(f"  {measured.index['records']} records, {measured.index['count']} tests")
     write_if_changed(str(run.docs / sitemeasurements.EXPLORER_PAGE),
                      sitemeasurements.generate_explorer_page(measured.index) + reference_next())
@@ -326,7 +323,7 @@ def _write_data_exports(run: _SiteRun, stats: dict, dumps: WantedDumps) -> None:
     write_if_changed(str(run.docs / "data.md"),
                      generate_data_page(exports, run.public / sitemeasurements.SQLITE_PATH)
                      + reference_next())
-    PAGE_DATA["data.md"] = dataset_structured_data(exports, run.db)
+    run.pages.page_data["data.md"] = dataset_structured_data(exports, run.db)
 
 
 def _write_platform_pages(run: _SiteRun) -> dict[str, str]:
@@ -356,7 +353,7 @@ def _write_platform_pages(run: _SiteRun) -> dict[str, str]:
         for stem, page in moved.items():
             if stem in coverages:
                 raise RuntimeError(f"a system page takes the platform {stem}'s address")
-            PART_PAGES.add(f"platforms/{stem}.md")
+            run.pages.part_pages.add(f"platforms/{stem}.md")
             anchor = re.search(rf"\]\({re.escape(name)}\.md#([^)\s]+)\)", page)
             if anchor:
                 published_parts[f"platforms/{stem}.md"] = f"platforms/{name}.md#{anchor[1]}"
@@ -366,7 +363,7 @@ def _write_platform_pages(run: _SiteRun) -> dict[str, str]:
             # weight does not reach, and their file list is already kept out
             # of the index: the title alone, found again on the setup's page
             # and the console's, is all the search held of them.
-            SEARCH_DEMOTED.add(f"platforms/{stem}.md")
+            run.pages.search_demoted.add(f"platforms/{stem}.md")
             front = front_matter(page)
             if front:
                 page = page[page.find("\n---\n", 4) + 5:].lstrip("\n")
@@ -375,34 +372,34 @@ def _write_platform_pages(run: _SiteRun) -> dict[str, str]:
             page = "---\n" + yaml.safe_dump(front, sort_keys=False, allow_unicode=True) \
                 + "---\n\n" + page
             write_if_changed(str(docs / "platforms" / f"{stem}.md"), page)
-        PAGE_DATA[f"platforms/{name}.md"] = platform_structured_data(name, cov)
+        run.pages.page_data[f"platforms/{name}.md"] = platform_structured_data(name, cov)
     return published_parts
 
 
-def _record_data_trees(profiles: dict) -> None:
-    """The data directories: their members, revisions and readers, and the
-    pages their member lists go to."""
-    DATA_MEMBERS.update(data_directory_members())
-    DATA_REVISIONS.update(data_directory_revisions())
+def _record_data_trees(profiles: dict, pages: PageRegistry) -> None:
+    """Record in ``pages`` the data directories: their members, revisions
+    and readers, and the pages their member lists go to."""
+    pages.data_members.update(data_directory_members())
+    pages.data_revisions.update(data_directory_revisions())
     for key in sorted(profiles):
         if not is_emulator(profiles[key]):
             continue
         display = str(profiles[key].get("emulator", key))
         for tree in page_data_directories(key, profiles):
-            readers = DATA_READERS.setdefault(str(tree.get("ref", "")), [])
+            readers = pages.data_readers.setdefault(str(tree.get("ref", "")), [])
             if (key, display) not in readers:
                 readers.append((key, display))
-    for ref, members in DATA_MEMBERS.items():
+    for ref, members in pages.data_members.items():
         for stem, _names in data_tree_pages(ref, members):
-            PART_PAGES.add(f"emulators/{stem}.md")
+            pages.part_pages.add(f"emulators/{stem}.md")
 
 
 def _write_emulator_pages(run: _SiteRun) -> None:
     """The emulator index, and each emulator's page and API item."""
     profiles = run.profiles
     print("Generating emulator pages...")
-    EMULATOR_SETUPS.update(emulator_setups(run.coverages, profiles))
-    _record_data_trees(profiles)
+    run.pages.emulator_setups.update(emulator_setups(run.coverages, profiles))
+    _record_data_trees(profiles, run.pages)
     write_if_changed(
         str(run.docs / "emulators" / "index.md"), generate_emulators_index(profiles)
     )
@@ -432,21 +429,21 @@ def _write_emulator_page(run: _SiteRun, name: str, profile: dict) -> None:
     )
     pages = emulator_pages(
         name, profile, db, run.consumers, run.suppl_names, run.data_registry,
-        data_dirs=page_data_directories(name, run.profiles),
+        data_dirs=page_data_directories(name, run.profiles), registry=run.pages,
     )
-    record_emulator_page(name, profile)
+    record_emulator_page(name, profile, run.pages)
     # A frozen copy answers after the emulator: a frozen_snapshot, and a
     # profile pinned to the revision one platform builds (pin_frozen).
     # Reicast and Flycast 2021 LE answered "dc bios missing" before Flycast.
     if (not lists_files(profile)
             or profile.get("core_classification") in ("launcher", "alias", "frozen_snapshot")
             or profile.get("pin_frozen")):
-        SEARCH_DEMOTED.add(f"emulators/{name}.md")
+        run.pages.search_demoted.add(f"emulators/{name}.md")
     files = profile.get("files") or []
     for stem, entries in emulator_parts(name, files, profile, run.file_held):
-        PAGE_DATA[f"emulators/{stem}.md"] = emulator_structured_data(
+        run.pages.page_data[f"emulators/{stem}.md"] = emulator_structured_data(
             {**profile, "files": [files[i] for i in entries]})
-        PART_PAGES.add(f"emulators/{stem}.md")
+        run.pages.part_pages.add(f"emulators/{stem}.md")
     for stem, page in pages.items():
         write_if_changed(str(docs / "emulators" / f"{stem}.md"), page)
 
@@ -584,6 +581,9 @@ def _write_guide_pages(run: _SiteRun) -> None:
     get_dir.mkdir(parents=True, exist_ok=True)
     for name in run.platform_names:
         write_if_changed(str(get_dir / f"{name}.md"), generate_get_page(name))
+        dated = get_page_data(name)
+        if dated:
+            run.pages.page_data[f"{releaserecord.GET_DIR}/{name}.md"] = dated
     write_if_changed(str(get_dir / f"{GROUP_PAGE}.md"),
                      sitehandheld.group_page(REPO_ROOT))
     write_if_changed(str(get_dir / "index.md"), generate_get_index())
@@ -605,7 +605,7 @@ def _write_navigation(run: _SiteRun, published_parts: dict[str, str]) -> None:
     stale += sweep_top_pages(docs)
 
     print("Adding page metadata and structured data...")
-    lastmod = decorate_markdown_pages(docs)
+    lastmod = decorate_markdown_pages(docs, run.pages)
 
     nav = generate_nav(coverages, run.manufacturers, run.profiles, run.registry,
                        Path(WIKI_SRC_DIR))

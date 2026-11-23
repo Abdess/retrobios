@@ -21,7 +21,7 @@ from sitegen.decorate import DEMOTED_WEIGHT, SEARCH_WEIGHT
 from core.text import series
 from sitegen.emulatorcards import (
     CardLayout,
-    DATA_MEMBERS,
+    CardSources,
     build_rows,
     entry_label,
     file_badges,
@@ -46,6 +46,7 @@ from sitegen.install import (
     standalone_place,
 )
 from sitegen.lookup import data_directory_origin, data_tree_pages
+from sitegen.pageregistry import PageRegistry
 from sitegen.render import (
     admonition_body,
     card_anchor,
@@ -222,15 +223,6 @@ def _emulator_held_line(files: list[dict], available: Callable[[dict], bool]) ->
     return [f"<p><small>In this collection: {series(held)}.</small></p>", ""]
 
 
-DATA_REVISIONS: dict[str, dict] = {}
-# Emulator -> the platforms that run it, as resolve_platform_cores answers.
-EMULATOR_SETUPS: dict[str, list[str]] = {}
-# The measurement index items of each emulator, for the proof lines of its page.
-MEASUREMENT_ITEMS: dict[str, list[dict]] = {}
-# The emulator pages that list each data directory, by ref.
-DATA_READERS: dict[str, list[tuple[str, str]]] = {}
-
-
 def _data_member_table(members: dict[str, dict], names: list[str], anchors: set[str]) -> list[str]:
     """A data directory's files with their size and sha1, each sha1 an
     anchor the first time the page lists it (``anchors``, the page's ids)."""
@@ -248,19 +240,19 @@ def _data_member_table(members: dict[str, dict], names: list[str], anchors: set[
 
 
 def _data_tree_page(ref: str, entry: dict, pages: list[tuple[str, list[str]]],
-                    index: int) -> str:
+                    index: int, registry: PageRegistry) -> str:
     """One page of a large data directory's file list."""
     stem, names = pages[index]
-    members = DATA_MEMBERS.get(ref) or {}
+    members = registry.data_members.get(ref) or {}
     part = f" (part {index + 1} of {len(pages)})" if len(pages) > 1 else ""
     read_by = series([f"[{escape_tags(display)}]({key}.md#data-directories)"
-                             for key, display in DATA_READERS.get(ref, [])])
+                             for key, display in registry.data_readers.get(ref, [])])
     # A file list out of the search: "dolphin" found three parts of the
     # dolphin-sys tree, on their title, before the Dolphin page.
     front: dict = {"level": "reference", "search": "exclude"}
     # The reader the tree is named after (dolphin for dolphin-sys), else
     # the first by name.
-    readers = DATA_READERS.get(ref) or []
+    readers = registry.data_readers.get(ref) or []
     owner = max(readers, default=None,
                 key=lambda reader: len(reader[0]) if ref.startswith(f"{reader[0]}-") else 0)
     if owner:
@@ -506,10 +498,11 @@ def generate_emulator_page(
     data_names: SupplementalIndex | None = None,
     data_registry: dict | None = None,
     data_dirs: list[dict] | None = None,
+    registry: PageRegistry | None = None,
 ) -> str:
     """One emulator's page. ``data_dirs`` defaults to the profile's own."""
     return emulator_pages(
-        name, profile, db, consumers, data_names, data_registry, data_dirs)[name]
+        name, profile, db, consumers, data_names, data_registry, data_dirs, registry)[name]
 
 
 def _collection_card_href(entry: dict, consumers: FileConsumers | None, owner: str) -> str:
@@ -723,8 +716,9 @@ def _source_rows(profile: dict) -> list[str]:
     return rows
 
 
-def _emulator_meta_rows(name: str, profile: dict) -> list[str]:
-    """The rows of the "About this profile" card, after its header."""
+def _emulator_meta_rows(name: str, profile: dict, setups: list[str] | None) -> list[str]:
+    """The rows of the "About this profile" card, after its header.
+    ``setups`` are the platforms that run the emulator."""
     rows = [f"| Type | {profile.get('type', 'unknown')} |"]
     classification = profile.get("core_classification", "")
     if classification:
@@ -736,7 +730,6 @@ def _emulator_meta_rows(name: str, profile: dict) -> list[str]:
     if revision:
         rows.append(f"| Revision | {revision} |")
     rows.extend(build_rows(profile))
-    setups = EMULATOR_SETUPS.get(name)
     if setups:
         # The file cards name the setups whose own list holds a file: the
         # ones that run the emulator and pack its files were said nowhere.
@@ -776,6 +769,7 @@ class _EmulatorSources:
     db: dict
     consumers: FileConsumers | None
     data_names: SupplementalIndex | None
+    data_members: dict[str, dict[str, dict]]
 
 
 def _emulator_files_section(
@@ -784,7 +778,8 @@ def _emulator_files_section(
     """The Files section, and the pages its cards went to."""
     files = profile.get("files", [])
     systems = profile.get("systems", [])
-    consumers = sources.consumers
+    cards_from = (CardSources(sources.consumers, sources.data_members)
+                  if sources.consumers else None)
     part_pages: dict[str, str] = {}
     lines: list[str] = []
     _file_available = availability_check(sources.db, sources.data_names, name)
@@ -799,7 +794,7 @@ def _emulator_files_section(
     data_href = f"{name}.md#data-folder" if parts else "#data-folder"
     table_form = markup.starlight() and (bool(parts) or len(files) >= EMULATOR_TABLE_MIN)
     cards = [
-        render_emulator_file(f, profile, consumers, files, _file_available, anchor, name,
+        render_emulator_file(f, profile, cards_from, files, _file_available, anchor, name,
                               CardLayout(alias, data_href, badges_apart=table_form))
         for f, anchor, alias in zip(files, anchors, aliases)
     ]
@@ -826,6 +821,7 @@ def _emulator_files_section(
 
 def _data_directory_lines(
     dd: dict, profile: dict, data_registry: dict | None, member_anchors: set[str],
+    registry: PageRegistry,
 ) -> tuple[list[str], dict[str, str]]:
     """One data directory: what it holds, where it comes from, which build
     reads it, and the pages its member list went to."""
@@ -841,14 +837,14 @@ def _data_directory_lines(
         line += f": {entry['description']}"
     lines.append(line)
     lines.extend(f"    - {line}" for line in data_directory_origin(
-        entry, DATA_REVISIONS.get(ref) or {}))
+        entry, registry.data_revisions.get(ref) or {}))
     if dd.get("mode"):
         lines.append(f"    - Read by the {dd['mode']} build only")
     if dd.get("bundled"):
         lines.append("    - Installed with the emulator, so packs leave it out")
     if dd.get("source_ref"):
         lines.append(f"    - Source: {source_ref_markdown(profile, dd['source_ref'])}")
-    members = DATA_MEMBERS.get(ref) or {}
+    members = registry.data_members.get(ref) or {}
     tree_pages = data_tree_pages(ref, members)
     if tree_pages:
         where = (f"[a page of their own]({tree_pages[0][0]}.md)" if len(tree_pages) == 1
@@ -856,7 +852,7 @@ def _data_directory_lines(
                      f"[part {i}]({stem}.md)" for i, (stem, _names) in enumerate(tree_pages, 1)))
         lines.append(f"    - {count_text(len(members), 'file')}, listed on {where}")
         for index, (stem, _names) in enumerate(tree_pages):
-            part_pages[stem] = _data_tree_page(ref, entry, tree_pages, index)
+            part_pages[stem] = _data_tree_page(ref, entry, tree_pages, index, registry)
     elif members:
         table = _data_member_table(members, sorted(members), member_anchors)
         lines.append("")
@@ -867,7 +863,7 @@ def _data_directory_lines(
 
 
 def _data_directories_section(
-    profile: dict, data_dirs: list[dict], data_registry: dict | None,
+    profile: dict, data_dirs: list[dict], data_registry: dict | None, registry: PageRegistry,
 ) -> tuple[list[str], dict[str, str]]:
     """The Data directories section, and the pages its member lists went to."""
     # The member tables are a file list with hashes: out of the search,
@@ -879,7 +875,7 @@ def _data_directories_section(
     # it and the code that does: these trees put thousands of files in
     # the packs, and the page said only `dolphin-sys` > `Sys`.
     for dd in data_dirs:
-        lines, pages = _data_directory_lines(dd, profile, data_registry, member_anchors)
+        lines, pages = _data_directory_lines(dd, profile, data_registry, member_anchors, registry)
         trees.extend(lines)
         part_pages.update(pages)
     trees.append("")
@@ -895,9 +891,12 @@ def emulator_pages(
     data_names: SupplementalIndex | None = None,
     data_registry: dict | None = None,
     data_dirs: list[dict] | None = None,
+    registry: PageRegistry | None = None,
 ) -> dict[str, str]:
     """An emulator's page by stem under emulators/, and the pages its cards
-    went to when there are more than EMULATOR_CARDS_PER_PAGE."""
+    went to when there are more than EMULATOR_CARDS_PER_PAGE. ``registry``
+    is what the build recorded about its pages."""
+    registry = registry or PageRegistry()
     if profile.get("type") == "alias":
         return {name: _alias_page(name, profile)}
 
@@ -934,7 +933,7 @@ def emulator_pages(
         "",
         "| Detail | Value |",
         "|---|---|",
-        *_emulator_meta_rows(name, profile),
+        *_emulator_meta_rows(name, profile, registry.emulator_setups.get(name)),
         "",
         "</div>",
         "",
@@ -959,18 +958,19 @@ def emulator_pages(
             lines.extend(markup.aside("info", "Why no files", [escape_tags(str(exclusion))])[:-1])
     else:
         section, pages = _emulator_files_section(
-            name, emu_name, profile, _EmulatorSources(db, consumers, data_names))
+            name, emu_name, profile,
+            _EmulatorSources(db, consumers, data_names, registry.data_members))
         lines.extend(section)
         part_pages.update(pages)
 
-    lines.extend(sitemeasurements.proof_section(MEASUREMENT_ITEMS.get(name, [])))
+    lines.extend(sitemeasurements.proof_section(registry.measurement_items.get(name, [])))
 
     blocks = render_structured_blocks(profile)
     if blocks:
         lines.extend(["## Profile data", "", *blocks])
 
     if data_dirs:
-        section, pages = _data_directories_section(profile, data_dirs, data_registry)
+        section, pages = _data_directories_section(profile, data_dirs, data_registry, registry)
         lines.extend(section)
         part_pages.update(pages)
 

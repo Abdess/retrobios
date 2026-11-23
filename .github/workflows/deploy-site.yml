@@ -178,6 +178,7 @@ on:
       - "scripts/sitegen/nav.py"
       - "scripts/sitegen/pagemarkdown.py"
       - "scripts/sitegen/pageprep.py"
+      - "scripts/sitegen/pageregistry.py"
       - "scripts/sitegen/parts.py"
       - "scripts/sitegen/places.py"
       - "scripts/sitegen/platformfiles.py"

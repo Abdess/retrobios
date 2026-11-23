@@ -13,7 +13,8 @@ from model.systemnames import system_name
 from sitegen import starlight as sitestarlight
 from sitegen.cards import emulator_file_anchors
 from sitegen.config import REPO_URL, SITE_NAME, SITE_URL
-from sitegen.descriptions import EMULATOR_SNIPPETS, NOTHING_TO_FETCH, PAGE_DATA, TITLE_NOUNS, title_noun
+from sitegen.descriptions import title_noun
+from sitegen.pageregistry import PageRegistry
 from sitegen.emulatorcards import snippet_noun
 from sitegen.install import comes_with_app
 from sitegen.lookup import data_member_digests, hash_pairs
@@ -294,10 +295,10 @@ def release_versions(profile: dict) -> dict[str, str]:
             if re.search(r"[0-9]", value) and not names_a_commit(value)}
 
 
-def record_emulator_page(name: str, profile: dict) -> None:
-    """What the title and the description of an emulator page read."""
+def record_emulator_page(name: str, profile: dict, pages: PageRegistry) -> None:
+    """Record in ``pages`` what the title and the description of an emulator page read."""
     key = f"emulators/{name}.md"
-    PAGE_DATA[key] = emulator_structured_data(profile)
+    pages.page_data[key] = emulator_structured_data(profile)
     listed = [f for f in profile.get("files") or [] if isinstance(f, dict)]
     fetched = [f for f in listed if f.get("name") and not comes_with_app(f)]
     systems = profile.get("systems") or []
@@ -317,8 +318,8 @@ def record_emulator_page(name: str, profile: dict) -> None:
         base = Path(str(f["name"])).name
         names.setdefault(base.casefold(), base)
     firmware = [f for f in fetched if f.get("category", "bios") in ("bios", "bios_zip")]
-    TITLE_NOUNS[key] = title_noun(str(f["name"]) for f in firmware)
-    EMULATOR_SNIPPETS[key] = (
+    pages.title_nouns[key] = title_noun(str(f["name"]) for f in firmware)
+    pages.emulator_snippets[key] = (
         # One console names an emulator of five systems, not BizHawk of 40.
         system_name(first) if 0 < len(systems) <= 5 else "",
         list(names.values()),
@@ -326,9 +327,9 @@ def record_emulator_page(name: str, profile: dict) -> None:
         snippet_noun(names.values(), len(firmware), len(fetched)),
     )
     if listed and all(comes_with_app(f) for f in listed):
-        NOTHING_TO_FETCH.add(key)
+        pages.nothing_to_fetch.add(key)
     else:
-        NOTHING_TO_FETCH.discard(key)
+        pages.nothing_to_fetch.discard(key)
 
 
 def emulator_structured_data(profile: dict) -> dict:

@@ -15,7 +15,6 @@ from sitegen import handheld as sitehandheld, markup
 from sitegen.config import RELEASE_URL, REPO_URL
 from core.paths import REPO_ROOT
 from core.sizes import size_text
-from sitegen.descriptions import PAGE_DATA
 from sitegen.guidepage import (
     NO_ZIP_FAQ,
     folder_words,
@@ -85,6 +84,17 @@ def _pack_lines(platform_name: str, display: str, record: dict, pack: dict) -> l
     ]
 
 
+def get_page_data(platform_name: str) -> dict:
+    """The structured data of get/<platform>/: the page changes with the
+    release it lists, so its tag is its date, the one the sitemap gives
+    (vYYYY.MM.DD). Empty when no release publishes the platform's pack."""
+    record = releaserecord.load_advertised()
+    tag_date = re.fullmatch(r"v(\d{4})\.(\d{2})\.(\d{2})", str(record.get("tag", "")))
+    if has_release_pack(platform_name) and releaserecord.pack_for(platform_name, record) and tag_date:
+        return {"dateModified": "-".join(tag_date.groups())}
+    return {}
+
+
 def generate_get_page(platform_name: str) -> str:
     """get/<platform>/: the address a link outside the site can keep.
 
@@ -99,11 +109,6 @@ def generate_get_page(platform_name: str) -> str:
     pack = releaserecord.pack_for(platform_name, record)
     released = has_release_pack(platform_name)
     title = get_page_title(platform_name, display)
-    # The page changes with the release it lists: its tag is its date, the
-    # one the sitemap gives (vYYYY.MM.DD).
-    tag_date = re.fullmatch(r"v(\d{4})\.(\d{2})\.(\d{2})", str(record.get("tag", "")))
-    if released and pack and tag_date:
-        PAGE_DATA[f"{releaserecord.GET_DIR}/{platform_name}.md"] = {"dateModified": "-".join(tag_date.groups())}
     if released and pack and pack.get("assets"):
         description = (f"The BIOS pack for {display}: {size_text(pack['download_size'])} to "
                        "download. The address stays the same and always gives the latest ZIP.")

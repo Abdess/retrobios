@@ -5942,7 +5942,7 @@ class EmulatorCardsLinkTheCopyAndTheSection(unittest.TestCase):
     def test_copy_and_sections(self):
         from types import SimpleNamespace
 
-        from scripts.sitegen.emulatorcards import render_emulator_file
+        from scripts.sitegen.emulatorcards import CardSources, render_emulator_file
 
         sha1 = "ef9194ab4804aa0aa8540d846caf291b28331165"
         consumers = SimpleNamespace(
@@ -5953,7 +5953,7 @@ class EmulatorCardsLinkTheCopyAndTheSection(unittest.TestCase):
         )
         entry = {"name": "IPL.bin", "path": "GC/USA/IPL.bin"}
         text = "\n".join(render_emulator_file(
-            entry, {"files": [entry]}, consumers, [entry], lambda f: True, "file-ipl", "dolphin",
+            entry, {"files": [entry]}, CardSources(consumers), [entry], lambda f: True, "file-ipl", "dolphin",
         ))
         self.assertIn("../systems/nintendo.md#sha1-ef9194ab4804", text)
         self.assertIn("../platforms/batocera.md#nintendo-gamecube", text)
@@ -5998,21 +5998,16 @@ class SitemapDatesComeFromThePage(unittest.TestCase):
     def test_the_page_date_or_none_reaches_the_sitemap(self):
         import tempfile
 
-        # decorate reads PAGE_DATA through its own import (sitegen.descriptions,
-        # bare): the dict filled here is that one.
         from sitegen import decorate
-        from sitegen import descriptions as sitegen_descriptions
+        from sitegen.pageregistry import PageRegistry
 
-        saved = dict(sitegen_descriptions.PAGE_DATA)
-        self.addCleanup(lambda: (sitegen_descriptions.PAGE_DATA.clear(),
-                                 sitegen_descriptions.PAGE_DATA.update(saved)))
+        pages = PageRegistry(page_data={"emulators/dated.md": {"dateModified": "2026-10-04"}})
         with tempfile.TemporaryDirectory() as tmp:
             docs = Path(tmp)
             (docs / "emulators").mkdir()
             (docs / "emulators" / "dated.md").write_text("# Dated\n\nA page with its own date.\n")
             (docs / "emulators" / "undated.md").write_text("# Undated\n\nA page with no date.\n")
-            sitegen_descriptions.PAGE_DATA["emulators/dated.md"] = {"dateModified": "2026-10-04"}
-            lastmod = decorate.decorate_markdown_pages(docs)
+            lastmod = decorate.decorate_markdown_pages(docs, pages)
         self.assertEqual(lastmod, {"/retrobios/emulators/dated/": "2026-10-04"})
         # The sitemap reads that map, and leaves every other page undated.
         config = (ROOT / "website" / "astro.config.mjs").read_text(encoding="utf-8")

@@ -547,8 +547,8 @@ class MovedPlatformPages(unittest.TestCase):
     def test_a_setups_list_for_one_console_is_a_reference(self) -> None:
         source = script_source("generate_site.py")
         block = source[source.index("for stem, page in moved.items():"):]
-        block = block[: block.index("PAGE_DATA[f\"platforms/{name}.md\"]")]
-        self.assertIn('SEARCH_DEMOTED.add(f"platforms/{stem}.md")', block)
+        block = block[: block.index("page_data[f\"platforms/{name}.md\"]")]
+        self.assertIn('search_demoted.add(f"platforms/{stem}.md")', block)
         self.assertIn('level="reference"', block)
         self.assertIn('search="exclude"', block)
         self.assertIn("parent=", block)

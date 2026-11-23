@@ -99,13 +99,14 @@ class AHeldEntrySaysWhere(unittest.TestCase):
 
         consumers = FileConsumers({"files": {"z" * 40: {
             "path": "bios/Arcade/MAME/spectrum_opus.zip"}}}, data_dir_registry={})
+        sources = emulatorcards.CardSources(consumers)
         line = emulatorcards._held_copy_line(
-            ("bios/Arcade/MAME/spectrum_opus.zip", "specmate.rom"), consumers)
+            ("bios/Arcade/MAME/spectrum_opus.zip", "specmate.rom"), sources)
         self.assertEqual(line, "Collection copy: member `specmate.rom` of "
                          "[`bios/Arcade/MAME/spectrum_opus.zip`]"
                          "(../systems/arcade.md#sha1-zzzzzzzzzzzz)")
         line = emulatorcards._held_copy_line(("data/dolphin-sys/GC/font_western.bin", ""),
-                                             consumers)
+                                             sources)
         self.assertEqual(line, "Collection copy: `GC/font_western.bin` in the "
                          "`dolphin-sys` data directory")
 

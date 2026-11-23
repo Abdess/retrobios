@@ -534,7 +534,7 @@ class AMemberIsReadInItsArchive(unittest.TestCase):
         self.assertIn(shipped, credited)
         self.assertFalse([p for p in credited if p.endswith("/sm1.sm1")])
         sm1 = next(f for f in files if f["name"] == "sm1.sm1")
-        rows = "\n".join(emulatorcards.render_emulator_file(sm1, profile, consumers, files,
+        rows = "\n".join(emulatorcards.render_emulator_file(sm1, profile, emulatorcards.CardSources(consumers), files,
                                                   lambda _f: True, owner="fbneo"))
         self.assertIn("Collection copy: member `sm1.sm1` of", rows)
         self.assertIn(shipped, rows)

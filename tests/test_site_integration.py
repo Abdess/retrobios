@@ -24,10 +24,10 @@ import yaml
 
 from freshness.findings import OK, STALE
 from freshness.profiles import check_source_paths
-from sitegen import emulatorcards
 from sitegen import emulatorpage
 from sitegen import startwith
 from sitegen import pageprep
+from sitegen.pageregistry import PageRegistry
 from model import collection
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -42,12 +42,9 @@ def _profile(name: str) -> dict:
 class DataTreeReaders(unittest.TestCase):
     def test_read_by_names_the_emulators(self):
         ref = "y-sys"
-        emulatorcards.DATA_MEMBERS[ref] = {"a.bin": {"size": 1, "sha1": "0" * 40}}
-        emulatorpage.DATA_READERS[ref] = [("dolphin", "Dolphin"), ("ishiiruka", "Ishiiruka")]
-        try:
-            page = emulatorpage._data_tree_page(ref, {}, [("y-sys", ["a.bin"])], 0)
-        finally:
-            del emulatorcards.DATA_MEMBERS[ref], emulatorpage.DATA_READERS[ref]
+        registry = PageRegistry(data_members={ref: {"a.bin": {"size": 1, "sha1": "0" * 40}}},
+                                data_readers={ref: [("dolphin", "Dolphin"), ("ishiiruka", "Ishiiruka")]})
+        page = emulatorpage._data_tree_page(ref, {}, [("y-sys", ["a.bin"])], 0, registry)
         self.assertIn("Read by [Dolphin](dolphin.md#data-directories) and "
                       "[Ishiiruka](ishiiruka.md#data-directories).", page)
         self.assertNotIn("('dolphin'", page)
