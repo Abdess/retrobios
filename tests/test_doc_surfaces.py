@@ -663,12 +663,12 @@ class ArchiveRecipesAreCountedFromTheRecipes(unittest.TestCase):
         self.assertIn(f"({SITE_URL}wiki/archive-recipes/)", line)
 
     def test_the_page_counts(self) -> None:
-        from sitegen import emulatorcards
+        from sitegen import archivecounts
 
         page = _read("wiki/archive-recipes.md")
-        self.assertEqual(emulatorcards.with_archive_counts(page, self.counts), page,
+        self.assertEqual(archivecounts.with_archive_counts(page, self.counts), page,
                          "wiki/archive-recipes.md counts are stale: run scripts/generate_site.py")
-        for line in emulatorcards.archive_recipe_lines(self.counts):
+        for line in archivecounts.archive_recipe_lines(self.counts):
             self.assertIn(line, page)
 
     def test_the_page_command_is_the_tools(self) -> None:

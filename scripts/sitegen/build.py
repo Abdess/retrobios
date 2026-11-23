@@ -44,6 +44,7 @@ from sitegen import (
 from sitegen.cards import wanted_link, system_install_choices, tables_out_of_search
 from sitegen.config import GENERATED_DIRS, PUBLIC_DIRS, REPO_URL, yaml
 from core.paths import REPO_ROOT
+from sitegen.archivecounts import ARCHIVE_RECIPES_PAGE, with_archive_counts
 from sitegen.crossref import generate_cross_reference
 from sitegen.dataexports import (
     source_commit,
@@ -57,10 +58,8 @@ from sitegen.pageregistry import PageRegistry
 from sitegen.decorate import front_matter, decorate_markdown_pages
 from sitegen.descriptions import title_noun
 from sitegen.emulatorcards import (
-    ARCHIVE_RECIPES_PAGE,
     ROMSET_FAQ_PAGE,
     emulator_setups,
-    with_archive_counts,
     with_romset_table,
 )
 from sitegen.emulatorpage import (
