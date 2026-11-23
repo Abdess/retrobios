@@ -8,7 +8,6 @@ truth data for reporting.
 from __future__ import annotations
 
 import os
-import re
 import zipfile
 from collections.abc import Callable, Collection, Iterator, Mapping, Sequence
 from typing import TYPE_CHECKING, TypedDict
@@ -20,7 +19,9 @@ from resolve.content import (
     name_match_size_ok,
     parse_validation,
     shape_fits,
+    merged_size_refusal,
     size_refusal,
+    SizeRefusal,
 )
 from resolve.archives import archive_members
 from model.database import records_for_hash
@@ -56,21 +57,41 @@ class Refusal(str):
     ``accepted`` maps the algorithm to the values the check takes, in the
     order the message lists them. Reports that look the dumps up read it,
     never the message, which is free to change.
+
+    ``check``, ``got`` and ``values`` say which check refused which digest
+    and what it takes, so refusals of one check merge on data. An Adler-32
+    check names its values there but accepts no dump a catalog can look up.
     """
 
     accepted: dict[str, list[str]]
+    check: str
+    got: str
+    values: list[str]
 
-    def __new__(cls, message: str, accepted: Mapping[str, Sequence[str]]) -> Refusal:
+    def __new__(
+        cls, message: str, accepted: Mapping[str, Sequence[str]],
+        check: str = "", got: str = "", values: Sequence[str] = (),
+    ) -> Refusal:
         refusal = super().__new__(cls, message)
         refusal.accepted = {algo: list(values) for algo, values in accepted.items()}
+        refusal.check, refusal.got, refusal.values = check, got, list(values)
         return refusal
+
+
+def _check_refusal(check: str, got: str, values: list[str], lookup: bool) -> Refusal:
+    """The refusal of a digest check, rendered from its data."""
+    return Refusal(f"{check} mismatch: got {got}, accepted [{','.join(values)}]",
+                   {check: values} if lookup else {}, check, got, values)
 
 
 def _hash_refusal(hash_type: str, got: str, accepted: Collection[str]) -> Refusal:
     """The refusal of a hash check that does not take ``got``."""
-    values = sorted(accepted)
-    return Refusal(f"{hash_type} mismatch: got {got}, accepted [{','.join(values)}]",
-                   {hash_type: values})
+    return _check_refusal(hash_type, got, sorted(accepted), True)
+
+
+def _adler32_refusal(got: str, accepted: Collection[str]) -> Refusal:
+    """The refusal of an Adler-32 check that does not take ``got``."""
+    return _check_refusal("adler32", f"0x{got}", sorted(accepted), False)
 
 
 def accepted_hashes(reason: str | None) -> dict[str, list[str]]:
@@ -173,8 +194,7 @@ def _rule_failure(
                 hashes.update(compute_hashes(local_path))
             actual = hashes["adler32"].lower()
         if actual not in rule["adler32"]:
-            accepted = ",".join(sorted(rule["adler32"]))
-            return f"adler32 mismatch: got 0x{actual}, accepted [{accepted}]"
+            return _adler32_refusal(actual, rule["adler32"])
     for check, spec in rule.get("content", {}).items():
         if check not in skip and not content_fits({"validation": [check], check: spec}, local_path):
             return _CONTENT_REASONS[check]
@@ -433,24 +453,22 @@ def _emulators_for_check(
     return sorted(result)
 
 
-_REASON = re.compile(r"^(\w+ mismatch): got (\S+), accepted \[(.*)\]$")
-
-
 def _merged_reason(reasons: list[str]) -> str:
     """One reason for every entry of a core that turned the copy away.
 
     Raze lists three BLOOD.RFF sizes and the message named the first one
-    alone. Reasons of one kind are merged into a single accepted list.
+    alone. Refusals of one check on one value are merged from their data
+    into a single accepted list.
     """
-    parsed = [m for m in (_REASON.match(reason) for reason in reasons) if m]
-    if len(parsed) == len(reasons) and len({(m.group(1), m.group(2)) for m in parsed}) == 1:
-        accepted = sorted({v for m in parsed for v in m.group(3).split(",") if v},
-                          key=lambda v: (len(v), v))
-        message = f"{parsed[0].group(1)}: got {parsed[0].group(2)}, accepted [{','.join(accepted)}]"
-        algorithms = {algo for reason in reasons for algo in accepted_hashes(reason)}
-        if len(algorithms) == 1 and all(isinstance(reason, Refusal) for reason in reasons):
-            return Refusal(message, {algorithms.pop(): accepted})
-        return message
+    sized = [reason for reason in reasons if isinstance(reason, SizeRefusal)]
+    if len(sized) == len(reasons) and len({reason.got for reason in sized}) == 1:
+        return merged_size_refusal(sized)
+    checked = [reason for reason in reasons if isinstance(reason, Refusal) and reason.check]
+    if len(checked) == len(reasons) and len({(r.check, r.got) for r in checked}) == 1:
+        first = checked[0]
+        values = sorted({v for r in checked for v in r.values}, key=lambda v: (len(v), v))
+        return _check_refusal(first.check, first.got, values,
+                              all(r.accepted for r in checked))
     return reasons[0]
 
 
@@ -584,12 +602,8 @@ def _merged_hash_failure(
         if entry.get("adler32_byteswap"):
             actual_adler = _adler32_byteswapped(local_path)
         if actual_adler not in entry["adler32"]:
-            expected = ",".join(sorted(entry["adler32"]))
             emus = _emulators_for_check("adler32", pe)
-            return (
-                f"adler32 mismatch: got 0x{actual_adler}, accepted [{expected}]",
-                emus,
-            )
+            return _adler32_refusal(actual_adler, entry["adler32"]), emus
     return None
 
 

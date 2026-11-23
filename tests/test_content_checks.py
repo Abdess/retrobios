@@ -241,6 +241,22 @@ class OtherContentTests(unittest.TestCase):
             path.write_bytes(b"\0" * 143200)
             self.assertIsNone(core_size_refusal(disk, str(path)))
 
+    def test_a_core_refusal_names_every_entry_s_sizes(self):
+        """The merge parsed the message: a second entry's window was dropped
+        and the report named the first entry's sizes alone."""
+        from resolve.validation import _merged_reason
+
+        exact = [size_refusal({"size": [300]}, 50), size_refusal({"size": [100, 2048]}, 50)]
+        self.assertEqual(_merged_reason(exact), "size mismatch: got 50, accepted [100,300,2048]")
+        mixed = [size_refusal({"size": [100]}, 50),
+                 size_refusal({"min_size": 200, "max_size": 300}, 50),
+                 size_refusal({"min_size": 65536, "size_multiple": 65536}, 50)]
+        self.assertEqual(_merged_reason(mixed),
+                         "size mismatch: got 50, accepted [100] or 200 to 300 "
+                         "or min 65536 in multiples of 65536")
+        lone = size_refusal({"min_size": 200, "max_size": 300}, 50)
+        self.assertEqual(_merged_reason([lone]), "size too small: min 200, got 50")
+
     def test_profiles_with_a_size_and_a_window_take_the_window(self):
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         entries = {

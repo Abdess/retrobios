@@ -6,8 +6,8 @@ import functools
 import hashlib
 import json
 import os
-from collections.abc import Collection
-from typing import TYPE_CHECKING, TypedDict
+from collections.abc import Collection, Iterable, Sequence
+from typing import TYPE_CHECKING, Optional, TypedDict
 
 from core.hashing import compute_hashes
 from core.ziptools import check_inside_zip
@@ -218,7 +218,63 @@ def size_fits(file_entry: dict, candidate_size: int) -> bool:
     return size_refusal(file_entry, candidate_size) is None
 
 
-def size_refusal(file_entry: dict, candidate_size: int) -> str | None:
+Window = tuple[Optional[int], Optional[int], Optional[int]]
+
+
+class SizeRefusal(str):
+    """A size check's refusal: the message for people, the accepted sizes as data.
+
+    ``sizes`` are the exact sizes the entry takes and ``windows`` its
+    (min_size, max_size, size_multiple) ranges. Merging reads them, never
+    the message.
+    """
+
+    got: int
+    sizes: tuple[int, ...]
+    windows: tuple[Window, ...]
+
+    def __new__(
+        cls, message: str, got: int, sizes: Iterable[int], windows: Iterable[Window] = (),
+    ) -> SizeRefusal:
+        refusal = super().__new__(cls, message)
+        refusal.got = got
+        refusal.sizes = tuple(sorted(set(sizes)))
+        refusal.windows = tuple(dict.fromkeys(windows))
+        return refusal
+
+
+def _window_text(window: Window) -> str:
+    low, high, multiple = window
+    if low is not None and high is not None:
+        bounds = f"{low} to {high}"
+    elif low is not None:
+        bounds = f"min {low}"
+    elif high is not None:
+        bounds = f"max {high}"
+    else:
+        return f"multiples of {multiple}"
+    return f"{bounds} in multiples of {multiple}" if multiple else bounds
+
+
+def merged_size_refusal(refusals: Sequence[SizeRefusal]) -> SizeRefusal:
+    """One refusal for several entries that each turn the same size away.
+
+    Every size and window any of them accepts is named: Raze lists three
+    BLOOD.RFF sizes, and a core can pair exact sizes in one entry with a
+    window in another.
+    """
+    if len(refusals) == 1:
+        return refusals[0]
+    got = refusals[0].got
+    sizes = sorted({size for refusal in refusals for size in refusal.sizes})
+    windows = list(dict.fromkeys(w for refusal in refusals for w in refusal.windows))
+    parts = [f"[{','.join(str(size) for size in sizes)}]"] if sizes else []
+    parts += [_window_text(window) for window in windows]
+    return SizeRefusal(f"size mismatch: got {got}, accepted {' or '.join(parts)}",
+                       got, sizes, windows)
+
+
+def size_refusal(file_entry: dict, candidate_size: int) -> SizeRefusal | None:
     """Why the entry's declared sizes turn a size away, or None.
 
     ``size`` is the exact size, or the list of sizes, the code accepts.
@@ -241,15 +297,19 @@ def size_refusal(file_entry: dict, candidate_size: int) -> str | None:
         if not allowed:
             return None
         accepted = ",".join(str(s) for s in sorted(allowed))
-        return f"size mismatch: got {candidate_size}, accepted [{accepted}]"
+        return SizeRefusal(f"size mismatch: got {candidate_size}, accepted [{accepted}]",
+                           candidate_size, allowed)
     exact = f" or [{','.join(str(s) for s in sorted(allowed))}]" if allowed else ""
     if low is not None and candidate_size < low:
-        return f"size too small: min {low}{exact}, got {candidate_size}"
-    if high is not None and candidate_size > high:
-        return f"size too large: max {high}{exact}, got {candidate_size}"
-    if multiple and candidate_size % int(multiple):
-        return f"size mismatch: got {candidate_size}, accepted multiples of {multiple}{exact}"
-    return None
+        message = f"size too small: min {low}{exact}, got {candidate_size}"
+    elif high is not None and candidate_size > high:
+        message = f"size too large: max {high}{exact}, got {candidate_size}"
+    elif multiple and candidate_size % int(multiple):
+        message = f"size mismatch: got {candidate_size}, accepted multiples of {multiple}{exact}"
+    else:
+        return None
+    window = (low, high, int(multiple) if multiple else None)
+    return SizeRefusal(message, candidate_size, allowed, [window])
 
 
 class DeclaredHashes(TypedDict):
