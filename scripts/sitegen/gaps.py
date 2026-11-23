@@ -11,9 +11,7 @@ from core.hashing import declared_hash_lists
 from core.text import series
 from model.database import sha1_at
 from model.platforms import native_layer
-from model.profiles import is_emulator
 from packs.crossref import gap_source_counts, whole_tree_gaps
-from resolve.cores import resolve_platform_cores
 from resolve.nativemode import check_label
 from resolve.sendable import sendable
 from sitegen import markup, wanted as sitewanted
@@ -369,25 +367,6 @@ PER_EMULATOR_STEM = "gaps-per-emulator"
 NOT_COLLECTED_STEM = "gaps-not-collected"
 
 
-def reading_platforms(emu_name: str, profiles: dict[str, dict], name: str,
-                      configs: dict[str, dict]) -> set[str]:
-    """Of the platforms running an emulator (name -> config), those whose
-    build of it reads the entry: BlastEm's cdbios.bin is read by the
-    standalone build only, and RetroBat hands that build other names.
-    *profiles* is every profile of the run, the emulator's among them."""
-    from resolve.standalone import platform_layouts, standalone_set
-    from resolve.validation import filter_files_by_mode, unread_on
-
-    profile = profiles[emu_name]
-    return {
-        platform for platform, config in configs.items()
-        if any(f.get("name") == name and not unread_on(f, platform)
-               for view, standalone in platform_layouts(
-                   emu_name, profile, standalone_set(config, profiles))
-               for f in filter_files_by_mode(view.get("files") or [], standalone))
-    }
-
-
 @dataclass
 class _VerifyTally:
     """Verify results aggregated across all platforms."""
@@ -526,22 +505,6 @@ def _divergence_rows(
     return div_rows
 
 
-def _emulator_platforms(profiles: dict, coverages: dict) -> dict[str, set[str]]:
-    """Each emulator with the platforms that run it."""
-    emu_to_platforms: dict[str, set[str]] = {}
-    unique_profiles = {
-        k: v
-        for k, v in profiles.items()
-        if is_emulator(v)
-    }
-    for pname in coverages:
-        config = coverages[pname]["config"]
-        matched = resolve_platform_cores(config, unique_profiles)
-        for emu_name in matched:
-            emu_to_platforms.setdefault(emu_name, set()).add(pname)
-    return emu_to_platforms
-
-
 @dataclass
 class _MissingFiles:
     """The files to find, one row each, and the entries they come from."""
@@ -581,12 +544,14 @@ def _missing_files(emulator_gaps: list[tuple[str, dict]]) -> _MissingFiles:
                     "emu_keys": [emu_name],
                     "required": g["required"],
                     "source_ref": g["source_ref"],
+                    "platforms": set(g.get("platforms") or ()),
                 }
                 found.rows.append(row)
             elif emu_name not in row["emu_keys"]:
                 row["emulators"].append(data["emulator"])
                 row["emu_keys"].append(emu_name)
                 row["required"] = row["required"] or g["required"]
+            row["platforms"].update(g.get("platforms") or ())
     return found
 
 
@@ -601,14 +566,10 @@ class SourceListing:
     placer: sitewanted.Placer | None = None
 
 
-def _source_row(m: dict, profiles: dict, coverages: dict,
-                emu_to_platforms: dict[str, set[str]], placer: sitewanted.Placer | None) -> str:
-    """The row of one file to source."""
-    plats = sorted(set().union(
-        *(reading_platforms(key, profiles, m["name"], {
-            p: coverages[p]["config"] for p in emu_to_platforms.get(key, set())
-        }) for key in m["emu_keys"])
-    ))
+def _source_row(m: dict, profiles: dict, placer: sitewanted.Placer | None) -> str:
+    """The row of one file to source, with the platforms the gap report
+    found needing it."""
+    plats = sorted(m["platforms"])
     plat_badges = (
         " ".join(
             f'<span class="rb-badge rb-badge-info">{p}</span>'
@@ -1004,12 +965,11 @@ def generate_gap_analysis(
         lines.extend(_complement_intro(src_totals, total_undeclared, emulator_gaps,
                                        listing.moved))
         # List truly missing files with platform impact
-        emu_to_platforms = _emulator_platforms(profiles, coverages)
         missing = _missing_files(emulator_gaps)
         if missing.rows:
             counted = _source_counted(missing)
             rows = [
-                _source_row(m, profiles, coverages, emu_to_platforms, listing.placer)
+                _source_row(m, profiles, listing.placer)
                 for m in sorted(missing.rows, key=lambda x: (not x["required"], x["name"]))
             ]
             lines.extend(["### Files to source", "", counted,

@@ -104,25 +104,6 @@ class BundledFilesAreNotToSource(unittest.TestCase):
         self.assertIn("| [ZQuest Classic](emulators/zq.md) | 4 | 1 | 0 | 0 | 2 | "
                       '<span class="rb-badge rb-badge-danger">1</span> |', page)
 
-    def test_a_row_names_only_the_platforms_that_read_it(self):
-        """cdbios.bin, read by standalone BlastEm only and never on RetroBat,
-        was badged retroarch, lakka and retrobat."""
-        from sitegen import gaps
-        from model.platforms import load_platform_config
-        from resolve.cores import resolve_platform_cores
-
-        root = Path(__file__).resolve().parents[1]
-        profile = yaml.safe_load((root / "emulators" / "blastem.yml").read_text(encoding="utf-8"))
-        configs = {}
-        for name in ("retroarch", "lakka", "retrobat", "batocera"):
-            config = load_platform_config(name, str(root / "platforms"))
-            if "blastem" in resolve_platform_cores(config, {"blastem": profile}):
-                configs[name] = config
-        self.assertIn("retroarch", configs)
-        self.assertIn("retrobat", configs)
-        found = gaps.reading_platforms("blastem", {"blastem": profile}, "cdbios.bin", configs)
-        self.assertFalse(found & {"retroarch", "lakka", "retrobat"}, found)
-
 
 class StructuredBlocks(unittest.TestCase):
     PIN = "1e0de94dc7e669c0925a22c0fccf6cdc837af0a0"

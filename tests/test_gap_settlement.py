@@ -98,6 +98,62 @@ class TheRunningBuildPlacesTheGap(unittest.TestCase):
         self.assertEqual(self._gap_paths(set()), ["Cemu/keys.txt"])
 
 
+class MissingRowsNameTheirPlatforms(unittest.TestCase):
+    """The gaps page decided again which platforms a missing file affects,
+    without installed_on: lzdoom's doom1.wad, which RetroPie's package
+    downloads, was badged retropie."""
+
+    PROFILE = {"emulator": "Engine", "type": "standalone + libretro", "systems": ["doom"],
+               "files": [
+                   {"name": "a.wad", "installed_on": ["beta"]},
+                   {"name": "b.bin", "unread_on": ["alpha"]},
+                   {"name": "c.bin", "mode": "standalone"},
+                   {"name": "d.bin", "bundled": True, "not_bundled_on": ["alpha"]},
+               ]}
+
+    def platforms(self) -> dict[str, list[str]]:
+        from packs.crossref import whole_tree_gaps
+
+        configs = [
+            {"_key": "alpha", "cores": ["engine"], "systems": {}},
+            {"_key": "beta", "cores": ["engine"], "systems": {}},
+            {"_key": "gamma", "cores": ["engine"], "standalone_cores": ["engine"],
+             "systems": {}},
+            {"_key": "delta", "cores": ["other"], "systems": {}},
+        ]
+        report = whole_tree_gaps(configs, {"files": {}, "indexes": {}},
+                                 {"engine": self.PROFILE})
+        return {g["name"]: g["platforms"] for g in report["engine"]["gap_details"]}
+
+    def test_each_platform_rule_is_applied(self):
+        self.assertEqual(self.platforms(), {
+            "a.wad": ["alpha", "gamma"],
+            "b.bin": ["beta", "gamma"],
+            "c.bin": ["gamma"],
+            "d.bin": ["alpha"],
+        })
+
+    def test_real_profiles_name_only_the_platforms_that_need_them(self):
+        """cdbios.bin, read by standalone BlastEm only and never on RetroBat,
+        was badged retroarch, lakka and retrobat."""
+        import yaml
+
+        from model.platforms import load_platform_config
+        from packs.crossref import whole_tree_gaps
+
+        profiles = {
+            name: yaml.safe_load((REPO_ROOT / "emulators" / f"{name}.yml").read_text(encoding="utf-8"))
+            for name in ("blastem", "lzdoom")
+        }
+        configs = [load_platform_config(name, str(REPO_ROOT / "platforms"))
+                   for name in ("retroarch", "lakka", "retrobat", "retropie")]
+        report = whole_tree_gaps(configs, {"files": {}, "indexes": {}}, profiles)
+        found = {(emu, g["name"]): set(g["platforms"])
+                 for emu, data in report.items() for g in data["gap_details"]}
+        self.assertFalse(found[("blastem", "cdbios.bin")] & {"retroarch", "lakka", "retrobat"})
+        self.assertNotIn("retropie", found[("lzdoom", "doom1.wad")])
+
+
 class EveryGapReportFoldsCase(unittest.TestCase):
     """The command line passed folded_slots and the site did not, so the
     gaps page listed RetroBat files the CLI report settled. Later the CLI

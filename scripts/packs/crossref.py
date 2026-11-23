@@ -106,10 +106,52 @@ def whole_tree_gaps(
     standalone layout is proven against them.
     """
     declared, scope = global_report_scope(configs, db, profiles)
-    return cross_reference(
+    report = cross_reference(
         emulator_profiles(profiles if compared is None else compared),
         declared, db, data_names, **scope,
     )
+    _record_needing_platforms(report, configs, profiles)
+    return report
+
+
+def _record_needing_platforms(
+    report: dict, configs: list[dict], profiles: dict[str, dict],
+) -> None:
+    """Give each missing row the platforms whose build of its emulator needs it.
+
+    A platform needs the entry when the build it runs reads it (BlastEm's
+    cdbios.bin is read by the standalone build only), its launcher does not
+    point the emulator elsewhere (`unread_on`) and its package of the
+    emulator does not install it (`installed_on`, `not_bundled_on`).
+    """
+    from resolve.cores import resolve_platform_cores
+    from resolve.standalone import standalone_set
+    from resolve.validation import filter_files_by_mode
+
+    missing = [
+        (emu_name, gap) for emu_name, data in report.items()
+        for gap in data["gap_details"] if gap["source"] == "missing"
+    ]
+    if not missing:
+        return
+    runners: dict[str, list[tuple[str, set[str]]]] = {}
+    runnable = emulator_profiles(profiles)
+    for config in configs:
+        platform = str(config.get("_key") or "")
+        standalone = standalone_set(config, profiles)
+        for emu_name in resolve_platform_cores(config, runnable):
+            runners.setdefault(emu_name, []).append((platform, standalone))
+    for emu_name, gap in missing:
+        profile = profiles[emu_name]
+        gap["platforms"] = sorted(
+            platform for platform, standalone in runners.get(emu_name, [])
+            if any(
+                f.get("name") == gap["name"] and not unread_on(f, platform)
+                and not installed_with_emulator(f, platform)
+                for view, is_standalone in platform_layouts(emu_name, profile, standalone)
+                for f in filter_files_by_mode(view.get("files") or [], is_standalone)
+            )
+        )
 
 
 
