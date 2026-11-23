@@ -362,6 +362,28 @@ class ReleaseServer:
         ]
         self.index.write_text(json.dumps(release))
 
+    def add_pack(self, pack_name: str, payload: dict[str, bytes]) -> None:
+        """A second whole pack, listed and summed like the first."""
+        archive = self.root / "assets" / pack_name
+        with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as zf:
+            for name, data in payload.items():
+                zf.writestr(name, data)
+        sums = self.root / "assets" / "SHA256SUMS.txt"
+        digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+        sums.write_text(sums.read_text() + f"{digest}  {pack_name}\n")
+        release = json.loads(self.index.read_text())
+        release["assets"].insert(0, {
+            "name": pack_name,
+            "size": archive.stat().st_size,
+            "browser_download_url": f"{self.base}/assets/{pack_name}",
+        })
+        self.index.write_text(json.dumps(release))
+
+    def tag(self, tag_name: str) -> None:
+        release = json.loads(self.index.read_text())
+        release["tag_name"] = tag_name
+        self.index.write_text(json.dumps(release))
+
     def drop_last_asset(self) -> None:
         """A part the release lists but no longer serves: its URL gives 404."""
         (self.root / "assets" / self.names[-1]).unlink()
@@ -709,6 +731,73 @@ class TestWholePackPython(WholePackCase, TestDownloadPython):
 
 class TestWholePackShell(WholePackCase, TestDownloadShell):
     pass
+
+
+@unittest.skipUnless(
+    shutil.which("curl") and shutil.which("unzip"), "curl and unzip required"
+)
+class TestPackChoice(DownloaderCase):
+    """Both downloaders pick a platform's pack by one rule: download.sh took
+    the first name in sort order that spelled the platform, the Android
+    target pack ahead of the full one."""
+
+    volumes = 1
+    pack_name = "RetroArch_v1.22.2_BIOS_Pack.zip"
+    platform = "retroarch"
+    target_pack = "RetroArch_v1.22.2_AndroidArm64V8A_BIOS_Pack.zip"
+    target_payload = {"bios/android.bin": b"\x50" * 4096}
+
+    def setUp(self):
+        super().setUp()
+        self.server.add_pack(self.target_pack, self.target_payload)
+
+    def run_command(self, command: list[str]) -> subprocess.CompletedProcess:
+        return subprocess.run(
+            [*command, self.platform, str(self.dest)], env=self.env(),
+            capture_output=True, text=True, timeout=120, check=False,
+        )
+
+    def assert_full_pack(self, proc: subprocess.CompletedProcess) -> None:
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assert_extracted()
+        self.assertFalse((self.dest / "bios/android.bin").exists())
+
+    def test_the_shell_takes_the_full_pack(self):
+        self.assert_full_pack(self.run_command(["bash", str(SHELL)]))
+
+    def test_python_takes_the_full_pack(self):
+        self.assert_full_pack(
+            self.run_command(["python3", str(REPO_ROOT / "scripts" / "download.py")])
+        )
+
+    def test_the_shell_reads_the_record_of_this_release(self):
+        """The record names a pack whose name does not spell the platform."""
+        checkout = scratch_dir(self)
+        (checkout / "scripts").mkdir()
+        shutil.copy(SHELL, checkout / "scripts" / "download.sh")
+        record = {"schema_version": 1, "tag": "v1", "packs": {
+            self.pack_name: {"files": 2, "assets": [self.pack_name], "platforms": ["lakka"]},
+            self.target_pack: {"files": 1, "assets": [self.target_pack], "platforms": []},
+        }}
+        (checkout / "release.json").write_text(json.dumps(record, indent=2) + "\n")
+        self.server.tag("v1")
+        shell = ["bash", str(checkout / "scripts" / "download.sh")]
+        release = latest.get_latest_release(self.server.base)
+
+        self.platform = "lakka"
+        self.assertEqual(packgroups.find_pack(release, "lakka", record).name, self.pack_name)
+        self.assert_full_pack(self.run_command(shell))
+
+        self.platform = "retroarch"
+        self.assertIsNone(packgroups.find_pack(release, "retroarch", record))
+        proc = self.run_command(shell)
+        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertIn("Platform 'retroarch' not found", proc.stdout)
+
+        self.server.tag("v0")
+        self.platform = "lakka"
+        self.assertIsNone(packgroups.find_pack(release | {"tag_name": "v0"}, "lakka", record))
+        self.assertEqual(self.run_command(shell).returncode, 1)
 
 
 class ZipPartsCase(DownloaderCase):

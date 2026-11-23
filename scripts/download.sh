@@ -75,6 +75,73 @@ normalize() {
     printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9'
 }
 
+# release.json beside a checkout, the file download.py reads. A script piped
+# to bash has no file of its own, so no record.
+record_file() {
+    local self="${BASH_SOURCE[0]:-}"
+    [ -f "$self" ] || return 0
+    local record
+    record="$(cd "$(dirname "$self")/.." && pwd)/release.json"
+    if [ -f "$record" ]; then
+        printf '%s\n' "$record"
+    fi
+}
+
+release_tag() {
+    printf '%s' "$1" | tr ',' '\n' |
+        sed -n 's/.*"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | sed -n 1p
+}
+
+record_tag() {
+    sed -n 's/^  "tag": "\([^"]*\)",\{0,1\}$/\1/p' "$1" | sed -n 1p
+}
+
+# The pack the record says serves a platform, first by name. Read from the
+# layout release_record.py writes: two-space indent, one string per line.
+recorded_pack() {
+    awk -v needle="$2" '
+        function key(s) { s = tolower(s); gsub(/[^a-z0-9]/, "", s); return s }
+        /^  "packs": \{/ { packs = 1; next }
+        packs && /^  }/ { packs = 0; next }
+        packs && /^    "[^"]*": \{/ { name = $0; sub(/^    "/, "", name); sub(/".*/, "", name); next }
+        packs && /^      "platforms": \[$/ { listed = 1; next }
+        listed && /^      \]/ { listed = 0; next }
+        listed {
+            value = $0
+            gsub(/^[[:space:]]*"|",?[[:space:]]*$/, "", value)
+            if (key(value) == needle) print name
+        }
+    ' "$1" | LC_ALL=C sort | sed -n 1p
+}
+
+# The pack that serves a platform, by the rule of release/packgroups.py. The
+# record names it when it records this release. Otherwise the shortest pack
+# name that spells the platform wins, ties broken by name: RetroArch_v1.22.2
+# is the full pack, RetroArch_v1.22.2_AndroidArm64V8A one target's.
+choose_pack() {
+    local release_json="$1" normalized="$2"
+    local record tag
+    record=$(record_file)
+    tag=$(release_tag "$release_json")
+    if [ -n "$record" ] && [ -n "$tag" ] && [ "$(record_tag "$record")" = "$tag" ]; then
+        local name
+        name=$(recorded_pack "$record" "$normalized")
+        if [ -n "$name" ]; then
+            pack_names "$release_json" | grep -Fx -- "$name" || true
+        fi
+        return 0
+    fi
+    [ -n "$normalized" ] || return 0
+    local candidate key
+    pack_names "$release_json" | while read -r candidate; do
+        [ -n "$candidate" ] || continue
+        key=$(normalize "$candidate")
+        case "$key" in
+            *"$normalized"*) printf '%s %s\n' "${#key}" "$candidate" ;;
+        esac
+    done | LC_ALL=C sort -k1,1n -k2,2 | sed -n 1p | cut -d' ' -f2
+}
+
 # The anonymous quota is 60 calls an hour per address. The token goes to
 # GitHub's API only: RETROBIOS_API can name any host. The header is read
 # from stdin so the token stays out of the process list.
@@ -106,19 +173,8 @@ download_pack() {
     local release_json
     release_json=$(fetch_release)
 
-    local archive=""
-    local candidate
-    while read -r candidate; do
-        [ -n "$candidate" ] || continue
-        case "$(normalize "$candidate")" in
-            *"$normalized"*)
-                archive="$candidate"
-                break
-                ;;
-        esac
-    done <<EOF
-$(pack_names "$release_json")
-EOF
+    local archive
+    archive=$(choose_pack "$release_json" "$normalized")
 
     if [ -z "$archive" ]; then
         echo "Error: Platform '$platform' not found in latest release."
