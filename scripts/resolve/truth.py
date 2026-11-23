@@ -596,7 +596,7 @@ def _fold_data_directory_readers(
                     # lists its resources, pcee2 lists patches.zip alone
                     # (its build compiles GameIndex.yaml and the shaders in).
                     continue
-                installed = platform_name in (tree.get("installed_on") or [])
+                installed = installed_with_emulator(tree, platform_name)
                 for path, entries in by_path.items():
                     if not path.startswith(prefix):
                         continue

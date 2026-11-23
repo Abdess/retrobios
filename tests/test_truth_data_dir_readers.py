@@ -92,6 +92,19 @@ class DataDirectoryReaders(unittest.TestCase):
         self.assertEqual(entry["_cores"], ["armsx2", "lrps2"])
         self.assertNotIn("hash_conflict", entry)
 
+    def test_a_bundled_tree_brings_the_file_as_a_bundled_file_does(self):
+        """The tree read installed_on alone: a tree the emulator ships
+        (bundled: true) counted its reader among those the platform must
+        supply, so the entry asked for a file the emulator installs."""
+        self.profiles["armsx2"]["files"][0]["bundled"] = True
+        self.profiles["lrps2"]["data_directories"][0]["bundled"] = True
+        entry = self._entry(self.registry)
+        self.assertEqual(entry["_cores"], ["armsx2", "lrps2"])
+        self.assertEqual(entry["_brought_by"], [])
+        self.assertTrue(entry.get("bundled"))
+        self.profiles["lrps2"]["data_directories"][0]["not_bundled_on"] = ["plat"]
+        self.assertEqual(self._entry(self.registry)["_brought_by"], ["lrps2:libretro"])
+
     def test_the_gaps_page_hands_truth_its_own_registry(self):
         """The divergence table folded the checked-out repository's
         _data_dirs.yml under generate_site --platforms-dir."""
