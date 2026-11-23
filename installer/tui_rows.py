@@ -33,7 +33,6 @@ from installer.tui_choice import (
     _cores_dir_given,
     _device_choice,
     _device_words,
-    _dry_copies,
     _emulator_words,
     _needed,
     _on_its_card,
@@ -50,8 +49,6 @@ from installer.tui_choice import (
     _tui_categories,
     _tui_estimating,
     _tui_misplaced,
-    _tui_pack_lacks,
-    _tui_pack_trees,
     _yes,
     core_ticked,
     games_where,
@@ -250,7 +247,7 @@ def _confirm_screen_rows(state: TuiState) -> list[TuiRow]:
         # Counted again, every file is in place: Install wrote nothing
         # and said Done.
         return [TuiRow("close", "Close"), TuiRow("back", "Back")]
-    if tui_offline_only(state) and not _dry_copies(state):
+    if tui_offline_only(state) and not _plan_copies(state.dry):
         # The plan's rule: Install would only fail every file.
         return [TuiRow("back", "Back")]
     return [TuiRow("install", "Install"), TuiRow("back", "Back")]
@@ -321,18 +318,17 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
     # The size the headline says: "Install 6.6 GB" stood under "14930 files
     # to download, 6.8 GB", the copies counted in one and the data files in
     # the other.
-    size = _ticked_estimate(state)[1] if _tui_estimating(state) else _plan_fetch(state, check)[1]
+    plan = _plan_fetch(state, check)
+    size = _ticked_estimate(state)[1] if _tui_estimating(state) else plan.size
     label = (f"{TUI_INSTALL_ROW} {format_size(size)}" if size >= CONFIRM_FROM_BYTES
              else TUI_INSTALL_ROW)
     rows = [TuiRow("install", label)]
-    if tui_offline_only(state) and not _plan_copies(state, check):
+    if tui_offline_only(state) and not plan.copied:
         # Nothing here to copy, and the network refused: Install would
         # only fail every file, in this folder or another.
         rows = []
-    files = {event["dest"] for event in state.files}
-    if (LOCAL.pack is not None and files and not _plan_copies(state, check)
-            and len(_tui_pack_lacks(state, sorted(files))) == len(files)
-            and not (check.get("data_missing") and _tui_pack_trees(state))):
+    if (LOCAL.pack is not None and state.files and not plan.copied
+            and len(plan.lacking) == len(state.files) and not plan.data_files):
         # The pack holds none of them, nor the data files: Install would
         # fail every one.
         rows = []

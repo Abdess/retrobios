@@ -29,6 +29,7 @@ from installer.destination import _unknown_target
 from installer.detect_os import detected_shown
 from installer.device import card_board, detect_board, version_note
 from installer.events import EVENTS
+from installer.fetch_plan import FetchPlan
 from installer.filesystems import (
     FAT_REFUSED,
     FAT_REFUSED_SHOWN,
@@ -237,6 +238,7 @@ class _PlatformPass:
         self.bios_index: FolderIndex | None = None
         self.copies: dict[int, LocalCopy] = {}
         self.unread: list[Unreadable] = []
+        self.plan = FetchPlan([], [], [], 0, 0)
         self.hint: list[str] = []
         self.space_checked = False
 

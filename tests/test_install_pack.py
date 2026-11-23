@@ -623,6 +623,54 @@ class PartSizes(unittest.TestCase):
                 install.parse_part_size(text)
 
 
+class TheRunDecidesWhatItFetches(unittest.TestCase):
+    """The screen worked the plan out again from the events: from a pack
+    without the data trees it promised them, and --check counted none from
+    a pack that held them all. fetch_plan decides it once for both."""
+
+    FILES = [{"dest": "a.bin", "size": 10}, {"dest": "b.bin", "size": 20},
+             {"dest": "c.bin", "size": 40}]
+    TREE = {"ref": "dolphin", "dest": "Sys", "files": {"font.bin": {"size": 5}}}
+
+    def plan(self, members: set | None) -> object:
+        class Pack:
+            name = "RetroArch_BIOS_Pack.zip"
+
+            @staticmethod
+            def find(entry: dict) -> tuple | None:
+                return (None, entry) if entry["dest"] in members else None
+
+        Pack.members = members
+        a_copy = {id(self.FILES[0]): object()}
+        state = (Path("Sys"), {"font.bin": {"size": 5}}, 0)
+        with mock.patch.object(install.LOCAL, "pack", Pack() if members is not None else None):
+            return install.fetch_plan(self.FILES, a_copy, [(self.TREE, state)])
+
+    def test_without_a_pack_every_file_and_tree_comes(self):
+        plan = self.plan(None)
+        self.assertEqual([entry["dest"] for entry in plan.copied], ["a.bin"])
+        self.assertEqual([entry["dest"] for entry in plan.coming], ["b.bin", "c.bin"])
+        self.assertEqual((plan.lacking, plan.data_files, plan.data_bytes), ([], 1, 5))
+
+    def test_a_pack_without_the_trees_brings_none_of_them(self):
+        plan = self.plan({"b.bin"})
+        self.assertEqual([entry["dest"] for entry in plan.lacking], ["c.bin"])
+        self.assertEqual([entry["dest"] for entry in plan.coming], ["b.bin"])
+        self.assertEqual((plan.data_files, plan.data_bytes), (0, 0))
+
+    def test_a_pack_holding_the_trees_brings_them(self):
+        plan = self.plan({"b.bin", "c.bin", "Sys/font.bin"})
+        self.assertEqual(plan.lacking, [])
+        self.assertEqual((plan.data_files, plan.data_bytes), (1, 5))
+
+    def test_the_event_carries_the_plan(self):
+        plan = self.plan({"b.bin"})
+        with mock.patch.object(install.EVENTS, "emit") as emit:
+            install.emit_fetch_plan("retroarch", plan)
+        emit.assert_called_once_with(
+            "fetch_plan", platform="retroarch", files=1, bytes=20, copied=["a.bin"],
+            lacking=["c.bin"], data_files=0, data_bytes=0)
+
 
 class AListRecordsWhatItNarrowsBy(unittest.TestCase):
     """A pack built here, a pack built by generate_pack and the list itself

@@ -121,6 +121,8 @@ def _take_check_event(state: TuiState, kind: str | None, event: dict) -> None:
         state.check["data_bytes"] = event["bytes"]
     elif kind == "space" and state.check is not None:
         state.check["space_bytes"] = event["bytes"]
+    elif kind == "fetch_plan" and state.check is not None:
+        state.check["fetch_plan"] = event
     elif kind == "check":
         state.check = event
     elif kind == "file":
@@ -140,6 +142,8 @@ def _take_dry_event(state: TuiState, kind: str | None, event: dict) -> None:
         state.dry["data_bytes"] = event["bytes"]
     elif kind == "space" and state.dry is not None:
         state.dry["space_bytes"] = event["bytes"]
+    elif kind == "fetch_plan" and state.dry is not None:
+        state.dry["fetch_plan"] = event
     elif kind == "check":
         state.dry = event
     elif kind == "file" and event.get("state") != "present":

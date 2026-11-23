@@ -15,6 +15,7 @@ from installer.detect_os import detected_shown
 from installer.diagnosis import CheckHeld, bios_folder_index, check_lines
 from installer.download import download_files
 from installer.events import EVENTS, _event_mode
+from installer.fetch_plan import emit_fetch_plan, fetch_plan
 from installer.filesystems import NOMEDIA, hide_from_media_scanner
 from installer.from_folders import (
     copy_plan_lines,
@@ -53,7 +54,7 @@ from installer.outcome import (
     _write_advice,
 )
 from installer.pack import run_pack, split_pack_lines
-from installer.pack_source import NOT_IN_PACK, pack_holds_trees, pack_lacks, pack_lacks_words
+from installer.pack_source import NOT_IN_PACK, pack_lacks_words
 from installer.paths import _entry_path, shown_path
 from installer.plan import CONFIRM_FROM_BYTES, _check_free_space, _print_plan, bulk_hint
 from installer.platforms import display_name
@@ -169,6 +170,7 @@ def _pass_check_existing(run: _InstallRun, p: _PlatformPass) -> None:
     if bios_index is not None:
         run.bios_indexes.append(bios_index)
     p.copies = copies = plan_local_copies(to_download, bios_path, bios_index, LOCAL.folders)
+    p.plan = plan = fetch_plan(to_download, copies, data_states)
     p.unread = unread = unreadable_copies(to_download, copies, LOCAL.folders)
     selection = p.selection
     p.hint = [] if LOCAL.pack is not None else bulk_hint(
@@ -182,17 +184,16 @@ def _pass_check_existing(run: _InstallRun, p: _PlatformPass) -> None:
     if EVENTS.on:
         # What the run would write, as _pass_download holds it against the
         # free space: the screen's plan warns on this number.
-        lacking = {id(f) for f in pack_lacks([f for f in to_download if id(f) not in copies])}
         _emit_check(
             p.plat_name, p.manifest, bios_path,
             CheckTally(files, up_to_date, mismatched,
                        sum(len(state[1]) for _entry, state in data_states),
                        len(p.omitted_files),
                        sum(data_fetch_bytes(entry, state[1]) for entry, state in data_states),
-                       bytes_written([f for f in to_download if id(f) not in lacking],
-                                     data_states)),
+                       bytes_written(plan.without_lacking(to_download), data_states)),
             chosen=selection[0] if selection else None,
         )
+        emit_fetch_plan(p.plat_name, plan)
         emit_copies(p.plat_name, to_download, copies, bios_index, bios_path, files)
         emit_unreadable(p.plat_name, unread)
     run.total_verified += len(up_to_date)
@@ -201,7 +202,7 @@ def _pass_check_existing(run: _InstallRun, p: _PlatformPass) -> None:
 def _pass_check_missing(run: _InstallRun, p: _PlatformPass) -> None:
     """--check: the files not in place named, and how to get them."""
     args, bios_path = run.args, p.bios_path
-    to_download, mismatched, copies = p.to_download, p.mismatched, p.copies
+    to_download, mismatched, copies, plan = p.to_download, p.mismatched, p.copies, p.plan
     # Named, not only counted: a user looking for the one bad
     # BIOS learned "1 files need downloading" and nothing else.
     # A wrong hash comes first and always in full: listed after
@@ -215,9 +216,8 @@ def _pass_check_missing(run: _InstallRun, p: _PlatformPass) -> None:
     offline = _offline_only()
     # What the pack lacks is said before the count, as the
     # screen says it.
-    lacking = pack_lacks([f for f in to_download if id(f) not in copies])
-    if lacking:
-        print(f"\n  {pack_lacks_words(len(lacking), len(to_download) - len(copies))}")
+    if plan.lacking:
+        print(f"\n  {pack_lacks_words(len(plan.lacking), len(plan.fetched))}")
     # One total with the count above it, the data files among
     # them as the screen counts them: "0 in place, 10805 missing"
     # stood over "8164 files to download".
@@ -234,9 +234,8 @@ def _pass_check_missing(run: _InstallRun, p: _PlatformPass) -> None:
     print(f"  BIOS folder: {shown_path(bios_path)}")
     # The data files need the internet too: offline, "8164 files
     # need the internet" stood under "10805 files not in place".
-    trees_fetched = p.trees_missing if LOCAL.pack is None else 0
-    print(_check_fetch_line(len(to_download) - len(copies) + trees_fetched,
-                            "the BIOS folder", len(lacking), bool(mismatched)))
+    print(_check_fetch_line(len(plan.fetched) + plan.data_files,
+                            "the BIOS folder", len(plan.lacking), bool(mismatched)))
     run.check_pending += len(to_download)
 
 
@@ -285,14 +284,13 @@ def _pass_dry_run(run: _InstallRun, p: _PlatformPass) -> None:
         {"dest": f"{entry['dest']}/{rel}" if entry.get("dest") else rel}
         for entry, needed in trees for rel in needed
     ], bios_path)
-    planned = [f for f in to_download if id(f) not in copies]
+    plan = p.plan
     # Said before the plan promises a count and a size, as an
     # install says it: the dry run promised 23 files where the pack
     # held 20.
-    lacking = {id(f) for f in pack_lacks(planned)}
-    if lacking:
-        print(f"\n  {pack_lacks_words(len(lacking), len(planned))}")
-    _print_plan([f for f in planned if id(f) not in lacking], bios_path, run.term,
+    if plan.lacking:
+        print(f"\n  {pack_lacks_words(len(plan.lacking), len(plan.fetched))}")
+    _print_plan(plan.coming, bios_path, run.term,
                 trees, kept, copy_plan_lines(to_download, copies, p.bios_index,
                                              bios_path, p.files, args.verbose, True),
                 verbose=args.verbose, manifest=p.manifest)
@@ -379,9 +377,8 @@ def _pass_download_head(run: _InstallRun, p: _PlatformPass, fetched: list[dict],
     if not p.menu:
         # What happens and where, the two lines a run without questions
         # opens on: the menu's head said them where it was asked.
-        coming = len(p.to_download) - len(lacking) + p.trees_missing
-        weight = dl_size + sum(data_fetch_bytes(entry, state[1])
-                               for entry, state in p.data_states)
+        coming = len(p.to_download) - len(lacking) + p.plan.data_files
+        weight = dl_size + p.plan.data_bytes
         taken = _RECORD_TAKEN.get(plat_name)
         print(f"\nInstalling {_plural(coming, 'file')} ({format_size(weight)}) for "
               f"{detected_shown(plat_name, bios_path) or p.display}"
@@ -489,7 +486,8 @@ def _pass_fetch(run: _InstallRun, p: _PlatformPass, dl_size: int, created: bool)
 def _pass_download(run: _InstallRun, p: _PlatformPass) -> str:
     """The missing files installed: "go" carries on with the setup, "next"
     moves to the next one, "stop" ends the run."""
-    fetched = [f for f in p.to_download if id(f) not in p.copies]
+    plan = p.plan
+    fetched = plan.fetched
     if _offline_only() and fetched:
         _pass_offline_left(run, p, fetched)
         fetched = []
@@ -497,10 +495,11 @@ def _pass_download(run: _InstallRun, p: _PlatformPass) -> str:
     # a pack older than the list gave "Copy 6.6 GB" and 8358 files
     # failed. They are still tried, and fail as
     # not in the pack, the size and the question leaving them out.
-    lacking = {id(f) for f in pack_lacks(fetched)}
+    # Offline there is no pack, so nothing is lacking.
+    lacking = {id(f) for f in plan.lacking}
     if lacking:
         print(f"\n  {pack_lacks_words(len(lacking), len(fetched))}")
-    if lacking and len(lacking) == len(p.to_download) and not pack_holds_trees(p.data_dirs):
+    if lacking and len(lacking) == len(p.to_download) and not plan.data_files:
         # Nothing here can come from the pack: no "Copying 0 files", no
         # folder made, each file failed as not in it.
         run.failures.extend((f["dest"], NOT_IN_PACK) for f in p.to_download)
@@ -508,9 +507,9 @@ def _pass_download(run: _InstallRun, p: _PlatformPass) -> str:
         run.files_pending += len(p.to_download)
         run.total_up_to_date += len(p.up_to_date)
         return "next"
-    coming = [f for f in p.to_download if id(f) not in lacking]
+    coming = plan.without_lacking(p.to_download)
     dl_size = _bytes(coming)
-    fetch_size = _bytes([f for f in fetched if id(f) not in lacking])
+    fetch_size = _bytes(plan.without_lacking(fetched))
     if not p.to_download:
         run.total_up_to_date += len(p.up_to_date)
         if _offline_only():

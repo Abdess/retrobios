@@ -44,7 +44,6 @@ from installer.tui_choice import (
     _tui_estimating,
     _tui_found_elsewhere,
     _tui_misplaced,
-    _tui_pack_trees,
     _tui_tally,
     games_plan_words,
     games_where,
@@ -101,6 +100,7 @@ class _PlanFigures(NamedTuple):
     dry: bool
     fetch: int
     fetch_bytes: int
+    data_fetch: int
     data_bytes: int
     copied: list
     lacking: list
@@ -113,26 +113,26 @@ def _plan_figures(check: dict, state: TuiState) -> _PlanFigures:
     need = _needed(check)
     data = check.get("data_missing", 0)
     dry = check is state.dry and check is not state.check
-    fetch, fetched, copied, lacking, sizes = _plan_fetch(state, check)
-    fetch_bytes = fetched - (check.get("data_bytes", 0) if data else 0)
+    plan = _plan_fetch(state, check)
+    copied = plan.copied
     elsewhere = (_tui_found_elsewhere(state, set(copied) if dry else None)
                  if check is state.check or dry else {})
     offline = tui_offline_only(state)
     # The data files are files to fetch like the others: one count and one
     # size, the kinds apart on the line under the folder. "8358 files and
     # 2636 data files" read as two kinds of one thing.
-    data_bytes = check.get("data_bytes", 0) if data else 0
-    return _PlanFigures(need, data, dry, fetch, fetch_bytes, data_bytes, copied, lacking,
-                        sizes, elsewhere, offline)
+    return _PlanFigures(need, data, dry, plan.files, plan.bytes, plan.data_files,
+                        plan.data_bytes, copied, plan.lacking,
+                        plan.sizes, elsewhere, offline)
 
 
 def _plan_needed_headline(check: dict, fig: _PlanFigures) -> str:
     """The headline of a plan with files to install."""
-    need, data, fetch, copied = fig.need, fig.data, fig.fetch, fig.copied
+    need, data, fetch, copied = fig.need, fig.data_fetch, fig.fetch, fig.copied
     if fig.elsewhere:
         # The folder by its last name: the whole path pushed the BIOS
         # folder off a 40x15 screen. The Options row spells it out. The
-        # data files are among those to fetch: one count.
+        # data files the run brings are among those to fetch: one count.
         where = ", ".join(f"{len(events)} found in {_last_name(folder)}"
                           for folder, events in fig.elsewhere.items())
         rest = fetch + data
@@ -165,7 +165,7 @@ def _plan_needed_headline(check: dict, fig: _PlanFigures) -> str:
     return f"{_plural(len(copied), 'file')} to copy from this machine"
 
 
-def _plan_headline(check: dict, state: TuiState, fig: _PlanFigures) -> str:
+def _plan_headline(check: dict, fig: _PlanFigures) -> str:
     data = fig.data
     # The data trees' size comes from their own event: "2636 data files"
     # beside "6.6 GB" said nothing of what they weigh.
@@ -177,7 +177,7 @@ def _plan_headline(check: dict, state: TuiState, fig: _PlanFigures) -> str:
     if fig.lacking and not fig.fetch and not fig.copied:
         # The data files too, when the pack holds none of them: "8252
         # files" said nothing of the 2636 it cannot give either.
-        lacked = len(fig.lacking) + (data if data and not _tui_pack_trees(state) else 0)
+        lacked = len(fig.lacking) + data - fig.data_fetch
         return pack_lacks_words(lacked, lacked)
     return _plan_needed_headline(check, fig)
 
@@ -271,7 +271,7 @@ def _plan_check_lines(check: dict, state: TuiState) -> list:
 def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
     fig = _plan_figures(check, state)
     data, fetch = fig.data, fig.fetch
-    headline = _plan_headline(check, state, fig)
+    headline = _plan_headline(check, fig)
     wrong = check["wrong_hash"]
     # Where some were found, the plan names the rest by kind ("Not in old:
     # 10 BIOS files and 6 game data files.", _view_plan), and the remedy

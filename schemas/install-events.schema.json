@@ -31,6 +31,7 @@
         "declared",
         "data",
         "space",
+        "fetch_plan",
         "found",
         "unreadable",
         "saves",
@@ -114,6 +115,9 @@
     },
     {
       "$ref": "#/$defs/space"
+    },
+    {
+      "$ref": "#/$defs/fetch_plan"
     },
     {
       "$ref": "#/$defs/found"
@@ -837,6 +841,56 @@
           "type": "string"
         },
         "bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "fetch_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "platform",
+        "files",
+        "bytes",
+        "copied",
+        "lacking",
+        "data_files",
+        "data_bytes"
+      ],
+      "properties": {
+        "event": {
+          "const": "fetch_plan"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "files": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "copied": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lacking": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "data_files": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "data_bytes": {
           "type": "integer",
           "minimum": 0
         }

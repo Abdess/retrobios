@@ -39,6 +39,7 @@ import types
 import unittest
 import warnings
 import zipfile
+from collections.abc import Iterable
 from pathlib import Path, PurePosixPath, PureWindowsPath
 from unittest import mock
 
@@ -369,6 +370,28 @@ CHECK = {"event": "check", "platform": "retroarch", "name": "RetroArch",
          "bios_dir": "/home/user/.config/retroarch/system", "files": 5, "present": 1,
          "missing": 3, "wrong_hash": 1, "bytes_needed": 1064964, "data_missing": 0,
          "not_installable": 2}
+
+
+def plan_event(check: dict, copied: Iterable[str] = (), lacking: Iterable[str] = (),
+               sizes: dict | None = None, **plan) -> dict:
+    """The fetch_plan event the run sends after check: every file not in
+    place fetched, but those copied from this machine and those the pack
+    lacks (sizes by dest, those of FILES by default), unless plan says
+    otherwise."""
+    copied, lacking = list(copied), list(lacking)
+    sizes = {event["dest"]: event["size"] for event in FILES} if sizes is None else sizes
+    left = [*copied, *lacking]
+    return {"event": "fetch_plan", "platform": check["platform"],
+            "files": check["missing"] + check["wrong_hash"] - len(left),
+            "bytes": check["bytes_needed"] - sum(sizes[dest] for dest in left),
+            "copied": copied, "lacking": lacking, "data_files": check.get("data_missing", 0),
+            "data_bytes": check.get("data_bytes", 0), **plan}
+
+
+def planned(check: dict, *given, **plan) -> dict:
+    """check as the screen holds it once its fetch_plan event came."""
+    return {**check, "fetch_plan": plan_event(check, *given, **plan)}
+
 FILES = [
     {"event": "file", "platform": "retroarch", "dest": "scph5500.bin",
      "systems": ["sony-playstation"], "size": 524288, "state": "missing"},
@@ -379,6 +402,7 @@ FILES = [
     {"event": "file", "platform": "retroarch", "dest": "gba_bios.bin",
      "systems": ["nintendo-gba"], "size": 16384, "state": "missing"},
 ]
+PLAN = plan_event(CHECK)
 HOME = Path("/home/user")
 SYSTEM_DIR = HOME / ".config" / "retroarch" / "system"
 
@@ -428,7 +452,7 @@ def games_state() -> install.TuiState:
     install.tui_receive(state, ("games_here", "retroarch", SYSTEM_DIR, 2))
     effects = install.tui_receive(state, ("manifest", "retroarch", MANIFEST))
     assert effects == [("run", "check")], effects
-    for event in [GAMES, *FILES, *SYSTEMS, CHECK]:
+    for event in [GAMES, *FILES, *SYSTEMS, CHECK, PLAN]:
         install.tui_receive(state, ("event", state.run_id, event))
     with mock.patch.object(install, "_tui_folder_facts", return_value={
             "free": 50 * 1024 ** 3, "writable": True, "cores": ["pcsx_rearmed"]}):
@@ -445,7 +469,7 @@ def checked_state(facts: dict | None = None) -> install.TuiState:
     assert effects == [("fetch", "retroarch")], effects
     effects = install.tui_receive(state, ("manifest", "retroarch", MANIFEST))
     assert effects == [("run", "check")], effects
-    for event in [*FILES, *SYSTEMS, CHECK]:
+    for event in [*FILES, *SYSTEMS, CHECK, PLAN]:
         install.tui_receive(state, ("event", state.run_id, event))
     with mock.patch.object(install, "_tui_folder_facts", return_value=facts or {
             "free": 50 * 1024 ** 3, "writable": True, "cores": ["pcsx_rearmed"]}):
@@ -640,7 +664,7 @@ class Flow(unittest.TestCase):
         self.assertEqual(press(state, "enter"), [("run", "preview")])
         self.assertEqual(install.tui_argv(state, "preview", "py", "i.py")[-2:],
                          ["--dry-run", "--events"])
-        for event in [*FILES, CHECK]:
+        for event in [*FILES, CHECK, PLAN]:
             install.tui_receive(state, ("event", state.run_id, event))
         install.tui_receive(state, ("ended", state.run_id, 0, []))
         text = "\n".join(install.tui_view(state, 80, 24))
@@ -1053,7 +1077,7 @@ def _golden_plan_states() -> dict:
     states["cores"] = cores
     preview = checked_state()
     preview.stack += ["options", "preview"]
-    preview.dry, preview.dry_files = dict(CHECK), list(FILES)
+    preview.dry, preview.dry_files = planned(CHECK), list(FILES)
     states["preview"] = preview
     command = checked_state()
     command.stack += ["options", "command"]
@@ -1062,8 +1086,8 @@ def _golden_plan_states() -> dict:
     confirm = checked_state()
     confirm.stack.append("confirm")
     confirm.ticked = {"nintendo-gba"}
-    confirm.dry = {**CHECK, "files": 1, "present": 0, "missing": 1, "wrong_hash": 0,
-                   "bytes_needed": 16384, "not_installable": 0}
+    confirm.dry = planned({**CHECK, "files": 1, "present": 0, "missing": 1, "wrong_hash": 0,
+                           "bytes_needed": 16384, "not_installable": 0})
     states["confirm"] = confirm
     return states
 
@@ -1292,7 +1316,7 @@ def record_state(setup: dict | None = None) -> install.TuiState:
     systems = [event for event in SYSTEMS if event["system"] == "nintendo-gba"]
     check = {**CHECK, "files": 1, "present": 0, "missing": 1, "wrong_hash": 0,
              "bytes_needed": 16384, "not_installable": 0}
-    for event in [*gba, *systems, check]:
+    for event in [*gba, *systems, check, plan_event(check)]:
         install.tui_receive(state, ("event", state.run_id, event))
     with mock.patch.object(install, "_tui_folder_facts", return_value={
             "free": 50 * 1024 ** 3, "writable": True, "cores": ["pcsx_rearmed"]}):
@@ -1369,7 +1393,7 @@ class RecordedPlan(unittest.TestCase):
             state, _effects = install.tui_start(_args(), "linux")
         self.assertTrue(state.opened_on_plan)
         install.tui_receive(state, ("manifest", "retroarch", MANIFEST))
-        for event in [*FILES, *SYSTEMS, CHECK]:
+        for event in [*FILES, *SYSTEMS, CHECK, PLAN]:
             install.tui_receive(state, ("event", state.run_id, event))
         with mock.patch.object(install, "_tui_folder_facts", return_value={
                 "free": 50 * 1024 ** 3, "writable": True}):
@@ -1416,7 +1440,7 @@ class RecordedPlan(unittest.TestCase):
         self.assertIn(("--all-files", None), flags)
         self.assertFalse([flag for flag in flags if flag[0] == "--system"])
         self.assertFalse(install.tui_record_kept(state))
-        for event in [*FILES, *SYSTEMS, CHECK]:
+        for event in [*FILES, *SYSTEMS, CHECK, PLAN]:
             install.tui_receive(state, ("event", state.run_id, event))
         with mock.patch.object(install, "_tui_folder_facts", return_value={
                 "free": 50 * 1024 ** 3, "writable": True}):
@@ -1459,8 +1483,8 @@ class RecordedPlan(unittest.TestCase):
         big = 2 * 1024 ** 3
         state = checked_state()
         state.files[0] = {**state.files[0], "size": big}
-        state.check = {**state.check, "bytes_needed": state.check["bytes_needed"] + big,
-                       "data_missing": 3, "data_bytes": 300 * 1024 ** 2}
+        state.check = planned({**state.check, "bytes_needed": state.check["bytes_needed"] + big,
+                               "data_missing": 3, "data_bytes": 300 * 1024 ** 2})
         headline = str(install._plan_lines(state.check, state.dest, state)[0])
         size = headline.rsplit(", ", 1)[1]
         self.assertEqual(install.tui_rows(state)[0].label, f"Install {size}")
@@ -2148,7 +2172,7 @@ class TicksBarAndPaths(unittest.TestCase):
         big = 6 * 1024 ** 3
         state = checked_state()
         state.files[0] = {**state.files[0], "size": big}
-        state.check = {**state.check, "bytes_needed": state.check["bytes_needed"] + big}
+        state.check = planned({**state.check, "bytes_needed": state.check["bytes_needed"] + big})
         self.assertEqual(install.tui_rows(state)[0].label, "Install 6.0 GB")
         for system, label, head in (("nintendo-gba", "Install", "About 1 file, 16.0 KB"),
                                     ("sony-playstation", "Install 6.0 GB",
@@ -2602,7 +2626,9 @@ class CopyFromAnOldCard(unittest.TestCase):
     """--from in the interface: a row on the plan, the browser, the counts."""
 
     def recheck(self, state: install.TuiState, events: list) -> None:
-        for event in [*FILES, *SYSTEMS, *events, CHECK]:
+        plan = plan_event(CHECK, [event["dest"] for event in events if event["event"] == "found"
+                                  and event["dest"] in {file["dest"] for file in FILES}])
+        for event in [*FILES, *SYSTEMS, *events, CHECK, plan]:
             install.tui_receive(state, ("event", state.run_id, event))
         with mock.patch.object(install, "_tui_folder_facts", return_value={
                 "free": 50 * 1024 ** 3, "writable": True, "cores": []}):
@@ -3314,7 +3340,7 @@ class CardsSpaceAndConfirm(unittest.TestCase):
                   {"event": "unreadable", "platform": "retroarch", "folder": "E:\\",
                    "path": "E:\\backup.zip", "member": "gba_bios.bin",
                    "reason": "it is encrypted, a password is needed"}]
-        for event in [*FILES, *SYSTEMS, *events, CHECK]:
+        for event in [*FILES, *SYSTEMS, *events, CHECK, PLAN]:
             install.tui_receive(state, ("event", state.run_id, event))
         with mock.patch.object(install, "_tui_folder_facts", return_value={
                 "free": 50 * 1024 ** 3, "writable": True, "cores": []}):
@@ -3500,7 +3526,7 @@ class SaveDirectoryLeftOut(unittest.TestCase):
         summary = {"event": "summary", "mode": "check", "installed": 0, "up_to_date": 0,
                    "pending": 5, "failed": [], "skipped": [self.UNPLACED], "left_out": [],
                    "kept": [], "interrupted": False}
-        for event in [*FILES, *SYSTEMS, CHECK, summary]:
+        for event in [*FILES, *SYSTEMS, CHECK, PLAN, summary]:
             install.tui_receive(state, ("event", state.run_id, event))
         with mock.patch.object(install, "_tui_folder_facts", return_value={
                 "free": 50 * 1024 ** 3, "writable": True, "cores": []}):
@@ -3537,7 +3563,7 @@ class SaveDirectoryLeftOut(unittest.TestCase):
         summary = {"event": "summary", "mode": "check", "installed": 0, "up_to_date": 0,
                    "pending": 5, "failed": [], "skipped": [self.UNPLACED], "left_out": [],
                    "kept": [], "interrupted": False}
-        for event in [*FILES, *SYSTEMS, CHECK, summary]:
+        for event in [*FILES, *SYSTEMS, CHECK, PLAN, summary]:
             install.tui_receive(state, ("event", state.run_id, event))
         with mock.patch.object(install, "_tui_folder_facts", return_value={
                 "free": 50 * 1024 ** 3, "writable": True, "cores": []}):
@@ -4309,6 +4335,8 @@ class OfflineInTheInterface(unittest.TestCase):
         state.found = [{"event": "found", "platform": "retroarch", "dest": FILES[0]["dest"],
                         "folder": "/media/old", "path": "/media/old/scph5500.bin",
                         "member": "", "reason": ""}]
+        state.check = planned(CHECK, files=3, bytes=CHECK["bytes_needed"] - FILES[0]["size"],
+                              copied=[FILES[0]["dest"]])
         text = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
         self.assertIn("1 found in old,", text)
         self.assertIn("need the internet (--offline)", text)
@@ -4387,7 +4415,7 @@ class BackTicksAndSaveFolder(unittest.TestCase):
     def test_confirm_offline_with_nothing_on_hand_has_no_install(self):
         state = checked_state()
         state.stack.append("confirm")
-        state.dry = dict(CHECK)
+        state.dry = planned(CHECK)
         state.dry_files = [dict(event, state="missing") for event in FILES]
         state.offline = True
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
@@ -4398,6 +4426,7 @@ class BackTicksAndSaveFolder(unittest.TestCase):
             state.found = [{"event": "found", "platform": "retroarch",
                             "dest": FILES[0]["dest"], "folder": "/media/old",
                             "path": "/media/old/x", "member": "", "reason": ""}]
+            state.dry = planned(CHECK, [FILES[0]["dest"]])
             self.assertEqual(install.tui_rows(state)[0].action, "install")
 
     def test_the_checking_clock_starts_at_zero(self):
@@ -4410,6 +4439,7 @@ class BackTicksAndSaveFolder(unittest.TestCase):
         state.found = [{"event": "found", "platform": "retroarch", "dest": FILES[0]["dest"],
                         "folder": "/media/old", "path": "/media/old/x", "member": "",
                         "reason": "misplaced"}]
+        state.check = planned(CHECK, [FILES[0]["dest"]])
         with mock.patch.object(install.LOCAL, "pack", mock.Mock()):
             text = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
             # one count, "4 files to install" above "3 from
@@ -6423,6 +6453,7 @@ class ThePlanNumbersAddUp(unittest.TestCase):
     def test_the_copied_files_are_the_difference(self):
         state = checked_state()
         state.found = [found("scph5500.bin", str(SYSTEM_DIR), "one folder too deep")]
+        state.check = planned(CHECK, ["scph5500.bin"])
         screen = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
         self.assertIn("3 files to download", screen)
         # The backup line under the count it explains, then the split.
@@ -7065,11 +7096,12 @@ class ConfirmRefusalsAndCardRows(unittest.TestCase):
         state.found = [{"event": "found", "platform": "retroarch", "dest": FILES[0]["dest"],
                         "folder": "/media/old", "path": "/media/old/x", "member": "",
                         "reason": ""}]
+        state.check = planned(CHECK, [FILES[0]["dest"]])
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: install.OFFLINE_FLAG_VALUE}):
             text = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
             self.assertNotIn("downloaded", text)
             state.found = []
-            state.check = dict(state.check, data_missing=2636, data_bytes=40 * 1024 * 1024)
+            state.check = planned(dict(CHECK, data_missing=2636, data_bytes=40 * 1024 * 1024))
             text = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
         # One count of files, the kinds apart under the folder: "4 files and
         # 2636 data files" read as two kinds of one.
@@ -8552,9 +8584,9 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
             "event": "file", "platform": "retroarch", "dest": "PCSX/EXTRA.BIN",
             "systems": ["sony-playstation"], "size": 4, "state": "missing"}]
         state.checked_dests.add("PCSX/EXTRA.BIN")
-        state.check = {**state.check, "missing": state.check["missing"] + 1,
-                       "files": state.check["files"] + 1,
-                       "bytes_needed": state.check["bytes_needed"] + 4}
+        state.check = planned({**state.check, "missing": state.check["missing"] + 1,
+                               "files": state.check["files"] + 1,
+                               "bytes_needed": state.check["bytes_needed"] + 4})
         text = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
         self.assertIn("5 files to download", text)
         self.assertIn("3 BIOS files (1.0 MB) and 2 game data files (8 B).", text)
@@ -9578,7 +9610,7 @@ class PacksWordingAndDocs(unittest.TestCase):
         press(state, "enter")
         self.assertEqual(state.screen, "checking")
         # The check of every system comes back, the ticks kept.
-        for event in [*FILES, *SYSTEMS, CHECK]:
+        for event in [*FILES, *SYSTEMS, CHECK, PLAN]:
             install.tui_receive(state, ("event", state.run_id, event))
         with mock.patch.object(install, "_tui_folder_facts", return_value={
                 "free": 50 * 1024 ** 3, "writable": True, "cores": []}):
@@ -9591,7 +9623,7 @@ class PacksWordingAndDocs(unittest.TestCase):
         state.focus["plan"] = next(i for i, row in enumerate(install.tui_rows(state))
                                    if row.action == "systems")
         press(state, "enter")
-        for event in [*FILES, *SYSTEMS, CHECK]:
+        for event in [*FILES, *SYSTEMS, CHECK, PLAN]:
             install.tui_receive(state, ("event", state.run_id, event))
         with mock.patch.object(install, "_tui_folder_facts", return_value={
                 "free": 50 * 1024 ** 3, "writable": True, "cores": []}):
@@ -10000,6 +10032,7 @@ class CardFoldersAndNarrowBars(unittest.TestCase):
         """Under the pack and copy split it was cut."""
         state = checked_state()
         state.found = [found("gba_bios.bin", "/media/old")]
+        state.check = planned(CHECK, ["gba_bios.bin"])
         lines = [str(line) for line in install._plan_lines(state.check, state.dest, state)]
         self.assertTrue(any("copied from this machine" in line for line in lines), lines)
         counts = next(index for index, line in enumerate(lines) if " in place, " in line)
@@ -11729,7 +11762,7 @@ class TapsGameDataAndExitCodes(_CardFixtures, unittest.TestCase):
         install.tui_receive(state, ("manifest", "retroarch", MANIFEST))
         for event in [{"event": "version", "platform": "retroarch", "list_version": "8.3.1",
                        "installed_version": "8.2.0.1", "message": said},
-                      *FILES, *SYSTEMS, CHECK]:
+                      *FILES, *SYSTEMS, CHECK, PLAN]:
             install.tui_receive(state, ("event", state.run_id, event))
         with mock.patch.object(install, "_tui_folder_facts", return_value={
                 "free": 50 * 1024 ** 3, "writable": True, "cores": []}):
@@ -12330,7 +12363,9 @@ class OneChoicePerRun(unittest.TestCase):
         state = checked_state()
         state.found = [found(event["dest"], "/media/old") for event in FILES]
         state.stack.append("confirm")
-        state.dry, state.dry_files = dict(CHECK), list(FILES)
+        state.dry = planned(CHECK, files=0, bytes=0,
+                            copied=[event["dest"] for event in FILES])
+        state.dry_files = list(FILES)
         for env in ({install.OFFLINE_VARIABLE: install.OFFLINE_FLAG_VALUE}, {}):
             with self.subTest(offline=bool(env)), mock.patch.dict(os.environ, env):
                 text = " ".join(" ".join(install.tui_view(state, 80, 24)).split())
@@ -12362,11 +12397,14 @@ class OneChoicePerRun(unittest.TestCase):
             def find(entry: dict) -> tuple | None:
                 return (None, entry) if entry["dest"] == "gba_bios.bin" else None
 
+        dests = [event["dest"] for event in FILES]
+        state.check = planned(CHECK, files=1, bytes=16384,
+                              lacking=[dest for dest in dests if dest != "gba_bios.bin"])
         with mock.patch.object(install.LOCAL, "pack", Lacking()):
             text = " ".join(" ".join(install.tui_view(state, 80, 24)).split())
             self.assertIn("1 file to install from the pack, 16.0 KB", text)
             self.assertIn("3 of these 4 files are not in RetroArch_BIOS_Pack.zip", text)
-            Lacking.find = staticmethod(lambda entry: None)
+            state.check = planned(CHECK, files=0, bytes=0, lacking=dests)
             text = " ".join(" ".join(install.tui_view(state, 80, 24)).split())
             self.assertIn("RetroArch_BIOS_Pack.zip holds none of these 4 files", text)
             self.assertNotIn("install", [row.action for row in install.tui_rows(state)])
@@ -12503,7 +12541,7 @@ class OneChoicePerRun(unittest.TestCase):
         """"8358 files and 2636 data files", and the
         definition dropped at 80 columns."""
         state = _game_state()
-        state.check = {**state.check, "data_missing": 7, "data_bytes": 2048}
+        state.check = planned({**state.check, "data_missing": 7, "data_bytes": 2048})
         lines = [str(line).strip() for line in install.tui_view(state, 80, 24)]
         text = " ".join(" ".join(lines).split())
         self.assertIn("11 files to download, 1.0 MB", text)
@@ -13322,7 +13360,10 @@ class ChoiceStateInBothModes(unittest.TestCase):
         files nor the trees: Install was offered and failed every file, and
         the result never named the data files."""
         state = checked_state()
-        state.check = {**state.check, "data_missing": 7, "data_bytes": 2048}
+        # The run's plan: the pack holds none of the files nor the trees.
+        state.check = planned({**state.check, "data_missing": 7, "data_bytes": 2048},
+                              lacking=[event["dest"] for event in state.files],
+                              data_files=0, data_bytes=0)
         state.manifest = {**MANIFEST, "data_directories": [
             {"ref": "dolphin", "dest": "dolphin-emu/Sys", "files": {}}]}
 
@@ -14031,7 +14072,10 @@ class OneVocabularyOneCount(unittest.TestCase):
             archive.writestr("manifest.json", json.dumps({"files": []}))
             archive.writestr("other-system.bin", b"x")
         state = checked_state()
-        state.check = {**state.check, "data_missing": 2, "data_bytes": 2}
+        # The run's plan: the pack holds none of the files nor the trees.
+        state.check = planned({**state.check, "data_missing": 2, "data_bytes": 2},
+                              lacking=[event["dest"] for event in state.files],
+                              data_files=0, data_bytes=0)
         state.manifest = {**MANIFEST, "data_directories": [
             {"ref": "bluemsx", "dest": "", "files": {
                 "Machines/a.txt": {"sha1": "0" * 40, "size": 1},
@@ -14488,8 +14532,9 @@ class ProvenCardsAndCounts(unittest.TestCase):
         state.offline = True
         folder = "/media/OLD"
         state.from_folders = [Path(folder)]
-        state.found = [found(dest, folder) for dest in ("scph5500.bin", "pcsx/extra.bin",
-                                                        "gba_bios.bin")]
+        copied = ("scph5500.bin", "pcsx/extra.bin", "gba_bios.bin")
+        state.found = [found(dest, folder) for dest in copied]
+        state.check = planned(CHECK, copied)
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             text = self.screen(state, 100, 30)
         self.assertIn("3 found in OLD, 1 needs the internet", text)

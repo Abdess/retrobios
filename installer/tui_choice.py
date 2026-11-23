@@ -4,7 +4,7 @@ from __future__ import annotations
 import re
 from collections.abc import Iterable
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, NamedTuple
 
 from installer.cards import card_bound
 from installer.choices import available_choices, core_files, emulator_names
@@ -15,8 +15,6 @@ from installer.frontend_folders import save_directory_for, save_where_words
 from installer.games import GAMES_REASONS
 from installer.manifest import OTHER_SYSTEMS, entry_copies
 from installer.narrowing import narrow
-from installer.offline import LOCAL
-from installer.pack_source import pack_holds_trees, pack_lacks
 from installer.paths import SavePlace, spelled
 from installer.plan_words import NO_CORE_FILES, _core_sized, emptied_words
 from installer.platforms import _tui_system_label, system_title
@@ -266,20 +264,10 @@ def _checked_scope(state: TuiState) -> set[str]:
     return set(state.checked_dests) | left if state.checked_dests or left else set()
 
 
-def _plan_copies(state: TuiState, check: dict) -> list[str]:
-    """The files to install that this machine holds, by destination."""
-    if check is state.dry and check is not state.check:
-        return _dry_copies(state)
-    local = {event["dest"] for event in state.found} if check is state.check else set()
-    sizes = {event["dest"] for event in state.files}
-    return [dest for dest in local if dest in sizes]
-
-
-def _dry_copies(state: TuiState) -> list[str]:
-    """The files the confirm or preview run would install that this
-    machine holds."""
-    local = {event["dest"] for event in state.found}
-    return [event["dest"] for event in state.dry_files if event["dest"] in local]
+def _plan_copies(check: dict) -> list[str]:
+    """The files to install that this machine holds, by destination, as the
+    run that counted check decided it (its fetch_plan event)."""
+    return list((check.get("fetch_plan") or {}).get("copied") or [])
 
 
 def space_needed(check: dict) -> int:
@@ -444,46 +432,39 @@ def _tui_found_elsewhere(state: TuiState, dests: set | None = None) -> dict[str,
     return found
 
 
-def _plan_fetch(state: TuiState, check: dict) -> tuple[int, int, list, list, dict]:
-    """(files to fetch, bytes the install fetches with the data files',
-    dests copied from this machine, dests the pack lacks, the size of each
-    file): the one size the plan's headline and its Install row say.
+class PlanFetch(NamedTuple):
+    """What the run that counted a check fetches, from its fetch_plan event:
+    the BIOS files and their bytes, the data files and theirs, the dests
+    copied from this machine, those the pack lacks, the size of each file."""
 
-    A file found on this machine is copied, not downloaded: the count and
-    the size to download leave it out, from the check's own events. On
-    Confirm the dry run's files are matched the same way: it called the
-    files a --from folder holds downloads, and sent an offline user for a
-    pack. The files the pack does not hold are left out too: the plan
-    offered "Install 6.6 GB" from a pack that held none of them.
-    """
+    files: int
+    bytes: int
+    data_files: int
+    data_bytes: int
+    copied: list[str]
+    lacking: list[str]
+    sizes: dict[str, int]
+
+    @property
+    def size(self) -> int:
+        """The one size the plan's headline and its Install row say."""
+        return self.bytes + self.data_bytes
+
+
+def _plan_fetch(state: TuiState, check: dict) -> PlanFetch:
+    """The plan of check as the run decided it: the screen reads the
+    counts, never works them out again. Worked out here, a file a --from
+    folder held was called a download, a pack that held none of the files
+    offered "Install 6.6 GB", and a pack without the data trees promised
+    them."""
     dry = check is state.dry and check is not state.check
-    sizes = {event["dest"]: event["size"]
-             for event in (state.dry_files if dry else state.files)}
-    copied = _plan_copies(state, check) if dry or check is state.check else []
-    lacking = _tui_pack_lacks(state, [dest_ for dest_ in sizes if dest_ not in copied])
-    fetch = max(0, _needed(check) - len(copied) - len(lacking))
-    fetch_bytes = max(0, check.get("bytes_needed", 0) - sum(sizes[dest_] for dest_ in copied)
-                      - sum(sizes[dest_] for dest_ in lacking))
-    data_bytes = check.get("data_bytes", 0) if check.get("data_missing", 0) else 0
-    return fetch, fetch_bytes + data_bytes, copied, lacking, sizes
-
-
-def _tui_pack_trees(state: TuiState) -> bool:
-    """Whether the pack given to the run holds a file of the list's data
-    trees."""
-    return pack_holds_trees((state.manifest or {}).get("data_directories") or [])
-
-
-def _tui_pack_lacks(state: TuiState, dests: list[str]) -> list[str]:
-    """The destinations of a plan the pack given to the run does not hold."""
-    if LOCAL.pack is None or not dests:
-        return []
-    manifest = state.manifest or {}
-    entries = {str(entry.get("dest")): entry for entry in [
-        *(manifest.get("files") or []), *(manifest.get("case_variants") or [])]}
-    held = {id(entry) for entry in pack_lacks([entries[dest] for dest in dests
-                                               if dest in entries])}
-    return [dest for dest in dests if dest in entries and id(entries[dest]) in held]
+    plan = check.get("fetch_plan") or {}
+    return PlanFetch(
+        plan.get("files", 0), plan.get("bytes", 0), plan.get("data_files", 0),
+        plan.get("data_bytes", 0), list(plan.get("copied") or []),
+        list(plan.get("lacking") or []),
+        {event["dest"]: event["size"] for event in (state.dry_files if dry else state.files)},
+    )
 
 
 def _plan_folder(state: TuiState, dest: Path | None) -> Path | None:

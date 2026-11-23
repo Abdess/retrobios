@@ -124,6 +124,15 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # hold against the free space. A kind of its own, since schema 1 never
     # adds a key to check.
     "space": ("platform", "bytes"),
+    # Right after space: what an install fetches, decided once by the run.
+    # files and bytes come from the network, or from the pack when one is
+    # given and holds them. copied: the dests a copy on this machine gives
+    # (each named by a found event), lacking: the dests the pack does not
+    # hold, data_files and data_bytes: the data trees' files the run brings
+    # (none from a pack that holds no tree). A kind of its own, since
+    # schema 1 never adds a key to check.
+    "fetch_plan": ("platform", "files", "bytes", "copied", "lacking", "data_files",
+                   "data_bytes"),
     # A file to install that this machine already holds: misplaced in the
     # BIOS folder (folder is its bios_dir, reason says why in words) or in
     # a folder named with --from (reason empty). member names the ZIP member

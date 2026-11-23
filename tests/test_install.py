@@ -7194,6 +7194,10 @@ class EventsDescribeTheRun(unittest.TestCase, _SyntheticTree):
             # The missing and the wrong copy, written: what the run holds
             # against the free space.
             {"event": "space", "platform": "retroarch", "bytes": 245},
+            # Each file not in place comes from the network: no copy here,
+            # no pack.
+            {"event": "fetch_plan", "platform": "retroarch", "files": 3, "bytes": 245,
+             "copied": [], "lacking": [], "data_files": 0, "data_bytes": 0},
         ]
 
     SKIPPED = [{"reason": "not_found", "label": "not found", "files": 1, "required": 1}]
