@@ -423,7 +423,10 @@ def write_mame_profile(path: str | Path, data: dict) -> None:
 
     original = p.read_text(encoding="utf-8")
     patched = _patch_core_version(original, data.get("core_version", ""))
-    patched = _patch_scalar(patched, "upstream_commit", data.get("upstream_commit", ""))
+    patched = _set_scalar(
+        patched, "upstream_commit", data.get("upstream_commit", ""),
+        after=("source_commit", "upstream"),
+    )
     patched = _patch_bios_entries(patched, data.get("files", []))
     patched = _append_new_entries(patched, data.get("files", []), original)
 
@@ -446,6 +449,22 @@ def _patch_scalar(text: str, key: str, value: str) -> str:
         count=1,
         flags=re.MULTILINE,
     )
+
+
+def _set_scalar(text: str, key: str, value: str, after: tuple[str, ...]) -> str:
+    """Write a top-level scalar, adding its line after the first key of *after* found.
+
+    The merge sets the value whether or not the profile carries the key: a
+    patch that only rewrites an existing line would report the change and
+    leave the file without it.
+    """
+    if not value or re.search(rf"^{re.escape(key)}:", text, re.MULTILINE):
+        return _patch_scalar(text, key, value)
+    for anchor in after:
+        match = re.search(rf"^{re.escape(anchor)}:[^\n]*$", text, re.MULTILINE)
+        if match:
+            return f'{text[: match.end()]}\n{key}: "{value}"{text[match.end():]}'
+    raise ValueError(f"no {' or '.join(after)} line to place {key} after")
 
 
 def _owned_end(lines: list[str], start_line: int) -> int:
@@ -476,6 +495,27 @@ def _patch_source_ref(lines: list[str], start_line: int, last_owned: int, source
             lines[j] = f'    source_ref: "{source_ref}"'
             return last_owned
     lines.insert(last_owned + 1, f'    source_ref: "{source_ref}"')
+    return last_owned + 1
+
+
+def _patch_required(lines: list[str], start_line: int, last_owned: int, required: bool) -> int:
+    """Rewrite required in-place, or add it before category when it is false.
+
+    An absent line reads as true, so only a false needs a line of its own.
+    Returns the new last owned line.
+    """
+    value = f"    required: {str(required).lower()}"
+    for j in range(start_line + 1, last_owned + 1):
+        if re.match(r"^    required:", lines[j]):
+            lines[j] = value
+            return last_owned
+    if required:
+        return last_owned
+    at = next(
+        (j for j in range(start_line + 1, last_owned + 1) if re.match(r"^    category:", lines[j])),
+        last_owned + 1,
+    )
+    lines.insert(at, value)
     return last_owned + 1
 
 
@@ -510,10 +550,7 @@ def _patch_entry(lines: list[str], start_line: int, fe: dict) -> None:
 
     # The source settles required for a set the machine runs without
     if "required" in fe:
-        for j in range(start_line + 1, last_owned + 1):
-            if re.match(r"^    required:", lines[j]):
-                lines[j] = f"    required: {str(fe['required']).lower()}"
-                break
+        last_owned = _patch_required(lines, start_line, last_owned, fe["required"])
 
     last_owned = _drop_contents(lines, start_line, last_owned)
 

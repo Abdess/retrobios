@@ -376,6 +376,40 @@ class TheMamePinMovesWithItsRefs(unittest.TestCase):
         self.assertEqual(yaml.safe_load(text)["upstream_commit"], "a" * 40)
 
 
+class TheWrittenFileHoldsWhatTheDiffReports(unittest.TestCase):
+    """The diff counted a set refreshed when required moved, but the writer
+    only rewrote lines already there: a set without a required line, or a
+    profile without upstream_commit, was reported on every run and never
+    written."""
+
+    def test_a_second_diff_finds_nothing_left_to_write(self):
+        hashes = _make_mame_hashes(commit="f" * 40, version="0.289")
+        hashes["bios_sets"] = {"mac2bios": {
+            "source_file": "src/mame/seta/macs.cpp", "source_line": 776,
+            "roms": [], "required": False,
+        }}
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "mame.yml"
+            path.write_text(
+                'emulator: MAME\nupstream: "https://github.com/mamedev/mame"\n'
+                'source_commit: "' + "a" * 40 + '"\ncore_version: "0.288"\nfiles:\n'
+                "  - name: mac2bios.zip\n    category: bios_zip\n"
+                '    source_ref: "src/mame/seta/macs.cpp:776"\n',
+                encoding="utf-8",
+            )
+            self.assertEqual(compute_diff(load_profile(path), hashes)["updated"], ["mac2bios"])
+            _refresh_mame(path, hashes)
+            written = load_profile(path)
+        self.assertEqual(compute_diff(written, hashes)["updated"], [])
+        entry = next(f for f in written["files"] if f["name"] == "mac2bios.zip")
+        self.assertIs(entry["required"], False)
+        self.assertEqual(written["upstream_commit"], "f" * 40)
+        self.assertEqual(written["core_version"], "0.289")
+        self.assertEqual(
+            list(written)[:4], ["emulator", "upstream", "source_commit", "upstream_commit"]
+        )
+
+
 class TheScraperClonesTheReleaseItLabels(unittest.TestCase):
     """Cloning master and labelling it with the latest release tag gave
     master's line numbers and hashes under the release's name."""
