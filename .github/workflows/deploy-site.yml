@@ -44,6 +44,7 @@ on:
       - "scripts/installer_build/port.py"
       - "scripts/model/__init__.py"
       - "scripts/model/alternatives.py"
+      - "scripts/model/citations.py"
       - "scripts/model/cliargs.py"
       - "scripts/model/collection.py"
       - "scripts/model/composition.py"

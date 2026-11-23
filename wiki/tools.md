@@ -1377,7 +1377,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | Script | Purpose |
 |--------|---------|
 | `core/` | Standard library only: hashing, ZIP reading and TorrentZip, atomic writes and output locks, `run_cli` and the input errors it prints on one line, the GitHub token, the repository root, forge access (`upstream.py`) |
-| `model/` | Data loading: `database.json`, platform configs and the registry, emulator profiles, hardware targets, system ids, the region vocabulary, dump catalogues, release assets, the `source_ref` grammar (`sourceref.py`) |
+| `model/` | Data loading: `database.json`, platform configs and the registry, emulator profiles, hardware targets, system ids, the region vocabulary, dump catalogues, release assets, the `source_ref` grammar (`sourceref.py`) and the citation walk every reader shares (`citations.py`) |
 | `resolve/` | From a declaration to a file: content checks, `resolve_local_file` and its stages, archive members, launcher layouts, the cores a platform runs, validation, slots, truth |
 | `packs/` | The library behind `verify.py`, `generate_pack.py`, `cross_reference.py`, `slots.py` and `refresh_data_dirs.py`: per-file verdicts, coverage and gaps, core extras, slot arbitration, pack naming and archives, manifests, the pack check, the data directory cache |
 | `profiling/` | What `profile_sync.py` runs: citations, anchoring, the report and its forms, version checks, detection, triage, the git state a pass reads (uncommitted profiles, the branch's profiles), the anonymous quota, and the guarded writes (recale, bump, prose realignment, `version_basis`) with the site's record of cited paths rebuilt after them |

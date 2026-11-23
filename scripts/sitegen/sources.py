@@ -7,7 +7,6 @@ import json
 import re
 import sys
 import urllib.parse
-from collections.abc import Iterator
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -15,6 +14,7 @@ from core.text import series
 from core import upstream
 from core.artifacts import repository_output_lock, write_if_changed
 from core.paths import REPO_ROOT
+from model.citations import document_citations, known_repositories
 from model.sourceref import (
     HEX_ADDRESS_RE,
     prose_runs,
@@ -224,17 +224,6 @@ def _cached_tree(
     return None
 
 
-def _walk(value: object) -> Iterator[tuple[str, object]]:
-    """Every (key, value) of a profile, nested lists and mappings included."""
-    if isinstance(value, dict):
-        for key, item in value.items():
-            yield str(key), item
-            yield from _walk(item)
-    elif isinstance(value, list):
-        for item in value:
-            yield from _walk(item)
-
-
 def cited_paths(profile: dict) -> set[str]:
     """Every path a page of the profile could link: the parts of each
     source_ref, the file:line citations of its prose and the file its
@@ -246,13 +235,11 @@ def cited_paths(profile: dict) -> set[str]:
         str(b["path"]) for b in bases
         if isinstance(b, dict) and b.get("kind") == "file" and b.get("path")
     }
-    for key, value in _walk(profile):
-        if key == "source_ref" and isinstance(value, (str, dict)):
-            for _label, refs in source_ref_values(value):
-                paths.update(ref_role(part.path)[1] for part in split_source_ref(refs))
-        elif isinstance(value, str) and ":" in value:
-            for _n, _span, _spans, parts, _run, _wrapped in prose_runs(value):
-                paths.update(part.path for part in parts)
+    for found in document_citations(profile):
+        if found.kind == "ref":
+            paths.update(ref_role(part.path)[1] for part in split_source_ref(found.ref))
+        else:
+            paths.update(part.path for part in found.parts)
     return {path for path in paths
             if _PATH_RE.fullmatch(path) and not is_binary_citation(path)}
 
@@ -625,11 +612,12 @@ def link_prose_citations(profile: dict, text: str) -> str:
         for _label, refs in source_ref_values(entry.get("source_ref"))
         for part in split_source_ref(refs)
     }
+    known = known_repositories(profile)
     out = []
     for line in text.split("\n"):
         guarded = _guarded_spans(line)
         edits = []
-        for _n, path_span, spans, parts, _run, wrapped in prose_runs(line):
+        for _n, path_span, spans, parts, _run, wrapped in prose_runs(line, known):
             path = parts[0].path
             if wrapped or " " in path or not _PATH_RE.fullmatch(path):
                 continue

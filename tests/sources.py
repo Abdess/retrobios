@@ -180,6 +180,7 @@ COMMANDS = {
         "profiling/bump.py", "profiling/realign.py", "profiling/run.py", "profiling/worktree.py",
         "profiling/quota.py", "profiling/sourcepaths.py", "profiling/realignpass.py",
         "profiling/versioncheck.py", "profiling/selection.py", "profiling/flagchecks.py",
+        "model/citations.py",
     ),
     "generate_truth.py": ("resolve/truth.py",),
     "diff_truth.py": ("exporter/truthdiff.py", "exporter/diffreport.py"),

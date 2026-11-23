@@ -997,6 +997,31 @@ class ProseCitationsLinkToThePin(unittest.TestCase):
         # The role word names a repository that does not hold it.
         self.assertNotIn("](", upstream_only)
 
+    BAM = {"source": "https://github.com/ravarcade/BAM_FPloader", "source_commit": "b" * 40,
+           "notes": "ref: BAM_FPloader FPLoader.cpp:259-305",
+           "files": [{"name": "x", "source_ref": "FPLoader.cpp:10",
+                      "details": ["see src/hu_stuff.c:1144"]}]}
+
+    def test_the_site_reads_the_citations_profile_sync_tracks(self):
+        """prboom-plus cites two paths in list items and fploader writes its
+        repository before the path: the site's own walk missed all three."""
+        from profiling.citations import collect_citations
+        from sitegen.sources import cited_paths
+
+        tracked = {part.path for found in collect_citations(self.BAM) for part in found.parts}
+        tracked |= {"FPLoader.cpp"}  # the structured ref, whose parts the site splits
+        self.assertEqual(cited_paths(self.BAM), tracked)
+        self.assertEqual(tracked, {"FPLoader.cpp", "src/hu_stuff.c"})
+
+    @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)  # a path the record confirms
+    def test_a_repository_prefix_is_not_part_of_the_path(self):
+        from sitegen.sources import link_prose_citations
+
+        self.assertEqual(
+            link_prose_citations(self.BAM, self.BAM["notes"]),
+            "ref: BAM_FPloader [`FPLoader.cpp:259-305`](https://github.com/ravarcade/BAM_FPloader"
+            "/blob/" + "b" * 40 + "/FPLoader.cpp#L259-L305)")
+
 
 class ACitationSaysWhoseCodeItIs(unittest.TestCase):
     """Readers could not tell whether the libretro core or the emulator asked

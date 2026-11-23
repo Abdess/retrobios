@@ -6,17 +6,14 @@ import bisect
 import os
 import posixpath
 import re
-from collections import Counter
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any
 
 import yaml
 
-from core import upstream
 from core.hashing import parse_hash_list
-from model.sourceref import RefPart, prose_runs, ref_prose_text, ref_role, source_ref_values
-from model.profilerepos import declared_repositories
+from model.citations import document_citations, known_repositories
+from model.sourceref import RefPart, prose_runs, ref_role
 
 
 HASH_FIELDS = ("sha1", "md5", "crc32", "sha256", "known_hash_adler32")
@@ -203,66 +200,6 @@ class Citation:
     in_comment: bool = False
 
 
-def _list_segments(items: list) -> list[object]:
-    """The field path segment naming each list item.
-
-    A name keys its entry. supermodel declares Games.xml twice, once per
-    build mode, and both notes answered to files[Games.xml].note: the
-    history read one note's citations against the other's text. A repeated
-    name takes its build mode, or its index when the mode repeats too.
-    """
-    keys: list[tuple[str | None, str | None]] = []
-    for item in items:
-        name = item.get("name") if isinstance(item, dict) else None
-        mode = item.get("mode") if isinstance(item, dict) else None
-        keys.append((
-            None if name is None else str(name),
-            mode if isinstance(mode, str) else None,
-        ))
-    names = Counter(name for name, _ in keys if name is not None)
-    modes = Counter(key for key in keys if key[0] is not None)
-    segments: list[object] = []
-    for index, (name, mode) in enumerate(keys):
-        if name is None:
-            segments.append(index)
-        elif names[name] == 1:
-            segments.append(name)
-        elif mode and modes[(name, mode)] == 1:
-            segments.append(f"{name}@{mode}")
-        else:
-            segments.append(f"{name}#{index}")
-    return segments
-
-
-def _walk_document(
-    node: object, where: str = ""
-) -> Iterator[tuple[str, str, dict | list, object, Any]]:
-    """Every citation carrier of the document, with its holder and field path.
-
-    Yields ("ref", field, holder, key, value) for each source_ref key and
-    ("str", field, holder, key, value) for every other string scalar. One
-    walker builds every field path, so the paths that name a scalar today
-    still name it when another pass looks it up at another revision.
-    """
-    if isinstance(node, dict):
-        for key, value in node.items():
-            spot = f"{where}.{key}" if where else str(key)
-            if key == "source_ref":
-                yield "ref", spot, node, key, value
-            elif isinstance(value, str):
-                yield "str", spot, node, key, value
-            else:
-                yield from _walk_document(value, spot)
-    elif isinstance(node, list):
-        segments = _list_segments(node)
-        for index, item in enumerate(node):
-            spot = f"{where}[{segments[index]}]"
-            if isinstance(item, str):
-                yield "str", spot, node, index, item
-            else:
-                yield from _walk_document(item, spot)
-
-
 def _scalar_spans(node: yaml.Node, spans: list[tuple[int, int]]) -> None:
     if isinstance(node, yaml.ScalarNode):
         spans.append((node.start_mark.index, node.end_mark.index))
@@ -331,38 +268,17 @@ def collect_citations(document: dict, text: str | None = None) -> list[Citation]
     of the text, not of a field name: anything this walk misses is a
     location profile_sync cannot keep honest.
     """
-    known = frozenset(
-        repo.name.lower()
-        for _, _, url in declared_repositories(document)
-        if (repo := upstream.parse_repo(url)) is not None
-    )
-    citations: list[Citation] = []
-    for kind, field_name, holder, key, value in _walk_document(document):
-        if kind == "ref":
-            for label, ref in source_ref_values(value):
-                citations.append(Citation(
-                    field=field_name, kind="ref", ref=ref,
-                    entry=holder if isinstance(holder, dict) else None,
-                    holder=holder, key=key, label=label,
-                ))
-            if isinstance(value, str):
-                for line, path_span, spans, parts, run, joined_at in prose_runs(
-                    ref_prose_text(value), known
-                ):
-                    citations.append(Citation(
-                        field=field_name, kind="prose", ref=run, holder=holder,
-                        key=key, line=line, path_span=path_span, spans=spans,
-                        parts=parts, wrapped=bool(joined_at), joined_at=joined_at,
-                    ))
-            continue
-        for line, path_span, spans, parts, run, joined_at in prose_runs(
-            value, known
-        ):
-            citations.append(Citation(
-                field=field_name, kind="prose", ref=run, holder=holder, key=key,
-                line=line, path_span=path_span, spans=spans, parts=parts,
-                wrapped=bool(joined_at), joined_at=joined_at,
-            ))
+    known = known_repositories(document)
+    citations = [
+        Citation(
+            field=found.field, kind=found.kind, ref=found.ref,
+            entry=found.holder if found.kind == "ref" and isinstance(found.holder, dict) else None,
+            holder=found.holder, key=found.key, label=found.label, line=found.line,
+            path_span=found.path_span, spans=found.spans, parts=found.parts,
+            wrapped=bool(found.joined_at), joined_at=found.joined_at,
+        )
+        for found in document_citations(document, known)
+    ]
     if text is not None:
         citations.extend(comment_citations(text, known))
     return citations

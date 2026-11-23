@@ -4401,14 +4401,16 @@ class TestCitationSurfaceGuard(unittest.TestCase):
 
         A consumer keying on the field name reopens the gap this closes:
         citations outside its list rot while the pin advances. The walker
-        matches the key once. Everything else goes through the collector.
-        Every profiling module is read, the audits beside profile_sync
-        included: mamerefs takes its driver refs from the collector too.
+        matches the key once, in the model walk the site shares. Everything
+        else goes through the collector. Every profiling module is read, the
+        audits beside profile_sync included: mamerefs takes its driver refs
+        from the collector too.
         """
         cli = Path(profile_sync.__file__)
         source = "".join(
             path.read_text(encoding="utf-8")
-            for path in [cli, *sorted((cli.parent / "profiling").glob("*.py"))]
+            for path in [cli, cli.parent / "model" / "citations.py",
+                         *sorted((cli.parent / "profiling").glob("*.py"))]
         )
         self.assertNotIn('.get("source_ref")', source)
         self.assertEqual(source.count('== "source_ref"'), 1)

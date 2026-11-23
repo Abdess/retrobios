@@ -3498,7 +3498,9 @@
   "prboom2/src/e6y.c",
   "prboom2/src/g_game.c",
   "prboom2/src/gl_hires.c",
+  "prboom2/src/gl_map.c",
   "prboom2/src/gl_shader.c",
+  "prboom2/src/hu_stuff.c",
   "prboom2/src/m_menu.c",
   "prboom2/src/m_misc.c",
   "prboom2/src/r_demo.c",
@@ -9669,6 +9671,9 @@
   "src/emulator.cpp",
   "src/llscreen.cpp",
   "src/menus.cpp"
+ ],
+ "github.com/ravarcade/BAM_FPloader@e13007994011ae57dd9d9f48674c1f774183914b": [
+  "FPLoader.cpp"
  ],
  "github.com/recalbox/pifba@419faa7c3967560f6fa149f2f78b5aedca5b123a": [
   "burn/neogeo/d_neogeo.cpp",
