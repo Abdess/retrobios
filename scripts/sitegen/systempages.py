@@ -137,30 +137,10 @@ class _BoardSort:
                                  *(f for f in files if str(f.get("sha1", "")) not in held)]
 
 
-def _installs_by_board(
-    installs: dict[str, dict[str, list[tuple[str, str]]]],
-) -> dict[str, dict[str, list[tuple[str, str]]]]:
-    """A system's install commands, moved to its board's section."""
-    from sitegen.render import system_section
-
-    moved: dict[str, dict[str, list[tuple[str, str]]]] = {}
-    for slug, consoles in installs.items():
-        for console, pairs in consoles.items():
-            for platform, sys_id in pairs:
-                section = system_section(sys_id)
-                if section and section[0] == "arcade" and section[1] in _BOARD_CONSOLES:
-                    slug_to, console_to = section
-                else:
-                    slug_to, console_to = slug, console
-                moved.setdefault(slug_to, {}).setdefault(console_to, []).append((platform, sys_id))
-    return moved
-
-
 def arcade_board_sections(
     manufacturers: dict[str, dict[str, list]],
-    installs: dict[str, dict[str, list[tuple[str, str]]]],
-) -> tuple[dict[str, dict[str, list]], dict[str, dict[str, list[tuple[str, str]]]]]:
-    """The Arcade page grouped by board, and each board's install commands.
+) -> dict[str, dict[str, list]]:
+    """The Arcade page grouped by board.
 
     The Arcade sections were the folders of bios/Arcade/: NAOMI, PGM and
     ZN-1 had no section, and their names stayed plain on 568 emulator
@@ -170,15 +150,16 @@ def arcade_board_sections(
     copy. A set a reviewed machine owns (sitegen.render.archive_machine) goes
     to that machine's section. Files neither claims stay in their
     folders. Each board is recorded (sitegen.render.record_board_section) before
-    any page links one, and a system's install commands follow its link to
-    the board's section. Call after reset_console_pages()."""
+    any page links one, so the install commands placed after it
+    (sitegen.cards.system_install_choices) follow a system's link to the
+    board's section. Call after reset_console_pages()."""
     from sitegen.render import arcade_boards, record_board_section
 
     _BOARD_CONSOLES.clear()
     _BOARDS_FROM.clear()
     arcade = manufacturers.get("Arcade")
     if not arcade:
-        return manufacturers, installs
+        return manufacturers
     names = arcade_boards()
     by_name = {name.casefold(): board for board, name in names.items()}
     sort = _BoardSort()
@@ -191,7 +172,7 @@ def arcade_board_sections(
     regrouped = {**sort.folders, **{names[board]: files for board, files in sort.boards.items()}}
     makers = {mfr: {console: files for console, files in consoles.items() if files}
               for mfr, consoles in sort.makers.items()}
-    return {**manufacturers, **makers, "Arcade": regrouped}, _installs_by_board(installs)
+    return {**manufacturers, **makers, "Arcade": regrouped}
 
 
 def _boards_line(manufacturer: str, console: str) -> list[str]:

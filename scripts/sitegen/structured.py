@@ -17,7 +17,7 @@ from sitegen.descriptions import EMULATOR_SNIPPETS, NOTHING_TO_FETCH, PAGE_DATA,
 from sitegen.emulatorcards import snippet_noun
 from sitegen.install import comes_with_app
 from sitegen.lookup import data_member_digests, hash_pairs
-from sitegen.render import card_anchor, system_page_map
+from sitegen.render import card_anchor, system_section
 from sitegen.write import write_if_changed
 
 
@@ -302,7 +302,9 @@ def record_emulator_page(name: str, profile: dict) -> None:
     fetched = [f for f in listed if f.get("name") and not comes_with_app(f)]
     systems = profile.get("systems") or []
     first = systems[0] if systems else ""
-    makers = [system_page_map[sys_id][0] for sys_id in systems if sys_id in system_page_map]
+    # The maker of the section each system links to, as the system pages
+    # place it.
+    makers = [section[0] for section in (system_section(str(sid)) for sid in systems) if section]
     if makers:
         sitestarlight.EMULATOR_CARDS[f"emulators/{name}"] = makers[0]
     else:

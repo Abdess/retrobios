@@ -1224,13 +1224,17 @@ class TheOneLinerIsWhereUsersLand(unittest.TestCase):
         from sitegen import cards
         from sitegen import render as siterender
 
-        saved = dict(siterender.system_page_map)
-        self.addCleanup(siterender.set_system_page_map, saved)
-        siterender.set_system_page_map({"sony-playstation": ("sony", "PlayStation"),
-                                        "nowhere": ("sony", "PlayStation")})
-        cov = {"retroarch": {"config": {"systems": {"sony-playstation": {}, "nowhere": {}}}}}
+        from model import systemnames
+
+        systemnames.set_console_sections({("Sony", "PlayStation")})
+        self.addCleanup(systemnames._sections_installed.__setitem__, 0, False)
+        siterender.reset_console_pages()
+        self.addCleanup(siterender.reset_console_pages)
+        # "playstation" leads to the same section, but the manifest records
+        # retroarch's own spelling only.
+        cov = {"retroarch": {"config": {"systems": {"sony-playstation": {}, "playstation": {}}}}}
         choices = cards.system_install_choices(cov)
-        self.assertEqual(choices["sony"]["PlayStation"], [("retroarch", "sony-playstation")])
+        self.assertEqual(choices, {"sony": {"PlayStation": [("retroarch", "sony-playstation")]}})
 
 
 class TheGapPageOpensOnCounts(unittest.TestCase):

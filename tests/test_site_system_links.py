@@ -81,32 +81,6 @@ class OtherSpellingsOfOneSystem(unittest.TestCase):
         self.assertEqual(platformfiles.system_emulators("sega-mega-drive", index), ["genesis_plus_gx"])
         self.assertEqual(platformfiles.system_emulators("nintendo-snes", index), [])
 
-    def _install(self, mapping: dict) -> None:
-        from sitegen import render as siterender
-
-        saved = dict(siterender.system_page_map)
-        self.addCleanup(siterender.set_system_page_map, saved)
-        siterender.set_system_page_map(mapping)
-
-    def test_a_profile_spelling_finds_the_platform_page(self):
-        from sitegen import render as siterender
-
-        self._install({"sega-mega-drive": ("sega", "Mega Drive")})
-        self.assertEqual(siterender.page_by_norm("sega-megadrive"), ("sega", "Mega Drive"))
-        self._install({"sega-mega-drive": ("sega", "Mega Drive"),
-                       "megadrive": ("other", "Elsewhere")})
-        self.assertIsNone(siterender.page_by_norm("sega-megadrive"))
-
-    def test_a_table_of_the_same_size_replaces_the_other_spellings(self):
-        """The index of other spellings was kept while the table kept its
-        length, so a second table of one entry linked to the first one's page."""
-        from sitegen import render as siterender
-
-        self._install({"sega-mega-drive": ("sega", "Mega Drive")})
-        self.assertEqual(siterender.page_by_norm("sega-megadrive"), ("sega", "Mega Drive"))
-        self._install({"sega-mega-drive": ("other", "Elsewhere")})
-        self.assertEqual(siterender.page_by_norm("sega-megadrive"), ("other", "Elsewhere"))
-
     def test_a_system_only_profiles_name_is_placed_by_their_files(self):
         manufacturers = {"Commodore": {"PET": [{"name": "basic4.bin"}]}}
         profiles = {"vice_xpet": {"systems": ["commodore-pet"],

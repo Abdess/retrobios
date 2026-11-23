@@ -167,12 +167,14 @@ class SystemLinks(unittest.TestCase):
             siterender.reset_console_pages()
             # The sections as the system pages hold them: each board, the
             # sets a reviewed machine owns under that machine.
-            cls.sections, _installs = arcade_board_sections(cls.manufacturers, {})
+            cls.sections = arcade_board_sections(cls.manufacturers)
             platforms = [
                 load_platform_config(name, "platforms")
                 for name in list_registered_platforms("platforms")
             ]
             cls.ids = siterender.system_ids(profiles, platforms)
+            cls.coverages = {name: {"config": config} for name, config in
+                             zip(list_registered_platforms("platforms"), platforms)}
 
             entries = _entries_by_system(platforms, profiles)
             cls.held: dict[str, set[tuple[str, str]]] = _held_sections(
@@ -195,6 +197,34 @@ class SystemLinks(unittest.TestCase):
             if siterender.system_section(sys_id) is None
         )
         self.assertEqual(plain, [], "link these or name them in UNLINKED with the reason")
+
+    def test_install_commands_sit_where_the_system_links(self) -> None:
+        """The commands were placed by the folder votes of sitegen.places
+        and the links by system_section: Game Boy Color's commands sat under
+        Game Boy, Super A'Can's under Arcade, while their links led to their
+        own sections."""
+        from sitegen.cards import system_install_choices
+        from sitegen.install import manifest_systems
+
+        placed = {
+            (platform, sys_id): (slug, console)
+            for slug, consoles in system_install_choices(self.coverages).items()
+            for console, pairs in consoles.items()
+            for platform, sys_id in pairs
+        }
+        wrong = sorted(
+            (pair, place, siterender.system_section(pair[1]))
+            for pair, place in placed.items()
+            if siterender.system_section(pair[1]) != place
+        )
+        self.assertEqual(wrong, [])
+        unplaced = sorted(
+            (name, sys_id)
+            for name, cov in self.coverages.items()
+            for sys_id in set(cov["config"].get("systems") or {}) & manifest_systems(name)
+            if siterender.system_section(sys_id) and (name, sys_id) not in placed
+        )
+        self.assertEqual(unplaced, [])
 
     def test_unlinked_list_is_current(self) -> None:
         stale = sorted(

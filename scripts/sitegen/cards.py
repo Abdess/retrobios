@@ -23,7 +23,7 @@ from model.mamerelease import tag_version
 from sitegen.fields import search_excluded
 from sitegen.install import manifest_systems, platform_display
 from sitegen.render import (
-    SHORT_HASH, card_anchor, code_span, count_text, emulator_card_page, system_page_map,
+    SHORT_HASH, card_anchor, code_span, count_text, emulator_card_page, system_section,
 )
 
 
@@ -750,18 +750,19 @@ def card_title(text: str, anchor: str, searchable: bool = True, weight: int = 10
 def system_install_choices(coverages: dict) -> dict[str, dict[str, list[tuple[str, str]]]]:
     """slug -> console -> the (platform, system id) pairs linked to it.
 
-    Read through the same table as every system link, so a command sits in
-    the section the platform's system links to. Only a system the
-    platform's install manifest records is offered: --system refuses any
-    other name.
+    Placed by system_section, the answer every system link reads, so a
+    command sits in the section the platform's system links to: the folder
+    votes put Game Boy Color's under Game Boy and Super A'Can's under
+    Arcade. A system with no section (vgmplay, vvvvvv) links nowhere and
+    offers no command there. Call once the arcade boards are recorded, so a
+    board's systems reach the board's section. Only a system the platform's
+    install manifest records is offered: --system refuses any other name.
     """
-    from sitegen.render import page_by_norm
-
     choices: dict[str, dict[str, list[tuple[str, str]]]] = {}
     for name, cov in sorted(coverages.items()):
         recorded = manifest_systems(name)
         for sys_id in sorted(set(cov["config"].get("systems") or {}) & recorded):
-            page = system_page_map.get(sys_id) or page_by_norm(sys_id)
+            page = system_section(sys_id)
             if page:
                 slug, console = page
                 choices.setdefault(slug, {}).setdefault(console, []).append((name, sys_id))

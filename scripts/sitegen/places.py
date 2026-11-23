@@ -1,4 +1,4 @@
-"""Which system page each system id leads to, read from the collection's folders."""
+"""Where the collection's folders place each system id: the run's set of system ids."""
 
 from __future__ import annotations
 

@@ -262,10 +262,10 @@ def _write_system_pages(run: _SiteRun) -> None:
     })
 
     # The arcade boards are recorded before any page links one, the
-    # system pages first among them.
+    # system pages and their install commands first among them.
     reset_console_pages()
-    sections, console_installs = arcade_board_sections(
-        manufacturers, system_install_choices(run.coverages))
+    sections = arcade_board_sections(manufacturers)
+    console_installs = system_install_choices(run.coverages)
     linked, total = link_coverage(
         system_ids(run.profiles, [cov["config"] for cov in run.coverages.values()]))
     print(f"  {linked} of {total} system ids linked")

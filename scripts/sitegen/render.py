@@ -117,7 +117,9 @@ def system_icon_markdown(manufacturer: str, console_name: str) -> str:
         return ""
     return markup.image(console_name, _icon_url(name), width="24") + " "
 
-# Global index: maps system_id -> (manufacturer_slug, console_name) for cross-linking
+# The system ids the collection's folders place (sitegen.places), by the
+# folder each is placed in. Read as the run's set of system ids: a link, an
+# install command and a card's maker go where system_section() says.
 system_page_map: dict[str, tuple[str, str]] = {}
 
 def slugify_anchor(text: str) -> str:
@@ -130,39 +132,10 @@ def slugify_anchor(text: str) -> str:
     slug = slug.strip("-")
     return slug
 
-_norm_page_map: dict[str, tuple[str, str] | None] = {}
-
-
 def set_system_page_map(mapping: dict[str, tuple[str, str]]) -> None:
-    """Install the system id -> page table every link on the site reads.
-
-    The table replaces the previous one, and the index of other spellings is
-    derived from it here. Kept anywhere else, it outlived a table of the same
-    size and linked to the pages of the previous one.
-    """
-    from model.systems import norm_system_id
-
+    """Install the run's placed system ids, replacing the previous table."""
     system_page_map.clear()
     system_page_map.update(mapping)
-    _norm_page_map.clear()
-    for known, page in system_page_map.items():
-        key = norm_system_id(known)
-        if _norm_page_map.get(key, page) != page:
-            _norm_page_map[key] = None
-        else:
-            _norm_page_map[key] = page
-
-
-def page_by_norm(sys_id: str) -> tuple[str, str] | None:
-    """The page an id leads to under another spelling of the same system.
-
-    Emulator cards name sega-megadrive or sinclair-zxspectrum, the pages are
-    keyed by the platforms' spellings: 2,431 of 4,195 cards had no link. A
-    spelling two pages share leads nowhere rather than to either.
-    """
-    from model.systems import norm_system_id
-
-    return _norm_page_map.get(norm_system_id(sys_id))
 
 
 # A manufacturer page too large for one page is a summary, each console on
