@@ -27,6 +27,7 @@ from profiling.anchoring import (
     verify_at_pin,
     worst_status,
 )
+from profiling.attribution import answers, field_role, owner_order
 from profiling.citations import (
     Citation,
     anchor_tokens,
@@ -541,15 +542,12 @@ class _Resolver:
         candidates = self._candidate_paths(path)
         # A part that names its repository is looked up there first. In a
         # profile keyed by build mode, a part naming none belongs to the
-        # first build declared, as _realign_part decides a shared path: the
-        # libretro tree of xenia-edge carries emulator.cc offset, and its
-        # better-scored line hid a standalone ref that had moved.
+        # first build declared: the libretro tree of xenia-edge carries
+        # emulator.cc offset, and its better-scored line hid a standalone
+        # ref that had moved. owner_order is the rule realign follows too.
         if not wanted and self.primary.mode:
             wanted = self.primary.mode
-        ordered = (
-            sorted(self.views, key=lambda v: not _answers(v, wanted)) if wanted
-            else self.views
-        )
+        ordered = owner_order(self.views, wanted, _declared)
         best: tuple[int, RepoView, str] | None = None
         for candidate in candidates:
             found, best = self._try_candidate(candidate, ordered, start, tokens, wanted, best)
@@ -936,13 +934,15 @@ def build_report(
 
 def _view_role(view: RepoView) -> str:
     """source or upstream: the profile field a repository comes from."""
-    return "upstream" if view.field == "upstream" else "source"
+    return field_role(view.field)
 
 
 def _answers(view: RepoView, role: str) -> bool:
-    """Whether a part written under *role* means this repository: the field
-    it comes from, or the build mode a keyed source declares it under."""
-    return bool(role) and role in (_view_role(view), view.mode)
+    return answers(view.field, view.mode, role)
+
+
+def _declared(view: RepoView) -> tuple[str, str]:
+    return view.field, view.mode
 
 
 NO_SOURCE_REF = "no source_ref"

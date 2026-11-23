@@ -5,7 +5,7 @@ from __future__ import annotations
 import itertools
 import posixpath
 import subprocess
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -14,6 +14,7 @@ import yaml
 from core import upstream
 from model.sourceref import RefPart
 from profiling.anchoring import anchor_block
+from profiling.attribution import owner_order
 from profiling.citations import Citation, citation_key, collect_citations, is_external_citation
 from profiling.proseedit import apply_prose_edits, run_after_moves
 from model.profilerepos import declared_repositories
@@ -173,6 +174,7 @@ def _realign_part(
     cache_dir: str,
     offline: bool,
     pinned: Iterable[tuple[upstream.Repo, str]] = (),
+    declared: Mapping[upstream.Repo, tuple[str, str]] | None = None,
 ) -> tuple[str, tuple[int, int] | str] | None:
     """One range, anchored from its writing revision to the current pin.
 
@@ -180,16 +182,28 @@ def _realign_part(
     repository carries but an unmoved one does lives where nothing moved:
     it needs no move, and calling it absent made two readings of the same
     history disagree on every run (nethersx2's AetherSX2 citations).
+    `declared` gives the (field, build mode) of each repository, which the
+    part's role word is matched against.
     """
     if is_external_citation(part.path):
         return None
-    # The path as written decides first, as attribution does: a prefix is
+    # The role word decides first, as attribution does: retrodream cites
+    # `(upstream retro_host.c:196-198)` beside the fork's retro_host.c, and
+    # both trees carry the file.
+    fields = declared or {}
+
+    def claim(item: tuple) -> tuple[str, str]:
+        return fields.get(item[0], ("source", ""))
+
+    pairs = owner_order(pairs, part.role, claim)
+    pinned = owner_order(pinned, part.role, claim)
+    # Then the path as written, as attribution reads it: a prefix is
     # stripped only when no declared repository carries the path itself.
     # hatarib's hatari/src/tos.c lives in hatariB, which did not move, and
     # stripping the prefix read it as hatari/hatari's src/tos.c instead.
-    # Between two repositories that both carry the path, the one declared
-    # first owns it, as in attribution: freej2me-plus and hex007/freej2me
-    # both hold src/libretro/, and the citations describe the fork.
+    # Between two repositories that both carry the path, owner_order puts
+    # first the one declared first: freej2me-plus and hex007/freej2me both
+    # hold src/libretro/, and the citations describe the fork.
     literal = [
         (repo, written, current) for repo, written, current in pairs
         if upstream.fetch_file(repo, written, part.path, cache_dir, offline) is not None
@@ -289,6 +303,7 @@ def _realign_citation(
     cache_dir: str,
     offline: bool,
     pinned: Iterable[tuple[upstream.Repo, str]] = (),
+    declared: Mapping[upstream.Repo, tuple[str, str]] | None = None,
 ) -> tuple[dict[int, tuple[int, int, str | None]], list[str]]:
     """The moves one prose run needs, and what blocks them.
 
@@ -304,7 +319,7 @@ def _realign_citation(
         outcomes = {
             repr(result): result
             for result in (
-                _realign_part(part, pairs, cache_dir, offline, pinned) if pairs else None
+                _realign_part(part, pairs, cache_dir, offline, pinned, declared) if pairs else None
                 for pairs in readings
             )
         }
@@ -335,6 +350,8 @@ class _ProseRepos:
     served: dict[upstream.Repo, upstream.Repo]
     # Every declared (repository, current pin).
     pinned: list[tuple[upstream.Repo, str]]
+    # The (field, build mode) each repository read is declared under.
+    roles: dict[upstream.Repo, tuple[str, str]]
 
 
 def _prose_repos(document: dict) -> _ProseRepos | None:
@@ -366,7 +383,8 @@ def _prose_repos(document: dict) -> _ProseRepos | None:
         for field, mode, repo in repos
         if (pin := _pin_of(document, f"{field}_commit", mode))
     ]
-    return _ProseRepos(repos, served, pinned)
+    roles = {served.get(repo, repo): (field, mode) for field, mode, repo in repos}
+    return _ProseRepos(repos, served, pinned, roles)
 
 
 @dataclass
@@ -463,7 +481,8 @@ def _prose_jobs(
         if not any(readings):
             continue
         moves, blocked = _realign_citation(
-            citation, readings, ambiguous, cache_dir, offline, declared.pinned
+            citation, readings, ambiguous, cache_dir, offline, declared.pinned,
+            declared.roles,
         )
         if blocked:
             # Half a run must not move: the untouched ranges would read as

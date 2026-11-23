@@ -59,6 +59,7 @@ from profiling.yamledit import (
 from profile_sync import build_parser
 from profiling.selection import select_profiles
 from profiling.resolver import build_report
+from tests.sources import script_source
 from profiling.bump import bump_commit
 from profiling.citations import collect_citations, collect_tokens
 from profiling.detection import (
@@ -5925,6 +5926,47 @@ class RealignGivesASharedPathToTheFirstRepository(unittest.TestCase):
                 pinned=[(fork, "3933e75"), (up, "8b9bc8a")],
             )
         self.assertIsNone(result)
+
+
+class RealignObeysTheRoleWord(unittest.TestCase):
+    """retrodream cites `(upstream retro_host.c:196-198)` beside the fork's
+    retro_host.c. With both pins moved and both trees carrying the file,
+    realign read the upstream citation in the fork, declared first."""
+
+    def _realign(self, role):
+        from unittest import mock
+
+        fork = upstream.make_repo("github.com", "f", "retrodream")
+        up = upstream.make_repo("github.com", "o", "dreamcast")
+        body = [f"line {n}" for n in range(1, 41)]
+        trees = {
+            (fork, "f-old"): body, (fork, "f-new"): ["pad"] * 5 + body,
+            (up, "u-old"): body, (up, "u-new"): body,
+        }
+
+        def fetch(repo, sha, path, *a, **k):
+            return trees.get((repo, sha)) if path == "retro_host.c" else None
+
+        part = sourceref.RefPart("retro_host.c", 20, 22, "20-22", role)
+        with mock.patch.object(upstream, "fetch_file", side_effect=fetch):
+            return realign._realign_part(
+                part, [(fork, "f-old", "f-new"), (up, "u-old", "u-new")], "cache", True,
+                pinned=[(fork, "f-new"), (up, "u-new")],
+                declared={fork: ("source", ""), up: ("upstream", "")},
+            )
+
+    def test_an_upstream_part_is_read_in_upstream(self):
+        self.assertIsNone(self._realign("upstream"))
+
+    def test_a_part_naming_no_repository_stays_with_the_first_declared(self):
+        self.assertEqual(self._realign(""), ("ok", (25, 27)))
+
+    def test_attribution_and_realign_share_the_order(self):
+        """The resolver and realign order repositories by one function."""
+        source = script_source("profile_sync.py")
+        self.assertEqual(source.count("def owner_order("), 1)
+        self.assertIn("owner_order(self.views", source)
+        self.assertIn("owner_order(pairs, part.role", source)
 
 
 class UpstreamForkedByThePort(unittest.TestCase):

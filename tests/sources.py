@@ -181,6 +181,7 @@ COMMANDS = {
         "profiling/quota.py", "profiling/sourcepaths.py", "profiling/realignpass.py",
         "profiling/versioncheck.py", "profiling/selection.py", "profiling/flagchecks.py",
         "model/citations.py",
+        "profiling/attribution.py",
     ),
     "generate_truth.py": ("resolve/truth.py",),
     "diff_truth.py": ("exporter/truthdiff.py", "exporter/diffreport.py"),
