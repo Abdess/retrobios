@@ -92,9 +92,19 @@ LINE_TEXT = {
 
 
 def words(text: str) -> int:
-    """Words a reader reads, a path left out."""
-    return sum(1 for token in text.split() if re.search(r"[A-Za-z0-9]", token)
-               and "/" not in token)
+    """Words a reader reads, a path left out, the part a long path wraps onto
+    the next line included: the scratch folder's length is the machine's, and
+    a worktree's longer one cut the path after its last slash."""
+    count = 0
+    previous = ""
+    for line in text.splitlines():
+        tokens = line.split()
+        if tokens and "/" in previous and re.fullmatch(r"[\w.\-]+", tokens[0]):
+            tokens = tokens[1:]
+        count += sum(1 for token in tokens if re.search(r"[A-Za-z0-9]", token)
+                     and "/" not in token)
+        previous = line.split()[-1] if line.split() else ""
+    return count
 
 
 def lines(text: str) -> int:
