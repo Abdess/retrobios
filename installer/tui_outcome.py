@@ -7,25 +7,30 @@ from typing import TYPE_CHECKING, NamedTuple
 from installer.cards import _mounted_cards, card_system
 from installer.destination import _last_name
 from installer.detect_os import detected_os
+from installer.failure_causes import (
+    Failure,
+    event_records,
+    failure_records,
+    failure_remedies,
+    retry_helps,
+    retry_words,
+    split_offline,
+)
 from installer.from_folders import sources_line
 from installer.handheld_app import NO_PYTHON_CARDS, app_lines, no_python_words
-from installer.host_fs import NOT_WRITABLE
 from installer.invocation import Invocation
 from installer.offline import LOCAL, offline_named
 from installer.outcome import (
     EVERYTHING_IN_PLACE,
     NEXT_ON_CARD,
     NEXT_ON_DEVICE,
-    _offline_failure,
     _offline_remedy,
-    _retry_words,
     write_remedy,
 )
 from installer.paths import shown_path
 from installer.platforms import display_name
 from installer.removal import _kept_words, backup_words, kept_line
 from installer.romm import ROMM_SCAN_WORDS
-from installer.safe_replace import NOT_KEPT
 from installer.tally import installed_words, left_out_words
 from installer.text import _plural, _wrap, agree, cell_width, format_size
 from installer.tui_choice import _on_its_card, _plan_folder, _tui_categories, _tui_tally
@@ -77,8 +82,8 @@ class _OutcomeCounts(NamedTuple):
     """What an install run reported, as its result counts it."""
     summary: dict
     installed: int
-    failed: list
-    offline_failed: list
+    failed: list[Failure]
+    offline_failed: list[Failure]
     left: int
     up_to_date: int
     total: int
@@ -91,12 +96,15 @@ def _outcome_counts(state: TuiState) -> _OutcomeCounts:
     # Killed by the second Ctrl-C, the child wrote no summary: what it
     # reported finished is what is installed.
     installed = summary.get("installed", sum(1 for _dest, ok, _why in state.finished if ok))
-    failed = summary.get("failed") or []
+    # Each with its cause, from the failures event the summary follows:
+    # without it, the cause its words name.
+    records = (event_records(state.failures) if summary.get("failed") and state.failures
+               else failure_records((failure["dest"], failure["reason"])
+                                    for failure in summary.get("failed") or []))
     # Left out by --offline: missing, never failed, as line mode says it.
     # The engine counts them in pending and no longer in failed (a file was
     # both): pending holds the real failures too, which are taken out.
-    offline_failed = [failure for failure in failed if _offline_failure(failure["reason"])]
-    failed = [failure for failure in failed if not _offline_failure(failure["reason"])]
+    failed, offline_failed = split_offline(records)
     left = len(offline_failed) + (max(0, summary.get("pending", 0) - len(failed))
                                   if tui_offline_only(state) and not offline_failed else 0)
     up_to_date = summary.get("up_to_date", 0)
@@ -160,7 +168,7 @@ def _outcome_counted(state: TuiState, counts: _OutcomeCounts, title: str,
     installed, failed, left = counts.installed, counts.failed, counts.left
     lines = [head]
     ok_dests = {dest for dest, good, _why in state.finished if good}
-    missing = ([failure["dest"] for failure in counts.offline_failed]
+    missing = ([failure.dest for failure in counts.offline_failed]
                or [event["dest"] for event in state.files
                    if event["dest"] not in ok_dests][:left]) if left else []
     # A wrong copy left in place is no missing file: --check counts it apart,
@@ -236,12 +244,12 @@ def _outcome_placed(state: TuiState, counts: _OutcomeCounts, title: str) -> list
     return lines
 
 
-def _failure_lines(failed: list) -> list[str]:
+def _failure_lines(failed: list[Failure]) -> list[str]:
     """Each file that failed with its reason, a reason shared by many said once."""
     lines: list[str] = []
     causes: dict[str, list[str]] = {}
     for failure in failed:
-        causes.setdefault(failure["reason"], []).append(failure["dest"])
+        causes.setdefault(failure.reason, []).append(failure.dest)
     shown = 0
     for reason, dests in causes.items():
         if len(dests) > 3:
@@ -258,14 +266,21 @@ def _failure_lines(failed: list) -> list[str]:
     return lines
 
 
-def _retry_lines(failed: list) -> list[str]:
+def _remedy_lines(state: TuiState, failed: list[Failure]) -> list[str]:
+    """What to do about each cause, the words line mode gives: the screen
+    ended a mirror's 404 or a proxy's refusal on "Run it again"."""
+    where = shown_path(str(_plan_folder(state, state.dest))) if state.dest else "the folder"
+    return [line.strip() for advice in failure_remedies(failed, where)
+            for line in advice.split("\n")]
+
+
+def _retry_lines(failed: list[Failure]) -> list[str]:
     # What a rerun does, as line mode and the first install page say
     # it: the screen never did.
-    pairs = [(failure["dest"], failure["reason"]) for failure in failed]
-    retry = _retry_words(pairs)
+    retry = retry_words(failed)
     if retry:
         return [retry]
-    if not all(str(reason).startswith(NOT_KEPT) for _dest, reason in pairs):
+    if retry_helps(failed):
         return ["Run it again to retry only those."]
     return []
 
@@ -284,8 +299,7 @@ def _outcome_unfinished(state: TuiState, counts: _OutcomeCounts, title: str) -> 
         lines.append(_detail(f"{_plural(expected - landed, 'data file')} not installed"
                              + (f": not in {LOCAL.pack.name}." if LOCAL.pack is not None
                                 else ".")))
-    if state.dest is not None and any(failure["reason"] == NOT_WRITABLE
-                                      for failure in failed):
+    if state.dest is not None and any(failure.kind == "not_writable" for failure in failed):
         # The plan's own advice: the result offered nothing after 22 files
         # failed on a read-only card.
         lines += _commands(state, write_remedy(state.dest, state.platform, tui_hint(state),
@@ -343,6 +357,7 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
     lines = _outcome_counted(state, counts, title, head)
     lines += _outcome_placed(state, counts, title)
     lines += _failure_lines(counts.failed)
+    lines += _remedy_lines(state, counts.failed)
     if title == "Finished with errors":
         lines += _retry_lines(counts.failed)
     lines += _outcome_unfinished(state, counts, title)

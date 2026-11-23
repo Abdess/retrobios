@@ -504,7 +504,7 @@ those it imports:
 | This machine | `detection_notes`, `detect_os`, `detect_frontends`, `cards`, `device`, `cores`, `frontend_folders`, `setups` |
 | Sources of files | `offline`, `network`, `lists`, `pack_source`, `from_folders`, `diagnosis`, `download`, `datadirs`, `standalone` |
 | What a run keeps | `narrowing`, `choices`, `romm`, `install_record`, `game_files`, `games`, `tally`, `space`, `fetch_plan` |
-| Line mode | `destination`, `line_folder`, `line_menu`, `plan_words`, `plan`, `outcome` |
+| Line mode | `destination`, `line_folder`, `line_menu`, `plan_words`, `plan`, `failure_causes`, `outcome` |
 | Runs and actions | `arguments`, `run_setups`, `run_files`, `run`, `pack`, `removal`, `handheld_app`, `cli` |
 | Full screen | `tui_state`, `tui_routes`, `tui_commands`, `tui_keys`, `tui_paint`, `tui_choice`, `tui_folder_scan`, `tui_rows`, `tui_frame`, `tui_plan_view`, `tui_outcome`, `tui_screens`, `tui_actions`, `tui_input`, `tui_receive`, `tui_list_words`, `tui_engine`, `tui_session` |
 

@@ -19,7 +19,7 @@ from installer.outcome import EVERYTHING_IN_PLACE, OutcomeDetails, _check_fetch_
 from installer.paths import _destination_path, _within
 from installer.plan import _check_free_space, _print_plan
 from installer.plan_words import _sized
-from installer.safe_replace import BACKUP_DIR, KEPT, NOT_KEPT, _NotKept, plan_kept
+from installer.safe_replace import KEPT, NOT_KEPT, _NotKept, plan_kept
 
 if TYPE_CHECKING:
     from installer.terminal import Terminal
@@ -67,40 +67,56 @@ def standalone_folders_here(
 STANDALONE_SOURCES = ("emudeck", "retroarch")
 
 
+def copy_sources(manifest: dict) -> list[tuple[dict, list[tuple[dict, str]]]]:
+    """Each standalone copy entry of the manifest, with the entries of its
+    file list it carries and the name each takes in the emulator folder.
+
+    The one reading of a copy entry: a pattern matches the names the list
+    gives, never whatever lies in the BIOS folder (a user's own
+    scph9999.bin went to DuckStation). `source` is where this list puts the
+    file that `file` names as the registry does for every platform: read
+    there, it was missing wherever the pack places it elsewhere.
+    """
+    from fnmatch import fnmatch
+
+    files = manifest.get("files", [])
+    by_dest = {entry["dest"]: entry for entry in files}
+    carried: list[tuple[dict, list[tuple[dict, str]]]] = []
+    for copy in manifest.get("standalone_copies", []):
+        if "note" in copy:
+            continue
+        if "pattern" in copy:
+            sources = [entry for entry in files
+                       if fnmatch(PurePosixPath(entry["dest"]).name, copy["pattern"])]
+        else:
+            held = by_dest.get(copy.get("source") or copy["file"])
+            sources = [held] if held else []
+        # `as`: the name the emulator reads, when it is not the
+        # platform's (melonDS's dsisd.bin, xemu's eeprom.bin).
+        carried.append((copy, [(entry, copy.get("as") or PurePosixPath(entry["dest"]).name)
+                               for entry in sources]))
+    return carried
+
+
 def standalone_plan(
     manifests: list[dict], os_type: str, extra_dirs: dict[str, Path] | None = None,
 ) -> list[tuple[Path, list[dict]]]:
     """What each emulator folder found here receives, by its own file name.
 
-    The standalone copies of the manifests, read as do_standalone_copies
-    reads them, but taken from the file lists rather than from a platform
-    tree already installed: an ES-DE user with DuckStation and PCSX2 and no
-    RetroArch had no tree to copy from. The first list that holds a name for
-    a folder serves it.
+    The standalone copies of the manifests (copy_sources), each entry named
+    as the emulator reads it. A run with no platform fetches them from the
+    lists: an ES-DE user with DuckStation and PCSX2 and no RetroArch had no
+    tree to copy from. The first list that holds a name for a folder
+    serves it.
     """
-    from fnmatch import fnmatch
-
     plan: dict[Path, dict[str, dict]] = {}
     for manifest in manifests:
-        files = manifest.get("files", [])
-        by_dest = {entry["dest"]: entry for entry in files}
-        for copy in manifest.get("standalone_copies", []):
-            if "note" in copy:
-                continue
-            if "pattern" in copy:
-                sources = [entry for entry in files
-                           if fnmatch(PurePosixPath(entry["dest"]).name, copy["pattern"])]
-            else:
-                held = by_dest.get(copy.get("source") or copy["file"])
-                sources = [held] if held else []
+        for copy, sources in copy_sources(manifest):
             for folder in _copy_targets(copy, os_type, extra_dirs):
                 if not sources or not _is_dir(folder):
                     continue
                 chosen = plan.setdefault(folder, {})
-                for entry in sources:
-                    # `as`: the name the emulator reads, when it is not the
-                    # platform's (melonDS's dsisd.bin, xemu's eeprom.bin).
-                    name = copy.get("as") or PurePosixPath(entry["dest"]).name
+                for entry, name in sources:
                     chosen.setdefault(name, {**entry, "dest": name})
     return [(folder, list(entries.values())) for folder, entries in plan.items() if entries]
 
@@ -118,6 +134,25 @@ def _check_standalone_folder(to_download: list[dict], mismatched: list[dict],
         print(f"    ... and {len(missing) - 10} more missing (--verbose lists them all)")
     if not to_download:
         print(f"  {EVERYTHING_IN_PLACE}")
+
+
+def preview_standalone(plan: list[tuple[Path, list[dict]]], args: argparse.Namespace,
+                       term: Terminal) -> int:
+    """--check or --dry-run over the emulator folders of a standalone plan:
+    what each holds and lacks, or what a run would write. The count of the
+    files not in place."""
+    pending = 0
+    for folder, entries in plan:
+        print(f"\n{folder}:")
+        to_download, _up_to_date, mismatched = check_local(entries, folder, jobs=args.jobs)
+        to_download.extend(mismatched)
+        if args.check:
+            _check_standalone_folder(to_download, mismatched, args.verbose)
+        else:
+            _print_plan(to_download, folder, term, kept=plan_kept(mismatched, folder),
+                        verbose=args.verbose)
+        pending += len(to_download)
+    return pending
 
 
 def _install_standalone_folders(
@@ -146,8 +181,13 @@ def _install_standalone_folders(
         "\nInstall the BIOS files these emulators read into their folders? [Y/n] "
     ):
         return False
+    if args.check or args.dry_run:
+        pending = preview_standalone(plan, args, term)
+        if args.check and pending:
+            print("\n" + _check_fetch_line(pending, "its folder"))
+            sys.exit(3)
+        return True
     downloaded = up_to_date_count = errors = 0
-    pending = 0
     failures: list[tuple[str, str]] = []
     transferred, seconds = 0, 0.0
     interrupted = False
@@ -156,14 +196,6 @@ def _install_standalone_folders(
         to_download, up_to_date, mismatched = check_local(entries, folder, jobs=args.jobs)
         to_download.extend(mismatched)
         up_to_date_count += len(up_to_date)
-        if args.check:
-            _check_standalone_folder(to_download, mismatched, args.verbose)
-            pending += len(to_download)
-            continue
-        if args.dry_run:
-            _print_plan(to_download, folder, term, kept=plan_kept(mismatched, folder),
-                        verbose=args.verbose)
-            continue
         if not to_download:
             print(f"  {EVERYTHING_IN_PLACE}")
             continue
@@ -181,13 +213,6 @@ def _install_standalone_folders(
         seconds += progress.elapsed()
         if interrupted:
             break
-    if args.check:
-        if pending:
-            print("\n" + _check_fetch_line(pending, "its folder"))
-            sys.exit(3)
-        return True
-    if args.dry_run:
-        return True
     _report_outcome(
         [folder for folder, _entries in plan], downloaded, up_to_date_count, errors,
         0, interrupted,
@@ -207,25 +232,6 @@ def _print_standalone_note(entry: dict, os_type: str) -> None:
         if _is_dir(expanded):
             print(f"  {entry['note']}")
             break
-
-
-def _standalone_sources(entry: dict, bios_path: Path) -> list[Path]:
-    """The files of the BIOS folder a standalone copy entry copies."""
-    from fnmatch import fnmatch
-
-    if "pattern" in entry:
-        # A kept file is never a source, when the backup had to go
-        # inside the BIOS folder.
-        return [
-            f for f in bios_path.rglob("*")
-            if fnmatch(f.name, entry["pattern"]) and f.is_file()
-            and BACKUP_DIR not in f.relative_to(bios_path).parts
-        ]
-    # `source` is where this platform's manifest put the file, and `file`
-    # names it as the registry does for every platform, and laid out
-    # that way it was missing wherever the pack places it elsewhere.
-    src = _destination_path(bios_path, entry.get("source") or entry["file"])
-    return [src] if _exists(src) else []
 
 
 def _copy_standalone_file(src: Path, dest: Path, resolved_dir: Path,
@@ -268,14 +274,16 @@ def do_standalone_copies(
     manifest: dict, bios_path: Path, os_type: str,
     extra_dirs: dict[str, Path] | None = None,
     failures: list[tuple[str, str]] | None = None,
+    verified: list[dict] | None = None,
 ) -> tuple[int, int, int]:
     """Copy BIOS files to standalone emulator directories.
 
-    Supports:
-    - file: single file copy
-    - pattern: glob match (e.g. "scph*.bin")
-    - note: informational message when detect path exists
-    - WSL fallback to linux targets
+    Each copy entry carries what copy_sources names, the entries of the
+    file list, read in bios_path: verified holds the entries this run found
+    or put there with their hashes, and no other is copied. Without it,
+    every entry of the list present in bios_path. A note entry prints its
+    message when its emulator is found here, and WSL falls back to the
+    Linux folders.
 
     extra_dirs maps the emulator id of an entry to a root that replaces the
     default per-OS locations, for setups such as LaunchBox that keep their
@@ -292,18 +300,22 @@ def do_standalone_copies(
     copies = manifest.get("standalone_copies", [])
     if not copies:
         return 0, 0, 0
+    carried = {id(copy): sources for copy, sources in copy_sources(manifest)}
+    held = None if verified is None else {entry["dest"] for entry in verified}
 
     copied = 0
     skipped = 0
     failed = 0
 
     for entry in copies:
-        # Note entries: print message if emulator detected
         if "note" in entry:
             _print_standalone_note(entry, os_type)
             continue
 
-        sources = _standalone_sources(entry, bios_path)
+        sources = [(src, name) for src, name in (
+            (_destination_path(bios_path, item["dest"]), name)
+            for item, name in carried[id(entry)]
+            if held is None or item["dest"] in held) if _exists(src)]
         if not sources:
             continue
 
@@ -320,8 +332,8 @@ def do_standalone_copies(
                 skipped += len(sources)
                 continue
             resolved_dir = target_dir.resolve()
-            for src in sources:
-                dest = target_dir / (entry.get("as") or src.name)
+            for src, name in sources:
+                dest = target_dir / name
                 if _copy_standalone_file(src, dest, resolved_dir, failures):
                     copied += 1
                 else:

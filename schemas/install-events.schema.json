@@ -39,6 +39,7 @@
         "progress",
         "transfer",
         "downloaded",
+        "failures",
         "summary",
         "app",
         "record",
@@ -139,6 +140,9 @@
     },
     {
       "$ref": "#/$defs/downloaded"
+    },
+    {
+      "$ref": "#/$defs/failures"
     },
     {
       "$ref": "#/$defs/summary"
@@ -1115,6 +1119,25 @@
         "bytes_total": {
           "type": "integer",
           "minimum": 0
+        }
+      }
+    },
+    "failures": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "failed"
+      ],
+      "properties": {
+        "event": {
+          "const": "failures"
+        },
+        "failed": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         }
       }
     },

@@ -1049,8 +1049,9 @@ class OneOfflineVocabulary(Scratch):
         from tests import test_install_tui as tui
 
         reason = f"not fetched: {install.OFFLINE_WORDS}"
-        state = tui._installed_state(self.dest, 1, [{"dest": f"f{n}.bin", "reason": reason}
-                                                    for n in range(20)])
+        left = [{"dest": f"f{n}.bin", "reason": reason} for n in range(20)]
+        state = tui._installed_state(self.dest, 1, left)
+        state.failures = [{**failure, "kind": "offline", "url": ""} for failure in left]
         state.summary["installed"] = 2
         state.from_folders = [self.root / "from1"]
         title, lines = install.tui_outcome(state)

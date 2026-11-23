@@ -1179,6 +1179,7 @@ class TestStandaloneCopiesExtraDirs(unittest.TestCase):
 
     def _manifest(self) -> dict:
         return {
+            "files": [{"dest": "ps2-0230a.bin"}, {"dest": "GC/USA/IPL.bin"}],
             "standalone_copies": [
                 {
                     "pattern": "ps2-*.bin",
@@ -1272,7 +1273,7 @@ class StandaloneCopiesReadWhereThePackPutTheFile(unittest.TestCase):
         (bios / "aes_keys.txt").write_text("keys")
         sysdata = scratch_dir(self) / "sysdata"
         sysdata.mkdir()
-        manifest = {"standalone_copies": [
+        manifest = {"files": [{"dest": "aes_keys.txt"}], "standalone_copies": [
             {**entry, "emulator": "azahar", "targets": {"linux": [str(sysdata)]}},
         ]}
         return sysdata, install.do_standalone_copies(manifest, bios, "linux")
@@ -1298,6 +1299,36 @@ class StandaloneCopiesReadWhereThePackPutTheFile(unittest.TestCase):
         ]
         with self.assertRaisesRegex(ValueError, r"standalone_copies\[0\]\.source"):
             install._validate_manifest(manifest, "emudeck")
+
+
+class StandaloneCopiesFollowTheList(unittest.TestCase):
+    """The platform pass scanned the BIOS folder for each pattern: a user's
+    own bios/old/scph9999.bin went to DuckStation, while the plan of a run
+    with no platform named scph5501.bin alone."""
+
+    def setUp(self) -> None:
+        self.bios = scratch_dir(self)
+        (self.bios / "scph5501.bin").write_bytes(b"rom")
+        (self.bios / "old").mkdir()
+        (self.bios / "old" / "scph9999.bin").write_bytes(b"other")
+        self.emu = scratch_dir(self) / "duckstation"
+        self.emu.mkdir()
+        self.manifest = {"files": [{"dest": "scph5501.bin"}], "standalone_copies": [
+            {"pattern": "scph*.bin", "emulator": "duckstation",
+             "targets": {"linux": [str(self.emu)]}}]}
+
+    def test_the_copy_and_the_plan_name_the_same_files(self):
+        plan = install.standalone_plan([self.manifest], "linux")
+        self.assertEqual([(folder, [entry["dest"] for entry in entries])
+                          for folder, entries in plan], [(self.emu, ["scph5501.bin"])])
+        self.assertEqual(install.do_standalone_copies(self.manifest, self.bios, "linux"),
+                         (1, 0, 0))
+        self.assertEqual(sorted(path.name for path in self.emu.iterdir()), ["scph5501.bin"])
+
+    def test_only_a_file_the_run_verified_is_copied(self):
+        self.assertEqual(install.do_standalone_copies(self.manifest, self.bios, "linux",
+                                                      verified=[]), (0, 0, 0))
+        self.assertEqual(list(self.emu.iterdir()), [])
 
 
 class OuterRootsAreUntrusted(unittest.TestCase):
@@ -1870,7 +1901,7 @@ class ARefusedCopyIsAnError(unittest.TestCase):
             (bios / "prod.keys").write_bytes(b"k")
             target = Path(tmp, "keys")
             target.mkdir()
-            manifest = {"standalone_copies": [
+            manifest = {"files": [{"dest": "prod.keys"}], "standalone_copies": [
                 {"file": "prod.keys", "targets": {"linux": [str(target)]}}
             ]}
             with unittest.mock.patch("shutil.copy2", side_effect=PermissionError(13, "denied")):
@@ -2054,6 +2085,7 @@ class TestStandaloneCopyTargetsAreUntrusted(unittest.TestCase):
 
     def _manifest(self, target: str) -> dict:
         return {
+            "files": [{"dest": "boot.bin"}],
             "standalone_copies": [
                 {"file": "boot.bin", "targets": {"linux": [target]}}
             ]
@@ -2481,8 +2513,10 @@ class TestLaunchboxDetectionPowershell(unittest.TestCase):
             (pcsx2 / "inis").mkdir()
             (pcsx2 / "inis" / "PCSX2.ini").write_text("[Folders]\nBios = bios\n")
 
+        # In place with its hash: only a file the run verified is copied.
         manifest = {
-            "files": [],
+            "files": [{"dest": "ps2-0230a.bin", "size": 3, "repo_path": "bios/ps2-0230a.bin",
+                       "sha1": "a1e17a20e93e5da710685444df3ad038ac66e2c9"}],
             "standalone_copies": [
                 {
                     "pattern": "ps2-*.bin",
@@ -4842,7 +4876,7 @@ class ARefusedStandaloneCopyIsNamed(unittest.TestCase):
         target.mkdir()
         target.chmod(0o500)
         self.addCleanup(target.chmod, 0o700)
-        manifest = {"standalone_copies": [
+        manifest = {"files": [{"dest": "scph5501.bin"}], "standalone_copies": [
             {"file": "scph5501.bin", "emulator": "pcsx2",
              "targets": {"linux": [str(target)]}},
         ]}
@@ -5131,9 +5165,10 @@ class StandaloneCopiesUnderTheirOwnName(unittest.TestCase):
         bios = scratch_dir(self)
         (bios / "xbox_eeprom.bin").write_bytes(b"eeprom")
         folder = scratch_dir(self)
-        manifest = {"standalone_copies": [
+        manifest = {"files": [{"dest": "xbox_eeprom.bin"}], "standalone_copies": [
             {"file": "xbox_eeprom.bin", "as": "eeprom.bin", "targets": {"linux": [str(folder)]}}]}
-        install._validate_manifest({**self._published(), **manifest}, "emudeck")
+        install._validate_manifest(
+            {**self._published(), "standalone_copies": manifest["standalone_copies"]}, "emudeck")
         self.assertEqual(install.do_standalone_copies(manifest, bios, "linux"), (1, 0, 0))
         self.assertEqual((folder / "eeprom.bin").read_bytes(), b"eeprom")
         self.assertFalse((folder / "xbox_eeprom.bin").exists())
@@ -6300,6 +6335,34 @@ class StandaloneFoldersAreNamedWhenThereAreAny(unittest.TestCase, _LoopbackRun):
         self.assertIn("Standalone emulator folders found here:", out)
         self.assertIn(str(duckstation), out)
         self.assertIn("--standalone-copies", out)
+
+
+class StandaloneCopiesAreChecked(unittest.TestCase, _LoopbackRun):
+    """--check and --dry-run with --standalone-copies said nothing of the
+    emulator folders: the flag was taken and never applied."""
+
+    def setUp(self) -> None:
+        self.env = self.serve(self)
+        self.duckstation = self.home / ".local" / "share" / "duckstation" / "bios"
+        self.duckstation.mkdir(parents=True)
+
+    def _run(self, *argv: str) -> subprocess.CompletedProcess:
+        return _install_run(self.env, "--platform", "retroarch", "--dest",
+                            str(self.home / "system"), "--system", "sony-playstation",
+                            "--standalone-copies", "--no-input", *argv)
+
+    def test_check_names_what_the_folder_lacks(self):
+        proc = self._run("--check")
+        self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
+        self.assertIn("Standalone emulators:", proc.stdout)
+        self.assertIn(f"{self.duckstation}:", proc.stdout)
+        self.assertIn("missing: scph1001.bin", proc.stdout)
+
+    def test_dry_run_plans_the_copies(self):
+        proc = self._run("--dry-run")
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn(f"{self.duckstation}:", proc.stdout)
+        self.assertEqual(list(self.duckstation.iterdir()), [])
 
 
 class StandaloneEmulatorsWithoutAPlatformAreServed(unittest.TestCase, _LoopbackRun):
@@ -7718,7 +7781,7 @@ class AFileYouHadIsKept(unittest.TestCase):
         pcsx2 = self.home / "PCSX2" / "bios"
         pcsx2.mkdir(parents=True)
         (pcsx2 / "ps2-0230a.bin").write_bytes(self.OLD)
-        manifest = {"standalone_copies": [
+        manifest = {"files": [{"dest": "ps2-0230a.bin"}], "standalone_copies": [
             {"pattern": "ps2-*.bin", "emulator": "pcsx2", "targets": {"linux": [str(pcsx2)]}}]}
         self.assertEqual(install.do_standalone_copies(manifest, self.bios, "linux"), (1, 0, 0))
         self.assertEqual((pcsx2 / "ps2-0230a.bin").read_bytes(), self.NEW)
@@ -7734,7 +7797,7 @@ class AFileYouHadIsKept(unittest.TestCase):
         (inside / "ps2-old.bin").write_bytes(self.OLD)
         pcsx2 = self.home / "PCSX2" / "bios"
         pcsx2.mkdir(parents=True)
-        manifest = {"standalone_copies": [
+        manifest = {"files": [{"dest": "ps2-0230a.bin"}], "standalone_copies": [
             {"pattern": "ps2-*.bin", "emulator": "pcsx2", "targets": {"linux": [str(pcsx2)]}}]}
         self.assertEqual(install.do_standalone_copies(manifest, self.bios, "linux"), (0, 0, 0))
 

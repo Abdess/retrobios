@@ -1585,6 +1585,13 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # out, empty without it. kept: [{"folder", "files", "bytes"}], the files
     # in place the run moved aside before replacing them (under --dry-run,
     # would move), one per backup folder, empty when none.
+    # Right before a summary whose failed is not empty: failed is the same
+    # files, each [{"dest", "reason", "kind", "url"}], kind its cause
+    # (offline, network, http, not_writable, drive_full, read_only,
+    # not_kept, not_in_pack or other) and url the address a server refused
+    # (http), "" otherwise. A kind of its own, since schema 1 never adds a
+    # key to summary: a screen gives the remedies line mode gives.
+    "failures": ("failed",),
     "summary": ("mode", "installed", "up_to_date", "pending", "failed", "skipped",
                 "left_out", "kept", "interrupted"),
     # --add-app, or yes to its question, after the summary: the RetroBIOS
@@ -11568,6 +11575,167 @@ def pack_lacks_words(count: int, total: int) -> str:
             f"{name}: {'it' if count == 1 else 'they'} cannot be installed from it.")
 
 
+# --- installer/failure_causes.py ---------------------------------------------
+
+class OfflineReason(str):
+    """A file not fetched because the run was told to make no request."""
+
+
+class NetworkReason(str):
+    """A failure the connection caused: cut, timed out, refused by a server
+    or a proxy. The summary names the network instead of the folder."""
+
+    url = ""
+
+
+class HttpReason(str):
+    """A file the server answered for with an error of its own (HTTP 404):
+    the summary names the address, where "HTTP 404" alone told the user
+    neither what failed nor that running again changes nothing."""
+
+    url = ""
+
+
+# The causes a failure event names (the failures event's kind), each with
+# the remedy failure_remedies gives it. other: a cause with no remedy of
+# its own, the reason words saying it.
+FAILURE_KINDS = ("offline", "network", "http", "not_writable", "drive_full", "read_only",
+                 "not_kept", "not_in_pack", "other")
+
+
+class Failure(NamedTuple):
+    """One failed file: where, the reason in words, its cause (FAILURE_KINDS)
+    and the address it was asked at, for a server's refusal."""
+
+    dest: str
+    reason: str
+    kind: str
+    url: str = ""
+
+
+def failure_kind(reason: str) -> str:
+    """The cause of a failure, from the type the run gave its reason or the
+    words that name it."""
+    if isinstance(reason, OfflineReason):
+        return "offline"
+    if isinstance(reason, HttpReason):
+        return "http"
+    if isinstance(reason, NetworkReason):
+        return "network"
+    words = str(reason)
+    if words == NOT_WRITABLE:
+        return "not_writable"
+    if words == DRIVE_FULL:
+        return "drive_full"
+    if words == READ_ONLY:
+        return "read_only"
+    if words.startswith(NOT_KEPT):
+        return "not_kept"
+    if words == NOT_IN_PACK:
+        return "not_in_pack"
+    return "other"
+
+
+def failure_records(failures: Iterable[tuple[str, str]]) -> list[Failure]:
+    """The run's failures, each with its cause."""
+    return [Failure(dest, str(reason), failure_kind(reason), getattr(reason, "url", ""))
+            for dest, reason in failures]
+
+
+def failure_events(failures: Iterable[tuple[str, str]]) -> list[dict]:
+    """The failures event's items: what a screen needs to give the same remedies."""
+    return [record._asdict() for record in failure_records(failures)]
+
+
+def event_records(items: Iterable[dict]) -> list[Failure]:
+    """The failures event's items read back."""
+    return [Failure(str(item.get("dest", "")), str(item.get("reason", "")),
+                    str(item.get("kind", "other")), str(item.get("url", "")))
+            for item in items]
+
+
+def split_offline(records: list[Failure]) -> tuple[list[Failure], list[Failure]]:
+    """(failed, offline): a file --offline left out is missing, never failed."""
+    return ([record for record in records if record.kind != "offline"],
+            [record for record in records if record.kind == "offline"])
+
+
+def _http_failure_lines(records: list[Failure]) -> list[str]:
+    """The address the first refused file was asked at, and what chose it:
+    a mirror named with RETROBIOS_BASE_URL that holds the lists and not yet
+    the files, or a list out of step with the files it names."""
+    refused = [record for record in records if record.kind == "http"]
+    if not refused:
+        return []
+    more = f" (and {_plural(len(refused) - 1, 'other file')})" if len(refused) > 1 else ""
+    lines = [f"  The server answered {refused[0].reason} for {refused[0].url}{more}."]
+    if active_remote().overridden:
+        return [*lines, OVERRIDE_LINE]
+    return lines + ["  The file list names files the server does not hold, and running "
+                    "again changes nothing until the two match.",
+                    f"  More help: {TROUBLESHOOTING_PAGE}"]
+
+
+NETWORK_FAILURE_ADVICE = (
+    "  The transfers were cut or refused on the way: check the connection, and "
+    "HTTPS_PROXY if this network needs a proxy.\n"
+    f"  More help: {TROUBLESHOOTING_PAGE}")
+
+
+def failure_remedies(records: list[Failure], locations: str) -> list[str]:
+    """What to do about each cause but a folder this user cannot write,
+    whose remedy each interface words with its own commands. locations
+    names the folders the run wrote to."""
+    kinds = {record.kind for record in records}
+    advice: list[str] = []
+    if "drive_full" in kinds:
+        advice.append(f"  The drive holding {locations} is full: free up space, or "
+                      "install to another drive with --dest, then run again.")
+    if "read_only" in kinds:
+        advice.append("  Files marked read-only are in the way: clear that attribute "
+                      "(or delete them), then run again.")
+    advice += _http_failure_lines(records)
+    if "network" in kinds:
+        advice.append(NETWORK_FAILURE_ADVICE)
+        if active_remote().overridden:
+            # A mirror that is down read as this machine's connection.
+            advice.append(OVERRIDE_LINE)
+    if "not_kept" in kinds:
+        # The same run fails the same way: "retry only those" sent a phone
+        # user round the loop with nothing changed.
+        advice.append("  The files in place were left as they were, as no backup folder could "
+                      "be made for them. Move them out of the folder, then run again to "
+                      "install the new ones.")
+    return advice
+
+
+def retry_words(records: list[Failure]) -> str:
+    """What to do when every failure is a file the pack does not hold: a
+    second run fails them the same way, and "run it again to retry only
+    those" sent people round. "" otherwise."""
+    lacking = [record for record in records if record.kind == "not_in_pack"]
+    if not lacking or len(lacking) != len(
+            [record for record in records if record.kind != "not_kept"]):
+        return ""
+    name = LOCAL.pack.name if LOCAL.pack is not None else "The pack"
+    return (f"{name} does not hold {'it' if len(lacking) == 1 else 'them'}: a newer pack, "
+            "or a run without --from-pack, installs "
+            f"{'it' if len(lacking) == 1 else 'them'}.")
+
+
+def retry_helps(records: list[Failure]) -> bool:
+    """Whether running again can install what failed: not when every file
+    failed for want of a backup folder or of space, which a second run
+    meets the same way."""
+    return not all(record.kind in ("not_kept", "drive_full") for record in records)
+
+
+def connection_only(records: list[Failure]) -> bool:
+    """Whether every file failed on the way, the folder never the problem."""
+    return bool(records) and all(record.kind in ("offline", "network", "http")
+                                 for record in records)
+
+
 # --- installer/tally.py ------------------------------------------------------
 
 def _bytes(files: list[dict]) -> int:
@@ -14281,6 +14449,9 @@ class TuiState:
         self.network: int = 0
         self.finished: list = []
         self.summary: dict | None = None
+        # The failed files with their causes, from the failures event the
+        # summary follows.
+        self.failures: list[dict] = []
         self.code: int | None = None
         self.stopping: bool = False
         self.tail: list = []
@@ -16243,41 +16414,6 @@ def _write_advice(path: Path, assumed: bool, plat: str = "",
             "or choose another folder with --dest.")
 
 
-class OfflineReason(str):
-    """A file not fetched because the run was told to make no request."""
-
-
-class NetworkReason(str):
-    """A failure the connection caused: cut, timed out, refused by a server
-    or a proxy. The summary names the network instead of the folder."""
-
-    url = ""
-
-
-class HttpReason(str):
-    """A file the server answered for with an error of its own (HTTP 404):
-    the summary names the address, where "HTTP 404" alone told the user
-    neither what failed nor that running again changes nothing."""
-
-    url = ""
-
-
-def _http_failure_lines(failures: list[tuple[str, str]]) -> list[str]:
-    """The address the first refused file was asked at, and what chose it:
-    a mirror named with RETROBIOS_BASE_URL that holds the lists and not yet
-    the files, or a list out of step with the files it names."""
-    refused = [reason for _dest, reason in failures if isinstance(reason, HttpReason)]
-    if not refused:
-        return []
-    more = f" (and {_plural(len(refused) - 1, 'other file')})" if len(refused) > 1 else ""
-    lines = [f"  The server answered {refused[0]} for {refused[0].url}{more}."]
-    if active_remote().overridden:
-        return [*lines, OVERRIDE_LINE]
-    return lines + ["  The file list names files the server does not hold, and running "
-                    "again changes nothing until the two match.",
-                    f"  More help: {TROUBLESHOOTING_PAGE}"]
-
-
 def _transfer_failure(exc: BaseException) -> bool:
     """Whether a download error came from the connection, not the disk."""
     # urlopen raises URLError for the name lookup, the connection and TLS.
@@ -16293,12 +16429,6 @@ def _transfer_failure(exc: BaseException) -> bool:
         errno.ECONNRESET, errno.ECONNREFUSED, errno.ECONNABORTED, errno.ETIMEDOUT,
         errno.EHOSTUNREACH, errno.ENETUNREACH, errno.ENETDOWN, errno.EPIPE,
     )
-
-
-NETWORK_FAILURE_ADVICE = (
-    "  The transfers were cut or refused on the way: check the connection, and "
-    "HTTPS_PROXY if this network needs a proxy.\n"
-    f"  More help: {TROUBLESHOOTING_PAGE}")
 
 
 def _status_print(term: Terminal | None) -> Callable[..., None]:
@@ -16322,7 +16452,7 @@ class _Ending(NamedTuple):
     errors: int
     omitted: int
     offline: int
-    failures: list[tuple[str, str]] | None
+    failures: list[Failure]
     sources: str
     kept: list[str]
     advice: list[str]
@@ -16336,58 +16466,40 @@ class _Ending(NamedTuple):
     missing: Tally | None
 
 
-def _say_failures(say: Callable[..., None], failures: list[tuple[str, str]] | None) -> None:
+def _say_failures(say: Callable[..., None], failures: list[Failure]) -> None:
     """The failed files the progress has not named, one cause said once."""
-    reasons = {reason for _dest, reason in failures or []}
+    reasons = {record.reason for record in failures}
     # A failure the progress already named on its FAILED line is not named
     # again: line mode listed each one twice.
-    unsaid = [failure for failure in failures or [] if failure[0] not in SAID_FAILED]
+    unsaid = [record for record in failures if record.dest not in SAID_FAILED]
     if failures and len(failures) > 1 and len(reasons) == 1 and reasons != {""}:
         # One cause, said once: a read-only folder listed ten of its files
         # and "... and 266 more" above the advice that fixes them all.
-        said = f", first {unsaid[0][0]}" if unsaid else ""
+        said = f", first {unsaid[0].dest}" if unsaid else ""
         say(f"  failed: {_plural(len(failures), 'file')} ({reasons.pop()}){said}")
     else:
-        for dest, reason in unsaid[:10]:
+        for dest, reason, _kind, _url in unsaid[:10]:
             say(f"  failed: {dest}" + (f" ({reason})" if reason else ""))
         if len(unsaid) > 10:
             say(f"  ... and {len(unsaid) - 10} more")
 
 
 def _failure_advice(
-    paths: list[Path], failures: list[tuple[str, str]], assumed: set[Path] | None,
+    paths: list[Path], failures: list[Failure], assumed: set[Path] | None,
     platform_of: dict[Path, str] | None,
 ) -> list[str]:
     """What to do about the causes of the failed files, one line each."""
-    refused = any(reason == NOT_WRITABLE for dest, reason in failures
-                  if not Path(dest).is_absolute())
+    refused = any(record.kind == "not_writable" for record in failures
+                  if not Path(record.dest).is_absolute())
     advice = [
         _write_advice(path, path in (assumed or set()), (platform_of or {}).get(path, ""))
         for path in paths
     ] if refused else []
     advice += [_write_advice(folder, False) for folder in sorted({
-        Path(dest).parent for dest, reason in failures
-        if Path(dest).is_absolute() and reason == NOT_WRITABLE
+        Path(record.dest).parent for record in failures
+        if Path(record.dest).is_absolute() and record.kind == "not_writable"
     })]
-    if any(reason == DRIVE_FULL for _dest, reason in failures):
-        advice.append(f"  The drive holding {_locations(paths)} is full: free up space, or "
-                      "install to another drive with --dest, then run again.")
-    if any(reason == READ_ONLY for _dest, reason in failures):
-        advice.append("  Files marked read-only are in the way: clear that attribute "
-                      "(or delete them), then run again.")
-    advice += _http_failure_lines(failures)
-    if any(isinstance(reason, NetworkReason) for _dest, reason in failures):
-        advice.append(NETWORK_FAILURE_ADVICE)
-        if active_remote().overridden:
-            # A mirror that is down read as this machine's connection.
-            advice.append(OVERRIDE_LINE)
-    if any(str(reason).startswith(NOT_KEPT) for _dest, reason in failures):
-        # The same run fails the same way: "retry only those" sent a phone
-        # user round the loop with nothing changed.
-        advice.append("  The files in place were left as they were, as no backup folder could "
-                      "be made for them. Move them out of the folder, then run again to "
-                      "install the new ones.")
-    return advice
+    return advice + failure_remedies(failures, _locations(paths))
 
 
 def _kept_and_unplaced(omitted_entries: list[dict], notes: list[str] | None,
@@ -16464,19 +16576,18 @@ def _end_nothing_installed(end: _Ending) -> NoReturn:
     """End a run whose every file failed."""
     say, paths, failures = end.say, end.paths, end.failures
     say(f"\nNothing was installed. {_plural(end.errors, 'file')} failed.")
-    if failures and all(isinstance(r, (NetworkReason, HttpReason, OfflineReason))
-                        for _d, r in failures):
+    if connection_only(failures):
         # The folder was never the problem: naming it as the place being
         # written to sent people looking at their disk.
         say(f"BIOS folder: {_locations(paths)}")
-    elif _retry_words(failures):
+    elif retry_words(failures):
         # Nothing was written: every file is one the pack lacks.
         say(f"BIOS folder: {_locations(paths)}")
     else:
         say(f"BIOS folder that was being written to: {_locations(paths)}")
     for line in end.kept + end.advice:
         say(line)
-    say(_retry_words(failures) or "Run the same command again once that is resolved. "
+    say(retry_words(failures) or "Run the same command again once that is resolved. "
         "Files already installed are kept.")
     for line in end.same_lines:
         say(line)
@@ -16497,11 +16608,10 @@ def _end_with_errors(end: _Ending) -> NoReturn:
     say(f"BIOS folder: {_locations(end.paths)}")
     for line in end.kept + end.advice:
         say(line)
-    retry = _retry_words(failures)
+    retry = retry_words(failures)
     if retry:
         say(retry)
-    elif not all(str(reason).startswith(NOT_KEPT) or reason == DRIVE_FULL
-                 for _dest, reason in failures or []):
+    elif retry_helps(failures):
         say("Run the same command again to retry only those.")
     for line in end.same_lines:
         say(line)
@@ -16620,17 +16730,15 @@ def _report_outcome(
     # A file --offline left out is not a failure, whether the run asked or
     # not: without questions it was "14698 files failed", and "Run the same
     # command again to retry only those", which cannot fetch them.
-    left = [failure for failure in failures or [] if isinstance(failure[1], OfflineReason)]
+    records, left = split_offline(failure_records(failures or []))
     if left:
-        failures = [failure for failure in failures or []
-                    if not isinstance(failure[1], OfflineReason)]
         errors = max(0, errors - len(left))
         offline += len(left)
     if transferred and seconds > 0 and OUTPUT.verbose:
         verb = "copied from the pack" if LOCAL.pack is not None else "downloaded"
         say(f"\n{format_size(transferred)} {verb} in "
             f"{format_duration(seconds)} ({format_size(int(transferred / seconds))}/s).")
-    _say_failures(say, failures)
+    _say_failures(say, records)
     if declined and not downloaded and not errors and not interrupted and not offline:
         say(f"\nNothing installed: {_plural(declined, 'file')} not downloaded, as answered.")
         if up_to_date:
@@ -16648,9 +16756,9 @@ def _report_outcome(
 
     # A standalone copy fails by absolute path, in an emulator's folder
     # rather than the BIOS folder: that folder is where the write went.
-    elsewhere = sorted({Path(dest).parent for dest, _reason in failures or []
-                        if Path(dest).is_absolute()})
-    advice = _failure_advice(paths, failures or [], d.assumed, d.platform_of)
+    elsewhere = sorted({Path(record.dest).parent for record in records
+                        if Path(record.dest).is_absolute()})
+    advice = _failure_advice(paths, records, d.assumed, d.platform_of)
     paths = paths + [folder for folder in elsewhere if folder not in paths]
 
     # The kinds installed, on every end that installed some, under where
@@ -16659,7 +16767,7 @@ def _report_outcome(
                        if d.kinds and d.kinds[0].files and downloaded and OUTPUT.verbose else "")
     end = _Ending(
         say=say, paths=paths, downloaded=downloaded, up_to_date=up_to_date, errors=errors,
-        omitted=omitted, offline=offline, failures=failures, sources=d.sources, kept=kept,
+        omitted=omitted, offline=offline, failures=records, sources=d.sources, kept=kept,
         advice=advice, same_lines=same_lines, installed_kinds=installed_kinds,
         omitted_entries=d.omitted_entries or [], unplaced=unplaced,
         platform_of=d.platform_of or {}, hints=d.hints or [], same_choice=same_choice,
@@ -16711,20 +16819,6 @@ def _offline_remedy(folders: list[str] | None = None, named: bool = False) -> st
             f"again with a pack (--from-pack) or {offline_undo()}.")
 
 
-def _retry_words(failures: list | None) -> str:
-    """What to do when every failure is a file the pack does not hold: a
-    second run fails them the same way, and "run it again to retry only
-    those" sent people round. "" otherwise."""
-    lacking = [dest for dest, reason in failures or [] if str(reason) == NOT_IN_PACK]
-    if not lacking or len(lacking) != len([
-            dest for dest, reason in failures or [] if not str(reason).startswith(NOT_KEPT)]):
-        return ""
-    name = LOCAL.pack.name if LOCAL.pack is not None else "The pack"
-    return (f"{name} does not hold {'it' if len(lacking) == 1 else 'them'}: a newer pack, "
-            "or a run without --from-pack, installs "
-            f"{'it' if len(lacking) == 1 else 'them'}.")
-
-
 def _check_fetch_line(fetch: int, beside: str, lacking: int = 0, wrong: bool = False) -> str:
     """What --check says a run without it does with the files not in place:
     offline, those it cannot fetch are said so, not "run it to fetch them".
@@ -16747,11 +16841,6 @@ def _check_fetch_line(fetch: int, beside: str, lacking: int = 0, wrong: bool = F
     return ("  Run the same command without --check to fetch them."
             + (f"\n  A wrong copy is replaced, and the one in place kept in {BACKUP_DIR} "
                f"beside {beside}." if OUTPUT.verbose or wrong else ""))
-
-
-def _offline_failure(reason: str) -> bool:
-    """Whether a failure a run reported is a file --offline left out."""
-    return OFFLINE_WORDS in reason or "makes no network request" in reason
 
 
 # The definitions in a few words, for a help with no room for the sentences.
@@ -22210,6 +22299,8 @@ class _PlatformPass:
         self.record_files: list[dict] = []
         self.to_download: list[dict] = []
         self.up_to_date: list[dict] = []
+        # The entries this run put in place, each checked as it landed.
+        self.landed: list[dict] = []
         self.mismatched: list[dict] = []
         self.data_states: list[tuple[dict, tuple[Path, dict[str, dict], int]]] = []
         self.trees_missing = 0
@@ -22873,40 +22964,56 @@ def standalone_folders_here(
 STANDALONE_SOURCES = ("emudeck", "retroarch")
 
 
+def copy_sources(manifest: dict) -> list[tuple[dict, list[tuple[dict, str]]]]:
+    """Each standalone copy entry of the manifest, with the entries of its
+    file list it carries and the name each takes in the emulator folder.
+
+    The one reading of a copy entry: a pattern matches the names the list
+    gives, never whatever lies in the BIOS folder (a user's own
+    scph9999.bin went to DuckStation). `source` is where this list puts the
+    file that `file` names as the registry does for every platform: read
+    there, it was missing wherever the pack places it elsewhere.
+    """
+    from fnmatch import fnmatch
+
+    files = manifest.get("files", [])
+    by_dest = {entry["dest"]: entry for entry in files}
+    carried: list[tuple[dict, list[tuple[dict, str]]]] = []
+    for copy in manifest.get("standalone_copies", []):
+        if "note" in copy:
+            continue
+        if "pattern" in copy:
+            sources = [entry for entry in files
+                       if fnmatch(PurePosixPath(entry["dest"]).name, copy["pattern"])]
+        else:
+            held = by_dest.get(copy.get("source") or copy["file"])
+            sources = [held] if held else []
+        # `as`: the name the emulator reads, when it is not the
+        # platform's (melonDS's dsisd.bin, xemu's eeprom.bin).
+        carried.append((copy, [(entry, copy.get("as") or PurePosixPath(entry["dest"]).name)
+                               for entry in sources]))
+    return carried
+
+
 def standalone_plan(
     manifests: list[dict], os_type: str, extra_dirs: dict[str, Path] | None = None,
 ) -> list[tuple[Path, list[dict]]]:
     """What each emulator folder found here receives, by its own file name.
 
-    The standalone copies of the manifests, read as do_standalone_copies
-    reads them, but taken from the file lists rather than from a platform
-    tree already installed: an ES-DE user with DuckStation and PCSX2 and no
-    RetroArch had no tree to copy from. The first list that holds a name for
-    a folder serves it.
+    The standalone copies of the manifests (copy_sources), each entry named
+    as the emulator reads it. A run with no platform fetches them from the
+    lists: an ES-DE user with DuckStation and PCSX2 and no RetroArch had no
+    tree to copy from. The first list that holds a name for a folder
+    serves it.
     """
-    from fnmatch import fnmatch
-
     plan: dict[Path, dict[str, dict]] = {}
     for manifest in manifests:
-        files = manifest.get("files", [])
-        by_dest = {entry["dest"]: entry for entry in files}
-        for copy in manifest.get("standalone_copies", []):
-            if "note" in copy:
-                continue
-            if "pattern" in copy:
-                sources = [entry for entry in files
-                           if fnmatch(PurePosixPath(entry["dest"]).name, copy["pattern"])]
-            else:
-                held = by_dest.get(copy.get("source") or copy["file"])
-                sources = [held] if held else []
+        for copy, sources in copy_sources(manifest):
             for folder in _copy_targets(copy, os_type, extra_dirs):
                 if not sources or not _is_dir(folder):
                     continue
                 chosen = plan.setdefault(folder, {})
-                for entry in sources:
-                    # `as`: the name the emulator reads, when it is not the
-                    # platform's (melonDS's dsisd.bin, xemu's eeprom.bin).
-                    name = copy.get("as") or PurePosixPath(entry["dest"]).name
+                for entry, name in sources:
                     chosen.setdefault(name, {**entry, "dest": name})
     return [(folder, list(entries.values())) for folder, entries in plan.items() if entries]
 
@@ -22924,6 +23031,25 @@ def _check_standalone_folder(to_download: list[dict], mismatched: list[dict],
         print(f"    ... and {len(missing) - 10} more missing (--verbose lists them all)")
     if not to_download:
         print(f"  {EVERYTHING_IN_PLACE}")
+
+
+def preview_standalone(plan: list[tuple[Path, list[dict]]], args: argparse.Namespace,
+                       term: Terminal) -> int:
+    """--check or --dry-run over the emulator folders of a standalone plan:
+    what each holds and lacks, or what a run would write. The count of the
+    files not in place."""
+    pending = 0
+    for folder, entries in plan:
+        print(f"\n{folder}:")
+        to_download, _up_to_date, mismatched = check_local(entries, folder, jobs=args.jobs)
+        to_download.extend(mismatched)
+        if args.check:
+            _check_standalone_folder(to_download, mismatched, args.verbose)
+        else:
+            _print_plan(to_download, folder, term, kept=plan_kept(mismatched, folder),
+                        verbose=args.verbose)
+        pending += len(to_download)
+    return pending
 
 
 def _install_standalone_folders(
@@ -22952,8 +23078,13 @@ def _install_standalone_folders(
         "\nInstall the BIOS files these emulators read into their folders? [Y/n] "
     ):
         return False
+    if args.check or args.dry_run:
+        pending = preview_standalone(plan, args, term)
+        if args.check and pending:
+            print("\n" + _check_fetch_line(pending, "its folder"))
+            sys.exit(3)
+        return True
     downloaded = up_to_date_count = errors = 0
-    pending = 0
     failures: list[tuple[str, str]] = []
     transferred, seconds = 0, 0.0
     interrupted = False
@@ -22962,14 +23093,6 @@ def _install_standalone_folders(
         to_download, up_to_date, mismatched = check_local(entries, folder, jobs=args.jobs)
         to_download.extend(mismatched)
         up_to_date_count += len(up_to_date)
-        if args.check:
-            _check_standalone_folder(to_download, mismatched, args.verbose)
-            pending += len(to_download)
-            continue
-        if args.dry_run:
-            _print_plan(to_download, folder, term, kept=plan_kept(mismatched, folder),
-                        verbose=args.verbose)
-            continue
         if not to_download:
             print(f"  {EVERYTHING_IN_PLACE}")
             continue
@@ -22987,13 +23110,6 @@ def _install_standalone_folders(
         seconds += progress.elapsed()
         if interrupted:
             break
-    if args.check:
-        if pending:
-            print("\n" + _check_fetch_line(pending, "its folder"))
-            sys.exit(3)
-        return True
-    if args.dry_run:
-        return True
     _report_outcome(
         [folder for folder, _entries in plan], downloaded, up_to_date_count, errors,
         0, interrupted,
@@ -23013,25 +23129,6 @@ def _print_standalone_note(entry: dict, os_type: str) -> None:
         if _is_dir(expanded):
             print(f"  {entry['note']}")
             break
-
-
-def _standalone_sources(entry: dict, bios_path: Path) -> list[Path]:
-    """The files of the BIOS folder a standalone copy entry copies."""
-    from fnmatch import fnmatch
-
-    if "pattern" in entry:
-        # A kept file is never a source, when the backup had to go
-        # inside the BIOS folder.
-        return [
-            f for f in bios_path.rglob("*")
-            if fnmatch(f.name, entry["pattern"]) and f.is_file()
-            and BACKUP_DIR not in f.relative_to(bios_path).parts
-        ]
-    # `source` is where this platform's manifest put the file, and `file`
-    # names it as the registry does for every platform, and laid out
-    # that way it was missing wherever the pack places it elsewhere.
-    src = _destination_path(bios_path, entry.get("source") or entry["file"])
-    return [src] if _exists(src) else []
 
 
 def _copy_standalone_file(src: Path, dest: Path, resolved_dir: Path,
@@ -23074,14 +23171,16 @@ def do_standalone_copies(
     manifest: dict, bios_path: Path, os_type: str,
     extra_dirs: dict[str, Path] | None = None,
     failures: list[tuple[str, str]] | None = None,
+    verified: list[dict] | None = None,
 ) -> tuple[int, int, int]:
     """Copy BIOS files to standalone emulator directories.
 
-    Supports:
-    - file: single file copy
-    - pattern: glob match (e.g. "scph*.bin")
-    - note: informational message when detect path exists
-    - WSL fallback to linux targets
+    Each copy entry carries what copy_sources names, the entries of the
+    file list, read in bios_path: verified holds the entries this run found
+    or put there with their hashes, and no other is copied. Without it,
+    every entry of the list present in bios_path. A note entry prints its
+    message when its emulator is found here, and WSL falls back to the
+    Linux folders.
 
     extra_dirs maps the emulator id of an entry to a root that replaces the
     default per-OS locations, for setups such as LaunchBox that keep their
@@ -23098,18 +23197,22 @@ def do_standalone_copies(
     copies = manifest.get("standalone_copies", [])
     if not copies:
         return 0, 0, 0
+    carried = {id(copy): sources for copy, sources in copy_sources(manifest)}
+    held = None if verified is None else {entry["dest"] for entry in verified}
 
     copied = 0
     skipped = 0
     failed = 0
 
     for entry in copies:
-        # Note entries: print message if emulator detected
         if "note" in entry:
             _print_standalone_note(entry, os_type)
             continue
 
-        sources = _standalone_sources(entry, bios_path)
+        sources = [(src, name) for src, name in (
+            (_destination_path(bios_path, item["dest"]), name)
+            for item, name in carried[id(entry)]
+            if held is None or item["dest"] in held) if _exists(src)]
         if not sources:
             continue
 
@@ -23126,8 +23229,8 @@ def do_standalone_copies(
                 skipped += len(sources)
                 continue
             resolved_dir = target_dir.resolve()
-            for src in sources:
-                dest = target_dir / (entry.get("as") or src.name)
+            for src, name in sources:
+                dest = target_dir / name
                 if _copy_standalone_file(src, dest, resolved_dir, failures):
                     copied += 1
                 else:
@@ -23902,6 +24005,8 @@ def _pass_make_folder(run: _InstallRun, p: _PlatformPass, written: int) -> bool:
         # and no summary, what was installed before it unsaid.
         EVENTS.emit("error", stage="dest", reason="not_writable", platform=plat_name,
                     message=f"{bios_path} cannot be created: {exc.strerror}")
+        if run.failures:
+            EVENTS.emit("failures", failed=failure_events(run.failures))
         EVENTS.emit(
             "summary", mode=_event_mode(args), installed=run.total_downloaded,
             up_to_date=run.total_up_to_date, pending=run.files_pending + len(p.to_download),
@@ -23946,6 +24051,7 @@ def _pass_fetch(run: _InstallRun, p: _PlatformPass, dl_size: int, created: bool)
     # counted them, over the files that landed: matched by the end
     # of a failed path, a.bin was dropped when x/a.bin failed.
     run.landed.extend(progress.landed)
+    p.landed += progress.landed
     p.record_files += [record_file(entry, "copy" if id(entry) in p.copies
                                    else "pack" if LOCAL.pack is not None else "download")
                        for entry in progress.landed]
@@ -24109,8 +24215,11 @@ def _pass_standalone(run: _InstallRun, p: _PlatformPass) -> None:
         print("\nStandalone emulators:")
         lb_root = launchbox_root(os_type)
         extra_dirs = launchbox_bios_dirs(lb_root) if lb_root else None
+        # The files this run checked in place or put there, never others
+        # the folder holds.
         copied, skipped, copy_failed = do_standalone_copies(
-            manifest, p.bios_path, os_type, extra_dirs, run.failures
+            manifest, p.bios_path, os_type, extra_dirs, run.failures,
+            p.up_to_date + p.landed,
         )
         if copied or skipped or copy_failed:
             print(
@@ -24133,6 +24242,25 @@ def _pass_standalone(run: _InstallRun, p: _PlatformPass) -> None:
                    "they read into them.")
 
 
+def _pass_standalone_preview(run: _InstallRun, p: _PlatformPass) -> None:
+    """--check or --dry-run with --standalone-copies: the emulator folders
+    found here, what each holds and lacks or would receive, as a run with
+    no platform says them."""
+    if not (p.manifest.get("standalone_copies") and run.args.standalone_copies):
+        return
+    lb_root = launchbox_root(run.os_type)
+    plan = standalone_plan([{**p.manifest, "files": p.files}], run.os_type,
+                           launchbox_bios_dirs(lb_root) if lb_root else None)
+    if not plan:
+        return
+    print("\nStandalone emulators:")
+    pending = preview_standalone(plan, run.args, run.term)
+    if run.args.check:
+        run.check_pending += pending
+    else:
+        run.files_pending += pending
+
+
 def _apply_setup_files(run: _InstallRun, p: _PlatformPass) -> bool:
     """The setup's files packed, checked, planned or installed. True when
     the run stops there."""
@@ -24147,9 +24275,11 @@ def _apply_setup_files(run: _InstallRun, p: _PlatformPass) -> bool:
     _pass_check_existing(run, p)
     if args.check:
         _pass_check_report(run, p)
+        _pass_standalone_preview(run, p)
         return False
     if args.dry_run:
         _pass_dry_run(run, p)
+        _pass_standalone_preview(run, p)
         return False
 
     if p.to_download:
@@ -24195,6 +24325,8 @@ def _finish_install(run: _InstallRun, real_stdout: TextIO) -> None:
         # The matches are the answer: nothing was installed.
         sys.exit(4 if getattr(args, "find_failed", False) else 0)
     if not run.listing:
+        if run.failures:
+            EVENTS.emit("failures", failed=failure_events(run.failures))
         EVENTS.emit(
             "summary", mode=_event_mode(args), installed=run.total_downloaded,
             up_to_date=run.total_verified if args.check or args.dry_run else run.total_up_to_date,
@@ -27530,8 +27662,8 @@ class _OutcomeCounts(NamedTuple):
     """What an install run reported, as its result counts it."""
     summary: dict
     installed: int
-    failed: list
-    offline_failed: list
+    failed: list[Failure]
+    offline_failed: list[Failure]
     left: int
     up_to_date: int
     total: int
@@ -27544,12 +27676,15 @@ def _outcome_counts(state: TuiState) -> _OutcomeCounts:
     # Killed by the second Ctrl-C, the child wrote no summary: what it
     # reported finished is what is installed.
     installed = summary.get("installed", sum(1 for _dest, ok, _why in state.finished if ok))
-    failed = summary.get("failed") or []
+    # Each with its cause, from the failures event the summary follows:
+    # without it, the cause its words name.
+    records = (event_records(state.failures) if summary.get("failed") and state.failures
+               else failure_records((failure["dest"], failure["reason"])
+                                    for failure in summary.get("failed") or []))
     # Left out by --offline: missing, never failed, as line mode says it.
     # The engine counts them in pending and no longer in failed (a file was
     # both): pending holds the real failures too, which are taken out.
-    offline_failed = [failure for failure in failed if _offline_failure(failure["reason"])]
-    failed = [failure for failure in failed if not _offline_failure(failure["reason"])]
+    failed, offline_failed = split_offline(records)
     left = len(offline_failed) + (max(0, summary.get("pending", 0) - len(failed))
                                   if tui_offline_only(state) and not offline_failed else 0)
     up_to_date = summary.get("up_to_date", 0)
@@ -27613,7 +27748,7 @@ def _outcome_counted(state: TuiState, counts: _OutcomeCounts, title: str,
     installed, failed, left = counts.installed, counts.failed, counts.left
     lines = [head]
     ok_dests = {dest for dest, good, _why in state.finished if good}
-    missing = ([failure["dest"] for failure in counts.offline_failed]
+    missing = ([failure.dest for failure in counts.offline_failed]
                or [event["dest"] for event in state.files
                    if event["dest"] not in ok_dests][:left]) if left else []
     # A wrong copy left in place is no missing file: --check counts it apart,
@@ -27689,12 +27824,12 @@ def _outcome_placed(state: TuiState, counts: _OutcomeCounts, title: str) -> list
     return lines
 
 
-def _failure_lines(failed: list) -> list[str]:
+def _failure_lines(failed: list[Failure]) -> list[str]:
     """Each file that failed with its reason, a reason shared by many said once."""
     lines: list[str] = []
     causes: dict[str, list[str]] = {}
     for failure in failed:
-        causes.setdefault(failure["reason"], []).append(failure["dest"])
+        causes.setdefault(failure.reason, []).append(failure.dest)
     shown = 0
     for reason, dests in causes.items():
         if len(dests) > 3:
@@ -27711,14 +27846,21 @@ def _failure_lines(failed: list) -> list[str]:
     return lines
 
 
-def _retry_lines(failed: list) -> list[str]:
+def _remedy_lines(state: TuiState, failed: list[Failure]) -> list[str]:
+    """What to do about each cause, the words line mode gives: the screen
+    ended a mirror's 404 or a proxy's refusal on "Run it again"."""
+    where = shown_path(str(_plan_folder(state, state.dest))) if state.dest else "the folder"
+    return [line.strip() for advice in failure_remedies(failed, where)
+            for line in advice.split("\n")]
+
+
+def _retry_lines(failed: list[Failure]) -> list[str]:
     # What a rerun does, as line mode and the first install page say
     # it: the screen never did.
-    pairs = [(failure["dest"], failure["reason"]) for failure in failed]
-    retry = _retry_words(pairs)
+    retry = retry_words(failed)
     if retry:
         return [retry]
-    if not all(str(reason).startswith(NOT_KEPT) for _dest, reason in pairs):
+    if retry_helps(failed):
         return ["Run it again to retry only those."]
     return []
 
@@ -27737,8 +27879,7 @@ def _outcome_unfinished(state: TuiState, counts: _OutcomeCounts, title: str) -> 
         lines.append(_detail(f"{_plural(expected - landed, 'data file')} not installed"
                              + (f": not in {LOCAL.pack.name}." if LOCAL.pack is not None
                                 else ".")))
-    if state.dest is not None and any(failure["reason"] == NOT_WRITABLE
-                                      for failure in failed):
+    if state.dest is not None and any(failure.kind == "not_writable" for failure in failed):
         # The plan's own advice: the result offered nothing after 22 files
         # failed on a read-only card.
         lines += _commands(state, write_remedy(state.dest, state.platform, tui_hint(state),
@@ -27796,6 +27937,7 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
     lines = _outcome_counted(state, counts, title, head)
     lines += _outcome_placed(state, counts, title)
     lines += _failure_lines(counts.failed)
+    lines += _remedy_lines(state, counts.failed)
     if title == "Finished with errors":
         lines += _retry_lines(counts.failed)
     lines += _outcome_unfinished(state, counts, title)
@@ -31080,6 +31222,8 @@ def _take_install_event(state: TuiState, kind: str | None, event: dict) -> None:
         state.progress = event
         if kind == "downloaded":
             state.finished.append((event["dest"], event["ok"], event["reason"]))
+    elif kind == "failures":
+        state.failures = event["failed"]
     elif kind == "summary":
         state.summary = event
 

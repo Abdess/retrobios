@@ -4087,6 +4087,7 @@ class TestE2E(unittest.TestCase):
         missing_dir = Path(self.root) / "nonexistent"
         manifest = {
             "base_destination": "bios",
+            "files": [{"dest": "prod.keys"}],
             "standalone_copies": [
                 {
                     "file": "prod.keys",

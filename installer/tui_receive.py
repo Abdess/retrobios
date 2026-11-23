@@ -173,6 +173,8 @@ def _take_install_event(state: TuiState, kind: str | None, event: dict) -> None:
         state.progress = event
         if kind == "downloaded":
             state.finished.append((event["dest"], event["ok"], event["reason"]))
+    elif kind == "failures":
+        state.failures = event["failed"]
     elif kind == "summary":
         state.summary = event
 

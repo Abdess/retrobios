@@ -283,6 +283,9 @@ class TuiState:
         self.network: int = 0
         self.finished: list = []
         self.summary: dict | None = None
+        # The failed files with their causes, from the failures event the
+        # summary follows.
+        self.failures: list[dict] = []
         self.code: int | None = None
         self.stopping: bool = False
         self.tail: list = []

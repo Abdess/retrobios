@@ -232,6 +232,8 @@ class _PlatformPass:
         self.record_files: list[dict] = []
         self.to_download: list[dict] = []
         self.up_to_date: list[dict] = []
+        # The entries this run put in place, each checked as it landed.
+        self.landed: list[dict] = []
         self.mismatched: list[dict] = []
         self.data_states: list[tuple[dict, tuple[Path, dict[str, dict], int]]] = []
         self.trees_missing = 0

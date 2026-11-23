@@ -1729,7 +1729,11 @@ executable, picked in the app) is not a target, nor is a place the registry
 already gives for the same file. A file the emulator finds by its contents in a
 folder the user sets (Amiberry's ROMs) is left out.
 
-An entry names one file or a glob, and one entry carries no file at all: when
+An entry names one file or a glob, matched against the names of the file list,
+never against whatever else the BIOS folder holds: only a file this run found
+in place with its hash, or put there, is copied. With `--check` or
+`--dry-run`, each emulator folder found says what it holds and lacks, or what
+the run would write to it. One entry carries no file at all: when
 an RPCS3 configuration directory is present it prints that `PS3UPDAT.PUP` is
 installed through RPCS3's own File menu, since that firmware is an installer to
 run rather than a file to copy.
@@ -2251,6 +2255,7 @@ other schemas under `api/v1/schemas/`.
 | `progress` | `files_done`, `files_total`, `bytes_done`, `bytes_total` | At most every half second while bytes arrive |
 | `transfer` | `bytes_local`, `bytes_network` | Right after each `progress` event, and once when the files of a `download` event are done. It splits `bytes_done`: `bytes_local` came from this machine (a copy found by `--from` or in the BIOS folder, the pack, a partial copy resumed), `bytes_network` from the network. A download speed is `bytes_network` over the time elapsed |
 | `downloaded` | `dest`, `ok`, `reason`, `size`, `files_done`, `files_total`, `bytes_done`, `bytes_total` | Each finished file, downloaded or copied from where a `found` event named it. `reason` says why one failed, and is empty otherwise. `bytes_done` counts every byte arrived, as `progress` does, a file still in transfer included: it never runs back |
+| `failures` | `failed` | Right before a `summary` whose `failed` is not empty: the same files, each `{dest, reason, kind, url}`. `kind` is the cause (`offline`, `network`, `http`, `not_writable`, `drive_full`, `read_only`, `not_kept`, `not_in_pack` or `other`), `url` the address a server refused (`http`), empty otherwise. A screen reads the cause here to give the remedy line mode gives |
 | `summary` | `mode`, `installed`, `up_to_date`, `pending`, `failed`, `skipped`, `left_out`, `kept`, `interrupted` | The outcome. `pending` counts what a next run would still fetch, `failed` lists `{dest, reason}`, `skipped` lists `{reason, label, files, required}` for the files the collection cannot supply, `left_out` lists `{category, label, files, dests}` for what `--no-game-data` left out, and is empty without it. `kept` lists `{folder, files, bytes}`, one per backup folder, for the files in place the run moved aside before replacing them (with `--dry-run`, would move), and is empty when none. Not written for a listing |
 | `app` | `system`, `folder`, `ok`, `reason`, `dests`, `written`, `kept` | After `summary`, with `--add-app` or a yes to its question: the RetroBIOS app on the card of `system` whose root is `folder`. `dests` lists the app's files below that root, `written` the ones this run wrote (empty when each was in place), `kept` the backup folders as in `summary`. `ok` is false, with `reason`, when the card takes no app (before anything is written, code 2), when the install did not finish, or when a file could not be fetched, verified or written (code 1) |
 | `record` | `platform`, `folder`, `path`, `status`, `choice`, `date`, `files`, `message` | The [install record](#the-install-record) of `folder`, kept at `path`. `status` is `applied` before `choices` when the run took its choice, nothing on the command line having chosen, `written` before `summary` once an install placed files, `unreadable` when it cannot be read (said once, ignored), or `not_written` when it could not be saved, the install itself unharmed. `choice` is the recorded options as words, `date` when it was written (UTC), `files` how many files it holds for the platform |

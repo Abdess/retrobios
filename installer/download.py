@@ -38,7 +38,8 @@ from installer.invocation import offline_requested
 from installer.local_check import _digest_file, _digest_handle, expected_hashes, unreachable_words
 from installer.network import _retry_after_failure, _server_delay, network_words
 from installer.offline import LOCAL, offline_words
-from installer.outcome import HttpReason, NetworkReason, OfflineReason, _transfer_failure
+from installer.failure_causes import HttpReason, NetworkReason, OfflineReason
+from installer.outcome import _transfer_failure
 from installer.pack_source import NOT_IN_PACK, _extract_from_pack
 from installer.paths import _entry_path, _entry_place
 from installer.remote import MAX_DOWNLOAD_SIZE, MAX_RETRIES, RELEASE_URL, RESUME_FROM_SIZE, active_remote

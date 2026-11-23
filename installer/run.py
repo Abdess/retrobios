@@ -15,6 +15,7 @@ from installer.detect_os import detected_shown
 from installer.diagnosis import CheckHeld, bios_folder_index, check_lines
 from installer.download import download_files
 from installer.events import EVENTS, _event_mode
+from installer.failure_causes import OfflineReason, failure_events
 from installer.fetch_plan import emit_fetch_plan, fetch_plan
 from installer.filesystems import NOMEDIA, hide_from_media_scanner
 from installer.from_folders import (
@@ -47,7 +48,6 @@ from installer.local_check import check_local, head_reads_done
 from installer.offline import LOCAL, _offline_only, offline_named
 from installer.outcome import (
     EVERYTHING_IN_PLACE,
-    OfflineReason,
     OutcomeDetails,
     _check_fetch_line,
     _report_outcome,
@@ -71,7 +71,7 @@ from installer.run_setups import (
 )
 from installer.safe_replace import KEPT, NOT_KEPT, plan_kept
 from installer.space import bytes_written
-from installer.standalone import do_standalone_copies, standalone_folders_here
+from installer.standalone import do_standalone_copies, preview_standalone, standalone_folders_here, standalone_plan
 from installer.tally import (
     CheckTally,
     _absent_required,
@@ -423,6 +423,8 @@ def _pass_make_folder(run: _InstallRun, p: _PlatformPass, written: int) -> bool:
         # and no summary, what was installed before it unsaid.
         EVENTS.emit("error", stage="dest", reason="not_writable", platform=plat_name,
                     message=f"{bios_path} cannot be created: {exc.strerror}")
+        if run.failures:
+            EVENTS.emit("failures", failed=failure_events(run.failures))
         EVENTS.emit(
             "summary", mode=_event_mode(args), installed=run.total_downloaded,
             up_to_date=run.total_up_to_date, pending=run.files_pending + len(p.to_download),
@@ -467,6 +469,7 @@ def _pass_fetch(run: _InstallRun, p: _PlatformPass, dl_size: int, created: bool)
     # counted them, over the files that landed: matched by the end
     # of a failed path, a.bin was dropped when x/a.bin failed.
     run.landed.extend(progress.landed)
+    p.landed += progress.landed
     p.record_files += [record_file(entry, "copy" if id(entry) in p.copies
                                    else "pack" if LOCAL.pack is not None else "download")
                        for entry in progress.landed]
@@ -630,8 +633,11 @@ def _pass_standalone(run: _InstallRun, p: _PlatformPass) -> None:
         print("\nStandalone emulators:")
         lb_root = launchbox_root(os_type)
         extra_dirs = launchbox_bios_dirs(lb_root) if lb_root else None
+        # The files this run checked in place or put there, never others
+        # the folder holds.
         copied, skipped, copy_failed = do_standalone_copies(
-            manifest, p.bios_path, os_type, extra_dirs, run.failures
+            manifest, p.bios_path, os_type, extra_dirs, run.failures,
+            p.up_to_date + p.landed,
         )
         if copied or skipped or copy_failed:
             print(
@@ -654,6 +660,25 @@ def _pass_standalone(run: _InstallRun, p: _PlatformPass) -> None:
                    "they read into them.")
 
 
+def _pass_standalone_preview(run: _InstallRun, p: _PlatformPass) -> None:
+    """--check or --dry-run with --standalone-copies: the emulator folders
+    found here, what each holds and lacks or would receive, as a run with
+    no platform says them."""
+    if not (p.manifest.get("standalone_copies") and run.args.standalone_copies):
+        return
+    lb_root = launchbox_root(run.os_type)
+    plan = standalone_plan([{**p.manifest, "files": p.files}], run.os_type,
+                           launchbox_bios_dirs(lb_root) if lb_root else None)
+    if not plan:
+        return
+    print("\nStandalone emulators:")
+    pending = preview_standalone(plan, run.args, run.term)
+    if run.args.check:
+        run.check_pending += pending
+    else:
+        run.files_pending += pending
+
+
 def _apply_setup_files(run: _InstallRun, p: _PlatformPass) -> bool:
     """The setup's files packed, checked, planned or installed. True when
     the run stops there."""
@@ -668,9 +693,11 @@ def _apply_setup_files(run: _InstallRun, p: _PlatformPass) -> bool:
     _pass_check_existing(run, p)
     if args.check:
         _pass_check_report(run, p)
+        _pass_standalone_preview(run, p)
         return False
     if args.dry_run:
         _pass_dry_run(run, p)
+        _pass_standalone_preview(run, p)
         return False
 
     if p.to_download:
@@ -716,6 +743,8 @@ def _finish_install(run: _InstallRun, real_stdout: TextIO) -> None:
         # The matches are the answer: nothing was installed.
         sys.exit(4 if getattr(args, "find_failed", False) else 0)
     if not run.listing:
+        if run.failures:
+            EVENTS.emit("failures", failed=failure_events(run.failures))
         EVENTS.emit(
             "summary", mode=_event_mode(args), installed=run.total_downloaded,
             up_to_date=run.total_verified if args.check or args.dry_run else run.total_up_to_date,

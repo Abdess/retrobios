@@ -32,7 +32,7 @@ from installer.local_check import _read_digests
 from installer.manifest import OTHER_SYSTEMS
 from installer.network import _retry_after_failure, _retry_delay
 from installer.offline import LOCAL, _Offline, _network_allowed, _offline_only
-from installer.outcome import OfflineReason
+from installer.failure_causes import OfflineReason
 from installer.paths import _destination_path
 from installer.platforms import entry_systems
 from installer.remote import MAX_DATA_ARCHIVE_SIZE, MAX_DOWNLOAD_SIZE, MAX_RETRIES

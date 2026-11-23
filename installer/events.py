@@ -162,6 +162,13 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # out, empty without it. kept: [{"folder", "files", "bytes"}], the files
     # in place the run moved aside before replacing them (under --dry-run,
     # would move), one per backup folder, empty when none.
+    # Right before a summary whose failed is not empty: failed is the same
+    # files, each [{"dest", "reason", "kind", "url"}], kind its cause
+    # (offline, network, http, not_writable, drive_full, read_only,
+    # not_kept, not_in_pack or other) and url the address a server refused
+    # (http), "" otherwise. A kind of its own, since schema 1 never adds a
+    # key to summary: a screen gives the remedies line mode gives.
+    "failures": ("failed",),
     "summary": ("mode", "installed", "up_to_date", "pending", "failed", "skipped",
                 "left_out", "kept", "interrupted"),
     # --add-app, or yes to its question, after the summary: the RetroBIOS

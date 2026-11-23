@@ -15,16 +15,22 @@ from installer.cards import _mounted_cards
 from installer.console import OUTPUT, SAID_FAILED
 from installer.destination import on_its_card
 from installer.detect_os import detected_os
-from installer.host_fs import DRIVE_FULL, NOT_WRITABLE, READ_ONLY, _held
+from installer.failure_causes import (
+    Failure,
+    connection_only,
+    failure_records,
+    failure_remedies,
+    retry_helps,
+    retry_words,
+    split_offline,
+)
+from installer.host_fs import _held
 from installer.invocation import _INVOCATION
-from installer.network import OVERRIDE_LINE
-from installer.offline import LOCAL, OFFLINE_WORDS, _offline_only, offline_named, offline_undo
-from installer.pack_source import NOT_IN_PACK
+from installer.offline import LOCAL, _offline_only, offline_named, offline_undo
 from installer.paths import shown_path
 from installer.platforms import display_name
-from installer.remote import TROUBLESHOOTING_PAGE, active_remote
 from installer.romm import ROMM_SCAN_WORDS
-from installer.safe_replace import BACKUP_DIR, KEPT, NOT_KEPT, _kept_lines
+from installer.safe_replace import BACKUP_DIR, KEPT, _kept_lines
 from installer.tally import _omission_lines, installed_words, needed_absent_words
 from installer.text import _plural, agree, format_duration, format_size, screen_text
 
@@ -144,41 +150,6 @@ def _write_advice(path: Path, assumed: bool, plat: str = "",
             "or choose another folder with --dest.")
 
 
-class OfflineReason(str):
-    """A file not fetched because the run was told to make no request."""
-
-
-class NetworkReason(str):
-    """A failure the connection caused: cut, timed out, refused by a server
-    or a proxy. The summary names the network instead of the folder."""
-
-    url = ""
-
-
-class HttpReason(str):
-    """A file the server answered for with an error of its own (HTTP 404):
-    the summary names the address, where "HTTP 404" alone told the user
-    neither what failed nor that running again changes nothing."""
-
-    url = ""
-
-
-def _http_failure_lines(failures: list[tuple[str, str]]) -> list[str]:
-    """The address the first refused file was asked at, and what chose it:
-    a mirror named with RETROBIOS_BASE_URL that holds the lists and not yet
-    the files, or a list out of step with the files it names."""
-    refused = [reason for _dest, reason in failures if isinstance(reason, HttpReason)]
-    if not refused:
-        return []
-    more = f" (and {_plural(len(refused) - 1, 'other file')})" if len(refused) > 1 else ""
-    lines = [f"  The server answered {refused[0]} for {refused[0].url}{more}."]
-    if active_remote().overridden:
-        return [*lines, OVERRIDE_LINE]
-    return lines + ["  The file list names files the server does not hold, and running "
-                    "again changes nothing until the two match.",
-                    f"  More help: {TROUBLESHOOTING_PAGE}"]
-
-
 def _transfer_failure(exc: BaseException) -> bool:
     """Whether a download error came from the connection, not the disk."""
     # urlopen raises URLError for the name lookup, the connection and TLS.
@@ -194,12 +165,6 @@ def _transfer_failure(exc: BaseException) -> bool:
         errno.ECONNRESET, errno.ECONNREFUSED, errno.ECONNABORTED, errno.ETIMEDOUT,
         errno.EHOSTUNREACH, errno.ENETUNREACH, errno.ENETDOWN, errno.EPIPE,
     )
-
-
-NETWORK_FAILURE_ADVICE = (
-    "  The transfers were cut or refused on the way: check the connection, and "
-    "HTTPS_PROXY if this network needs a proxy.\n"
-    f"  More help: {TROUBLESHOOTING_PAGE}")
 
 
 def _status_print(term: Terminal | None) -> Callable[..., None]:
@@ -223,7 +188,7 @@ class _Ending(NamedTuple):
     errors: int
     omitted: int
     offline: int
-    failures: list[tuple[str, str]] | None
+    failures: list[Failure]
     sources: str
     kept: list[str]
     advice: list[str]
@@ -237,58 +202,40 @@ class _Ending(NamedTuple):
     missing: Tally | None
 
 
-def _say_failures(say: Callable[..., None], failures: list[tuple[str, str]] | None) -> None:
+def _say_failures(say: Callable[..., None], failures: list[Failure]) -> None:
     """The failed files the progress has not named, one cause said once."""
-    reasons = {reason for _dest, reason in failures or []}
+    reasons = {record.reason for record in failures}
     # A failure the progress already named on its FAILED line is not named
     # again: line mode listed each one twice.
-    unsaid = [failure for failure in failures or [] if failure[0] not in SAID_FAILED]
+    unsaid = [record for record in failures if record.dest not in SAID_FAILED]
     if failures and len(failures) > 1 and len(reasons) == 1 and reasons != {""}:
         # One cause, said once: a read-only folder listed ten of its files
         # and "... and 266 more" above the advice that fixes them all.
-        said = f", first {unsaid[0][0]}" if unsaid else ""
+        said = f", first {unsaid[0].dest}" if unsaid else ""
         say(f"  failed: {_plural(len(failures), 'file')} ({reasons.pop()}){said}")
     else:
-        for dest, reason in unsaid[:10]:
+        for dest, reason, _kind, _url in unsaid[:10]:
             say(f"  failed: {dest}" + (f" ({reason})" if reason else ""))
         if len(unsaid) > 10:
             say(f"  ... and {len(unsaid) - 10} more")
 
 
 def _failure_advice(
-    paths: list[Path], failures: list[tuple[str, str]], assumed: set[Path] | None,
+    paths: list[Path], failures: list[Failure], assumed: set[Path] | None,
     platform_of: dict[Path, str] | None,
 ) -> list[str]:
     """What to do about the causes of the failed files, one line each."""
-    refused = any(reason == NOT_WRITABLE for dest, reason in failures
-                  if not Path(dest).is_absolute())
+    refused = any(record.kind == "not_writable" for record in failures
+                  if not Path(record.dest).is_absolute())
     advice = [
         _write_advice(path, path in (assumed or set()), (platform_of or {}).get(path, ""))
         for path in paths
     ] if refused else []
     advice += [_write_advice(folder, False) for folder in sorted({
-        Path(dest).parent for dest, reason in failures
-        if Path(dest).is_absolute() and reason == NOT_WRITABLE
+        Path(record.dest).parent for record in failures
+        if Path(record.dest).is_absolute() and record.kind == "not_writable"
     })]
-    if any(reason == DRIVE_FULL for _dest, reason in failures):
-        advice.append(f"  The drive holding {_locations(paths)} is full: free up space, or "
-                      "install to another drive with --dest, then run again.")
-    if any(reason == READ_ONLY for _dest, reason in failures):
-        advice.append("  Files marked read-only are in the way: clear that attribute "
-                      "(or delete them), then run again.")
-    advice += _http_failure_lines(failures)
-    if any(isinstance(reason, NetworkReason) for _dest, reason in failures):
-        advice.append(NETWORK_FAILURE_ADVICE)
-        if active_remote().overridden:
-            # A mirror that is down read as this machine's connection.
-            advice.append(OVERRIDE_LINE)
-    if any(str(reason).startswith(NOT_KEPT) for _dest, reason in failures):
-        # The same run fails the same way: "retry only those" sent a phone
-        # user round the loop with nothing changed.
-        advice.append("  The files in place were left as they were, as no backup folder could "
-                      "be made for them. Move them out of the folder, then run again to "
-                      "install the new ones.")
-    return advice
+    return advice + failure_remedies(failures, _locations(paths))
 
 
 def _kept_and_unplaced(omitted_entries: list[dict], notes: list[str] | None,
@@ -365,19 +312,18 @@ def _end_nothing_installed(end: _Ending) -> NoReturn:
     """End a run whose every file failed."""
     say, paths, failures = end.say, end.paths, end.failures
     say(f"\nNothing was installed. {_plural(end.errors, 'file')} failed.")
-    if failures and all(isinstance(r, (NetworkReason, HttpReason, OfflineReason))
-                        for _d, r in failures):
+    if connection_only(failures):
         # The folder was never the problem: naming it as the place being
         # written to sent people looking at their disk.
         say(f"BIOS folder: {_locations(paths)}")
-    elif _retry_words(failures):
+    elif retry_words(failures):
         # Nothing was written: every file is one the pack lacks.
         say(f"BIOS folder: {_locations(paths)}")
     else:
         say(f"BIOS folder that was being written to: {_locations(paths)}")
     for line in end.kept + end.advice:
         say(line)
-    say(_retry_words(failures) or "Run the same command again once that is resolved. "
+    say(retry_words(failures) or "Run the same command again once that is resolved. "
         "Files already installed are kept.")
     for line in end.same_lines:
         say(line)
@@ -398,11 +344,10 @@ def _end_with_errors(end: _Ending) -> NoReturn:
     say(f"BIOS folder: {_locations(end.paths)}")
     for line in end.kept + end.advice:
         say(line)
-    retry = _retry_words(failures)
+    retry = retry_words(failures)
     if retry:
         say(retry)
-    elif not all(str(reason).startswith(NOT_KEPT) or reason == DRIVE_FULL
-                 for _dest, reason in failures or []):
+    elif retry_helps(failures):
         say("Run the same command again to retry only those.")
     for line in end.same_lines:
         say(line)
@@ -521,17 +466,15 @@ def _report_outcome(
     # A file --offline left out is not a failure, whether the run asked or
     # not: without questions it was "14698 files failed", and "Run the same
     # command again to retry only those", which cannot fetch them.
-    left = [failure for failure in failures or [] if isinstance(failure[1], OfflineReason)]
+    records, left = split_offline(failure_records(failures or []))
     if left:
-        failures = [failure for failure in failures or []
-                    if not isinstance(failure[1], OfflineReason)]
         errors = max(0, errors - len(left))
         offline += len(left)
     if transferred and seconds > 0 and OUTPUT.verbose:
         verb = "copied from the pack" if LOCAL.pack is not None else "downloaded"
         say(f"\n{format_size(transferred)} {verb} in "
             f"{format_duration(seconds)} ({format_size(int(transferred / seconds))}/s).")
-    _say_failures(say, failures)
+    _say_failures(say, records)
     if declined and not downloaded and not errors and not interrupted and not offline:
         say(f"\nNothing installed: {_plural(declined, 'file')} not downloaded, as answered.")
         if up_to_date:
@@ -549,9 +492,9 @@ def _report_outcome(
 
     # A standalone copy fails by absolute path, in an emulator's folder
     # rather than the BIOS folder: that folder is where the write went.
-    elsewhere = sorted({Path(dest).parent for dest, _reason in failures or []
-                        if Path(dest).is_absolute()})
-    advice = _failure_advice(paths, failures or [], d.assumed, d.platform_of)
+    elsewhere = sorted({Path(record.dest).parent for record in records
+                        if Path(record.dest).is_absolute()})
+    advice = _failure_advice(paths, records, d.assumed, d.platform_of)
     paths = paths + [folder for folder in elsewhere if folder not in paths]
 
     # The kinds installed, on every end that installed some, under where
@@ -560,7 +503,7 @@ def _report_outcome(
                        if d.kinds and d.kinds[0].files and downloaded and OUTPUT.verbose else "")
     end = _Ending(
         say=say, paths=paths, downloaded=downloaded, up_to_date=up_to_date, errors=errors,
-        omitted=omitted, offline=offline, failures=failures, sources=d.sources, kept=kept,
+        omitted=omitted, offline=offline, failures=records, sources=d.sources, kept=kept,
         advice=advice, same_lines=same_lines, installed_kinds=installed_kinds,
         omitted_entries=d.omitted_entries or [], unplaced=unplaced,
         platform_of=d.platform_of or {}, hints=d.hints or [], same_choice=same_choice,
@@ -612,20 +555,6 @@ def _offline_remedy(folders: list[str] | None = None, named: bool = False) -> st
             f"again with a pack (--from-pack) or {offline_undo()}.")
 
 
-def _retry_words(failures: list | None) -> str:
-    """What to do when every failure is a file the pack does not hold: a
-    second run fails them the same way, and "run it again to retry only
-    those" sent people round. "" otherwise."""
-    lacking = [dest for dest, reason in failures or [] if str(reason) == NOT_IN_PACK]
-    if not lacking or len(lacking) != len([
-            dest for dest, reason in failures or [] if not str(reason).startswith(NOT_KEPT)]):
-        return ""
-    name = LOCAL.pack.name if LOCAL.pack is not None else "The pack"
-    return (f"{name} does not hold {'it' if len(lacking) == 1 else 'them'}: a newer pack, "
-            "or a run without --from-pack, installs "
-            f"{'it' if len(lacking) == 1 else 'them'}.")
-
-
 def _check_fetch_line(fetch: int, beside: str, lacking: int = 0, wrong: bool = False) -> str:
     """What --check says a run without it does with the files not in place:
     offline, those it cannot fetch are said so, not "run it to fetch them".
@@ -648,11 +577,6 @@ def _check_fetch_line(fetch: int, beside: str, lacking: int = 0, wrong: bool = F
     return ("  Run the same command without --check to fetch them."
             + (f"\n  A wrong copy is replaced, and the one in place kept in {BACKUP_DIR} "
                f"beside {beside}." if OUTPUT.verbose or wrong else ""))
-
-
-def _offline_failure(reason: str) -> bool:
-    """Whether a failure a run reported is a file --offline left out."""
-    return OFFLINE_WORDS in reason or "makes no network request" in reason
 
 
 # The definitions in a few words, for a help with no room for the sentences.

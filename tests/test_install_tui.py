@@ -1354,12 +1354,14 @@ def result_states() -> dict:
                          "left_out": [], "kept": [], "interrupted": False, **summary}
         return state
 
+    left = [{"dest": name, "reason": install.OFFLINE_WORDS}
+            for name in ("scph5500.bin", "scph5501.bin", "pcsx/extra.bin")]
+    offline = ended(1, installed=1, pending=3, failed=left)
+    offline.failures = [{**failure, "kind": "offline", "url": ""} for failure in left]
     return {
         "done": ended(0),
         "partial": golden_states()["result"],
-        "offline": ended(1, installed=1, pending=3, failed=[
-            {"dest": name, "reason": install.OFFLINE_WORDS}
-            for name in ("scph5500.bin", "scph5501.bin", "pcsx/extra.bin")]),
+        "offline": offline,
         "stopped": ended(130, installed=2, interrupted=True),
     }
 
@@ -5284,6 +5286,41 @@ def _installed_state(dest: Path, code: int = 0, failed: list | None = None) -> i
                      "pending": 0, "failed": failed or [], "skipped": [], "left_out": [],
                      "kept": [], "interrupted": False}
     return state
+
+
+class TheResultGivesTheRemediesOfLineMode(unittest.TestCase):
+    """The screen ended a mirror's 404 and a cut connection on "Run it again
+    to retry only those", where line mode named the address, the proxy and
+    that running again changes nothing: the cause did not reach it."""
+
+    def _state(self, *failures: tuple) -> install.TuiState:
+        failed = [{"dest": dest, "reason": reason} for dest, reason, _kind, _url in failures]
+        state = _installed_state(SYSTEM_DIR, 1, failed)
+        state.failures = [{"dest": dest, "reason": reason, "kind": kind, "url": url}
+                          for dest, reason, kind, url in failures]
+        return state
+
+    def test_each_cause_gets_the_line_mode_remedy(self):
+        url = "https://example.invalid/bios/a.bin"
+        state = self._state(("a.bin", "HTTP 404", "http", url),
+                            ("b.bin", "timed out", "network", ""))
+        text = "\n".join(str(line) for line in install.tui_outcome(state)[1])
+        records = install.event_records(state.failures)
+        for advice in install.failure_remedies(records, "x"):
+            for line in advice.split("\n"):
+                self.assertIn(line.strip(), text)
+        self.assertIn(f"The server answered HTTP 404 for {url}.", text)
+        self.assertIn("HTTPS_PROXY", text)
+
+    def test_the_cause_comes_from_the_event_not_the_words(self):
+        state = self._state(("a.bin", "not fetched: no request", "offline", ""))
+        title, _lines = install.tui_outcome(state)
+        self.assertEqual(title, "Finished with files missing")
+
+    def test_a_full_drive_offers_no_retry(self):
+        state = self._state(("a.bin", install.DRIVE_FULL, "drive_full", ""))
+        lines = [str(line) for line in install.tui_outcome(state)[1]]
+        self.assertNotIn("Run it again to retry only those.", lines)
 
 
 class TheRomMResultNamesTheScan(unittest.TestCase):
