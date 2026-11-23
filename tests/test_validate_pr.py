@@ -341,6 +341,30 @@ class HashRecognition(_Fixture):
         self.assertNotIn("where the dump comes from", markdown)
         self.assertNotIn("Place it in", markdown)
 
+    def test_a_zip_member_is_known_by_the_rule_a_loose_file_is(self):
+        """Members were looked up by a narrower rule: a profile crc32
+        declared without a size, or a sha256, knew the loose file and not
+        the same bytes inside an archive."""
+        import hashlib
+        import zipfile
+        import zlib
+
+        by_crc, by_sha256 = b"CRC ONLY ROM", b"SHA256 ROM"
+        with zipfile.ZipFile(self.tmp / "set.zip", "w") as archive:
+            archive.writestr("crc.bin", by_crc)
+            archive.writestr("sha.bin", by_sha256)
+        crc = f"{zlib.crc32(by_crc):08x}"
+        profiles = {"crc32": {(crc, None): {"someemu"}},
+                    "sha256": {hashlib.sha256(by_sha256).hexdigest(): {"otheremu"}}}
+        markdown = reviewreport.file_markdown(
+            review.validate_file("set.zip", None, EMPTY_HASHES, profiles))
+        self.assertIn("`crc.bin` declared and not held", markdown)
+        self.assertIn("`sha.bin` declared and not held", markdown)
+        platform = {**EMPTY_HASHES, "sha256": {hashlib.sha256(by_sha256).hexdigest()}}
+        markdown = reviewreport.file_markdown(review.validate_file("set.zip", None, platform))
+        self.assertIn("`sha.bin` declared and not held", markdown)
+        self.assertIn("`crc.bin` not recognised", markdown)
+
     def test_a_duplicate_of_a_known_file_is_reported(self):
         """A copy of a held file passed, and was sent to the folder that
         already holds it."""

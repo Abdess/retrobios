@@ -309,6 +309,53 @@ def load_profile_hashes(
     return known
 
 
+@dataclass(frozen=True)
+class _Digests:
+    """The digests of one file or ZIP member, as the hash tables key them."""
+
+    sha1: str
+    md5: str
+    sha256: str
+    crc32: str
+    size: int
+
+
+@dataclass(frozen=True)
+class _DigestMatch:
+    """Which declaration a file's digests match: a platform's sha1, md5, other hash, a profile."""
+
+    sha1: bool
+    md5: bool
+    other: bool
+    by_profile: set[str] | None
+
+    @property
+    def any(self) -> bool:
+        return bool(self.sha1 or self.md5 or self.other or self.by_profile)
+
+
+def _known_digest(
+    digests: _Digests, platform_hashes: dict, profile_hashes: dict
+) -> _DigestMatch:
+    """The one rule that knows a file by its bytes, loose or inside a ZIP."""
+    crc32 = profile_hashes.get("crc32", {})
+    return _DigestMatch(
+        sha1=digests.sha1 in platform_hashes.get("sha1", set()),
+        md5=digests.md5 in platform_hashes.get("md5", set()),
+        other=(
+            digests.sha256 in platform_hashes.get("sha256", set())
+            or (digests.crc32, digests.size) in platform_hashes.get("crc32", set())
+        ),
+        by_profile=(
+            profile_hashes.get("sha1", {}).get(digests.sha1)
+            or profile_hashes.get("sha256", {}).get(digests.sha256)
+            or profile_hashes.get("md5", {}).get(digests.md5)
+            or crc32.get((digests.crc32, digests.size))
+            or crc32.get((digests.crc32, None))
+        ),
+    )
+
+
 def _archive_members(
     filepath: str, db: dict | None, platform_hashes: dict, profile_hashes: dict
 ) -> list[str] | None:
@@ -330,19 +377,15 @@ def _archive_members(
                     described.append(f"`{info.filename}` too large to read here")
                     continue
                 with archive.open(info) as handle:
-                    digests = stream_hashes(handle, frozenset({"sha1", "md5"}))
-                sha1_hex, md5_hex = digests["sha1"], digests["md5"]
-                crc = f"{info.CRC:08x}"
+                    digests = stream_hashes(handle, frozenset({"sha1", "md5", "sha256"}))
+                sha1_hex = digests["sha1"]
                 if sha1_hex in held:
                     state = f"already held at `{held[sha1_hex]['path']}`"
-                elif (
-                    sha1_hex in platform_hashes.get("sha1", set())
-                    or md5_hex in platform_hashes.get("md5", set())
-                    or (crc, info.file_size) in platform_hashes.get("crc32", set())
-                    or profile_hashes.get("sha1", {}).get(sha1_hex)
-                    or profile_hashes.get("md5", {}).get(md5_hex)
-                    or profile_hashes.get("crc32", {}).get((crc, info.file_size))
-                ):
+                elif _known_digest(
+                    _Digests(sha1_hex, digests["md5"], digests["sha256"],
+                             f"{info.CRC:08x}", info.file_size),
+                    platform_hashes, profile_hashes,
+                ).any:
                     state = "declared and not held"
                 else:
                     state = "not recognised"
@@ -452,25 +495,16 @@ def _check_duplicate(result: ValidationResult, db: dict, relative: str) -> None:
 
 
 def _identify(review: _Review, result: ValidationResult, sha256: str) -> _Known:
-    platform_hashes, profile_hashes = review.platform_hashes, review.profile_hashes
-    sha1_known = result.sha1 in platform_hashes.get("sha1", set())
-    md5_known = result.md5 in platform_hashes.get("md5", set())
-    other_known = (
-        sha256 in platform_hashes.get("sha256", set())
-        or (result.crc32, result.size) in platform_hashes.get("crc32", set())
+    platform_hashes = review.platform_hashes
+    match = _known_digest(
+        _Digests(result.sha1, result.md5, sha256, result.crc32, result.size),
+        platform_hashes, review.profile_hashes,
     )
     accepted_by = (
-        set() if sha1_known or md5_known or other_known
+        set() if match.sha1 or match.md5 or match.other
         else _platforms_accepting(review.filepath, result.filename, platform_hashes)
     )
-    by_profile = (
-        profile_hashes.get("sha1", {}).get(result.sha1)
-        or profile_hashes.get("sha256", {}).get(sha256)
-        or profile_hashes.get("md5", {}).get(result.md5)
-        or profile_hashes.get("crc32", {}).get((result.crc32, result.size))
-        or profile_hashes.get("crc32", {}).get((result.crc32, None))
-    )
-    return _Known(sha1_known, md5_known, other_known, accepted_by, by_profile,
+    return _Known(match.sha1, match.md5, match.other, accepted_by, match.by_profile,
                   result.filename in platform_hashes.get("names", set()))
 
 
