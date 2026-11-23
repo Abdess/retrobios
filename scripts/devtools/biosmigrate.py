@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import shutil
+from collections.abc import Callable
 from pathlib import Path
 
 from acquire.fetch import LEGACY_BRANCHES, legacy_branch_blob, legacy_branch_files
@@ -66,16 +67,18 @@ def sha1_blob(data: bytes) -> str:
     return hashlib.sha1(data).hexdigest()
 
 
-def extract_from_branches(target: Path, dry_run: bool, existing_hashes: set[str]) -> int:
-    """Extract BIOS files from all branches into the target structure."""
+def extract_from_branches(
+    target: Path, dry_run: bool, existing_hashes: set[str], say: Callable[[str], None],
+) -> int:
+    """Extract BIOS files from all branches into the target structure, each step said."""
     extracted = 0
 
     for branch in LEGACY_BRANCHES:
         files = legacy_branch_files(branch)
         if files is None:
-            print(f"  Branch {branch} not found, skipping")
+            say(f"  Branch {branch} not found, skipping")
             continue
-        print(f"\n  Branch '{branch}': {len(files)} files")
+        say(f"\n  Branch '{branch}': {len(files)} files")
 
         branch_extracted = 0
         for filepath in files:
@@ -109,20 +112,22 @@ def extract_from_branches(target: Path, dry_run: bool, existing_hashes: set[str]
             if not dry_run:
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 dest.write_bytes(content)
-            print(f"    {label}: {filepath} -> {dest.relative_to(target)}")
+            say(f"    {label}: {filepath} -> {dest.relative_to(target)}")
             existing_hashes.add(file_hash)
             branch_extracted += 1
 
-        print(f"    -> {branch_extracted} new files from {branch}")
+        say(f"    -> {branch_extracted} new files from {branch}")
         extracted += branch_extracted
 
     return extracted
 
 
 def migrate_local(
-    source: Path, target: Path, dry_run: bool,
+    source: Path, target: Path, dry_run: bool, say: Callable[[str], None],
 ) -> tuple[int, int, list[tuple[Path, str]], set[str]]:
-    """Migrate files from local flat structure to Manufacturer/Console hierarchy."""
+    """Migrate files from local flat structure to Manufacturer/Console hierarchy,
+    each step said and each failed copy returned.
+    """
     moved = 0
     skipped = 0
     errors: list[tuple[Path, str]] = []
@@ -139,7 +144,7 @@ def migrate_local(
         if not files:
             continue
 
-        print(f"  {old_dir_name}/ -> bios/{manufacturer}/{console}/")
+        say(f"  {old_dir_name}/ -> bios/{manufacturer}/{console}/")
 
         if not dry_run:
             new_path.mkdir(parents=True, exist_ok=True)
@@ -147,18 +152,17 @@ def migrate_local(
         for f in files:
             dest = new_path / f.name
             if dest.exists():
-                print(f"    SKIP (exists): {f.name}")
+                say(f"    SKIP (exists): {f.name}")
                 skipped += 1
                 continue
 
             if dry_run:
-                print(f"    COPY: {f.name}")
+                say(f"    COPY: {f.name}")
             else:
                 try:
                     shutil.copy2(str(f), str(dest))
                 except OSError as e:
                     errors.append((f, str(e)))
-                    print(f"    ERROR: {f.name}: {e}")
                     continue
 
             existing_hashes.add(file_digest(f))

@@ -56,14 +56,14 @@ def main() -> None:
 
     print("=== Phase 1: Local files (libretro branch) ===")
     moved, skipped, errors, existing_hashes = migrate_local(
-        source, target, args.dry_run
+        source, target, args.dry_run, print
     )
     action = "Would copy" if args.dry_run else "Copied"
     print(f"\n{action} {moved} files, skipped {skipped}")
 
     if args.include_branches:
         print("\n=== Phase 2: Extracting from other branches ===")
-        branch_count = extract_from_branches(target, args.dry_run, existing_hashes)
+        branch_count = extract_from_branches(target, args.dry_run, existing_hashes, print)
         print(f"\n{action} {branch_count} additional files from branches")
         moved += branch_count
 
