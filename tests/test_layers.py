@@ -58,8 +58,9 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     # site's source trees and profile_sync's report.
     "freshness": frozenset({"scraper", "exporter", "packs", "installer_build", "sitegen", "profiling"}),
     # Step 5 builds the packs in memory, and the offline export refusal asks
-    # the exporters which ones patch a cached original.
-    "orchestrate": frozenset({"packs", "exporter"}),
+    # the exporters which ones patch a cached original. The stale-pack purge
+    # deletes the release set the release code defines.
+    "orchestrate": frozenset({"packs", "exporter", "release"}),
     "games": frozenset(),
 }
 

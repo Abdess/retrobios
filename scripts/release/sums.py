@@ -8,6 +8,7 @@ from core.hashing import file_digest
 from model.releaserecord import PACK_SUFFIX
 
 SUMS = "SHA256SUMS.txt"
+SIGNATURE = SUMS + ".sig"
 
 
 def published_packs(directory: Path) -> list[Path]:
@@ -15,6 +16,20 @@ def published_packs(directory: Path) -> list[Path]:
     stem = PACK_SUFFIX.removesuffix(".zip")
     return sorted(
         path for path in Path(directory).glob(f"*{stem}*.zip") if path.is_file()
+    )
+
+
+def release_set_files(directory: Path) -> list[Path]:
+    """The files a pack build and its release leave in a directory.
+
+    Every ZIP and the legacy `.zip.NNN` slices, the checksum list and its
+    signature: a new build replaces them all, or an old one is published.
+    """
+    return sorted(
+        path for path in Path(directory).iterdir()
+        if path.is_file() and (
+            path.suffix == ".zip" or ".zip." in path.name or path.name in (SUMS, SIGNATURE)
+        )
     )
 
 

@@ -33,12 +33,11 @@ from model.registry import list_release_pack_platforms
 from core.cli import require_directory
 from model.releaserecord import RECORD, load_record
 from release.check import (
-    SIGNATURE,
-    SUMS,
     compare_release,
     fetch_assets,
     fetch_sums,
 )
+from release.sums import SIGNATURE, SUMS
 from core.hashing import parse_sha256sums
 
 

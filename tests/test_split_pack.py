@@ -338,5 +338,24 @@ class PartsAreExplainedWhereTheyAreDownloaded(unittest.TestCase):
                         self.assertTrue("cmd /c copy /b" in line, line.strip())
 
 
+class PurgeTakesTheWholeReleaseSet(unittest.TestCase):
+    """The purge kept the last release's SHA256SUMS.txt.sig beside new packs
+    and a new checksum list: published unsigned, every verify failed."""
+
+    def test_the_signature_goes_with_the_packs(self) -> None:
+        from orchestrate.build import purge_stale_packs
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dist = Path(tmp)
+            names = ("A_BIOS_Pack.zip", "A_BIOS_Pack.zip.001", "SHA256SUMS.txt",
+                     "SHA256SUMS.txt.sig", "release.json")
+            for name in names:
+                (dist / name).write_bytes(b"x")
+            with contextlib.redirect_stdout(io.StringIO()):
+                purge_stale_packs(str(dist))
+            left = sorted(p.name for p in dist.iterdir() if p.name != ".lock")
+        self.assertEqual(left, ["release.json"])
+
+
 if __name__ == "__main__":
     unittest.main()

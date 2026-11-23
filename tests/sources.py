@@ -55,7 +55,7 @@ COMMANDS = {
     ),
     "release_record.py": ("model/releaserecord.py", "release/record.py"),
     "release_notes.py": ("release/notes.py",),
-    "check_release.py": ("release/check.py",),
+    "check_release.py": ("release/check.py", "release/sums.py"),
     "check_release_assets.py": ("release/assets.py",),
     "sync_release_assets.py": ("release/sync.py",),
     "restore_large_files.py": ("release/restore.py",),

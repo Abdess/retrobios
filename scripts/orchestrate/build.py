@@ -17,6 +17,7 @@ from orchestrate import runner
 from orchestrate.labels import STEP_LABELS, skip_notice
 from orchestrate.results import SKIPPED
 from packs.datadirs import hold_data_dirs
+from release.sums import release_set_files
 
 
 def scratch_file(prefix: str) -> str:
@@ -98,14 +99,7 @@ def purge_stale_packs(output_dir: str) -> None:
         return
     try:
         with artifact_lock(str(out_dir)):
-            stale = [
-                p for p in out_dir.iterdir()
-                if p.is_file() and (
-                    p.suffix == ".zip"
-                    or ".zip." in p.name
-                    or p.name == "SHA256SUMS.txt"
-                )
-            ]
+            stale = release_set_files(out_dir)
             for p in stale:
                 p.unlink()
             if stale:
