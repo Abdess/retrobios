@@ -95,10 +95,15 @@ def refuse_flag_combinations(args: argparse.Namespace) -> None:
             ("--triage", args.triage),
         ) if on
     ]
+    if len(machine) > 1 and set(machine) != {"--json", "--triage"}:
+        # One output per run: the first one emit_reports reached printed and
+        # the others were dropped. --json --triage is the ranking as JSON.
+        print(f"{' and '.join(machine)} are separate outputs, pass one", file=sys.stderr)
+        raise SystemExit(1)
     # The version check and detection live on the report, so the outputs
     # built from the report (text, --json, --markdown) carry them. A URL
-    # list and a ranking do not.
-    lists_only = args.fetch_plan or args.triage
+    # list and a ranking table do not.
+    lists_only = args.fetch_plan or (args.triage and not args.as_json)
     extras = [
         flag for flag, on in (
             ("--check-version", args.check_version and lists_only),

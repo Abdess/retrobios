@@ -25,7 +25,9 @@ from profiling.reports import (
 )
 from profiling.resolver import build_report
 from profiling.sourcepaths import record_write
-from profiling.triage import PROGRESS_SECONDS, Progress, print_interrupted, print_triage
+from profiling.triage import (
+    PROGRESS_SECONDS, Progress, print_interrupted, print_triage, score_reports, scored_to_dict,
+)
 from profiling.version_basis import VersionTag, version_tags
 from profiling.versions import (
     VersionReport,
@@ -488,6 +490,12 @@ def emit_reports(
 ) -> bool | None:
     """Write the reports in the form the flags ask for. False when the
     triage was cut short."""
+    if args.as_json and args.triage:
+        # The ranking travels in the report: each row carries its score,
+        # worst first, for a reader that cannot parse the table.
+        scoring = score_reports(args, selected, shown)
+        print(json.dumps([scored_to_dict(item) for item in scoring.ranked], indent=2))
+        return scoring.complete
     if args.as_json:
         print(json.dumps([report_to_dict(r) for r in shown], indent=2))
         return None

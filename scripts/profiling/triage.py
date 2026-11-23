@@ -6,9 +6,10 @@ import argparse
 import sys
 import time
 from collections.abc import Sequence
+from dataclasses import dataclass, field
 
 from core import upstream
-from profiling.reports import ProfileReport, triage_state
+from profiling.reports import ProfileReport, report_to_dict, triage_state
 from profiling.version_basis import version_repo, version_tags
 from profiling.versions import VersionReport, check_version
 
@@ -70,21 +71,40 @@ def print_interrupted(done: int, total: int, what: str) -> None:
     print(f"interrupted after {done} of {total} profiles: {what}", file=sys.stderr, flush=True)
 
 
-def print_triage(
+@dataclass(frozen=True)
+class ScoredReport:
+    """One profile's drift score, and why its commit history went unread."""
+
+    report: ProfileReport
+    score: int
+    refused: str = ""
+
+
+@dataclass
+class Scoring:
+    """The scores a pass over the forges produced, worst first."""
+
+    ranked: list[ScoredReport] = field(default_factory=list)
+    # False when Ctrl-C cut the pass short: the ranking covers those scored.
+    complete: bool = True
+
+
+def score_reports(
     args: argparse.Namespace, selected: dict, reports: list[ProfileReport]
-) -> bool:
-    """Profiles ranked by drift, worst first. False when Ctrl-C cut the
-    scoring short: the ranking then covers the profiles scored."""
-    ranked: list[tuple[int, ProfileReport, str]] = []
+) -> Scoring:
+    """Score every report by drift, asking the forges for versions and commits."""
+    scored: list[ScoredReport] = []
     sampled = 0
     progress = Progress(len(reports), "scored", args.offline or len(reports) < 2)
     complete = True
     try:
         for done, report in enumerate(reports):
             progress.step(done, report.name)
-            sampled += _score(args, selected, report, ranked)
+            entry, was_sampled = _score(args, selected, report)
+            scored.append(entry)
+            sampled += was_sampled
     except KeyboardInterrupt:
-        print_interrupted(len(ranked), len(reports), "the ranking covers those scored")
+        print_interrupted(len(scored), len(reports), "the ranking covers those scored")
         complete = False
     if sampled:
         # One line for the run: a notice per profile buried the ranking
@@ -94,23 +114,46 @@ def print_triage(
             f"{sampled} profiles citing more",
             file=sys.stderr,
         )
+    return Scoring(sorted(scored, key=lambda item: -item.score), complete)
+
+
+def scored_to_dict(item: ScoredReport) -> dict:
+    """A report's JSON form with its drift score and the history it lacked."""
+    payload = report_to_dict(item.report)
+    payload["drift_score"] = item.score
+    payload["drift_refused"] = item.refused or None
+    return payload
+
+
+def render_triage(scoring: Scoring) -> None:
+    """The ranking as a table, worst first."""
     print(f"{'score':>5s}  {'profile':30s}  state (worst first)")
     pending = 0
-    for score, report, refused in sorted(ranked, key=lambda item: -item[0]):
+    for item in scoring.ranked:
+        report = item.report
         state = triage_state(report)
-        if refused:
-            state += f", {refused}"
+        if item.refused:
+            state += f", {item.refused}"
         pending += bool(report.needs_review() or report.uncheckable())
-        print(f"{score:5d}  {report.name:30s}  {state}")
-    print(f"{len(ranked)} profiles, {pending} with something to review")
-    return complete
+        print(f"{item.score:5d}  {report.name:30s}  {state}")
+    print(f"{len(scoring.ranked)} profiles, {pending} with something to review")
+
+
+def print_triage(
+    args: argparse.Namespace, selected: dict, reports: list[ProfileReport]
+) -> bool:
+    """Profiles ranked by drift, worst first. False when Ctrl-C cut the
+    scoring short: the ranking then covers the profiles scored."""
+    scoring = score_reports(args, selected, reports)
+    render_triage(scoring)
+    return scoring.complete
 
 
 def _score(
-    args: argparse.Namespace, selected: dict, report: ProfileReport, ranked: list
-) -> bool:
-    """Append one profile's drift score to ``ranked``. True when its commit
-    count was read on a sample of the paths it cites."""
+    args: argparse.Namespace, selected: dict, report: ProfileReport
+) -> tuple[ScoredReport, bool]:
+    """One profile's drift score, and whether its commit count was read on a
+    sample of the paths it cites."""
     profile = selected[report.name]
     versions: list[VersionReport] = []
     commits = 0
@@ -136,5 +179,4 @@ def _score(
             refused = "commit history unreachable"
             print(f"{report.name}: {exc}", file=sys.stderr)
         sampled = len(sources) > TRIAGE_PATH_SAMPLE and not refused
-    ranked.append((drift_score(report, versions, commits), report, refused))
-    return sampled
+    return ScoredReport(report, drift_score(report, versions, commits), refused), sampled

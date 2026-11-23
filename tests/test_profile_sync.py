@@ -5556,6 +5556,28 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("--check-version", err)
 
+    def test_json_carries_the_ranking(self):
+        """--json --triage printed the plain report: no score, no order."""
+        code, out, err = self._main("--json", "--triage")
+        self.assertEqual(code, 0, err)
+        rows = json.loads(out)
+        self.assertEqual([r["name"] for r in rows], ["drift", "clean"])
+        self.assertEqual([r["drift_score"] for r in rows], [30, 0])
+        self.assertIsNone(rows[0]["drift_refused"])
+
+    def test_the_ranking_as_json_carries_the_version_check(self):
+        code, out, err = self._main("--json", "--triage", "--check-version")
+        self.assertEqual(code, 0, err)
+        self.assertTrue(all("version" in row for row in json.loads(out)))
+
+    def test_two_outputs_are_refused(self):
+        for pair in (("--json", "--markdown"), ("--markdown", "--triage"),
+                     ("--json", "--fetch-plan"), ("--fetch-plan", "--triage")):
+            code, out, err = self._main(*pair)
+            self.assertEqual(code, 1, pair)
+            self.assertIn("separate outputs", err, pair)
+            self.assertEqual(out, "", pair)
+
     def test_a_profile_the_forge_failed_is_listed_and_fails_the_run(self):
         """Dropped by --changed-only, a 502 read as nothing to review."""
         from unittest import mock
