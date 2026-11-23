@@ -507,6 +507,14 @@ class TheOfflineSwitchHoldsAtTheGateway(unittest.TestCase):
                 upstream.download("https://host/x", tests.scratch_dir(self) / "x")
         urlopen.assert_not_called()
 
+    def test_a_file_address_is_read_offline(self):
+        """A file: address is this machine's: refusing it made every test that
+        serves a fixture through file:// fail once the guard moved into
+        open_retrying."""
+        held = tests.scratch_dir(self) / "held.txt"
+        held.write_bytes(b"local")
+        self.assertEqual(upstream.fetch_body(held.as_uri()), b"local")
+
     def test_the_cache_answers_as_an_offline_run(self):
         cache = str(tests.scratch_dir(self))
         with mock.patch.object(upstream, "http_json", side_effect=_no_network), \

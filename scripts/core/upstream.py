@@ -385,10 +385,11 @@ def open_retrying(
     again in this process. What ends the attempts is raised as urllib gave
     it, except a host that does not resolve (GoneError) and a host muted
     earlier (RateLimitError). A run that fetches nothing (run_is_offline)
-    raises OfflineError before anything goes out.
+    raises OfflineError before anything goes out. A file: address is read
+    from this machine and is never refused.
     """
     url = request.full_url
-    if run_is_offline():
+    if run_is_offline() and request.type != "file":
         raise OfflineError(f"{url}: {OFFLINE_ENV} is set, nothing is fetched")
     host = urllib.parse.urlsplit(url).hostname or ""
     if host in _exhausted_hosts:
