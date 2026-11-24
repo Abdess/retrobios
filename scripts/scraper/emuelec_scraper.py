@@ -36,14 +36,14 @@ from .batocera_scraper import (
 from .batocera_scraper import (
     CheckBiosScraper,
 )
-from .emuelec_launchers import extract_launchers
+from .launchers.emuelec import extract_launchers
 from .es_emulators import (
     attach_system_cores,
     es_cores,
     json_systems,
     system_cores,
 )
-from scraper.shell_launchers import RepoTree
+from scraper.launchers.shell import RepoTree
 from .emuelec_systems import (
     BUILDS_OF,
     ES_SYSTEMS_TEMPLATE,

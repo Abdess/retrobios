@@ -18,7 +18,7 @@ import yaml
 
 from model.launcherrecords import emulator_names, record_emulators
 from scraper import recalbox_scraper
-from scraper.recalbox_configgen import (
+from scraper.launchers.recalbox_configgen import (
     ALL_CORES,
     AMIBERRY_CONFIG,
     AMIBERRY_GLOBAL,
@@ -36,7 +36,7 @@ from scraper.recalbox_configgen import (
     XEMU,
     XROAR,
 )
-from scraper.recalbox_launchers import (
+from scraper.launchers.recalbox import (
     SOURCE_FILES,
     Launcher,
     LauncherShapeError,
@@ -46,8 +46,8 @@ from scraper.recalbox_launchers import (
     extract_launchers,
     system_directories,
 )
-from scraper.recalbox_emulators import amiberry, dolphin, mupen64plus, pcsx2, xemu, xroar
-from scraper.recalbox_cascades import gsplus, hatari, hatari_libretro
+from scraper.launchers.recalbox_emulators import amiberry, dolphin, mupen64plus, pcsx2, xemu, xroar
+from scraper.launchers.recalbox_cascades import gsplus, hatari, hatari_libretro
 
 from tests.launchersrecalboxsupport import configgen, files, ref
 

@@ -20,7 +20,7 @@ Verification (knulli-systems at the release tag):
 
 es_systems.yml and configgen-defaults.yml have Batocera's shape, so the cores
 are read with Batocera's code. The launcher layer comes from KNULLI's own
-configgen package and board scripts at the same tag (knulli_launchers):
+configgen package and board scripts at the same tag (launchers/knulli.py):
 Batocera's extractors where a generator is still Batocera's code, KNULLI's
 where it is older or its own.
 """
@@ -48,9 +48,9 @@ from .batocera_scraper import (
 from .es_emulators import attach_system_cores
 from .es_systems import es_systems_by_system, es_systems_libretro_systems
 from .targets.knulli_targets_scraper import Scraper as BoardTargets
-from .batocera_configgen import configs_root
-from .knulli_launchers import BATOCERA_SUBMODULE, extract_launchers
-from .knulli_launchers import configgen as knulli_configgen
+from .launchers.batocera_configgen import configs_root
+from .launchers.knulli import BATOCERA_SUBMODULE, extract_launchers
+from .launchers.knulli import configgen as knulli_configgen
 
 PLATFORM_NAME = "knulli"
 

@@ -12,7 +12,7 @@ import unittest
 from pathlib import Path
 
 from model.region import REGIONS
-from scripts.scraper import game_dat_importer as importer
+from scripts.scraper.dats import game_dat_importer as importer
 
 ROOT = Path(__file__).resolve().parent.parent
 FIXTURES = ROOT / "tests" / "fixtures" / "game_dats"
@@ -25,7 +25,7 @@ except ImportError:  # pragma: no cover - CI installs it
 
 def run_import(source: str, output: Path, *extra: str) -> subprocess.CompletedProcess:
     return subprocess.run(
-        [sys.executable, "-m", "scripts.scraper.game_dat_importer", "--source", source,
+        [sys.executable, "-m", "scripts.scraper.dats.game_dat_importer", "--source", source,
          "--pack", str(FIXTURES), "--output-dir", str(output), *extra],
         cwd=ROOT, capture_output=True, text=True, check=False,
     )
@@ -120,7 +120,7 @@ class FixtureImport(unittest.TestCase):
 
     def test_offline_without_cache_names_the_remedy(self) -> None:
         result = subprocess.run(
-            [sys.executable, "-m", "scripts.scraper.game_dat_importer", "--source", "redump",
+            [sys.executable, "-m", "scripts.scraper.dats.game_dat_importer", "--source", "redump",
              "--cache-dir", str(self.out / "empty"), "--output-dir", str(self.out)],
             cwd=ROOT, capture_output=True, text=True, check=False,
         )
@@ -132,7 +132,7 @@ class OneLogiqxReader(unittest.TestCase):
     """The catalog importer read <game> only and kept nameless ROMs."""
 
     def test_machine_entries_and_serials(self) -> None:
-        from scripts.scraper.logiqx_parser import parse_logiqx_games
+        from scripts.scraper.dats.logiqx_parser import parse_logiqx_games
 
         name, version, games = parse_logiqx_games(
             b'<datafile><header><name>D</name><version>1</version></header>'

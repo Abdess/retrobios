@@ -15,17 +15,14 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scraper import retrobat_launchers as rl
-from scraper import retrobat_generators
-from scraper.retrobat_computers import hatari, openmsx, amiberry
-from scraper.retrobat_config_files import (
-    ares,
-    mesen,
-)
-from scraper.retrobat_generators import GENERATORS, GUARDED_WRITES, guarded_writes_in
-from scraper.retrobat_playstation import duckstation, psx_cascades
-from scraper.retrobat_render import _option_path_in
-from scraper.csharp_source import LauncherPatternMissing, Source, render_concat
+from scraper.launchers import retrobat as rl
+from scraper.launchers import retrobat_generators
+from scraper.launchers.retrobat_computers import hatari, openmsx, amiberry
+from scraper.launchers.retrobat_config_files import ares, mesen
+from scraper.launchers.retrobat_generators import GENERATORS, GUARDED_WRITES, guarded_writes_in
+from scraper.launchers.retrobat_playstation import duckstation, psx_cascades
+from scraper.launchers.retrobat_render import _option_path_in
+from scraper.launchers.csharp_source import LauncherPatternMissing, Source, render_concat
 from model.sourcerevision import required_revision
 from tests.launcherssupport import _sources
 

@@ -134,7 +134,7 @@ class Planning(unittest.TestCase):
                 "batocera": "-m scripts.scraper.targets.batocera_targets_scraper"
                 " -o platforms/targets/batocera.yml",
                 "dolphin-sys": "scripts/refresh_data_dirs.py --key dolphin-sys --force",
-                "fbneo recipes": "-m scripts.scraper.romset_dat_importer"
+                "fbneo recipes": "-m scripts.scraper.arcade.romset_dat_importer"
                 " --source fbneo --fetch",
             },
         )
@@ -146,9 +146,9 @@ class Planning(unittest.TestCase):
         self.assertEqual(
             {j.subject: " ".join(j.command[1:]) for j in jobs},
             {
-                "no-intro games": "-m scripts.scraper.game_dat_importer --source no-intro"
+                "no-intro games": "-m scripts.scraper.dats.game_dat_importer --source no-intro"
                 " --fetch --refresh --floor",
-                "redump games": "-m scripts.scraper.game_dat_importer --source redump"
+                "redump games": "-m scripts.scraper.dats.game_dat_importer --source redump"
                 " --fetch --refresh --floor",
             },
         )

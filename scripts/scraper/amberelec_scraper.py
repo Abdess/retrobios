@@ -24,7 +24,7 @@ Verification (batocera-systems at that commit):
   `--strictfilter`, which the script's argument switch (lines 665-687) does
   not handle: that call prints nothing and exits 0.
 
-The launcher layer is read at the same commit (amberelec_launchers): runemu.py,
+The launcher layer is read at the same commit (launchers/amberelec.py): runemu.py,
 the scripts its standalone table runs and the configs their packages install.
 """
 
@@ -33,7 +33,7 @@ from __future__ import annotations
 import re
 
 from model.targets import not_cores
-from .amberelec_launchers import extract_launchers
+from .launchers.amberelec import extract_launchers
 from .base_scraper import fetch_text, github_json
 from .batocera_scraper import (
     SYSTEM_SLUG_MAP as BATOCERA_SLUGS,

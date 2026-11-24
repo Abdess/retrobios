@@ -29,8 +29,8 @@ class LinesOfOffsets(unittest.TestCase):
 
 class ParsersReportLines(unittest.TestCase):
     def test_mame_and_fbneo_sets_carry_their_line(self):
-        from scripts.scraper.fbneo_parser import find_bios_sets
-        from scripts.scraper.mame_parser import find_bios_root_sets
+        from scripts.scraper.arcade.fbneo_parser import find_bios_sets
+        from scripts.scraper.arcade.mame_parser import find_bios_root_sets
 
         mame = "\n\nGAME( 1990, neogeo, 0, ng, ng, ng_state, init, ROT0, \"SNK\", \"Neo\", MACHINE_IS_BIOS_ROOT )\n"
         self.assertEqual(find_bios_root_sets(mame, "neogeo.cpp")["neogeo"]["source_line"], 3)

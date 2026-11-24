@@ -8,8 +8,8 @@ from dataclasses import dataclass
 from core import upstream
 from model.sources import source_yaml_file
 from profiling.citations import collect_citations
-from scraper.clex import blank_comments
-from scraper.mame_parser import MACHINE_MACROS
+from scraper.arcade.clex import blank_comments
+from scraper.arcade.mame_parser import MACHINE_MACROS
 
 # An optional role word names the repository the lines are in.
 DRIVER_REF = re.compile(r"^(?:(source|upstream) )?(src/[\w./+-]+):(\d+)$")

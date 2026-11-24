@@ -17,11 +17,11 @@ from pathlib import Path
 import yaml
 
 from model.launcherrecords import record_emulators
-from scraper import knulli_launchers as kl
-from scraper.configgen_sites import bios_sites, GenericSites
-from scraper.batocera_searches import hatari
-from scraper.batocera_config_writes import melonds
-from scraper.configgen_launchers import LauncherShapeError
+from scraper.launchers import knulli as kl
+from scraper.launchers.configgen_sites import bios_sites, GenericSites
+from scraper.launchers.batocera_searches import hatari
+from scraper.launchers.batocera_config_writes import melonds
+from scraper.launchers.configgen import LauncherShapeError
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

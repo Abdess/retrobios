@@ -18,16 +18,22 @@ from pathlib import Path
 import yaml
 
 from model.launcherrecords import record_emulators
-from scraper.batocera_configgen import CONFIGGEN, GENERATORS, IMPORTER, PATHS_MODULE, Configgen
-from scraper.batocera_launchers import (
+from scraper.launchers.batocera_configgen import (
+    CONFIGGEN,
+    GENERATORS,
+    IMPORTER,
+    PATHS_MODULE,
+    Configgen,
+)
+from scraper.launchers.batocera import (
     Launcher,
     LauncherShapeError,
     config_directories,
     extract_launchers,
 )
-from scraper.batocera_searches import duckstation, hatari
-from scraper.batocera_config_writes import lexaloffle
-from scraper.retropie_scripts import Launcher as PackageLauncher
+from scraper.launchers.batocera_searches import duckstation, hatari
+from scraper.launchers.batocera_config_writes import lexaloffle
+from scraper.launchers.retropie_scripts import Launcher as PackageLauncher
 from tests.launcherssupport import placed
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -532,7 +538,7 @@ class MameSearchPaths(unittest.TestCase):
     """mameGenerator.py:129-142 at batocera-43.1: `-rompath` and `-samplepath`."""
 
     def test_the_command_line_search_paths_are_recorded(self):
-        from scraper.batocera_launchers import search_paths
+        from scraper.launchers.batocera import search_paths
 
         cg = configgen({
             MAME: placed({1: MAME_HEAD, 129: MAME_COMMAND, 142: MAME_SAMPLES, 378: MAME_BOOT}),
@@ -620,7 +626,7 @@ class PlatformRecords(unittest.TestCase):
 
     def test_every_reference_is_in_configgen(self):
         # Or in a patch Batocera applies to an emulator's own path code.
-        from scraper.batocera_launchers import PATH_PATCHES
+        from scraper.launchers.batocera import PATH_PATCHES
 
         for record in self.config["launchers"]:
             self.assertTrue(

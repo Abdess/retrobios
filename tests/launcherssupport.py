@@ -6,7 +6,7 @@ import tests
 
 import textwrap
 
-from scraper.csharp_source import Source
+from scraper.launchers.csharp_source import Source
 
 
 def placed(blocks: dict[int, str]) -> str:

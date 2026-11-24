@@ -8,7 +8,7 @@ import os
 import tempfile
 import unittest
 
-from scripts.scraper.mame_parser import (
+from scripts.scraper.arcade.mame_parser import (
     find_bios_root_sets,
     parse_mame_source_tree,
     parse_rom_block,
@@ -407,7 +407,7 @@ class TestCSourceLexer(unittest.TestCase):
     """One reader of C comments and macro calls for every driver scraper."""
 
     def test_a_char_literal_quote_opens_no_string(self) -> None:
-        from scripts.scraper.clex import blank_comments
+        from scripts.scraper.arcade.clex import blank_comments
 
         text = "c = '\"';  /* ROM_START( fake ) */\nx"
         self.assertNotIn("ROM_START", blank_comments(text))
@@ -415,7 +415,7 @@ class TestCSourceLexer(unittest.TestCase):
         self.assertEqual(blank_comments("a/*x\ny*/b", keep_lines=False), "a b")
 
     def test_an_escaped_quote_does_not_end_the_call(self) -> None:
-        from scripts.scraper.clex import call_span
+        from scripts.scraper.arcade.clex import call_span
 
         text = 'GAME(1990, foo, "a\\"b)", 0) tail'
         self.assertEqual(call_span(text, 5), (["1990", "foo", '"a\\"b)"', "0"], 27))

@@ -33,13 +33,15 @@ Before starting, gather the following from the upstream project:
 
 ## Step 1: Create the scraper
 
-Scrapers live in `scripts/scraper/` and are auto-discovered by the plugin system.
-Any file matching `*_scraper.py` in that directory is loaded at import time via
-`pkgutil.iter_modules`. No registration step is needed beyond placing the file.
+A platform scraper is `scripts/scraper/<name>_scraper.py`. Nothing scans the
+directory: the registry's `scraper: <name>` field (Step 2) names the module, and
+`platform_scraper` in `scripts/freshness/scrapers.py` turns it into the
+`python -m scripts.scraper.<name>_scraper` command that `check_freshness.py`
+and `refresh_stale.py` run.
 
 ### Module contract
 
-The module must export two names:
+The module defines two names:
 
 ```python
 PLATFORM_NAME = "myplatform"  # matches the key in _registry.yml
@@ -464,12 +466,12 @@ launchers:
 | `choices_from` | The feature or option file listing the values the option takes (es_features, a core `.opt`), never the record's evidence |
 | `source_ref` | `path:lines` in the repository and at the revision `source` pins, which the site links |
 
-Batocera's generators are read with `ast`: `scripts/scraper/batocera_configgen.py`
-opens the configgen tree and `scripts/scraper/configgen_sites.py` reads each BIOS
+Batocera's generators are read with `ast`: `scripts/scraper/launchers/batocera_configgen.py`
+opens the configgen tree and `scripts/scraper/launchers/configgen_sites.py` reads each BIOS
 path a generator names, both shared with KNULLI. RetroBat's C# generators are read as
-text through `scripts/scraper/csharp_source.py`.
+text through `scripts/scraper/launchers/csharp_source.py`.
 ROCKNIX and EmuDeck launch from shell scripts and configs shipped with each
-package, so `scripts/scraper/shell_launchers.py` reads assignments, `for`
+package, so `scripts/scraper/launchers/shell.py` reads assignments, `for`
 loops, `ln -s` commands and `key = value` lines. A ROCKNIX package can ship
 one config per device: the configs are grouped by the value read, and
 `device` appears only when there is more than one group. melonDS writes its
@@ -580,6 +582,14 @@ python scripts/verify.py --platform myplatform
 python scripts/verify.py --platform myplatform --verbose
 ```
 
+A new platform or system needs its sharing cards, the PNG images a link to
+its page shows. Draw them and commit the result:
+
+```bash
+python scripts/make_og_cards.py --only platforms   # a new platform
+python scripts/make_og_cards.py --only systems     # a new system
+```
+
 ## Step 4: Add verification logic
 
 Check how the platform verifies BIOS files by reading its source code.
@@ -606,8 +616,8 @@ Read the platform's source code to understand its exact verification behavior be
 An exporter writes the platform's own BIOS file back, updated with what the
 emulator code shows. Every registered platform has one, unless its registry
 entry says `native_list: none`: `tests/test_exporters_contract.py` fails otherwise.
-Exporters live in `scripts/exporter/` and are found the same way as scrapers
-(`*_exporter.py`).
+Exporters live in `scripts/exporter/`, where `discover_exporters` finds each
+one by its file name (`*_exporter.py`).
 
 ### Module contract
 
@@ -692,8 +702,8 @@ something that no longer runs.
 
 Target scrapers determine which emulator cores are available on each hardware
 target (e.g. which RetroArch cores exist for Switch, RPi4, or x86_64).
-They live in `scripts/scraper/targets/` and are auto-discovered by filename
-(`*_targets_scraper.py`).
+They live in `scripts/scraper/targets/`, where `discover_target_scrapers()`
+finds each one by its file name (`*_targets_scraper.py`).
 
 ### Module contract
 
@@ -833,6 +843,7 @@ Verification is not optional. A platform that passes `pipeline.py` today may bre
 - [ ] Entry added to `platforms/_registry.yml`
 - [ ] Guide added to `platforms/_guides.yml`
 - [ ] Platform YAML generated and verified
+- [ ] Sharing cards drawn (`make_og_cards.py --only platforms`, `--only systems`)
 - [ ] `python scripts/pipeline.py --offline` passes
 - [ ] Exporter in `scripts/exporter/<name>_exporter.py`, unless the registry says `native_list: none`
 - [ ] Target scraper in `scripts/scraper/targets/<name>_targets_scraper.py` (if applicable)

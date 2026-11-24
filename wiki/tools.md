@@ -400,7 +400,7 @@ and a core of the system opens sets its profile does not list. BizHawk and
 MiSTer resolve no core, so nothing is examined and nothing is listed.
 
 A destination the platform's own list declares twice, for two different
-files, is written under `doubled` (`slots.find_collisions` finds it). One
+files, is written under `doubled` (`resolve.collisions.find_collisions` finds it). One
 path holds one file, so one of the two checks fails on every install.
 When both are archives and one holds every member of the other, that one
 ships: a MAME core reads members, never the container, so the larger set
@@ -793,8 +793,8 @@ committed.
 | `native/<name>` | `generate_truth.py --platform <name>`, `export_native.py --platform <name> --refresh-cache`, then the export itself |
 | `targets/<name>` | the target scraper |
 | `data/<key>` | `refresh_data_dirs.py --key <key> --force` |
-| `catalogs/mame recipes`, `catalogs/fbneo recipes` | `scraper/romset_dat_importer.py --source <source> --fetch` |
-| `catalogs/no-intro games`, `catalogs/redump games` | `scraper/game_dat_importer.py --source <source> --fetch --refresh --floor` |
+| `catalogs/mame recipes`, `catalogs/fbneo recipes` | `scraper/arcade/romset_dat_importer.py --source <source> --fetch` |
+| `catalogs/no-intro games`, `catalogs/redump games` | `scraper/dats/game_dat_importer.py --source <source> --fetch --refresh --floor` |
 | `ci/install.py pin` | `pin_installer.py` |
 
 Rows that need a decision are listed and never run: a buildbot core with no
@@ -1414,7 +1414,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `validate_site.py` | Validate rendered metadata, heading order, image alternatives, JSON-LD, local resources, links and fragments, and the page size and search index budgets |
 | `indexnow.py` | List the pages a deploy changes, read against the `digests.json` the live site serves, as the IndexNow request the deploy posts once the new site is live. `--dist` names the built site, `--output` appends the request to a step output |
 | `romset_recipes.py` | Identify which emulator version an arcade archive matches, rebuild a pinned archive from ROMs already held, record a recipe for every archive the collection holds and build any of them from the members it holds (see [Archive recipes](#archive-recipes)) |
-| `scraper/romset_dat_importer.py` | Fetch and import per-set recipes from MAME `-listxml` or FBNeo DATs into `recipes/`. `--fetch` alone takes the newest MAME release, and FBNeo DATs are refreshed by git blob sha. `--fetch <revision>` reads FBNeo at that tag, branch or commit |
+| `scraper/arcade/romset_dat_importer.py` | Fetch and import per-set recipes from MAME `-listxml` or FBNeo DATs into `recipes/`. `--fetch` alone takes the newest MAME release, and FBNeo DATs are refreshed by git blob sha. `--fetch <revision>` reads FBNeo at that tag, branch or commit |
 | `core/torrentzip.py` | Build TorrentZip archives for MAME/FBNeo ROM sets (archive bytes depend only on contents, with stock zlib), streaming one member at a time |
 | `core/cryptoverify.py` | 3DS RSA signature and AES crypto verification |
 | `core/sect233r1.py` | Pure Python ECDSA verification on sect233r1 curve (3DS OTP cert) |
@@ -1427,6 +1427,19 @@ before a release (wiki/release-process.md). Its lines stay in
 | `bios_integrity.py` | Rehash every file the database names, restore a confirmed bit flip of a committed file from HEAD (see above) |
 | `sync_release_assets.py` | Upload the `large-files` assets the release serves out of date, after a double SHA-1 check (see above) |
 | `migrate.py` | Migrate flat bios structure to Manufacturer/Console/ hierarchy |
+| `build_port.py`, `build_pypi.py`, `generate_launcher_index.py` | The handheld launcher archives, the PyPI package and `install/launchers/index.json`: see [Changing the installer](installer.md#changing-the-installer) and [Cutting a release](release-process.md#cutting-a-release) |
+
+### Site assets
+
+Run by hand when what they draw changes. The site build reads what they
+committed and never runs them.
+
+| Script | Writes |
+|--------|--------|
+| `make_og_cards.py` | The sharing cards (Open Graph PNG): one per section, per platform and per manufacturer's systems page (`--only platforms`, `--only systems`). Needs Playwright |
+| `make_site_icons.py` | The site's logo and favicons, and the repository's logos, banners and social preview, all from the one chip mark. Needs Playwright for the PNG files |
+| `fetch_site_images.py` | Local copies of the platform logos and system icons, normalised to one size, with a `sources.json` naming where each came from (`--only logos`). Needs Pillow |
+| `site_diagrams.py` | Every site diagram as SVG under `--output-dir` (default `tmp/diagrams`), to look at one outside a page. The site build draws them itself |
 
 Further options, by script:
 
@@ -1460,10 +1473,10 @@ Further options, by script:
 | `validate_pr.py` | `--changed` takes the BIOS files the branch changes, a folder named checks every file under it, `--place` copies each recognised file from outside `bios/` to its folder and declared name (or its `.variants/` slot), `--markdown`, `--json` |
 | `validate_site.py` | `--site-dir` (rendered site, default `website/dist`), `--base` (path the site is served under), `--max-errors N` |
 | `scraper/coreinfo_scraper.py` | `--compare-db database.json` lists the `.info` firmware the database lacks |
-| `scraper/mame_hash_scraper.py` | `--release mameNNNN --profile FILE --source-commit SHA --core NAME --built-by PLATFORM` writes the profile of a MAME build a platform compiles. `--devices --listxml FILE` documents in `mame.yml` every device set with dumped ROMs that the release's `-listxml` names (`isdevice="yes"`), with `--dry-run` to preview |
-| `scraper/romset_dat_importer.py` | `--cache-dir` (downloaded listxml and DATs) |
-| `scraper/game_dat_importer.py` | `--source no-intro\|redump` (repeatable), `--pack FILE` imports a local ZIP, directory or DAT, `--refresh` asks the servers again, `--cache-dir`, `--output-dir`, `--dry-run` |
-| `scraper/arcade_parent_importer.py` | `--profile NAME` (one core version), `--emulators-dir`, `--db` (BIOS roots checked against it by archive name), `--output-dir`, `--cache-dir`, `--offline`, `--dry-run` |
+| `scraper/arcade/mame_hash_scraper.py` | `--release mameNNNN --profile FILE --source-commit SHA --core NAME --built-by PLATFORM` writes the profile of a MAME build a platform compiles. `--devices --listxml FILE` documents in `mame.yml` every device set with dumped ROMs that the release's `-listxml` names (`isdevice="yes"`), with `--dry-run` to preview |
+| `scraper/arcade/romset_dat_importer.py` | `--cache-dir` (downloaded listxml and DATs) |
+| `scraper/dats/game_dat_importer.py` | `--source no-intro\|redump` (repeatable), `--pack FILE` imports a local ZIP, directory or DAT, `--refresh` asks the servers again, `--cache-dir`, `--output-dir`, `--dry-run` |
+| `scraper/arcade/arcade_parent_importer.py` | `--profile NAME` (one core version), `--emulators-dir`, `--db` (BIOS roots checked against it by archive name), `--output-dir`, `--cache-dir`, `--offline`, `--dry-run` |
 | `scraper/romfolders` | `--sources DIR` (default `platforms/romfolders/_sources`), `--output-dir`, `--dry-run` |
 | `game_rules.py` | `--regions`, `--extras`, `--headers` (files checked against the profiles and the header readers), `--emulators-dir`, `--json` |
 | `generate_games_index.py` | `--output-dir` (default `install/games`), `--check`, `--quiet` |
@@ -1528,10 +1541,10 @@ publish theirs without a browser: MAME ships its `-listxml` as a release asset,
 FBNeo keeps its DATs in the repository.
 
 ```bash
-python -m scripts.scraper.romset_dat_importer --source mame --fetch mame0289
-python -m scripts.scraper.romset_dat_importer --source mame --fetch mame0250
-python -m scripts.scraper.romset_dat_importer --source fbneo --fetch
-python -m scripts.scraper.romset_dat_importer --source fbneo --fetch v1.0.0.02
+python -m scripts.scraper.arcade.romset_dat_importer --source mame --fetch mame0289
+python -m scripts.scraper.arcade.romset_dat_importer --source mame --fetch mame0250
+python -m scripts.scraper.arcade.romset_dat_importer --source fbneo --fetch
+python -m scripts.scraper.arcade.romset_dat_importer --source fbneo --fetch v1.0.0.02
 ```
 
 FBNeo DATs are read at one commit: the revision named (tag, branch or commit,
@@ -1650,8 +1663,9 @@ The rules for asset names, uploads and checks are on the
 
 Located in `scripts/scraper/`. Each platform scraper inherits `BaseScraper` and
 implements its two abstract methods, `fetch_requirements()` and
-`validate_format()`. The MAME and FBNeo hash scrapers read a source tree and
-stand alone.
+`validate_format()`. The MAME and FBNeo hash scrapers, in `scraper/arcade/`, read
+a source tree and stand alone. The launcher readers are in `scraper/launchers/`
+and the DAT readers in `scraper/dats/`.
 
 | Scraper | Source | Format |
 |---------|--------|--------|
@@ -1671,8 +1685,8 @@ stand alone.
 | `minui_scraper`, `nextui_scraper`, `myminui_scraper` | each pak's `launch.sh` (`EMU_EXE`, the tag from the pak folder), each device's `cores/makefile` (the repository a library is built from) and the minarch statement that sets `core.bios_dir` | Shell, Make, C |
 | `coreinfo_scraper` | .info files from libretro-core-info | INI-like |
 | `bizhawk_scraper` | FirmwareDatabase.cs | C# source |
-| `mame_hash_scraper` | mamedev/mame source tree. `--release mameNNNN` writes the profile of one release a platform builds. `--devices --listxml FILE` adds the device ROM sets of the release's `-listxml` | C source (sparse clone), listxml |
-| `fbneo_hash_scraper` | FBNeo source tree | C source (sparse clone) |
+| `arcade/mame_hash_scraper` | mamedev/mame source tree. `--release mameNNNN` writes the profile of one release a platform builds. `--devices --listxml FILE` adds the device ROM sets of the release's `-listxml` | C source (sparse clone), listxml |
+| `arcade/fbneo_hash_scraper` | FBNeo source tree | C source (sparse clone) |
 
 A machine that instantiates a device loads the device's ROMs from
 `<device shortname>.zip`, and a missing ROM that is neither optional nor
@@ -1720,18 +1734,18 @@ downloads that release's `-listxml` into `.cache/dats/` and runs the device
 merge itself, so the BIOS root sets and the device sets name one release.
 
 ```bash
-python -m scripts.scraper.mame_hash_scraper --devices --listxml .cache/dats/mame0289lx.zip --dry-run
-python -m scripts.scraper.mame_hash_scraper --devices --listxml .cache/dats/mame0289lx.zip
+python -m scripts.scraper.arcade.mame_hash_scraper --devices --listxml .cache/dats/mame0289lx.zip --dry-run
+python -m scripts.scraper.arcade.mame_hash_scraper --devices --listxml .cache/dats/mame0289lx.zip
 ```
 
 Internal modules: `base_scraper.py` (abstract base with `_fetch_raw()` caching,
-the GitHub and text fetches, and the shared CLI), `dat_parser.py` (clrmamepro DAT format parser),
-`logiqx_parser.py` (Logiqx XML DAT parser, used by the dump catalogs),
-`mame_parser.py` (MAME C source BIOS root set parser),
-`fbneo_parser.py` (FBNeo C source BIOS set parser),
-`dat_fetch.py` (upstream MAME `-listxml` and FBNeo DATs, cached under `.cache/dats/`),
-`_hash_merge.py` (fetched hashes merged into a profile), `_hash_write.py` (text-based YAML
-patching that preserves formatting), `_mame_sections.py` (the generated MAME device and
+the GitHub and text fetches, and the shared CLI), `dats/dat_parser.py` (clrmamepro DAT format parser),
+`dats/logiqx_parser.py` (Logiqx XML DAT parser, used by the dump catalogs),
+`arcade/mame_parser.py` (MAME C source BIOS root set parser),
+`arcade/fbneo_parser.py` (FBNeo C source BIOS set parser),
+`arcade/dat_fetch.py` (upstream MAME `-listxml` and FBNeo DATs, cached under `.cache/dats/`),
+`arcade/_hash_merge.py` (fetched hashes merged into a profile), `arcade/_hash_write.py` (text-based YAML
+patching that preserves formatting), `arcade/_mame_sections.py` (the generated MAME device and
 software list sections).
 
 Adding a scraper: inherit `BaseScraper`, implement `fetch_requirements()` and
@@ -1746,10 +1760,10 @@ refreshed manually. `generate_db.py` joins them into `database.json`,
 and `provenance_report.py` reports the gaps.
 
 ```bash
-python -m scripts.scraper.redump_dat_scraper --dry-run
-python -m scripts.scraper.redump_dat_scraper --output provenance/redump.json
-python -m scripts.scraper.dat_pack_importer --source no-intro --pack no-intro.zip
-python -m scripts.scraper.dat_pack_importer --source tosec --pack TOSEC-v2025.zip
+python -m scripts.scraper.dats.redump_dat_scraper --dry-run
+python -m scripts.scraper.dats.redump_dat_scraper --output provenance/redump.json
+python -m scripts.scraper.dats.dat_pack_importer --source no-intro --pack no-intro.zip
+python -m scripts.scraper.dats.dat_pack_importer --source tosec --pack TOSEC-v2025.zip
 python scripts/provenance_report.py            # coverage summary (pipeline step 1b)
 python scripts/provenance_report.py --missing  # list acquisition targets
 python scripts/provenance_report.py --missing --derive  # mark targets a held dump already contains
@@ -1792,9 +1806,9 @@ from sources and published under `install/games/` by pipeline step 4e.
 python -m scripts.scraper.romfolders --list                 # setups and the format each is read in
 python -m scripts.scraper.romfolders --all                  # platforms/romfolders/<setup>.yml at the pins of _sources/
 python -m scripts.scraper.romfolders --setup batocera --offline
-python -m scripts.scraper.game_dat_importer --fetch --floor # games/catalogs/: No-Intro and Redump game DATs
-python -m scripts.scraper.game_dat_importer --floor         # same from .cache/game-dats/ only
-python -m scripts.scraper.arcade_parent_importer --all      # games/arcade/: game set to BIOS parent, per core
+python -m scripts.scraper.dats.game_dat_importer --fetch --floor # games/catalogs/: No-Intro and Redump game DATs
+python -m scripts.scraper.dats.game_dat_importer --floor         # same from .cache/game-dats/ only
+python -m scripts.scraper.arcade.arcade_parent_importer --all      # games/arcade/: game set to BIOS parent, per core
 python scripts/game_rules.py                                # games/regions.yml and games/extras.yml against the profiles
 python scripts/generate_games_index.py                      # install/games/ (pipeline step 4e)
 python scripts/generate_games_index.py --check              # exit 1 when a published file would change
@@ -1804,10 +1818,10 @@ python scripts/generate_games_index.py --check              # exit 1 when a publ
 |--------|-----------|-------|
 | `platforms/romfolders/_sources/<setup>.yml` | hand, each fact with its `source_ref` | pins, roms root, case rule, folders never scanned |
 | `platforms/romfolders/<setup>.yml` | `scraper/romfolders` | folders, extensions and default core as the OS writes them |
-| `games/catalogs/<source>/<system>.json` | `scraper/game_dat_importer.py` | crc32, size, sha1, region and title per game, disc serials |
+| `games/catalogs/<source>/<system>.json` | `scraper/dats/game_dat_importer.py` | crc32, size, sha1, region and title per game, disc serials |
 | `games/headers.yml` | hand, cited | header fields each core reads and the region each value means |
 | `games/regions.yml`, `games/extras.yml` | hand, cited | region routes, the cases that keep every region, per-game files |
-| `games/arcade/<profile>.json` | `scraper/arcade_parent_importer.py` | BIOS parent and device sets of each game set, from the DAT the pin names or, for mame2000, mame2003 and mame2003-plus, from the driver code |
+| `games/arcade/<profile>.json` | `scraper/arcade/arcade_parent_importer.py` | BIOS parent and device sets of each game set, from the DAT the pin names or, for mame2000, mame2003 and mame2003-plus, from the driver code |
 
 Folder names resolve to systems through `SYSTEM_ALIASES` and `norm_system_id`
 in `scripts/model/systems.py`, the one alias table, and core names to profiles through the

@@ -1135,7 +1135,7 @@ class CommentsSayWhy(unittest.TestCase):
             cwd=REPO_ROOT, capture_output=True, text=True, check=True,
         ).stdout.split()
         self.assertIn("install.py", tracked)
-        self.assertIn("scripts/scraper/mame_parser.py", tracked)
+        self.assertIn("scripts/scraper/arcade/mame_parser.py", tracked)
         found = []
         for name in sorted(set(tracked)):
             lines = (REPO_ROOT / name).read_text(encoding="utf-8").splitlines()

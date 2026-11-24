@@ -21,8 +21,8 @@ from core import upstreamtree
 from model.safeparse import parse_untrusted_xml
 
 from .base_scraper import BaseScraper, BiosRequirement, fetch_bytes, systems_from_requirements
-from .recalbox_launchers import SOURCE_FILES as LAUNCHER_FILES
-from .recalbox_launchers import LauncherShapeError, extract_launchers
+from .launchers.recalbox import SOURCE_FILES as LAUNCHER_FILES
+from .launchers.recalbox import LauncherShapeError, extract_launchers
 from .recalbox_romfs import read_system_ini
 
 PLATFORM_NAME = "recalbox"

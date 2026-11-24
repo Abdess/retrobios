@@ -120,7 +120,7 @@ def _catalog_command(subject: str, registry: dict[str, dict]) -> list[str] | Non
         return [
             sys.executable,
             "-m",
-            "scripts.scraper.romset_dat_importer",
+            "scripts.scraper.arcade.romset_dat_importer",
             "--source",
             _RECIPE_SOURCES[subject],
             "--fetch",
@@ -130,7 +130,7 @@ def _catalog_command(subject: str, registry: dict[str, dict]) -> list[str] | Non
         return [
             sys.executable,
             "-m",
-            "scripts.scraper.game_dat_importer",
+            "scripts.scraper.dats.game_dat_importer",
             "--source",
             _GAME_SOURCES[subject],
             "--fetch",

@@ -492,9 +492,9 @@ class Scrapers(unittest.TestCase):
     """The records each platform's scraper writes for these directories."""
 
     def test_rocknix_patched_data_directory(self) -> None:
-        from scraper import rocknix_launchers as rl
-        from scraper.rocknix_configs import STANDALONE
-        from scraper.shell_launchers import LauncherPatternMissing, RepoTree
+        from scraper.launchers import rocknix as rl
+        from scraper.launchers.rocknix_configs import STANDALONE
+        from scraper.launchers.shell import LauncherPatternMissing, RepoTree
 
         path = f"{STANDALONE}/flycast-sa/patches/000-conf-dir.patch"
         patch = textwrap.dedent("""\
@@ -518,9 +518,14 @@ class Scrapers(unittest.TestCase):
             rl.patched_directories(RepoTree.from_files({path: patch.replace("return", "x =")}))
 
     def test_batocera_environment_directory(self) -> None:
-        from scraper.batocera_configgen import GENERATORS, IMPORTER, PATHS_MODULE, Configgen
-        from scraper.batocera_launchers import environment_directories
-        from scraper.configgen_launchers import LauncherShapeError
+        from scraper.launchers.batocera_configgen import (
+            GENERATORS,
+            IMPORTER,
+            PATHS_MODULE,
+            Configgen,
+        )
+        from scraper.launchers.batocera import environment_directories
+        from scraper.launchers.configgen import LauncherShapeError
 
         paths = "from pathlib import Path\nBIOS = Path('/userdata/bios')\nCONFIGS = Path('/userdata/system/configs')\n"
         importer = "_GENERATOR_MAP = {}\n_LEGACY_GENERATOR_MAP = {}\n"
@@ -551,9 +556,9 @@ class Scrapers(unittest.TestCase):
             environment_directories(Configgen(tree.__getitem__))
 
     def test_retrobat_bios_path_setting(self) -> None:
-        from scraper import retrobat_generators
-        from scraper.retrobat_config_files import value_writes
-        from scraper.csharp_source import Source
+        from scraper.launchers import retrobat_generators
+        from scraper.launchers.retrobat_config_files import value_writes
+        from scraper.launchers.csharp_source import Source
 
         path = f"{retrobat_generators.GENERATORS}/Flycast.Generator.cs"
         text = textwrap.dedent("""\

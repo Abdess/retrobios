@@ -29,8 +29,8 @@ from resolve.launchers import handed_directories
 from resolve.launcherplaces import launcher_places
 from profiling.reportinputs import check_build_refs
 from profiling.repos import shipped_build_holders
-from scraper.retrobat_launchers import _choices_apart
-from scraper.shell_launchers import LauncherPatternMissing, Script, config_placement
+from scraper.launchers.retrobat import _choices_apart
+from scraper.launchers.shell import LauncherPatternMissing, Script, config_placement
 from resolve.launcherrefs import config_ref, is_feature_ref
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

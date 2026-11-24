@@ -372,20 +372,20 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
         """Every HEAD unanswered printed "16 unknown" and exited 0, so the
         online pipeline printed check_buildbot OK."""
         import check_buildbot_system as cbs
-        from scraper import buildbot_system
+        from freshness import buildbot
 
         registry = str(REPO_ROOT / "platforms" / "_data_dirs.yml")
-        tracked = buildbot_system.load_tracked_entries(registry)
+        tracked = buildbot.load_tracked_entries(registry)
         self.assertTrue(tracked)
         cases = {
             "index unreachable": mock.patch.object(
-                buildbot_system, "fetch_index", side_effect=OSError("down")),
+                buildbot, "fetch_index", side_effect=OSError("down")),
             "every HEAD unanswered": mock.patch.object(
-                buildbot_system, "fetch_index", return_value=set(tracked)),
+                buildbot, "fetch_index", return_value=set(tracked)),
         }
         for label, index in cases.items():
             with self.subTest(label), index, \
-                    mock.patch.object(buildbot_system, "get_remote_etag", return_value=None), \
+                    mock.patch.object(buildbot, "get_remote_etag", return_value=None), \
                     mock.patch.object(sys, "argv", ["check_buildbot_system.py",
                                                     "--registry", registry]), \
                     contextlib.redirect_stdout(io.StringIO()), \

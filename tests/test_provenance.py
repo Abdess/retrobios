@@ -18,9 +18,9 @@ from scripts.model.dumpcatalog import (
 )
 from scripts.sitegen.provenance import generate_provenance_page, wanted_dumps
 from scripts.acquire.provenance import build_report
-from scripts.scraper.dat_pack_importer import _bios_entries, import_pack
-from scripts.scraper.logiqx_parser import parse_logiqx, validate_logiqx_format
-from scripts.scraper.redump_dat_scraper import discover_bios_datfiles, parse_redump_dat
+from scripts.scraper.dats.dat_pack_importer import _bios_entries, import_pack
+from scripts.scraper.dats.logiqx_parser import parse_logiqx, validate_logiqx_format
+from scripts.scraper.dats.redump_dat_scraper import discover_bios_datfiles, parse_redump_dat
 
 LOGIQX_GAME_FIXTURE = """<?xml version="1.0"?>
 <datafile>

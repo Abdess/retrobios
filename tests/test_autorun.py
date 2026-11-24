@@ -274,7 +274,7 @@ class GithubTokenPerStep(Scratch):
         return unattended_jobs.parse_jobs({"jobs": {name: {"steps": [{"run": run, "github_token": True}]}}})
 
     def test_allowed_on_the_scrapers_and_freshness_scripts(self):
-        for run in ([PY, "-m", "scripts.scraper.mame_hash_scraper"],
+        for run in ([PY, "-m", "scripts.scraper.arcade.mame_hash_scraper"],
                     [PY, "scripts/check_freshness.py", "--json"],
                     [PY, "scripts/refresh_stale.py", "--only", "data"]):
             with self.subTest(run=run):
@@ -293,11 +293,11 @@ class GithubTokenPerStep(Scratch):
 
     def test_refused_in_the_campaign_job_even_on_a_scraper(self):
         with self.assertRaisesRegex(ValueError, "campaign never receives"):
-            self.job([PY, "-m", "scripts.scraper.mame_hash_scraper"], name="campaign")
+            self.job([PY, "-m", "scripts.scraper.arcade.mame_hash_scraper"], name="campaign")
 
     def test_an_undeclared_step_gets_no_token(self):
         job = unattended_jobs.parse_jobs({"jobs": {"x": {"network": True, "steps": [
-            [PY, "-m", "scripts.scraper.mame_hash_scraper"]]}}})["x"]
+            [PY, "-m", "scripts.scraper.arcade.mame_hash_scraper"]]}}})["x"]
         with unittest.mock.patch.object(unattended_jobs, "token_env", return_value={"GITHUB_TOKEN": "t1"}), \
                 unittest.mock.patch.dict(os.environ, {"GITHUB_TOKEN": "t1"}):
             self.assertNotIn("GITHUB_TOKEN", unattended_jobs.job_env(job, job.steps[0]))

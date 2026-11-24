@@ -16,7 +16,7 @@ RetroArch: RetroPie claimed every libretro core in existence while shipping
 (openmsx, pcsx2, xroar, sdltrs, amiberry and the rest). Both halves were
 wrong, in opposite directions.
 
-The same scripts carry the launcher layer (retropie_launchers): where each
+The same scripts carry the launcher layer (launchers/retropie.py): where each
 package links, copies or passes a BIOS file, what it builds and which
 systems it registers.
 """
@@ -29,9 +29,9 @@ import tarfile
 from collections.abc import Iterator
 
 from .base_scraper import BaseScraper, BiosRequirement, fetch_branch_head, fetch_bytes
-from .retropie_scripts import SCRIPTMODULES
-from .retropie_scripts import SECTIONS as PACKAGE_SECTIONS
-from .retropie_launchers import extract_launchers
+from .launchers.retropie_scripts import SCRIPTMODULES
+from .launchers.retropie_scripts import SECTIONS as PACKAGE_SECTIONS
+from .launchers.retropie import extract_launchers
 from .retropie_modules import module_fields
 
 PLATFORM_NAME = "retropie"

@@ -23,11 +23,11 @@ Mapping (stale -> command):
                             -o platforms/targets/<name>.yml
     data/<key>              python scripts/refresh_data_dirs.py --key <key>
                             --force
-    catalogs/mame recipes   python -m scripts.scraper.romset_dat_importer
+    catalogs/mame recipes   python -m scripts.scraper.arcade.romset_dat_importer
                             --source mame --fetch
-    catalogs/fbneo recipes  python -m scripts.scraper.romset_dat_importer
+    catalogs/fbneo recipes  python -m scripts.scraper.arcade.romset_dat_importer
                             --source fbneo --fetch
-    catalogs/no-intro games python -m scripts.scraper.game_dat_importer
+    catalogs/no-intro games python -m scripts.scraper.dats.game_dat_importer
     catalogs/redump games   --source <source> --fetch --refresh --floor
     ci/install.py pin       python scripts/pin_installer.py
 

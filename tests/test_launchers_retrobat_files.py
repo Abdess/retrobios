@@ -11,9 +11,9 @@ import tests
 
 import unittest
 
-from scraper import retrobat_generators
-from scraper.retrobat_arguments import pico8, xroar, mame
-from scraper.retrobat_config_files import (
+from scraper.launchers import retrobat_generators
+from scraper.launchers.retrobat_arguments import pico8, xroar, mame
+from scraper.launchers.retrobat_config_files import (
     bizhawk_gb,
     dolphin,
     blastem,
@@ -21,11 +21,11 @@ from scraper.retrobat_config_files import (
     melonds_dsi,
     desmume,
 )
-from scraper.retrobat_config_folders import eka2l1, tsugaru, dosbox_copies
-from scraper.retrobat_generators import GENERATORS
-from scraper.retrobat_render import render
-from scraper.retrobat_xbox import CXBX_DATA_FOLDER, cxbx, xemu_saves
-from scraper.csharp_source import LauncherPatternMissing, Source
+from scraper.launchers.retrobat_config_folders import eka2l1, tsugaru, dosbox_copies
+from scraper.launchers.retrobat_generators import GENERATORS
+from scraper.launchers.retrobat_render import render
+from scraper.launchers.retrobat_xbox import CXBX_DATA_FOLDER, cxbx, xemu_saves
+from scraper.launchers.csharp_source import LauncherPatternMissing, Source
 from tests.launcherssupport import _sources
 
 

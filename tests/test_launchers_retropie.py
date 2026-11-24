@@ -18,9 +18,9 @@ from pathlib import Path
 
 import yaml
 
-from scraper import batocera_launchers
-from scraper import retropie_launchers as rl
-from scraper.retropie_scripts import Launcher, Scripts, LauncherPatternMissing
+from scraper.launchers import batocera as batocera_launchers
+from scraper.launchers import retropie as rl
+from scraper.launchers.retropie_scripts import Launcher, Scripts, LauncherPatternMissing
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -301,7 +301,7 @@ class AdvanceMameSearchList(unittest.TestCase):
         )
 
     def test_mame_does_not_read_a_colon_as_a_separator(self):
-        from scraper.retropie_reader import LIST_SEPARATORS
+        from scraper.launchers.retropie_reader import LIST_SEPARATORS
 
         self.assertNotIn("mame", LIST_SEPARATORS)
         self.assertEqual(

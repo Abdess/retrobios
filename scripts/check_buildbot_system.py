@@ -21,13 +21,7 @@ from core.cli import InputMissing
 from core.paths import DATA_DIRS_FILE
 from model.registry import data_dir_registry_at
 from packs.datadirs import refresh_keys
-from scraper.buildbot_system import (
-    check,
-    pending,
-    print_report,
-    unanswered,
-    updated,
-)
+from freshness.buildbot import check, pending, print_report, unanswered, updated
 
 
 def main() -> None:

@@ -56,7 +56,7 @@ from .base_scraper import (
     md5_field,
     systems_from_requirements,
 )
-from .retrodeck_launchers import extract_launchers
+from .launchers.retrodeck import extract_launchers
 from .romfolders.esde import command_core, esde_systems
 
 PLATFORM_NAME = "retrodeck"

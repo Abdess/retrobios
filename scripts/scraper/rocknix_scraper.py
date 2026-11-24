@@ -24,8 +24,8 @@ from .base_scraper import (
     fetch_text,
     github_json,
 )
-from .rocknix_launchers import extract_launchers
-from scraper.shell_launchers import RepoTree
+from .launchers.rocknix import extract_launchers
+from scraper.launchers.shell import RepoTree
 from .rocknix_packages import dual_mode_emulators, standalone_emulators
 from .targets.rocknix_targets_scraper import Scraper as DeviceTargets
 

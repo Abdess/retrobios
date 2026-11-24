@@ -103,7 +103,7 @@ def refresh_steps(args: argparse.Namespace, results: dict) -> bool:
     # Step 2a: Refresh MAME BIOS hashes
     if not args.offline:
         ok, _ = runner.run(
-            [sys.executable, "-m", "scripts.scraper.mame_hash_scraper"],
+            [sys.executable, "-m", "scripts.scraper.arcade.mame_hash_scraper"],
             STEP_LABELS["mame_hashes"],
         )
         results["mame_hashes"] = ok
@@ -115,7 +115,7 @@ def refresh_steps(args: argparse.Namespace, results: dict) -> bool:
     # Step 2a2: Refresh FBNeo BIOS hashes
     if not args.offline:
         ok, _ = runner.run(
-            [sys.executable, "-m", "scripts.scraper.fbneo_hash_scraper"],
+            [sys.executable, "-m", "scripts.scraper.arcade.fbneo_hash_scraper"],
             STEP_LABELS["fbneo_hashes"],
         )
         results["fbneo_hashes"] = ok

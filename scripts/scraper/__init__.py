@@ -1,54 +1,24 @@
-"""Scraper plugin discovery module.
+"""Readers of upstream sources, each written to a file of this repository.
 
-Auto-detects *_scraper.py files and exposes their scrapers.
-Each scraper module must define:
-    PLATFORM_NAME: str
-    Scraper: class inheriting BaseScraper
+The `<name>_scraper.py` modules at this level each read one platform's BIOS
+list into `platforms/<platform>.yml`: the registry's `scraper:` field names
+the module, and `freshness.scrapers.platform_scraper` turns it into the
+command that runs it. base_scraper.py holds what they share, the network
+access included. The subpackages hold the other subjects: `targets/` the
+cores each hardware target ships, `romfolders/` each setup's rom folders,
+`launchers/` what each platform's launch code reads and passes to a core,
+`arcade/` the MAME and FBNeo hashes and romset recipes, and `dats/` the dump
+catalogs read from DAT files.
 """
 
 from __future__ import annotations
 
-import importlib
-import pkgutil
 import sys
 from pathlib import Path
 
-# Scrapers run both as `python -m scripts.scraper.x` and as plain scripts, and
-# they share helpers with the rest of scripts/. Putting that directory on the
-# path once here is what lets every submodule say `from core.cli import ...`
-# instead of carrying its own bootstrap.
+# Scrapers run both as `python -m scripts.scraper.<module>` and as plain
+# scripts, and they share helpers with the rest of scripts/. Putting that
+# directory on the path once here is what lets every submodule say
+# `from core.cli import ...` instead of carrying its own bootstrap.
 if (_SCRIPTS_DIR := str(Path(__file__).resolve().parent.parent)) not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
-
-from .base_scraper import BaseScraper
-
-_scrapers: dict[str, type] = {}
-
-
-def discover_scrapers() -> dict[str, type]:
-    """Auto-discover all *_scraper.py modules and return {platform_name: ScraperClass}."""
-    if _scrapers:
-        return _scrapers
-
-    package_dir = Path(__file__).parent
-
-    for _finder, name, _ispkg in pkgutil.iter_modules([str(package_dir)]):
-        if not name.endswith("_scraper"):
-            continue
-
-        module = importlib.import_module(f".{name}", package=__package__)
-
-        platform_name = getattr(module, "PLATFORM_NAME", None)
-        scraper_class = getattr(module, "Scraper", None)
-
-        if platform_name and scraper_class and issubclass(scraper_class, BaseScraper):
-            _scrapers[platform_name] = scraper_class
-
-    return _scrapers
-
-
-def get_scraper(platform_name: str) -> BaseScraper | None:
-    """Get an instantiated scraper for a platform."""
-    scrapers = discover_scrapers()
-    cls = scrapers.get(platform_name)
-    return cls() if cls else None

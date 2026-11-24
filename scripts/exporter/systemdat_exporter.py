@@ -13,7 +13,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from scraper.dat_parser import parse_dat
+from scraper.dats.dat_parser import parse_dat
 
 from .base_exporter import BaseExporter
 from resolve.nativemodel import NativeFile, NativeSystem, Report

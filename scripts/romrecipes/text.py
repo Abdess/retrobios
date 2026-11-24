@@ -20,7 +20,7 @@ def print_survey(result: dict) -> None:
     if not result["dat_recipes"]:
         print(
             "  No DAT recipe: import one with "
-            "`python -m scripts.scraper.romset_dat_importer --source mame --fetch mame0289`"
+            "`python -m scripts.scraper.arcade.romset_dat_importer --source mame --fetch mame0289`"
         )
     for problem in result.get("unreadable_archives", []):
         print(f"  UNREADABLE: {problem}")

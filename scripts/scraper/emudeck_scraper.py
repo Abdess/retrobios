@@ -25,8 +25,8 @@ from .base_scraper import (
     github_json,
     systems_from_requirements,
 )
-from .emudeck_launchers import emulator_of_script, extract_launchers
-from scraper.shell_launchers import RepoTree
+from .launchers.emudeck import emulator_of_script, extract_launchers
+from scraper.launchers.shell import RepoTree
 
 PLATFORM_NAME = "emudeck"
 

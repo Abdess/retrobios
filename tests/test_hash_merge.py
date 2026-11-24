@@ -12,14 +12,14 @@ from typing import Any
 
 import yaml
 
-from scripts.scraper._hash_merge import (
+from scripts.scraper.arcade._hash_merge import (
     _build_source_ref,
     compute_diff,
     load_profile,
     merge_fbneo_profile,
     merge_mame_profile,
 )
-from scripts.scraper._hash_write import write_fbneo_profile, write_mame_profile
+from scripts.scraper.arcade._hash_write import write_fbneo_profile, write_mame_profile
 
 
 def _refresh_mame(path: Path, hashes: dict) -> None:
@@ -255,7 +255,7 @@ class TestMameMerge(unittest.TestCase):
         The manager set loads "01", but written unquoted it re-parses as the
         integer 1 and the profile stops naming the file the driver opens.
         """
-        from scripts.scraper._hash_write import _append_new_entries, format_contents
+        from scripts.scraper.arcade._hash_write import _append_new_entries, format_contents
 
         contents = [
             {"name": "01", "description": "ROM bank 0-1", "size": 8192,
@@ -414,9 +414,9 @@ class TheScraperClonesTheReleaseItLabels(unittest.TestCase):
     def test_clone_and_version_come_from_one_tag(self):
         from unittest import mock
 
-        from scripts.scraper import mame_hash_scraper as scraper
+        from scripts.scraper.arcade import mame_hash_scraper as scraper
 
-        from scripts.scraper import sparse_clone
+        from scripts.scraper.arcade import sparse_clone
 
         calls: list[list[str]] = []
 
@@ -443,7 +443,7 @@ class AReleaseProfileDescribesItsOwnRelease(unittest.TestCase):
     gives a set."""
 
     def test_sets_pins_and_systems(self):
-        from scripts.scraper.mame_hash_scraper import release_profile
+        from scripts.scraper.arcade.mame_hash_scraper import release_profile
 
         bios_sets = {
             "neogeo": {"source_file": "src/mame/neogeo/neogeo.cpp", "source_line": 10,
@@ -478,7 +478,7 @@ class AReleaseProfileDescribesItsOwnRelease(unittest.TestCase):
 
     def test_a_set_the_release_runs_without_is_not_required(self):
         """recel is undumped at 0.258: the current profile's true does not apply."""
-        from scripts.scraper.mame_hash_scraper import release_profile
+        from scripts.scraper.arcade.mame_hash_scraper import release_profile
 
         bios_sets = {
             "recel": {"source_file": "src/mame/pinball/recel.cpp", "source_line": 505,
@@ -501,7 +501,7 @@ class AReleaseProfileDescribesItsOwnRelease(unittest.TestCase):
         self.assertTrue(files["neogeo.zip"]["required"])
 
     def test_a_release_profile_is_left_out_of_the_current_refresh(self):
-        from scripts.scraper.mame_hash_scraper import _find_mame_profiles
+        from scripts.scraper.arcade.mame_hash_scraper import _find_mame_profiles
 
         names = {path.name for path in _find_mame_profiles()}
         self.assertIn("mame.yml", names)
@@ -509,7 +509,7 @@ class AReleaseProfileDescribesItsOwnRelease(unittest.TestCase):
 
     def test_a_pinned_build_of_the_mame_tree_is_left_out(self):
         """pSxMAME builds mamedev/mame at 0.133: refreshed, it would carry 0.289 refs."""
-        from scripts.scraper.mame_hash_scraper import _find_mame_profiles
+        from scripts.scraper.arcade.mame_hash_scraper import _find_mame_profiles
 
         self.assertNotIn("psxmame.yml", {path.name for path in _find_mame_profiles()})
 
@@ -761,7 +761,7 @@ class AnUnreadableCloneStopsTheScrape(unittest.TestCase):
         import subprocess
         from unittest import mock
 
-        from scripts.scraper import sparse_clone
+        from scripts.scraper.arcade import sparse_clone
 
         dest = Path(tempfile.gettempdir()) / "retrobios-no-clone"
         failing = subprocess.CalledProcessError(128, ["git", "rev-parse", "HEAD"])
@@ -840,7 +840,8 @@ class OneCloneDirectoryPerRun(unittest.TestCase):
     def test_the_clone_directory_names_the_process(self):
         import os
 
-        from scripts.scraper import fbneo_hash_scraper, mame_hash_scraper
+        from scripts.scraper.arcade import fbneo_hash_scraper
+        from scripts.scraper.arcade import mame_hash_scraper
 
         for clone in (mame_hash_scraper._CLONE_DIR, fbneo_hash_scraper.CLONE_DIR):
             with self.subTest(clone=clone.name):
@@ -854,7 +855,8 @@ class ABrokenProfileStopsTheRefresh(unittest.TestCase):
     def test_both_scrapers_name_it(self):
         from unittest import mock
 
-        from scripts.scraper import fbneo_hash_scraper, mame_hash_scraper
+        from scripts.scraper.arcade import fbneo_hash_scraper
+        from scripts.scraper.arcade import mame_hash_scraper
 
         with tempfile.TemporaryDirectory() as directory:
             Path(directory, "fbneo.yml").write_text("files: [\n  - name: a\n")

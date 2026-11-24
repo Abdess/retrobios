@@ -23,7 +23,7 @@ class TestE2EHashScrapers(E2EFixture):
     # ---------------------------------------------------------------
 
     def test_mame_parser_finds_bios_root_sets(self):
-        from scripts.scraper.mame_parser import find_bios_root_sets, parse_rom_block
+        from scripts.scraper.arcade.mame_parser import find_bios_root_sets, parse_rom_block
 
         source = """
 ROM_START( neogeo )
@@ -45,7 +45,7 @@ GAME( 1980, pacman, 0, pacman, pacman, pacman_state, empty_init, ROT90, "Namco",
         self.assertEqual(roms[0]["crc32"], "9036d879")
 
     def test_fbneo_parser_finds_bios_sets(self):
-        from scripts.scraper.fbneo_parser import find_bios_sets, parse_rom_info
+        from scripts.scraper.arcade.fbneo_parser import find_bios_sets, parse_rom_info
 
         source = """
 static struct BurnRomInfo neogeoRomDesc[] = {
@@ -69,7 +69,7 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertEqual(roms[0]["crc32"], "9036d879")
 
     def test_mame_merge_preserves_manual_fields(self):
-        from scripts.scraper._hash_merge import merge_mame_profile
+        from scripts.scraper.arcade._hash_merge import merge_mame_profile
 
         profile = {
             "emulator": "Test",
@@ -119,7 +119,7 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertEqual(result["core_version"], "0.286")
 
     def test_fbneo_merge_updates_individual_roms(self):
-        from scripts.scraper._hash_merge import merge_fbneo_profile
+        from scripts.scraper.arcade._hash_merge import merge_fbneo_profile
 
         profile = {
             "emulator": "FBNeo",

@@ -8,7 +8,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.scraper.fbneo_parser import (
+from scripts.scraper.arcade.fbneo_parser import (
     find_bios_sets,
     parse_fbneo_source_tree,
     parse_rom_info,

@@ -73,7 +73,8 @@ from model.romfolders import load_sources, sources_dir
 from model.safeparse import yaml_load
 from model.targets import platform_overrides
 from profiling.reports import ProfileReport, SkipKind, report_to_dict
-from scripts.scraper import dat_fetch, game_dat_importer
+from scripts.scraper.arcade import dat_fetch
+from scripts.scraper.dats import game_dat_importer
 from tests.sources import SCRIPTS
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -969,19 +970,19 @@ class TheBuildbotIndexIsRead(unittest.TestCase):
     def test_new_and_dropped_assets_are_stale(self):
         from unittest import mock
 
-        from scraper import buildbot_system
+        from freshness import buildbot
 
         report = {"entries": [
             {"zip": "New.zip", "status": "NEW", "key": None},
             {"zip": "Old.zip", "status": "OK", "key": "old"},
         ]}
-        with mock.patch.object(buildbot_system, "check", lambda registry: report):
+        with mock.patch.object(buildbot, "check", lambda registry: report):
             finding = _check_buildbot_system(REPO_ROOT / "platforms")
         self.assertEqual(finding.status, STALE)
         self.assertIn("new New.zip", finding.detail)
-        with mock.patch.object(buildbot_system, "check", lambda registry: {"error": "x", "entries": []}):
+        with mock.patch.object(buildbot, "check", lambda registry: {"error": "x", "entries": []}):
             self.assertEqual(_check_buildbot_system(REPO_ROOT / "platforms").status, UNKNOWN)
-        self.assertEqual([e["zip"] for e in buildbot_system.pending(report)], ["New.zip"])
+        self.assertEqual([e["zip"] for e in buildbot.pending(report)], ["New.zip"])
 
 
 

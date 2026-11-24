@@ -16,9 +16,9 @@ from pathlib import Path
 
 import yaml
 
-from scraper import emudeck_launchers as el
+from scraper.launchers import emudeck as el
 from model.sourcerevision import required_revision
-from scraper.shell_launchers import LauncherPatternMissing, RepoTree, words
+from scraper.launchers.shell import LauncherPatternMissing, RepoTree, words
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

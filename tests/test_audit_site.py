@@ -558,7 +558,7 @@ class TheCollectionShipsADat(unittest.TestCase):
     converter from files.csv."""
 
     def test_round_trip_through_the_logiqx_parser(self):
-        sys.path.insert(0, str(REPO_ROOT / "scripts" / "scraper"))
+        sys.path.insert(0, str(REPO_ROOT / "scripts" / "scraper" / "dats"))
         from logiqx_parser import parse_logiqx
         from scripts.sitegen.structured import collection_dat
 
@@ -581,7 +581,7 @@ class TheCollectionShipsADat(unittest.TestCase):
         """A Batocera user auditing share/bios against the collection DAT met
         thousands of sets laid out by manufacturer, and nothing of the folder
         Batocera reads."""
-        sys.path.insert(0, str(REPO_ROOT / "scripts" / "scraper"))
+        sys.path.insert(0, str(REPO_ROOT / "scripts" / "scraper" / "dats"))
         from logiqx_parser import parse_logiqx
         from scripts.sitegen.platformfiles import platform_data_links
         from scripts.sitegen.structured import platform_dat

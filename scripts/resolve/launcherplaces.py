@@ -20,8 +20,8 @@ PLACE_KINDS = ("names_searched", "fixed_name", "core_option", "links")
 # How each launcher extractor spells the BIOS directory in search_dir, as the
 # platform's own scripts name it: RetroPie's scriptmodules ($biosdir,
 # retropie_reader.BIOSDIR), EmuDeck's EmuScripts (${biosPath},
-# emudeck_launchers.BIOS) and RetroDECK's framework ($bios_path,
-# retrodeck_launchers.BIOS).
+# launchers.emudeck.BIOS) and RetroDECK's framework ($bios_path,
+# launchers.retrodeck.BIOS).
 BIOS_ROOT_TOKENS = ("$biosdir", "${biosdir}", "${biosPath}", "$bios_path", "${bios_path}")
 
 # A path spelled from a home or filesystem root names the BIOS directory by
@@ -139,7 +139,7 @@ def name_settings(record: dict, names: list[str]) -> dict[str, str]:
     """The setting each name of a record is written to.
 
     A record naming several files of one config spells passes_to as
-    describe_keys does (shell_launchers.py), "atari800.cfg ROM_OS_A_PAL,
+    describe_keys does (launchers/shell.py), "atari800.cfg ROM_OS_A_PAL,
     ROM_5200_A, ...", one key per name and in the order of the names. When
     the counts differ, each name keeps the whole description.
     """

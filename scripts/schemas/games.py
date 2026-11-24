@@ -61,7 +61,7 @@ def arcade_pin_errors() -> list[str]:
                            f"the profile says {profile.get('core_version')!r}")
         if drifted:
             out.append(f"{label}: {'; '.join(drifted)} "
-                       f"(python -m scripts.scraper.arcade_parent_importer --profile {doc.get('profile')})")
+                       f"(python -m scripts.scraper.arcade.arcade_parent_importer --profile {doc.get('profile')})")
     return out
 
 

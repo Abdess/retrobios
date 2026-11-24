@@ -17,8 +17,8 @@ from pathlib import Path
 import yaml
 
 from model.launcherrecords import record_emulators
-from scraper import amberelec_launchers as al
-from scraper.configgen_launchers import LauncherShapeError
+from scraper.launchers import amberelec as al
+from scraper.launchers.configgen import LauncherShapeError
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

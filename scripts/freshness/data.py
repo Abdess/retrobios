@@ -37,13 +37,13 @@ def _check_buildbot_system(platforms_dir: Path) -> Finding:
     The registry entries are refreshed above. An asset published since, or
     one the buildbot no longer serves, is only seen by reading its .index.
     """
-    from scraper import buildbot_system
+    from freshness import buildbot
 
     with contextlib.redirect_stdout(io.StringIO()):
-        report = buildbot_system.check(str(platforms_dir / Path(DATA_DIRS_FILE).name))
+        report = buildbot.check(str(platforms_dir / Path(DATA_DIRS_FILE).name))
     if report.get("error"):
         return Finding("data", "buildbot system", UNKNOWN, detail="index unreachable")
-    todo = buildbot_system.pending(report)
+    todo = buildbot.pending(report)
     if not todo:
         return Finding("data", "buildbot system", OK)
     every = [f"{e['status'].lower()} {e['zip']}" for e in todo]

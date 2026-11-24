@@ -1229,7 +1229,7 @@ class HashScraperRefusesAnEmptyRead(unittest.TestCase):
                 "commit": "abc", "bios_sets": sets}
 
     def test_mame_raises_and_writes_no_cache(self):
-        from scraper import mame_hash_scraper as m
+        from scraper.arcade import mame_hash_scraper as m
 
         with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp) / "mame-hashes.json"
@@ -1242,7 +1242,7 @@ class HashScraperRefusesAnEmptyRead(unittest.TestCase):
 
 
     def test_fbneo_raises_and_writes_no_cache(self):
-        from scraper import fbneo_hash_scraper as f
+        from scraper.arcade import fbneo_hash_scraper as f
 
         with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp) / "fbneo-hashes.json"
@@ -1254,7 +1254,7 @@ class HashScraperRefusesAnEmptyRead(unittest.TestCase):
             self.assertFalse(cache.exists())
 
     def test_an_empty_or_unreadable_cache_is_not_served(self):
-        from scraper.sparse_clone import fresh_cache
+        from scraper.arcade.sparse_clone import fresh_cache
 
         with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp) / "hashes.json"

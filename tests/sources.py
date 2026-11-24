@@ -71,7 +71,7 @@ COMMANDS = {
     "commit_rules.py": ("devtools/commitrules.py",),
     "pr_checks.py": ("devtools/prchecks.py",),
     "check_buildbot_system.py": (
-        "scraper/buildbot_system.py", "packs/datadirs.py", "packs/datadirextract.py",
+        "freshness/buildbot.py", "packs/datadirs.py", "packs/datadirextract.py",
     ),
     "generate_site.py": (
         "sitegen/config.py", "sitegen/emulatorsindex.py", "sitegen/places.py", "sitegen/home.py",

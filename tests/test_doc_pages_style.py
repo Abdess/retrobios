@@ -205,7 +205,7 @@ class TheCatalogRowsStateFacts(unittest.TestCase):
         self.assertEqual(len(rows), 2)
         for word in ("stale", "blocks"):
             self.assertNotIn(word, " ".join(rows))
-        scraper = (ROOT / "scripts" / "scraper" / "redump_dat_scraper.py").read_text(encoding="utf-8")
+        scraper = (ROOT / "scripts" / "scraper" / "dats" / "redump_dat_scraper.py").read_text(encoding="utf-8")
         self.assertIn("/bios/<CODE>", scraper)
         self.assertIn("`/bios/<CODE>`", rows[0])
 

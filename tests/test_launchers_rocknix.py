@@ -17,11 +17,11 @@ from pathlib import Path
 
 import yaml
 
-from scraper import rocknix_launchers as rl
-from scraper import rocknix_configs
-from scraper.rocknix_configs import ROCKNIX, DEVICES, STANDALONE
+from scraper.launchers import rocknix as rl
+from scraper.launchers import rocknix_configs
+from scraper.launchers.rocknix_configs import ROCKNIX, DEVICES, STANDALONE
 from model.sourcerevision import required_revision
-from scraper.shell_launchers import LauncherPatternMissing, RepoTree
+from scraper.launchers.shell import LauncherPatternMissing, RepoTree
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

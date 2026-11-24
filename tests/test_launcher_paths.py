@@ -17,11 +17,11 @@ import unittest
 from pathlib import Path
 
 from resolve.launchers import handed_directories, standalone_bindings
-from scraper import retrobat_generators
-from scraper.retrobat_arguments import portable_users
-from scraper.csharp_source import Source
-from scraper.batocera_configgen import GENERATORS, IMPORTER, PATHS_MODULE, Configgen
-from scraper.batocera_launchers import LauncherShapeError, patched_paths, working_directories
+from scraper.launchers import retrobat_generators
+from scraper.launchers.retrobat_arguments import portable_users
+from scraper.launchers.csharp_source import Source
+from scraper.launchers.batocera_configgen import GENERATORS, IMPORTER, PATHS_MODULE, Configgen
+from scraper.launchers.batocera import LauncherShapeError, patched_paths, working_directories
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -298,7 +298,7 @@ class OnlyWhatABoardBuildsIsRun(unittest.TestCase):
         self.assertIn("suyu", bs.configgen_cores(self.DEFAULTS, self.ES, set())[0])
 
     def test_the_extractor_reports_programs_run_from_its_own_bios_root(self):
-        from scraper.batocera_launchers import Launcher, extraction
+        from scraper.launchers.batocera import Launcher, extraction
 
         # A fork whose batoceraPaths puts the BIOS folder elsewhere: the
         # report follows the root its code gives, not Batocera's.

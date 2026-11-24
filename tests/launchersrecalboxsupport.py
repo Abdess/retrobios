@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import tests
 
-from scraper.recalbox_configgen import (
+from scraper.launchers.recalbox_configgen import (
     AMIBERRY_CONFIG,
     AMIBERRY_GLOBAL,
     AMIBERRY_KICKSTARTS,

@@ -32,8 +32,8 @@ from .base_scraper import (
     optional_core_lists,
     systems_from_requirements,
 )
-from .batocera_configgen import Configgen, configs_root
-from .batocera_launchers import extract_launchers
+from .launchers.batocera_configgen import Configgen, configs_root
+from .launchers.batocera import extract_launchers
 from .es_systems import es_systems_emulators, es_systems_libretro, es_systems_libretro_systems
 from .targets.batocera_targets_scraper import BuildSelection
 from .targets.batocera_targets_scraper import Scraper as BoardTargets

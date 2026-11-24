@@ -844,7 +844,7 @@ class EmuDeckScriptNamesHaveOneRule(unittest.TestCase):
     rename added to one copy only made --target filter that core out."""
 
     def test_the_target_scraper_names_scripts_as_the_platform_does(self):
-        from scripts.scraper.emudeck_launchers import emulator_of_script
+        from scripts.scraper.launchers.emudeck import emulator_of_script
 
         listing = [
             "emuDeckRMG.sh",
@@ -899,7 +899,7 @@ class HashScrapersRefuseAnUnknownVersion(unittest.TestCase):
     and cached it for a day, while the pipeline step still read OK."""
 
     def test_mame_raises(self):
-        from scripts.scraper import mame_hash_scraper
+        from scripts.scraper.arcade import mame_hash_scraper
 
         with mock.patch("urllib.request.urlopen", _refuse), \
                 self.assertRaises(RuntimeError):

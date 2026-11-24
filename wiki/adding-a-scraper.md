@@ -17,25 +17,29 @@ every scraper extends.
 
 ## Scraper architecture
 
-### Plugin discovery
+### How a scraper is run
 
-Scrapers are discovered automatically at import time. The `scripts/scraper/__init__.py`
-module uses `pkgutil.iter_modules` to scan for files matching `*_scraper.py` in
-the scraper directory. Each module must export:
+A platform scraper is the module `scripts/scraper/<name>_scraper.py`, where
+`<name>` is the value of the platform's `scraper:` field in
+`platforms/_registry.yml` (`scraper: libretro` names `libretro_scraper.py`,
+shared by RetroArch and Lakka). `platform_scraper` in
+`scripts/freshness/scrapers.py` turns that field into the module that
+`check_freshness.py` and `refresh_stale.py` run:
 
-- `PLATFORM_NAME: str` - the platform identifier (matches `_registry.yml`)
-- `Scraper: class` - a subclass of `BaseScraper`
-
-No registration code is needed. Drop a file, export the two names, and it works.
-
-```python
-# scripts/scraper/__init__.py (simplified)
-for finder, name, ispkg in pkgutil.iter_modules([package_dir]):
-    if not name.endswith("_scraper"):
-        continue
-    module = importlib.import_module(f".{name}", package=__package__)
-    # looks for PLATFORM_NAME and Scraper attributes
+```bash
+python -m scripts.scraper.<name>_scraper
 ```
+
+Nothing scans the directory: a file the registry does not name is never run.
+The module defines a `Scraper` class extending `BaseScraper` and a `main()`
+that hands it to `scraper_cli`. `PLATFORM_NAME` names the platform where the
+module reads its own registry entry or pinned revision.
+
+The other subjects have a folder of their own under `scripts/scraper/`:
+`targets/` (hardware targets), `romfolders/` (each setup's rom folders),
+`launchers/` (what each platform's launch code reads), `arcade/` (MAME and
+FBNeo hashes and romset recipes) and `dats/` (DAT readers and the dump
+catalogs).
 
 ### BaseScraper ABC
 
@@ -258,8 +262,8 @@ A few rules keep that transcription honest:
 ## Creating a target scraper
 
 Target scrapers determine which emulator cores are available on each hardware
-target. They live in `scripts/scraper/targets/` and follow the same auto-discovery
-pattern (`*_targets_scraper.py`).
+target. They live in `scripts/scraper/targets/`, where `discover_target_scrapers()`
+finds each one by its file name (`*_targets_scraper.py`).
 
 ### BaseTargetScraper ABC
 
@@ -364,8 +368,10 @@ Register the target scraper in `_registry.yml`:
 
 ## Parser modules
 
-Shared parsers in `scripts/scraper/` handle formats used by multiple scrapers
-or formats complex enough to warrant dedicated parsing logic.
+Shared parsers handle formats used by multiple scrapers or formats complex
+enough to warrant dedicated parsing logic. The DAT readers are in
+`scripts/scraper/dats/`, the MAME and FBNeo source readers in
+`scripts/scraper/arcade/`.
 
 ### dat_parser
 

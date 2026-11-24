@@ -16,7 +16,7 @@ from pathlib import Path
 
 import yaml
 
-from scraper import retrodeck_launchers as rd
+from scraper.launchers import retrodeck as rd
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

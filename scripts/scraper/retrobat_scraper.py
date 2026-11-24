@@ -24,8 +24,8 @@ from .base_scraper import (
 )
 from .batocera_scraper import SYSTEM_SLUG_MAP as BATOCERA_SLUGS
 from .es_emulators import es_cores, libretro_systems, xml_systems
-from .retrobat_launchers import SOURCE_FILES as LAUNCHER_FILES
-from .retrobat_launchers import extract_launchers
+from .launchers.retrobat import SOURCE_FILES as LAUNCHER_FILES
+from .launchers.retrobat import extract_launchers
 
 PLATFORM_NAME = "retrobat"
 PLATFORM_FILE = Path(__file__).resolve().parents[2] / "platforms" / "retrobat.yml"

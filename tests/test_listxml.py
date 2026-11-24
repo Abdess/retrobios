@@ -10,8 +10,8 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from scripts.scraper import listxml
-from scripts.scraper.listxml import attrs, iter_elements, open_listxml, rom_members
+from scripts.scraper.dats import listxml
+from scripts.scraper.dats.listxml import attrs, iter_elements, open_listxml, rom_members
 
 DOCUMENT = b"""<?xml version="1.0"?>
 <mame build="0.289 (mame0289)">

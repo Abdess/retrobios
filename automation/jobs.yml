@@ -53,9 +53,9 @@ jobs:
       - run: [python, scripts/refresh_stale.py, --findings, tmp/autorun/freshness.json,
               --only, "data,catalogs"]
         github_token: true
-      - run: [python, -m, scripts.scraper.mame_hash_scraper]
+      - run: [python, -m, scripts.scraper.arcade.mame_hash_scraper]
         github_token: true
-      - run: [python, -m, scripts.scraper.fbneo_hash_scraper]
+      - run: [python, -m, scripts.scraper.arcade.fbneo_hash_scraper]
         github_token: true
     gate:
       - [python, scripts/pipeline.py, --offline]

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://abdess.github.io/retrobios/api/v1/schemas/game-catalog.schema.json",
   "title": "RetroBIOS game catalog of one system",
-  "description": "Games of one No-Intro or Redump DAT, keyed by what identifies a game file (games/catalogs/<source>/<system>.json, written by python -m scripts.scraper.game_dat_importer). A row's region is the market the DAT names, never the value a core computes.",
+  "description": "Games of one No-Intro or Redump DAT, keyed by what identifies a game file (games/catalogs/<source>/<system>.json, written by python -m scripts.scraper.dats.game_dat_importer). A row's region is the market the DAT names, never the value a core computes.",
   "type": "object",
   "additionalProperties": false,
   "required": ["source", "system", "dat", "version", "fetched_from", "fetched", "archive", "licence", "fields", "regions", "games"],

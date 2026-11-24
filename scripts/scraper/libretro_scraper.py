@@ -17,7 +17,7 @@ from .base_scraper import (
     fetch_github_latest_version,
     systems_from_requirements,
 )
-from .dat_parser import parse_dat, parse_dat_metadata, validate_dat_format
+from .dats.dat_parser import parse_dat, parse_dat_metadata, validate_dat_format
 
 PLATFORM_NAME = "libretro"
 

@@ -27,7 +27,7 @@ from .base_scraper import (
     fetch_github_latest_version,
     scraper_cli,
 )
-from .csharp_source import blank_comments
+from .launchers.csharp_source import blank_comments
 
 PLATFORM_NAME = "bizhawk"
 

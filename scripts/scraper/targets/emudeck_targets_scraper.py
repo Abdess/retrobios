@@ -18,7 +18,7 @@ from pathlib import Path
 
 from model.safeparse import yaml_load
 
-from ..emudeck_launchers import SCRIPT_SUFFIXES, emulator_of_script
+from ..launchers.emudeck import SCRIPT_SUFFIXES, emulator_of_script
 from . import BaseTargetScraper, fetch_text, forge_headers, target_cli
 
 PLATFORM_NAME = "emudeck"

@@ -24,7 +24,7 @@ from romrecipes.identify import (
     reconstruct,
     write_reconstructions,
 )
-from scripts.scraper.romset_dat_importer import (
+from scripts.scraper.arcade.romset_dat_importer import (
     catalog_targets,
     compact_entries,
     holds_target,
@@ -32,7 +32,7 @@ from scripts.scraper.romset_dat_importer import (
     merge_snapshot,
     recipe_entries,
 )
-from scripts.scraper.logiqx_parser import parse_logiqx
+from scripts.scraper.dats.logiqx_parser import parse_logiqx
 from core.hashing import git_blob_sha
 from core.torrentzip import build_torrentzip, is_torrentzip
 
@@ -421,7 +421,7 @@ class ListXmlRecipes(unittest.TestCase):
     def test_a_machine_larger_than_the_window_is_kept(self):
         """Each machine here spans several reads: the window grows until the
         element closes instead of cutting its start tag away."""
-        from scripts.scraper import listxml
+        from scripts.scraper.dats import listxml
 
         expected = listxml_entries(self._opener(self._document()), "MAME 0.289", None)
         saved = listxml.LISTXML_CHUNK
@@ -455,7 +455,7 @@ class ListXmlRecipes(unittest.TestCase):
     def test_a_set_kept_under_another_name_is_matched_by_members(self):
         """aga.zip holds exactly MAME's isa_aga: the entry carries the
         collection's name and keeps the upstream one in ``set``."""
-        from scripts.scraper.romset_dat_importer import member_list
+        from scripts.scraper.arcade.romset_dat_importer import member_list
 
         child = [
             {"name": "own.rom", "crc32": loopback.crc(ROM_B)},
@@ -474,7 +474,7 @@ class ListXmlRecipes(unittest.TestCase):
         )
 
     def test_matching_by_members_keeps_the_named_sets(self):
-        from scripts.scraper.romset_dat_importer import member_list
+        from scripts.scraper.arcade.romset_dat_importer import member_list
 
         entries = listxml_entries(
             self._opener(self._document()), "MAME 0.289", {"parentset.zip"},
@@ -484,7 +484,7 @@ class ListXmlRecipes(unittest.TestCase):
 
     def test_one_entry_per_archive_its_own_set_first(self):
         """Thirty keyboard sets share one ROM: the set named like the archive wins."""
-        from scripts.scraper.romset_dat_importer import one_set_per_archive
+        from scripts.scraper.arcade.romset_dat_importer import one_set_per_archive
 
         members = [{"name": "kbd.rom", "crc32": "12345678"}]
         entries = one_set_per_archive([
@@ -495,7 +495,7 @@ class ListXmlRecipes(unittest.TestCase):
         self.assertEqual([entry["set"] for entry in entries], ["a500kbd"])
 
     def test_a_logiqx_set_is_matched_by_members_too(self):
-        from scripts.scraper.romset_dat_importer import member_list
+        from scripts.scraper.arcade.romset_dat_importer import member_list
 
         members = [
             {"name": "01", "crc32": loopback.crc(ROM_A)},
@@ -512,7 +512,7 @@ class ListXmlRecipes(unittest.TestCase):
 
     def test_the_collection_names_and_member_lists(self):
         """A .variants/ copy stands for the name its tag is cut from."""
-        from scripts.scraper.romset_dat_importer import collection_archives, member_list
+        from scripts.scraper.arcade.romset_dat_importer import collection_archives, member_list
 
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -539,7 +539,8 @@ class ListXmlRecipes(unittest.TestCase):
         from argparse import Namespace
 
         from model.database import DatabaseUnreadable
-        from scripts.scraper import arcade_parent_importer, romset_dat_importer
+        from scripts.scraper.arcade import arcade_parent_importer
+        from scripts.scraper.arcade import romset_dat_importer
 
         args = Namespace(all=False, db=str(TMP_ROOT / "nosuch.json"))
         with self.assertRaises(DatabaseUnreadable):
@@ -864,7 +865,7 @@ class AnOversizedDatIsNamed(unittest.TestCase):
         import io
         import zipfile
 
-        from scripts.scraper.listxml import iter_dat_documents
+        from scripts.scraper.dats.listxml import iter_dat_documents
 
         with tempfile.TemporaryDirectory() as directory:
             pack = Path(directory) / "pack.zip"
@@ -880,7 +881,7 @@ class AnOversizedDatIsNamed(unittest.TestCase):
         folder, and dat_pack_importer refused a lone DAT file."""
         import zipfile
 
-        from scripts.scraper.listxml import iter_dat_documents
+        from scripts.scraper.dats.listxml import iter_dat_documents
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             root = Path(directory)
@@ -912,8 +913,8 @@ class FbneoFetchReadsOneRevision(unittest.TestCase):
     CDN caches, and --fetch <revision> read the tip whatever was named."""
 
     def setUp(self):
-        from scripts.scraper import dat_fetch
-        from scripts.scraper import romset_dat_importer as importer
+        from scripts.scraper.arcade import dat_fetch
+        from scripts.scraper.arcade import romset_dat_importer as importer
 
         self.dat_fetch = dat_fetch
         self.importer = importer

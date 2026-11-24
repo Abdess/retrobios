@@ -23,7 +23,7 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
-from scraper import buildbot_system
+from freshness import buildbot
 from packs import datadirs
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -187,7 +187,7 @@ class RefreshFailuresAreFailures(unittest.TestCase):
     def test_a_failed_refresh_is_returned_and_exits_nonzero(self):
         report = {"entries": [{"status": "UPDATED", "key": "dolphin-sys"},
                               {"status": "OK", "key": "ppsspp-assets"}]}
-        self.assertEqual(buildbot_system.updated(report), ["dolphin-sys"])
+        self.assertEqual(buildbot.updated(report), ["dolphin-sys"])
         registry = {"dolphin-sys": {"local_cache": "data/dolphin-sys"}}
         with mock.patch.object(datadirs, "refresh_entry", return_value=None):
             self.assertEqual(datadirs.refresh_keys(registry, ["dolphin-sys"]), ["dolphin-sys"])
@@ -217,8 +217,8 @@ class RefreshFailuresAreFailures(unittest.TestCase):
                 seen.append((key, entry))
                 return True
 
-            with mock.patch.object(buildbot_system, "fetch_index", return_value={"Else.zip"}), \
-                    mock.patch.object(buildbot_system, "get_remote_etag", return_value='"new"'), \
+            with mock.patch.object(buildbot, "fetch_index", return_value={"Else.zip"}), \
+                    mock.patch.object(buildbot, "get_remote_etag", return_value='"new"'), \
                     mock.patch.object(datadirs, "refresh_entry", side_effect=refresh), \
                     mock.patch.object(sys, "argv", ["check_buildbot_system.py", "--update",
                                                     "--registry", str(registry)]), \

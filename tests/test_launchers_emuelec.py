@@ -17,11 +17,11 @@ from pathlib import Path
 
 import yaml
 
-from scraper import emuelec_launchers as el
-from scraper import emuelec_runs
-from scraper.emuelec_runs import SX05RE, BIN, Runs, LIBRETRO, EMULATORS
+from scraper.launchers import emuelec as el
+from scraper.launchers import emuelec_runs
+from scraper.launchers.emuelec_runs import SX05RE, BIN, Runs, LIBRETRO, EMULATORS
 from model.sourcerevision import required_revision
-from scraper.shell_launchers import LauncherPatternMissing, RepoTree
+from scraper.launchers.shell import LauncherPatternMissing, RepoTree
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

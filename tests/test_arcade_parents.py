@@ -11,11 +11,11 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from scripts.scraper import arcade_parent_importer as api
-from scripts.scraper import arcade_drivers
-from scripts.scraper import arcade_sets
-from scripts.scraper import clex
-from scripts.scraper import listxml
+from scripts.scraper.arcade import arcade_parent_importer as api
+from scripts.scraper.arcade import arcade_drivers
+from scripts.scraper.arcade import arcade_sets
+from scripts.scraper.arcade import clex
+from scripts.scraper.dats import listxml
 
 ROOT = Path(__file__).resolve().parent.parent
 FIXTURES = ROOT / "tests" / "fixtures" / "arcade_parents"

@@ -17,11 +17,11 @@ import unittest
 from pathlib import Path
 
 from scripts.model.safeparse import yaml_load
-from scripts.scraper._hash_write import DEVICE_SECTION, SOFTLIST_SECTION, write_mame_profile
-from scripts.scraper._hash_merge import load_profile, mame_ref_role, merge_mame_profile
-from scripts.scraper._mame_sections import merge_mame_devices, merge_mame_support
-from scripts.scraper.listxml import open_listxml
-from scripts.scraper.mame_devices import (
+from scripts.scraper.arcade._hash_write import DEVICE_SECTION, SOFTLIST_SECTION, write_mame_profile
+from scripts.scraper.arcade._hash_merge import load_profile, mame_ref_role, merge_mame_profile
+from scripts.scraper.arcade._mame_sections import merge_mame_devices, merge_mame_support
+from scripts.scraper.dats.listxml import open_listxml
+from scripts.scraper.arcade.mame_devices import (
     ABSENT,
     AMBIGUOUS,
     NO_FILE,
@@ -1001,7 +1001,7 @@ class TheRepositoryProfile(unittest.TestCase):
 class Cli(unittest.TestCase):
 
     def test_devices_needs_a_listxml(self):
-        from scripts.scraper.mame_hash_scraper import main
+        from scripts.scraper.arcade.mame_hash_scraper import main
         import sys
         from unittest import mock
 
@@ -1019,7 +1019,7 @@ class TheDevicesFollowTheRelease(unittest.TestCase):
         import argparse
         from unittest import mock
 
-        from scripts.scraper import mame_hash_scraper as scraper
+        from scripts.scraper.arcade import mame_hash_scraper as scraper
 
         with tempfile.TemporaryDirectory() as directory:
             profile = Path(directory) / "mame.yml"
@@ -1058,7 +1058,7 @@ class TheDevicesFollowTheRelease(unittest.TestCase):
         import argparse
         from unittest import mock
 
-        from scripts.scraper import mame_hash_scraper as scraper
+        from scripts.scraper.arcade import mame_hash_scraper as scraper
 
         with tempfile.TemporaryDirectory() as directory:
             profile = Path(directory) / "mame.yml"
