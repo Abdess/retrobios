@@ -9436,18 +9436,27 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         """TERM unset or dumb gave line questions without
         a word, where a small window said why."""
         reason = install.line_mode_reason
-        self.assertEqual(reason("TERM is dumb or not set", {}),
-                         "TERM is not set: questions come line by line.")
-        self.assertEqual(reason("TERM is dumb or not set", {"TERM": "dumb"}),
-                         "TERM=dumb: questions come line by line.")
-        self.assertEqual(reason("TERM=vt52 cannot move the cursor", {}),
+        tty = mock.Mock(isatty=lambda: True)
+
+        def said(env: dict, size: tuple[int, int] = (80, 24), drawing: str = "",
+                 **given) -> str:
+            with mock.patch.object(install, "_terminal_size", return_value=size), \
+                    mock.patch.object(install, "terminal_without_ansi", return_value=drawing), \
+                    mock.patch.object(install, "_tui_keys_blocker", return_value=""), \
+                    mock.patch.object(install.os, "name", "posix"):
+                return reason(install.tui_obstacle(_args(**given), tty, tty, env))
+
+        self.assertEqual(said({}), "TERM is not set: questions come line by line.")
+        self.assertEqual(said({"TERM": "dumb"}), "TERM=dumb: questions come line by line.")
+        self.assertEqual(said({"TERM": "vt52"}, drawing="TERM=vt52 cannot move the cursor"),
                          "TERM=vt52 cannot move the cursor: questions come line by line.")
-        self.assertEqual(reason("the terminal is 39x12, smaller than 40x12", {}),
+        self.assertEqual(said({"TERM": "xterm"}, (39, 12)),
                          "The window is 39x12: questions come line by line (40x12 for the "
                          "full screen).")
-        self.assertEqual(reason("the terminal is 0x0, smaller than 40x12", {}), "")
-        self.assertEqual(reason("--check runs without questions", {}), "")
-        self.assertEqual(reason("the input is not a terminal", {}), "")
+        self.assertEqual(said({"TERM": "xterm"}, (0, 0)), "")
+        self.assertEqual(said({"TERM": "xterm"}, check=True), "")
+        self.assertEqual(reason(install.tui_obstacle(_args(), io.StringIO(), tty, {})), "")
+        self.assertEqual(said({"TERM": "xterm"}), "")
 
     def test_game_data_has_one_wording_and_one_decision(self):
         """Five wordings, "No game data" read as a
@@ -10879,8 +10888,9 @@ class CardNamesAndHelp(_CardFixtures, unittest.TestCase):
         self.assertIn("--offline.", end)
 
     def test_a_small_window_says_why_the_questions_come_line_by_line(self):
-        with mock.patch.object(install, "tui_blocker",
-                               return_value="the terminal is 39x12, smaller than 40x12"), \
+        small = install.TuiObstacle("size", "the terminal is 39x12, smaller than 40x12",
+                                    size=(39, 12))
+        with mock.patch.object(install, "tui_obstacle", return_value=small), \
                 mock.patch.object(install, "_run", side_effect=SystemExit(0)), \
                 mock.patch.object(install, "detect_os", return_value="linux"), \
                 mock.patch.dict(install._WSL), \

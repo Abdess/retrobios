@@ -5,7 +5,7 @@ import argparse
 import re
 from pathlib import Path
 
-from installer.invocation import OFFLINE_VARIABLE, _INVOCATION, installer_id
+from installer.invocation import DEFAULT_JOBS, OFFLINE_VARIABLE, _INVOCATION, installer_id
 from installer.remote import INSTALLER_PAGE, active_remote
 from installer.safe_replace import BACKUP_DIR
 from installer.text import format_size
@@ -390,8 +390,8 @@ def build_parser() -> argparse.ArgumentParser:
         "--jobs", "-j",
         metavar="N",
         type=int,
-        default=8,
-        help="parallel download threads (default: 8)",
+        default=DEFAULT_JOBS,
+        help=f"parallel download threads (default: {DEFAULT_JOBS})",
     )
     parser.add_argument(
         "--verbose", "-v",

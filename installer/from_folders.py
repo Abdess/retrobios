@@ -13,6 +13,7 @@ from typing import IO, TYPE_CHECKING, Any
 from installer.console import SAID_FAILED
 from installer.events import EVENTS
 from installer.host_fs import _REPARSE_POINT
+from installer.invocation import DEFAULT_JOBS
 from installer.local_check import _digest_file, _digest_handle, _sha1_file
 from installer.offline import LOCAL, local_manifest_platform
 from installer.pack_source import _PART_FILE, PackSource
@@ -813,7 +814,7 @@ def _open_local_sources(args: argparse.Namespace) -> None:
 def reset_local_sources(args: argparse.Namespace) -> None:
     """Forget the sources and failures a previous run in this process kept."""
     LOCAL.reset()
-    LOCAL.jobs = getattr(args, "jobs", 8) or 8
+    LOCAL.jobs = getattr(args, "jobs", DEFAULT_JOBS) or DEFAULT_JOBS
     SAID_FAILED.clear()
 
 

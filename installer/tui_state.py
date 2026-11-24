@@ -6,7 +6,7 @@ import unicodedata
 from pathlib import Path
 from typing import TYPE_CHECKING, NamedTuple
 
-from installer.invocation import offline_requested
+from installer.invocation import DEFAULT_JOBS, offline_requested
 from installer.offline import LOCAL
 
 if TYPE_CHECKING:
@@ -266,7 +266,7 @@ class TuiState:
         # A quit the user chose, said as one (tui_quit).
         self.quit_asked: bool = False
         self.installed_only: bool = False
-        self.jobs: int = 8
+        self.jobs: int = DEFAULT_JOBS
         self.passthrough: list = []
         # Whether Details were opened on the result: the terminal keeps
         # them after Exit too.

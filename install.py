@@ -605,6 +605,9 @@ RESUME_FROM_SIZE = 16 * 1024 * 1024
 
 # --- installer/invocation.py -------------------------------------------------
 
+# Downloads at once when --jobs is not given.
+DEFAULT_JOBS = 8
+
 # Options that take a value, as a hint gives them back.
 _VALUED_OPTIONS = (
     "--system", "--core", "--emulator", "--region", "--target", "--cores-dir", "--save-dir",
@@ -792,6 +795,76 @@ def offline_option(given: bool) -> bool:
 
 def offline_requested() -> bool:
     return os.environ.get(OFFLINE_VARIABLE, "") not in ("", "0")
+
+
+# --- installer/combinations.py -----------------------------------------------
+
+# --source truth, named as one option among the others.
+SOURCE_TRUTH = "--source=truth"
+
+
+def given_options(args: argparse.Namespace) -> set[str]:
+    """The options of a run that the combination rules read, by name."""
+    given = {flag for flag, on in (
+        ("--json", args.json), ("--find", bool(args.find)), ("--standalone", args.standalone),
+        ("--emulator", args.emulator), ("--region", args.region),
+        ("--one-per-slot", args.one_per_slot), ("--core", args.core), ("--system", args.system),
+        ("--for-games", args.for_games is not None), ("--declared-only", args.declared_only),
+        (SOURCE_TRUTH, args.source == "truth"), ("--tui", args.tui), ("--target", args.target),
+        ("--installed-cores", args.installed_cores), ("--no-game-data", args.no_game_data),
+        ("--all-files", args.all_files), ("--check", args.check), ("--events", args.events),
+    ) if on}
+    return given | set(listings_given(args))
+
+
+def combination_refusals(given: Collection[str]) -> list[str]:
+    """Every refusal the options given meet, in the order a run says them.
+    --one-per-slot, --standalone, --source truth and --find are each held
+    equal to the pack builder's own option, so a choice the builder refuses
+    beside it is refused here."""
+    def has(*flags: str) -> bool:
+        return any(flag in given for flag in flags)
+
+    listing = has(*(flag for flag, _attr in LISTING_FLAGS))
+    truth = SOURCE_TRUTH in given
+    find = "--find" in given
+    rules = (
+        (has("--json") and not find, "--json applies to --find"),
+        (has("--standalone") and not has("--emulator"),
+         "--standalone applies to --emulator: it picks that emulator's standalone build"),
+        (has("--standalone") and has("--region", "--one-per-slot", "--core", "--system"),
+         "--standalone installs each emulator's standalone build whole, which "
+         "--region, --one-per-slot, --core and --system do not narrow"),
+        (has("--one-per-slot") and has("--system", "--emulator", "--for-games"),
+         "--one-per-slot decides each slot over the whole list, which --system, "
+         "--emulator and --for-games narrow first"),
+        (has("--one-per-slot") and has("--declared-only"),
+         "--one-per-slot ranks the files cores load too, which --declared-only leaves out"),
+        (truth and has("--system", "--core", "--emulator", "--region", "--one-per-slot",
+                       "--for-games", "--declared-only", "--target", "--installed-cores",
+                       "--no-game-data"),
+         "--source truth installs what the emulator profiles prove is read, over "
+         "the whole list: run it without other choices"),
+        (truth and has("--tui"), "the full-screen interface has no choice for --source truth"),
+        (find and (truth or has("--system", "--core", "--emulator", "--region", "--one-per-slot",
+                                "--for-games", "--declared-only", "--no-game-data", "--target",
+                                "--installed-cores", "--all-files", "--standalone")),
+         "--find picks one file by its hash: run it without other choices"),
+        (find and (listing or has("--check", "--tui")),
+         "--find installs or names one file, not a listing, a check or the full screen"),
+        (has("--json") and has("--events"), "--json and --events each write JSON on stdout"),
+        (listing and (truth or has("--one-per-slot", "--standalone")),
+         "a listing prints the whole list, which --one-per-slot, --standalone and "
+         "--source do not narrow"),
+    )
+    return [reason for refused, reason in rules if refused]
+
+
+def adds_refusal(option: str, given: Collection[str]) -> bool:
+    """Whether the option, added to those given, meets a refusal they did not."""
+    without = set(given) - {option}
+    return bool(set(combination_refusals(without | {option}))
+                - set(combination_refusals(without)))
 
 
 # --- installer/terminal.py ---------------------------------------------------
@@ -7173,7 +7246,7 @@ class LocalSources:
         # The folders named with --from, read once for every platform.
         self.folders: list[FolderIndex] = []
         # The reads at once of the files in place (--jobs).
-        self.jobs: int = 8
+        self.jobs: int = DEFAULT_JOBS
         # Every folder index of the run still in use, closed at its end.
         self.indexes: weakref.WeakSet[FolderIndex] = weakref.WeakSet()
         self._serves: tuple = (None, None, frozenset())
@@ -7203,7 +7276,7 @@ class LocalSources:
         self.manifest = None
         self.pack = None
         self.folders = []
-        self.jobs = 8
+        self.jobs = DEFAULT_JOBS
 
     def close_indexes(self) -> None:
         for index in list(self.indexes):
@@ -7379,7 +7452,7 @@ def unreachable_words(exc: OSError) -> str:
 
 
 def check_local(
-    files: list[dict], bios_path: Path, jobs: int = 8,
+    files: list[dict], bios_path: Path, jobs: int = DEFAULT_JOBS,
     term: "Terminal | None" = None,
 ) -> tuple[list[dict], list[dict], list[dict]]:
     """Check which files exist locally and have correct hashes.
@@ -9988,8 +10061,8 @@ def build_parser() -> argparse.ArgumentParser:
         "--jobs", "-j",
         metavar="N",
         type=int,
-        default=8,
-        help="parallel download threads (default: 8)",
+        default=DEFAULT_JOBS,
+        help=f"parallel download threads (default: {DEFAULT_JOBS})",
     )
     parser.add_argument(
         "--verbose", "-v",
@@ -12978,7 +13051,7 @@ def _open_local_sources(args: argparse.Namespace) -> None:
 def reset_local_sources(args: argparse.Namespace) -> None:
     """Forget the sources and failures a previous run in this process kept."""
     LOCAL.reset()
-    LOCAL.jobs = getattr(args, "jobs", 8) or 8
+    LOCAL.jobs = getattr(args, "jobs", DEFAULT_JOBS) or DEFAULT_JOBS
     SAID_FAILED.clear()
 
 
@@ -13894,53 +13967,75 @@ def _tui_keys_blocker(stdin: TextIO) -> str:
     return ""
 
 
-def tui_blocker(
+class TuiObstacle(NamedTuple):
+    """What keeps the full screen from running here: its kind ("flag",
+    "stream", "term", "drawing", "size", "keys"), the reason in words, and
+    the TERM or the size it was decided on."""
+    kind: str
+    text: str
+    term: str = ""
+    size: tuple[int, int] = (0, 0)
+
+
+def tui_obstacle(
     args: argparse.Namespace, stdin: TextIO | None = None, stdout: TextIO | None = None,
     env: Mapping[str, str] | None = None,
-) -> str:
-    """Why the full-screen interface cannot run here, "" when it can."""
+) -> TuiObstacle | None:
+    """What keeps the full-screen interface from running here, None when nothing does."""
     env = os.environ if env is None else env
     stdin = stdin or sys.stdin
     stdout = stdout or sys.stdout
     flag_blocker = _tui_flag_blocker(args)
     if flag_blocker:
-        return flag_blocker
+        return TuiObstacle("flag", flag_blocker)
     for name, stream in (("input", stdin), ("output", stdout)):
         isatty = getattr(stream, "isatty", None)
         if not (isatty and isatty()):
-            return f"the {name} is not a terminal"
-    if os.name != "nt" and env.get("TERM", "") in ("", "dumb"):
-        return "TERM is dumb or not set"
+            return TuiObstacle("stream", f"the {name} is not a terminal")
+    term = env.get("TERM", "")
+    if os.name != "nt" and term in ("", "dumb"):
+        return TuiObstacle("term", "TERM is dumb or not set", term=term)
     drawing = terminal_without_ansi(env)
     if drawing:
-        return drawing
+        return TuiObstacle("drawing", drawing, term=term)
     # A pseudo-terminal nobody sized reports 0x0: script(1) fed from a pipe
     # is one, and the line questions run there as they always have.
     cols, rows = _terminal_size(stdout)
     if cols < TUI_MIN_COLS or rows < TUI_MIN_ROWS:
-        return (f"the terminal is {cols}x{rows}, smaller than "
-                f"{TUI_MIN_COLS}x{TUI_MIN_ROWS}")
-    return _tui_keys_blocker(stdin)
+        return TuiObstacle("size", f"the terminal is {cols}x{rows}, smaller than "
+                           f"{TUI_MIN_COLS}x{TUI_MIN_ROWS}", size=(cols, rows))
+    keys = _tui_keys_blocker(stdin)
+    return TuiObstacle("keys", keys) if keys else None
 
 
-def line_mode_reason(blocker: str, env: Mapping[str, str] | None = None) -> str:
+def tui_blocker(
+    args: argparse.Namespace, stdin: TextIO | None = None, stdout: TextIO | None = None,
+    env: Mapping[str, str] | None = None,
+) -> str:
+    """Why the full-screen interface cannot run here, "" when it can."""
+    obstacle = tui_obstacle(args, stdin, stdout, env)
+    return obstacle.text if obstacle else ""
+
+
+def line_mode_reason(obstacle: TuiObstacle | None) -> str:
     """Why the questions come line by line, in one line, for a terminal the
     full screen cannot draw on: its size or its TERM. "" for a run that
     asks nothing (--check, a pipe), and for a pseudo-terminal nobody sized
     (script fed from a pipe is 0x0), which is no window."""
-    env = os.environ if env is None else env
-    small = re.match(r"the terminal is (\d+x\d+), smaller than", blocker)
-    if small:
-        if "0" in small[1].split("x"):
+    if obstacle is None:
+        return ""
+    if obstacle.kind == "size":
+        cols, rows = obstacle.size
+        if not (cols and rows):
             return ""
-        return (f"The window is {small[1]}: questions come line by line "
+        return (f"The window is {cols}x{rows}: questions come line by line "
                 f"({TUI_MIN_COLS}x{TUI_MIN_ROWS} for the full screen).")
-    if blocker == "TERM is dumb or not set":
-        term = screen_text(env.get("TERM", ""))
+    if obstacle.kind == "term":
+        term = screen_text(obstacle.term)
         return (f"TERM={term}: questions come line by line." if term
                 else "TERM is not set: questions come line by line.")
-    if blocker.startswith("TERM="):
-        return f"{blocker}: questions come line by line."
+    if obstacle.kind == "drawing":
+        return f"{obstacle.text}: questions come line by line."
     return ""
 
 
@@ -14458,7 +14553,7 @@ class TuiState:
         # A quit the user chose, said as one (tui_quit).
         self.quit_asked: bool = False
         self.installed_only: bool = False
-        self.jobs: int = 8
+        self.jobs: int = DEFAULT_JOBS
         self.passthrough: list = []
         # Whether Details were opened on the result: the terminal keeps
         # them after Exit too.
@@ -17382,7 +17477,7 @@ class _Corrupt(Exception):
 
 
 def download_files(
-    files: list[dict], bios_path: Path, jobs: int = 8, verbose: bool = False,
+    files: list[dict], bios_path: Path, jobs: int = DEFAULT_JOBS, verbose: bool = False,
     term: Terminal | None = None, progress: Progress | None = None,
     copies: dict[int, LocalCopy] | None = None,
 ) -> tuple[list[tuple[str, str]], bool]:
@@ -24518,7 +24613,22 @@ def _tui_system_flags(state: TuiState) -> list[tuple[str, str | None]]:
 
 
 def tui_flags(state: TuiState) -> list[tuple[str, str | None]]:
-    """The options that carry the choices made on screen, CLI ones included."""
+    """The options that carry the choices made on screen, CLI ones included.
+    --standalone and --one-per-slot are decided against all the others, the
+    install record's among them, as the run itself decides."""
+    head = _tui_choice_flags(state)
+    tail = _tui_run_flags(state, head)
+    expert: list[tuple[str, str | None]] = []
+    if state.standalone and _tui_standalone_offered(state, head + tail):
+        expert.append(("--standalone", None))
+    if state.one_per_slot and _tui_slot_offered(state, head + expert + tail):
+        expert.append(("--one-per-slot", None))
+    return head + expert + tail
+
+
+def _tui_choice_flags(state: TuiState) -> list[tuple[str, str | None]]:
+    """The options of the files chosen: device, emulators, systems, cores,
+    regions, games and game data."""
     flags = list(state.passthrough)
     if state.target:
         flags.append(("--target", state.target))
@@ -24536,22 +24646,26 @@ def tui_flags(state: TuiState) -> list[tuple[str, str | None]]:
             flags.append(("--required-only", None))
     if state.no_game_data:
         flags.append(("--no-game-data", None))
-    if state.standalone and _tui_standalone_offered(state):
-        flags.append(("--standalone", None))
-    if state.one_per_slot and _tui_slot_offered(state, flags):
-        flags.append(("--one-per-slot", None))
-    if state.installed_only and not any(flag == "--cores-dir" for flag, _v in flags):
+    return flags
+
+
+def _tui_run_flags(state: TuiState, head: list[tuple[str, str | None]]
+                   ) -> list[tuple[str, str | None]]:
+    """The options after the choice: installed cores, downloads at once,
+    the record's own, and where the files come from."""
+    flags: list[tuple[str, str | None]] = []
+    if state.installed_only and not any(flag == "--cores-dir" for flag, _v in head):
         flags.append(("--installed-cores", None))
-    if state.jobs != 8:
+    if state.jobs != DEFAULT_JOBS:
         flags.append(("--jobs", str(state.jobs)))
     flags += state.record_flags
     if (state.record is not None and not state.for_games
-            and not any(flag in RECORD_NARROWING for flag, _value in flags)):
+            and not any(flag in RECORD_NARROWING for flag, _value in head + flags)):
         # The whole list, chosen over a recorded narrower one: said so to
         # the runs, whose own reading of the record would narrow it again.
         flags.append(("--all-files", None))
     flags += [("--from", str(folder)) for folder in state.from_folders]
-    if state.offline and not any(flag == "--offline" for flag, _v in flags):
+    if state.offline and not any(flag == "--offline" for flag, _v in head + flags):
         flags.append(("--offline", None))
     return flags
 
@@ -24679,30 +24793,41 @@ def _tui_systems_chosen(state: TuiState) -> list[str]:
     return [value for _flag, value in _tui_system_flags(state) if value]
 
 
-def _tui_standalone_offered(state: TuiState) -> bool:
+def _tui_standalone_offered(state: TuiState,
+                            given: list[tuple[str, str | None]] | None = None) -> bool:
     """Whether Change offers --standalone: emulators are chosen, the list
-    records a standalone build for each of them, and no region, core or
-    system choice narrows the run, which the option refuses beside it."""
+    records a standalone build for each of them, and no other option the
+    run is given refuses it beside them."""
     manifest = state.manifest or {}
     layouts = manifest.get("standalone_builds") or []
-    if not state.emulators or not layouts or not _tui_standalone_fits(state):
+    if not state.emulators or not layouts or not _tui_standalone_fits(state, given):
         return False
     names = emulator_names(manifest, *tui_run_files(state))
     return all(names.get(name) in layouts for name in state.emulators)
 
 
-def _tui_standalone_fits(state: TuiState) -> bool:
+def _tui_standalone_fits(state: TuiState,
+                         given: list[tuple[str, str | None]] | None = None) -> bool:
     """No region, core or system choice: --standalone takes none."""
-    return not (state.regions or tui_core_flags(state) or _tui_system_flags(state))
+    flags = _tui_given(state) if given is None else given
+    return not adds_refusal("--standalone", [flag for flag, _value in flags])
 
 
-def _tui_slot_offered(state: TuiState, flags: list[tuple[str, str | None]]) -> bool:
+def _tui_slot_offered(state: TuiState,
+                      given: list[tuple[str, str | None]] | None = None) -> bool:
     """Whether Change offers --one-per-slot: the list records its slots and
-    the choice is the whole list, as the pack builder decides slots over it
-    (no system, emulator or game choice narrows it first)."""
-    return bool((state.manifest or {}).get("slot_fields")) and not any(
-        flag in ("--system", "--emulator", "--for-games", "--declared-only")
-        for flag, _value in flags)
+    no other option the run is given refuses it, as the pack builder decides
+    slots over the whole list (no system, emulator, game or declared-only
+    choice narrows it first)."""
+    flags = tui_flags(state) if given is None else given
+    return bool((state.manifest or {}).get("slot_fields")) and not adds_refusal(
+        "--one-per-slot", [flag for flag, _value in flags])
+
+
+def _tui_given(state: TuiState) -> list[tuple[str, str | None]]:
+    """The options the run is given, --standalone and --one-per-slot aside."""
+    head = _tui_choice_flags(state)
+    return head + _tui_run_flags(state, head)
 
 
 def _record_key(options: Iterable[tuple[str, str | None]]) -> list:
@@ -25807,7 +25932,7 @@ def _option_rows(state: TuiState) -> list[TuiRow]:
         what.append(TuiRow("regions", "Preferred regions: "
                            + (", ".join(map(region_title, state.regions)) or "any"),
                            "--region"))
-    if _tui_slot_offered(state, tui_flags(state)):
+    if _tui_slot_offered(state):
         what.append(TuiRow("slot", "One BIOS per console and region: "
                            + _yes(state.one_per_slot), "--one-per-slot"))
     if len(choices["cores"]) > 1:
@@ -32323,44 +32448,10 @@ def _tui_cleanup(
 
 def _check_expert(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
     """--one-per-slot, --standalone, --source truth and --find, applied or
-    refused, never ignored. Each is held equal to the pack builder's own
-    option, so a choice the builder refuses beside it is refused here."""
-    listing = bool(listings_given(args))
-    truth = args.source == "truth"
-    refusals = (
-        (args.json and not args.find, "--json applies to --find"),
-        (args.standalone and not args.emulator,
-         "--standalone applies to --emulator: it picks that emulator's standalone build"),
-        (args.standalone and (args.region or args.one_per_slot or args.core or args.system),
-         "--standalone installs each emulator's standalone build whole, which "
-         "--region, --one-per-slot, --core and --system do not narrow"),
-        (args.one_per_slot and (args.system or args.emulator or args.for_games is not None),
-         "--one-per-slot decides each slot over the whole list, which --system, "
-         "--emulator and --for-games narrow first"),
-        (args.one_per_slot and args.declared_only,
-         "--one-per-slot ranks the files cores load too, which --declared-only leaves out"),
-        (truth and (args.system or args.core or args.emulator or args.region
-                    or args.one_per_slot or args.for_games is not None
-                    or args.declared_only or args.target or args.installed_cores
-                    or args.no_game_data),
-         "--source truth installs what the emulator profiles prove is read, over "
-         "the whole list: run it without other choices"),
-        (truth and args.tui, "the full-screen interface has no choice for --source truth"),
-        (bool(args.find) and (args.system or args.core or args.emulator or args.region
-                              or args.one_per_slot or truth or args.for_games is not None
-                              or args.declared_only or args.no_game_data or args.target
-                              or args.installed_cores or args.all_files or args.standalone),
-         "--find picks one file by its hash: run it without other choices"),
-        (bool(args.find) and (listing or args.check or args.tui),
-         "--find installs or names one file, not a listing, a check or the full screen"),
-        (args.json and args.events, "--json and --events each write JSON on stdout"),
-        (listing and (args.one_per_slot or args.standalone or truth),
-         "a listing prints the whole list, which --one-per-slot, --standalone and "
-         "--source do not narrow"),
-    )
-    for given, reason in refusals:
-        if given:
-            parser.error(reason)
+    refused, never ignored (combination_refusals)."""
+    refusals = combination_refusals(given_options(args))
+    if refusals:
+        parser.error(refusals[0])
     if args.find:
         # Each would be skipped by a run that installs one file or prints it.
         for flag, given in (("--pack", getattr(args, "pack", None) is not None),
@@ -32561,14 +32652,14 @@ def _main_dispatch(args: argparse.Namespace) -> None:
     # rest, and the run keeps the platform's own list.
     # Nor for --source truth and --find, which choose the files themselves.
     lined = args.declared_only or args.source == "truth" or bool(args.find)
-    blocker = "" if args.tui else tui_blocker(args)
-    if args.tui or not (plain_requested(args) or lined or blocker):
+    obstacle = None if args.tui else tui_obstacle(args)
+    if args.tui or not (plain_requested(args) or lined or obstacle):
         sys.exit(run_tui(args))
     if not (plain_requested(args) or lined):
         # The questions came line by line with no word of why: the page
         # says a smaller window says so, and a TERM
         # unset or dumb said nothing.
-        said = line_mode_reason(blocker)
+        said = line_mode_reason(obstacle)
         if said:
             print(fold_line(said))
     if args.events:

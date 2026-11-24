@@ -11,6 +11,9 @@ from pathlib import Path
 
 from installer.remote import BOOTSTRAP_URL
 
+# Downloads at once when --jobs is not given.
+DEFAULT_JOBS = 8
+
 # Options that take a value, as a hint gives them back.
 _VALUED_OPTIONS = (
     "--system", "--core", "--emulator", "--region", "--target", "--cores-dir", "--save-dir",

@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from installer.host_fs import read_local_json
-from installer.invocation import OFFLINE_VARIABLE, offline_requested
+from installer.invocation import DEFAULT_JOBS, OFFLINE_VARIABLE, offline_requested
 from installer.platforms import AVAILABLE_PLATFORMS
 from installer.remote import MAX_MANIFEST_BYTES
 
@@ -26,7 +26,7 @@ class LocalSources:
         # The folders named with --from, read once for every platform.
         self.folders: list[FolderIndex] = []
         # The reads at once of the files in place (--jobs).
-        self.jobs: int = 8
+        self.jobs: int = DEFAULT_JOBS
         # Every folder index of the run still in use, closed at its end.
         self.indexes: weakref.WeakSet[FolderIndex] = weakref.WeakSet()
         self._serves: tuple = (None, None, frozenset())
@@ -56,7 +56,7 @@ class LocalSources:
         self.manifest = None
         self.pack = None
         self.folders = []
-        self.jobs = 8
+        self.jobs = DEFAULT_JOBS
 
     def close_indexes(self) -> None:
         for index in list(self.indexes):

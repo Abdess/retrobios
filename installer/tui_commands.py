@@ -8,10 +8,11 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from installer.choices import choosable_cores, emulator_names
+from installer.combinations import adds_refusal
 from installer.handheld_app import card_app
 from installer.host_fs import _is_dir
 from installer.install_record import RECORD_NARROWING, record_argv, record_options
-from installer.invocation import Invocation
+from installer.invocation import DEFAULT_JOBS, Invocation
 from installer.offline import LOCAL
 from installer.tally import leave_out_game_data
 from installer.tui_routes import TUI_LIST_ENV, TUI_RECORD_ENV
@@ -45,7 +46,22 @@ def _tui_system_flags(state: TuiState) -> list[tuple[str, str | None]]:
 
 
 def tui_flags(state: TuiState) -> list[tuple[str, str | None]]:
-    """The options that carry the choices made on screen, CLI ones included."""
+    """The options that carry the choices made on screen, CLI ones included.
+    --standalone and --one-per-slot are decided against all the others, the
+    install record's among them, as the run itself decides."""
+    head = _tui_choice_flags(state)
+    tail = _tui_run_flags(state, head)
+    expert: list[tuple[str, str | None]] = []
+    if state.standalone and _tui_standalone_offered(state, head + tail):
+        expert.append(("--standalone", None))
+    if state.one_per_slot and _tui_slot_offered(state, head + expert + tail):
+        expert.append(("--one-per-slot", None))
+    return head + expert + tail
+
+
+def _tui_choice_flags(state: TuiState) -> list[tuple[str, str | None]]:
+    """The options of the files chosen: device, emulators, systems, cores,
+    regions, games and game data."""
     flags = list(state.passthrough)
     if state.target:
         flags.append(("--target", state.target))
@@ -63,22 +79,26 @@ def tui_flags(state: TuiState) -> list[tuple[str, str | None]]:
             flags.append(("--required-only", None))
     if state.no_game_data:
         flags.append(("--no-game-data", None))
-    if state.standalone and _tui_standalone_offered(state):
-        flags.append(("--standalone", None))
-    if state.one_per_slot and _tui_slot_offered(state, flags):
-        flags.append(("--one-per-slot", None))
-    if state.installed_only and not any(flag == "--cores-dir" for flag, _v in flags):
+    return flags
+
+
+def _tui_run_flags(state: TuiState, head: list[tuple[str, str | None]]
+                   ) -> list[tuple[str, str | None]]:
+    """The options after the choice: installed cores, downloads at once,
+    the record's own, and where the files come from."""
+    flags: list[tuple[str, str | None]] = []
+    if state.installed_only and not any(flag == "--cores-dir" for flag, _v in head):
         flags.append(("--installed-cores", None))
-    if state.jobs != 8:
+    if state.jobs != DEFAULT_JOBS:
         flags.append(("--jobs", str(state.jobs)))
     flags += state.record_flags
     if (state.record is not None and not state.for_games
-            and not any(flag in RECORD_NARROWING for flag, _value in flags)):
+            and not any(flag in RECORD_NARROWING for flag, _value in head + flags)):
         # The whole list, chosen over a recorded narrower one: said so to
         # the runs, whose own reading of the record would narrow it again.
         flags.append(("--all-files", None))
     flags += [("--from", str(folder)) for folder in state.from_folders]
-    if state.offline and not any(flag == "--offline" for flag, _v in flags):
+    if state.offline and not any(flag == "--offline" for flag, _v in head + flags):
         flags.append(("--offline", None))
     return flags
 
@@ -206,30 +226,41 @@ def _tui_systems_chosen(state: TuiState) -> list[str]:
     return [value for _flag, value in _tui_system_flags(state) if value]
 
 
-def _tui_standalone_offered(state: TuiState) -> bool:
+def _tui_standalone_offered(state: TuiState,
+                            given: list[tuple[str, str | None]] | None = None) -> bool:
     """Whether Change offers --standalone: emulators are chosen, the list
-    records a standalone build for each of them, and no region, core or
-    system choice narrows the run, which the option refuses beside it."""
+    records a standalone build for each of them, and no other option the
+    run is given refuses it beside them."""
     manifest = state.manifest or {}
     layouts = manifest.get("standalone_builds") or []
-    if not state.emulators or not layouts or not _tui_standalone_fits(state):
+    if not state.emulators or not layouts or not _tui_standalone_fits(state, given):
         return False
     names = emulator_names(manifest, *tui_run_files(state))
     return all(names.get(name) in layouts for name in state.emulators)
 
 
-def _tui_standalone_fits(state: TuiState) -> bool:
+def _tui_standalone_fits(state: TuiState,
+                         given: list[tuple[str, str | None]] | None = None) -> bool:
     """No region, core or system choice: --standalone takes none."""
-    return not (state.regions or tui_core_flags(state) or _tui_system_flags(state))
+    flags = _tui_given(state) if given is None else given
+    return not adds_refusal("--standalone", [flag for flag, _value in flags])
 
 
-def _tui_slot_offered(state: TuiState, flags: list[tuple[str, str | None]]) -> bool:
+def _tui_slot_offered(state: TuiState,
+                      given: list[tuple[str, str | None]] | None = None) -> bool:
     """Whether Change offers --one-per-slot: the list records its slots and
-    the choice is the whole list, as the pack builder decides slots over it
-    (no system, emulator or game choice narrows it first)."""
-    return bool((state.manifest or {}).get("slot_fields")) and not any(
-        flag in ("--system", "--emulator", "--for-games", "--declared-only")
-        for flag, _value in flags)
+    no other option the run is given refuses it, as the pack builder decides
+    slots over the whole list (no system, emulator, game or declared-only
+    choice narrows it first)."""
+    flags = tui_flags(state) if given is None else given
+    return bool((state.manifest or {}).get("slot_fields")) and not adds_refusal(
+        "--one-per-slot", [flag for flag, _value in flags])
+
+
+def _tui_given(state: TuiState) -> list[tuple[str, str | None]]:
+    """The options the run is given, --standalone and --one-per-slot aside."""
+    head = _tui_choice_flags(state)
+    return head + _tui_run_flags(state, head)
 
 
 def _record_key(options: Iterable[tuple[str, str | None]]) -> list:

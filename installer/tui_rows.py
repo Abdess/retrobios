@@ -66,7 +66,6 @@ from installer.tui_commands import (
     _tui_app_ready,
     _tui_slot_offered,
     _tui_standalone_offered,
-    tui_flags,
     tui_record_kept,
 )
 from installer.tui_folder_scan import FolderScan
@@ -518,7 +517,7 @@ def _option_rows(state: TuiState) -> list[TuiRow]:
         what.append(TuiRow("regions", "Preferred regions: "
                            + (", ".join(map(region_title, state.regions)) or "any"),
                            "--region"))
-    if _tui_slot_offered(state, tui_flags(state)):
+    if _tui_slot_offered(state):
         what.append(TuiRow("slot", "One BIOS per console and region: "
                            + _yes(state.one_per_slot), "--one-per-slot"))
     if len(choices["cores"]) > 1:

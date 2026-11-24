@@ -663,6 +663,29 @@ class ChangeRows(unittest.TestCase):
         self.assertNotIn("slot", self.actions(state))
         self.assertNotIn(("--one-per-slot", None), install.tui_flags(state))
 
+    def test_one_per_slot_beside_a_recorded_declared_only(self):
+        """The record's --declared-only came after the check that offers
+        --one-per-slot: the argv carried both and every run was refused."""
+        state = self.state(LIST)
+        state.one_per_slot = True
+        state.record_flags = [("--declared-only", None)]
+        flags = install.tui_flags(state)
+        self.assertNotIn(("--one-per-slot", None), flags)
+        self.assertNotIn("slot", self.actions(state))
+        argv = install.tui_argv(state, "check", "python", "install.py")
+        args = install.build_parser().parse_args(argv[2:])
+        self.assertEqual(install.combination_refusals(install.given_options(args)), [])
+
+    def test_the_cli_and_the_screen_read_one_rule(self):
+        """Each refusal the screen avoids is the one the run says."""
+        refusals = install.combination_refusals
+        self.assertEqual(refusals({"--one-per-slot", "--declared-only"}),
+                         ["--one-per-slot ranks the files cores load too, which "
+                          "--declared-only leaves out"])
+        self.assertTrue(install.adds_refusal("--one-per-slot", {"--system"}))
+        self.assertFalse(install.adds_refusal("--one-per-slot", {"--region"}))
+        self.assertFalse(install.adds_refusal("--standalone", {"--emulator"}))
+
     def test_standalone_when_the_emulator_has_a_build(self):
         state = self.state(LIST)
         self.assertNotIn("standalone", self.actions(state))

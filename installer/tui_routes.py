@@ -4,7 +4,6 @@ from __future__ import annotations
 import argparse
 import io
 import os
-import re
 import sys
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, NamedTuple, TextIO
@@ -230,53 +229,75 @@ def _tui_keys_blocker(stdin: TextIO) -> str:
     return ""
 
 
-def tui_blocker(
+class TuiObstacle(NamedTuple):
+    """What keeps the full screen from running here: its kind ("flag",
+    "stream", "term", "drawing", "size", "keys"), the reason in words, and
+    the TERM or the size it was decided on."""
+    kind: str
+    text: str
+    term: str = ""
+    size: tuple[int, int] = (0, 0)
+
+
+def tui_obstacle(
     args: argparse.Namespace, stdin: TextIO | None = None, stdout: TextIO | None = None,
     env: Mapping[str, str] | None = None,
-) -> str:
-    """Why the full-screen interface cannot run here, "" when it can."""
+) -> TuiObstacle | None:
+    """What keeps the full-screen interface from running here, None when nothing does."""
     env = os.environ if env is None else env
     stdin = stdin or sys.stdin
     stdout = stdout or sys.stdout
     flag_blocker = _tui_flag_blocker(args)
     if flag_blocker:
-        return flag_blocker
+        return TuiObstacle("flag", flag_blocker)
     for name, stream in (("input", stdin), ("output", stdout)):
         isatty = getattr(stream, "isatty", None)
         if not (isatty and isatty()):
-            return f"the {name} is not a terminal"
-    if os.name != "nt" and env.get("TERM", "") in ("", "dumb"):
-        return "TERM is dumb or not set"
+            return TuiObstacle("stream", f"the {name} is not a terminal")
+    term = env.get("TERM", "")
+    if os.name != "nt" and term in ("", "dumb"):
+        return TuiObstacle("term", "TERM is dumb or not set", term=term)
     drawing = terminal_without_ansi(env)
     if drawing:
-        return drawing
+        return TuiObstacle("drawing", drawing, term=term)
     # A pseudo-terminal nobody sized reports 0x0: script(1) fed from a pipe
     # is one, and the line questions run there as they always have.
     cols, rows = _terminal_size(stdout)
     if cols < TUI_MIN_COLS or rows < TUI_MIN_ROWS:
-        return (f"the terminal is {cols}x{rows}, smaller than "
-                f"{TUI_MIN_COLS}x{TUI_MIN_ROWS}")
-    return _tui_keys_blocker(stdin)
+        return TuiObstacle("size", f"the terminal is {cols}x{rows}, smaller than "
+                           f"{TUI_MIN_COLS}x{TUI_MIN_ROWS}", size=(cols, rows))
+    keys = _tui_keys_blocker(stdin)
+    return TuiObstacle("keys", keys) if keys else None
 
 
-def line_mode_reason(blocker: str, env: Mapping[str, str] | None = None) -> str:
+def tui_blocker(
+    args: argparse.Namespace, stdin: TextIO | None = None, stdout: TextIO | None = None,
+    env: Mapping[str, str] | None = None,
+) -> str:
+    """Why the full-screen interface cannot run here, "" when it can."""
+    obstacle = tui_obstacle(args, stdin, stdout, env)
+    return obstacle.text if obstacle else ""
+
+
+def line_mode_reason(obstacle: TuiObstacle | None) -> str:
     """Why the questions come line by line, in one line, for a terminal the
     full screen cannot draw on: its size or its TERM. "" for a run that
     asks nothing (--check, a pipe), and for a pseudo-terminal nobody sized
     (script fed from a pipe is 0x0), which is no window."""
-    env = os.environ if env is None else env
-    small = re.match(r"the terminal is (\d+x\d+), smaller than", blocker)
-    if small:
-        if "0" in small[1].split("x"):
+    if obstacle is None:
+        return ""
+    if obstacle.kind == "size":
+        cols, rows = obstacle.size
+        if not (cols and rows):
             return ""
-        return (f"The window is {small[1]}: questions come line by line "
+        return (f"The window is {cols}x{rows}: questions come line by line "
                 f"({TUI_MIN_COLS}x{TUI_MIN_ROWS} for the full screen).")
-    if blocker == "TERM is dumb or not set":
-        term = screen_text(env.get("TERM", ""))
+    if obstacle.kind == "term":
+        term = screen_text(obstacle.term)
         return (f"TERM={term}: questions come line by line." if term
                 else "TERM is not set: questions come line by line.")
-    if blocker.startswith("TERM="):
-        return f"{blocker}: questions come line by line."
+    if obstacle.kind == "drawing":
+        return f"{obstacle.text}: questions come line by line."
     return ""
 
 

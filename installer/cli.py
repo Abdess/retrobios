@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import NoReturn
 
 from installer.arguments import PACK_NAME_END, build_parser
+from installer.combinations import combination_refusals, given_options
 from installer.console import OUTPUT, fold_line
 from installer.detect_os import detect_os
 from installer.events import EVENTS, EVENT_SCHEMA, _event_exit_code, _event_mode
@@ -35,50 +36,23 @@ from installer.regions import resolve_regions
 from installer.remote import remote_from_env, remote_in_use
 from installer.removal import run_backups, run_delete_backup, run_removal
 from installer.run import _install
-from installer.tui_routes import TUI_LIST_ENV, TUI_RECORD_ENV, line_mode_reason, plain_requested, tui_blocker
+from installer.tui_routes import (
+    TUI_LIST_ENV,
+    TUI_RECORD_ENV,
+    line_mode_reason,
+    plain_requested,
+    tui_blocker,
+    tui_obstacle,
+)
 from installer.tui_session import run_tui
 
 
 def _check_expert(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
     """--one-per-slot, --standalone, --source truth and --find, applied or
-    refused, never ignored. Each is held equal to the pack builder's own
-    option, so a choice the builder refuses beside it is refused here."""
-    listing = bool(listings_given(args))
-    truth = args.source == "truth"
-    refusals = (
-        (args.json and not args.find, "--json applies to --find"),
-        (args.standalone and not args.emulator,
-         "--standalone applies to --emulator: it picks that emulator's standalone build"),
-        (args.standalone and (args.region or args.one_per_slot or args.core or args.system),
-         "--standalone installs each emulator's standalone build whole, which "
-         "--region, --one-per-slot, --core and --system do not narrow"),
-        (args.one_per_slot and (args.system or args.emulator or args.for_games is not None),
-         "--one-per-slot decides each slot over the whole list, which --system, "
-         "--emulator and --for-games narrow first"),
-        (args.one_per_slot and args.declared_only,
-         "--one-per-slot ranks the files cores load too, which --declared-only leaves out"),
-        (truth and (args.system or args.core or args.emulator or args.region
-                    or args.one_per_slot or args.for_games is not None
-                    or args.declared_only or args.target or args.installed_cores
-                    or args.no_game_data),
-         "--source truth installs what the emulator profiles prove is read, over "
-         "the whole list: run it without other choices"),
-        (truth and args.tui, "the full-screen interface has no choice for --source truth"),
-        (bool(args.find) and (args.system or args.core or args.emulator or args.region
-                              or args.one_per_slot or truth or args.for_games is not None
-                              or args.declared_only or args.no_game_data or args.target
-                              or args.installed_cores or args.all_files or args.standalone),
-         "--find picks one file by its hash: run it without other choices"),
-        (bool(args.find) and (listing or args.check or args.tui),
-         "--find installs or names one file, not a listing, a check or the full screen"),
-        (args.json and args.events, "--json and --events each write JSON on stdout"),
-        (listing and (args.one_per_slot or args.standalone or truth),
-         "a listing prints the whole list, which --one-per-slot, --standalone and "
-         "--source do not narrow"),
-    )
-    for given, reason in refusals:
-        if given:
-            parser.error(reason)
+    refused, never ignored (combination_refusals)."""
+    refusals = combination_refusals(given_options(args))
+    if refusals:
+        parser.error(refusals[0])
     if args.find:
         # Each would be skipped by a run that installs one file or prints it.
         for flag, given in (("--pack", getattr(args, "pack", None) is not None),
@@ -279,14 +253,14 @@ def _main_dispatch(args: argparse.Namespace) -> None:
     # rest, and the run keeps the platform's own list.
     # Nor for --source truth and --find, which choose the files themselves.
     lined = args.declared_only or args.source == "truth" or bool(args.find)
-    blocker = "" if args.tui else tui_blocker(args)
-    if args.tui or not (plain_requested(args) or lined or blocker):
+    obstacle = None if args.tui else tui_obstacle(args)
+    if args.tui or not (plain_requested(args) or lined or obstacle):
         sys.exit(run_tui(args))
     if not (plain_requested(args) or lined):
         # The questions came line by line with no word of why: the page
         # says a smaller window says so, and a TERM
         # unset or dumb said nothing.
-        said = line_mode_reason(blocker)
+        said = line_mode_reason(obstacle)
         if said:
             print(fold_line(said))
     if args.events:

@@ -9,6 +9,7 @@ from typing import IO, TYPE_CHECKING
 
 from installer.console import ReadCounter, _live_stdout
 from installer.host_fs import _held, _is_file
+from installer.invocation import DEFAULT_JOBS
 from installer.offline import LOCAL
 from installer.paths import _entry_path
 
@@ -127,7 +128,7 @@ def unreachable_words(exc: OSError) -> str:
 
 
 def check_local(
-    files: list[dict], bios_path: Path, jobs: int = 8,
+    files: list[dict], bios_path: Path, jobs: int = DEFAULT_JOBS,
     term: "Terminal | None" = None,
 ) -> tuple[list[dict], list[dict], list[dict]]:
     """Check which files exist locally and have correct hashes.

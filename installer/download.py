@@ -34,7 +34,7 @@ from installer.host_fs import (
     _write_refused,
     _writing,
 )
-from installer.invocation import offline_requested
+from installer.invocation import DEFAULT_JOBS, offline_requested
 from installer.local_check import _digest_file, _digest_handle, expected_hashes, unreachable_words
 from installer.network import _retry_after_failure, _server_delay, network_words
 from installer.offline import LOCAL, offline_words
@@ -561,7 +561,7 @@ class _Corrupt(Exception):
 
 
 def download_files(
-    files: list[dict], bios_path: Path, jobs: int = 8, verbose: bool = False,
+    files: list[dict], bios_path: Path, jobs: int = DEFAULT_JOBS, verbose: bool = False,
     term: Terminal | None = None, progress: Progress | None = None,
     copies: dict[int, LocalCopy] | None = None,
 ) -> tuple[list[tuple[str, str]], bool]:
