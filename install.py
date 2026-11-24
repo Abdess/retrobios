@@ -8807,6 +8807,129 @@ def read_game(facts: GameFacts, system_id: str, system: SystemData, readers: set
     _read_game_headers(facts, system, wanted, packed)
 
 
+# --- installer/game_regions.py -----------------------------------------------
+
+def core_regions(facts: GameFacts, system_id: str, system: SystemData,
+                 profile: str) -> frozenset | None:
+    """The regions a game is proven to need under one core: the catalog's
+    tag of the content matched, the region the core's own readers compute
+    from its bytes, or both when they agree. None for no proof or for two
+    proofs that disagree."""
+    if facts.system != system_id:
+        return None
+    core = system.cores.get(profile) or {}
+    header: frozenset | None = None
+    order = [name for name in core.get("order") or [] if isinstance(name, str)]
+    all_read = bool(order)
+    for name in order:
+        value = facts.readings.get(name)
+        if value is None:
+            all_read = False
+            continue
+        if isinstance(value, frozenset):
+            header = value
+            break
+    otherwise = core.get("otherwise")
+    if header is None and all_read and isinstance(otherwise, list) and otherwise:
+        header = frozenset(str(region) for region in otherwise)
+    proofs = [proof for proof in (facts.dat_regions, header) if proof]
+    if not proofs:
+        return None
+    if len(proofs) == 2 and not any(_region_comparable(a, b)
+                                    for a in proofs[0] for b in proofs[1]):
+        return None
+    return frozenset().union(*proofs)
+
+
+# Cases of games/regions.yml a proven region does not settle whatever the
+# game: device state (an option, a per-game setting) or the code itself.
+_ALWAYS_WIDE = ("always", "option", "user-state")
+
+
+def region_rule_keeps_all(rule: dict | None, games: list[GameFacts]) -> bool:
+    """Whether the core keeps every region whatever its games prove: no rule
+    read at its pin, or one of the cases games/regions.yml names (a region
+    option, an override BIOS, a fallback across regions, a disc database)."""
+    if not isinstance(rule, dict):
+        return True
+    for case in rule.get("keep_all_regions") or []:
+        if not isinstance(case, dict):
+            return True
+        name, condition = case.get("case"), case.get("condition")
+        if condition in _ALWAYS_WIDE:
+            return True
+        if name == "first-disc-region":
+            if any(_suffix(game.path.name) == ".m3u" for game in games):
+                return True
+        elif name not in ("multi-area-disc", "gamecube-unknown-region", "saturn-kr-ipl"):
+            return True
+    return False
+
+
+def needed_regions(rule: dict, proofs: list[frozenset | None]) -> frozenset | None:
+    """The regions the games of one core prove, routed as the core routes
+    them, None when one game proves none."""
+    if not proofs or any(proof is None for proof in proofs):
+        return None
+    routes = rule.get("routes") or {}
+    needed = frozenset(str(routes.get(region, region))
+                       for proof in proofs for region in proof or ())
+    wide = {str(case.get("case")) for case in rule.get("keep_all_regions") or []
+            if isinstance(case, dict)}
+    if "saturn-kr-ipl" in wide and needed & {"asia-ntsc", "south-korea"}:
+        return None
+    return needed
+
+
+def keep_regions(dests: list[str], entries: dict[str, dict], needed: frozenset,
+                 region_free: set[str]) -> list[str]:
+    """The files of a set the proven regions keep: every file with no region
+    tag, a world or region-free file, and those whose tag a needed region
+    matches. A needed region no file matches keeps the whole set."""
+
+    def regions(dest: str) -> list[str]:
+        entry = entries.get(dest) or {}
+        if Path(dest).name.casefold() in region_free:
+            return []
+        tags = [str(r) for r in entry.get("regions") or []]
+        return [] if WORLD_REGION in tags else tags
+
+    tagged = {dest: regions(dest) for dest in dests if regions(dest)}
+    for region in needed:
+        if not any(_region_comparable(region, tag) for tags in tagged.values() for tag in tags):
+            return list(dests)
+    return [dest for dest in dests
+            if dest not in tagged
+            or any(_region_comparable(region, tag) for region in needed for tag in tagged[dest])]
+
+
+def _region_kept(files: list[str], games: list[GameFacts], entries: dict[str, dict],
+                 system: str, info: SystemData,
+                 profile: str) -> tuple[list[str], bool, frozenset | None]:
+    """The files of a set the games' regions keep, whether every region is
+    kept, and the regions it was narrowed to (None when not narrowed)."""
+    rule = info.rules.get(profile)
+    region_free = {str(name).casefold() for name in (rule or {}).get("region_free") or []}
+    tagged = any((entries.get(dest) or {}).get("regions") for dest in files)
+    if not tagged:
+        return list(files), False, None
+    if region_rule_keeps_all(rule, games):
+        return list(files), True, None
+    proofs = [core_regions(game, system, info, profile) for game in games]
+    needed = needed_regions(rule or {}, proofs)
+    if needed is None:
+        for game, proof in zip(games, proofs):
+            if proof is None and not game.reason:
+                game.reason = ("not_read" if not game.read
+                               else "not_recognised" if not game.recognised
+                               else "region_unknown")
+        return list(files), True, None
+    kept = keep_regions(files, entries, needed, region_free)
+    if len(kept) < len(files):
+        return kept, False, needed
+    return kept, True, None
+
+
 # --- installer/lists.py ------------------------------------------------------
 
 NETWORK_ADVICE = ("  Check the connection, and HTTPS_PROXY if this network needs a "
@@ -19142,7 +19265,7 @@ def finish_app(
         sys.exit(1)
 
 
-# --- installer/games.py ------------------------------------------------------
+# --- installer/games_index.py ------------------------------------------------
 
 # --- Games on the card -------------------------------------------------------
 #
@@ -19354,99 +19477,7 @@ def games_setups(index: dict, plat: str, bios_path: Path, os_type: str = "") -> 
     return found
 
 
-def core_regions(facts: GameFacts, system_id: str, system: SystemData,
-                 profile: str) -> frozenset | None:
-    """The regions a game is proven to need under one core: the catalog's
-    tag of the content matched, the region the core's own readers compute
-    from its bytes, or both when they agree. None for no proof or for two
-    proofs that disagree."""
-    if facts.system != system_id:
-        return None
-    core = system.cores.get(profile) or {}
-    header: frozenset | None = None
-    order = [name for name in core.get("order") or [] if isinstance(name, str)]
-    all_read = bool(order)
-    for name in order:
-        value = facts.readings.get(name)
-        if value is None:
-            all_read = False
-            continue
-        if isinstance(value, frozenset):
-            header = value
-            break
-    otherwise = core.get("otherwise")
-    if header is None and all_read and isinstance(otherwise, list) and otherwise:
-        header = frozenset(str(region) for region in otherwise)
-    proofs = [proof for proof in (facts.dat_regions, header) if proof]
-    if not proofs:
-        return None
-    if len(proofs) == 2 and not any(_region_comparable(a, b)
-                                    for a in proofs[0] for b in proofs[1]):
-        return None
-    return frozenset().union(*proofs)
-
-
-# Cases of games/regions.yml a proven region does not settle whatever the
-# game: device state (an option, a per-game setting) or the code itself.
-_ALWAYS_WIDE = ("always", "option", "user-state")
-
-
-def region_rule_keeps_all(rule: dict | None, games: list[GameFacts]) -> bool:
-    """Whether the core keeps every region whatever its games prove: no rule
-    read at its pin, or one of the cases games/regions.yml names (a region
-    option, an override BIOS, a fallback across regions, a disc database)."""
-    if not isinstance(rule, dict):
-        return True
-    for case in rule.get("keep_all_regions") or []:
-        if not isinstance(case, dict):
-            return True
-        name, condition = case.get("case"), case.get("condition")
-        if condition in _ALWAYS_WIDE:
-            return True
-        if name == "first-disc-region":
-            if any(_suffix(game.path.name) == ".m3u" for game in games):
-                return True
-        elif name not in ("multi-area-disc", "gamecube-unknown-region", "saturn-kr-ipl"):
-            return True
-    return False
-
-
-def needed_regions(rule: dict, proofs: list[frozenset | None]) -> frozenset | None:
-    """The regions the games of one core prove, routed as the core routes
-    them, None when one game proves none."""
-    if not proofs or any(proof is None for proof in proofs):
-        return None
-    routes = rule.get("routes") or {}
-    needed = frozenset(str(routes.get(region, region))
-                       for proof in proofs for region in proof or ())
-    wide = {str(case.get("case")) for case in rule.get("keep_all_regions") or []
-            if isinstance(case, dict)}
-    if "saturn-kr-ipl" in wide and needed & {"asia-ntsc", "south-korea"}:
-        return None
-    return needed
-
-
-def keep_regions(dests: list[str], entries: dict[str, dict], needed: frozenset,
-                 region_free: set[str]) -> list[str]:
-    """The files of a set the proven regions keep: every file with no region
-    tag, a world or region-free file, and those whose tag a needed region
-    matches. A needed region no file matches keeps the whole set."""
-
-    def regions(dest: str) -> list[str]:
-        entry = entries.get(dest) or {}
-        if Path(dest).name.casefold() in region_free:
-            return []
-        tags = [str(r) for r in entry.get("regions") or []]
-        return [] if WORLD_REGION in tags else tags
-
-    tagged = {dest: regions(dest) for dest in dests if regions(dest)}
-    for region in needed:
-        if not any(_region_comparable(region, tag) for tags in tagged.values() for tag in tags):
-            return list(dests)
-    return [dest for dest in dests
-            if dest not in tagged
-            or any(_region_comparable(region, tag) for region in needed for tag in tagged[dest])]
-
+# --- installer/game_folders.py -----------------------------------------------
 
 class GamesPlan:
     """What the games of a card need, and what was read to say so."""
@@ -19551,80 +19582,6 @@ def _set_rows(fallback: dict, key: str) -> tuple[list[str], set[str]]:
 def _named_dests(names: Iterable[str], pool: Iterable[str]) -> list[str]:
     wanted = {name.casefold() for name in names}
     return [dest for dest in pool if Path(dest).name.casefold() in wanted]
-
-
-def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None = None,
-               term: Terminal | None = None, data: GamesData | None = None,
-               os_type: str = "", network: bool = True) -> GamesPlan | None:
-    """What the games of the card (or of folder) need, from install/games/.
-
-    None when the card has no rom folder this setup reads and no folder was
-    named. Raises GamesUnavailable when the index cannot be read, or does
-    not describe this list (a destination it names is not in the list).
-    """
-    data = data or GAMES
-    index = data.load_index(network)
-    fallback = data.doc("fallback", plat, network)
-    if fallback is None:
-        raise GamesUnavailable("no_sets", f"install/games/ holds no BIOS sets for {plat}")
-    setup, root = _games_setup_root(data, index, plat, bios_path, folder, os_type, network)
-    if root is None:
-        return None
-    folders = game_folders(setup, index, root, folder is not None)
-    plan = GamesPlan(root, folder is None)
-    entries = {str(entry.get("dest")): entry for entry in manifest.get("files") or []}
-    listed = set(entries)
-    found = _found_games(plan, folders, setup)
-    docs = _GamesDocs(data, network)
-    cache_root = cache_folder()
-    cache = _ScanCache(cache_root / GAMES_SCAN_FILE if cache_root is not None else None)
-    progress = ReadCounter(sum(len(games) for _folder, games in found), term, "games_reading",
-                           " games")
-    read = [(game_folder, _read_folder_games(plan, game_folder, games, docs, cache, progress))
-            for game_folder, games in found]
-    progress.end()
-    cache.save()
-    _plan_read_folders(plan, read, fallback, entries, docs)
-    missing = sorted((plan.keep | plan.required) - listed)
-    if missing:
-        raise GamesUnavailable("stale", "the games index does not describe this file list "
-                                        f"({missing[0]} is not in it)")
-    return plan
-
-
-def _games_setup_root(data: GamesData, index: dict, plat: str, bios_path: Path,
-                      folder: Path | None, os_type: str,
-                      network: bool) -> tuple[dict | None, Path | None]:
-    """The rom folder setup the card follows, and the root of its games."""
-    setup = None
-    root = folder
-    for key in games_setups(index, plat, bios_path, os_type):
-        candidate = data.doc("setups", key, network)
-        if candidate is None:
-            continue
-        setup = setup or candidate
-        if folder is None:
-            found_root = games_root(candidate, bios_path)
-            if found_root is not None:
-                setup, root = candidate, found_root
-                break
-    return setup, root
-
-
-def _found_games(plan: GamesPlan, folders: list[GameFolder],
-                 setup: dict | None) -> list[tuple[GameFolder, list[Path]]]:
-    """The games of each folder, up to MAX_GAME_FILES in all."""
-    budget = MAX_GAME_FILES
-    found: list[tuple[GameFolder, list[Path]]] = []
-    for game_folder in folders:
-        games, others = folder_games(game_folder, setup, budget)
-        budget -= len(games)
-        plan.not_games += others
-        found.append((game_folder, games))
-        if budget <= 0:
-            plan.truncated = True
-            break
-    return found
 
 
 def _arcade_lookup(doc: dict) -> dict:
@@ -19836,33 +19793,6 @@ def _plan_arcade_folder(plan: GamesPlan, games: list[GameFacts], entries: dict[s
             plan.required.update(dest for dest in files if dest not in optional)
 
 
-def _region_kept(files: list[str], games: list[GameFacts], entries: dict[str, dict],
-                 system: str, info: SystemData,
-                 profile: str) -> tuple[list[str], bool, frozenset | None]:
-    """The files of a set the games' regions keep, whether every region is
-    kept, and the regions it was narrowed to (None when not narrowed)."""
-    rule = info.rules.get(profile)
-    region_free = {str(name).casefold() for name in (rule or {}).get("region_free") or []}
-    tagged = any((entries.get(dest) or {}).get("regions") for dest in files)
-    if not tagged:
-        return list(files), False, None
-    if region_rule_keeps_all(rule, games):
-        return list(files), True, None
-    proofs = [core_regions(game, system, info, profile) for game in games]
-    needed = needed_regions(rule or {}, proofs)
-    if needed is None:
-        for game, proof in zip(games, proofs):
-            if proof is None and not game.reason:
-                game.reason = ("not_read" if not game.read
-                               else "not_recognised" if not game.recognised
-                               else "region_unknown")
-        return list(files), True, None
-    kept = keep_regions(files, entries, needed, region_free)
-    if len(kept) < len(files):
-        return kept, False, needed
-    return kept, True, None
-
-
 def _plan_set_extras(plan: GamesPlan, info: SystemData, profile: str, games: list[GameFacts],
                      files: list[str], kept: list[str], entries: dict[str, dict],
                      profiles: list[str]) -> None:
@@ -19931,6 +19861,82 @@ def _extra_fires(extra: dict, games: list[GameFacts]) -> bool:
         return True
     extensions = {str(ext).lower() for ext in trigger.get("extensions") or []}
     return any(_suffix(game.path.name) in extensions for game in games)
+
+
+# --- installer/games.py ------------------------------------------------------
+
+def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None = None,
+               term: Terminal | None = None, data: GamesData | None = None,
+               os_type: str = "", network: bool = True) -> GamesPlan | None:
+    """What the games of the card (or of folder) need, from install/games/.
+
+    None when the card has no rom folder this setup reads and no folder was
+    named. Raises GamesUnavailable when the index cannot be read, or does
+    not describe this list (a destination it names is not in the list).
+    """
+    data = data or GAMES
+    index = data.load_index(network)
+    fallback = data.doc("fallback", plat, network)
+    if fallback is None:
+        raise GamesUnavailable("no_sets", f"install/games/ holds no BIOS sets for {plat}")
+    setup, root = _games_setup_root(data, index, plat, bios_path, folder, os_type, network)
+    if root is None:
+        return None
+    folders = game_folders(setup, index, root, folder is not None)
+    plan = GamesPlan(root, folder is None)
+    entries = {str(entry.get("dest")): entry for entry in manifest.get("files") or []}
+    listed = set(entries)
+    found = _found_games(plan, folders, setup)
+    docs = _GamesDocs(data, network)
+    cache_root = cache_folder()
+    cache = _ScanCache(cache_root / GAMES_SCAN_FILE if cache_root is not None else None)
+    progress = ReadCounter(sum(len(games) for _folder, games in found), term, "games_reading",
+                           " games")
+    read = [(game_folder, _read_folder_games(plan, game_folder, games, docs, cache, progress))
+            for game_folder, games in found]
+    progress.end()
+    cache.save()
+    _plan_read_folders(plan, read, fallback, entries, docs)
+    missing = sorted((plan.keep | plan.required) - listed)
+    if missing:
+        raise GamesUnavailable("stale", "the games index does not describe this file list "
+                                        f"({missing[0]} is not in it)")
+    return plan
+
+
+def _games_setup_root(data: GamesData, index: dict, plat: str, bios_path: Path,
+                      folder: Path | None, os_type: str,
+                      network: bool) -> tuple[dict | None, Path | None]:
+    """The rom folder setup the card follows, and the root of its games."""
+    setup = None
+    root = folder
+    for key in games_setups(index, plat, bios_path, os_type):
+        candidate = data.doc("setups", key, network)
+        if candidate is None:
+            continue
+        setup = setup or candidate
+        if folder is None:
+            found_root = games_root(candidate, bios_path)
+            if found_root is not None:
+                setup, root = candidate, found_root
+                break
+    return setup, root
+
+
+def _found_games(plan: GamesPlan, folders: list[GameFolder],
+                 setup: dict | None) -> list[tuple[GameFolder, list[Path]]]:
+    """The games of each folder, up to MAX_GAME_FILES in all."""
+    budget = MAX_GAME_FILES
+    found: list[tuple[GameFolder, list[Path]]] = []
+    for game_folder in folders:
+        games, others = folder_games(game_folder, setup, budget)
+        budget -= len(games)
+        plan.not_games += others
+        found.append((game_folder, games))
+        if budget <= 0:
+            plan.truncated = True
+            break
+    return found
 
 
 def games_lines(plan: GamesPlan, manifest: dict | None, every: bool = False) -> list[str]:

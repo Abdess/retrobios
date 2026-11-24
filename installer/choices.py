@@ -27,7 +27,7 @@ from installer.remote import DEFAULT_RELEASE_REF, active_remote
 from installer.text import _plural
 
 if TYPE_CHECKING:
-    from installer.games import GamesPlan
+    from installer.game_folders import GamesPlan
 
 
 def recorded_axes(files: list[dict], omitted: Iterable[dict] = ()) -> frozenset:

@@ -12,7 +12,7 @@ from installer.datadirs import select_data_directories
 from installer.destination import dest_drive, shown_bios_folder
 from installer.embedded import CARD_PLATFORMS
 from installer.frontend_folders import SAVE_NOT_KNOWN, save_directory_for, save_where_words
-from installer.games import GAMES_REASONS
+from installer.games_index import GAMES_REASONS
 from installer.manifest import OTHER_SYSTEMS, entry_copies
 from installer.narrowing import narrow
 from installer.paths import SavePlace, spelled

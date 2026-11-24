@@ -53,7 +53,7 @@ from installer.terminal import terminal_size
 from installer.text import _no_widow, _pad, _plural, _wrap, agree, cell_width, format_size, screen_text
 
 if TYPE_CHECKING:
-    from installer.games import GamesPlan
+    from installer.game_folders import GamesPlan
     from installer.tally import Tally
 
 

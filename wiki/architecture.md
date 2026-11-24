@@ -503,7 +503,7 @@ those it imports:
 | Files and folders | `host_fs`, `paths`, `filesystems`, `config_values`, `local_check`, `safe_replace` |
 | This machine | `detection_notes`, `detect_os`, `detect_frontends`, `cards`, `device`, `cores`, `frontend_folders`, `setups` |
 | Sources of files | `offline`, `network`, `lists`, `pack_source`, `from_folders`, `diagnosis`, `download`, `datadirs`, `standalone` |
-| What a run keeps | `narrowing`, `choices`, `romm`, `install_record`, `game_files`, `games`, `tally`, `space`, `fetch_plan` |
+| What a run keeps | `narrowing`, `choices`, `romm`, `install_record`, `game_files`, `games_index`, `game_regions`, `game_folders`, `games`, `tally`, `space`, `fetch_plan` |
 | Line mode | `destination`, `line_folder`, `line_menu`, `plan_words`, `plan`, `failure_causes`, `outcome` |
 | Runs and actions | `arguments`, `run_setups`, `run_files`, `run`, `pack`, `removal_plan`, `removal`, `backups`, `handheld_app`, `cli` |
 | Full screen | `tui_state`, `tui_routes`, `tui_commands`, `tui_keys`, `tui_paint`, `tui_choice`, `tui_folder_scan`, `tui_rows`, `tui_frame`, `tui_plan_view`, `tui_outcome`, `tui_where_views`, `tui_screens`, `tui_help`, `tui_steps`, `tui_folder_actions`, `tui_actions`, `tui_input`, `tui_receive`, `tui_list_words`, `tui_engine`, `tui_first_screen`, `tui_terminal`, `tui_session` |

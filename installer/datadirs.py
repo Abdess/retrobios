@@ -40,7 +40,7 @@ from installer.safe_replace import KEPT, _MEMBER_ERRORS, _NotKept, _kept_slot, u
 
 if TYPE_CHECKING:
     from installer.console import Progress
-    from installer.games import GamesPlan
+    from installer.game_folders import GamesPlan
 
 
 def _archive_validator(headers: http.client.HTTPMessage | Mapping[str, str] | None) -> str:
