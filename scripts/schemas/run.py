@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
+
 import core.paths
+from core.artifacts import ArtifactLockBusy
 from core.paths import DB_FILE, EMULATORS_DIR, PLATFORMS_DIR
 from schemas.documents import (
     semantic_database_checks,
@@ -48,7 +51,16 @@ def source_errors() -> list[str]:
     return errors
 
 
-def generated_errors() -> list[str]:
+@dataclass
+class Validation:
+    """The errors of a run and the checks it could not make."""
+
+    errors: list[str] = field(default_factory=list)
+    # Each check skipped, by the reason the command reports.
+    skipped: list[str] = field(default_factory=list)
+
+
+def generated_errors(run: Validation) -> None:
     """The generated artifacts: database, install lists, site data and packs."""
     root = core.paths.REPO_ROOT
     errors = validate_json_files(
@@ -87,8 +99,12 @@ def generated_errors() -> list[str]:
 
     errors.extend(_site_api_errors())
     errors.extend(games_index_errors())
-    errors.extend(validate_pack_manifests(root / "dist"))
-    return errors
+    dist = root / "dist"
+    try:
+        errors.extend(validate_pack_manifests(dist))
+    except ArtifactLockBusy:
+        run.skipped.append(f"pack manifests skipped, {dist.name} in use")
+    run.errors.extend(errors)
 
 
 def _site_api_errors() -> list[str]:
@@ -120,10 +136,10 @@ def _site_api_errors() -> list[str]:
     return errors
 
 
-def validation_errors(source_only: bool) -> list[str]:
+def validate(source_only: bool) -> Validation:
     """Every error of a run: the sources, then the generated artifacts unless
     ``source_only``."""
-    errors = source_errors()
+    run = Validation(source_errors())
     if not source_only:
-        errors.extend(generated_errors())
-    return errors
+        generated_errors(run)
+    return run

@@ -3,12 +3,11 @@
 from __future__ import annotations
 
 import json
-import sys
 import zipfile
 from pathlib import Path, PurePosixPath
 
 import core.paths
-from core.artifacts import ArtifactLockBusy, artifact_lock
+from core.artifacts import artifact_lock
 from schemas.validators import schema_errors, schema_validator
 
 
@@ -22,20 +21,15 @@ def validate_pack_manifests(dist: Path) -> list[str]:
     Reading a pack while a build is writing it reports "File is not a zip
     file" about an archive that is merely half-written, so this takes the same
     shared lock --verify-packs does. A build holding the exclusive lock means
-    the packs on disk are mid-flight and there is nothing stable to validate.
+    the packs on disk are mid-flight and there is nothing stable to validate:
+    ArtifactLockBusy reaches the caller, which reports the skip. An empty
+    list would read as packs that validated.
     """
     if not dist.is_dir():
         return []
 
-    try:
-        with artifact_lock(str(dist), exclusive=False):
-            return _scan_pack_manifests(dist)
-    except ArtifactLockBusy:
-        print(
-            f"note: {dist.name} is being written, skipping pack manifests",
-            file=sys.stderr,
-        )
-        return []
+    with artifact_lock(str(dist), exclusive=False):
+        return _scan_pack_manifests(dist)
 
 
 def _scan_pack_manifests(dist: Path) -> list[str]:

@@ -2194,6 +2194,27 @@ class InstallerBoundaryRegressions(unittest.TestCase):
             self.assertTrue(any("sha1" in message for message in errors), errors)
 
     @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
+    def test_packs_being_written_are_a_skip_not_a_pass(self):
+        """Under a build's lock the reader returned [], the value of packs
+        that validated, and validate_schemas announced everything valid
+        without reading one."""
+        from core.artifacts import ArtifactLockBusy, artifact_lock
+        from schemas import packmanifests, run
+
+        with tempfile.TemporaryDirectory() as directory:
+            dist = Path(directory) / "dist"
+            dist.mkdir()
+            (dist / "Bad_BIOS_Pack.zip").write_bytes(b"not a zip")
+            self.assertTrue(packmanifests.validate_pack_manifests(dist))
+            with artifact_lock(str(dist), exclusive=True):
+                with self.assertRaises(ArtifactLockBusy):
+                    packmanifests.validate_pack_manifests(dist)
+                outcome = run.Validation()
+                with mock.patch.object(run.core.paths, "REPO_ROOT", Path(directory)):
+                    run.generated_errors(outcome)
+        self.assertEqual(outcome.skipped, ["pack manifests skipped, dist in use"])
+
+    @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
     def test_a_pack_carries_its_install_list_and_board_lists(self):
         """pack_systems puts the install list and the per-board core lists
         in the pack's manifest.json, which install.py reads with the pack

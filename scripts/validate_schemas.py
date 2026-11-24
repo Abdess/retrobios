@@ -16,7 +16,7 @@ except ImportError:
         raise
     sys.exit('Error: jsonschema required (pip install "jsonschema[format-nongpl]")')
 
-from schemas.run import validation_errors
+from schemas.run import validate
 
 
 def main() -> int:
@@ -28,12 +28,18 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    errors = validation_errors(args.source_only)
-    if errors:
-        for error in errors:
+    run = validate(args.source_only)
+    for skipped in run.skipped:
+        print(f"note: {skipped}", file=sys.stderr)
+    if run.errors:
+        for error in run.errors:
             print(f"ERROR {error}")
-        print(f"{len(errors)} schema or semantic error(s)")
+        print(f"{len(run.errors)} schema or semantic error(s)")
         return 1
+    if run.skipped:
+        print("Every schema and semantic invariant checked is valid: "
+              + ", ".join(run.skipped) + ".")
+        return 0
     print("All RetroBIOS schemas and semantic invariants are valid.")
     return 0
 
