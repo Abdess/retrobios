@@ -25,7 +25,7 @@ from sitegen.consolecards import (
     without_files,
 )
 from core.text import series
-from sitegen.emulatorcards import region_words
+from sitegen.filebadges import region_words
 from sitegen.install import comes_with_app
 from sitegen.render import card_anchor, code_span, count_text, console_anchor
 from sitegen.runsections import section_labels

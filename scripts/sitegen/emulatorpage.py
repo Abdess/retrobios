@@ -24,16 +24,13 @@ from sitegen.emulatorcards import (
     CardSources,
     build_rows,
     entry_label,
-    file_badges,
     named_example,
     named_system_link,
-    region_words,
     render_emulator_file,
-    render_metadata_rows,
     any_name_bios,
-    emulator_romset,
-    version_markdown,
 )
+from sitegen.filebadges import file_badges, region_words
+from sitegen.emulatormetadata import render_metadata_rows, emulator_romset, version_markdown
 from sitegen.emulatorsindex import CLS_LABEL_ONE
 from sitegen.fields import render_platform_details, render_structured_blocks, search_excluded
 from sitegen.home import next_block

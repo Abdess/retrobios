@@ -1173,7 +1173,7 @@ class ACardSaysWhyAFileIsLeftOut(unittest.TestCase):
     could not tell why a RetroArch pack carried PPSSPP's assets."""
 
     def test_the_build_and_the_platforms_are_named(self):
-        from sitegen.emulatorcards import file_badges
+        from sitegen.filebadges import file_badges
 
         badges = " ".join(file_badges({"name": "a", "bundled": True, "mode": "standalone"}, True))
         self.assertIn("installed with the standalone emulator", badges)

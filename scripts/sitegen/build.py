@@ -60,11 +60,8 @@ from sitegen.datapage import generate_data_page
 from sitegen.pageregistry import PageRegistry
 from sitegen.decorate import front_matter, decorate_markdown_pages
 from sitegen.descriptions import title_noun
-from sitegen.emulatorcards import (
-    ROMSET_FAQ_PAGE,
-    emulator_setups,
-    with_romset_table,
-)
+from sitegen.emulatormetadata import ROMSET_FAQ_PAGE, with_romset_table
+from sitegen.emulatorcards import emulator_setups
 from sitegen.emulatorpage import (
     availability_check,
     emulator_pages,

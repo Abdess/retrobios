@@ -17,7 +17,7 @@ import yaml
 
 from model.database import load_database
 from sitegen.emulatorpage import availability_check
-from sitegen.emulatorcards import file_badges
+from sitegen.filebadges import file_badges
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

@@ -40,6 +40,8 @@ import json
 from sitegen import guidedata
 from sitegen import cards
 from sitegen import emulatorcards
+from sitegen import emulatormetadata
+from sitegen import filebadges
 from sitegen import emulatorpage
 from sitegen import emulatorsindex
 from sitegen import install as sitegen_install
@@ -210,7 +212,7 @@ class TheSummaryLineIsProse(unittest.TestCase):
         self.assertIn("By kind: 1,563 BIOS ZIPs and 2 game data.", text)
 
     def test_category_badge_in_words(self):
-        badges = " ".join(emulatorcards.file_badges({"name": "a", "category": "game_data"}, True))
+        badges = " ".join(filebadges.file_badges({"name": "a", "category": "game_data"}, True))
         self.assertIn(">game data</span>", badges)
 
 
@@ -242,15 +244,15 @@ def _emulator_page(name: str, profile: dict | None = None) -> str:
 
 class EachArcadePageNamesItsRomset(unittest.TestCase):
     def test_the_romset_by_profile(self):
-        self.assertEqual(emulatorcards.emulator_romset(_profile("mame2003")), "MAME 0.78")
+        self.assertEqual(emulatormetadata.emulator_romset(_profile("mame2003")), "MAME 0.78")
         # The app's version is 1.38.1, its MAME is 0.289.
-        self.assertEqual(emulatorcards.emulator_romset(_profile("mame4droid-2024")), "MAME 0.289")
-        self.assertEqual(emulatorcards.emulator_romset(_profile("mame2003_plus")), "MAME 0.78 (plus backports)")
-        self.assertTrue(emulatorcards.emulator_romset(_profile("fbneo")).startswith("FinalBurn Neo "))
-        self.assertTrue(emulatorcards.emulator_romset(_profile("fbalpha2012")).startswith("FB Alpha "))
-        self.assertEqual(emulatorcards.emulator_romset(_profile("duckstation")), "")
+        self.assertEqual(emulatormetadata.emulator_romset(_profile("mame4droid-2024")), "MAME 0.289")
+        self.assertEqual(emulatormetadata.emulator_romset(_profile("mame2003_plus")), "MAME 0.78 (plus backports)")
+        self.assertTrue(emulatormetadata.emulator_romset(_profile("fbneo")).startswith("FinalBurn Neo "))
+        self.assertTrue(emulatormetadata.emulator_romset(_profile("fbalpha2012")).startswith("FB Alpha "))
+        self.assertEqual(emulatormetadata.emulator_romset(_profile("duckstation")), "")
         # HBMAME publishes no MAME release number.
-        self.assertEqual(emulatorcards.emulator_romset(_profile("hbmame")), "")
+        self.assertEqual(emulatormetadata.emulator_romset(_profile("hbmame")), "")
 
     def test_a_row_and_a_line_under_the_intro(self):
         page = _emulator_page("mame2003")
@@ -275,14 +277,14 @@ class WhatTheAppShipsIsNoFileToGet(unittest.TestCase):
 
     def test_the_badge(self):
         font = next(f for f in self.profile["files"] if f["name"] == "Roboto-Regular.ttf")
-        badges = " ".join(emulatorcards.file_badges(font, False))
+        badges = " ".join(filebadges.file_badges(font, False))
         self.assertIn(">comes with the app</span>", badges)
         self.assertNotIn(">required</span>", badges)
         self.assertNotIn(">missing</span>", badges)
         # Narrowed to one build, the entry is that build's alone, as verify
         # and the pack read it: EightyOne installs its ROMs, and the libretro
         # core, which embeds them, reads no entry. Nothing to fetch.
-        dual = " ".join(emulatorcards.file_badges({"name": "a", "bundled": True, "mode": "standalone",
+        dual = " ".join(filebadges.file_badges({"name": "a", "bundled": True, "mode": "standalone",
                                          "required": True}, False))
         self.assertNotIn(">required</span>", dual)
         self.assertNotIn(">missing</span>", dual)
@@ -725,7 +727,7 @@ class DataFolderPrinted(unittest.TestCase):
                                                          "standalone_path": "a"}), "a")
 
     def test_the_metadata_card_has_a_row_per_system(self) -> None:
-        rows = emulatorcards.render_metadata_rows(_profile("cxbx-reloaded"))
+        rows = emulatormetadata.render_metadata_rows(_profile("cxbx-reloaded"))
         self.assertIn("| Data folder (Windows) | `%APPDATA%/Cxbx-Reloaded/` |", rows)
         self.assertFalse(any("Data folder (Linux)" in row for row in rows))
 

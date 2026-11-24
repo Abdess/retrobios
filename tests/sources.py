@@ -82,6 +82,7 @@ COMMANDS = {
         "sitegen/systemsindex.py",
         "sitegen/provenance.py", "sitegen/fields.py", "sitegen/consolecards.py",
         "sitegen/startwith.py", "sitegen/systempages.py", "sitegen/emulatorcards.py",
+        "sitegen/filebadges.py", "sitegen/emulatormetadata.py",
         "sitegen/emulatorpage.py", "sitegen/gaps.py", "sitegen/crossref.py", "sitegen/reference.py",
         "sitegen/whichpack.py", "sitegen/nav.py", "sitegen/build.py", "sitegen/coverage.py",
         "sitegen/extraction.py", "sitegen/releasepacks.py", "sitegen/archivecounts.py",

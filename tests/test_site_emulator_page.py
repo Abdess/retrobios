@@ -76,7 +76,7 @@ class WhoShipsTheBuildAndWhy(unittest.TestCase):
     def test_the_version_links_its_proof(self):
         """`0.97, stated in libretro/handy.h` was bare text beside a pinned
         Revision link: the #define it reads was one search away."""
-        from sitegen import emulatorcards
+        from sitegen import emulatormetadata
         from sitegen import sources
         import yaml
 
@@ -84,15 +84,15 @@ class WhoShipsTheBuildAndWhy(unittest.TestCase):
         path = handy["version_basis"]["path"]
         self.assertIn(path, sources.cited_paths(handy))
         self.assertIn(f"stated in [`{path}`](https://github.com/libretro/libretro-handy/blob/"
-                      f"{handy['source_commit']}/{path})", emulatorcards.version_markdown(handy))
+                      f"{handy['source_commit']}/{path})", emulatormetadata.version_markdown(handy))
         tagged = {"source": "https://github.com/owner/emu", "source_commit": "a" * 40,
                   "core_version": "1.2-3-gaaaaaaa",
                   "version_basis": {"kind": "tag", "tag": "1.2", "distance": 3}}
-        self.assertEqual(emulatorcards.version_markdown(tagged), "1.2-3-gaaaaaaa, 3 commits after tag "
+        self.assertEqual(emulatormetadata.version_markdown(tagged), "1.2-3-gaaaaaaa, 3 commits after tag "
                          "[`1.2`](https://github.com/owner/emu/tree/1.2)")
         # A file no recorded tree confirms stays plain: no link beats a 404.
         unread = {**tagged, "version_basis": {"kind": "file", "path": "src/none.h"}}
-        self.assertEqual(emulatorcards.version_markdown(unread), "1.2-3-gaaaaaaa, stated in `src/none.h`")
+        self.assertEqual(emulatormetadata.version_markdown(unread), "1.2-3-gaaaaaaa, stated in `src/none.h`")
 
     def test_the_upstream_pin_says_why_it_is_held(self):
         """mupen64plus showed its core revision and not that AmberELEC

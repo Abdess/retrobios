@@ -1049,13 +1049,13 @@ class FaqRegressions(unittest.TestCase):
         # Typed by hand, the table and the prose under it kept MAME 0.160
         # and FinalBurn Neo 1.0.0.2, versions no source at the pins states,
         # and the test holding them to the profiles kept the errors in step.
-        from sitegen import emulatorcards
+        from sitegen import emulatormetadata
         from model.profiles import load_emulator_profiles
 
         profiles = load_emulator_profiles(str(ROOT / "emulators"), skip_aliases=False)
         page = (ROOT / "wiki" / "technical-faq.md").read_text(encoding="utf-8")
         self.assertEqual(
-            page, emulatorcards.with_romset_table(page, profiles),
+            page, emulatormetadata.with_romset_table(page, profiles),
             "wiki/technical-faq.md romset table is stale: run scripts/generate_site.py",
         )
         prose = page.split("### How this is known", 1)[1].split("\n## ", 1)[0]
