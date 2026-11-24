@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from scraper.dat_parser import parse_dat
 
 from .base_exporter import BaseExporter
-from resolve.reconcile import NativeFile, NativeSystem, Report
+from resolve.nativemodel import NativeFile, NativeSystem, Report
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/libretro/libretro-database/master/dat/System.dat"

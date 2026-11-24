@@ -23,7 +23,8 @@ from scraper.retropie_modules import module_fields
 from scraper.retropie_scraper import script_members
 
 from .base_exporter import BaseExporter
-from resolve.reconcile import NativeFile, NativeSystem, Report, search_order
+from resolve.nativemodel import NativeFile, NativeSystem, Report
+from resolve.reconcile import search_order
 
 SOURCE_URL = (
     "https://codeload.github.com/RetroPie/RetroPie-Setup/tar.gz/refs/heads/master"

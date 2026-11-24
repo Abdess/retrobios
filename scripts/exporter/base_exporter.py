@@ -12,7 +12,7 @@ from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, Union
 
 from model.profiles import core_key_index, platform_core_profiles
-from resolve.reconcile import NativeFile, NativeSystem, Report
+from resolve.nativemodel import NativeFile, NativeSystem, Report
 
 # What a produced file holds: text for every format, bytes besides for one
 # that also hands back an archive (MiSTer's bios_db.json.zip).

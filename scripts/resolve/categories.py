@@ -19,9 +19,8 @@ from pathlib import Path
 from model.systems import norm_system_id
 from resolve.cores import resolve_platform_cores, unresolved_platform_cores
 from core.hashing import declared_hashes, parse_hash_list
-from resolve.reconcile import (
-    HASH_FIELDS, NativeSystem, comparable, contradicts, entry_names,
-)
+from resolve.reconcile import HASH_FIELDS, entry_names
+from resolve.nativemodel import NativeSystem, comparable, contradicts
 from resolve.launcherconfig import bound_launchers
 from resolve.launcherplaces import record_names as launcher_names
 

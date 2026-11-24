@@ -20,9 +20,9 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class EveryAcceptedRevisionIsKnown(unittest.TestCase):
     def test_multi_hash_members_are_known(self):
-        from resolve import review
+        from resolve.reviewhashes import load_platform_hashes
 
-        known = review.load_platform_hashes(str(REPO_ROOT / "platforms"))
+        known = load_platform_hashes(str(REPO_ROOT / "platforms"))
         raw = yaml.safe_load((REPO_ROOT / "platforms" / "recalbox.yml").read_text())
         listed = [
             value.strip().lower()

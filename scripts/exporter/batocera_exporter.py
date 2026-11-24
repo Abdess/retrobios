@@ -14,7 +14,7 @@ import re
 from scraper.batocera_scraper import comment_start, systems_span
 
 from .base_exporter import BaseExporter
-from resolve.reconcile import NativeFile, NativeSystem, Report
+from resolve.nativemodel import NativeFile, NativeSystem, Report
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/batocera-linux/batocera.linux/master"

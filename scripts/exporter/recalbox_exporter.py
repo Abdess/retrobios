@@ -24,9 +24,8 @@ from core.hashing import parse_hash_list
 from model.safeparse import parse_untrusted_xml
 
 from .base_exporter import BaseExporter
-from resolve.reconcile import (
-    NativeFile, NativeSystem, Report, by_destination, by_name,
-)
+from resolve.nativemodel import NativeFile, NativeSystem, Report
+from resolve.reconcile import by_destination, by_name
 
 SOURCE_URL = (
     "https://gitlab.com/recalbox/recalbox/-/raw/master/board/recalbox/fsoverlay"

@@ -26,7 +26,8 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from model.database import load_optional_database
 from core.cli import add_repo_inputs, require_directory
-from resolve.review import load_platform_hashes, load_profile_hashes, validate_file
+from resolve.reviewhashes import load_platform_hashes, load_profile_hashes
+from resolve.review import validate_file
 from devtools.reviewfiles import ChangedFilesUnreadable, SelectionError, files_to_validate, place
 from devtools.reviewreport import json_rows, markdown_report, text_lines
 

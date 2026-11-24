@@ -9,7 +9,7 @@ every build, and an addition is written the same way.
 
 from __future__ import annotations
 
-from resolve.reconcile import NativeFile
+from resolve.nativemodel import NativeFile
 from .batocera_exporter import Exporter as BatoceraExporter
 
 SOURCE_URL = (

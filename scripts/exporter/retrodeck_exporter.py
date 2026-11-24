@@ -15,7 +15,7 @@ from collections import OrderedDict
 from .base_exporter import BaseExporter
 from core.hashing import parse_hash_list
 from model.declarations import declared_components
-from resolve.reconcile import NativeFile, NativeSystem, Report
+from resolve.nativemodel import NativeFile, NativeSystem, Report
 
 COMPONENTS_REPO = "RetroDECK/components"
 COMPONENTS_BRANCH = "main"

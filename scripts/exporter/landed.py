@@ -7,7 +7,8 @@ from dataclasses import dataclass, field
 
 from .base_exporter import BaseExporter
 from core.hashing import parse_hash_list
-from resolve.reconcile import HASH_FIELDS, NativeFile, single_size
+from resolve.reconcile import HASH_FIELDS
+from resolve.nativemodel import NativeFile, single_size
 
 
 @dataclass

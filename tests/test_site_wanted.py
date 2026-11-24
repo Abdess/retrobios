@@ -28,7 +28,7 @@ from pathlib import Path
 from sitegen import gaps
 from sitegen import lookup
 from sitegen import wanted as sitewanted
-from resolve import review, sendable
+from resolve import review, reviewhashes, sendable
 import yaml
 from model.database import load_database
 from tests.test_site_pronouns import pronouns
@@ -159,7 +159,7 @@ class _World(unittest.TestCase):
         ]}]
         self.platform_hashes = {"sha1": set(), "md5": set(), "names": set(), "folders": {},
                                 "named": {}}
-        self.profile_hashes = review.load_profile_hashes(str(emulators), self.db)
+        self.profile_hashes = reviewhashes.load_profile_hashes(str(emulators), self.db)
         self.placer = sitewanted.Placer(self.db, self.platform_hashes, self.profile_hashes)
         self.data = sitewanted.build_wanted(
             self.profiles, self.coverages, self.gap_report, self.db, self.placer,
@@ -606,8 +606,8 @@ class AFolderComesFromTheSystem(unittest.TestCase):
         if not (REPO_ROOT / "database.json").is_file():
             raise unittest.SkipTest("no database")
         cls.db = load_database(str(REPO_ROOT / "database.json"))
-        cls.platform_hashes = review.load_platform_hashes(str(REPO_ROOT / "platforms"), cls.db)
-        cls.profile_hashes = review.load_profile_hashes(str(REPO_ROOT / "emulators"), cls.db)
+        cls.platform_hashes = reviewhashes.load_platform_hashes(str(REPO_ROOT / "platforms"), cls.db)
+        cls.profile_hashes = reviewhashes.load_profile_hashes(str(REPO_ROOT / "emulators"), cls.db)
 
     def place(self, systems: list[str], directory: str) -> review.Placement:
         return review.placement([], "config.ini", self.db, self.platform_hashes,
@@ -655,8 +655,8 @@ class ThePublishedList(unittest.TestCase):
 
     def test_every_folder_is_the_reviews(self):
         placer = sitewanted.Placer(
-            self.db, review.load_platform_hashes(str(REPO_ROOT / "platforms"), self.db),
-            review.load_profile_hashes(str(REPO_ROOT / "emulators"), self.db))
+            self.db, reviewhashes.load_platform_hashes(str(REPO_ROOT / "platforms"), self.db),
+            reviewhashes.load_profile_hashes(str(REPO_ROOT / "emulators"), self.db))
         # An entry placed by its hashes. The others take their folder from
         # their system and directory, which the list does not carry: the
         # synthetic world above holds them to the rule.

@@ -18,6 +18,7 @@ from pathlib import Path
 
 from devtools import reviewfiles, reviewreport
 from resolve import review
+from resolve.reviewhashes import load_profile_hashes, load_platform_hashes
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -132,7 +133,7 @@ class AFileOnlyACoreReadsIsKnown(_Fixture):
             "emulator: Engine\ntype: standalone\nsystems: [x]\nfiles:\n"
             f"  - name: \"data.bin\"\n    sha1: \"{hashlib.sha1(data).hexdigest()}\"\n"
         )
-        known = review.load_profile_hashes(str(emulators))
+        known = load_profile_hashes(str(emulators))
         result = review.validate_file(
             self._bios_file("bios/Maker/Engine/data.bin", data), None, EMPTY_HASHES, known,
         )
@@ -155,7 +156,7 @@ class AFileOnlyACoreReadsIsKnown(_Fixture):
         )
         db = {"files": {hashlib.sha1(held).hexdigest(): {"path": "bios/Maker/Console/a.bin"}},
               "indexes": {"by_md5": {}, "by_sha256": {}}}
-        known = review.load_profile_hashes(str(emulators), db)
+        known = load_profile_hashes(str(emulators), db)
         result = review.validate_file(
             self._bios_file("Downloads/b.bin", missing), db, EMPTY_HASHES, known,
         )
@@ -203,7 +204,7 @@ class ADeclaredFileBesideItsHeldNameIsAVariant(_Fixture):
         )
         db = {"files": {"a" * 40: {"path": "bios/Maker/Console/v.bin"}},
               "indexes": {"by_md5": {}, "by_sha256": {}, "by_name": {"v.bin": ["a" * 40]}}}
-        known = review.load_profile_hashes(str(emulators), db)
+        known = load_profile_hashes(str(emulators), db)
         result = review.validate_file(
             self._bios_file("card/v.bin", data), db, EMPTY_HASHES, known)
         slot = f"bios/Maker/Console/.variants/v.bin.{result.sha1[:8]}"
@@ -434,7 +435,7 @@ class PlacementBySystem(_Fixture):
         db = {"files": {"aaaa": {"path": "bios/Arcade/MAME/a.zip"},
                         "bbbb": {"path": "bios/Apple/Apple II/b.zip"}},
               "indexes": {"by_md5": {}}}
-        known = review.load_platform_hashes(str(platforms), db)
+        known = load_platform_hashes(str(platforms), db)
         self.assertEqual(known["folders"], {})
 
 
@@ -498,7 +499,7 @@ class Reporting(_Fixture):
 
 class PlatformHashLoading(_Fixture):
     def test_missing_directory_yields_empty_sets(self):
-        known = review.load_platform_hashes(str(self.tmp / "absent"))
+        known = load_platform_hashes(str(self.tmp / "absent"))
         self.assertEqual(known, {"sha1": set(), "md5": set(), "sha256": set(), "crc32": set(),
                                  "names": set(), "folders": {}, "sizes": {}, "entries": {},
                                  "named": {}, "name_systems": {}, "system_dirs": {},
@@ -519,7 +520,7 @@ class PlatformHashLoading(_Fixture):
             f"        sha1: {'a' * 40}\n"
             f"        md5: {'b' * 32}\n"
         )
-        known = review.load_platform_hashes(str(platforms))
+        known = load_platform_hashes(str(platforms))
         self.assertIn("a" * 40, known["sha1"])
         self.assertIn("b" * 32, known["md5"])
         self.assertIn("boot.bin", known["names"])
@@ -539,7 +540,7 @@ class ThePlatformsOwnCheckDecides(_Fixture):
             encoding="utf-8")
         (platforms / "p.yml").write_text(f"platform: P\nsystems:\n  s:\n    files:\n{systems}",
                                          encoding="utf-8")
-        return review.load_platform_hashes(str(platforms))
+        return load_platform_hashes(str(platforms))
 
     def _zip(self) -> str:
         import zipfile
@@ -682,7 +683,7 @@ class ProfileHashesReadAsTheResolverDoes(unittest.TestCase):
                 "  - name: bsx.bin\n    sha256: \"aa,bb\"\n",
                 encoding="utf-8",
             )
-            known = review.load_profile_hashes(tmp)
+            known = load_profile_hashes(tmp)
         self.assertEqual(known["crc32"][("bf63fb1f", 16384)], {"core"})
         self.assertIn("bb", known["sha256"])
 

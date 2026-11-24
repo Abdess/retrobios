@@ -30,7 +30,7 @@ from packs.crossref import whole_tree_gaps
 from packs.supplemental import SupplementalIndex
 from acquire.provenance import build_report, profile_needs
 from resolve.cores import resolve_platform_cores
-from resolve.review import load_platform_hashes, load_profile_hashes
+from resolve.reviewhashes import load_platform_hashes, load_profile_hashes
 from installer_build.handhelds import GROUP_PAGE
 from sitegen import (
     agents as siteagents,

@@ -20,7 +20,8 @@ from pathlib import Path
 from resolve.localfile import resolve_local_file
 from exporter import discover_exporters
 from exporter.landed import landed_changes
-from resolve.reconcile import NativeFile, build_native_model
+from resolve.nativemodel import NativeFile
+from resolve.reconcile import build_native_model
 from exporter.batocera_exporter import md5_list_support
 from scraper import rocknix_scraper
 from scraper.base_scraper import md5_field, requirement_entry

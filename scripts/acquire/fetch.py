@@ -16,7 +16,7 @@ from core import upstream
 from core.hashing import parse_hash_list
 from core.paths import EMULATORS_DIR, PLATFORMS_DIR, REPO_ROOT
 from resolve.lookup import held_record_for
-from resolve.review import load_platform_hashes, load_profile_hashes
+from resolve.reviewhashes import load_platform_hashes, load_profile_hashes
 
 MAX_DOWNLOAD = 100 * 1024 * 1024  # 100MB per file
 

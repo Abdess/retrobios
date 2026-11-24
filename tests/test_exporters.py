@@ -38,7 +38,8 @@ from exporter import discover_exporters
 from exporter.base_exporter import BaseExporter
 from exporter.originals import SOURCES_INDEX, collect_originals, fetch, pinned_base, source_key
 from exporter.landed import landed_changes
-from resolve.reconcile import NativeFile, NativeSystem, Report, build_native_model
+from resolve.nativemodel import NativeFile, NativeSystem, Report
+from resolve.reconcile import build_native_model
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -760,7 +761,7 @@ class SearchOrder(unittest.TestCase):
         """PicoDrive loads the first file of each region's list. RetroPie
         names one per region, but the export appended three more, which the
         sentence reads as three more required files."""
-        from resolve.reconcile import NativeSystem
+        from resolve.nativemodel import NativeSystem
 
         def cd(name, region, rank):
             return NativeFile(name=name, destination=name, native_system="segacd", truth={
@@ -795,7 +796,7 @@ class SearchOrder(unittest.TestCase):
         """flycast's help names the Dreamcast BIOS, then the Naomi/Atomiswave
         ones. naomi2.zip, an arcade archive, went into the Dreamcast list:
         only the first BIOS clause was read."""
-        from resolve.reconcile import NativeSystem
+        from resolve.nativemodel import NativeSystem
 
         def entry(name, system):
             return NativeFile(name=name, destination=f"dc/{name}", native_system=system,
@@ -2871,7 +2872,7 @@ class ARecordDescribesOneDump(unittest.TestCase):
     export wrote v2.0's crc beside v2.1's md5 and sha1."""
 
     def test_the_platform_record_stays_whole_when_the_truth_accepts_it(self):
-        from resolve.reconcile import NativeFile
+        from resolve.nativemodel import NativeFile
 
         fe = NativeFile(
             name="syscard2.pce", destination="syscard2.pce", native_system="pce",
@@ -2884,7 +2885,7 @@ class ARecordDescribesOneDump(unittest.TestCase):
         self.assertEqual(fe.record_hash("md5"), "3cdd6614" + "0" * 24)
 
     def test_a_field_only_the_truth_names_is_written_when_unambiguous(self):
-        from resolve.reconcile import NativeFile
+        from resolve.nativemodel import NativeFile
 
         one = NativeFile(name="a", destination="a", native_system="s",
                          platform={"crc32": "11111111"},

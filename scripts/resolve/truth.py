@@ -13,7 +13,7 @@ import os
 from resolve.launches import PlatformLaunches
 from resolve.standalone import platform_layouts, platform_launches
 from resolve.cores import resolve_platform_cores
-from resolve.reconcile import contradicts, shares_hash
+from resolve.nativemodel import contradicts, shares_hash
 from model.alternatives import groups_of
 from core.hashing import HASH_FIELDS, compute_hashes, declared_hashes, parse_hash_list
 from resolve.entryscope import (

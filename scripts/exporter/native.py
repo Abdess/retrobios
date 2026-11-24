@@ -30,7 +30,8 @@ from model.registry import load_data_dir_registry, load_platform_registry
 from model.safeparse import yaml_load
 from packs.datadirs import hold_data_dirs
 from resolve.categories import removal_candidates
-from resolve.reconcile import Report, build_native_model
+from resolve.nativemodel import Report
+from resolve.reconcile import build_native_model
 from resolve.truth import generate_platform_truth
 
 

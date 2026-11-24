@@ -18,7 +18,7 @@ import unittest
 import unittest.mock
 from pathlib import Path
 
-from resolve.reconcile import checked_hashes
+from resolve.nativemodel import checked_hashes
 from resolve.truth import generate_platform_truth
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

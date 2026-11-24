@@ -19,7 +19,7 @@ from scraper.romm_scraper import SLUG_MAP
 
 from .base_exporter import BaseExporter
 from core.hashing import parse_hash_list
-from resolve.reconcile import NativeFile, NativeSystem, Report
+from resolve.nativemodel import NativeFile, NativeSystem, Report
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/rommapp/romm/master/backend/models"

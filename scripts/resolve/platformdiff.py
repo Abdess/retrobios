@@ -19,7 +19,7 @@ def _hash_mismatch(t_entry: dict, s_entry: dict) -> dict | None:
     contradicts nothing (checked_hashes), and a platform md5 that is a
     composite of a zip's members is no container md5 (comparable).
     """
-    from resolve.reconcile import contradicted_hashes
+    from resolve.nativemodel import contradicted_hashes
 
     fields = contradicted_hashes(t_entry, s_entry)
     if not fields:
@@ -42,7 +42,8 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
     correct while the export corrected hashes the diff never named. An entry
     never answers for two.
     """
-    from resolve.reconcile import is_placeholder, is_label, pair_entries, platform_declares
+    from resolve.nativemodel import is_placeholder, is_label
+    from resolve.reconcile import pair_entries, platform_declares
 
     truth_files = [
         fe for fe in truth_sys.get("files", [])
