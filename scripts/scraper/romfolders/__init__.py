@@ -150,7 +150,7 @@ def load_formats() -> dict[str, Parser]:
     """Import every parser module of this package once.
 
     Testing FORMATS for emptiness stopped short once a scraper had imported
-    one parser module on its own (retrodeck_scraper reads romfolders.es):
+    one parser module on its own (retrodeck_scraper reads romfolders.esde):
     the other formats were never registered. import_module returns a module
     already loaded at once, so every call goes through all of them.
     """

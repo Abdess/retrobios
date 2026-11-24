@@ -57,7 +57,7 @@ from .base_scraper import (
     systems_from_requirements,
 )
 from .retrodeck_launchers import extract_launchers
-from .romfolders.es import command_core, esde_systems
+from .romfolders.esde import command_core, esde_systems
 
 PLATFORM_NAME = "retrodeck"
 COMPONENTS_REPO = "RetroDECK/components"
