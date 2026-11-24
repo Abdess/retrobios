@@ -1,4 +1,9 @@
-"""Building a platform pack, whole or cut per system: plan, variant choice, slot settlement, the archive."""
+"""The entry points of a platform pack, whole or cut per system or manufacturer.
+
+The options a build takes and their checks live here. The plan, variant choice and slot
+settlement come from packplan.py, the archive is written by platformzip.py, and a split
+builds each part against the full pack's own placement.
+"""
 
 from __future__ import annotations
 

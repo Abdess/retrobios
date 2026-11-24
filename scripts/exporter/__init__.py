@@ -1,7 +1,9 @@
-"""Exporter plugin discovery module.
+"""Each platform's own BIOS list file, written back in its native format and
+corrected by the ground truth: one *_exporter.py per format, the originals
+the code-bearing formats are patched from, and the report of what landed.
 
-Auto-detects *_exporter.py files and exposes their exporters.
-Each exporter module must define an Exporter class inheriting BaseExporter.
+discover_exporters() finds the *_exporter.py modules of this package. Each
+defines an Exporter class inheriting BaseExporter, keyed by its platform name.
 """
 
 from __future__ import annotations
