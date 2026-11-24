@@ -4321,7 +4321,7 @@ class AnAcceptedVersionIsNoCoreDiscrepancy(unittest.TestCase):
                 "source_path": "NWINTER.GRP", "source_profile": "eduke32"}
 
     def test_a_sibling_version_matches(self):
-        from scripts.packs.platformpack import _matches_an_alternative
+        from scripts.packs.platformzip import _matches_an_alternative
 
         with tempfile.TemporaryDirectory() as tmp:
             held = Path(tmp) / "NWINTER.GRP"
@@ -4332,7 +4332,7 @@ class AnAcceptedVersionIsNoCoreDiscrepancy(unittest.TestCase):
                 self._extra(), str(held), {"eduke32": profile}))
 
     def test_a_copy_no_entry_declares_still_disagrees(self):
-        from scripts.packs.platformpack import _matches_an_alternative
+        from scripts.packs.platformzip import _matches_an_alternative
 
         with tempfile.TemporaryDirectory() as tmp:
             held = Path(tmp) / "NWINTER.GRP"

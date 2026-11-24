@@ -32,7 +32,7 @@ from packs.manifestentry import (
 )
 from packs.manifestselect import SelectionIndex
 from packs.archive import Placed
-from packs.platformpack import one_per_slot_drops
+from packs.packplan import one_per_slot_drops
 from resolve import regions as resolve_regions, slot as slot_mod
 from resolve.contentlayout import TARGET_KEY, content_folder_boards
 from resolve.cores import (

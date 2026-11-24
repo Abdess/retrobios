@@ -360,11 +360,11 @@ class AVersionTakenWithoutACheck(unittest.TestCase):
             ))
 
     def test_the_pack_reads_it_as_an_alternative(self):
-        from packs import platformpack
+        from packs import platformzip
 
         fe = {"name": "BLOOD.RFF", "source_profile": "raze", "source_path": "BLOOD.RFF"}
         with tempfile.TemporaryDirectory() as tmp:
-            self.assertTrue(platformpack._matches_an_alternative(
+            self.assertTrue(platformzip._matches_an_alternative(
                 fe, self._file(tmp), {"raze": self.RAZE}
             ))
 

@@ -266,8 +266,9 @@ class EveryNarrowingIsCompared(unittest.TestCase):
 
         from orchestrate import narrowed
         from packs import platformpack
+        from packs import platformzip
 
-        refused = platformpack.PlatformPackOutcome(zip_path=None, refusal="no core runs x")
+        refused = platformzip.PlatformPackOutcome(zip_path=None, refusal="no core runs x")
         inputs = ({}, {}, {}, {}, [(["p"], "p")])
         printed = io.StringIO()
         with mock.patch.object(narrowed, "comparison_inputs", return_value=inputs), \

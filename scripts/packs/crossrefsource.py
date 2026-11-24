@@ -7,9 +7,9 @@ from packs.supplemental import SupplementalIndex, data_hit, declared_content
 from resolve.content import content_fits, name_match_size_ok
 from resolve.directories import directory_members
 from resolve.layout import system_dir_path
-from resolve.localfile import held_record_for
+from resolve.lookup import held_record_for
 from resolve.ownership import foreign_tree, owner_tokens
-from resolve.validation import read_from_save_dir
+from resolve.entryscope import read_from_save_dir
 
 
 def _resolve_source(

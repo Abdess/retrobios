@@ -271,7 +271,7 @@ class TestConflicts(unittest.TestCase):
         """
         import inspect
 
-        from packs import coverage, manifest, platformpack
+        from packs import coverage, manifest, packplan
 
         for function in (
             packs_slots.platform_claims,
@@ -292,7 +292,7 @@ class TestConflicts(unittest.TestCase):
         # the ZIP builder, the install manifest and the report. The manifest
         # deciding nothing gave the installer other bytes than the ZIP.
         for tool, modules, calls in (
-            ("generate_pack", (platformpack, manifest), 2), ("verify", (coverage,), 1),
+            ("generate_pack", (packplan, manifest), 2), ("verify", (coverage,), 1),
         ):
             source = "".join(inspect.getsource(module) for module in modules)
             with self.subTest(tool=tool):
@@ -528,7 +528,7 @@ class TestBuilderAndVerifierAgree(unittest.TestCase):
         # The rule lives in one place. A second copy would let the pack and the
         # report describe different files, which the project forbids outright.
         scripts = Path(__file__).resolve().parents[1] / "scripts"
-        builder = (scripts / "packs" / "platformpack.py", scripts / "packs" / "manifest.py")
+        builder = (scripts / "packs" / "packplan.py", scripts / "packs" / "manifest.py")
         verifier = (scripts / "packs" / "coverage.py",)
         for source in (*builder, *verifier):
             text = source.read_text(encoding="utf-8")
@@ -545,7 +545,7 @@ class TestBuilderAndVerifierAgree(unittest.TestCase):
         # override lookup both sides must perform. The old anchor was a string
         # the test above forbids, so the window was the whole file.
         mode_test = re.compile(r"""[=!]=\s*["'](?:md5|sha1|existence)["']""")
-        for name in ("packs/platformpack.py", "packs/manifestbuild.py", "packs/platformtally.py"):
+        for name in ("packs/platformzip.py", "packs/manifestbuild.py", "packs/platformtally.py"):
             source = Path(__file__).resolve().parents[1] / "scripts" / name
             body = source.read_text(encoding="utf-8")
             anchors = [m.start() for m in re.finditer(r"slot_overrides\.get\(", body)]

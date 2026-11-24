@@ -34,7 +34,7 @@ from model.registry import list_registered_platforms, load_data_dir_registry
 from resolve.localfile import resolve_local_file
 from resolve.ownership import BUCKET_FOLDERS, names_manufacturer
 from collection.indexes import shadowed_alias_index
-from packs import manifest as packs_manifest, md5pack, naming as packs_naming, platformpack
+from packs import manifest as packs_manifest, md5pack, naming as packs_naming, packplan, platformpack
 from resolve import ownership
 from packs.coverage import verify_platform
 
@@ -197,7 +197,7 @@ class DiskRomGoesToThePc88File(_Collection):
         manifest = self._manifest()
         original = (platforms.load_platform_config, localfile.system_makers)
         # Every module that reads the loader by its own name sees the stub.
-        readers = (packs_manifest, md5pack, packs_naming, platformpack, platforms, cliargs, cores, grouping)
+        readers = (packs_manifest, md5pack, packs_naming, packplan, platformpack, platforms, cliargs, cores, grouping)
 
         def untagged(*args, **kwargs):
             config = original[0](*args, **kwargs)

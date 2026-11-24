@@ -7,7 +7,8 @@ from typing import TYPE_CHECKING
 from packs.datatrees import uncached_warning
 
 if TYPE_CHECKING:
-    from packs.platformpack import PlatformPackOutcome, SplitOutcome
+    from packs.platformzip import PlatformPackOutcome
+    from packs.platformpack import SplitOutcome
 
 _STATUS_LABELS = {"untested": "UNTESTED", "excluded": "EXCLUDED", "missing": "MISSING"}
 

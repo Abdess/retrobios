@@ -22,7 +22,7 @@ class SlotPassReadsTheRegionGrouping(unittest.TestCase):
     def test_ranked_mega_cd_alternatives_are_decided(self):
         if not (REPO_ROOT / "database.json").is_file():
             self.skipTest("database.json not built")
-        from packs import platformpack
+        from packs import packplan
         from model.database import load_database
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
@@ -33,7 +33,7 @@ class SlotPassReadsTheRegionGrouping(unittest.TestCase):
         db = load_database("database.json")
         profiles = load_emulator_profiles("emulators")
         config = load_platform_config("retroarch", "platforms")
-        drops, _fallbacks, _undecided = platformpack._select_variants(
+        drops, _fallbacks, _undecided = packplan._select_variants(
             config, config["systems"], "emulators", db,
             config.get("base_destination", ""), profiles, None, "full",
             regions=None, one_per_slot=True,
@@ -57,7 +57,7 @@ class VariantGroupSpansSystems(unittest.TestCase):
         """
         if not (REPO_ROOT / "database.json").is_file():
             self.skipTest("database.json not built")
-        from packs import platformpack
+        from packs import packplan
         from model import region
         from model.database import load_database
         from model.profiles import load_emulator_profiles
@@ -69,7 +69,7 @@ class VariantGroupSpansSystems(unittest.TestCase):
         db = load_database("database.json")
         profiles = load_emulator_profiles("emulators")
         config = load_platform_config("retroarch", "platforms")
-        drops, _fallbacks, _undecided = platformpack._select_variants(
+        drops, _fallbacks, _undecided = packplan._select_variants(
             config, config["systems"], "emulators", db,
             config.get("base_destination", ""), profiles, None, "full",
             regions=region.parse_requested("us"), one_per_slot=False,

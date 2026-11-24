@@ -18,6 +18,7 @@ from pathlib import Path
 import yaml
 from packs import archive
 from packs import platformpack
+from packs import platformzip
 
 from model.platforms import load_platform_config
 
@@ -85,14 +86,14 @@ class ThePackReadmeNamesTheSpellingsItLeavesOut(unittest.TestCase):
         }}}))
         _platform_config_cache.clear()
         texts: dict[str, str] = {}
-        real = platformpack.write_generated_member
+        real = platformzip.write_generated_member
 
         def capture(zf, arcname, text):
             texts[arcname] = text
             return real(zf, arcname, text)
 
-        platformpack.write_generated_member = capture
-        self.addCleanup(setattr, platformpack, "write_generated_member", real)
+        platformzip.write_generated_member = capture
+        self.addCleanup(setattr, platformzip, "write_generated_member", real)
         platformpack.build_platform_pack(
             "p", "platforms", self.db, "bios", "", emulators_dir="emulators",
             offline=True, record=archive.PackRecord(),
