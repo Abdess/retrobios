@@ -550,10 +550,11 @@ class Scrapers(unittest.TestCase):
             environment_directories(Configgen(tree.__getitem__))
 
     def test_retrobat_bios_path_setting(self) -> None:
-        from scraper import retrobat_launchers as rl
+        from scraper import retrobat_generators
+        from scraper.retrobat_config_files import _value_writes
         from scraper.csharp_source import Source
 
-        path = f"{rl.GENERATORS}/Flycast.Generator.cs"
+        path = f"{retrobat_generators.GENERATORS}/Flycast.Generator.cs"
         text = textwrap.dedent("""\
                 private void SetupConfiguration(string path)
                 {
@@ -566,7 +567,7 @@ class Scrapers(unittest.TestCase):
                     }
                 }
             """)
-        records = rl._value_writes(Source(path, text), "flycast", "standalone")
+        records = _value_writes(Source(path, text), "flycast", "standalone")
         self.assertEqual([r["search_dir"] for r in records], ["bios/dc"])
         self.assertIn("Dreamcast.BiosPath", records[0]["passes_to"])
 

@@ -17,7 +17,8 @@ import unittest
 from pathlib import Path
 
 from resolve.launchers import handed_directories, standalone_bindings
-from scraper import retrobat_launchers as rl
+from scraper import retrobat_generators
+from scraper.retrobat_arguments import portable_users
 from scraper.csharp_source import Source
 from scraper.batocera_configgen import GENERATORS, IMPORTER, PATHS_MODULE, Configgen
 from scraper.batocera_launchers import LauncherShapeError, patched_paths, working_directories
@@ -185,16 +186,16 @@ class APortableUserFolder(unittest.TestCase):
             return self.CITRON.replace("citron.exe", exe)
 
         return {
-            f"{rl.GENERATORS}/Citron.Generator.cs": source("c", self.CITRON),
-            f"{rl.GENERATORS}/Eden.Generator.cs": source("e", yuzu_like("eden.exe")),
-            f"{rl.GENERATORS}/Ryujinx.Generator.cs": source("r", self.RYUJINX),
-            f"{rl.GENERATORS}/ShadPS4.Generator.cs": source("s", self.SHADPS4),
-            f"{rl.GENERATORS}/Sudachi.Generator.cs": source("u", yuzu_like("sudachi.exe")),
-            f"{rl.GENERATORS}/Yuzu.Generator.cs": source("y", yuzu_like("yuzu.exe")),
+            f"{retrobat_generators.GENERATORS}/Citron.Generator.cs": source("c", self.CITRON),
+            f"{retrobat_generators.GENERATORS}/Eden.Generator.cs": source("e", yuzu_like("eden.exe")),
+            f"{retrobat_generators.GENERATORS}/Ryujinx.Generator.cs": source("r", self.RYUJINX),
+            f"{retrobat_generators.GENERATORS}/ShadPS4.Generator.cs": source("s", self.SHADPS4),
+            f"{retrobat_generators.GENERATORS}/Sudachi.Generator.cs": source("u", yuzu_like("sudachi.exe")),
+            f"{retrobat_generators.GENERATORS}/Yuzu.Generator.cs": source("y", yuzu_like("yuzu.exe")),
         }
 
     def test_each_generator_gives_its_user_folder(self):
-        found = rl.portable_users(self.sources())
+        found = portable_users(self.sources())
         self.assertEqual(
             [(r["emulator"], r["search_dir"], r["source_ref"]) for r in found],
             [("citron", '<AppConfig.GetFullPath("citron")>/user', "c:3, 7-8"),
@@ -214,7 +215,7 @@ class APortableUserFolder(unittest.TestCase):
         config = {
             "base_destination": "bios", "standalone_cores": ["citron"],
             "emulators_directory": {"launcher_spelling": '<AppConfig.GetFullPath("{key}")>'},
-            "launchers": rl.portable_users(self.sources())[:1],
+            "launchers": portable_users(self.sources())[:1],
         }
         found = standalone_bindings(
             {"citron"}, ["$XDG_DATA_HOME/citron", "PORTABLE_DIR"], handed_directories(config, {})

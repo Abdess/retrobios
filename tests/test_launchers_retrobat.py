@@ -16,12 +16,30 @@ import unittest
 from pathlib import Path
 
 from scraper import retrobat_launchers as rl
+from scraper import retrobat_generators
+from scraper.retrobat_arguments import pico8, xroar, mame
+from scraper.retrobat_computers import hatari, openmsx, amiberry
+from scraper.retrobat_config_files import (
+    ares,
+    bizhawk_gb,
+    dolphin,
+    blastem,
+    jzintv,
+    melonds_dsi,
+    desmume,
+    mesen,
+)
+from scraper.retrobat_config_folders import eka2l1, tsugaru, dosbox_copies
+from scraper.retrobat_generators import GUARDED_WRITES, guarded_writes_in, GENERATORS
+from scraper.retrobat_playstation import duckstation, psx_cascades
+from scraper.retrobat_render import _render, _option_path_in
+from scraper.retrobat_xbox import CXBX_DATA_FOLDER, cxbx, xemu_saves
 from scraper.csharp_source import LauncherPatternMissing, Source, render_concat
 from model.sourcerevision import required_revision
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-G = rl.GENERATORS
+G = GENERATORS
 
 
 def _sources(**texts: str) -> dict[str, Source]:
@@ -361,7 +379,7 @@ def revision_of(url: str) -> str:
 
 class NamesInLauncherOrder(unittest.TestCase):
     def test_ares_fallback_chain_keeps_its_order(self):
-        [record] = rl.ares(_sources(**{f"{G}/Ares.Generator.cs": ARES}))
+        [record] = ares(_sources(**{f"{G}/Ares.Generator.cs": ARES}))
         self.assertEqual(
             record["names"],
             [
@@ -378,7 +396,7 @@ class NamesInLauncherOrder(unittest.TestCase):
         self.assertEqual(record["source_ref"], f"{G}/Ares.Generator.cs:7-14")
 
     def test_mesen_copy_names_source_and_renamed_target(self):
-        [record] = rl.mesen(_sources(**{f"{G}/Mesen.Generator.cs": MESEN}))
+        [record] = mesen(_sources(**{f"{G}/Mesen.Generator.cs": MESEN}))
         self.assertEqual(record["names"], ["colecovision.rom"])
         self.assertEqual(record["kind"], "copies")
         self.assertIn("<mesen>/Firmware/bios.col", record["passes_to"])
@@ -389,7 +407,7 @@ class NamesInLauncherOrder(unittest.TestCase):
         self.assertEqual(record["source_ref"], f"{G}/Mesen.Generator.cs:1-13")
 
     def test_amiberry_identical_lists_are_one_record(self):
-        records = rl.amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
+        records = amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
         records = [r for r in records if r["kind"] == "names_searched"]
         self.assertEqual(
             [r["names"] for r in records],
@@ -408,7 +426,7 @@ class NamesInLauncherOrder(unittest.TestCase):
         )
 
     def test_amiberry_folders_are_below_its_emulator_folder(self):
-        records = rl.amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
+        records = amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
         folders = [r for r in records if r["kind"] == "passes_path"]
         self.assertEqual(
             [(r["search_dir"], r["passes_to"], r["source_ref"]) for r in folders],
@@ -421,7 +439,7 @@ class NamesInLauncherOrder(unittest.TestCase):
         )
 
     def test_amiberry_copies_each_kickstart_into_its_roms_folder(self):
-        records = rl.amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
+        records = amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
         copies = [r for r in records if r["kind"] == "copies"]
         self.assertEqual(
             [(r["names"], r["passes_to"], r["depends_on_option"]) for r in copies],
@@ -445,10 +463,10 @@ class NamesInLauncherOrder(unittest.TestCase):
     def test_amiberry_copy_without_its_staleness_test_raises(self):
         broken = AMIBERRY.replace(" || dst.LastWriteTimeUtc < src.LastWriteTimeUtc", "")
         with self.assertRaises(LauncherPatternMissing):
-            rl.amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": broken}))
+            amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": broken}))
 
     def test_psx_cascade_splits_searched_from_fallback(self):
-        records = rl.psx_cascades(_psx_sources())
+        records = psx_cascades(_psx_sources())
         searched, fallback = [r for r in records if r["emulator"] == "mednafen"]
         self.assertEqual(searched["names"], ["psxonpsp660.bin", "ps1_rom.bin"])
         self.assertEqual(searched["depends_on_option"], "mednafen_psx_original_bios off")
@@ -458,14 +476,14 @@ class NamesInLauncherOrder(unittest.TestCase):
         self.assertEqual(searched["source_ref"], f"{G}/Mednafen.Generator.cs:1-21")
 
     def test_libretro_cascade_takes_the_core_from_its_guard(self):
-        records = rl.psx_cascades(_psx_sources())
+        records = psx_cascades(_psx_sources())
         [beetle] = [r for r in records if r["build"] == "libretro"]
         self.assertEqual(beetle["emulator"], "mednafen_psx_hw")
         self.assertEqual(beetle["names"], ["psxonpsp660.bin"])
         self.assertEqual(beetle["source_ref"], f"{G}/LibRetro.CoreOptions.cs:3-12")
 
     def test_openmsx_one_record_per_machine(self):
-        records = rl.openmsx(_sources(**{f"{G}/OpenMSX.Generator.cs": OPENMSX}))
+        records = openmsx(_sources(**{f"{G}/OpenMSX.Generator.cs": OPENMSX}))
         self.assertEqual(
             [(r["passes_to"], r["names"]) for r in records],
             [
@@ -480,27 +498,27 @@ class NamesInLauncherOrder(unittest.TestCase):
 
     def test_openmsx_home_is_handed_as_a_directory(self):
         # OPENMSX_HOME is the user directory openMSX reads share/systemroms below.
-        records = rl.openmsx(_sources(**{f"{G}/OpenMSX.Generator.cs": OPENMSX}))
+        records = openmsx(_sources(**{f"{G}/OpenMSX.Generator.cs": OPENMSX}))
         home = records[-1]
         self.assertEqual(home["kind"], "passes_path")
         self.assertEqual(home["search_dir"], "bios/openmsx")
         self.assertEqual(home["source_ref"], f"{G}/OpenMSX.Generator.cs:13-14")
 
     def test_duckstation_reads_the_standalone_feature_not_the_core(self):
-        search, option = rl.duckstation(
-            _sources(**{f"{G}/Duckstation.Generator.cs": DUCKSTATION, rl.FEATURES: FEATURES})
+        search, option = duckstation(
+            _sources(**{f"{G}/Duckstation.Generator.cs": DUCKSTATION, retrobat_generators.FEATURES: FEATURES})
         )
         self.assertEqual(search["kind"], "passes_path")
         self.assertEqual(search["names"], [])
         self.assertEqual(option["names"], ["psxonpsp660.bin", "scph5501.bin"])
         self.assertEqual(option["passes_to"], "settings.ini [BIOS] PathNTSCJ = PathPAL = <value>")
         self.assertEqual(
-            option["source_ref"], f"{G}/Duckstation.Generator.cs:3-7, {rl.FEATURES}:12-15"
+            option["source_ref"], f"{G}/Duckstation.Generator.cs:3-7, {retrobat_generators.FEATURES}:12-15"
         )
 
     def test_hatari_default_and_option(self):
-        fixed, option, emutos, newer = rl.hatari(
-            _sources(**{f"{G}/Hatari.Generator.cs": HATARI, rl.FEATURES: HATARI_FEATURES})
+        fixed, option, emutos, newer = hatari(
+            _sources(**{f"{G}/Hatari.Generator.cs": HATARI, retrobat_generators.FEATURES: HATARI_FEATURES})
         )
         message = "ApplicationException 'Missing TOS file <tosName> in 'bios' folder.'"
         self.assertEqual(fixed["names"], ["tos.img"])
@@ -517,7 +535,7 @@ class NamesInLauncherOrder(unittest.TestCase):
 
 
 def _one(text: str, emulator: str, path: str = f"{G}/X.Generator.cs") -> list[dict]:
-    return rl.guarded_writes_in(_sources(**{path: text})[path], emulator)
+    return guarded_writes_in(_sources(**{path: text})[path], emulator)
 
 
 class GuardedConfigWrites(unittest.TestCase):
@@ -575,7 +593,7 @@ class GuardedConfigWrites(unittest.TestCase):
 
     def test_pinned_kega_fusion_generator_is_read(self):
         self.assertIn(f"{G}/KegaFusion.Generator.cs", rl.SOURCE_FILES)
-        self.assertEqual(rl.GUARDED_WRITES[f"{G}/KegaFusion.Generator.cs"], "kega-fusion")
+        self.assertEqual(GUARDED_WRITES[f"{G}/KegaFusion.Generator.cs"], "kega-fusion")
 
 
 SATURN_FEATURES = """
@@ -1068,14 +1086,14 @@ XROAR = """
 
 
 def _feature_sources(path: str, text: str, features: str) -> dict[str, Source]:
-    return _sources(**{path: text, rl.FEATURES: features})
+    return _sources(**{path: text, retrobat_generators.FEATURES: features})
 
 
 class OptionReplacesThePath(unittest.TestCase):
     def test_kronos_default_then_option_without_hle(self):
         path = f"{G}/Kronos.Generator.cs"
         sources = _feature_sources(path, KRONOS, SATURN_FEATURES)
-        fixed, option = rl._option_path_in(sources[path], sources[rl.FEATURES], "kronos")
+        fixed, option = _option_path_in(sources[path], sources[retrobat_generators.FEATURES], "kronos")
         self.assertEqual(fixed["names"], ["saturn_bios.bin"])
         self.assertEqual(fixed["depends_on_option"], "kronos_force_bios unset")
         self.assertEqual(
@@ -1084,12 +1102,12 @@ class OptionReplacesThePath(unittest.TestCase):
         self.assertEqual(fixed["source_ref"], f"{path}:6, 14-15")
         self.assertEqual(option["kind"], "core_option")
         self.assertEqual(option["names"], ["saturn_bios.bin", "sega_101.bin"])
-        self.assertEqual(option["source_ref"], f"{path}:7-15, {rl.FEATURES}:3-7")
+        self.assertEqual(option["source_ref"], f"{path}:7-15, {retrobat_generators.FEATURES}:3-7")
 
     def test_ymir_writes_without_a_check_and_passes_the_folder(self):
         path = f"{G}/Ymir.Generator.cs"
         sources = _feature_sources(path, YMIR, SATURN_FEATURES)
-        fixed, option, folder = rl._option_path_in(sources[path], sources[rl.FEATURES], "ymir")
+        fixed, option, folder = _option_path_in(sources[path], sources[retrobat_generators.FEATURES], "ymir")
         self.assertEqual(
             fixed["passes_to"], "Ymir.toml [System.IPL] Path, written without an existence check"
         )
@@ -1102,8 +1120,8 @@ class OptionReplacesThePath(unittest.TestCase):
     def test_kronos_falls_back_to_the_regional_bios(self):
         path = f"{G}/Kronos.Generator.cs"
         sources = _feature_sources(path, KRONOS_FALLBACK, SATURN_FEATURES)
-        fixed, option, fallback = rl._option_path_in(
-            sources[path], sources[rl.FEATURES], "kronos"
+        fixed, option, fallback = _option_path_in(
+            sources[path], sources[retrobat_generators.FEATURES], "kronos"
         )
         self.assertEqual(
             fixed["fails_when_missing"],
@@ -1126,12 +1144,12 @@ class OptionReplacesThePath(unittest.TestCase):
     def test_ymir_writes_a_forced_bios_under_its_flag(self):
         path = f"{G}/Ymir.Generator.cs"
         sources = _feature_sources(path, YMIR_OVERRIDE, SATURN_FEATURES)
-        option, ipl, cdb = rl._option_path_in(sources[path], sources[rl.FEATURES], "ymir")
+        option, ipl, cdb = _option_path_in(sources[path], sources[retrobat_generators.FEATURES], "ymir")
         self.assertEqual(
             option["passes_to"],
             "Ymir.toml [System.IPL] Path = <bios>/<value>, only if the file exists",
         )
-        self.assertEqual(option["source_ref"], f"{path}:7-13, {rl.FEATURES}:10-13")
+        self.assertEqual(option["source_ref"], f"{path}:7-13, {retrobat_generators.FEATURES}:10-13")
         self.assertEqual(ipl["passes_to"], "Ymir.toml [General.PathOverrides] IPLROMImages = bios")
         self.assertEqual(cdb["search_dir"], "bios/cdb")
         self.assertEqual(
@@ -1142,7 +1160,7 @@ class OptionReplacesThePath(unittest.TestCase):
     def test_ssf_has_no_default_name(self):
         path = f"{G}/SSF.Generator.cs"
         sources = _feature_sources(path, SSF, SATURN_FEATURES)
-        [option] = rl._option_path_in(sources[path], sources[rl.FEATURES], "ssf")
+        [option] = _option_path_in(sources[path], sources[retrobat_generators.FEATURES], "ssf")
         self.assertEqual(option["names"], ["sega_101.bin"])
         self.assertEqual(
             option["passes_to"],
@@ -1152,7 +1170,7 @@ class OptionReplacesThePath(unittest.TestCase):
 
 class FilesNeededTogether(unittest.TestCase):
     def test_desmume_pair_and_firmware_override(self):
-        pair, firmware = rl.desmume(_sources(**{f"{G}/Desmume.Generator.cs": DESMUME}))
+        pair, firmware = desmume(_sources(**{f"{G}/Desmume.Generator.cs": DESMUME}))
         self.assertEqual(pair["names"], ["bios7.bin", "bios9.bin"])
         self.assertEqual(
             pair["passes_to"],
@@ -1167,8 +1185,8 @@ class FilesNeededTogether(unittest.TestCase):
         )
 
     def test_melonds_dsi_files_and_nand_region(self):
-        fixed, region = rl.melonds_dsi(
-            _sources(**{f"{G}/MelonDS.Generator.cs": MELONDS_DSI, rl.FEATURES: MELONDS_FEATURES})
+        fixed, region = melonds_dsi(
+            _sources(**{f"{G}/MelonDS.Generator.cs": MELONDS_DSI, retrobat_generators.FEATURES: MELONDS_FEATURES})
         )
         self.assertEqual(fixed["names"], ["dsi_bios9.bin", "dsi_nand.bin"])
         self.assertEqual(fixed["passes_to"], "melonDS.toml [DSi] BIOS9Path, NANDPath")
@@ -1185,7 +1203,7 @@ class FilesNeededTogether(unittest.TestCase):
         self.assertEqual(region["fails_when_missing"], "falls back to dsi_nand.bin")
 
     def test_jzintv_flags_in_command_line_order(self):
-        both, ecs = rl.jzintv(_sources(**{f"{G}/Jzintv.Generator.cs": JZINTV}))
+        both, ecs = jzintv(_sources(**{f"{G}/Jzintv.Generator.cs": JZINTV}))
         self.assertEqual(both["names"], ["exec.bin", "grom.bin"])
         self.assertEqual(both["passes_to"], "command line -e <bios>/exec.bin -g <bios>/grom.bin")
         self.assertEqual(ecs["names"], ["ecs.bin"])
@@ -1301,7 +1319,7 @@ CXBX = """
 
 class XboxFilesTheLauncherWrites(unittest.TestCase):
     def test_xemu_keeps_its_eeprom_and_disk_below_saves(self):
-        records = rl.xemu_saves(_sources(**{f"{G}/Xemu.Generator.cs": XEMU_SAVES}))
+        records = xemu_saves(_sources(**{f"{G}/Xemu.Generator.cs": XEMU_SAVES}))
         self.assertEqual(
             [(r["emulator"], r["kind"], r["names"], r["search_dir"], r["source_ref"])
              for r in records],
@@ -1319,7 +1337,7 @@ class XboxFilesTheLauncherWrites(unittest.TestCase):
                       records[0]["depends_on_option"])
 
     def test_cxbx_runs_from_its_folder_and_gets_the_eeprom_there(self):
-        records = rl.cxbx(_sources(**{f"{G}/Cxbx.Generator.cs": CXBX}))
+        records = cxbx(_sources(**{f"{G}/Cxbx.Generator.cs": CXBX}))
         self.assertEqual(
             [(r["emulator"], r["kind"], r["names"], r["search_dir"], r["source_ref"])
              for r in records],
@@ -1338,14 +1356,14 @@ class XboxFilesTheLauncherWrites(unittest.TestCase):
                  '<AppConfig.GetFullPath("cxbx-reloaded")>', f"{G}/Cxbx.Generator.cs:34-41"),
             ],
         )
-        self.assertTrue(all(r["passes_to"].startswith(rl.CXBX_DATA_FOLDER) for r in records[:3]))
+        self.assertTrue(all(r["passes_to"].startswith(CXBX_DATA_FOLDER) for r in records[:3]))
         self.assertEqual(records[3]["passes_to"], "exec")
         self.assertEqual(records[5]["depends_on_option"], 'system == "xbox"')
 
 
 class HelpersAndCopies(unittest.TestCase):
     def test_blastem_one_record_per_helper_call(self):
-        records = rl.blastem(_sources(**{f"{G}/Blastem.Generator.cs": BLASTEM}))
+        records = blastem(_sources(**{f"{G}/Blastem.Generator.cs": BLASTEM}))
         self.assertEqual(
             [(r["names"], r["passes_to"]) for r in records],
             [
@@ -1359,7 +1377,7 @@ class HelpersAndCopies(unittest.TestCase):
         self.assertEqual(records[0]["source_ref"], f"{G}/Blastem.Generator.cs:9-10, 14-21")
 
     def test_dolphin_unchecked_write_and_segaboot_candidates(self):
-        gba, segaboot = rl.dolphin(_sources(**{f"{G}/Dolphin.Generator.cs": DOLPHIN}))
+        gba, segaboot = dolphin(_sources(**{f"{G}/Dolphin.Generator.cs": DOLPHIN}))
         self.assertEqual(gba["names"], ["gba_bios.bin"])
         self.assertEqual(
             gba["passes_to"],
@@ -1376,7 +1394,7 @@ class HelpersAndCopies(unittest.TestCase):
         sources = _sources(
             **{f"{G}/DosBoxPure.Generator.cs": DOSBOX, f"{G}/DosBoxStaging.Generator.cs": DOSBOX}
         )
-        records = rl.dosbox_copies(sources)
+        records = dosbox_copies(sources)
         self.assertEqual(
             [(r["emulator"], r["names"], r["passes_to"]) for r in records[:2]],
             [
@@ -1396,7 +1414,7 @@ class HelpersAndCopies(unittest.TestCase):
         self.assertEqual(records[0]["depends_on_option"], "the target does not exist")
 
     def test_tsugaru_folder_chain(self):
-        [record] = rl.tsugaru(_sources(**{f"{G}/Tsugaru.Generator.cs": TSUGARU}))
+        [record] = tsugaru(_sources(**{f"{G}/Tsugaru.Generator.cs": TSUGARU}))
         self.assertEqual(record["names"], ["FMT_SYS.ROM"])
         self.assertEqual(
             record["search_dir"], "bios/fmtowns, then bios/fmtownsux, then <emulator>/roms"
@@ -1406,11 +1424,11 @@ class HelpersAndCopies(unittest.TestCase):
         )
 
     def test_commented_code_is_not_read(self):
-        [record] = rl.eka2l1(_sources(**{f"{G}/Eka2l1.Generator.cs": EKA2L1}))
+        [record] = eka2l1(_sources(**{f"{G}/Eka2l1.Generator.cs": EKA2L1}))
         self.assertEqual(record["passes_to"], "config.yml data-storage = bios/eka2l1/data")
 
     def test_bizhawk_gb_one_slot_per_system(self):
-        records = rl.bizhawk_gb(
+        records = bizhawk_gb(
             _sources(
                 **{
                     f"{G}/Bizhawk.CoreOptions.cs": BIZHAWK_GB,
@@ -1436,7 +1454,7 @@ class HelpersAndCopies(unittest.TestCase):
 class FolderArguments(unittest.TestCase):
     def test_mess_folders_shared_with_the_libretro_core(self):
         sources = _sources(**{f"{G}/MessSystem.cs": MESS, f"{G}/Mame64.Generator.cs": MAME64})
-        records = rl.mame(sources)
+        records = mame(sources)
         mess = [r for r in records if r["source_ref"].startswith(f"{G}/MessSystem.cs")]
         self.assertEqual(
             [(r["emulator"], r["passes_to"]) for r in mess],
@@ -1455,7 +1473,7 @@ class FolderArguments(unittest.TestCase):
 
     def test_mame64_ternary_folder(self):
         sources = _sources(**{f"{G}/MessSystem.cs": MESS, f"{G}/Mame64.Generator.cs": MAME64})
-        own = [r for r in rl.mame(sources) if r["source_ref"].startswith(f"{G}/Mame64")]
+        own = [r for r in mame(sources) if r["source_ref"].startswith(f"{G}/Mame64")]
         self.assertEqual(own[0]["passes_to"], "command line -rp bios;<rom directory>")
         self.assertEqual(
             own[1]["search_dir"], "bios/hbmame/samples when hbmame, else bios/mame/samples"
@@ -1463,8 +1481,8 @@ class FolderArguments(unittest.TestCase):
 
     def test_xroar_reassigned_folder_and_config_line(self):
         # romPath is bios/dragon, rewritten to bios/coco for the coco system.
-        default, coco, config = rl.xroar(_sources(**{
-            f"{G}/Xroar.Generator.cs": XROAR, rl.FEATURES: XROAR_FEATURES,
+        default, coco, config = xroar(_sources(**{
+            f"{G}/Xroar.Generator.cs": XROAR, retrobat_generators.FEATURES: XROAR_FEATURES,
         }))
         self.assertEqual(
             (default["search_dir"], default["passes_to"], default.get("systems")),
@@ -1477,7 +1495,7 @@ class FolderArguments(unittest.TestCase):
         self.assertEqual(coco["machines"], ["coco", "coco3"])
         self.assertNotIn("machines", default)
         self.assertEqual(
-            coco["source_ref"], f"{default['source_ref']}, {rl.FEATURES}:3-6"
+            coco["source_ref"], f"{default['source_ref']}, {retrobat_generators.FEATURES}:3-6"
         )
         self.assertEqual(config["search_dir"], "bios/dragon")
         self.assertEqual(
@@ -1523,7 +1541,7 @@ PICO8 = """
 
 class ProgramsRunFromEmulatorFolders(unittest.TestCase):
     def test_pico8_runs_its_binary_from_its_emulator_folder(self):
-        (record,) = rl.pico8(_sources(**{f"{G}/Pico8.Generator.cs": PICO8}))
+        (record,) = pico8(_sources(**{f"{G}/Pico8.Generator.cs": PICO8}))
         self.assertEqual(
             (record["emulator"], record["kind"], record["names"], record["search_dir"],
              record["passes_to"], record["source_ref"]),
@@ -1540,7 +1558,7 @@ class EveryBiosReferenceIsRead(unittest.TestCase):
             "    }\n"
         )
         with self.assertRaises(LauncherPatternMissing) as caught:
-            rl.eka2l1(_sources(**{f"{G}/Eka2l1.Generator.cs": extra}))
+            eka2l1(_sources(**{f"{G}/Eka2l1.Generator.cs": extra}))
         self.assertIn("bios reference at line", str(caught.exception))
 
     def test_semicolon_inside_a_string_does_not_end_the_value(self):
@@ -1548,7 +1566,7 @@ class EveryBiosReferenceIsRead(unittest.TestCase):
             "x.cs",
             'void f(string rom)\n{\n    string p = AppConfig.GetFullPath("bios") + ";" + Path.GetDirectoryName(rom);\n}\n',
         )
-        self.assertEqual(rl._render(src, "p", 0, len(src.text))[0], "bios;<rom directory>")
+        self.assertEqual(_render(src, "p", 0, len(src.text))[0], "bios;<rom directory>")
 
 
 class AbsentConstructStopsTheScrape(unittest.TestCase):
@@ -1561,7 +1579,7 @@ class AbsentConstructStopsTheScrape(unittest.TestCase):
     def test_chain_without_fallback_is_not_a_search(self):
         single = ARES.split("        if (!File.Exists(bios_japan))")[0] + "    }\n"
         with self.assertRaises(LauncherPatternMissing):
-            rl.ares(_sources(**{f"{G}/Ares.Generator.cs": single}))
+            ares(_sources(**{f"{G}/Ares.Generator.cs": single}))
 
     def test_missing_source_file_is_named(self):
         with self.assertRaises(LauncherPatternMissing) as caught:
