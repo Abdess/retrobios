@@ -204,7 +204,7 @@ class GapReportReadsADirectory(DirectoryFixture):
     listed as a file to source."""
 
     def test_a_held_hidden_directory_is_held(self):
-        from packs.crossref import entry_source
+        from packs.crossrefsource import entry_source
 
         self._add("Engine/cdogs/data/.wolf3d/N3D.cdogscpn/campaign.json", b"campaign")
         db = self._db()

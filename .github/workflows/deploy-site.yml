@@ -85,6 +85,7 @@ on:
       - "scripts/packs/coverage.py"
       - "scripts/packs/crossref.py"
       - "scripts/packs/crossreflaunchers.py"
+      - "scripts/packs/crossrefsource.py"
       - "scripts/packs/datadirextract.py"
       - "scripts/packs/datadirs.py"
       - "scripts/packs/executable.py"

@@ -6855,16 +6855,16 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_gap_analysis_resolves_renamed_mame_set(self):
         """A renamed set is held under the name dedup kept, as verify reads it."""
-        from packs import crossref
+        from model import database
 
         db = self._gap_db("v4bios.zip", "a" * 40, "465c4e1c")
-        original = crossref.get_mame_clone_map
-        crossref.get_mame_clone_map = lambda *_a: {"bctvidbs.zip": "v4bios.zip"}
+        original = database.get_mame_clone_map
+        database.get_mame_clone_map = lambda *_a: {"bctvidbs.zip": "v4bios.zip"}
         try:
             entry = {"name": "bctvidbs.zip", "required": True}
             self.assertEqual(self._gap_source(entry, db), "bios")
         finally:
-            crossref.get_mame_clone_map = original
+            database.get_mame_clone_map = original
 
 
 class StandaloneModeRequiresAStandaloneBuild(unittest.TestCase):

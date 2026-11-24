@@ -15,7 +15,7 @@ from sitegen.runsections import system_name
 def _emulator_slots(files: list[dict]) -> list[list[dict]]:
     """The entries of each slot, as verify --emulator and the gaps page
     count them, leaving out the slots the app ships."""
-    from packs.crossref import slot_key
+    from packs.crossrefsource import slot_key
 
     slots: dict[tuple, list[dict]] = {}
     for f in files:

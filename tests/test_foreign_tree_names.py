@@ -198,7 +198,7 @@ class TheGapReportAsksAsTheEmulator(unittest.TestCase):
         self.entry = {"name": "et4000.bin", "required": True}
 
     def _source(self, owner: str) -> str | None:
-        from packs.crossref import entry_source
+        from packs.crossrefsource import entry_source
 
         by_name = self.db["indexes"]["by_name"]
         index = {

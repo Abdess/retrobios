@@ -24,7 +24,7 @@ from romrecipes import ledger as romrecipes_ledger
 from resolve.launches import PlatformLaunches
 from resolve.standalone import platform_launches
 from model.profiles import unique_emulator_profiles
-from packs.crossref import first_hash
+from packs.crossrefsource import first_hash
 from core.hashing import cut_md5_owner, declared_hash_lists, parse_hash_list
 from resolve.review import LARGE_FILE_ISSUE_URL, Placement, placement
 from resolve.sendable import can_send, sendable

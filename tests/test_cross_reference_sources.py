@@ -16,7 +16,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from packs.crossref import cross_reference, entry_source
+from packs.crossref import cross_reference
+from packs.crossrefsource import entry_source
 from packs.supplemental import build_supplemental_index
 from packs.crossreftext import print_report
 

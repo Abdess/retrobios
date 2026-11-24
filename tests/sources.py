@@ -35,7 +35,7 @@ COMMANDS = {
         "packs/emulatorentries.py",
     ),
     "cross_reference.py": (
-        "packs/crossref.py", "packs/crossrefscope.py", "packs/crossrefrun.py",
+        "packs/crossref.py", "packs/crossrefsource.py", "packs/crossrefscope.py", "packs/crossrefrun.py",
         "packs/crossreflaunchers.py", "packs/crossreftext.py", "packs/crossrefreport.py",
         "packs/supplemental.py",
     ),
@@ -88,7 +88,7 @@ COMMANDS = {
         "sitegen/gapsources.py", "sitegen/exportrows.py",
         "sitegen/whichpack.py", "sitegen/nav.py", "sitegen/build.py", "sitegen/coverage.py",
         "sitegen/extraction.py", "sitegen/releasepacks.py", "sitegen/archivecounts.py",
-        "packs/crossref.py",
+        "packs/crossref.py", "packs/crossrefsource.py",
     ),
     "site_diagrams.py": ("sitegen/diagrams.py",),
     "site_sources.py": ("sitegen/sources.py",),

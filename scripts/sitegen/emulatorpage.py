@@ -68,7 +68,7 @@ def availability_check(
     missing while the gap report called it held would describe a
     different collection on two pages of the same site.
     """
-    from packs.crossref import entry_index, entry_source
+    from packs.crossrefsource import entry_index, entry_source
 
     index = entry_index(db, data_names)
 
@@ -81,6 +81,187 @@ def availability_check(
         return entry_source({**f, "source_profile": owner} if owner else f, index) is not None
 
     return _file_available
+
+
+||||||| parent of 068513702 (refactor: move entry sources out of crossref)
+def _emulator_slots(files: list[dict]) -> list[list[dict]]:
+    """The entries of each slot, as verify --emulator and the gaps page
+    count them, leaving out the slots the app ships."""
+    from packs.crossrefsource import slot_key
+
+    slots: dict[tuple, list[dict]] = {}
+    for f in files:
+        slots.setdefault(slot_key(f), []).append(f)
+    return [group for group in slots.values() if not all(comes_with_app(f) for f in group)]
+
+
+def _set_names(value: object) -> list[str]:
+    """The sets an entry belongs to: group takes a name, a list or a map."""
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, (list, dict)):
+        return [str(name) for name in value]
+    return []
+
+
+def _requirements(files: list[dict], groups: dict | None) -> list[list[dict]]:
+    """Each thing the emulator needs: the members of a required set, any one
+    of which fills it (DuckStation's ps-bios, 105 images), or a required
+    file of its own. load_emulator_profiles marks every member of a
+    required set required, so counted per file DuckStation read "105
+    required" for one BIOS."""
+    required_sets = {name for name, spec in (groups or {}).items()
+                     if isinstance(spec, dict) and spec.get("required")}
+    sets: dict[str, list[dict]] = {}
+    alone: list[list[dict]] = []
+    for f in files:
+        if f.get("required") is not True or comes_with_app(f):
+            continue
+        names = [name for name in _set_names(f.get("group")) if name in required_sets]
+        if names:
+            for name in names:
+                sets.setdefault(name, []).append(f)
+        else:
+            alone.append([f])
+    return [*sets.values(), *alone]
+
+
+def _regional_set(requirements: list[list[dict]]) -> list[dict]:
+    """The one requirement, a set whose members the code picks by the game's
+    region, or [] when there is no such single choice."""
+    if len(requirements) != 1 or len(requirements[0]) < 2:
+        return []
+    members = requirements[0]
+    if not all(f.get("region") for f in members):
+        return []
+    return members if len({region_words(f["region"]) for f in members}) >= 2 else []
+
+
+def _emulator_file_summary(files: list[dict], groups: dict | None = None) -> list[str]:
+    """What the emulator reads, above its file table, and its categories.
+
+    Counted by slot, as verify --emulator and the gaps page count: raze
+    lists every GRP its code accepts under one name, and holding one fills
+    the slot. Counted per entry, the page announced 46 missing where 12
+    slots are empty. The files the app ships are counted apart: NetherSX2
+    said "4 required" for one BIOS and three fonts in its package. A
+    required set counts once (`groups`).
+    """
+    slots = _emulator_slots(files)
+    shipped = sum(1 for f in files if comes_with_app(f))
+    requirements = _requirements(files, groups)
+    in_sets = {id(f) for members in requirements for f in members}
+    req_slots = sum(1 for group in slots if any(id(f) in in_sets for f in group))
+    req_count = len(requirements)
+    optional = len(slots) - req_slots
+    hle_count = sum(1 for group in slots if any(f.get("hle_fallback") for f in group))
+
+    # Sentences, one number format: the line read "1,563 files | 164
+    # required, 1399 optional | 1563 in repo".
+    total = f"**{count_text(len(slots), 'file')}**"
+    if sum(len(group) for group in slots) != len(slots):
+        total += f" ({sum(len(group) for group in slots):,} accepted versions)"
+    line = f"{total}: {req_count:,} required, {optional:,} optional."
+    if any(len(members) > 1 for members in requirements):
+        line += " Any one file of a required set fills it."
+    regional = _regional_set(requirements) or (
+        [f for members in requirements for f in members]
+        if _regional_choice([f for members in requirements for f in members]) else [])
+    if regional:
+        # DuckStation takes the BIOS of the game's region: "3 required"
+        # read as "get all three".
+        line = f"{total}. One of {len(regional):,} is required, for the games' region."
+        if optional:
+            line += f" {optional:,} {'is' if optional == 1 else 'are'} optional."
+    if hle_count:
+        line += f" {hle_count:,} {'has' if hle_count == 1 else 'have'} an HLE fallback."
+    if shipped:
+        line += f" {count_text(shipped, 'more file')} {'comes' if shipped == 1 else 'come'} with the app."
+    lines = [line, ""]
+
+    categories = [f.get("category", "bios") for f in files]
+    if "game_data" in categories or "bios_zip" in categories:
+        cats = [
+            f"{categories.count(key):,} {label}"
+            for key, label in (
+                ("bios", "BIOS"), ("bios_zip", "BIOS ZIPs"), ("game_data", "game data")
+            )
+            if categories.count(key)
+        ]
+        lines.extend([f"By kind: {series(cats)}.", ""])
+    return lines
+
+
+def _emulator_held_line(files: list[dict], available: Callable[[dict], bool]) -> list[str]:
+    """What this collection holds of them, one quiet line under the table:
+    a reader comes for what the emulator needs, the project's counts after."""
+    slots = _emulator_slots(files)
+    if not slots:
+        return []
+    in_repo = sum(1 for group in slots if any(available(f) for f in group))
+    unsourceable = sum(
+        1 for group in slots
+        if not any(available(f) for f in group) and all(f.get("unsourceable") for f in group)
+    )
+    held = [f"{in_repo:,} in repo", f"{len(slots) - in_repo - unsourceable:,} missing"]
+    if unsourceable:
+        held.append(f"{unsourceable:,} unsourceable")
+    return [f"<p><small>In this collection: {series(held)}.</small></p>", ""]
+
+
+def _data_member_table(members: dict[str, dict], names: list[str], anchors: set[str]) -> list[str]:
+    """A data directory's files with their size and sha1, each sha1 an
+    anchor the first time the page lists it (``anchors``, the page's ids)."""
+    table = ["| File | Size | SHA1 |", "|------|-----:|------|"]
+    for member in names:
+        info = members[member]
+        sha1 = str(info.get("sha1", ""))
+        # One id per page: two members can hold the same bytes (every empty
+        # file), and Dolphin's trees share Sys.
+        anchor = card_anchor(sha1)
+        span = "" if anchor in anchors else f'<span id="{anchor}"></span>'
+        anchors.add(anchor)
+        table.append(f"| {span}{code_span(member)} | {size_text(int(info.get('size', 0)))} | {code_span(sha1)} |")
+    return table
+
+
+def _data_tree_page(ref: str, entry: dict, pages: list[tuple[str, list[str]]],
+                    index: int, registry: PageRegistry) -> str:
+    """One page of a large data directory's file list."""
+    stem, names = pages[index]
+    members = registry.data_members.get(ref) or {}
+    part = f" (part {index + 1} of {len(pages)})" if len(pages) > 1 else ""
+    read_by = series([f"[{escape_tags(display)}]({key}.md#data-directories)"
+                             for key, display in registry.data_readers.get(ref, [])])
+    # A file list out of the search: "dolphin" found three parts of the
+    # dolphin-sys tree, on their title, before the Dolphin page.
+    front: dict = {"level": "reference", "search": "exclude"}
+    # The reader the tree is named after (dolphin for dolphin-sys), else
+    # the first by name.
+    readers = registry.data_readers.get(ref) or []
+    owner = max(readers, default=None,
+                key=lambda reader: len(reader[0]) if ref.startswith(f"{reader[0]}-") else 0)
+    if owner:
+        head = _part_front_matter(
+            (owner[1], f"{owner[0]}.md"),
+            [(f"The {ref} data directory, part {n}", f"{other}.md")
+             for n, (other, _names) in enumerate(pages, 1)], index, front)
+    else:
+        head = ["---", yaml.safe_dump(front, sort_keys=False, allow_unicode=True).rstrip("\n"),
+                "---", ""]
+    lines = [
+        *head,
+        f"# The {ref} data directory{part}", "",
+        f"{entry.get('description') or 'A data directory'}: "
+        f"{count_text(len(members), 'file')}, as the packs ship them."
+        + (f" Read by {read_by}." if read_by else ""), "",
+    ]
+    if len(pages) > 1:
+        lines.extend([", ".join(f"[part {i}]({other}.md)" if other != stem else f"part {i}"
+                                for i, (other, _names) in enumerate(pages, 1)), ""])
+    lines.extend(search_excluded(_data_member_table(members, names, set())))
+    lines.extend(["", date_line()])
+    return "\n".join(lines) + "\n"
 
 
 # An emulator page lists at most this many file cards: MAME's 1,564 made a

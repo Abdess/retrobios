@@ -5130,7 +5130,7 @@ class AFileToSourceIsAFileNotAName(unittest.TestCase):
     def test_rows_are_keyed_by_name_and_hash(self):
         source = script_source("generate_site.py")
         self.assertIn('key = (g["name"], g.get("identity") or f"emulator:{emu_name}")', source)
-        from scripts.packs.crossref import first_hash
+        from scripts.packs.crossrefsource import first_hash
 
         self.assertEqual(first_hash({"md5": ["AB", "cd"]}), "md5:ab")
         self.assertEqual(first_hash({"crc32": "1", "sha1": "F" * 40}), "sha1:" + "f" * 40)
