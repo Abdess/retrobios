@@ -13,6 +13,7 @@ from __future__ import annotations
 import tests
 
 import hashlib
+import os
 import tempfile
 import unittest
 import zipfile
@@ -298,6 +299,64 @@ class TheMatchingArchiveForAMember(unittest.TestCase):
             entry = {"name": "neogeo.zip", "zipped_file": "sfix.sfix",
                      "md5": hashlib.md5(b"second").hexdigest()}
             self.assertEqual(resolve_local_file(entry, db), (str(paths[1]), "zip_exact"))
+
+
+class AnotherSystemsFileIsNoMismatch(unittest.TestCase):
+    """NanoBoyAdvance reads a 16 KB bios.bin and checks nothing but its size.
+    The collection holds bios.bin only as PC BIOSes, and the name step
+    returned one of them as a mismatch, so verify announced a wrong file
+    where the GBA BIOS is missing. A same-named file that fails the checks
+    is reported only when it can be the same file."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        # Collection paths are relative to the repository, as in database.json.
+        self.addCleanup(os.chdir, os.getcwd())
+        os.chdir(self.tmp.name)
+        self.bios = Path("bios")
+        self.files: dict = {}
+        self.by_name: dict = {"bios.bin": []}
+
+    def hold(self, folder: str, blob: bytes) -> Path:
+        path = self.bios / folder / "bios.bin"
+        path.parent.mkdir(parents=True)
+        path.write_bytes(blob)
+        sha1 = hashlib.sha1(blob).hexdigest()
+        self.files[sha1] = {"path": str(path), "name": "bios.bin", "size": len(blob),
+                            "md5": hashlib.md5(blob).hexdigest()}
+        self.by_name["bios.bin"].append(sha1)
+        return path
+
+    def resolve(self, **extra: object) -> tuple[str | None, str]:
+        db = {"bios_dir": str(self.bios), "files": self.files,
+              "indexes": {"by_name": self.by_name, "by_md5": {},
+                          "by_crc32": {}, "by_path_suffix": {}}}
+        entry = {"name": "bios.bin", "path": "bios.bin", "system": "nintendo-gba",
+                 "size": 16384, "validation": ["size"],
+                 "source_profile": "nanoboyadvance", **extra}
+        return resolve_local_file(entry, db)
+
+    def test_another_makers_file_and_another_emulators_copy_are_absent(self):
+        self.hold("PC/PCem/roms", b"\0" * 65536)
+        self.hold("Other/QEMU", b"\1" * 131072)
+        self.hold("Nintendo/Game Boy", b"\3" * 256)
+        self.assertEqual(self.resolve()[1], "hash_mismatch")
+        self.assertIn("Nintendo", str(self.resolve()[0]))
+
+    def test_nothing_of_the_system_is_not_found(self):
+        # The collection files Nintendo machines, just no bios.bin for them.
+        self.files["gb"] = {"path": "bios/Nintendo/Game Boy/dmg_boot.bin", "name": "dmg_boot.bin"}
+        self.hold("PC/PCem/roms", b"\0" * 65536)
+        self.hold("Other/QEMU", b"\1" * 131072)
+        self.assertEqual(self.resolve(), (None, "not_found"))
+        md5 = hashlib.md5(b"\2" * 16384).hexdigest()
+        self.assertEqual(self.resolve(md5=md5), (None, "not_found"))
+
+    def test_the_file_of_the_checked_size_is_served(self):
+        self.hold("PC/PCem/roms", b"\0" * 65536)
+        gba = self.hold("Nintendo/Game Boy Advance", b"\2" * 16384)
+        self.assertEqual(self.resolve(), (str(gba), "name_exact"))
 
 
 if __name__ == "__main__":

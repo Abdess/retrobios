@@ -61,6 +61,11 @@ def system_makers(file_entry: dict, db: dict) -> frozenset[str]:
     sys_id = str(file_entry.get("platform_system") or "")
     if not sys_id or owner_tokens(file_entry):
         return frozenset()
+    return makers_named_by(sys_id, db)
+
+
+def makers_named_by(sys_id: str, db: dict) -> frozenset[str]:
+    """The maker folders a system id names: nintendo-gba names Nintendo."""
     return frozenset(
         folder for folder in _maker_folders(db) if names_manufacturer(sys_id, folder)
     )

@@ -29,6 +29,7 @@ from resolve.ownership import (
     engine_tree,
     foreign_tree,
     maker_folder,
+    makers_named_by,
     other_maker,
     owner_tokens,
 )
@@ -316,8 +317,22 @@ def named_candidates(q: Lookup, makers: frozenset[str]) -> list[tuple[str, str, 
         if name_match_size_ok(q.file_entry, c[2]) and content_fits(q.file_entry, c[0])
     ]
     if sized:
-        named = sized
-    return named
+        return sized
+    return [c for c in named if not _homonym(q, c[0])]
+
+
+def _homonym(q: Lookup, path: str) -> bool:
+    """Whether a same-named file that fails the entry's checks belongs elsewhere.
+
+    Such a file is reported as this entry's mismatch only when it can be the
+    same file: not another emulator's own copy, not filed under a maker the
+    entry's system does not name. NanoBoyAdvance reads a 16 KB bios.bin and
+    was reported the 64 KB PC BIOS of PCem.
+    """
+    if foreign_tree(path, owner_tokens(q.file_entry)):
+        return True
+    sys_id = str(q.file_entry.get("system") or "")
+    return bool(sys_id) and other_maker(path, makers_named_by(sys_id, q.db), q.db)
 
 
 def named_md5_match(q: Lookup, named: list[tuple[str, str, int | None]]) -> Resolution | None:
