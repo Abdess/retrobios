@@ -142,8 +142,8 @@ class TheChecklistInstallsWhatCiInstalls(unittest.TestCase):
         section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
         for tool, step in (("shellcheck", "shellcheck --version"),
                            ("bwrap", "bwrap --ro-bind"),
-                           ("python3.8 -m unittest tests.test_install_tui",
-                            "python3.8 -m unittest tests.test_install_tui")):
+                           ("python3.8 -m unittest tests.test_tui_",
+                            "python3.8 -m unittest -v tests.test_tui_")):
             with self.subTest(tool=tool):
                 self.assertIn(step, workflow)
                 self.assertIn(tool, section)

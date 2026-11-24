@@ -105,7 +105,8 @@ python scripts/generate_site.py                             # the pages the site
 npm ci --prefix website                                     # the site's packages, Node 24
 npm run build --prefix website                              # the built site
 python scripts/run_tests.py --jobs 4                        # the suite, one process per module
-python3.8 -m unittest tests.test_install_tui                # the full screen on the installer's floor
+# the full screen on the installer's floor
+python3.8 -m unittest tests.test_tui_card_counts tests.test_tui_card_setups tests.test_tui_card_space tests.test_tui_choices tests.test_tui_devices tests.test_tui_flow tests.test_tui_folders tests.test_tui_line_mode tests.test_tui_mouse tests.test_tui_packs tests.test_tui_pty tests.test_tui_screens tests.test_tui_terminal tests.test_tui_views
 python scripts/validate_site.py --site-dir website/dist     # links and page budgets
 ```
 

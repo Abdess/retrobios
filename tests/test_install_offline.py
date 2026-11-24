@@ -1011,7 +1011,7 @@ class OneOfflineVocabulary(Scratch):
 
     def test_the_command_suggested_keeps_the_offline_setting(self):
         """Sudo does not pass RETROBIOS_INSTALL_OFFLINE on."""
-        from tests import test_install_tui as tui
+        from tests import tuisupport as tui
 
         args = tui._args(platform="retroarch", declared_only=False, offline=False)
         hint = install.Invocation()
@@ -1046,7 +1046,7 @@ class OneOfflineVocabulary(Scratch):
 
     def test_the_screen_says_missing_not_failed(self):
         """On the full screen: "Finished with errors, 20 failed"."""
-        from tests import test_install_tui as tui
+        from tests import tuisupport as tui
 
         reason = f"not fetched: {install.OFFLINE_WORDS}"
         left = [{"dest": f"f{n}.bin", "reason": reason} for n in range(20)]

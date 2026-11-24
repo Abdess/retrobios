@@ -29,7 +29,7 @@ from pathlib import Path
 
 import install
 from tests import test_install_games as games
-from tests.test_install_tui import DOWN, UP, Pty, pty, pyte
+from tests.tuisupport import DOWN, UP, Pty, pty, pyte
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

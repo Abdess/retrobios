@@ -439,6 +439,24 @@ def render_readme(inputs: ReadmeInputs) -> str:
     return "\n".join(lines) + "\n"
 
 
+# Past this width a command takes its comment on the line above: the 3.8 run
+# names fourteen modules, and aligning on it pushed every comment off the page.
+STEP_WIDTH = 72
+
+
+def check_lines() -> str:
+    """The checks of pr_checks.py, each with what it covers."""
+    commands = [(prchecks.shown(step), step.why) for step in prchecks.STEPS]
+    width = max(len(command) for command, _ in commands if len(command) <= STEP_WIDTH)
+    lines = []
+    for command, why in commands:
+        if len(command) > STEP_WIDTH:
+            lines += [f"# {why}", command]
+        else:
+            lines.append(f"{command:<{width}}  # {why}")
+    return "\n".join(lines)
+
+
 def ci_install_lines() -> tuple[str, str]:
     """The pip lines the test job of validate.yml runs, verbatim.
 
@@ -464,8 +482,7 @@ def contributing_text(
     .md for the site); *site_words* names the site from where the text is read.
     """
     pip_line, floor_line = ci_install_lines()
-    width = max(len(prchecks.shown(step)) for step in prchecks.STEPS)
-    steps = "\n".join(f"{prchecks.shown(step):<{width}}  # {step.why}" for step in prchecks.STEPS)
+    steps = check_lines()
     return f"""{title}
 
 ## Add a BIOS file

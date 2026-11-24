@@ -355,7 +355,7 @@ jobs:
         if: ${{ !cancelled() }}
         env:
           RETROBIOS_OFFLINE: "1"
-        run: python3.8 -m unittest tests.test_install_tui -v
+        run: python3.8 -m unittest -v tests.test_tui_card_counts tests.test_tui_card_setups tests.test_tui_card_space tests.test_tui_choices tests.test_tui_devices tests.test_tui_flow tests.test_tui_folders tests.test_tui_line_mode tests.test_tui_mouse tests.test_tui_packs tests.test_tui_pty tests.test_tui_screens tests.test_tui_terminal tests.test_tui_views
 
       # deploy-site.yml runs this after the merge, and a dead link or a stray
       # heading failed it there with nothing in front of it. Run whatever the

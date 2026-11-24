@@ -23,6 +23,16 @@ class Step:
     may_fail: bool = False
 
 
+# The full-screen tests, run again on the installer's Python floor.
+TUI_MODULES = (
+    "tests.test_tui_card_counts", "tests.test_tui_card_setups", "tests.test_tui_card_space",
+    "tests.test_tui_choices", "tests.test_tui_devices", "tests.test_tui_flow",
+    "tests.test_tui_folders", "tests.test_tui_line_mode", "tests.test_tui_mouse",
+    "tests.test_tui_packs", "tests.test_tui_pty", "tests.test_tui_screens",
+    "tests.test_tui_terminal", "tests.test_tui_views",
+)
+
+
 # The order of validate.yml: data fetched, site generated and built, then the
 # suite, its 3.8 run and the built-site check.
 STEPS: tuple[Step, ...] = (
@@ -50,7 +60,8 @@ STEPS: tuple[Step, ...] = (
          needs="npm", provider="Node 24", env={"NODE_DISABLE_COMPILE_CACHE": "1"}),
     Step("python scripts/run_tests.py --jobs 4", "the suite, one process per module",
          env={"RETROBIOS_OFFLINE": "1"}),
-    Step("python3.8 -m unittest tests.test_install_tui", "the full screen on the installer's floor",
+    Step("python3.8 -m unittest " + " ".join(TUI_MODULES),
+         "the full screen on the installer's floor",
          needs="python3.8", provider="a Python 3.8 with pyte",
          env={"RETROBIOS_OFFLINE": "1"}),
     Step("python scripts/validate_site.py --site-dir website/dist", "links and page budgets"),
