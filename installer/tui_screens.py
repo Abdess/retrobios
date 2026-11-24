@@ -9,7 +9,7 @@ from installer.detect_os import detected_shown
 from installer.manifest import OTHER_SYSTEMS
 from installer.offline import LOCAL
 from installer.platforms import display_name
-from installer.removal import backup_words
+from installer.backups import backup_words
 from installer.setups import _setup_label
 from installer.text import _plural, _wrap, cell_width, format_duration, format_size
 from installer.tui_choice import (

@@ -18,7 +18,7 @@ from installer.plan import CONFIRM_FROM_BYTES
 from installer.plan_words import cores_words
 from installer.platforms import TARGET_PLATFORMS, _tui_system_label, system_title
 from installer.regions import region_title
-from installer.removal import backup_words
+from installer.backups import backup_words
 from installer.setups import setup_list
 from installer.tally import tally
 from installer.text import _plural, cell_width, format_size

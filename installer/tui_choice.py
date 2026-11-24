@@ -19,7 +19,7 @@ from installer.paths import SavePlace, spelled
 from installer.plan_words import NO_CORE_FILES, _core_sized, emptied_words
 from installer.platforms import _tui_system_label, system_title
 from installer.regions import region_title
-from installer.removal import recorded_systems
+from installer.removal_plan import recorded_systems
 from installer.tally import tally
 from installer.text import _names_and, _plural, agree
 from installer.tui_commands import _core_base, _tui_system_flags, _tui_systems_chosen, tui_flags, tui_run_files

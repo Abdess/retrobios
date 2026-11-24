@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 from installer.device import detect_board
 from installer.platforms import display_name
-from installer.removal import list_backups
+from installer.backups import list_backups
 from installer.tui_actions import _activate, _device_focus, _install_now, _same_plan
 from installer.tui_steps import _focus_plan, _replace, _start_check, _start_run
 from installer.tui_folder_actions import _known_choice, _tui_folder_facts

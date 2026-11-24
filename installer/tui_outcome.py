@@ -30,7 +30,8 @@ from installer.outcome import (
 )
 from installer.paths import shown_path
 from installer.platforms import display_name
-from installer.removal import _kept_words, backup_words, kept_line
+from installer.removal import _kept_words, kept_line
+from installer.backups import backup_words
 from installer.romm import ROMM_SCAN_WORDS
 from installer.tally import installed_words, left_out_words
 from installer.text import _plural, _wrap, agree, cell_width, format_size

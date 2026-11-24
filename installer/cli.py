@@ -34,7 +34,8 @@ from installer.platforms import AVAILABLE_PLATFORMS, TARGET_PLATFORMS, _name_key
 from installer.refusal import Refusal
 from installer.regions import resolve_regions
 from installer.remote import remote_from_env, remote_in_use
-from installer.removal import run_backups, run_delete_backup, run_removal
+from installer.backups import run_backups, run_delete_backup
+from installer.removal import run_removal
 from installer.run import _install
 from installer.tui_routes import (
     TUI_LIST_ENV,
