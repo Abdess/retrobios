@@ -26,6 +26,7 @@ import zlib
 from pathlib import Path
 
 from sitegen import gaps
+from sitegen import gapsources
 from sitegen import lookup
 from sitegen import wanted as sitewanted
 from resolve import review, reviewhashes, sendable
@@ -474,7 +475,7 @@ class EveryFolderIsTheReviewsFolder(_World):
         self.assertEqual(sitewanted.upload_href(sitewanted.UPLOAD_ROOT, "bios/Maker/Sub Dir/"),
                          "https://github.com/Abdess/retrobios/upload/main/bios/Maker/Sub%20Dir")
         self.assertEqual(sitewanted.upload_href(sitewanted.UPLOAD_ROOT, ""),
-                         gaps.UPLOAD_URL)
+                         gapsources.UPLOAD_URL)
 
 
 def _node(script: str) -> str:

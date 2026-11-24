@@ -24,7 +24,8 @@ import yaml
 
 from freshness.findings import OK, STALE
 from freshness.profiles import check_source_paths
-from sitegen import emulatorpage
+from sitegen import emulatordata
+from sitegen import emulatorintro
 from sitegen import startwith
 from sitegen import pageprep
 from sitegen.pageregistry import PageRegistry
@@ -44,7 +45,7 @@ class DataTreeReaders(unittest.TestCase):
         ref = "y-sys"
         registry = PageRegistry(data_members={ref: {"a.bin": {"size": 1, "sha1": "0" * 40}}},
                                 data_readers={ref: [("dolphin", "Dolphin"), ("ishiiruka", "Ishiiruka")]})
-        page = emulatorpage._data_tree_page(ref, {}, [("y-sys", ["a.bin"])], 0, registry)
+        page = emulatordata._data_tree_page(ref, {}, [("y-sys", ["a.bin"])], 0, registry)
         self.assertIn("Read by [Dolphin](dolphin.md#data-directories) and "
                       "[Ishiiruka](ishiiruka.md#data-directories).", page)
         self.assertNotIn("('dolphin'", page)
@@ -58,7 +59,7 @@ class EngineIntros(unittest.TestCase):
                 continue
             name = Path(path).stem
             with self.subTest(profile=name):
-                intro = emulatorpage._emulator_intro(str(profile.get("emulator") or name), profile)
+                intro = emulatorintro.emulator_intro(str(profile.get("emulator") or name), profile)
                 self.assertNotRegex(intro, r"emulates\s*(?:\.|game\b|and\b|,)")
                 self.assertNotIn("  ", intro)
 

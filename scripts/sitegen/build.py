@@ -40,6 +40,7 @@ from sitegen import (
     measurements as sitemeasurements,
     runlinks,
     runsections,
+    sidebartopics,
     starlight as sitestarlight,
     steps as sitesteps,
     wanted as sitewanted,
@@ -49,8 +50,8 @@ from sitegen.config import GENERATED_DIRS, PUBLIC_DIRS, REPO_URL, yaml
 from core.paths import REPO_ROOT
 from sitegen.archivecounts import ARCHIVE_RECIPES_PAGE, with_archive_counts
 from sitegen.crossref import generate_cross_reference
+from sitegen.exportrows import source_commit
 from sitegen.dataexports import (
-    source_commit,
     generate_data_exports,
     generate_stats,
     system_export_item,
@@ -70,7 +71,8 @@ from sitegen.emulatorpage import (
 )
 from sitegen.emulatorsindex import generate_emulators_index
 from sitegen.exports import generate_exports_page, load_export_reports
-from sitegen.gaps import PlatformRegistries, SourceListing, generate_gap_analysis
+from sitegen.gaps import PlatformRegistries, generate_gap_analysis
+from sitegen.gapsources import SourceListing
 from sitegen.getpages import generate_get_index, generate_get_page, get_page_data
 from sitegen.guidepage import DEMO_ASSETS, generate_handheld_guide
 from sitegen.home import generate_explore_index, generate_home
@@ -621,7 +623,7 @@ def _write_navigation(run: _SiteRun, published_parts: dict[str, str]) -> None:
     generated = site / "src" / "generated"
     generated.mkdir(parents=True, exist_ok=True)
     write_if_changed(str(generated / "sidebar.json"),
-                     json.dumps(sitestarlight.sidebar(nav, present, overview_anchors(nav, docs)),
+                     json.dumps(sidebartopics.sidebar(nav, present, overview_anchors(nav, docs)),
                                 indent=1) + "\n")
     write_if_changed(str(generated / "redirects.json"),
                      json.dumps(sitestarlight.redirects(run.profiles, present, published_parts), indent=1,

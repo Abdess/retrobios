@@ -448,12 +448,12 @@ class TheGapsSayWhatToSupplyAndWhere(unittest.TestCase):
     the emulator page only, and Data.rsdk's three rows looked identical."""
 
     def test_export_rows(self):
-        from sitegen.dataexports import _gap_export_rows
+        from sitegen.exportrows import gap_export_rows
 
         report = {"bstone": {"emulator": "BStone", "systems": ["blake-stone"], "gap_details": [
             {"name": "EANIM.BS6", "path": "AOG/EANIM.BS6", "source": "missing",
              "required": False, "identity": "sha1:" + "a" * 40}]}}
-        row = next(r for r in _gap_export_rows({}, report) if r["name"] == "EANIM.BS6")
+        row = next(r for r in gap_export_rows({}, report) if r["name"] == "EANIM.BS6")
         self.assertEqual(row["destination"], "AOG/EANIM.BS6")
         self.assertEqual(row["expected"], "sha1:" + "a" * 40)
 
@@ -466,7 +466,7 @@ class TheGapCategoryTravelsOnTheRow(unittest.TestCase):
 
     def test_every_row_carries_the_profile_category(self):
         from packs.crossref import cross_reference
-        from sitegen.dataexports import _gap_export_rows
+        from sitegen.exportrows import gap_export_rows
 
         profiles = {"emu": {"emulator": "Emu", "systems": ["sys"], "files": [
             {"name": "a.bin", "path": "a.bin", "system_dir": "emu", "category": "game_data"},
@@ -477,7 +477,7 @@ class TheGapCategoryTravelsOnTheRow(unittest.TestCase):
         db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_crc32": {},
                                        "by_sha256": {}, "by_path_suffix": {}}}
         report = cross_reference(profiles, {}, db)
-        rows = {r["name"]: r for r in _gap_export_rows({}, report)}
+        rows = {r["name"]: r for r in gap_export_rows({}, report)}
         self.assertEqual(rows["a.bin"]["destination"], "emu/a.bin")
         self.assertEqual(rows["a.bin"]["category"], "game_data")
         self.assertEqual(rows["b.o2r"]["category"], "game_data")
@@ -533,12 +533,12 @@ class ArchiveMembersAreAcceptedHashes(unittest.TestCase):
     calls the one to ask."""
 
     def test_member_rows(self):
-        from sitegen.dataexports import _accepted_hash_rows
+        from sitegen.exportrows import accepted_hash_rows
 
         item = {"id": "fbalpha2019", "profile": {"files": [
             {"name": "nmk004.zip", "system": "arcade",
              "contents": [{"name": "nmk004.bin", "crc32": "83b6f611"}]}]}}
-        rows = _accepted_hash_rows([], [item])
+        rows = accepted_hash_rows([], [item])
         self.assertIn(
             ("nmk004.bin", "nmk004.zip/nmk004.bin", "crc32", "83b6f611"),
             {(r["name"], r["path"], r["algorithm"], r["value"]) for r in rows},
@@ -1116,7 +1116,7 @@ class AMismatchNamesTheDumpTheCollectionHolds(unittest.TestCase):
     the collection held that exact dump for every row."""
 
     def test_the_held_copy_is_named(self):
-        from sitegen.gaps import _held_accepted
+        from sitegen.gapproblems import _held_accepted
 
         db = {"files": {"s1": {"path": "bios/Microsoft/MSX/CLK/msx-japanese.rom"}},
               "indexes": {"by_sha256": {"ab" * 32: "s1"}, "by_crc32": {"84f68bf9": "s1"}}}

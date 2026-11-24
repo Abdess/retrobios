@@ -43,6 +43,8 @@ from sitegen import emulatorcards
 from sitegen import emulatormetadata
 from sitegen import filebadges
 from sitegen import emulatorpage
+from sitegen import emulatordata
+from sitegen import emulatorintro
 from sitegen import emulatorsindex
 from sitegen import install as sitegen_install
 from sitegen import lookup
@@ -86,7 +88,7 @@ class TheIntroSaysWhatIsNeeded(unittest.TestCase):
         # region fills it, and every member is marked required by the loader.
         profile = _profile("duckstation")
         members = [f for f in profile["files"] if f.get("group") == "ps-bios"]
-        intro = emulatorpage._emulator_intro("DuckStation", profile)
+        intro = emulatorintro.emulator_intro("DuckStation", profile)
         self.assertIn(
             f"It needs one BIOS for the game's region, among the {len(members)} it accepts.",
             intro)
@@ -94,7 +96,7 @@ class TheIntroSaysWhatIsNeeded(unittest.TestCase):
         self.assertIn("DuckStation emulates Sony PlayStation.", intro)
 
     def test_three_required_bios_of_three_regions_read_as_one_choice(self):
-        intro = emulatorpage._emulator_intro("X", {"systems": ["sony-playstation"], "files": [
+        intro = emulatorintro.emulator_intro("X", {"systems": ["sony-playstation"], "files": [
             {"name": "j.bin", "required": True, "region": ["japan"]},
             {"name": "u.bin", "required": True, "region": ["north-america"]},
             {"name": "e.bin", "required": True, "region": ["europe"]},
@@ -104,16 +106,16 @@ class TheIntroSaysWhatIsNeeded(unittest.TestCase):
         self.assertNotIn("3 of them required", intro)
 
     def test_required_files_without_regions_keep_the_count(self):
-        intro = emulatorpage._emulator_intro("X", {"files": [
+        intro = emulatorintro.emulator_intro("X", {"files": [
             {"name": "a.bin", "required": True}, {"name": "b.bin"}]})
         self.assertIn("It reads 2 files, 1 of them required", intro)
 
     def test_several_machines_say_who_needs_a_required_file(self):
-        intro = emulatorpage._emulator_intro("X", {
+        intro = emulatorintro.emulator_intro("X", {
             "systems": ["sony-playstation", "sega-saturn"],
             "files": [{"name": "a.bin", "required": True}]})
         self.assertIn("A required file is needed only by the machines that use it.", intro)
-        one = emulatorpage._emulator_intro("X", {
+        one = emulatorintro.emulator_intro("X", {
             "systems": ["sony-playstation"], "files": [{"name": "a.bin", "required": True}]})
         self.assertNotIn("machines that use it", one)
 
@@ -205,7 +207,7 @@ class TheSummaryLineIsProse(unittest.TestCase):
             {"name": "a.pak", "category": "game_data"}, {"name": "b.pak", "category": "game_data"}]
         for f in files[:164]:
             f["required"] = True
-        text = "\n".join(emulatorpage._emulator_file_summary(files))
+        text = "\n".join(emulatorintro.emulator_file_summary(files))
         self.assertNotIn(" | ", text)
         self.assertNotIn("1399", text)
         self.assertIn("1,401 optional", text)
@@ -368,7 +370,7 @@ class DataDirectoryPagesStayOutOfSearch(unittest.TestCase):
         registry = PageRegistry(
             data_members={"dolphin-sys": {"a.bin": {"sha1": "a" * 40, "size": 1}}},
             data_readers={"dolphin-sys": [("dolphin-mmjr", "Dolphin MMJR"), ("dolphin", "Dolphin")]})
-        page = emulatorpage._data_tree_page("dolphin-sys", {}, [("data-dolphin-sys", ["a.bin"])], 0, registry)
+        page = emulatordata._data_tree_page("dolphin-sys", {}, [("data-dolphin-sys", ["a.bin"])], 0, registry)
         front = yaml.safe_load(page.split("---\n")[1])
         self.assertEqual(front["search"], "exclude")
         self.assertEqual(front["parent"], {"label": "Dolphin", "link": "dolphin.md"})
@@ -449,7 +451,7 @@ class AnAppThatReadsAnyBios(unittest.TestCase):
         self.assertIsNotNone(emulatorcards.any_name_bios(_profile("pcsx2")))
 
     def test_the_download_links_the_collection_card(self):
-        steps = emulatorpage._any_name_steps("X", _profile("aethersx2"),
+        steps = emulatorintro._any_name_steps("X", _profile("aethersx2"),
                                    emulatorcards.any_name_bios(_profile("aethersx2")),
                                    "../systems/sony.md#sha1-abc")
         self.assertIn("1. Download [`ps2-0230a-20080220.bin`](../systems/sony.md#sha1-abc).", steps)
@@ -488,7 +490,7 @@ class PartsKnowWhereTheySit(unittest.TestCase):
         registry = PageRegistry(data_members={ref: members}, data_readers={ref: [("x", "X")]})
         pages = lookup.data_tree_pages(ref, members)
         self.assertEqual(len(pages), 3)
-        middle = _front(emulatorpage._data_tree_page(ref, {}, pages, 1, registry))
+        middle = _front(emulatordata._data_tree_page(ref, {}, pages, 1, registry))
         self.assertEqual(middle["parent"], {"label": "X", "link": "x.md"})
         self.assertEqual(middle["prev"]["link"], f"{pages[0][0]}.md")
         self.assertEqual(middle["next"]["link"], f"{pages[2][0]}.md")
@@ -704,7 +706,7 @@ class DataFolderPrinted(unittest.TestCase):
 
     def test_aethersx2_step_names_the_android_folder(self) -> None:
         profile = _profile("aethersx2")
-        steps = emulatorpage._any_name_steps("AetherSX2", profile, emulatorcards.any_name_bios(profile), "", "aethersx2")
+        steps = emulatorintro._any_name_steps("AetherSX2", profile, emulatorcards.any_name_bios(profile), "", "aethersx2")
         self.assertIn("2. Put it in this folder:", steps)
         self.assertIn("`Android/data/xyz.aethersx2.android/files/bios/`, on the internal storage.",
                       steps)
@@ -818,7 +820,7 @@ class SmallFixes(unittest.TestCase):
     def test_region_choice_summary(self) -> None:
         profile = _profile("duckstation")
         members = sum(1 for f in profile["files"] if f.get("group") == "ps-bios")
-        lines = emulatorpage._emulator_file_summary(profile["files"], profile.get("groups"))
+        lines = emulatorintro.emulator_file_summary(profile["files"], profile.get("groups"))
         self.assertIn(f"One of {members} is required, for the games' region.", lines[0])
         self.assertNotIn(f"{members} required", lines[0])
 
@@ -826,7 +828,7 @@ class SmallFixes(unittest.TestCase):
         files = [{"name": "a.rom", "required": True, "group": "boot"},
                  {"name": "b.rom", "required": True, "group": "boot"},
                  {"name": "c.rom", "required": True}, {"name": "d.rom"}]
-        line = emulatorpage._emulator_file_summary(files, {"boot": {"required": True}})[0]
+        line = emulatorintro.emulator_file_summary(files, {"boot": {"required": True}})[0]
         self.assertIn("2 required, 1 optional. Any one file of a required set fills it.", line)
 
     def test_no_emulator_part_says_where_it_sits(self) -> None:

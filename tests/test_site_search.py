@@ -38,6 +38,7 @@ from sitegen import getpages
 from sitegen.pageregistry import PageRegistry
 from sitegen import structured
 from sitegen import starlight as sitestarlight
+from sitegen import sidebartopics
 from sitegen import validate
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
@@ -387,7 +388,7 @@ def _sidebar_with_get_pages() -> tuple[dict, list[str]]:
     nav = _nav()
     names = list_registered_platforms(PLATFORMS)
     get_pages = ["get/index.md", *(f"get/{name}.md" for name in names)]
-    return sitestarlight.sidebar(nav, _present(nav) | set(get_pages), ANCHORS), get_pages
+    return sidebartopics.sidebar(nav, _present(nav) | set(get_pages), ANCHORS), get_pages
 
 
 class GetPagesSitInYourSetup(unittest.TestCase):
@@ -400,7 +401,7 @@ class GetPagesSitInYourSetup(unittest.TestCase):
         setup = set(side["options"]["topics"].get("setups", []))
         for rel in get_pages:
             with self.subTest(page=rel):
-                self.assertIn("/" + sitestarlight._sidebar_link(rel).strip("/"), setup)
+                self.assertIn("/" + sidebartopics._sidebar_link(rel).strip("/"), setup)
 
     def test_a_get_page_is_dated_by_its_release(self):
         """The sitemap gave no date to the pages that change only with a release."""
@@ -423,7 +424,7 @@ class GetPagesSitInYourSetup(unittest.TestCase):
     def test_no_page_is_left_out_of_every_tab(self):
         nav = _nav()
         present = _present(nav) | {"orphans/alone.md"}
-        side = sitestarlight.sidebar(nav, present, ANCHORS)
+        side = sidebartopics.sidebar(nav, present, ANCHORS)
         self.assertEqual(side["options"]["exclude"], [])
         placed = {path for paths in side["options"]["topics"].values() for path in paths}
         self.assertIn("/orphans/alone", placed)
@@ -585,15 +586,15 @@ class LetterGroupsAreNoCrumb(unittest.TestCase):
 
     def test_by_initial(self):
         names = [{"label": "Dolphin", "link": "/d"}, {"label": "DuckStation", "link": "/e"}]
-        self.assertTrue(sitestarlight.by_initial("D", names))
-        self.assertFalse(sitestarlight.by_initial("E", names))
+        self.assertTrue(sidebartopics.by_initial("D", names))
+        self.assertFalse(sidebartopics.by_initial("E", names))
         digits = [{"label": "2600.emu", "link": "/a"}, {"label": "81", "link": "/b"}]
-        self.assertTrue(sitestarlight.by_initial("0 to 9", digits))
-        self.assertFalse(sitestarlight.by_initial("Sony", names))
-        self.assertFalse(sitestarlight.by_initial("D", [{"label": "D", "items": names}]))
+        self.assertTrue(sidebartopics.by_initial("0 to 9", digits))
+        self.assertFalse(sidebartopics.by_initial("Sony", names))
+        self.assertFalse(sidebartopics.by_initial("D", [{"label": "D", "items": names}]))
 
     def test_emulator_letter_groups_are_marked(self):
-        side = sitestarlight.sidebar(_nav(), _present(_nav()), ANCHORS)
+        side = sidebartopics.sidebar(_nav(), _present(_nav()), ANCHORS)
         letters = {key: value for key, value in side["groups"].items()
                    if key.startswith("Explore/Emulators/")}
         self.assertTrue(letters)

@@ -39,6 +39,7 @@ from sitegen import emulatorsindex
 from sitegen import nav as sitegen_nav
 from sitegen import parts
 from sitegen import starlight as sitestarlight
+from sitegen import sidebartopics
 from core import anchors as core_anchors
 from model.registry import list_registered_platforms, load_platform_registry
 from model.platforms import load_platform_config
@@ -94,7 +95,7 @@ ANCHORS = {
 
 class NotFoundPage(unittest.TestCase):
     def test_the_404_opens_on_the_first_tab(self):
-        side = sitestarlight.sidebar(_nav(), _present(_nav()), ANCHORS)
+        side = sidebartopics.sidebar(_nav(), _present(_nav()), ANCHORS)
         self.assertNotIn("/404", side["options"]["exclude"])
         self.assertIn("/404", side["options"]["topics"]["start-here"])
 
@@ -122,7 +123,7 @@ class NotFoundPage(unittest.TestCase):
 class GroupsAreGroups(unittest.TestCase):
     def setUp(self):
         nav = _nav()
-        self.side = sitestarlight.sidebar(nav, _present(nav), ANCHORS)
+        self.side = sidebartopics.sidebar(nav, _present(nav), ANCHORS)
         self.groups = self.side["groups"]
 
     def test_setup_groups_stay_groups_and_point_at_their_section(self):
@@ -193,7 +194,7 @@ class EmulatorsOneLevelDeep(unittest.TestCase):
 class OneNextPerPage(unittest.TestCase):
     def setUp(self):
         nav = _nav()
-        self.runs = sitestarlight.sidebar(nav, _present(nav), ANCHORS)["reading"]
+        self.runs = sidebartopics.sidebar(nav, _present(nav), ANCHORS)["reading"]
         self.links = [[entry["link"] for entry in run] for run in self.runs]
 
     def test_start_here_runs_into_your_setup_and_stops(self):

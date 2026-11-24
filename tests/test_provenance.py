@@ -717,7 +717,7 @@ class TheWantedPageAsksOnlyForWhatCannotBeMade(unittest.TestCase):
     already produces (a Kickstart's odd bytes, a character ROM's halves)."""
 
     def test_a_derivable_dump_moves_out_of_the_wanted_list(self):
-        from scripts.sitegen import dataexports, provenance as sitegen_provenance
+        from scripts.sitegen import exportrows, provenance as sitegen_provenance
 
         report = {"tosec": {
             "imported_at": "2026-01-01", "dats": {}, "total": 2, "matched": 0,
@@ -734,7 +734,7 @@ class TheWantedPageAsksOnlyForWhatCannotBeMade(unittest.TestCase):
         # The report stays whole: the coverage table and the gaps page
         # count every missing dump.
         self.assertEqual(len(report["tosec"]["missing"]), 2)
-        rows = dataexports._provenance_wanted_rows(dumps)
+        rows = exportrows.provenance_wanted_rows(dumps)
         self.assertEqual([row["name"] for row in rows], ["lost.rom"])
         wanted, _, derived = page.partition("## Derivable")
         self.assertIn("**1** dumps a catalog", wanted)

@@ -9,22 +9,18 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
 from core.hashing import parse_hash_list
-from core.sizes import size_text
 from sitegen.runsections import system_name
 from model.profiles import is_emulator
 from packs.consumers import FileConsumers
 from packs.supplemental import SupplementalIndex
 from sitegen import entries as siteentries, markup, measurements as sitemeasurements
 from sitegen.cards import ROMSET_FAQ, emulator_file_anchors
-from sitegen.config import REPO_URL, date_line, yaml
-from sitegen.decorate import DEMOTED_WEIGHT, SEARCH_WEIGHT
-from core.text import series
+from sitegen.config import REPO_URL, date_line
 from sitegen.emulatorcards import (
     CardLayout,
     CardSources,
     build_rows,
     entry_label,
-    named_example,
     named_system_link,
     render_emulator_file,
     any_name_bios,
@@ -32,23 +28,22 @@ from sitegen.emulatorcards import (
 from sitegen.filebadges import file_badges, region_words
 from sitegen.emulatormetadata import render_metadata_rows, emulator_romset, version_markdown
 from sitegen.emulatorsindex import CLS_LABEL_ONE
-from sitegen.fields import render_platform_details, render_structured_blocks, search_excluded
+from sitegen.fields import render_platform_details, render_structured_blocks
 from sitegen.home import next_block
 from sitegen.install import (
     install_block,
     platform_display,
     comes_with_app,
-    data_folder_block,
     data_root_words,
-    standalone_place,
 )
-from sitegen.lookup import data_directory_origin, data_tree_pages
 from sitegen.pageregistry import PageRegistry
 from sitegen.render import admonition_body, card_anchor, code_span, count_text, escape_tags
 from sitegen.runlinks import card_page, record_emulator_cards
-from sitegen.sources import source_ref_markdown, link_prose_citations, revision_markdown
-from sitegen.parts import even_runs, weighted_runs
+from sitegen.sources import link_prose_citations, revision_markdown
+from sitegen.parts import even_runs, part_front_matter, weighted_runs
 from sitegen.structured import emulator_file_aliases
+from sitegen.emulatordata import data_directories_section
+from sitegen.emulatorintro import emulator_file_summary, emulator_held_line, emulator_intro
 
 
 def _distinct_spellings(names: list) -> list[str]:
@@ -86,186 +81,6 @@ def availability_check(
         return entry_source({**f, "source_profile": owner} if owner else f, index) is not None
 
     return _file_available
-
-
-def _emulator_slots(files: list[dict]) -> list[list[dict]]:
-    """The entries of each slot, as verify --emulator and the gaps page
-    count them, leaving out the slots the app ships."""
-    from packs.crossref import slot_key
-
-    slots: dict[tuple, list[dict]] = {}
-    for f in files:
-        slots.setdefault(slot_key(f), []).append(f)
-    return [group for group in slots.values() if not all(comes_with_app(f) for f in group)]
-
-
-def _set_names(value: object) -> list[str]:
-    """The sets an entry belongs to: group takes a name, a list or a map."""
-    if isinstance(value, str):
-        return [value]
-    if isinstance(value, (list, dict)):
-        return [str(name) for name in value]
-    return []
-
-
-def _requirements(files: list[dict], groups: dict | None) -> list[list[dict]]:
-    """Each thing the emulator needs: the members of a required set, any one
-    of which fills it (DuckStation's ps-bios, 105 images), or a required
-    file of its own. load_emulator_profiles marks every member of a
-    required set required, so counted per file DuckStation read "105
-    required" for one BIOS."""
-    required_sets = {name for name, spec in (groups or {}).items()
-                     if isinstance(spec, dict) and spec.get("required")}
-    sets: dict[str, list[dict]] = {}
-    alone: list[list[dict]] = []
-    for f in files:
-        if f.get("required") is not True or comes_with_app(f):
-            continue
-        names = [name for name in _set_names(f.get("group")) if name in required_sets]
-        if names:
-            for name in names:
-                sets.setdefault(name, []).append(f)
-        else:
-            alone.append([f])
-    return [*sets.values(), *alone]
-
-
-def _regional_set(requirements: list[list[dict]]) -> list[dict]:
-    """The one requirement, a set whose members the code picks by the game's
-    region, or [] when there is no such single choice."""
-    if len(requirements) != 1 or len(requirements[0]) < 2:
-        return []
-    members = requirements[0]
-    if not all(f.get("region") for f in members):
-        return []
-    return members if len({region_words(f["region"]) for f in members}) >= 2 else []
-
-
-def _emulator_file_summary(files: list[dict], groups: dict | None = None) -> list[str]:
-    """What the emulator reads, above its file table, and its categories.
-
-    Counted by slot, as verify --emulator and the gaps page count: raze
-    lists every GRP its code accepts under one name, and holding one fills
-    the slot. Counted per entry, the page announced 46 missing where 12
-    slots are empty. The files the app ships are counted apart: NetherSX2
-    said "4 required" for one BIOS and three fonts in its package. A
-    required set counts once (`groups`).
-    """
-    slots = _emulator_slots(files)
-    shipped = sum(1 for f in files if comes_with_app(f))
-    requirements = _requirements(files, groups)
-    in_sets = {id(f) for members in requirements for f in members}
-    req_slots = sum(1 for group in slots if any(id(f) in in_sets for f in group))
-    req_count = len(requirements)
-    optional = len(slots) - req_slots
-    hle_count = sum(1 for group in slots if any(f.get("hle_fallback") for f in group))
-
-    # Sentences, one number format: the line read "1,563 files | 164
-    # required, 1399 optional | 1563 in repo".
-    total = f"**{count_text(len(slots), 'file')}**"
-    if sum(len(group) for group in slots) != len(slots):
-        total += f" ({sum(len(group) for group in slots):,} accepted versions)"
-    line = f"{total}: {req_count:,} required, {optional:,} optional."
-    if any(len(members) > 1 for members in requirements):
-        line += " Any one file of a required set fills it."
-    regional = _regional_set(requirements) or (
-        [f for members in requirements for f in members]
-        if _regional_choice([f for members in requirements for f in members]) else [])
-    if regional:
-        # DuckStation takes the BIOS of the game's region: "3 required"
-        # read as "get all three".
-        line = f"{total}. One of {len(regional):,} is required, for the games' region."
-        if optional:
-            line += f" {optional:,} {'is' if optional == 1 else 'are'} optional."
-    if hle_count:
-        line += f" {hle_count:,} {'has' if hle_count == 1 else 'have'} an HLE fallback."
-    if shipped:
-        line += f" {count_text(shipped, 'more file')} {'comes' if shipped == 1 else 'come'} with the app."
-    lines = [line, ""]
-
-    categories = [f.get("category", "bios") for f in files]
-    if "game_data" in categories or "bios_zip" in categories:
-        cats = [
-            f"{categories.count(key):,} {label}"
-            for key, label in (
-                ("bios", "BIOS"), ("bios_zip", "BIOS ZIPs"), ("game_data", "game data")
-            )
-            if categories.count(key)
-        ]
-        lines.extend([f"By kind: {series(cats)}.", ""])
-    return lines
-
-
-def _emulator_held_line(files: list[dict], available: Callable[[dict], bool]) -> list[str]:
-    """What this collection holds of them, one quiet line under the table:
-    a reader comes for what the emulator needs, the project's counts after."""
-    slots = _emulator_slots(files)
-    if not slots:
-        return []
-    in_repo = sum(1 for group in slots if any(available(f) for f in group))
-    unsourceable = sum(
-        1 for group in slots
-        if not any(available(f) for f in group) and all(f.get("unsourceable") for f in group)
-    )
-    held = [f"{in_repo:,} in repo", f"{len(slots) - in_repo - unsourceable:,} missing"]
-    if unsourceable:
-        held.append(f"{unsourceable:,} unsourceable")
-    return [f"<p><small>In this collection: {series(held)}.</small></p>", ""]
-
-
-def _data_member_table(members: dict[str, dict], names: list[str], anchors: set[str]) -> list[str]:
-    """A data directory's files with their size and sha1, each sha1 an
-    anchor the first time the page lists it (``anchors``, the page's ids)."""
-    table = ["| File | Size | SHA1 |", "|------|-----:|------|"]
-    for member in names:
-        info = members[member]
-        sha1 = str(info.get("sha1", ""))
-        # One id per page: two members can hold the same bytes (every empty
-        # file), and Dolphin's trees share Sys.
-        anchor = card_anchor(sha1)
-        span = "" if anchor in anchors else f'<span id="{anchor}"></span>'
-        anchors.add(anchor)
-        table.append(f"| {span}{code_span(member)} | {size_text(int(info.get('size', 0)))} | {code_span(sha1)} |")
-    return table
-
-
-def _data_tree_page(ref: str, entry: dict, pages: list[tuple[str, list[str]]],
-                    index: int, registry: PageRegistry) -> str:
-    """One page of a large data directory's file list."""
-    stem, names = pages[index]
-    members = registry.data_members.get(ref) or {}
-    part = f" (part {index + 1} of {len(pages)})" if len(pages) > 1 else ""
-    read_by = series([f"[{escape_tags(display)}]({key}.md#data-directories)"
-                             for key, display in registry.data_readers.get(ref, [])])
-    # A file list out of the search: "dolphin" found three parts of the
-    # dolphin-sys tree, on their title, before the Dolphin page.
-    front: dict = {"level": "reference", "search": "exclude"}
-    # The reader the tree is named after (dolphin for dolphin-sys), else
-    # the first by name.
-    readers = registry.data_readers.get(ref) or []
-    owner = max(readers, default=None,
-                key=lambda reader: len(reader[0]) if ref.startswith(f"{reader[0]}-") else 0)
-    if owner:
-        head = _part_front_matter(
-            (owner[1], f"{owner[0]}.md"),
-            [(f"The {ref} data directory, part {n}", f"{other}.md")
-             for n, (other, _names) in enumerate(pages, 1)], index, front)
-    else:
-        head = ["---", yaml.safe_dump(front, sort_keys=False, allow_unicode=True).rstrip("\n"),
-                "---", ""]
-    lines = [
-        *head,
-        f"# The {ref} data directory{part}", "",
-        f"{entry.get('description') or 'A data directory'}: "
-        f"{count_text(len(members), 'file')}, as the packs ship them."
-        + (f" Read by {read_by}." if read_by else ""), "",
-    ]
-    if len(pages) > 1:
-        lines.extend([", ".join(f"[part {i}]({other}.md)" if other != stem else f"part {i}"
-                                for i, (other, _names) in enumerate(pages, 1)), ""])
-    lines.extend(search_excluded(_data_member_table(members, names, set())))
-    lines.extend(["", date_line()])
-    return "\n".join(lines) + "\n"
 
 
 # An emulator page lists at most this many file cards: MAME's 1,564 made a
@@ -506,154 +321,6 @@ def _collection_card_href(entry: dict, consumers: FileConsumers | None, owner: s
     return f"../systems/{urllib.parse.quote(card_page(held, sha1))}.md#{card_anchor(sha1)}"
 
 
-def _any_name_folder(profile: dict, entry: dict) -> str:
-    """Where the one BIOS goes, as the profile states it, or ""."""
-    folder = str(profile.get("bios_directory") or "")
-    if not folder:
-        path = str(entry.get("path") or "")
-        folder = path.rsplit("/", 1)[0] + "/" if "/" in path else ""
-    if not folder:
-        return ""
-    if profile.get("type") == "standalone":
-        # A bare `bios/` is a folder inside the app's own data folder.
-        own = ("[the app's data folder](#data-folder)" if profile.get("data_root")
-               else "the app's own data folder")
-        return f"the {code_span(folder.strip('/'))} folder inside {own}"
-    return f"{code_span(folder)}, inside the BIOS folder"
-
-
-def _any_name_steps(emu_name: str, profile: dict, entry: dict, href: str,
-                    name: str = "") -> str:
-    """The intro of an emulator that takes one BIOS of any name: get one,
-    put it in its folder, any name works.
-
-    An app whose profile names its data folder gets that folder, one tab
-    per system it runs on: AetherSX2's step said "inside the app's own
-    data folder" while the profile cites Android/data/xyz.aethersx2.android.
-    """
-    system = system_name((profile.get("systems") or [""])[0])
-    example = str(entry.get("name") or "")
-    if named_example(example) and href:
-        get = f"Download [{code_span(example)}]({href})."
-    else:
-        get = f"Get one from the {named_system_link(profile['systems'][0], '../')} files."
-    steps = [get]
-    folders: list[str] = []
-    if profile.get("type") == "standalone" and standalone_place(profile, entry):
-        steps.append("Put it in this folder:")
-        folders = ['<div id="data-folder" class="rb-anchor"></div>', "",
-                   *data_folder_block(profile, [entry])]
-    else:
-        folder = _any_name_folder(profile, entry)
-        if folder:
-            steps.append(f"Put it in {folder}.")
-        folders = _data_folder_intro(name, profile)
-    reader = "The app" if profile.get("type") == "standalone" else "The emulator"
-    return "\n".join([
-        f"{emu_name} needs one {system} BIOS file, any region.",
-        "",
-        *(f"{number}. {step}" for number, step in enumerate(steps, 1)),
-        "",
-        *folders,
-        *([""] if folders and folders[-1] else []),
-        f"Any file name works. {reader} reads what the file holds.",
-    ])
-
-
-def _data_folder_intro(name: str, profile: dict) -> list[str]:
-    """Where the app keeps its files, under the intro of a profile that
-    names its data folder and takes more than one BIOS of any name."""
-    if not profile.get("data_root"):
-        return []
-    files = [f for f in profile.get("files") or [] if isinstance(f, dict)]
-    placed = [f for f in files if standalone_place(profile, f)]
-    subject = ("The app" if profile.get("type") == "standalone"
-               else "Run on its own, the app")
-    lead = (f"{subject} reads its files from this folder:" if placed
-            else f"{subject} keeps its data in this folder:")
-    return ['<div id="data-folder" class="rb-anchor"></div>', "", lead, "",
-            *data_folder_block(profile, files)]
-
-
-def _emulator_intro(emu_name: str, profile: dict, href: str = "", name: str = "") -> str:
-    """What the emulator needs, in plain words, from fields every profile has.
-
-    The page opened on a twelve-row table: "Type", "Version", "Checked by".
-    DuckStation needs one PlayStation BIOS of any name, and the reader had
-    to infer it from the "Files found by" row. ``href`` links the
-    collection's copy of the one BIOS an emulator takes under any name,
-    and ``name`` is the profile's key.
-    """
-    entry = any_name_bios(profile)
-    if entry is not None:
-        return _any_name_steps(emu_name, profile, entry, href, name)
-    names: list[str] = []
-    for sys_id in profile.get("systems") or []:
-        label = system_name(sys_id)
-        if label not in names:
-            names.append(label)
-    # What the app installs itself is no file for the reader to get.
-    files = [f for f in profile.get("files") or [] if isinstance(f, dict) and not comes_with_app(f)]
-    requirements = _requirements(files, profile.get("groups"))
-    required = [f for members in requirements for f in members]
-    sentences = []
-    if names:
-        shown = names if len(names) <= 4 else names[:3] + [f"{len(names) - 3} more systems"]
-        sentences.append(f"{emu_name} emulates {series(shown)}.")
-    regional = _regional_set(requirements)
-    by_region = "" if regional else _regional_choice(required)
-    others = len(files) - len(required)
-    if regional:
-        # DuckStation needs one BIOS of the game's region and accepts 105
-        # images: every member of its ps-bios set is marked required, and
-        # the page said "105 of them required".
-        sentences.append(
-            f"It needs one BIOS for the game's region, among the {len(regional):,} it accepts.")
-        if others:
-            sentences.append(
-                f"The {count_text(others, 'other file')} {'is' if others == 1 else 'are'} optional.")
-    elif by_region:
-        # Three required BIOS of three regions: the page said "3 of them
-        # required" and read as "get all of these".
-        sentences.append(f"It picks the BIOS for the game's region: {by_region}.")
-        if others:
-            sentences.append(
-                f"The {count_text(others, 'other file')} {'is' if others == 1 else 'are'} optional.")
-    elif files:
-        sentences.append(
-            f"It reads {count_text(len(files), 'file')}, {len(requirements):,} of them required: "
-            "without a required file it does not start games."
-            if requirements else
-            f"It reads {count_text(len(files), 'file')}, none of them required: it starts "
-            "games without them."
-        )
-        if any(len(members) > 1 for members in requirements):
-            sentences.append("Any one file of a required set fills it.")
-    if required and len(names) > 1:
-        sentences.append("A required file is needed only by the machines that use it.")
-        if profile.get("found_by") == "content":
-            sentences.append("It recognises a file by its contents, so any file name works.")
-        if any(f.get("source_ref") for f in files):
-            sentences.append("Each file below cites the line of source code that reads it.")
-    folder = _data_folder_intro(name, profile) if name else []
-    return "\n".join([" ".join(sentences), "", *folder]).strip("\n")
-
-
-def _regional_choice(required: list[dict], most: int = 6) -> str:
-    """The required files as one choice by region, or "" when they are not one.
-
-    Only when every required entry carries a region: and they name at least
-    two: region: is the territory the code selects the file for, so the
-    reader needs the one of the game's region.
-    """
-    if not required or len(required) > most or not all(f.get("region") for f in required):
-        return ""
-    if len({region_words(f["region"]) for f in required}) < 2:
-        return ""
-    choices = [f"{f.get('name', '')} ({region_words(f['region'], 3)})" for f in required]
-    return series(choices, "or")
-
-
 def _alias_page(name: str, profile: dict) -> str:
     """The page of a core that uses another one's firmware."""
     parent = profile.get("alias_of", profile.get("bios_identical_to", "unknown"))
@@ -775,8 +442,8 @@ def _emulator_files_section(
     _file_available = availability_check(sources.db, sources.data_names, name)
 
     lines.extend(["## Files", ""])
-    lines.extend(_emulator_file_summary(files, profile.get("groups")))
-    held = _emulator_held_line(files, _file_available)
+    lines.extend(emulator_file_summary(files, profile.get("groups")))
+    held = emulator_held_line(files, _file_available)
 
     anchors = emulator_file_anchors(files)
     aliases = emulator_file_aliases(files, anchors)
@@ -809,70 +476,6 @@ def _emulator_files_section(
     return lines, part_pages
 
 
-def _data_directory_lines(
-    dd: dict, profile: dict, data_registry: dict | None, member_anchors: set[str],
-    registry: PageRegistry,
-) -> tuple[list[str], dict[str, str]]:
-    """One data directory: what it holds, where it comes from, which build
-    reads it, and the pages its member list went to."""
-    lines: list[str] = []
-    part_pages: dict[str, str] = {}
-    ref = dd.get("ref", "")
-    dest = dd.get("destination", "")
-    entry = (data_registry or {}).get(ref, {})
-    # An empty destination wrote "``", which opened a code span
-    # running to the next one and hid a link from the MDX pass.
-    line = f"- `{ref}` > `{dest}`" if dest else f"- `{ref}`"
-    if entry.get("description"):
-        line += f": {entry['description']}"
-    lines.append(line)
-    lines.extend(f"    - {line}" for line in data_directory_origin(
-        entry, registry.data_revisions.get(ref) or {}))
-    if dd.get("mode"):
-        lines.append(f"    - Read by the {dd['mode']} build only")
-    if dd.get("bundled"):
-        lines.append("    - Installed with the emulator, so packs leave it out")
-    if dd.get("source_ref"):
-        lines.append(f"    - Source: {source_ref_markdown(profile, dd['source_ref'])}")
-    members = registry.data_members.get(ref) or {}
-    tree_pages = data_tree_pages(ref, members)
-    if tree_pages:
-        where = (f"[a page of their own]({tree_pages[0][0]}.md)" if len(tree_pages) == 1
-                 else "pages of their own: " + ", ".join(
-                     f"[part {i}]({stem}.md)" for i, (stem, _names) in enumerate(tree_pages, 1)))
-        lines.append(f"    - {count_text(len(members), 'file')}, listed on {where}")
-        for index, (stem, _names) in enumerate(tree_pages):
-            part_pages[stem] = _data_tree_page(ref, entry, tree_pages, index, registry)
-    elif members:
-        table = _data_member_table(members, sorted(members), member_anchors)
-        lines.append("")
-        lines.extend(markup.details(
-            "info", f"{count_text(len(members), 'file')}, as the packs ship them",
-            table, indent="    "))
-    return lines, part_pages
-
-
-def _data_directories_section(
-    profile: dict, data_dirs: list[dict], data_registry: dict | None, registry: PageRegistry,
-) -> tuple[list[str], dict[str, str]]:
-    """The Data directories section, and the pages its member lists went to."""
-    # The member tables are a file list with hashes: out of the search,
-    # dolphin, primehack and ishiiruka each put 210 KB of it there.
-    trees: list[str] = []
-    part_pages: dict[str, str] = {}
-    member_anchors: set[str] = set()
-    # Each tree with what it holds, where it comes from, which build reads
-    # it and the code that does: these trees put thousands of files in
-    # the packs, and the page said only `dolphin-sys` > `Sys`.
-    for dd in data_dirs:
-        lines, pages = _data_directory_lines(dd, profile, data_registry, member_anchors, registry)
-        trees.extend(lines)
-        part_pages.update(pages)
-    trees.append("")
-    # The member tables are the lookup's.
-    return ["## Data directories", "", *search_excluded(trees)], part_pages
-
-
 def emulator_pages(
     name: str,
     profile: dict,
@@ -902,7 +505,7 @@ def emulator_pages(
 
     part_pages: dict[str, str] = {}
     one_bios = any_name_bios(profile)
-    intro = _emulator_intro(emu_name, profile, _collection_card_href(
+    intro = emulator_intro(emu_name, profile, _collection_card_href(
         one_bios, consumers, name) if one_bios else "", name)
     romset = emulator_romset(profile)
     lines = [
@@ -960,7 +563,7 @@ def emulator_pages(
         lines.extend(["## Profile data", "", *blocks])
 
     if data_dirs:
-        section, pages = _data_directories_section(profile, data_dirs, data_registry, registry)
+        section, pages = data_directories_section(profile, data_dirs, data_registry, registry)
         lines.extend(section)
         part_pages.update(pages)
 
@@ -1008,26 +611,6 @@ def _card_index(
     ]
 
 
-def _part_front_matter(parent: tuple[str, str], siblings: list[tuple[str, str]],
-                       index: int, front: dict | None = None) -> list[str]:
-    """The front matter of part ``index`` of ``siblings`` ((label, link)
-    each): the page it belongs to, its neighbours and the part weight.
-
-    MAME's eight card pages had no parent, so the crumbs skipped MAME, and
-    `prev: false`, so part 5 reached part 6 only through a sentence.
-    The first part's previous page is the parent, the last part has no next.
-    """
-    data = dict(front or {})
-    data["parent"] = {"label": parent[0], "link": parent[1]}
-    before = siblings[index - 1] if index > 0 else parent
-    data["prev"] = {"label": before[0], "link": before[1]}
-    data["next"] = ({"label": siblings[index + 1][0], "link": siblings[index + 1][1]}
-                    if index + 1 < len(siblings) else False)
-    data["searchWeight"] = SEARCH_WEIGHT.get("part", DEMOTED_WEIGHT)
-    return ["---", yaml.safe_dump(data, sort_keys=False, allow_unicode=True).rstrip("\n"),
-            "---", ""]
-
-
 def _emulator_part_page(
     name: str, emu_name: str, number: int, parts: Sequence[tuple[str, Sequence[int]]],
     cards: list[list[str]], files: list[dict], rows: list[siteentries.Row] | None = None,
@@ -1045,7 +628,7 @@ def _emulator_part_page(
     others = ", ".join(
         f"[{n}]({stem}.md)" for n, (stem, _e) in enumerate(parts, 1) if n != number)
     lines = [
-        *_part_front_matter((emu_name, f"{name}.md"),
+        *part_front_matter((emu_name, f"{name}.md"),
                             [(f"{emu_name} files, part {n}", f"{stem}.md")
                              for n, (stem, _e) in enumerate(parts, 1)], number - 1),
         f"# {emu_name} files, part {number} of {len(parts)}",

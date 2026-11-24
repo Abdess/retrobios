@@ -170,10 +170,10 @@ class PlatformScopedEntries(unittest.TestCase):
     def test_the_page_and_the_text_count_sources_alike(self):
         """The gaps page kept a held bundled file under bios where the text
         report counted it bundled: 410 files in different columns."""
-        from sitegen import gaps
+        from sitegen import gapsources
 
         report = cross_reference(self.PROFILES, {}, self.DB, platform="plat")
-        totals, _total, _rows = gaps._undeclared_gaps(report)
+        totals, _total, _rows = gapsources.undeclared_gaps(report)
         self.assertEqual(totals["bundled"], 1)
         self.assertEqual(totals["bios"], 0)
         self.assertEqual(totals["missing"], 1)

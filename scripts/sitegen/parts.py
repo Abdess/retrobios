@@ -9,8 +9,8 @@ from typing import TypeVar
 
 from core.paths import REPO_ROOT
 from sitegen import starlight as sitestarlight
-from sitegen.config import date_line
-from sitegen.decorate import front_matter
+from sitegen.config import date_line, yaml
+from sitegen.decorate import DEMOTED_WEIGHT, SEARCH_WEIGHT, front_matter
 
 
 # A platform's file lists are split by the share of a page they render to,
@@ -172,3 +172,23 @@ def list_pages(
     if len(stems) == 1:
         return f"[a page of their own]({stems[0]}.md)"
     return "pages of their own: " + part_links(stems)
+
+
+def part_front_matter(parent: tuple[str, str], siblings: list[tuple[str, str]],
+                       index: int, front: dict | None = None) -> list[str]:
+    """The front matter of part ``index`` of ``siblings`` ((label, link)
+    each): the page it belongs to, its neighbours and the part weight.
+
+    MAME's eight card pages had no parent, so the crumbs skipped MAME, and
+    `prev: false`, so part 5 reached part 6 only through a sentence.
+    The first part's previous page is the parent, the last part has no next.
+    """
+    data = dict(front or {})
+    data["parent"] = {"label": parent[0], "link": parent[1]}
+    before = siblings[index - 1] if index > 0 else parent
+    data["prev"] = {"label": before[0], "link": before[1]}
+    data["next"] = ({"label": siblings[index + 1][0], "link": siblings[index + 1][1]}
+                    if index + 1 < len(siblings) else False)
+    data["searchWeight"] = SEARCH_WEIGHT.get("part", DEMOTED_WEIGHT)
+    return ["---", yaml.safe_dump(data, sort_keys=False, allow_unicode=True).rstrip("\n"),
+            "---", ""]

@@ -4748,16 +4748,16 @@ class TheSiteCountsSlotsNotVersions(unittest.TestCase):
     59 files, 46 missing, where verify --emulator said 23 slots, 12 missing."""
 
     def test_one_held_version_fills_the_slot(self):
-        from scripts.sitegen.emulatorpage import _emulator_file_summary, _emulator_held_line
+        from scripts.sitegen.emulatorintro import emulator_file_summary, emulator_held_line
 
         files = [
             {"name": "DUKE3D.GRP", "crc32": "1"},
             {"name": "DUKE3D.GRP", "crc32": "2"},
             {"name": "BLOOD.RFF", "crc32": "3"},
         ]
-        line = _emulator_file_summary(files)[0]
+        line = emulator_file_summary(files)[0]
         self.assertIn("**2 files** (3 accepted versions)", line)
-        held = _emulator_held_line(files, lambda f: f.get("crc32") == "2")[0]
+        held = emulator_held_line(files, lambda f: f.get("crc32") == "2")[0]
         self.assertIn("1 in repo and 1 missing", held)
 
 
@@ -5677,9 +5677,9 @@ class BundledFilesAreNotToSource(unittest.TestCase):
         self.assertNotIn("n64.psh", summary)
 
     def test_the_site_gives_it_its_own_status(self):
-        from sitegen import dataexports
+        from sitegen import exportrows
 
-        rows = dataexports._gap_export_rows({}, {"daedalusx64": {
+        rows = exportrows.gap_export_rows({}, {"daedalusx64": {
             "emulator": "DaedalusX64", "systems": ["nintendo-64"],
             "gap_details": [{"name": "n64.psh", "source": "missing", "required": True,
                              "in_repo": False, "bundled": True}],
@@ -5809,13 +5809,13 @@ class GapsPageCountsOneWay(unittest.TestCase):
     of the same platform already holds."""
 
     def test_settled_declarations_are_listed_apart(self):
-        from scripts.sitegen.gaps import _render_problem_files
+        from scripts.sitegen.gapproblems import render_problem_files
 
         problems = [{"platform": "RetroDECK", "name": "dsifirmware.bin", "status": "untested",
                      "required": True, "reason": "x", "discrepancy": ""}]
         settled = [{"platform": "RetroDECK", "name": "cdibios.zip", "status": "untested",
                     "held_by": "arcade"}]
-        text = "\n".join(_render_problem_files(problems, settled))
+        text = "\n".join(render_problem_files(problems, settled))
         self.assertIn("0 missing, 1 untested", text)
         self.assertIn("Other revisions of a held destination", text)
         self.assertIn("`cdibios.zip`", text)
@@ -5823,12 +5823,12 @@ class GapsPageCountsOneWay(unittest.TestCase):
     def test_missing_says_the_destination_count_of_the_opening_sentence(self):
         # The page opened on "48 are missing" (by destination) above a
         # heading that said "10 files": one row per name.
-        from scripts.sitegen.gaps import _render_problem_files
+        from scripts.sitegen.gapproblems import render_problem_files
 
         problems = [{"platform": "AmberELEC", "name": "hardwareconfig.xml",
                      "status": "missing", "required": True, "reason": "",
                      "discrepancy": "", "category": "unread"}] * 3
-        text = "\n".join(_render_problem_files(problems, missing_total=3))
+        text = "\n".join(render_problem_files(problems, missing_total=3))
         self.assertIn("3 missing under 1 name,", text)
         self.assertIn('rb-badge-danger">1 name</span>', text)
         self.assertNotIn("1 missing", text)
@@ -5836,13 +5836,13 @@ class GapsPageCountsOneWay(unittest.TestCase):
     def test_a_missing_row_links_each_entry_and_names_its_folder(self):
         """The row said `N88_KNJ1.ROM | unread | yes | AmberELEC` in plain text:
         neither where the list puts it nor which cores were examined."""
-        from scripts.sitegen.gaps import _render_problem_files
+        from scripts.sitegen.gapproblems import render_problem_files
 
         problems = [{"platform": "AmberELEC", "platform_key": "amberelec", "name": "N88_KNJ1.ROM",
                      "status": "missing", "required": True, "reason": "", "discrepancy": "",
                      "category": "unread", "system": "nec-pc-88",
                      "destination": "bios/quasi88/N88_KNJ1.ROM"}]
-        text = "\n".join(_render_problem_files(problems))
+        text = "\n".join(render_problem_files(problems))
         self.assertIn("| [AmberELEC](platforms/amberelec.md#nec-pc-88) "
                       "`bios/quasi88/N88_KNJ1.ROM` |", text)
 

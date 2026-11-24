@@ -59,8 +59,11 @@ from sitegen import cards
 from sitegen import config as sitegen_config
 from sitegen import crossref
 from sitegen import dataexports
+from sitegen import exportrows
 from sitegen import datapage
 from sitegen import gaps
+from sitegen import gapproblems
+from sitegen import gapsources
 from sitegen import lookup
 from sitegen import parts as sitegen_parts
 from sitegen import platformfiles
@@ -408,7 +411,7 @@ class ExportsComplete(unittest.TestCase):
             {"name": "h.xml", "system": "s", "status": "missing"},
             {"name": "h.xml", "system": "s", "status": "missing"}, detail]}}
         db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
-        rows = dataexports._gap_export_rows(coverages, {}, db)
+        rows = exportrows.gap_export_rows(coverages, {}, db)
         self.assertEqual([r["name"] for r in rows], ["h.xml", "x.bin"])
         held = rows[1]
         self.assertEqual(held["collection_path"], path)
@@ -420,7 +423,7 @@ class ExportsComplete(unittest.TestCase):
         db = {"files": {"a" * 40: {"path": "bios/X/x.bin"}}}
         coverages = {"p": {"platform": "P", "details": [
             {"name": "x.bin", "system": "s", "status": "untested", "path": "bios/./X/x.bin"}]}}
-        rows = dataexports._gap_export_rows(coverages, {}, db)
+        rows = exportrows.gap_export_rows(coverages, {}, db)
         self.assertEqual(rows[0]["resolved_sha1"], "a" * 40)
 
     def test_platform_rows_carry_status_and_file(self):
@@ -431,25 +434,25 @@ class ExportsComplete(unittest.TestCase):
             {"name": "a.bin", "system": "s", "status": "ok", "path": entry["path"],
              "category": "bios"},
             {"name": "b.bin", "system": "s", "status": "missing", "category": "game_data"}]}}
-        _items, rows = dataexports._platform_export_rows(coverages, db)
+        _items, rows = exportrows.platform_export_rows(coverages, db)
         self.assertEqual((rows[0]["status"], rows[0]["resolved_sha1"]), ("ok", sha1))
         self.assertEqual(rows[0]["collection_path"], entry["path"])
         self.assertEqual((rows[1]["status"], rows[1]["category"], rows[1]["collection_path"]),
                          ("missing", "game_data", ""))
 
     def test_commit_and_wanted_list(self):
-        commit = dataexports.source_commit()
+        commit = exportrows.source_commit()
         self.assertRegex(commit, r"^[0-9a-f]{40}$")
         schema = json.loads((REPO_ROOT / "schemas" / "site-api-envelope.schema.json")
                             .read_text(encoding="utf-8"))
         self.assertIn("commit", schema["properties"])
         db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
-        rows = dataexports._provenance_wanted_rows(provenance.wanted_dumps(
+        rows = exportrows.provenance_wanted_rows(provenance.wanted_dumps(
             build_report(db, load_provenance_snapshots()), provenance.load_derivable()))
         self.assertTrue(rows)
         self.assertTrue(all(r["catalog"] and r["name"] for r in rows))
-        text = dataexports._csv_document(list(dataexports.WANTED_FIELDS), rows)
-        self.assertEqual(next(csv.reader(io.StringIO(text))), list(dataexports.WANTED_FIELDS))
+        text = dataexports._csv_document(list(exportrows.WANTED_FIELDS), rows)
+        self.assertEqual(next(csv.reader(io.StringIO(text))), list(exportrows.WANTED_FIELDS))
 
 
 class DatesAndNames(unittest.TestCase):
@@ -526,7 +529,7 @@ class TheExportsKeepWhatACheckNeeds(unittest.TestCase):
     }}
 
     def test_rows_carry_the_member_and_the_flags(self):
-        _items, rows = dataexports._platform_export_rows(self.COVERAGE)
+        _items, rows = exportrows.platform_export_rows(self.COVERAGE)
         zipped, flagged = rows
         self.assertEqual(zipped["zipped_file"], "basic1.rom")
         self.assertIs(flagged["hash_match_mandatory"], True)
@@ -537,10 +540,10 @@ class TheExportsKeepWhatACheckNeeds(unittest.TestCase):
     def test_the_csv_header_and_the_table_name_them(self):
         source = script_source("generate_site.py")
         self.assertIn('"collection_path", "resolved_sha1", *ENTRY_EXPORT_FIELDS,', source)
-        for field in dataexports.ENTRY_EXPORT_FIELDS:
+        for field in exportrows.ENTRY_EXPORT_FIELDS:
             self.assertIn(f":{field}", source)
         for field in ("zipped_file", "hash_match_mandatory", "mandatory_declared", "curated"):
-            self.assertIn(field, dataexports.ENTRY_EXPORT_FIELDS)
+            self.assertIn(field, exportrows.ENTRY_EXPORT_FIELDS)
 
     def test_the_built_csv_has_the_column(self):
         text = _built(PUBLIC / "downloads" / "platform-files.csv").read_text(encoding="utf-8")
@@ -663,7 +666,7 @@ class TheContractsValidate(unittest.TestCase):
         platforms = str(REPO_ROOT / "platforms")
         for name in list_registered_platforms(platforms):
             config = load_platform_config(name, platforms)
-            contract, registry = dataexports._split_contract(config)
+            contract, registry = exportrows._split_contract(config)
             with self.subTest(platform=name):
                 errors = [error.message for error in validator.iter_errors(contract)]
                 self.assertEqual(errors, [])
@@ -738,7 +741,7 @@ class EveryEnvelopeCarriesTheCommit(unittest.TestCase):
 
     def test_every_built_envelope_has_it(self):
         _built(API / "catalog.json")
-        if not dataexports.source_commit():
+        if not exportrows.source_commit():
             raise unittest.SkipTest("not a git checkout")
         lacking = [
             path.relative_to(API).as_posix() for path in sorted(API.rglob("*.json"))
@@ -919,13 +922,13 @@ class TablesFitTheirColumn(unittest.TestCase):
     def test_the_gaps_tables(self):
         problem = {"platform": "Batocera", "name": "x.bin", "status": "untested", "required": True,
                    "reason": "expected md5 differs", "declared": {"md5": ["b" * 32]}, "path": ""}
-        table = "\n".join(gaps._render_problem_files([problem], db={"files": {}}))
+        table = "\n".join(gapproblems.render_problem_files([problem], db={"files": {}}))
         row = next(line for line in table.splitlines() if "x.bin" in line)
         self.assertIn(f'<code title="{"b" * 32}">{"b" * 12}</code>', row)
         self.assertIn('<span class="rb-reason">expected md5 differs</span>', row)
         source = script_source("generate_site.py")
         self.assertIn('expected = f"{algorithm} {short_hash(value)}"', source)
-        self.assertIn("{_reason_cell(u['reason'])}", source)
+        self.assertIn("{reason_cell(u['reason'])}", source)
 
 
 class SourceLinksGoWhereTheFileIs(unittest.TestCase):
@@ -1301,9 +1304,9 @@ class FilesToSourceOnAPhone(unittest.TestCase):
         for part in parts:
             rows = [line for line in part.read_text(encoding="utf-8").splitlines()
                     if line.startswith("| `")]
-            self.assertLessEqual(len(rows), gaps.FILES_TO_SOURCE_PART, part.name)
+            self.assertLessEqual(len(rows), gapsources.FILES_TO_SOURCE_PART, part.name)
             for row in rows:
-                self.assertIn(f"[Have it? Upload]({gaps.UPLOAD_URL}", row)
+                self.assertIn(f"[Have it? Upload]({gapsources.UPLOAD_URL}", row)
 
     def test_the_upload_lands_in_the_folder_the_review_asks_for(self):
         """The link read the profile's first system: Raze's Duke Nukem 3D
@@ -1334,13 +1337,13 @@ class LongGapTablesOnPagesOfTheirOwn(unittest.TestCase):
                           "unsourceable": [unsourced], "gap_details": [gap]}}
         return gaps.generate_gap_analysis(
             {"xm7": {"emulator": "XM7", "files": []}}, {}, {"files": {}, "indexes": {}},
-            gap_report=report, listing=gaps.SourceListing(moved=moved))
+            gap_report=report, listing=gapsources.SourceListing(moved=moved))
 
     def test_both_tables_leave_with_their_anchors_kept(self):
         moved: dict[str, str] = {}
         page = self._page(moved)
         self.assertEqual(set(moved) - {"gaps-files-to-source"},
-                         {gaps.PER_EMULATOR_STEM, gaps.NOT_COLLECTED_STEM})
+                         {gapsources.PER_EMULATOR_STEM, gapsources.NOT_COLLECTED_STEM})
         self.assertNotIn("| Emulator | Undeclared |", page)
         self.assertNotIn("| File | Emulator | Reason |", page)
         self.assertIn("### Per emulator", page)
@@ -1348,11 +1351,11 @@ class LongGapTablesOnPagesOfTheirOwn(unittest.TestCase):
         self.assertIn('<span id="acknowledged-gaps"></span>', page)
         self.assertIn("## Not collected yet", page)
         self.assertIn("[a page of their own](gaps-not-collected.md)", page)
-        own = moved[gaps.NOT_COLLECTED_STEM]
+        own = moved[gapsources.NOT_COLLECTED_STEM]
         self.assertIn('link: "/gaps/"', own)
         self.assertIn("| `KANJI2.ROM` | XM7 |", own)
         self.assertIn("gaps.md#not-collected-yet", own)
-        self.assertIn("| [XM7](emulators/xm7.md) | 1 |", moved[gaps.PER_EMULATOR_STEM])
+        self.assertIn("| [XM7](emulators/xm7.md) | 1 |", moved[gapsources.PER_EMULATOR_STEM])
 
     def test_without_pages_the_tables_stay(self):
         page = self._page(None)
@@ -1372,12 +1375,12 @@ class OneAnswerOnReleasePacks(unittest.TestCase):
     """8.1: the API, the picker's data and the pages read the registry."""
 
     def test_a_child_does_not_inherit_its_parents_pack(self):
-        _contract, registry = dataexports._split_contract(
+        _contract, registry = exportrows._split_contract(
             {"_key": "lakka", "inherits": "retroarch", "release_pack": True})
         self.assertIs(registry["release_pack"], "lakka" in _released())
-        _contract, registry = dataexports._split_contract({"_key": "minui"})
+        _contract, registry = exportrows._split_contract({"_key": "minui"})
         self.assertNotIn("release_pack", registry)
-        _contract, registry = dataexports._split_contract({"_key": "retroarch"})
+        _contract, registry = exportrows._split_contract({"_key": "retroarch"})
         self.assertIs(registry["release_pack"], "retroarch" in _released())
 
     def test_api_release_pack_set_equals_the_registry(self):

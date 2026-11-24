@@ -52,7 +52,7 @@ class AnUntestedRowNamesBothHashes(unittest.TestCase):
 
     def test_declared_and_held(self):
         from core.hashing import declared_hash_lists
-        from sitegen import gaps
+        from sitegen import gapproblems
 
         path = "bios/Nintendo/Nintendo DS/dsifirmware.bin"
         declared, held = "1" * 64, "2" * 64
@@ -63,7 +63,7 @@ class AnUntestedRowNamesBothHashes(unittest.TestCase):
             "declared": declared_hash_lists(entry), "path": path,
         }
         db = {"files": {"f" * 40: {"path": path, "sha256": held}}}
-        table = "\n".join(gaps._render_problem_files([problem], db=db))
+        table = "\n".join(gapproblems.render_problem_files([problem], db=db))
         row = next(line for line in table.splitlines() if "dsifirmware" in line)
         # Cut to 12 characters in the cell, the whole value in its title.
         self.assertIn(f'sha256 <code title="{declared}">{declared[:12]}</code>', row)
