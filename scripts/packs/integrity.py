@@ -23,7 +23,7 @@ from resolve.validation import (
 )
 from resolve.nativemode import hash_mismatch_excludes_file
 import sys
-from resolve.cores import filter_systems_by_target
+from resolve.cores import platform_scope_systems
 from core.hashing import (
     compute_hashes, md5_composite, md5_composite_of, md5sum, parse_hash_list,
     stream_hashes,
@@ -978,14 +978,8 @@ def verify_pack_against_platform(
     )
     opts = _PlatformCheckSettings(**options)
     config, emu_profiles = _cut_config(platform_name, platforms_dir, target_cores, opts)
-    expected_systems = config.get("systems", {})
-    if target_cores is not None:
-        expected_systems = filter_systems_by_target(
-            expected_systems,
-            emu_profiles,
-            target_cores,
-            resolve_platform_cores(config, emu_profiles),
-        )
+    # The systems the builder packed, by the one rule verify and the pack read.
+    expected_systems = platform_scope_systems(config, emu_profiles, target_cores)
     expect = _Expectation(
         config, emu_profiles, expected_systems,
         _region_drops(

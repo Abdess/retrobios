@@ -6435,9 +6435,9 @@ struct BurnDriver BurnDrvneogeo = {
             "the pack verifier takes no target, so it cannot narrow by one",
         )
         self.assertIn(
-            "filter_systems_by_target(",
+            "platform_scope_systems(config, emu_profiles, target_cores)",
             source,
-            "the baseline expectation is not narrowed by the target",
+            "the baseline expectation is not narrowed by the target, as the pack and verify narrow it",
         )
         self.assertIn(
             "target_cores=target_cores",
