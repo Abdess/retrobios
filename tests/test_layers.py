@@ -371,5 +371,37 @@ class ModuleNames(unittest.TestCase):
         self.assertEqual(found, [])
 
 
+CODE_CEILING = 800
+TEST_CEILING = 1500
+
+
+def oversized(paths: list[Path], ceiling: int) -> list[str]:
+    root = SCRIPTS.parent
+    found = []
+    for path in paths:
+        if "__pycache__" in path.parts or path.stem in SELF_CONTAINED:
+            continue
+        with path.open(encoding="utf-8") as handle:
+            lines = sum(1 for _ in handle)
+        if lines > ceiling:
+            found.append(f"{path.relative_to(root)} ({lines})")
+    return found
+
+
+class ModuleSizes(unittest.TestCase):
+    """A module past its ceiling holds several subjects: split it by subject.
+    install.py is built from installer/ and core_probe.py is hashed whole by
+    every measurement, so neither is held to the ceiling."""
+
+    def test_code_modules_stay_under_the_ceiling(self):
+        root = SCRIPTS.parent
+        paths = sorted(SCRIPTS.rglob("*.py")) + sorted((root / "installer").glob("*.py"))
+        self.assertEqual(oversized(paths, CODE_CEILING), [])
+
+    def test_test_modules_stay_under_the_ceiling(self):
+        folder = Path(__file__).resolve().parent
+        self.assertEqual(oversized(sorted(folder.glob("*.py")), TEST_CEILING), [])
+
+
 if __name__ == "__main__":
     unittest.main()
