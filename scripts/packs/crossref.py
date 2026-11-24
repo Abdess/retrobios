@@ -21,7 +21,7 @@ from resolve.content import content_fits, name_match_size_ok
 from resolve.directories import directory_members
 from resolve.launcherlayer import LauncherLayer, held_record
 from resolve.layout import system_dir_path
-from resolve.localfile import held_record_for
+from resolve.lookup import held_record_for
 from resolve.ownership import foreign_tree, owner_tokens
 from resolve.launches import PlatformLaunches
 from resolve.standalone import platform_layouts

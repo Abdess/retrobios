@@ -16,7 +16,7 @@ import unittest
 from pathlib import Path
 
 from probes.entries import held_file, held_variants
-from resolve.localfile import variant_copies
+from resolve.lookup import variant_copies
 
 
 def _record(root: Path, path: str, body: bytes) -> tuple[str, dict]:

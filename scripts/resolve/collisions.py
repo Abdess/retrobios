@@ -9,7 +9,8 @@ from dataclasses import dataclass, field
 from core.hashing import compute_hashes, declared_hashes, parse_hash_list
 from core.paths import comparable_destination
 from core.ziptools import check_inside_zip
-from resolve.localfile import resolve_local_file, variant_base_name
+from resolve.localfile import resolve_local_file
+from resolve.lookup import variant_base_name
 from model.database import record_at
 from model.declarations import declared_slot
 from resolve.packfiles import preferred_entries

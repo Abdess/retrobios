@@ -7,7 +7,7 @@ from pathlib import Path
 
 from core.collectionfiles import collection_files
 from core.hashing import compute_hashes
-from resolve.localfile import variant_base_name
+from resolve.lookup import variant_base_name
 
 # Every digest database.json publishes per file, in the order compute_hashes
 # returns them. The schema requires all five, so a cache entry missing any of

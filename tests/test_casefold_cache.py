@@ -7,7 +7,7 @@ import tests
 import unittest
 from pathlib import Path
 
-from resolve.localfile import _casefold_name_index
+from resolve.namestages import _casefold_name_index
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -54,7 +54,8 @@ class APrimaryUnderAnotherCasing(unittest.TestCase):
         self.by_name.setdefault(name, []).append(sha1)
 
     def _resolve(self, name: str) -> str:
-        from resolve.localfile import _casefold_name_index, resolve_local_file
+        from resolve.namestages import _casefold_name_index
+        from resolve.localfile import resolve_local_file
 
         _casefold_name_index.clear()
         db = {"files": self.files, "indexes": {"by_name": self.by_name, "by_md5": {},

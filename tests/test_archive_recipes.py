@@ -159,7 +159,7 @@ class HeldArchivesMatchTheirRecipes(unittest.TestCase):
         bios = REPO_ROOT / "bios"
         if not bios.is_dir() or not (REPO_ROOT / "recipes").is_dir():
             self.skipTest("bios/ or recipes/ is not present")
-        from resolve.localfile import variant_base_name
+        from resolve.lookup import variant_base_name
         from core.hashing import md5_composite_of
 
         allowed = _allowed_members()

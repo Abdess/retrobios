@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from collection.declared import Declarations, hash_values
-from resolve.localfile import variant_base_name
+from resolve.lookup import variant_base_name
 
 
 def _primary_names(entries: list) -> set[str]:

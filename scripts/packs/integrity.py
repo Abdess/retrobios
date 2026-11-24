@@ -42,7 +42,7 @@ from packs.paths import flat_arcname
 from resolve.nativemode import reads_file_contents
 from resolve import regions as resolve_regions
 from packs import slots
-from resolve.localfile import held_record_for
+from resolve.lookup import held_record_for
 from resolve.packfiles import resolve_declaration, resolve_file
 from resolve.categories import BIOS, EntryCategories
 from resolve.gamedata import without_game_data

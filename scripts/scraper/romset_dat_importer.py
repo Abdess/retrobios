@@ -48,7 +48,7 @@ from model.platforms import load_platform_config
 from core.cli import add_repo_inputs, run_cli
 from model.database import load_database
 from model.dumpcatalog import build_snapshot, load_provenance_snapshots, write_snapshot
-from resolve.localfile import variant_base_name
+from resolve.lookup import variant_base_name
 from .base_scraper import BlobMismatchError, fetch_github_latest_version
 from .dat_fetch import fetch_pack, mame_label
 from .listxml import (
