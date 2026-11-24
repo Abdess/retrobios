@@ -38,7 +38,8 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from core.gitclone import main_checkout
-from devtools.diskcleanup import ALERT_GB, apply, busy_paths, disk_line, inside, plan
+from core.hostguard import LOW_DISK_GB
+from devtools.diskcleanup import apply, busy_paths, disk_line, inside, plan
 
 
 def main() -> int:
@@ -46,7 +47,7 @@ def main() -> int:
     parser.add_argument("--apply", action="store_true", help="delete (default: dry run)")
     parser.add_argument("--hours", type=float, default=72,
                         help="keep anything younger than this (default: %(default)s)")
-    parser.add_argument("--alert-gb", type=float, default=ALERT_GB,
+    parser.add_argument("--alert-gb", type=float, default=LOW_DISK_GB,
                         help="alert under this much free space (default: %(default)s)")
     parser.add_argument("--check", action="store_true",
                         help="report free space only, delete nothing")

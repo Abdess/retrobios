@@ -18,7 +18,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from core.artifacts import TIMESTAMP_KEYS
-from core.hostguard import LockBusy, free_gb, global_lock, host_misread, lock_busy
+from core.hostguard import LOW_DISK_GB, LockBusy, free_gb, global_lock, host_misread, lock_busy
 from core.paths import AUTORUN_DIR, AUTORUN_WORKTREE
 from core.statefile import now_iso, save_state
 from unattended.breaker import may_push, refresh_breaker
@@ -35,7 +35,6 @@ from unattended.worktree import (
 )
 
 
-ALERT_FREE_GB = 100
 LOG_DAYS = 30
 
 
@@ -382,8 +381,8 @@ class Runner:
     def execute(self) -> tuple[str, str]:
         ctx, job = self.ctx, self.job
         free = free_gb(ctx.repo)
-        set_alert(self.state, "disk", free < ALERT_FREE_GB,
-                  f"{free:.0f} GB free, under {ALERT_FREE_GB} GB", now_iso())
+        set_alert(self.state, "disk", free < LOW_DISK_GB,
+                  f"{free:.0f} GB free, under {LOW_DISK_GB} GB", now_iso())
         if free < job.min_free_gb:
             return REFUSED, f"{free:.0f} GB free, {job.name} needs {job.min_free_gb:.0f} GB"
         if not wait_for_load(ctx.host, job.max_load_wait):

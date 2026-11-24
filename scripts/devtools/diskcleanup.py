@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from core.generated import is_generated
+from core.hostguard import disk_gb
 from core.paths import AUTORUN_WORKTREE
 
 # What tmp/ keeps whatever its age, by name pattern, with the reason printed.
@@ -28,7 +29,6 @@ KEPT_TMP: dict[str, str] = {
     # The CI guardian's log, scripts and the runs it has already seen.
     "ci_guardian*": "CI guardian state",
 }
-ALERT_GB = 100
 
 
 @dataclass(frozen=True)
@@ -189,8 +189,7 @@ def apply(repo: Path, decisions: Iterable[Decision]) -> list[str]:
 
 
 def disk_line(path: Path, alert_gb: float) -> tuple[str, bool]:
-    usage = shutil.disk_usage(path)
-    free, total = usage.free / 1024 ** 3, usage.total / 1024 ** 3
+    free, total = disk_gb(path)
     low = free < alert_gb
     line = f"disk: {free:.0f} GB free of {total:.0f} GB"
     if low:

@@ -15,6 +15,8 @@ LOCK_HELD_ENV = "RETROBIOS_AUTO_LOCK_HELD"
 # A segfault as a shell reports it. Python reports the signal as -11.
 SHELL_SEGFAULT = 139
 HOST_MISREAD_MARKERS = ("SystemError", "unknown opcode")
+# Under this much free space the autorun state and the disk check both alert.
+LOW_DISK_GB = 100
 
 
 class LockBusy(RuntimeError):
@@ -50,8 +52,14 @@ def lock_busy(path: Path) -> bool:
         return True
 
 
+def disk_gb(path: Path) -> tuple[float, float]:
+    """Free and total space of *path*'s filesystem, in GB."""
+    usage = shutil.disk_usage(path)
+    return usage.free / 1024 ** 3, usage.total / 1024 ** 3
+
+
 def free_gb(path: Path) -> float:
-    return shutil.disk_usage(path).free / 1024 ** 3
+    return disk_gb(path)[0]
 
 
 def host_misread(returncode: int, text: str) -> bool:
