@@ -747,7 +747,7 @@ cores the pack ships.
 The `install.detect` rules in `_registry.yml` say how `install.py` finds the
 platform on the user's machine and where its BIOS folder is. The installer
 runs before it fetches any manifest, so it carries the same rules in its own
-tables, and `tests/test_install.py` holds the two equal.
+tables, and `tests/test_install_detection.py` holds the two equal.
 
 | Method | Finds the platform when | Fields |
 |--------|-------------------------|--------|

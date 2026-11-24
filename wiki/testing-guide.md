@@ -36,7 +36,7 @@ Run a single module, or several:
 
 ```bash
 python -m unittest tests.test_e2e_resolution -v
-python -m unittest tests.test_install tests.test_install_cores -v
+python -m unittest tests.test_install_detection tests.test_install_cores -v
 ```
 
 The table below says which module covers what.
@@ -69,8 +69,8 @@ Every module in `tests/`, by the area it guards.
 | Packs and manifests | synthetic + real packs | `test_artifact_lock`, `test_atomic_artifacts`, `test_batocera_cores`, `test_core_data_trees`, `test_deterministic_zip`, `test_emulator_pack_counts`, `test_finalize_pack_names`, `test_large_file_cache`, `test_libretro_layout`, `test_manifest_entry`, `test_manifest_narrowings`, `test_minui_platform`, `test_no_game_data`, `test_pack_conformance_dirs`, `test_pack_core_extras`, `test_pack_counts`, `test_pack_destinations`, `test_pack_failures`, `test_pack_file_names`, `test_pack_grouping`, `test_pack_integrity`, `test_pack_member_identity`, `test_pack_readme`, `test_platform_inheritance`, `test_platform_keys`, `test_release_packs`, `test_required_only_archives`, `test_required_only_twins`, `test_save_root`, `test_split_extras`, `test_split_names`, `test_split_pack`, `test_system_pack_extras`, `test_system_pack_parity`, `test_torrentzip`, `test_which_pack` |
 | Slots and regions | synthetic + profiles | `test_region`, `test_region_agnostic_scan`, `test_region_groups`, `test_region_held`, `test_region_platform_index`, `test_region_required_only`, `test_slot`, `test_slots`, `test_slots_shipped_file` |
 | Hardware targets and systems | synthetic + target files | `test_amberelec_targets`, `test_emuelec_targets`, `test_extract_targets`, `test_lakka_targets`, `test_libretro_slugs`, `test_system_ids`, `test_system_selection`, `test_target_names`, `test_target_scrapers`, `test_target_systems`, `test_target_verify` |
-| Installer and downloads | loopback server | `test_build_installer`, `test_check_release`, `test_download`, `test_install`, `test_install_cores`, `test_install_experience`, `test_install_expert`, `test_install_filesystems`, `test_install_app`, `test_install_from`, `test_install_games`, `test_install_journeys`, `test_install_offline`, `test_install_pack`, `test_install_removal`, `test_install_selection`, `test_install_tui`, `test_pypi_package` |
-| Handheld launchers | a pty as the console, fake installer and firmware tools, stubbed PortMaster dialogs | `test_handheld_launchers`, `test_port`, `test_site_handheld` |
+| Installer and downloads | loopback server | `test_build_installer`, `test_check_release`, `test_download`, `test_install_app`, `test_install_bootstrap`, `test_install_config`, `test_install_cores`, `test_install_data_trees`, `test_install_detection`, `test_install_devices`, `test_install_downloads`, `test_install_events`, `test_install_experience`, `test_install_expert`, `test_install_filesystems`, `test_install_from`, `test_install_games`, `test_install_journeys`, `test_install_kept`, `test_install_offline`, `test_install_pack`, `test_install_pack_parity`, `test_install_platforms`, `test_install_removal`, `test_install_runs`, `test_install_selection`, `test_install_standalone`, `test_install_tui`, `test_pypi_package` |
+| Handheld launchers | a pty as the console, fake installer and firmware tools, stubbed PortMaster dialogs | `test_handheld_frontends`, `test_handheld_portmaster`, `test_handheld_scripts`, `test_port`, `test_site_handheld` |
 | Running cores | parsers on fixed inputs, a libretro core built from C in the test when a compiler exists | `test_core_probe` |
 | Measurement records | synthetic record files, the committed `measurements/` against HEAD, the **Proof** line naming the BIOS a core ran, and that no page shows a Tested block, a region outcome or a time per frame | `test_measurements` |
 | Real-condition campaign | synthetic profiles, records and content folders, a fake host for load, disk, clock and commands, and whole passes against a libretro core built from C when a compiler and strace exist | `test_campaign` |
@@ -186,10 +186,12 @@ DATs: the Logiqx XML parser, the Redump scraper's parsing path, the DAT pack
 importer, the SHA1-then-MD5+size join performed by `generate_db.py`, and the
 coverage report's covered/uncovered DAT accounting.
 
-**test_install.** Covers `install.py` without touching the network: OS
-detection, each registry detection method (`config_file`, `path_exists`,
-`file_exists`), config-file key parsing, manifest loading, target filtering,
-and destination resolution.
+**test_install_detection** and its siblings. Cover `install.py` without
+touching the network: OS detection and each registry detection method
+(`config_file`, `path_exists`, `file_exists`) in `test_install_detection`,
+config-file key parsing in `test_install_config`, handhelds, boards and target
+filtering in `test_install_devices`, manifest loading in
+`test_install_platforms`, and destination resolution in `test_install_runs`.
 
 **test_profile_sync.** Covers ref anchoring end to end: the six statuses,
 widening a one-line anchor until it is unique, refusing to rebase an ambiguous
@@ -307,7 +309,7 @@ python scripts/generate_pack.py --all --verify-packs --output-dir dist/
 The pipeline runs the same check as step 6, after the consistency check and
 before the README. It needs packs in `dist/`, and `--skip-packs` skips it.
 
-### test_handheld_launchers.py
+### test_handheld_scripts.py, test_handheld_portmaster.py, test_handheld_frontends.py
 
 The launchers in `ports/`: the PortMaster port, the Batocera and Knulli
 port, the muOS app and the Tools entry, all built on `ports/shared/tui.txt`.
@@ -315,9 +317,10 @@ port, the muOS app and the Tools entry, all built on `ports/shared/tui.txt`.
 installed), the gptokeyb and evmapy mappings decoded by the interface's own
 key decoder, and the four archives `scripts/build_port.py` writes (layout,
 reproducibility, the bundled `install.py` equal to the one `install.sh`
-pins).
+pins), in `test_handheld_scripts`.
 
-Each launcher then runs from its extracted archive on a simulated device: a
+Each launcher then runs from its extracted archive on a simulated device (`test_handheld_portmaster`
+for the PortMaster port, `test_handheld_frontends` for the others): a
 pseudo-terminal stands for the console, and fakes stand for `install.py`,
 gptokeyb and gptokeyb2 (each killing the way its source does), setfont,
 chvt, curl, sudo, foot, xterm, muxterm, PortMaster's `control.txt` and
@@ -331,7 +334,7 @@ read-only card. None of these may leave a console waiting for a button.
 What reaches the screen and the pad on a real device is not exercised.
 
 ```bash
-python -m unittest tests.test_handheld_launchers -v
+python -m unittest tests.test_handheld_scripts tests.test_handheld_portmaster tests.test_handheld_frontends -v
 ```
 
 ### test_port.py

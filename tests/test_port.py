@@ -4,7 +4,8 @@ The screens are driven here with PortMasterDialog's functions replaced by
 stubs that record each command and answer from a script, and with a fake
 install.py that writes canned --events streams. What a device adds (pugwash
 drawing, the pad, mount, the network) is not exercised. The full-screen
-route of the port, and the other launchers, are in test_handheld_launchers.
+route of the port is in test_handheld_portmaster, the other launchers in
+test_handheld_frontends.
 """
 from __future__ import annotations
 
