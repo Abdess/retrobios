@@ -56,7 +56,7 @@ from packs.paths import platform_destination, save_layout
 from packs.scope import pack_sections, platform_list_version, system_titles
 from packs.standalone import standalone_copies, standalone_layouts
 from resolve.contentlayout import TARGET_KEY
-from resolve.cores import filter_systems_by_target, resolve_platform_cores as _platform_cores
+from resolve.cores import platform_scope_systems, resolve_platform_cores as _platform_cores
 from resolve.gamedata import GAME_DATA, is_game_data, platform_game_data, without_game_data
 from resolve.nativemode import platform_mode
 from resolve.packfiles import preferred_entries as _preferred_entries
@@ -611,13 +611,7 @@ def _start_manifest(
     # Load registry for install metadata
     plat_registry = platform_registry_at(registry_path).get(platform_name) or {}
 
-    plat_cores = _platform_cores(config, emu_profiles) if opts.target_cores else None
-    pack_systems = filter_systems_by_target(
-        config.get("systems", {}),
-        emu_profiles,
-        opts.target_cores,
-        platform_cores=plat_cores,
-    )
+    pack_systems = platform_scope_systems(config, emu_profiles, opts.target_cores)
     build = _ManifestBuild(
         platform_name, platforms_dir, db, bios_dir, opts, config, emu_profiles,
         zip_contents, data_registry, game_entries, plat_registry.get("install", {}),

@@ -107,6 +107,18 @@ class ASystemTheTargetDropsIsNamedAsSuch(unittest.TestCase):
         self.assertEqual(platform_scope_systems(config, profiles, switch, wanted), {})
         self.assertEqual(list(platform_scope_systems(config, profiles, None, wanted)), wanted)
 
+    def test_the_manifest_reads_the_same_scope(self):
+        """install/<platform>.json copied the body of platform_scope_systems,
+        so a change to how a target narrows the systems reached the pack and
+        verify but not the installer."""
+        import inspect
+
+        from packs import manifest
+
+        source = inspect.getsource(manifest._start_manifest)
+        self.assertIn("platform_scope_systems(", source)
+        self.assertNotIn("filter_systems_by_target(", source)
+
     def test_the_message_names_the_target(self):
         from resolve.cores import system_scope_error
 
