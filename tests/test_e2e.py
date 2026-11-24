@@ -42,7 +42,8 @@ from model.profiles import ProfileSelectionError, load_emulator_profiles
 from model.platforms import load_platform_config
 from resolve.localfile import resolve_local_file
 from resolve.cores import resolve_platform_cores
-from resolve.truth import diff_platform_truth, generate_platform_truth
+from resolve.platformdiff import diff_platform_truth
+from resolve.truth import generate_platform_truth
 from resolve.validation import build_validation_index, check_file_validation
 from resolve.entryscope import filter_files_by_mode
 from packs.verdicts import Severity, Status
@@ -4310,7 +4311,7 @@ class TestE2E(unittest.TestCase):
 
     def test_104_diff_truth_normalized_system_ids(self):
         """Diff matches systems with different ID formats via normalization."""
-        from resolve.truth import diff_platform_truth
+        from resolve.platformdiff import diff_platform_truth
 
         truth = {
             "systems": {
@@ -4681,7 +4682,7 @@ class TestE2E(unittest.TestCase):
 
     def test_177_diff_hash_fallback_rename(self):
         """Diff detects platform renames via hash fallback."""
-        from resolve.truth import diff_platform_truth
+        from resolve.platformdiff import diff_platform_truth
 
         truth = {
             "systems": {
@@ -4716,7 +4717,7 @@ class TestE2E(unittest.TestCase):
 
     def test_178_diff_system_normalization(self):
         """Diff matches systems with different IDs via normalization."""
-        from resolve.truth import diff_platform_truth
+        from resolve.platformdiff import diff_platform_truth
 
         truth = {
             "systems": {

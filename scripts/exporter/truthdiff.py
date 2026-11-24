@@ -6,7 +6,7 @@ import os
 
 from model.platforms import load_platform_config, native_layer
 from model.safeparse import require_yaml, yaml_load
-from resolve.truth import diff_platform_truth
+from resolve.platformdiff import diff_platform_truth
 
 require_yaml()
 

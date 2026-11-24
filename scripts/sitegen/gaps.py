@@ -471,7 +471,8 @@ def _divergence_rows(
     coverages: dict, registries: PlatformRegistries, profiles: dict, db: dict,
 ) -> list[str]:
     """Section 1b: platform lists vs emulator source, one row a platform."""
-    from resolve.truth import diff_platform_truth, generate_platform_truth
+    from resolve.platformdiff import diff_platform_truth
+    from resolve.truth import generate_platform_truth
 
     div_rows = []
     for pname, cov in _by_platform_name(coverages):

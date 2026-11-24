@@ -355,7 +355,7 @@ class Reconciliation(unittest.TestCase):
         self.assertEqual(report.hashes_corrected, [])
 
     def test_the_diff_names_no_mismatch_the_code_does_not_check(self):
-        from resolve.truth import _diff_system
+        from resolve.platformdiff import _diff_system
         truth_sys = {"files": [{"name": "scph1001.bin", "md5": "a" * 32,
                                 "validation": ["size"]}]}
         scraped_sys = {"files": [{"name": "scph1001.bin", "md5": "b" * 32}]}
@@ -399,7 +399,7 @@ class Reconciliation(unittest.TestCase):
         self.assertEqual(report.hashes_corrected, [])
 
     def test_the_diff_names_no_missing_label(self):
-        from resolve.truth import _diff_system
+        from resolve.platformdiff import _diff_system
         truth_sys = {"files": [{"name": "scph1001_v20.bin", "md5": "a" * 32,
                                 "_cores": ["duckstation"], "_named_by": []}]}
         self.assertNotIn("missing", _diff_system(truth_sys, {"files": []}))
@@ -440,7 +440,7 @@ class Reconciliation(unittest.TestCase):
         self.assertEqual(added.runners, [(False, "armsx2")])
 
     def test_the_diff_names_no_missing_bundled_file(self):
-        from resolve.truth import _diff_system
+        from resolve.platformdiff import _diff_system
         truth_sys = {"files": [{"name": "gngeo_data.zip", "md5": "a" * 32, "bundled": True,
                                 "_cores": ["gngeopi"], "_named_by": ["gngeopi"],
                                 "_brought_by": []}]}
@@ -449,7 +449,7 @@ class Reconciliation(unittest.TestCase):
     def test_the_diff_pairs_by_the_same_rule(self):
         """diff_truth reads the same pairing, or it names a mismatch the
         export does not correct."""
-        from resolve.truth import _diff_system
+        from resolve.platformdiff import _diff_system
         truth_sys = {"files": [
             {"name": "system.rom", "aliases": ["bios.rom"], "md5": "c" * 32},
             {"name": "bios.rom", "path": "np2kai/bios.rom"},

@@ -181,7 +181,7 @@ class EveryRevisionACoreAcceptsStays(unittest.TestCase):
         giving 1.07's sha1 and md5 is that revision, not a mismatch. dosbox
         checks the sha1 (validation), so its md5 describes one revision and
         contradicts nothing, the rule the export applies too."""
-        from resolve.truth import _hash_mismatch
+        from resolve.platformdiff import _hash_mismatch
 
         truth = {"name": "MT32_CONTROL.ROM", "md5": "c" * 32, "sha1": ["a" * 40, "b" * 40],
                  "validation": ["sha1"]}
@@ -206,7 +206,7 @@ class DiffAndExportShareOneMismatchRule(unittest.TestCase):
 
     def test_the_diff_names_what_the_export_corrects(self):
         from resolve.reconcile import build_native_model
-        from resolve.truth import diff_platform_truth
+        from resolve.platformdiff import diff_platform_truth
 
         for t_hashes, p_hashes in self.CASES:
             with self.subTest(truth=t_hashes, platform=p_hashes):
@@ -338,7 +338,7 @@ class ASizeOutsideARangeIsAnotherFile(unittest.TestCase):
     def test_exact_sizes_and_a_window_admit_both(self):
         """An entry admits its exact sizes and the window declared beside
         them, as size_refusal reads it. Two windows with no common size clash."""
-        from resolve.truth import _sizes_clash
+        from resolve.truthsystems import _sizes_clash
 
         disk = {"size": [143360, 143403, 143488], "min_size": 143105, "max_size": 143364}
         self.assertFalse(_sizes_clash(disk, {"size": 143200}))

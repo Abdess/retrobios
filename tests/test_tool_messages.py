@@ -24,6 +24,7 @@ from exporter import diffreport
 import pipeline
 from orchestrate import guards, labels, prepare, runner
 from resolve import truth
+from resolve.platformdiff import diff_platform_truth
 from packs import coverage
 from packs import report as packs_report
 from packs import verdicts
@@ -500,7 +501,7 @@ class TheTruthDiffShowsWhereAndAsksNothing(unittest.TestCase):
         scraped_sys = {"files": [
             {"name": "hiscore.dat", "destination": "fbneo/hiscore.dat", "md5": "b" * 32},
         ]}
-        report = truth.diff_platform_truth(
+        report = diff_platform_truth(
             {"systems": {"arcade": truth_sys}}, {"systems": {"arcade": scraped_sys}}
         )
         report["platform"] = "p"
