@@ -284,6 +284,17 @@ class OneCommandRunsTheChecks(unittest.TestCase):
             with self.subTest(step=step.command):
                 self.assertIn(step.command, section)
 
+    def test_ci_runs_every_full_screen_module_on_the_floor(self):
+        """The 3.8 list was written twice, in validate.yml and in
+        pr_checks.py, and a new test_tui_ module reached neither."""
+        from devtools import prchecks
+
+        workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+        line = next(line for line in workflow.splitlines() if "run: python3.8 -m unittest" in line)
+        ran = tuple(word for word in line.split() if word.startswith("tests."))
+        self.assertEqual(ran, prchecks.TUI_MODULES)
+        self.assertIn("tests.test_tui_pty", prchecks.TUI_MODULES)
+
     def test_a_missing_tool_is_reported_and_a_failure_does_not_stop_the_run(self):
         import contextlib
         import io

@@ -23,13 +23,10 @@ class Step:
     may_fail: bool = False
 
 
-# The full-screen tests, run again on the installer's Python floor.
-TUI_MODULES = (
-    "tests.test_tui_card_counts", "tests.test_tui_card_setups", "tests.test_tui_card_space",
-    "tests.test_tui_choices", "tests.test_tui_devices", "tests.test_tui_flow",
-    "tests.test_tui_folders", "tests.test_tui_line_mode", "tests.test_tui_mouse",
-    "tests.test_tui_packs", "tests.test_tui_pty", "tests.test_tui_screens",
-    "tests.test_tui_terminal", "tests.test_tui_views",
+# The full-screen tests, run again on the installer's Python floor: every
+# module named test_tui_*.
+TUI_MODULES = tuple(
+    f"tests.{path.stem}" for path in sorted((REPO_ROOT / "tests").glob("test_tui_*.py"))
 )
 
 
