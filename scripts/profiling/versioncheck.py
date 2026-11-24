@@ -9,19 +9,19 @@ from collections import Counter
 from dataclasses import asdict
 from pathlib import Path
 
-from profiling import version_basis
+from profiling import versionbasis
 from profiling.bump import write_version
 from profiling.worktree import refuse_dirty_tree
 from profiling.yamledit import YamlWriteError
 
 
-def format_reading(name: str, reading: version_basis.Reading) -> str:
+def format_reading(name: str, reading: versionbasis.Reading) -> str:
     """One reading as a line: its status, the version said, and where it was read."""
     mode = f"[{reading.mode}] " if reading.mode else ""
     kind = f"{reading.kind} " if reading.kind else ""
-    if reading.status == version_basis.DRIFT:
+    if reading.status == versionbasis.DRIFT:
         said = f"declared {reading.declared}, code {reading.read}"
-    elif reading.status == version_basis.MATCH:
+    elif reading.status == versionbasis.MATCH:
         said = str(reading.read)
     else:
         said = f"declared {reading.declared}"
@@ -36,13 +36,13 @@ def run_versions(args: argparse.Namespace, profiles: dict, selected: dict) -> No
     rows = []
     failed = False
     for name, profile in selected.items():
-        readings = version_basis.check(
+        readings = versionbasis.check(
             profile, args.cache_dir, args.offline, profiles, recompute=args.set_version
         )
         for reading in readings:
             counts[reading.status] += 1
             rows.append({"profile": name, **asdict(reading)})
-            if not args.as_json and (not args.changed_only or reading.status != version_basis.MATCH):
+            if not args.as_json and (not args.changed_only or reading.status != versionbasis.MATCH):
                 print(format_reading(name, reading))
         if args.set_version:
             path = Path(args.emulators_dir) / f"{name}.yml"
@@ -54,7 +54,7 @@ def run_versions(args: argparse.Namespace, profiles: dict, selected: dict) -> No
             except YamlWriteError as exc:
                 print(f"{name}: write refused: {exc}", file=sys.stderr)
                 failed = True
-        elif any(r.status in version_basis.FAILING for r in readings):
+        elif any(r.status in versionbasis.FAILING for r in readings):
             failed = True
     if args.as_json:
         print(json.dumps(rows, indent=2))

@@ -76,7 +76,7 @@ from profiling.rebase import Recale, rebase_refs
 from profiling.repos import select_repo
 from model.sourceref import RefPart, parse_source_ref, split_source_ref
 from core import upstream
-from profiling import version_basis
+from profiling import versionbasis
 from core.upstream import CompareResult, FileChange
 
 
@@ -84,11 +84,11 @@ def _version_read_as_written(profile, cache_dir, offline, profiles=None, recompu
     """bump_commit reads core_version again at the new pin. These fixtures
     have no forge behind them, so the version reads as written here:
     tests/test_version_basis.py holds the reading and the refusals."""
-    stated = version_basis.declared(profile, "")
-    return [version_basis.Reading("", "file", stated, stated, "fixture", version_basis.MATCH)]
+    stated = versionbasis.declared(profile, "")
+    return [versionbasis.Reading("", "file", stated, stated, "fixture", versionbasis.MATCH)]
 
 
-_VERSION_AS_WRITTEN = mock.patch.object(version_basis, "check", _version_read_as_written)
+_VERSION_AS_WRITTEN = mock.patch.object(versionbasis, "check", _version_read_as_written)
 
 
 def setUpModule():
@@ -3722,7 +3722,7 @@ class TestCheckVersion(unittest.TestCase):
         upstream.tag_commit = upstream.resolve_tag_commit
 
     def _check(self, declared, tag=None):
-        named = version_basis.VersionTag("", declared, tag or declared, 0, self.repo, "source")
+        named = versionbasis.VersionTag("", declared, tag or declared, 0, self.repo, "source")
         return check_version(named, self.dir, False)
 
     def tearDown(self):
@@ -5270,7 +5270,7 @@ class TestRateLimitEndsOneProfile(unittest.TestCase):
 
 class AWriteRefreshesTheSourcePaths(unittest.TestCase):
     """Each bump left website/src/data/source-paths.json behind its pins and
-    the site's freshness test red until someone ran sitesources by hand."""
+    the site's freshness test red until someone ran site_sources by hand."""
 
     def _args(self, **kw):
         base = {
@@ -5334,7 +5334,7 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
                 contextlib.redirect_stderr(io.StringIO()) as err:
             profiling_sourcepaths.refresh_source_paths(self._args(emulators_dir=tmp), {"p"})
         self.assertFalse(refreshed.called)
-        self.assertIn(f"sitesources.py --fetch --emulators-dir {tmp}", err.getvalue())
+        self.assertIn(f"site_sources.py --fetch --emulators-dir {tmp}", err.getvalue())
 
     def test_the_run_cache_and_the_record_path_are_passed(self):
         from unittest import mock
@@ -5351,7 +5351,7 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
 
     def test_the_record_waits_for_a_run_holding_the_repository(self):
         """profile_sync rewrote source-paths.json without the repository
-        hold sitesources takes, in the middle of a pipeline run."""
+        hold site_sources takes, in the middle of a pipeline run."""
         from unittest import mock
 
         from core.artifacts import ArtifactLockBusy
@@ -5367,7 +5367,7 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
             profiling_sourcepaths.refresh_source_paths(self._args(), {"x"})
         lock.assert_called_once_with(str(sources.SOURCE_PATHS))
         self.assertFalse(built.called)
-        self.assertIn("sitesources.py --fetch", err.getvalue())
+        self.assertIn("site_sources.py --fetch", err.getvalue())
 
 
 class EveryWriterIsRecorded(unittest.TestCase):
@@ -5411,7 +5411,7 @@ class EveryWriterIsRecorded(unittest.TestCase):
 
 
 class AnUnreadTreeKeepsItsRecord(unittest.TestCase):
-    """sitesources --fetch, rate-limited by GitLab, dropped about twenty
+    """site_sources --fetch, rate-limited by GitLab, dropped about twenty
     trees it never read from source-paths.json."""
 
     def test_unread_trees_carry_over(self):

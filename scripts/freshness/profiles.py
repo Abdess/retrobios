@@ -14,7 +14,7 @@ def check_source_paths(profiles: dict) -> Finding:
     """The site links a cited path only where source-paths.json records it
     in the tree the profile pins. A recorded tree no profile pins any more,
     or a pinned tree the record lacks, means a pin moved or a profile was
-    added and `sitesources.py --fetch` was not run after it. Every tree a run
+    added and `site_sources.py --fetch` was not run after it. Every tree a run
     tries is recorded, read or not, so a lacking one was never tried."""
     from sitegen import sources as sitegen_sources
 
@@ -34,7 +34,7 @@ def check_source_paths(profiles: dict) -> Finding:
         "source-paths.json",
         STALE if problems else OK,
         local=f"{len(recorded)} trees",
-        detail=(", ".join(problems) + ": run python scripts/sitesources.py --fetch") if problems
+        detail=(", ".join(problems) + ": run python scripts/site_sources.py --fetch") if problems
         else "every pinned tree is recorded, and only those",
     )
 

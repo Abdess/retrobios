@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 
 from core import upstream
 from profiling.reports import ProfileReport, report_to_dict, triage_state
-from profiling.version_basis import version_repo, version_tags
+from profiling.versionbasis import version_repo, version_tags
 from profiling.versions import VersionReport, check_version
 
 

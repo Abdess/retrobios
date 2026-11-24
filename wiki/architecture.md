@@ -423,7 +423,7 @@ resolution.
 - `safe_extract_zip()` prevents zip-slip path traversal attacks
 - a pack copies each ZIP of the collection byte for byte, so every member
   hashes to the SHA1 the install list publishes
-- `core/crypto_verify.py` and `core/sect233r1.py` verify 3DS RSA-2048 signatures and AES-128-CBC integrity
+- `core/cryptoverify.py` and `core/sect233r1.py` verify 3DS RSA-2048 signatures and AES-128-CBC integrity
 - ZIP inner ROM verification via `checkInsideZip()` replicates Batocera's behavior
 - `md5_composite()` replicates Recalbox's composite ZIP hash
 

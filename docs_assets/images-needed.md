@@ -3,7 +3,7 @@
 These pictures show a real screen, so they are captured on a real install and
 never drawn as a mock-up. Each entry says what the capture must show, where it
 goes, and the alt text it carries. Folder layouts that follow from data are
-drawn by `scripts/sitediagrams.py` instead (the MinUI card tree is
+drawn by `scripts/site_diagrams.py` instead (the MinUI card tree is
 `<!-- image: minui-card -->`).
 
 Captures: PNG or WebP, 1200 px wide at most, cropped tight, under 150 KB,

@@ -15,7 +15,7 @@ from core import upstream
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
 from model.registry import list_registered_platforms
-from profiling import version_basis
+from profiling import versionbasis
 from profiling.anchoring import REVIEW_STATUSES
 from profiling.rebase import pending_recale, pin_blockers
 from profiling.reports import ProfileReport, SkipKind
@@ -37,7 +37,7 @@ def apply_readings(document: dict, readings: list) -> tuple[object, dict | None]
     if isinstance(version, dict):
         version = dict(version)
     for reading in readings:
-        if reading.status not in (version_basis.MATCH, version_basis.DRIFT):
+        if reading.status not in (versionbasis.MATCH, versionbasis.DRIFT):
             continue
         if reading.mode:
             if not isinstance(version, dict):
@@ -190,7 +190,7 @@ def bump_commit(
         new_text = _set_pin(
             new_text, document, "upstream_commit", report.upstream_head, "source_commit"
         )
-    readings = version_basis.check(expected, cache_dir, offline, recompute=True)
+    readings = versionbasis.check(expected, cache_dir, offline, recompute=True)
     refused = version_refusal(readings)
     if refused:
         return Bump(False, f"{refused}, its pin is not advanced")
@@ -207,11 +207,11 @@ def bump_commit(
 def version_refusal(readings: list) -> str | None:
     """Why the version at a new pin cannot be stated, or None."""
     for reading in readings:
-        if reading.status == version_basis.NO_BASIS:
+        if reading.status == versionbasis.NO_BASIS:
             return "no version_basis says where its version is read"
-        if reading.status == version_basis.UNREADABLE:
+        if reading.status == versionbasis.UNREADABLE:
             return f"core_version cannot be read at the new pin: {reading.where}"
-        if reading.status == version_basis.UNCHECKED:
+        if reading.status == versionbasis.UNCHECKED:
             return f"core_version is {reading.where}, not read from the code at a pin"
     return None
 

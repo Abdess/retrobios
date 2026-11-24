@@ -145,7 +145,7 @@ class SourcePathsFreshness(unittest.TestCase):
         moved = dict(profile, source_commit="f" * 40, upstream_commit="e" * 40)
         finding = check_source_paths({"geolith": moved})
         self.assertEqual(finding.status, STALE)
-        self.assertIn("sitesources.py --fetch", finding.detail)
+        self.assertIn("site_sources.py --fetch", finding.detail)
 
     def test_a_pinned_tree_never_read_is_stale(self):
         """fbneo moved to two new pins while fbneo_cps12 kept the old ones:

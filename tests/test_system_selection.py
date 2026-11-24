@@ -294,7 +294,7 @@ def _command(path: Path) -> list[str]:
 class AMissingProfileDirIsRefused(unittest.TestCase):
     """A mistyped --emulators-dir read as "no emulator": generate_pack built
     a pack without its core files marked OK, verify --strict passed, and
-    sitesources wrote {} over source-paths.json, every one exiting 0."""
+    site_sources wrote {} over source-paths.json, every one exiting 0."""
 
     EXTRA = {
         "arcade_parent_importer": ["--all", "--offline"],
@@ -306,7 +306,7 @@ class AMissingProfileDirIsRefused(unittest.TestCase):
         "mame_ref_audit": ["mame"],
         "profile_sync": ["--all", "--triage"],
         "romset_dat_importer": ["--source", "mame", "--pack", "{dat}", "--output", "{out}/r.json"],
-        "sitesources": ["--cache-dir", "{cache}", "--output", "{out}/source-paths.json"],
+        "site_sources": ["--cache-dir", "{cache}", "--output", "{out}/source-paths.json"],
         "validate_pr": ["bios/Sony/PlayStation/scph5501.bin"],
         "verify": ["--platform", "retroarch", "--strict"],
     }
@@ -341,7 +341,7 @@ class AMissingProfileDirIsRefused(unittest.TestCase):
         ]
         self.assertEqual(written, [])
         # Read as empty, generate_site rewrote published-parts.json and the
-        # FAQ, and sitesources source-paths.json. The copy compares the
+        # FAQ, and site_sources source-paths.json. The copy compares the
         # files themselves: a name `git diff` already listed hid a rewrite.
         after = snapshot(checkout)
         self.assertEqual(sorted(k for k in before.keys() | after.keys()

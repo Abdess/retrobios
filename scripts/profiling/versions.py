@@ -6,7 +6,7 @@ import re
 from dataclasses import dataclass
 
 from core import upstream
-from profiling.version_basis import VersionTag, declared
+from profiling.versionbasis import VersionTag, declared
 
 
 @dataclass(frozen=True)

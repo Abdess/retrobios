@@ -13,7 +13,7 @@
    .rb-terminal        wraps a code block that shows terminal output
    .rb-cmd             wraps a command that must wrap instead of scrolling
    code.rb-path        a folder path shown as a chip
-   .rb-figure          a generated diagram (scripts/sitediagrams.py)
+   .rb-figure          a generated diagram (scripts/site_diagrams.py)
    .rb-bar             inline coverage bar, width from --v
    .rb-details-*       collapsible block, neutral unless caution or danger
    dl.rb-facts         the facts of a file card, label and value side by side
@@ -772,8 +772,8 @@ body:has(table.rb-entries) { --sl-content-width: var(--rb-grid-width); }
 /* Terminal output: what the screen shows, not something to type */
 .sl-markdown-content .rb-terminal .expressive-code pre { background: var(--rb-terminal-bg); color: var(--rb-terminal-fg); }
 
-/* Diagrams written by scripts/sitediagrams.py follow the theme: each is an
-   image per theme (its colours written in the file, sitediagrams.THEMES),
+/* Diagrams written by scripts/site_diagrams.py follow the theme: each is an
+   image per theme (its colours written in the file, sitegen.diagrams.THEMES),
    and the one of the other theme is not shown, so not fetched either.
    Starlight's dark theme is the one without data-theme='light'. */
 .sl-markdown-content .rb-figure { margin: 1.2rem 0 1.6rem; }

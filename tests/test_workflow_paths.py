@@ -123,7 +123,7 @@ class DeploySiteTriggers(unittest.TestCase):
         self.assertNotIn("tests/**", patterns)
 
     def test_the_site_reads_the_ref_grammar_not_the_checker(self):
-        """sitesources imported two parsing functions from profile_sync, so
+        """site_sources imported two parsing functions from profile_sync, so
         every change to the comparison tool rebuilt an unchanged site."""
         read = closure(["generate_site.py"])
         self.assertNotIn("scripts/profile_sync.py", read)

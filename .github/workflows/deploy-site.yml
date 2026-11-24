@@ -17,7 +17,7 @@ on:
       - "scripts/core/anchors.py"
       - "scripts/core/artifacts.py"
       - "scripts/core/cli.py"
-      - "scripts/core/crypto_verify.py"
+      - "scripts/core/cryptoverify.py"
       - "scripts/core/gitclone.py"
       - "scripts/core/github.py"
       - "scripts/core/hashing.py"

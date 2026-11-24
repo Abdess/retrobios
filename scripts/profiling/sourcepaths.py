@@ -33,7 +33,7 @@ def refresh_source_paths(args: argparse.Namespace, written: set[str]) -> None:
     """Rebuild the site's record of cited source paths after a write.
 
     Each bump left website/src/data/source-paths.json behind its pins, and
-    the site's freshness test stayed red until someone ran sitesources.py
+    the site's freshness test stayed red until someone ran site_sources.py
     --fetch by hand. A run that writes nothing, or makes no request, leaves
     it alone. The record describes the repository's profiles: a pass over
     another tree prints the command for it instead of reducing the record
@@ -44,7 +44,7 @@ def refresh_source_paths(args: argparse.Namespace, written: set[str]) -> None:
     if Path(args.emulators_dir).resolve() != (REPO_ROOT / EMULATORS_DIR).resolve():
         print(
             f"source paths not refreshed: {args.emulators_dir} is not the repository's "
-            f"{EMULATORS_DIR}/: run python scripts/sitesources.py --fetch "
+            f"{EMULATORS_DIR}/: run python scripts/site_sources.py --fetch "
             f"--emulators-dir {args.emulators_dir} --cache-dir {args.cache_dir} "
             "--output <record> to record them",
             file=sys.stderr,
@@ -66,7 +66,7 @@ def refresh_source_paths(args: argparse.Namespace, written: set[str]) -> None:
     except ArtifactLockBusy as exc:
         # The profiles are written: only the record waits for the other run.
         print(
-            f"source paths not refreshed ({exc}): run python scripts/sitesources.py "
+            f"source paths not refreshed ({exc}): run python scripts/site_sources.py "
             "--fetch once it finishes",
             file=sys.stderr,
         )

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The hand-written crypto that backs 3DS file validation.
 
-crypto_verify.py and sect233r1.py reimplement RSA PKCS#1 v1.5, AES-128-CBC
+cryptoverify.py and sect233r1.py reimplement RSA PKCS#1 v1.5, AES-128-CBC
 and ECDSA over GF(2^233) in pure Python, and validation.py reaches them by a
 dynamic import. Nothing exercised them, and a signature check that accepts
 everything looks exactly like one that works.
@@ -23,7 +23,7 @@ import unittest
 import unittest.mock
 from pathlib import Path
 
-from core import crypto_verify
+from core import cryptoverify
 from core import sect233r1 as ec
 
 
@@ -199,7 +199,7 @@ class RsaPkcs1V15(unittest.TestCase):
     def test_a_valid_signature_verifies(self):
         message = b"SecureInfo_A body"
         self.assertTrue(
-            crypto_verify._rsa_verify_pkcs1v15_sha256(
+            cryptoverify._rsa_verify_pkcs1v15_sha256(
                 message, self._sign(message), self.modulus, self.exponent
             )
         )
@@ -207,7 +207,7 @@ class RsaPkcs1V15(unittest.TestCase):
     def test_a_changed_message_is_rejected(self):
         signature = self._sign(b"SecureInfo_A body")
         self.assertFalse(
-            crypto_verify._rsa_verify_pkcs1v15_sha256(
+            cryptoverify._rsa_verify_pkcs1v15_sha256(
                 b"SecureInfo_B body", signature, self.modulus, self.exponent
             )
         )
@@ -216,21 +216,21 @@ class RsaPkcs1V15(unittest.TestCase):
         tampered = bytearray(self._sign(b"body"))
         tampered[-1] ^= 0x01
         self.assertFalse(
-            crypto_verify._rsa_verify_pkcs1v15_sha256(
+            cryptoverify._rsa_verify_pkcs1v15_sha256(
                 b"body", bytes(tampered), self.modulus, self.exponent
             )
         )
 
     def test_a_signature_at_or_above_the_modulus_is_rejected(self):
         self.assertFalse(
-            crypto_verify._rsa_verify_pkcs1v15_sha256(
+            cryptoverify._rsa_verify_pkcs1v15_sha256(
                 b"body", self.modulus, self.modulus, self.exponent
             )
         )
 
     def test_an_all_zero_signature_is_rejected(self):
         self.assertFalse(
-            crypto_verify._rsa_verify_pkcs1v15_sha256(
+            cryptoverify._rsa_verify_pkcs1v15_sha256(
                 b"body", b"\x00" * self.mod_len, self.modulus, self.exponent
             )
         )
@@ -239,7 +239,7 @@ class RsaPkcs1V15(unittest.TestCase):
         """A modulus too small to hold the required padding cannot verify."""
         tiny = (1 << 335).to_bytes(42, "big")
         self.assertFalse(
-            crypto_verify._rsa_verify_pkcs1v15_sha256(
+            cryptoverify._rsa_verify_pkcs1v15_sha256(
                 b"body", b"\x01" * 42, tiny, self.exponent
             )
         )
@@ -262,14 +262,14 @@ class AesCbc(unittest.TestCase):
 
     def test_the_published_vector_decrypts(self):
         self.assertEqual(
-            crypto_verify._aes_128_cbc_decrypt(self.CIPHERTEXT, self.KEY, self.IV),
+            cryptoverify._aes_128_cbc_decrypt(self.CIPHERTEXT, self.KEY, self.IV),
             self.PLAINTEXT,
         )
 
     def test_a_different_key_does_not_give_the_plaintext(self):
         other = bytes(self.KEY[:-1]) + bytes([self.KEY[-1] ^ 0x01])
         self.assertNotEqual(
-            crypto_verify._aes_128_cbc_decrypt(self.CIPHERTEXT, other, self.IV),
+            cryptoverify._aes_128_cbc_decrypt(self.CIPHERTEXT, other, self.IV),
             self.PLAINTEXT,
         )
 
@@ -295,7 +295,7 @@ class KeysFile(unittest.TestCase):
             "not a pair\n"
             "odd_length=abc\n"
         )
-        parsed = crypto_verify.parse_keys_file(path)
+        parsed = cryptoverify.parse_keys_file(path)
         self.assertEqual(
             parsed["AES"]["slot0x2CKeyN"],
             bytes.fromhex("00112233445566778899aabbccddeeff"),
@@ -308,24 +308,24 @@ class KeysFile(unittest.TestCase):
     def test_an_empty_file_yields_no_sections(self):
         path = self.tmp / "aes_keys.txt"
         path.write_text("")
-        self.assertEqual(crypto_verify.parse_keys_file(path), {})
+        self.assertEqual(cryptoverify.parse_keys_file(path), {})
 
     def test_the_keys_file_is_found_under_nintendo_3ds(self):
         target = self.tmp / "Nintendo" / "3DS"
         target.mkdir(parents=True)
         (target / "aes_keys.txt").write_text(":AES\n")
         self.assertEqual(
-            crypto_verify.find_keys_file(self.tmp), target / "aes_keys.txt"
+            cryptoverify.find_keys_file(self.tmp), target / "aes_keys.txt"
         )
 
     def test_the_alternate_name_is_found(self):
         target = self.tmp / "Nintendo" / "3DS"
         target.mkdir(parents=True)
         (target / "keys.txt").write_text(":AES\n")
-        self.assertEqual(crypto_verify.find_keys_file(self.tmp), target / "keys.txt")
+        self.assertEqual(cryptoverify.find_keys_file(self.tmp), target / "keys.txt")
 
     def test_absence_reports_none(self):
-        self.assertIsNone(crypto_verify.find_keys_file(self.tmp))
+        self.assertIsNone(cryptoverify.find_keys_file(self.tmp))
 
 
 class OneFileIsVerifiedOncePerContent(unittest.TestCase):
@@ -347,14 +347,14 @@ class OneFileIsVerifiedOncePerContent(unittest.TestCase):
             self.calls.append(data)
             return data[0] == 1, "first byte is not 1"
 
-        patcher = unittest.mock.patch.dict(crypto_verify._CRYPTO_VERIFIERS, {"otp.bin": verifier})
+        patcher = unittest.mock.patch.dict(cryptoverify._CRYPTO_VERIFIERS, {"otp.bin": verifier})
         patcher.start()
         self.addCleanup(patcher.stop)
-        self.addCleanup(crypto_verify._crypto_cache.clear)
+        self.addCleanup(cryptoverify._crypto_cache.clear)
         self.addCleanup(self._tmp.cleanup)
 
     def check(self) -> str | None:
-        return crypto_verify.check_crypto_validation(str(self.file), "otp.bin", str(self.bios))
+        return cryptoverify.check_crypto_validation(str(self.file), "otp.bin", str(self.bios))
 
     def test_the_same_file_is_verified_once(self):
         self.assertEqual([self.check() for _ in range(7)], ["first byte is not 1"] * 7)

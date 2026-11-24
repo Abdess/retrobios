@@ -26,7 +26,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from core import crypto_verify
+from core import cryptoverify
 from core import sect233r1 as ec
 
 # A 2048-bit RSA key, the size the 3DS signatures use, from two fixed primes
@@ -108,26 +108,26 @@ class SecureInfoA(_Fixture):
         return self._write("SecureInfo_A", _rsa_sign(sign or body) + body)
 
     def test_a_correctly_signed_file_verifies(self):
-        ok, reason = crypto_verify.verify_secure_info_a(self._file(), _keys())
+        ok, reason = cryptoverify.verify_secure_info_a(self._file(), _keys())
         self.assertTrue(ok, reason)
         self.assertEqual(reason, "signature valid")
 
     def test_wrong_size_is_refused_before_anything_else(self):
         path = self._write("SecureInfo_A", b"\x00" * 100)
-        ok, reason = crypto_verify.verify_secure_info_a(path, _keys())
+        ok, reason = cryptoverify.verify_secure_info_a(path, _keys())
         self.assertFalse(ok)
         self.assertIn("size mismatch", reason)
 
     def test_an_all_zero_serial_is_refused(self):
         body = bytes([1]) + b"\x00" + b"\x00" * 15
-        ok, reason = crypto_verify.verify_secure_info_a(self._file(body), _keys())
+        ok, reason = cryptoverify.verify_secure_info_a(self._file(body), _keys())
         self.assertFalse(ok)
         self.assertIn("serial_number is all zeros", reason)
 
     def test_missing_keys_are_reported_rather_than_guessed(self):
         keys = _keys()
         keys["RSA"].pop("secureInfoMod")
-        ok, reason = crypto_verify.verify_secure_info_a(self._file(), keys)
+        ok, reason = cryptoverify.verify_secure_info_a(self._file(), keys)
         self.assertFalse(ok)
         self.assertIn("missing RSA keys", reason)
 
@@ -135,7 +135,7 @@ class SecureInfoA(_Fixture):
         body = _secure_info_body()
         tampered = body[:2] + b"X" + body[3:]
         path = self._write("SecureInfo_A", _rsa_sign(body) + tampered)
-        ok, reason = crypto_verify.verify_secure_info_a(path, _keys())
+        ok, reason = cryptoverify.verify_secure_info_a(path, _keys())
         self.assertFalse(ok)
         self.assertEqual(reason, "signature invalid")
 
@@ -144,7 +144,7 @@ class SecureInfoA(_Fixture):
         signed = _secure_info_body(region=2)
         shipped = _secure_info_body(region=5)
         path = self._write("SecureInfo_A", _rsa_sign(signed) + shipped)
-        ok, reason = crypto_verify.verify_secure_info_a(path, _keys())
+        ok, reason = cryptoverify.verify_secure_info_a(path, _keys())
         self.assertFalse(ok)
         self.assertIn("region changed from 2 to 5", reason)
 
@@ -155,17 +155,17 @@ class LocalFriendCodeSeedB(_Fixture):
         return self._write("LocalFriendCodeSeed_B", _rsa_sign(sign or body) + body)
 
     def test_a_correctly_signed_file_verifies(self):
-        ok, reason = crypto_verify.verify_local_friend_code_seed_b(self._file(), _keys())
+        ok, reason = cryptoverify.verify_local_friend_code_seed_b(self._file(), _keys())
         self.assertTrue(ok, reason)
 
     def test_wrong_size_is_refused(self):
         path = self._write("LocalFriendCodeSeed_B", b"\x00" * 0x111)
-        ok, reason = crypto_verify.verify_local_friend_code_seed_b(path, _keys())
+        ok, reason = cryptoverify.verify_local_friend_code_seed_b(path, _keys())
         self.assertFalse(ok)
         self.assertIn("size mismatch", reason)
 
     def test_a_zero_friend_code_seed_is_refused(self):
-        ok, reason = crypto_verify.verify_local_friend_code_seed_b(
+        ok, reason = cryptoverify.verify_local_friend_code_seed_b(
             self._file(_lfcs_body(seed=0)), _keys()
         )
         self.assertFalse(ok)
@@ -176,14 +176,14 @@ class LocalFriendCodeSeedB(_Fixture):
         path = self._write(
             "LocalFriendCodeSeed_B", _rsa_sign(body) + _lfcs_body(seed=0xDEAD)
         )
-        ok, reason = crypto_verify.verify_local_friend_code_seed_b(path, _keys())
+        ok, reason = cryptoverify.verify_local_friend_code_seed_b(path, _keys())
         self.assertFalse(ok)
         self.assertEqual(reason, "signature invalid")
 
     def test_missing_keys_are_reported(self):
         keys = _keys()
         keys["RSA"].pop("lfcsExp")
-        ok, reason = crypto_verify.verify_local_friend_code_seed_b(self._file(), keys)
+        ok, reason = cryptoverify.verify_local_friend_code_seed_b(self._file(), keys)
         self.assertFalse(ok)
         self.assertIn("missing RSA keys", reason)
 
@@ -198,27 +198,27 @@ class MovableSed(_Fixture):
         return self._write("movable.sed", bytes(data))
 
     def test_the_short_variant_verifies(self):
-        ok, reason = crypto_verify.verify_movable_sed(self._file(), _keys())
+        ok, reason = cryptoverify.verify_movable_sed(self._file(), _keys())
         self.assertTrue(ok, reason)
         self.assertIn("magic valid", reason)
 
     def test_the_long_variant_verifies(self):
-        ok, reason = crypto_verify.verify_movable_sed(self._file(size=0x140), _keys())
+        ok, reason = cryptoverify.verify_movable_sed(self._file(size=0x140), _keys())
         self.assertTrue(ok, reason)
 
     def test_a_wrong_magic_is_refused(self):
-        ok, reason = crypto_verify.verify_movable_sed(self._file(magic=b"SEXD"), _keys())
+        ok, reason = cryptoverify.verify_movable_sed(self._file(magic=b"SEXD"), _keys())
         self.assertFalse(ok)
         self.assertIn("invalid magic", reason)
 
     def test_an_unexpected_size_is_refused(self):
         path = self._write("movable.sed", b"\x00" * 0x130)
-        ok, reason = crypto_verify.verify_movable_sed(path, _keys())
+        ok, reason = cryptoverify.verify_movable_sed(path, _keys())
         self.assertFalse(ok)
         self.assertIn("size mismatch", reason)
 
     def test_a_tampered_embedded_seed_fails_while_the_magic_still_passes(self):
-        ok, reason = crypto_verify.verify_movable_sed(self._file(seed=0xBADF00D), _keys())
+        ok, reason = cryptoverify.verify_movable_sed(self._file(seed=0xBADF00D), _keys())
         self.assertFalse(ok)
         self.assertEqual(reason, "magic valid, LFCS signature invalid")
 
@@ -271,7 +271,7 @@ def _root_public() -> bytes:
 class Otp(_Fixture):
     def test_a_decrypted_otp_passes_every_stage(self):
         path = self._write("otp.bin", _otp_plaintext())
-        ok, reason = crypto_verify.verify_otp(
+        ok, reason = cryptoverify.verify_otp(
             path, _keys(ECC={"rootPublicXY": _root_public()})
         )
         self.assertTrue(ok, reason)
@@ -279,13 +279,13 @@ class Otp(_Fixture):
 
     def test_without_a_root_key_the_ecc_stage_is_skipped_not_faked(self):
         path = self._write("otp.bin", _otp_plaintext())
-        ok, reason = crypto_verify.verify_otp(path, _keys())
+        ok, reason = cryptoverify.verify_otp(path, _keys())
         self.assertTrue(ok)
         self.assertIn("ECC skipped", reason)
 
     def test_wrong_size_is_refused(self):
         path = self._write("otp.bin", b"\x00" * 0xFF)
-        ok, reason = crypto_verify.verify_otp(path, _keys())
+        ok, reason = cryptoverify.verify_otp(path, _keys())
         self.assertFalse(ok)
         self.assertIn("size mismatch", reason)
 
@@ -293,13 +293,13 @@ class Otp(_Fixture):
         data = bytearray(_otp_plaintext())
         data[0x30] ^= 0xFF
         path = self._write("otp.bin", bytes(data))
-        ok, reason = crypto_verify.verify_otp(path, _keys())
+        ok, reason = cryptoverify.verify_otp(path, _keys())
         self.assertFalse(ok)
         self.assertIn("SHA-256 hash mismatch", reason)
 
     def test_an_unsigned_certificate_is_refused(self):
         path = self._write("otp.bin", _otp_plaintext(sign=False))
-        ok, reason = crypto_verify.verify_otp(
+        ok, reason = cryptoverify.verify_otp(
             path, _keys(ECC={"rootPublicXY": _root_public()})
         )
         self.assertFalse(ok)
@@ -311,7 +311,7 @@ class Otp(_Fixture):
         struct.pack_into("<I", data, 0x04, 0x0A0B0C0E)
         body = bytes(data[:0xE0])
         path = self._write("otp.bin", body + hashlib.sha256(body).digest())
-        ok, reason = crypto_verify.verify_otp(
+        ok, reason = cryptoverify.verify_otp(
             path, _keys(ECC={"rootPublicXY": _root_public()})
         )
         self.assertFalse(ok)
@@ -319,21 +319,21 @@ class Otp(_Fixture):
 
     def test_the_pre_v5_expiry_endianness_is_honoured(self):
         path = self._write("otp.bin", _otp_plaintext(otp_version=4))
-        ok, reason = crypto_verify.verify_otp(
+        ok, reason = cryptoverify.verify_otp(
             path, _keys(ECC={"rootPublicXY": _root_public()})
         )
         self.assertTrue(ok, reason)
 
     def test_a_dev_unit_uses_the_dev_issuer(self):
         path = self._write("otp.bin", _otp_plaintext(system_type=1))
-        ok, reason = crypto_verify.verify_otp(
+        ok, reason = cryptoverify.verify_otp(
             path, _keys(ECC={"rootPublicXY": _root_public()})
         )
         self.assertTrue(ok, reason)
 
     def test_an_encrypted_otp_without_keys_says_so(self):
         path = self._write("otp.bin", b"\x11" * 0x100)
-        ok, reason = crypto_verify.verify_otp(path, _keys())
+        ok, reason = cryptoverify.verify_otp(path, _keys())
         self.assertFalse(ok)
         self.assertIn("missing AES keys", reason)
 
@@ -343,19 +343,19 @@ class Dispatch(_Fixture):
 
     def test_an_unknown_filename_is_not_this_module_business(self):
         self.assertIsNone(
-            crypto_verify.check_crypto_validation("x", "scph5501.bin", str(self.tmp))
+            cryptoverify.check_crypto_validation("x", "scph5501.bin", str(self.tmp))
         )
 
     def test_a_known_filename_without_a_keys_file_does_not_crash(self):
         path = self._write("movable.sed", b"\x00" * 0x120)
-        result = crypto_verify.check_crypto_validation(
+        result = cryptoverify.check_crypto_validation(
             str(path), "movable.sed", str(self.tmp)
         )
         self.assertIsInstance(result, (str, type(None)))
 
     def test_every_verifier_is_reachable_by_its_filename(self):
         self.assertEqual(
-            sorted(crypto_verify._CRYPTO_VERIFIERS),
+            sorted(cryptoverify._CRYPTO_VERIFIERS),
             ["LocalFriendCodeSeed_B", "SecureInfo_A", "movable.sed", "otp.bin"],
         )
 

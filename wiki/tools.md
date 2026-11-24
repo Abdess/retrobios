@@ -585,7 +585,7 @@ is added, and commit it with the profiles. Every tree a run tries is recorded,
 read or not, so `check_freshness.py` reports a pinned tree the record lacks:
 
 ```bash
-python scripts/sitesources.py --fetch
+python scripts/site_sources.py --fetch
 ```
 
 A forge can also go for good. A 451, a 410 or a host that stops resolving
@@ -752,7 +752,7 @@ its core lists at that release and never moves it, so a newer release is
 
 The `profiles` area always checks `website/src/data/source-paths.json`
 against the profiles, offline: a recorded tree that no profile pins any more
-is `STALE` until `sitesources.py --fetch` runs again. It also reads each
+is `STALE` until `site_sources.py --fetch` runs again. It also reads each
 `pin_build` reference of a held pin: where the platform YAML was scraped at
 the reference's own revision the row is `OK` without network, otherwise the
 build file is fetched at the platform's new revision (or at the branch head
@@ -1406,7 +1406,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `find_pinned_revision.py` | Walk the upstream commits that touched a file and return the revision whose bytes match a platform's pinned md5 (`--write` saves them) |
 | `generate_readme.py` | Generate README.md and CONTRIBUTING.md from database |
 | `generate_site.py` | Generate the site (this documentation) into the Starlight project in `website/` |
-| `sitesources.py` | Record which cited source paths each pinned upstream tree holds, for the site's source links (`--fetch` reads a tree no cache holds) |
+| `site_sources.py` | Record which cited source paths each pinned upstream tree holds, for the site's source links (`--fetch` reads a tree no cache holds) |
 | `site_markdown.py` | Write each built page as Markdown beside its HTML (`<page>/index.md`, named in every page's head) and `llms-full.txt`, the guides and every setup's page in one file, for the assistants that read the site. The Astro build runs it once the pages are written |
 | `site_insights.py` | What readers look for and do not find, from totals only, each section with its period: Google searches by page against the period of the same length before (anchors merged into their page), ranked by the clicks lost against the site's own click rate at each position, searches clicked less than half that rate, searched file names the collection does not hold, site searches that found nothing, broken addresses, "Did this page help?" answers, GitHub traffic (14 days) and release downloads since the previous run (`--days`, `--skip gsc,goatcounter,github`, `--output`, `--downloads-snapshot`, default `.cache/insights/downloads.json`). Reads Search Console, GoatCounter and GitHub with credentials kept outside the repository. A source it cannot read (rate limit, missing credential) is named at the top of the report instead of ending the run, which then exits 1. [What the site counts](privacy.md) |
 | `make_demo.py` | Record the installer demos of the README and the site into `docs_assets/demo/`. An ArkOS card with six games is built under `tmp/demo/` in a mount namespace of the user, this checkout is served on loopback, and VHS runs one tape per variant: `default` (`install.tape`, the one-line command in a terminal, the card at `/media/EASYROMS`, needs `unshare`) and `handheld` (`install-handheld.tape`, the full-screen interface at 640x480 on an ArkOS root made with `bwrap`, as its Tools menu starts it, driven by the keys gptokeyb sends for the buttons). `--variant NAME` records one (repeatable), every variant by default, the others kept. Each needs `vhs`, `ttyd` and `ffmpeg`. The default gets the README's GIF, each gets a WebM, an MP4 and a poster, held to their size targets, and an entry in `demo.json` with what it shows and its alt text. No Windows variant: under pwsh on Linux the installer's summary gives `--dest /mnt/e/bios` back. Never run by the build |
@@ -1415,7 +1415,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `romset_recipes.py` | Identify which emulator version an arcade archive matches, rebuild a pinned archive from ROMs already held, record a recipe for every archive the collection holds and build any of them from the members it holds (see [Archive recipes](#archive-recipes)) |
 | `scraper/romset_dat_importer.py` | Fetch and import per-set recipes from MAME `-listxml` or FBNeo DATs into `recipes/`. `--fetch` alone takes the newest MAME release, and FBNeo DATs are refreshed by git blob sha. `--fetch <revision>` reads FBNeo at that tag, branch or commit |
 | `core/torrentzip.py` | Build TorrentZip archives for MAME/FBNeo ROM sets (archive bytes depend only on contents, with stock zlib), streaming one member at a time |
-| `core/crypto_verify.py` | 3DS RSA signature and AES crypto verification |
+| `core/cryptoverify.py` | 3DS RSA signature and AES crypto verification |
 | `core/sect233r1.py` | Pure Python ECDSA verification on sect233r1 curve (3DS OTP cert) |
 | `check_buildbot_system.py` | Detect stale data directories by comparing with buildbot |
 | `check_freshness.py` | One report on every upstream the repository transcribes (see above) |
@@ -1728,7 +1728,7 @@ the GitHub and text fetches, and the shared CLI), `dat_parser.py` (clrmamepro DA
 `logiqx_parser.py` (Logiqx XML DAT parser, used by the dump catalogs),
 `mame_parser.py` (MAME C source BIOS root set parser),
 `fbneo_parser.py` (FBNeo C source BIOS set parser),
-`datfetch.py` (upstream MAME `-listxml` and FBNeo DATs, cached under `.cache/dats/`),
+`dat_fetch.py` (upstream MAME `-listxml` and FBNeo DATs, cached under `.cache/dats/`),
 `_hash_merge.py` (text-based YAML patching that preserves formatting).
 
 Adding a scraper: inherit `BaseScraper`, implement `fetch_requirements()` and

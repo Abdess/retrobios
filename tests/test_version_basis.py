@@ -27,7 +27,7 @@ import profile_sync
 from profiling import resolver
 from profiling import yamledit
 from core import upstream
-from profiling import version_basis
+from profiling import versionbasis
 from model.profilerepos import pin_field
 from model.profiles import load_emulator_profiles
 from profiling.reports import ProfileReport, SkipKind
@@ -68,13 +68,13 @@ class ReadsTheRecordedSourceOffline(unittest.TestCase):
 
     def _check(self, name: str, profiles: dict | None = None) -> list:
         profiles = profiles or self.profiles
-        return version_basis.check(profiles[name], str(self.cache), True, profiles)
+        return versionbasis.check(profiles[name], str(self.cache), True, profiles)
 
     def test_every_kind_reads_its_version(self):
         for name in self.profiles:
             with self.subTest(profile=name):
                 readings = self._check(name)
-                self.assertEqual([r.status for r in readings], [version_basis.MATCH],
+                self.assertEqual([r.status for r in readings], [versionbasis.MATCH],
                                  readings)
 
     def test_a_file_basis_names_the_line_it_read(self):
@@ -94,26 +94,26 @@ class ReadsTheRecordedSourceOffline(unittest.TestCase):
                 profiles = copy.deepcopy(self.profiles)
                 profiles[name]["core_version"] = stale
                 (reading,) = self._check(name, profiles)
-                self.assertEqual(reading.status, version_basis.DRIFT)
+                self.assertEqual(reading.status, versionbasis.DRIFT)
 
     def test_a_tag_distance_the_forge_contradicts_is_drift(self):
         profiles = copy.deepcopy(self.profiles)
         profiles["dolphin"]["version_basis"]["distance"] = 400
         (reading,) = self._check("dolphin", profiles)
-        self.assertEqual(reading.status, version_basis.DRIFT)
+        self.assertEqual(reading.status, versionbasis.DRIFT)
         self.assertEqual(dict(reading.updates)["distance"], 437)
 
     def test_a_pattern_that_no_longer_matches_is_unreadable(self):
         profiles = copy.deepcopy(self.profiles)
         profiles["snes9x"]["version_basis"]["pattern"] = "#define\\s+NOPE\\s+(\\S+)"
         (reading,) = self._check("snes9x", profiles)
-        self.assertEqual(reading.status, version_basis.UNREADABLE)
+        self.assertEqual(reading.status, versionbasis.UNREADABLE)
 
     def test_a_profile_without_basis_is_reported(self):
         profiles = copy.deepcopy(self.profiles)
         del profiles["snes9x"]["version_basis"]
         (reading,) = self._check("snes9x", profiles)
-        self.assertEqual(reading.status, version_basis.NO_BASIS)
+        self.assertEqual(reading.status, versionbasis.NO_BASIS)
 
     def test_the_command_fails_on_drift_and_passes_clean(self):
         emulators = Path(self.tmp.name) / "emulators"
@@ -155,20 +155,20 @@ class EveryProfileSaysWhereItsVersionIsRead(unittest.TestCase):
 
     def test_every_profile_has_a_basis(self):
         missing = sorted(name for name, p in self.profiles.items()
-                         if not version_basis.bases(p))
+                         if not versionbasis.bases(p))
         self.assertEqual(missing, [], "profiles without version_basis")
 
     def test_no_placeholder_is_a_version(self):
         named = sorted(
             name for name, p in self.profiles.items()
-            for mode in (version_basis.bases(p) or {"": {}})
-            if version_basis.is_placeholder(version_basis.declared(p, mode))
+            for mode in (versionbasis.bases(p) or {"": {}})
+            if versionbasis.is_placeholder(versionbasis.declared(p, mode))
         )
         self.assertEqual(named, [])
 
     def test_keyed_bases_follow_the_keyed_version(self):
         for name, profile in self.profiles.items():
-            found = version_basis.bases(profile)
+            found = versionbasis.bases(profile)
             if not found or "" in found:
                 continue
             with self.subTest(profile=name):
@@ -177,45 +177,45 @@ class EveryProfileSaysWhereItsVersionIsRead(unittest.TestCase):
 
     def test_none_states_no_version(self):
         for name, profile in self.profiles.items():
-            for mode, basis in version_basis.bases(profile).items():
+            for mode, basis in versionbasis.bases(profile).items():
                 if basis.get("kind") == "none":
                     with self.subTest(profile=name, mode=mode):
-                        self.assertIsNone(version_basis.declared(profile, mode))
+                        self.assertIsNone(versionbasis.declared(profile, mode))
 
     def test_a_tag_version_is_the_describe_form_of_its_pin(self):
         for name, profile in self.profiles.items():
-            for mode, basis in version_basis.bases(profile).items():
+            for mode, basis in versionbasis.bases(profile).items():
                 if basis.get("kind") != "tag" or basis.get("url"):
                     continue
                 field = pin_field(str(basis.get("repo") or "source")) + "_commit"
-                pin = version_basis._by_mode(profile, field, mode)
+                pin = versionbasis._by_mode(profile, field, mode)
                 if not pin:
                     continue
                 with self.subTest(profile=name, mode=mode):
                     self.assertEqual(
-                        version_basis.declared(profile, mode),
-                        version_basis.describe_form(basis["tag"], basis["distance"], pin),
+                        versionbasis.declared(profile, mode),
+                        versionbasis.describe_form(basis["tag"], basis["distance"], pin),
                     )
 
     def test_an_alias_carries_the_version_of_its_profile(self):
         for name, profile in self.profiles.items():
-            for mode, basis in version_basis.bases(profile).items():
+            for mode, basis in versionbasis.bases(profile).items():
                 if basis.get("kind") != "alias":
                     continue
                 with self.subTest(profile=name):
-                    (reading,) = [r for r in version_basis.check(
+                    (reading,) = [r for r in versionbasis.check(
                         profile, "", True, self.profiles) if r.mode == mode]
-                    self.assertEqual(reading.status, version_basis.MATCH, reading)
+                    self.assertEqual(reading.status, versionbasis.MATCH, reading)
 
     def test_a_package_named_after_its_version_states_it(self):
         for name, profile in self.profiles.items():
-            for mode, basis in version_basis.bases(profile).items():
+            for mode, basis in versionbasis.bases(profile).items():
                 if basis.get("kind") != "package" or not basis.get("pattern"):
                     continue
                 with self.subTest(profile=name):
-                    (reading,) = [r for r in version_basis.check(profile, "", True)
+                    (reading,) = [r for r in versionbasis.check(profile, "", True)
                                   if r.mode == mode]
-                    self.assertEqual(reading.status, version_basis.MATCH, reading)
+                    self.assertEqual(reading.status, versionbasis.MATCH, reading)
 
 
 SAMPLE = """emulator: Sample
@@ -240,13 +240,13 @@ class TheBasisPinIsTheComparisonPin(unittest.TestCase):
                    "profiled_date": "2026-01-01"}
         basis = {"kind": "file", "repo": "source"}
         with mock.patch.object(upstream, "resolve_commit_at", return_value="a" * 40) as at:
-            repo, pin = version_basis._repo_and_pin(profile, basis, "", "cache", True)
+            repo, pin = versionbasis._repo_and_pin(profile, basis, "", "cache", True)
         self.assertEqual((repo.slug, pin), ("o/r", "a" * 40))
         self.assertEqual(at.call_args.args[1:], ("2026-01-01", "cache", True, "port"))
 
     def test_a_mirror_is_pinned_by_the_source_commit(self):
         profile = {"source_mirror": "https://github.com/o/m", "source_commit": "b" * 40}
-        repo, pin = version_basis._repo_and_pin(
+        repo, pin = versionbasis._repo_and_pin(
             profile, {"kind": "file", "repo": "source_mirror"}, "", "cache", True)
         self.assertEqual((repo.slug, pin), ("o/m", "b" * 40))
 
@@ -262,18 +262,18 @@ class TheVersionRepositoryIsTheBasisRepository(unittest.TestCase):
     }
 
     def test_a_basis_naming_the_upstream_is_read_there(self):
-        repo, field = version_basis.version_repo(self.PROFILE)
+        repo, field = versionbasis.version_repo(self.PROFILE)
         self.assertEqual((repo.slug, field), ("o/up", "upstream"))
 
     def test_a_profile_without_basis_is_read_where_it_was_profiled(self):
         profile = {k: v for k, v in self.PROFILE.items() if k != "version_basis"}
-        repo, field = version_basis.version_repo(profile)
+        repo, field = versionbasis.version_repo(profile)
         self.assertEqual((repo.slug, field), ("o/port", "source"))
 
     def test_a_basis_url_is_its_own_repository(self):
         profile = dict(self.PROFILE, version_basis={
             "kind": "package", "url": "https://github.com/o/pkg/releases"})
-        repo, field = version_basis.version_repo(profile)
+        repo, field = versionbasis.version_repo(profile)
         self.assertEqual((repo.slug, field), ("o/pkg", "url"))
 
     def test_the_check_reads_the_tags_and_the_pin_of_that_repository(self):
@@ -339,17 +339,17 @@ class TheTagCoreVersionNames(unittest.TestCase):
         return report, asked
 
     def test_a_tag_basis_names_its_tag(self):
-        [named] = version_basis.version_tags(self.DESCRIBED)
+        [named] = versionbasis.version_tags(self.DESCRIBED)
         self.assertEqual((named.declared, named.tag, named.distance),
                          ("2.9.2-77-gfc4ab0b", "2.9.2", 77))
 
     def test_a_mode_keyed_version_names_one_tag_per_build(self):
         profile = {"source": "https://github.com/o/n",
                    "core_version": {"standalone": "v1.1", "libretro": "v0.9"}}
-        self.assertEqual([(n.mode, n.tag) for n in version_basis.version_tags(profile)],
+        self.assertEqual([(n.mode, n.tag) for n in versionbasis.version_tags(profile)],
                          [("standalone", "v1.1"), ("libretro", "v0.9")])
         same = dict(profile, core_version={"standalone": "0.14.1", "libretro": "0.14.1"})
-        self.assertEqual([n.tag for n in version_basis.version_tags(same)], ["0.14.1"])
+        self.assertEqual([n.tag for n in versionbasis.version_tags(same)], ["0.14.1"])
 
     def test_a_release_after_the_described_pin_is_named(self):
         report, asked = self._attach(self.DESCRIBED, {"2.9.2": "tag292", "2.10.0": "rel210"})
@@ -388,16 +388,16 @@ class AnAdvanceReadsTheVersionAgain(unittest.TestCase):
         self.tmp.cleanup()
 
     def _reading(self, status: str, value: str | None):
-        return version_basis.Reading("", "file", "1.0", value, "o/n@bbbbbbb:version.h:3", status)
+        return versionbasis.Reading("", "file", "1.0", value, "o/n@bbbbbbb:version.h:3", status)
 
     def test_the_version_moves_with_the_pin(self):
         seen = []
 
         def check(profile, cache_dir, offline, profiles=None, recompute=False):
             seen.append((profile["source_commit"], recompute))
-            return [self._reading(version_basis.DRIFT, "2.0")]
+            return [self._reading(versionbasis.DRIFT, "2.0")]
 
-        with mock.patch.object(version_basis, "check", check):
+        with mock.patch.object(versionbasis, "check", check):
             self.assertTrue(bump_commit(self.path, self.report).moved)
         written = yaml.safe_load(self.path.read_text(encoding="utf-8"))
         self.assertEqual(written["source_commit"], "bbbbbbb")
@@ -406,8 +406,8 @@ class AnAdvanceReadsTheVersionAgain(unittest.TestCase):
         self.assertEqual(seen, [("bbbbbbb", True)])
 
     def test_an_unreadable_version_holds_the_pin(self):
-        with mock.patch.object(version_basis, "check",
-                               return_value=[self._reading(version_basis.UNREADABLE, None)]):
+        with mock.patch.object(versionbasis, "check",
+                               return_value=[self._reading(versionbasis.UNREADABLE, None)]):
             self.assertFalse(bump_commit(self.path, self.report).moved)
         self.assertEqual(self.path.read_text(encoding="utf-8"), SAMPLE)
 
@@ -418,9 +418,9 @@ class AnAdvanceReadsTheVersionAgain(unittest.TestCase):
         self.assertEqual(self.path.read_text(encoding="utf-8"), before)
 
     def test_a_package_version_is_advanced_by_hand(self):
-        reading = version_basis.Reading("", "package", "1.0", None, "read from x.apk",
-                                        version_basis.UNCHECKED)
-        with mock.patch.object(version_basis, "check", return_value=[reading]):
+        reading = versionbasis.Reading("", "package", "1.0", None, "read from x.apk",
+                                        versionbasis.UNCHECKED)
+        with mock.patch.object(versionbasis, "check", return_value=[reading]):
             self.assertFalse(bump_commit(self.path, self.report).moved)
 
 

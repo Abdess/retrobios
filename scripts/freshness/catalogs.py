@@ -12,7 +12,7 @@ from pathlib import Path
 from core import upstream
 from core.paths import REPO_ROOT
 from scripts.scraper import game_dat_importer
-from scripts.scraper.datfetch import is_tracked_dat, label_version
+from scripts.scraper.dat_fetch import is_tracked_dat, label_version
 from scripts.scraper.redump_dat_scraper import fetch_snapshot
 from freshness.findings import (
     FBNEO_RECIPES, MAME_RECIPES, NO_INTRO_GAMES, OK, REDUMP_GAMES, SKIPPED, STALE, UNKNOWN,

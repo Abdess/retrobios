@@ -985,7 +985,7 @@ class EveryGitHubApiCallerSendsTheToken(unittest.TestCase):
             for path in [*scripts.rglob("*.py"), *scripts.rglob("*.sh")]
             if "api.github.com" in (source := path.read_text(encoding="utf-8"))
             # arcade_parent_importer names API URLs and sends them through
-            # datfetch.api_json, which holds the token, and the
+            # dat_fetch.api_json, which holds the token, and the
             # scrapers through base_scraper.github_json, the rest through
             # core.upstream.fetch_body or forge_headers.
             and ("Request(" in source or "urlopen(" in source or path.suffix == ".sh")

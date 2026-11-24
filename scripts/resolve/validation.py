@@ -199,7 +199,7 @@ def _rule_failure(
         if check not in skip and not content_fits({"validation": [check], check: spec}, local_path):
             return _CONTENT_REASONS[check]
     if rule["crypto"] - skip:
-        from core.crypto_verify import check_crypto_validation
+        from core.cryptoverify import check_crypto_validation
 
         return check_crypto_validation(local_path, filename, bios_dir)
     return None
@@ -527,7 +527,7 @@ def check_file_validation(
 
     # Signature/crypto checks (3DS RSA, AES)
     if entry["crypto_only"]:
-        from core.crypto_verify import check_crypto_validation
+        from core.cryptoverify import check_crypto_validation
 
         crypto_reason = check_crypto_validation(local_path, filename, bios_dir)
         if crypto_reason:

@@ -71,7 +71,7 @@ from model.romfolders import load_sources, sources_dir
 from model.safeparse import yaml_load
 from model.targets import platform_overrides
 from profiling.reports import ProfileReport, SkipKind, report_to_dict
-from scripts.scraper import datfetch, game_dat_importer
+from scripts.scraper import dat_fetch, game_dat_importer
 from tests.sources import SCRIPTS
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -648,11 +648,11 @@ class CatalogParsingTests(unittest.TestCase):
         self.assertEqual(mame_versions(recipes), ["mame0250", "mame0289"])
 
     def test_versions_and_blobs_follow_the_importer_rules(self):
-        recipes = {"dats": {datfetch.mame_label("mame0289lx"): "mame0289lx"}}
+        recipes = {"dats": {dat_fetch.mame_label("mame0289lx"): "mame0289lx"}}
         self.assertEqual(mame_versions(recipes), ["mame0289"])
         # The check asks the importer which DATs it reads, never a copy of the rule.
-        self.assertIs(freshness.catalogs.is_tracked_dat, datfetch.is_tracked_dat)
-        self.assertIs(freshness.catalogs.label_version, datfetch.label_version)
+        self.assertIs(freshness.catalogs.is_tracked_dat, dat_fetch.is_tracked_dat)
+        self.assertIs(freshness.catalogs.label_version, dat_fetch.label_version)
 
 
 def _rows(*reports: ProfileReport) -> list[dict]:

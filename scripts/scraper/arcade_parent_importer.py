@@ -61,7 +61,7 @@ from .fbneo_parser import zip_name
 from .clex import DriverSourceError, blank_comments, call_args, call_span
 from .listxml import Opener, attrs, iter_elements, open_listxml, rom_members
 from model.mamerelease import mame_tag
-from .datfetch import MAME_LISTXML_URL, api_json, cached_pack, fetch_pack
+from .dat_fetch import MAME_LISTXML_URL, api_json, cached_pack, fetch_pack
 
 SCHEMA_VERSION = 1
 DEFAULT_OUTPUT = Path("games") / "arcade"

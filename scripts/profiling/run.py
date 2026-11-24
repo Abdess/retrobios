@@ -29,7 +29,7 @@ from profiling.sourcepaths import record_write
 from profiling.triage import (
     PROGRESS_SECONDS, Progress, print_interrupted, print_triage, score_reports, scored_to_dict,
 )
-from profiling.version_basis import VersionTag, version_tags
+from profiling.versionbasis import VersionTag, version_tags
 from profiling.versions import (
     VersionReport,
     check_version,

@@ -220,7 +220,7 @@ def load_emulator_profiles(
     emu_path = Path(emulators_dir)
     if not emu_path.is_dir():
         # Read as "no emulator", a mistyped --emulators-dir built a pack
-        # without any core file marked OK, and sitesources wrote {} over
+        # without any core file marked OK, and site_sources wrote {} over
         # source-paths.json, both exiting 0.
         raise InputMissing(f"no emulator profile directory at {emulators_dir}")
     for f in source_yaml_paths(emu_path):
