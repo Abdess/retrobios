@@ -7,7 +7,7 @@
   "platform": "myminui",
   "display_name": "MyMinUI",
   "version": "2026-08-09",
-  "generated": "2026-11-13T11:31:17Z",
+  "generated": "2026-11-24T09:06:59Z",
   "base_destination": "",
   "detect": [
     {
@@ -481,7 +481,7 @@
       "sha1": "30c6ad697439de7c2158192ecdb48f5edd37478e",
       "sha256": "efd00af9a44241c2aa094d5f1977aa68fc0bb8467dbcf82f32762977d37a6f17",
       "size": 328397,
-      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.30c6ad69",
+      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.f5cdce5b",
       "cores": [
         "fbneo"
       ]
@@ -491,7 +491,7 @@
       "sha1": "30c6ad697439de7c2158192ecdb48f5edd37478e",
       "sha256": "efd00af9a44241c2aa094d5f1977aa68fc0bb8467dbcf82f32762977d37a6f17",
       "size": 328397,
-      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.30c6ad69",
+      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.f5cdce5b",
       "cores": [
         "fbneo"
       ]
@@ -711,7 +711,7 @@
       "sha1": "b48347a133ab8f28b9875ab300fea2ffa2f37ebc",
       "sha256": "f1b2b78fb847801b542c8c5b1e68c1fc064ba79301db29fbd2878e6bf6b377af",
       "size": 131926,
-      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.b48347a1",
+      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.f870afb4",
       "cores": [
         "mame2003_plus"
       ],

@@ -1269,7 +1269,7 @@
         "sha1": "3c6cc6e04fdd0b2a392d7a6ed769455444846be7",
         "sha256": "49d987ee1eab29a157425b82d54516957a81e1bac247c8834e494642605c3e8c",
         "size": 8192,
-        "repo_path": "bios/Nintendo/GameCube/.variants/dsp_rom.bin.3c6cc6e0",
+        "repo_path": "bios/Nintendo/GameCube/.variants/dsp_rom.bin.23645d44",
         "cores": [
           "dolphin"
         ]
@@ -1279,7 +1279,7 @@
         "sha1": "c116d867ba001dcd6bf6d399ff4bf38d340f556c",
         "sha256": "a1e269cfdc6b82d5a55baab5a0bbbb3b9f953ad92729e0d5ec50dbc2746a2c47",
         "size": 4096,
-        "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.c116d867",
+        "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.9a6514b8",
         "cores": [
           "dolphin"
         ]
@@ -1740,7 +1740,7 @@
         "sha1": "3c6cc6e04fdd0b2a392d7a6ed769455444846be7",
         "sha256": "49d987ee1eab29a157425b82d54516957a81e1bac247c8834e494642605c3e8c",
         "size": 8192,
-        "repo_path": "bios/Nintendo/GameCube/.variants/dsp_rom.bin.3c6cc6e0",
+        "repo_path": "bios/Nintendo/GameCube/.variants/dsp_rom.bin.23645d44",
         "cores": [
           "ishiiruka"
         ]
@@ -1750,7 +1750,7 @@
         "sha1": "c116d867ba001dcd6bf6d399ff4bf38d340f556c",
         "sha256": "a1e269cfdc6b82d5a55baab5a0bbbb3b9f953ad92729e0d5ec50dbc2746a2c47",
         "size": 4096,
-        "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.c116d867",
+        "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.9a6514b8",
         "cores": [
           "ishiiruka"
         ]
@@ -2697,7 +2697,7 @@
         "sha1": "3c6cc6e04fdd0b2a392d7a6ed769455444846be7",
         "sha256": "49d987ee1eab29a157425b82d54516957a81e1bac247c8834e494642605c3e8c",
         "size": 8192,
-        "repo_path": "bios/Nintendo/GameCube/.variants/dsp_rom.bin.3c6cc6e0",
+        "repo_path": "bios/Nintendo/GameCube/.variants/dsp_rom.bin.23645d44",
         "cores": [
           "primehack"
         ]
@@ -2707,7 +2707,7 @@
         "sha1": "c116d867ba001dcd6bf6d399ff4bf38d340f556c",
         "sha256": "a1e269cfdc6b82d5a55baab5a0bbbb3b9f953ad92729e0d5ec50dbc2746a2c47",
         "size": 4096,
-        "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.c116d867",
+        "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.9a6514b8",
         "cores": [
           "primehack"
         ]

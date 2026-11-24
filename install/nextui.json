@@ -7,7 +7,7 @@
   "platform": "nextui",
   "display_name": "NextUI",
   "version": "2026-10-20",
-  "generated": "2026-11-13T11:31:17Z",
+  "generated": "2026-11-24T09:06:59Z",
   "base_destination": "",
   "detect": [
     {
@@ -142,7 +142,7 @@
       "sha1": "30c6ad697439de7c2158192ecdb48f5edd37478e",
       "sha256": "efd00af9a44241c2aa094d5f1977aa68fc0bb8467dbcf82f32762977d37a6f17",
       "size": 328397,
-      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.30c6ad69",
+      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.f5cdce5b",
       "cores": [
         "fbneo"
       ]

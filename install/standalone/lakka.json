@@ -277,7 +277,7 @@
         "sha1": "5bc114bba29f60a614a311745b3e2464bfa06846",
         "sha256": "d78ab119983d6960e3ae1accaf42c5d5c3ca4c7e7c7e00479afb3ff5ba0ab03d",
         "size": 262144,
-        "repo_path": "bios/Commodore/Amiga/.variants/kick34005.CDTV.ceae68d2",
+        "repo_path": "bios/Commodore/Amiga/.variants/kick34005.CDTV.d1145ab3",
         "cores": [
           "amiberry"
         ]
@@ -14696,7 +14696,7 @@
         "sha1": "8c031bf9908fd0142fdd10a9cdd79389f8a3f2fc",
         "sha256": "37561c4444bec52ae1aae31de5579f1856d5b23002ee083ade42f9ed13c8616f",
         "size": 524288,
-        "repo_path": "bios/Sega/Saturn/.variants/hisaturn_v103.bin",
+        "repo_path": "bios/Sega/Saturn/.variants/hisaturn_v103.bin.0306c0e4",
         "cores": [
           "ymir"
         ]

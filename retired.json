@@ -316,6 +316,15 @@
    "sha256": "15ff418a0fc877886015cc781c9c3b0810a870bee5803d76741bbcbcc540b9e5",
    "size": 1548
   },
+  "03c99ea4f532ad89a5fb8feb9f7fe91ef2873056": {
+   "crc32": "f5e91fd7",
+   "left": "2026-11-24",
+   "md5": "2b0f855e1409472b1d0098db5445fcc8",
+   "name": "GLideN64.356c268e.OpenGL.keys",
+   "path": "bios/Nintendo/Nintendo 64DD/shaders/GLideN64.356c268e.OpenGL.keys",
+   "sha256": "cf6e70f4d3f2003397ee7829fcbd3861d37fe8766c977cc007ae94123b704a57",
+   "size": 384
+  },
   "03d19e6f31c8f0b592beb7c658cc3b46f1aaaf8e": {
    "crc32": "e1c35e69",
    "left": "2026-10-20",
@@ -416,6 +425,15 @@
    "sha256": "782bbf60014498e40a7043a44a404e3be3f621b9ea0dde269e92a2e99f0b38a2",
    "size": 1890
   },
+  "050913bd1dd2cf5c8fd0258d8935e7a391f01ae8": {
+   "crc32": "18567dff",
+   "left": "2026-11-24",
+   "md5": "8f351a51d95072b53fdee72399c9070c",
+   "name": "config",
+   "path": "bios/Arcade/Arcade/keropi/config",
+   "sha256": "8c5df3a282ec590932a8f2e7385782dc5fc92379e9018c256a828e30810fea92",
+   "size": 42
+  },
   "052349a4df58bed6d66f9194fe6810bb1149bd34": {
    "crc32": "11519c22",
    "left": "2026-10-20",
@@ -469,6 +487,15 @@
    "path": "bios/Other/beebem/BeebFile/6502Tube.rom",
    "sha256": "e67d1afdd4ed545a6c544cbdf50d3d32dbffdd94d97f3b822d2fa08a5e6b0aed",
    "size": 2048
+  },
+  "05b91dc8dd6fdbbf982388fd0673073363be9ce6": {
+   "crc32": "772caf31",
+   "left": "2026-11-24",
+   "md5": "3088997dfc4798cfc86a7eb357d2186c",
+   "name": "firmare installation.txt",
+   "path": "bios/Arcade/Arcade/switch/firmare installation.txt",
+   "sha256": "1cf244001bcc42008d93669cdf7bb37a2b343045cd81485527111c5dec2be092",
+   "size": 157
   },
   "05bd922e3e80ebba548c457e8aa6de62c8ae659d": {
    "crc32": "6d1df88a",
@@ -876,6 +903,15 @@
    "sha256": "9ee624153f6ff198267fa57dd7568933a36e2003fbe9dd17799b6d21652a37bb",
    "size": 16384
   },
+  "0aa783672edadcec7b09eff91c6ce8ede4b08eca": {
+   "crc32": "584c4f86",
+   "left": "2026-11-24",
+   "md5": "93b1945b18c2baa96b8df75c1cbf60bb",
+   "name": "FinalBurn Neo (ClrMame Pro XML, NeoGeo Pocket Games only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, NeoGeo Pocket Games only).dat",
+   "sha256": "f8dbca4f8e2d516d01fc0cca69e14a37e4a14a252a8b64520acd32f99a459e9c",
+   "size": 91756
+  },
   "0aaf20633888d2d0a2da38e82773cb5d44e840eb": {
    "crc32": "21a26259",
    "left": "2026-10-20",
@@ -1269,6 +1305,15 @@
    "sha256": "5fa20317f169d97de3887dd17e8180d8e246857230706a6425ea3000f2720553",
    "size": 5326
   },
+  "0f4f556277e87b3532a862b437a1685c6d77574c": {
+   "crc32": "ba572850",
+   "left": "2026-11-24",
+   "md5": "f06cf541494cc9685e6eaf568335c193",
+   "name": "SGB SFC for BSNES.zip",
+   "path": "bios/Nintendo/Super Game Boy/SGB SFC for BSNES.zip",
+   "sha256": "6219403c7efb56bb7127b4ee18d1f6f65352a2bad51982e573b87ff6d19f6c95",
+   "size": 434423
+  },
   "0f562d1e5ea3b3d56be45b528541ef418020ba0f": {
    "crc32": "bbeab2b8",
    "left": "2026-10-20",
@@ -1350,6 +1395,15 @@
    "path": "bios/Other/visual-pinball/plugins/pinmame/gamedefs/machines/partial/bally/star-trek-1979.json",
    "sha256": "37c14066c447a211b1fc1ebd6ff087e2b9a25fbdb5d485997c842a58ca8d974e",
    "size": 15836
+  },
+  "1090223c6e8b38d7f8c1a97c9c125e3aa7c2b8cf": {
+   "crc32": "de55de92",
+   "left": "2026-11-24",
+   "md5": "58744063e88786ec3486903e4ce91f5a",
+   "name": "SGB SFC for Higan or nSide.zip",
+   "path": "bios/Nintendo/Super Game Boy/SGB SFC for Higan or nSide.zip",
+   "sha256": "da7e06f6647af97cbf39f3920e3979c30454bf5bcccdda118a56abed1ec933fa",
+   "size": 435551
   },
   "10a3847ffc49cde636ee8013e1c837286fc2ca97": {
    "crc32": "65464233",
@@ -1488,6 +1542,15 @@
    "path": "bios/Other/visual-pinball/plugins/pinmame/memmaps/maps/bally/as-2518-35/system-rom-35-7digit.map.json",
    "sha256": "6fb0d722ddfefc27e591ed6d5a0a62420f6ad1ae2c5714960cd147a0287e1fe4",
    "size": 7153
+  },
+  "12e4fc7f01634433d80130530ab9b9daee9da0b5": {
+   "crc32": "67f664b7",
+   "left": "2026-11-24",
+   "md5": "c12ff542426beaed6304ca897196798d",
+   "name": "FB Alpha (ClrMame Pro XML, Master System only).dat",
+   "path": "bios/Arcade/FBNeo/FB Alpha (ClrMame Pro XML, Master System only).dat",
+   "sha256": "11925c58d7ce10e145aa06f95e864f04e0307354666cc2003309752ff578b7a5",
+   "size": 144630
   },
   "132075a83357ed4a74083f42f65c1ee133eba35d": {
    "crc32": "0c5d3500",
@@ -2023,6 +2086,15 @@
    "sha256": "df16fc3dd1e350bbfebf675af241041680367b71325539fc82abc27b96728079",
    "size": 3624
   },
+  "18b123bac4378b5fd796beb67c29eaa78012f0e9": {
+   "crc32": "bf9f1a4c",
+   "left": "2026-11-24",
+   "md5": "e163f5706a36cfa5ed1b8723ebca0ebc",
+   "name": "FB Alpha (ClrMame Pro XML, Neogeo only).dat",
+   "path": "bios/Arcade/FBNeo/FB Alpha (ClrMame Pro XML, Neogeo only).dat",
+   "sha256": "487446eb3530fe6b5a5d034ab40e307007e112a417efbdc1a8da1738350fb7bf",
+   "size": 1387593
+  },
   "18cc21df587d9cd9302f38a00ed9a23d619f5673": {
    "crc32": "38dfa295",
    "left": "2026-10-20",
@@ -2195,6 +2267,24 @@
    "path": "bios/Adobe/Flash/libopenh264-2.4.1-linux-arm64.7.so",
    "sha256": "e8ea7e42855ceb4a90e7bd0b3abeba0c58b5f97166e8b0a30eefd58e099557a4",
    "size": 1496120
+  },
+  "1aaed3fbca1096ecaea1aeb5f32d6ce884576e82": {
+   "crc32": "dc8513ac",
+   "left": "2026-11-24",
+   "md5": "3840296f57cd561a06e8fce7c35a4dcf",
+   "name": "GLideN64.356c268e.OpenGL.shaders",
+   "path": "bios/Nintendo/Nintendo 64DD/shaders/GLideN64.356c268e.OpenGL.shaders",
+   "sha256": "6e3e1b7bf95e5e47f07df1c55cc9d83210b201b5b1a4e7dfa0ee2f51d4a3568c",
+   "size": 528928
+  },
+  "1aca1ab73dcd243334e6595ca84f41de8ff1f49f": {
+   "crc32": "a1445074",
+   "left": "2026-11-24",
+   "md5": "2f5a6caaf57864d8de27f82b6422948e",
+   "name": "FinalBurn Neo (ClrMame Pro XML, Sega SG-1000 only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, Sega SG-1000 only).dat",
+   "sha256": "b705609b621433f7463ca5c03517d68f1784410f089f8fa82c29eb8955166e64",
+   "size": 80005
   },
   "1acd01c2c03424a78b32c9440f4d890fb1104815": {
    "crc32": "2fa2e7d6",
@@ -3900,6 +3990,15 @@
    "sha256": "f6c3e682af3200d8870aa17a69cbcbf16d1594b9d9c653cc31a70141614d89d9",
    "size": 1848
   },
+  "2fd0c44cf42e00e1fb8a6a7496134ff979ab24cc": {
+   "crc32": "564c3eb1",
+   "left": "2026-11-24",
+   "md5": "eb74491cecc8f1ea38abf5fdbb7d3508",
+   "name": "FinalBurn Neo (ClrMame Pro XML, Arcade only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, Arcade only).dat",
+   "sha256": "284ae592726e3a5ab70ec310b6bf959a61c021f4c345937dd8c7d67f82a49d29",
+   "size": 11689543
+  },
   "303933c22622a0100f1c78ee403934ce7a194238": {
    "crc32": "501a861d",
    "left": "2026-10-20",
@@ -4052,6 +4151,15 @@
    "path": "bios/Acorn/BBC Micro/b2/roms/m128/3.50/view.rom",
    "sha256": "86b245bf736ea17640d3527cd709fd67b600c1901df5b3210f09a12595072681",
    "size": 16384
+  },
+  "31654f0e212eaebe882750cfb2750d830cb19fc2": {
+   "crc32": "3a717efc",
+   "left": "2026-11-24",
+   "md5": "a91af21fd24c360d5e58b9918a029c0c",
+   "name": "FinalBurn Neo (ClrMame Pro XML, Fairchild Channel F Games only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, Fairchild Channel F Games only).dat",
+   "sha256": "4a15d45916a962a07b55a5bd326aaa776bf1dfbed855e915c0158bc3fa907552",
+   "size": 30125
   },
   "3169d2bc30067da13a851ebb0241c28873189905": {
    "crc32": "9c585b89",
@@ -4306,6 +4414,15 @@
    "path": "bios/Other/mariani/CHARSET82.bmp",
    "sha256": "371424a8030c7f8078b80f5004dc1f58135a3f7fbcbf4eec0f07a5c3d4f3a77c",
    "size": 8254
+  },
+  "3489b012ddeb95f3b576c33ccbcf35fe0d94ae80": {
+   "crc32": "8445314c",
+   "left": "2026-11-24",
+   "md5": "dd05be610defbd52f5550665c1c3d71d",
+   "name": "GLideN64.6c688714.OpenGL.shaders",
+   "path": "bios/Nintendo/Nintendo 64DD/shaders/GLideN64.6c688714.OpenGL.shaders",
+   "sha256": "ec9d7b419a738a4903686391d69ae825ec0bb02af6068b06c4567468b3377f6f",
+   "size": 517644
   },
   "3491fbaeea804845a892c5767316eb62ff655780": {
    "crc32": "936d1de9",
@@ -6676,6 +6793,15 @@
    "sha256": "87c9a5ac79fee3a9905aa8fe0d7112c9e284acf634f060d3d32912d8d4151074",
    "size": 7998
   },
+  "52219399219c176476201355b964e387869490f8": {
+   "crc32": "ec0abda8",
+   "left": "2026-11-24",
+   "md5": "e7c3bd6fbfa90aadf94739db757718dd",
+   "name": "FB Alpha (ClrMame Pro XML, ZX Spectrum Games only).dat",
+   "path": "bios/Arcade/FBNeo/FB Alpha (ClrMame Pro XML, ZX Spectrum Games only).dat",
+   "sha256": "3299289f7d49aa04d0378ab25f26d2b4871ca08a372115f363b18775407ba642",
+   "size": 125628
+  },
   "524c878a440b4a09ce4b98c6a00a8adfa218e5c2": {
    "crc32": "30d14146",
    "left": "2026-10-20",
@@ -6693,6 +6819,15 @@
    "path": "bios/Commodore/Amiga/.variants/whdload_db.xml.d97aaced",
    "sha256": "ffd497274bc9960f50ba466e06ffce36f48f57a1bc65b79bd44e8f7df7e65a91",
    "size": 8530799
+  },
+  "52530b657d5e035101421eb540fd6df5c7415986": {
+   "crc32": "f4a107f9",
+   "left": "2026-11-24",
+   "md5": "bd444b3dc24b58688077103480b812d8",
+   "name": "FB Alpha (ClrMame Pro XML, Arcade only).dat",
+   "path": "bios/Arcade/FBNeo/FB Alpha (ClrMame Pro XML, Arcade only).dat",
+   "sha256": "9d5efe1c613d262a2ea4c463816f04cfd8a0394c5b1e6c212c6bd7ebdc193d97",
+   "size": 8166802
   },
   "5276001908fca61a42659a81e550e12908e19d74": {
    "crc32": "16024549",
@@ -7421,6 +7556,15 @@
    "sha256": "89749a88e1b3b07cd67316459a09d79d2b788c45df1b199f060525a2c582890e",
    "size": 4096
   },
+  "5a9d9c387162e280512f5ebd169c01125c8dda4b": {
+   "crc32": "413acfc9",
+   "left": "2026-11-24",
+   "md5": "3dbbbbac1edef40e040309f229c033ed",
+   "name": "WHDLoad.prefs_backup",
+   "path": "bios/Commodore/Amiga/WHDLoad.prefs_backup",
+   "sha256": "6b5c79789f9af9f1044320ace0bdc7878b405763f21c188dcb4ad99adf254fd2",
+   "size": 1934
+  },
   "5aad884478da3c4495e033567c68e29bd8e9e783": {
    "crc32": "907c321a",
    "left": "2026-10-20",
@@ -7878,6 +8022,15 @@
    "sha256": "19c1bfab9bd971d4c0b11bd2bd393db8104f3b358528609349f0d4fb8f6098d3",
    "size": 852432
   },
+  "60c6e393295188b8937bf975394b799c64d87e70": {
+   "crc32": "621a057a",
+   "left": "2026-11-24",
+   "md5": "733af5c6422ec0d77423047c1401b8f1",
+   "name": "Profiles.json",
+   "path": "bios/Arcade/Arcade/switch/Profiles.json",
+   "sha256": "ebb770368645197d340c4c618e243425e64ab444f128b5a7ab84761564bf5d89",
+   "size": 65635
+  },
   "60c88cbb4d43633a0d8475de828599e07f60de4a": {
    "crc32": "d6778071",
    "left": "2026-10-20",
@@ -7886,6 +8039,15 @@
    "path": "bios/Other/visual-pinball/plugins/pinmame/memmaps/maps/williams/wpc/nf_22.map.json",
    "sha256": "dbc2ae6f2a7f9d6a80c77d516a11bc41f5efe83380c9b92c14efa2bc392f4133",
    "size": 22888
+  },
+  "60e74d379269930af88866edecebd621b5edcc69": {
+   "crc32": "12cd8a33",
+   "left": "2026-11-24",
+   "md5": "e0af702cfa6da861674ac52460e72eee",
+   "name": "FinalBurn Neo (ClrMame Pro XML, Master System only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, Master System only).dat",
+   "sha256": "a88ab610183aec9f9805e8f535349dcbeed23a549cfe69e697be084d781e7332",
+   "size": 276340
   },
   "60e757ac003912bdaeed85b079213d06059ad687": {
    "crc32": "4bb85d3a",
@@ -8505,6 +8667,15 @@
    "sha256": "a73b9f1c37d64532bf82d1d790a3e0cb81a9b2accb04d866901bb7ae1970473a",
    "size": 152643,
    "successor": "ccbc64e2f5b9aefd89ff9acd7227eff230aed8ed"
+  },
+  "683a8fca9a782de05e8f6b1fcc5573ad9011a032": {
+   "crc32": "451efb01",
+   "left": "2026-11-24",
+   "md5": "758ad9874925c54e04db50f11385f515",
+   "name": "GLideN64.adc115e7.OpenGL.shaders",
+   "path": "bios/Nintendo/Nintendo 64DD/shaders/GLideN64.adc115e7.OpenGL.shaders",
+   "sha256": "1dc99c9c3f771ee27b6a43813fc1f0c19054fca56b54f53d4490f87a1ab7a60e",
+   "size": 526244
   },
   "685abb883343ec80e4fcf1ac078633cce4ca4865": {
    "crc32": "d67e623f",
@@ -9333,6 +9504,15 @@
    "sha256": "447241c0ff6b89dadc7c610ff492dd0da7e750d4d4f26bdea68f8d28a3a7b493",
    "size": 16384
   },
+  "736e11825ef6204a7da4422e9b8bcb961a4feaaf": {
+   "crc32": "98b5f4f5",
+   "left": "2026-11-24",
+   "md5": "b190a9aee9331a96eadf4e64fd84ed4e",
+   "name": "FinalBurn Neo (ClrMame Pro XML, PC-Engine only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, PC-Engine only).dat",
+   "sha256": "7e06f7f8a11f42c091b846aec4a35cd4a84c7855026a708e5fcb36070a2b0f4a",
+   "size": 125004
+  },
   "7378f2cd299b08719784fd47eca327cf974bb8d8": {
    "crc32": "77637cc4",
    "left": "2026-10-20",
@@ -9603,6 +9783,15 @@
    "sha256": "60d8cde8990aa18442859f158c1f4a262540eb7da8838b42fe3ca626cb93c083",
    "size": 18916
   },
+  "76c18deb168ad0ffd7886a130a9e74e915070782": {
+   "crc32": "72628c06",
+   "left": "2026-11-24",
+   "md5": "51b55ee3807901c015fdb93616858b8b",
+   "name": "config",
+   "path": "bios/Sharp/X68000/.variants/config",
+   "sha256": "847de5c002e031b53459f76fd630779f692ff3d1e824ad5859e439ce1069c410",
+   "size": 264
+  },
   "770c437f89762c71d5799f95455e0217d2d2176f": {
    "crc32": "890d98cb",
    "left": "2026-10-20",
@@ -9683,6 +9872,15 @@
    "path": "bios/Arcade/Arcade/a2pic.zip",
    "sha256": "a6efa64a734091a2421ddeb91f05922464c825d3f74897effe40446234febd82",
    "size": 440329
+  },
+  "77be2f6f28897f99b73d4c47bf7cd47e999fd7cd": {
+   "crc32": "5dd9a0c5",
+   "left": "2026-11-24",
+   "md5": "d407317a52f8425a6753232064d14700",
+   "name": "config",
+   "path": "bios/Sharp/X68000/.variants/config.77be2f6f",
+   "sha256": "07ab9575dfc9024cd52ebc92e2f3e64e9a0a3d713f6902eaf81974f20174d582",
+   "size": 48
   },
   "77c965bbf259038d2cd0c4cd343bad31b486330f": {
    "crc32": "74a7f80b",
@@ -10890,6 +11088,15 @@
    "sha256": "eeb6934b0cbf1e7b2b5ebea8fedc73ac653f0db5ffaa42e5ce61535830115466",
    "size": 1254733
   },
+  "85acdc4646039d919c6125d715109685865376ab": {
+   "crc32": "4860e4b4",
+   "left": "2026-11-24",
+   "md5": "3ec5ebb9a9d65cccedb73d5d326194eb",
+   "name": "_info.txt",
+   "path": "bios/Arcade/Arcade/switch/_info.txt",
+   "sha256": "58fb6bdd20229c3a1d442d416aa1d4c120eebf402bfb408a245ef406fbb84a81",
+   "size": 111
+  },
   "85c2523977bc191f33d38af7121bac676cfdffa0": {
    "crc32": "b220bd92",
    "left": "2026-10-20",
@@ -11144,6 +11351,15 @@
    "path": "bios/Other/zesarux/plus3e_sm8en3eE.rom",
    "sha256": "8a4d0d01402beafa0f939c9eaf1044ff34f82d5cf3b43dd15464b2a139025da7",
    "size": 65536
+  },
+  "89b6e90101a41097f2d9086cf5415b20a5409065": {
+   "crc32": "c6ccf3ad",
+   "left": "2026-11-24",
+   "md5": "21a0cf43e0fdf4e5a012082a852828c9",
+   "name": "FB Alpha (ClrMame Pro XML, Megadrive only).dat",
+   "path": "bios/Arcade/FBNeo/FB Alpha (ClrMame Pro XML, Megadrive only).dat",
+   "sha256": "fea32304cf41e47d65e6bbeff52abca405310fbc01291763dc2aec02bac1bb6d",
+   "size": 611983
   },
   "89d8f29048176e8faff89cd48d0eda7b4875bf49": {
    "crc32": "0f3cd1f5",
@@ -11416,6 +11632,15 @@
    "path": "bios/Other/j2me-loader/color.fsh",
    "sha256": "e8db921de586a6b6e2d4ab0e5454d4a850b6d2a88758228f09c44e65b392857f",
    "size": 891
+  },
+  "8cc8be9f6e1442c917f51cfe05600ea738a0e62c": {
+   "crc32": "53b6d23a",
+   "left": "2026-11-24",
+   "md5": "95a8db2d7f06ce0e742b57e3d35d9747",
+   "name": "FinalBurn Neo (ClrMame Pro XML, Neogeo only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, Neogeo only).dat",
+   "sha256": "6032727d0f9ded2ea8be37d48f3756550f0594d4699decdfa73448e05b4bedb9",
+   "size": 2157236
   },
   "8cfe79e680583a5b1545f8c66ec7b192b9e924c5": {
    "crc32": "e2f21cfc",
@@ -11760,6 +11985,15 @@
    "sha256": "258f83ae830da8d77b963070fbd2aaa9cc4ea0abf64a72e495827615459a7669",
    "size": 3188
   },
+  "92032b9a1685cc6230a7388f0811f72bc5f0bba2": {
+   "crc32": "e825438f",
+   "left": "2026-11-24",
+   "md5": "18da80df345547719f21555dbb2638f8",
+   "name": "GLideN64.a9ea2da6.OpenGL.keys",
+   "path": "bios/Nintendo/Nintendo 64DD/shaders/GLideN64.a9ea2da6.OpenGL.keys",
+   "sha256": "c66c682e909e41c24d5c1528cdf0710118664e314049931cbe3977c5ec1e7bd0",
+   "size": 124
+  },
   "9232dab5717fb1dcd94d165c8c65e983cbc71262": {
    "crc32": "8588f070",
    "left": "2026-10-20",
@@ -11931,6 +12165,15 @@
    "sha256": "b2e40a68bc372096c9fc2843ab31f0f5e9174cab0ced73d4a01c82442b6c66f1",
    "size": 358828
   },
+  "93dd665de9ce629dcec9709dd818ce2ad6e5fd7e": {
+   "crc32": "4c7f0188",
+   "left": "2026-11-24",
+   "md5": "27140a1c9701027e408796867782ab84",
+   "name": "GLideN64.7d94496d.OpenGL.shaders",
+   "path": "bios/Nintendo/Nintendo 64DD/shaders/GLideN64.7d94496d.OpenGL.shaders",
+   "sha256": "174ea7d5ea445e1d7c2d68a55abbe4a27ad80acb493d450669129d11acbe9379",
+   "size": 293624
+  },
   "93e0ef85abc61e73d4df4e1c6ef38d9913527268": {
    "crc32": "c6f3e735",
    "left": "2026-10-20",
@@ -11966,6 +12209,15 @@
    "path": "bios/Other/visual-pinball/plugins/pinmame/memmaps/maps/bally/as-2518-35/eballdlx.map.json",
    "sha256": "a9b5f47b80fe6663ce5f7c4d2b3a1257063480a7b061f304cc869b24460ac7f2",
    "size": 8167
+  },
+  "9478e452eebe3510a79161b16704fdc8554773a1": {
+   "crc32": "51c82ee8",
+   "left": "2026-11-24",
+   "md5": "ff2b49f2798938506e14b20ed3c1ef6c",
+   "name": "FinalBurn Neo (ClrMame Pro XML, SuprGrafx only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, SuprGrafx only).dat",
+   "sha256": "208beb3b2ff2d5ce26577f1532ef6ae5a07f4d8d01076cd98d43fc9cac15ff41",
+   "size": 3815
   },
   "947d56344b305c6a3a89c3836036def5faf2c4a8": {
    "crc32": "1404c598",
@@ -12110,6 +12362,15 @@
    "path": "bios/Game Engines/Starship/starship/starship.o2r",
    "sha256": "6e276d4f7a2476a2e5eacfc26c124bb267fe5bbed30fca9df08552aa0e6fb759",
    "size": 10733
+  },
+  "95cc29bc8648eb0028fb30ac61c3d77fea5bd48f": {
+   "crc32": "7fc048dc",
+   "left": "2026-11-24",
+   "md5": "0b8ab4c78ff0160822d0573c31c852bb",
+   "name": "FinalBurn Neo (ClrMame Pro XML, TurboGrafx16 only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, TurboGrafx16 only).dat",
+   "sha256": "bb25b9a44c40f849a54bd443891b2c506c49665c07b663e09f73fabb21d269a0",
+   "size": 32442
   },
   "95d01fcce55b96d772246b79a9d7154437e88a43": {
    "crc32": "dd1a5df6",
@@ -13077,6 +13338,15 @@
    "sha256": "74cfcdc60c5f7d5fdeccbd4650911a377b5532ac60633aa265969dbf961c2a63",
    "size": 2597
   },
+  "a167f4fbced6bab7f23544c5a1fc7676bdbc03a5": {
+   "crc32": "481309dc",
+   "left": "2026-11-24",
+   "md5": "a0e49bb7127ba194b40852a96e401ea9",
+   "name": "FinalBurn Neo (ClrMame Pro XML, ZX Spectrum Games only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, ZX Spectrum Games only).dat",
+   "sha256": "26faff9896ee1bec6e9f8cfb7b62564fc2382c220c92b22012dc8b3ad35dea77",
+   "size": 1052388
+  },
   "a1711217b5ab62aab73abf5b13bbb27b30cf54db": {
    "crc32": "3cb4f143",
    "left": "2026-10-20",
@@ -13502,6 +13772,15 @@
    "sha256": "39a940af4f25861c81a54740cb3a6332a981ad5908862cd503e117972c6bc8dd",
    "size": 33905
   },
+  "a6256a471d6f3a3e511c405df0b9642d481c0780": {
+   "crc32": "4c59d3ef",
+   "left": "2026-11-24",
+   "md5": "ea8519ce69ec9432e585c92ba5edd2e4",
+   "name": "config",
+   "path": "bios/Sharp/X68000/config",
+   "sha256": "9436c1684a0bbe727c4229378b0e92cc7a733398399f491af17ce3e6518cb2fe",
+   "size": 1196
+  },
   "a664d408fffb5738a58895ce10c3d6b113dd0f94": {
    "crc32": "bfe32485",
    "left": "2026-10-20",
@@ -13610,6 +13889,15 @@
    "path": "bios/Other/visual-pinball/plugins/pinmame/gamedefs/machines/partial/gottlieb/torch-1980.json",
    "sha256": "22e3f1f997afeacc8ff78ef86bfc84dd3d8592f1d9e456a8d679bd916e2751ce",
    "size": 1687
+  },
+  "a7cc4e3afd03df9842a9273c6f3860b660e4ba93": {
+   "crc32": "8c82c214",
+   "left": "2026-11-24",
+   "md5": "e4c10b2cc0c441747af6917305c38202",
+   "name": "FB Alpha (ClrMame Pro XML, TurboGrafx16 only).dat",
+   "path": "bios/Arcade/FBNeo/FB Alpha (ClrMame Pro XML, TurboGrafx16 only).dat",
+   "sha256": "ff2292b5b585e2b74fcf894920d6f0c8ba66aeea8016c6cfd1a18aa9c9254038",
+   "size": 20118
   },
   "a7dfc272acbd560d71b407e182c71d8958393ff8": {
    "crc32": "473bede6",
@@ -14663,6 +14951,15 @@
    "sha256": "b0ed4ddce6a305c9fcafdd99cc793dd01b87c57722b594f4125fffdffb451bf4",
    "size": 2309
   },
+  "b31cca5881bb7fa071ccb5940b1bd7a6e4056e35": {
+   "crc32": "ff550460",
+   "left": "2026-11-24",
+   "md5": "57eca542eab9ca9303e09d18819feb03",
+   "name": "GLideN64.1e462a6e.OpenGL.keys",
+   "path": "bios/Nintendo/Nintendo 64DD/shaders/GLideN64.1e462a6e.OpenGL.keys",
+   "sha256": "9725badc4407a780bda630fc61ca51f5e2705e969cabde8045eb1f0720071784",
+   "size": 464
+  },
   "b32c3cae7c8d4139606038988b4b4b12f78185d8": {
    "crc32": "1ad81696",
    "left": "2026-10-20",
@@ -14900,6 +15197,15 @@
    "path": "bios/Other/visual-pinball/plugins/pinmame/gamedefs/machines/partial/gottlieb/royal-flush-deluxe-1983.json",
    "sha256": "c182fef4453330d5d7313237f5ccb2ce39cc6a5c30e236c7461aa73ea29427a5",
    "size": 8485
+  },
+  "b762897f514d0fa124c4425ee9009007975f874d": {
+   "crc32": "814e86df",
+   "left": "2026-11-24",
+   "md5": "df0b4930b5195c74f117041c51d8773d",
+   "name": "GLideN64.7d94496d.OpenGL.keys",
+   "path": "bios/Nintendo/Nintendo 64DD/shaders/GLideN64.7d94496d.OpenGL.keys",
+   "sha256": "494a29ad0cc0b8deb802462249f51ad8c4cf7b58f98c65ec5259a183e62c8813",
+   "size": 244
   },
   "b7ab295d15bd8c103c42eab7fb7c7ec447915b40": {
    "crc32": "73473af5",
@@ -15274,6 +15580,15 @@
    "sha256": "7f2805572c0b81c4f2944cb6f46db3fab4df6876cde1a4537275b2f9138f28c4",
    "size": 2472
   },
+  "bbe573720ab35c8ea37901a9f9cbc11542926c8e": {
+   "crc32": "9767a5c3",
+   "left": "2026-11-24",
+   "md5": "da49e4ccb61b6dda187d4e9ad544383f",
+   "name": "FinalBurn Neo (ClrMame Pro XML, FDS Games only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, FDS Games only).dat",
+   "sha256": "9ff01837273e1732dbfdf05f5efe0b3872318140acb1d4c7e2760170f3e95f68",
+   "size": 82980
+  },
   "bbf6028d6da82e74765954fe150515e997a9bfcf": {
    "crc32": "d59e1cd8",
    "left": "2026-10-20",
@@ -15510,6 +15825,15 @@
    "path": "bios/Other/visual-pinball/plugins/pinmame/memmaps/maps/stern/sam/tf_180.map.json",
    "sha256": "a4d159e19d8788475b64be95fa6d01f9b1a579b8185f3edb77bb901fe6cf9619",
    "size": 5462
+  },
+  "bea81d1203000d8637969d59b1b89094b9463092": {
+   "crc32": "6da2f808",
+   "left": "2026-11-24",
+   "md5": "097fe2bf51e907edc71f2577bcf8212c",
+   "name": "FinalBurn Neo (ClrMame Pro XML, MSX 1 Games only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, MSX 1 Games only).dat",
+   "sha256": "9266a237a53d7abeddf885b96ae3ec60a2dc549be2327a8585248b9dc65a3766",
+   "size": 958324
   },
   "bec2fa70a0dff45e7dc9e221d6038f8d5a814a40": {
    "crc32": "b0645257",
@@ -16180,6 +16504,15 @@
    "sha256": "e1008c6ea910a67071ef5825a9dfe5324fbacd15af2e050d0a5325e13f880958",
    "size": 102765
   },
+  "c7139e7f98c2109adb05703c8d3ba7b3bad3134d": {
+   "crc32": "7aa253e0",
+   "left": "2026-11-24",
+   "md5": "df28596f96886f70e64006c95097691c",
+   "name": "GLideN64.1e462a6e.OpenGL.shaders",
+   "path": "bios/Nintendo/Nintendo 64DD/shaders/GLideN64.1e462a6e.OpenGL.shaders",
+   "sha256": "a463253e36e2d0d1e33fde43389adeb6168253228b91c1b3e78c209a07e04627",
+   "size": 616578
+  },
   "c720c6891db40cd2cf80eb704f0617ea1d050b30": {
    "crc32": "1f5ccfc5",
    "left": "2026-10-20",
@@ -16416,6 +16749,15 @@
    "path": "bios/Other/visual-pinball/plugins/pinmame/gamedefs/machines/author-ready/stern/metallica-premium-limited-edition-2013.json",
    "sha256": "2b2b5a17890002ed1b85055ca188c9060e8a7880e340f37673db19f16f85c1fd",
    "size": 405347
+  },
+  "c92c4b644995178820e32d04350f6aa651157db5": {
+   "crc32": "72f8b314",
+   "left": "2026-11-24",
+   "md5": "755e41c84b830587eb12e2dc61a3b430",
+   "name": "FinalBurn Neo (ClrMame Pro XML, ColecoVision only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, ColecoVision only).dat",
+   "sha256": "54dba9d0dc5410eb804c7f88ee2725b848c940f3ec1b8c9ec25b5641ca5816ee",
+   "size": 322195
   },
   "c930f217bfe4f7cf3899c77742f3c514dfb94ab1": {
    "crc32": "dce7284e",
@@ -16968,6 +17310,15 @@
    "size": 501051,
    "successor": "8d3a4f685f8c0e82e4e16f3b5c90f0dff60481b5"
   },
+  "ce95266fb5a357b60fcfebf2e23e2b628897b5b4": {
+   "crc32": "226b3d58",
+   "left": "2026-11-24",
+   "md5": "01487823b500ce795f48904d18f9f93b",
+   "name": "FB Alpha (ClrMame Pro XML, MSX 1 Games only).dat",
+   "path": "bios/Arcade/FBNeo/FB Alpha (ClrMame Pro XML, MSX 1 Games only).dat",
+   "sha256": "07a235f607d23d18e95b88ad32652e278f20018a521f918cc48b448d7ba5449c",
+   "size": 533180
+  },
   "ce9ab342ac870f9c5bcd53671cca05263ef27f0d": {
    "crc32": "8ab62620",
    "left": "2026-10-20",
@@ -17204,6 +17555,15 @@
    "path": "bios/Other/nethersx2/assets/shaders/opengl/merge.glsl",
    "sha256": "0af2a35c907c0328e9d33aa2acc05ebf04b5ebbc51b28837c37d88d7b440ab2e",
    "size": 455
+  },
+  "d1ba776e1ec56281fee157cb2e44487b1db18b53": {
+   "crc32": "f46151c3",
+   "left": "2026-11-24",
+   "md5": "e5069aba7da5b2c0f13091360d84068a",
+   "name": "FB Alpha (ClrMame Pro XML, ColecoVision only).dat",
+   "path": "bios/Arcade/FBNeo/FB Alpha (ClrMame Pro XML, ColecoVision only).dat",
+   "sha256": "41a2c9d826aba9167af2e3cee14fc0893bfe50942ffd35376385c48cbbac7395",
+   "size": 128819
   },
   "d1bdf707afe393153e48301694e573d44a2ce5c1": {
    "crc32": "73b8c20e",
@@ -17529,6 +17889,15 @@
    "sha256": "42f8d11ed06570f7a919729117a966f7e65ec1ef3461a28b26f8f0eae446eefe",
    "size": 37320
   },
+  "d6428808fe4f59c5035d800a892d3efb814950b2": {
+   "crc32": "5f9dd698",
+   "left": "2026-11-24",
+   "md5": "162da43c1d89d7797c1f7ee54a79e005",
+   "name": "FinalBurn Neo (ClrMame Pro XML, Game Gear only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, Game Gear only).dat",
+   "sha256": "de389905e25ec50cf60ac33a19704fff957364c26fa670ddc9f818630963c407",
+   "size": 312429
+  },
   "d668cbe8712f062bcc6af898ebb2937b73dcfd2d": {
    "crc32": "c577735e",
    "left": "2026-10-20",
@@ -17794,6 +18163,15 @@
    "sha256": "2eafc00b0c0a9911153130cdc8390a9cc67813df9b86b49d5c50cb11806b5e92",
    "size": 16384,
    "successor": "0b4425149ca93dddf8d03da3767635dc3f1eecb8"
+  },
+  "d9c9e362a6be348390e60d5008c59d3ea4f70ca4": {
+   "crc32": "35d3c5e4",
+   "left": "2026-11-24",
+   "md5": "1e136665cc76332b568b5c09a9c20193",
+   "name": "FinalBurn Neo (ClrMame Pro XML, Megadrive only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, Megadrive only).dat",
+   "sha256": "da49b6c9255caac991d22c6eb5418ea127bb27e08df69464f6bf1f19ee8715b5",
+   "size": 1198972
   },
   "d9cd618bf24c15952e6fd3935e7ae51f7992c390": {
    "crc32": "a9263846",
@@ -18122,6 +18500,15 @@
    "sha256": "f62fb675f094383a4eafc37cb19ecdb0bc4028a633fc5b70e5b6e278ab50e23c",
    "size": 1707
   },
+  "dd842826759525e94ae808d880e9524543a99a96": {
+   "crc32": "873a1aad",
+   "left": "2026-11-24",
+   "md5": "389c5a776907057ee4ad1dcc31824f6c",
+   "name": "GLideN64.adc115e7.OpenGL.keys",
+   "path": "bios/Nintendo/Nintendo 64DD/shaders/GLideN64.adc115e7.OpenGL.keys",
+   "sha256": "eb0c03da5fe877043a573df036dadc274a83121d27966a7ebea60318d2a72dce",
+   "size": 404
+  },
   "dddd90b8fb4091420a4b98b97d869d561ae922f2": {
    "crc32": "1aeb8e51",
    "left": "2026-10-20",
@@ -18437,6 +18824,15 @@
    "path": "bios/Other/visual-pinball/plugins/pinmame/memmaps/maps/gottlieb/system3/stargate.map.json",
    "sha256": "b3241eeec4cd758645f31453415fd2e04ac7c5ebaa3550fca6e61d472598616a",
    "size": 3451
+  },
+  "e2838eddcf5272c9281d251ca48c1a46e85471f2": {
+   "crc32": "9140fa1b",
+   "left": "2026-11-24",
+   "md5": "1aa780768f72cd4d466ff5231e881877",
+   "name": "FB Alpha (ClrMame Pro XML, Sega SG-1000 only).dat",
+   "path": "bios/Arcade/FBNeo/FB Alpha (ClrMame Pro XML, Sega SG-1000 only).dat",
+   "sha256": "eb3e1256bd3c94c9a3770cf8fc462996a009b1b42a4b5de6f9e4b5377e5a093b",
+   "size": 47336
   },
   "e2a7b601a94544961884a275d1596b042dbfc75e": {
    "crc32": "20a8c200",
@@ -19203,6 +19599,15 @@
    "sha256": "9bb1b6740dbcaf2f712dcb8ce2ec70c5f96f90cb9a44681ef7bb3f1a25dbace9",
    "size": 1646
   },
+  "ed8ce6bec53032e7a4dbe743bdcc4883edaf2a5c": {
+   "crc32": "d88426d7",
+   "left": "2026-11-24",
+   "md5": "2bce9666b04eaa31b6ef23733b373f94",
+   "name": "GLideN64.6c688714.OpenGL.keys",
+   "path": "bios/Nintendo/Nintendo 64DD/shaders/GLideN64.6c688714.OpenGL.keys",
+   "sha256": "27c7aa8a329dded2b5803a4851417742f6f902eaf1fce176e3ef656936fe1c04",
+   "size": 384
+  },
   "ed9a60d56ddcc91514b033c16f2062638c3e6eeb": {
    "crc32": "ba5831cb",
    "left": "2026-10-20",
@@ -19503,6 +19908,15 @@
    "path": "bios/Other/visual-pinball/plugins/pinmame/memmaps/maps/zaccaria/gen2/pinchamp.map.json",
    "sha256": "9f3cd2cc6184443748e1874105812f586482fcefbea305890b9696106ac84703",
    "size": 1412
+  },
+  "f1ad917e0affaeb8d2114c7ecd02b9f938c3cbd9": {
+   "crc32": "7389b815",
+   "left": "2026-11-24",
+   "md5": "bfd8292fbf0a251647a23c5cb310a97a",
+   "name": "choose-your-dsi-sd-images-size.zip",
+   "path": "bios/Nintendo/Nintendo DSi/choose-your-dsi-sd-images-size.zip",
+   "sha256": "36e2e064101c4a9d3bab3e753f65be0795a11b7f643eb7d45477fb45775a068c",
+   "size": 3518551
   },
   "f1b54ff1633fe80ce70830ec2d6d75a4c3e0c15c": {
    "crc32": "09fee171",
@@ -19812,6 +20226,15 @@
    "path": "bios/Other/visual-pinball/plugins/pinmame/memmaps/maps/zaccaria/gen1/strapids.map.json",
    "sha256": "946bc214c9bedead290b09a87b08a0c48d50942cecaacd4800275ef9b90cdf51",
    "size": 1378
+  },
+  "f64190e28c9bc9013b4d267825818f5d1f2cde30": {
+   "crc32": "16940ddc",
+   "left": "2026-11-24",
+   "md5": "a0d02bbdf7910c706f226eddba42f9d5",
+   "name": "GLideN64.a9ea2da6.OpenGL.shaders",
+   "path": "bios/Nintendo/Nintendo 64DD/shaders/GLideN64.a9ea2da6.OpenGL.shaders",
+   "sha256": "9c8eca2a3648b24681262fb0e67ca212517b63a82157d5642964aad4c38a0f2d",
+   "size": 108066
   },
   "f645d7a3a00321c84490243690caa4415b3803f2": {
    "crc32": "4c14b502",
@@ -20185,6 +20608,15 @@
    "sha256": "ff802d53d9f5ae0c5d73dae74b025c8021420005cedb0d870348a77c91f14db7",
    "size": 410197
   },
+  "fa157c96fa4d6284d180edcf45c24fb7522e0054": {
+   "crc32": "8ca98605",
+   "left": "2026-11-24",
+   "md5": "aa42bc078eb59556a3628ad395dbcdf0",
+   "name": "readme.txt",
+   "path": "bios/Arcade/Arcade/neocd/readme.txt",
+   "sha256": "a185cf22d42ff7c7e66141079d0432dbdf30883d3e4a91d6a1276ce825000eff",
+   "size": 27915
+  },
   "fa334ab5ba6366bd28168860c913e6365b9fec96": {
    "crc32": "22b3f406",
    "left": "2026-10-20",
@@ -20194,6 +20626,15 @@
    "sha256": "275832cdb077c22883192f5aaeb8f76547f4dce786370f10b2d54c46a8ed3c5e",
    "size": 148364,
    "successor": "ccbc64e2f5b9aefd89ff9acd7227eff230aed8ed"
+  },
+  "fa36171d1e13c15eb3fa8f4b91ca695f9c6030df": {
+   "crc32": "0eee7ecb",
+   "left": "2026-11-24",
+   "md5": "78ebd4c235c40af2929fe04e57d65992",
+   "name": "FinalBurn Neo (ClrMame Pro XML, NES Games only).dat",
+   "path": "bios/Arcade/FBNeo/FinalBurn Neo (ClrMame Pro XML, NES Games only).dat",
+   "sha256": "1a8bfd49cf53f5f182b82a5868689828f25954920e80c24b77c73a80fcbd2427",
+   "size": 860993
   },
   "fa40404e0551e8f8376c6fbfa086147b498d0c1b": {
    "crc32": "63e9e98b",
@@ -20367,6 +20808,15 @@
    "sha256": "b6f2ed78a427aad602bec6a78d274a14424139f9e5591d959c054ee8399d0628",
    "size": 27033
   },
+  "fd06c94ed8a4a389d0f746a0e161aa9fb79ccb72": {
+   "crc32": "1fd2cc0b",
+   "left": "2026-11-24",
+   "md5": "6caa36fbde4bb7b75849588e437c5eff",
+   "name": "FB Alpha (ClrMame Pro XML, SuprGrafx only).dat",
+   "path": "bios/Arcade/FBNeo/FB Alpha (ClrMame Pro XML, SuprGrafx only).dat",
+   "sha256": "5e8aab94903250151880285af34b5f3feca1686627288e964268487d1b1d6a64",
+   "size": 2143
+  },
   "fd2eac27510d37b350b55a39d3598394b2fa46ea": {
    "crc32": "9b5ab702",
    "left": "2026-10-20",
@@ -20411,6 +20861,15 @@
    "path": "bios/Other/future-pinball-fploader/XML/fp-p2.2.xml",
    "sha256": "27bb21df2126dd5efdfa6b4df3f88de052ad6e2a511d64f7b287fde076a6621b",
    "size": 6267
+  },
+  "fd650b4829ec953fcff2eba89a655259fc4d5a9c": {
+   "crc32": "ab2d2a0f",
+   "left": "2026-11-24",
+   "md5": "507ee0faf818b15826301fa0de43ae55",
+   "name": "FB Alpha (ClrMame Pro XML, Game Gear only).dat",
+   "path": "bios/Arcade/FBNeo/FB Alpha (ClrMame Pro XML, Game Gear only).dat",
+   "sha256": "7dc552a5164ca30d5458654a33fadc73945703d5529c7915766e1db3de9202b2",
+   "size": 199119
   },
   "fd91f8c1337962197f5058dc9fbea5da2bac5ae6": {
    "crc32": "073b5596",
@@ -20484,6 +20943,15 @@
    "sha256": "95ed81be09ad19f5933ae743cc4dec859190f970bd7652aee2099bcbe6ff4f72",
    "size": 108464,
    "successor": "505d61d5b154c1e300ce82834f7a3190b754aaa4"
+  },
+  "fe3d7375cf2edb3d465b6255e09a6b1b385206f5": {
+   "crc32": "bf2f29ba",
+   "left": "2026-11-24",
+   "md5": "e6712ff5769f2d29f746b272b4ca7cbd",
+   "name": "FB Alpha (ClrMame Pro XML, PC-Engine only).dat",
+   "path": "bios/Arcade/FBNeo/FB Alpha (ClrMame Pro XML, PC-Engine only).dat",
+   "sha256": "42b69c8dd4a01825dd783b0090e1a7a9702cec461e17ac981f978988767ad047",
+   "size": 71558
   },
   "fe41d7b5d5a55789124c8e035a4ea7e89cb10b41": {
    "crc32": "d4bc3c7f",

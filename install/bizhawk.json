@@ -7,7 +7,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "2.11.1",
-  "generated": "2026-11-13T00:03:18Z",
+  "generated": "2026-11-24T09:06:59Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -1324,7 +1324,7 @@
       "sha1": "5130243429b40b01a14e1304d0394b8459a6fbae",
       "sha256": "8e0413c324a748ca2e493652b8089aa1db129e1ba115b5f58a99e32cebe063e1",
       "size": 1024,
-      "repo_path": "bios/Philips/Videopac/O2_G7400_bios.bin",
+      "repo_path": "bios/Philips/Videopac+/O2_G7400_bios.bin",
       "cores": null,
       "systems": [
         "philips-videopac"

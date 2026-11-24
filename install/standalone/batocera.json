@@ -18629,7 +18629,7 @@
         "sha1": "c80e4272f3ff5480d42ef33e6e833785fc430a93",
         "sha256": "611b3df0c0672bd6e0a643898e2d28efb134d274b53cc7f015ccc892cf946fc9",
         "size": 25702245,
-        "repo_path": "bios/3D Realms/Shadow Warrior/.variants/SW.GRP.c80e4272",
+        "repo_path": "bios/3D Realms/Shadow Warrior/.variants/SW.GRP.4a7cb256",
         "cores": [
           "raze"
         ]

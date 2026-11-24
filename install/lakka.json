@@ -7,7 +7,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "v6.1",
-  "generated": "2026-11-13T11:31:17Z",
+  "generated": "2026-11-24T10:38:35Z",
   "base_destination": "system",
   "detect": [
     {
@@ -6081,7 +6081,7 @@
       "sha1": "30b97b2670b79d0de41cba190324c504846c6fa1",
       "sha256": "ff29929e3e094459f6358a5a3ca4d2dabe64f64e2cade0faa407969d83e096bf",
       "size": 16107,
-      "repo_path": "bios/Arcade/Arcade/.variants/decocass.zip.30b97b26",
+      "repo_path": "bios/Arcade/Arcade/.variants/decocass.zip.b7e1189b",
       "cores": null,
       "systems": [
         "arcade"
@@ -6357,7 +6357,7 @@
       "sha1": "c25686d24c7205473741f948f8a9df9906823145",
       "sha256": "c89b60537573183cc93e245f19ea4d4cf7c60d9a37f5c41a765d5732cb437fa3",
       "size": 5758,
-      "repo_path": "bios/Arcade/Arcade/.variants/fdsbios.zip.c25686d2",
+      "repo_path": "bios/Arcade/Arcade/.variants/fdsbios.zip.c26bf174",
       "cores": null,
       "systems": [
         "arcade",
@@ -6384,7 +6384,7 @@
       "sha1": "30c6ad697439de7c2158192ecdb48f5edd37478e",
       "sha256": "efd00af9a44241c2aa094d5f1977aa68fc0bb8467dbcf82f32762977d37a6f17",
       "size": 328397,
-      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.30c6ad69",
+      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.f5cdce5b",
       "cores": null,
       "systems": [
         "arcade"
@@ -6394,7 +6394,7 @@
           "sha1": "30c6ad697439de7c2158192ecdb48f5edd37478e",
           "sha256": "efd00af9a44241c2aa094d5f1977aa68fc0bb8467dbcf82f32762977d37a6f17",
           "size": 328397,
-          "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.30c6ad69",
+          "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.f5cdce5b",
           "cores": [
             "fbneo"
           ]
@@ -6545,7 +6545,7 @@
           "sha1": "4f28af31ca0defdd73d80edec2fa296908e624dc",
           "sha256": "6aa507a5dc33c45d2592bf2bc77eb3e497762221ddd9225f18583a5c55d38667",
           "size": 214681,
-          "repo_path": "bios/Arcade/Arcade/.variants/neocdz.zip.4f28af31",
+          "repo_path": "bios/Arcade/Arcade/.variants/neocdz.zip.62d56b12",
           "systems": [
             "arcade"
           ]
@@ -8493,7 +8493,7 @@
           "sha1": "7c4cd0a5451eedeac9b328f48408dbc312198ccf",
           "sha256": "9c828fe883923374a15fc9cd708555688c5d9b9beeeaf6d16aceff0669c57502",
           "size": 2367241,
-          "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-fast.jar",
+          "repo_path": "bios/Java/J2ME/SquirrelJME/squirreljme-0.3.0-fast.jar",
           "cores": [
             "squirreljme"
           ]
@@ -8516,7 +8516,7 @@
           "sha1": "b411c128bfd8411f339a49bbcb1c9e97189c2161",
           "sha256": "a377398e6a62326c3d7b412f8a01ee769250e31402e82e453da6a5244f001ba4",
           "size": 3772058,
-          "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-slow-test.jar",
+          "repo_path": "bios/Java/J2ME/SquirrelJME/squirreljme-0.3.0-slow-test.jar",
           "cores": [
             "squirreljme"
           ]
@@ -8539,7 +8539,7 @@
           "sha1": "3a23de6999b94fc088bdd9c9e4a73781a1d42233",
           "sha256": "433aea9d2f418dc1ac7e8e9f7181ff37fb502822438898d09a12998deb2e152a",
           "size": 3129653,
-          "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-slow.jar",
+          "repo_path": "bios/Java/J2ME/SquirrelJME/squirreljme-0.3.0-slow.jar",
           "cores": [
             "squirreljme"
           ]
@@ -8707,7 +8707,7 @@
       "sha1": "5130243429b40b01a14e1304d0394b8459a6fbae",
       "sha256": "8e0413c324a748ca2e493652b8089aa1db129e1ba115b5f58a99e32cebe063e1",
       "size": 1024,
-      "repo_path": "bios/Philips/Videopac/O2_G7400_bios.bin",
+      "repo_path": "bios/Philips/Videopac+/O2_G7400_bios.bin",
       "cores": null,
       "systems": [
         "magnavox-odyssey2",
@@ -8718,7 +8718,7 @@
           "sha1": "5130243429b40b01a14e1304d0394b8459a6fbae",
           "sha256": "8e0413c324a748ca2e493652b8089aa1db129e1ba115b5f58a99e32cebe063e1",
           "size": 1024,
-          "repo_path": "bios/Philips/Videopac/O2_G7400_bios.bin",
+          "repo_path": "bios/Philips/Videopac+/O2_G7400_bios.bin",
           "cores": [
             "o2em"
           ]
@@ -8797,7 +8797,7 @@
       "sha1": "bf5fb954db868e523febccc68549ed9187961076",
       "sha256": "0a09940701f40647a2715271b43c9ab0d82bd488871427ad627b7e0f462f5dda",
       "size": 33152,
-      "repo_path": "bios/Microsoft/MSX/.variants/CARTS.SHA.bf5fb954",
+      "repo_path": "bios/Microsoft/MSX/.variants/CARTS.SHA.74b0f217",
       "cores": null,
       "systems": [
         "microsoft-msx"
@@ -8807,7 +8807,7 @@
           "sha1": "bf5fb954db868e523febccc68549ed9187961076",
           "sha256": "0a09940701f40647a2715271b43c9ab0d82bd488871427ad627b7e0f462f5dda",
           "size": 33152,
-          "repo_path": "bios/Microsoft/MSX/.variants/CARTS.SHA.bf5fb954",
+          "repo_path": "bios/Microsoft/MSX/.variants/CARTS.SHA.74b0f217",
           "cores": [
             "fmsx"
           ]
@@ -9287,7 +9287,7 @@
       "sha1": "3b31fc68fa7f47b21c1a1cb027b86b9e87afbfff",
       "sha256": "cf0b48f5541f5efd54a006d1a6042dd7ce613ccc69e13f2f41ca678569b5d650",
       "size": 32768,
-      "repo_path": "bios/NEC/PC-88/.variants/N88.ROM.3b31fc68",
+      "repo_path": "bios/NEC/PC-88/.variants/N88.ROM.4f984e04",
       "cores": null,
       "systems": [
         "nec-pc-88"
@@ -9310,7 +9310,7 @@
       "sha1": "5b922ed9de07d2a729bdf1da7b57c50ddf08809a",
       "sha256": "11c3c727d7d12d0c7e044dd02ce154a5715bd7a2b8a9007132645962c7803881",
       "size": 32768,
-      "repo_path": "bios/NEC/PC-88/.variants/N88N.ROM.5b922ed9",
+      "repo_path": "bios/NEC/PC-88/.variants/N88N.ROM.2ff07b87",
       "cores": null,
       "systems": [
         "nec-pc-88"
@@ -10445,7 +10445,7 @@
       "sha1": "239eacd86527ff9a75aeb7282da65797baeef010",
       "sha256": "92f1411fb2c3e6c37bb6a5819d01f84f945fda31cfe26db8c81d997ed471a62e",
       "size": 2097152,
-      "repo_path": "bios/Nintendo/GameCube/.variants/gc-ntsc-11.bin",
+      "repo_path": "bios/Nintendo/GameCube/.variants/gc-ntsc-11.bin.019e3982",
       "cores": null,
       "systems": [
         "nintendo-gamecube"
@@ -10469,7 +10469,7 @@
       "sha1": "f27c63e5394e2fd1606f70df004c4fc2d6027700",
       "sha256": "a782522d3b941da91b0f7ef23adc3120efa8b74e0e23a0deecd2a98d79343176",
       "size": 2097152,
-      "repo_path": "bios/Nintendo/GameCube/.variants/gc-pal-10.bin",
+      "repo_path": "bios/Nintendo/GameCube/.variants/gc-pal-10.bin.0cdda509",
       "cores": null,
       "systems": [
         "nintendo-gamecube"
@@ -10481,7 +10481,7 @@
       "sha1": "f3cd0c7c61cbcefa85e7de3aff4cfa50bc508714",
       "sha256": "7973d3f9922b7d7f2b71648939036bc984ac9feee92ed10b5175803aeb8a4696",
       "size": 2097152,
-      "repo_path": "bios/Nintendo/GameCube/.variants/gc-pal-11.bin",
+      "repo_path": "bios/Nintendo/GameCube/.variants/gc-pal-11.bin.339848a0",
       "cores": null,
       "systems": [
         "nintendo-gamecube"
@@ -10617,7 +10617,7 @@
       "sha1": "c116d867ba001dcd6bf6d399ff4bf38d340f556c",
       "sha256": "a1e269cfdc6b82d5a55baab5a0bbbb3b9f953ad92729e0d5ec50dbc2746a2c47",
       "size": 4096,
-      "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.c116d867",
+      "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.9a6514b8",
       "cores": null,
       "systems": [
         "nintendo-gamecube"
@@ -10627,7 +10627,7 @@
           "sha1": "c116d867ba001dcd6bf6d399ff4bf38d340f556c",
           "sha256": "a1e269cfdc6b82d5a55baab5a0bbbb3b9f953ad92729e0d5ec50dbc2746a2c47",
           "size": 4096,
-          "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.c116d867",
+          "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.9a6514b8",
           "cores": [
             "dolphin",
             "ishiiruka"
@@ -10640,7 +10640,7 @@
       "sha1": "3c6cc6e04fdd0b2a392d7a6ed769455444846be7",
       "sha256": "49d987ee1eab29a157425b82d54516957a81e1bac247c8834e494642605c3e8c",
       "size": 8192,
-      "repo_path": "bios/Nintendo/GameCube/.variants/dsp_rom.bin.3c6cc6e0",
+      "repo_path": "bios/Nintendo/GameCube/.variants/dsp_rom.bin.23645d44",
       "cores": null,
       "systems": [
         "nintendo-gamecube"
@@ -10650,7 +10650,7 @@
           "sha1": "3c6cc6e04fdd0b2a392d7a6ed769455444846be7",
           "sha256": "49d987ee1eab29a157425b82d54516957a81e1bac247c8834e494642605c3e8c",
           "size": 8192,
-          "repo_path": "bios/Nintendo/GameCube/.variants/dsp_rom.bin.3c6cc6e0",
+          "repo_path": "bios/Nintendo/GameCube/.variants/dsp_rom.bin.23645d44",
           "cores": [
             "dolphin",
             "ishiiruka"
@@ -10912,7 +10912,7 @@
       "sha1": "26322f182540211e9b5e3647675b7c593706ae2b",
       "sha256": "914584ee6964e8b4cc4ff092874052e7baf13708cfb3f35940342421fcf1bedc",
       "size": 1009534,
-      "repo_path": "bios/Nintendo/NES/.variants/NstDatabase.xml.26322f18",
+      "repo_path": "bios/Nintendo/NES/.variants/NstDatabase.xml.7bfe8c05",
       "cores": null,
       "systems": [
         "nintendo-nes"
@@ -12092,7 +12092,7 @@
       "sha1": "5d0b1b55b0d0958a5c9069c3219d4da5a87a6b93",
       "sha256": "315306e1cbb232fa1cb35219a43e3f4ebe997f6da9627b56ad680a708db52f9a",
       "size": 660996,
-      "repo_path": "bios/Philips/CD-i/.variants/cdimono1.zip.5d0b1b55",
+      "repo_path": "bios/Philips/CD-i/.variants/cdimono1.zip.c59f9264",
       "cores": null,
       "systems": [
         "philips-cdi"
@@ -12137,7 +12137,7 @@
       "sha1": "718c1a00d38e0810a1ad0ffde79f73447f846f01",
       "sha256": "dc4e7723aa4183456d135db72cf5ee0e6ce31bbbda892586588f7a20d9270904",
       "size": 9523360,
-      "repo_path": "bios/ScummVM/.variants/scummvm.zip.a93f1c4b",
+      "repo_path": "bios/ScummVM/.variants/scummvm.zip.a17e0e01",
       "cores": null,
       "systems": [
         "scummvm"
@@ -13191,7 +13191,7 @@
       "sha1": "f2a730530f4989ca0e8860aa4e455b6a5fe69e1d",
       "sha256": "cb7d12703030f53a1578210ca7c4979f95bda22970e6df9d2a5eb52b6461ea92",
       "size": 715730,
-      "repo_path": "bios/Arcade/Arcade/.variants/airlbios.zip",
+      "repo_path": "bios/Arcade/Arcade/.variants/airlbios.zip.7a11bfe0",
       "cores": null,
       "systems": [
         "sega-dreamcast-arcade"
@@ -13286,7 +13286,7 @@
       "sha1": "782c303cbdfab1027b04db74a63e27bdad5e0c53",
       "sha256": "43d2c16c6a5b19a778b96a4e7d00468ee461b2c141f9d735427f7a7d893ba692",
       "size": 1479106,
-      "repo_path": "bios/Arcade/Arcade/.variants/hod2bios.zip",
+      "repo_path": "bios/Arcade/Arcade/.variants/hod2bios.zip.f4011d31",
       "cores": null,
       "systems": [
         "sega-dreamcast-arcade"
@@ -13311,7 +13311,7 @@
       "sha1": "c96711c01c0158f161791d6fbe75d88329e8ac0a",
       "sha256": "9f3ff37a68bef27cd9ce8f5603ce44779b402cca40e653ae3633fff78d179392",
       "size": 9321533,
-      "repo_path": "bios/Arcade/Arcade/.variants/naomi.zip",
+      "repo_path": "bios/Arcade/Arcade/.variants/naomi.zip.526eda1e",
       "cores": null,
       "systems": [
         "sega-dreamcast-arcade"
@@ -13336,7 +13336,7 @@
       "sha1": "2962e338ccc9f66f29b409f73ca27aeee79633ac",
       "sha256": "a852233a97a2282e331dababb83d2dbf14bdef5253bf590adeaf02fbbfe3d64c",
       "size": 7022501,
-      "repo_path": "bios/Sega/Dreamcast/.variants/naomi2.zip.2962e338",
+      "repo_path": "bios/Sega/Dreamcast/.variants/naomi2.zip.c50072cb",
       "cores": null,
       "systems": [
         "sega-dreamcast-arcade"
@@ -15707,7 +15707,7 @@
       "sha1": "712816a3c41baf4129e23d645305a536e03d69de",
       "sha256": "f885f2cc79b5c0120ca316b0db360183c2b9a60bc727cbe211b7518e12bd5548",
       "size": 955352,
-      "repo_path": "bios/SNK/Neo Geo CD/.variants/neocdz.zip.712816a3",
+      "repo_path": "bios/SNK/Neo Geo CD/.variants/neocdz.zip.b31a246b",
       "cores": null,
       "systems": [
         "snk-neogeo-cd"
@@ -15717,7 +15717,7 @@
           "sha1": "712816a3c41baf4129e23d645305a536e03d69de",
           "sha256": "f885f2cc79b5c0120ca316b0db360183c2b9a60bc727cbe211b7518e12bd5548",
           "size": 955352,
-          "repo_path": "bios/SNK/Neo Geo CD/.variants/neocdz.zip.712816a3",
+          "repo_path": "bios/SNK/Neo Geo CD/.variants/neocdz.zip.b31a246b",
           "cores": [
             "geolith"
           ]
@@ -15758,7 +15758,7 @@
           "sha1": "712816a3c41baf4129e23d645305a536e03d69de",
           "sha256": "f885f2cc79b5c0120ca316b0db360183c2b9a60bc727cbe211b7518e12bd5548",
           "size": 955352,
-          "repo_path": "bios/SNK/Neo Geo CD/.variants/neocdz.zip.712816a3",
+          "repo_path": "bios/SNK/Neo Geo CD/.variants/neocdz.zip.b31a246b",
           "cores": [
             "geolith"
           ]
@@ -18626,7 +18626,7 @@
       "sha1": "57369df9ca82a460e596cea7835c5a0797dee668",
       "sha256": "efa94cb7b9208dc6812bb9407dc986560e523cce57f511eff30942f76b7288bf",
       "size": 1737799,
-      "repo_path": "bios/Sony/PlayStation 2/.variants/GameIndex.yaml.57369df9",
+      "repo_path": "bios/Sony/PlayStation 2/.variants/GameIndex.yaml.526291c9",
       "cores": null,
       "systems": [
         "sony-playstation-2"
@@ -94753,7 +94753,7 @@
       "sha1": "1ef3956f7f918873fb9b031339bba45d1e5e5878",
       "sha256": "01f43988d825d48a46915199b6cd42ae1505bdf83d642511204c50ecdf95c741",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/.variants/KANJI.ROM.a068cba9",
+      "repo_path": "bios/Microsoft/MSX/.variants/KANJI.ROM.5353336d",
       "cores": [
         "openmsx-libretro"
       ],
@@ -99981,7 +99981,7 @@
       "sha1": "5b851c281f00ee6e1a3895cd19659eb3990bfb05",
       "sha256": "b5673896e0ff174b3030525668483a1a32657e46ee22213c6773f9ef11c961ae",
       "size": 192,
-      "repo_path": "bios/RPG Maker/wildmidi.cfg",
+      "repo_path": "bios/RPG Maker/easyrpg/wildmidi.cfg",
       "cores": [
         "easyrpg"
       ],
@@ -101036,7 +101036,7 @@
       "sha1": "cbdb2ec6510fd760d2b6a0ad4c1f54b9f6b80b76",
       "sha256": "641100cf14081dc13d078cf8860213f3c345a2a7f87a9d67a62efd48e29d93cb",
       "size": 50801,
-      "repo_path": "bios/Arcade/MAME/.variants/megaplay.zip",
+      "repo_path": "bios/Arcade/MAME/.variants/megaplay.zip.1b5e4572",
       "cores": [
         "mame",
         "mamearcade"
@@ -113824,7 +113824,7 @@
       "sha1": "374ccff4cfa71cab6e5c925d4377a126bce5cd20",
       "sha256": "e9ccbeb29e1c78af1a485c2ccf7403a6fa5b015e442c159fdd4e767595a08ef9",
       "size": 128088,
-      "repo_path": "bios/Arcade/MAME/.variants/newbrain_eim.zip.0fb3e93f",
+      "repo_path": "bios/Arcade/Arcade/.variants/newbrain_eim.zip.0fb3e93f",
       "cores": [
         "mame"
       ],
@@ -115021,7 +115021,7 @@
       "sha1": "7e37e3dae0c4ddff1912bf02fca3fb2019326b78",
       "sha256": "cb689855f2414c5c09e6841ec42898eb15ffd32f82a4a24e488294526fac8159",
       "size": 541045,
-      "repo_path": "bios/Arcade/MAME/.variants/ql_sqmouse.zip.25fbfbc4",
+      "repo_path": "bios/Arcade/Arcade/.variants/ql_sqmouse.zip.25fbfbc4",
       "cores": [
         "mame"
       ],
@@ -115034,7 +115034,7 @@
       "sha1": "7e37e3dae0c4ddff1912bf02fca3fb2019326b78",
       "sha256": "cb689855f2414c5c09e6841ec42898eb15ffd32f82a4a24e488294526fac8159",
       "size": 541045,
-      "repo_path": "bios/Arcade/MAME/.variants/ql_sqmouse.zip.25fbfbc4",
+      "repo_path": "bios/Arcade/Arcade/.variants/ql_sqmouse.zip.25fbfbc4",
       "cores": [
         "mame"
       ],
@@ -115060,7 +115060,7 @@
       "sha1": "7e37e3dae0c4ddff1912bf02fca3fb2019326b78",
       "sha256": "cb689855f2414c5c09e6841ec42898eb15ffd32f82a4a24e488294526fac8159",
       "size": 541045,
-      "repo_path": "bios/Arcade/MAME/.variants/ql_sqmouse.zip.25fbfbc4",
+      "repo_path": "bios/Arcade/Arcade/.variants/ql_sqmouse.zip.25fbfbc4",
       "cores": [
         "mame"
       ],
@@ -119584,7 +119584,7 @@
       "sha1": "e6fb1ead1fc6c051876f3a6ec0f68a1af6688e7d",
       "sha256": "fd79fd61b2e39a89d62ba91e1c9847d867e4d946edb808e9161f38df1d95461c",
       "size": 9482,
-      "repo_path": "bios/Funtech/Super A'Can/.variants/supracan.zip",
+      "repo_path": "bios/Funtech/Super A'Can/.variants/supracan.zip.8f63cc8c",
       "cores": [
         "mamemess"
       ]
@@ -122963,7 +122963,7 @@
       "sha1": "57728781299905c1c4f26f0333d272cb9defd173",
       "sha256": "f9685ba8d22e851a4be492c6b74fbc671d89112d64394e7af86ec7a23751529c",
       "size": 932346,
-      "repo_path": "bios/Other/sdlpal/sdlpal/abc.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/abc.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -122974,7 +122974,7 @@
       "sha1": "9b60a2cbf1ce159df836de9d734f0182af8dfd75",
       "sha256": "b9925833a9d921aa6bea9d0d199dbbe170968716d951036a142c1dd303f99bd0",
       "size": 145070,
-      "repo_path": "bios/Other/sdlpal/sdlpal/ball.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/ball.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -122985,7 +122985,7 @@
       "sha1": "114446bb3afc56710ce4424370f627f1e9becb5c",
       "sha256": "c0bc968e5322b06fe669dd6e34483dd1f12dd223ac25b03b6dc74d3742635c1b",
       "size": 63978,
-      "repo_path": "bios/Other/sdlpal/sdlpal/data.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/data.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -122996,7 +122996,7 @@
       "sha1": "b35d6d48b13ea6d09c7eff4a922a984f718b8bdd",
       "sha256": "eb492e6dcd0eefb6fbc1751d775bc8667b46d3cd5231974caa1eef309f3152d7",
       "size": 173198,
-      "repo_path": "bios/Other/sdlpal/sdlpal/f.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/f.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -123007,7 +123007,7 @@
       "sha1": "0a8d2366e9c90370cd7ee166721b0a7e22af1aeb",
       "sha256": "29bbc71c10c58a555e5b45b853dfeef3fa0d299ceeb8e7556b6c1d6bc40c4d84",
       "size": 1242530,
-      "repo_path": "bios/Other/sdlpal/sdlpal/fbp.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/fbp.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -123018,7 +123018,7 @@
       "sha1": "c250ee224bb118c47f0244295fd93e08cc5c7010",
       "sha256": "5a23940d3daab5bfa95efd3b92b4d1ae481fc4f7ad38374ec66b16c7e7d5d9cf",
       "size": 764381,
-      "repo_path": "bios/Other/sdlpal/sdlpal/fire.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/fire.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -123029,7 +123029,7 @@
       "sha1": "6aa5008a7c013dcf05e1276118b22f76f3316dd1",
       "sha256": "5745d016a8d9c280b90a8b92d2871210a2dd0a0c04a79d4c8e65f4d0396aa04b",
       "size": 16437766,
-      "repo_path": "bios/Other/sdlpal/sdlpal/gop.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/gop.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -123040,7 +123040,7 @@
       "sha1": "a1c905ee895b99229a8a03fb571ca811e257a881",
       "sha256": "62739644af65b5e80c0736d31da00e4fe805a56ee5c5fede6558c0c13bacd575",
       "size": 1614602,
-      "repo_path": "bios/Other/sdlpal/sdlpal/map.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/map.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -123051,7 +123051,7 @@
       "sha1": "2d25209f3e3b757e927e0b7c1bf8ee2aa40a3535",
       "sha256": "0df639e22da1cf766c821de0b07d8c0bb58602c50ff5a2eea233a9e3c9f6e789",
       "size": 1443503,
-      "repo_path": "bios/Other/sdlpal/sdlpal/mgo.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/mgo.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -123062,7 +123062,7 @@
       "sha1": "96e03ed05dadf5d4672c1f08f582a26f85533389",
       "sha256": "b2d6a3db53a3e80106a4c041c7f94dfaf9dcb065517fce79b1ff3d413494d997",
       "size": 8488,
-      "repo_path": "bios/Other/sdlpal/sdlpal/pat.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/pat.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -123073,7 +123073,7 @@
       "sha1": "d24f75ea245798953f3e0407bac7ae24d7544822",
       "sha256": "fbeb7cbafd374af8c07088ab18996edcadd6ec52b8bb0a0af644c2cee4e26bac",
       "size": 453202,
-      "repo_path": "bios/Other/sdlpal/sdlpal/rgm.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/rgm.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -123084,7 +123084,7 @@
       "sha1": "2b0f6556bb27ce4d5462e4777fe2c1c847732f7b",
       "sha256": "5d62cad87b330d2e1ec00d7c1acc4de96b8324e547fa8095aab0f64a9811d7bd",
       "size": 4085342,
-      "repo_path": "bios/Other/sdlpal/sdlpal/rng.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/rng.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -123095,7 +123095,7 @@
       "sha1": "34cecac4a0e2a4dcb37e6cf905db488f2d688825",
       "sha256": "3acf15a825b674e593dea86a0b5e632ef98086ec153b6934418e3a3a9b36b774",
       "size": 575270,
-      "repo_path": "bios/Other/sdlpal/sdlpal/sss.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/sss.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -123106,7 +123106,7 @@
       "sha1": "f9cbbc4a50b95434fa5df3f3f399aff8d164b449",
       "sha256": "b8c37694665ff8575b557f426dd357b367006ce85e2306a32a654dfff56a0f5d",
       "size": 224455,
-      "repo_path": "bios/Other/sdlpal/sdlpal/m.msg",
+      "repo_path": "bios/sdlpal/sdlpal/m.msg",
       "cores": [
         "sdlpal"
       ],
@@ -123117,7 +123117,7 @@
       "sha1": "daf8a250f813a6a43a71b86553c2e82d62429b21",
       "sha256": "be56e77c7ecd61306133913a1987b1dddf656528ae870c2de1ee8ccda7ff3ebf",
       "size": 5650,
-      "repo_path": "bios/Other/sdlpal/sdlpal/word.dat",
+      "repo_path": "bios/sdlpal/sdlpal/word.dat",
       "cores": [
         "sdlpal"
       ],
@@ -123139,7 +123139,7 @@
       "sha1": "c5d57da07dca7659159fd7a777cbd9b94492c0ea",
       "sha256": "d28985aee96b96981be1542172f6f32509541dec325163e857cd677f56dad8f9",
       "size": 5088,
-      "repo_path": "bios/Other/sdlpal/sdlpal/wor16.asc",
+      "repo_path": "bios/sdlpal/sdlpal/wor16.asc",
       "cores": [
         "sdlpal"
       ],
@@ -123150,7 +123150,7 @@
       "sha1": "20008f4bc271adbf80cd30a6c6aae16844ea8ecc",
       "sha256": "2631bfa2b70333ad85d6e32edf7dedb5e888a3d34ee31f0f2da3f7d8599cd5e3",
       "size": 77986,
-      "repo_path": "bios/Other/sdlpal/sdlpal/wor16.fon",
+      "repo_path": "bios/sdlpal/sdlpal/wor16.fon",
       "cores": [
         "sdlpal"
       ],
@@ -123161,7 +123161,7 @@
       "sha1": "6785239d04751da055a19511e4c46ba6acba5d19",
       "sha256": "c6e14eaaff50979df269b7d6d5f7401cb354be38e3ad737e4ca3ec473c1c5ab3",
       "size": 1997044,
-      "repo_path": "bios/Other/sdlpal/sdlpal/voc.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/voc.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -123172,7 +123172,7 @@
       "sha1": "77e95569fc7e6fdddbd4f82ea89838022da86755",
       "sha256": "039a5cc64be937168ce458c8288fbd61fb3d2854e9445a775ab67f6af2276e01",
       "size": 18112888,
-      "repo_path": "bios/Other/sdlpal/sdlpal/sounds.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/sounds.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -123183,7 +123183,7 @@
       "sha1": "9961f2ad3f11b8e80e6c259a215fc48151e80969",
       "sha256": "8367c9d34331f67b20b12380e809a38d3313cae199f260d272d07fcf55e11a21",
       "size": 331284,
-      "repo_path": "bios/Other/sdlpal/sdlpal/mus.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/mus.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -123194,7 +123194,7 @@
       "sha1": "652fd2885ad39e56a627d3cec1b9d225de1128ba",
       "sha256": "70587d762bdcea0a6e07f0f13808993045a6f382c713f0ad81793a7f6991f913",
       "size": 762442,
-      "repo_path": "bios/Other/sdlpal/sdlpal/midi.mkf",
+      "repo_path": "bios/sdlpal/sdlpal/midi.mkf",
       "cores": [
         "sdlpal"
       ],
@@ -123205,7 +123205,7 @@
       "sha1": "35fbefcb73b4f2611fb2c7fba03512123d768964",
       "sha256": "c9e68039ab02bebadb36cdce2308502db42b457bd821114ee487cfbe092f76da",
       "size": 9079428,
-      "repo_path": "bios/Other/sdlpal/sdlpal/1.avi",
+      "repo_path": "bios/sdlpal/sdlpal/1.avi",
       "cores": [
         "sdlpal"
       ],
@@ -123216,7 +123216,7 @@
       "sha1": "929b428407c2800615db87281587679ecc16e44e",
       "sha256": "51f60a923bf1199910b12db84e1b58d63b4f45c1f653a447153ef26cbda3720d",
       "size": 31872668,
-      "repo_path": "bios/Other/sdlpal/sdlpal/2.avi",
+      "repo_path": "bios/sdlpal/sdlpal/2.avi",
       "cores": [
         "sdlpal"
       ],
@@ -123227,7 +123227,7 @@
       "sha1": "15844682678b258957dd59c28b17146609cb8d0c",
       "sha256": "28a97b9f3812ffa32185dea996e2928c1090e9786953f9d7cc9107ad54fc3cc0",
       "size": 20245444,
-      "repo_path": "bios/Other/sdlpal/sdlpal/3.avi",
+      "repo_path": "bios/sdlpal/sdlpal/3.avi",
       "cores": [
         "sdlpal"
       ],
@@ -123238,7 +123238,7 @@
       "sha1": "0fbb47081dd269a8b288bc81a4c603d53769a236",
       "sha256": "600616fa3aa551ae3b783715325066051a4c46151ee8daeb4e0e4243b869aa73",
       "size": 7825060,
-      "repo_path": "bios/Other/sdlpal/sdlpal/4.avi",
+      "repo_path": "bios/sdlpal/sdlpal/4.avi",
       "cores": [
         "sdlpal"
       ],
@@ -123249,7 +123249,7 @@
       "sha1": "1f86bcc7c856d567b4c3f66cdd8db6a43ee0392a",
       "sha256": "30c6a574b2625140ca5ad1b456e8fb30ae9026b1684f90381630caff4e24f069",
       "size": 82833972,
-      "repo_path": "bios/Other/sdlpal/sdlpal/5.avi",
+      "repo_path": "bios/sdlpal/sdlpal/5.avi",
       "cores": [
         "sdlpal"
       ],
@@ -123260,7 +123260,7 @@
       "sha1": "09a293724620161be64ab7ad495cf01aab9334eb",
       "sha256": "53a8c472d50263d512bae327e7064e9b88ff459788dc5bbee8fd7f8a55300217",
       "size": 36953012,
-      "repo_path": "bios/Other/sdlpal/sdlpal/6.avi",
+      "repo_path": "bios/sdlpal/sdlpal/6.avi",
       "cores": [
         "sdlpal"
       ],
@@ -123301,7 +123301,7 @@
       "sha1": "600cf0440594b0c69339ba4b626a47288b342d77",
       "sha256": "7454313938871f6ab3b27e464caae477ac051d5b2a629adc9f952a31d1bdd949",
       "size": 3396757,
-      "repo_path": "bios/Java/J2ME/squirreljme-test.jar",
+      "repo_path": "bios/Java/J2ME/SquirrelJME/squirreljme-0.3.0-test.jar",
       "cores": [
         "squirreljme"
       ],
@@ -123314,7 +123314,7 @@
       "sha1": "600cf0440594b0c69339ba4b626a47288b342d77",
       "sha256": "7454313938871f6ab3b27e464caae477ac051d5b2a629adc9f952a31d1bdd949",
       "size": 3396757,
-      "repo_path": "bios/Java/J2ME/squirreljme-test.jar",
+      "repo_path": "bios/Java/J2ME/SquirrelJME/squirreljme-0.3.0-test.jar",
       "cores": [
         "squirreljme"
       ],
@@ -125970,7 +125970,7 @@
       "sha1": "a22ec279222ec6aeb3249932f7d377b7cf1e7bf1",
       "sha256": "b95bbae8b1be197aea6d9b896a37bead6212852303b9f85559699da92c883832",
       "size": 215475,
-      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.a22ec279",
+      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.c6f35123",
       "cores": [
         "mame2003"
       ],
@@ -125995,7 +125995,7 @@
       "sha1": "17b8b03a89d8443927aa92ede799e117b4ab6fdb",
       "sha256": "5a8f5bf5090e7fb9c2878ecee11b2b5e80e9b3e8fdc15a9158b3f14f31fcc5d5",
       "size": 202298,
-      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.17b8b03a",
+      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.bb8023a4",
       "cores": [
         "mame2010"
       ],
@@ -126009,7 +126009,7 @@
       "sha1": "68e94fb579f46f3255ef7c34c0322f3f0f3c8e20",
       "sha256": "c470a579d8836299e64b835012f7c536115aac695ba9ae10ecd4d168bede54ca",
       "size": 216250,
-      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.68e94fb5",
+      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.7e31f0b8",
       "cores": [
         "mess2015"
       ],
@@ -126350,7 +126350,7 @@
       "sha1": "68e94fb579f46f3255ef7c34c0322f3f0f3c8e20",
       "sha256": "c470a579d8836299e64b835012f7c536115aac695ba9ae10ecd4d168bede54ca",
       "size": 216250,
-      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.68e94fb5",
+      "repo_path": "bios/Arcade/Arcade/.variants/hiscore.dat.7e31f0b8",
       "cores": [
         "ume2015"
       ],
@@ -144515,7 +144515,7 @@
       "sha1": "7c4cd0a5451eedeac9b328f48408dbc312198ccf",
       "sha256": "9c828fe883923374a15fc9cd708555688c5d9b9beeeaf6d16aceff0669c57502",
       "size": 2367241,
-      "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-fast.jar",
+      "repo_path": "bios/Java/J2ME/SquirrelJME/squirreljme-0.3.0-fast.jar",
       "cores": [
         "squirreljme"
       ],
@@ -144528,7 +144528,7 @@
       "sha1": "3a23de6999b94fc088bdd9c9e4a73781a1d42233",
       "sha256": "433aea9d2f418dc1ac7e8e9f7181ff37fb502822438898d09a12998deb2e152a",
       "size": 3129653,
-      "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-slow.jar",
+      "repo_path": "bios/Java/J2ME/SquirrelJME/squirreljme-0.3.0-slow.jar",
       "cores": [
         "squirreljme"
       ],
@@ -144541,7 +144541,7 @@
       "sha1": "b411c128bfd8411f339a49bbcb1c9e97189c2161",
       "sha256": "a377398e6a62326c3d7b412f8a01ee769250e31402e82e453da6a5244f001ba4",
       "size": 3772058,
-      "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-slow-test.jar",
+      "repo_path": "bios/Java/J2ME/SquirrelJME/squirreljme-0.3.0-slow-test.jar",
       "cores": [
         "squirreljme"
       ],

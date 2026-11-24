@@ -7,7 +7,7 @@
   "platform": "misterfpga",
   "display_name": "MiSTer FPGA",
   "version": "2026-11-04",
-  "generated": "2026-11-12T11:40:11Z",
+  "generated": "2026-11-24T09:06:59Z",
   "base_destination": "games",
   "detect": [
     {
@@ -792,7 +792,7 @@
       "sha1": "8c031bf9908fd0142fdd10a9cdd79389f8a3f2fc",
       "sha256": "37561c4444bec52ae1aae31de5579f1856d5b23002ee083ade42f9ed13c8616f",
       "size": 524288,
-      "repo_path": "bios/Sega/Saturn/.variants/hisaturn_v103.bin",
+      "repo_path": "bios/Sega/Saturn/.variants/hisaturn_v103.bin.0306c0e4",
       "cores": null,
       "systems": [
         "sega-saturn"

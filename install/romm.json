@@ -7,7 +7,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "5.4.1",
-  "generated": "2026-11-13T01:24:31Z",
+  "generated": "2026-11-24T09:06:59Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -9955,7 +9955,7 @@
       "sha1": "f2a730530f4989ca0e8860aa4e455b6a5fe69e1d",
       "sha256": "cb7d12703030f53a1578210ca7c4979f95bda22970e6df9d2a5eb52b6461ea92",
       "size": 715730,
-      "repo_path": "bios/Arcade/Arcade/.variants/airlbios.zip",
+      "repo_path": "bios/Arcade/Arcade/.variants/airlbios.zip.7a11bfe0",
       "cores": null,
       "systems": [
         "arcade"
@@ -10003,7 +10003,7 @@
       "sha1": "30b97b2670b79d0de41cba190324c504846c6fa1",
       "sha256": "ff29929e3e094459f6358a5a3ca4d2dabe64f64e2cade0faa407969d83e096bf",
       "size": 16107,
-      "repo_path": "bios/Arcade/Arcade/.variants/decocass.zip.30b97b26",
+      "repo_path": "bios/Arcade/Arcade/.variants/decocass.zip.b7e1189b",
       "cores": null,
       "systems": [
         "arcade"
@@ -10039,7 +10039,7 @@
       "sha1": "782c303cbdfab1027b04db74a63e27bdad5e0c53",
       "sha256": "43d2c16c6a5b19a778b96a4e7d00468ee461b2c141f9d735427f7a7d893ba692",
       "size": 1479106,
-      "repo_path": "bios/Arcade/Arcade/.variants/hod2bios.zip",
+      "repo_path": "bios/Arcade/Arcade/.variants/hod2bios.zip.f4011d31",
       "cores": null,
       "systems": [
         "arcade"
@@ -10075,7 +10075,7 @@
       "sha1": "c96711c01c0158f161791d6fbe75d88329e8ac0a",
       "sha256": "9f3ff37a68bef27cd9ce8f5603ce44779b402cca40e653ae3633fff78d179392",
       "size": 9321533,
-      "repo_path": "bios/Arcade/Arcade/.variants/naomi.zip",
+      "repo_path": "bios/Arcade/Arcade/.variants/naomi.zip.526eda1e",
       "cores": null,
       "systems": [
         "arcade"
@@ -10147,7 +10147,7 @@
       "sha1": "533ef12a6d22726da81a50f08871c6e9a377a328",
       "sha256": "75910bca402ce5b3db9aaab485150bc40aee5a0028e3e50c8bd63132520ffe4f",
       "size": 2189528,
-      "repo_path": "bios/Arcade/Arcade/.variants/naomi2.zip.533ef12a",
+      "repo_path": "bios/Arcade/Arcade/.variants/naomi2.zip.0ea5bf03",
       "cores": null,
       "systems": [
         "arcade"
@@ -10328,7 +10328,7 @@
       "sha1": "997bae5e5a190c5bb3b1fb9e7e3e75b2da88cb27",
       "sha256": "d91f81caeafc863f811c2945259589d617eb95dac5ca18b2d1f4e1bbebb41703",
       "size": 12733492,
-      "repo_path": "bios/Id Software/Doom/.variants/DOOM.WAD.997bae5e",
+      "repo_path": "bios/Id Software/Doom/.variants/DOOM.WAD.4461d451",
       "cores": null,
       "systems": [
         "doom"
@@ -10341,7 +10341,7 @@
       "sha1": "c745f04a6abc2e6d2a2d52382f45500dd2a260be",
       "sha256": "5142a922518a7cfe09ed21097cf6a57316ec77c095682ebe2e90b56f4a568089",
       "size": 14802506,
-      "repo_path": "bios/Id Software/Doom/.variants/DOOM2.WAD.c745f04a",
+      "repo_path": "bios/Id Software/Doom/.variants/DOOM2.WAD.9aa3cbf6",
       "cores": null,
       "systems": [
         "doom"
@@ -10367,7 +10367,7 @@
       "sha1": "d041456bea851c173f65ac6ab3f2ee61bb0b8b53",
       "sha256": "05ec0118cc130036d04bf6e6f7fe4792dfafc2d4bd98de349dd63e2022925365",
       "size": 15103212,
-      "repo_path": "bios/Id Software/Doom/.variants/DOOM64.WAD.d041456b",
+      "repo_path": "bios/Id Software/Doom/.variants/DOOM64.WAD.0aaba212",
       "cores": null,
       "systems": [
         "doom"
@@ -10379,7 +10379,7 @@
       "sha1": "9820e2a3035f0cdd87f69a7d57c59a7a267c9409",
       "sha256": "b7b60364d8dd6763b82d5b4f93da547ff15990135c9df8a3abce4328c3dba5f0",
       "size": 18304630,
-      "repo_path": "bios/Id Software/Doom/.variants/TNT.WAD.9820e2a3",
+      "repo_path": "bios/Id Software/Doom/.variants/TNT.WAD.8974e311",
       "cores": null,
       "systems": [
         "doom"
@@ -10392,7 +10392,7 @@
       "sha1": "816c7c6b0098f66c299c9253f62bd908456efb63",
       "sha256": "2376491fdf49e6fda80f9b489571252e195d24423c4f1be3f3c38e81d2022f52",
       "size": 17531493,
-      "repo_path": "bios/Id Software/Doom/.variants/PLUTONIA.WAD.816c7c6b",
+      "repo_path": "bios/Id Software/Doom/.variants/PLUTONIA.WAD.24037397",
       "cores": null,
       "systems": [
         "doom"
@@ -10751,7 +10751,7 @@
       "sha1": "bf5fb954db868e523febccc68549ed9187961076",
       "sha256": "0a09940701f40647a2715271b43c9ab0d82bd488871427ad627b7e0f462f5dda",
       "size": 33152,
-      "repo_path": "bios/Microsoft/MSX/.variants/CARTS.SHA.bf5fb954",
+      "repo_path": "bios/Microsoft/MSX/.variants/CARTS.SHA.74b0f217",
       "cores": null,
       "systems": [
         "microsoft-msx"
@@ -10943,7 +10943,7 @@
       "sha1": "6639b6693784574d204c42703a74fd8b088a3a5e",
       "sha256": "34f1c8ded59116436065783f8ad2ef0939df3cbfc76277ec9e5c41bf9ccb93cd",
       "size": 1048576,
-      "repo_path": "bios/Microsoft/Xbox/.variants/Complex_4627.bin.6639b669",
+      "repo_path": "bios/Microsoft/Xbox/.variants/Complex_4627.bin.ec00e31e",
       "cores": null,
       "systems": [
         "microsoft-xbox"
@@ -11434,7 +11434,7 @@
       "sha1": "239eacd86527ff9a75aeb7282da65797baeef010",
       "sha256": "92f1411fb2c3e6c37bb6a5819d01f84f945fda31cfe26db8c81d997ed471a62e",
       "size": 2097152,
-      "repo_path": "bios/Nintendo/GameCube/.variants/gc-ntsc-11.bin",
+      "repo_path": "bios/Nintendo/GameCube/.variants/gc-ntsc-11.bin.019e3982",
       "cores": null,
       "systems": [
         "nintendo-gamecube"
@@ -11458,7 +11458,7 @@
       "sha1": "f27c63e5394e2fd1606f70df004c4fc2d6027700",
       "sha256": "a782522d3b941da91b0f7ef23adc3120efa8b74e0e23a0deecd2a98d79343176",
       "size": 2097152,
-      "repo_path": "bios/Nintendo/GameCube/.variants/gc-pal-10.bin",
+      "repo_path": "bios/Nintendo/GameCube/.variants/gc-pal-10.bin.0cdda509",
       "cores": null,
       "systems": [
         "nintendo-gamecube"
@@ -11470,7 +11470,7 @@
       "sha1": "f3cd0c7c61cbcefa85e7de3aff4cfa50bc508714",
       "sha256": "7973d3f9922b7d7f2b71648939036bc984ac9feee92ed10b5175803aeb8a4696",
       "size": 2097152,
-      "repo_path": "bios/Nintendo/GameCube/.variants/gc-pal-11.bin",
+      "repo_path": "bios/Nintendo/GameCube/.variants/gc-pal-11.bin.339848a0",
       "cores": null,
       "systems": [
         "nintendo-gamecube"
@@ -11551,7 +11551,7 @@
       "sha1": "26322f182540211e9b5e3647675b7c593706ae2b",
       "sha256": "914584ee6964e8b4cc4ff092874052e7baf13708cfb3f35940342421fcf1bedc",
       "size": 1009534,
-      "repo_path": "bios/Nintendo/NES/.variants/NstDatabase.xml.26322f18",
+      "repo_path": "bios/Nintendo/NES/.variants/NstDatabase.xml.7bfe8c05",
       "cores": null,
       "systems": [
         "nintendo-nes"
@@ -11912,7 +11912,7 @@
       "sha1": "5130243429b40b01a14e1304d0394b8459a6fbae",
       "sha256": "8e0413c324a748ca2e493652b8089aa1db129e1ba115b5f58a99e32cebe063e1",
       "size": 1024,
-      "repo_path": "bios/Philips/Videopac/O2_G7400_bios.bin",
+      "repo_path": "bios/Philips/Videopac+/O2_G7400_bios.bin",
       "cores": null,
       "systems": [
         "philips-videopac"
@@ -11934,7 +11934,7 @@
       "sha1": "718c1a00d38e0810a1ad0ffde79f73447f846f01",
       "sha256": "dc4e7723aa4183456d135db72cf5ee0e6ce31bbbda892586588f7a20d9270904",
       "size": 9523360,
-      "repo_path": "bios/ScummVM/.variants/scummvm.zip.a93f1c4b",
+      "repo_path": "bios/ScummVM/.variants/scummvm.zip.a17e0e01",
       "cores": null,
       "systems": [
         "scummvm"
@@ -12923,7 +12923,7 @@
       "sha1": "a837f66977040f7b51ed053a2483c10f3d070ab7",
       "sha256": "99206572132625323f98d0954a75d9dab52e58bf32ce339185c9803957fe1573",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/.variants/plus3-0.rom.a10230c0",
+      "repo_path": "bios/Sinclair/ZX Spectrum/.variants/plus3-0.rom.3abdc20e",
       "cores": null,
       "systems": [
         "sinclair-zx-spectrum"
@@ -12935,7 +12935,7 @@
       "sha1": "6a4364f25513e4079f048f2de131a896d30edc64",
       "sha256": "1623b7d070d225b7ad3a7992c7546045ba406424f3e0b820385c573714a8a045",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/.variants/plus3-1.rom.09b9c3ca",
+      "repo_path": "bios/Sinclair/ZX Spectrum/.variants/plus3-1.rom.8361a1d9",
       "cores": null,
       "systems": [
         "sinclair-zx-spectrum"
@@ -12947,7 +12947,7 @@
       "sha1": "0a747cc0b827a94b4fd74cfd818ca792437a38f7",
       "sha256": "297d6026ac0fb8aad482f2536f57bbf4f135e082f58711d0e3254a2622515a23",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/.variants/plus3-2.rom.a60285a0",
+      "repo_path": "bios/Sinclair/ZX Spectrum/.variants/plus3-2.rom.f36c5c2d",
       "cores": null,
       "systems": [
         "sinclair-zx-spectrum"
@@ -13367,7 +13367,7 @@
       "sha1": "bf6b379c204da77dece1aedf83ff35227a623e5d",
       "sha256": "71994d72072f0c1b554209a9055bbdbf6045df73999720ed3432ac072f394aba",
       "size": 214876,
-      "repo_path": "bios/SNK/Neo Geo CD/.variants/neocdz.zip.bf6b379c",
+      "repo_path": "bios/SNK/Neo Geo CD/.variants/neocdz.zip.c38cb8e5",
       "cores": null,
       "systems": [
         "snk-neogeo-cd"
@@ -15655,7 +15655,7 @@
       "sha1": "7c4cd0a5451eedeac9b328f48408dbc312198ccf",
       "sha256": "9c828fe883923374a15fc9cd708555688c5d9b9beeeaf6d16aceff0669c57502",
       "size": 2367241,
-      "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-fast.jar",
+      "repo_path": "bios/Java/J2ME/SquirrelJME/squirreljme-0.3.0-fast.jar",
       "cores": [
         "squirreljme"
       ],
@@ -15681,7 +15681,7 @@
       "sha1": "600cf0440594b0c69339ba4b626a47288b342d77",
       "sha256": "7454313938871f6ab3b27e464caae477ac051d5b2a629adc9f952a31d1bdd949",
       "size": 3396757,
-      "repo_path": "bios/Java/J2ME/squirreljme-test.jar",
+      "repo_path": "bios/Java/J2ME/SquirrelJME/squirreljme-0.3.0-test.jar",
       "cores": [
         "squirreljme"
       ],
@@ -15694,7 +15694,7 @@
       "sha1": "3a23de6999b94fc088bdd9c9e4a73781a1d42233",
       "sha256": "433aea9d2f418dc1ac7e8e9f7181ff37fb502822438898d09a12998deb2e152a",
       "size": 3129653,
-      "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-slow.jar",
+      "repo_path": "bios/Java/J2ME/SquirrelJME/squirreljme-0.3.0-slow.jar",
       "cores": [
         "squirreljme"
       ],
@@ -15707,7 +15707,7 @@
       "sha1": "b411c128bfd8411f339a49bbcb1c9e97189c2161",
       "sha256": "a377398e6a62326c3d7b412f8a01ee769250e31402e82e453da6a5244f001ba4",
       "size": 3772058,
-      "repo_path": "bios/Other/SquirrelJME/squirreljme-0.3.0-slow-test.jar",
+      "repo_path": "bios/Java/J2ME/SquirrelJME/squirreljme-0.3.0-slow-test.jar",
       "cores": [
         "squirreljme"
       ],
@@ -15746,7 +15746,7 @@
       "sha1": "600cf0440594b0c69339ba4b626a47288b342d77",
       "sha256": "7454313938871f6ab3b27e464caae477ac051d5b2a629adc9f952a31d1bdd949",
       "size": 3396757,
-      "repo_path": "bios/Java/J2ME/squirreljme-test.jar",
+      "repo_path": "bios/Java/J2ME/SquirrelJME/squirreljme-0.3.0-test.jar",
       "cores": [
         "squirreljme"
       ],
