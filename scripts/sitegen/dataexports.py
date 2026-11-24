@@ -18,7 +18,7 @@ from core.artifacts import json_text as _json_text
 from core.hashing import file_digest
 from model import retired as model_retired
 from model.database import sha1_at
-from model.platforms import PLATFORMS_DIR_KEY
+from model.platforms import ENTRY_TAGS, registry_fields
 from model.profiles import is_emulator
 from packs.consumers import FileConsumers
 from sitegen.apiitems import core_index_items, system_index_items
@@ -136,8 +136,6 @@ def _split_contract(config: dict) -> tuple[dict, dict]:
     """
     allowed = _contract_keys()
     contract = {key: value for key, value in config.items() if key in allowed}
-    # platform_system and platform_cores are the resolver's copies of the key
-    # each entry sits under and of that system's cores.
     if isinstance(contract.get("systems"), dict):
         contract["systems"] = {
             sys_id: {
@@ -146,7 +144,7 @@ def _split_contract(config: dict) -> tuple[dict, dict]:
                     {
                         k: v
                         for k, v in f.items()
-                        if k not in ("platform_system", "platform_cores")
+                        if k not in ENTRY_TAGS
                     }
                     for f in system["files"]
                 ],
@@ -155,8 +153,8 @@ def _split_contract(config: dict) -> tuple[dict, dict]:
             else system
             for sys_id, system in contract["systems"].items()
         }
-    registry = {key: value for key, value in config.items()
-                if key not in allowed and key not in ("_key", PLATFORMS_DIR_KEY)}
+    registry = {key: value for key, value in registry_fields(config).items()
+                if key not in allowed}
     # The merged config gives a child its parent's release_pack: Lakka and
     # RetroPie said true in the API while every page said they had no ZIP.
     # The registry's own entry decides, as it does for the pages.

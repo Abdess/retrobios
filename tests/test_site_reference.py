@@ -656,7 +656,7 @@ class TheContractsValidate(unittest.TestCase):
             self.skipTest("jsonschema is a tooling dependency")
 
         from model.registry import list_registered_platforms
-        from model.platforms import PLATFORMS_DIR_KEY, load_platform_config
+        from model.platforms import PLATFORMS_DIR_KEY, load_platform_config, registry_fields
 
         schema = json.loads((REPO_ROOT / "schemas" / "platform.schema.json").read_text())
         validator = Draft202012Validator(schema)
@@ -671,9 +671,11 @@ class TheContractsValidate(unittest.TestCase):
                 self.assertNotIn("_key", registry)
                 # The directory a run loaded the config from is no published field.
                 self.assertNotIn(PLATFORMS_DIR_KEY, registry)
-                unpublished = {"_key", PLATFORMS_DIR_KEY}
-                self.assertEqual(set(contract) | set(registry) | unpublished,
-                                 set(config) | unpublished)
+                # The registry is what the loader merged from _registry.yml,
+                # never a key it adds for its own readers (_roms_root).
+                self.assertEqual(set(registry), set(registry_fields(config)) - set(contract))
+                self.assertEqual([key for key in registry if key.startswith("_")], [])
+                self.assertLessEqual(set(contract) | set(registry), set(config))
 
     def test_every_schema_id_is_the_address_it_is_served_at(self):
         for path in sorted((REPO_ROOT / "schemas").glob("*.schema.json")):

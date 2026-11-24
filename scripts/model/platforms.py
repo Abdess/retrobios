@@ -152,6 +152,11 @@ def _mark_composite_archives(config: dict) -> None:
     }
 
 
+# The fields _tag_platform_systems adds to each entry, which the platform's
+# own list does not carry.
+ENTRY_TAGS = ("platform_system", "platform_cores")
+
+
 def _tag_platform_systems(config: dict) -> None:
     """Each entry carries the system that declares it.
 
@@ -198,6 +203,35 @@ def _attach_rom_folders(config: dict, platform_name: str, platforms_dir: str) ->
         config["_rom_folders"] = [row for row in folders if isinstance(row, dict)]
 
 
+def _registry_entries(chain: list[str], platforms_dir: str) -> list[dict]:
+    """The registry entry of each platform in the chain, nearest first.
+
+    The platform's own entry first, then its parents' for what it does not
+    say: RetroPie's scraper and install are its own, its verification mode
+    is RetroArch's.
+    """
+    registry_path = os.path.join(platforms_dir, "_registry.yml")
+    if not os.path.exists(registry_path):
+        return []
+    platforms = _cached_platform_yaml(registry_path).get("platforms", {})
+    return [platforms.get(name) or {} for name in chain]
+
+
+def registry_fields(config: dict) -> dict:
+    """The registry fields load_platform_config merged into a config, with
+    the values the config holds.
+
+    Empty for a config built by hand, which names no registry key.
+    """
+    platform_name = config.get("_key")
+    if not platform_name:
+        return {}
+    platforms_dir = config_platforms_dir(config)
+    chain = inheritance_chain(platform_name, platforms_dir)
+    merged = {key for entry in _registry_entries(chain, platforms_dir) for key in entry}
+    return {key: value for key, value in config.items() if key in merged}
+
+
 def load_platform_config(platform_name: str, platforms_dir: str = PLATFORMS_DIR) -> dict:
     """Load a platform config with inheritance and shared group resolution.
 
@@ -214,22 +248,15 @@ def load_platform_config(platform_name: str, platforms_dir: str = PLATFORMS_DIR)
     # Merge metadata from _registry.yml. The registry is our curated source,
     # while the scraped YAML may be incomplete (missing cores, metadata fields).
     # Registry fields supplement (not replace) the scraped config.
-    registry_path = os.path.join(platforms_dir, "_registry.yml")
-    if os.path.exists(registry_path):
-        reg = _cached_platform_yaml(registry_path)
-        # The platform's own entry first, then its parents' for what it does
-        # not say: RetroPie's status, scraper and install are its own, its
-        # verification mode is RetroArch's.
-        for depth, name in enumerate(chain):
-            reg_entry = reg.get("platforms", {}).get(name, {})
-            _merge_registry_cores(config, reg_entry, depth)
+    for depth, reg_entry in enumerate(_registry_entries(chain, platforms_dir)):
+        _merge_registry_cores(config, reg_entry, depth)
 
-            # Merge all registry fields absent from config (except cores,
-            # handled above with union logic). No hardcoded list: any field
-            # added to the registry is automatically available in the config.
-            for key, val in reg_entry.items():
-                if key != "cores" and key not in config:
-                    config[key] = val
+        # Merge all registry fields absent from config (except cores,
+        # handled above with union logic). No hardcoded list: any field
+        # added to the registry is automatically available in the config.
+        for key, val in reg_entry.items():
+            if key != "cores" and key not in config:
+                config[key] = val
 
     if os.path.exists(shared_path):
         shared = _cached_platform_yaml(shared_path)
