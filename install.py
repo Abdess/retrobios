@@ -1644,6 +1644,11 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # per core), once that directory is known. Not written when it is not:
     # the summary's skipped then counts them (no_save_directory).
     "saves": ("platform", "files", "folder"),
+    # Where saves is written, once per root (save, roms, configs or emulators)
+    # whose folder the run cannot place: why its files are left out, in
+    # words. The summary's skipped counts them (no_<root>_directory). A
+    # kind of its own, since schema 1 never adds a key to summary.
+    "unplaced": ("platform", "root", "why"),
     "download": ("platform", "files", "bytes"),
     "progress": ("files_done", "files_total", "bytes_done", "bytes_total"),
     # Right after each progress event, and once when the files of a
@@ -6421,9 +6426,25 @@ def _retroarch_config_at(bios_path: Path) -> tuple[Path, Path] | None:
     return None
 
 
+# Why a save directory cannot be told, where nothing more is known.
+SAVE_NOT_KNOWN = "its place is not known"
+
+
+class SaveUnknown(NamedTuple):
+    """Why this run cannot tell the save directory: the cause, and the
+    remedy line mode joins to it."""
+
+    cause: str
+    remedy: str = ""
+
+    @property
+    def words(self) -> str:
+        return f"{self.cause}{self.remedy}"
+
+
 def save_directory_for(
     bios_path: Path, manifest: dict, override: Path | None = None,
-) -> SavePlace | str:
+) -> SavePlace | SaveUnknown:
     """The save directory the platform's frontend hands its cores, or why
     this run cannot tell.
 
@@ -6443,7 +6464,7 @@ def save_directory_for(
     """
     layout = manifest.get("save_directory")
     if not layout:
-        return "the file list names no save directory for this platform"
+        return SaveUnknown("the file list names no save directory for this platform")
     folder = layout["folder"]
     listed = bool(layout["by_core"])
     by_core = listed
@@ -6452,8 +6473,8 @@ def save_directory_for(
         cfg_path, app_dir = found
         for key in ("savefiles_in_content_dir", "sort_savefiles_by_content_enable"):
             if _cfg_true(_retroarch_cfg_value(cfg_path, key)):
-                return (f"RetroArch keeps saves beside each game ({key} in {cfg_path}): "
-                        "name the folder with --save-dir")
+                return SaveUnknown(f"RetroArch keeps saves beside each game ({key} in "
+                                   f"{cfg_path})", ": name the folder with --save-dir")
         sort = _retroarch_cfg_value(cfg_path, "sort_savefiles_enable")
         if sort is not None:
             by_core = _cfg_true(sort)
@@ -6474,7 +6495,7 @@ def save_directory_for(
         return SavePlace(bios_path / folder, by_core, listed)
     # The wording of the run's end, said before the menu too: two wordings
     # of one fact in one run, the first printing /mnt/e under WSL.
-    return "its place is not known. Name it with --save-dir"
+    return SaveUnknown(SAVE_NOT_KNOWN, ". Name it with --save-dir")
 
 
 def place_save_entries(
@@ -6484,9 +6505,9 @@ def place_save_entries(
     """Find the save directory for the entries read below it.
 
     Returns the files to install and, when the save directory is unknown,
-    the entries left out as omissions. Nothing is printed or sent: the run
-    says it (say_saves) once a choice of systems has kept the files it
-    counts.
+    the entries left out as omissions, each with why (the cause) and the
+    remedy line mode joins to it. Nothing is printed or sent: the run says
+    it (say_saves) once a choice of systems has kept the files it counts.
     """
     saved = [entry for entry in files if entry.get("root") == "save"]
     if not saved:
@@ -6503,13 +6524,13 @@ def place_save_entries(
             where += f"{os.sep}<core>"
         _SAVE_WHERE[bios_path] = where
         return files, []
-    _SAVE_WHY[bios_path] = place
     kept = [entry for entry in files if entry.get("root") != "save"]
     unplaced = [
         {"dest": entry["dest"], "name": PurePosixPath(entry["dest"]).name,
          "system": "", "systems": list(entry.get("systems") or []), "required": False,
          "reason": "no_save_directory", "frontend": display,
-         "cores": entry.get("cores"), "root": "save",
+         "cores": entry.get("cores"), "root": "save", "why": place.cause,
+         "remedy": place.remedy,
          **({"core_folder": entry["core_folder"]} if entry.get("core_folder") else {})}
         for entry in saved
     ]
@@ -6525,8 +6546,7 @@ def place_relative_entries(
     source places them (ROCKNIX's /storage/roms holds bios/, Batocera's
     configs folder is ../system/configs): a BIOS folder of the platform's
     name puts the root there. Any other is a folder this run cannot relate
-    to the root, and the entries are left out, the reason kept for
-    say_unplaced.
+    to the root, and the entries are left out, each with why in words.
     """
     unplaced: list[dict] = []
     for root in RELATIVE_ROOTS:
@@ -6541,13 +6561,13 @@ def place_relative_entries(
         if folder is not None:
             _RELATIVE_DIRS[(bios_path, root)] = folder
             continue
-        _UNPLACED_WHY[(bios_path, root)] = (
-            f"{bios_path} is not its {layout.get('bios_folder') or 'BIOS'} folder")
+        why = f"{bios_path} is not its {layout.get('bios_folder') or 'BIOS'} folder"
         files = [entry for entry in files if entry.get("root") != root]
         unplaced += [
             {"dest": entry["dest"], "name": PurePosixPath(entry["dest"]).name,
              "system": "", "systems": list(entry.get("systems") or []), "required": False,
-             "reason": f"no_{root}_directory", "cores": entry.get("cores"), "root": root}
+             "reason": f"no_{root}_directory", "cores": entry.get("cores"), "root": root,
+             "why": why}
             for entry in below
         ]
     return files, unplaced
@@ -6562,7 +6582,7 @@ def place_emulator_entries(
     launcher config (RetroBat's bios beside emulationstation): a BIOS
     folder of that name whose parent holds the config is the platform's.
     A key the config sets moves the folder somewhere this run does not
-    follow, so its files are left out, the reason kept for say_unplaced.
+    follow, so its files are left out, each with why in words.
     Otherwise the folder is the first of the searched places that exists,
     the default one when none does, as the launcher searches them.
     """
@@ -6581,6 +6601,9 @@ def place_emulator_entries(
         matches = True
     else:
         moved, matches = set(), False
+    why = (f"{config} sets their folder" if matches
+           else f"{bios_path} is not the {layout.get('bios_folder') or 'BIOS'} folder "
+                f"beside {layout.get('config') or 'its config'}")
     kept: list[dict] = []
     unplaced: list[dict] = []
     for entry in files:
@@ -6607,38 +6630,46 @@ def place_emulator_entries(
             "dest": entry["dest"], "name": PurePosixPath(entry["dest"]).name,
             "system": "", "systems": list(entry.get("systems") or []), "required": False,
             "reason": "no_emulators_directory", "cores": entry.get("cores"),
-            "root": "emulators",
+            "root": "emulators", "why": why,
         })
-    if unplaced:
-        _UNPLACED_WHY[(bios_path, "emulators")] = (
-            f"{config} sets their folder" if matches
-            else f"{bios_path} is not the {layout.get('bios_folder') or 'BIOS'} folder "
-                 f"beside {layout.get('config') or 'its config'}")
     return kept, unplaced
 
 
-# Per BIOS folder and root, why the files read below a roms, configs or
-# emulators folder are left out: said once a choice keeps the ones counted.
-_UNPLACED_WHY: dict[tuple[Path, str], str] = {}
-_UNPLACED_FOLDERS = {"roms": "roms folder", "configs": "configs folder",
-                     "emulators": "emulator folders"}
+UNPLACED_FOLDERS = {"roms": "roms folder", "configs": "configs folder",
+                    "emulators": "emulator folders"}
 
 
-def say_unplaced(omitted: list[dict], bios_path: Path, display: str) -> None:
+def unplaced_whys(omitted: list[dict]) -> dict[str, str]:
+    """Per root (save, roms, configs, emulators), why the files read below
+    its folder are left out, as the entries carry it."""
+    whys: dict[str, str] = {}
+    for entry in omitted:
+        reason = str(entry.get("reason") or "")
+        if entry.get("why") and reason.startswith("no_") and reason.endswith("_directory"):
+            whys.setdefault(reason[3:-len("_directory")], str(entry["why"]))
+    return whys
+
+
+def unplaced_line(display: str, root: str, count: int, why: str) -> str:
+    """The files read from a roms, configs or emulator folder left out, and why."""
+    return (f"{_plural(count, 'file')} read from {display}'s {UNPLACED_FOLDERS[root]} "
+            f"left out: {why}.")
+
+
+def say_unplaced(omitted: list[dict], display: str) -> None:
     """The roms, configs and emulator folder lines, over the entries a
     narrowed run still counts: --system panasonic-3do said 1918 files read
     from EmuDeck's roms folder were left out, 6 of them the 3DO's."""
-    for root, folder in _UNPLACED_FOLDERS.items():
+    whys = unplaced_whys(omitted)
+    for root in UNPLACED_FOLDERS:
         left = sum(1 for entry in omitted if entry.get("reason") == f"no_{root}_directory")
-        why = _UNPLACED_WHY.get((bios_path, root))
-        if left and why is not None:
-            print(f"  {_plural(left, 'file')} read from {display}'s {folder} left out: {why}.")
+        if left and root in whys:
+            print(f"  {unplaced_line(display, root, left, whys[root])}")
 
 
-# Per BIOS folder, where its save files go in words, or why that is not
-# known: read by the lines that count them once a choice is made.
+# Per BIOS folder, where its save files go in words: read by the lines that
+# count them once a choice is made.
 _SAVE_WHERE: dict[Path, str] = {}
-_SAVE_WHY: dict[Path, str] = {}
 
 
 def say_saves(plat: str, files: list[dict], omitted: list[dict], bios_path: Path,
@@ -6687,10 +6718,10 @@ def saves_line(display: str, count: int, where: str) -> str:
             f"{shown_path(folder)}")
 
 
-def unplaced_line(display: str, count: int, remedy: str) -> str:
+def unplaced_save_line(display: str, count: int, remedy: str) -> str:
     """The files read from an unknown save directory, left out."""
     return (f"{_plural(count, 'file')} read from {display}'s save directory left out: "
-            f"its place is not known. {remedy}")
+            f"{SAVE_NOT_KNOWN}. {remedy}")
 
 
 def save_lines(files: list[dict], omitted: list[dict], bios_path: Path | None,
@@ -6704,12 +6735,12 @@ def save_lines(files: list[dict], omitted: list[dict], bios_path: Path | None,
     where = _SAVE_WHERE.get(bios_path) if bios_path is not None else None
     if count and where is not None:
         lines.append(saves_line(display, count, where))
-    left = sum(1 for entry in omitted if entry.get("reason") == "no_save_directory")
+    left = [entry for entry in omitted if entry.get("reason") == "no_save_directory"]
     if left:
-        why = _SAVE_WHY.get(bios_path) if bios_path is not None else None
-        lines.append(f"{_plural(left, 'file')} read from {display}'s save directory left "
-                     f"out: {why}." if why else
-                     unplaced_line(display, left, "Name it with --save-dir."))
+        why = next((entry for entry in left if entry.get("why")), None)
+        lines.append(f"{_plural(len(left), 'file')} read from {display}'s save directory "
+                     f"left out: {why['why']}{why.get('remedy') or ''}." if why else
+                     unplaced_save_line(display, len(left), "Name it with --save-dir."))
     return lines
 
 
@@ -14327,7 +14358,7 @@ def _short_path(path: Path | None, home: Path) -> str:
 # What a check run tells the screen, kept whole when Choose systems widens a
 # --system plan: Back with the same ticks gives that plan back.
 _CHECK_FIELDS = ("check", "files", "systems", "choices", "set_aside", "found", "scanned",
-                 "unreadable", "saves", "check_summary", "checked_flags", "cli_systems",
+                 "unreadable", "saves", "unplaced_why", "check_summary", "checked_flags", "cli_systems",
                  "facts", "ticked", "version", "board", "checked_dests", "games",
                  "games_unavailable")
 
@@ -14558,6 +14589,9 @@ class TuiState:
         self.check_summary: dict | None = None
         # The saves event of the check: the files that go to the save folder.
         self.saves: dict | None = None
+        # The unplaced events of the check: per root (save, roms, configs,
+        # emulators), why the files read below its folder are left out.
+        self.unplaced_why: dict[str, str] = {}
         # The version event of the check: the list built for another
         # release than the one this machine runs, said on the plan and the
         # result as line mode says it.
@@ -22754,7 +22788,17 @@ def _pass_version_and_saves(run: _InstallRun, p: _PlatformPass) -> None:
     if not manifest.get("save_directory") and not run.packing:
         # Its own list leaves these files out: naming the folder with
         # --save-dir installs none of them, and was advised in a loop.
-        _SAVE_WHY[bios_path] = unlisted_saves_words(display)
+        why = unlisted_saves_words(display)
+        p.unplaced = [_unlisted_save(entry, why) for entry in p.unplaced]
+        p.omitted_files = [_unlisted_save(entry, why) for entry in p.omitted_files]
+
+
+def _unlisted_save(entry: dict, why: str) -> dict:
+    """entry, when read from a save directory the list names no place for,
+    with why in words and no remedy."""
+    if entry.get("reason") != "no_save_directory":
+        return entry
+    return {**entry, "why": why, "remedy": ""}
 
 
 def _pass_games(run: _InstallRun, p: _PlatformPass) -> None:
@@ -22980,7 +23024,9 @@ def _pass_unplaced(run: _InstallRun, p: _PlatformPass) -> bool:
         say_saves(p.plat_name, p.files, p.omitted_files + p.unplaced, p.bios_path, p.display,
                   p.menu)
         if not run.listing:
-            say_unplaced(p.unplaced, p.bios_path, p.display)
+            say_unplaced(p.unplaced, p.display)
+        for root, why in unplaced_whys(p.omitted_files + p.unplaced).items():
+            EVENTS.emit("unplaced", platform=p.plat_name, root=root, why=why)
 
     if args.list_systems or args.list_cores:
         _print_choices(p.plat_name, p.files, p.omitted_files, args.list_systems, p.manifest)
@@ -25317,11 +25363,16 @@ def _save_folder_words(state: TuiState) -> str:
         return _short_path(given, state.home)
     if state.saves and state.saves.get("folder"):
         return _short_path(Path(save_where_words(state.saves["folder"])[1]), state.home)
-    place = (save_directory_for(state.dest, state.manifest, None)
-             if state.dest is not None and state.manifest else None)
-    if isinstance(place, SavePlace):
-        return _short_path(spelled(place.directory), state.home)
-    return "not known"
+    # The cause the check gave, else the one the same rule gives here: a
+    # RetroArch keeping saves beside each game read as "not known".
+    why = state.unplaced_why.get("save")
+    if why is None:
+        place = (save_directory_for(state.dest, state.manifest, None)
+                 if state.dest is not None and state.manifest else None)
+        if isinstance(place, SavePlace):
+            return _short_path(spelled(place.directory), state.home)
+        why = place.cause if place is not None else ""
+    return why if why and why != SAVE_NOT_KNOWN else "not known"
 
 
 def _tui_card_bound(state: TuiState) -> tuple[str, str] | None:
@@ -27472,17 +27523,29 @@ def _saves_lines(state: TuiState, saves: dict | None, whole: bool = False) -> li
 
 def _unplaced_lines(summary: dict | None, state: TuiState,
                     remedy: str = "") -> list[str]:
-    """The files read from the frontend's save directory that the run left
-    out, that directory being unknown: said, never silent."""
-    count = sum(group.get("files", 0) for group in (summary or {}).get("skipped") or []
-                if group.get("reason") == "no_save_directory")
+    """The files the run left out, their folder (save, roms, configs,
+    emulators) being unknown, with the reason line mode gives: said, never
+    silent."""
+    counts = {group.get("reason"): group.get("files", 0)
+              for group in (summary or {}).get("skipped") or []}
+    name = display_name(state.platform) if state.platform else "the frontend"
+    lines = _unplaced_save_lines(counts.get("no_save_directory", 0), name, state, remedy)
+    for root in UNPLACED_FOLDERS:
+        count, why = counts.get(f"no_{root}_directory", 0), state.unplaced_why.get(root)
+        if count and why:
+            lines.append(unplaced_line(name, root, count, why))
+    return lines
+
+
+def _unplaced_save_lines(count: int, name: str, state: TuiState, remedy: str) -> list[str]:
+    """The files read from the frontend's save directory left out, and why."""
     if not count:
         return []
-    name = display_name(state.platform) if state.platform else "the frontend"
     left = f"{_plural(count, 'file')} read from {name}'s save directory left out"
     if state.manifest and not state.manifest.get("save_directory"):
         return [f"{left}.", _detail(f"{unlisted_saves_words(name)}.")]
-    return [f"{left}. {remedy or TUI_SAVE_REMEDY}", _detail("Its place is not known.")]
+    why = state.unplaced_why.get("save") or SAVE_NOT_KNOWN
+    return [f"{left}. {remedy or TUI_SAVE_REMEDY}", _detail(f"{why[:1].upper()}{why[1:]}.")]
 
 
 # Said when ES-DE is found, and in fewer words where the long form would
@@ -29447,6 +29510,7 @@ def _start_run(state: TuiState, run: str) -> list[tuple]:
         state.choices = state.set_aside = None
         state.found, state.scanned, state.unreadable = [], [], []
         state.check_summary = state.saves = None
+        state.unplaced_why = {}
         state.version = state.version_short = state.board = ""
         state.games = state.games_reading = state.games_unavailable = None
         state.checked_flags = tui_flags(state)
@@ -31410,6 +31474,8 @@ def _take_check_event(state: TuiState, kind: str | None, event: dict) -> None:
                                f"{event['installed_version']}.")
     elif kind == "saves":
         state.saves = event
+    elif kind == "unplaced":
+        state.unplaced_why[str(event["root"])] = str(event["why"])
     elif kind == "data" and state.check is not None:
         state.check["data_bytes"] = event["bytes"]
     elif kind == "space" and state.check is not None:

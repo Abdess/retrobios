@@ -1376,7 +1376,7 @@ class OuterRootsAreUntrusted(unittest.TestCase):
         self.assertEqual((kept, len(left), out.getvalue()), ([], 4, ""))
         chosen = install.narrow([], left, ["panasonic-3do"], [], [])[1]
         with contextlib.redirect_stdout(io.StringIO()) as out:
-            install.say_unplaced(chosen, bios, "EmuDeck")
+            install.say_unplaced(chosen, "EmuDeck")
         self.assertEqual(out.getvalue(), "  1 file read from EmuDeck's roms folder left out: "
                                          f"{bios} is not its BIOS folder.\n")
 

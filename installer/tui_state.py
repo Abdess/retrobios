@@ -231,6 +231,9 @@ class TuiState:
         self.check_summary: dict | None = None
         # The saves event of the check: the files that go to the save folder.
         self.saves: dict | None = None
+        # The unplaced events of the check: per root (save, roms, configs,
+        # emulators), why the files read below its folder are left out.
+        self.unplaced_why: dict[str, str] = {}
         # The version event of the check: the list built for another
         # release than the one this machine runs, said on the plan and the
         # result as line mode says it.

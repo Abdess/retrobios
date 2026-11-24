@@ -4535,6 +4535,31 @@ class BackTicksAndSaveFolder(unittest.TestCase):
         lines = install.tui_view(state, 40, 12)
         self.assertIn(" Shared, counted once", lines)
 
+    def test_a_folder_left_out_gives_the_cause_line_mode_gives(self):
+        """A RetroArch keeping saves beside each game read on the screen as
+        "Its place is not known", and the roms folder had no line at all."""
+        files = [{"dest": "keys.txt", "root": "save", "size": 1}]
+        why = install.SaveUnknown("RetroArch keeps saves beside each game "
+                                  "(savefiles_in_content_dir in /c/retroarch.cfg)",
+                                  ": name the folder with --save-dir")
+        with mock.patch.object(install, "save_directory_for", return_value=why):
+            kept, left = install.place_save_entries(files, Path("/bios"), {}, None, "RetroArch")
+        roms = [{"dest": "pico-8/pico8_64", "root": "roms", "cores": ["x"]}]
+        _kept, beyond = install.place_relative_entries(roms, Path("/card/notbios"), {})
+        self.assertIn(f"left out: {why.words}.",
+                      " ".join(install.save_lines(kept, left, Path("/bios"), "RetroArch")))
+        state = checked_state()
+        state.manifest = {**state.manifest, "save_directory": {"folder": "saves",
+                                                               "by_core": True}}
+        state.unplaced_why = install.unplaced_whys(left + beyond)
+        summary = {"skipped": [{"reason": "no_save_directory", "files": 1},
+                               {"reason": "no_roms_directory", "files": 1}]}
+        lines = install._unplaced_lines(summary, state)
+        self.assertIn(f"{why.cause}.", screen_text(lines))
+        self.assertIn("1 file read from RetroArch's roms folder left out: /card/notbios is "
+                      "not its BIOS folder.", lines)
+        self.assertEqual(install._save_folder_words(state), why.cause)
+
     def test_the_save_folder_remedy_is_the_same_on_both_screens(self):
         summary = {"skipped": [{"reason": "no_save_directory", "files": 1}]}
         state = checked_state()

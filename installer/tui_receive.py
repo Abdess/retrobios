@@ -117,6 +117,8 @@ def _take_check_event(state: TuiState, kind: str | None, event: dict) -> None:
                                f"{event['installed_version']}.")
     elif kind == "saves":
         state.saves = event
+    elif kind == "unplaced":
+        state.unplaced_why[str(event["root"])] = str(event["why"])
     elif kind == "data" and state.check is not None:
         state.check["data_bytes"] = event["bytes"]
     elif kind == "space" and state.check is not None:

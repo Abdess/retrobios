@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, NamedTuple
 
 from installer.destination import _last_name
 from installer.from_folders import MAX_SCANNED_FILES
-from installer.frontend_folders import save_where_words
+from installer.frontend_folders import SAVE_NOT_KNOWN, UNPLACED_FOLDERS, save_where_words, unplaced_line
 from installer.install_record import record_changes, record_says
 from installer.manifest import GAME_DATA, OTHER_SYSTEMS
 from installer.offline import LOCAL, offline_named, offline_undo
@@ -400,17 +400,29 @@ def _saves_lines(state: TuiState, saves: dict | None, whole: bool = False) -> li
 
 def _unplaced_lines(summary: dict | None, state: TuiState,
                     remedy: str = "") -> list[str]:
-    """The files read from the frontend's save directory that the run left
-    out, that directory being unknown: said, never silent."""
-    count = sum(group.get("files", 0) for group in (summary or {}).get("skipped") or []
-                if group.get("reason") == "no_save_directory")
+    """The files the run left out, their folder (save, roms, configs,
+    emulators) being unknown, with the reason line mode gives: said, never
+    silent."""
+    counts = {group.get("reason"): group.get("files", 0)
+              for group in (summary or {}).get("skipped") or []}
+    name = display_name(state.platform) if state.platform else "the frontend"
+    lines = _unplaced_save_lines(counts.get("no_save_directory", 0), name, state, remedy)
+    for root in UNPLACED_FOLDERS:
+        count, why = counts.get(f"no_{root}_directory", 0), state.unplaced_why.get(root)
+        if count and why:
+            lines.append(unplaced_line(name, root, count, why))
+    return lines
+
+
+def _unplaced_save_lines(count: int, name: str, state: TuiState, remedy: str) -> list[str]:
+    """The files read from the frontend's save directory left out, and why."""
     if not count:
         return []
-    name = display_name(state.platform) if state.platform else "the frontend"
     left = f"{_plural(count, 'file')} read from {name}'s save directory left out"
     if state.manifest and not state.manifest.get("save_directory"):
         return [f"{left}.", _detail(f"{unlisted_saves_words(name)}.")]
-    return [f"{left}. {remedy or TUI_SAVE_REMEDY}", _detail("Its place is not known.")]
+    why = state.unplaced_why.get("save") or SAVE_NOT_KNOWN
+    return [f"{left}. {remedy or TUI_SAVE_REMEDY}", _detail(f"{why[:1].upper()}{why[1:]}.")]
 
 
 # Said when ES-DE is found, and in fewer words where the long form would

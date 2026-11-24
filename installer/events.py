@@ -147,6 +147,11 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # per core), once that directory is known. Not written when it is not:
     # the summary's skipped then counts them (no_save_directory).
     "saves": ("platform", "files", "folder"),
+    # Where saves is written, once per root (save, roms, configs or emulators)
+    # whose folder the run cannot place: why its files are left out, in
+    # words. The summary's skipped counts them (no_<root>_directory). A
+    # kind of its own, since schema 1 never adds a key to summary.
+    "unplaced": ("platform", "root", "why"),
     "download": ("platform", "files", "bytes"),
     "progress": ("files_done", "files_total", "bytes_done", "bytes_total"),
     # Right after each progress event, and once when the files of a

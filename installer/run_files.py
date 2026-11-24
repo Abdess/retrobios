@@ -40,12 +40,12 @@ from installer.filesystems import (
     split_fat_refused,
 )
 from installer.frontend_folders import (
-    _SAVE_WHY,
     place_emulator_entries,
     place_relative_entries,
     place_save_entries,
     say_saves,
     say_unplaced,
+    unplaced_whys,
 )
 from installer.games import fallback_lines, read_games
 from installer.install_record import _RECORD_TAKEN, by_record, drop_recorded, record_menu_words
@@ -510,7 +510,17 @@ def _pass_version_and_saves(run: _InstallRun, p: _PlatformPass) -> None:
     if not manifest.get("save_directory") and not run.packing:
         # Its own list leaves these files out: naming the folder with
         # --save-dir installs none of them, and was advised in a loop.
-        _SAVE_WHY[bios_path] = unlisted_saves_words(display)
+        why = unlisted_saves_words(display)
+        p.unplaced = [_unlisted_save(entry, why) for entry in p.unplaced]
+        p.omitted_files = [_unlisted_save(entry, why) for entry in p.omitted_files]
+
+
+def _unlisted_save(entry: dict, why: str) -> dict:
+    """entry, when read from a save directory the list names no place for,
+    with why in words and no remedy."""
+    if entry.get("reason") != "no_save_directory":
+        return entry
+    return {**entry, "why": why, "remedy": ""}
 
 
 def _pass_games(run: _InstallRun, p: _PlatformPass) -> None:
@@ -736,7 +746,9 @@ def _pass_unplaced(run: _InstallRun, p: _PlatformPass) -> bool:
         say_saves(p.plat_name, p.files, p.omitted_files + p.unplaced, p.bios_path, p.display,
                   p.menu)
         if not run.listing:
-            say_unplaced(p.unplaced, p.bios_path, p.display)
+            say_unplaced(p.unplaced, p.display)
+        for root, why in unplaced_whys(p.omitted_files + p.unplaced).items():
+            EVENTS.emit("unplaced", platform=p.plat_name, root=root, why=why)
 
     if args.list_systems or args.list_cores:
         _print_choices(p.plat_name, p.files, p.omitted_files, args.list_systems, p.manifest)

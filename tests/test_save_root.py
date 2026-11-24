@@ -512,15 +512,15 @@ class TheInstallerFindsTheSaveDirectory(unittest.TestCase):
         for key in ("savefiles_in_content_dir", "sort_savefiles_by_content_enable"):
             with self.subTest(key=key):
                 found = self.place(f'{key} = "true"\n')
-                self.assertIsInstance(found, str)
-                self.assertIn(key, found)
+                self.assertIsInstance(found, install.SaveUnknown)
+                self.assertIn(key, found.cause)
 
     def test_without_a_config(self):
         self.assertEqual(self.place(None), install.SavePlace(self.app / "saves", True))
         other = self.root / "BIOS"
         found = install.save_directory_for(other, self.MANIFEST)
-        self.assertIsInstance(found, str)
-        self.assertIn("--save-dir", found)
+        self.assertIsInstance(found, install.SaveUnknown)
+        self.assertIn("--save-dir", found.words)
         self.assertEqual(install.save_directory_for(other, self.MANIFEST, self.root / "s"),
                          install.SavePlace(self.root / "s", True))
 

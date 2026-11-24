@@ -11,7 +11,7 @@ from installer.choices import available_choices, core_files, emulator_names
 from installer.datadirs import select_data_directories
 from installer.destination import dest_drive, shown_bios_folder
 from installer.embedded import CARD_PLATFORMS
-from installer.frontend_folders import save_directory_for, save_where_words
+from installer.frontend_folders import SAVE_NOT_KNOWN, save_directory_for, save_where_words
 from installer.games import GAMES_REASONS
 from installer.manifest import OTHER_SYSTEMS, entry_copies
 from installer.narrowing import narrow
@@ -367,11 +367,16 @@ def _save_folder_words(state: TuiState) -> str:
         return _short_path(given, state.home)
     if state.saves and state.saves.get("folder"):
         return _short_path(Path(save_where_words(state.saves["folder"])[1]), state.home)
-    place = (save_directory_for(state.dest, state.manifest, None)
-             if state.dest is not None and state.manifest else None)
-    if isinstance(place, SavePlace):
-        return _short_path(spelled(place.directory), state.home)
-    return "not known"
+    # The cause the check gave, else the one the same rule gives here: a
+    # RetroArch keeping saves beside each game read as "not known".
+    why = state.unplaced_why.get("save")
+    if why is None:
+        place = (save_directory_for(state.dest, state.manifest, None)
+                 if state.dest is not None and state.manifest else None)
+        if isinstance(place, SavePlace):
+            return _short_path(spelled(place.directory), state.home)
+        why = place.cause if place is not None else ""
+    return why if why and why != SAVE_NOT_KNOWN else "not known"
 
 
 def _tui_card_bound(state: TuiState) -> tuple[str, str] | None:

@@ -211,7 +211,7 @@ def _short_path(path: Path | None, home: Path) -> str:
 # What a check run tells the screen, kept whole when Choose systems widens a
 # --system plan: Back with the same ticks gives that plan back.
 _CHECK_FIELDS = ("check", "files", "systems", "choices", "set_aside", "found", "scanned",
-                 "unreadable", "saves", "check_summary", "checked_flags", "cli_systems",
+                 "unreadable", "saves", "unplaced_why", "check_summary", "checked_flags", "cli_systems",
                  "facts", "ticked", "version", "board", "checked_dests", "games",
                  "games_unavailable")
 

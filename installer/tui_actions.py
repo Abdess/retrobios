@@ -217,6 +217,7 @@ def _start_run(state: TuiState, run: str) -> list[tuple]:
         state.choices = state.set_aside = None
         state.found, state.scanned, state.unreadable = [], [], []
         state.check_summary = state.saves = None
+        state.unplaced_why = {}
         state.version = state.version_short = state.board = ""
         state.games = state.games_reading = state.games_unavailable = None
         state.checked_flags = tui_flags(state)

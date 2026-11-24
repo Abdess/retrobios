@@ -35,6 +35,7 @@
         "found",
         "unreadable",
         "saves",
+        "unplaced",
         "download",
         "progress",
         "transfer",
@@ -128,6 +129,9 @@
     },
     {
       "$ref": "#/$defs/saves"
+    },
+    {
+      "$ref": "#/$defs/unplaced"
     },
     {
       "$ref": "#/$defs/download"
@@ -989,6 +993,35 @@
           "minimum": 0
         },
         "folder": {
+          "type": "string"
+        }
+      }
+    },
+    "unplaced": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "platform",
+        "root",
+        "why"
+      ],
+      "properties": {
+        "event": {
+          "const": "unplaced"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "root": {
+          "enum": [
+            "save",
+            "roms",
+            "configs",
+            "emulators"
+          ]
+        },
+        "why": {
           "type": "string"
         }
       }
