@@ -18,7 +18,7 @@ from installer.events import EVENTS, EVENT_SCHEMA, _event_exit_code, _event_mode
 from installer.from_folders import _open_local_sources
 from installer.handheld_app import app_not_added
 from installer.host_fs import _is_dir, _writing
-from installer.install_record import restore_kept
+from installer.restore import restore_kept
 from installer.invocation import (
     LISTING_FLAGS,
     OFFLINE_VARIABLE,

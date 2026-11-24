@@ -16,12 +16,8 @@ from installer.console import QUIT_CODE, _answer_yes
 from installer.events import EVENTS
 from installer.filesystems import keeps_case
 from installer.host_fs import _clear_read_only, _is_link
-from installer.install_record import (
-    _record_now,
-    _update_record,
-    load_record,
-    setup_record,
-)
+from installer.install_record import _record_now, load_record, setup_record
+from installer.restore import _update_record
 from installer.invocation import _INVOCATION, offline_requested
 from installer.lists import fetch_manifest
 from installer.local_check import _digest_file
