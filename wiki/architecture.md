@@ -516,7 +516,7 @@ subset:
 | File | Coverage |
 |------|----------|
 | `test_e2e_*.py` | resolution, verification, packs, inheritance, targets, truth and exporters |
-| `test_profile_sync.py`, `test_upstream.py` | source anchoring, forge parsing, revisions, cache and guarded writes |
+| `test_profile_sync_*.py`, `test_upstream.py` | source anchoring, forge parsing, revisions, cache and guarded writes |
 | `test_install_bootstrap.py`, `test_audit_*.py` | automatic wrappers, manifest boundaries, pipeline exits, strong hashes and safe archives |
 | `test_region.py` | region vocabulary, ranking, per-system grouping and repository conformance |
 | `test_site_exports.py`, `test_site_validation.py` | versioned exports, SQLite, metadata, accessibility structure and complete local-link graph |
@@ -529,7 +529,7 @@ python -m unittest tests.test_e2e_region -v   # single module
 ```
 
 `test_e2e_*.py`, `test_install_detection.py`, `test_provenance.py`, the parser tests,
-`test_profile_sync.py` and `test_upstream.py` run on synthetic fixtures with no
+`test_profile_sync_*.py` and `test_upstream.py` run on synthetic fixtures with no
 network and no real BIOS files. `test_pack_integrity.py`, `test_torrentzip.py` and
 `test_no_case_collisions.py` read the working tree and skip when the data they
 need is absent. See the [testing guide](testing-guide.md) for the fixture
