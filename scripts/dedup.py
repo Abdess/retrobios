@@ -12,7 +12,7 @@ Two types of deduplication:
 2. MAME DEVICE CLONES: Different filenames with identical content in the same
    MAME directory (e.g., bbc_m87.zip and bbc_24bbc.zip are identical ZIPs).
    These are NOT aliases: MAME loads each by its unique name. Instead of
-   deleting, we create a _mame_clones.json mapping so generate_pack.py can
+   deleting, we create a mame_clones.json mapping so generate_pack.py can
    pack all names from a single canonical file.
 
 After dedup, run generate_db.py --force to rebuild database indexes.

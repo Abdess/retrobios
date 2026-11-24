@@ -550,7 +550,7 @@ class GeneratedModelsAreWrittenWhole(unittest.TestCase):
                     archive.writestr("rom.bin", b"rom")
             data = (bios / "Arcade" / "MAME" / "set.zip").read_bytes()
             (bios / "Arcade" / "MAME" / "setclone.zip").write_bytes(data)
-            (root / "_mame_clones.json").write_text("<<<<<<< HEAD")
+            (root / "mame_clones.json").write_text("<<<<<<< HEAD")
             from model.database import CloneMapUnreadable
 
             with self.assertRaises(CloneMapUnreadable):
@@ -564,11 +564,11 @@ class GeneratedModelsAreWrittenWhole(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "bios").mkdir()
-            (root / "_mame_clones.json").write_text("<<<<<<< HEAD")
+            (root / "mame_clones.json").write_text("<<<<<<< HEAD")
             with self.assertRaises(database.CloneMapUnreadable) as caught:
                 database.get_mame_clone_map(str(root / "bios"))
             self.assertIn("Restore it from git", str(caught.exception))
-            (root / "_mame_clones.json").write_text("[]")
+            (root / "mame_clones.json").write_text("[]")
             with self.assertRaises(database.CloneMapUnreadable):
                 database.get_mame_clone_map(str(root / "bios"))
 
@@ -765,7 +765,7 @@ class AMameCloneNameIsANameStep(unittest.TestCase):
         bios.mkdir(parents=True)
         parent = bios / "parent.zip"
         parent.write_bytes(b"PARENTSET")
-        (self.tmp / "_mame_clones.json").write_text(
+        (self.tmp / "mame_clones.json").write_text(
             json.dumps({"parent.zip": {"clones": ["clone.zip"]}})
         )
         sha1 = hashlib.sha1(parent.read_bytes()).hexdigest()

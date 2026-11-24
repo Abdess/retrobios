@@ -285,7 +285,7 @@ class PlatformShareCards(unittest.TestCase):
     def test_every_platform_page_shares_its_own_card(self):
         for key in list_registered_platforms(str(REPO_ROOT / "platforms")):
             with self.subTest(platform=key):
-                card = REPO_ROOT / "docs_assets" / "og" / "platforms" / f"{key}.png"
+                card = REPO_ROOT / "website" / "assets" / "og" / "platforms" / f"{key}.png"
                 data = card.read_bytes()
                 self.assertEqual(struct.unpack(">II", data[16:24]), (1200, 630))
                 self.assertEqual(sitestarlight.og_image(f"platforms/{key}.md", "setup"),

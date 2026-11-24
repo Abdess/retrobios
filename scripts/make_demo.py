@@ -34,14 +34,14 @@ Everything a recording reads is local and the same on every machine:
   rest of the bootstrap as the site's copy does.
 - HOME is an empty folder and the prompt is "$ ".
 
-docs_assets/demo/<stem>.tape drives VHS (github.com/charmbracelet/vhs, with
+website/assets/demo/<stem>.tape drives VHS (github.com/charmbracelet/vhs, with
 ttyd, ffmpeg and a Chromium on PATH, and bwrap for the handheld). This
 script encodes what it records:
 
-    docs_assets/demo/install.gif     the README (the default variant only)
-    docs_assets/demo/<stem>.webm     the site, with <stem>.mp4 as fallback
-    docs_assets/demo/<stem>.png      the first frame shown, the video's poster
-    docs_assets/demo/demo.json       per variant, what it shows and its alt text
+    website/assets/demo/install.gif  the README (the default variant only)
+    website/assets/demo/<stem>.webm  the site, with <stem>.mp4 as fallback
+    website/assets/demo/<stem>.png   the first frame shown, the video's poster
+    website/assets/demo/demo.json    per variant, what it shows and its alt text
 
 The site build copies the video files and never runs this script. Run it
 again when a screen of the installer or the file list of its games changes:

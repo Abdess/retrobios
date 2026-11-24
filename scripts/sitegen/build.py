@@ -140,12 +140,12 @@ def _write_public_assets(docs: Path, public: Path) -> None:
     images_dest = public / "assets" / "images"
     images_dest.mkdir(parents=True, exist_ok=True)
     # Logos, system icons and sharing cards are served from the site itself
-    # (docs_assets/*/sources.json records where each came from).
+    # (website/assets/*/sources.json records where each came from).
     # brand: the mark, favicons and touch icon (scripts/make_site_icons.py).
     folders = [("logos", "logos"), ("system-icons", "system-icons"), ("og", "og"),
                ("brand", "brand")]
     for folder, dest in folders:
-        source = Path("docs_assets") / folder
+        source = Path("website", "assets") / folder
         if source.is_dir():
             shutil.copytree(source, public / "assets" / dest, dirs_exist_ok=True)
     # The diagrams and the drawn install steps, one SVG per layout and theme.
@@ -154,7 +154,7 @@ def _write_public_assets(docs: Path, public: Path) -> None:
     demo_dest = public / "assets" / "demo"
     demo_dest.mkdir(parents=True, exist_ok=True)
     for name in DEMO_ASSETS:
-        shutil.copy2(Path("docs_assets") / "demo" / name, demo_dest / name)
+        shutil.copy2(Path("website", "assets") / "demo" / name, demo_dest / name)
     assets_src = Path(".github") / "assets"
     for name, dest_name in [("logo.png", "logo.png"), ("favicon.png", "favicon.png")]:
         src = assets_src / name

@@ -17,8 +17,8 @@ from model.platforms import load_platform_config
 from model.registry import list_registered_platforms
 from sitegen.diagrams import FONT, setups_named, wrap
 
-OUT = REPO_ROOT / "docs_assets" / "og"
-LOGO = REPO_ROOT / "docs_assets" / "brand" / "logo.svg"
+OUT = REPO_ROOT / "website" / "assets" / "og"
+LOGO = REPO_ROOT / "website" / "assets" / "brand" / "logo.svg"
 PLATFORM_TAGLINE = "Which BIOS files it needs, and where each one goes"
 # The tagline's box on the card: og_card_svg wraps it at this width and
 # size, and three lines fit above the address.
@@ -26,7 +26,7 @@ TAGLINE_WIDTH, TAGLINE_SIZE, TAGLINE_LINES = 1000, 34, 3
 
 
 # Sharing cards: one 1200x630 card per section of the site, rendered to PNG
-# once by scripts/make_og_cards.py and committed under docs_assets/og/.
+# once by scripts/make_og_cards.py and committed under website/assets/og/.
 
 OG_SECTIONS: dict[str, tuple[str, str]] = {
     "home": ("BIOS and firmware packs", "Checked file by file, for {frontends}"),
@@ -40,7 +40,7 @@ OG_SECTIONS: dict[str, tuple[str, str]] = {
 
 def og_card_svg(section: str, mark_svg: str) -> str:
     """A sharing card. ``mark_svg`` is the site's white mark
-    (docs_assets/brand/logo.svg), drawn as the header draws it."""
+    (website/assets/brand/logo.svg), drawn as the header draws it."""
     title, tagline = OG_SECTIONS[section]
     tagline = tagline.format(frontends=setups_named(["RetroArch", "Batocera", "EmuDeck"]))
     mark = mark_svg.strip().replace("<svg ", '<svg x="96" y="88" width="112" height="112" ', 1)

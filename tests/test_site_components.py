@@ -302,7 +302,7 @@ class Picker(unittest.TestCase):
 
 
 UNBROKEN = WEBSITE / "src" / "plugins" / "ec-unbroken-tokens.mjs"
-LOGOS = REPO_ROOT / "docs_assets" / "logos"
+LOGOS = REPO_ROOT / "website" / "assets" / "logos"
 
 # Shown at 40 px in a tile and beside a setup's title: twice that for a
 # sharp mark on a dense screen.

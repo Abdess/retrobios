@@ -17,6 +17,8 @@ toolchain works. To set up BIOS files on a device, start with
 - **[What the packs do not hold](../gaps.md)**: files emulators load that no pack can carry yet, by platform and by emulator
 - **[Cores by platform](../cross-reference.md)**: every core each platform runs, the systems it emulates, the upstream project it comes from
 - **[Dump provenance](../provenance.md)**: how the collection lines up against the No-Intro, Redump and TOSEC catalogs
+- **[Rebuilding an archive](archive-recipes.md)**: the recipe of each arcade ZIP, and how it rebuilds the archive from the ROMs the collection holds
+- **[How emulators are tested](measurements.md)**: when an emulator is run for real, what a Proof line means, where every run is recorded
 
 ## Data
 
@@ -52,6 +54,7 @@ at run time, so the source is the primary reference:
 - **[Architecture](architecture.md)**: directory structure, data flow, platform inheritance, pack grouping, security, edge cases, CI workflows
 - **[Command-line tools](tools.md)**: every script, pipeline usage, scrapers
 - **[Build custom packs](advanced-usage.md)**: custom packs, region filtering, one file per slot, target filtering, truth generation, emulator verification, offline workflow
+- **[Screenshots wanted](images-wanted.md)**: captures of real screens the pages still need, with their alt text
 
 See [contributing](../contributing.md) for submission guidelines.
 

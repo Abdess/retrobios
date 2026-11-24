@@ -18,12 +18,21 @@ sys.path.insert(0, os.path.dirname(__file__))
 from core.cli import add_repo_inputs
 from model.database import load_database
 from core.artifacts import repository_output_lock
-from sitegen.readme import README_PATH, load_readme_inputs, render_readme, write_readme
+from sitegen.readme import (
+    README_PATH,
+    check_readme,
+    load_readme_inputs,
+    render_readme,
+    write_readme,
+)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Generate slim README.md")
     add_repo_inputs(parser, "db", "platforms")
+    parser.add_argument("--check", action="store_true",
+                        help="exit 1 when README.md or CONTRIBUTING.md differs from what"
+                             " the generator writes, writing nothing")
     args = parser.parse_args()
 
     import contextlib
@@ -38,6 +47,8 @@ def main() -> None:
     with repository_output_lock(str(README_PATH)), contextlib.ExitStack() as held:
         hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
         inputs = load_readme_inputs(db, args.platforms_dir, args.db)
+        if args.check:
+            sys.exit(check_readme(render_readme(inputs)))
         write_readme(render_readme(inputs))
 
 

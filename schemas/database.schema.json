@@ -30,7 +30,7 @@
     },
     "bios_dir": {
       "type": "string",
-      "description": "Directory the files were scanned from; _mame_clones.json sits beside it."
+      "description": "Directory the files were scanned from. mame_clones.json sits beside it."
     },
     "files": {
       "type": "object",

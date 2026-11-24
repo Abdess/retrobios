@@ -28,12 +28,18 @@ platforms/               one YAML config per platform (scraped from upstream)
   _registry.yml          platform metadata (logos, scrapers, release packs, install config)
   _guides.yml            the guide text of each platform's page
   _data_dirs.yml         data directory definitions (Dolphin Sys, PPSSPP...)
+  _core_info.json        git blob of each libretro .info as last reviewed (check_freshness.py)
   targets/               hardware target configs + _overrides.yml
+  romfolders/            each setup's rom folders, scraped from _sources/<setup>.yml
 provenance/              dump-catalog snapshots (redump, no-intro, tosec)
 recipes/                 romset recipes read from MAME and FBNeo DATs, and
                          archives.json, the recipe of every archive held
 exports/                 each platform's own file, updated, with a report of the changes
-measurements/            records of real runs, one JSONL file per emulator
+measurements/            records of real runs, one JSONL file per emulator, read by the site
+  campaign/              the campaign's contents, oracles and observations (scripts/campaign.py)
+games/                   games-on-card data: catalogs/ (No-Intro, Redump), arcade/ (parent sets
+                         per profile), regions.yml, extras.yml, headers.yml, published
+                         into install/games/ by generate_games_index.py
 scripts/                 all tooling (Python and pyyaml, jsonschema for schema checks)
   core/                  standard-library foundations: hashing, archives, artifacts, paths, CLI plumbing
   model/                 data loading: database, platforms, registry, profiles, targets, catalogues
@@ -64,26 +70,47 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   freshness/             each transcribed layer against its upstream (check_freshness.py) and the
                          refresh of each stale row (refresh_stale.py)
   orchestrate/           the pipeline's steps in order and the comparisons of step 5 (pipeline.py)
-install/                 JSON install manifests per platform
+install/                 JSON install manifests per platform, read by install.py
   targets/               JSON target manifests per platform (cores per architecture)
+  standalone/            the files of each platform's standalone emulators (--standalone)
+  games/                 the games-on-card index: setups, systems, arcade sets, fallback
+  launchers/             index.json, the handheld launchers the installer offers
 install.py               the installer, with install.sh and install.ps1 to start it,
                          built from installer/ by scripts/build_installer.py
 installer/               the installer's source, one module per concern
+packaging/pypi/          the PyPI package's project file and README (scripts/build_pypi.py)
 ports/                   launchers that run the installer on handhelds
 automation/              jobs.yml, the unattended jobs scripts/autorun.py runs
 data/                    cached data directories (not BIOS, fetched at build)
 schemas/                 JSON schemas for platform and emulator YAML (checked in CI)
 tests/                   test suite with synthetic fixtures
 wiki/                    hand-written documentation sources
-docs_assets/             logos, icons and images the site uses
-website/                 Astro Starlight project; pages, data and navigation
-                         are generated into it (gitignored, rebuilt in CI)
-_mame_clones.json        MAME parent/clone set mappings
-database.json            file index built from bios/ (SHA1 primary key)
-derivable.json           files a held dump already contains, from provenance_report.py
-retired.json             files that left the collection, written by generate_db.py
-release.json             files, sizes and assets of each pack of the last release
-allowed_signers          public key that signs SHA256SUMS.txt
+website/                 Astro Starlight project: config, components, styles, lockfile
+  assets/                logos, icons, sharing cards and demos, copied into the site by
+                         generate_site.py
+  src/data/              JSON data the components read, written by generate_site.py and
+                         committed. The pages, navigation and public/ it writes are gitignored
+database.json            file index built from bios/ by generate_db.py (SHA1 primary key),
+                         read by every tool: packs, verify, manifests, the site
+mame_clones.json         MAME parent/clone sets, written by dedup.py beside bios/, read by
+                         resolve_local_file to find a deduplicated clone
+derivable.json           files a held dump already contains, written by provenance_report.py,
+                         read by the site's provenance page
+retired.json             files that left the collection, written by generate_db.py, read by
+                         the site so old file links still answer
+release.json             files, sizes and assets of each pack of the last release, written by
+                         release_record.py, read by the README and the site download tables
+allowed_signers          public key that signs SHA256SUMS.txt, read by ssh-keygen -Y verify
+pyproject.toml           project metadata, the ruff and mypy configuration
+README.md                the repository's front page, written by generate_readme.py
+CONTRIBUTING.md          the contributing guide, written by generate_readme.py
+LICENSE                  MIT, for the scripts, schemas, documentation and metadata
+NOTICE                   the status of the BIOS files and how to ask for a removal
+SECURITY.md              the private channel for a security report
+CODE_OF_CONDUCT.md       the Contributor Covenant
+.github/                 the two workflows, issue and pull request templates, banner images
+.gitattributes           LF line endings, bios/ kept as bytes, generated files marked
+.gitignore               the release assets under bios/ (the large-files registry), local output
 dist/                    generated packs (gitignored)
 .cache/                  hash cache and large file downloads (gitignored)
 ```
@@ -480,7 +507,7 @@ not available on the target. Without `--target`, all systems are included.
 
 ## MAME clone map
 
-`_mame_clones.json`, beside the `bios/` tree it describes, maps MAME clone ROM names to their canonical parent.
+`mame_clones.json`, beside the `bios/` tree it describes, maps MAME clone ROM names to their canonical parent.
 When a clone ZIP was deduplicated, `resolve_local_file` uses this map to find the canonical file.
 
 ## Install manifests

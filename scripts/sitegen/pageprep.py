@@ -46,8 +46,8 @@ def unresolved_images(markdown: str) -> list[str]:
 
 # Local copies of images the site used to load from other hosts.
 
-LOGO_DIR = REPO_ROOT / "docs_assets" / "logos"
-ICON_DIR = REPO_ROOT / "docs_assets" / "system-icons"
+LOGO_DIR = REPO_ROOT / "website" / "assets" / "logos"
+ICON_DIR = REPO_ROOT / "website" / "assets" / "system-icons"
 SITE_LOGO_DIR = "assets/logos"
 SITE_ICON_DIR = "assets/system-icons"
 IMAGE_LINK = re.compile(r"(!\[[^\]\n]*\]\()(https?://[^)\s]+)(\))")

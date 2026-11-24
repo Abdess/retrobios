@@ -40,6 +40,8 @@ STEPS: tuple[Step, ...] = (
     Step("ruff check .", "the lint rules of pyproject.toml", needs="ruff",
          provider='pip install -e ".[dev]"'),
     Step("python scripts/build_installer.py --check", "install.py is the one installer/ builds"),
+    Step("python scripts/generate_readme.py --db database.json --platforms-dir platforms --check",
+         "README.md and CONTRIBUTING.md are the generated ones", env={"RETROBIOS_OFFLINE": "1"}),
     Step("python scripts/profile_sync.py --added --strict", "each profile the branch adds"),
     Step("vermin --no-tips -t=3.8- --violations install.py installer", "the installer stays on Python 3.8",
          needs="vermin", provider="the pip line of CONTRIBUTING.md"),

@@ -25,3 +25,24 @@ data/** -text
 # Measurement records are append-only: two branches that each add a line to
 # the same file merge by keeping both.
 measurements/*.jsonl text eol=lf merge=union
+
+# What a pipeline run writes (scripts/core/generated.py, GENERATED), folded in
+# review diffs and left out of the language statistics. Anchored with a slash:
+# a bare README.md would match platforms/README.md too. A test holds this list
+# equal to GENERATED.
+/database.json linguist-generated=true
+/derivable.json linguist-generated=true
+/retired.json linguist-generated=true
+/install/*.json linguist-generated=true
+/install/standalone/*.json linguist-generated=true
+/install/targets/*.json linguist-generated=true
+/install/games/*.json linguist-generated=true
+/install/games/*/*.json linguist-generated=true
+/README.md linguist-generated=true
+/CONTRIBUTING.md linguist-generated=true
+/wiki/installer.md linguist-generated=true
+/wiki/reading-reports.md linguist-generated=true
+/website/src/data/*.json linguist-generated=true
+/recipes/archives.json linguist-generated=true
+/exports/*.json linguist-generated=true
+/exports/*/*.json linguist-generated=true

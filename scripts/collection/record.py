@@ -18,7 +18,7 @@ def database_record(files: dict, indexes: dict, bios_dir: str) -> dict:
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "total_files": len(files),
         "total_size": sum(entry["size"] for entry in files.values()),
-        # The tree these paths belong to: dedup writes _mame_clones.json
+        # The tree these paths belong to: dedup writes mame_clones.json
         # beside it, and the resolver reads the map there, not at the repo root.
         "bios_dir": os.path.normpath(bios_dir),
         "files": files,

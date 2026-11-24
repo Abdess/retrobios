@@ -36,9 +36,9 @@ hosted runner should rebuild and re-upload.
 
 **Trigger.** Push to `main` when an input of the site changes: the data
 (`platforms/`, `emulators/`, `provenance/`, `exports/`, `measurements/`,
-`database.json`, `release.json`, `derivable.json`, `install/`), the pages and
-their assets (`wiki/`, `docs_assets/`, `website/`), the installer and its two
-bootstraps the site serves, `campaign/observations.yml` (the Proof lines
+`database.json`, `release.json`, `derivable.json`, `mame_clones.json`,
+`install/`), the pages and their assets (`wiki/`, `website/`), the installer
+and its two bootstraps the site serves, `campaign/observations.yml` (the Proof lines
 of the emulator pages), the workflow itself, and every script the build runs
 or imports. Also manual dispatch.
 
@@ -111,7 +111,8 @@ scripts stay Python.
 `install.py`, `install.sh` or `install.ps1` (the bootstraps pin the
 installer's SHA-256, so editing one without the other fails the run),
 `ports/**` (the handheld port bundles the installer), `packaging/**` (the PyPI
-package is built from it), or any input of the site build. The path lists are spelled out once per event because the workflow
+package is built from it), `README.md` and `CONTRIBUTING.md` (both generated),
+or any input of the site build. The path lists are spelled out once per event because the workflow
 parser reads no YAML anchor, and a test holds the two equal.
 
 **Concurrency.** Per-PR group on a pull request, per-ref on a push. A pull
@@ -133,6 +134,9 @@ which validates every platform YAML against `schemas/platform.schema.json` and
 every emulator profile against `schemas/emulator.schema.json`. Both schemas set
 `additionalProperties: false`, so a typo in a field name fails the job instead
 of being silently ignored.
+It also regenerates `README.md` and `CONTRIBUTING.md` with
+`generate_readme.py` and fails when either differs from the committed file:
+both are written by `scripts/sitegen/readme.py`, never by hand.
 
 **check-new-profiles.** Runs `profile_sync.py --added --base BASE --strict`,
 which checks each profile the change adds (the files `git diff --diff-filter=A`

@@ -62,7 +62,7 @@ class SuiteWithoutJsonschema(unittest.TestCase):
 
 
 # Tools a maintainer runs by hand when a logo or a card changes. Their output
-# is committed under docs_assets/ and the build only reads it, so the build
+# is committed under website/assets/ and the build only reads it, so the build
 # keeps to the standard library and pyyaml.
 MAINTENANCE_TOOLS = {
     "sitegen/imagenormalize.py": "PIL",

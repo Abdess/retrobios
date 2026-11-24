@@ -41,6 +41,18 @@ def json_text(value: object) -> str:
     return str(value)
 
 
+def content_differs(
+    path: str, content: str, normalize: Callable[[str], str] | None = None
+) -> bool:
+    """Whether path is absent or holds other content once timestamp lines are stripped."""
+    if not os.path.exists(path):
+        return True
+    with open(path) as f:
+        existing = f.read()
+    before, after = (normalize(existing), normalize(content)) if normalize else (existing, content)
+    return _strip_timestamps(before) != _strip_timestamps(after)
+
+
 def write_if_changed(
     path: str, content: str, normalize: Callable[[str], str] | None = None
 ) -> bool:
@@ -54,16 +66,8 @@ def write_if_changed(
     part it owns. Without it the second pass always sees a difference, the
     file is rewritten, and the fresh timestamp defeats the comparison.
     """
-    if os.path.exists(path):
-        with open(path) as f:
-            existing = f.read()
-        before, after = (
-            (normalize(existing), normalize(content))
-            if normalize
-            else (existing, content)
-        )
-        if _strip_timestamps(before) == _strip_timestamps(after):
-            return False
+    if not content_differs(path, content, normalize):
+        return False
     write_text_atomic(path, content)
     return True
 

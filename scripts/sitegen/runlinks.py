@@ -64,7 +64,7 @@ def prime_system_icons(names: set[str]) -> int:
     """Record which system icons the site holds a copy of, and return how
     many of ``names`` have none.
 
-    The icons are copied once into ``docs_assets/system-icons/`` by
+    The icons are copied once into ``website/assets/system-icons/`` by
     ``scripts/fetch_site_images.py``: the build reads that folder and never
     the network. A system without a copy gets no icon, because a heading
     with a broken image reads worse than a heading without one.

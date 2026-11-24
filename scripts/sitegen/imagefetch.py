@@ -1,4 +1,4 @@
-"""The platform logos and system icons the site shows, copied once into docs_assets/."""
+"""The platform logos and system icons the site shows, copied once into website/assets/."""
 
 from __future__ import annotations
 

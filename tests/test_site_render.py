@@ -26,7 +26,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 class IconsComeFromTheLocalCopies(unittest.TestCase):
     """Icons were checked against upstream with a HEAD request per system on
     every build, and linked from a branch tip. The build now reads the copies
-    in docs_assets/system-icons and makes no request."""
+    in website/assets/system-icons and makes no request."""
 
     def setUp(self) -> None:
         self.addCleanup(runlinks.use, runlinks.current())
@@ -35,7 +35,7 @@ class IconsComeFromTheLocalCopies(unittest.TestCase):
     def test_availability_is_the_folder(self):
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
-        folder = Path(tmp.name) / "docs_assets" / "system-icons"
+        folder = Path(tmp.name) / "website" / "assets" / "system-icons"
         folder.mkdir(parents=True)
         (folder / "A - One.png").write_bytes(b"png")
         with mock.patch.object(runlinks, "ICON_DIR", folder):

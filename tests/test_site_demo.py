@@ -28,7 +28,7 @@ from sitegen import starlight as sitestarlight
 
 ROOT = Path(__file__).resolve().parent.parent
 
-DEMO = ROOT / "docs_assets" / "demo"
+DEMO = ROOT / "website" / "assets" / "demo"
 COMPONENT = ROOT / "website" / "src" / "components" / "InstallDemo.astro"
 
 

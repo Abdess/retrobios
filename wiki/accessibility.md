@@ -1,3 +1,9 @@
+---
+level: setup
+order: 105
+terms: accessibility, screen reader, keyboard, colour, contrast
+---
+
 # Accessibility
 
 ## Commitment
@@ -50,4 +56,4 @@ Open an issue at https://github.com/Abdess/retrobios/issues/new (the **Report a 
 - your system, browser or terminal, and any assistive technology (screen reader, magnifier, controller, voice control),
 - what you expected and what happened.
 
-A security problem goes through the private channel described in [SECURITY.md](SECURITY.md).
+A security problem goes through the private channel described in [SECURITY.md](https://github.com/Abdess/retrobios/blob/main/SECURITY.md).

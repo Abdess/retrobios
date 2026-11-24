@@ -92,7 +92,7 @@ class PlatformLogos(unittest.TestCase):
 
         tiles = {re.sub(r"[^a-z0-9]+", "-", tile.name.lower()).strip("-"): tile.logo
                  for group in group_tiles().values() for tile in group}
-        sources = json.loads((REPO_ROOT / "docs_assets" / "logos" / "sources.json").read_text())
+        sources = json.loads((REPO_ROOT / "website" / "assets" / "logos" / "sources.json").read_text())
         for entry in sources["images"]:
             with self.subTest(platform=entry["platform"]):
                 logo = (self.registry[entry["platform"]].get("logo")

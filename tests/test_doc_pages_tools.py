@@ -189,7 +189,7 @@ CONTRIBUTOR_PAGES = (
 REPO_DIRS = (
     "scripts/", "platforms/", "emulators/", "schemas/", "tests/", "wiki/", "install/",
     "provenance/", "recipes/", "exports/", "measurements/", "website/", "automation/",
-    "ports/", "docs_assets/", "docs/", "campaign/",
+    "ports/", "docs/", "campaign/",
 )
 
 PLACEHOLDER = re.compile(r"[<>*{}]|myplatform|\bNAME\b|\.\.\.")

@@ -315,7 +315,7 @@ def og_section(rel: str, level: str) -> str:
 
 # Sharing cards of their own, made by scripts/make_og_cards.py: one per
 # platform page, titled with the platform's name.
-OG_DIR = REPO_ROOT / "docs_assets" / "og"
+OG_DIR = REPO_ROOT / "website" / "assets" / "og"
 
 
 # An emulator page's card is that of the maker of the first system it runs,

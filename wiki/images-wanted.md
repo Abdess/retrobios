@@ -1,15 +1,22 @@
-# Images that need a real device
+---
+level: contribute
+order: 95
+terms: screenshot, capture, image, alt text
+---
+
+# Screenshots wanted
 
 These pictures show a real screen, so they are captured on a real install and
-never drawn as a mock-up. Each entry says what the capture must show, where it
-goes, and the alt text it carries. Folder layouts that follow from data are
-drawn by `scripts/site_diagrams.py` instead (the MinUI card tree is
-`<!-- image: minui-card -->`).
+never drawn as a mock-up. Each entry says what the capture must show, the pages
+it is for, and the alt text it carries. Folder layouts that follow from data
+are drawn by `scripts/site_diagrams.py` instead, from the repository's own
+files.
 
 Captures: PNG or WebP, 1200 px wide at most, cropped tight, under 150 KB,
 personal paths and user names removed. Menu labels are checked against the
-current release of the software before the capture is used. Put each file in
-`docs_assets/screens/` and note the software version in the commit message.
+current release of the software before the capture is used. Attach the file
+to a [new issue](https://github.com/Abdess/retrobios/issues/new) that names
+the entry below and the software version shown.
 
 ## RetroArch System/BIOS directory
 
@@ -26,7 +33,7 @@ the firmware lines reading Present. For RetroArch and Lakka pages, "Done when".
 
 **Alt text**: RetroArch Core Information for a PlayStation core, each firmware line marked Present.
 
-## Steam Deck Desktop Mode and Konsole
+## Steam Deck desktop mode and terminal
 
 Two panels: the Steam Deck power menu with Switch to Desktop selected, then the
 desktop with Konsole open and the install command pasted. For the EmuDeck and

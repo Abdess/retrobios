@@ -8,7 +8,7 @@ from pathlib import Path
 
 from core.paths import REPO_ROOT
 
-OUT = REPO_ROOT / "docs_assets" / "demo"
+OUT = REPO_ROOT / "website" / "assets" / "demo"
 WORK = REPO_ROOT / "tmp" / "demo"
 FACTS = OUT / "demo.json"
 

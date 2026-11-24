@@ -4,7 +4,7 @@
 The site served these from other hosts: GitHub avatars and files on the
 ``master`` branch of upstream repositories. A rename upstream broke an image
 in silence, and every page view hit third-party hosts. This tool copies them
-into ``docs_assets/logos/`` and ``docs_assets/system-icons/``, which are
+into ``website/assets/logos/`` and ``website/assets/system-icons/``, which are
 committed, and records where each came from in a ``sources.json`` beside
 them. The site build only reads those copies (``sitegen.pageprep.localize_images``).
 

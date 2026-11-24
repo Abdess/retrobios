@@ -354,6 +354,8 @@ they use to select over the installer.
   (code 2).
 - `--plain`, `RETROBIOS_PLAIN=1` or `ACCESSIBLE=1` keep the questions line by
   line. This is the mode for a screen reader, which reads a full screen badly.
+  [Accessibility](accessibility.md) lists what works without the full screen,
+  colour or a mouse, and what has not been checked.
 
 Behind the screens, the installer runs itself with `--check --events`, then
 `--events --yes` and the options chosen: the same

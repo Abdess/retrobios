@@ -13,13 +13,13 @@ everyday words (BIOS, emulator, core, hash) are in the [glossary](glossary.md).
     the RetroArch menu. It starts the emulator.
 
 **Pack**
-:   One ZIP file with every BIOS file a setup uses. A pack over 2 GB comes in
-    several parts, and every part is needed. A release publishes packs for the
-    setups the registry marks `release_pack`, and the installer serves the rest.
+:   Defined in the [glossary](glossary.md). A pack over 2 GB comes in several
+    parts, and every part is needed. A release publishes packs for the setups
+    the registry marks `release_pack`, and the installer serves the rest.
 
 **Profile and source_ref**
-:   A profile records which files one emulator opens, read from its code.
-    Every entry has a `source_ref`, the line of code that proves it, at the
+:   A profile, a YAML file in `emulators/`, records which files one emulator
+    opens, read from its code. Every entry has a `source_ref`, the line of code that proves it, at the
     revision named by `source_commit` (the pin). Example:
     `emulators/duckstation.yml` lists `scph5501.bin` at
     `src/core/bios.cpp:47`, read at its `source_commit`.
@@ -52,10 +52,6 @@ everyday words (BIOS, emulator, core, hash) are in the [glossary](glossary.md).
     CRC32) one version expects, enough to rebuild that exact ZIP from chips
     already held. Example: `spec128.zip` (MD5 `1a524bfa...`) was rebuilt from
     the FBNeo recipe.
-
-**Profile**
-:   A YAML file in `emulators/` that documents what one emulator loads, read
-    from its source code.
 
 **Ground truth**
 :   The emulator's source code, the reference every profile is checked against.

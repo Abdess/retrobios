@@ -161,7 +161,7 @@ _mame_clone_map_cache: dict[str, dict[str, str]] = {}
 
 
 class CloneMapUnreadable(SourceUnreadable):
-    """_mame_clones.json exists but is not a JSON object."""
+    """mame_clones.json exists but is not a JSON object."""
 
 
 def clone_map_path(bios_dir: str) -> str:
@@ -171,7 +171,7 @@ def clone_map_path(bios_dir: str) -> str:
     relative to the working directory let a scan of a fixture tree rewrite
     the repository's own map.
     """
-    return os.path.join(os.path.dirname(os.path.abspath(bios_dir)), "_mame_clones.json")
+    return os.path.join(os.path.dirname(os.path.abspath(bios_dir)), "mame_clones.json")
 
 
 def read_clone_map(clone_path: str) -> dict:
@@ -195,7 +195,7 @@ def read_clone_map(clone_path: str) -> dict:
 def get_mame_clone_map(bios_dir: str | None = None) -> dict[str, str]:
     """The MAME clone map (clone_name -> canonical_name) of a scanned tree.
 
-    dedup.py writes _mame_clones.json beside the tree it scanned, and the
+    dedup.py writes mame_clones.json beside the tree it scanned, and the
     map of one tree says nothing about another: read from the repository
     root whatever ``--bios-dir`` said, an alternate tree's renamed clones
     fell out of its packs. Without a tree the repository's own is read.

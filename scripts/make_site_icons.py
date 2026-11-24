@@ -11,7 +11,7 @@ four pins per side and the pixel glyph on a 4 by 4 grid. Three variants:
   shapes rasterised by a headless Chromium through Playwright, for browsers
   that take no SVG icon and for home-screen shortcuts.
 
-The files land in ``docs_assets/brand/``, which generate_site.py copies into
+The files land in ``website/assets/brand/``, which generate_site.py copies into
 the site. The site build never runs this script.
 
 The repository's own images come from the same shapes, in ``.github/assets/``:

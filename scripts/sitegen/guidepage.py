@@ -143,7 +143,7 @@ def first_screen_words() -> list[str]:
             f"and **{installer.TUI_FOLDER_TITLE}**), then offers **{installer.TUI_INSTALL_ROW}**."]
 
 
-# The demo files the site serves (docs_assets/demo/, scripts/make_demo.py):
+# The demo files the site serves (website/assets/demo/, scripts/make_demo.py):
 # the GIF is the README's, the tape and demo.json are inputs.
 DEMO_ASSETS = tuple(f"{stem}.{ext}" for stem in ("install", "install-handheld")
                     for ext in ("webm", "mp4", "png"))

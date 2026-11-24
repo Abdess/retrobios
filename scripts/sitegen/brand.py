@@ -8,7 +8,7 @@ from typing import Any
 
 from core.paths import REPO_ROOT
 
-OUT = REPO_ROOT / "docs_assets" / "brand"
+OUT = REPO_ROOT / "website" / "assets" / "brand"
 PROJECT = REPO_ROOT / ".github" / "assets"
 
 HEADER = "#3b3f7a"

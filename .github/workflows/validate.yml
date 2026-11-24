@@ -26,13 +26,13 @@ on:
       # Every input of the site build, so a page that would fail the deploy
       # fails here first (tests/test_workflow_paths.py).
       - "wiki/**"
-      - "docs_assets/**"
       - "provenance/**"
       - "exports/**"
       - "install/**"
       - "database.json"
       - "release.json"
       - "derivable.json"
+      - "mame_clones.json"
       - "retired.json"
       - "recipes/**"
       - "measurements/**"
@@ -40,6 +40,9 @@ on:
       - "website/**"
       # The type check's and the lint's configuration.
       - "pyproject.toml"
+      # Generated files: a hand edit fails the regeneration check.
+      - "README.md"
+      - "CONTRIBUTING.md"
   # Spelled out twice because the workflow parser reads no YAML anchor. A test
   # holds the two lists equal.
   push:
@@ -58,19 +61,21 @@ on:
       - "ports/**"
       - "packaging/**"
       - "wiki/**"
-      - "docs_assets/**"
       - "provenance/**"
       - "exports/**"
       - "install/**"
       - "database.json"
       - "release.json"
       - "derivable.json"
+      - "mame_clones.json"
       - "retired.json"
       - "recipes/**"
       - "measurements/**"
       - "campaign/**"
       - "website/**"
       - "pyproject.toml"
+      - "README.md"
+      - "CONTRIBUTING.md"
 
 permissions:
   contents: read
@@ -196,6 +201,15 @@ jobs:
       # one side only fails here.
       - name: Check that install.py is the one installer/ builds
         run: python scripts/build_installer.py --check
+
+      # README.md and CONTRIBUTING.md are written by scripts/sitegen/readme.py.
+      # Deploy Site compared them only after the merge, and only when another
+      # path triggered it: a hand edit to either file reached main unchecked.
+      # Offline, the contributors section is read back from the file.
+      - name: Check that README and CONTRIBUTING are the generated ones
+        env:
+          RETROBIOS_OFFLINE: "1"
+        run: python scripts/generate_readme.py --db database.json --platforms-dir platforms --check
 
   # A profile written from a clone can cite lines that do not hold the value
   # it declares, and schemas and tests pass it. Each profile a change adds is

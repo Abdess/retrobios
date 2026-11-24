@@ -1,4 +1,4 @@
-"""Merging and writing the MAME clone map _mame_clones.json."""
+"""Merging and writing the MAME clone map mame_clones.json."""
 
 from __future__ import annotations
 

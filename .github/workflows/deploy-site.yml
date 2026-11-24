@@ -242,7 +242,6 @@ on:
       - "scripts/validate_schemas.py"
       - "scripts/validate_site.py"
       - "schemas/**"
-      - "docs_assets/**"
       - "install/**"
       # The site serves install.sh and install.ps1 pinned to install.py
       # of the commit it is built from (scripts/sitegen/bootstrap.py).
@@ -256,6 +255,8 @@ on:
       - "database.json"
       - "release.json"
       - "derivable.json"
+      # The coverage counts resolve MAME clones through it.
+      - "mame_clones.json"
       - "retired.json"
       # The README and the archive recipes page count the recipes.
       - "recipes/archives.json"

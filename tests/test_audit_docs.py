@@ -800,7 +800,7 @@ class DocsDescribeTheRegistriesTheyName(unittest.TestCase):
         tools = (REPO_ROOT / "wiki" / "tools.md").read_text(encoding="utf-8")
         line = next(entry for entry in tools.splitlines() if "NODEDUP_DIRS" in entry)
         # Compared as list items: `mame` was missing while the substring
-        # test found it in `_mame_clones.json` on the same line.
+        # test found it in `mame_clones.json` on the same line.
         listed = line.split("`NODEDUP_DIRS`", 1)[1].split(":", 1)[1].rstrip(" |")
         self.assertEqual(
             sorted(item.strip() for item in listed.split(",")),

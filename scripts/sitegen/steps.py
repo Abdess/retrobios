@@ -86,7 +86,7 @@ STEPS: dict[str, tuple[str, tuple[Step, ...]]] = {
     )),
 }
 
-# The recording each tab shows (docs_assets/demo/demo.json keys), "" for none.
+# The recording each tab shows (website/assets/demo/demo.json keys), "" for none.
 TAB_DEMOS = {"device": "handheld", "windows": ""}
 DEFAULT_DEMO = "default"
 

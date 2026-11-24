@@ -141,7 +141,7 @@ class NoMermaidAtRuntime(unittest.TestCase):
 
 class ImagesAreServedFromTheSite(unittest.TestCase):
     def _manifest(self, folder: str) -> list[dict]:
-        path = ROOT / "docs_assets" / folder / "sources.json"
+        path = ROOT / "website" / "assets" / folder / "sources.json"
         return json.loads(path.read_text(encoding="utf-8"))["images"]
 
     def test_every_registry_logo_has_a_local_copy(self):
@@ -155,13 +155,13 @@ class ImagesAreServedFromTheSite(unittest.TestCase):
             with self.subTest(platform=name):
                 self.assertIn(name, copies, "run scripts/fetch_site_images.py --only logos")
                 self.assertEqual(copies[name]["source"], entry["logo"])
-                self.assertTrue((ROOT / "docs_assets" / "logos" / copies[name]["file"]).is_file())
+                self.assertTrue((ROOT / "website" / "assets" / "logos" / copies[name]["file"]).is_file())
                 self.assertTrue(copies[name]["owner"] and copies[name]["licence"])
 
     def test_every_recorded_icon_exists(self):
         for entry in self._manifest("system-icons"):
             with self.subTest(icon=entry["file"]):
-                self.assertTrue((ROOT / "docs_assets" / "system-icons" / entry["file"]).is_file())
+                self.assertTrue((ROOT / "website" / "assets" / "system-icons" / entry["file"]).is_file())
 
     def test_remote_links_with_a_copy_are_rewritten(self):
         logo = self._manifest("logos")[0]
@@ -195,10 +195,10 @@ class SharingCards(unittest.TestCase):
 
         for section in ogcards.OG_SECTIONS:
             with self.subTest(section=section):
-                data = (ROOT / "docs_assets" / "og" / f"{section}.png").read_bytes()
+                data = (ROOT / "website" / "assets" / "og" / f"{section}.png").read_bytes()
                 self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n")
                 self.assertEqual(struct.unpack(">II", data[16:24]), (1200, 630))
-                mark = (ROOT / "docs_assets" / "brand" / "logo.svg").read_text(encoding="utf-8")
+                mark = (ROOT / "website" / "assets" / "brand" / "logo.svg").read_text(encoding="utf-8")
                 ET.fromstring(ogcards.og_card_svg(section, mark))
 
     def test_the_template_names_every_section(self):
@@ -210,14 +210,14 @@ class SharingCards(unittest.TestCase):
         self.assertEqual(named, set(ogcards.OG_SECTIONS))
         for section in named:
             with self.subTest(section=section):
-                self.assertTrue((ROOT / "docs_assets" / "og" / f"{section}.png").is_file())
+                self.assertTrue((ROOT / "website" / "assets" / "og" / f"{section}.png").is_file())
 
 
 class ImagesStillNeeded(unittest.TestCase):
     """Screens that need a real device are listed, never drawn as a mock-up."""
 
     def test_the_list_gives_each_capture_its_alt_text(self):
-        text = (ROOT / "docs_assets" / "images-needed.md").read_text(encoding="utf-8")
+        text = (ROOT / "wiki" / "images-wanted.md").read_text(encoding="utf-8")
         entries = re.findall(r"(?m)^## ", text)
         self.assertGreater(len(entries), 3)
         self.assertEqual(len(entries), len(re.findall(r"(?m)^\*\*Alt text\*\*", text)))

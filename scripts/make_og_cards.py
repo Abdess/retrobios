@@ -3,7 +3,7 @@
 
 Each card is an SVG written by ``sitegen.ogcards.og_card_svg`` from the
 registry, rasterised by a headless Chromium through Playwright, then
-committed under ``docs_assets/og/``. The site build copies the PNG files and
+committed under ``website/assets/og/``. The site build copies the PNG files and
 never runs this script, so it adds nothing to the build's dependencies.
 Run it again when a section's wording, the platform count, the list of
 platforms or the consoles of a manufacturer change.

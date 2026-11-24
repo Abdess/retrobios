@@ -1,55 +1,49 @@
-# Platform Configs
+# Platform configs
 
-How platform YAML files work and where subdirectory requirements come from.
+What each file of this folder holds. How a platform checks its files is in
+[How each platform checks files](../wiki/verification-modes.md), and the
+steps to add one are in [Adding a platform](../wiki/adding-a-platform.md).
 
 ## Files
 
-- `_registry.yml` -- platform metadata (name, release pack, display order)
-- `_shared.yml` -- shared file groups with canonical destinations
-- `<platform>.yml` -- per-platform BIOS declarations
-- Inheritance: `lakka.yml` inherits `retroarch`, `retropie.yml` inherits `retroarch`
+- `<platform>.yml`: the platform's own BIOS list, written by its scraper
+  (`scripts/scraper/<platform>_scraper.py`). A hand edit is overwritten by the
+  next scrape: the fix goes in the scraper, `_shared.yml` or a profile.
+  `lakka.yml` and `retropie.yml` inherit `retroarch`, `romm.yml` inherits
+  `emulatorjs`.
+- `_registry.yml`: platform metadata (name, scraper, release pack, install
+  detection, display order).
+- `_shared.yml`: file groups several platforms include, with the destination
+  the core expects.
+- `_data_dirs.yml`: whole directory trees a core needs.
+- `_guides.yml`: the guide text of each platform's page on the site.
+- `_core_info.json`: the git blob of every libretro `.info` as last reviewed,
+  written by `check_freshness.py --record-coreinfo`.
+- `targets/`: the cores each hardware target runs, one file per platform.
+- `romfolders/`: the rom folders of each setup.
 
 ## Shared groups (`_shared.yml`)
 
-The subdirectory a BIOS goes into is determined by the **libretro core**, not
-the platform. NP2kai expects `np2kai/BIOS.ROM` whether you're on RetroArch,
-Batocera, or Recalbox. Only `base_destination` varies (`system/` vs `bios/`).
+The subdirectory a BIOS goes into is set by the core, not the platform.
+NP2kai expects `np2kai/BIOS.ROM` on RetroArch, Batocera and Recalbox alike.
+Only `base_destination` varies (`system/` or `bios/`).
 
-Shared groups define files with correct destinations **once**. Platforms
-reference them via `includes: [group_name]` in their system definitions.
-`load_platform_config()` in `scripts/model/platforms.py` resolves includes at load time,
-deduplicating by filename.
+A group declares those files and their destination once, and platforms
+include it with `includes: [group_name]` in a system. `load_platform_config()`
+(`scripts/model/platforms.py`) resolves the includes at load time. A scraper
+that writes a platform keeps its includes in its own `SYSTEM_SHARED_GROUPS`,
+so they survive the next scrape. `libretro_scraper.py` also prefixes the
+subdirectory of the cores in `CORE_SUBDIR_MAP`.
 
-When to use shared groups: whenever 2+ platforms share files that a core
-expects in a specific subdirectory. The group carries the correct destination
-so platforms can't drift.
+Adding a group:
 
-For RetroArch specifically, `libretro_scraper.py` injects `includes:`
-references and applies subdirectory prefixes via `CORE_SUBDIR_MAP` during
-generation. Manual edits to `retroarch.yml` will be overwritten on next scrape.
+1. Add it to `_shared.yml` with a comment citing the code that reads the path.
+2. Give each file its name, destination with the subdirectory, `required` and
+   hashes.
+3. Reference it with `includes: [group_name]`, in the scraper's
+   `SYSTEM_SHARED_GROUPS` for a scraped platform.
 
-## Data directories (`_data_dirs.yml`)
-
-Some cores need entire directory trees, not just individual BIOS files.
-Dolphin needs `dolphin-emu/Sys/` (GameSettings, DSP firmware, fonts),
-PPSSPP needs `PPSSPP/` (font assets, shaders), blueMSX needs `Databases/`
-and `Machines/` (machine configs).
-
-These are defined in `_data_dirs.yml` as a central registry with upstream
-source URLs. The pack generator auto-refreshes from upstream before building
-(use `--offline` to skip). Data directories live in `data/` (not `bios/`)
-and are NOT indexed in `database.json`.
-
-Adding a data directory:
-1. Add entry to `_data_dirs.yml` with source URL, extraction path, cache location
-2. Reference via `data_directories: [{ref: key, destination: path}]` in platform systems
-3. For scraper-generated platforms, add to `SYSTEM_DATA_DIRS` in the scraper
-4. Run `python scripts/refresh_data_dirs.py --key <name>` to populate the cache
-
-## Subdirectory reference
-
-Each entry documents where the requirement comes from. Check these source
-files to verify or update the paths.
+Where the subdirectories come from:
 
 | Core | Subdirectory | Source |
 |------|-------------|--------|
@@ -57,44 +51,36 @@ files to verify or update the paths.
 | PX68k | `keropi/` | `px68k/libretro/libretro.c` |
 | QUASI88 | `quasi88/` | `quasi88/src/libretro.c` |
 | Kronos | `kronos/` | `libretro-kronos/libretro/libretro.c` |
-| ep128emu | `ep128emu/rom/` | `ep128emu-core/src/libretro.cpp` |
+| ep128emu | `ep128emu/roms/` | `ep128emu-core/src/libretro.cpp` |
 | Flycast | `dc/` | `flycast/shell/libretro/libretro.cpp` |
 | FBNeo NeoCD | `neocd/` | `fbneo/src/burn/drv/neogeo/neo_run.cpp` |
 | Fuse | `fuse/` | `fuse-libretro/fuse/settings.c` |
 | hatari | `hatari/tos/` | `hatari/src/tos.c` |
 
-Full libretro docs: `https://docs.libretro.com/library/<core>/`
+## Data directories (`_data_dirs.yml`)
 
-## Adding a platform
+Some cores need a whole tree: Dolphin's `dolphin-emu/Sys/`, PPSSPP's assets,
+blueMSX's `Databases/` and `Machines/`. Each entry names its upstream source.
+`scripts/refresh_data_dirs.py` fetches them into `data/`, which is not indexed
+in `database.json`, and pack generation refreshes them first unless
+`--offline` is given.
 
-1. Create `platforms/<name>.yml`
-2. Set `base_destination` (`system` or `bios`), `verification_mode`, `hash_type`
-3. Use `includes: [group]` for systems with subdirectory requirements
-4. Use `inherits: retroarch` to share RetroArch's file set
-5. Add platform-specific overrides in `overrides.systems`
-6. Test: `python scripts/verify.py --platform <name>`
+Adding a data directory:
 
-## Adding a shared group
+1. Add the entry with its source URL, extraction path and cache location.
+2. Reference it with `data_directories: [{ref: key, destination: path}]` in a
+   platform system, in the scraper's `SYSTEM_DATA_DIRS` for a scraped platform.
+3. Run `python scripts/refresh_data_dirs.py --key <name>` to fill the cache.
 
-1. Add the group to `_shared.yml` with a source ref comment
-2. Include: filename, destination with subdirectory prefix, required flag, hashes
-3. Reference via `includes: [group_name]` in platform system definitions
-4. For scraper-generated platforms, add the mapping in the scraper's
-   `SYSTEM_SHARED_GROUPS` dict so it persists across regeneration
+## Targets (`targets/`)
 
-## Verification modes
+`<platform>.yml` lists the cores of each hardware target, written by the
+platform's target scraper (`scripts/scraper/targets/`), or kept by hand for a
+single-target platform. `_overrides.yml` is never overwritten: it adds
+aliases and adds or removes cores per target, `_default` for every target.
 
-| Platform | Mode | Native logic | Upstream source |
-|----------|------|-------------|----------------|
-| RetroArch | existence | `path_is_valid()` -- file exists | `core_info.c` |
-| Lakka | existence | inherits RetroArch | idem |
-| RetroPie | existence | inherits RetroArch | idem |
-| Batocera | md5 | `md5sum()` + `checkInsideZip()` | `batocera-systems` |
-| RetroBat | md5 | MD5 check via JSON config | `batocera-systems.json` |
-| EmuDeck | md5 | MD5 whitelist per system | `checkBIOS.sh` |
-| Recalbox | md5 | multi-hash comma-separated | `es_bios.xml` + `Bios.cpp` |
-| RetroDECK | md5 | MD5 per file via component manifests | `api_data_processing.sh` |
-| RomM | md5 | size + any hash (MD5/SHA1/CRC32) | `firmware.py` |
-| ROCKNIX | md5 | `md5sum()` + `checkInsideZip()` with `altmd5` | `rocknix-systems` |
-| MiSTer FPGA | md5 | MD5 of the file at its destination | `process_db_index_worker.py` |
-| BizHawk | sha1 | SHA1 per firmware entry | `FirmwareDatabase.cs` |
+## Rom folders (`romfolders/`)
+
+`_sources/<setup>.yml` names the repositories and commits to read and the
+facts a parser cannot read from a table. `python -m scripts.scraper.romfolders`
+writes `<setup>.yml` from them, with the folder names the OS itself uses.

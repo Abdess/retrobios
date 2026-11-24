@@ -598,10 +598,10 @@ class EachManufacturerHasItsCard(unittest.TestCase):
     def test_every_manufacturer_page_has_a_committed_card(self) -> None:
         cards = ogcards.system_cards()
         missing = [key for key in cards
-                   if not (REPO_ROOT / "docs_assets" / "og" / f"{key}.png").is_file()]
+                   if not (REPO_ROOT / "website" / "assets" / "og" / f"{key}.png").is_file()]
         self.assertEqual(missing, [], "run python scripts/make_og_cards.py --only systems")
         # A card left behind by a page that went: oric.png outlived its page.
-        committed = (REPO_ROOT / "docs_assets" / "og" / "systems").glob("*.png")
+        committed = (REPO_ROOT / "website" / "assets" / "og" / "systems").glob("*.png")
         stale = sorted(f"systems/{path.stem}" for path in committed
                        if f"systems/{path.stem}" not in cards)
         self.assertEqual(stale, [])

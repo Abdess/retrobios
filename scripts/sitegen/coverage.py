@@ -122,7 +122,7 @@ def _coverage_inputs(db_path: Path, platforms_dir: str, emulators_dir: str) -> s
     revisions = sorted({REPO_ROOT / versions_file_for(entry)
                         for entry in load_data_dir_registry(platforms_dir).values()
                         if entry.get("local_cache")})
-    for path in (REPO_ROOT / ".gitignore", REPO_ROOT / "_mame_clones.json", *revisions):
+    for path in (REPO_ROOT / ".gitignore", REPO_ROOT / "mame_clones.json", *revisions):
         add_file(path)
     digest.update(b"offline\0" + (b"1" if run_is_offline() else b"0") + b"\n")
     large = Path(LARGE_FILES_CACHE).resolve()
