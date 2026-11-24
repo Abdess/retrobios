@@ -69,7 +69,7 @@ lists what else a change rewrites.
 ## File conventions
 
 - `bios/Manufacturer/Console/filename` for canonical files
-- `bios/Manufacturer/Console/.variants/filename.sha1prefix` for alternate versions
+- `bios/Manufacturer/Console/.variants/filename.md5prefix` for alternate versions, the first 8 hex digits of the file's md5
 - A file too large for git goes to the `large-files` GitHub release and its
   path into `.gitignore`, the list that decides what is served from the release
 - Trees addressed by path are kept out of deduplication (`NODEDUP_DIRS` in

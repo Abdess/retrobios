@@ -12076,7 +12076,7 @@
               "849f709632ad9bdfb9af1b5a2acf8308"
             ]
           },
-          "file": "bios/Arcade/Arcade/.variants/cdibios.zip.e7d2a0da",
+          "file": "bios/Philips/CD-i/.variants/cdibios.zip.849f7096",
           "readers": [
             {
               "emulator": "MAME 2015",

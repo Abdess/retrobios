@@ -53,7 +53,7 @@ MIN_EXTRA = 1
 # Kept as they are: rewriting them would drop bytes the collection holds
 # nowhere else, or they are another emulator's archive under a MAME set name.
 KEPT = {
-    "bios/Acorn/BBC Micro/.variants/bbcb.zip": (
+    "bios/Acorn/BBC Micro/.variants/bbcb.zip.224779dc": (
         "MAME 0.150's bbcb loads its DFS ROMs from the machine archive "
         "(src/mess/drivers/bbc.c ROM_START(bbcb)), older than every imported "
         "listxml; zdfs-0.90.rom is held only here"

@@ -170,7 +170,7 @@ class AFileOnlyACoreReadsIsKnown(_Fixture):
         self._bios_file("bios/Maker/Console/b.bin", b"another")
         self.assertEqual(
             review.validate_file("Downloads/b.bin", db, EMPTY_HASHES, known).destination,
-            f"bios/Maker/Console/.variants/b.bin.{result.sha1[:8]}",
+            f"bios/Maker/Console/.variants/b.bin.{result.md5[:8]}",
         )
         # Copied under the declared name, never over a file, and only once.
         card = self._bios_file("card/B.BIN", missing)
@@ -207,7 +207,7 @@ class ADeclaredFileBesideItsHeldNameIsAVariant(_Fixture):
         known = load_profile_hashes(str(emulators), db)
         result = review.validate_file(
             self._bios_file("card/v.bin", data), db, EMPTY_HASHES, known)
-        slot = f"bios/Maker/Console/.variants/v.bin.{result.sha1[:8]}"
+        slot = f"bios/Maker/Console/.variants/v.bin.{result.md5[:8]}"
         self.assertEqual(result.destination, slot)
         self.assertIn(("WARN", "File is not under bios/ yet. The collection keeps this name in "
                                f"`bios/Maker/Console/`. --place copies it to `{slot}`"),

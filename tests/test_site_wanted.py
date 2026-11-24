@@ -420,7 +420,7 @@ class EveryFolderIsTheReviewsFolder(_World):
                     f"card/{name}", self.db, platform_hashes, self.profile_hashes)
                 entry = self.entry(name)
                 folder = self.data["folders"][entry["f"]]
-                expected = (f"{folder}.variants/{entry['t']}.{sha1(data)[:8]}" if entry.get("v")
+                expected = (f"{folder}.variants/{entry['t']}.{md5(data)[:8]}" if entry.get("v")
                             else folder + entry["t"])
                 self.assertEqual(result.destination, expected)
         self.assertEqual(self.data["folders"][self.entry("b.bin")["f"]], "bios/Maker/Console/")
@@ -528,7 +528,7 @@ class ThePageReadsTheListAsTheResolverDoes(_World):
                          "https://github.com/Abdess/retrobios/upload/main/bios/Maker/Console")
         variant = self._page(VARIANT, "v.bin")["place"]
         self.assertEqual(variant, {"folder": "bios/Maker/Console/.variants/",
-                                   "name": f"v.bin.{sha1(VARIANT)[:8]}"})
+                                   "name": f"v.bin.{md5(VARIANT)[:8]}"})
 
     def test_a_dropped_file_meets_a_name_only_entry_by_its_name(self):
         out = json.loads(_node(

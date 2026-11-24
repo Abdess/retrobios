@@ -363,7 +363,7 @@ def build_wanted(
     of the first emulator that reads it, else the page of the first setup
     that lists it), f folder, t the name it is uploaded under, v that name
     goes to the folder's .variants/ with the first 8 characters of its
-    sha1. Entries come most useful first (_order). A file no one can share
+    md5. Entries come most useful first (_order). A file no one can share
     (the reason says so, NOT_SHAREABLE) is left out.
     """
     records = _collect_records(wanted_declarations(profiles, coverages, gap_report),

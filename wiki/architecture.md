@@ -21,7 +21,7 @@ RetroArch runs load many more, and the RetroArch pack carries both.
 ```
 bios/                    BIOS and firmware files, organized by Manufacturer/Console/
   Manufacturer/Console/  canonical files (one per unique content)
-  .variants/             alternate versions (different hash, same purpose)
+  .variants/             alternate versions (different hash, same purpose), <name>.<md5[:8]>
 emulators/               one YAML profile per core/engine
 platforms/               one YAML config per platform (scraped from upstream)
   _shared.yml            shared file groups across platforms
@@ -360,8 +360,9 @@ holds a ZIP, so the comparison covers the archive copy as well as loose files.
 How files enter `bios/`, and why.
 
 - **Variants keep every layer served.** A different dump under an existing
-  name goes to `.variants/`. The primary carries the name the emulator's
-  source uses, and a dump a platform pins under an older name stays a variant,
+  name goes to the `.variants/` folder beside its primary, named
+  `<name>.<first 8 hex digits of its md5>`. The primary carries the name the
+  emulator's source uses, and a dump a platform pins under an older name stays a variant,
   so each layer receives the bytes it checks. A destination that already
   exists is something a platform depends on: a `segaboot.gcm` that Batocera
   requires was once overwritten by the dump RetroDECK requires, and is now

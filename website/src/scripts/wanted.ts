@@ -58,12 +58,12 @@ export const byName = (data: Wanted, name: string): Entry[] =>
 
 // The folder and the name an upload carries, as validate_pr.Placement
 // gives them: the declared name, beside the held file of that name in
-// .variants/ with the first 8 characters of the sha1, or the file's own
+// .variants/ with the first 8 characters of the md5, or the file's own
 // name when the declarations settle none. bios/ when no folder is known.
 export const target = (data: Wanted, entry: Entry, file: FileHashes, ownName: string) => {
 	const folder = entry.f === undefined ? 'bios/' : data.folders[entry.f];
 	if (!entry.t) return { folder, name: ownName };
-	if (entry.v) return { folder: `${folder}.variants/`, name: `${entry.t}.${file.sha1.slice(0, 8)}` };
+	if (entry.v) return { folder: `${folder}.variants/`, name: `${entry.t}.${file.md5.slice(0, 8)}` };
 	return { folder, name: entry.t };
 };
 

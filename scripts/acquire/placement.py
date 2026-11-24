@@ -65,7 +65,7 @@ def place_file(
         if dest.exists() and dest.read_bytes() != data:
             # Another revision under the same name: the collection keeps it
             # beside, never in place of, the file already there.
-            dest = folder / ".variants" / f"{dest.name}.{sha1[:8]}"
+            dest = folder / ".variants" / f"{dest.name}.{hashlib.md5(data).hexdigest()[:8]}"
     dest.parent.mkdir(parents=True, exist_ok=True)
     with open(dest, "wb") as f:
         f.write(data)

@@ -389,7 +389,7 @@ def _suggest_destination(review: _Review, result: ValidationResult, values: tupl
         values, result.filename, review.db, review.platform_hashes, review.profile_hashes,
         declared=bool(known.by_platform or known.by_profile),
     )
-    result.destination = spot.destination(result.sha1)
+    result.destination = spot.destination(result.md5)
     copies = f". --place copies it to `{result.destination}`" if result.destination else ""
     if spot.folders:
         result.add_warning(
@@ -435,7 +435,7 @@ def _note_variant(review: _Review, result: ValidationResult, normalized: str) ->
     if not home and normalized.startswith("bios" + os.sep):
         # Beside the file, in the folder the contributor chose.
         home = os.path.dirname(normalized).replace(os.sep, "/") + "/"
-    slot = f"{home}.variants/{result.filename}.{result.sha1[:8]}"
+    slot = f"{home}.variants/{result.filename}.{result.md5[:8]}"
     if home and not normalized.startswith("bios" + os.sep):
         result.destination = slot
     if home:
@@ -562,11 +562,12 @@ class Placement:
     def folder(self) -> str:
         return self.folders[0] if self.folders else self.home
 
-    def destination(self, sha1: str) -> str:
+    def destination(self, md5: str) -> str:
+        """The path it is copied to, a variant tagged with its md5 prefix."""
         if not self.name:
             return ""
         if self.variant:
-            return f"{self.folder}.variants/{self.name}.{sha1[:8]}"
+            return f"{self.folder}.variants/{self.name}.{md5[:8]}"
         return self.folder + self.name
 
 

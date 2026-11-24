@@ -1168,7 +1168,8 @@ class ABoardIsAnArcadeMachine(unittest.TestCase):
 
 
 class TheDreamcastBoardsAreFiledByBoard(unittest.TestCase):
-    """6.5: the NAOMI and Atomiswave sets under the Dreamcast folder."""
+    """6.5: the NAOMI sets under the Dreamcast folder. The Atomiswave
+    variants left it for the folder of their primary, Arcade/Arcade."""
 
     def test_the_board_sets_left_the_dreamcast(self) -> None:
         sega = _system_page("sega")
@@ -1176,7 +1177,6 @@ class TheDreamcastBoardsAreFiledByBoard(unittest.TestCase):
         for name in ("naomi.zip", "awbios.zip", "naomi2.zip"):
             self.assertNotIn(f"<code>{name}</code>", dreamcast)
         self.assertIn("(/retrobios/systems/arcade-sega-naomi/)", dreamcast)
-        self.assertIn("(/retrobios/systems/arcade-sammy-atomiswave/)", dreamcast)
 
     def test_every_naomi_set_is_on_its_board(self) -> None:
         db = _database()

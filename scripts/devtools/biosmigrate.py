@@ -104,7 +104,7 @@ def extract_from_branches(
                 if file_digest(dest) == file_hash:
                     existing_hashes.add(file_hash)
                     continue
-                dest = dest_dir / ".variants" / f"{dest.name}.{file_hash[:8]}"
+                dest = dest_dir / ".variants" / f"{dest.name}.{hashlib.md5(content).hexdigest()[:8]}"
                 if dest.exists():
                     continue
                 label = "VARIANT"
