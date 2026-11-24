@@ -2243,6 +2243,30 @@ def system_spellings(systems: Iterable[str]) -> dict[str, str]:
     return spellings
 
 
+def _region_basis(extra: dict) -> tuple[str, str]:
+    """What a core extra's region group is keyed on, in either mode.
+
+    A selection slot, else the one system the file is chosen for, else the
+    file alone. Platform and emulator mode both read this, so the two
+    cannot group the same file apart.
+    """
+    variant = extra.get("selection_slot")
+    if variant:
+        # A selection slot is one slot of one core, whatever system each
+        # member is filed under: PicoDrive files its US Mega CD BIOS under
+        # sega-segacd and the EU/JP ones under sega-megacd, and find_bios
+        # picks one of the twelve.
+        return "variant", str(variant)
+    systems = extra_system_ids(extra)
+    if len(systems) == 1:
+        return "system", systems[0]
+    # No system names the machine this file is chosen for. Filed under every
+    # system of a 30-system profile, CLK's American MSX ROM made the
+    # Enterprise group drop its German ROM. Alone, it drops nothing and is
+    # never dropped.
+    return "file", str(extra.get("destination", extra.get("name", "")))
+
+
 def extra_region_groups(
     extra: dict, spellings: dict[str, str] | None = None
 ) -> list[str]:
@@ -2251,29 +2275,14 @@ def extra_region_groups(
     A group named after a system takes the platform's spelling of it, so the
     extra competes beside the files the platform declares for that system.
     """
-    def system_group(sys_id: str) -> str:
-        return (spellings or {}).get(norm_system_id(sys_id), sys_id)
-
     emulator = extra.get("source_emulator", "")
-    variant = extra.get("selection_slot")
-    if variant:
-        # A selection slot is one slot of one core, whatever system each
-        # member is filed under: PicoDrive files its US Mega CD BIOS under
-        # sega-segacd and the EU/JP ones under sega-megacd, and find_bios
-        # picks one of the twelve. Keyed as emulator mode keys it.
-        return [f"{emulator}:variant:{variant}"]
-    explicit = extra.get("source_system")
-    if explicit:
-        return [system_group(str(explicit))]
-    systems = [str(s) for s in extra.get("source_systems", []) if s]
-    if len(systems) == 1:
-        return [system_group(systems[0])]
-    # No system names the machine this file is chosen for. Filed under every
-    # system of a 30-system profile, CLK's American MSX ROM made the
-    # Enterprise group drop its German ROM. Alone, it drops nothing and is
-    # never dropped.
-    destination = extra.get("destination", extra.get("name", ""))
-    return [f"{emulator}{FILE_GROUP}{destination}"]
+    kind, value = _region_basis(extra)
+    if kind == "variant":
+        return [f"{emulator}:variant:{value}"]
+    if kind == "system":
+        return [(spellings or {}).get(norm_system_id(value), value)]
+    return [f"{emulator}{FILE_GROUP}{value}"]
+
 
 def emulator_region_drops(
     selected: list[tuple[str, dict]],
@@ -2415,18 +2424,19 @@ def _emulator_region_group(
 ) -> str:
     """Stable group ID for regional alternatives within an emulator profile.
 
-    The rule extra_region_groups applies on the platform side: a file no
-    system names, in a profile serving several, competes with nothing.
-    Grouped together, geargrafx's LaserActive pac-n1.bin was dropped by
-    --emulator --region us and kept by --platform --region us.
+    Keyed by _region_basis, the rule extra_region_groups applies on the
+    platform side, over the systems entry_system_ids gives the entry. A
+    system group carries the emulator, since an emulator pack reduces each
+    profile on its own.
     """
-    variant = file_entry.get("selection_slot")
-    if variant:
-        return f"{emu_name}:variant:{variant}"
-    system = file_entry.get("system")
-    profile_systems = list(profile.get("systems", []))
-    if not system and len(profile_systems) == 1:
-        system = profile_systems[0]
-    if not system:
-        return f"{emu_name}{FILE_GROUP}{dest}"
-    return f"{emu_name}:system:{system}"
+    kind, value = _region_basis({
+        "selection_slot": file_entry.get("selection_slot"),
+        "source_system": file_entry.get("system"),
+        "source_systems": entry_system_ids(file_entry, profile),
+        "destination": dest,
+    })
+    if kind == "variant":
+        return f"{emu_name}:variant:{value}"
+    if kind == "system":
+        return f"{emu_name}:system:{value}"
+    return f"{emu_name}{FILE_GROUP}{dest}"

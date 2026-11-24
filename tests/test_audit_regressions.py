@@ -1906,6 +1906,30 @@ class RegionRegressions(unittest.TestCase):
         ]
         self.assertEqual(emulator, platform)
 
+    def test_an_entry_systems_list_groups_alike_in_both_modes(self):
+        """An entry's own one-element `systems:` names its machine on the
+        platform side. Emulator mode read only `system:`, so --emulator
+        --region us kept the Japanese file --platform --region us dropped."""
+        from model.profiles import entry_system_ids
+        from packs.extras import emulator_region_drops, extra_region_groups
+
+        profile = {"systems": ["sys-a", "sys-b"], "files": [
+            {"name": "us.bin", "systems": ["sys-a"], "region": ["north-america"]},
+            {"name": "jp.bin", "systems": ["sys-a"], "region": ["japan"]},
+        ]}
+        self.assertEqual(
+            emulator_region_drops([("emu", profile)], False, ["north-america"]),
+            {"jp.bin"},
+        )
+        for fe in profile["files"]:
+            self.assertEqual(
+                _emulator_region_group("emu", profile, fe, fe["name"]),
+                "emu:system:" + extra_region_groups({
+                    "source_emulator": "emu", "destination": fe["name"],
+                    "source_systems": entry_system_ids(fe, profile),
+                })[0],
+            )
+
     def test_region_audit_resolves_the_way_the_pack_does(self):
         """A private resolver read sha1, md5 and a lone name: an entry
         identified by its path (Dolphin's three IPL.bin) was never checked."""
