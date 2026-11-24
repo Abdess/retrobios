@@ -20,6 +20,8 @@ from unittest import mock
 from pathlib import Path
 
 from core import upstream
+from core import forgehttp
+from core import upstreamtree
 from core.cli import InputMissing
 from exporter.native import ExportResult
 from exporter.originals import SOURCES_INDEX
@@ -468,7 +470,7 @@ class SiteNpmPins(unittest.TestCase):
                 name = url.split("registry.npmjs.org/", 1)[1].rsplit("/latest", 1)[0]
                 return {"version": latest[name]}
             with mock.patch("freshness.ci.SITE_PACKAGE", package), \
-                    mock.patch.object(upstream, "http_json", side_effect=answer):
+                    mock.patch.object(forgehttp, "http_json", side_effect=answer):
                 rows = {f.subject: f for f in _npm_findings()}
         self.assertEqual(rows["npm:astro"].status, STALE)
         self.assertEqual(rows["npm:astro"].remote, "7.4.7")
@@ -546,7 +548,7 @@ class RomFolderPins(unittest.TestCase):
             with mock.patch.object(upstream, "commit_date", return_value="2026-10-01T00:00:00"), \
                     mock.patch.object(upstream, "latest_release", return_value=None), \
                     mock.patch.object(upstream, "resolve_head", side_effect=lambda repo, _c: heads.get(repo.slug)), \
-                    mock.patch.object(upstream, "ancestry", return_value=(5, 0)):
+                    mock.patch.object(upstreamtree, "ancestry", return_value=(5, 0)):
                 rows = {f.subject: f for f in check_romfolders(root, "", False)}
         self.assertEqual(rows["card"].status, OK)
         self.assertEqual((rows["card:dist"].status, rows["card:dist"].detail),

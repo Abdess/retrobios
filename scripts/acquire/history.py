@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 
 from core import upstream
+from core import forgehttp
 
 
 # Commits listed per page and the most pages walked: a data file older than
@@ -34,7 +35,7 @@ def find_revision(
     """The newest revision whose copy of the path has this md5, and its bytes."""
     wanted = md5.lower()
     for sha in path_history(repo, path, cache_dir):
-        data = upstream.fetch_body(upstream.content_url(repo, sha, path))
+        data = forgehttp.fetch_body(upstream.content_url(repo, sha, path))
         if data is not None and hashlib.md5(data).hexdigest() == wanted:
             return sha, data
     return None

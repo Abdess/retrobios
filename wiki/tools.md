@@ -680,9 +680,10 @@ under `.cache/upstream/`, addressed by commit sha, so `--offline` replays a
 previous run. GitHub, GitLab and Forgejo upstreams are supported, other
 hosts are reported as skipped.
 
-The forge side lives in `core/upstream.py`: it resolves a revision, fetches a
-file at a given sha, and compares trees, for the forge families the
-profiles point at. It knows nothing about profile structure, so anchoring
+The forge side lives in `core/upstream.py`, which resolves a revision and
+fetches a file at a given sha, `core/upstreamtree.py`, which compares two
+revisions and lists trees, and `core/forgehttp.py`, which sends the requests,
+for the forge families the profiles point at. It knows nothing about profile structure, so anchoring
 logic and repository access stay testable apart.
 
 ### resolve/validation.py

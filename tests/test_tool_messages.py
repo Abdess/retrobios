@@ -974,13 +974,13 @@ class TheGitHubTokenComesFromGh(unittest.TestCase):
         run.assert_not_called()
 
     def test_every_api_caller_reads_it(self):
-        from core import upstream
+        from core import forgehttp
         from profiling.quota import check_quota
         from scraper import base_scraper
 
         with self._gh():
             self.assertEqual(
-                upstream.forge_headers("https://api.github.com/repos/o/n")["Authorization"],
+                forgehttp.forge_headers("https://api.github.com/repos/o/n")["Authorization"],
                 "Bearer gho_fromgh",
             )
         os.environ.pop("GITHUB_TOKEN")
@@ -992,10 +992,10 @@ class TheGitHubTokenComesFromGh(unittest.TestCase):
             check_quota(606, offline=False)
 
     def test_another_forge_never_triggers_gh(self):
-        from core import upstream
+        from core import forgehttp
 
         with self._gh() as run:
-            headers = upstream.forge_headers("https://gitlab.com/api/v4/projects/1")
+            headers = forgehttp.forge_headers("https://gitlab.com/api/v4/projects/1")
         self.assertNotIn("Authorization", headers)
         run.assert_not_called()
 

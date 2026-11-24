@@ -16,6 +16,7 @@ from enum import Enum
 from pathlib import Path
 
 from core import upstream
+from core import forgehttp
 from model.database import record_at, record_for_hash, sha1_at
 from model.largefiles import asset_candidates, asset_names, fetch_large_file
 from core.hashing import declared_hash_lists, file_digest
@@ -97,7 +98,7 @@ def download_external(
     """Download a `storage: external` file, verify its hash, write dest_path.
 
     The run's network policy applies: under --offline nothing is fetched and
-    the entry stays missing, as verify reports it. core.upstream.download
+    the entry stays missing, as verify reports it. core.forgehttp.download
     streams the body to a scratch beside dest_path, retried on a transient
     failure, and dest_path is written only once the scratch hashes to the
     declared value. Nothing is printed: the caller reports the outcome.
@@ -115,12 +116,12 @@ def download_external(
     algo, expected = declared[0], set(declared[1])
     Path(dest_path).parent.mkdir(parents=True, exist_ok=True)
     try:
-        served = upstream.download(
+        served = forgehttp.download(
             url, dest_path, timeout=120, user_agent="retrobios-pack-gen/1.0",
             accept=lambda scratch: file_digest(Path(scratch), algo) in expected,
         )
     except (urllib.error.URLError, OSError, http.client.HTTPException,
-            upstream.UpstreamError, ValueError) as exc:
+            forgehttp.UpstreamError, ValueError) as exc:
         return ExternalFetch(ExternalOutcome.NETWORK_ERROR, f"{url}: {exc}")
     if served is None:
         return ExternalFetch(ExternalOutcome.MISMATCH, algo.upper())

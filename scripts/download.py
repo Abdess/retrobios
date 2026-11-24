@@ -28,7 +28,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from core.paths import REPO_ROOT
-from core.upstream import UpstreamError
+from core.forgehttp import UpstreamError
 from core.ziptools import safe_extract_zip
 from model.releaserecord import RECORD, load_record
 from release.downloaderror import DownloadError

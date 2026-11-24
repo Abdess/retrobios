@@ -48,20 +48,20 @@ def _serving(payloads: dict[str, bytes]):
 class SoftwareHeritageAnswersByContent(unittest.TestCase):
     def test_the_bytes_it_serves_are_kept_when_the_hash_holds(self):
         urlopen, asked = _serving({f"{fetch.SOFTWARE_HERITAGE}/sha1:{SHA1}/raw/": PAYLOAD})
-        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.forgehttp.urllib.request, "urlopen", urlopen):
             data = fetch.step3b_software_heritage({"name": "D8039HLC.rom", "sha1": SHA1}, [])
         self.assertEqual(data, PAYLOAD)
         self.assertEqual(asked, [f"{fetch.SOFTWARE_HERITAGE}/sha1:{SHA1}/raw/"])
 
     def test_other_bytes_under_the_hash_are_refused(self):
         urlopen, _asked = _serving({fetch.SOFTWARE_HERITAGE: b"something else"})
-        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.forgehttp.urllib.request, "urlopen", urlopen):
             data = fetch.step3b_software_heritage({"name": "x", "sha1": SHA1}, [])
         self.assertIsNone(data)
 
     def test_an_absent_file_is_not_counted_as_a_source_that_did_not_answer(self):
         urlopen, _asked = _serving({})
-        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.forgehttp.urllib.request, "urlopen", urlopen):
             found = fetch.search({"name": "x", "sha1": SHA1}, fetch.SHA1_SOURCES)
         self.assertEqual(found, fetch.SearchResult(None, None, ()))
 
@@ -76,7 +76,7 @@ class LookupBySha1(unittest.TestCase):
 
     def test_a_found_file_goes_to_tmp_acquire_never_to_bios(self):
         urlopen, _asked = _serving({f"{fetch.SOFTWARE_HERITAGE}/sha1:{SHA1}/raw/": PAYLOAD})
-        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.forgehttp.urllib.request, "urlopen", urlopen):
             [record] = fetch.lookup_sha1s([SHA1.upper()], {"files": {}},
                                           acquire_dir=self.acquire)
         self.assertEqual((record.outcome, record.source), ("found", "software_heritage"))
@@ -92,7 +92,7 @@ class LookupBySha1(unittest.TestCase):
     def test_a_held_file_is_named_and_not_fetched(self):
         urlopen, asked = _serving({})
         db = {"files": {SHA1: {"path": "bios/Commodore/Amiga/x.rom"}}}
-        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen), \
+        with mock.patch.object(fetch.forgehttp.urllib.request, "urlopen", urlopen), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
             code = fetchtext.report_lookups([SHA1], db, acquire_dir=self.acquire)
         self.assertEqual((code, asked), (0, []))
@@ -100,7 +100,7 @@ class LookupBySha1(unittest.TestCase):
 
     def test_nothing_found_and_a_malformed_hash_end_with_one(self):
         urlopen, _asked = _serving({})
-        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen), \
+        with mock.patch.object(fetch.forgehttp.urllib.request, "urlopen", urlopen), \
                 contextlib.redirect_stdout(io.StringIO()) as out, \
                 contextlib.redirect_stderr(io.StringIO()) as err:
             code = fetchtext.report_lookups([SHA1, "not-a-hash"], {"files": {}},
@@ -139,13 +139,13 @@ class AStalledOrLimitedSourceIsNoAnswer(unittest.TestCase):
     A 429 from Software Heritage was recorded unanswered at once."""
 
     def setUp(self):
-        from core import upstream
+        from core import forgehttp
 
-        patcher = mock.patch.object(upstream, "_sleep", lambda _s: None)
+        patcher = mock.patch.object(forgehttp, "_sleep", lambda _s: None)
         patcher.start()
         self.addCleanup(patcher.stop)
-        upstream._exhausted_hosts.clear()
-        self.addCleanup(upstream._exhausted_hosts.clear)
+        forgehttp._exhausted_hosts.clear()
+        self.addCleanup(forgehttp._exhausted_hosts.clear)
 
     def test_a_stalled_read_is_recorded_and_the_search_goes_on(self):
         class _Stalled(_Answer):
@@ -156,7 +156,7 @@ class AStalledOrLimitedSourceIsNoAnswer(unittest.TestCase):
             return _Stalled()
 
         unanswered: list[str] = []
-        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.forgehttp.urllib.request, "urlopen", urlopen):
             self.assertIsNone(fetch.step3_search_public_repos(
                 {"name": "x.bin", "sha1": SHA1}, unanswered))
         self.assertEqual(len(unanswered), len(fetch.PUBLIC_REPOS))
@@ -170,7 +170,7 @@ class AStalledOrLimitedSourceIsNoAnswer(unittest.TestCase):
                 raise answer
             return _Answer(answer)
 
-        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.forgehttp.urllib.request, "urlopen", urlopen):
             found = fetch.search({"name": "x", "sha1": SHA1}, fetch.SHA1_SOURCES)
         self.assertEqual(found, fetch.SearchResult(PAYLOAD, "software_heritage", ()))
 
@@ -184,7 +184,7 @@ class AStalledOrLimitedSourceIsNoAnswer(unittest.TestCase):
             return _Answer(b"0" * 64)
 
         with mock.patch.object(fetch, "MAX_DOWNLOAD", 32), \
-                mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+                mock.patch.object(fetch.forgehttp.urllib.request, "urlopen", urlopen):
             data = fetch.step3_search_public_repos(
                 {"name": "x.bin", "destination": "sub/x.bin", "sha1": SHA1}, [])
         self.assertEqual(data, PAYLOAD)
@@ -212,7 +212,7 @@ class ArchiveOrgAnswersByHash(unittest.TestCase):
 
     def test_the_member_is_found_by_its_sha1_whatever_its_name(self):
         urlopen, asked = self._archive()
-        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.forgehttp.urllib.request, "urlopen", urlopen):
             data = fetch.step4_search_archive_org(
                 {"name": "scph1001.bin", "sha1": SHA1.upper()}, [])
         self.assertEqual(data, PAYLOAD)
@@ -220,7 +220,7 @@ class ArchiveOrgAnswersByHash(unittest.TestCase):
 
     def test_the_platform_search_and_the_sha1_search_agree(self):
         urlopen, _asked = self._archive()
-        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.forgehttp.urllib.request, "urlopen", urlopen):
             by_platform = fetch.step4_search_archive_org(
                 {"name": "scph1001.bin", "sha1": SHA1}, [])
             by_sha1 = fetch.archive_org_by_sha1(SHA1, [])
@@ -228,7 +228,7 @@ class ArchiveOrgAnswersByHash(unittest.TestCase):
 
     def test_a_declared_md5_still_has_to_hold(self):
         urlopen, _asked = self._archive()
-        with mock.patch.object(fetch.upstream.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.forgehttp.urllib.request, "urlopen", urlopen):
             data = fetch.step4_search_archive_org(
                 {"name": "scph1001.bin", "sha1": SHA1, "md5": "f" * 32}, [])
         self.assertIsNone(data)

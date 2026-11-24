@@ -13,6 +13,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from core import forgehttp
 from profiling import mamerefs
 from profiling.mamerefs import declares
 
@@ -121,7 +122,7 @@ class TestCorpusStaysCorrect(unittest.TestCase):
                     findings, agreed, _ = mamerefs.audit(
                         name, str(ROOT / "emulators"), str(cache), True
                     )
-                except mamerefs.upstream.NotCachedError as exc:
+                except forgehttp.NotCachedError as exc:
                     # A cache that holds some drivers and not others is as
                     # cold as an empty one for this profile.
                     self.skipTest(f"{name}: {exc}")

@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from collections.abc import Container
 
-from core import upstream
+from core import upstreamtree
 from model.safeparse import parse_untrusted_xml
 
 from .base_scraper import BaseScraper, BiosRequirement, fetch_bytes, systems_from_requirements
@@ -122,13 +122,13 @@ def tree_listing(directory: str, tag: str) -> list[dict]:
     import json
 
     entries: list[dict] = []
-    for page in range(1, upstream.MAX_TREE_PAGES + 1):
+    for page in range(1, upstreamtree.MAX_TREE_PAGES + 1):
         url = TREE_URL.format(
-            path=directory, tag=tag, per_page=upstream.TREE_PAGE_SIZE, page=page
+            path=directory, tag=tag, per_page=upstreamtree.TREE_PAGE_SIZE, page=page
         )
         listing = json.loads(fetch_bytes(url))
         entries += [item for item in listing if isinstance(item, dict)]
-        if len(listing) < upstream.TREE_PAGE_SIZE:
+        if len(listing) < upstreamtree.TREE_PAGE_SIZE:
             return entries
     raise RuntimeError(f"{directory} at {tag} outruns the page cap")
 # One raw read per system.ini made about 150 requests and GitLab throttled

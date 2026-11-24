@@ -7,7 +7,7 @@ import subprocess
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from core import upstream
+from core import forgehttp
 from model.registry import list_registered_platforms, load_platform_registry
 from model.sources import source_yaml_file
 from freshness.findings import ERROR, OK, SKIPPED, STALE, UNKNOWN, Finding
@@ -96,9 +96,9 @@ def check_emulatorjs(platforms_dir: Path, offline: bool) -> Finding:
     tag = str((source_yaml_file(platforms_dir / "romm.yml") or {}).get("version", ""))
     for path in ROMM_DOCKERFILES:
         try:
-            text = upstream.http_text(
+            text = forgehttp.http_text(
                 f"https://raw.githubusercontent.com/rommapp/romm/{tag}/{path}")
-        except upstream.UpstreamError as exc:
+        except forgehttp.UpstreamError as exc:
             return Finding("platforms", subject, UNKNOWN, local=local, detail=str(exc))
         pin = emulatorjs_pin(text or "")
         if pin:

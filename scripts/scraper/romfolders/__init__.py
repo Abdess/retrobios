@@ -26,6 +26,7 @@ if (_SCRIPTS_DIR := str(Path(__file__).resolve().parents[2])) not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 
 from core import upstream
+from core import upstreamtree
 
 from ..base_scraper import PlatformDumper
 
@@ -85,7 +86,7 @@ class Fetcher:
         repo, sha = self._repo(key)
         if repo.family == "gitlab" and prefix.strip("/"):
             return self._gitlab_subtree(repo, sha, prefix)
-        paths, truncated = upstream.list_tree(repo, sha, self.cache_dir, self.offline)
+        paths, truncated = upstreamtree.list_tree(repo, sha, self.cache_dir, self.offline)
         if truncated:
             raise SourceError(f"{repo.slug}@{sha[:8]}: the forge truncated the tree")
         return sorted(p for p in paths if p.startswith(prefix))
@@ -94,7 +95,7 @@ class Fetcher:
         """Fetch a whole GitLab directory in one archive request before its
         files are read one by one. A no-op on other forges."""
         repo, sha = self._repo(key)
-        held = upstream.cache_gitlab_directory(repo, sha, directory, self.cache_dir, self.offline)
+        held = upstreamtree.cache_gitlab_directory(repo, sha, directory, self.cache_dir, self.offline)
         if held is not None:
             self._cached_dirs.setdefault(key, {})[directory.strip("/")] = held
 
@@ -120,7 +121,7 @@ class Fetcher:
         self, repo: upstream.Repo, sha: str, directory: str, *, recursive: bool, blobs: bool
     ) -> list[str]:
         directory = directory.strip("/")
-        entries, truncated = upstream.gitlab_tree_entries(
+        entries, truncated = upstreamtree.gitlab_tree_entries(
             repo, sha, self.cache_dir, self.offline, path=directory, recursive=recursive
         )
         if truncated:

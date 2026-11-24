@@ -11,7 +11,9 @@ from collections.abc import Callable, Iterable, Iterator, Sequence
 from dataclasses import dataclass, field, replace
 
 from core import upstream
-from core.upstream import CompareResult
+from core import forgehttp
+from core import upstreamtree
+from core.upstreamtree import CompareResult
 from model.sourceref import RefPart, ref_role, resolve_project_word, split_source_ref
 from profiling.anchoring import (
     BLANK_LOOKAHEAD,
@@ -246,9 +248,9 @@ def _readable_views(
 
     try:
         views = select_views(profile, cache_dir, offline)
-    except upstream.RateLimitError:
+    except forgehttp.RateLimitError:
         raise
-    except upstream.UpstreamError:
+    except forgehttp.UpstreamError:
         # citron's dead domain now resolves to an unrelated host that fails
         # TLS: for a forge the profile declares gone, any refusal agrees.
         if stated_gone:
@@ -319,7 +321,7 @@ def _record_revisions(
             f"{view.repo.slug}: pin {view.pin[:8]} is no ancestor of {view.head[:8]}"
             for view in views
             if not reads_own_revision(view, tagged)
-            and upstream.compare(
+            and upstreamtree.compare(
                 view.repo, view.pin, view.head, cache_dir, offline
             ).diverged
         ]
@@ -416,8 +418,8 @@ class _Resolver:
         known: the parts it cannot place stay external, as before."""
         for view in self.views:
             try:
-                yield upstream.list_gitlinks(view.repo, view.pin, self.cache_dir, self.offline)
-            except upstream.TruncatedListingError as exc:
+                yield upstreamtree.list_gitlinks(view.repo, view.pin, self.cache_dir, self.offline)
+            except forgehttp.TruncatedListingError as exc:
                 print(f"{self.name}: submodule paths unknown, {exc}", file=sys.stderr)
                 yield ()
 
@@ -588,7 +590,7 @@ class _Resolver:
         """Tree at the revision the refs were written against, memoised."""
         key = view.repo.slug
         if key not in self.pin_trees:
-            tree, _ = upstream.list_tree(view.repo, view.pin, self.cache_dir, self.offline)
+            tree, _ = upstreamtree.list_tree(view.repo, view.pin, self.cache_dir, self.offline)
             self.pin_trees[key] = tree
         return self.pin_trees[key]
 
@@ -614,10 +616,10 @@ class _Resolver:
                 # A file of a submodule is read at the commit its gitlink
                 # pins in this revision, so a bump moves it with the port.
                 try:
-                    inner = upstream.through_gitlink(
+                    inner = upstreamtree.through_gitlink(
                         repo, sha, wanted, self.cache_dir, self.offline
                     )
-                except upstream.TruncatedListingError as exc:
+                except forgehttp.TruncatedListingError as exc:
                     # The tree is listed in part: the path may sit in a
                     # submodule nobody can see, which is no reason to mute
                     # every other file of the repository.
@@ -627,9 +629,9 @@ class _Resolver:
                 if inner is not None:
                     found = upstream.fetch_file(*inner, self.cache_dir, self.offline)
             return found
-        except (upstream.RateLimitError, upstream.NotCachedError):
+        except (forgehttp.RateLimitError, forgehttp.NotCachedError):
             raise
-        except upstream.UpstreamError as exc:
+        except forgehttp.UpstreamError as exc:
             self.mute.add(key)
             print(f"{self.name}: {repo.host}/{repo.slug} muted, {exc}", file=sys.stderr)
             return None
@@ -637,10 +639,10 @@ class _Resolver:
     def context_for(self, view: RepoView) -> tuple[CompareResult, list[str]]:
         key = view.repo.slug
         if key not in self.context:
-            comparison = upstream.compare(
+            comparison = upstreamtree.compare(
                 view.repo, view.pin, view.head, self.cache_dir, self.offline
             )
-            tree, truncated = upstream.list_tree(
+            tree, truncated = upstreamtree.list_tree(
                 view.repo, view.head, self.cache_dir, self.offline
             )
             self.context[key] = (comparison, tree)

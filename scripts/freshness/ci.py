@@ -6,6 +6,7 @@ import json
 import re
 
 from core import upstream
+from core import forgehttp
 from core.paths import REPO_ROOT
 from installer_build import pins as installer_build_pins
 from freshness.findings import INSTALLER_PIN, OK, SKIPPED, STALE, UNKNOWN, Finding
@@ -76,7 +77,7 @@ def specifier_allows(spec: str, version: str) -> bool:
 
 
 def pypi_latest(name: str) -> str | None:
-    payload = upstream.http_json(PYPI_URL.format(name=name))
+    payload = forgehttp.http_json(PYPI_URL.format(name=name))
     if not isinstance(payload, dict):
         return None
     info = payload.get("info") or {}
@@ -93,7 +94,7 @@ def parse_npm_pins(text: str) -> dict[str, str]:
 
 
 def npm_latest(name: str) -> str | None:
-    payload = upstream.http_json(NPM_URL.format(name=name))
+    payload = forgehttp.http_json(NPM_URL.format(name=name))
     if not isinstance(payload, dict):
         return None
     return str(payload.get("version") or "") or None
@@ -110,7 +111,7 @@ def _npm_findings() -> list[Finding]:
             continue
         try:
             latest = npm_latest(name)
-        except upstream.UpstreamError as exc:
+        except forgehttp.UpstreamError as exc:
             findings.append(Finding("ci", subject, UNKNOWN, local=pinned, detail=str(exc)))
             continue
         if latest is None:
@@ -147,7 +148,7 @@ def check_ci(cache_dir: str, offline: bool) -> list[Finding]:
     for name, spec in sorted(pins.items()):
         try:
             latest = pypi_latest(name)
-        except upstream.UpstreamError as exc:
+        except forgehttp.UpstreamError as exc:
             findings.append(Finding("ci", f"pypi:{name}", UNKNOWN, local=spec, detail=str(exc)))
             continue
         if latest is None:

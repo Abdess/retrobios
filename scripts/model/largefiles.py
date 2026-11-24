@@ -22,6 +22,7 @@ from collections.abc import Iterable
 from pathlib import Path
 
 from core import upstream
+from core import forgehttp
 from core.artifacts import set_plain_mode
 from core.hashing import compute_hashes, file_digest, parse_hash_list
 from core.paths import REPO_ROOT
@@ -211,18 +212,18 @@ def restore_verified(source: str, path: str, sha1: str) -> bool:
             os.unlink(scratch)
 
 
-_FAILURES = (urllib.error.URLError, OSError, http.client.HTTPException, upstream.UpstreamError)
+_FAILURES = (urllib.error.URLError, OSError, http.client.HTTPException, forgehttp.UpstreamError)
 
 
 def _download(name: str, tmp_path: str) -> bool:
     """Stream the first release URL of *name* that answers into *tmp_path*,
-    each through core.upstream.download (scratch, rename, retries)."""
+    each through core.forgehttp.download (scratch, rename, retries)."""
     # Only a name no candidate answers is reported: a spaced name is
     # published dotted, and logging its first 404 read as a missing asset.
     failures: list[str] = []
     for candidate, url in _asset_urls(name):
         try:
-            upstream.download(url, tmp_path, timeout=300, user_agent=USER_AGENT)
+            forgehttp.download(url, tmp_path, timeout=300, user_agent=USER_AGENT)
             return True
         except _FAILURES as exc:
             # A stalled or cut stream is a timeout or IncompleteRead, not
@@ -434,9 +435,9 @@ def _served_digests() -> dict[str, str]:
         f"{LARGE_FILES_RELEASE}"
     )
     try:
-        body = upstream.fetch_body(url, accept_json=True, timeout=60, user_agent=USER_AGENT)
+        body = forgehttp.fetch_body(url, accept_json=True, timeout=60, user_agent=USER_AGENT)
         release = json.loads(body) if body is not None else {}
-    except (upstream.UpstreamError, ValueError) as exc:
+    except (forgehttp.UpstreamError, ValueError) as exc:
         print(f"  large files release listing: {exc}", file=sys.stderr)
         return {}
     digests = dict(digests_of(release.get("assets") or []))
@@ -448,10 +449,10 @@ def _served_size(name: str) -> int | None:
     """Size of the asset the release serves now, or None when unreadable."""
     for candidate, url in _asset_urls(name):
         req = urllib.request.Request(
-            url, method="HEAD", headers=upstream.forge_headers(url, user_agent=USER_AGENT)
+            url, method="HEAD", headers=forgehttp.forge_headers(url, user_agent=USER_AGENT)
         )
         try:
-            length = upstream.open_retrying(
+            length = forgehttp.open_retrying(
                 req, lambda resp: resp.headers.get("Content-Length"), 60
             )
         except _FAILURES as exc:

@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from core import upstream
+from core import forgehttp
 from model.profiles import upstream_profile_index
 from model.sources import source_yaml_file
 from model.targets import apply_target_overrides, platform_overrides, read_target_overrides
@@ -152,7 +153,7 @@ def check_lakka_release(platforms_dir: Path, cache_dir: str, offline: bool) -> F
     repo = upstream.parse_repo(f"https://github.com/{LAKKA_REPO}")
     try:
         release = upstream.latest_release(repo, cache_dir) if repo else None
-    except upstream.UpstreamError as exc:
+    except forgehttp.UpstreamError as exc:
         return Finding("targets", subject, UNKNOWN, local=local, detail=str(exc))
     if release is None:
         return Finding("targets", subject, UNKNOWN, local=local, detail="no release listed")

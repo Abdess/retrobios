@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from core import upstream
+from core import upstreamtree
 from model.registry import load_platform_registry
 from model.romfolders import load_sources, row_sources, sources_dir
 from model.sourcerevision import scraped_revision
@@ -115,6 +116,6 @@ def _romfolder_upstream(
         return Finding("romfolders", subject, UNKNOWN, local=pin, detail="branch head unavailable")
     if head == commit:
         return Finding("romfolders", subject, OK, local=pin, detail="branch head")
-    counts = upstream.ancestry(repo, commit, head, cache_dir)
+    counts = upstreamtree.ancestry(repo, commit, head, cache_dir)
     behind = f"{counts[0]} commits behind the branch head" if counts else "the branch head moved"
     return Finding("romfolders", subject, STALE, local=pin, remote=head[:12], detail=behind)

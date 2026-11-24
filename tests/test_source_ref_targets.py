@@ -21,6 +21,7 @@ from unittest import mock
 from model import sourceref
 from sitegen import sources
 from core import upstream
+from core import upstreamtree
 from model.profiles import load_emulator_profiles
 from model.sourceref import ref_role, source_ref_values, split_source_ref
 
@@ -78,7 +79,7 @@ class ForgejoTreesArePaged(unittest.TestCase):
             return {"tree": pages.get(page, []), "truncated": True, "total_count": 1002}
 
         with mock.patch.object(upstream, "cached_api", side_effect=fake_api):
-            paths, truncated = upstream.list_tree(repo, "7" * 40, "unused")
+            paths, truncated = upstreamtree.list_tree(repo, "7" * 40, "unused")
         self.assertFalse(truncated)
         self.assertEqual(len(paths), 1001)
         self.assertIn("src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs", paths)
@@ -87,7 +88,7 @@ class ForgejoTreesArePaged(unittest.TestCase):
         repo = upstream.parse_repo("https://github.com/o/r")
         payload = {"tree": [{"type": "blob", "path": "x"}], "truncated": True}
         with mock.patch.object(upstream, "cached_api", return_value=payload) as api:
-            paths, truncated = upstream.list_tree(repo, "7" * 40, "unused")
+            paths, truncated = upstreamtree.list_tree(repo, "7" * 40, "unused")
         self.assertTrue(truncated)
         self.assertEqual(api.call_count, 1)
 

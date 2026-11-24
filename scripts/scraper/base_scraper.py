@@ -20,17 +20,16 @@ from typing import Any, Callable, Iterator, NoReturn, TypeVar
 from core.github import github_token
 from core.artifacts import write_text_atomic
 from core.hashing import git_blob_sha
-from core.upstream import (
+from core.forgehttp import (
     MAX_RESPONSE_SIZE,
     RateLimitError,
     UpstreamError,
-    make_repo,
     open_retrying,
     read_limited,
-    resolve_head,
 )
-from core.upstream import download as upstream_download
-from core.upstream import forge_headers as upstream_headers
+from core.upstream import make_repo, resolve_head
+from core.forgehttp import download as upstream_download
+from core.forgehttp import forge_headers as upstream_headers
 from model.safeparse import require_yaml
 from model.sources import source_yaml_file
 
@@ -173,7 +172,7 @@ class FetchError(ConnectionError):
 
 def forge_headers(url: str, accept: str | None = None) -> dict[str, str]:
     """Request headers for `url`: the GitHub token goes to GitHub's API and
-    raw hosts only, compared whole (core.upstream.forge_headers)."""
+    raw hosts only, compared whole (core.forgehttp.forge_headers)."""
     return upstream_headers(url, accept, SCRAPER_AGENT)
 
 
@@ -207,7 +206,7 @@ def _open(
     timeout: float,
 ) -> _T:
     """Open `request` and hand the response to `consume`, retried as
-    core.upstream.open_retrying does. A header the request does not set
+    core.forgehttp.open_retrying does. A header the request does not set
     comes from forge_headers(). A failure raises FetchError."""
     url = request.full_url
     for name, value in forge_headers(url).items():
@@ -264,7 +263,7 @@ def download(
     """Stream `url` into `destination`, whole or not at all, and return the
     response's Content-Disposition ("" when absent or when skipped).
 
-    core.upstream.download does the work: a scratch file renamed into place,
+    core.forgehttp.download does the work: a scratch file renamed into place,
     so a reader or an interrupted run never sees half an archive.
     `skip_existing` keeps a file already there without asking the server.
     A failure raises FetchError.

@@ -886,7 +886,7 @@ class AProgressBarOnlyOnATerminal(unittest.TestCase):
         """One reset midway through a 2 GiB part failed the whole download."""
         import http.client
 
-        from core import upstream
+        from core import forgehttp
 
         class Body(io.BytesIO):
             headers = {"Content-Length": "6"}
@@ -905,7 +905,7 @@ class AProgressBarOnlyOnATerminal(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory, \
                 mock.patch.object(transfer.urllib.request, "urlopen",
                                   lambda *a, **k: answers.pop(0)), \
-                mock.patch.object(upstream, "_sleep", lambda _s: None), \
+                mock.patch.object(forgehttp, "_sleep", lambda _s: None), \
                 contextlib.redirect_stdout(io.StringIO()):
             target = Path(directory) / "a.zip"
             transfer.download_file("https://example.com/a.zip", target, 6)
@@ -942,14 +942,14 @@ class ATransferFailureIsADownloadError(unittest.TestCase):
         )
 
     def test_a_transport_failure_raises(self):
-        from core import upstream
+        from core import forgehttp
 
         def refuse(*_a, **_k):
             raise ConnectionResetError("reset by peer")
 
         with tempfile.TemporaryDirectory() as directory, \
                 mock.patch.object(transfer.urllib.request, "urlopen", refuse), \
-                mock.patch.object(upstream, "_sleep", lambda _s: None), \
+                mock.patch.object(forgehttp, "_sleep", lambda _s: None), \
                 self.assertRaises(DownloadError) as raised:
             transfer.download_file("https://example.com/a.zip", Path(directory) / "a.zip", 20)
         self.assertEqual(

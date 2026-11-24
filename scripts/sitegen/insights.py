@@ -19,7 +19,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
-from core import upstream
+from core import forgehttp
 from core.artifacts import write_text_atomic
 from core.cli import SourceUnreadable
 from core.github import github_token
@@ -37,7 +37,7 @@ USER_AGENT = "retrobios-site-insights"
 EXPORT_POLL = 5
 EXPORT_TRIES = 60
 # GoatCounter answers four requests a second and 500 per window, and says
-# when to come back in X-Rate-Limit-Reset. core.upstream.open_retrying waits
+# when to come back in X-Rate-Limit-Reset. core.forgehttp.open_retrying waits
 # a short wait and gives up on a long one, which ends the run.
 
 # Expected click-through rate: the site's own rate at each rounded
@@ -83,15 +83,15 @@ class SourceUnavailable(Exception):
 
 
 def _open(request: urllib.request.Request) -> tuple[int, bytes]:
-    """Status and body of a request, retried by core.upstream.open_retrying:
+    """Status and body of a request, retried by core.forgehttp.open_retrying:
     a dropped connection or a 5xx is asked again, a rate limit waited out."""
     try:
-        return upstream.open_retrying(request, lambda response: (response.status, response.read()), 60)
-    except (urllib.error.HTTPError, upstream.RateLimitError) as error:
+        return forgehttp.open_retrying(request, lambda response: (response.status, response.read()), 60)
+    except (urllib.error.HTTPError, forgehttp.RateLimitError) as error:
         if isinstance(error, urllib.error.HTTPError) and error.code != 429:
             raise
         headers = error.headers if isinstance(error, urllib.error.HTTPError) else None
-        wait = upstream.requested_wait(headers)
+        wait = forgehttp.requested_wait(headers)
         delay = f" for {wait:.0f} s" if wait is not None else ""
         raise SourceUnavailable(f"{urllib.parse.urlsplit(request.full_url).hostname} refuses requests"
                                 f"{delay} (rate limit); run again then", wait) from error
@@ -220,7 +220,7 @@ def fetch_github() -> dict:
     if not github_token():
         raise SourceUnavailable("GitHub traffic needs a token: GITHUB_TOKEN, or gh auth login")
     api = f"https://api.github.com/repos/{REPOSITORY}"
-    auth = upstream.forge_headers(api, "application/vnd.github+json", USER_AGENT)
+    auth = forgehttp.forge_headers(api, "application/vnd.github+json", USER_AGENT)
     releases = _get_json(f"{api}/releases?per_page=10", auth)
     return {
         "views": _get_json(f"{api}/traffic/views", auth),

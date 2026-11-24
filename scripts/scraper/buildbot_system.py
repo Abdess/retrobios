@@ -6,7 +6,7 @@ import logging
 import urllib.error
 import urllib.parse
 
-from core.upstream import remote_etag as get_remote_etag
+from core.forgehttp import remote_etag as get_remote_etag
 from core.paths import DATA_DIRS_FILE
 from model.registry import data_dir_registry_at, load_versions, versions_file_for
 from .base_scraper import fetch_text

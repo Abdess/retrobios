@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Protocol
 
 from core.hashing import compute_hashes, parse_sha256sums
-from core.upstream import open_retrying
+from core.forgehttp import open_retrying
 from release.downloaderror import DownloadError
 from release.latest import checked_url
 from release.transfer import TRANSFER_ERRORS, download_file

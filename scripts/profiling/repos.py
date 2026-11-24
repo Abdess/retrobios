@@ -7,6 +7,8 @@ from collections.abc import Iterable
 from dataclasses import dataclass, replace
 
 from core import upstream
+from core import forgehttp
+from core import upstreamtree
 from model.profilerepos import declared_pin, declared_repositories, pin_field, serving_url
 
 
@@ -111,11 +113,11 @@ def select_views(
         branch = declared if pinned_by == "source" else None
         head = None
         try:
-            unread: upstream.NotCachedError | None = None
+            unread: forgehttp.NotCachedError | None = None
             for candidate in branch_candidates(url):
                 try:
                     head = upstream.resolve_head(repo, cache_dir, offline, candidate)
-                except upstream.NotCachedError as exc:
+                except forgehttp.NotCachedError as exc:
                     # Another prefix of the /tree/ tail may be the cached branch.
                     unread = exc
                     continue
@@ -130,7 +132,7 @@ def select_views(
             if not pin or origin is None:
                 continue
             head = head or upstream.resolve_head(repo, cache_dir, offline, branch)
-        except upstream.GoneError:
+        except forgehttp.GoneError:
             # yuzu's source answers 451: the mirror declared after it is what
             # keeps the profile checkable, so a gone repository is passed over.
             gone = True
@@ -141,13 +143,13 @@ def select_views(
             # A tip cached before the pin was written is older than the pin:
             # scummvm-standalone pinned 6f7b060d while the cache still held
             # 77d80d7, and a bump would have moved the pin backwards.
-            relation = upstream.ancestry(repo, pin, head, cache_dir, offline)
+            relation = upstreamtree.ancestry(repo, pin, head, cache_dir, offline)
             if relation and relation[0] == 0 and relation[1] > 0:
                 head = upstream.resolve_head(repo, cache_dir, offline, branch, fresh=True) or head
         seen.add((repo.host, repo.slug))
         views.append(RepoView(repo, pin, head, origin, field_name, mode))
     if gone and not views:
-        raise upstream.GoneError(f"{profile.get('emulator', '?')}: every declared repository is gone")
+        raise forgehttp.GoneError(f"{profile.get('emulator', '?')}: every declared repository is gone")
     views = _follow_fork_base(_follow_submodule(views, cache_dir, offline), cache_dir, offline)
     return _hold_upstream(profile, views)
 
@@ -184,7 +186,7 @@ def _follow_submodule(
         return views
     pinned = {
         sha: path
-        for path, sha in upstream.list_gitlinks(
+        for path, sha in upstreamtree.list_gitlinks(
             source.repo, source.pin, cache_dir, offline
         ).items()
     }
@@ -194,7 +196,7 @@ def _follow_submodule(
     for view in views:
         path = pinned.get(view.pin) if view.field == "upstream" else None
         head = (
-            upstream.list_gitlinks(source.repo, source.head, cache_dir, offline).get(path)
+            upstreamtree.list_gitlinks(source.repo, source.head, cache_dir, offline).get(path)
             if path else None
         )
         followed.append(
@@ -222,7 +224,7 @@ def _follow_fork_base(
         if view.field != "upstream" or view.pin == view.head or " via " in view.origin:
             followed.append(view)
             continue
-        base = upstream.fork_base(
+        base = upstreamtree.fork_base(
             view.repo, view.head, source.repo, source.head, cache_dir, offline
         )
         if base and base != view.pin:
@@ -230,7 +232,7 @@ def _follow_fork_base(
             # carry: the upstream is a build of its own, the Qt melonDS or the
             # EasyRPG Player a standalone + libretro profile documents, and
             # its HEAD stays the reference. melonds read 825 commits back.
-            moved = upstream.ancestry(view.repo, base, view.pin, cache_dir, offline)
+            moved = upstreamtree.ancestry(view.repo, base, view.pin, cache_dir, offline)
             if moved and moved[0] > 0 and moved[1] == 0:
                 base = None
         followed.append(

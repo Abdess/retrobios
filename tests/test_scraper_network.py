@@ -276,7 +276,7 @@ class OneImplementationPerJob(unittest.TestCase):
             for needle in needles
             if needle in path.read_text(encoding="utf-8")
         ]
-        # The ETag HEAD probe is core.upstream.remote_etag. MinUI reads
+        # The ETag HEAD probe is core.forgehttp.remote_etag. MinUI reads
         # through a fetch its tests replace, and hands the answer to
         # tree_entries.
         self.assertEqual(found, ["minui_scraper.py: ?recursive=1"])

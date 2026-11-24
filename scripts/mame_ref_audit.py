@@ -25,6 +25,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 
 from core import upstream
+from core import forgehttp
 from core.cli import add_repo_inputs, require_directory
 from profiling.mamerefs import audit, rewrite
 
@@ -54,7 +55,7 @@ def main() -> None:
             findings, agreed, unjudged = audit(
                 name, args.emulators_dir, args.cache_dir, args.offline
             )
-        except upstream.UpstreamError as exc:
+        except forgehttp.UpstreamError as exc:
             print(f"{name}: unreachable, {exc}", file=sys.stderr)
             continue
         total += len(findings)

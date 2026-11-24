@@ -27,6 +27,7 @@ import profile_sync
 from profiling import resolver
 from profiling import yamledit
 from core import upstream
+from core import upstreamtree
 from profiling import versionbasis
 from model.profilerepos import pin_field
 from model.profiles import load_emulator_profiles
@@ -293,7 +294,7 @@ class TheVersionRepositoryIsTheBasisRepository(unittest.TestCase):
         with mock.patch.object(upstream, "latest_release", return_value=None), \
                 mock.patch.object(upstream, "newest_tag", return_value=None), \
                 mock.patch.object(upstream, "tag_commit", side_effect=tag_commit), \
-                mock.patch.object(upstream, "ancestry", return_value=(3, 0)) as ancestry:
+                mock.patch.object(upstreamtree, "ancestry", return_value=(3, 0)) as ancestry:
             profiling_run._attach_version(args, dict(self.PROFILE, core_version="v1"), report)
         self.assertEqual(set(asked), {"o/up"})
         self.assertEqual(report.version.tag_commit, "uptag")
@@ -334,7 +335,7 @@ class TheTagCoreVersionNames(unittest.TestCase):
                                return_value=upstream.Release("2.10.0", "2026-11-01", False)), \
                 mock.patch.object(upstream, "newest_tag", return_value="2.10.0"), \
                 mock.patch.object(upstream, "tag_commit", side_effect=tag_commit), \
-                mock.patch.object(upstream, "ancestry", side_effect=ancestry):
+                mock.patch.object(upstreamtree, "ancestry", side_effect=ancestry):
             profiling_run._attach_version(args, profile, report)
         return report, asked
 

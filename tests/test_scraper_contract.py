@@ -159,19 +159,19 @@ class RateLimitedForge(unittest.TestCase):
         return urllib.error.HTTPError("u", 429, "Too Many Requests", headers, io.BytesIO())
 
     def setUp(self):
-        from core import upstream
+        from core import forgehttp
 
         self.waits: list[float] = []
-        patcher = mock.patch.object(upstream, "_sleep", self.waits.append)
+        patcher = mock.patch.object(forgehttp, "_sleep", self.waits.append)
         patcher.start()
         self.addCleanup(patcher.stop)
-        upstream._exhausted_hosts.clear()
-        self.addCleanup(upstream._exhausted_hosts.clear)
+        forgehttp._exhausted_hosts.clear()
+        self.addCleanup(forgehttp._exhausted_hosts.clear)
 
     def test_a_rate_limit_is_waited_out(self):
         import io
 
-        from core import upstream
+        from core import forgehttp
         from scraper.base_scraper import fetch_bytes
 
         answers = [self._limited("7"), self._limited(None), io.BytesIO(b"ok")]
@@ -184,7 +184,7 @@ class RateLimitedForge(unittest.TestCase):
 
         with mock.patch("urllib.request.urlopen", urlopen):
             self.assertEqual(fetch_bytes("https://x"), b"ok")
-        self.assertEqual(self.waits, [7.0, upstream.RATE_LIMIT_WAITS[1]])
+        self.assertEqual(self.waits, [7.0, forgehttp.RATE_LIMIT_WAITS[1]])
 
     def test_a_lasting_limit_or_a_missing_file_fails(self):
         from scraper.base_scraper import FetchError, fetch_bytes
@@ -987,7 +987,7 @@ class EveryGitHubApiCallerSendsTheToken(unittest.TestCase):
             # arcade_parent_importer names API URLs and sends them through
             # dat_fetch.api_json, which holds the token, and the
             # scrapers through base_scraper.github_json, the rest through
-            # core.upstream.fetch_body or forge_headers.
+            # core.forgehttp.fetch_body or forge_headers.
             and ("Request(" in source or "urlopen(" in source or path.suffix == ".sh")
             and "GITHUB_TOKEN" not in source
             and "github_headers(" not in source

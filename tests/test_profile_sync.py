@@ -76,8 +76,10 @@ from profiling.rebase import Recale, rebase_refs
 from profiling.repos import select_repo
 from model.sourceref import RefPart, parse_source_ref, split_source_ref
 from core import upstream
+from core import forgehttp
+from core import upstreamtree
 from profiling import versionbasis
-from core.upstream import CompareResult, FileChange
+from core.upstreamtree import CompareResult, FileChange
 
 
 def _version_read_as_written(profile, cache_dir, offline, profiles=None, recompute=False):
@@ -325,7 +327,7 @@ class TestSourceMirror(unittest.TestCase):
             "source_commit": "87b176a",
             "upstream_commit": "07021f0",
         }
-        with tempfile.TemporaryDirectory() as cache, self.assertRaises(upstream.NotCachedError):
+        with tempfile.TemporaryDirectory() as cache, self.assertRaises(forgehttp.NotCachedError):
             profiling_repos.select_views(profile, cache, True)
 
     def test_a_profile_without_a_mirror_is_unchanged(self):
@@ -1291,22 +1293,22 @@ class TestBuildReport(unittest.TestCase):
             upstream.fetch_file,
             upstream.resolve_head,
             upstream.resolve_commit_at,
-            upstream.compare,
-            upstream.list_tree,
+            upstreamtree.compare,
+            upstreamtree.list_tree,
             upstream.list_tags,
             upstream.resolve_tag_commit,
             upstream.tag_commit,
-            upstream.http_json,
-            upstream.http_text,
-            upstream.list_gitlinks,
+            forgehttp.http_json,
+            forgehttp.http_text,
+            upstreamtree.list_gitlinks,
             upstream.current_slug,
-            upstream.fork_base,
-            upstream.ancestry,
+            upstreamtree.fork_base,
+            upstreamtree.ancestry,
         )
         # Pin and tip are unrelated shas in these fixtures: no ancestry.
-        upstream.ancestry = lambda *a, **k: None
+        upstreamtree.ancestry = lambda *a, **k: None
         self.fork_bases: dict[str, str] = {}
-        upstream.fork_base = (
+        upstreamtree.fork_base = (
             lambda repo, sha, fork, fork_sha, cache_dir, offline=False:
             self.fork_bases.get(fork_sha)
         )
@@ -1318,7 +1320,7 @@ class TestBuildReport(unittest.TestCase):
         )
         self.tags: list[str] = []
         self.gitlinks: dict[str, dict[str, str]] = {}
-        upstream.list_gitlinks = (
+        upstreamtree.list_gitlinks = (
             lambda repo, sha, cache_dir, offline=False: self.gitlinks.get(sha, {})
         )
         self.tag_commits: dict[str, str] = {}
@@ -1326,8 +1328,8 @@ class TestBuildReport(unittest.TestCase):
         def _no_network(url):
             raise AssertionError(f"test reached the network: {url}")
 
-        upstream.http_json = _no_network
-        upstream.http_text = _no_network
+        forgehttp.http_json = _no_network
+        forgehttp.http_text = _no_network
         upstream.list_tags = (
             lambda repo, cache, offline=False: self.tags
         )
@@ -1337,7 +1339,7 @@ class TestBuildReport(unittest.TestCase):
         upstream.tag_commit = (
             lambda repo, tag, cache, offline=False: self.tag_commits.get(tag)
         )
-        upstream.list_tree = (
+        upstreamtree.list_tree = (
             lambda repo, sha, cache_dir, offline=False: (
                 sorted({path for _, path in self.files}), False
             )
@@ -1353,7 +1355,7 @@ class TestBuildReport(unittest.TestCase):
         upstream.resolve_commit_at = (
             lambda repo, date, cache_dir, offline=False, branch=None: "pinsha"
         )
-        upstream.compare = (
+        upstreamtree.compare = (
             lambda repo, base, head, cache_dir, offline=False: CompareResult([], False)
         )
 
@@ -1362,17 +1364,17 @@ class TestBuildReport(unittest.TestCase):
             upstream.fetch_file,
             upstream.resolve_head,
             upstream.resolve_commit_at,
-            upstream.compare,
-            upstream.list_tree,
+            upstreamtree.compare,
+            upstreamtree.list_tree,
             upstream.list_tags,
             upstream.resolve_tag_commit,
             upstream.tag_commit,
-            upstream.http_json,
-            upstream.http_text,
-            upstream.list_gitlinks,
+            forgehttp.http_json,
+            forgehttp.http_text,
+            upstreamtree.list_gitlinks,
             upstream.current_slug,
-            upstream.fork_base,
-            upstream.ancestry,
+            upstreamtree.fork_base,
+            upstreamtree.ancestry,
         ) = self._orig
         self.tmp.cleanup()
 
@@ -1410,7 +1412,7 @@ class TestBuildReport(unittest.TestCase):
         """git.eden-emu.dev answers 403 to scripts: the muted repository's
         citations read "absent at HEAD" for files that exist."""
         def refuse(repo, sha, path, cache_dir, offline=False):
-            raise upstream.UpstreamError(f"{path}: HTTP 403")
+            raise forgehttp.UpstreamError(f"{path}: HTTP 403")
 
         upstream.fetch_file = refuse
         with contextlib.redirect_stderr(io.StringIO()):
@@ -1423,7 +1425,7 @@ class TestBuildReport(unittest.TestCase):
         """git.eden-emu.dev truncates the HEAD tree: fs_paths.h, cited bare,
         was reported GONE though it lives under src/common/fs/."""
         self.files[("pinsha", "fs_paths.h")] = ["x", "hit"]
-        upstream.list_tree = (
+        upstreamtree.list_tree = (
             lambda repo, sha, cache_dir, offline=False: (["other.c"], True)
         )
         with contextlib.redirect_stderr(io.StringIO()):
@@ -1789,7 +1791,7 @@ class TestBuildReport(unittest.TestCase):
         upstream.resolve_head = (
             lambda repo, cache, offline=False, branch=None: heads[repo.slug]
         )
-        upstream.list_tree = (
+        upstreamtree.list_tree = (
             lambda repo, sha, cache_dir, offline=False: (
                 sorted(path for revision, path in self.files if revision == sha), False
             )
@@ -1836,7 +1838,7 @@ class TestBuildReport(unittest.TestCase):
         # the forge's orphaned objects, and every ref read ANCHORED.
         self.files[("pinsha", "a.c")] = ["x", "hit"]
         self.files[("headsha", "a.c")] = ["x", "hit"]
-        upstream.compare = (
+        upstreamtree.compare = (
             lambda repo, base, head, cache_dir, offline=False: CompareResult([], False, True)
         )
         report = build_report("test", self._profile(["a.c:2"]), self.dir)
@@ -1848,7 +1850,7 @@ class TestBuildReport(unittest.TestCase):
         self.files[("pinsha", "a.c")] = ["x", "hit"]
         self.files[("headsha", "a.c")] = ["x", "hit"]
         self.tag_commits = {"v1.6.0": "pinsha"}
-        upstream.compare = (
+        upstreamtree.compare = (
             lambda repo, base, head, cache_dir, offline=False: CompareResult([], False, True)
         )
         report = build_report("test", self._versioned("1.6.0"), self.dir)
@@ -1882,7 +1884,7 @@ class TestBuildReport(unittest.TestCase):
             lambda repo, cache, offline=False, branch=None: heads[repo.slug]
         )
         # A tag off the tracked branch is not an orphaned pin.
-        upstream.compare = (
+        upstreamtree.compare = (
             lambda repo, base, head, cache_dir, offline=False: CompareResult(
                 [], False, repo.slug == "o/up"
             )
@@ -1986,7 +1988,7 @@ class TestDeclaredDeadUpstream(TestBuildReport):
 
     def test_a_declared_death_is_reported_as_declared(self):
         def boom(*a, **k):
-            raise upstream.GoneError("https://h/x: HTTP 451")
+            raise forgehttp.GoneError("https://h/x: HTTP 451")
 
         upstream.resolve_head = boom
         report = build_report(
@@ -2000,7 +2002,7 @@ class TestDeclaredDeadUpstream(TestBuildReport):
     def test_any_refusal_of_a_declared_dead_forge_agrees(self):
         # citron's taken domain now resolves and fails TLS.
         def tls(*a, **k):
-            raise upstream.UpstreamError("TLSV1_UNRECOGNIZED_NAME")
+            raise forgehttp.UpstreamError("TLSV1_UNRECOGNIZED_NAME")
 
         upstream.resolve_head = tls
         report = build_report("test", self._profile_with("domain taken"), self.dir)
@@ -2018,10 +2020,10 @@ class TestDeclaredDeadUpstream(TestBuildReport):
 
     def test_an_undeclared_death_is_unchanged(self):
         def boom(*a, **k):
-            raise upstream.GoneError("https://h/x: HTTP 451")
+            raise forgehttp.GoneError("https://h/x: HTTP 451")
 
         upstream.resolve_head = boom
-        with self.assertRaises(upstream.GoneError):
+        with self.assertRaises(forgehttp.GoneError):
             build_report("test", self._profile(["a.c:1"]), self.dir)
 
 
@@ -2087,7 +2089,7 @@ class TestBareNameResolvedAtThePin(TestBuildReport):
         def list_tree(repo, sha, cache_dir, offline=False):
             return sorted({path for rev, path in self.files if rev == sha}), False
 
-        upstream.list_tree = list_tree
+        upstreamtree.list_tree = list_tree
 
     def test_a_bare_name_follows_the_file_that_moved_after_the_pin(self):
         self._tree_per_revision()
@@ -2170,7 +2172,7 @@ class TestRunResilience(unittest.TestCase):
         def flaky(repo, date, cache_dir, offline=False, branch=None):
             self.seen.append(repo.slug)
             if repo.slug == "o/bad":
-                raise upstream.UpstreamError("HTTP 401")
+                raise forgehttp.UpstreamError("HTTP 401")
             return "pinsha"
 
         upstream.resolve_commit_at = flaky
@@ -2186,12 +2188,12 @@ class TestRunResilience(unittest.TestCase):
             "profiled_date": "2026-03-29",
             "files": [{"name": "a.bin", "source_ref": "a.c:1"}],
         }
-        with self.assertRaises(upstream.UpstreamError):
+        with self.assertRaises(forgehttp.UpstreamError):
             build_report("bad", profile, self.tmp.name)
 
     def test_rate_limit_still_propagates(self):
         def limited(repo, date, cache_dir, offline=False, branch=None):
-            raise upstream.RateLimitError("HTTP 403")
+            raise forgehttp.RateLimitError("HTTP 403")
 
         upstream.resolve_commit_at = limited
         profile = {
@@ -2200,7 +2202,7 @@ class TestRunResilience(unittest.TestCase):
             "profiled_date": "2026-03-29",
             "files": [{"name": "a.bin", "source_ref": "a.c:1"}],
         }
-        with self.assertRaises(upstream.RateLimitError):
+        with self.assertRaises(forgehttp.RateLimitError):
             build_report("x", profile, self.tmp.name)
 
 
@@ -2240,7 +2242,7 @@ class TestExtrasSurviveARefusingForge(unittest.TestCase):
         original = upstream.fetch_file
 
         def refuse(*_args, **_kwargs):
-            raise upstream.UpstreamError("https://x/y: HTTP 403")
+            raise forgehttp.UpstreamError("https://x/y: HTTP 403")
 
         upstream.fetch_file = refuse
         try:
@@ -2279,11 +2281,11 @@ class TestExtrasSurviveARefusingForge(unittest.TestCase):
         original = upstream.fetch_file
 
         def quota(*_args, **_kwargs):
-            raise upstream.RateLimitError("quota")
+            raise forgehttp.RateLimitError("quota")
 
         upstream.fetch_file = quota
         try:
-            with self.assertRaises(upstream.RateLimitError):
+            with self.assertRaises(forgehttp.RateLimitError):
                 profiling_run._attach_detection(
                     self._profile(), _sample_report(), "x", False, True, False
                 )
@@ -2814,9 +2816,9 @@ class TestWriteDryRun(unittest.TestCase):
         from unittest import mock
 
         before = self.path.read_bytes()
-        cold = upstream.NotCachedError("x.c not cached")
+        cold = forgehttp.NotCachedError("x.c not cached")
         with mock.patch.object(profiling_run, "realign_prose", side_effect=[[], cold]), \
-                self.assertRaises(upstream.NotCachedError):
+                self.assertRaises(forgehttp.NotCachedError):
             self._run(self._args(rebase_refs=True, dry_run=False), self._shifted())
         self.assertEqual(self.path.read_bytes(), before)
 
@@ -2828,7 +2830,7 @@ class TestWriteDryRun(unittest.TestCase):
         before = self.path.read_bytes()
         skipped = ProfileReport(name="p", entries=[], counts={}, skipped="offline: not cached",
                                 skip_kind=SkipKind.OFFLINE)
-        cold = upstream.NotCachedError("o/n@pin:a.c is not in the offline cache")
+        cold = forgehttp.NotCachedError("o/n@pin:a.c is not in the offline cache")
         reports: list[ProfileReport] = []
         failed: set[str] = set()
         with mock.patch.object(profiling_run, "_build_full_report", return_value=skipped), \
@@ -3787,7 +3789,7 @@ class APassedReleaseIsNewerThanTheTag(unittest.TestCase):
             "v0.2.22", "v0.2.22", "v0.2.20", "2026-07-25", True, "tag22"
         )
         with mock.patch.object(upstream, "tag_commit", return_value="rel20"), \
-                mock.patch.object(upstream, "ancestry", return_value=(5, 0)):
+                mock.patch.object(upstreamtree, "ancestry", return_value=(5, 0)):
             self.assertIsNone(versions.latest_passed_release("repo", version, "pin", "c", True))
 
 
@@ -3800,7 +3802,7 @@ class ANewerReleaseThanTheTag(unittest.TestCase):
         version = versions.VersionReport("2.8", "2.9", "2.9", "2026-10-01", True, "tag28")
         answers = iter([after_tag, after_pin])
         with mock.patch.object(upstream, "tag_commit", return_value="rel29"), \
-                mock.patch.object(upstream, "ancestry", side_effect=lambda *a, **k: next(answers)):
+                mock.patch.object(upstreamtree, "ancestry", side_effect=lambda *a, **k: next(answers)):
             return versions.newer_release("repo", version, "tag28", "c", True)
 
     def test_a_later_release_is_named(self):
@@ -3836,7 +3838,7 @@ class AProjectThatOnlyTags(unittest.TestCase):
 
         version = versions.VersionReport("v1.2", "v1.3", None, None, True, "tag12")
         with mock.patch.object(upstream, "tag_commit", return_value="tag13"), \
-                mock.patch.object(upstream, "ancestry", return_value=(7, 0)):
+                mock.patch.object(upstreamtree, "ancestry", return_value=(7, 0)):
             self.assertEqual(versions.newer_release("repo", version, "tag12", "c", True), "v1.3")
 
 
@@ -3860,7 +3862,7 @@ class APassedReleaseUnderAnUntaggedVersion(unittest.TestCase):
             version = versions.VersionReport(declared, release, release, "d", False, None)
             with self.subTest(declared=declared, release=release), \
                     mock.patch.object(upstream, "tag_commit", return_value="rel"), \
-                    mock.patch.object(upstream, "ancestry", return_value=(3, 0)):
+                    mock.patch.object(upstreamtree, "ancestry", return_value=(3, 0)):
                 self.assertEqual(versions.latest_passed_release("repo", version, "pin", "c", True), expected)
 
     def test_no_tag_and_nothing_passed_stays_quiet(self):
@@ -3872,10 +3874,10 @@ class APassedReleaseUnderAnUntaggedVersion(unittest.TestCase):
 class TestAncestry(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.saved = upstream.http_json
+        self.saved = forgehttp.http_json
 
     def tearDown(self):
-        upstream.http_json = self.saved
+        forgehttp.http_json = self.saved
         self.tmp.cleanup()
 
     def test_github_answers_both_directions_at_once(self):
@@ -3885,10 +3887,10 @@ class TestAncestry(unittest.TestCase):
             calls.append(url)
             return {"ahead_by": 3, "behind_by": 0}
 
-        upstream.http_json = answer
+        forgehttp.http_json = answer
         repo = upstream.parse_repo("https://github.com/o/n")
         self.assertEqual(
-            upstream.ancestry(repo, "tag", "pin", self.tmp.name), (3, 0)
+            upstreamtree.ancestry(repo, "tag", "pin", self.tmp.name), (3, 0)
         )
         self.assertEqual(len(calls), 1)
 
@@ -3897,10 +3899,10 @@ class TestAncestry(unittest.TestCase):
             forward = "from=tag&to=pin" in url
             return {"commits": [{}] * (0 if forward else 5)}
 
-        upstream.http_json = answer
+        forgehttp.http_json = answer
         repo = upstream.parse_repo("https://gitlab.com/o/n")
         self.assertEqual(
-            upstream.ancestry(repo, "tag", "pin", self.tmp.name), (0, 5)
+            upstreamtree.ancestry(repo, "tag", "pin", self.tmp.name), (0, 5)
         )
 
 
@@ -4316,10 +4318,10 @@ class TestCollectCitations(unittest.TestCase):
 
         with mock.patch.object(upstream, "fetch_file", side_effect=fetch), \
                 mock.patch.object(
-                    upstream, "list_gitlinks",
+                    upstreamtree, "list_gitlinks",
                     return_value={"Q3E/src/main/jni/xash3d/xash3d-fwgs": "s1"},
                 ):
-            target = upstream.through_gitlink(
+            target = upstreamtree.through_gitlink(
                 port, "p1",
                 "Q3E/src/main/jni/xash3d/xash3d-fwgs/filesystem/filesystem.c", "c",
             )
@@ -4868,14 +4870,14 @@ class TestRealignProse(unittest.TestCase):
         self.files: dict[tuple[str, str], list[str]] = {}
         self._orig = (
             upstream.fetch_file,
-            upstream.list_tree,
+            upstreamtree.list_tree,
         )
         upstream.fetch_file = (
             lambda repo, sha, path, cache_dir, offline=False: self.files.get(
                 (sha, path)
             )
         )
-        upstream.list_tree = (
+        upstreamtree.list_tree = (
             lambda repo, sha, cache_dir, offline=False: (
                 sorted({p for _, p in self.files}), False
             )
@@ -4884,7 +4886,7 @@ class TestRealignProse(unittest.TestCase):
     def tearDown(self):
         (
             upstream.fetch_file,
-            upstream.list_tree,
+            upstreamtree.list_tree,
         ) = self._orig
         self.tmp.cleanup()
 
@@ -5190,7 +5192,7 @@ class TestRealignProse(unittest.TestCase):
         base = PROSE_SAMPLE.replace("(a.c:10)", "(deep.c:10)")
         self._commit(base.replace('"pin"', '"oldpin"'), "profile")
         self.path.write_text(base, encoding="utf-8")
-        upstream.list_tree = (
+        upstreamtree.list_tree = (
             lambda repo, sha, cache_dir, offline=False: ([], True)
         )
         self.files[("oldpin", "b.c")] = list("pqrstuvwx")
@@ -5242,7 +5244,7 @@ class TestRateLimitEndsOneProfile(unittest.TestCase):
 
         def build(name, *_args, **_kwargs):
             if name == "cemu":
-                raise upstream.RateLimitError(
+                raise forgehttp.RateLimitError(
                     "https://git.libretro.com/x: HTTP 429", "git.libretro.com"
                 )
             return ProfileReport(name=name, counts={"CHANGED": 1})
@@ -5593,7 +5595,7 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
 
         def build(name, *args, **kwargs):
             if name == "drift":
-                raise upstream.UpstreamError("https://x: HTTP 502")
+                raise forgehttp.UpstreamError("https://x: HTTP 502")
             return ProfileReport(name=name)
 
         out = io.StringIO()
@@ -5798,7 +5800,7 @@ class UpstreamVendoredAsASubmodule(unittest.TestCase):
             profiling_repos.RepoView(repo_u, "sub-old", "nesbox-tip", "upstream_commit", "upstream"),
         ]
         with mock.patch.object(
-            upstream, "list_gitlinks",
+            upstreamtree, "list_gitlinks",
             side_effect=lambda repo, sha, *a, **k: links.get(sha, {}),
         ):
             return profiling_repos._follow_submodule(views, "cache", True)
@@ -5820,9 +5822,9 @@ class UpstreamVendoredAsASubmodule(unittest.TestCase):
             profiling_repos.RepoView(object(), "sub-old", "nesbox-tip", "upstream_commit", "upstream"),
         ]
         with mock.patch.object(
-            upstream, "list_gitlinks",
-            side_effect=upstream.TruncatedListingError("tree listing truncated"),
-        ), self.assertRaises(upstream.TruncatedListingError):
+            upstreamtree, "list_gitlinks",
+            side_effect=forgehttp.TruncatedListingError("tree listing truncated"),
+        ), self.assertRaises(forgehttp.TruncatedListingError):
             profiling_repos._follow_submodule(views, "cache", True)
 
 
@@ -5837,10 +5839,10 @@ class TruncatedGitlinksInTheResolver(unittest.TestCase):
 
         def links(repo, sha, *_args):
             if repo == "a":
-                raise upstream.TruncatedListingError("a@p1: tree listing truncated")
+                raise forgehttp.TruncatedListingError("a@p1: tree listing truncated")
             return {"sub": "s"}
 
-        with mock.patch.object(upstream, "list_gitlinks", side_effect=links), \
+        with mock.patch.object(upstreamtree, "list_gitlinks", side_effect=links), \
                 contextlib.redirect_stderr(io.StringIO()) as err:
             found = [list(paths) for paths in resolver._Resolver.gitlinks_in_order(state)]
         self.assertEqual(found, [[], ["sub"]])
@@ -5859,7 +5861,7 @@ class AMirrorOutlivesAGoneSource(unittest.TestCase):
 
         def head(repo, cache_dir, offline=False, branch=None):
             if repo == gone_repo:
-                raise upstream.GoneError("HTTP 451")
+                raise forgehttp.GoneError("HTTP 451")
             return "mirror-head"
 
         profile = {
@@ -5883,7 +5885,7 @@ class AMirrorOutlivesAGoneSource(unittest.TestCase):
 
         def head(repo, cache_dir, offline=False, branch=None):
             if repo == gone_repo:
-                raise upstream.GoneError("HTTP 404")
+                raise forgehttp.GoneError("HTTP 404")
             return "tip"
 
         profile = {
@@ -6042,9 +6044,9 @@ class UpstreamForkedByThePort(unittest.TestCase):
             profiling_repos.RepoView(self.up, "old-base", "up-tip", "upstream_commit", "upstream"),
         ]
         with mock.patch.object(
-            upstream, "fork_base", return_value=base
+            upstreamtree, "fork_base", return_value=base
         ) as asked, mock.patch.object(
-            upstream, "ancestry", return_value=ancestry
+            upstreamtree, "ancestry", return_value=ancestry
         ):
             followed = profiling_repos._follow_fork_base(views, "cache", True)
         return followed, asked
@@ -6077,7 +6079,7 @@ class ACachedTipOlderThanThePin(TestBuildReport):
     77d80d7, its ancestor: a bump would have moved the pin backwards."""
 
     def test_the_tip_is_asked_again(self):
-        upstream.ancestry = lambda *a, **k: (0, 3)
+        upstreamtree.ancestry = lambda *a, **k: (0, 3)
         upstream.resolve_head = (
             lambda repo, cache_dir, offline=False, branch=None, fresh=False:
             "newtip" if fresh else "staletip"
@@ -6095,10 +6097,10 @@ class OfflineCacheMissIsNotGone(TestBuildReport):
 
     def test_an_uncached_file_is_not_reported_gone(self):
         def cold(repo, sha, path, cache_dir, offline=False):
-            raise upstream.NotCachedError(f"{path} not cached")
+            raise forgehttp.NotCachedError(f"{path} not cached")
 
         upstream.fetch_file = cold
-        with self.assertRaises(upstream.NotCachedError):
+        with self.assertRaises(forgehttp.NotCachedError):
             build_report("test", self._profile(["a.c:2"]), self.dir, offline=True)
 
 
@@ -6287,10 +6289,10 @@ class AnOffForgeProfileWatchesItsReleasePage(unittest.TestCase):
             "url": "https://example.test/altirra", "pattern": r"Altirra (\d+\.\d+) released",
         }}
         answers = [
-            (upstream.NotCachedError("cold"), "not cached offline"),
+            (forgehttp.NotCachedError("cold"), "not cached offline"),
             (None, "page absent"),
             ("<p>nothing here</p>", "pattern not found"),
-            (upstream.UpstreamError("HTTP 500"), "https://example.test/altirra: HTTP 500"),
+            (forgehttp.UpstreamError("HTTP 500"), "https://example.test/altirra: HTTP 500"),
         ]
         for answer, reason in answers:
             effect = {"side_effect": answer} if isinstance(answer, Exception) else {"return_value": answer}
@@ -6301,7 +6303,7 @@ class AnOffForgeProfileWatchesItsReleasePage(unittest.TestCase):
                 stderr.write.assert_not_called()
 
     def test_an_uncached_page_offline_is_not_an_absent_one(self):
-        with tempfile.TemporaryDirectory() as cache, self.assertRaises(upstream.NotCachedError):
+        with tempfile.TemporaryDirectory() as cache, self.assertRaises(forgehttp.NotCachedError):
             upstream.fetch_page("https://example.invalid/never-cached", cache, True)
 
     def test_the_reason_reaches_the_json_and_the_text(self):
@@ -6366,7 +6368,7 @@ class EachCitationNamesTheCodeThatAsks(unittest.TestCase):
             lambda repo, sha, path, cache_dir, offline=False:
             trees.get(repo.slug, {}).get(path)
         )
-        upstream.list_tree = (
+        upstreamtree.list_tree = (
             lambda repo, sha, cache_dir, offline=False: (sorted(trees[repo.slug]), False)
         )
         upstream.resolve_head = (
@@ -6414,7 +6416,7 @@ class ARoleIsReadPerPart(unittest.TestCase):
             lambda repo, sha, path, cache_dir, offline=False:
             trees.get((repo.slug, sha), {}).get(path)
         )
-        upstream.list_tree = (
+        upstreamtree.list_tree = (
             lambda repo, sha, cache_dir, offline=False:
             (sorted(trees.get((repo.slug, sha), {})), False)
         )
@@ -6422,9 +6424,9 @@ class ARoleIsReadPerPart(unittest.TestCase):
             lambda repo, cache_dir, offline=False, branch=None:
             "heads" if repo.owner == "libretro" else "pinu"
         )
-        upstream.compare = (
+        upstreamtree.compare = (
             lambda repo, base, head, cache_dir, offline=False:
-            upstream.CompareResult([], False)
+            upstreamtree.CompareResult([], False)
         )
         text = (
             'emulator: T\n'

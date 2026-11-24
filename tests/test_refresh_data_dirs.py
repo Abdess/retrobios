@@ -451,6 +451,7 @@ class TheRemoteCommitComesFromTheForgeClient(unittest.TestCase):
 
     def _resolve(self, url: str, version: str, answers: list) -> tuple[str | None, list]:
         from core import upstream
+        from core import forgehttp
 
         seen: list = []
 
@@ -464,7 +465,7 @@ class TheRemoteCommitComesFromTheForgeClient(unittest.TestCase):
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp, \
                 mock.patch.object(upstream, "CACHE_DIR", tmp), \
-                mock.patch.object(upstream, "_sleep", lambda _s: None), \
+                mock.patch.object(forgehttp, "_sleep", lambda _s: None), \
                 mock.patch.dict("os.environ", {"GITHUB_TOKEN": "SECRET"}), \
                 mock.patch("urllib.request.urlopen", urlopen):
             return datadirs.get_remote_sha(url, version), seen

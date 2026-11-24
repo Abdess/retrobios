@@ -24,6 +24,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 
 from core import upstream
+from core import forgehttp
 from core.cli import add_repo_inputs, require_directory
 from model.profiles import ProfileSelectionError, load_emulator_profiles, resolve_profile_name
 from profiling import fileless
@@ -65,7 +66,7 @@ def main() -> None:
     for name in names:
         try:
             hits = fileless.audit(name, args.emulators_dir, args.cache_dir, args.offline)
-        except upstream.UpstreamError as exc:
+        except forgehttp.UpstreamError as exc:
             print(f"{name}: unreachable, {exc}", file=sys.stderr)
             unreachable += 1
             continue

@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 from . import Fetcher, SourceError, dump_setup, scrape_setup
-from core.upstream import UpstreamError
+from core.forgehttp import UpstreamError
 from core.artifacts import write_if_changed
 from model.romfolders import ROMFOLDERS_DIR, SOURCES_DIR, load_sources
 

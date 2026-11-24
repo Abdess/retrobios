@@ -17,6 +17,7 @@ from pathlib import Path
 from unittest import mock
 
 import fileless_audit
+from core import forgehttp
 from profiling import fileless
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -147,7 +148,7 @@ class TestCommandLine(unittest.TestCase):
 
     def test_an_unreachable_source_fails_the_run(self):
         def unreachable(name):
-            raise fileless.upstream.UpstreamError("HTTP 403")
+            raise forgehttp.UpstreamError("HTTP 403")
 
         code, _ = self._main("open", audit=unreachable)
         self.assertEqual(code, 1)
@@ -173,7 +174,7 @@ class TestCorpusIsAnswered(unittest.TestCase):
             # A cold path is unread here, not absent.
             try:
                 lines = fetch(*args, **kwargs)
-            except fileless.upstream.NotCachedError:
+            except forgehttp.NotCachedError:
                 return None
             if lines is not None:
                 read.append(args[2])
@@ -190,7 +191,7 @@ class TestCorpusIsAnswered(unittest.TestCase):
                     hits = fileless.audit(
                         path.stem, str(ROOT / "emulators"), str(cache), True
                     )
-                except fileless.upstream.NotCachedError:
+                except forgehttp.NotCachedError:
                     # A cold branch tip is unread too, not a branch gone.
                     continue
                 if hits:

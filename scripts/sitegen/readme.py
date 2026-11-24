@@ -18,6 +18,7 @@ from core.artifacts import write_if_changed
 from core.paths import DB_FILE, REPO_ROOT
 from core.sizes import size_text
 from core import upstream
+from core import forgehttp
 from installer_build.module import installer_module
 from model.guides import PACKAGE_COMMAND
 from sitegen.guidedata import install_command
@@ -161,9 +162,9 @@ def fetch_contributors() -> list[dict]:
         return []
     url = f"https://api.github.com/repos/{REPO}/contributors"
     try:
-        body = upstream.fetch_body(url, accept_json=True, timeout=10, user_agent="retrobios-readme/1.0")
+        body = forgehttp.fetch_body(url, accept_json=True, timeout=10, user_agent="retrobios-readme/1.0")
         data = json.loads(body) if body is not None else []
-    except (upstream.UpstreamError, ValueError) as exc:
+    except (forgehttp.UpstreamError, ValueError) as exc:
         print(f"contributors: {exc}", file=sys.stderr)
         return []
     owner = REPO.split("/")[0]

@@ -12,6 +12,8 @@ from pathlib import Path
 
 from core.text import series
 from core import upstream
+from core import forgehttp
+from core import upstreamtree
 from core.artifacts import repository_output_lock, write_if_changed
 from core.paths import REPO_ROOT
 from model.citations import document_citations, known_repositories
@@ -217,8 +219,8 @@ def _cached_tree(
     for index, cache_dir in enumerate(cache_dirs):
         online = fetch and index == len(cache_dirs) - 1
         try:
-            paths, truncated = upstream.list_tree(repo, pin, str(cache_dir), offline=not online)
-        except upstream.UpstreamError as exc:
+            paths, truncated = upstreamtree.list_tree(repo, pin, str(cache_dir), offline=not online)
+        except forgehttp.UpstreamError as exc:
             print(f"  {tree_key(repo, pin)}: {exc}", file=sys.stderr)
             return None
         if paths and not truncated:
@@ -277,8 +279,8 @@ def _listed_directories(
         for index, cache_dir in enumerate(cache_dirs):
             online = fetch and index == len(cache_dirs) - 1
             try:
-                names = upstream.list_directory(repo, pin, folder, str(cache_dir), offline=not online)
-            except upstream.UpstreamError:
+                names = upstreamtree.list_directory(repo, pin, folder, str(cache_dir), offline=not online)
+            except forgehttp.UpstreamError:
                 names = None
             if names is not None:
                 break

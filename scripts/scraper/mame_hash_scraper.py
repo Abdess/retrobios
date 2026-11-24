@@ -29,6 +29,7 @@ from model.sources import source_yaml_file
 from core.cli import SourceUnreadable
 
 from core import upstream
+from core import upstreamtree
 
 from .base_scraper import fetch_github_latest_version
 from ._hash_merge import (
@@ -473,7 +474,7 @@ def _merge_devices(args: argparse.Namespace) -> None:
         device["systems"] = filed.get(set_name, [])
     report = merge_mame_devices(str(profile_path), devices, write=not args.dry_run)
 
-    shipped = upstream.list_directory(repo, commit, "hash", upstream.CACHE_DIR)
+    shipped = upstreamtree.list_directory(repo, commit, "hash", upstream.CACHE_DIR)
     if shipped is None:
         raise RuntimeError(f"hash/ of {repo.slug} at {commit} could not be listed")
     present = {name[:-4] for name in shipped if name.endswith(".xml")}

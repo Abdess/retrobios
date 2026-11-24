@@ -33,6 +33,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from core import upstream
+from core import forgehttp
+from core import upstreamtree
 from model.profilerepos import pin_field
 from profiling.repos import resolve_pin, select_repo
 
@@ -224,15 +226,15 @@ def _ancestry(
     """The forge's compare, else the commit graph: GitHub refuses with 422
     a compare whose diff is too large (aps3e's tag and pin)."""
     try:
-        relation = upstream.ancestry(repo, base, head, cache_dir, offline)
-    except upstream.RateLimitError:
+        relation = upstreamtree.ancestry(repo, base, head, cache_dir, offline)
+    except forgehttp.RateLimitError:
         raise
-    except upstream.UpstreamError:
+    except forgehttp.UpstreamError:
         relation = None
     if relation is None:
         try:
-            relation = upstream.graph_ancestry(repo, base, head, cache_dir, offline)
-        except upstream.NotCachedError:
+            relation = upstreamtree.graph_ancestry(repo, base, head, cache_dir, offline)
+        except forgehttp.NotCachedError:
             return None
     return relation
 
@@ -267,7 +269,7 @@ def _read_none(req: _Request) -> Reading:
         # A release tagged since the basis was written gives the
         # code a version: the advance has to name it.
         repo, pin = req.repo_and_pin()
-        described = upstream.describe(repo, pin, req.cache_dir, req.offline)
+        described = upstreamtree.describe(repo, pin, req.cache_dir, req.offline)
         if described is not None:
             tag, distance = described
             return Reading(req.mode, req.kind, req.stated, describe_form(tag, distance, pin),
@@ -317,7 +319,7 @@ def _read_file(req: _Request, repo: upstream.Repo, pin: str) -> Reading:
 def _read_tag(req: _Request, repo: upstream.Repo, pin: str) -> Reading:
     basis = req.basis
     if req.recompute:
-        described = upstream.describe(repo, pin, req.cache_dir, req.offline, basis.get("match"))
+        described = upstreamtree.describe(repo, pin, req.cache_dir, req.offline, basis.get("match"))
         if described is None:
             return req.unreadable(f"{repo.slug}@{pin[:7]}: no tag in its history")
         tag, distance = described
@@ -375,7 +377,7 @@ def read(
         on_forge = _ON_FORGE.get(kind)
         if on_forge is not None:
             return on_forge(req, repo, pin)
-    except (upstream.UpstreamError, VersionUnreadable) as exc:
+    except (forgehttp.UpstreamError, VersionUnreadable) as exc:
         return req.unreadable(str(exc))
     return req.unreadable(f"unknown kind {kind!r}")
 

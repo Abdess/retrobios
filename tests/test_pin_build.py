@@ -16,6 +16,8 @@ from pathlib import Path
 from unittest import mock
 
 from core import upstream
+from core import forgehttp
+from core import upstreamtree
 from freshness.findings import OK, SKIPPED, STALE
 from freshness.pinbuilds import build_variable, check_pin_builds, pin_build_revision
 
@@ -104,14 +106,14 @@ class HeldPinsReadTheirBuildFileAgain(unittest.TestCase):
 
         profiles = {"amiberry": {"pin_frozen": "x", "pin_build": [ref]}}
         with mock.patch.object(upstream, "fetch_file", side_effect=fetch), \
-                mock.patch.object(upstream, "list_gitlinks", return_value={"batocera": "c" * 40}):
+                mock.patch.object(upstreamtree, "list_gitlinks", return_value={"batocera": "c" * 40}):
             (row,) = check_pin_builds(profiles, self.platforms, "cache", False)
         self.assertEqual(row.status, OK, row.detail)
 
     def test_offline_and_uncached_is_skipped(self):
         self._platform("10.2")
         profiles = {"mame0278": {"pin_frozen": "x", "pin_build": [self.REF]}}
-        cold = upstream.NotCachedError("not cached")
+        cold = forgehttp.NotCachedError("not cached")
         with mock.patch.object(upstream, "fetch_file", side_effect=cold):
             (row,) = check_pin_builds(profiles, self.platforms, "cache", True)
         self.assertEqual(row.status, SKIPPED)

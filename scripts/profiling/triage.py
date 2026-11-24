@@ -9,6 +9,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field
 
 from core import upstream
+from core import forgehttp
 from profiling.reports import ProfileReport, report_to_dict, triage_state
 from profiling.versionbasis import version_repo, version_tags
 from profiling.versions import VersionReport, check_version
@@ -173,7 +174,7 @@ def _score(
                     source.repo, source.path, source.pin, args.cache_dir, args.offline,
                     head=source.head,
                 )
-        except upstream.UpstreamError as exc:
+        except forgehttp.UpstreamError as exc:
             # One forge refusing a request (Eden's answers 403 to commit
             # lookups) leaves this profile unscored, not the whole ranking.
             refused = "commit history unreachable"

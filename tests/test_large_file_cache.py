@@ -40,7 +40,7 @@ PAYLOAD_B = b"B" * (256 * 1024)
 _ONLINE = mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""})
 # core.upstream retries a failed transfer after a pause: the pauses are
 # skipped, the retries are not.
-_NO_PAUSE = mock.patch.object(largefiles.upstream, "_sleep", lambda _s: None)
+_NO_PAUSE = mock.patch.object(largefiles.forgehttp, "_sleep", lambda _s: None)
 
 # The names these tests fetch, registered as .gitignore registers an asset:
 # a bare name no registered path carries is never asked of the release.
@@ -343,8 +343,8 @@ class TheOfflineSwitchHoldsEverywhere(unittest.TestCase):
         under RETROBIOS_OFFLINE it listed the release and HEADed the asset."""
         with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(
             os.environ, {"RETROBIOS_OFFLINE": "1"}
-        ), mock.patch.object(largefiles.upstream, "fetch_body") as fetch_body, \
-                mock.patch.object(largefiles.upstream, "open_retrying") as head:
+        ), mock.patch.object(largefiles.forgehttp, "fetch_body") as fetch_body, \
+                mock.patch.object(largefiles.forgehttp, "open_retrying") as head:
             Path(tmp, "asset.bin").write_bytes(PAYLOAD_A)
             self.assertIsNone(largefiles.fetch_large_file(
                 "asset.bin", dest_dir=tmp,
@@ -960,10 +960,10 @@ class AFailedReleaseListingIsAskedAgain(unittest.TestCase):
     run, and every asset fell back to its Content-Length."""
 
     def test_the_listing_is_read_again_after_a_failure(self):
-        from core import upstream
+        from core import forgehttp
 
         release = {"assets": [{"name": "a.zip", "digest": "sha256:ABC"}]}
-        answers = [upstream.UpstreamError("reset"), json.dumps(release).encode()]
+        answers = [forgehttp.UpstreamError("reset"), json.dumps(release).encode()]
 
         def fetch_body(*_args, **_kwargs):
             answer = answers.pop(0)
@@ -972,7 +972,7 @@ class AFailedReleaseListingIsAskedAgain(unittest.TestCase):
             return answer
 
         with mock.patch.object(largefiles, "_digests_cache", None), \
-                mock.patch.object(upstream, "fetch_body", fetch_body):
+                mock.patch.object(forgehttp, "fetch_body", fetch_body):
             self.assertEqual(largefiles._served_digests(), {})
             self.assertEqual(largefiles._served_digests(), {"a.zip": "abc"})
 

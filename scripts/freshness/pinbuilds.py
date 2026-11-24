@@ -6,6 +6,8 @@ import re
 from pathlib import Path
 
 from core import upstream
+from core import forgehttp
+from core import upstreamtree
 from model.sourcerevision import scraped_revision
 from freshness.findings import OK, SHOWN_NAMES, SKIPPED, STALE, UNKNOWN, Finding
 
@@ -89,17 +91,17 @@ def check_pin_builds(
                     # platform's tree pins: KNULLI builds Batocera's
                     # amiberry package through its batocera submodule.
                     modules = upstream.fetch_file(repo, at, ".gitmodules", cache_dir, offline)
-                    declared = upstream.submodule_urls("\n".join(modules or ()), repo)
+                    declared = upstreamtree.submodule_urls("\n".join(modules or ()), repo)
                     if any(reference["path"].startswith(f"{p}/") for p in declared):
-                        linked = upstream.through_gitlink(repo, at, reference["path"],
+                        linked = upstreamtree.through_gitlink(repo, at, reference["path"],
                                                           cache_dir, offline)
                         if linked is not None:
                             lines = upstream.fetch_file(*linked, cache_dir, offline)
-            except upstream.NotCachedError:
+            except forgehttp.NotCachedError:
                 findings.append(Finding("profiles", subject, SKIPPED, local=recorded[:12],
                                         detail="offline, the build file is not cached"))
                 continue
-            except upstream.UpstreamError as exc:
+            except forgehttp.UpstreamError as exc:
                 findings.append(Finding("profiles", subject, UNKNOWN, local=recorded[:12],
                                         detail=str(exc)))
                 continue

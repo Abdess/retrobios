@@ -86,6 +86,7 @@ import core
 from sitegen import sources
 from model import releaserecord
 from core import upstream
+from core import forgehttp
 from packs.verdicts import Severity, blocking_missing, compute_severity
 from acquire.provenance import build_report
 from model.dumpcatalog import load_provenance_snapshots
@@ -1189,8 +1190,8 @@ class SourceLinksOnlyWhereTheFileIs(unittest.TestCase):
         profile = {"source": "https://github.com/o/r", "source_commit": "e" * 40,
                    "files": [{"source_ref": "src/a.c:5"}]}
         with mock.patch.object(sources, "_cached_tree", return_value=None), \
-                mock.patch.object(core.upstream, "list_directory",
-                                  side_effect=upstream.UpstreamError("HTTP 404")):
+                mock.patch.object(core.upstreamtree, "list_directory",
+                                  side_effect=forgehttp.UpstreamError("HTTP 404")):
             held, unread = sources.build_source_paths({"p": profile}, [TMP])
         self.assertEqual(held, {})
         self.assertEqual(unread, ["github.com/o/r@" + "e" * 40])

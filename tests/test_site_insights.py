@@ -292,8 +292,8 @@ class GoatCounterExport(unittest.TestCase):
         refusal = urllib.error.HTTPError("https://retrobios.goatcounter.com/api/v0/stats/hits", 429,
                                          "Too Many Requests", headers, io.BytesIO(b""))
         with mock.patch.object(insights.urllib.request, "urlopen", side_effect=refusal), \
-                mock.patch.object(insights.upstream, "_sleep") as sleep, \
-                mock.patch.object(insights.upstream, "_exhausted_hosts", set()), \
+                mock.patch.object(insights.forgehttp, "_sleep") as sleep, \
+                mock.patch.object(insights.forgehttp, "_exhausted_hosts", set()), \
                 self.assertRaisesRegex(insights.SourceUnavailable, "2356 s") as caught:
             insights._get_json("https://retrobios.goatcounter.com/api/v0/stats/hits")
         sleep.assert_not_called()
@@ -307,7 +307,7 @@ class GoatCounterExport(unittest.TestCase):
         answer.__enter__.return_value.status = 200
         answer.__enter__.return_value.read.return_value = json.dumps({"ok": 1}).encode()
         with mock.patch.object(insights.urllib.request, "urlopen", side_effect=[refusal, answer]), \
-                mock.patch.object(insights.upstream, "_sleep") as sleep:
+                mock.patch.object(insights.forgehttp, "_sleep") as sleep:
             self.assertEqual(insights._get_json("https://x/api"), {"ok": 1})
         sleep.assert_called_once_with(2)
 
@@ -319,7 +319,7 @@ class GoatCounterExport(unittest.TestCase):
         answer.__enter__.return_value.status = 200
         answer.__enter__.return_value.read.return_value = json.dumps({"ok": 1}).encode()
         with mock.patch.object(insights.urllib.request, "urlopen", side_effect=[refusal, answer]), \
-                mock.patch.object(insights.upstream, "_sleep"):
+                mock.patch.object(insights.forgehttp, "_sleep"):
             self.assertEqual(insights._get_json("https://x/api"), {"ok": 1})
 
     def test_github_headers_come_from_the_forge_helper(self) -> None:

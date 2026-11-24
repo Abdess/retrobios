@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from acquire.placement import ACQUIRE_DIR, Placement, keep_acquired, place_file
-from core import upstream
+from core import forgehttp
 from core.hashing import parse_hash_list
 from core.paths import EMULATORS_DIR, PLATFORMS_DIR, REPO_ROOT
 from resolve.lookup import held_record_for
@@ -193,10 +193,10 @@ def _get(url: str, unanswered: list[str], timeout: float = 30) -> bytes | None:
     report every file as needing a community contribution.
     """
     try:
-        return upstream.fetch_body(
+        return forgehttp.fetch_body(
             url, timeout=timeout, max_bytes=MAX_DOWNLOAD, user_agent="retrobios-fetch/1.0"
         )
-    except upstream.UpstreamError as exc:
+    except forgehttp.UpstreamError as exc:
         unanswered.append(f"{url}: {exc}")
     except ValueError:
         pass

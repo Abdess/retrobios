@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 import core_probe as cp
-from core import upstream
+from core import forgehttp
 from probes.appimage import fetch, github_releases, select_asset
 from probes.standaloneemulators import EMULATORS, Emulator
 from probes.standalonerecord import Busy, RunFailed, measure, validate
@@ -31,7 +31,7 @@ def run_mode(args: argparse.Namespace) -> int:
     if args.mode == "fetch":
         try:
             print(json.dumps(fetch(emu), indent=2))
-        except (cp.ProbeError, upstream.UpstreamError, OSError, http.client.HTTPException,
+        except (cp.ProbeError, forgehttp.UpstreamError, OSError, http.client.HTTPException,
                 subprocess.CalledProcessError) as exc:
             print(f"ERROR: {exc}", file=sys.stderr)
             return 1

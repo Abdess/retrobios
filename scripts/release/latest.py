@@ -7,7 +7,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-from core.upstream import forge_headers, open_retrying
+from core.forgehttp import forge_headers, open_retrying
 from release.downloaderror import DownloadError
 
 DEFAULT_API = "https://api.github.com"

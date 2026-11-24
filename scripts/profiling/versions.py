@@ -6,6 +6,8 @@ import re
 from dataclasses import dataclass
 
 from core import upstream
+from core import forgehttp
+from core import upstreamtree
 from profiling.versionbasis import VersionTag, declared
 
 
@@ -68,9 +70,9 @@ def page_version(
         return None, "version_source names no url or pattern"
     try:
         text = upstream.fetch_page(url, cache_dir, offline)
-    except upstream.NotCachedError:
+    except forgehttp.NotCachedError:
         return None, "not cached offline"
-    except upstream.UpstreamError as exc:
+    except forgehttp.UpstreamError as exc:
         return None, f"{url}: {exc}"
     if text is None:
         return None, "page absent"
@@ -206,10 +208,10 @@ def newer_release(
     commit = upstream.tag_commit(repo, published, cache_dir, offline)
     if not commit or commit == pin:
         return None
-    after_tag = upstream.ancestry(repo, version.tag_commit, commit, cache_dir, offline)
+    after_tag = upstreamtree.ancestry(repo, version.tag_commit, commit, cache_dir, offline)
     if not after_tag or after_tag[0] == 0 or after_tag[1] != 0:
         return None
-    after_pin = upstream.ancestry(repo, pin, commit, cache_dir, offline)
+    after_pin = upstreamtree.ancestry(repo, pin, commit, cache_dir, offline)
     if not after_pin or after_pin[0] == 0:
         return None
     return published
@@ -245,12 +247,12 @@ def latest_passed_release(
     if version.tag_commit and version.tag_commit != commit:
         # A project can publish a release older than its newest tag:
         # pcsx2x6's latest release is v0.2.20, its declared tag v0.2.22.
-        older = upstream.ancestry(repo, commit, version.tag_commit, cache_dir, offline)
+        older = upstreamtree.ancestry(repo, commit, version.tag_commit, cache_dir, offline)
         if older and older[1] == 0:
             return None
     if commit == pin:
         return published
-    relation = upstream.ancestry(repo, commit, pin, cache_dir, offline)
+    relation = upstreamtree.ancestry(repo, commit, pin, cache_dir, offline)
     if relation and relation[1] == 0:
         return published
     return None

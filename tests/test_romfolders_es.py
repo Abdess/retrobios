@@ -298,9 +298,10 @@ class CachedDirectory(unittest.TestCase):
         from unittest import mock
 
         from core import upstream
+        from core import upstreamtree
 
         fetcher = Fetcher({"os": {"repo": "https://gitlab.com/g/p", "commit": "0" * 40}})
-        with mock.patch.object(upstream, "cache_gitlab_directory", return_value={"sys/a/system.ini"}):
+        with mock.patch.object(upstreamtree, "cache_gitlab_directory", return_value={"sys/a/system.ini"}):
             fetcher.cache_directory("os", "sys/")
         with mock.patch.object(upstream, "fetch_file", side_effect=AssertionError("network")):
             self.assertIsNone(fetcher.optional_text("os", "sys/b/system.ini"))

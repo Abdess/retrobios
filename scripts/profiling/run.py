@@ -12,6 +12,8 @@ from pathlib import Path
 import yaml
 
 from core import upstream
+from core import forgehttp
+from core import upstreamtree
 from profiling.bump import bump_commit, pins_changed
 from profiling.detection import detect_upstream_changes, print_extras
 from profiling.realign import realign_prose
@@ -76,12 +78,12 @@ def _read_stale_prose(
     """
     try:
         return realign_prose(path, args.cache_dir, args.offline, dry_run=True)
-    except upstream.RateLimitError:
+    except forgehttp.RateLimitError:
         raise
-    except upstream.NotCachedError as exc:
+    except forgehttp.NotCachedError as exc:
         # Unread offline, as a report is: not clean, and not a failure.
         return [f"not read offline: {exc}"]
-    except upstream.UpstreamError as exc:
+    except forgehttp.UpstreamError as exc:
         # Not read is not clean: the bump would refuse on the same error.
         print(f"{name}: prose not read, {exc}", file=sys.stderr)
         failed.add(name)
@@ -269,9 +271,9 @@ def _attach_detection(
         return
     try:
         detect_upstream_changes(profile, report, cache_dir, offline, files, hashes)
-    except upstream.RateLimitError:
+    except forgehttp.RateLimitError:
         raise
-    except upstream.UpstreamError as exc:
+    except forgehttp.UpstreamError as exc:
         report.detection_skipped = str(exc)
 
 
@@ -303,16 +305,16 @@ def _version_of(
     passed = None
     try:
         if version and version.tag_commit and pin and version.tag_commit != pin:
-            relation = upstream.ancestry(
+            relation = upstreamtree.ancestry(
                 repo, version.tag_commit, pin, args.cache_dir, args.offline
             )
         passed = latest_passed_release(repo, version, pin, args.cache_dir, args.offline)
         newer = None if passed or profile.get(frozen_by) else newer_release(
             repo, version, pin, args.cache_dir, args.offline
         )
-    except upstream.RateLimitError:
+    except forgehttp.RateLimitError:
         raise
-    except upstream.UpstreamError as exc:
+    except forgehttp.UpstreamError as exc:
         report.version_unread = f"tag ancestry unread: {exc}"
         newer = None
     warning = version_warning(version, pin, relation, passed) or (
@@ -340,9 +342,9 @@ def _attach_version(
     for named in named_tags:
         try:
             version, warning = _version_of(args, profile, report, named)
-        except upstream.RateLimitError:
+        except forgehttp.RateLimitError:
             raise
-        except upstream.UpstreamError as exc:
+        except forgehttp.UpstreamError as exc:
             report.version_unread = f"version check skipped: {exc}"
             return
         if report.version is None:
@@ -368,7 +370,7 @@ def read_one_profile(
     profile_path = Path(args.emulators_dir) / f"{name}.yml"
     try:
         report = _build_full_report(args, name, profile, profile_path, failed)
-    except upstream.RateLimitError as exc:
+    except forgehttp.RateLimitError as exc:
         # A quota is one forge's: git.libretro.com answering 429 said
         # nothing about the 600 profiles on GitHub. upstream stops asking
         # that host, so the rest of the pass costs it nothing.
@@ -386,7 +388,7 @@ def read_one_profile(
             # The guard already left the file untouched, so keep going.
             print(f"{name}: write refused: {exc}", file=sys.stderr)
             failed.add(name)
-        except upstream.UpstreamError as exc:
+        except forgehttp.UpstreamError as exc:
             # A prose read the writes need could not be made (offline with
             # a cold cache, a forge down): the profile was put back, and one
             # profile must not end the pass for the others.
@@ -450,20 +452,20 @@ def _build_full_report(
             profile_path.read_text(encoding="utf-8")
             if profile_path.is_file() else None,
         )
-    except upstream.RateLimitError:
+    except forgehttp.RateLimitError:
         raise
-    except upstream.NotCachedError as exc:
+    except forgehttp.NotCachedError as exc:
         # Offline with a cache that never stored this file: the profile
         # is unverified, not wrong. Reporting GONE sent readers after
         # files that exist.
         report = _skipped(name, SkipKind.OFFLINE, f"offline: {exc}")
-    except upstream.GoneError as exc:
+    except forgehttp.GoneError as exc:
         # The forge is not coming back: a takedown, or a host that no
         # longer resolves. Saying so once in the summary beats repeating
         # it on stderr every pass, and it keeps the profile out of the
         # backlog, where nobody can act on it anyway.
         report = _skipped(name, SkipKind.GONE, f"upstream gone: {exc}")
-    except upstream.UpstreamError as exc:
+    except forgehttp.UpstreamError as exc:
         # One unreachable forge must not abandon the other profiles.
         print(f"{name}: {exc}", file=sys.stderr)
         report = _skipped(name, SkipKind.UPSTREAM_ERROR, f"upstream error: {exc}")

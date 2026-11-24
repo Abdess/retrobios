@@ -12,6 +12,7 @@ from pathlib import Path
 import yaml
 
 from core import upstream
+from core import upstreamtree
 from model.sourceref import RefPart
 from profiling.anchoring import anchor_block
 from profiling.attribution import owner_order
@@ -153,7 +154,7 @@ def _resolve_at(
         if lines is not None:
             return "found", (candidate, lines)
     if "/" not in path:
-        tree, truncated = upstream.list_tree(repo, sha, cache_dir, offline)
+        tree, truncated = upstreamtree.list_tree(repo, sha, cache_dir, offline)
         matches = [p for p in tree or [] if posixpath.basename(p) == path]
         if len(matches) == 1:
             lines = upstream.fetch_file(

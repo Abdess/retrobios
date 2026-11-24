@@ -10,7 +10,7 @@ from collections.abc import Sequence
 from pathlib import Path
 
 import core_probe as cp
-from core import upstream
+from core import forgehttp
 from core.statefile import now_iso
 from probes.host import main_cache
 from probes.standaloneemulators import Emulator
@@ -62,8 +62,8 @@ def fetch(emu: Emulator, cache: Path | None = None) -> dict:
     folder = (cache or cache_root()) / emu.name
     folder.mkdir(parents=True, exist_ok=True)
     partial = folder / f"{asset['name']}.part"
-    # Whole or absent, retried on a cut stream (core.upstream.download).
-    upstream.download(asset["url"], partial, timeout=600)
+    # Whole or absent, retried on a cut stream (core.forgehttp.download).
+    forgehttp.download(asset["url"], partial, timeout=600)
     sha256 = cp.file_digest(partial, "sha256")
     target = folder / sha256 / asset["name"]
     target.parent.mkdir(parents=True, exist_ok=True)

@@ -10,7 +10,9 @@ import re
 import sys
 
 from core import upstream
-from core.upstream import CompareResult
+from core import forgehttp
+from core import upstreamtree
+from core.upstreamtree import CompareResult
 from profiling.citations import collect_tokens
 from profiling.reports import CitedSource, ProfileReport
 
@@ -284,9 +286,9 @@ def print_extras(
         return
     try:
         _print_extras_from(args, report)
-    except upstream.RateLimitError:
+    except forgehttp.RateLimitError:
         raise
-    except upstream.UpstreamError as exc:
+    except forgehttp.UpstreamError as exc:
         print(f"  extras skipped: {exc}")
 
 
@@ -310,7 +312,7 @@ def _print_extras_from(args: argparse.Namespace, report: ProfileReport) -> None:
             by_repo.setdefault((source.repo.host, source.repo.slug), []).append(source)
         for sources in by_repo.values():
             first = sources[0]
-            comparison = upstream.compare(
+            comparison = upstreamtree.compare(
                 first.repo, first.pin, first.head, args.cache_dir, args.offline
             )
             if len(by_repo) > 1:

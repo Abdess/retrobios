@@ -7,7 +7,7 @@ import urllib.error
 import urllib.request
 from typing import TYPE_CHECKING
 
-from core.upstream import UpstreamError, open_retrying
+from core.forgehttp import UpstreamError, open_retrying
 from release.downloaderror import DownloadError
 from release.latest import checked_url
 
@@ -27,7 +27,7 @@ def download_file(
     """Write the asset at *url* to *dest* and return its byte count.
 
     *progress* receives the bytes written so far and the announced total
-    after each block. core.upstream.open_retrying asks again after a dropped
+    after each block. core.forgehttp.open_retrying asks again after a dropped
     connection, a stream cut midway or a 5xx, and waits out a rate limit:
     each attempt writes `dest` from its first byte. A transfer that fails or
     ends short of *expected_size* raises DownloadError.

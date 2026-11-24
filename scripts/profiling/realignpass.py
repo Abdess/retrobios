@@ -6,7 +6,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from core import upstream
+from core import forgehttp
 from profiling.realign import realign_prose
 from profiling.sourcepaths import record_write, refresh_source_paths
 from profiling.yamledit import YamlWriteError
@@ -26,7 +26,7 @@ def run_realign(args: argparse.Namespace, selected: dict) -> None:
                     profile_path, args.cache_dir, args.offline, args.dry_run
                 ):
                     print(f"{name}: {line}")
-        except upstream.UpstreamError as exc:
+        except forgehttp.UpstreamError as exc:
             print(f"{name}: {exc}", file=sys.stderr)
             failed.add(name)
         except YamlWriteError as exc:

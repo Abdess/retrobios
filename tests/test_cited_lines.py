@@ -14,6 +14,7 @@ import unittest
 from pathlib import Path
 
 from core import upstream
+from core import forgehttp
 from model.safeparse import yaml_load
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -47,7 +48,7 @@ class CitedLinesHoldTheirCode(unittest.TestCase):
                     lines = upstream.fetch_file(
                         repo, str(document["source_commit"]), path, str(CACHE), True
                     )
-                except upstream.NotCachedError:
+                except forgehttp.NotCachedError:
                     self.skipTest(f"{path} is not in the upstream cache")
                 self.assertIsNotNone(lines)
                 self.assertIn(text, lines[line - 1])

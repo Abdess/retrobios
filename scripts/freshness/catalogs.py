@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from core import upstream
+from core import forgehttp
 from core.paths import REPO_ROOT
 from scripts.scraper import game_dat_importer
 from scripts.scraper.dat_fetch import is_tracked_dat, label_version
@@ -109,7 +110,7 @@ def redump_datfile_version(code: str) -> str:
     gives the download: a HEAD request, nothing downloaded."""
     url = game_dat_importer.REDUMP_DATFILE_URL.format(code=code)
     request = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "retrobios/1.0"})
-    disposition = upstream.open_retrying(
+    disposition = forgehttp.open_retrying(
         request, lambda response: response.headers.get("Content-Disposition", ""), timeout=60
     )
     version = game_dat_importer.served_version(game_dat_importer.datfile_name(disposition) or "")
@@ -135,7 +136,7 @@ def _check_redump_games(offline: bool) -> Finding:
     for code, (_name, system, _floor) in sorted(game_dat_importer.REDUMP_DATS.items()):
         try:
             remote = redump_datfile_version(code)
-        except (OSError, http.client.HTTPException, upstream.UpstreamError, ValueError) as exc:
+        except (OSError, http.client.HTTPException, forgehttp.UpstreamError, ValueError) as exc:
             return Finding("catalogs", subject, UNKNOWN, local=newest, detail=str(exc))
         remote_newest = max(remote_newest, remote)
         if local.get(system) != remote:
@@ -194,8 +195,8 @@ def _check_tosec(offline: bool) -> Finding:
     if offline:
         return Finding("catalogs", "tosec", SKIPPED, local=imported, detail="offline")
     try:
-        html = upstream.http_text(TOSEC_DOWNLOADS)
-    except upstream.UpstreamError as exc:
+        html = forgehttp.http_text(TOSEC_DOWNLOADS)
+    except forgehttp.UpstreamError as exc:
         return Finding("catalogs", "tosec", UNKNOWN, local=imported, detail=str(exc))
     latest = tosec_latest_pack(html or "")
     if latest is None:

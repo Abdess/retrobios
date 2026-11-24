@@ -7,7 +7,7 @@ import posixpath
 from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass, replace
 
-from core.upstream import CompareResult, find_renamed
+from core.upstreamtree import CompareResult, find_renamed
 from model.sourceref import RefPart, is_binary_citation
 from profiling.citations import is_external_citation
 from profiling.repos import HEAD, PIN

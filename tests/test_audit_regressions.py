@@ -3543,7 +3543,7 @@ class ContributorsSurviveAFailedRequest(unittest.TestCase):
         from sitegen import readme
 
         with mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": "1"}), \
-                mock.patch.object(readme.upstream, "fetch_body",
+                mock.patch.object(readme.forgehttp, "fetch_body",
                                   side_effect=AssertionError("network")):
             self.assertEqual(readme.fetch_contributors(), [])
 
@@ -3556,7 +3556,7 @@ class ContributorsSurviveAFailedRequest(unittest.TestCase):
             {"login": readme.REPO.split("/")[0], "type": "User"},
         ]).encode()
         with mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
-                mock.patch.object(readme.upstream, "fetch_body", return_value=answer) as fetch:
+                mock.patch.object(readme.forgehttp, "fetch_body", return_value=answer) as fetch:
             self.assertEqual([c["login"] for c in readme.fetch_contributors()], ["someone"])
         self.assertIn("/contributors", fetch.call_args.args[0])
 
@@ -4502,7 +4502,7 @@ class TriageSurvivesAForgeRefusal(unittest.TestCase):
 
         def check_version(named, *_args):
             if "eden" in named.repo.slug:
-                raise triage.upstream.UpstreamError("HTTP 403")
+                raise triage.forgehttp.UpstreamError("HTTP 403")
             return
 
         args = SimpleNamespace(cache_dir="", offline=True)
@@ -7015,7 +7015,7 @@ class AnUnansweredSearchIsNotANotFound(unittest.TestCase):
         entry = {"name": "nowhere.bin", "system": "test-system", "sha1": "0" * 40}
         db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}}}
         with mock.patch("urllib.request.urlopen", refuse), \
-                mock.patch.object(acquire_fetch.upstream, "_sleep", lambda _s: None), \
+                mock.patch.object(acquire_fetch.forgehttp, "_sleep", lambda _s: None), \
                 mock.patch.object(acquire_fetch, "step2_scan_branches", lambda e: None):
             return acquire_fetch.fetch_missing([entry], db, "bios")
 
@@ -7857,7 +7857,7 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
 
     def test_each_failure_names_its_own_cause(self):
         """Four causes came back as one False, reported as a download failure."""
-        from core import upstream
+        from core import forgehttp
         from resolve import packfiles as packresolve
 
         outcome = packresolve.ExternalOutcome
@@ -7868,7 +7868,7 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
             offline = packresolve.download_external(self.ENTRY, f"{tmp}/x", offline=True)
             with mock.patch("urllib.request.urlopen",
                             side_effect=urllib.error.URLError("refused")), \
-                    mock.patch.object(upstream, "_sleep", lambda _s: None):
+                    mock.patch.object(forgehttp, "_sleep", lambda _s: None):
                 failed = packresolve.download_external(self.ENTRY, f"{tmp}/x", offline=False)
         self.assertIs(no_hash.outcome, outcome.NO_HASH)
         self.assertIs(offline.outcome, outcome.OFFLINE)
@@ -7934,7 +7934,7 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
 
     def test_a_transient_failure_is_retried_and_no_scratch_remains(self):
         """One 503 failed the external file for the whole build."""
-        from core import upstream
+        from core import forgehttp
         from resolve import packfiles as packresolve
 
         refusal = urllib.error.HTTPError(self.ENTRY["source_url"], 503, "busy", {}, None)
@@ -7942,7 +7942,7 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
             target = Path(tmp) / "x"
             with mock.patch("urllib.request.urlopen",
                             side_effect=[refusal, self._response(b"payload")]), \
-                    mock.patch.object(upstream, "_sleep", lambda _s: None):
+                    mock.patch.object(forgehttp, "_sleep", lambda _s: None):
                 self.assertTrue(
                     packresolve.download_external(self.ENTRY, str(target), offline=False).fetched)
             self.assertEqual(target.read_bytes(), b"payload")
