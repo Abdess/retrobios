@@ -38,7 +38,7 @@ from installer.tally import (
 from installer.text import _plural
 
 if TYPE_CHECKING:
-    from installer.run_files import _PlatformPass
+    from installer.setup_passes import _PlatformPass
     from installer.run_setups import _InstallRun
 
 

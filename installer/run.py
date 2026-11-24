@@ -57,7 +57,7 @@ from installer.text import agree
 
 if TYPE_CHECKING:
     from installer.folder_index import FolderIndex
-    from installer.run_files import _PlatformPass
+    from installer.setup_passes import _PlatformPass
     from installer.run_setups import _InstallRun
 from installer.run_check import _pass_check_existing, _pass_check_report, _pass_dry_run
 from installer.run_download import _pass_download, _remember_install

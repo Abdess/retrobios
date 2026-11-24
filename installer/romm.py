@@ -9,7 +9,7 @@ from installer.host_fs import _is_dir
 from installer.refusal import Refusal
 
 if TYPE_CHECKING:
-    from installer.run_files import _PlatformPass
+    from installer.setup_passes import _PlatformPass
     from installer.run_setups import _InstallRun
 
 # RomM serves the firmware rows its library scan records (rommapp/romm 5.4.0,

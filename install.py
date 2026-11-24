@@ -22840,31 +22840,7 @@ def _pass_download(run: _InstallRun, p: _PlatformPass) -> str:
     return "stop" if _pass_fetch(run, p, dl_size, created) else "go"
 
 
-# --- installer/run_files.py --------------------------------------------------
-
-def _system_label(name: str, manifest: dict | None) -> str:
-    """A system id with the names the platform gives it: nintendo-gba (gba)."""
-    names = ((manifest or {}).get("system_names") or {}).get(name)
-    return f"{name} ({', '.join(names)})" if names else name
-
-
-def _print_choices(
-    plat: str, files: list[dict], omitted: list[dict], systems: bool,
-    manifest: dict | None = None,
-) -> None:
-    """What --system or --core accepts for a platform, with what each holds."""
-    choices = available_choices(files, omitted)
-    names = choices["systems"] if systems else choices["cores"]
-    if not names:
-        print(f"  {plat} records no {'systems' if systems else 'cores'}")
-        return
-    labels = {name: _system_label(name, manifest) if systems else name for name in names}
-    width = min(max(len(label) for label in labels.values()), 40)
-    for name in names:
-        held = [f for f in files if _chosen(f, {name})] if systems else core_files(files, name)
-        print(f"  {labels[name]:<{width}}  "
-              f"{_system_sized(held) if systems else _core_sized(held)}")
-
+# --- installer/setup_passes.py -----------------------------------------------
 
 def _print_emulators(plat: str, manifest: dict, files: list[dict], omitted: list[dict]) -> None:
     """What --emulator accepts for a platform, one name per line."""
@@ -23265,6 +23241,32 @@ def _unlisted_save(entry: dict, why: str) -> dict:
     if entry.get("reason") != "no_save_directory":
         return entry
     return {**entry, "why": why, "remedy": ""}
+
+
+# --- installer/run_files.py --------------------------------------------------
+
+def _system_label(name: str, manifest: dict | None) -> str:
+    """A system id with the names the platform gives it: nintendo-gba (gba)."""
+    names = ((manifest or {}).get("system_names") or {}).get(name)
+    return f"{name} ({', '.join(names)})" if names else name
+
+
+def _print_choices(
+    plat: str, files: list[dict], omitted: list[dict], systems: bool,
+    manifest: dict | None = None,
+) -> None:
+    """What --system or --core accepts for a platform, with what each holds."""
+    choices = available_choices(files, omitted)
+    names = choices["systems"] if systems else choices["cores"]
+    if not names:
+        print(f"  {plat} records no {'systems' if systems else 'cores'}")
+        return
+    labels = {name: _system_label(name, manifest) if systems else name for name in names}
+    width = min(max(len(label) for label in labels.values()), 40)
+    for name in names:
+        held = [f for f in files if _chosen(f, {name})] if systems else core_files(files, name)
+        print(f"  {labels[name]:<{width}}  "
+              f"{_system_sized(held) if systems else _core_sized(held)}")
 
 
 def _pass_games(run: _InstallRun, p: _PlatformPass) -> None:

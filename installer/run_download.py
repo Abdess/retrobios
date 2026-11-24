@@ -37,7 +37,7 @@ from installer.tally import _bytes
 from installer.text import _plural, format_size, screen_text
 
 if TYPE_CHECKING:
-    from installer.run_files import _PlatformPass
+    from installer.setup_passes import _PlatformPass
     from installer.run_setups import _InstallRun
 
 
