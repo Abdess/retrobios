@@ -168,7 +168,7 @@ COMMANDS = {
         "sitegen/demorecord.py",
     ),
     "campaign.py": (
-        "probes/campaign.py", "probes/host.py", "probes/content.py", "probes/cores.py",
+        "probes/campaign.py", "probes/checkruns.py", "probes/host.py", "probes/content.py", "probes/cores.py",
         "probes/rules.py", "probes/state.py", "probes/gate.py", "probes/reports.py",
         "probes/profileedit.py", "probes/entries.py", "probes/campaignmodes.py",
         "probes/findings.py",

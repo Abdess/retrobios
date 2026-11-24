@@ -35,6 +35,7 @@ import core_probe
 from core import hostguard
 from core.hashing import file_digest
 from probes import campaign as probes_campaign
+from probes import checkruns
 from probes import content as probes_content
 from probes import cores
 from probes import entries as probes_entries
@@ -518,19 +519,19 @@ class Guards(Workspace):
         host = FakeHost(loads=[5.0])
         c = self.make(host, max_load_wait=120)
         c.deadline = 10_000
-        with self.assertRaisesRegex(probes_campaign.Pause, "busy host"):
+        with self.assertRaisesRegex(checkruns.Pause, "busy host"):
             c.guard()
 
     def test_full_disk_pauses(self) -> None:
         c = self.make(FakeHost(free=10.0), min_free_gb=30)
         c.deadline = 10_000
-        with self.assertRaisesRegex(probes_campaign.Pause, "disk"):
+        with self.assertRaisesRegex(checkruns.Pause, "disk"):
             c.guard()
 
     def test_budget_pauses(self) -> None:
         c = self.make()
         c.deadline = 0
-        with self.assertRaisesRegex(probes_campaign.Pause, "budget"):
+        with self.assertRaisesRegex(checkruns.Pause, "budget"):
             c.guard()
 
     def test_the_lock_is_skipped_under_autorun(self) -> None:
@@ -760,7 +761,7 @@ class ProbeRuns(Workspace):
     def completed(self, code: int, stdout: str = "", stderr: str = "") -> subprocess.CompletedProcess:
         return subprocess.CompletedProcess([], code, stdout, stderr)
 
-    def probe(self, *results: object) -> tuple[probes_campaign.ProbeResult, FakeHost]:
+    def probe(self, *results: object) -> tuple[checkruns.ProbeResult, FakeHost]:
         host = FakeHost()
         host.results = list(results)
         c = self.make(host)
@@ -787,7 +788,7 @@ class ProbeRuns(Workspace):
         self.assertEqual((result.status, result.record, len(host.calls)), ("done", record, 2))
 
     def test_refusal_on_a_busy_host_pauses(self) -> None:
-        with self.assertRaisesRegex(probes_campaign.Pause, "busy host"):
+        with self.assertRaisesRegex(checkruns.Pause, "busy host"):
             self.probe(self.completed(3, stderr="load average"))
 
 
@@ -891,7 +892,7 @@ class Findings(Workspace):
     def setUp(self) -> None:
         super().setUp()
         self.c = self.make()
-        self.c.current = probes_campaign.Pass(started=statefile.now_iso())
+        self.c.current = checkruns.Pass(started=statefile.now_iso())
         self.content = probes_content.Content("fake-system", "fakesys", "Fake Game (World)", "no-intro",
                                         "r", None, "", 12, 2, False, None)
         self.core = cores.Core("fake", self.tmp / "fake_libretro.so", "a" * 64)

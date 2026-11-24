@@ -15,7 +15,8 @@ from probes.profileedit import write_fields
 from probes.state import DONE, FAILED, PENDING
 
 if TYPE_CHECKING:
-    from probes.campaign import Campaign, Pass
+    from probes.campaign import Campaign
+    from probes.checkruns import Pass
 
 
 # --------------------------------------------------------------------------

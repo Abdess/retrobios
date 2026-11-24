@@ -21,7 +21,7 @@ from core.statefile import now_iso
 from probes.host import NETWORK_DELAYS, Unavailable, child_env, main_cache, run_group
 
 if TYPE_CHECKING:
-    from probes.campaign import Campaign
+    from probes.checkruns import CheckRuns
 
 
 ROMFETCH_ENV = "RETROBIOS_ROMFETCH"
@@ -167,7 +167,7 @@ class ContentStore:
     past the cap. Only what the campaign fetched is ever deleted, and never
     a pinned entry."""
 
-    def __init__(self, campaign: Campaign) -> None:
+    def __init__(self, campaign: CheckRuns) -> None:
         self.c = campaign
         self.state: dict = campaign.state["content"]
         self.refs: dict[str, set[str]] = {}

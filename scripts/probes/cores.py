@@ -26,7 +26,7 @@ from core.statefile import now_iso
 from probes.host import NETWORK_DELAYS, Unavailable, child_env, run_group, slug
 
 if TYPE_CHECKING:
-    from probes.campaign import Campaign
+    from probes.checkruns import CheckRuns
 
 
 T = TypeVar("T")
@@ -290,7 +290,7 @@ class Cores:
     """Buildbot nightlies, downloaded once per build, else local builds of
     the profile's pinned commit."""
 
-    def __init__(self, campaign: Campaign) -> None:
+    def __init__(self, campaign: CheckRuns) -> None:
         self.c = campaign
         self.listing: set[str] | None = None
 
