@@ -8,7 +8,7 @@ import urllib.parse
 
 from core.upstream import remote_etag as get_remote_etag
 from core.paths import DATA_DIRS_FILE
-from model.registry import data_dir_registry_at, load_versions
+from model.registry import data_dir_registry_at, load_versions, versions_file_for
 from .base_scraper import fetch_text
 
 
@@ -50,7 +50,14 @@ def check(registry_path: str = DATA_DIRS_FILE) -> dict:
         return {"error": str(exc), "entries": []}
 
     tracked = load_tracked_entries(registry_path)
-    versions = load_versions()
+    registry = data_dir_registry_at(registry_path, required=True)
+    version_files: dict = {}
+
+    def stored_etag(key: str) -> str:
+        path = versions_file_for(registry[key])
+        if path not in version_files:
+            version_files[path] = load_versions(path)
+        return version_files[path].get(key, {}).get("sha", "")
 
     buildbot_set = set(index_zips)
     tracked_set = set(tracked.keys())
@@ -63,7 +70,7 @@ def check(registry_path: str = DATA_DIRS_FILE) -> dict:
 
     for z in sorted(tracked_set & buildbot_set):
         key, url = tracked[z]
-        stored = versions.get(key, {}).get("sha", "")
+        stored = stored_etag(key)
         remote = get_remote_etag(url)
         if remote is None:
             status = "UNKNOWN"

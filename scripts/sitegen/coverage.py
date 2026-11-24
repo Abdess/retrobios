@@ -14,7 +14,7 @@ from model import siteinputs
 from model.largefiles import LARGE_FILES_CACHE
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
-from model.registry import VERSIONS_FILE
+from model.registry import load_data_dir_registry, versions_file_for
 from packs.coverage import verify_platform
 from packs.shares import core_shares
 from packs.verdicts import blocking_missing
@@ -128,8 +128,10 @@ def _coverage_inputs(db_path: Path, platforms_dir: str, emulators_dir: str) -> s
                           (REPO_ROOT / "recipes", "*.json")):
         for path in sorted(p for p in root.resolve().rglob(pattern) if p.is_file()):
             add_file(path)
-    for path in (REPO_ROOT / ".gitignore", REPO_ROOT / "_mame_clones.json",
-                 REPO_ROOT / VERSIONS_FILE):
+    revisions = sorted({REPO_ROOT / versions_file_for(entry)
+                        for entry in load_data_dir_registry(platforms_dir).values()
+                        if entry.get("local_cache")})
+    for path in (REPO_ROOT / ".gitignore", REPO_ROOT / "_mame_clones.json", *revisions):
         add_file(path)
     digest.update(b"offline\0" + (b"1" if run_is_offline() else b"0") + b"\n")
     large = Path(LARGE_FILES_CACHE).resolve()

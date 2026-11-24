@@ -6,13 +6,12 @@ import os
 import re
 import zipfile
 from collections.abc import Iterable, Iterator
-from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
 
 from core.hashing import compute_hashes
 from core.options import reject_unknown
 from model.declarations import declared_root
-from model.registry import load_versions
+from model.registry import load_versions, versions_file_for
 from model.profiles import entry_system_ids, installed_data_refs_in
 from model.systems import norm_system_id
 from packs.archive import PackRecord, Placed, add_pack_member
@@ -380,10 +379,9 @@ def _tree_group(
 def _recorded_version(ref: str, entry: dict, versions: dict[str, dict[str, dict]]) -> dict:
     """What refresh_data_dirs recorded of the tree's last fetch, read once
     per .versions.json."""
-    cache = entry.get("local_cache")
-    if not cache:
+    if not entry.get("local_cache"):
         return {}
-    recorded = Path(cache).parent / ".versions.json"
+    recorded = versions_file_for(entry)
     if str(recorded) not in versions:
         versions[str(recorded)] = load_versions(recorded)
     found = versions[str(recorded)].get(ref)

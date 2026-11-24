@@ -283,12 +283,12 @@ class TheVersionIsReadBeforeTheDownload(unittest.TestCase):
             state["downloaded"] = True
             return 3
 
-        versions = root / "versions.json"
+        versions = root / ".versions.json"
         entry = {"source_type": "zip", "source_url": "https://example.invalid/Sys.zip",
                  "local_cache": str(root / "cache")}
         with mock.patch.object(datadirs, "_get_remote_etag", etag), \
                 mock.patch.object(datadirs, "_download_and_extract_zip", download):
-            self.assertTrue(datadirs._refresh_entry("sys", entry, True, False, str(versions)))
+            self.assertTrue(datadirs._refresh_entry("sys", entry, True, False))
         self.assertEqual(json.loads(versions.read_text())["sys"]["sha"], "build-1")
 
 
@@ -299,7 +299,6 @@ class ABadResponseIsTriedAgain(unittest.TestCase):
     def setUp(self) -> None:
         root = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, root, True)
-        self.versions = str(root / "versions.json")
         self.entry = {"source_type": "zip", "source_url": "https://example.invalid/S.zip",
                       "local_cache": str(root / "cache")}
         self.waits: list[int] = []
@@ -316,7 +315,7 @@ class ABadResponseIsTriedAgain(unittest.TestCase):
         with mock.patch.object(datadirs, "_get_remote_etag", lambda _url: "tag"), \
                 mock.patch.object(datadirs, "_download_and_extract_zip", download), \
                 mock.patch.object(datadirs.time, "sleep", self.waits.append):
-            return datadirs._refresh_entry("s", self.entry, True, False, self.versions)
+            return datadirs._refresh_entry("s", self.entry, True, False)
 
     def test_a_bad_archive_then_a_good_one_refreshes(self):
         self.assertTrue(self.run_with([zipfile.BadZipFile("File is not a zip file"), 12]))

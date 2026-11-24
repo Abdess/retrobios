@@ -377,11 +377,11 @@ def _write_platform_pages(run: _SiteRun) -> dict[str, str]:
     return published_parts
 
 
-def _record_data_trees(profiles: dict, pages: PageRegistry) -> None:
+def _record_data_trees(profiles: dict, data_registry: dict, pages: PageRegistry) -> None:
     """Record in ``pages`` the data directories: their members, revisions
     and readers, and the pages their member lists go to."""
     pages.data_members.update(data_directory_members())
-    pages.data_revisions.update(data_directory_revisions())
+    pages.data_revisions.update(data_directory_revisions(data_registry))
     for key in sorted(profiles):
         if not is_emulator(profiles[key]):
             continue
@@ -400,7 +400,7 @@ def _write_emulator_pages(run: _SiteRun) -> None:
     profiles = run.profiles
     print("Generating emulator pages...")
     run.pages.emulator_setups.update(emulator_setups(run.coverages, profiles))
-    _record_data_trees(profiles, run.pages)
+    _record_data_trees(profiles, run.data_registry, run.pages)
     write_if_changed(
         str(run.docs / "emulators" / "index.md"), generate_emulators_index(profiles)
     )

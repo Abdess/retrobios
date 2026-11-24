@@ -18,7 +18,7 @@ from pathlib import Path
 from core import upstream
 from core.artifacts import file_lock as _file_lock, write_text_atomic
 from core.upstream import remote_etag as _get_remote_etag
-from model.registry import VERSIONS_FILE, load_versions
+from model.registry import load_versions, versions_file_for
 from packs.datadirextract import extract_tar_subtree, extract_zip_tree
 
 
@@ -113,9 +113,7 @@ def hold_data_dirs(stack: contextlib.ExitStack, registry: dict) -> None:
             stack.enter_context(cache_lock(cache, shared=True))
 
 
-def _save_versions(
-    versions: dict[str, dict], versions_path: str = VERSIONS_FILE
-) -> None:
+def _save_versions(versions: dict[str, dict], versions_path: str | Path) -> None:
     """Write the version file whole or not at all.
 
     Truncating in place let a concurrent reader load an empty file and die
@@ -125,7 +123,7 @@ def _save_versions(
     write_text_atomic(versions_path, json.dumps(versions, indent=2, sort_keys=True) + "\n")
 
 
-def _record_version(key: str, record: dict, versions_path: str) -> None:
+def _record_version(key: str, record: dict, versions_path: str | Path) -> None:
     """Set one key under the file lock, so two writers keep both updates."""
     path = Path(versions_path)
     with _file_lock(path.with_name(f".{path.name}.lock")):
@@ -296,16 +294,16 @@ def _measure_archive(source_url: str) -> int | None:
     return size or None
 
 
-def _record_archive_size(key: str, entry: dict, versions_path: str) -> None:
+def _record_archive_size(key: str, entry: dict) -> None:
     """Record the archive size of a tree current since before it was kept.
 
     The installer announces a tree's download as that size: a tarball
     whose tree is 10 KB is a download of 21 MB. Measured, not refetched,
     so the tree the packs carry stays the one recorded.
     """
-    path = Path(versions_path)
+    path = versions_file_for(entry)
     with _file_lock(path.with_name(f".{path.name}.lock")):
-        versions = load_versions(versions_path)
+        versions = load_versions(path)
         record = versions.get(key)
         if record is None or "archive_size" in record:
             return
@@ -317,10 +315,10 @@ def _record_archive_size(key: str, entry: dict, versions_path: str) -> None:
     if size is None:
         return
     with _file_lock(path.with_name(f".{path.name}.lock")):
-        versions = load_versions(versions_path)
+        versions = load_versions(path)
         if key in versions and "archive_size" not in versions[key]:
             versions[key]["archive_size"] = size
-            _save_versions(versions, versions_path)
+            _save_versions(versions, path)
     log.info("[%s] archive size recorded: %d bytes", key, size)
 
 
@@ -338,7 +336,6 @@ def refresh_entry(
     *,
     force: bool = False,
     dry_run: bool = False,
-    versions_path: str = VERSIONS_FILE,
 ) -> bool | None:
     """Refresh a single data directory entry.
 
@@ -353,17 +350,17 @@ def refresh_entry(
     it, and only a tree to replace waits.
     """
     if dry_run:
-        return _refresh_entry(key, entry, force, dry_run, versions_path)
+        return _refresh_entry(key, entry, force, dry_run)
     if not force:
-        needs, _remote, cached_tag = _decide(key, entry, False, versions_path)
+        needs, _remote, cached_tag = _decide(key, entry, False)
         if needs is None:
             return None
         if not needs:
             log.info("[%s] up to date (tag: %s)", key, _short_tag(cached_tag))
-            _record_archive_size(key, entry, versions_path)
+            _record_archive_size(key, entry)
             return False
     with cache_lock(entry["local_cache"]):
-        return _refresh_entry(key, entry, force, dry_run, versions_path)
+        return _refresh_entry(key, entry, force, dry_run)
 
 
 def _remote_tag(entry: dict, version: str) -> str | None:
@@ -375,12 +372,12 @@ def _remote_tag(entry: dict, version: str) -> str | None:
 
 
 def _decide(
-    key: str, entry: dict, force: bool, versions_path: str
+    key: str, entry: dict, force: bool
 ) -> tuple[bool | None, str | None, str | None]:
     """(whether the tree needs a refresh, the remote tag read, the recorded
     tag). None when the remote could not be read."""
     version = entry.get("version", "master")
-    cached = load_versions(versions_path).get(key, {})
+    cached = load_versions(versions_file_for(entry)).get(key, {})
     cached_tag = cached.get("sha") or cached.get("etag")
     if force or not Path(entry["local_cache"]).exists():
         return True, None, cached_tag
@@ -392,7 +389,7 @@ def _decide(
 
 
 def _refresh_entry(
-    key: str, entry: dict, force: bool, dry_run: bool, versions_path: str
+    key: str, entry: dict, force: bool, dry_run: bool
 ) -> bool | None:
     source_type = entry.get("source_type", "tarball")
     version = entry.get("version", "master")
@@ -400,7 +397,7 @@ def _refresh_entry(
     local_cache = entry["local_cache"]
     exclude = entry.get("exclude", [])
 
-    needs_refresh, remote_tag, cached_tag = _decide(key, entry, force, versions_path)
+    needs_refresh, remote_tag, cached_tag = _decide(key, entry, force)
     if needs_refresh is None:
         return None
     if not needs_refresh:
@@ -464,7 +461,7 @@ def _refresh_entry(
     record = {"sha": remote_tag or "", "version": version}
     if archive_sizes:
         record["archive_size"] = archive_sizes[-1]
-    _record_version(key, record, versions_path)
+    _record_version(key, record, versions_file_for(entry))
 
     log.info("[%s] refreshed: %d files extracted to %s", key, file_count, local_cache)
     return True
@@ -475,7 +472,6 @@ def refresh_all(
     *,
     force: bool = False,
     dry_run: bool = False,
-    versions_path: str = VERSIONS_FILE,
     platform: str | None = None,
 ) -> dict[str, bool | None]:
     """Refresh all entries in the registry.
@@ -497,7 +493,6 @@ def refresh_all(
             entry,
             force=force,
             dry_run=dry_run,
-            versions_path=versions_path,
         )
     if any(results.values()):
         # A cache the resolver indexed in this process has changed under it.
@@ -512,7 +507,6 @@ def refresh_keys(
     keys: list[str],
     *,
     force: bool = False,
-    versions_path: str = VERSIONS_FILE,
 ) -> list[str]:
     """Refresh the named entries of a registry and return the keys whose
     refresh failed."""
@@ -520,7 +514,7 @@ def refresh_keys(
     refreshed = False
     for key in keys:
         log.info("refreshing %s ...", key)
-        outcome = refresh_entry(key, registry[key], force=force, versions_path=versions_path)
+        outcome = refresh_entry(key, registry[key], force=force)
         if outcome is None:
             log.error("refresh of %s failed", key)
             failed.append(key)

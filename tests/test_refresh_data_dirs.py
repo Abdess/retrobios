@@ -103,7 +103,7 @@ class RefreshConcurrency(unittest.TestCase):
         with mock.patch.object(datadirs.urllib.request, "urlopen", fake_urlopen), \
                 mock.patch.object(datadirs, "_get_remote_etag", return_value="e1"):
             self.assertTrue(
-                datadirs.refresh_entry("pak", entry, force=True, versions_path=self.versions)
+                datadirs.refresh_entry("pak", entry, force=True)
             )
         self.assertEqual(seen, [True])
 
@@ -117,12 +117,12 @@ class RefreshConcurrency(unittest.TestCase):
         with mock.patch.object(datadirs.urllib.request, "urlopen",
                                lambda *a, **k: _Response(payload)), \
                 mock.patch.object(datadirs, "_get_remote_etag", return_value="e1"):
-            self.assertTrue(datadirs.refresh_entry("pak", entry, versions_path=self.versions))
+            self.assertTrue(datadirs.refresh_entry("pak", entry))
             self.assertEqual(load_versions(self.versions)["pak"]["archive_size"],
                              len(payload))
             datadirs._record_version("pak", {"sha": "e1"}, self.versions)
             (self.cache / "a.bin").write_bytes(b"kept")
-            self.assertFalse(datadirs.refresh_entry("pak", entry, versions_path=self.versions))
+            self.assertFalse(datadirs.refresh_entry("pak", entry))
         self.assertEqual(load_versions(self.versions)["pak"],
                          {"sha": "e1", "archive_size": len(payload)})
         self.assertEqual((self.cache / "a.bin").read_bytes(), b"kept")
@@ -142,7 +142,7 @@ class RefreshConcurrency(unittest.TestCase):
                 mock.patch.object(datadirs, "_get_remote_etag", return_value="e1"):
             fcntl.flock(reader, fcntl.LOCK_SH)
             worker = threading.Thread(target=lambda: result.append(
-                datadirs.refresh_entry("pak", entry, versions_path=self.versions)
+                datadirs.refresh_entry("pak", entry)
             ), daemon=True)
             worker.start()
             worker.join(timeout=20)
@@ -291,14 +291,14 @@ class DryRunReport(unittest.TestCase):
 
     def test_the_remote_tag_is_shown_beside_the_cached_one(self):
         with tempfile.TemporaryDirectory() as tmp:
-            versions = Path(tmp) / "versions.json"
+            versions = Path(tmp) / ".versions.json"
             versions.write_text(json.dumps({"k": {"etag": '"2725165595"', "archive_size": 1}}))
+            (Path(tmp) / "k").mkdir()
             entry = {"source_type": "zip", "source_url": "https://x.invalid/a.zip",
-                     "local_cache": tmp}
+                     "local_cache": str(Path(tmp) / "k")}
             with mock.patch.object(datadirs, "_get_remote_etag", return_value='"2685251384"'), \
                     self.assertLogs(datadirs.log, "INFO") as logs:
-                self.assertTrue(datadirs.refresh_entry("k", entry, dry_run=True,
-                                                  versions_path=str(versions)))
+                self.assertTrue(datadirs.refresh_entry("k", entry, dry_run=True))
         self.assertIn("cached: 2725165595, remote: 2685251384", logs.output[0])
 
     def test_a_run_ends_on_its_counts(self):
@@ -394,11 +394,41 @@ class ASourceThatMovesIsPinnedOrFollowed(unittest.TestCase):
                     mock.patch.object(datadirs, "_get_remote_etag",
                                       side_effect=AssertionError("an ETag for a revision")), \
                     mock.patch.object(datadirs, "_download_and_extract_zip", extract):
-                self.assertTrue(datadirs.refresh_entry("r", entry, force=True,
-                                                       versions_path=versions))
+                self.assertTrue(datadirs.refresh_entry("r", entry, force=True))
             self.assertEqual(fetched, [f"https://github.com/o/r/archive/{self.COMMIT}.zip"])
             self.assertEqual(load_versions(versions)["r"],
                              {"sha": self.COMMIT, "version": "master"})
+
+    def test_the_record_lives_beside_the_tree(self):
+        """A registry whose caches sit outside data/ wrote their commits to
+        ./data/.versions.json: the manifest read nothing beside the tree and
+        listed the branch by name, and the real data/ tree of the same key
+        was recorded at a commit it did not hold."""
+        from packs.datatrees import manifest_data_directories
+        from sitegen.lookup import data_directory_revisions
+
+        with tempfile.TemporaryDirectory() as tmp:
+            cache = Path(tmp) / "x" / "data" / "r"
+            entry = {"source_type": "zip", "version": "master",
+                     "source_url": "https://github.com/o/r/archive/{version}.zip",
+                     "local_cache": str(cache)}
+
+            def extract(url, local_cache, *args, **kwargs):
+                Path(local_cache).mkdir(parents=True)
+                (Path(local_cache) / "a.bin").write_bytes(b"abc")
+                return 1
+
+            with mock.patch.object(datadirs, "get_remote_sha", return_value=self.COMMIT), \
+                    mock.patch.object(datadirs, "_download_and_extract_zip", extract):
+                self.assertTrue(datadirs.refresh_entry("r", entry, force=True))
+            self.assertEqual(load_versions(cache.parent / ".versions.json")["r"]["sha"],
+                             self.COMMIT)
+            listed = manifest_data_directories(
+                [(str(cache / "a.bin"), "r/a.bin")], {"r/a.bin": ("r", ("s",), "r", True)},
+                {"r": entry}, "")
+            self.assertEqual(data_directory_revisions({"r": entry})["r"]["sha"], self.COMMIT)
+        self.assertEqual(listed[0]["url"], f"https://github.com/o/r/archive/{self.COMMIT}.zip")
+        self.assertNotIn("rolling", listed[0])
 
     def test_every_forge_source_takes_a_commit(self):
         """archive/refs/heads/<commit> is no address: a forge source must be

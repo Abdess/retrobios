@@ -12,7 +12,7 @@ from pathlib import Path
 from core.hashing import declared_hash_lists
 from model import siteinputs
 from model.collection import manufacturer_slug
-from model.registry import load_versions
+from model.registry import load_versions, versions_file_for
 from model.systemnames import system_name
 from model.profiles import is_emulator
 from packs.consumers import FileConsumers
@@ -125,9 +125,20 @@ def data_directory_members(install_dir: Path | None = None) -> dict[str, dict[st
     return members
 
 
-def data_directory_revisions(data_dir: Path = REPO_ROOT / "data") -> dict[str, dict]:
-    """The revision each data directory was fetched at, as refresh_data_dirs records it."""
-    return load_versions(data_dir / ".versions.json")
+def data_directory_revisions(data_registry: dict[str, dict]) -> dict[str, dict]:
+    """The revision each data directory was fetched at, as refresh_data_dirs
+    records it beside the tree."""
+    files: dict[Path, dict[str, dict]] = {}
+    revisions: dict[str, dict] = {}
+    for ref, entry in data_registry.items():
+        if not entry.get("local_cache"):
+            continue
+        path = REPO_ROOT / versions_file_for(entry)
+        if path not in files:
+            files[path] = load_versions(path)
+        if ref in files[path]:
+            revisions[ref] = files[path][ref]
+    return revisions
 
 
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}")

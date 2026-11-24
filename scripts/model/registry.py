@@ -88,10 +88,16 @@ def list_release_pack_platforms(platforms_dir: str = PLATFORMS_DIR) -> list[str]
     ]
 
 
-VERSIONS_FILE = "data/.versions.json"
+def versions_file_for(entry: dict) -> Path:
+    """Where refresh_data_dirs records a tree's last fetch: beside its cache.
+
+    The writer and every reader take it from the entry, so a registry whose
+    caches sit elsewhere than data/ keeps its records with its trees.
+    """
+    return Path(entry["local_cache"]).parent / ".versions.json"
 
 
-def load_versions(versions_path: str | os.PathLike[str] = VERSIONS_FILE) -> dict[str, dict]:
+def load_versions(versions_path: str | os.PathLike[str]) -> dict[str, dict]:
     """What refresh_data_dirs recorded of each tree's last fetch."""
     path = Path(versions_path)
     if not path.is_file():
