@@ -466,6 +466,8 @@ class _ProfileComparison:
             self.fate(f, "unsourceable")
             row = {
                 "name": fname,
+                # Where the file goes once found, as a gap row says it.
+                "path": effective_path,
                 "required": f.get("required", False),
                 "reason": unsourceable_reason,
                 "source_ref": f.get("source_ref", ""),

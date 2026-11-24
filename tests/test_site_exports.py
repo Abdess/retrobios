@@ -481,6 +481,8 @@ class TheGapCategoryTravelsOnTheRow(unittest.TestCase):
         self.assertEqual(rows["a.bin"]["destination"], "emu/a.bin")
         self.assertEqual(rows["a.bin"]["category"], "game_data")
         self.assertEqual(rows["b.o2r"]["category"], "game_data")
+        # Unsourceable, it still says where it goes once found.
+        self.assertEqual(rows["b.o2r"]["destination"], "emu/b.o2r")
         self.assertEqual(rows["set.zip"]["category"], "bios_zip")
         self.assertNotIn("_profile_categories", script_source("generate_site.py"))
 
