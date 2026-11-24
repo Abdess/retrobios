@@ -7,7 +7,8 @@ from collections.abc import Callable
 
 from core.text import count_text as count_text
 from model.collection import manufacturer_slug
-from sitegen.runsections import installed, system_name
+from sitegen import runsections
+from sitegen.runsections import system_name
 
 
 WIKI_SRC_DIR = "wiki"  # manually maintained wiki sources
@@ -77,12 +78,12 @@ def slugify_anchor(text: str) -> str:
     return slug
 
 def console_anchor(manufacturer: str, console: str) -> str:
-    """The id of a console's heading on its manufacturer's page."""
+    """The id of a console's heading on its manufacturer's page, from the
+    same sections that name the systems."""
     from core.anchors import toc_slug
 
-    run = installed()
     key = (manufacturer_slug(manufacturer), console)
-    return (run.anchors.get(key) if run else None) or toc_slug(console)
+    return runsections.current().anchors.get(key) or toc_slug(console)
 
 
 def board_slug(sys_id: str) -> str:

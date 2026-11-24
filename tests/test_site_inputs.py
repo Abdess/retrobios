@@ -60,6 +60,25 @@ class SectionsFollowTheInputs(_Inputs):
             runsections.system_name("sony-playstation")
         self.assertEqual(runsections.current().anchors, {})
 
+    def test_a_heading_id_comes_from_the_sections_that_name_systems(self) -> None:
+        # Rendered on its own, a page read the names from the inputs and the
+        # heading ids from nothing: both Sega folders took "mega-cd".
+        from unittest import mock
+
+        from sitegen import render, runsections
+
+        self.addCleanup(runsections.reset)
+        runsections.reset()
+        tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, tmp)
+        (tmp / "emulators").mkdir()
+        (tmp / "database.json").write_text(json.dumps({"files": {}}), encoding="utf-8")
+        self.use(db=tmp / "database.json", emulators=tmp / "emulators")
+        folders = {"Sega": {"Mega CD": [], "Mega-CD": []}}
+        with mock.patch.object(runsections, "group_by_manufacturer", return_value=folders):
+            self.assertEqual(render.console_anchor("Sega", "Mega CD"), "mega-cd")
+            self.assertEqual(render.console_anchor("Sega", "Mega-CD"), "mega-cd_1")
+
 
 class TheGivenDatabase(_Inputs):
     def setUp(self) -> None:
