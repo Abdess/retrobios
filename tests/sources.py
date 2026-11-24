@@ -20,7 +20,7 @@ COMMANDS = {
         "packs/platformpack.py", "packs/platformreport.py", "packs/emulatorpack.py",
         "packs/md5pack.py", "packs/targets.py",
         "packs/manifestentry.py", "packs/manifestcores.py", "packs/standalone.py",
-        "packs/manifest.py", "packs/finalize.py", "packs/outputdir.py", "packs/variants.py",
+        "packs/manifest.py", "packs/manifestbuild.py", "packs/finalize.py", "packs/outputdir.py", "packs/variants.py",
         "packs/manifestrun.py", "packs/packcheck.py", "packs/runscope.py", "packs/platformrun.py",
         "packs/packoptions.py", "packs/packmodes.py", "packs/packcounts.py",
         "packs/emulatorentries.py", "packs/integrity.py",

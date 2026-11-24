@@ -150,7 +150,7 @@ class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
     def test_no_part_is_asked_for_a_dropped_system(self):
         from unittest import mock
 
-        from packs import manifest, platformpack
+        from packs import manifestbuild, platformpack
         from packs import platformpack as packs_platformpack
         from model.profiles import load_emulator_profiles
 
@@ -167,7 +167,7 @@ class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
                 mock.patch.object(platformpack, "build_platform_pack", record), \
                 mock.patch.object(platformpack, "print_split_packs"), \
                 mock.patch.object(platformpack, "collect_emulator_extras", return_value=[]), \
-                mock.patch.object(manifest, "collect_emulator_extras", return_value=[]):
+                mock.patch.object(manifestbuild, "collect_emulator_extras", return_value=[]):
             packs_platformpack.generate_split_packs(
                 "retroarch", platforms, {"files": {}}, "bios", out,
                 emu_profiles=profiles,
@@ -316,7 +316,7 @@ class TheSplitDirectoryReadsThePackStem(unittest.TestCase):
     def test_a_reserved_character_is_made_safe_as_in_the_full_pack(self):
         from unittest import mock
 
-        from packs import manifest, md5pack, naming
+        from packs import manifest, manifestbuild, md5pack, naming
         from packs import platformpack as packs_platformpack
 
         config = {"platform": "Foo: Bar", "version": "release/1.22", "systems": {}}
@@ -326,7 +326,7 @@ class TheSplitDirectoryReadsThePackStem(unittest.TestCase):
                 mock.patch.object(manifest, "load_platform_config", return_value=config), \
                 mock.patch.object(md5pack, "load_platform_config", return_value=config), \
                 mock.patch.object(packs_platformpack, "collect_emulator_extras", return_value=[]), \
-                mock.patch.object(manifest, "collect_emulator_extras", return_value=[]):
+                mock.patch.object(manifestbuild, "collect_emulator_extras", return_value=[]):
             packs_platformpack.generate_split_packs(
                 "foo", "platforms", {"files": {}}, "bios", out, emu_profiles={},
             )
