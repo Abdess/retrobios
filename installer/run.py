@@ -53,7 +53,8 @@ from installer.outcome import (
     _report_outcome,
     _write_advice,
 )
-from installer.pack import run_pack, split_pack_lines
+from installer.pack import run_pack
+from installer.pack_parts import split_pack_lines
 from installer.pack_source import NOT_IN_PACK, pack_lacks_words
 from installer.paths import _entry_path, shown_path
 from installer.plan import CONFIRM_FROM_BYTES, _check_free_space, _print_plan, bulk_hint

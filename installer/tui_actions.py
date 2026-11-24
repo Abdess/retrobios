@@ -11,7 +11,7 @@ from installer.destination import (
 from installer.games import games_probe
 from installer.host_fs import _is_dir, _nearest_folder
 from installer.offline import LOCAL
-from installer.pack import _listed
+from installer.pack_parts import _listed
 from installer.pack_source import PackSource
 from installer.platforms import display_name
 from installer.tui_choice import (
