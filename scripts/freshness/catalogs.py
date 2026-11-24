@@ -12,6 +12,7 @@ from pathlib import Path
 from core import upstream
 from core.paths import REPO_ROOT
 from scripts.scraper import game_dat_importer
+from scripts.scraper.datfetch import is_tracked_dat, label_version
 from scripts.scraper.redump_dat_scraper import fetch_snapshot
 from freshness.findings import (
     FBNEO_RECIPES, MAME_RECIPES, NO_INTRO_GAMES, OK, REDUMP_GAMES, SKIPPED, STALE, UNKNOWN,
@@ -211,12 +212,8 @@ def _check_tosec(offline: bool) -> Finding:
 
 def mame_versions(recipes: dict) -> list[str]:
     """MAME version tags a recipe snapshot has absorbed, oldest first."""
-    tags = set()
-    for label in (recipes.get("dats") or {}):
-        match = re.search(r"\b(mame\d{4})\b", str(label))
-        if match:
-            tags.add(match.group(1))
-    return sorted(tags)
+    tags = {label_version(str(label)) for label in (recipes.get("dats") or {})}
+    return sorted(tag for tag in tags if tag)
 
 
 def _check_mame(cache_dir: str, offline: bool) -> Finding:
@@ -249,9 +246,7 @@ def fbneo_blob_drift(snapshot: dict, listing: object) -> tuple[list[str], bool]:
     remote = {
         item["name"]: item.get("sha", "")
         for item in (listing if isinstance(listing, list) else [])
-        if isinstance(item, dict)
-        and item.get("type") == "file"
-        and str(item.get("name", "")).lower().endswith(".dat")
+        if is_tracked_dat(item)
     }
     drifted = sorted(
         name for name in set(recorded) | set(remote) if recorded.get(name) != remote.get(name)

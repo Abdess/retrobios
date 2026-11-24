@@ -50,7 +50,7 @@ from model.database import load_database
 from model.dumpcatalog import build_snapshot, load_provenance_snapshots, write_snapshot
 from resolve.localfile import variant_base_name
 from .base_scraper import BlobMismatchError, fetch_github_latest_version
-from .datfetch import fetch_pack
+from .datfetch import fetch_pack, mame_label
 from .listxml import (
     Opener,
     iter_dat_documents,
@@ -475,7 +475,7 @@ def _selection(args: argparse.Namespace) -> _Selection:
 
 
 def _import_listxml(pack: Path, args: argparse.Namespace, output: str, chosen: _Selection) -> int:
-    label = f"MAME {pack.stem.replace('lx', '')}"
+    label = mame_label(pack.stem)
     entries = listxml_entries(
         lambda: open_listxml(pack), label, chosen.keep, chosen.targets, chosen.by_members
     )

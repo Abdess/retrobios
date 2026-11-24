@@ -23,6 +23,7 @@ from core import upstream
 from core.cli import InputMissing
 from exporter.native import ExportResult
 from exporter.originals import SOURCES_INDEX
+import freshness.catalogs
 from freshness.catalogs import (
     NO_INTRO_MIRROR,
     _check_no_intro,
@@ -70,7 +71,7 @@ from model.romfolders import load_sources, sources_dir
 from model.safeparse import yaml_load
 from model.targets import platform_overrides
 from profiling.reports import ProfileReport, SkipKind, report_to_dict
-from scripts.scraper import game_dat_importer
+from scripts.scraper import datfetch, game_dat_importer
 from tests.sources import SCRIPTS
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -645,6 +646,13 @@ class CatalogParsingTests(unittest.TestCase):
     def test_mame_versions_read_from_dat_labels(self):
         recipes = {"dats": {"MAME mame0250": "0.250", "MAME mame0289": "0.289", "FinalBurn Neo": "x"}}
         self.assertEqual(mame_versions(recipes), ["mame0250", "mame0289"])
+
+    def test_versions_and_blobs_follow_the_importer_rules(self):
+        recipes = {"dats": {datfetch.mame_label("mame0289lx"): "mame0289lx"}}
+        self.assertEqual(mame_versions(recipes), ["mame0289"])
+        # The check asks the importer which DATs it reads, never a copy of the rule.
+        self.assertIs(freshness.catalogs.is_tracked_dat, datfetch.is_tracked_dat)
+        self.assertIs(freshness.catalogs.label_version, datfetch.label_version)
 
 
 def _rows(*reports: ProfileReport) -> list[dict]:

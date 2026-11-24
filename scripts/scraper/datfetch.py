@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 from core.hashing import git_blob_sha
@@ -23,6 +24,26 @@ FBNEO_API = f"https://api.github.com/repos/{FBNEO_REPO}"
 def api_json(url: str) -> object:
     """An api.github.com answer, ConnectionError when it cannot be read."""
     return github_json(url, f"cannot read {url}", timeout=60, error=ConnectionError)
+
+
+def is_tracked_dat(item: object) -> bool:
+    """Whether an entry of the FBNeo ``dats`` listing is a DAT the import reads."""
+    return (
+        isinstance(item, dict)
+        and item.get("type") == "file"
+        and str(item.get("name", "")).lower().endswith(".dat")
+    )
+
+
+def mame_label(pack_stem: str) -> str:
+    """The snapshot label of a MAME listxml pack (``mame0289lx`` gives ``MAME mame0289``)."""
+    return f"MAME {pack_stem.replace('lx', '')}"
+
+
+def label_version(label: str) -> str | None:
+    """The MAME tag a snapshot label names, None for a label without one."""
+    match = re.search(r"\b(mame\d{4})\b", label)
+    return match.group(1) if match else None
 
 
 class NotCached(FileNotFoundError):
@@ -66,7 +87,7 @@ def fetch_pack(
     target.mkdir(parents=True, exist_ok=True)
     blobs: dict[str, str] = {}
     for item in listing:
-        if item.get("type") != "file" or not item["name"].lower().endswith(".dat"):
+        if not is_tracked_dat(item):
             continue
         fetch_verified_blob(
             item["download_url"], target / item["name"], item["sha"],
@@ -91,7 +112,11 @@ def cached_pack(
             raise NotCached(f"{listxml} is not cached")
         return listxml, {}
     folder = _fbneo_folder(revision, cache_dir)
-    blobs = {p.name: git_blob_sha(p.read_bytes()) for p in sorted(folder.glob("*.dat"))}
+    blobs = {
+        p.name: git_blob_sha(p.read_bytes())
+        for p in (sorted(folder.iterdir()) if folder.is_dir() else ())
+        if is_tracked_dat({"type": "file" if p.is_file() else "dir", "name": p.name})
+    }
     if not blobs:
         raise NotCached(f"{folder} is not cached")
     return folder, blobs
