@@ -7,7 +7,6 @@ import http.client
 import json
 import os
 import re
-import sys
 import urllib.error
 from collections.abc import Callable, Collection, Iterable
 from pathlib import Path
@@ -41,6 +40,7 @@ from installer.network import _fetch_json, _read_capped
 from installer.offline import LOCAL, _Offline, offline_words
 from installer.paths import shown_path
 from installer.platforms import entry_systems, system_title
+from installer.refusal import Refusal
 from installer.regions import WORLD_REGION, _region_comparable, region_title
 from installer.remote import active_remote
 from installer.text import _plural, agree
@@ -912,20 +912,31 @@ def games_probe(plat: str, bios_path: Path, network: bool = True,
     return None
 
 
+def games_folder(given: Path) -> Path:
+    """The folder --for-games names, as the run reads it."""
+    return Path(os.path.expanduser(str(given))).absolute()
+
+
+def games_folder_refusal(given: object, platform: str) -> Refusal | None:
+    """The refusal of a folder named with --for-games that cannot be opened,
+    or None. Asked before the run, as for --from and --pack: a typo fetched
+    the file list first, and an offline run blamed the list instead."""
+    if not isinstance(given, Path):
+        return None
+    folder = games_folder(given)
+    if _is_dir(folder):
+        return None
+    message = f"the games folder {folder} does not exist or cannot be opened"
+    return Refusal("games", "no_folder", platform, f"Error: {message}.", message=message)
+
+
 def read_games(args: argparse.Namespace, plat: str, bios_path: Path, manifest: dict,
                term: Terminal | None, os_type: str) -> GamesPlan | None:
     """The games of the card read for this run, their lines said. None when
     there are none to read, or what they need cannot be known: the run then
     keeps every file, and says so where --for-games asked."""
     asked = args.for_games is not None
-    folder = args.for_games if isinstance(args.for_games, Path) else None
-    if folder is not None:
-        folder = Path(os.path.expanduser(str(folder))).absolute()
-        if not _is_dir(folder):
-            message = f"the games folder {folder} does not exist or cannot be opened"
-            EVENTS.emit("games_unavailable", platform=plat, reason="no_folder", message=message)
-            print(f"Error: {message}.", file=sys.stderr)
-            sys.exit(1)
+    folder = games_folder(args.for_games) if isinstance(args.for_games, Path) else None
     # Not asked for, a run given its list as a file looks for the games index
     # beside it and in the cache only: one fetched now could describe another
     # list.

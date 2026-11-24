@@ -3392,6 +3392,16 @@ class CardsSpaceAndConfirm(unittest.TestCase):
             self.assertEqual(install.run_tui(_args(**{"from": [missing]})), 1)
         self.assertIn(f"Error: {missing} does not exist: --from names the folder", err.getvalue())
 
+    def test_a_games_folder_that_does_not_exist_closes_before_the_first_frame(self):
+        missing = REPO_ROOT / "tmp" / "no-such-games-folder"
+        err = io.StringIO()
+        with mock.patch.object(install, "detect_os", return_value="linux"), \
+                mock.patch.object(install, "tui_start", side_effect=AssertionError("opened")), \
+                mock.patch.object(sys, "stderr", err):
+            self.assertEqual(install.run_tui(_args(for_games=missing)), 1)
+        self.assertIn(f"Error: the games folder {missing} does not exist or cannot be opened.",
+                      err.getvalue())
+
     # Work folders: only a kill no handler sees leaves one, and the next
     # run takes it away.
 

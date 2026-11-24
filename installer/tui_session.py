@@ -33,6 +33,7 @@ from installer.detect_frontends import detect_frontends
 from installer.detection_notes import DETECTION_NOTES, detection_held
 from installer.detect_os import _enter_wsl, _wsl_dest, detect_os, detected_os
 from installer.from_folders import from_folder_refusal, open_list_and_pack, reset_local_sources
+from installer.games import games_folder_refusal
 from installer.host_fs import _DETECTION_REFUSED, refused_words
 from installer.install_record import choice_given
 from installer.invocation import _INVOCATION, OFFLINE_VARIABLE
@@ -877,7 +878,7 @@ def run_tui(args: argparse.Namespace) -> int:
 
 def _tui_startup(args: argparse.Namespace) -> tuple[TuiState, list[tuple]] | None:
     """The local sources opened and the first screen chosen, None when a
-    --from folder cannot be read (said on stderr)."""
+    --from or --for-games folder cannot be read (said on stderr)."""
     os_type = _INVOCATION.os_type or detect_os()
     if os_type == "wsl":
         _enter_wsl()
@@ -892,6 +893,11 @@ def _tui_startup(args: argparse.Namespace) -> tuple[TuiState, list[tuple]] | Non
             for line in refusal.lines:
                 print(line, file=sys.stderr)
             return None
+    refusal = games_folder_refusal(getattr(args, "for_games", None), args.platform or "")
+    if refusal is not None:
+        for line in refusal.lines:
+            print(line, file=sys.stderr)
+        return None
     return tui_start(args, os_type)
 
 

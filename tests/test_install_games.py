@@ -862,6 +862,17 @@ class CommandLine(unittest.TestCase):
         self.assertEqual(proc.returncode, 1)
         self.assertIn("does not exist", proc.stderr)
 
+    def test_a_games_folder_that_does_not_exist_is_refused_before_the_list(self):
+        # Refused as --from is, before the list: offline with no list at hand,
+        # the run named the list and never the folder.
+        shutil.rmtree(self.card.lists)
+        proc = run_cli(self.card, "--for-games", str(self.card.root / "nowhere"), "--check",
+                       "--events")
+        self.assertEqual(proc.returncode, 1)
+        errors = [e for e in self.events(proc) if e["event"] == "error"]
+        self.assertEqual([(e["stage"], e["reason"]) for e in errors], [("games", "no_folder")])
+        self.assertEqual(proc.stderr.count("does not exist or cannot be opened"), 1)
+
     def test_offline_without_the_index_keeps_every_file_and_says_so(self):
         shutil.rmtree(self.card.lists / "games")
         proc = run_cli(self.card, "--for-games", "--check", "--events")

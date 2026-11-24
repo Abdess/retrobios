@@ -17,6 +17,7 @@ from installer.detect_frontends import detect_frontends, detect_platforms
 from installer.detect_os import _enter_wsl, _os_name, _system_lines, _wsl_dest, detect_os, detected_os, found_label
 from installer.events import EVENTS
 from installer.from_folders import _open_local_sources
+from installer.games import games_folder_refusal
 from installer.handheld_app import app_refusal
 from installer.install_record import by_record, drop_recorded
 from installer.invocation import _INVOCATION, Invocation, installer_id
@@ -159,6 +160,9 @@ def _start_install(args: argparse.Namespace, real_stdout: TextIO) -> _InstallRun
         _enter_wsl()
         _wsl_dest(args)
     _open_local_sources(args)
+    refusal = games_folder_refusal(args.for_games, args.platform or "")
+    if refusal is not None:
+        raise refusal
     # --pack: the files go into a ZIP for another device, no folder of this
     # machine is read or written, and nothing is asked.
     packing = getattr(args, "pack", None) is not None

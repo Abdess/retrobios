@@ -19331,20 +19331,31 @@ def games_probe(plat: str, bios_path: Path, network: bool = True,
     return None
 
 
+def games_folder(given: Path) -> Path:
+    """The folder --for-games names, as the run reads it."""
+    return Path(os.path.expanduser(str(given))).absolute()
+
+
+def games_folder_refusal(given: object, platform: str) -> Refusal | None:
+    """The refusal of a folder named with --for-games that cannot be opened,
+    or None. Asked before the run, as for --from and --pack: a typo fetched
+    the file list first, and an offline run blamed the list instead."""
+    if not isinstance(given, Path):
+        return None
+    folder = games_folder(given)
+    if _is_dir(folder):
+        return None
+    message = f"the games folder {folder} does not exist or cannot be opened"
+    return Refusal("games", "no_folder", platform, f"Error: {message}.", message=message)
+
+
 def read_games(args: argparse.Namespace, plat: str, bios_path: Path, manifest: dict,
                term: Terminal | None, os_type: str) -> GamesPlan | None:
     """The games of the card read for this run, their lines said. None when
     there are none to read, or what they need cannot be known: the run then
     keeps every file, and says so where --for-games asked."""
     asked = args.for_games is not None
-    folder = args.for_games if isinstance(args.for_games, Path) else None
-    if folder is not None:
-        folder = Path(os.path.expanduser(str(folder))).absolute()
-        if not _is_dir(folder):
-            message = f"the games folder {folder} does not exist or cannot be opened"
-            EVENTS.emit("games_unavailable", platform=plat, reason="no_folder", message=message)
-            print(f"Error: {message}.", file=sys.stderr)
-            sys.exit(1)
+    folder = games_folder(args.for_games) if isinstance(args.for_games, Path) else None
     # Not asked for, a run given its list as a file looks for the games index
     # beside it and in the cache only: one fetched now could describe another
     # list.
@@ -23477,6 +23488,9 @@ def _start_install(args: argparse.Namespace, real_stdout: TextIO) -> _InstallRun
         _enter_wsl()
         _wsl_dest(args)
     _open_local_sources(args)
+    refusal = games_folder_refusal(args.for_games, args.platform or "")
+    if refusal is not None:
+        raise refusal
     # --pack: the files go into a ZIP for another device, no folder of this
     # machine is read or written, and nothing is asked.
     packing = getattr(args, "pack", None) is not None
@@ -32326,7 +32340,7 @@ def run_tui(args: argparse.Namespace) -> int:
 
 def _tui_startup(args: argparse.Namespace) -> tuple[TuiState, list[tuple]] | None:
     """The local sources opened and the first screen chosen, None when a
-    --from folder cannot be read (said on stderr)."""
+    --from or --for-games folder cannot be read (said on stderr)."""
     os_type = _INVOCATION.os_type or detect_os()
     if os_type == "wsl":
         _enter_wsl()
@@ -32341,6 +32355,11 @@ def _tui_startup(args: argparse.Namespace) -> tuple[TuiState, list[tuple]] | Non
             for line in refusal.lines:
                 print(line, file=sys.stderr)
             return None
+    refusal = games_folder_refusal(getattr(args, "for_games", None), args.platform or "")
+    if refusal is not None:
+        for line in refusal.lines:
+            print(line, file=sys.stderr)
+        return None
     return tui_start(args, os_type)
 
 
