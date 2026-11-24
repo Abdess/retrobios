@@ -1,5 +1,5 @@
 // What each page knows of its place in the site, computed once per page
-// from what scripts/sitestarlight.py writes beside the sidebar:
+// from what scripts/sitegen/starlight.py writes beside the sidebar:
 // - breadcrumbs: the tab and the groups above the page, each linked to the
 //   page or the section that introduces it, never to a sibling page. A
 //   group of names by their first letter (A, B) is no crumb;

@@ -21,9 +21,9 @@ DEFAULT_INSTALL_URL="https://raw.githubusercontent.com/Abdess/retrobios/main/ins
 # What a refused installer most likely means for this copy. The copy the
 # site serves reads a commit's installer, which no cache serves stale, and
 # curl or wget stop on a cut transfer before the hash is read: the site's
-# build rewrites this line there (scripts/sitebootstrap.py).
+# build rewrites this line there (scripts/sitegen/bootstrap.py).
 MISMATCH_ADVICE="The download was most likely cut short: try again. Within minutes of an update of this project the two files can come from caches of different ages. Waiting five minutes settles that."
-DEFAULT_INSTALL_SHA256="bf437a4a291a8eda372040014f029689183cf09d78f6b54102b9261c493e40dd"
+DEFAULT_INSTALL_SHA256="4307fc63db9377dfe241598bf044c1635fade08a3bde5d10b034ee25abf23878"
 # The pin above refuses any changed byte: this cap only stops a body that
 # cannot be the installer (a sign-in portal's page) before it is hashed.
 MAX_INSTALLER_BYTES=8388608

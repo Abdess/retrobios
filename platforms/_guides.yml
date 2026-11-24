@@ -1,6 +1,6 @@
 # What each platform page and pack README tell someone holding the device:
 # the folder, where the command runs, what to know. Read by
-# scripts/siteguides.py, which checks it on load: every platform in
+# scripts/sitegen/guides.py, which checks it on load: every platform in
 # _registry.yml has a guide here, and every guide a registered platform.
 #
 # Values are Markdown. A folder row with no `path` is the registry's
@@ -19,7 +19,7 @@
 # The registry keeps what tools read (device_group, extract_to, install);
 # this file keeps what people read.
 
-# The site serving the one-line bootstraps (scripts/sitebootstrap.py).
+# The site serving the one-line bootstraps (scripts/sitegen/bootstrap.py).
 install_base: https://abdess.github.io/retrobios
 
 # Is it safe: shown on the home page and under every command on a guide page.

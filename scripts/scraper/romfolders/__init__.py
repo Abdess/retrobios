@@ -5,7 +5,7 @@ the commits to read, the format of the system list, and the facts a parser
 cannot read from a table (roms root, case rule, folders the OS never scans),
 each with its `source_ref`. A format parser reads the system list and returns
 one row per folder. The setup file it writes carries the OS's own names only:
-`scripts/romfolders.py` resolves them to repository systems and profiles.
+`scripts/model/romfolders.py` resolves them to repository systems and profiles.
 
 Every fetch goes through `upstream.fetch_file`, cached by revision, so a
 second run reads nothing from the network and writes the same bytes.

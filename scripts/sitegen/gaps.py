@@ -333,7 +333,7 @@ def generate_gap_analysis(
     a file the collection does not hold yet names the catalog or romset
     that lists it.
 
-    Combines verification results (from coverages/verify.py) with source
+    Combines verification results (from packs/coverage.py) with source
     provenance (from cross_reference) into a single truth dashboard.
 
     Sections:

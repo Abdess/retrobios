@@ -1,4 +1,4 @@
-"""The installer demos of the README and the site (scripts/demovariants.py).
+"""The installer demos of the README and the site (scripts/sitegen/demovariants.py).
 
 The home page and Get your files score 98 to 100 on a phone: a video must
 cost nothing before it is on screen, keep still under reduced motion, and say

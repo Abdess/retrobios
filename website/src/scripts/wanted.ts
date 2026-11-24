@@ -1,4 +1,4 @@
-// The wanted page's reading of public/data/wanted.json (scripts/sitewanted.py):
+// The wanted page's reading of public/data/wanted.json (scripts/sitegen/wanted.py):
 // which entries a hashed file is, and where its upload goes. An entry
 // with no h is known by its name only: a dropped file meets it by name,
 // and the review of the upload decides.

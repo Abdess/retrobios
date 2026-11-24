@@ -4,7 +4,7 @@
 verify.py and generate_pack.py must reach the same verdict on the same file:
 a pack and a coverage report that disagree describe different collections.
 The rule used to rest on both files spelling out `mode == "existence"` in
-their own words. Routing both through scripts/nativemode.py single-sources
+their own words. Routing both through scripts/resolve/nativemode.py single-sources
 it, and these tests make the agreement checkable instead of reviewable.
 """
 

@@ -1,4 +1,4 @@
-"""The drawn steps of the install box (scripts/sitesteps.py).
+"""The drawn steps of the install box (scripts/sitegen/steps.py).
 
 Each drawing file says in words what it shows, for one opened on its own:
 a title and a desc the SVG names. On the page the images are alt="" and the

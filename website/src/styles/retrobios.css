@@ -564,7 +564,7 @@ body:has(.rb-sys-file, .rb-file-entry) { --sl-content-width: var(--rb-grid-width
 }
 :is(.rb-sys-file, .rb-file-entry):has(> .rb-file-title:target) { background: var(--rb-surface); }
 
-/* Entries as table rows (scripts/siteentries.py): the name takes the room
+/* Entries as table rows (scripts/sitegen/entries.py): the name takes the room
    and its card opens under it. On a phone the row stacks like any table
    with a hash column, the name on the full width. */
 body:has(table.rb-entries) { --sl-content-width: var(--rb-grid-width); }

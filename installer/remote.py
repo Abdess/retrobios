@@ -125,7 +125,7 @@ SITE_URL = "https://abdess.github.io/retrobios/"
 INSTALLER_PAGE = f"{SITE_URL}wiki/installer/"
 TROUBLESHOOTING_PAGE = f"{SITE_URL}wiki/troubleshooting/"
 # The one-line bootstraps the site serves: BOOTSTRAP_URL for sh, .ps1 after it
-# for PowerShell (scripts/sitebootstrap.py).
+# for PowerShell (scripts/sitegen/bootstrap.py).
 BOOTSTRAP_URL = f"{SITE_URL}i"
 
 

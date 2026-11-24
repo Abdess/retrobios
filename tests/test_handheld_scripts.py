@@ -287,7 +287,7 @@ class TheArchives(unittest.TestCase):
 
     def test_the_site_serves_each_and_the_release_none(self):
         """Each archive carries install.py: the site serves it from its own
-        commit (sitehandheld.py), and the release steps never build one."""
+        commit (sitegen/handheld.py), and the release steps never build one."""
         text = (REPO_ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")
         self.assertNotIn("scripts/build_port.py", text)
         installer = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
