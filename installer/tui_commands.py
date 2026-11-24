@@ -14,6 +14,7 @@ from installer.host_fs import _is_dir
 from installer.install_record import RECORD_NARROWING, record_argv, record_options
 from installer.invocation import DEFAULT_JOBS, Invocation
 from installer.offline import LOCAL
+from installer.regions import resolve_regions
 from installer.tally import leave_out_game_data
 from installer.tui_routes import TUI_LIST_ENV, TUI_RECORD_ENV
 
@@ -265,11 +266,20 @@ def _tui_given(state: TuiState) -> list[tuple[str, str | None]]:
 
 def _record_key(options: Iterable[tuple[str, str | None]]) -> list:
     """A choice in a form two spellings of it share: one name per --system
-    and --core, in any order."""
+    and --core, in any order, and the regions as one list in their order of
+    priority, each spelled as the manifests spell it."""
     pairs = record_options(record_argv(options))
-    return sorted((flag, name.strip()) for flag, value in pairs
-                  for name in ((value or "").split(",") if flag in ("--system", "--core")
-                               else [value or ""]) if name.strip() or value is None)
+    key = sorted((flag, name.strip()) for flag, value in pairs if flag != "--region"
+                 for name in ((value or "").split(",") if flag in ("--system", "--core")
+                              else [value or ""]) if name.strip() or value is None)
+    regions = [str(value) for flag, value in pairs if flag == "--region"]
+    if regions:
+        try:
+            spelled = ",".join(resolve_regions(regions))
+        except ValueError:
+            spelled = ",".join(regions)
+        key.append(("--region", spelled))
+    return key
 
 
 def tui_record_kept(state: TuiState) -> bool:

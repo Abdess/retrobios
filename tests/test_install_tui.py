@@ -1389,6 +1389,14 @@ class RecordedPlan(unittest.TestCase):
         self.assertEqual(record_state(record_setup(
             ["--region", "us", "--region", "zz"])).regions, ["north-america"])
 
+    def test_a_recorded_region_is_the_same_choice_on_screen(self):
+        """The screen spells regions as the manifests do and joins them: the
+        record's own words are still its choice, in their order."""
+        state = record_state(record_setup(["--region", "us", "--region", "jp"]))
+        self.assertTrue(install.tui_record_kept(state))
+        self.assertNotEqual(install._record_key([("--region", "us,jp")]),
+                            install._record_key([("--region", "jp,us")]))
+
     def test_opens_on_the_plan_of_the_one_setup_found(self):
         state = record_state()
         self.assertTrue(state.opened_on_plan)
