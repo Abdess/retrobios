@@ -17,7 +17,6 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 # Files the trees below them address at the maker level, left as they are.
 MAKER_LEVEL = {
-    "RPG Maker/wildmidi.cfg",
     "ScummVM/scummvm.zip",
 }
 

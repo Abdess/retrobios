@@ -37,7 +37,7 @@ UNLINKED: dict[str, str] = {
     # several systems' files or not reviewed as the system's own. The
     # heading names the program, not the system.
     "capcom-cps3": "Arcade > FBNeo",
-    "commanderx16": "Arcade > Arcade",
+    "commanderx16": "Other > x16emu",
     "dark-forces-ii": "Game Engines > OpenJKDF2",
     "fpinball": "Other > future-pinball-fploader",
     "fruitmachine": "Other > mfme",
