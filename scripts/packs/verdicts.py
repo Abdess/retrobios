@@ -5,13 +5,8 @@ from __future__ import annotations
 from core.hashing import compute_hashes, md5sum, parse_hash_list
 from core.ziptools import check_inside_zip
 from resolve.nativemode import SIZE_AND_ANY_HASH, reads_file_contents
-from resolve.validation import (
-    accepted_hashes,
-    check_file_validation,
-    existence_discrepancy,
-    frontend_digest_matches,
-    validated_choice,
-)
+from resolve.validation import accepted_hashes, check_file_validation
+from resolve.acceptance import existence_discrepancy, frontend_digest_matches, validated_choice
 
 
 # Status model: aligned with Batocera BiosStatus (batocera-systems:967-969)

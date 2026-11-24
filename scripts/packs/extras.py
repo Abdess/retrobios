@@ -29,7 +29,7 @@ from resolve.standalone import platform_launches
 from model.declarations import OUTER_ROOTS, outer_layout
 from core.paths import declared_destination, sanitize_pack_path
 from resolve.content import declares_shape, shape_fits, size_fits
-from resolve.validation import deliverable, read_by_build, read_from_save_dir, read_from_system_dir
+from resolve.entryscope import deliverable, read_by_build, read_from_save_dir, read_from_system_dir
 from packs.gaps import gap_destination
 from packs.paths import libretro_systems, save_destination, save_layout
 from resolve.regions import FILE_GROUP
@@ -315,7 +315,7 @@ class ExtraResolver:
     def alternatives(self, fe: dict) -> list[dict]:
         """The versions the extra's own profile accepts at its slot, as
         validation.extra_alternatives finds them."""
-        from resolve.validation import slot_index
+        from resolve.acceptance import slot_index
 
         key = fe.get("source_profile") or ""
         index = self._slots.get(key)
@@ -328,7 +328,7 @@ class ExtraResolver:
     def resolve(self, fe: dict, dest: str) -> tuple[str | None, str, str]:
         """(local copy or None, resolver status, the core's disagreement)."""
         from resolve.packfiles import release_asset_paths, resolve_file, run_is_offline
-        from resolve.validation import core_size_refusal, validated_choice
+        from resolve.acceptance import core_size_refusal, validated_choice
 
         local_path, status = resolve_file(
             fe, self.db, self.bios_dir, self.zip_contents,
@@ -2103,7 +2103,7 @@ def _ships(
     AmberELEC's bluemsx config.ini read as missing while the pack held it.
     """
     from resolve.packfiles import resolve_declaration
-    from resolve.validation import baseline_verdict
+    from resolve.acceptance import baseline_verdict
 
     path, status = resolve_declaration(
         file_entry, db, "bios", zip_contents, data_registry, override, offline=True,
@@ -2309,7 +2309,8 @@ def emulator_region_drops(
     """
     from resolve import regions as resolve_regions
     from packs.paths import resolve_destination
-    from resolve.validation import build_validation_index, filter_files_by_mode
+    from resolve.validation import build_validation_index
+    from resolve.entryscope import filter_files_by_mode
 
     region_index = resolve_regions.build_region_index(dict(selected))
     region_groups: dict[str, list[tuple[str, str]]] = {}
@@ -2402,7 +2403,8 @@ def _emulator_ships(
     held it.
     """
     from resolve.packfiles import resolve_file
-    from resolve.validation import validated_choice, with_archive_members
+    from resolve.acceptance import validated_choice
+    from resolve.entryscope import with_archive_members
 
     local, status = resolve_file(
         {**with_archive_members(file_entry, profile.get("files", [])),

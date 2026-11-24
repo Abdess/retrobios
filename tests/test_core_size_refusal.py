@@ -26,7 +26,7 @@ from model.profiles import load_emulator_profiles, emulator_profiles_cache
 from collection.indexes import build_indexes
 from packs import manifest as packs_manifest
 from packs import platformpack
-from resolve.validation import core_size_refusal
+from resolve.acceptance import core_size_refusal
 from packs.gaps import find_undeclared_files
 from packs.coverage import verify_platform
 

@@ -10,7 +10,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 
 from core.paths import comparable_destination, declared_destination, sanitize_pack_path
-from resolve.validation import read_from_save_dir
+from resolve.entryscope import read_from_save_dir
 
 
 def under_base(path: str, base_dest: str) -> str:

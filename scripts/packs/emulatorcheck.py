@@ -32,12 +32,9 @@ from packs.verdicts import (
     emulator_severity,
     storage_verdict,
 )
-from resolve.validation import (
-    build_validation_index,
-    build_ground_truth,
-    validated_choice,
-    with_archive_members,
-)
+from resolve.validation import build_validation_index, build_ground_truth
+from resolve.acceptance import validated_choice
+from resolve.entryscope import with_archive_members
 
 
 # The repository's platforms wherever the script runs from, for library calls

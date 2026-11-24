@@ -677,7 +677,7 @@ class ThePublishedList(unittest.TestCase):
         """Each emulator a row names declares that file as firmware it does
         not install itself: pak0.pk3, game data for every profile, is gone."""
         from model.profiles import load_emulator_profiles
-        from resolve.validation import installed_everywhere
+        from resolve.entryscope import installed_everywhere
 
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         self.assertNotIn("pak0.pk3", [e["n"] for e in self.data["entries"]])

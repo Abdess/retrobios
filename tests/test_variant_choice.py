@@ -21,7 +21,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from resolve.validation import find_validated_variant
+from resolve.acceptance import find_validated_variant
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -95,7 +95,8 @@ _SEEDED = """
 import hashlib, sys, tempfile
 from pathlib import Path
 sys.path.insert(0, sys.argv[1])
-from resolve.validation import build_validation_index, find_validated_variant
+from resolve.validation import build_validation_index
+from resolve.acceptance import find_validated_variant
 root = Path(sys.argv[2])
 paths = [root / f"ctrl_{i}.rom" for i in range(8)]
 files = {}

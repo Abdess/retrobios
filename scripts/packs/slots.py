@@ -20,12 +20,8 @@ from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from resolve.packfiles import preferred_entries
 from resolve.launches import PlatformLaunches
 from resolve.standalone import platform_layouts, platform_launches
-from resolve.validation import (
-    content_alternatives,
-    outside_gap_scope,
-    read_from_save_dir,
-    with_archive_members,
-)
+from resolve.validation import content_alternatives
+from resolve.entryscope import outside_gap_scope, read_from_save_dir, with_archive_members
 
 if TYPE_CHECKING:
     from packs.extras import ExtraPlacement

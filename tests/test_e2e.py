@@ -43,7 +43,8 @@ from model.platforms import load_platform_config
 from resolve.localfile import resolve_local_file
 from resolve.cores import resolve_platform_cores
 from resolve.truth import diff_platform_truth, generate_platform_truth
-from resolve.validation import build_validation_index, check_file_validation, filter_files_by_mode
+from resolve.validation import build_validation_index, check_file_validation
+from resolve.entryscope import filter_files_by_mode
 from packs.verdicts import Severity, Status
 from packs.gaps import find_exclusion_notes, find_undeclared_files
 from packs.emulatorcheck import verify_emulator

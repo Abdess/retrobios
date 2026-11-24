@@ -22,7 +22,7 @@ from packs.extras import (
     save_manifest_dest,
 )
 from resolve.packfiles import resolve_file
-from resolve.validation import validated_choice
+from resolve.acceptance import validated_choice
 
 
 # Manifest generation (JSON inventory for install.py)

@@ -225,7 +225,7 @@ class OtherContentTests(unittest.TestCase):
         self.assertFalse(size_fits(bsx, 32767))
 
     def test_core_refusal_names_the_sizes_and_the_window(self):
-        from resolve.validation import core_size_refusal
+        from resolve.acceptance import core_size_refusal
 
         disk = {"size": [143360, 143403], "min_size": 143105, "max_size": 143364,
                 "validation": ["size"]}

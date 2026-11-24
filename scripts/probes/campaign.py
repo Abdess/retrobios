@@ -329,7 +329,7 @@ class Campaign:
         return result.record
 
     def system_entries(self, profile: dict, system: str) -> list[tuple[int, dict]]:
-        from resolve.validation import filter_files_by_mode
+        from resolve.entryscope import filter_files_by_mode
 
         libretro = filter_files_by_mode(profile.get("files") or [], standalone=False)
         keep = {id(e) for e in libretro}

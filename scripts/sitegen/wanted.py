@@ -28,7 +28,7 @@ from packs.crossref import first_hash
 from core.hashing import cut_md5_owner, declared_hash_lists, parse_hash_list
 from resolve.review import LARGE_FILE_ISSUE_URL, Placement, placement
 from resolve.sendable import can_send, sendable
-from resolve.validation import deliverable, filter_files_by_mode
+from resolve.entryscope import deliverable, filter_files_by_mode
 from sitegen.config import UPLOAD_ROOT
 
 ALGORITHMS = ("sha1", "sha256", "md5", "crc32")

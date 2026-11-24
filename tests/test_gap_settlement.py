@@ -15,7 +15,7 @@ from pathlib import Path
 
 from packs.crossref import cross_reference
 from resolve.launches import PlatformLaunches
-from resolve.validation import case_folded_slots, declaration_settles
+from resolve.entryscope import case_folded_slots, declaration_settles
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

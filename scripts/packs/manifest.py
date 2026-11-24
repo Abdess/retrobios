@@ -60,10 +60,8 @@ from resolve.cores import platform_scope_systems, resolve_platform_cores as _pla
 from resolve.gamedata import GAME_DATA, is_game_data, platform_game_data, without_game_data
 from resolve.nativemode import platform_mode
 from resolve.packfiles import preferred_entries as _preferred_entries
-from resolve.validation import (
-    build_validation_index,
-    destination_owners,
-)
+from resolve.validation import build_validation_index
+from resolve.acceptance import destination_owners
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack

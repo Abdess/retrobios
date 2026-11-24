@@ -25,7 +25,7 @@ from resolve.localfile import held_record_for
 from resolve.ownership import foreign_tree, owner_tokens
 from resolve.launches import PlatformLaunches
 from resolve.standalone import platform_layouts
-from resolve.validation import (
+from resolve.entryscope import (
     case_folded_slots,
     declaration_settles,
     installed_everywhere,
@@ -127,7 +127,7 @@ def _record_needing_platforms(
     """
     from resolve.cores import resolve_platform_cores
     from resolve.standalone import platform_launches
-    from resolve.validation import filter_files_by_mode
+    from resolve.entryscope import filter_files_by_mode
 
     missing = [
         (emu_name, gap) for emu_name, data in report.items()

@@ -46,11 +46,9 @@ from packs.naming import (
 )
 from resolve import packfiles as packresolve
 from resolve.packfiles import download_external, resolve_file
-from resolve.validation import (
-    build_validation_index,
-    validated_choice,
-    with_archive_members,
-)
+from resolve.validation import build_validation_index
+from resolve.acceptance import validated_choice
+from resolve.entryscope import with_archive_members
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack

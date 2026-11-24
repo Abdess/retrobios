@@ -23,7 +23,7 @@ from model.declarations import declared_components
 from model.profiles import lists_files
 from resolve.collisions import accepted_by_all, find_collisions
 from resolve.content import size_fits
-from resolve.validation import opens_by_name, outside_gap_scope
+from resolve.entryscope import opens_by_name, outside_gap_scope
 
 
 def _names(entry: dict) -> set[str]:

@@ -67,13 +67,8 @@ from resolve.packfiles import (
     preferred_entries as _preferred_entries,
     resolve_file,
 )
-from resolve.validation import (
-    build_validation_index,
-    parse_validation,
-    destination_owners,
-    existence_discrepancy,
-    extra_alternatives,
-)
+from resolve.validation import build_validation_index, parse_validation
+from resolve.acceptance import destination_owners, existence_discrepancy, extra_alternatives
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack

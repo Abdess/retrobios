@@ -20,7 +20,7 @@ from model.profiles import reads_own_files
 from resolve.launches import PlatformLaunches
 from resolve.layout import data_root_place
 from resolve.standalone import platform_launches
-from resolve.validation import installed_everywhere, installed_with_emulator
+from resolve.entryscope import installed_everywhere, installed_with_emulator
 from sitegen import markup
 from installer_build.module import installer_module
 from sitegen.fields import search_excluded

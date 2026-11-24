@@ -21,7 +21,7 @@ from packs.paths import MEDIA_MARKER, lands_on_android
 from resolve.cores import resolve_platform_cores as _platform_cores
 from resolve.layout import core_system_dirs
 from resolve.standalone import platform_layouts, platform_launches
-from resolve.validation import deliverable, read_from_system_dir
+from resolve.entryscope import deliverable, read_from_system_dir
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack

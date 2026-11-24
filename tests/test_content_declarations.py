@@ -13,7 +13,7 @@ import tests
 import unittest
 
 from model.declarations import platform_declared_contents
-from resolve.validation import declaration_settles
+from resolve.entryscope import declaration_settles
 
 SHA1 = "70cdf57469a208528f78a14275837352e90e20f1"
 DB = {

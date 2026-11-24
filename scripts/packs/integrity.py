@@ -18,8 +18,11 @@ from packs.paths import MEDIA_MARKER, has_path_conflict
 from core.ziptools import build_zip_contents_index, is_archive_path, zip_members
 from core.ziptools import safe_member_parts
 from resolve.nativemode import digest_algorithm, platform_mode
-from resolve.validation import (
-    baseline_verdict, digest_verdict, inner_rom_check, inner_rom_data_check,
+from resolve.acceptance import (
+    baseline_verdict,
+    digest_verdict,
+    inner_rom_check,
+    inner_rom_data_check,
 )
 from resolve.nativemode import hash_mismatch_excludes_file
 import sys
@@ -547,7 +550,8 @@ def _builder_extras(
     there: taken by the refused file, that core file was never compared.
     """
     from packs.extras import ExtraResolver, hidden_extras
-    from resolve.validation import build_validation_index, destination_owners
+    from resolve.validation import build_validation_index
+    from resolve.acceptance import destination_owners
 
     config, emu_profiles = expect.config, expect.emu_profiles
     data_registry = expect.opts.data_registry

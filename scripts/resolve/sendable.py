@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 
 from resolve.gamedata import is_game_data
-from resolve.validation import installed_everywhere
+from resolve.entryscope import installed_everywhere
 
 # A name the code builds from the content (<serial>.txt, *.ini) is a
 # pattern, not a file anyone can upload.

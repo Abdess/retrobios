@@ -22,7 +22,7 @@ from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
 from model.registry import list_registered_platforms
 from resolve.nativemode import digest_algorithm, platform_mode
-from resolve.validation import frontend_digest_matches, inner_rom_check
+from resolve.acceptance import frontend_digest_matches, inner_rom_check
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack

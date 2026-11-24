@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 from resolve.nativemode import digest_algorithm, reads_file_contents
 from resolve.packfiles import resolve_declaration
-from resolve.validation import agnostic_substitute, baseline_verdict, validated_choice
+from resolve.acceptance import agnostic_substitute, baseline_verdict, validated_choice
 
 
 @dataclass(frozen=True)

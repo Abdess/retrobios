@@ -20,18 +20,17 @@ from resolve.localfile import resolve_local_file
 from resolve.nativemode import hash_mismatch_excludes_file, platform_mode
 from resolve.ownership import foreign_tree, owner_tokens
 from resolve.standalone import platform_layouts, platform_launches
-from resolve.validation import (
-    parse_validation,
+from resolve.validation import parse_validation
+from resolve.entryscope import (
     case_folded_slots,
-    core_size_refusal,
     declaration_settles,
     installed_with_emulator,
     outside_gap_scope,
     read_from_save_dir,
-    same_slot_entries,
     unread_on,
     with_archive_members,
 )
+from resolve.acceptance import core_size_refusal, same_slot_entries
 
 
 # Cross-reference: undeclared files used by cores

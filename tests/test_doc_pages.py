@@ -458,12 +458,12 @@ class Md5CompositeDefinition(unittest.TestCase):
         """The page said the direct MD5 is tried before the composite, which
         Recalbox never does for a .zip, and the pack check did the same."""
         from resolve.localfile import resolve_local_file
-        from resolve import validation
+        from resolve.acceptance import digest_verdict
 
         section = _section(_page("verification-modes.md"), "md5_composite (Recalbox ZIP verification)")
         self.assertIn("zip_digest: composite", section)
         self.assertNotIn("is tried before reporting a mismatch", section)
-        for function in (resolve_local_file, validation.digest_verdict):
+        for function in (resolve_local_file, digest_verdict):
             self.assertIn('get("zip_digest") == "composite"', inspect.getsource(function))
 
 
@@ -1873,7 +1873,7 @@ class CrossReferenceSettlesBySlotAndSize(unittest.TestCase):
     settles a file only at its slot or at a size the core accepts."""
 
     def test_the_page_states_the_rule_verify_reads(self):
-        from resolve.validation import declaration_settles
+        from resolve.entryscope import declaration_settles
 
         rom1 = {"name": "ROM1.BIN", "size": 32768, "validation": ["size"]}
         self.assertFalse(declaration_settles(rom1, "ROM1.BIN", {"ROM1.BIN": [(4096, "rom1.bin")]},

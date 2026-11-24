@@ -36,7 +36,7 @@ from packs.paths import (
     save_destination,
     save_layout,
 )
-from resolve.validation import (
+from resolve.entryscope import (
     entry_root,
     outside_gap_scope,
     read_from_save_dir,

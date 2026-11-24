@@ -9,7 +9,7 @@ from packs.extras import emulator_required_spares, expand_agnostic_entries
 from packs.paths import archive_destination, resolve_destination
 from resolve.archives import archive_entry, archive_is_optional
 from resolve.directories import expand_directory_entries
-from resolve.validation import deliverable
+from resolve.entryscope import deliverable
 
 
 @dataclass(frozen=True)

@@ -17,7 +17,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from resolve.validation import build_validation_index, destination_owners, validated_choice
+from resolve.validation import build_validation_index
+from resolve.acceptance import destination_owners, validated_choice
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -309,7 +310,8 @@ class AlternativesAreLookedUpBySlot(unittest.TestCase):
         from unittest import mock
 
         from packs import extras as packextras
-        from resolve import validation
+        from resolve import acceptance as verdicts
+        from resolve.acceptance import extra_alternatives
 
         files = [{"name": "DUKE3D.GRP", "size": n} for n in (1, 2)] + [
             {"name": "a.bin", "path": "dir/a.bin"}, {"name": "a.bin"}, "not an entry",
@@ -322,10 +324,10 @@ class AlternativesAreLookedUpBySlot(unittest.TestCase):
             {"source_profile": "raze", "source_name": "a.bin", "name": "renamed"},
             {"source_profile": "other", "name": "a.bin"},
         ]
-        with mock.patch.object(validation, "slot_index", side_effect=validation.slot_index) as built:
+        with mock.patch.object(verdicts, "slot_index", side_effect=verdicts.slot_index) as built:
             for fe in extras:
                 self.assertEqual(resolver.alternatives(fe),
-                                 validation.extra_alternatives(fe, profiles))
+                                 extra_alternatives(fe, profiles))
         self.assertEqual(built.call_count, 2)
 
 

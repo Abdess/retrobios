@@ -10,7 +10,7 @@ from model.platforms import load_platform_config
 from model.registry import list_registered_platforms
 from packs.consumers import FileConsumers
 from resolve.directories import expand_directory_entries
-from resolve.validation import installed_everywhere
+from resolve.entryscope import installed_everywhere
 
 
 def _entries(profile: dict, db: dict) -> list[dict]:

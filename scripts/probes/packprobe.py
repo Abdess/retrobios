@@ -36,7 +36,7 @@ from probes.packlayout import (
 )
 from resolve.cores import resolve_platform_cores
 from resolve.standalone import platform_launches
-from resolve.validation import filter_files_by_mode
+from resolve.entryscope import filter_files_by_mode
 
 
 PACK_CONTENT_FILE = REPO_ROOT / "tests" / "campaign" / "pack_content.yml"

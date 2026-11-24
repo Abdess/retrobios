@@ -20,7 +20,7 @@ from resolve.reconcile import contradicts, shares_hash
 from model.alternatives import groups_of
 from model.database import record_for_hash
 from core.hashing import HASH_FIELDS, compute_hashes, declared_hashes, lists_hashes, parse_hash_list
-from resolve.validation import (
+from resolve.entryscope import (
     filter_files_by_mode,
     installed_with_emulator,
     opens_by_name,

@@ -33,12 +33,10 @@ from resolve.categories import BIOS, EntryCategories
 from resolve.cores import platform_scope_systems, resolve_platform_cores
 from resolve.launcherconfig import launcher_unproven
 from resolve.nativemode import digest_algorithm, platform_mode, reads_file_contents
-from resolve.validation import (
-    accepted_hashes,
-    build_validation_index,
+from resolve.validation import accepted_hashes, build_validation_index, build_ground_truth
+from resolve.acceptance import (
     agnostic_substitute,
     baseline_verdict,
-    build_ground_truth,
     destination_owners,
     validated_choice,
 )

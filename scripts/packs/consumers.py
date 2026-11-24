@@ -13,7 +13,8 @@ from packs.supplemental import content_matches, declared_content, supplemental_l
 from resolve.archives import archive_entry
 from resolve.directories import expand_directory_entries
 from resolve.localfile import resolve_local_file
-from resolve.validation import inner_rom_check, with_archive_members
+from resolve.acceptance import inner_rom_check
+from resolve.entryscope import with_archive_members
 
 
 def held_copy(

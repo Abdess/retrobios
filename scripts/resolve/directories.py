@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from core.memo import DerivedView
-from resolve.validation import read_by_build
+from resolve.entryscope import read_by_build
 
 
 # The members found under each tail, kept per by_path_suffix index.

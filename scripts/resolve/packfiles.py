@@ -23,7 +23,7 @@ from resolve.content import declared_hash_verdict, record_answers_declaration
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from core.paths import REPO_ROOT, declared_destination
 from core.ziptools import is_archive_path, readable_zip_member_crcs
-from resolve.validation import inner_rom_check
+from resolve.acceptance import inner_rom_check
 # CLI-wide network policy.  Public helpers can override it explicitly, while
 # every CLI mode inherits --offline (including large-file release fallback).
 OFFLINE = False

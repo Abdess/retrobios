@@ -1452,7 +1452,7 @@ class OneBaselineVerdict(unittest.TestCase):
         return str(path)
 
     def test_a_missing_member_is_refused_whatever_the_outer_status(self):
-        from scripts.resolve.validation import baseline_verdict
+        from scripts.resolve.acceptance import baseline_verdict
 
         entry = {"name": "dragon32.zip", "zipped_file": "d32.rom", "md5": ""}
         with tempfile.TemporaryDirectory() as directory:
@@ -1494,7 +1494,7 @@ class OneBaselineVerdict(unittest.TestCase):
         import hashlib
 
         from scripts.core.hashing import md5_composite
-        from scripts.resolve.validation import baseline_verdict, digest_verdict
+        from scripts.resolve.acceptance import baseline_verdict, digest_verdict
 
         with tempfile.TemporaryDirectory() as directory:
             loose = Path(directory) / "abc.bin"
@@ -1524,7 +1524,7 @@ class OneBaselineVerdict(unittest.TestCase):
         import hashlib
 
         from scripts.core.hashing import md5_composite
-        from scripts.resolve.validation import digest_verdict
+        from scripts.resolve.acceptance import digest_verdict
 
         with tempfile.TemporaryDirectory() as directory:
             archive = self._archive(Path(directory), "rom.bin")
@@ -4050,7 +4050,7 @@ class KidVidTapesStayWithTheContent(unittest.TestCase):
 
     def test_no_pack_places_them_in_the_system_directory(self):
         from scripts.model.profiles import load_emulator_profiles
-        from scripts.resolve.validation import (
+        from scripts.resolve.entryscope import (
             outside_gap_scope,
             read_from_save_dir,
             read_from_system_dir,
@@ -5700,7 +5700,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
     def test_a_build_scope_keeps_it_for_the_other_build(self):
         """PPSSPP's standalone release ships assets/, its libretro core does
         not: bundled for one build, the entry still reaches a core's pack."""
-        from resolve.validation import deliverable
+        from resolve.entryscope import deliverable
 
         entries = [{"ref": "ppsspp-assets", "mode": "libretro"},
                    {"name": "a.bin", "bundled": True, "mode": "standalone"},
@@ -5712,7 +5712,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
     def test_a_platform_package_can_differ_both_ways(self):
         """Batocera's hcl package installs the binary alone, its blueMSX core
         package copies the machines beside the core."""
-        from resolve.validation import installed_with_emulator
+        from resolve.entryscope import installed_with_emulator
 
         hcl = {"name": "data.pak", "bundled": True, "not_bundled_on": ["batocera"]}
         machines = {"name": "Machines/MSX/config.ini", "installed_on": ["batocera", "retropie"]}
@@ -5727,7 +5727,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
         the global gap report and the wanted list all still ask for them."""
         from acquire.provenance import profile_needs
         from packs.crossref import cross_reference
-        from resolve.validation import installed_everywhere
+        from resolve.entryscope import installed_everywhere
         from sitegen.install import comes_with_app
 
         font = {"name": "LiberationMono-Regular.ttf", "bundled": True,
@@ -6246,7 +6246,7 @@ class ZippedFileMd5IsParsedOnce(unittest.TestCase):
         import hashlib
         import zipfile as zf_mod
 
-        from scripts.resolve.validation import inner_rom_check
+        from scripts.resolve.acceptance import inner_rom_check
         from scripts.packs.verdicts import verify_entry_md5
 
         with tempfile.TemporaryDirectory() as directory:
@@ -6708,7 +6708,7 @@ class FsUaeKickstartIsFoundByContent(unittest.TestCase):
     flag came from the RetroPie launcher, which the platform layer records."""
 
     def test_the_kickstart_is_an_optional_label(self):
-        from scripts.resolve.validation import opens_by_name
+        from scripts.resolve.entryscope import opens_by_name
 
         profile = yaml.safe_load((ROOT / "emulators" / "fs-uae.yml").read_text(encoding="utf-8"))
         entry = next(f for f in profile["files"] if f.get("sha1") == "891e9a547772fe0c6c19b610baf8bc4ea7fcb785")
@@ -7433,7 +7433,7 @@ class AFileTheLauncherNeverOpens(unittest.TestCase):
     as required and missing on RetroBat although nothing there opens them."""
 
     def test_unread_on_drops_the_entry_for_that_platform_only(self):
-        from resolve.validation import deliverable, unread_on
+        from resolve.entryscope import deliverable, unread_on
 
         entry = {"name": "cdbios.bin", "unread_on": ["retrobat"]}
         self.assertTrue(unread_on(entry, "retrobat"))
@@ -8110,7 +8110,7 @@ class Ps2BiosImagesAreFoundByContent(unittest.TestCase):
         name armsx2 opens on six platforms."""
         import yaml
 
-        from resolve.validation import opens_by_name
+        from resolve.entryscope import opens_by_name
 
         named = []
         for path in sorted((ROOT / "emulators").glob("*.yml")):
@@ -8140,7 +8140,7 @@ class SynthRomsAreFoundByContent(unittest.TestCase):
     def test_every_synth_rom_is_marked(self):
         import yaml
 
-        from resolve.validation import opens_by_name
+        from resolve.entryscope import opens_by_name
 
         profile = yaml.safe_load(
             (ROOT / "emulators" / "dosbox-staging.yml").read_text(encoding="utf-8")
@@ -8187,7 +8187,7 @@ class OpenMsxSystemRomsAreFoundBySha1(unittest.TestCase):
     def test_no_systemrom_label_reads_as_a_name(self):
         import yaml
 
-        from resolve.validation import opens_by_name
+        from resolve.entryscope import opens_by_name
 
         profile = yaml.safe_load((ROOT / "emulators" / "openmsx.yml").read_text())
         named = [
@@ -8368,7 +8368,7 @@ class VerifySha1ReadsTheBuilderDigest(unittest.TestCase):
         self.sha1 = hashlib.sha1(b"bizhawk firmware").hexdigest()
 
     def _status(self, sha1: object) -> str:
-        from resolve.validation import frontend_digest_matches
+        from resolve.acceptance import frontend_digest_matches
 
         entry = {"name": "fw.bin", "sha1": sha1}
         builder = frontend_digest_matches(entry, self.path, "sha1")

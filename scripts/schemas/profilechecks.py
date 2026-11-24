@@ -6,7 +6,7 @@ from pathlib import Path
 
 import core.paths
 from model.alternatives import groups_of
-from resolve.validation import read_from_save_dir
+from resolve.entryscope import read_from_save_dir
 
 
 CHECK_FIELDS = {

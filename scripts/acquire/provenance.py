@@ -13,7 +13,7 @@ from core.paths import REPO_ROOT
 from core.ziptools import is_archive_path, zip_members
 from model.dbpaths import on_disk
 from resolve.content import size_fits
-from resolve.validation import installed_everywhere
+from resolve.entryscope import installed_everywhere
 
 
 HASH_FIELDS = ("sha1", "md5", "sha256")

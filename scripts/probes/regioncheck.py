@@ -18,7 +18,7 @@ from probes.content import Content, content_root, load_content, load_file, ready
 from probes.cores import cached_nightly
 from probes.entries import entry_dest, held_file, regions_of
 from probes.host import CONTENT_FILE, Unavailable, main_cache, run_when_idle
-from resolve.validation import read_by_build
+from resolve.entryscope import read_by_build
 
 
 VARIANTS = ("full", "own", "others", "pack")

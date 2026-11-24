@@ -26,7 +26,7 @@ from resolve.standalone import platform_layouts, platform_launches
 from packs import archive
 from packs import datatrees
 from packs import platformpack
-from resolve.validation import deliverable, read_from_system_dir
+from resolve.entryscope import deliverable, read_from_system_dir
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
