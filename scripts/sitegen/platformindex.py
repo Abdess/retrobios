@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from model import releaserecord
+from model import siteinputs
 from sitegen.guidedata import device_groups, group_tiles, platform_guides
 from resolve.nativemode import check_label
 from sitegen import markup
@@ -63,9 +63,9 @@ def setup_table(coverages: dict) -> list[str]:
         "| Setup | Files on its own list | Files in the ZIP | How it checks |",
         "|-------|------:|------:|---------------|",
     ]
+    record = siteinputs.advertised()
     for name, cov in sorted(coverages.items(), key=lambda item: item[1]["platform"].casefold()):
         listed = f"{cov['total']:,}" if cov["total"] else "No list of its own"
-        record = releaserecord.load_advertised()
         state = release_state(name, record)
         files, _size = release_totals(name, record)
         zipped = ("No ZIP" if state == "none" else "No ZIP yet" if state == "pending"

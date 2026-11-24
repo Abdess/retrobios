@@ -88,7 +88,7 @@ def get_page_data(platform_name: str) -> dict:
     """The structured data of get/<platform>/: the page changes with the
     release it lists, so its tag is its date, the one the sitemap gives
     (vYYYY.MM.DD). Empty when no release publishes the platform's pack."""
-    record = releaserecord.load_advertised()
+    record = siteinputs.advertised()
     tag_date = re.fullmatch(r"v(\d{4})\.(\d{2})\.(\d{2})", str(record.get("tag", "")))
     if has_release_pack(platform_name) and releaserecord.pack_for(platform_name, record) and tag_date:
         return {"dateModified": "-".join(tag_date.groups())}
@@ -105,7 +105,7 @@ def generate_get_page(platform_name: str) -> str:
     never touches it: committing release.json rebuilds it."""
     config = load_platform_config(platform_name, str(siteinputs.current().platforms))
     display = display_name(config, platform_name)
-    record = releaserecord.load_advertised()
+    record = siteinputs.advertised()
     pack = releaserecord.pack_for(platform_name, record)
     released = has_release_pack(platform_name)
     title = get_page_title(platform_name, display)

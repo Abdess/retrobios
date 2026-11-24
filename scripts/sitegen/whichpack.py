@@ -188,7 +188,7 @@ def generate_which_pack() -> str:
     The tiles are the choice. Open tables under them listed every setup a
     second time and made the page 11,800 px tall on a phone."""
     registry = load_platform_registry(str(siteinputs.current().platforms))
-    record = releaserecord.load_advertised()
+    record = siteinputs.advertised()
     display = {key: platform_display(key) for key in registry}
     all_tabs = ("windows", "macos", "linux", "steamdeck", "android")
     # The quick install box also runs on a game system: its tab shows the

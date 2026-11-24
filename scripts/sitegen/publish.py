@@ -6,7 +6,7 @@ import json
 import shutil
 from pathlib import Path
 
-from model import releaserecord, siteinputs
+from model import siteinputs
 from core.paths import REPO_ROOT
 from sitegen.write import record_written, write_if_changed
 
@@ -21,7 +21,7 @@ def write_release_advertised(generated: Path) -> None:
     generated.mkdir(parents=True, exist_ok=True)
     write_if_changed(
         str(generated / "release-advertised.json"),
-        json.dumps(releaserecord.load_advertised(), ensure_ascii=False, indent=1,
+        json.dumps(siteinputs.advertised(), ensure_ascii=False, indent=1,
                    sort_keys=True) + "\n",
     )
 
@@ -65,7 +65,7 @@ def publish_manifests(api: Path) -> list[tuple]:
         record_written(exports / source.name)
         assets.append((exports / source.name, f"Updated platform file, its changes: {source.stem}",
                        "application/json", None))
-    release = REPO_ROOT / "release.json"
+    release = siteinputs.release_record_path()
     if release.is_file():
         shutil.copy2(release, api / "release.json")
         record_written(api / "release.json")

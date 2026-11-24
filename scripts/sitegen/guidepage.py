@@ -84,7 +84,7 @@ def pack_buttons(platform_name: str, label: str = "Pack", prefix: str = "../",
     if not has_release_pack(platform_name):
         display = display or platform_display(platform_name)
         return f"{no_zip_line(display)} [Why no ZIP?]({prefix}{NO_ZIP_FAQ})"
-    record = releaserecord.load_advertised()
+    record = siteinputs.advertised()
     buttons = download_links(
         platform_name,
         record,
@@ -203,7 +203,7 @@ def _share_tabs(name: str, share: str) -> tuple[dict[str, str], dict[str, str]]:
 def _offline_line(name: str) -> list[str]:
     """The offline line, on a setup whose ZIP a release publishes: the
     installer reads that ZIP with no network (`--from-pack`)."""
-    pack = releaserecord.pack_for(name, releaserecord.load_advertised())
+    pack = releaserecord.pack_for(name, siteinputs.advertised())
     return [OFFLINE_LINE, ""] if pack and pack.get("assets") else []
 
 
@@ -290,7 +290,7 @@ def _computer_first(name: str, guide: Guide) -> bool:
     """A system that runs only on its own device, with a ZIP to download: a
     beginner fills its folder from a computer more easily than from a
     terminal on the TV. Without a ZIP the command is the only route."""
-    pack = releaserecord.pack_for(name, releaserecord.load_advertised())
+    pack = releaserecord.pack_for(name, siteinputs.advertised())
     return guide.run == ("device",) and bool(pack and pack.get("assets"))
 
 
@@ -308,7 +308,7 @@ def _guide_download(name: str, display: str, guide: Guide, extract_to: str | Non
                     heading: str) -> list[str]:
     """The pack: its buttons, its size, and where it is unzipped."""
     lines = [heading, ""]
-    record = releaserecord.load_advertised()
+    record = siteinputs.advertised()
     pack = releaserecord.pack_for(name, record)
     network = any(label.startswith("From ") for label, _path in guide.folders)
     if pack and pack.get("assets"):

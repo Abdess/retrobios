@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from core.paths import REPO_ROOT
+from model import releaserecord
 
 
 @dataclass(frozen=True)
@@ -54,3 +55,18 @@ def manifests_dir() -> Path:
     """The install manifests built from the collection the inputs name."""
     inputs = current()
     return inputs.manifests or inputs.db.parent / "install"
+
+
+def release_record_path() -> Path:
+    """release.json, beside the database the inputs name."""
+    return current().db.parent / releaserecord.RECORD
+
+
+def advertised() -> dict:
+    """The release record reduced to the release_pack platforms of the inputs' registry.
+
+    The tiles read the registry from --platforms-dir while the ZIP column
+    read ./platforms and ./release.json: a run from another folder gave
+    every setup "No ZIP", and a run on another collection mixed two registries.
+    """
+    return releaserecord.load_advertised(release_record_path(), str(current().platforms))
