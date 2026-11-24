@@ -22,14 +22,8 @@ from collections.abc import Callable
 from pathlib import PurePosixPath
 from typing import Any
 
-from .retropie_launchers import (
-    Launcher,
-    LauncherPatternMissing,
-    _split,
-    _split_path,
-    merge_records,
-    source_ref,
-)
+from .retropie_scripts import Launcher, LauncherPatternMissing, _split, merge_records, source_ref
+from .retropie_reader import _split_path
 
 BIOS = "$bios_path"
 PLACEHOLDER = "RETRODECKBIOSDIR"

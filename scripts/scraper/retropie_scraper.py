@@ -29,8 +29,8 @@ import tarfile
 from collections.abc import Iterator
 
 from .base_scraper import BaseScraper, BiosRequirement, fetch_branch_head, fetch_bytes
-from .retropie_launchers import SCRIPTMODULES
-from .retropie_launchers import SECTIONS as PACKAGE_SECTIONS
+from .retropie_scripts import SCRIPTMODULES
+from .retropie_scripts import SECTIONS as PACKAGE_SECTIONS
 from .retropie_launchers import extract_launchers
 from .retropie_modules import module_fields
 

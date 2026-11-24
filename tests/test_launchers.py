@@ -28,7 +28,7 @@ from scraper.batocera_launchers import (
     hatari,
     lexaloffle,
 )
-from scraper.retropie_launchers import Launcher as PackageLauncher
+from scraper.retropie_scripts import Launcher as PackageLauncher
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

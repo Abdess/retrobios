@@ -38,7 +38,7 @@ PLACE_KINDS = ("names_searched", "fixed_name", "core_option", "links")
 
 # How each launcher extractor spells the BIOS directory in search_dir, as the
 # platform's own scripts name it: RetroPie's scriptmodules ($biosdir,
-# retropie_launchers.BIOSDIR), EmuDeck's EmuScripts (${biosPath},
+# retropie_reader.BIOSDIR), EmuDeck's EmuScripts (${biosPath},
 # emudeck_launchers.BIOS) and RetroDECK's framework ($bios_path,
 # retrodeck_launchers.BIOS).
 BIOS_ROOT_TOKENS = ("$biosdir", "${biosdir}", "${biosPath}", "$bios_path", "${bios_path}")
@@ -629,7 +629,7 @@ ROMS_ROOT_VARIABLES = ("$roms_path", "${roms_path}", "$romdir", "${romdir}")
 HANDED_KINDS = ("links", "passes_path", "scans_dir")
 
 # How a launcher record says the platform starts the emulator in a directory
-# (retropie_launchers._working_directory), and the handle a profile gives
+# (retropie_reader._working_directory), and the handle a profile gives
 # that directory in standalone_directories: the call its code reads it with.
 WORKING_DIRECTORY_PASSED = "working directory of "
 WORKING_DIRECTORY = "getcwd"
@@ -759,7 +759,7 @@ def native_systems(config: dict) -> dict[str, str]:
 
 
 # How the launcher extractors spell the folder holding the launched game:
-# RetroBat's Path.GetDirectoryName(rom) (retrobat_launchers._KNOWN), KNULLI's
+# RetroBat's Path.GetDirectoryName(rom) (retrobat_render._KNOWN), KNULLI's
 # os.path.dirname(rom) and its software list folder (mameGenerator.py:113-116).
 GAME_FOLDERS = ("<rom directory>", "<romDirname>", "<softDir>")
 

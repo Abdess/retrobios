@@ -397,10 +397,10 @@ class LauncherLayerTest(unittest.TestCase):
 
     def test_every_extractor_spelling_of_the_bios_folder_is_known(self) -> None:
         from resolve import launchers
-        from scraper import emudeck_launchers, retrodeck_launchers, retropie_launchers
+        from scraper import emudeck_launchers, retrodeck_launchers, retropie_reader
 
         for token in (emudeck_launchers.BIOS, retrodeck_launchers.BIOS,
-                      retropie_launchers.BIOSDIR):
+                      retropie_reader.BIOSDIR):
             self.assertIn(token, launchers.BIOS_ROOT_TOKENS)
 
     def test_no_place_is_filled_twice(self) -> None:

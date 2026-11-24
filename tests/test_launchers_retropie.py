@@ -20,6 +20,7 @@ import yaml
 
 from scraper import batocera_launchers
 from scraper import retropie_launchers as rl
+from scraper.retropie_scripts import Launcher, Scripts, LauncherPatternMissing
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -300,7 +301,7 @@ class AdvanceMameSearchList(unittest.TestCase):
         )
 
     def test_mame_does_not_read_a_colon_as_a_separator(self):
-        from scraper.retropie_launchers import LIST_SEPARATORS
+        from scraper.retropie_reader import LIST_SEPARATORS
 
         self.assertNotIn("mame", LIST_SEPARATORS)
         self.assertEqual(
@@ -336,7 +337,7 @@ class CommandLines(unittest.TestCase):
             f"{EMULATORS}/basilisk.sh": BASILISK.replace("--rom ", "--romfile "),
             f"{EMULATORS}/gngeopi.sh": GNGEOPI,
         }
-        with self.assertRaises(rl.LauncherPatternMissing):
+        with self.assertRaises(LauncherPatternMissing):
             rl.extract_launchers(files)
 
 
@@ -464,7 +465,7 @@ class WorkingDirectory(unittest.TestCase):
 
     def test_a_launch_script_that_no_longer_enters_a_folder_raises(self):
         files = {f"{EMULATORS}/drastic.sh": DRASTIC.replace('pushd "', 'echo "')}
-        with self.assertRaises(rl.LauncherPatternMissing):
+        with self.assertRaises(LauncherPatternMissing):
             rl.extract_launchers(files)
 
 
@@ -482,7 +483,7 @@ class LaunchScripts(unittest.TestCase):
     def test_a_launch_script_without_a_check_raises(self):
         script = FS_UAE_LAUNCHER.replace("exit 1", "true")
         files = {f"{EMULATORS}/fs-uae.sh": FS_UAE, f"{EMULATORS}/fs-uae/fs-uae.sh": script}
-        with self.assertRaises(rl.LauncherPatternMissing):
+        with self.assertRaises(LauncherPatternMissing):
             records(files)
 
 
@@ -508,19 +509,19 @@ class Packages(unittest.TestCase):
 
     def test_a_system_name_left_unresolved_raises(self):
         broken = FBNEO.replace('"${systems[@]}"', '"${others[@]}"')
-        with self.assertRaises(rl.LauncherPatternMissing):
+        with self.assertRaises(LauncherPatternMissing):
             records({f"{LIBRETRO}/lr-fbneo.sh": broken})
 
 
 class UnknownConstructs(unittest.TestCase):
     def test_an_unclassified_use_of_the_bios_folder_raises(self):
         broken = REDREAM.replace('mkUserDir "$biosdir/dc"', 'rsync -a "$biosdir/dc" "$md_inst"')
-        with self.assertRaises(rl.LauncherPatternMissing):
+        with self.assertRaises(LauncherPatternMissing):
             records({f"{EMULATORS}/redream.sh": broken})
 
     def test_scripts_without_a_package_raise(self):
-        with self.assertRaises(rl.LauncherPatternMissing):
-            rl.Scripts({f"{EMULATORS}/redream.sh": "function x() {\n}\n"})
+        with self.assertRaises(LauncherPatternMissing):
+            Scripts({f"{EMULATORS}/redream.sh": "function x() {\n}\n"})
 
 
 class PlatformRecords(unittest.TestCase):
@@ -554,7 +555,7 @@ class PlatformRecords(unittest.TestCase):
 
     def test_the_schema_describes_every_scraper_field(self):
         fields = {
-            f.name for cls in (batocera_launchers.Launcher, rl.Launcher)
+            f.name for cls in (batocera_launchers.Launcher, Launcher)
             for f in dataclasses.fields(cls)
         } - {"lines"}
         self.assertEqual(fields, set(self.schema["$defs"]["launcher"]["properties"]))
