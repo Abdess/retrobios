@@ -22408,6 +22408,438 @@ def _check_free_space(bios_path: Path, needed: int, plat: str = "", code: int = 
                           f"{format_size(needed)} needed, {format_size(free)} free.")
 
 
+# --- installer/run_check.py --------------------------------------------------
+
+def _drop_stale_parts(bios_path: Path, entries: list[dict]) -> None:
+    """Remove the partial copy left beside each file now in place."""
+    for entry in entries:
+        try:
+            stale = _entry_path(bios_path, entry)
+        except ValueError:
+            continue
+        stale = stale.parent / f".{stale.name}.part"
+        if stale.is_file():
+            stale.unlink()
+
+
+def _pass_check_existing(run: _InstallRun, p: _PlatformPass) -> None:
+    """The setup's folder checked, and where each missing file comes from."""
+    args, bios_path, files = run.args, p.bios_path, p.files
+    detail("\nChecking existing files...")
+    to_download, up_to_date, mismatched = check_local(
+        files, bios_path, jobs=args.jobs, term=run.term
+    )
+    present = len(up_to_date) + len(mismatched)
+    # The screen's words: "0/22 present (0 verified, 0 wrong hash)"
+    # beside its "0 in place, 22 missing, 0 wrong copies". The data files
+    # the head counts are among them, as the screen counts them.
+    wrong = len(mismatched)
+    # Each data tree read and hashed once in the run: the count here,
+    # the check, the events, the plan and the install read this.
+    p.data_states = data_states = [(entry, data_directory_state(entry, bios_path))
+                                   for entry in p.data_dirs]
+    head_reads_done()
+    p.trees_missing = trees_missing = sum(len(state[1]) for _entry, state in data_states)
+    trees_held = p.head_data - trees_missing
+    detail(f"  {len(up_to_date) + trees_held} in place, "
+           f"{p.run_counts.files - present + trees_missing} missing, "
+           f"{_plural(wrong, 'wrong copy')}")
+
+    # A partial copy left by an interrupted run is useless once the file
+    # is in place: it goes.
+    _drop_stale_parts(bios_path, up_to_date)
+
+    # Mismatched files need re-download
+    to_download.extend(mismatched)
+    p.to_download, p.up_to_date, p.mismatched = to_download, up_to_date, mismatched
+    # The files this machine already holds: misplaced in the BIOS folder
+    # (bios/bios/, a pack extracted into a folder of its own, a name in
+    # capitals, still zipped), or in a folder named with --from.
+    p.bios_index = bios_index = (bios_folder_index(bios_path, files, up_to_date)
+                                 if to_download else None)
+    if bios_index is not None:
+        run.bios_indexes.append(bios_index)
+    p.copies = copies = plan_local_copies(to_download, bios_path, bios_index, LOCAL.folders)
+    p.plan = plan = fetch_plan(to_download, copies, data_states)
+    p.unread = unread = unreadable_copies(to_download, copies, LOCAL.folders)
+    selection = p.selection
+    p.hint = [] if LOCAL.pack is not None else bulk_hint(
+        to_download, p.manifest,
+        systems_chosen=bool(selection and selection[0]),
+        cores_chosen=bool((selection and selection[1]) or args.emulator
+                          or args.installed_cores or p.target),
+        accepted=p.core_choices,
+    )
+
+    if EVENTS.on:
+        # What the run would write, as _pass_download holds it against the
+        # free space: the screen's plan warns on this number.
+        _emit_check(
+            p.plat_name, p.manifest, bios_path,
+            CheckTally(files, up_to_date, mismatched,
+                       sum(len(state[1]) for _entry, state in data_states),
+                       len(p.omitted_files),
+                       sum(data_fetch_bytes(entry, state[1]) for entry, state in data_states),
+                       bytes_written(plan.without_lacking(to_download), data_states)),
+            chosen=selection[0] if selection else None,
+        )
+        emit_fetch_plan(p.plat_name, plan)
+        emit_copies(p.plat_name, to_download, copies, bios_index, bios_path, files)
+        emit_unreadable(p.plat_name, unread)
+    run.total_verified += len(up_to_date)
+
+
+def _pass_check_missing(run: _InstallRun, p: _PlatformPass) -> None:
+    """--check: the files not in place named, and how to get them."""
+    args, bios_path = run.args, p.bios_path
+    to_download, mismatched, copies, plan = p.to_download, p.mismatched, p.copies, p.plan
+    # Named, not only counted: a user looking for the one bad
+    # BIOS learned "1 files need downloading" and nothing else.
+    # A wrong hash comes first and always in full: listed after
+    # 8000 missing files, it hid behind "... and 8059 more".
+    wrong = {id(entry) for entry in mismatched}
+    missing = [entry for entry in to_download if id(entry) not in wrong]
+    # A pack extracted from some of its parts: the part is named
+    # before the hundreds of files it holds.
+    for line in split_pack_lines(bios_path):
+        print(line)
+    offline = _offline_only()
+    # What the pack lacks is said before the count, as the
+    # screen says it.
+    if plan.lacking:
+        print(f"\n  {pack_lacks_words(len(plan.lacking), len(plan.fetched))}")
+    # One total with the count above it, the data files among
+    # them as the screen counts them: "0 in place, 10805 missing"
+    # stood over "8164 files to download".
+    # The count and the folder by default, each file with
+    # --verbose: 20 paths hid the line saying what to do.
+    print(f"\n  {_plural(len(to_download) + p.trees_missing, 'file')} "
+          + ("not in place." if offline or LOCAL.pack is not None
+             else "to download."))
+    for line in check_lines(missing, mismatched, p.files, p.manifest, bios_path,
+                            args.verbose, CheckHeld(p.up_to_date, p.bios_index, copies)):
+        print(line)
+    for line in unreadable_lines(p.unread, args.verbose):
+        print(line)
+    print(f"  BIOS folder: {shown_path(bios_path)}")
+    # The data files need the internet too: offline, "8164 files
+    # need the internet" stood under "10805 files not in place".
+    print(_check_fetch_line(len(plan.fetched) + plan.data_files,
+                            "the BIOS folder", len(plan.lacking), bool(mismatched)))
+    run.check_pending += len(to_download)
+
+
+def _pass_check_report(run: _InstallRun, p: _PlatformPass) -> None:
+    """--check: what the setup's folder holds and lacks."""
+    args, plat_name, bios_path = run.args, p.plat_name, p.bios_path
+    if p.to_download:
+        _pass_check_missing(run, p)
+    elif p.trees_missing:
+        # The screen's headline: "Everything is in place." stood
+        # above "0/169 data files present" and exit code 1.
+        print(f"\n  {_plural(p.trees_missing, 'data file')} to fetch")
+    else:
+        print(f"\n  {EVERYTHING_IN_PLACE}")
+        print(f"  BIOS folder: {shown_path(bios_path)}")
+    if plat_name in _RECORD_TAKEN:
+        # The files counted are the recorded choice's, not the list's.
+        print(f"  {record_menu_words(_RECORD_TAKEN[plat_name])} "
+              "--all-files checks every file.")
+    absent = _absent_required(p.omitted_files, bios_path)
+    # The collection cannot supply these, so they leave the exit
+    # code alone, but a user asking why a game will not start needs
+    # their count, and with --verbose their names, and which system
+    # and emulator each one is for.
+    if absent and not OUTPUT.verbose:
+        print(f"  {needed_absent_words(len(absent), '--verbose')}")
+    for line in _needed_lines(
+        absent, "Not in the collection and absent here, needed to start an emulator",
+        every=args.verbose,
+    ):
+        detail(line)
+    for entry, (_root, needed, present) in p.data_states:
+        if needed:
+            detail(f"  {entry['ref']}: {present}/{len(entry['files'])} data files "
+                   f"present, {len(needed)} to fetch")
+            run.check_pending += len(needed)
+
+
+def _pass_dry_run(run: _InstallRun, p: _PlatformPass) -> None:
+    """--dry-run: the plan of what an install would write."""
+    args, bios_path, to_download, copies = run.args, p.bios_path, p.to_download, p.copies
+    run.files_pending += len(to_download)
+    trees = [(entry, state[1]) for entry, state in p.data_states]
+    # A data file in place with other contents is kept like a BIOS file.
+    kept = plan_kept(p.mismatched + [
+        {"dest": f"{entry['dest']}/{rel}" if entry.get("dest") else rel}
+        for entry, needed in trees for rel in needed
+    ], bios_path)
+    plan = p.plan
+    # Said before the plan promises a count and a size, as an
+    # install says it: the dry run promised 23 files where the pack
+    # held 20.
+    if plan.lacking:
+        print(f"\n  {pack_lacks_words(len(plan.lacking), len(plan.fetched))}")
+    _print_plan(plan.coming, bios_path, run.term,
+                trees, kept, copy_plan_lines(to_download, copies, p.bios_index,
+                                             bios_path, p.files, args.verbose, True),
+                verbose=args.verbose, manifest=p.manifest)
+    if p.plat_name in _RECORD_TAKEN:
+        print(f"  {record_menu_words(_RECORD_TAKEN[p.plat_name])} "
+              "--all-files lists every file.")
+    for line in unreadable_lines(p.unread, args.verbose):
+        print(line)
+    for line in p.hint:
+        print(line)
+
+
+# --- installer/run_download.py -----------------------------------------------
+
+def _remember_install(args: argparse.Namespace, plat: str, folder: Path, manifest: dict,
+                      written: list[dict], games: bool) -> None:
+    """Record what this install placed in folder and the choice it made,
+    games being the card's games applied with no --for-games."""
+    if not written and setup_record(plat, folder)[0] is None:
+        # Nothing of ours is there to record, and no choice to keep.
+        return
+    # A games folder is kept only where the next run reads it from a
+    # record (games_folder_kept): elsewhere the card's own games are.
+    options = [(flag, value if flag != "--for-games" or not value
+                else os.path.abspath(value)
+                if games_folder_kept(os.path.abspath(value), folder) else None)
+               for flag, value in _INVOCATION.flags(plat)]
+    if games:
+        options += [("--for-games", None),
+                    *([("--required-only", None)] if args.required_only else [])]
+    choice = record_argv(options)
+    path, setup, problem = write_record(folder, plat, manifest, choice, written)
+    if problem:
+        detail(f"  {problem}.")
+    count = len(setup["files"])
+    EVENTS.emit("record", platform=plat, folder=str(folder),
+                path=str(path or record_paths(folder)[0]),
+                status="not_written" if problem else "written", choice=choice,
+                date=setup["written"], files=count,
+                message=f"{problem}." if problem else
+                f"Recorded {_plural(count, 'file')} and this choice in {path}.")
+
+
+def _pass_offline_left(run: _InstallRun, p: _PlatformPass, fetched: list[dict]) -> None:
+    """--offline: the files to fetch counted missing, the copies kept to do."""
+    # The screen offers no Install for these: the question asked
+    # to download 6.6 GB that --offline never fetches. With --yes,
+    # the screen's own install, each one was "downloading", then
+    # FAILED, and the summary listed it pending and failed at once.
+    # Counted, never said here: the summary says it once.
+    # Not done: the summary counts them as missing.
+    run.files_pending += len(fetched)
+    run.total_offline += len(fetched)
+    wrong_ids = {id(entry) for entry in p.mismatched}
+    run.total_wrong_left += sum(1 for f in fetched if id(f) in wrong_ids)
+    run.offline_left += [f for f in fetched if id(f) not in wrong_ids]
+    p.to_download = [f for f in p.to_download if id(f) in p.copies]
+
+
+def _pass_declined(run: _InstallRun, p: _PlatformPass, fetch_size: int) -> bool:
+    """The size question, where one is asked. True when it was declined."""
+    args = run.args
+    if (
+        run.interactive
+        and not args.yes
+        and fetch_size >= CONFIRM_FROM_BYTES
+        and not _confirm(
+            f"\nCopy {format_size(fetch_size)} from the pack to "
+            f"{shown_path(p.bios_path)}? [Y/n] " if LOCAL.pack is not None
+            else f"\nDownload {format_size(fetch_size)} to "
+            f"{shown_path(p.bios_path)}? [Y/n] "
+        )
+    ):
+        # A beginner who just passed the c entry was sent to a
+        # 91-line --help.
+        print(p.smaller or "  Nothing downloaded. --system, --core and --region "
+              "install less (see --help).")
+        run.total_up_to_date += len(p.up_to_date)
+        run.total_declined += len(p.to_download)
+        run.files_pending += len(p.to_download)
+        return True
+    return False
+
+
+def _pass_copy_line(run: _InstallRun, p: _PlatformPass, fetched: list[dict],
+                    lacking: set[int], dl_size: int) -> None:
+    """The copies from this machine planned, and the line that opens them."""
+    copies, bios_index = p.copies, p.bios_index
+    detail()
+    for line in copy_plan_lines(p.to_download, copies, bios_index, p.bios_path,
+                                p.files, run.args.verbose, False):
+        detail(line)
+    held = len(fetched) - len(lacking)
+    rest = (f" and {'copying' if LOCAL.pack is not None else 'downloading'} "
+            f"{held}" if held else "")
+    where = f" from {LOCAL.pack.name}" if fetched and LOCAL.pack is not None else ""
+    # Named by the folder they come from, as the line above
+    # names it: "found on this machine" followed "from E:\".
+    sources = list(dict.fromkeys(copy.index.label for copy in copies.values()))
+    named = ", ".join(screen_text(shown_path(label)) for label in sources)
+    origin = (f"from {named}" if all(
+        copy.index is not bios_index for copy in copies.values())
+        else "found on this machine")
+    # The size beside what it weighs: after "and downloading
+    # 19" it read as theirs alone.
+    sized = f" ({format_size(dl_size)})"
+    detail(f"\nCopying {_plural(len(copies), 'file')}{'' if rest else sized} "
+           f"{origin}{rest}{where}{sized if rest else ''}...")
+
+
+def _pass_download_head(run: _InstallRun, p: _PlatformPass, fetched: list[dict],
+                        lacking: set[int], dl_size: int) -> None:
+    """The lines an install opens on: what comes, from where, to where."""
+    args, plat_name, bios_path = run.args, p.plat_name, p.bios_path
+    if not p.menu:
+        # What happens and where, the two lines a run without questions
+        # opens on: the menu's head said them where it was asked.
+        coming = len(p.to_download) - len(lacking) + p.plan.data_files
+        weight = dl_size + p.plan.data_bytes
+        taken = _RECORD_TAKEN.get(plat_name)
+        print(f"\nInstalling {_plural(coming, 'file')} ({format_size(weight)}) for "
+              f"{detected_shown(plat_name, bios_path) or p.display}"
+              + (", what the games need" if p.games_applied else "")
+              + (f", same choice as on {record_day(taken)}" if taken else "") + ".")
+        print(f"BIOS folder: {shown_path(bios_path)}")
+        OUTPUT.where_said = True
+    if p.unread:
+        # A file of the user's that could not be read is said in
+        # every mode: it was expected to be copied.
+        print()
+        for line in unreadable_lines(p.unread, args.verbose):
+            print(line)
+    if p.copies:
+        _pass_copy_line(run, p, fetched, lacking, dl_size)
+    elif LOCAL.pack is not None:
+        # The files the pack holds: "Copying 23 files (85.0 KB)" sat
+        # beside the size of 20.
+        detail(f"\nCopying {_plural(len(p.to_download) - len(lacking), 'file')} "
+               f"({format_size(dl_size)}) from {LOCAL.pack.name}...")
+    else:
+        detail(f"\nDownloading {len(p.to_download)} files ({format_size(dl_size)})...")
+    detail("  Press Ctrl+C to stop. Running the same command again "
+           "carries on from here.")
+
+
+def _pass_make_folder(run: _InstallRun, p: _PlatformPass, written: int) -> bool:
+    """The space checked and the BIOS folder made. True when it was created."""
+    plat_name, bios_path = p.plat_name, p.bios_path
+    with run.writes(len(p.to_download)):
+        # Checked before the folder is created: a run stopped for space
+        # left an empty BIOS folder behind. The data trees count too,
+        # written after the files on the same drive.
+        _check_free_space(bios_path, written, plat_name,
+                          1 if run.total_downloaded else 2, on_its_card(plat_name, bios_path))
+        p.space_checked = True
+        created = not bios_path.exists()
+        try:
+            bios_path.mkdir(parents=True, exist_ok=True)
+        except OSError as exc:
+            sys.stdout.flush()
+            # The documented code for a folder that cannot be written,
+            # as when it exists read-only. 1 once an earlier platform
+            # of the run installed something.
+            raise Refusal(
+                "dest", "not_writable", plat_name,
+                f"\nCannot create {bios_path}.", f"  {exc.strerror}.",
+                _write_advice(bios_path, bios_path in run.assumed_dests, plat_name),
+                code=1 if run.total_downloaded else 2,
+                message=f"{bios_path} cannot be created: {exc.strerror}",
+            ) from None
+    if created:
+        detail(f"  Created {shown_path(bios_path)}")
+    return created
+
+
+def _pass_fetch(run: _InstallRun, p: _PlatformPass, dl_size: int, created: bool) -> bool:
+    """The files downloaded or copied and counted. True when interrupted."""
+    args, plat_name, bios_path, to_download = run.args, p.plat_name, p.bios_path, p.to_download
+    progress = Progress(len(to_download), dl_size, run.term)
+    failed, interrupted = download_files(
+        to_download, bios_path, jobs=args.jobs, verbose=args.verbose,
+        term=run.term, progress=progress, copies=p.copies,
+    )
+    if created and not progress.installed:
+        # Created for files none of which came: not left behind empty.
+        try:
+            bios_path.rmdir()
+        except OSError as exc:
+            if args.verbose:
+                print(f"  {shown_path(bios_path)} stays: {exc.strerror}",
+                      file=sys.stderr)
+    run.bulk_lines += p.hint
+    if plat_name == "romm" and progress.installed:
+        run.bulk_lines.append(ROMM_SCAN_WORDS)
+    run.total_downloaded += progress.installed
+    # The end line tells BIOS files from game data, as the menu
+    # counted them, over the files that landed: matched by the end
+    # of a failed path, a.bin was dropped when x/a.bin failed.
+    run.landed.extend(progress.landed)
+    p.landed += progress.landed
+    p.record_files += [record_file(entry, "copy" if id(entry) in p.copies
+                                   else "pack" if LOCAL.pack is not None else "download")
+                       for entry in progress.landed]
+    run.files_pending += len(to_download) - progress.installed if interrupted \
+        else len(failed)
+    run.total_errors += len(failed)
+    run.failures.extend(failed)
+    run.total_bytes += progress.transferred()
+    run.total_seconds += progress.elapsed()
+    if interrupted:
+        run.total_interrupted = True
+        _remember_install(args, plat_name, bios_path, p.manifest, p.record_files,
+                          p.games_applied and args.for_games is None)
+    return interrupted
+
+
+def _pass_download(run: _InstallRun, p: _PlatformPass) -> str:
+    """The missing files installed: "go" carries on with the setup, "next"
+    moves to the next one, "stop" ends the run."""
+    plan = p.plan
+    fetched = plan.fetched
+    if _offline_only() and fetched:
+        _pass_offline_left(run, p, fetched)
+        fetched = []
+    # What the pack does not hold is said before a size is promised:
+    # a pack older than the list gave "Copy 6.6 GB" and 8358 files
+    # failed. They are still tried, and fail as
+    # not in the pack, the size and the question leaving them out.
+    # Offline there is no pack, so nothing is lacking.
+    lacking = {id(f) for f in plan.lacking}
+    if lacking:
+        print(f"\n  {pack_lacks_words(len(lacking), len(fetched))}")
+    if lacking and len(lacking) == len(p.to_download) and not plan.data_files:
+        # Nothing here can come from the pack: no "Copying 0 files", no
+        # folder made, each file failed as not in it.
+        run.failures.extend((f["dest"], NOT_IN_PACK) for f in p.to_download)
+        run.total_errors += len(p.to_download)
+        run.files_pending += len(p.to_download)
+        run.total_up_to_date += len(p.up_to_date)
+        return "next"
+    coming = plan.without_lacking(p.to_download)
+    dl_size = _bytes(coming)
+    fetch_size = _bytes(plan.without_lacking(fetched))
+    if not p.to_download:
+        run.total_up_to_date += len(p.up_to_date)
+        if _offline_only():
+            for _entry, (_root, needed, present) in p.data_states:
+                run.total_up_to_date += present
+                run.total_offline += len(needed)
+                run.files_pending += len(needed)
+        return "next"
+    if _pass_declined(run, p, fetch_size):
+        return "next"
+    EVENTS.emit("download", platform=p.plat_name, files=len(p.to_download), bytes=dl_size)
+    _pass_download_head(run, p, fetched, lacking, dl_size)
+    created = _pass_make_folder(run, p, bytes_written(coming, p.data_states))
+    return "stop" if _pass_fetch(run, p, dl_size, created) else "go"
+
+
 # --- installer/run_files.py --------------------------------------------------
 
 def _system_label(name: str, manifest: dict | None) -> str:
@@ -23945,434 +24377,6 @@ def _check_run_cores(run: _InstallRun) -> None:
 
 
 # --- installer/run.py --------------------------------------------------------
-
-def _remember_install(args: argparse.Namespace, plat: str, folder: Path, manifest: dict,
-                      written: list[dict], games: bool) -> None:
-    """Record what this install placed in folder and the choice it made,
-    games being the card's games applied with no --for-games."""
-    if not written and setup_record(plat, folder)[0] is None:
-        # Nothing of ours is there to record, and no choice to keep.
-        return
-    # A games folder is kept only where the next run reads it from a
-    # record (games_folder_kept): elsewhere the card's own games are.
-    options = [(flag, value if flag != "--for-games" or not value
-                else os.path.abspath(value)
-                if games_folder_kept(os.path.abspath(value), folder) else None)
-               for flag, value in _INVOCATION.flags(plat)]
-    if games:
-        options += [("--for-games", None),
-                    *([("--required-only", None)] if args.required_only else [])]
-    choice = record_argv(options)
-    path, setup, problem = write_record(folder, plat, manifest, choice, written)
-    if problem:
-        detail(f"  {problem}.")
-    count = len(setup["files"])
-    EVENTS.emit("record", platform=plat, folder=str(folder),
-                path=str(path or record_paths(folder)[0]),
-                status="not_written" if problem else "written", choice=choice,
-                date=setup["written"], files=count,
-                message=f"{problem}." if problem else
-                f"Recorded {_plural(count, 'file')} and this choice in {path}.")
-
-
-def _drop_stale_parts(bios_path: Path, entries: list[dict]) -> None:
-    """Remove the partial copy left beside each file now in place."""
-    for entry in entries:
-        try:
-            stale = _entry_path(bios_path, entry)
-        except ValueError:
-            continue
-        stale = stale.parent / f".{stale.name}.part"
-        if stale.is_file():
-            stale.unlink()
-
-
-def _pass_check_existing(run: _InstallRun, p: _PlatformPass) -> None:
-    """The setup's folder checked, and where each missing file comes from."""
-    args, bios_path, files = run.args, p.bios_path, p.files
-    detail("\nChecking existing files...")
-    to_download, up_to_date, mismatched = check_local(
-        files, bios_path, jobs=args.jobs, term=run.term
-    )
-    present = len(up_to_date) + len(mismatched)
-    # The screen's words: "0/22 present (0 verified, 0 wrong hash)"
-    # beside its "0 in place, 22 missing, 0 wrong copies". The data files
-    # the head counts are among them, as the screen counts them.
-    wrong = len(mismatched)
-    # Each data tree read and hashed once in the run: the count here,
-    # the check, the events, the plan and the install read this.
-    p.data_states = data_states = [(entry, data_directory_state(entry, bios_path))
-                                   for entry in p.data_dirs]
-    head_reads_done()
-    p.trees_missing = trees_missing = sum(len(state[1]) for _entry, state in data_states)
-    trees_held = p.head_data - trees_missing
-    detail(f"  {len(up_to_date) + trees_held} in place, "
-           f"{p.run_counts.files - present + trees_missing} missing, "
-           f"{_plural(wrong, 'wrong copy')}")
-
-    # A partial copy left by an interrupted run is useless once the file
-    # is in place: it goes.
-    _drop_stale_parts(bios_path, up_to_date)
-
-    # Mismatched files need re-download
-    to_download.extend(mismatched)
-    p.to_download, p.up_to_date, p.mismatched = to_download, up_to_date, mismatched
-    # The files this machine already holds: misplaced in the BIOS folder
-    # (bios/bios/, a pack extracted into a folder of its own, a name in
-    # capitals, still zipped), or in a folder named with --from.
-    p.bios_index = bios_index = (bios_folder_index(bios_path, files, up_to_date)
-                                 if to_download else None)
-    if bios_index is not None:
-        run.bios_indexes.append(bios_index)
-    p.copies = copies = plan_local_copies(to_download, bios_path, bios_index, LOCAL.folders)
-    p.plan = plan = fetch_plan(to_download, copies, data_states)
-    p.unread = unread = unreadable_copies(to_download, copies, LOCAL.folders)
-    selection = p.selection
-    p.hint = [] if LOCAL.pack is not None else bulk_hint(
-        to_download, p.manifest,
-        systems_chosen=bool(selection and selection[0]),
-        cores_chosen=bool((selection and selection[1]) or args.emulator
-                          or args.installed_cores or p.target),
-        accepted=p.core_choices,
-    )
-
-    if EVENTS.on:
-        # What the run would write, as _pass_download holds it against the
-        # free space: the screen's plan warns on this number.
-        _emit_check(
-            p.plat_name, p.manifest, bios_path,
-            CheckTally(files, up_to_date, mismatched,
-                       sum(len(state[1]) for _entry, state in data_states),
-                       len(p.omitted_files),
-                       sum(data_fetch_bytes(entry, state[1]) for entry, state in data_states),
-                       bytes_written(plan.without_lacking(to_download), data_states)),
-            chosen=selection[0] if selection else None,
-        )
-        emit_fetch_plan(p.plat_name, plan)
-        emit_copies(p.plat_name, to_download, copies, bios_index, bios_path, files)
-        emit_unreadable(p.plat_name, unread)
-    run.total_verified += len(up_to_date)
-
-
-def _pass_check_missing(run: _InstallRun, p: _PlatformPass) -> None:
-    """--check: the files not in place named, and how to get them."""
-    args, bios_path = run.args, p.bios_path
-    to_download, mismatched, copies, plan = p.to_download, p.mismatched, p.copies, p.plan
-    # Named, not only counted: a user looking for the one bad
-    # BIOS learned "1 files need downloading" and nothing else.
-    # A wrong hash comes first and always in full: listed after
-    # 8000 missing files, it hid behind "... and 8059 more".
-    wrong = {id(entry) for entry in mismatched}
-    missing = [entry for entry in to_download if id(entry) not in wrong]
-    # A pack extracted from some of its parts: the part is named
-    # before the hundreds of files it holds.
-    for line in split_pack_lines(bios_path):
-        print(line)
-    offline = _offline_only()
-    # What the pack lacks is said before the count, as the
-    # screen says it.
-    if plan.lacking:
-        print(f"\n  {pack_lacks_words(len(plan.lacking), len(plan.fetched))}")
-    # One total with the count above it, the data files among
-    # them as the screen counts them: "0 in place, 10805 missing"
-    # stood over "8164 files to download".
-    # The count and the folder by default, each file with
-    # --verbose: 20 paths hid the line saying what to do.
-    print(f"\n  {_plural(len(to_download) + p.trees_missing, 'file')} "
-          + ("not in place." if offline or LOCAL.pack is not None
-             else "to download."))
-    for line in check_lines(missing, mismatched, p.files, p.manifest, bios_path,
-                            args.verbose, CheckHeld(p.up_to_date, p.bios_index, copies)):
-        print(line)
-    for line in unreadable_lines(p.unread, args.verbose):
-        print(line)
-    print(f"  BIOS folder: {shown_path(bios_path)}")
-    # The data files need the internet too: offline, "8164 files
-    # need the internet" stood under "10805 files not in place".
-    print(_check_fetch_line(len(plan.fetched) + plan.data_files,
-                            "the BIOS folder", len(plan.lacking), bool(mismatched)))
-    run.check_pending += len(to_download)
-
-
-def _pass_check_report(run: _InstallRun, p: _PlatformPass) -> None:
-    """--check: what the setup's folder holds and lacks."""
-    args, plat_name, bios_path = run.args, p.plat_name, p.bios_path
-    if p.to_download:
-        _pass_check_missing(run, p)
-    elif p.trees_missing:
-        # The screen's headline: "Everything is in place." stood
-        # above "0/169 data files present" and exit code 1.
-        print(f"\n  {_plural(p.trees_missing, 'data file')} to fetch")
-    else:
-        print(f"\n  {EVERYTHING_IN_PLACE}")
-        print(f"  BIOS folder: {shown_path(bios_path)}")
-    if plat_name in _RECORD_TAKEN:
-        # The files counted are the recorded choice's, not the list's.
-        print(f"  {record_menu_words(_RECORD_TAKEN[plat_name])} "
-              "--all-files checks every file.")
-    absent = _absent_required(p.omitted_files, bios_path)
-    # The collection cannot supply these, so they leave the exit
-    # code alone, but a user asking why a game will not start needs
-    # their count, and with --verbose their names, and which system
-    # and emulator each one is for.
-    if absent and not OUTPUT.verbose:
-        print(f"  {needed_absent_words(len(absent), '--verbose')}")
-    for line in _needed_lines(
-        absent, "Not in the collection and absent here, needed to start an emulator",
-        every=args.verbose,
-    ):
-        detail(line)
-    for entry, (_root, needed, present) in p.data_states:
-        if needed:
-            detail(f"  {entry['ref']}: {present}/{len(entry['files'])} data files "
-                   f"present, {len(needed)} to fetch")
-            run.check_pending += len(needed)
-
-
-def _pass_dry_run(run: _InstallRun, p: _PlatformPass) -> None:
-    """--dry-run: the plan of what an install would write."""
-    args, bios_path, to_download, copies = run.args, p.bios_path, p.to_download, p.copies
-    run.files_pending += len(to_download)
-    trees = [(entry, state[1]) for entry, state in p.data_states]
-    # A data file in place with other contents is kept like a BIOS file.
-    kept = plan_kept(p.mismatched + [
-        {"dest": f"{entry['dest']}/{rel}" if entry.get("dest") else rel}
-        for entry, needed in trees for rel in needed
-    ], bios_path)
-    plan = p.plan
-    # Said before the plan promises a count and a size, as an
-    # install says it: the dry run promised 23 files where the pack
-    # held 20.
-    if plan.lacking:
-        print(f"\n  {pack_lacks_words(len(plan.lacking), len(plan.fetched))}")
-    _print_plan(plan.coming, bios_path, run.term,
-                trees, kept, copy_plan_lines(to_download, copies, p.bios_index,
-                                             bios_path, p.files, args.verbose, True),
-                verbose=args.verbose, manifest=p.manifest)
-    if p.plat_name in _RECORD_TAKEN:
-        print(f"  {record_menu_words(_RECORD_TAKEN[p.plat_name])} "
-              "--all-files lists every file.")
-    for line in unreadable_lines(p.unread, args.verbose):
-        print(line)
-    for line in p.hint:
-        print(line)
-
-
-def _pass_offline_left(run: _InstallRun, p: _PlatformPass, fetched: list[dict]) -> None:
-    """--offline: the files to fetch counted missing, the copies kept to do."""
-    # The screen offers no Install for these: the question asked
-    # to download 6.6 GB that --offline never fetches. With --yes,
-    # the screen's own install, each one was "downloading", then
-    # FAILED, and the summary listed it pending and failed at once.
-    # Counted, never said here: the summary says it once.
-    # Not done: the summary counts them as missing.
-    run.files_pending += len(fetched)
-    run.total_offline += len(fetched)
-    wrong_ids = {id(entry) for entry in p.mismatched}
-    run.total_wrong_left += sum(1 for f in fetched if id(f) in wrong_ids)
-    run.offline_left += [f for f in fetched if id(f) not in wrong_ids]
-    p.to_download = [f for f in p.to_download if id(f) in p.copies]
-
-
-def _pass_declined(run: _InstallRun, p: _PlatformPass, fetch_size: int) -> bool:
-    """The size question, where one is asked. True when it was declined."""
-    args = run.args
-    if (
-        run.interactive
-        and not args.yes
-        and fetch_size >= CONFIRM_FROM_BYTES
-        and not _confirm(
-            f"\nCopy {format_size(fetch_size)} from the pack to "
-            f"{shown_path(p.bios_path)}? [Y/n] " if LOCAL.pack is not None
-            else f"\nDownload {format_size(fetch_size)} to "
-            f"{shown_path(p.bios_path)}? [Y/n] "
-        )
-    ):
-        # A beginner who just passed the c entry was sent to a
-        # 91-line --help.
-        print(p.smaller or "  Nothing downloaded. --system, --core and --region "
-              "install less (see --help).")
-        run.total_up_to_date += len(p.up_to_date)
-        run.total_declined += len(p.to_download)
-        run.files_pending += len(p.to_download)
-        return True
-    return False
-
-
-def _pass_copy_line(run: _InstallRun, p: _PlatformPass, fetched: list[dict],
-                    lacking: set[int], dl_size: int) -> None:
-    """The copies from this machine planned, and the line that opens them."""
-    copies, bios_index = p.copies, p.bios_index
-    detail()
-    for line in copy_plan_lines(p.to_download, copies, bios_index, p.bios_path,
-                                p.files, run.args.verbose, False):
-        detail(line)
-    held = len(fetched) - len(lacking)
-    rest = (f" and {'copying' if LOCAL.pack is not None else 'downloading'} "
-            f"{held}" if held else "")
-    where = f" from {LOCAL.pack.name}" if fetched and LOCAL.pack is not None else ""
-    # Named by the folder they come from, as the line above
-    # names it: "found on this machine" followed "from E:\".
-    sources = list(dict.fromkeys(copy.index.label for copy in copies.values()))
-    named = ", ".join(screen_text(shown_path(label)) for label in sources)
-    origin = (f"from {named}" if all(
-        copy.index is not bios_index for copy in copies.values())
-        else "found on this machine")
-    # The size beside what it weighs: after "and downloading
-    # 19" it read as theirs alone.
-    sized = f" ({format_size(dl_size)})"
-    detail(f"\nCopying {_plural(len(copies), 'file')}{'' if rest else sized} "
-           f"{origin}{rest}{where}{sized if rest else ''}...")
-
-
-def _pass_download_head(run: _InstallRun, p: _PlatformPass, fetched: list[dict],
-                        lacking: set[int], dl_size: int) -> None:
-    """The lines an install opens on: what comes, from where, to where."""
-    args, plat_name, bios_path = run.args, p.plat_name, p.bios_path
-    if not p.menu:
-        # What happens and where, the two lines a run without questions
-        # opens on: the menu's head said them where it was asked.
-        coming = len(p.to_download) - len(lacking) + p.plan.data_files
-        weight = dl_size + p.plan.data_bytes
-        taken = _RECORD_TAKEN.get(plat_name)
-        print(f"\nInstalling {_plural(coming, 'file')} ({format_size(weight)}) for "
-              f"{detected_shown(plat_name, bios_path) or p.display}"
-              + (", what the games need" if p.games_applied else "")
-              + (f", same choice as on {record_day(taken)}" if taken else "") + ".")
-        print(f"BIOS folder: {shown_path(bios_path)}")
-        OUTPUT.where_said = True
-    if p.unread:
-        # A file of the user's that could not be read is said in
-        # every mode: it was expected to be copied.
-        print()
-        for line in unreadable_lines(p.unread, args.verbose):
-            print(line)
-    if p.copies:
-        _pass_copy_line(run, p, fetched, lacking, dl_size)
-    elif LOCAL.pack is not None:
-        # The files the pack holds: "Copying 23 files (85.0 KB)" sat
-        # beside the size of 20.
-        detail(f"\nCopying {_plural(len(p.to_download) - len(lacking), 'file')} "
-               f"({format_size(dl_size)}) from {LOCAL.pack.name}...")
-    else:
-        detail(f"\nDownloading {len(p.to_download)} files ({format_size(dl_size)})...")
-    detail("  Press Ctrl+C to stop. Running the same command again "
-           "carries on from here.")
-
-
-def _pass_make_folder(run: _InstallRun, p: _PlatformPass, written: int) -> bool:
-    """The space checked and the BIOS folder made. True when it was created."""
-    plat_name, bios_path = p.plat_name, p.bios_path
-    with run.writes(len(p.to_download)):
-        # Checked before the folder is created: a run stopped for space
-        # left an empty BIOS folder behind. The data trees count too,
-        # written after the files on the same drive.
-        _check_free_space(bios_path, written, plat_name,
-                          1 if run.total_downloaded else 2, on_its_card(plat_name, bios_path))
-        p.space_checked = True
-        created = not bios_path.exists()
-        try:
-            bios_path.mkdir(parents=True, exist_ok=True)
-        except OSError as exc:
-            sys.stdout.flush()
-            # The documented code for a folder that cannot be written,
-            # as when it exists read-only. 1 once an earlier platform
-            # of the run installed something.
-            raise Refusal(
-                "dest", "not_writable", plat_name,
-                f"\nCannot create {bios_path}.", f"  {exc.strerror}.",
-                _write_advice(bios_path, bios_path in run.assumed_dests, plat_name),
-                code=1 if run.total_downloaded else 2,
-                message=f"{bios_path} cannot be created: {exc.strerror}",
-            ) from None
-    if created:
-        detail(f"  Created {shown_path(bios_path)}")
-    return created
-
-
-def _pass_fetch(run: _InstallRun, p: _PlatformPass, dl_size: int, created: bool) -> bool:
-    """The files downloaded or copied and counted. True when interrupted."""
-    args, plat_name, bios_path, to_download = run.args, p.plat_name, p.bios_path, p.to_download
-    progress = Progress(len(to_download), dl_size, run.term)
-    failed, interrupted = download_files(
-        to_download, bios_path, jobs=args.jobs, verbose=args.verbose,
-        term=run.term, progress=progress, copies=p.copies,
-    )
-    if created and not progress.installed:
-        # Created for files none of which came: not left behind empty.
-        try:
-            bios_path.rmdir()
-        except OSError as exc:
-            if args.verbose:
-                print(f"  {shown_path(bios_path)} stays: {exc.strerror}",
-                      file=sys.stderr)
-    run.bulk_lines += p.hint
-    if plat_name == "romm" and progress.installed:
-        run.bulk_lines.append(ROMM_SCAN_WORDS)
-    run.total_downloaded += progress.installed
-    # The end line tells BIOS files from game data, as the menu
-    # counted them, over the files that landed: matched by the end
-    # of a failed path, a.bin was dropped when x/a.bin failed.
-    run.landed.extend(progress.landed)
-    p.landed += progress.landed
-    p.record_files += [record_file(entry, "copy" if id(entry) in p.copies
-                                   else "pack" if LOCAL.pack is not None else "download")
-                       for entry in progress.landed]
-    run.files_pending += len(to_download) - progress.installed if interrupted \
-        else len(failed)
-    run.total_errors += len(failed)
-    run.failures.extend(failed)
-    run.total_bytes += progress.transferred()
-    run.total_seconds += progress.elapsed()
-    if interrupted:
-        run.total_interrupted = True
-        _remember_install(args, plat_name, bios_path, p.manifest, p.record_files,
-                          p.games_applied and args.for_games is None)
-    return interrupted
-
-
-def _pass_download(run: _InstallRun, p: _PlatformPass) -> str:
-    """The missing files installed: "go" carries on with the setup, "next"
-    moves to the next one, "stop" ends the run."""
-    plan = p.plan
-    fetched = plan.fetched
-    if _offline_only() and fetched:
-        _pass_offline_left(run, p, fetched)
-        fetched = []
-    # What the pack does not hold is said before a size is promised:
-    # a pack older than the list gave "Copy 6.6 GB" and 8358 files
-    # failed. They are still tried, and fail as
-    # not in the pack, the size and the question leaving them out.
-    # Offline there is no pack, so nothing is lacking.
-    lacking = {id(f) for f in plan.lacking}
-    if lacking:
-        print(f"\n  {pack_lacks_words(len(lacking), len(fetched))}")
-    if lacking and len(lacking) == len(p.to_download) and not plan.data_files:
-        # Nothing here can come from the pack: no "Copying 0 files", no
-        # folder made, each file failed as not in it.
-        run.failures.extend((f["dest"], NOT_IN_PACK) for f in p.to_download)
-        run.total_errors += len(p.to_download)
-        run.files_pending += len(p.to_download)
-        run.total_up_to_date += len(p.up_to_date)
-        return "next"
-    coming = plan.without_lacking(p.to_download)
-    dl_size = _bytes(coming)
-    fetch_size = _bytes(plan.without_lacking(fetched))
-    if not p.to_download:
-        run.total_up_to_date += len(p.up_to_date)
-        if _offline_only():
-            for _entry, (_root, needed, present) in p.data_states:
-                run.total_up_to_date += present
-                run.total_offline += len(needed)
-                run.files_pending += len(needed)
-        return "next"
-    if _pass_declined(run, p, fetch_size):
-        return "next"
-    EVENTS.emit("download", platform=p.plat_name, files=len(p.to_download), bytes=dl_size)
-    _pass_download_head(run, p, fetched, lacking, dl_size)
-    created = _pass_make_folder(run, p, bytes_written(coming, p.data_states))
-    return "stop" if _pass_fetch(run, p, dl_size, created) else "go"
-
 
 def _pass_install_tree(run: _InstallRun, p: _PlatformPass, entry: dict,
                        state: tuple[Path, dict[str, dict], int]) -> None:
