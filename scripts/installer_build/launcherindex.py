@@ -9,21 +9,48 @@ from pathlib import Path
 from core.paths import REPO_ROOT
 from installer_build.module import installer_module
 from installer_build.pins import installer_sha256, pinned_sha256
-from installer_build.port import (
-    BATOCERA_ZIP,
-    MUOS_APP,
-    TOOLS_ZIP,
-    packs_table,
-    archive_members,
-)
+from installer_build.handhelds import Launcher, launchers_for
+from installer_build.port import MUOS_APP, PORT_ZIP, archive_members, packs_table
 
 
 OUTPUT = REPO_ROOT / "install" / "launchers" / "index.json"
 
 _install = installer_module()
 
+
+
+def own_launcher(system: str) -> Launcher:
+    """The row of handhelds.LAUNCHERS that starts *system* from its own menu,
+    the one the installer puts on its card. PortMaster's row is not it."""
+    own = [launcher for launcher in launchers_for(system) if launcher.archive != PORT_ZIP]
+    if len(own) != 1:
+        raise ValueError(f"{system}: {len(own)} launcher rows outside PortMaster, "
+                         "the card needs exactly one")
+    return own[0]
+
+
+def card_folder(system: str) -> str:
+    """The folder below the card's root that *system*'s own row names: the
+    first quoted path of its copy_to, a console path ending in it."""
+    text = own_launcher(system).folder_for(system)
+    return text.split("`")[1].strip("/") if text.count("`") >= 2 else ""
+
+
+def launcher_archives() -> dict[str, str]:
+    """The archive each APP_PLACES system gets, by its key, read from the
+    handheld table so the card install and the doc rows agree."""
+    archives = {}
+    for system, place in _install.APP_PLACES.items():
+        folder = card_folder(system)
+        if folder != place.folder and not folder.endswith("/" + place.folder):
+            raise ValueError(f"{system}: APP_PLACES writes to {place.folder}, "
+                             f"the handheld table says {folder or 'no folder'}")
+        archives[place.key] = own_launcher(system).archive
+    return archives
+
+
 # The archive whose members each system gets, by its key in APP_PLACES.
-LAUNCHER_ARCHIVES = {"muos": MUOS_APP, "knulli": BATOCERA_ZIP, "rocknix": TOOLS_ZIP}
+LAUNCHER_ARCHIVES = launcher_archives()
 
 
 def _entry(field: str, name: str, source: Path | None, root: Path) -> dict:
@@ -54,9 +81,6 @@ def build_index(root: Path = REPO_ROOT) -> dict:
         raise ValueError("install.py is not the installer install.sh pins: re-pin the "
                          "bootstraps before writing the launcher list")
     places = {place.key: place for place in _install.APP_PLACES.values()}
-    if set(places) != set(LAUNCHER_ARCHIVES):
-        raise ValueError(f"APP_PLACES names {sorted(places)}, the archives "
-                         f"{sorted(LAUNCHER_ARCHIVES)}")
     launchers: dict[str, dict] = {}
     for key, archive in sorted(LAUNCHER_ARCHIVES.items()):
         folder = places[key].folder

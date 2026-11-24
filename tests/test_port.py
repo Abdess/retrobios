@@ -152,6 +152,32 @@ class LauncherIndex(unittest.TestCase):
         with self.assertRaises(ValueError):
             launcherindex.build_index(root)
 
+    def test_the_card_install_follows_the_handheld_table(self):
+        """The archive and folder the installer writes are the ones the doc
+        rows and get/ pages give: a third description let them part."""
+        from installer_build import handhelds, launcherindex
+
+        for system, place in install.APP_PLACES.items():
+            with self.subTest(system=system):
+                row = launcherindex.own_launcher(system)
+                self.assertIn(row, handhelds.LAUNCHERS)
+                self.assertNotEqual(row.archive, installer_build_port.PORT_ZIP)
+                self.assertEqual(launcherindex.LAUNCHER_ARCHIVES[place.key], row.archive)
+                folder = launcherindex.card_folder(system)
+                self.assertTrue(folder == place.folder
+                                or folder.endswith("/" + place.folder), folder)
+
+    def test_a_folder_the_table_does_not_give_is_refused(self):
+        from unittest import mock
+
+        from installer_build import launcherindex
+
+        moved = dict(install.APP_PLACES)
+        moved["KNULLI"] = moved["KNULLI"]._replace(folder="roms/tools")
+        with mock.patch.dict(launcherindex._install.APP_PLACES, moved), \
+                self.assertRaisesRegex(ValueError, "KNULLI"):
+            launcherindex.launcher_archives()
+
 
 class EventRecords(unittest.TestCase):
     """rbevents turns --events into fields the FIFO carries intact."""
