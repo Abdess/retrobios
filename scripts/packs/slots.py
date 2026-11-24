@@ -18,7 +18,8 @@ from resolve.cores import resolve_platform_cores
 from resolve.layout import system_dir_path
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from resolve.packfiles import preferred_entries
-from resolve.standalone import platform_layouts, standalone_set as platform_standalone_set
+from resolve.launches import PlatformLaunches
+from resolve.standalone import platform_layouts, platform_launches
 from resolve.validation import (
     content_alternatives,
     outside_gap_scope,
@@ -146,7 +147,7 @@ def profile_claims(
     profiles: dict,
     db: dict,
     base_dest: str = "",
-    standalone_cores: set[str] | None = None,
+    standalone_cores: PlatformLaunches | None = None,
     zip_contents: dict | None = None,
     data_dir_registry: dict | None = None,
     config: dict | None = None,
@@ -165,7 +166,7 @@ def profile_claims(
     running that emulator as a core, and where it does, the destination is
     ``standalone_path``. This is the gate verify already applies.
     """
-    standalone_cores = standalone_cores or set()
+    standalone_cores = standalone_cores or PlatformLaunches()
     placement = None
     if config is not None:
         from packs.extras import ExtraPlacement
@@ -353,7 +354,7 @@ def _slot_claims(
     profiles: dict,
     db: dict,
     base_dest: str,
-    standalone_cores: set[str] | None,
+    standalone_cores: PlatformLaunches | None,
     zip_contents: dict | None,
     data_dir_registry: dict | None,
 ) -> tuple[dict[str, Claim], dict[str, list[Claim]]]:
@@ -427,7 +428,7 @@ def find_conflicts(
     profiles: dict,
     db: dict,
     base_dest: str = "",
-    standalone_cores: set[str] | None = None,
+    standalone_cores: PlatformLaunches | None = None,
     zip_contents: dict | None = None,
     data_dir_registry: dict | None = None,
 ) -> list[Conflict]:
@@ -544,7 +545,7 @@ def slot_choices(
         platform_profiles,
         db,
         config.get("base_destination", ""),
-        platform_standalone_set(config, profiles),
+        platform_launches(config, profiles),
         zip_contents,
         data_dir_registry,
     )

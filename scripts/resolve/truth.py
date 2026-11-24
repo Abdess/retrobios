@@ -13,7 +13,8 @@ from dataclasses import dataclass
 
 from model.declarations import OUTER_ROOTS
 from model.systems import norm_system_id
-from resolve.standalone import platform_layouts, standalone_set as platform_standalone_set
+from resolve.launches import PlatformLaunches
+from resolve.standalone import platform_layouts, platform_launches
 from resolve.cores import resolve_platform_cores
 from resolve.reconcile import contradicts, shares_hash
 from model.alternatives import groups_of
@@ -542,7 +543,7 @@ def _fold_data_directory_readers(
     systems: dict,
     profiles: dict,
     cores: list[str],
-    standalone_set: set[str],
+    launches: PlatformLaunches,
     platform_name: str,
     data_registry: dict,
 ) -> None:
@@ -565,7 +566,7 @@ def _fold_data_directory_readers(
         return
     for emu_name in cores:
         for view, standalone in platform_layouts(
-            emu_name, profiles[emu_name], standalone_set
+            emu_name, profiles[emu_name], launches
         ):
             trees = [
                 tree for tree in filter_files_by_mode(
@@ -729,7 +730,7 @@ def _cover(
 
 
 def _platform_entries(
-    emu_name: str, profile: dict, standalone_set: set[str], platform_name: str,
+    emu_name: str, profile: dict, launches: PlatformLaunches, platform_name: str,
 ) -> list[dict]:
     # The pack's rule (validation.deliverable), per build: a file the
     # emulator installs is kept and marked, one the launcher never opens
@@ -741,7 +742,7 @@ def _platform_entries(
             "_brought": None if installed_with_emulator(fe, platform_name)
             else f"{emu_name}:{'standalone' if standalone else 'libretro'}",
         }
-        for view, standalone in platform_layouts(emu_name, profile, standalone_set)
+        for view, standalone in platform_layouts(emu_name, profile, launches)
         for fe in _system_dir_files(view, standalone)
         if not unread_on(fe, platform_name)
     ])
@@ -802,7 +803,7 @@ def generate_platform_truth(
     # The layout rule verify and the pack builder apply: truth guessed its
     # own from the profile type where the platform names no standalone
     # emulator, and kept files the pack never carries.
-    standalone_set = platform_standalone_set(config, profiles)
+    launches = platform_launches(config, profiles)
 
     resolved = resolve_platform_cores(config, profiles, target_cores)
 
@@ -830,7 +831,7 @@ def generate_platform_truth(
         on_platform = {
             mapping.map_sys_id(sid) for sid in profile.get("systems", [])
         } & mapping.platform_sys_ids
-        for fe in _platform_entries(emu_name, profile, standalone_set, platform_name):
+        for fe in _platform_entries(emu_name, profile, launches, platform_name):
             sys_targets = mapping.targets(fe, profile, on_platform)
             if not sys_targets:
                 unattributed[emu_name] = unattributed.get(emu_name, 0) + 1
@@ -859,7 +860,7 @@ def generate_platform_truth(
             _cover(system_cores, sys_id, "unprofiled", emu_name)
 
     _fold_data_directory_readers(
-        systems, profiles, sorted(cores_profiled), standalone_set, platform_name,
+        systems, profiles, sorted(cores_profiled), launches, platform_name,
         data_registry,
     )
 

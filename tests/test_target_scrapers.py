@@ -308,9 +308,8 @@ class CoreDownloaderReach(unittest.TestCase):
         """Batocera runs amiberry standalone, and its x86_64 boards fetch
         amiberry_libretro: removing every name the image builds lost the
         libretro core to the name it shares with the standalone package."""
-        from resolve.layout import DUAL_MODE_PREFIX
         from resolve.cores import resolve_platform_cores
-        from resolve.standalone import standalone_set
+        from resolve.standalone import platform_launches
         from scraper.batocera_scraper import installable_cores
         from scraper.targets.batocera_targets_scraper import BuildSelection
 
@@ -335,7 +334,7 @@ class CoreDownloaderReach(unittest.TestCase):
         self.assertEqual(resolve_platform_cores(config, profiles), {"amiberry", "amiberry-7"})
         self.assertEqual(resolve_platform_cores({**config, "installable_cores": []}, profiles),
                          {"amiberry-7"})
-        self.assertIn(DUAL_MODE_PREFIX + "amiberry", standalone_set(config, profiles))
+        self.assertIn("amiberry", platform_launches(config, profiles).dual)
 
 
 class DownloadedCoresReachTheirBoards(unittest.TestCase):

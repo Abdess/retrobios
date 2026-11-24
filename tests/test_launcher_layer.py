@@ -23,6 +23,7 @@ import yaml
 
 from model.profiles import emulator_profiles_cache, load_emulator_profiles
 from model.platforms import load_platform_config
+from resolve.launches import PlatformLaunches
 from resolve.launchers import LauncherLayer, launcher_places, suffixed_stem
 from packs.gaps import find_undeclared_files
 from packs.coverage import verify_platform
@@ -443,7 +444,7 @@ class LauncherLayerTest(unittest.TestCase):
         report = cross_reference(
             self.profiles, declared, self.db, set(),
             all_declared=scope["all_declared"],
-            standalone_cores={"psxemu", "fixemu"},
+            standalone_cores=PlatformLaunches(standalone=frozenset({"psxemu", "fixemu"})),
             platform="launchertest", launcher_layer=layer,
         )
         gaps = sorted(

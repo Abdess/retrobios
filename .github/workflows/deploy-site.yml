@@ -110,6 +110,7 @@ on:
       - "scripts/resolve/grouping.py"
       - "scripts/resolve/launcherrefs.py"
       - "scripts/resolve/launchers.py"
+      - "scripts/resolve/launches.py"
       - "scripts/resolve/layout.py"
       - "scripts/resolve/localfile.py"
       - "scripts/resolve/nativemode.py"

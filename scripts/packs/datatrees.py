@@ -20,7 +20,7 @@ from packs.extras import prefixed_destination
 from packs.paths import MEDIA_MARKER, lands_on_android
 from resolve.cores import resolve_platform_cores as _platform_cores
 from resolve.layout import core_system_dirs
-from resolve.standalone import platform_layouts, standalone_set
+from resolve.standalone import platform_layouts, platform_launches
 from resolve.validation import deliverable, read_from_system_dir
 
 if TYPE_CHECKING:
@@ -66,7 +66,7 @@ def core_data_trees(
     if not data_registry:
         return []
     installed = installed_data_refs_in(platform_name, profiles)
-    handed = standalone_set(config, profiles)
+    launches = platform_launches(config, profiles)
     # Relative to base_destination, which the members are written under. A
     # platform with none writes its BIOS folder into every destination, and
     # the trees go there as the core extras do.
@@ -75,10 +75,10 @@ def core_data_trees(
     seen: dict[tuple[str, str], int] = {}
     for core in sorted(_platform_cores(config, profiles, target_cores)):
         profile = profiles[core]
-        if all(standalone for _view, standalone in platform_layouts(core, profile, handed)):
+        if all(standalone for _view, standalone in platform_layouts(core, profile, launches)):
             continue
         declared = [t for t in profile.get("data_directories") or [] if isinstance(t, dict)]
-        directories = core_system_dirs(core, profile, handed)
+        directories = core_system_dirs(core, profile, launches)
         structure = str((profile.get("pack_structure") or {}).get("libretro") or "")
         for tree in deliverable(declared, False, platform_name):
             if not read_from_system_dir(tree):

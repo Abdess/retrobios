@@ -94,7 +94,7 @@ class CoreChoice(unittest.TestCase):
         self.assertTrue(packprobe.libretro_build_runs("duckstation", both, {
             "standalone_cores": ["duckstation"], "dual_mode_cores": ["duckstation-sa"]}, {}))
         # A buildbot core installable under the standalone name is its
-        # libretro build, run both ways (standalone_set).
+        # libretro build, run both ways (platform_launches).
         self.assertTrue(packprobe.libretro_build_runs("duckstation", both, {
             "standalone_cores": ["duckstation"], "installable_cores": ["duckstation"]}, {}))
         self.assertFalse(packprobe.libretro_build_runs("x", {"type": "standalone"}, {}, {}))

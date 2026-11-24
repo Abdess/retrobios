@@ -10,7 +10,8 @@ from model.platforms import load_platform_config
 from model.registry import list_registered_platforms
 from model.targets import target_scope
 from resolve.cores import resolve_platform_cores
-from resolve.standalone import merged_standalone_set, standalone_set
+from resolve.launches import PlatformLaunches
+from resolve.standalone import merged_launches, platform_launches
 
 
 @dataclass(frozen=True)
@@ -18,7 +19,7 @@ class PlatformScope:
     """The profiles a --platform run compares, and how the platform runs them."""
 
     profiles: dict[str, dict]
-    standalone_cores: set[str]
+    standalone_cores: PlatformLaunches
     config: dict
     relevant: set[str]
     run_anywhere: set[str]
@@ -44,7 +45,7 @@ def platform_scope(
     )
     return PlatformScope(
         {k: v for k, v in profiles.items() if k in relevant},
-        standalone_set(config, all_profiles),
+        platform_launches(config, all_profiles),
         config,
         relevant,
         run_anywhere,
@@ -58,7 +59,7 @@ class TreeScope:
     standalone layout of those platforms."""
 
     profiles: dict[str, dict]
-    standalone_cores: set[str]
+    standalone_cores: PlatformLaunches
     selected: list[str] | None
     platform: PlatformScope | None = None
 
@@ -79,7 +80,7 @@ def target_platforms_scope(
         relevant |= set(resolve_platform_cores(config, profiles, target_cores=cache.get(name)))
     return TreeScope(
         {k: v for k, v in profiles.items() if k in relevant},
-        merged_standalone_set(configs.values(), all_profiles),
+        merged_launches(configs.values(), all_profiles),
         kept,
     )
 
@@ -99,7 +100,7 @@ def tree_scope(
     # eka2l1, dolphin and xenia-edge lost 133 files no platform declares.
     return TreeScope(
         profiles,
-        merged_standalone_set(
+        merged_launches(
             (
                 load_platform_config(name, platforms_dir)
                 for name in list_registered_platforms(platforms_dir)

@@ -112,13 +112,16 @@ class AnEmulatorLaunchedBothWaysGetsBothLayouts(unittest.TestCase):
         self.assertEqual(standalone & es_systems_libretro(text), {"dolphin"})
 
     def test_the_layouts_are_both(self):
-        from resolve.layout import DUAL_MODE_PREFIX
+        from resolve.launches import PlatformLaunches
         from resolve.standalone import platform_layouts
 
         profile = {"type": "standalone + libretro", "cores": ["dolphin"], "files": []}
-        both = platform_layouts("dolphin", profile, {"dolphin", DUAL_MODE_PREFIX + "dolphin"})
+        dolphin = frozenset({"dolphin"})
+        both = platform_layouts(
+            "dolphin", profile, PlatformLaunches(standalone=dolphin, dual=dolphin)
+        )
         self.assertEqual([standalone for _view, standalone in both], [False, True])
-        only = platform_layouts("dolphin", profile, {"dolphin"})
+        only = platform_layouts("dolphin", profile, PlatformLaunches(standalone=dolphin))
         self.assertEqual([standalone for _view, standalone in only], [True])
 
     def test_the_batocera_manifest_carries_both(self):

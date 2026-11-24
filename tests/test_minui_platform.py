@@ -439,16 +439,16 @@ class TheSitePageOfACardPlatform(unittest.TestCase):
 
 class TheWholeTreeKeepsCoresMinUILeavesOut(unittest.TestCase):
     """Without --platform, cross_reference and the site's gap report merge
-    every platform's standalone set. MinUI's per-core folders came along and
+    every platform's launches. MinUI's per-core folders came along and
     left every core MinUI does not list with no layout: px68k showed 0 files
     and the global report lost 238 profiles."""
 
     def test_a_core_minui_does_not_list_keeps_its_files(self):
-        from resolve.standalone import merged_standalone_set, platform_layouts
+        from resolve.standalone import merged_launches, platform_layouts
 
         minui = {"core_system_dirs": {"Bios/FC": {"cores": ["fceumm"]}}}
         retroarch = {}
-        merged = merged_standalone_set([minui, retroarch], {})
+        merged = merged_launches([minui, retroarch], {})
         profile = {"type": "libretro", "files": [{"name": "cgrom.tmp"}]}
         layouts = platform_layouts("px68k", profile, merged)
         self.assertEqual(layouts, [(profile, False)])
@@ -460,10 +460,10 @@ class TheWholeTreeKeepsCoresMinUILeavesOut(unittest.TestCase):
             source = script_source(script)
             with self.subTest(script=script):
                 self.assertTrue(
-                    "merged_standalone_set(" in source or "global_report_scope(" in source
+                    "merged_launches(" in source or "global_report_scope(" in source
                 )
-                self.assertNotIn("set().union(*(\n            standalone_set(", source)
-                self.assertNotIn("*(standalone_set(cov", source)
+                self.assertNotIn("set().union(*(\n            platform_launches(", source)
+                self.assertNotIn("*(platform_launches(cov", source)
 
 
 if __name__ == "__main__":

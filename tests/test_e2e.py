@@ -6872,18 +6872,20 @@ class StandaloneModeRequiresAStandaloneBuild(unittest.TestCase):
     profile loses every ``path:`` and drops its files at the root."""
 
     def test_libretro_only_profile_keeps_its_layout(self):
-        from resolve.layout import runs_standalone
+        from resolve.launches import PlatformLaunches
 
         libretro_only = {"type": "libretro", "cores": ["scummvm"]}
         dual = {"type": "standalone + libretro", "cores": ["dolphin"]}
         standalone = {"type": "standalone", "cores": ["xemu"]}
-        named = {"scummvm", "dolphin", "xemu", "hatari"}
-        self.assertFalse(runs_standalone("scummvm", libretro_only, named))
-        self.assertTrue(runs_standalone("dolphin", dual, named))
-        self.assertTrue(runs_standalone("xemu", standalone, named))
-        self.assertTrue(runs_standalone("other-key", {"type": "standalone", "cores": ["hatari"]}, named))
-        self.assertFalse(runs_standalone("dolphin", dual, set()))
-        self.assertFalse(runs_standalone("dolphin", dual, {"pcsx2"}))
+        named = PlatformLaunches(standalone=frozenset({"scummvm", "dolphin", "xemu", "hatari"}))
+        self.assertFalse(named.runs_standalone("scummvm", libretro_only))
+        self.assertTrue(named.runs_standalone("dolphin", dual))
+        self.assertTrue(named.runs_standalone("xemu", standalone))
+        self.assertTrue(named.runs_standalone("other-key", {"type": "standalone", "cores": ["hatari"]}))
+        self.assertFalse(PlatformLaunches().runs_standalone("dolphin", dual))
+        self.assertFalse(
+            PlatformLaunches(standalone=frozenset({"pcsx2"})).runs_standalone("dolphin", dual)
+        )
 
 
 

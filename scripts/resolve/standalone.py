@@ -3,50 +3,40 @@
 from __future__ import annotations
 
 import dataclasses
-import json
-from collections.abc import Iterable, Mapping
+from collections.abc import Hashable, Iterable, Mapping
 from dataclasses import dataclass
 
 from model.profiles import profile_names
 from model.systems import norm_system_id
-from resolve.contentlayout import content_folder_tags, content_layout
+from resolve.contentlayout import content_launches, content_layout
+from resolve.launches import PlatformLaunches, frozen_source
 from resolve.layout import (
-    CONTENT_TAG_PREFIXES,
-    CORE_DIR_PREFIX,
-    DUAL_MODE_PREFIX,
-    EXECUTED_PREFIX,
-    HANDED_PREFIX,
     MACHINE_KEY,
     OUTSIDE_BIOS_FOLDER,
-    OWN_BUILD_PREFIX,
-    SYSTEM_FILE_PREFIX,
-    handed_from_tags,
     placed_entry,
     core_system_dirs,
     entry_launch_systems,
-    runs_standalone,
     standalone_bindings_for,
     standalone_destination,
     standalone_layout_path,
     system_dir_view,
-    system_file_index,
 )
 
 
-def own_build_tags(
-    config: dict, standalone: set[str], profiles: Mapping[str, dict]
-) -> set[str]:
-    """The standalone names the platform's own builds answer to, tagged,
-    read from the run's profiles."""
+def own_builds(
+    config: dict, standalone: frozenset[str], profiles: Mapping[str, dict]
+) -> frozenset[tuple[str, str, Hashable]]:
+    """The standalone names the platform's own builds answer to, as
+    (name, profile, source), read from the run's profiles."""
     platform = str(config.get("_key") or "")
     if not platform or not standalone:
-        return set()
-    return {
-        OWN_BUILD_PREFIX + json.dumps([n, key, p.get("source")])
+        return frozenset()
+    return frozenset(
+        (n, key, frozen_source(p.get("source")))
         for key, p in profiles.items()
         if platform in (p.get("built_by") or []) and "standalone" in str(p.get("type", ""))
         for n in set(profile_names(key, p)) & standalone
-    }
+    )
 
 
 def twin_build_names(config: dict, profiles: Mapping[str, dict]) -> set[str]:
@@ -74,104 +64,92 @@ def twin_build_names(config: dict, profiles: Mapping[str, dict]) -> set[str]:
     return found
 
 
-def core_dir_tags(config: dict) -> set[str]:
-    """The system directory a platform hands each core, tagged."""
-    return {
-        CORE_DIR_PREFIX + json.dumps([str(core), directory])
+def core_dirs(config: dict) -> frozenset[tuple[str, str]]:
+    """The system directory a platform hands each core, as (core, directory)."""
+    return frozenset(
+        (str(core), directory)
         for directory, entry in (config.get("core_system_dirs") or {}).items()
         for core in entry.get("cores") or []
+    )
+
+
+def _system_files(config: dict, handed: Iterable) -> frozenset[tuple[str, str]]:
+    """The file names a platform declares under the systems its launcher
+    records name, and the machines a record offers under its systems."""
+    named = {system for h in handed for system in h.systems}
+    found = {
+        (slug, str(f["name"]).lower())
+        for slug, system in (config.get("systems") or {}).items()
+        if slug in named
+        for f in system.get("files") or []
+        if f.get("name")
     }
+    # The machines a record offers under its systems, by normalized id.
+    from resolve.launchers import native_systems
+
+    natives = native_systems(config)
+    found |= {
+        (natives.get(str(native), str(native)), MACHINE_KEY + norm_system_id(str(m)))
+        for record in config.get("launchers") or []
+        for native in record.get("systems") or []
+        for m in record.get("machines") or []
+    }
+    return frozenset(found)
 
 
-def standalone_set(config: dict, profiles: Mapping[str, dict]) -> set[str]:
+def platform_launches(config: dict, profiles: Mapping[str, dict]) -> PlatformLaunches:
     """The emulators a platform launches standalone, with its dual-mode ones.
 
     ``dual_mode_cores`` names those it offers both ways (Batocera lists
-    libretro:dolphin and standalone dolphin for GameCube). They travel in the
-    same set, tagged, so every reader of standalone_cores sees them. A
-    launcher record resting on a config file is proven against *profiles*,
-    the run's, as cross-reference proves it, and the platform's own and twin
-    builds are read from them.
+    libretro:dolphin and standalone dolphin for GameCube). A launcher record
+    resting on a config file is proven against *profiles*, the run's, as
+    cross-reference proves it, and the platform's own and twin builds are
+    read from them.
     """
-    names = {str(c) for c in config.get("standalone_cores") or []}
-    names |= {DUAL_MODE_PREFIX + str(c) for c in config.get("dual_mode_cores") or []}
+    standalone = frozenset(str(c) for c in config.get("standalone_cores") or [])
+    dual = {str(c) for c in config.get("dual_mode_cores") or []}
     # A buildbot core the platform's RetroArch installs under the name of an
     # emulator it runs standalone is that emulator's libretro build: run
     # both ways, as Batocera runs amiberry standalone and can fetch
     # amiberry_libretro.
-    names |= {
-        DUAL_MODE_PREFIX + str(c)
-        for c in set(map(str, config.get("installable_cores") or []))
-        & set(map(str, config.get("standalone_cores") or []))
-    }
-    names |= own_build_tags(config, names, profiles)
-    names |= {DUAL_MODE_PREFIX + n for n in twin_build_names(config, profiles)}
-    # The system directory each core is handed travels the same way, so
-    # platform_layouts places a core's files below it for every reader.
-    names |= core_dir_tags(config)
-    if names - {n for n in names if n.startswith(CORE_DIR_PREFIX)}:
-        from resolve.launchers import executed_files, handed_directories
+    dual |= set(map(str, config.get("installable_cores") or [])) & standalone
+    builds = own_builds(config, standalone, profiles)
+    dual |= twin_build_names(config, profiles)
+    launches = PlatformLaunches(
+        standalone=standalone, dual=frozenset(dual), own_builds=builds,
+        # The system directory each core is handed: platform_layouts places
+        # a core's files below it for every reader.
+        core_dirs=core_dirs(config), content=content_launches(config),
+    )
+    if not (standalone or dual or builds):
+        return launches
+    from resolve.launchers import executed_files, handed_directories
 
-        handed = handed_directories(config, profiles)
-        # The record's position travels too: a search list is read in order.
-        names |= {
-            HANDED_PREFIX + json.dumps(
-                [position, h.emulator, h.folder, h.directory, sorted(h.handles), h.source_ref,
-                 h.roms_place, sorted(h.systems), h.holds_declared]
-            )
-            for position, h in enumerate(handed)
-        }
-        named = {system for h in handed for system in h.systems}
-        names |= {
-            SYSTEM_FILE_PREFIX + json.dumps([slug, str(f["name"]).lower()])
-            for slug, system in (config.get("systems") or {}).items()
-            if slug in named
-            for f in system.get("files") or []
-            if f.get("name")
-        }
-        # The machines a record offers under its systems, by normalized id.
-        from resolve.launchers import native_systems
-
-        natives = native_systems(config)
-        names |= {
-            SYSTEM_FILE_PREFIX + json.dumps(
-                [natives.get(str(native), str(native)), MACHINE_KEY + norm_system_id(str(m))]
-            )
-            for record in config.get("launchers") or []
-            for native in record.get("systems") or []
-            for m in record.get("machines") or []
-        }
-        names |= {
-            EXECUTED_PREFIX + json.dumps([run.emulator, run.name, run.place, run.source_ref])
-            for run in executed_files(config, profiles)
-        }
-    return names | content_folder_tags(config)
+    # The record's order travels too: a search list is read in order.
+    handed = tuple(handed_directories(config, profiles))
+    return dataclasses.replace(
+        launches,
+        handed=handed,
+        system_files=_system_files(config, handed),
+        executed=tuple(dict.fromkeys(executed_files(config, profiles))),
+    )
 
 
-def merged_standalone_set(configs: Iterable[dict], profiles: Mapping[str, dict]) -> set[str]:
-    """The standalone set of several platforms read as one tree.
-
-    A per-core directory marker says which cores one platform hands a folder
-    and that it hands the others none. Carried into the union, MinUI's 86
-    markers left every core they do not list without a layout: the global
-    gap report lost 238 profiles and 1201 files without a word.
-    """
-    return {
-        tag
-        for config in configs
-        for tag in standalone_set(config, profiles)
-        if not tag.startswith((CORE_DIR_PREFIX, *CONTENT_TAG_PREFIXES))
-    }
+def merged_launches(
+    configs: Iterable[dict], profiles: Mapping[str, dict]
+) -> PlatformLaunches:
+    """The launches of several platforms read as one tree (PlatformLaunches.merged)."""
+    return PlatformLaunches.merged(platform_launches(config, profiles) for config in configs)
 
 
 def platform_layouts(
-    emu_name: str, profile: dict, standalone_cores: set[str]
+    emu_name: str, profile: dict, launches: PlatformLaunches
 ) -> list[tuple[dict, bool]]:
     """The layouts a platform gives an emulator: (profile, standalone?) each,
     with the files read in a roms folder placed there (content_layout)."""
     return [
-        (content_layout(emu_name, view, standalone, standalone_cores), standalone)
-        for view, standalone in _build_layouts(emu_name, profile, standalone_cores)
+        (content_layout(emu_name, view, standalone, launches), standalone)
+        for view, standalone in _build_layouts(emu_name, profile, launches)
     ]
 
 
@@ -181,7 +159,7 @@ class _StandaloneLaunches:
 
     emu_name: str
     profile: dict
-    standalone_cores: set[str]
+    launches: PlatformLaunches
     per_system: bool
     index: Mapping[str, set[str]]
     # A profile system the platform launches under a system of its own, as
@@ -196,12 +174,12 @@ class _StandaloneLaunches:
     by_systems: dict[frozenset[str], dict[str, tuple[str, str]]] = dataclasses.field(default_factory=dict)
 
     @classmethod
-    def of(cls, emu_name: str, profile: dict, standalone_cores: set[str]) -> _StandaloneLaunches:
+    def of(cls, emu_name: str, profile: dict, launches: PlatformLaunches) -> _StandaloneLaunches:
         names = set(profile_names(emu_name, profile))
         per_system = bool(
             profile.get("standalone_directories") or profile.get("standalone_pools")
-        ) and any(h.systems and h.emulator in names for h in handed_from_tags(standalone_cores))
-        index = system_file_index(standalone_cores) if per_system else {}
+        ) and any(h.systems and h.emulator in names for h in launches.handed)
+        index = launches.system_file_index() if per_system else {}
         # A profile system the platform launches under a system of its own, as
         # its list says for one entry, is launched there for every entry:
         # Recalbox lists mc10.rom under trs80coco, so alice.rom is read there.
@@ -216,7 +194,7 @@ class _StandaloneLaunches:
         # the folder its record gives, every other launch the folder the records
         # naming none give.
         named_systems = frozenset().union(*(
-            h.systems for h in handed_from_tags(standalone_cores) if h.emulator in names
+            h.systems for h in launches.handed if h.emulator in names
         )) if per_system else frozenset()
 
         # The layout folders a search setting stands for (standalone_pools):
@@ -225,7 +203,7 @@ class _StandaloneLaunches:
 
         pool_folders = {v.strip("/") for v in _pool_folders(profile).values()} - {""}
         return cls(
-            emu_name, profile, standalone_cores, per_system, index, family,
+            emu_name, profile, launches, per_system, index, family,
             named_systems, pool_folders,
         )
 
@@ -248,7 +226,7 @@ class _StandaloneLaunches:
     def bindings_for(self, systems: frozenset[str]) -> dict[str, tuple[str, str]]:
         if systems not in self.by_systems:
             self.by_systems[systems] = standalone_bindings_for(
-                self.emu_name, self.profile, self.standalone_cores, systems
+                self.emu_name, self.profile, self.launches, systems
             )
         return self.by_systems[systems]
 
@@ -307,7 +285,7 @@ class _StandaloneLaunches:
 
 
 def _build_layouts(
-    emu_name: str, profile: dict, standalone_cores: set[str]
+    emu_name: str, profile: dict, launches: PlatformLaunches
 ) -> list[tuple[dict, bool]]:
     """The layouts a platform gives an emulator: (profile, standalone?) each.
 
@@ -316,19 +294,19 @@ def _build_layouts(
     Dolphin found dolphin-emu/Sys/GC/ empty. Each layout keeps its own rules
     (what the build reads from the system directory, where it reads it).
     """
-    if not runs_standalone(emu_name, profile, standalone_cores):
-        directories = core_system_dirs(emu_name, profile, standalone_cores)
+    if not launches.runs_standalone(emu_name, profile):
+        directories = core_system_dirs(emu_name, profile, launches)
         if directories is None:
             return [(profile, False)]
         return [(system_dir_view(profile, d), False) for d in directories]
     standalone = profile
-    launches = _StandaloneLaunches.of(emu_name, profile, standalone_cores)
+    placing = _StandaloneLaunches.of(emu_name, profile, launches)
 
     layout_entries = [
         f for f in profile.get("files") or []
         if isinstance(f, dict) and standalone_layout_path(f, profile) is not None
     ]
-    if any(launches.bindings_of(f) for f in layout_entries):
+    if any(placing.bindings_of(f) for f in layout_entries):
         # The standalone view carries the platform's destination, so every
         # reader of standalone_path (builder, manifest, verify, slots) places
         # the file in the folder the platform hands the emulator.
@@ -336,11 +314,9 @@ def _build_layouts(
         # platform keeps outside the BIOS tree: UAE4All2's kick.rom in
         # RetroPie's $md_inst. It is marked, never left at the BIOS root
         # where the emulator does not read it.
-        standalone = {**profile, "files": launches.placed_files()}
-    dual = {c.removeprefix(DUAL_MODE_PREFIX) for c in standalone_cores
-            if c.startswith(DUAL_MODE_PREFIX)}
-    if "libretro" in str(profile.get("type", "")) and dual & {
-        emu_name, *(str(c) for c in profile.get("cores", []))
-    }:
+        standalone = {**profile, "files": placing.placed_files()}
+    if "libretro" in str(profile.get("type", "")) and launches.is_dual(
+        {emu_name, *(str(c) for c in profile.get("cores", []))}
+    ):
         return [(profile, False), (standalone, True)]
     return [(standalone, True)]

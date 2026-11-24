@@ -13,7 +13,6 @@ import tests
 
 import hashlib
 import io
-import json
 import shutil
 import tempfile
 import unittest
@@ -25,7 +24,7 @@ import yaml
 
 from model.profiles import emulator_profiles_cache, load_emulator_profiles
 from model.platforms import load_platform_config
-from resolve.standalone import platform_layouts, standalone_set
+from resolve.standalone import platform_layouts, platform_launches
 from packs.manifest import generate_manifest
 from packs.platformpack import build_platform_pack
 from packs.coverage import verify_platform
@@ -204,7 +203,7 @@ class ALinkMovesTheDestination(unittest.TestCase):
         config = {"standalone_cores": ["kick"], "launchers": [LINK]}
         profiles = load_emulator_profiles(str(self.emulators))
         profile = profiles["kick"]
-        (view, standalone), = platform_layouts("kick", profile, standalone_set(config, profiles))
+        (view, standalone), = platform_layouts("kick", profile, platform_launches(config, profiles))
         self.assertTrue(standalone)
         self.assertNotIn("standalone_path", view["files"][0])
 
@@ -216,7 +215,7 @@ class UAE4AllOnRetroPie(unittest.TestCase):
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         profile = profiles["uae4all"]
         config = load_platform_config("retropie", str(REPO_ROOT / "platforms"))
-        (view, standalone), = platform_layouts("uae4all", profile, standalone_set(config, profiles))
+        (view, standalone), = platform_layouts("uae4all", profile, platform_launches(config, profiles))
         self.assertTrue(standalone)
         for entry in view["files"]:
             if entry["path"].startswith("kickstarts/"):
@@ -689,7 +688,7 @@ class AetherSX2OnKnulli(unittest.TestCase):
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         profile = profiles["aethersx2"]
         config = load_platform_config("knulli", str(REPO_ROOT / "platforms"))
-        (view, standalone), = platform_layouts("aethersx2", profile, standalone_set(config, profiles))
+        (view, standalone), = platform_layouts("aethersx2", profile, platform_launches(config, profiles))
         self.assertTrue(standalone)
         for entry in view["files"]:
             path = entry.get("path") or ""
@@ -706,7 +705,7 @@ class Quasi88OnRetroPie(unittest.TestCase):
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         profile = profiles["quasi88kai"]
         config = load_platform_config("retropie", str(REPO_ROOT / "platforms"))
-        (view, standalone), = platform_layouts("quasi88kai", profile, standalone_set(config, profiles))
+        (view, standalone), = platform_layouts("quasi88kai", profile, platform_launches(config, profiles))
         self.assertTrue(standalone)
         paths = [e["path"] for e in view["files"]]
         self.assertTrue(paths and all(p.startswith("rom/") for p in paths))
@@ -736,7 +735,7 @@ class FlycastOnEmuELEC(unittest.TestCase):
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         profile = profiles["flycast"]
         config = load_platform_config("emuelec", str(REPO_ROOT / "platforms"))
-        layouts = platform_layouts("flycast", profile, standalone_set(config, profiles))
+        layouts = platform_layouts("flycast", profile, platform_launches(config, profiles))
         (view,) = [v for v, standalone in layouts if standalone]
         self.assertTrue(view["files"])
         for entry in view["files"]:
@@ -747,7 +746,7 @@ def standalone_view(emulator: str, platform: str) -> dict:
     profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
     profile = profiles[emulator]
     config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
-    (view,) = [v for v, standalone in platform_layouts(emulator, profile, standalone_set(config, profiles))
+    (view,) = [v for v, standalone in platform_layouts(emulator, profile, platform_launches(config, profiles))
                if standalone]
     return view
 
@@ -939,7 +938,7 @@ class LibretroMameSetsInMameBios(unittest.TestCase):
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         profile = profiles["mame"]
         config = load_platform_config("retrobat", str(REPO_ROOT / "platforms"))
-        builds = sorted(s for _v, s in platform_layouts("mame", profile, standalone_set(config, profiles)))
+        builds = sorted(s for _v, s in platform_layouts("mame", profile, platform_launches(config, profiles)))
         self.assertEqual(builds, [False, True])
 
 
@@ -1041,7 +1040,7 @@ def libretro_view(emulator: str, platform: str) -> dict:
     profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
     profile = profiles[emulator]
     config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
-    (view,) = [v for v, standalone in platform_layouts(emulator, profile, standalone_set(config, profiles))
+    (view,) = [v for v, standalone in platform_layouts(emulator, profile, platform_launches(config, profiles))
                if not standalone]
     return view
 
@@ -1232,12 +1231,12 @@ class AdvanceMameOnRetroPie(unittest.TestCase):
     def test_the_sets_go_to_the_first_folder_searched(self) -> None:
         config = load_platform_config("retropie", str(REPO_ROOT / "platforms"))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
-        tags = standalone_set(config, profiles)
+        launches = platform_launches(config, profiles)
         for emu in ("advmame", "advmame-1.4", "advmame-0.94"):
             with self.subTest(emu=emu):
                 placed = [
                     (f.get("root"), f.get("standalone_path"))
-                    for view, standalone in platform_layouts(emu, profiles[emu], tags)
+                    for view, standalone in platform_layouts(emu, profiles[emu], launches)
                     if standalone
                     for f in view["files"] if isinstance(f, dict) and f["name"] == "neogeo.zip"
                 ]
@@ -1282,16 +1281,13 @@ class CoreOfferedOnSomeBoards(unittest.TestCase):
         self.assertIsNone(boards[("puae2021", "amiga")])
 
     def test_a_board_pack_places_the_core_where_the_board_offers_it(self) -> None:
-        from resolve.layout import CONTENT_FOLDER_PREFIX
-        from resolve.contentlayout import TARGET_KEY, content_folder_tags
+        from resolve.contentlayout import TARGET_KEY, content_launches
 
         def placed(config: dict) -> dict:
-            rows = [json.loads(t[len(CONTENT_FOLDER_PREFIX):]) for t in content_folder_tags(config)
-                    if t.startswith(CONTENT_FOLDER_PREFIX)]
-            return {core: on for core, _folder, _where, on in rows}
+            return {row.core: row.boards for row in content_launches(config).folders}
 
         every = placed(self.config())
-        self.assertEqual(every["uae4arm"], ["h700", "rk3326"])
+        self.assertEqual(every["uae4arm"], ("h700", "rk3326"))
         self.assertIsNone(every["puae"])
         self.assertIn("uae4arm", placed(self.config(**{TARGET_KEY: "rk3326"})))
         self.assertNotIn("uae4arm", placed(self.config(**{TARGET_KEY: "s922x"})))

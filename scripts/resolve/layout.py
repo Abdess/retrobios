@@ -1,90 +1,22 @@
-"""Where a platform's launch code puts a file: tag prefixes and standalone layout paths."""
+"""Where a platform's launch code puts a file: system directories and standalone layout paths."""
 
 from __future__ import annotations
 
-import json
 from collections.abc import Iterable, Mapping
+from typing import TYPE_CHECKING
 
 from model.profiles import profile_names
 
+if TYPE_CHECKING:
+    from resolve.launches import PlatformLaunches
 
 
-def runs_standalone(
-    emu_name: str, profile: dict, standalone_cores: set[str]
-) -> bool:
-    """Whether a platform lays this emulator's files out for its standalone build.
-
-    A platform names the emulators it launches standalone in
-    ``standalone_cores``, by profile key or by any name in ``cores:``. The
-    name alone is not enough: Recalbox and Batocera call their standalone
-    ScummVM ``scummvm``, which is also the key of the libretro core's
-    profile, and that profile documents no standalone build. Laid out
-    "standalone" it would lose every ``path:`` and drop its files at the
-    root, so a profile whose ``type`` has no standalone build keeps its
-    libretro layout whatever the platform calls it.
-    """
-    if not standalone_cores:
-        return False
-    if "standalone" not in str(profile.get("type", "")):
-        return False
-    names = {emu_name, *(str(c) for c in profile.get("cores", []))}
-    # A name a build the platform compiles itself answers to means that
-    # build there: RetroBat's standalone amiberry is 8.3.0, and the 8.5.0
-    # profile, run there as the buildbot core, keeps its libretro layout.
-    owners: dict[str, set[str]] = {}
-    for tag in standalone_cores:
-        if tag.startswith(OWN_BUILD_PREFIX):
-            name, owner, source = json.loads(tag[len(OWN_BUILD_PREFIX):])
-            if source == profile.get("source"):
-                owners.setdefault(name, set()).add(owner)
-    if any(emu_name not in owners[n] for n in names & owners.keys()):
-        return False
-    return emu_name in standalone_cores or bool(standalone_cores & names)
-
-
-# Marks, in a platform's standalone set, an emulator it also launches as a
-# libretro core. No core name starts with it.
-DUAL_MODE_PREFIX = "dual:"
-# Marks, in the same set, a whole directory the platform's launcher hands a
-# standalone emulator (launchers.handed_directories), as JSON.
-HANDED_PREFIX = "handed:"
-# Marks, in the same set, a libretro core and the system directory the
-# platform hands it (``core_system_dirs``), as JSON.
-CORE_DIR_PREFIX = "coredir:"
-# Marks, in the same set, a file the platform's launcher executes
-# (launchers.executed_files), as JSON.
-EXECUTED_PREFIX = "exec:"
-# Marks, in the same set, a standalone name a build the platform compiles
-# itself (built_by) answers to, as JSON [name, profile, source].
-OWN_BUILD_PREFIX = "ownbuild:"
-# Marks, in the same set, a file name the platform declares under one of the
-# systems a launcher record is written for, as JSON [system, name]: it says
-# which launch reads a profile entry of that name.
-SYSTEM_FILE_PREFIX = "sysfile:"
-# The key, in that index, of a machine a launcher record offers.
+# The key, in a platform's system file index, of a machine a launcher record offers.
 MACHINE_KEY = "machine:"
-# The platform is known: an entry read beside the content is placed in the
-# roms folders a core is launched for, or named as read outside the BIOS
-# folder. The tags below carry those folders.
-CONTENT_SCOPE_TAG = "contentscope:"
-# [core name, roms folder, (tree, path)]: a libretro core the platform
-# launches for the games of that folder, which it reads beside.
-CONTENT_FOLDER_PREFIX = "contentdir:"
-# [emulator or core, (tree, path), system, machines, any machine,
-# source_ref, build]: a standalone emulator, or a libretro core in the
-# command line it is handed as content, given a roms folder as its ROM
-# search path by a system's launch command.
-ROM_SEARCH_PREFIX = "romsearch:"
-# The frontend writes the BIOS it hands a core beside the content: the
-# folder it gives the BIOS is the content's.
-CONTENT_SYSTEM_TAG = "contentsystem:"
-CONTENT_TAG_PREFIXES = (
-    CONTENT_SCOPE_TAG, CONTENT_FOLDER_PREFIX, ROM_SEARCH_PREFIX, CONTENT_SYSTEM_TAG,
-)
 
 
 def core_system_dirs(
-    emu_name: str, profile: dict, standalone_cores: Iterable[str]
+    emu_name: str, profile: dict, launches: PlatformLaunches
 ) -> list[str] | None:
     """The system directories a platform hands this libretro core, or None.
 
@@ -93,14 +25,10 @@ def core_system_dirs(
     them (MinUI hands each launch tag its own Bios/<TAG>/) gives a core it
     lists no directory at all, so the list is then empty.
     """
-    pairs = [
-        json.loads(tag[len(CORE_DIR_PREFIX):])
-        for tag in standalone_cores if tag.startswith(CORE_DIR_PREFIX)
-    ]
-    if not pairs:
+    if not launches.core_dirs:
         return None
     names = set(profile_names(emu_name, profile))
-    return sorted({directory for core, directory in pairs if core in names})
+    return sorted({directory for core, directory in launches.core_dirs if core in names})
 
 
 def system_dir_view(profile: dict, directory: str) -> dict:
@@ -129,40 +57,12 @@ def system_dir_path(entry: dict, path: str) -> str:
     return f"{directory}/{path}" if directory else path
 
 
-def handed_from_tags(standalone_cores: Iterable[str]) -> list:
-    """The directories a standalone set carries, as launchers built them."""
-    from resolve.launchers import HandedDirectory
-
-    found = []
-    for tag in standalone_cores:
-        if not tag.startswith(HANDED_PREFIX):
-            continue
-        position, emulator, folder, directory, handles, ref, roms, systems, held = json.loads(
-            tag[len(HANDED_PREFIX):]
-        )
-        found.append(((position, tag), HandedDirectory(
-            emulator, folder, directory, frozenset(handles), ref,
-            tuple(roms) if roms else None, frozenset(systems), held,
-        )))
-    return [h for _key, h in sorted(found, key=lambda pair: pair[0])]
-
-
-def system_file_index(standalone_cores: Iterable[str]) -> dict[str, set[str]]:
-    """File name, lower case -> the platform systems declaring it (SYSTEM_FILE_PREFIX)."""
-    index: dict[str, set[str]] = {}
-    for tag in standalone_cores:
-        if tag.startswith(SYSTEM_FILE_PREFIX):
-            slug, name = json.loads(tag[len(SYSTEM_FILE_PREFIX):])
-            index.setdefault(name, set()).add(slug)
-    return index
-
-
 def entry_launch_systems(entry: dict, index: Mapping[str, set[str]]) -> frozenset[str]:
     """The platform systems, by our ids, that launch the emulator for an entry.
 
     The systems the entry names, and those under which the platform declares
-    a file of one of its names (``index``, system_file_index): Recalbox lists
-    XRoar's coco3.rom under trs80coco, which our coco is.
+    a file of one of its names (``index``, PlatformLaunches.system_file_index):
+    Recalbox lists XRoar's coco3.rom under trs80coco, which our coco is.
     """
     systems = {str(s) for s in entry.get("systems") or []}
     if entry.get("system"):
@@ -171,18 +71,6 @@ def entry_launch_systems(entry: dict, index: Mapping[str, set[str]]) -> frozense
         if name:
             systems |= index.get(str(name).lower(), set())
     return frozenset(systems)
-
-
-def _executed(standalone_cores: Iterable[str]) -> list:
-    """The files a standalone set's launchers execute, as launchers read them."""
-    from resolve.launchers import ExecutedFile
-
-    found = []
-    for tag in standalone_cores:
-        if tag.startswith(EXECUTED_PREFIX):
-            emulator, name, place, ref = json.loads(tag[len(EXECUTED_PREFIX):])
-            found.append(ExecutedFile(emulator, name, tuple(place) if place else None, ref))
-    return found
 
 
 # Why a standalone entry has no destination on a platform that relocates its
@@ -266,7 +154,7 @@ def standalone_destination(
 
 
 def standalone_bindings_for(
-    emu_name: str, profile: dict, standalone_cores: Iterable[str],
+    emu_name: str, profile: dict, launches: PlatformLaunches,
     systems: Iterable[str] = (),
 ) -> dict[str, tuple[str, str]]:
     """The places a platform gives this emulator's standalone layout, by subfolder.
@@ -286,7 +174,7 @@ def standalone_bindings_for(
         if isinstance(f, dict) and (path := standalone_layout_path(f, profile))
     ]
     return standalone_bindings(
-        names, declared, handed_from_tags(standalone_cores), _executed(standalone_cores), layout,
+        names, declared, launches.handed, launches.executed, layout,
         pools, systems,
     )
 

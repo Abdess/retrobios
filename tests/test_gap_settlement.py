@@ -14,6 +14,7 @@ import unittest
 from pathlib import Path
 
 from packs.crossref import cross_reference
+from resolve.launches import PlatformLaunches
 from resolve.validation import case_folded_slots, declaration_settles
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -87,7 +88,7 @@ class TheRunningBuildPlacesTheGap(unittest.TestCase):
                              "systems": ["nintendo-wiiu"], "files": [self.KEYS]}}
         report = cross_reference(
             profiles, {}, {"files": {}, "indexes": {}}, all_declared={},
-            standalone_cores=standalone,
+            standalone_cores=PlatformLaunches(standalone=frozenset(standalone)),
         )
         return [g["path"] for g in report["cemu"]["gap_details"]]
 

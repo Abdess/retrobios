@@ -19,6 +19,7 @@ from pathlib import Path
 import yaml
 
 from packs.crossref import cross_reference
+from resolve.launches import PlatformLaunches
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -76,10 +77,11 @@ class CrossReferenceReadsTheBuildThePlatformRuns(unittest.TestCase):
     for Recalbox, which runs Dolphin standalone, it reported 12 Dolphin gaps
     where verify and the pack builder found 26."""
 
-    def _gaps(self, standalone_cores):
+    def _gaps(self, standalone, dual=frozenset()):
         empty_db = {"files": {}, "indexes": {}}
         report = cross_reference(
-            {"dual": DUAL_PROFILE}, {}, empty_db, standalone_cores=standalone_cores
+            {"dual": DUAL_PROFILE}, {}, empty_db,
+            standalone_cores=PlatformLaunches(standalone=frozenset(standalone), dual=dual),
         )
         return sorted(g["name"] for g in report["dual"]["gap_details"])
 
@@ -93,10 +95,8 @@ class CrossReferenceReadsTheBuildThePlatformRuns(unittest.TestCase):
     def test_a_platform_running_both_builds(self):
         # The dual layout keyed seen files by (path, slot) and then looked
         # the pair up in the slot table: KeyError on Batocera's dolphin.
-        from resolve.layout import DUAL_MODE_PREFIX
-
         self.assertEqual(
-            self._gaps({"dual", DUAL_MODE_PREFIX + "dual"}),
+            self._gaps({"dual"}, dual=frozenset({"dual"})),
             ["both.bin", "libretro.bin", "standalone.bin"],
         )
 
@@ -111,7 +111,8 @@ class CrossReferenceReadsTheBuildThePlatformRuns(unittest.TestCase):
             ],
         }
         report = cross_reference(
-            {"b": profile}, {}, {"files": {}, "indexes": {}}, standalone_cores={"b"}
+            {"b": profile}, {}, {"files": {}, "indexes": {}},
+            standalone_cores=PlatformLaunches(standalone=frozenset({"b"})),
         )
         self.assertEqual(len(report["b"]["gap_details"]), 2)
 

@@ -16,9 +16,12 @@ from pathlib import Path
 from packs import slotreport
 from packs import slots as packs_slots
 from resolve import collisions as resolve_collisions
+from resolve.launches import PlatformLaunches
 from packs.slots import Claim, Conflict, arbitrate
 from packs.slotreport import format_decision
 from tests.sources import script_source
+
+ARES = PlatformLaunches(standalone=frozenset({"ares"}))
 
 
 def _db(entries: dict[str, dict]) -> dict:
@@ -699,7 +702,7 @@ class TestBuildModeDecidesWhoClaims(unittest.TestCase):
             self._config(standalone=["ares"]),
             self._profile(mode="standalone"),
             REGIONS_DB,
-            standalone_cores={"ares"},
+            standalone_cores=ARES,
         )
         self.assertEqual(len(conflicts), 1)
 
@@ -708,7 +711,7 @@ class TestBuildModeDecidesWhoClaims(unittest.TestCase):
             self._config(standalone=["ares"]),
             self._profile(mode="libretro"),
             REGIONS_DB,
-            standalone_cores={"ares"},
+            standalone_cores=ARES,
         )
         self.assertEqual(conflicts, [])
 
@@ -716,7 +719,7 @@ class TestBuildModeDecidesWhoClaims(unittest.TestCase):
         claims = packs_slots.profile_claims(
             self._profile(standalone_path="elsewhere/IPL.bin"),
             REGIONS_DB,
-            standalone_cores={"ares"},
+            standalone_cores=ARES,
         )
         self.assertEqual(claims[0].destination, "elsewhere/IPL.bin")
 
@@ -728,7 +731,7 @@ class TestBuildModeDecidesWhoClaims(unittest.TestCase):
                                             "mode": "standalone"}]}}
         conflicts = packs_slots.find_conflicts(
             self._config(standalone=["ares"]), profile, REGIONS_DB,
-            standalone_cores={"ares"},
+            standalone_cores=ARES,
         )
         self.assertEqual(len(conflicts), 1)
 
@@ -738,7 +741,7 @@ class TestBuildModeDecidesWhoClaims(unittest.TestCase):
                                        "path": "GC/JAP/IPL.bin",
                                        "standalone_path": "elsewhere/IPL.bin"}]}}
         claims = packs_slots.profile_claims(
-            profile, REGIONS_DB, standalone_cores={"ares"}
+            profile, REGIONS_DB, standalone_cores=ARES
         )
         self.assertEqual(claims[0].destination, "GC/JAP/IPL.bin")
 

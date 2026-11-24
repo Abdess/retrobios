@@ -4544,7 +4544,7 @@ class OpenMsxRomsSitInItsSystemroms(unittest.TestCase):
     def test_every_entry_is_under_share_systemroms(self):
         from scripts.model.profiles import load_emulator_profiles
         from scripts.model.platforms import load_platform_config
-        from scripts.resolve.standalone import platform_layouts, standalone_set
+        from scripts.resolve.standalone import platform_layouts, platform_launches
 
         profiles = load_emulator_profiles(str(ROOT / "emulators"))
         profile = profiles["openmsx"]
@@ -4557,7 +4557,7 @@ class OpenMsxRomsSitInItsSystemroms(unittest.TestCase):
         }
         self.assertEqual(declared_dirs, {"openmsx/share/systemroms"})
         config = load_platform_config("retrobat", str(ROOT / "platforms"))
-        ((view, _standalone),) = platform_layouts("openmsx", profile, standalone_set(config, profiles))
+        ((view, _standalone),) = platform_layouts("openmsx", profile, platform_launches(config, profiles))
         placed = {f["name"]: f for f in view["files"]}
         for entry in profile["files"]:
             with self.subTest(name=entry["name"]):
@@ -5385,7 +5385,7 @@ class EmuDeckRunsItsEmulatorsStandalone(unittest.TestCase):
 
     def test_every_emuscripts_emulator_is_standalone(self):
         from scripts.model.platforms import load_platform_config
-        from scripts.resolve.layout import runs_standalone
+        from scripts.resolve.launches import PlatformLaunches
         from scripts.model.profiles import load_emulator_profiles
 
         config = load_platform_config("emudeck", str(ROOT / "platforms"))
@@ -5394,10 +5394,10 @@ class EmuDeckRunsItsEmulatorsStandalone(unittest.TestCase):
             sorted(c for c in config["cores"] if c != "retroarch"),
         )
         profiles = load_emulator_profiles(str(ROOT / "emulators"))
-        standalone = set(config["standalone_cores"])
+        standalone = PlatformLaunches(standalone=frozenset(config["standalone_cores"]))
         for name in ("dolphin", "cemu", "armsx2", "supermodel"):
             with self.subTest(emulator=name):
-                self.assertTrue(runs_standalone(name, profiles[name], standalone))
+                self.assertTrue(standalone.runs_standalone(name, profiles[name]))
 
     def test_retroarch_brings_its_libretro_cores(self):
         """The scraper dropped RetroArch's own script: np2kai, neocd and

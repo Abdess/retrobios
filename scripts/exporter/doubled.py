@@ -16,7 +16,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from resolve.archives import contents_members, holds_required_members
-from resolve.standalone import platform_layouts, standalone_set
+from resolve.standalone import platform_layouts, platform_launches
 from resolve.cores import resolve_platform_cores
 from core.hashing import declared_hash_lists, lists_hashes
 from model.declarations import declared_components
@@ -78,7 +78,7 @@ def doubled_destinations(
     collisions = find_collisions(scraped, db, zip_contents, data_registry)
     if not collisions:
         return []
-    standalone = standalone_set(scraped, profiles)
+    standalone = platform_launches(scraped, profiles)
     named: dict[str, list[tuple[str, dict, dict, bool]]] = {}
     for key in sorted(resolve_platform_cores(scraped, profiles)):
         profile = profiles[key]

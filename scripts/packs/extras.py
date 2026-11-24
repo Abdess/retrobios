@@ -22,9 +22,10 @@ from resolve.localfile import resolution_is_hash_exact
 from resolve.localfile import resolve_local_file
 from resolve.nativemode import platform_mode
 from resolve.cores import resolve_platform_cores
+from resolve.launches import PlatformLaunches
 from resolve.layout import core_system_dirs, system_dir_path
 from resolve.standalone import platform_layouts
-from resolve.standalone import standalone_set as platform_standalone_set
+from resolve.standalone import platform_launches
 from model.declarations import OUTER_ROOTS, outer_layout
 from core.paths import declared_destination, sanitize_pack_path
 from resolve.content import declares_shape, shape_fits, size_fits
@@ -592,7 +593,7 @@ def _agnostic_scan_extras(
     by_name: dict,
     seen_dests: set,
     extras_prefix: str,
-    standalone_set: set[str] | None = None,
+    launches: PlatformLaunches | None = None,
     taken: dict[str, dict] | None = None,
 ) -> list[dict]:
     """Every interchangeable candidate a filename-agnostic core accepts.
@@ -620,7 +621,7 @@ def _agnostic_scan_extras(
         ):
             continue
         resolved = _resolved_dirs(emu_name, profile, db)
-        for layout, standalone in platform_layouts(emu_name, profile, standalone_set or set()):
+        for layout, standalone in platform_layouts(emu_name, profile, launches or PlatformLaunches()):
             # A layout copies each entry in order (a launcher's folder, a
             # system directory): its files are looked up as the profile's
             # own, or a bound layout scans nothing (KNULLI's bios/ps2).
@@ -962,7 +963,7 @@ def expand_agnostic_entries(
     scanned = _agnostic_scan_extras(
         {emu_name: {**profile, "files": files}}, {emu_name}, db,
         db.get("indexes", {}).get("by_name", {}), set(), "",
-        {emu_name} if standalone else set(),
+        PlatformLaunches(standalone=frozenset({emu_name})) if standalone else PlatformLaunches(),
     )
 
     # A placeholder is answered by the files its own scan found in its own
@@ -1167,7 +1168,7 @@ def _archive_prefix_extras(
     extras_prefix: str,
     by_name: dict,
     taken: dict[str, dict] | None = None,
-    standalone_set: set[str] | None = None,
+    launches: PlatformLaunches | None = None,
 ) -> list[dict]:
     """A second copy of an archive under the subdirectory a core reads.
 
@@ -1188,10 +1189,10 @@ def _archive_prefix_extras(
         # A platform that hands each core its own system directory moves the
         # subfolder with it, once per directory.
         views = [profile]
-        if core_system_dirs(emu_name, profile, standalone_set or set()) is not None:
+        if core_system_dirs(emu_name, profile, launches or PlatformLaunches()) is not None:
             views = [
                 view for view, standalone
-                in platform_layouts(emu_name, profile, standalone_set or set())
+                in platform_layouts(emu_name, profile, launches or PlatformLaunches())
                 if not standalone
             ]
         for view in views:
@@ -1535,7 +1536,7 @@ def collect_emulator_extras(
         return extras
 
     relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
-    standalone_set = platform_standalone_set(config, profiles)
+    launches = platform_launches(config, profiles)
     by_name = db.get("indexes", {}).get("by_name", {})
 
     # Build set of filenames already covered (platform baseline + first pass extras)
@@ -1556,7 +1557,7 @@ def collect_emulator_extras(
             continue
         if emu_name not in relevant:
             continue
-        for layout, is_standalone in platform_layouts(emu_name, profile, standalone_set):
+        for layout, is_standalone in platform_layouts(emu_name, profile, launches):
             for f in layout.get("files", []):
                 copy = _second_pass_copy(scope, emu_name, layout, is_standalone, f)
                 if copy is not None:
@@ -1581,14 +1582,14 @@ def collect_emulator_extras(
     extras.extend(
         _archive_prefix_extras(
             profiles, relevant, covered_names, state.seen_dests, extras_prefix,
-            by_name, state.taken, standalone_set,
+            by_name, state.taken, launches,
         )
     )
 
     extras.extend(
         _agnostic_scan_extras(
             profiles, relevant, db, by_name, state.seen_dests, extras_prefix,
-            standalone_set, state.taken,
+            launches, state.taken,
         )
     )
 

@@ -35,8 +35,7 @@ from probes.packlayout import (
     pack_layout,
 )
 from resolve.cores import resolve_platform_cores
-from resolve.layout import DUAL_MODE_PREFIX, runs_standalone
-from resolve.standalone import standalone_set
+from resolve.standalone import platform_launches
 from resolve.validation import filter_files_by_mode
 
 
@@ -76,11 +75,10 @@ def libretro_build_runs(
     the platform does not run the emulator standalone only."""
     if "libretro" not in str(profile.get("type", "")) or profile.get("type") == "alias":
         return False
-    standalone = standalone_set(config, profiles)
-    if not runs_standalone(name, profile, standalone):
+    standalone = platform_launches(config, profiles)
+    if not standalone.runs_standalone(name, profile):
         return True
-    dual = {c.removeprefix(DUAL_MODE_PREFIX) for c in standalone if c.startswith(DUAL_MODE_PREFIX)}
-    return bool(dual & ({name} | {str(c) for c in profile.get("cores") or ()}))
+    return standalone.is_dual({name} | {str(c) for c in profile.get("cores") or ()})
 
 
 def so_names(name: str, profile: dict, buildbot: set[str], target: set[str] | None) -> list[str]:

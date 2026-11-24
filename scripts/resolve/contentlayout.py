@@ -7,13 +7,9 @@ import json
 from collections.abc import Callable, Iterable
 
 from model.targets import list_available_targets
+from resolve.launches import ContentFolder, ContentLaunches, PlatformLaunches, RomSearch
 from resolve.layout import (
-    CONTENT_FOLDER_PREFIX,
-    CONTENT_SCOPE_TAG,
-    CONTENT_SYSTEM_TAG,
-    CONTENT_TAG_PREFIXES,
     OUTSIDE_BIOS_FOLDER,
-    ROM_SEARCH_PREFIX,
     placed_entry,
     standalone_layout_path,
 )
@@ -128,9 +124,9 @@ def content_folder_boards(config: dict) -> dict[tuple[str, str], frozenset[str] 
     }
 
 
-def content_folder_tags(config: dict) -> set[str]:
+def content_launches(config: dict) -> ContentLaunches:
     """The roms folders a platform launches each libretro core for, and the
-    ROM search paths its commands hand emulators and cores, as tags.
+    ROM search paths its commands hand emulators and cores.
 
     A core reading its BIOS sets beside the game (MAME 2003's osd_get_path
     gives FILETYPE_ROM the content directory) reads them in the folder of
@@ -145,10 +141,9 @@ def content_folder_tags(config: dict) -> set[str]:
         # EmulatorJS writes the BIOS a frontend hands it and the game to
         # the root of one filesystem (data/src/emulator.js:845, 990, 1054):
         # RomM's firmware folder is beside the content.
-        return {CONTENT_SYSTEM_TAG}
-    tags = {CONTENT_SCOPE_TAG}
+        return ContentLaunches(beside=True)
     if outer_layout(config, ROMS_ROOT) is None:
-        return tags
+        return ContentLaunches(scoped=True)
     rows = config.get("_rom_folders") or []
     folders = {str(r.get("folder")) for r in rows if r.get("folder")}
     boards = content_folder_boards(config)
@@ -156,29 +151,32 @@ def content_folder_tags(config: dict) -> set[str]:
     pairs = {pair for pair, on in boards.items() if not target or on is None or target in on}
     from resolve.launchers import roms_place_of
 
-    def place(folder: str) -> list:
-        return list(roms_place_of(config, folder) or ())
+    def place(folder: str) -> tuple[str, ...]:
+        return tuple(roms_place_of(config, folder) or ())
 
     # Without a board, a core a folder offers on some boards only carries
     # them, for a manifest the installer narrows to one.
-    tags |= {
-        CONTENT_FOLDER_PREFIX + json.dumps([
+    content_folders = frozenset(
+        ContentFolder(
             c, f, place(f),
-            None if target or (offered_on := boards.get((c, f))) is None else sorted(offered_on),
-        ])
+            None if target or (offered_on := boards.get((c, f))) is None
+            else tuple(sorted(offered_on)),
+        )
         for c, f in pairs if f in folders
-    }
-    for row in rows:
-        for search in row.get("searched_by") or []:
-            for read in search.get("reads") or []:
-                if read in folders:
-                    tags.add(ROM_SEARCH_PREFIX + json.dumps([
-                        str(search.get("core") or search["emulator"]), place(read),
-                        str(row["folder"]), sorted(search.get("machines") or []),
-                        bool(search.get("any_machine")), str(search.get("source_ref", "")),
-                        "libretro" if search.get("core") else "standalone",
-                    ]))
-    return tags
+    )
+    searches = frozenset(
+        RomSearch(
+            str(search.get("core") or search["emulator"]), place(read),
+            str(row["folder"]), tuple(sorted(search.get("machines") or [])),
+            bool(search.get("any_machine")), str(search.get("source_ref", "")),
+            "libretro" if search.get("core") else "standalone",
+        )
+        for row in rows
+        for search in row.get("searched_by") or []
+        for read in search.get("reads") or []
+        if read in folders
+    )
+    return ContentLaunches(scoped=True, folders=content_folders, searches=searches)
 
 
 # The machines ES-DE runs from a folder whose command starts the game itself
@@ -257,12 +255,12 @@ def _rom_search_sets(
     return frozenset(found | members)
 
 
-def _search_reads(emu_name: str, searches: list, name: str) -> list[tuple[str, str]]:
+def _search_reads(emu_name: str, searches: list[RomSearch], name: str) -> list[tuple[str, str]]:
     """The (tree, folder) places a passed ROM search reads this set from."""
     stem = name.rsplit(".", 1)[0]
     return sorted({
-        tuple(where) for _emu, where, system, machines, any_machine, _ref, _build in searches
-        if where and stem in rom_search_sets(emu_name, system, machines, any_machine)
+        (s.place[0], s.place[1]) for s in searches
+        if s.place and stem in rom_search_sets(emu_name, s.folder, s.machines, s.any_machine)
     })
 
 
@@ -277,28 +275,29 @@ def _roms_entry(entry: dict, tree: str, folder: str, rel: str) -> dict:
     return {**entry, **where, "path": f"{folder}/{rel}", "layout_path": rel}
 
 
-def _content_folder_boards(tags: list[str], names: set[str]) -> dict[tuple, set[str] | None]:
+def _content_folder_boards(
+    folders: Iterable[ContentFolder], names: set[str],
+) -> dict[tuple, set[str] | None]:
     """Each roms folder the platform launches the core from, with its boards."""
     # A place keeps the boards its core is offered on there, every board
     # when one folder offers it everywhere.
     on_boards: dict[tuple, set[str] | None] = {}
-    for core, _folder, where, on in (
-        json.loads(t[len(CONTENT_FOLDER_PREFIX):])
-        for t in tags if t.startswith(CONTENT_FOLDER_PREFIX)
-    ):
-        if core not in names or not where:
+    for folder in folders:
+        if folder.core not in names or not folder.place:
             continue
-        place = tuple(where)
-        known = on_boards.get(place, set())
-        on_boards[place] = None if on is None or known is None else known | set(on)
+        known = on_boards.get(folder.place, set())
+        on_boards[folder.place] = (
+            None if folder.boards is None or known is None else known | set(folder.boards)
+        )
     return on_boards
 
 
 def _libretro_content_layout(
-    emu_name: str, view: dict, tags: list[str], names: set[str], searches: list,
+    emu_name: str, view: dict, content: ContentLaunches, names: set[str],
+    searches: list[RomSearch],
 ) -> dict:
     """The libretro layout with each file read beside the content placed there."""
-    on_boards = _content_folder_boards(tags, names)
+    on_boards = _content_folder_boards(content.folders, names)
     folders = sorted(on_boards)
     # The folders a passed `-rompath` replaces the build's own search
     # path with stand for these: libretro MAME hands MAME
@@ -336,7 +335,7 @@ def _libretro_content_layout(
     return {**view, "files": out} if changed else view
 
 
-def _standalone_content_layout(emu_name: str, view: dict, searches: list) -> dict:
+def _standalone_content_layout(emu_name: str, view: dict, searches: list[RomSearch]) -> dict:
     """The standalone layout with each set a passed search reads placed there."""
     pools = {str(v).strip("/") for v in (view.get("standalone_pools") or {}).values()}
     if not searches or "" not in pools:
@@ -377,7 +376,7 @@ def _standalone_content_layout(emu_name: str, view: dict, searches: list) -> dic
 
 
 def content_layout(
-    emu_name: str, view: dict, standalone: bool, standalone_cores: Iterable[str],
+    emu_name: str, view: dict, standalone: bool, launches: PlatformLaunches,
 ) -> dict:
     """The layout with each file read in a roms folder placed in that folder.
 
@@ -387,11 +386,11 @@ def content_layout(
     entry in the folder a passed ROM search path stands for (the root of a
     standalone layout, a ``libretro_pools`` folder) also goes to each folder
     a command passes for a machine that reads it, and a standalone entry no
-    launcher record places goes there only. Outside a platform (no
-    CONTENT_SCOPE_TAG) the view is left as it is.
+    launcher record places goes there only. Outside a platform (not
+    ContentLaunches.scoped) the view is left as it is.
     """
-    tags = [t for t in standalone_cores if t.startswith(CONTENT_TAG_PREFIXES)]
-    if CONTENT_SYSTEM_TAG in tags and not standalone:
+    content = launches.content
+    if content.beside and not standalone:
         files = [
             _without_libretro_load(f)
             if isinstance(f, dict) and _content_load(f) == "content_dir"
@@ -399,17 +398,15 @@ def content_layout(
             for f in view.get("files") or []
         ]
         return {**view, "files": files}
-    if CONTENT_SCOPE_TAG not in tags:
+    if not content.scoped:
         return view
     names = {core_key(n) for n in profile_names(emu_name, view)}
-    searches = [
-        json.loads(t[len(ROM_SEARCH_PREFIX):])
-        for t in tags if t.startswith(ROM_SEARCH_PREFIX)
-    ]
     build = "standalone" if standalone else "libretro"
-    searches = [s for s in searches if core_key(s[0]) in names and s[6] == build]
+    searches = [
+        s for s in content.searches if core_key(s.emulator) in names and s.build == build
+    ]
     if not standalone:
-        return _libretro_content_layout(emu_name, view, tags, names, searches)
+        return _libretro_content_layout(emu_name, view, content, names, searches)
     return _standalone_content_layout(emu_name, view, searches)
 
 

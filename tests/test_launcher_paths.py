@@ -349,7 +349,7 @@ class AUserFolderInTheConfigsFolder(unittest.TestCase):
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
         from resolve.standalone import platform_layouts
-        from resolve.standalone import standalone_set
+        from resolve.standalone import platform_launches
 
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         profile = profiles["shadps4"]
@@ -357,7 +357,7 @@ class AUserFolderInTheConfigsFolder(unittest.TestCase):
         for platform in ("batocera",):
             config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
             ((view, _standalone),) = platform_layouts(
-                "shadps4", profile, standalone_set(config, profiles)
+                "shadps4", profile, platform_launches(config, profiles)
             )
             with self.subTest(platform=platform):
                 self.assertEqual(

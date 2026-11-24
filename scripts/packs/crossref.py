@@ -23,6 +23,7 @@ from resolve.launchers import LauncherLayer, held_record
 from resolve.layout import system_dir_path
 from resolve.localfile import held_record_for
 from resolve.ownership import foreign_tree, owner_tokens
+from resolve.launches import PlatformLaunches
 from resolve.standalone import platform_layouts
 from resolve.validation import (
     case_folded_slots,
@@ -68,7 +69,7 @@ def global_report_scope(
         merged_platform_declared_contents,
         platform_declarations,
     )
-    from resolve.standalone import merged_standalone_set
+    from resolve.standalone import merged_launches
 
     declared: dict[str, set[str]] = {}
     for config in configs:
@@ -82,7 +83,7 @@ def global_report_scope(
     ))
     return declared, {
         "all_declared": merged_platform_declarations(configs, db),
-        "standalone_cores": merged_standalone_set(configs, profiles),
+        "standalone_cores": merged_launches(configs, profiles),
         "folded_slots": folded,
         "declared_contents": merged_platform_declared_contents(configs, db),
     }
@@ -125,7 +126,7 @@ def _record_needing_platforms(
     emulator does not install it (`installed_on`, `not_bundled_on`).
     """
     from resolve.cores import resolve_platform_cores
-    from resolve.standalone import standalone_set
+    from resolve.standalone import platform_launches
     from resolve.validation import filter_files_by_mode
 
     missing = [
@@ -138,7 +139,7 @@ def _record_needing_platforms(
     runnable = emulator_profiles(profiles)
     for config in configs:
         platform = str(config.get("_key") or "")
-        standalone = standalone_set(config, profiles)
+        standalone = platform_launches(config, profiles)
         for emu_name in resolve_platform_cores(config, runnable):
             runners.setdefault(emu_name, []).append((platform, standalone))
     for emu_name, gap in missing:
@@ -653,7 +654,7 @@ def _cross_reference_profile(
     declared: dict[str, set[str]],
     report: dict,
     index: dict,
-    standalone_cores: set[str] | None = None,
+    standalone_cores: PlatformLaunches | None = None,
     platform: str = "",
 ) -> None:
     """Compare one emulator profile against what the platforms declare.
@@ -684,7 +685,7 @@ def _cross_reference_profile(
 
     # The build a platform runs decides which entries it reads, as in
     # find_undeclared_files: without a platform, the libretro build.
-    layouts = platform_layouts(emu_name, profile, standalone_cores or set())
+    layouts = platform_layouts(emu_name, profile, standalone_cores or PlatformLaunches())
     comparison = _ProfileComparison(emu_name, profile, index, platform_names, platform, layouts)
     # Each file under each layout the platform gives the emulator: both, for
     # one it launches as a libretro core and standalone.
@@ -770,7 +771,7 @@ class ReportScope(TypedDict, total=False):
     """What a cross_reference run compares against and answers for."""
 
     all_declared: dict[str, list[tuple[int | None, str]]] | None
-    standalone_cores: set[str] | None
+    standalone_cores: PlatformLaunches | None
     folded_slots: frozenset[str]
     platform: str
     launcher_layer: LauncherLayer | None

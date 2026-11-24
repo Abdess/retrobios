@@ -762,15 +762,14 @@ def _attach_runners(
     """
     if not scraped:
         return
-    from resolve.layout import runs_standalone
-    from resolve.standalone import standalone_set
+    from resolve.standalone import platform_launches
 
     declared = scraped.get("cores")
     libretro = {str(c) for c in declared} if isinstance(declared, list) else set()
     standalone = {str(c) for c in scraped.get("standalone_cores") or []}
-    # The build decision reads the tagged set (own builds, twins), as the
+    # The build decision reads the platform launches (own builds, twins), as the
     # pack does. The runner's name is looked up among the plain names.
-    layout_set = standalone_set(scraped, profiles)
+    launches = platform_launches(scraped, profiles)
     for system in systems.values():
         for fe in system.files:
             if fe.platform is not None or not fe.truth:
@@ -781,7 +780,7 @@ def _attach_runners(
                 sorted((key, build == "standalone") for key, _, build in
                        (b.partition(":") for b in brought))
                 if brought is not None
-                else [(key, runs_standalone(key, profiles.get(key, {}), layout_set))
+                else [(key, launches.runs_standalone(key, profiles.get(key, {})))
                       for key in sorted(fe.truth.get("_cores") or ())]
             )
             for key, as_standalone in layers:

@@ -21,8 +21,8 @@ from collections.abc import Callable, Iterable
 from pathlib import Path
 
 from romrecipes import ledger as romrecipes_ledger
-from resolve.layout import runs_standalone
-from resolve.standalone import standalone_set
+from resolve.launches import PlatformLaunches
+from resolve.standalone import platform_launches
 from model.profiles import unique_emulator_profiles
 from packs.crossref import first_hash
 from core.hashing import cut_md5_owner, declared_hash_lists, parse_hash_list
@@ -160,7 +160,7 @@ def paired_declarations(files: list, details: list[dict]) -> Iterable[tuple[dict
 
 
 def _brought_by_readers(
-    detail: dict, standalone_cores: set[str], platform: str, profiles: dict,
+    detail: dict, standalone_cores: PlatformLaunches, platform: str, profiles: dict,
 ) -> bool:
     """Whether every core that reads a platform entry installs it itself.
 
@@ -179,7 +179,7 @@ def _brought_by_readers(
         names = {str(e.get("name")) for e in reader.get("entries") or []}
         read = [f for f in profile.get("files") or []
                 if isinstance(f, dict) and str(f.get("name")) in names]
-        standalone = runs_standalone(reader["emulator"], profile, standalone_cores)
+        standalone = standalone_cores.runs_standalone(reader["emulator"], profile)
         if filter_files_by_mode(read, standalone):
             verdicts.append(not deliverable(read, standalone, platform))
     return bool(verdicts) and all(verdicts)
@@ -199,7 +199,7 @@ def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> li
     found: list[dict] = []
     for key, coverage in sorted(coverages.items()):
         systems = coverage.get("config", {}).get("systems") or {}
-        standalone_cores = standalone_set(coverage.get("config", {}), profiles)
+        standalone_cores = platform_launches(coverage.get("config", {}), profiles)
         by_system: dict[str, list[dict]] = {}
         for detail in coverage.get("details", []):
             by_system.setdefault(detail.get("system", ""), []).append(detail)

@@ -22,7 +22,7 @@ from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles, installed_data_refs_in
 from model.registry import load_data_dir_registry, list_registered_platforms
 from resolve.cores import resolve_platform_cores
-from resolve.standalone import platform_layouts, standalone_set
+from resolve.standalone import platform_layouts, platform_launches
 from packs import archive
 from packs import datatrees
 from packs import platformpack
@@ -155,7 +155,7 @@ class EveryReaderHasTheTreeOrAReason(unittest.TestCase):
         unexplained = []
         for platform in list_registered_platforms(platforms_dir):
             config = load_platform_config(platform, platforms_dir)
-            handed = standalone_set(config, profiles)
+            handed = platform_launches(config, profiles)
             for core in sorted(resolve_platform_cores(config, profiles)):
                 profile = profiles[core]
                 if all(standalone for _view, standalone

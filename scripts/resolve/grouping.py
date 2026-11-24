@@ -8,7 +8,7 @@ import os
 
 from model.platforms import load_platform_config
 from model.sources import source_yaml_file
-from resolve.standalone import core_dir_tags
+from resolve.standalone import core_dirs
 
 
 def group_identical_platforms(
@@ -65,7 +65,7 @@ def group_identical_platforms(
             bool(config.get("case_insensitive_fs")),
             # Where each core's files go: the same cores handed other
             # folders make another pack.
-            sorted(core_dir_tags(config)),
+            sorted(core_dirs(config)),
         ]
         fp = hashlib.sha1(f"{fp}|{emulators}".encode()).hexdigest()
         if target_cores_cache:

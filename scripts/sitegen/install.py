@@ -17,8 +17,9 @@ from sitegen.guidedata import platform_guides, terminals, install_command
 from model.platforms import load_platform_config
 from model.registry import list_release_pack_platforms
 from model.profiles import reads_own_files
-from resolve.layout import data_root_place, runs_standalone
-from resolve.standalone import standalone_set
+from resolve.launches import PlatformLaunches
+from resolve.layout import data_root_place
+from resolve.standalone import platform_launches
 from resolve.validation import installed_everywhere, installed_with_emulator
 from sitegen import markup
 from installer_build.module import installer_module
@@ -165,7 +166,7 @@ def emulator_install_route(name: str, profile: dict) -> tuple[str, list[str], tu
         # package leaves out the 667 files every other setup's install brings.
         if all(installed_with_emulator(f, platform) for f in files):
             continue
-        if standalone and not runs_standalone(name, profile, _standalone_cores(platform)):
+        if standalone and not _standalone_cores(platform).runs_standalone(name, profile):
             continue
         if any("--dest" in args for args in platform_args(platform, platform_guides()[platform]).values()):
             continue
@@ -194,16 +195,16 @@ def emulator_install_route(name: str, profile: dict) -> tuple[str, list[str], tu
     return command, setups, oses
 
 
-def _standalone_cores(platform: str) -> frozenset[str]:
+def _standalone_cores(platform: str) -> PlatformLaunches:
     """The emulators a setup launches as apps, by its platform file."""
     inputs = siteinputs.current()
     return _standalone_cores_in(str(inputs.platforms), str(inputs.emulators), platform)
 
 
 @functools.cache
-def _standalone_cores_in(platforms_dir: str, emulators_dir: str, platform: str) -> frozenset[str]:
+def _standalone_cores_in(platforms_dir: str, emulators_dir: str, platform: str) -> PlatformLaunches:
     config = load_platform_config(platform, platforms_dir)
-    return frozenset(standalone_set(config, profiles_in(emulators_dir, skip_aliases=True)))
+    return platform_launches(config, profiles_in(emulators_dir, skip_aliases=True))
 
 
 def install_block(name: str, profile: dict) -> list[str]:

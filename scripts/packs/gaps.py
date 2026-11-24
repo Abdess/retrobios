@@ -14,11 +14,11 @@ from resolve.archives import archive_entry, archive_members
 from resolve.cores import resolve_platform_cores
 from resolve.directories import expand_directory_entries
 from resolve.launchers import LauncherLayer, declared_destinations, held_record
-from resolve.layout import runs_standalone, system_dir_path
+from resolve.layout import system_dir_path
 from resolve.localfile import resolve_local_file
 from resolve.nativemode import hash_mismatch_excludes_file, platform_mode
 from resolve.ownership import foreign_tree, owner_tokens
-from resolve.standalone import platform_layouts, standalone_set as platform_standalone_set
+from resolve.standalone import platform_layouts, platform_launches
 from resolve.validation import (
     parse_validation,
     case_folded_slots,
@@ -484,7 +484,7 @@ def find_undeclared_files(
     )
 
     relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
-    standalone_set = platform_standalone_set(config, profiles)
+    launches = platform_launches(config, profiles)
     # What the platform's own launchers open, matched to the cores it runs:
     # the one decision the builder and this report both read.
     launcher_layer = LauncherLayer(
@@ -509,7 +509,7 @@ def find_undeclared_files(
         # (ARMSX2's arcade/proverb.zip once ROCKNIX binds bios/armsx2).
         agnostic = profile.get("bios_mode") == "agnostic"
 
-        for layout, is_standalone in platform_layouts(emu_name, profile, standalone_set):
+        for layout, is_standalone in platform_layouts(emu_name, profile, launches):
             for f in expand_directory_entries(
                 layout.get("files", []), db, is_standalone
             ):
@@ -647,7 +647,7 @@ def find_exclusion_notes(
         platform_systems.add(sys_id)
 
     relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
-    standalone_set = platform_standalone_set(config, profiles)
+    launches = platform_launches(config, profiles)
     notes = []
     for emu_name, profile in sorted(profiles.items()):
         emu_systems = set(profile.get("systems", []))
@@ -683,7 +683,7 @@ def find_exclusion_notes(
 
         # Count standalone-only files, but only report as excluded if the
         # platform does NOT use this emulator in standalone mode
-        is_standalone = runs_standalone(emu_name, profile, standalone_set)
+        is_standalone = launches.runs_standalone(emu_name, profile)
         if not is_standalone:
             standalone_files = [
                 f for f in profile.get("files", []) if f.get("mode") == "standalone"
