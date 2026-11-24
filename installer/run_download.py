@@ -1,5 +1,4 @@
 """The download pass of a setup: what offline leaves, the question, the folder, the fetch."""
-
 from __future__ import annotations
 
 import argparse

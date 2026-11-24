@@ -7,6 +7,7 @@ from pathlib import Path
 
 from installer.console import SAID_FAILED
 from installer.events import EVENTS
+from installer.folder_index import FolderIndex, MAX_SCANNED_FILES, PSEUDO_FOLDERS
 from installer.invocation import DEFAULT_JOBS
 from installer.offline import LOCAL, local_manifest_platform
 from installer.pack_source import _PART_FILE, PackSource
@@ -15,8 +16,6 @@ from installer.platforms import display_name, normalize_platform
 from installer.refusal import Refusal
 from installer.safe_replace import unreadable_words
 from installer.text import _plural, screen_text
-
-from installer.folder_index import FolderIndex, MAX_SCANNED_FILES, PSEUDO_FOLDERS
 
 
 def sources_line(

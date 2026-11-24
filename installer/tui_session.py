@@ -23,7 +23,6 @@ from installer.offline import OFFLINE_FLAG_VALUE
 from installer.outcome import LINE_SAVE_REMEDY
 from installer.text import screen_text
 from installer.tui_actions import open_tui_pack, use_tui_pack
-from installer.tui_steps import tui_interrupt
 from installer.tui_commands import tui_argv, tui_run_env
 from installer.tui_engine import (
     _EngineRun,
@@ -35,6 +34,8 @@ from installer.tui_engine import (
     _tui_put_app,
     _tui_work_folder,
 )
+from installer.tui_first_screen import tui_start
+from installer.tui_help import tui_view
 from installer.tui_input import tui_hits, tui_update
 from installer.tui_outcome import TUI_RESULT_AGAIN, TUI_RESULT_COPY, tui_keeps_log, tui_outcome
 from installer.tui_plan_view import TUI_SAVE_REMEDY, _shown
@@ -44,10 +45,8 @@ from installer.tui_routes import (
     tui_idle_exit,
     tui_wants_mouse,
 )
-from installer.tui_help import tui_view
 from installer.tui_state import TuiState
-
-from installer.tui_first_screen import tui_start
+from installer.tui_steps import tui_interrupt
 from installer.tui_terminal import (
     _TuiSignals,
     _TuiTerminal,
@@ -57,6 +56,7 @@ from installer.tui_terminal import (
     tui_ctrl_z,
     tui_suspend,
 )
+
 
 TUI_FRAME = 0.1
 

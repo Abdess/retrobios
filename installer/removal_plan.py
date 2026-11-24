@@ -1,5 +1,4 @@
 """Which installed files a removal takes, which it keeps and why."""
-
 from __future__ import annotations
 
 import os
@@ -11,12 +10,12 @@ from typing import NamedTuple
 from installer.choices import available_choices, system_ids
 from installer.filesystems import keeps_case
 from installer.host_fs import _is_link
-from installer.restore import _below, _check_ours
 from installer.install_record import record_argv, record_options
 from installer.local_check import _digest_file
 from installer.manifest import OTHER_SYSTEMS, entry_copies
 from installer.narrowing import designated_cores
 from installer.platforms import display_name, entry_systems, system_title
+from installer.restore import _below, _check_ours
 from installer.safe_replace import BACKUP_DIR
 
 

@@ -15,7 +15,12 @@ from installer.config_values import (
     _parse_retroarch_system_dir,
     _retroarch_cfg_dir,
 )
-from installer.detection_notes import note_detection
+from installer.detect_android import _detect_android, android_unreachable_folders
+from installer.detect_launchbox import (
+    _launchbox_retroarch_system_dir,
+    launchbox_emulators,
+    launchbox_root,
+)
 from installer.detect_os import (
     _detect_embedded,
     _macos_retroarch_base,
@@ -23,16 +28,11 @@ from installer.detect_os import (
     _read_registry,
     _unix_retroarch_base,
 )
+from installer.detection_notes import note_detection
 from installer.host_fs import _SETUP_SEARCH, _exists, _host_path, _is_dir, _is_file, _note_refused
 from installer.paths import MOVED, RETRODECK_CONFIG, shown_path
 from installer.platforms import display_name
 from installer.text import _CONTROLS
-from installer.detect_android import _detect_android, android_unreachable_folders
-from installer.detect_launchbox import (
-    _launchbox_retroarch_system_dir,
-    launchbox_emulators,
-    launchbox_root,
-)
 
 
 def _steam_libraries() -> list[Path]:

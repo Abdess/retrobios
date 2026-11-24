@@ -1,5 +1,4 @@
 """The index of a folder BIOS files are copied from: each file by hash, inside archives too."""
-
 from __future__ import annotations
 
 import contextlib

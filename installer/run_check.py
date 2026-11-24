@@ -1,5 +1,4 @@
 """The passes that read a setup: files in place, files missing, and what a dry run would do."""
-
 from __future__ import annotations
 
 from pathlib import Path

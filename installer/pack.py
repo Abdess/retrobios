@@ -17,10 +17,11 @@ from installer.datadirs import install_data_directory
 from installer.download import download_files
 from installer.events import EVENTS
 from installer.filesystems import fat32_drive
-from installer.local_copies import plan_local_copies
 from installer.host_fs import DRIVE_FULL, _drive_full, _is_dir, _stop
 from installer.lists import ListFailure, held_targets, load_targets, targets_file_words
+from installer.local_copies import plan_local_copies
 from installer.offline import LOCAL
+from installer.pack_parts import PackError, PackMember, pack_bound, plan_pack_parts, write_pack
 from installer.pack_source import (
     pack_name_platforms,
     part_file_name,
@@ -33,7 +34,6 @@ from installer.text import _plural, format_size, screen_text
 
 if TYPE_CHECKING:
     from installer.terminal import Terminal
-from installer.pack_parts import PackError, PackMember, pack_bound, plan_pack_parts, write_pack
 
 
 # FAT32 holds no file of 4 GiB or more (its size field is 32 bits). A pack

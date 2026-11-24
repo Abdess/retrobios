@@ -1,5 +1,4 @@
 """--restore: a backup put back in place, and the install record after it."""
-
 from __future__ import annotations
 
 import json

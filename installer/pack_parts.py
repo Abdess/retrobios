@@ -1,5 +1,4 @@
 """The ZIP parts of a pack: planned, written, marked, swapped into place, and their markers read back."""
-
 from __future__ import annotations
 
 import hashlib

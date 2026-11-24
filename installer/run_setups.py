@@ -36,8 +36,8 @@ from installer.pack_source import pack_name_platforms
 from installer.paths import MOVED
 from installer.platforms import AVAILABLE_PLATFORMS, _NO_BIOS_FOLDER, display_name, normalize_platform
 from installer.refusal import Refusal
-from installer.setup_passes import _output_kind, needed_targets
 from installer.safe_replace import KEPT
+from installer.setup_passes import _output_kind, needed_targets
 from installer.setups import PORTABLE_ONLY, _default_dest, _line_setups, drive_example, found_setups
 from installer.standalone import _install_standalone_folders
 from installer.terminal import Terminal

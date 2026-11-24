@@ -18,6 +18,7 @@ from typing import TYPE_CHECKING, BinaryIO
 
 from installer.console import Progress
 from installer.events import EVENTS
+from installer.failure_causes import HttpReason, NetworkReason, OfflineReason
 from installer.folder_index import FOLDER_IN_PLACE, _copy_local
 from installer.host_fs import (
     DRIVE_FULL,
@@ -38,7 +39,6 @@ from installer.invocation import DEFAULT_JOBS, offline_requested
 from installer.local_check import _digest_file, _digest_handle, expected_hashes, unreachable_words
 from installer.network import _retry_after_failure, _server_delay, network_words
 from installer.offline import LOCAL, offline_words
-from installer.failure_causes import HttpReason, NetworkReason, OfflineReason
 from installer.outcome import _transfer_failure
 from installer.pack_source import NOT_IN_PACK, _extract_from_pack
 from installer.paths import _entry_path, _entry_place

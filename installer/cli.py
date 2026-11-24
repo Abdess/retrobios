@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import NoReturn
 
 from installer.arguments import PACK_NAME_END, build_parser
+from installer.backups import run_backups, run_delete_backup
 from installer.combinations import combination_refusals, given_options
 from installer.console import OUTPUT, fold_line
 from installer.detect_os import detect_os
@@ -18,7 +19,6 @@ from installer.events import EVENTS, EVENT_SCHEMA, _event_exit_code, _event_mode
 from installer.from_folders import _open_local_sources
 from installer.handheld_app import app_not_added
 from installer.host_fs import _is_dir, _writing
-from installer.restore import restore_kept
 from installer.invocation import (
     LISTING_FLAGS,
     OFFLINE_VARIABLE,
@@ -34,8 +34,8 @@ from installer.platforms import AVAILABLE_PLATFORMS, TARGET_PLATFORMS, _name_key
 from installer.refusal import Refusal
 from installer.regions import resolve_regions
 from installer.remote import remote_from_env, remote_in_use
-from installer.backups import run_backups, run_delete_backup
 from installer.removal import run_removal
+from installer.restore import restore_kept
 from installer.run import _install
 from installer.tui_routes import (
     TUI_LIST_ENV,

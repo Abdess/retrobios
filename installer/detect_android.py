@@ -1,5 +1,4 @@
 """RetroArch builds found on Android, and the app folders Android keeps out of reach."""
-
 from __future__ import annotations
 
 import contextlib

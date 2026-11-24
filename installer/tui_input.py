@@ -8,15 +8,15 @@ from installer.host_fs import closed_folder
 from installer.terminal import TUI_MIN_COLS, TUI_MIN_ROWS
 from installer.text import cell_width
 from installer.tui_actions import _activate, _checklist, _option, _tick, _toggle_region
-from installer.tui_steps import _back, _open_details, _push, _start_run, tui_interrupt, tui_quit
-from installer.tui_folder_actions import _card_refusal, _choose_card, _closed_status, typed_path
 from installer.tui_commands import _tui_standalone_fits
+from installer.tui_folder_actions import _card_refusal, _choose_card, _closed_status, typed_path
 from installer.tui_frame import _armed, _bar_click, _bar_commits, _pager_starts
+from installer.tui_help import tui_view
 from installer.tui_keys import TuiKey, TuiMouse
 from installer.tui_rows import TUI_TICK_ROWS, _CHECKLISTS, _PAGERS, _first_item, tui_rows
 from installer.tui_screens import _only_match, _pager_items
-from installer.tui_help import tui_view
 from installer.tui_state import TUI_MAX_WIDTH
+from installer.tui_steps import _back, _open_details, _push, _start_run, tui_interrupt, tui_quit
 
 if TYPE_CHECKING:
     from installer.tui_state import TuiRow, TuiState

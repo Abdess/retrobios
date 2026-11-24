@@ -1,5 +1,4 @@
 """The terminal under the full screen: its modes, suspend and signals, and a terminal that closes."""
-
 from __future__ import annotations
 
 import codecs

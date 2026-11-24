@@ -17,13 +17,13 @@ from installer.choices import (
 from installer.console import _ask, _quit
 from installer.datadirs import data_directory_state, data_fetch_bytes, select_data_directories
 from installer.destination import _last_name, on_its_card, shown_bios_folder
-from installer.local_copies import plan_local_copies
 from installer.frontend_folders import save_lines
 from installer.host_fs import _is_file
 from installer.install_record import _RECORD_TAKEN
 from installer.invocation import _INVOCATION
 from installer.line_folder import _ask_from_folder
 from installer.local_check import not_in_place, read_in_place
+from installer.local_copies import plan_local_copies
 from installer.manifest import OTHER_SYSTEMS
 from installer.narrowing import _chosen, narrow
 from installer.offline import LOCAL, _offline_only, offline_named

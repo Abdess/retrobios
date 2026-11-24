@@ -1,5 +1,4 @@
 """The first passes over a setup's file list: names, options, board, target, cores, emulators, saves."""
-
 from __future__ import annotations
 
 import argparse

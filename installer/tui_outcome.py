@@ -4,6 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, NamedTuple
 
+from installer.backups import backup_words
 from installer.cards import _mounted_cards, card_system
 from installer.destination import _last_name
 from installer.detect_os import detected_os
@@ -31,7 +32,6 @@ from installer.outcome import (
 from installer.paths import shown_path
 from installer.platforms import display_name
 from installer.removal import _kept_words, kept_line
-from installer.backups import backup_words
 from installer.romm import ROMM_SCAN_WORDS
 from installer.tally import installed_words, left_out_words
 from installer.text import _plural, _wrap, agree, cell_width, format_size

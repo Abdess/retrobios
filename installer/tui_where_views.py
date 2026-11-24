@@ -1,5 +1,4 @@
 """The screens that choose the setup, the platform, the card and the folder."""
-
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

@@ -23,6 +23,15 @@ from installer.tui_choice import (
     tui_choices,
 )
 from installer.tui_commands import _tui_card, tui_flags, tui_record_kept
+from installer.tui_folder_actions import (
+    _activate_browse,
+    _activate_cardroot,
+    _activate_create,
+    _activate_folder,
+    _activate_platforms,
+    _activate_setup,
+    _open_folder_screen,
+)
 from installer.tui_paint import _CHECK_FIELDS, _styled
 from installer.tui_rows import (
     TUI_TICK_ROWS,
@@ -34,18 +43,6 @@ from installer.tui_rows import (
 )
 from installer.tui_screens import _only_match
 from installer.tui_state import TuiRow
-
-if TYPE_CHECKING:
-    from installer.tui_state import TuiState
-from installer.tui_folder_actions import (
-    _activate_browse,
-    _activate_cardroot,
-    _activate_create,
-    _activate_folder,
-    _activate_platforms,
-    _activate_setup,
-    _open_folder_screen,
-)
 from installer.tui_steps import (
     _activate_action,
     _back,
@@ -59,6 +56,9 @@ from installer.tui_steps import (
     _tui_record_take,
     tui_quit,
 )
+
+if TYPE_CHECKING:
+    from installer.tui_state import TuiState
 
 
 def _plan_close(state: TuiState, row: TuiRow) -> list[tuple]:

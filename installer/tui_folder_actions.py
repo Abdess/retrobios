@@ -1,5 +1,4 @@
 """What choosing a setup, a platform, a card or a folder does."""
-
 from __future__ import annotations
 
 import os

@@ -1,5 +1,4 @@
 """The games index under install/games/: where it lives, its bounds, the setups it covers."""
-
 from __future__ import annotations
 
 import hashlib

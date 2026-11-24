@@ -1,5 +1,4 @@
 """LaunchBox on Windows: where it lives, the emulators it lists and their BIOS folders."""
-
 from __future__ import annotations
 
 import contextlib

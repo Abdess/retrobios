@@ -1,5 +1,4 @@
 """The backups a run leaves: listing them, deleting one, and the setup an action names."""
-
 from __future__ import annotations
 
 import argparse
@@ -16,12 +15,12 @@ from installer.detect_frontends import detect_platforms
 from installer.detect_os import detect_os
 from installer.events import EVENTS
 from installer.host_fs import _clear_read_only
-from installer.restore import _backup_note
 from installer.install_record import day_words, load_record
 from installer.invocation import _INVOCATION
 from installer.paths import shown_path, spelled
 from installer.platforms import normalize_platform
 from installer.refusal import Refusal
+from installer.restore import _backup_note
 from installer.safe_replace import KeptFiles, _backup_files, _is_backup_run, _tree
 from installer.text import _plural, format_size
 

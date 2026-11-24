@@ -11,13 +11,13 @@ from installer.folder_index import (
     FolderIndex,
     _ZippedLookup,
 )
+from installer.host_fs import _is_file
 from installer.local_copies import (
     _copy_reason,
     _counts_by_folder,
     _known_destinations,
     _place_reason,
 )
-from installer.host_fs import _is_file
 from installer.manifest import GAME_DATA, entry_copies
 from installer.paths import _entry_path, shown_path
 from installer.platforms import entry_systems

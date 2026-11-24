@@ -1,5 +1,4 @@
 """Which BIOS regions the games on a card need, and when a rule keeps every region."""
-
 from __future__ import annotations
 
 from pathlib import Path

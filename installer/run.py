@@ -36,6 +36,8 @@ from installer.plan import _check_free_space
 from installer.platforms import display_name
 from installer.refusal import Refusal
 from installer.romm import _check_run_romm, _pass_romm_layout
+from installer.run_check import _pass_check_existing, _pass_check_report, _pass_dry_run
+from installer.run_download import _pass_download, _remember_install
 from installer.run_files import _select_setup_files
 from installer.run_setups import (
     _check_run_cores,
@@ -59,8 +61,6 @@ if TYPE_CHECKING:
     from installer.folder_index import FolderIndex
     from installer.setup_passes import _PlatformPass
     from installer.run_setups import _InstallRun
-from installer.run_check import _pass_check_existing, _pass_check_report, _pass_dry_run
-from installer.run_download import _pass_download, _remember_install
 
 
 def _pass_install_tree(run: _InstallRun, p: _PlatformPass, entry: dict,

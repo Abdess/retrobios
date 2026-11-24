@@ -1,5 +1,4 @@
 """The help screen, and the view that picks which screen to draw."""
-
 from __future__ import annotations
 
 import textwrap

@@ -20,9 +20,8 @@ from installer.cards import (
     drive_kind,
 )
 from installer.console import _ask, _quit
-from installer.detection_notes import note_detection
-from installer.detect_frontends import _UNNAMEABLE, detect_platforms
 from installer.detect_android import _android_storage_root
+from installer.detect_frontends import _UNNAMEABLE, detect_platforms
 from installer.detect_os import (
     _DETECTED_OS,
     _FROM_CARD,
@@ -32,6 +31,7 @@ from installer.detect_os import (
     detected_os,
     detected_shown,
 )
+from installer.detection_notes import note_detection
 from installer.frontend_folders import _retroarch_config_at
 from installer.host_fs import _DETECTION_REFUSED, _is_dir, _is_file
 from installer.offline import LOCAL

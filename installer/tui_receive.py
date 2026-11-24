@@ -4,17 +4,17 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 
+from installer.backups import list_backups
 from installer.device import detect_board
 from installer.platforms import display_name
-from installer.backups import list_backups
 from installer.tui_actions import _activate, _device_focus, _install_now, _same_plan
-from installer.tui_steps import _focus_plan, _replace, _start_check, _start_run
-from installer.tui_folder_actions import _known_choice, _tui_folder_facts
 from installer.tui_choice import _needed
 from installer.tui_commands import TUI_ACTION_RUNS
+from installer.tui_folder_actions import _known_choice, _tui_folder_facts
 from installer.tui_outcome import full_drive_words
 from installer.tui_paint import _styled
 from installer.tui_rows import tui_rows
+from installer.tui_steps import _focus_plan, _replace, _start_check, _start_run
 
 if TYPE_CHECKING:
     from installer.tui_state import TuiState

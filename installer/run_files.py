@@ -50,6 +50,16 @@ from installer.plan_words import (
 )
 from installer.platforms import system_title
 from installer.refusal import Refusal
+from installer.setup_passes import (
+    _PlatformPass,
+    _pass_case_and_names,
+    _pass_emulators,
+    _pass_files,
+    _pass_installed_cores,
+    _pass_options,
+    _pass_target,
+    _pass_version_and_saves,
+)
 from installer.tally import (
     _bytes,
     _left_out_lines,
@@ -63,16 +73,6 @@ from installer.text import _plural, format_size
 
 if TYPE_CHECKING:
     from installer.run_setups import _InstallRun
-from installer.setup_passes import (
-    _PlatformPass,
-    _pass_case_and_names,
-    _pass_emulators,
-    _pass_files,
-    _pass_installed_cores,
-    _pass_options,
-    _pass_target,
-    _pass_version_and_saves,
-)
 
 
 def _system_label(name: str, manifest: dict | None) -> str:

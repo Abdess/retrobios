@@ -1,5 +1,4 @@
 """Reading the game folders of a card into the systems and BIOS sets its games need."""
-
 from __future__ import annotations
 
 import os

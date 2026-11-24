@@ -1,5 +1,4 @@
 """The screen a full-screen session opens on, from the options and what detection found."""
-
 from __future__ import annotations
 
 import argparse

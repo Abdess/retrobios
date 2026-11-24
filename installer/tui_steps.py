@@ -1,5 +1,4 @@
 """Moves between screens: opening and leaving them, starting a check or a run, the action menus."""
-
 from __future__ import annotations
 
 from pathlib import Path

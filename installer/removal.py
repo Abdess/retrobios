@@ -11,13 +11,13 @@ import urllib.error
 from collections.abc import Iterable
 from pathlib import Path, PurePosixPath
 
+from installer.backups import _action_setup, _backup_date
 from installer.choices import available_choices, emulator_names, resolve_choices, resolve_systems
 from installer.console import QUIT_CODE, _answer_yes
 from installer.events import EVENTS
 from installer.filesystems import keeps_case
 from installer.host_fs import _clear_read_only, _is_link
 from installer.install_record import _record_now, load_record, setup_record
-from installer.restore import _update_record
 from installer.invocation import _INVOCATION, offline_requested
 from installer.lists import fetch_manifest
 from installer.local_check import _digest_file
@@ -27,14 +27,6 @@ from installer.paths import shown_path, spelled
 from installer.platforms import display_name, refuse_name
 from installer.refusal import Refusal
 from installer.remote import MAX_MANIFEST_BYTES, active_remote
-from installer.safe_replace import (
-    BACKUP_DIR,
-    KEPT,
-    REMOVED_NOTE,
-    _move_aside,
-)
-from installer.text import _plural, agree, format_size
-from installer.backups import _action_setup, _backup_date
 from installer.removal_plan import (
     CHANGED_SINCE_PLAN,
     REMOVAL_REASONS,
@@ -44,6 +36,14 @@ from installer.removal_plan import (
     plan_misplaced_removal,
     plan_removal,
 )
+from installer.restore import _update_record
+from installer.safe_replace import (
+    BACKUP_DIR,
+    KEPT,
+    REMOVED_NOTE,
+    _move_aside,
+)
+from installer.text import _plural, agree, format_size
 
 
 def _left_by_hand(folder: Path, record: dict, fold: bool) -> list[str]:

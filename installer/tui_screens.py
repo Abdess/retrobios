@@ -5,11 +5,11 @@ import re
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 
+from installer.backups import backup_words
 from installer.detect_os import detected_shown
 from installer.manifest import OTHER_SYSTEMS
 from installer.offline import LOCAL
 from installer.platforms import display_name
-from installer.backups import backup_words
 from installer.setups import _setup_label
 from installer.text import _plural, _wrap, cell_width, format_duration, format_size
 from installer.tui_choice import (
@@ -56,10 +56,6 @@ from installer.tui_plan_view import (
 )
 from installer.tui_routes import TUI_ROUTES
 from installer.tui_rows import OTHER_HELP, tui_rows
-
-if TYPE_CHECKING:
-    from installer.tui_paint import TuiLine
-    from installer.tui_state import TuiRow, TuiState
 from installer.tui_where_views import (
     _view_browse,
     _view_cardroot,
@@ -69,6 +65,10 @@ from installer.tui_where_views import (
     _view_platforms,
     _view_setup,
 )
+
+if TYPE_CHECKING:
+    from installer.tui_paint import TuiLine
+    from installer.tui_state import TuiRow, TuiState
 
 
 def _view_checking(state: TuiState, width: int, height: int) -> tuple:

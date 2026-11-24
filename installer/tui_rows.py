@@ -6,6 +6,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from installer.backups import backup_words
 from installer.cards import _doubt_kinds, _mount_name, _mounted_cards
 from installer.choices import recorded_axes
 from installer.cores import CORE_PLATFORMS
@@ -18,7 +19,6 @@ from installer.plan import CONFIRM_FROM_BYTES
 from installer.plan_words import cores_words
 from installer.platforms import TARGET_PLATFORMS, _tui_system_label, system_title
 from installer.regions import region_title
-from installer.backups import backup_words
 from installer.setups import setup_list
 from installer.tally import tally
 from installer.text import _plural, cell_width, format_size

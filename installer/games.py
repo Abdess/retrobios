@@ -18,6 +18,8 @@ from installer.game_files import (
     game_folders,
     games_root,
 )
+from installer.game_folders import GamesPlan, _GamesDocs, _plan_read_folders, _read_folder_games
+from installer.games_index import GAMES, GAMES_REASONS, GamesData, GamesUnavailable, games_setups
 from installer.host_fs import _is_dir
 from installer.offline import LOCAL
 from installer.paths import shown_path
@@ -29,8 +31,6 @@ from installer.text import _plural, agree
 if TYPE_CHECKING:
     from installer.game_files import GameFolder
     from installer.terminal import Terminal
-from installer.game_folders import GamesPlan, _GamesDocs, _plan_read_folders, _read_folder_games
-from installer.games_index import GAMES, GAMES_REASONS, GamesData, GamesUnavailable, games_setups
 
 
 def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None = None,
