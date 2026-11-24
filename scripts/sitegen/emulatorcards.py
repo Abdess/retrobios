@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from core.sizes import size_text
-from model.collection import manufacturer_slug
+from model.manufacturers import manufacturer_slug
 from sitegen.runsections import system_name
 from model.profiles import reads_own_files
 from packs.consumers import FileConsumers, entry_target, held_copy

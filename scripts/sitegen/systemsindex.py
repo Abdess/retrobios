@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
-from model.collection import SECTION_LABELS, profiles_on_disk, manufacturer_slug
+from model.collection import profiles_on_disk
+from model.manufacturers import manufacturer_slug
 from model.composition import GAME_DATA_TOPS
 from model.profiles import is_emulator
 from sitegen import starlight as sitestarlight
 from sitegen.render import count_text
 from sitegen.runlinks import console_href
+from sitegen.runsections import section_labels
 from sitegen.startwith import section_label
 
 
@@ -18,7 +20,9 @@ def _console_display(manufacturer: str, console: str) -> str:
     from model.collection import PROGRAM_TOPS
     from model.systemnames import heading_name
 
-    return console if manufacturer in PROGRAM_TOPS else heading_name(manufacturer, console)
+    if manufacturer in PROGRAM_TOPS:
+        return console
+    return heading_name(manufacturer, console, section_labels())
 
 
 def generate_systems_index(manufacturers: dict) -> str:
@@ -49,6 +53,8 @@ def generate_systems_index(manufacturers: dict) -> str:
         "",
     ]
 
+    labels = section_labels()
+
     # Other holds one folder per emulator: a7800 or altirra in the console
     # table named no console. Arcade boards are neither consoles nor
     # computers, and the crumb of their page says Arcade too.
@@ -72,7 +78,7 @@ def generate_systems_index(manufacturers: dict) -> str:
         rows = sorted(
             ((folder_emulator(console)[0] if group == "programs"
               else section_label(mfr, console) if mfr == "Arcade"
-              or (mfr, console) in SECTION_LABELS
+              or (mfr, console) in labels
               else _console_display(mfr, console), mfr, console, len(files))
              for mfr, consoles in manufacturers.items() if kind(mfr) == group
              for console, files in consoles.items()),

@@ -8,7 +8,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass, field
 
 from model import siteinputs
-from model.collection import card_moves
+from model.manufacturers import manufacturer_slug
 from model.systemnames import SYSTEM_PARENTS
 from sitegen import runsections
 from sitegen.runsections import section_without_boards, system_name
@@ -26,7 +26,9 @@ class LinkTables:
     (sitegen.places), by the folder each is placed in. ``console_pages``:
     (slug, console) -> its page stems under systems/ when a manufacturer page
     too large for one is cut, and ``card_pages`` (slug, console, sha1) -> the
-    stem holding that card. ``board_sections``: boards whose section the
+    stem holding that card. ``card_moves``: (slug, folder, sha1) -> the
+    (slug, console) section a system page filed that copy's card in, outside
+    its folder: neogeo.zip under Arcade. ``board_sections``: boards whose section the
     system pages wrote. ``emulator_card_pages``: (emulator, anchor) -> the
     emulators/ stem a card moved to. ``icons``: icon name -> whether the site
     holds a copy. ``arcade``: the boards elected, with the runsections generation
@@ -38,6 +40,7 @@ class LinkTables:
     system_pages: dict[str, tuple[str, str]] = field(default_factory=dict)
     console_pages: dict[tuple[str, str], list[str]] = field(default_factory=dict)
     card_pages: dict[tuple[str, str, str], str] = field(default_factory=dict)
+    card_moves: dict[tuple[str, str, str], tuple[str, str]] = field(default_factory=dict)
     board_sections: set[str] = field(default_factory=set)
     emulator_card_pages: dict[tuple[str, str], str] = field(default_factory=dict)
     icons: dict[str, bool] = field(default_factory=dict)
@@ -96,8 +99,17 @@ def reset_console_pages() -> None:
     tables = current()
     tables.console_pages.clear()
     tables.card_pages.clear()
+    tables.card_moves.clear()
     tables.board_sections.clear()
     tables.aliases = None
+
+
+def record_card_move(manufacturer: str, folder: str, sha1: str,
+                     to_manufacturer: str, to_console: str) -> None:
+    """Mark that the card of the copy under bios/<manufacturer>/<folder>/
+    sits in the section (to_manufacturer, to_console)."""
+    current().card_moves[(manufacturer_slug(manufacturer), folder, str(sha1))] = (
+        manufacturer_slug(to_manufacturer), to_console)
 
 
 def record_console_pages(
@@ -137,7 +149,8 @@ def console_href(slug: str, console: str, prefix: str = "") -> str:
 def card_page(path: str, sha1: str) -> str:
     """The systems/ page stem holding the card of the copy at ``path``
     (bios/<Manufacturer>/<Console>/...). A board's set is on the board's
-    page whatever folder holds the copy."""
+    page whatever folder holds the copy, and a copy a system page or the
+    grouping filed outside its folder is on that section's page."""
     tables = current()
     parts = path.split("/")
     slug = parts[1].lower().replace(" ", "-")
@@ -146,7 +159,9 @@ def card_page(path: str, sha1: str) -> str:
         board = arcade_board(sha1)
         if board in tables.board_sections:
             return f"arcade-{board_slug(board)}"
-    slug, console = card_moves.get((slug, console, str(sha1)), (slug, console))
+    key = (slug, console, str(sha1))
+    slug, console = (tables.card_moves.get(key) or runsections.current().moves.get(key)
+                     or (slug, console))
     return tables.card_pages.get((slug, console, sha1), slug)
 
 

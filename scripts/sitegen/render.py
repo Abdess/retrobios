@@ -6,7 +6,7 @@ import re
 from collections.abc import Callable
 
 from core.text import count_text as count_text
-from model.collection import manufacturer_slug
+from model.manufacturers import manufacturer_slug
 from sitegen import runsections
 from sitegen.runsections import system_name
 

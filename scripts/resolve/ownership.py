@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 
 from core.memo import DerivedView
-from model.collection import manufacturer_slug
+from model.manufacturers import manufacturer_slug
 
 
 # bios/Other/<emulator> and bios/Arcade/<emulator or board> file a copy by

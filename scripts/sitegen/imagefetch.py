@@ -97,7 +97,7 @@ def fetch_icons() -> Iterator[str]:
     db = load_database(str(REPO_ROOT / DB_FILE))
     names = sorted({
         console_icon_name(manufacturer, console)
-        for manufacturer, consoles in group_by_manufacturer(db).items()
+        for manufacturer, consoles in group_by_manufacturer(db).sections.items()
         for console in consoles
     })
     ICON_DIR.mkdir(parents=True, exist_ok=True)

@@ -5,7 +5,8 @@ from __future__ import annotations
 import urllib.parse
 from collections.abc import Callable
 
-from model.collection import group_by_manufacturer, manufacturer_slug
+from model.collection import group_by_manufacturer
+from model.manufacturers import manufacturer_slug
 from model.database import declared_records, sha1_at
 from sitegen.runsections import system_name
 from model.profiles import is_emulator
@@ -52,7 +53,7 @@ def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
                 for sha1 in named}
             for sys_id in ids:
                 held.setdefault(sys_id, set()).update(found)
-    manufacturers = {manufacturer_slug(mfr): mfr for mfr in group_by_manufacturer(db)}
+    manufacturers = {manufacturer_slug(mfr): mfr for mfr in group_by_manufacturer(db).sections}
     base = urllib.parse.urlsplit(SITE_URL).path
     items = []
     for sys_id in sorted(system_ids(profiles, [c["config"] for c in coverages.values()])):

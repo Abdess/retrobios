@@ -9,7 +9,7 @@ import re
 import urllib.parse
 from dataclasses import dataclass
 
-from model.collection import SECTION_LABELS, manufacturer_slug
+from model.manufacturers import manufacturer_slug
 from model.composition import GAME_DATA_TOPS
 from packs.consumers import FileConsumers
 from sitegen import markup
@@ -31,6 +31,7 @@ from sitegen.home import next_block
 from sitegen.install import console_install_block, manifest_systems, platform_display
 from sitegen.parts import character_count, even_runs, parent_front_matter, part_stems, weighted_runs
 from sitegen.render import count_text, slugify_anchor
+from sitegen.runsections import section_labels
 from sitegen.runlinks import console_href, record_console_pages
 from sitegen.startwith import (
     OTHER_ARCADE,
@@ -84,8 +85,7 @@ class _BoardSort:
 
     def arcade_folders(self, arcade: dict[str, list], by_name: dict[str, str]) -> None:
         """The folders of bios/Arcade/, each file to its board or machine."""
-        from sitegen.runlinks import arcade_board, archive_machine
-        from model.collection import record_card_move
+        from sitegen.runlinks import arcade_board, archive_machine, record_card_move
 
         for console in sorted(arcade):
             joined = by_name.get(console.casefold())
@@ -105,8 +105,7 @@ class _BoardSort:
         """A board's set filed under a machine's folder is on the board's page
         too, whatever the folder: naomi.zip under the Dreamcast was the copy
         five setups list, and the NAOMI page did not name it."""
-        from sitegen.runlinks import arcade_board, archive_machine
-        from model.collection import record_card_move
+        from sitegen.runlinks import arcade_board, archive_machine, record_card_move
 
         for mfr, consoles in manufacturers.items():
             if mfr == "Arcade":
@@ -194,7 +193,7 @@ def _part_name(manufacturer: str, console: str) -> str:
     """What a part's title calls the files: "Arcade files a to b"."""
     if (manufacturer, console) == OTHER_ARCADE:
         return "Arcade"
-    return SECTION_LABELS.get((manufacturer, console), console)
+    return section_labels().get((manufacturer, console), console)
 
 
 def _system_front_matter(

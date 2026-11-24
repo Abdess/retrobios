@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from model.collection import copy_places, manufacturer_slug
+from model.collection import copy_places
+from model.manufacturers import manufacturer_slug
 from model.systemnames import console_index, section_pairs_of, spelled_section
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from resolve.ownership import BUCKET_FOLDERS, names_manufacturer

@@ -42,6 +42,7 @@ import zipfile
 import json
 
 from model import collection
+from model.manufacturers import manufacturer_slug
 import sitegen
 from sitegen import cards as sitegen_cards
 from sitegen import consolecards
@@ -932,7 +933,7 @@ class ConsolesFieldNamesMachinesOnce(unittest.TestCase):
     def test_no_emulator_folder_is_a_console(self) -> None:
         for maker in ("Other", "Game Engines"):
             page = systempages.system_pages(maker, {"dolphin": [_game_boy_file("a.bin", "a")]}, _consumers_by_system({}))
-            self.assertEqual(_consoles(page[collection.manufacturer_slug(maker)][0]), [], maker)
+            self.assertEqual(_consoles(page[manufacturer_slug(maker)][0]), [], maker)
 
     def test_a_console_with_its_own_page_is_left_to_it(self) -> None:
         big = [_game_boy_file(f"r{i:02}.bin", "0123456789"[i], f"bios/Sega/Saturn/r{i:02}.bin")
@@ -1240,6 +1241,31 @@ class EnginesGoByEngine(unittest.TestCase):
             table = json.loads(redirects.read_text(encoding="utf-8"))
             self.assertEqual(table.get("/systems/other-scummvm/"), "/systems/scummvm/")
             self.assertEqual(table.get("/systems/oric/"), "/systems/tangerine/#oric")
+
+
+class TheGroupingCarriesItsLabelsAndMoves(unittest.TestCase):
+    """The grouping wrote engine headings into SECTION_LABELS and card moves
+    into a module dict nothing reset: a heading one collection left named a
+    section of the next, and a manifest build wrote site state."""
+
+    def test_the_labels_come_back_with_the_sections(self) -> None:
+        before = dict(collection.SECTION_LABELS)
+        copy = {"sha1": "s", "name": "a.bin", "path": "bios/3D Realms/eng/a.bin"}
+        named = collection._engine_sections(
+            {"3D Realms": {"eng": [copy]}}, {"eng": {"emulator": "Engine One"}})
+        self.assertEqual(named.labels[("3D Realms", "eng")], "Engine One")
+        self.assertEqual(named.labels[("Arcade", "fba2012")], "FB Alpha 2012")
+        self.assertEqual(dict(collection.SECTION_LABELS), before)
+        plain = collection._engine_sections({"3D Realms": {"eng": [copy]}}, {})
+        self.assertNotIn(("3D Realms", "eng"), plain.labels)
+
+    def test_the_moves_come_back_with_the_sections(self) -> None:
+        copy = {"sha1": "s", "name": "a.dat", "path": "bios/Other/ScummVM/a.dat"}
+        grouping = collection._engine_sections(
+            {"ScummVM": {}, "Other": {"ScummVM": [copy]}}, {})
+        self.assertEqual(grouping.sections, {"ScummVM": {"ScummVM": [copy]}})
+        self.assertEqual(dict(grouping.moves), {("other", "ScummVM", "s"): ("scummvm", "ScummVM")})
+        self.assertEqual(collection._engine_sections({"Sony": {"PS": [copy]}}, {}).moves, {})
 
 
 class OneLabelOnceOnABoardPage(unittest.TestCase):

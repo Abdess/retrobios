@@ -74,7 +74,9 @@ class SectionsFollowTheInputs(_Inputs):
         (tmp / "emulators").mkdir()
         (tmp / "database.json").write_text(json.dumps({"files": {}}), encoding="utf-8")
         self.use(db=tmp / "database.json", emulators=tmp / "emulators")
-        folders = {"Sega": {"Mega CD": [], "Mega-CD": []}}
+        from model.collection import SECTION_LABELS, Grouping
+
+        folders = Grouping({"Sega": {"Mega CD": [], "Mega-CD": []}}, SECTION_LABELS, {})
         with mock.patch.object(runsections, "group_by_manufacturer", return_value=folders):
             self.assertEqual(render.console_anchor("Sega", "Mega CD"), "mega-cd")
             self.assertEqual(render.console_anchor("Sega", "Mega-CD"), "mega-cd_1")

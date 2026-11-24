@@ -6,7 +6,7 @@ import re
 from collections.abc import Iterator
 from pathlib import Path
 
-from model.collection import manufacturer_slug
+from model.manufacturers import manufacturer_slug
 from model.composition import GAME_DATA_TOPS
 from sitegen.guidedata import device_groups, group_tiles, handheld_guide
 from model.profiles import unique_emulator_profiles

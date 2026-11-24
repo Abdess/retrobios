@@ -9,7 +9,8 @@ from xml.sax.saxutils import escape
 
 from core.paths import DB_FILE, PLATFORMS_DIR, REPO_ROOT
 from core.text import series
-from model.collection import group_by_manufacturer, manufacturer_slug
+from model.collection import group_by_manufacturer
+from model.manufacturers import manufacturer_slug
 from model.composition import GAME_DATA_TOPS
 from model.database import load_database
 from model.platforms import load_platform_config
@@ -99,7 +100,7 @@ def system_cards() -> dict[str, tuple[str, str]]:
     """Each manufacturer page's card under og/systems/, titled with the
     manufacturer and listing its consoles. Read from the same grouping the
     system pages are written from."""
-    manufacturers = group_by_manufacturer(load_database(str(REPO_ROOT / DB_FILE)))
+    manufacturers = group_by_manufacturer(load_database(str(REPO_ROOT / DB_FILE))).sections
     return {
         f"systems/{manufacturer_slug(manufacturer)}": (
             manufacturer, consoles_tagline(list(consoles), _manufacturer_lead(manufacturer)))

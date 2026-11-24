@@ -11,7 +11,7 @@ from pathlib import Path
 
 from core.hashing import declared_hash_lists
 from model import siteinputs
-from model.collection import manufacturer_slug
+from model.manufacturers import manufacturer_slug
 from model.database import declared_records
 from model.registry import load_versions, versions_file_for
 from sitegen.runsections import system_name

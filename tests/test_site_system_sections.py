@@ -159,10 +159,11 @@ class SystemLinks(unittest.TestCase):
 
             with open("database.json", encoding="utf-8") as handle:
                 db = json.load(handle)
-            cls.manufacturers = group_by_manufacturer(db)
+            grouping = group_by_manufacturer(db)
+            cls.manufacturers = grouping.sections
             profiles = load_emulator_profiles("emulators", skip_aliases=False)
-            runsections.install(
-                cls.manufacturers, systemnames.program_names(profiles))
+            runsections.install_grouping(
+                grouping, systemnames.program_names(profiles))
             # The system pages give every arcade board a section of its own
             # and record it. The built pages are checked by
             # test_site_built_gate.
@@ -238,9 +239,10 @@ class SystemLinks(unittest.TestCase):
     def test_a_matching_heading_is_linked(self) -> None:
         """An id whose name reads one heading, outside Other, leads there."""
         by_heading: dict[str, set[tuple[str, str]]] = {}
+        labels = runsections.section_labels()
         for mfr, consoles in self.manufacturers.items():
             for console in consoles:
-                for name in {systemnames.heading_name(mfr, console), console}:
+                for name in {systemnames.heading_name(mfr, console, labels), console}:
                     by_heading.setdefault(name.casefold(), set()).add((mfr, console))
         missed = []
         for sys_id in sorted(self.ids):

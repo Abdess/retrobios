@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Mapping
+from dataclasses import dataclass, field
 
 from core.anchors import toc_slug, unique_anchor
 from model import siteinputs
-from model.collection import group_by_manufacturer, manufacturer_slug
+from model.collection import SECTION_LABELS, Grouping, group_by_manufacturer
+from model.manufacturers import manufacturer_slug
 from model.systemnames import (
     ConsoleSections,
     console_sections,
@@ -26,12 +28,15 @@ class RunSections:
     share a slug, and the second heading took "mega-cd_1" while every link
     said "mega-cd". ``generation`` counts the installs: what a page derives
     from the sections (the arcade boards) is stale once it moves.
+    ``moves``: the cards the grouping filed outside their folder
+    (model.collection.Grouping.moves).
     """
 
     sections: ConsoleSections
     anchors: dict[tuple[str, str], str]
     inputs: siteinputs.SiteInputs
     generation: int
+    moves: Mapping[tuple[str, str, str], tuple[str, str]] = field(default_factory=dict)
 
 
 _current: list[RunSections | None] = [None]
@@ -41,15 +46,19 @@ _installs = [0]
 def install(
     sections: dict[str, dict] | set[tuple[str, str]],
     programs: set[str] | frozenset[str] = frozenset(),
+    labels: Mapping[tuple[str, str], str] = SECTION_LABELS,
+    moves: Mapping[tuple[str, str, str], tuple[str, str]] | None = None,
 ) -> RunSections:
     """Install the console sections the system pages carry, under the
     current site inputs, the previous ones forgotten.
 
     ``sections`` maps each manufacturer to its consoles, as the system pages
     group them, or is a set of (manufacturer, console) pairs. ``programs``
-    are the emulator names, which never name a system.
+    are the emulator names, which never name a system. ``labels`` and
+    ``moves`` are the headings and card moves of the grouping
+    (install_grouping).
     """
-    carried = console_sections(sections, programs)
+    carried = console_sections(sections, programs, labels)
     by_maker: dict[str, list[str]] = {}
     for mfr, console in carried.pairs:
         by_maker.setdefault(mfr, []).append(console)
@@ -60,9 +69,15 @@ def install(
         for console in sorted(consoles):
             anchors[(manufacturer_slug(mfr), console)] = unique_anchor(toc_slug(console), used)
     _installs[0] += 1
-    run = RunSections(carried, anchors, siteinputs.current(), _installs[0])
+    run = RunSections(carried, anchors, siteinputs.current(), _installs[0], dict(moves or {}))
     _current[0] = run
     return run
+
+
+def install_grouping(grouping: Grouping, programs: set[str] | frozenset[str]) -> RunSections:
+    """Install the sections of a collection's grouping, with its headings
+    and card moves."""
+    return install(grouping.sections, programs, grouping.labels, grouping.moves)
 
 
 def reset() -> None:
@@ -90,7 +105,12 @@ def current() -> RunSections:
 
     db = load_database(str(inputs.db))
     profiles = load_emulator_profiles(str(inputs.emulators), skip_aliases=False)
-    return install(group_by_manufacturer(db), program_names(profiles))
+    return install_grouping(group_by_manufacturer(db), program_names(profiles))
+
+
+def section_labels() -> Mapping[tuple[str, str], str]:
+    """The heading each labelled section shows in place of its folder."""
+    return current().sections.labels
 
 
 def system_name(sys_id: str) -> str:

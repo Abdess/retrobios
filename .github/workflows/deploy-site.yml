@@ -58,6 +58,7 @@ on:
       - "scripts/model/largefiles.py"
       - "scripts/model/launcherrecords.py"
       - "scripts/model/mamerelease.py"
+      - "scripts/model/manufacturers.py"
       - "scripts/model/measurements.py"
       - "scripts/model/nodedup.py"
       - "scripts/model/platforms.py"

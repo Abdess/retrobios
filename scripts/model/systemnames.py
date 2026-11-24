@@ -11,39 +11,44 @@ from model.collection import (
     SECTION_LABELS,
     PROGRAM_TOPS,
     group_by_manufacturer,
-    manufacturer_slug,
 )
+from model.manufacturers import manufacturer_slug
 
 
 @dataclass(frozen=True)
 class ConsoleSections:
     """The console sections a collection files: every (manufacturer,
-    console) pair, by normalized id and by the name its heading reads, and
-    the program names (casefolded) whose headings name no system."""
+    console) pair, by normalized id and by the name its heading reads, the
+    program names (casefolded) whose headings name no system, and the
+    heading each labelled section shows in place of its folder."""
     index: Mapping[str, set[tuple[str, str]]]
     programs: AbstractSet[str]
     pairs: AbstractSet[tuple[str, str]]
     by_name: Mapping[str, set[tuple[str, str]]]
+    labels: Mapping[tuple[str, str], str]
 
 
 def console_sections(
     sections: dict[str, dict] | set[tuple[str, str]],
     programs: Iterable[str] = (),
+    labels: Mapping[tuple[str, str], str] = SECTION_LABELS,
 ) -> ConsoleSections:
     """The sections ``sections`` carries: a map of each manufacturer to its
     consoles, as the system pages group them, or a set of (manufacturer,
     console) pairs. ``programs`` are the emulator names, which never name a
-    system."""
+    system. ``labels`` are the headings the grouping gave
+    (model.collection.Grouping.labels)."""
     pairs = section_pairs_of(sections)
     by_name: dict[str, set[tuple[str, str]]] = {}
     for mfr, console in pairs:
-        for name in {heading_name(mfr, console).casefold(), console.casefold()}:
+        for name in {heading_name(mfr, console, labels).casefold(), console.casefold()}:
             by_name.setdefault(name, set()).add((mfr, console))
     return ConsoleSections(
         console_index(pairs),
         frozenset(name.casefold() for name in programs),
         frozenset(pairs),
         by_name,
+        labels,
     )
 
 
@@ -52,10 +57,8 @@ def collection_sections(
 ) -> ConsoleSections:
     """The console sections of a collection: its database, the bios folder
     it describes and every emulator profile, aliases included."""
-    return console_sections(
-        group_by_manufacturer(db, bios_dir=bios_dir, profiles=profiles),
-        program_names(profiles),
-    )
+    grouping = group_by_manufacturer(db, bios_dir=bios_dir, profiles=profiles)
+    return console_sections(grouping.sections, program_names(profiles), grouping.labels)
 
 
 def program_names(profiles: dict[str, dict]) -> set[str]:
@@ -139,19 +142,22 @@ def own_section_in(sys_id: str, sections: ConsoleSections) -> tuple[str, str] | 
     if (
         mfr in PROGRAM_TOPS
         or console.casefold() == mfr.casefold()
-        or heading_name(mfr, console).casefold() in sections.programs
+        or heading_name(mfr, console, sections.labels).casefold() in sections.programs
     ):
         return None
     return mfr, console
 
 
-def heading_name(mfr: str, console: str) -> str:
+def heading_name(
+    mfr: str, console: str, labels: Mapping[tuple[str, str], str] = SECTION_LABELS,
+) -> str:
     """A console heading read out of its page: the maker in front, unless
-    the heading already starts with it or the page is a game publisher's."""
+    the heading already starts with it or the page is a game publisher's,
+    headed with its label (``labels``) or its folder."""
     from model.composition import GAME_DATA_TOPS
 
     if mfr in GAME_DATA_TOPS:
-        return SECTION_LABELS.get((mfr, console), console)
+        return labels.get((mfr, console), console)
     if console.casefold().startswith(mfr.split()[0].casefold()):
         return console
     return f"{mfr} {console}"
@@ -194,7 +200,7 @@ def system_name_in(sys_id: str, sections: ConsoleSections) -> str:
     sys_id = str(sys_id)
     section = own_section_in(sys_id, sections)
     if section is not None:
-        return heading_name(*section)
+        return heading_name(*section, sections.labels)
     name = SYSTEM_NAMES.get(sys_id)
     if name is None:
         raise KeyError(

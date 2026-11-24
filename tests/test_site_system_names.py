@@ -45,11 +45,12 @@ class SystemNames(unittest.TestCase):
     def setUpClass(cls) -> None:
         with open(REPO_ROOT / "database.json", encoding="utf-8") as handle:
             db = json.load(handle)
-        cls.manufacturers = group_by_manufacturer(db)
+        grouping = group_by_manufacturer(db)
+        cls.manufacturers = grouping.sections
         cls.profiles = load_emulator_profiles(
             str(REPO_ROOT / "emulators"), skip_aliases=False)
-        runsections.install(
-            cls.manufacturers, systemnames.program_names(cls.profiles))
+        runsections.install_grouping(
+            grouping, systemnames.program_names(cls.profiles))
         platforms_dir = str(REPO_ROOT / "platforms")
         cls.platform_ids = {
             sys_id
@@ -116,7 +117,7 @@ class SystemNames(unittest.TestCase):
 
 
 class SectionsComeBeforeThePlan(unittest.TestCase):
-    """plan_emulator_pages names systems. Run before runsections.install,
+    """plan_emulator_pages names systems. Run before runsections.install_grouping,
     it made siterender read ./database.json and ./emulators whatever --db
     and --emulators-dir gave, so the parts were cut on another collection."""
 
@@ -131,7 +132,7 @@ class SectionsComeBeforeThePlan(unittest.TestCase):
         for node in ast.walk(tree):
             if isinstance(node, ast.Call):
                 lines.setdefault(ast.unparse(node.func), node.lineno)
-        self.assertLess(lines["runsections.install"], lines["plan_emulator_pages"])
+        self.assertLess(lines["runsections.install_grouping"], lines["plan_emulator_pages"])
 
 
 if __name__ == "__main__":

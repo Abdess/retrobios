@@ -15,7 +15,8 @@ from core.artifacts import build_timestamp
 from romrecipes import ledger
 from model import releaserecord
 from model import siteinputs
-from model.collection import group_by_manufacturer, manufacturer_slug
+from model.collection import group_by_manufacturer
+from model.manufacturers import manufacturer_slug
 from model.composition import compute_composition
 from model.database import load_database
 from model.dumpcatalog import load_provenance_snapshots
@@ -683,8 +684,9 @@ def generate_site(args: argparse.Namespace) -> None:
     # cut into weigh the status its rows show.
     run.file_held = availability_check(db, run.suppl_names)
     # The plan names systems: the sections must be this run's data first.
-    run.manufacturers = group_by_manufacturer(db)
-    runsections.install(run.manufacturers, program_names(profiles))
+    grouping = group_by_manufacturer(db)
+    run.manufacturers = grouping.sections
+    runsections.install_grouping(grouping, program_names(profiles))
     # Which archive is which board's depends on the sections: elected once
     # they are this run's.
     use_arcade_boards(elect_arcade_boards(profiles, db))

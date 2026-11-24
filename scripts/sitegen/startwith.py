@@ -6,7 +6,7 @@ import re
 from collections.abc import Iterator
 from dataclasses import dataclass
 
-from model.collection import SECTION_LABELS
+from model.manufacturers import manufacturer_slug
 from packs.consumers import FileConsumers
 from sitegen import markup
 from sitegen.cards import ROMSET_FAQ, emulator_display, romset_releases
@@ -28,6 +28,7 @@ from core.text import series
 from sitegen.emulatorcards import region_words
 from sitegen.install import comes_with_app
 from sitegen.render import card_anchor, code_span, count_text, console_anchor
+from sitegen.runsections import section_labels
 
 
 class _StartGroup:
@@ -302,7 +303,6 @@ def _start_groups(
     no file to fetch."""
     from model.systemnames import heading_name
     from sitegen.runsections import system_name
-    from model.collection import manufacturer_slug
 
     here = (manufacturer_slug(section[0]), section[1]) if section else None
     kept, candidates = _section_reads(files, consumers, here)
@@ -327,7 +327,7 @@ def _start_groups(
     named_keys = [key for key in groups if key is not None]
     if None in groups and named_keys:
         # An entry that names no system reads the section's own console.
-        heading = heading_name(*section) if section else None
+        heading = heading_name(*section, section_labels()) if section else None
         groups[heading if heading in groups else named_keys[0]].absorb(groups.pop(None))
     return groups
 
@@ -721,4 +721,4 @@ def section_label(manufacturer: str, console: str) -> str:
     """The heading a section shows."""
     if (manufacturer, console) == OTHER_ARCADE:
         return OTHER_ARCADE_LABEL
-    return SECTION_LABELS.get((manufacturer, console), console)
+    return section_labels().get((manufacturer, console), console)

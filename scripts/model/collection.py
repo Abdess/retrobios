@@ -9,11 +9,13 @@ bios folder comes from siteinputs, never the working directory.
 from __future__ import annotations
 
 import functools
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 
 from model import siteinputs
 from model.composition import GAME_DATA_TOPS
+from model.manufacturers import manufacturer_slug
 from model.profiles import is_emulator, load_emulator_profiles
 
 
@@ -44,10 +46,6 @@ def copy_places(
     return places
 
 
-def manufacturer_slug(manufacturer: str) -> str:
-    return manufacturer.lower().replace(" ", "-")
-
-
 def collection_paths(db: dict) -> dict[str, set[str]]:
     """Every path under bios/ that holds each file, by sha1.
 
@@ -70,11 +68,32 @@ def collection_paths(db: dict) -> dict[str, set[str]]:
     return paths
 
 
+# (manufacturer slug, folder, sha1) -> the (manufacturer slug, console) a
+# copy's card goes to when its section is not its folder.
+CardMoves = dict[tuple[str, str, str], tuple[str, str]]
+
+
+@dataclass(frozen=True)
+class Grouping:
+    """The sections a collection files, as manufacturer -> console -> files.
+
+    ``labels``: (manufacturer, console) -> the heading a section shows in
+    place of its folder, SECTION_LABELS and the engine names. ``moves``:
+    (manufacturer slug, folder, sha1) -> the (manufacturer slug, console)
+    holding the card of a copy filed outside its folder: ScummVM's engine
+    data under Other/ScummVM.
+    """
+
+    sections: dict[str, dict[str, list]]
+    labels: Mapping[tuple[str, str], str]
+    moves: Mapping[tuple[str, str, str], tuple[str, str]]
+
+
 def group_by_manufacturer(
     db: dict,
     bios_dir: Path | None = None,
     profiles: dict[str, dict] | None = None,
-) -> dict[str, dict[str, list]]:
+) -> Grouping:
     """Group files by manufacturer -> console -> files.
 
     The database keeps one path per content, and a copy filed elsewhere was
@@ -95,7 +114,7 @@ def group_by_manufacturer(
 def _engine_sections(
     manufacturers: dict[str, dict[str, list]],
     all_profiles: dict[str, dict] | None = None,
-) -> dict[str, dict[str, list]]:
+) -> Grouping:
     """A game engine's files in one section headed with the engine's name.
 
     The Systems index listed ".variants", "scummvm.zip" and "wildmidi.cfg"
@@ -104,7 +123,7 @@ def _engine_sections(
     the section of the one engine that reads it (else of the engine the
     top is named after), the folder under Other named after a game-engine
     top joins that top, and a folder named by a profile key is headed with
-    the engine's name (SECTION_LABELS), its address unchanged.
+    the engine's name (Grouping.labels), its address unchanged.
     """
 
     if all_profiles is None:
@@ -112,19 +131,21 @@ def _engine_sections(
     profiles = {key: profile for key, profile in all_profiles.items()
                 if is_emulator(profile)}
     engines = _Engines(profiles, _file_readers(profiles))
+    moves: CardMoves = {}
     out: dict[str, dict[str, list]] = {}
     for mfr, consoles in manufacturers.items():
         if mfr not in GAME_DATA_TOPS:
             out[mfr] = dict(consoles)
             continue
-        out[mfr] = _regroup_top(mfr, consoles, engines)
-    _join_other_folders(out)
+        out[mfr] = _regroup_top(mfr, consoles, engines, moves)
+    _join_other_folders(out, moves)
+    labels = dict(SECTION_LABELS)
     for mfr in GAME_DATA_TOPS:
         for console in out.get(mfr, {}):
             named = console if console in profiles else None
             if named and engines.engine(named) != console:
-                SECTION_LABELS[(mfr, console)] = engines.engine(named)
-    return {mfr: consoles for mfr, consoles in out.items() if consoles}
+                labels[(mfr, console)] = engines.engine(named)
+    return Grouping({mfr: consoles for mfr, consoles in out.items() if consoles}, labels, moves)
 
 
 @dataclass(frozen=True)
@@ -152,7 +173,9 @@ def _file_readers(profiles: dict[str, dict]) -> dict[str, set[str]]:
     return readers
 
 
-def _regroup_top(mfr: str, consoles: dict[str, list], engines: _Engines) -> dict[str, list]:
+def _regroup_top(
+    mfr: str, consoles: dict[str, list], engines: _Engines, moves: CardMoves,
+) -> dict[str, list]:
 
     own = engines.profile_of(mfr)
     regrouped: dict[str, list] = {}
@@ -170,12 +193,12 @@ def _regroup_top(mfr: str, consoles: dict[str, list], engines: _Engines) -> dict
                 target = found or (next((c for c in consoles if c == reader), None)
                                    or (engines.engine(reader) if reader else base))
             if target != console:
-                record_card_move(mfr, console, str(f.get("sha1", "")), mfr, target)
+                _move_card(moves, (mfr, console, str(f.get("sha1", ""))), (mfr, target))
             regrouped.setdefault(target, []).append(f)
     return regrouped
 
 
-def _join_other_folders(out: dict[str, dict[str, list]]) -> None:
+def _join_other_folders(out: dict[str, dict[str, list]], moves: CardMoves) -> None:
     """The folder under Other an engine top is named after: ScummVM's
     engine data under Other/ScummVM, its themes under ScummVM/."""
 
@@ -189,7 +212,7 @@ def _join_other_folders(out: dict[str, dict[str, list]]) -> None:
         target = next((c for c in sections if c.casefold() == folder.casefold()), folder)
         held = {str(f.get("sha1", "")) for f in sections.get(target, [])}
         for f in others[folder]:
-            record_card_move("Other", folder, str(f.get("sha1", "")), top, target)
+            _move_card(moves, ("Other", folder, str(f.get("sha1", ""))), (top, target))
         sections[target] = [*sections.get(target, []),
                             *(f for f in others.pop(folder) if str(f.get("sha1", "")) not in held)]
 
@@ -203,18 +226,14 @@ def profiles_in(emulators_dir: str, skip_aliases: bool) -> dict[str, dict]:
     return load_emulator_profiles(emulators_dir, skip_aliases=skip_aliases)
 
 
-# (manufacturer slug, folder, sha1) -> the (manufacturer slug, console) a
-# copy's card went to when the system pages file it outside its folder:
-# ScummVM's engine data under Other/ScummVM, neogeo.zip under Arcade.
-card_moves: dict[tuple[str, str, str], tuple[str, str]] = {}
-
-
-def record_card_move(manufacturer: str, folder: str, sha1: str,
-                     to_manufacturer: str, to_console: str) -> None:
-    """Mark that the card of the copy under bios/<manufacturer>/<folder>/
-    sits in the section (to_manufacturer, to_console)."""
-    card_moves[(manufacturer_slug(manufacturer), folder, str(sha1))] = (
-        manufacturer_slug(to_manufacturer), to_console)
+def _move_card(
+    moves: CardMoves, copy: tuple[str, str, str], section: tuple[str, str],
+) -> None:
+    """Mark that the card of the copy (manufacturer, folder, sha1) sits in
+    the section (manufacturer, console)."""
+    manufacturer, folder, sha1 = copy
+    moves[(manufacturer_slug(manufacturer), folder, sha1)] = (
+        manufacturer_slug(section[0]), section[1])
 
 
 # System display names. A system is named by the heading of the console
@@ -232,6 +251,6 @@ PROGRAM_TOPS = frozenset({"Other", "Arcade"})
 
 # A section whose folder is a short name the code reads, headed with the
 # program's name instead (bios/Arcade/fba2012 holds FB Alpha 2012's samples).
-SECTION_LABELS: dict[tuple[str, str], str] = {
+SECTION_LABELS: Mapping[tuple[str, str], str] = {
     ("Arcade", "fba2012"): "FB Alpha 2012",
 }
