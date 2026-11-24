@@ -35,8 +35,10 @@ from installer.pack_source import (
     part_marker_name,
 )
 from installer.paths import shown_path
+from installer.plan_words import space_remedy
 from installer.platforms import PLATFORM_NAMES, TARGET_PLATFORMS, display_name
 from installer.safe_replace import BACKUP_DIR
+from installer.space import space_shortfall
 from installer.text import _plural, format_size, screen_text
 
 if TYPE_CHECKING:
@@ -654,6 +656,22 @@ def _pack_refused(plat: str, path: Path, words: str, code: int,
     return code
 
 
+def _pack_space_refused(plat: str, path: Path, shortfall: tuple[int, int],
+                        members: dict[str, tuple[str, int]]) -> int:
+    """No pack for a drive that cannot hold it, refused as a run is for
+    space (a no_space event and the shared remedy). The dry run checks too,
+    so the plan never offers a pack the run then refuses to write."""
+    needed, free = shortfall
+    EVENTS.emit("no_space", platform=plat, folder=str(path.parent), bytes_needed=needed,
+                bytes_free=free)
+    code = _pack_refused(plat, path, f"the drive holding {shown_path(path.parent)} has "
+                         f"{format_size(free)} free, and making the pack needs "
+                         f"{format_size(needed)}", 2, members)
+    remedy = space_remedy(needed - free, plat, None, commands=False)
+    print("  " + "\n    ".join(remedy), file=sys.stderr)
+    return code
+
+
 def pack_parts_words(count: int, limit: int | None, fat: bool) -> str:
     """How the pack is written, in one line: whole, or in parts and why."""
     if count == 1:
@@ -725,6 +743,10 @@ def run_pack(args: argparse.Namespace, plat: str, manifest: dict, files: list[di
     how = pack_parts_words(count, limit, fat and limit == FAT_PART_BYTES)
     if count > 1:
         print(f"  {how}")
+    needed = pack_space_bytes(total, pack_bound(len(body), planned), data_dirs)
+    shortfall = space_shortfall(path.parent, needed)
+    if shortfall is not None:
+        return _pack_space_refused(plat, path, shortfall, members)
     if args.dry_run:
         for name in sorted(members):
             detail(f"    {screen_text(name)} ({format_size(members[name][1])})")
@@ -732,15 +754,6 @@ def run_pack(args: argparse.Namespace, plat: str, manifest: dict, files: list[di
             print("  --verbose lists the files.")
         _pack_event(plat, path, members, finals, "planned", how)
         return 0
-    needed = pack_space_bytes(total, pack_bound(len(body), planned), data_dirs)
-    try:
-        free = shutil.disk_usage(path.parent).free
-    except OSError:
-        free = needed
-    if free < needed:
-        return _pack_refused(plat, path, f"the drive holding {shown_path(path.parent)} has "
-                             f"{format_size(free)} free, and making the pack needs "
-                             f"{format_size(needed)}", 2, members)
     staging = Path(tempfile.mkdtemp(prefix=f".{path.name}.", suffix=".staging",
                                     dir=str(path.parent)))
     try:

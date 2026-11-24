@@ -578,7 +578,22 @@ class TheSpaceCountsTheTreeArchive(Repository):
             script=str(REPO_ROOT / "install.py")))
         self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
         self.assertIn("has 10.0 MB free", proc.stderr)
+        self.assertIn("or run it again and choose another folder.", proc.stderr)
         self.assertEqual(self.packs(), [])
+
+    def test_the_dry_run_refuses_what_the_run_would(self):
+        """The screen offered Make the pack from a dry run that never read
+        the free space, and the run then refused it."""
+        proc = self.run_installer("--pack", f"{self.out}{os.sep}", "--dry-run", "--events",
+                                  code=SPACE_CHILD.format(script=str(REPO_ROOT / "install.py")))
+        self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
+        events = [json.loads(line) for line in proc.stdout.splitlines()]
+        space = next(event for event in events if event["event"] == "no_space")
+        self.assertEqual(space["bytes_free"], 10 * 1024 * 1024)
+        self.assertGreater(space["bytes_needed"], space["bytes_free"])
+        pack = next(event for event in events if event["event"] == "pack")
+        self.assertEqual(pack["status"], "failed")
+        self.assertIn("has 10.0 MB free", pack["message"])
 
     def test_the_largest_archive_counts_once(self):
         trees = [{"files": {"a": {}}, "archive_size": 300},
