@@ -1035,7 +1035,7 @@ class TheDevicesFollowTheRelease(unittest.TestCase):
                 if moves:
                     profile.write_text('core_version: "0.290"\nfiles: []\n')
 
-            merged = []
+            merged: list = []
             with mock.patch.multiple(
                 scraper,
                 _EMULATORS_DIR=Path(directory),
@@ -1058,6 +1058,34 @@ class TheDevicesFollowTheRelease(unittest.TestCase):
     def test_an_unmoved_pin_leaves_the_devices(self):
         self.assertEqual(self._run(moves=False), [])
         self.assertEqual(self._run(moves=True, dry_run=True), [])
+
+    def test_a_release_with_no_set_change_still_moves_the_pin(self) -> None:
+        """No BIOS root set changed: the pin moves anyway, and the devices follow."""
+        import argparse
+        from unittest import mock
+
+        from scripts.scraper import mame_hash_scraper as scraper
+
+        with tempfile.TemporaryDirectory() as directory:
+            profile = Path(directory) / "mame.yml"
+            profile.write_text('core_version: "0.289"\nfiles: []\n')
+            merged: list = []
+            out = io.StringIO()
+            with mock.patch.multiple(
+                scraper,
+                _EMULATORS_DIR=Path(directory),
+                _fetch_hashes=lambda force: {
+                    "bios_sets": {}, "version": "0.290", "commit": "cccc",
+                },
+                _find_mame_profiles=lambda: [profile],
+                fetch_release_listxml=lambda version: Path(f"mame{version}lx.zip"),
+                _merge_devices=merged.append,
+            ), mock.patch("sys.stdout", new=out):
+                scraper._run(argparse.Namespace(force=False, json=False, dry_run=False))
+            self.assertIn('core_version: "0.290"', profile.read_text())
+            self.assertIn("core_version moves from 0.289 to 0.290", out.getvalue())
+        (args,) = merged
+        self.assertEqual(args.listxml, Path("mame0.290lx.zip"))
 
 
 if __name__ == "__main__":

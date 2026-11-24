@@ -62,6 +62,23 @@ def settled_required(entry: dict, set_data: dict) -> bool:
     return current
 
 
+def mame_pin(profile: dict[str, Any], hashes: dict[str, Any]) -> dict[str, Any]:
+    """The core_version and upstream_commit a refresh gives a MAME profile."""
+    # The version follows the refs only for profiles already labelled with a
+    # MAME release. A derivative pins its own line: same_cdi ("Git") and a7800
+    # ("5.2") would otherwise be relabelled with a MAME version they were
+    # never built from.
+    if not _MAME_RELEASE_RE.match(str(profile.get("core_version") or "")):
+        return {}
+    pin = {"core_version": hashes.get("version", profile.get("core_version"))}
+    # The refs about to be written are line numbers of that release's
+    # mamedev/mame tree: the pin moves with them, or the profile cites lines
+    # its declared revision does not hold.
+    if profile.get("upstream") == _MAMEDEV and hashes.get("commit"):
+        pin["upstream_commit"] = hashes["commit"]
+    return pin
+
+
 def merge_mame_profile(
     profile: dict[str, Any],
     hashes: dict[str, Any],
@@ -79,18 +96,7 @@ def merge_mame_profile(
     is write_mame_profile's.
     """
     profile = dict(profile)
-
-    # The version follows the refs only for profiles already labelled with a
-    # MAME release. A derivative pins its own line: same_cdi ("Git") and a7800
-    # ("5.2") would otherwise be relabelled with a MAME version they were
-    # never built from.
-    if _MAME_RELEASE_RE.match(str(profile.get("core_version") or "")):
-        profile["core_version"] = hashes.get("version", profile.get("core_version"))
-        # The refs about to be written are line numbers of that release's
-        # mamedev/mame tree: the pin moves with them, or the profile cites
-        # lines its declared revision does not hold.
-        if profile.get("upstream") == _MAMEDEV and hashes.get("commit"):
-            profile["upstream_commit"] = hashes["commit"]
+    profile.update(mame_pin(profile, hashes))
 
     files = profile.get("files", [])
     bios_zip, non_bios = _split_files(files, lambda f: f.get("category") == "bios_zip")
@@ -273,12 +279,21 @@ def diff_mame(
         1 for s in existing_by_name if s in bios_sets
     )
 
+    # A release that leaves every BIOS root set as it was still moves the pin.
+    # merge_mame_profile writes it, so the write gate has to see it.
+    pin = {
+        field: (profile.get(field), value)
+        for field, value in mame_pin(profile, hashes).items()
+        if profile.get(field) != value
+    }
+
     return {
         "added": added,
         "updated": updated,
         "removed": [],
         "unchanged": unchanged,
         "out_of_scope": out_of_scope,
+        "pin": pin,
     }
 
 

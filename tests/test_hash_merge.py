@@ -594,6 +594,28 @@ class TestDiff(unittest.TestCase):
         self.assertEqual(len(diff["removed"]), 0)
         self.assertEqual(diff["unchanged"], 0)
 
+    def test_diff_mame_reports_the_pin_the_merge_writes(self) -> None:
+        """A release that changes no set still moves core_version and upstream_commit."""
+        hashes = _make_mame_hashes()
+        profile = merge_mame_profile(
+            _make_mame_profile(upstream="https://github.com/mamedev/mame"), hashes,
+        )
+        hashes = {**hashes, "version": "0.287", "commit": "cccc"}
+
+        diff = compute_diff(profile, hashes, mode="mame")
+        merged = merge_mame_profile(profile, hashes)
+
+        self.assertEqual(diff["updated"], [])
+        self.assertEqual(diff["pin"], {
+            "core_version": ("0.286", "0.287"),
+            "upstream_commit": ("abc123", "cccc"),
+        })
+        self.assertEqual(
+            {field: merged[field] for field in diff["pin"]},
+            {field: new for field, (_old, new) in diff["pin"].items()},
+        )
+        self.assertEqual(compute_diff(merged, hashes, mode="mame")["pin"], {})
+
     def test_diff_mame_out_of_scope(self) -> None:
         """Items in profile but not in scraper output = out of scope, not removed."""
         hashes = _make_mame_hashes()

@@ -176,12 +176,15 @@ def _format_diff(
     removed = diff.get("removed", [])
     unchanged = diff.get("unchanged", 0)
 
-    if not added and not updated and not removed:
+    pin = diff.get("pin", {})
+
+    if not added and not updated and not removed and not pin:
         lines.append(f"  {name}:")
         lines.append("    no changes")
         return lines
 
     lines.append(f"  {name}:")
+    lines.extend(f"    ^ {field} moves from {old} to {new}" for field, (old, new) in pin.items())
 
     if show_added:
         bios_sets = hashes.get("bios_sets", {})
@@ -272,7 +275,7 @@ def _run(args: argparse.Namespace) -> None:
         if not args.dry_run:
             updated = diff.get("updated", [])
             added = diff.get("added", []) if is_main else []
-            if added or updated:
+            if added or updated or diff.get("pin"):
                 write_mame_profile(
                     profile_path, merge_mame_profile(profile, hashes, add_new=is_main),
                 )
