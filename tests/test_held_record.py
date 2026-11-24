@@ -15,7 +15,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from model.database import record_for_hash, records_for_hash
+from model.database import declared_records, record_for_hash, records_for_hash
 from packs.crossref import entry_source
 from packs.integrity import _repo_satisfies_declaration
 from resolve.localfile import held_record_for
@@ -53,6 +53,38 @@ class RecordsForHash(unittest.TestCase):
         db = _db({SHA_A: {"path": "a"}}, by_md5={MD5_A: SHA_A})
         self.assertEqual(records_for_hash(db, "md5", MD5_A[:29]), [SHA_A])
         self.assertEqual(records_for_hash(db, "md5", MD5_B[:29]), [])
+
+
+class DeclaredRecords(unittest.TestCase):
+    """The site's system index, file lookup and gap table name a held file
+    by one rule: systems.json missed 494 files declared by crc32 or sha256."""
+
+    def setUp(self):
+        self.db = _db(
+            {SHA_A: {"path": "a", "size": 4}, SHA_B: {"path": "b", "size": 8}},
+            by_md5={MD5_A: SHA_A}, by_sha256={"f" * 64: SHA_B},
+            by_crc32={"deadbeef": SHA_A, "cafef00d": SHA_B},
+        )
+
+    def test_a_crc32_alone_names_a_record_of_the_declared_size(self):
+        found = declared_records(self.db, {"crc32": ["deadbeef"]}, 4)
+        self.assertEqual(found, {("crc32", "deadbeef"): [SHA_A]})
+        found = declared_records(self.db, {"crc32": ["deadbeef"]}, [8, 16])
+        self.assertEqual(found, {("crc32", "deadbeef"): []})
+
+    def test_a_crc32_beside_a_stronger_hash_names_what_that_hash_names(self):
+        # An erased flash block shares its crc32 with every other one.
+        found = declared_records(self.db, {"sha1": [SHA_B], "crc32": ["deadbeef"]})
+        self.assertEqual(found, {("sha1", SHA_B): [SHA_B], ("crc32", "deadbeef"): []})
+        found = declared_records(self.db, {"md5": [MD5_A], "crc32": ["deadbeef"]})
+        self.assertEqual(found[("crc32", "deadbeef")], [SHA_A])
+
+    def test_sha256_and_a_cut_md5_name_their_record(self):
+        found = declared_records(self.db, {"sha256": ["f" * 64], "md5": [MD5_A[:29]]})
+        self.assertEqual(found, {("sha256", "f" * 64): [SHA_B], ("md5", MD5_A[:29]): [SHA_A]})
+
+    def test_an_algorithm_without_an_index_names_nothing(self):
+        self.assertEqual(declared_records(self.db, {"adler32": ["1234abcd"]}), {})
 
 
 class GapReportHeldRule(unittest.TestCase):

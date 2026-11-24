@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 
 from core.hashing import declared_hash_lists
 from core.text import series
-from model.database import sha1_at
+from model.database import declared_records, sha1_at
 from model.platforms import native_layer
 from packs.crossref import gap_source_counts, whole_tree_gaps
 from resolve.nativemode import check_label
@@ -46,19 +46,9 @@ def _held_accepted(accepted: dict[str, list[str]], db: dict | None) -> str:
     """
     if not accepted or not db:
         return ""
-    indexes = db.get("indexes", {})
     files = db.get("files", {})
-    for algo, values in accepted.items():
-        for value in values:
-            value = value.lower()
-            if algo == "sha1":
-                sha1 = value if value in files else None
-            else:
-                sha1 = indexes.get(f"by_{algo}", {}).get(value)
-            path = files.get(sha1 or "", {}).get("path")
-            if path:
-                return path
-    return ""
+    return next((path for named in declared_records(db, accepted).values()
+                 for sha1 in named if (path := files[sha1].get("path"))), "")
 
 
 def _declarations(cov: dict) -> dict[int, dict]:

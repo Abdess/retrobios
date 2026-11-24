@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+from collections.abc import Iterable, Mapping
 from pathlib import Path
 
 from core.cli import InputMissing, SourceUnreadable
@@ -119,6 +120,36 @@ def records_for_hash(db: dict, kind: str, value: object) -> list[str]:
         return []
     named = [found] if isinstance(found, str) else list(found)
     return [sha1 for sha1 in named if sha1 in files]
+
+
+def declared_records(
+    db: dict, declared: Mapping[str, Iterable[str]], size: object = None,
+) -> dict[tuple[str, str], list[str]]:
+    """Each declared (algorithm, value) -> the sha1 of every held record it names.
+
+    ``declared`` is an entry's hash lists by algorithm (declared_hash_lists).
+    A crc32 follows the resolver's rule (resolve_local_file): it names only
+    a record of the declared size, one value or a list of them, and beside
+    a stronger declared hash only a record that hash names too. An
+    algorithm the database has no index for (adler32) names nothing.
+    """
+    files = db.get("files", {})
+    sizes = None if size is None else size if isinstance(size, list) else [size]
+    named: dict[tuple[str, str], list[str]] = {}
+    for algorithm in (a for a in declared if a == "sha1" or a in _HASH_INDEXES):
+        for value in declared[algorithm]:
+            named[(algorithm, value)] = records_for_hash(db, algorithm, value)
+    stronger = {sha1 for (algorithm, _v), found in named.items()
+                if algorithm != "crc32" for sha1 in found}
+    strong_declared = any(algorithm != "crc32" for algorithm, _v in named)
+    for pair, found in named.items():
+        if pair[0] == "crc32":
+            named[pair] = [
+                sha1 for sha1 in found
+                if (sizes is None or files[sha1].get("size") in sizes)
+                and (not strong_declared or sha1 in stronger)
+            ]
+    return named
 
 
 def record_for_hash(db: dict, kind: str, value: object) -> str | None:

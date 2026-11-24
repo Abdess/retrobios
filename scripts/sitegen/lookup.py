@@ -12,6 +12,7 @@ from pathlib import Path
 from core.hashing import declared_hash_lists
 from model import siteinputs
 from model.collection import manufacturer_slug
+from model.database import declared_records
 from model.registry import load_versions, versions_file_for
 from model.systemnames import system_name
 from model.profiles import is_emulator
@@ -387,9 +388,18 @@ def _collection_lookup_records(
     return records
 
 
-def _platform_lookup_records(coverages: dict, consumers: FileConsumers | None) -> list[dict]:
+def _designated(db: dict, holder: dict) -> dict[tuple[str, str], str]:
+    """Each value an entry declares -> the one collection file it names,
+    by model.database.declared_records. A value naming several names none."""
+    named = declared_records(db, declared_hash_lists(holder, HASH_ALGORITHMS), holder.get("size"))
+    return {pair: found[0] for pair, found in named.items() if len(found) == 1}
+
+
+def _platform_lookup_records(
+    coverages: dict, consumers: FileConsumers | None, db: dict,
+) -> list[dict]:
     """A platform's declared values, each leading to the system section of
-    its page."""
+    its page, and to the collection file a value names."""
     records: list[dict] = []
     for key, coverage in sorted(coverages.items()):
         for system_id, system in sorted((coverage["config"].get("systems") or {}).items()):
@@ -400,17 +410,20 @@ def _platform_lookup_records(coverages: dict, consumers: FileConsumers | None) -
                 # no collection file by itself: the archive holding it is the one.
                 archive = (consumers.sha1_of(entry)
                            if consumers is not None and entry.get("zipped_file") else None)
+                designated = _designated(db, entry)
                 records.extend({
                     "value": value, "algorithm": algorithm, "layer": "platform",
                     "owner": key, "name": str(entry.get("name", "")), "url": url,
                     **({"system_name": system_label} if system_label else {}),
-                    **({"sha1": archive} if archive else {}),
+                    **({"sha1": sha1} if (sha1 := archive or designated.get((algorithm, value)))
+                       else {}),
                 } for algorithm, value in hash_pairs(entry))
     return records
 
 
-def _emulator_lookup_records(profiles: dict) -> list[dict]:
-    """A profile's declared values, each leading to the entry's card."""
+def _emulator_lookup_records(profiles: dict, db: dict) -> list[dict]:
+    """A profile's declared values, each leading to the entry's card, and to
+    the collection file a value names."""
     records: list[dict] = []
     for key, profile in sorted(profiles.items()):
         if not is_emulator(profile):
@@ -427,10 +440,12 @@ def _emulator_lookup_records(profiles: dict) -> list[dict]:
                 if isinstance(member, dict) and member.get("name")
             ]
             for name, holder in holders:
+                designated = _designated(db, holder)
                 records.extend({
                     "value": value, "algorithm": algorithm, "layer": "emulator",
                     "owner": key, "name": name, "url": url,
                     **({"system_name": entry_label} if entry_label else {}),
+                    **({"sha1": sha1} if (sha1 := designated.get((algorithm, value))) else {}),
                 } for algorithm, value in hash_pairs(holder))
     return records
 
@@ -456,11 +471,11 @@ def file_lookup_records(
     files = db.get("files", {})
     named = _console_system_names(profiles, coverages)
     records = _collection_lookup_records(files, named, locations, members or {})
-    records += _platform_lookup_records(coverages, consumers)
-    records += _emulator_lookup_records(profiles)
+    records += _platform_lookup_records(coverages, consumers, db)
+    records += _emulator_lookup_records(profiles, db)
     records += retired_records(retired or {}, files, locations)
     records += wanted_records(wanted or [])
-    records += _held_under_every_hash(records, files, db.get("indexes") or {})
+    records += _held_under_every_hash(records, files)
     for record in records:
         if record["layer"] in ("platform", "emulator"):
             record.setdefault("declared", record["algorithm"])
@@ -521,17 +536,7 @@ def _read_by_name(records: list[dict], files: dict, consumers: FileConsumers) ->
     return added
 
 
-def _collection_sha1(files: dict, indexes: dict, algorithm: str, value: str) -> str | None:
-    """The collection file a declared value designates, None when none does."""
-    if algorithm == "sha1":
-        return value if value in files else None
-    found = indexes.get(f"by_{algorithm}", {}).get(value)
-    if isinstance(found, list):
-        found = found[0] if len(found) == 1 else None
-    return found if found in files else None
-
-
-def _held_under_every_hash(records: list[dict], files: dict, indexes: dict) -> list[dict]:
+def _held_under_every_hash(records: list[dict], files: dict) -> list[dict]:
     """A platform or emulator record whose value designates a collection
     file, written under the file's other hashes too.
 
@@ -543,11 +548,9 @@ def _held_under_every_hash(records: list[dict], files: dict, indexes: dict) -> l
     for record in records:
         if record["layer"] not in ("platform", "emulator"):
             continue
-        sha1 = record.get("sha1") or _collection_sha1(
-            files, indexes, record["algorithm"], record["value"])
+        sha1 = record.get("sha1")
         if sha1 not in files:
             continue
-        record["sha1"] = sha1
         copies.extend({**record, "value": value, "algorithm": algorithm,
                        "declared": record["algorithm"]}
                       for algorithm, value in hash_pairs(files[sha1])

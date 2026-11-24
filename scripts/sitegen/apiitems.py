@@ -6,11 +6,11 @@ import urllib.parse
 from collections.abc import Callable
 
 from model.collection import group_by_manufacturer, manufacturer_slug
-from model.database import sha1_at
+from model.database import declared_records, sha1_at
 from model.systemnames import system_name
 from model.profiles import is_emulator
 from sitegen.config import SITE_URL
-from core.hashing import parse_hash_list
+from core.hashing import declared_hash_lists
 from sitegen.lookup import site_path
 from sitegen.render import card_anchor
 from sitegen.runlinks import console_href
@@ -30,7 +30,6 @@ def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
     from sitegen.runlinks import card_page, system_section
 
     files = db.get("files") or {}
-    by_md5 = (db.get("indexes") or {}).get("by_md5") or {}
     held: dict[str, set[str]] = {}
     for coverage in coverages.values():
         for detail in coverage.get("details") or []:
@@ -48,10 +47,9 @@ def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
             ids = ([str(entry["system"])] if entry.get("system")
                    else [str(s) for s in entry.get("systems") or []] or
                    (own if len(own) == 1 else []))
-            found = {v for v in parse_hash_list(entry.get("sha1")) if v in files}
-            for md5 in parse_hash_list(entry.get("md5")):
-                match = by_md5.get(md5)
-                found.update([match] if isinstance(match, str) else match or [])
+            found = {sha1 for named in declared_records(
+                db, declared_hash_lists(entry), entry.get("size")).values()
+                for sha1 in named}
             for sys_id in ids:
                 held.setdefault(sys_id, set()).update(found)
     manufacturers = {manufacturer_slug(mfr): mfr for mfr in group_by_manufacturer(db)}

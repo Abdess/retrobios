@@ -785,7 +785,7 @@ class TheLookupRecipeSaysWhatASha1Misses(unittest.TestCase):
     def test_the_page_and_the_records_agree(self):
         record = {"layer": "platform", "algorithm": "md5", "value": "0" * 32,
                   "name": "dmg_boot.bin", "owner": "recalbox"}
-        self.assertEqual(lookup._held_under_every_hash([record], {}, {}), [])
+        self.assertEqual(lookup._held_under_every_hash([record], {}), [])
         self.assertNotIn("sha1", record)
         page = " ".join(datapage.generate_data_page([]).split())
         self.assertNotIn("none is needed", page)
