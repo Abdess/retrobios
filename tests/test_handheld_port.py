@@ -1,11 +1,11 @@
-"""The PortMaster port: its archive, its event reader and its fallback screens.
+"""The PortMaster port: its dialog commands, its event reader and its fallback screens.
 
 The screens are driven here with PortMasterDialog's functions replaced by
 stubs that record each command and answer from a script, and with a fake
 install.py that writes canned --events streams. What a device adds (pugwash
 drawing, the pad, mount, the network) is not exercised. The full-screen
 route of the port is in test_handheld_portmaster, the other launchers in
-test_handheld_frontends.
+test_handheld_frontends, the archives in test_handheld_scripts.
 """
 from __future__ import annotations
 
@@ -22,11 +22,9 @@ import shutil
 import subprocess
 import sys
 import unittest
-import zipfile
 from pathlib import Path
 
 from installer_build import port as installer_build_port
-from installer_build.pins import pinned_sha256
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PORT = REPO_ROOT / "ports" / "RetroBIOS"
@@ -42,7 +40,7 @@ _spec.loader.exec_module(rbevents)
 SCRIPTS = [PORT / "RetroBIOS.sh", PORT / "retrobios" / "screens.txt"]
 
 
-class EveryScriptParses(unittest.TestCase):
+class DialogCommands(unittest.TestCase):
     def test_only_dialog_functions_the_oldest_releases_have(self):
         """PortMaster 2024.02.26 and 8.5.23 define these in PortMasterDialog.txt,
         and have no funcs.txt: pm_message and the rest would be undefined."""
@@ -67,43 +65,6 @@ class EveryScriptParses(unittest.TestCase):
         inits = re.findall(r'PortMasterDialogInit "([\w-]+)"', text)
         self.assertTrue(inits)
         self.assertEqual(set(inits), {"no-check"})
-
-
-class ThePortArchive(unittest.TestCase):
-    def setUp(self):
-        self.out = scratch_dir(self)
-
-    def _build(self, name: str = "RetroBIOS.zip") -> Path:
-        return installer_build_port.build_port(self.out / name)
-
-    def test_layout_portmaster_installs(self):
-        """One launch script at the top, one folder holding port.json: what
-        harbourmaster's captain.check_port accepts without a warning."""
-        with zipfile.ZipFile(self._build()) as zf:
-            names = zf.namelist()
-            port = json.loads(zf.read("retrobios/port.json"))
-            mode = zf.getinfo("RetroBIOS.sh").external_attr >> 16
-        self.assertEqual(names, sorted(names))
-        self.assertEqual([n for n in names if "/" not in n], ["RetroBIOS.sh"])
-        self.assertEqual({n.split("/")[0] for n in names if "/" in n}, {"retrobios"})
-        self.assertEqual([n for n in names if n.endswith(".sh")], ["RetroBIOS.sh"])
-        for member in ("retrobios/install.py", "retrobios/rbevents.py",
-                       "retrobios/screens.txt", "retrobios/tui.txt",
-                       "retrobios/retrobios.gptk", "retrobios/gameinfo.xml",
-                       "retrobios/retrobios.md", "retrobios/licenses/LICENSE-retrobios.txt"):
-            self.assertIn(member, names)
-        self.assertEqual(port["version"], 4)
-        self.assertEqual(port["name"], "retrobios.zip")
-        self.assertEqual(port["items"], ["RetroBIOS.sh", "retrobios"])
-        self.assertEqual(port["attr"]["genres"], ["other"])
-        self.assertTrue(mode & 0o111, "the launch script is executable")
-
-    def test_bundled_installer_is_the_pinned_one(self):
-        with zipfile.ZipFile(self._build()) as zf:
-            bundled = hashlib.sha256(zf.read("retrobios/install.py")).hexdigest()
-        self.assertEqual(bundled, pinned_sha256("install.sh"))
-        install_sh = (REPO_ROOT / "install.sh").read_text(encoding="utf-8")
-        self.assertIn(f'DEFAULT_INSTALL_SHA256="{bundled}"', install_sh)
 
 
 class LauncherIndex(unittest.TestCase):

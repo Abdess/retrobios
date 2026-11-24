@@ -19,8 +19,7 @@ from pathlib import Path
 from unittest import mock
 
 import install
-from tests.test_install_app import make_card
-from tests.test_install_selection import FakeRepository
+from tests.installsupport import FakeRepository, make_card
 from tests.netguard import module_guard
 from tests.tuisupport import (
     _args, CHECK, checked_state, _Decided, FILES, found, fresh_state, HOME, in_full,
@@ -989,7 +988,7 @@ class ScreenRowsAndFilters(unittest.TestCase):
         """Cannot create, then end 2 and nothing else."""
         import subprocess
 
-        from tests.test_install_offline import PAYLOAD, _offline_env, _pack
+        from tests.installsupport import PAYLOAD, _offline_env, _pack
 
         if os.name == "nt" or os.geteuid() == 0:
             self.skipTest("a folder that refuses writes is POSIX, and root writes anyway")
@@ -1018,7 +1017,7 @@ class ScreenRowsAndFilters(unittest.TestCase):
         be created gave it a summary."""
         import subprocess
 
-        from tests.test_install_offline import PAYLOAD, _offline_env, _pack
+        from tests.installsupport import PAYLOAD, _offline_env, _pack
 
         pack = _pack(self.root, "RetroArch_v1_BIOS_Pack.zip", PAYLOAD)
         argv = ["install.py", "--platform", "retroarch", "--dest", str(self.root / "system"),

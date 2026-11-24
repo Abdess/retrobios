@@ -371,6 +371,37 @@ class ModuleNames(unittest.TestCase):
         self.assertEqual(found, [])
 
 
+class TestModulesImportNoTestModule(unittest.TestCase):
+    """FakeRepository lived in test_install_selection and fifteen modules
+    imported it from there: a module imported for a fixture loads its test
+    classes too, and a shared fixture belongs in a helper module."""
+
+    @staticmethod
+    def imported_test_modules(source: str) -> list[str]:
+        found = []
+        for node in ast.walk(ast.parse(source)):
+            if isinstance(node, ast.ImportFrom) and node.module:
+                names = [node.module] + [f"{node.module}.{a.name}" for a in node.names]
+            elif isinstance(node, ast.Import):
+                names = [a.name for a in node.names]
+            else:
+                continue
+            found += [name for name in names if name.startswith("tests.test_")][:1]
+        return found
+
+    def test_no_test_module_is_imported(self):
+        folder = Path(__file__).resolve().parent
+        found = [f"{path.name}: {name}" for path in sorted(folder.rglob("*.py"))
+                 for name in self.imported_test_modules(path.read_text(encoding="utf-8"))]
+        self.assertEqual(found, [], "move what it shares into a helper module")
+
+    def test_both_forms_are_found(self):
+        self.assertEqual(self.imported_test_modules("from tests.test_x import y\n"), ["tests.test_x"])
+        self.assertEqual(self.imported_test_modules("import tests.test_x\n"), ["tests.test_x"])
+        self.assertEqual(self.imported_test_modules("from tests import test_x\n"), ["tests.test_x"])
+        self.assertEqual(self.imported_test_modules("from tests.sitepages import x\n"), [])
+
+
 CODE_CEILING = 800
 TEST_CEILING = 1500
 

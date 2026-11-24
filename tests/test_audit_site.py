@@ -11,7 +11,7 @@ import sys
 import unittest
 from pathlib import Path
 from unittest import mock
-from tests.auditsupport import ROOT
+from tests import REPO_ROOT
 
 
 class TheSiteCountsSlotsNotVersions(unittest.TestCase):
@@ -230,7 +230,7 @@ class GapsPageCountsOneWay(unittest.TestCase):
         from scripts.sitegen.gaps import _verify_tally
         from model.platforms import load_platform_config
 
-        config = load_platform_config("amberelec", str(ROOT / "platforms"))
+        config = load_platform_config("amberelec", str(REPO_ROOT / "platforms"))
         details, wanted = [], []
         for system, data in (config.get("systems") or {}).items():
             for entry in data.get("files") or []:
@@ -488,7 +488,7 @@ class SitemapDatesComeFromThePage(unittest.TestCase):
             lastmod = decorate.decorate_markdown_pages(docs, pages)
         self.assertEqual(lastmod, {"/retrobios/emulators/dated/": "2026-10-04"})
         # The sitemap reads that map, and leaves every other page undated.
-        config = (ROOT / "website" / "astro.config.mjs").read_text(encoding="utf-8")
+        config = (REPO_ROOT / "website" / "astro.config.mjs").read_text(encoding="utf-8")
         self.assertIn("lastmod.json", config)
         self.assertIn("serialize(item)", config)
 
@@ -558,7 +558,7 @@ class TheCollectionShipsADat(unittest.TestCase):
     converter from files.csv."""
 
     def test_round_trip_through_the_logiqx_parser(self):
-        sys.path.insert(0, str(ROOT / "scripts" / "scraper"))
+        sys.path.insert(0, str(REPO_ROOT / "scripts" / "scraper"))
         from logiqx_parser import parse_logiqx
         from scripts.sitegen.structured import collection_dat
 
@@ -581,7 +581,7 @@ class TheCollectionShipsADat(unittest.TestCase):
         """A Batocera user auditing share/bios against the collection DAT met
         thousands of sets laid out by manufacturer, and nothing of the folder
         Batocera reads."""
-        sys.path.insert(0, str(ROOT / "scripts" / "scraper"))
+        sys.path.insert(0, str(REPO_ROOT / "scripts" / "scraper"))
         from logiqx_parser import parse_logiqx
         from scripts.sitegen.platformfiles import platform_data_links
         from scripts.sitegen.structured import platform_dat

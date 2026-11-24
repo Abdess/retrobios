@@ -28,7 +28,7 @@ from pathlib import Path
 from unittest import mock
 
 import install
-from tests.test_install_selection import FakeRepository
+from tests.installsupport import FakeRepository
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

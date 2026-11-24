@@ -15,7 +15,7 @@ from pathlib import Path
 from unittest import mock
 
 import install
-from tests.test_install_app import make_card
+from tests.installsupport import make_card
 from tests.netguard import module_guard
 from tests.tuisupport import (
     _args, _CardFixtures, CHECK, checked_state, drawn, FILES, fresh_state, _game_state, GOLDEN,

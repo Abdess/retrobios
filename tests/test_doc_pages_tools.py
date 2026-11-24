@@ -16,7 +16,9 @@ import sys
 import unittest
 from pathlib import Path
 
-from tests.docpagessupport import PUBLISHED, ROOT, WIKI, _page, _registry, _schema, _section
+from tests.docpagessupport import (
+    MARKETING_WORDS, PUBLISHED, ROOT, WIKI, _page, _registry, _schema, _section,
+)
 
 
 class TestSkeletonReadsTheResultShape(unittest.TestCase):
@@ -181,16 +183,19 @@ class ScratchFilesGoToRepoTmp(unittest.TestCase):
 CONTRIBUTOR_PAGES = (
     "profiling.md", "adding-a-platform.md", "adding-a-scraper.md", "architecture.md",
     "verification-modes.md", "reference-terms.md", "glossary.md", "legal.md", "index.md",
-    "what-are-bios-files.md", "community-tools.md",
+    "what-are-bios-files.md", "community-tools.md", "testing-guide.md", "tools.md",
 )
 
 REPO_DIRS = (
     "scripts/", "platforms/", "emulators/", "schemas/", "tests/", "wiki/", "install/",
     "provenance/", "recipes/", "exports/", "measurements/", "website/", "automation/",
-    "ports/", "docs_assets/", "docs/",
+    "ports/", "docs_assets/", "docs/", "campaign/",
 )
 
 PLACEHOLDER = re.compile(r"[<>*{}]|myplatform|\bNAME\b|\.\.\.")
+
+# Folders the site build writes, ignored by git and absent from a fresh clone.
+BUILT = ("website/src/content/docs", "website/dist")
 
 
 def _schema_keys(schema: object, keys: set[str]) -> set[str]:
@@ -220,7 +225,7 @@ def missing_repo_paths(text: str) -> list[str]:
                 continue
             path = re.sub(r":[\d,-]+$", "", token).rstrip(".,")
             if path.startswith(REPO_DIRS) and not PLACEHOLDER.search(path):
-                if not (ROOT / path).exists():
+                if not (ROOT / path).exists() and not path.startswith(BUILT):
                     missing.append(path)
             elif re.fullmatch(r"test_\w+\.py", path) and not (ROOT / "tests" / path).exists():
                 missing.append(path)
@@ -236,10 +241,14 @@ def _script_source(line: str) -> tuple[str, str] | None:
     match = re.search(r"python3? -m (scripts\.scraper\.[\w.]+)", line)
     if match:
         module = match.group(1)
-        path = ROOT / (module.replace(".", "/") + ".py")
-        source = path.read_text(encoding="utf-8") if path.is_file() else ""
+        path = ROOT / module.replace(".", "/")
+        # A package runs its __main__ and reads its options across its modules.
+        files = sorted(path.glob("*.py")) if path.is_dir() else [path.with_suffix(".py")]
+        source = "".join(f.read_text(encoding="utf-8") for f in files if f.is_file())
         if "scraper_cli" in source or "myplatform" in module:
             source += (ROOT / "scripts/scraper/base_scraper.py").read_text(encoding="utf-8")
+        if "target_cli" in source:
+            source += (ROOT / "scripts/scraper/targets/__init__.py").read_text(encoding="utf-8")
         return module, source
     return None
 
@@ -258,7 +267,9 @@ def unknown_commands(text: str) -> list[str]:
             wrong.extend(
                 f"{name} {option}"
                 for option in re.findall(r"(?<![\w-])(--[a-z][a-z0-9-]*)", command)
-                if f'"{option}"' not in source and option not in declared_options(source)
+                # argparse adds --help to every parser.
+                if option != "--help"
+                and f'"{option}"' not in source and option not in declared_options(source)
             )
     return sorted(set(wrong))
 
@@ -611,10 +622,8 @@ class LandingAChangeNamesTheCommitRules(unittest.TestCase):
 
         section = self._landing()
         words = re.search(r"\\b\((.*?)\)", commitrules.REFUSED_WORDS.pattern).group(1)
-        from tests.test_prose_style import NoMarketingVocabulary
-
         for word in words.replace("|", " ").split():
-            if NoMarketingVocabulary.WORDS.search(word):
+            if MARKETING_WORDS.search(word):
                 # Named by "the marketing vocabulary above": spelled out,
                 # the page would fail that test.
                 continue
@@ -646,6 +655,61 @@ class LandingAChangeNamesTheCommitRules(unittest.TestCase):
         self.assertEqual(refused.returncode, 1, refused.stderr)
         self.assertIn("which review asked for it", refused.stderr)
         self.assertEqual(accepted.returncode, 0, accepted.stderr)
+
+
+# Families of test modules: a family is one subject split by size, so it sits
+# on one row of the guide's table.
+TEST_FAMILIES = ("test_site_", "test_install_", "test_tui_", "test_profile_sync_",
+                 "test_launchers_", "test_e2e_", "test_audit_")
+
+# A skip that names repository data: the test reads the working tree.
+WORKING_TREE_SKIP = re.compile(
+    r"(?:skipTest|SkipTest|skipUnless|skipIf)\(.*(?:database\.json|bios/|romset|no pack found|dist/)"
+)
+
+
+class TheTestingGuideNamesEveryModule(unittest.TestCase):
+    """The guide described 18 modules of 144, and a contributor touching
+    slots.py or the downloader found no module named for it. Later one row
+    held 113 modules, the site, the doc pages, profile_sync and the launcher
+    extractors together, and a family was split across rows."""
+
+    TESTS = ROOT / "tests"
+
+    def _rows(self) -> list[list[str]]:
+        section = _section(_page("testing-guide.md"), "Modules at a glance")
+        return [re.findall(r"`(test_\w+)`", line.split("|")[3])
+                for line in section.splitlines()
+                if line.startswith("| ") and line.count("|") >= 4 and "`test_" in line]
+
+    def test_each_module_is_on_one_row_once(self):
+        named = [name for row in self._rows() for name in row]
+        modules = sorted(path.stem for path in self.TESTS.glob("test_*.py"))
+        self.assertEqual(sorted(set(modules) - set(named)), [], "not in the table")
+        self.assertEqual(sorted(set(named) - set(modules)), [], "no such module")
+        self.assertEqual(sorted({n for n in named if named.count(n) > 1}), [], "named twice")
+
+    def test_each_family_sits_on_one_row(self):
+        rows = self._rows()
+        for prefix in TEST_FAMILIES:
+            with self.subTest(family=prefix):
+                holding = [i for i, row in enumerate(rows) if any(n.startswith(prefix) for n in row)]
+                self.assertEqual(len(holding), 1, f"{prefix} on rows {holding}")
+
+    def test_every_helper_module_is_in_the_helpers_table(self):
+        section = _section(_page("testing-guide.md"), "Shared helpers")
+        named = set(re.findall(r"^\| `(\w+)` \|", section, re.M))
+        helpers = {path.stem for path in self.TESTS.glob("*.py") if not path.stem.startswith("test_")}
+        helpers |= {path.parent.name for path in self.TESTS.glob("*/__init__.py")}
+        self.assertEqual(sorted(helpers - named), [], "not in the table")
+        self.assertEqual(sorted(named - helpers), [], "no such module")
+
+    def test_every_module_reading_the_working_tree_is_listed(self):
+        section = _section(_page("testing-guide.md"), "Tests that read the working tree")
+        reading = sorted(path.stem for path in self.TESTS.glob("test_*.py")
+                         if WORKING_TREE_SKIP.search(path.read_text(encoding="utf-8")))
+        self.assertIn("test_archive_build", reading)
+        self.assertEqual([name for name in reading if f"`{name}`" not in section], [])
 
 
 if __name__ == "__main__":

@@ -22,12 +22,12 @@ from scraper.retrobat_config_files import (
     ares,
     mesen,
 )
-from scraper.retrobat_generators import GUARDED_WRITES, guarded_writes_in
+from scraper.retrobat_generators import GENERATORS, GUARDED_WRITES, guarded_writes_in
 from scraper.retrobat_playstation import duckstation, psx_cascades
 from scraper.retrobat_render import _option_path_in
 from scraper.csharp_source import LauncherPatternMissing, Source, render_concat
 from model.sourcerevision import required_revision
-from tests.launchersretrobatsupport import G, _sources
+from tests.launcherssupport import _sources
 
 
 ARES = """
@@ -347,9 +347,9 @@ REASSIGNED = """
 def _psx_sources() -> dict[str, Source]:
     return _sources(
         **{
-            f"{G}/Mednafen.Generator.cs": MEDNAFEN,
-            f"{G}/Bizhawk.Generator.cs": MEDNAFEN.replace("mednafen_psx", "bizhawk_psx"),
-            f"{G}/LibRetro.CoreOptions.cs": LIBRETRO_PSX,
+            f"{GENERATORS}/Mednafen.Generator.cs": MEDNAFEN,
+            f"{GENERATORS}/Bizhawk.Generator.cs": MEDNAFEN.replace("mednafen_psx", "bizhawk_psx"),
+            f"{GENERATORS}/LibRetro.CoreOptions.cs": LIBRETRO_PSX,
         }
     )
 
@@ -360,7 +360,7 @@ def revision_of(url: str) -> str:
 
 class NamesInLauncherOrder(unittest.TestCase):
     def test_ares_fallback_chain_keeps_its_order(self):
-        [record] = ares(_sources(**{f"{G}/Ares.Generator.cs": ARES}))
+        [record] = ares(_sources(**{f"{GENERATORS}/Ares.Generator.cs": ARES}))
         self.assertEqual(
             record["names"],
             [
@@ -374,10 +374,10 @@ class NamesInLauncherOrder(unittest.TestCase):
         self.assertEqual(
             record["passes_to"], "settings.bml LaserActiveSEGAPAC/Firmware/BIOS.Japan (first found)"
         )
-        self.assertEqual(record["source_ref"], f"{G}/Ares.Generator.cs:7-14")
+        self.assertEqual(record["source_ref"], f"{GENERATORS}/Ares.Generator.cs:7-14")
 
     def test_mesen_copy_names_source_and_renamed_target(self):
-        [record] = mesen(_sources(**{f"{G}/Mesen.Generator.cs": MESEN}))
+        [record] = mesen(_sources(**{f"{GENERATORS}/Mesen.Generator.cs": MESEN}))
         self.assertEqual(record["names"], ["colecovision.rom"])
         self.assertEqual(record["kind"], "copies")
         self.assertIn("<mesen>/Firmware/bios.col", record["passes_to"])
@@ -385,10 +385,10 @@ class NamesInLauncherOrder(unittest.TestCase):
             record["fails_when_missing"],
             "ApplicationException 'Colecovision firmware is missing (colecovision.rom)'",
         )
-        self.assertEqual(record["source_ref"], f"{G}/Mesen.Generator.cs:1-13")
+        self.assertEqual(record["source_ref"], f"{GENERATORS}/Mesen.Generator.cs:1-13")
 
     def test_amiberry_identical_lists_are_one_record(self):
-        records = amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
+        records = amiberry(_sources(**{f"{GENERATORS}/Amiberry.Generator.cs": AMIBERRY}))
         records = [r for r in records if r["kind"] == "names_searched"]
         self.assertEqual(
             [r["names"] for r in records],
@@ -399,7 +399,7 @@ class NamesInLauncherOrder(unittest.TestCase):
         )
         self.assertEqual(records[0]["search_dir"], "bios, bios/amiga, bios/Amiga")
         self.assertEqual(
-            records[0]["source_ref"], f"{G}/Amiberry.Generator.cs:3-5, 8-10, 15-17, 23-27"
+            records[0]["source_ref"], f"{GENERATORS}/Amiberry.Generator.cs:3-5, 8-10, 15-17, 23-27"
         )
         self.assertEqual(
             records[1]["passes_to"],
@@ -407,20 +407,20 @@ class NamesInLauncherOrder(unittest.TestCase):
         )
 
     def test_amiberry_folders_are_below_its_emulator_folder(self):
-        records = amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
+        records = amiberry(_sources(**{f"{GENERATORS}/Amiberry.Generator.cs": AMIBERRY}))
         folders = [r for r in records if r["kind"] == "passes_path"]
         self.assertEqual(
             [(r["search_dir"], r["passes_to"], r["source_ref"]) for r in folders],
             [
                 ('<AppConfig.GetFullPath("amiberry")>/ROMs', "written: rom_path in amiberry.conf",
-                 f"{G}/Amiberry.Generator.cs:31, 37-41"),
+                 f"{GENERATORS}/Amiberry.Generator.cs:31, 37-41"),
                 ('<AppConfig.GetFullPath("amiberry")>/WHDBoot',
-                 "written: whdboot_path in amiberry.conf", f"{G}/Amiberry.Generator.cs:31, 40-41"),
+                 "written: whdboot_path in amiberry.conf", f"{GENERATORS}/Amiberry.Generator.cs:31, 40-41"),
             ],
         )
 
     def test_amiberry_copies_each_kickstart_into_its_roms_folder(self):
-        records = amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
+        records = amiberry(_sources(**{f"{GENERATORS}/Amiberry.Generator.cs": AMIBERRY}))
         copies = [r for r in records if r["kind"] == "copies"]
         self.assertEqual(
             [(r["names"], r["passes_to"], r["depends_on_option"]) for r in copies],
@@ -438,13 +438,13 @@ class NamesInLauncherOrder(unittest.TestCase):
         self.assertEqual(copies[0]["search_dir"], "bios, bios/amiga, bios/Amiga")
         self.assertEqual(
             copies[0]["source_ref"],
-            f"{G}/Amiberry.Generator.cs:3-5, 8-10, 15, 23-27, 31, 37-39, 52-59",
+            f"{GENERATORS}/Amiberry.Generator.cs:3-5, 8-10, 15, 23-27, 31, 37-39, 52-59",
         )
 
     def test_amiberry_copy_without_its_staleness_test_raises(self):
         broken = AMIBERRY.replace(" || dst.LastWriteTimeUtc < src.LastWriteTimeUtc", "")
         with self.assertRaises(LauncherPatternMissing):
-            amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": broken}))
+            amiberry(_sources(**{f"{GENERATORS}/Amiberry.Generator.cs": broken}))
 
     def test_psx_cascade_splits_searched_from_fallback(self):
         records = psx_cascades(_psx_sources())
@@ -454,17 +454,17 @@ class NamesInLauncherOrder(unittest.TestCase):
         self.assertEqual(fallback["names"], ["scph5502.bin", "scph5500.bin"])
         self.assertEqual(fallback["kind"], "fixed_name")
         self.assertEqual(fallback["fails_when_missing"], "names written without an existence check")
-        self.assertEqual(searched["source_ref"], f"{G}/Mednafen.Generator.cs:1-21")
+        self.assertEqual(searched["source_ref"], f"{GENERATORS}/Mednafen.Generator.cs:1-21")
 
     def test_libretro_cascade_takes_the_core_from_its_guard(self):
         records = psx_cascades(_psx_sources())
         [beetle] = [r for r in records if r["build"] == "libretro"]
         self.assertEqual(beetle["emulator"], "mednafen_psx_hw")
         self.assertEqual(beetle["names"], ["psxonpsp660.bin"])
-        self.assertEqual(beetle["source_ref"], f"{G}/LibRetro.CoreOptions.cs:3-12")
+        self.assertEqual(beetle["source_ref"], f"{GENERATORS}/LibRetro.CoreOptions.cs:3-12")
 
     def test_openmsx_one_record_per_machine(self):
-        records = openmsx(_sources(**{f"{G}/OpenMSX.Generator.cs": OPENMSX}))
+        records = openmsx(_sources(**{f"{GENERATORS}/OpenMSX.Generator.cs": OPENMSX}))
         self.assertEqual(
             [(r["passes_to"], r["names"]) for r in records],
             [
@@ -475,37 +475,37 @@ class NamesInLauncherOrder(unittest.TestCase):
         )
         self.assertEqual(records[0]["search_dir"], "bios/openmsx/share/systemroms")
         self.assertFalse(records[0]["case_insensitive"])
-        self.assertEqual(records[1]["source_ref"], f"{G}/OpenMSX.Generator.cs:1-4, 10")
+        self.assertEqual(records[1]["source_ref"], f"{GENERATORS}/OpenMSX.Generator.cs:1-4, 10")
 
     def test_openmsx_home_is_handed_as_a_directory(self):
         # OPENMSX_HOME is the user directory openMSX reads share/systemroms below.
-        records = openmsx(_sources(**{f"{G}/OpenMSX.Generator.cs": OPENMSX}))
+        records = openmsx(_sources(**{f"{GENERATORS}/OpenMSX.Generator.cs": OPENMSX}))
         home = records[-1]
         self.assertEqual(home["kind"], "passes_path")
         self.assertEqual(home["search_dir"], "bios/openmsx")
-        self.assertEqual(home["source_ref"], f"{G}/OpenMSX.Generator.cs:13-14")
+        self.assertEqual(home["source_ref"], f"{GENERATORS}/OpenMSX.Generator.cs:13-14")
 
     def test_duckstation_reads_the_standalone_feature_not_the_core(self):
         search, option = duckstation(
-            _sources(**{f"{G}/Duckstation.Generator.cs": DUCKSTATION, retrobat_generators.FEATURES: FEATURES})
+            _sources(**{f"{GENERATORS}/Duckstation.Generator.cs": DUCKSTATION, retrobat_generators.FEATURES: FEATURES})
         )
         self.assertEqual(search["kind"], "passes_path")
         self.assertEqual(search["names"], [])
         self.assertEqual(option["names"], ["psxonpsp660.bin", "scph5501.bin"])
         self.assertEqual(option["passes_to"], "settings.ini [BIOS] PathNTSCJ = PathPAL = <value>")
         self.assertEqual(
-            option["source_ref"], f"{G}/Duckstation.Generator.cs:3-7, {retrobat_generators.FEATURES}:12-15"
+            option["source_ref"], f"{GENERATORS}/Duckstation.Generator.cs:3-7, {retrobat_generators.FEATURES}:12-15"
         )
 
     def test_hatari_default_and_option(self):
         fixed, option, emutos, newer = hatari(
-            _sources(**{f"{G}/Hatari.Generator.cs": HATARI, retrobat_generators.FEATURES: HATARI_FEATURES})
+            _sources(**{f"{GENERATORS}/Hatari.Generator.cs": HATARI, retrobat_generators.FEATURES: HATARI_FEATURES})
         )
         message = "ApplicationException 'Missing TOS file <tosName> in 'bios' folder.'"
         self.assertEqual(fixed["names"], ["tos.img"])
         self.assertEqual(fixed["search_dir"], "bios")
         self.assertEqual(fixed["fails_when_missing"], f"bios/hatari/tos/emutos.img instead, else {message}")
-        self.assertEqual(fixed["source_ref"], f"{G}/Hatari.Generator.cs:1-3, 13-14, 27")
+        self.assertEqual(fixed["source_ref"], f"{GENERATORS}/Hatari.Generator.cs:1-3, 13-14, 27")
         self.assertEqual(option["names"], ["tos206.img", "tos102.img"])
         self.assertEqual(option["search_dir"], "bios/hatari/tos")
         self.assertEqual(option["fails_when_missing"], message)
@@ -515,7 +515,7 @@ class NamesInLauncherOrder(unittest.TestCase):
         self.assertEqual(newer["names"], ["tos104.img", "tos206.img", "emutos.img"])
 
 
-def _one(text: str, emulator: str, path: str = f"{G}/X.Generator.cs") -> list[dict]:
+def _one(text: str, emulator: str, path: str = f"{GENERATORS}/X.Generator.cs") -> list[dict]:
     return guarded_writes_in(_sources(**{path: text})[path], emulator)
 
 
@@ -532,7 +532,7 @@ class GuardedConfigWrites(unittest.TestCase):
                  "32XM68KBIOS not written"),
             ],
         )
-        self.assertEqual(fixed[0]["source_ref"], f"{G}/X.Generator.cs:14-16")
+        self.assertEqual(fixed[0]["source_ref"], f"{GENERATORS}/X.Generator.cs:14-16")
         self.assertTrue(all(r["search_dir"] == "bios" and r["case_insensitive"] for r in fixed))
         self.assertNotIn("depends_on_option", fixed[0])
 
@@ -540,7 +540,7 @@ class GuardedConfigWrites(unittest.TestCase):
         (folder,) = [r for r in _one(KEGA, "kega-fusion") if r["kind"] == "passes_path"]
         self.assertEqual(folder["names"], [])
         self.assertEqual(folder["passes_to"], "Fusion.ini GenesisBIOS = bios")
-        self.assertEqual(folder["source_ref"], f"{G}/X.Generator.cs:7, 11")
+        self.assertEqual(folder["source_ref"], f"{GENERATORS}/X.Generator.cs:7, 11")
 
     def test_early_return_and_enclosing_if_are_conditions(self):
         (record,) = _one(JGENESIS, "jgenesis")
@@ -551,7 +551,7 @@ class GuardedConfigWrites(unittest.TestCase):
         self.assertEqual(
             record["passes_to"], "jgenesis-config.toml [sega_cd] bios_path, only if the file exists"
         )
-        self.assertEqual(record["source_ref"], f"{G}/X.Generator.cs:12-13, 17, 21-22")
+        self.assertEqual(record["source_ref"], f"{GENERATORS}/X.Generator.cs:12-13, 17, 21-22")
 
     def test_option_switch_is_named(self):
         (record,) = _one(MELONDS, "melonds")
@@ -573,8 +573,8 @@ class GuardedConfigWrites(unittest.TestCase):
             _one(looped, "kega-fusion")
 
     def test_pinned_kega_fusion_generator_is_read(self):
-        self.assertIn(f"{G}/KegaFusion.Generator.cs", rl.SOURCE_FILES)
-        self.assertEqual(GUARDED_WRITES[f"{G}/KegaFusion.Generator.cs"], "kega-fusion")
+        self.assertIn(f"{GENERATORS}/KegaFusion.Generator.cs", rl.SOURCE_FILES)
+        self.assertEqual(GUARDED_WRITES[f"{GENERATORS}/KegaFusion.Generator.cs"], "kega-fusion")
 
 
 SATURN_FEATURES = """
@@ -717,7 +717,7 @@ def _feature_sources(path: str, text: str, features: str) -> dict[str, Source]:
 
 class OptionReplacesThePath(unittest.TestCase):
     def test_kronos_default_then_option_without_hle(self):
-        path = f"{G}/Kronos.Generator.cs"
+        path = f"{GENERATORS}/Kronos.Generator.cs"
         sources = _feature_sources(path, KRONOS, SATURN_FEATURES)
         fixed, option = _option_path_in(sources[path], sources[retrobat_generators.FEATURES], "kronos")
         self.assertEqual(fixed["names"], ["saturn_bios.bin"])
@@ -731,7 +731,7 @@ class OptionReplacesThePath(unittest.TestCase):
         self.assertEqual(option["source_ref"], f"{path}:7-15, {retrobat_generators.FEATURES}:3-7")
 
     def test_ymir_writes_without_a_check_and_passes_the_folder(self):
-        path = f"{G}/Ymir.Generator.cs"
+        path = f"{GENERATORS}/Ymir.Generator.cs"
         sources = _feature_sources(path, YMIR, SATURN_FEATURES)
         fixed, option, folder = _option_path_in(sources[path], sources[retrobat_generators.FEATURES], "ymir")
         self.assertEqual(
@@ -744,7 +744,7 @@ class OptionReplacesThePath(unittest.TestCase):
         )
 
     def test_kronos_falls_back_to_the_regional_bios(self):
-        path = f"{G}/Kronos.Generator.cs"
+        path = f"{GENERATORS}/Kronos.Generator.cs"
         sources = _feature_sources(path, KRONOS_FALLBACK, SATURN_FEATURES)
         fixed, option, fallback = _option_path_in(
             sources[path], sources[retrobat_generators.FEATURES], "kronos"
@@ -768,7 +768,7 @@ class OptionReplacesThePath(unittest.TestCase):
         self.assertEqual(fallback["source_ref"], f"{path}:15-19")
 
     def test_ymir_writes_a_forced_bios_under_its_flag(self):
-        path = f"{G}/Ymir.Generator.cs"
+        path = f"{GENERATORS}/Ymir.Generator.cs"
         sources = _feature_sources(path, YMIR_OVERRIDE, SATURN_FEATURES)
         option, ipl, cdb = _option_path_in(sources[path], sources[retrobat_generators.FEATURES], "ymir")
         self.assertEqual(
@@ -784,7 +784,7 @@ class OptionReplacesThePath(unittest.TestCase):
         self.assertEqual(cdb["source_ref"], f"{path}:15-19")
 
     def test_ssf_has_no_default_name(self):
-        path = f"{G}/SSF.Generator.cs"
+        path = f"{GENERATORS}/SSF.Generator.cs"
         sources = _feature_sources(path, SSF, SATURN_FEATURES)
         [option] = _option_path_in(sources[path], sources[retrobat_generators.FEATURES], "ssf")
         self.assertEqual(option["names"], ["sega_101.bin"])
@@ -804,7 +804,7 @@ class AbsentConstructStopsTheScrape(unittest.TestCase):
     def test_chain_without_fallback_is_not_a_search(self):
         single = ARES.split("        if (!File.Exists(bios_japan))")[0] + "    }\n"
         with self.assertRaises(LauncherPatternMissing):
-            ares(_sources(**{f"{G}/Ares.Generator.cs": single}))
+            ares(_sources(**{f"{GENERATORS}/Ares.Generator.cs": single}))
 
     def test_missing_source_file_is_named(self):
         with self.assertRaises(LauncherPatternMissing) as caught:

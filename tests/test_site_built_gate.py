@@ -16,6 +16,7 @@ Skips when the site is not built.
 from __future__ import annotations
 
 import tests
+from tests.sitepages import DIST
 
 import json
 import re
@@ -27,7 +28,6 @@ import yaml
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
-DIST = REPO_ROOT / "website" / "dist"
 DOCS = REPO_ROOT / "website" / "src" / "content" / "docs"
 SIDEBAR = REPO_ROOT / "website" / "src" / "generated" / "sidebar.json"
 BASE = "/retrobios/"

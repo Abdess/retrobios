@@ -30,7 +30,7 @@ from sitegen import cards
 from sitegen import datapage
 from sitegen import lookup
 import check_platform_folder
-from tests.sitereferencesupport import API, PUBLIC, REPO_ROOT, SITE, _built
+from tests.sitepages import API, PUBLIC, REPO_ROOT, SITE, built
 
 
 def _verify_status(entry: dict, path: Path, mode: str) -> str:
@@ -96,7 +96,7 @@ class AFolderCheckAgreesWithTheVerifier(unittest.TestCase):
         """A check driven by platform-files.csv, with zipped_file, gives the
         verifier's verdict on every Batocera entry of a folder filled from
         the collection."""
-        text = _built(PUBLIC / "downloads" / "platform-files.csv").read_text(encoding="utf-8")
+        text = built(PUBLIC / "downloads" / "platform-files.csv").read_text(encoding="utf-8")
         rows = [row for row in csv.DictReader(io.StringIO(text)) if row["platform_id"] == "batocera"]
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -113,7 +113,7 @@ class AFolderCheckAgreesWithTheVerifier(unittest.TestCase):
             if len(held) < 100:
                 raise unittest.SkipTest("the collection files are not in this checkout")
             # The verifier reads the platform's own entries, the check the CSV.
-            contract = json.loads(_built(API / "platforms" / "batocera.json").read_text())[
+            contract = json.loads(built(API / "platforms" / "batocera.json").read_text())[
                 "items"][0]["contract"]
             declared = [entry for _sys, system in sorted(contract["systems"].items())
                         for entry in system.get("files") or []]
@@ -187,12 +187,12 @@ class LookupUrlsResolve(unittest.TestCase):
                 self.assertEqual(by_layer[layer]["system_name"], expected)
 
     def test_built_shards_carry_the_name(self):
-        shard = json.loads(_built(API / "lookup" / "05.json").read_text())
+        shard = json.loads(built(API / "lookup" / "05.json").read_text())
         record = next(r for r in shard["items"] if r["value"].startswith("0555c6fae890"))
         self.assertEqual(record["system_name"], "Sony PlayStation")
 
     def test_built_records_land_on_built_pages(self):
-        shard = json.loads(_built(API / "lookup" / "05.json").read_text())
+        shard = json.loads(built(API / "lookup" / "05.json").read_text())
         dist = REPO_ROOT / "website" / "dist"
         for record in shard["items"][:200]:
             with self.subTest(url=record["url"]):
@@ -243,7 +243,7 @@ class LookupRecordsUnderEveryHash(unittest.TestCase):
         db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
         sha1 = "0555c6fae8906f3f09baf5988f00e55f88e9f30b"
         entry = db["files"][sha1]
-        _built(API / "lookup")
+        built(API / "lookup")
         answers = []
         for algorithm in ("sha1", "md5", "crc32", "sha256"):
             value = str(entry[algorithm]).lower()
@@ -344,7 +344,7 @@ class LookupCountsEmulatorsLikeTheCard(unittest.TestCase):
 
     def test_scph5501_names_the_cards_eleven(self):
         sha1 = "0555c6fae8906f3f09baf5988f00e55f88e9f30b"
-        shard = json.loads(_built(API / "lookup" / f"{sha1[:2]}.json").read_text())
+        shard = json.loads(built(API / "lookup" / f"{sha1[:2]}.json").read_text())
         owners = {r["owner"] for r in shard["items"]
                   if r["value"] == sha1 and r["layer"] == "emulator"}
         self.assertGreaterEqual(len(owners), 11)

@@ -18,7 +18,7 @@ import yaml
 import install
 from orchestrate import runner
 from scripts.packs.targets import generate_target_manifests
-from tests.auditsupport import HAS_JSONSCHEMA, ROOT
+from tests import HAS_JSONSCHEMA, REPO_ROOT
 
 
 class InstallerBoundaryRegressions(unittest.TestCase):
@@ -91,7 +91,7 @@ class InstallerBoundaryRegressions(unittest.TestCase):
         from jsonschema import Draft202012Validator
 
         schema = json.loads(
-            (ROOT / "schemas" / "target-manifest.schema.json").read_text(
+            (REPO_ROOT / "schemas" / "target-manifest.schema.json").read_text(
                 encoding="utf-8"
             )
         )
@@ -158,7 +158,7 @@ class InstallerBoundaryRegressions(unittest.TestCase):
         from packs import scope
         from schemas import packmanifests
 
-        install_list = json.loads((ROOT / "install" / "romm.json").read_text(encoding="utf-8"))
+        install_list = json.loads((REPO_ROOT / "install" / "romm.json").read_text(encoding="utf-8"))
         targets = {"browser": None, "rpi4": {"cores": ["mgba"], "images": ["rpi4"]}}
         document = {
             "schema_version": 1, "version": 1,
@@ -226,10 +226,10 @@ class TargetManifestRegressions(unittest.TestCase):
                 generate_target_manifests(str(root / "absent"), str(root / "out"))
             (root / "plat").mkdir()
             run = subprocess.run(
-                [sys.executable, str(ROOT / "scripts" / "generate_pack.py"),
+                [sys.executable, str(REPO_ROOT / "scripts" / "generate_pack.py"),
                  "--manifest-targets", "--platforms-dir", str(root / "plat"),
                  "--output-dir", str(root / "out")],
-                capture_output=True, text=True, cwd=ROOT, check=False,
+                capture_output=True, text=True, cwd=REPO_ROOT, check=False,
             )
             self.assertEqual(run.returncode, 1, run.stderr)
             self.assertIn("No targets directory at", run.stderr)
@@ -242,7 +242,7 @@ def _git_paths(*args: str, stdin: list[str] | None = None) -> set[str] | None:
         result = subprocess.run(
             ["git", *args],
             input="".join(f"{p}\0" for p in stdin or []),
-            capture_output=True, text=True, cwd=ROOT, check=False,
+            capture_output=True, text=True, cwd=REPO_ROOT, check=False,
         )
     except FileNotFoundError:
         return None
@@ -264,18 +264,18 @@ class ManifestVersionIsThePlatformsOwn(unittest.TestCase):
 
     def test_committed_manifests_state_their_platform_version(self):
         from scripts.model.platforms import load_platform_config
-        manifests = sorted((ROOT / "install").glob("*.json"))
+        manifests = sorted((REPO_ROOT / "install").glob("*.json"))
         self.assertTrue(manifests)
         for path in manifests:
             with self.subTest(manifest=path.name):
                 data = json.loads(path.read_text())
-                config = load_platform_config(data["platform"], str(ROOT / "platforms"))
+                config = load_platform_config(data["platform"], str(REPO_ROOT / "platforms"))
                 self.assertTrue(config.get("version"))
                 self.assertEqual(data["version"], str(config["version"]))
 
     def test_no_child_shows_its_parents_version(self):
         from scripts.model.platforms import load_platform_config
-        platforms = ROOT / "platforms"
+        platforms = REPO_ROOT / "platforms"
         children = {}
         for path in sorted(platforms.glob("*.yml")):
             raw = yaml.safe_load(path.read_text()) or {}
@@ -298,7 +298,7 @@ class ManifestVersionIsThePlatformsOwn(unittest.TestCase):
             self.assertNotIn("version", load_platform_config("child", tmp))
 
     def test_lakka_names_the_release_its_cores_are_read_at(self):
-        platforms = ROOT / "platforms"
+        platforms = REPO_ROOT / "platforms"
         lakka = yaml.safe_load((platforms / "lakka.yml").read_text())
         targets = yaml.safe_load((platforms / "targets" / "lakka.yml").read_text())
         tag = re.search(r"/blob/([^/]+)/", targets["source"]).group(1)
@@ -316,7 +316,7 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
     """
 
     def test_committed_manifests_all_have_a_source(self):
-        manifests = sorted((ROOT / "install").glob("*.json"))
+        manifests = sorted((REPO_ROOT / "install").glob("*.json"))
         self.assertTrue(manifests, "no install manifests to check")
         for path in manifests:
             with self.subTest(manifest=path.name):
@@ -332,7 +332,7 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
 
     def test_an_unresolvable_file_is_recorded_as_omitted(self):
         """The reason must be one install.py knows how to report."""
-        for path in sorted((ROOT / "install").glob("*.json")):
+        for path in sorted((REPO_ROOT / "install").glob("*.json")):
             with self.subTest(manifest=path.name):
                 data = json.loads(path.read_text())
                 for entry in data.get("omitted_files", []):
@@ -341,7 +341,7 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
     def test_the_installer_accepts_every_published_manifest(self):
         """A reason the schema allowed and the installer did not made the
         installer refuse the whole RomM manifest: no RomM install ran."""
-        for path in sorted((ROOT / "install").glob("*.json")):
+        for path in sorted((REPO_ROOT / "install").glob("*.json")):
             with self.subTest(manifest=path.name):
                 data = json.loads(path.read_text())
                 install._validate_manifest(data, data["platform"])
@@ -351,8 +351,8 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
         reads: the installer accepts it against its own list, each item
         written whole has a source, and a list naming builds has its file."""
         listed = {path.stem: json.loads(path.read_text())
-                  for path in sorted((ROOT / "install").glob("*.json"))}
-        layouts = sorted((ROOT / "install" / "standalone").glob("*.json"))
+                  for path in sorted((REPO_ROOT / "install").glob("*.json"))}
+        layouts = sorted((REPO_ROOT / "install" / "standalone").glob("*.json"))
         self.assertEqual({path.stem for path in layouts},
                          {plat for plat, data in listed.items()
                           if data.get("standalone_builds")})
@@ -367,7 +367,7 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
 
     def test_schema_and_installer_name_the_same_reasons(self):
         schema = json.loads(
-            (ROOT / "schemas" / "install-manifest.schema.json").read_text()
+            (REPO_ROOT / "schemas" / "install-manifest.schema.json").read_text()
         )
         reasons = schema["properties"]["omitted_files"]["items"]["properties"][
             "reason"
@@ -375,8 +375,8 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
         self.assertEqual(set(reasons), set(install.OMISSION_REASONS))
 
     def _manifests(self) -> list[Path]:
-        paths = sorted((ROOT / "install").glob("*.json"))
-        paths += sorted((ROOT / "install" / "targets").glob("*.json"))
+        paths = sorted((REPO_ROOT / "install").glob("*.json"))
+        paths += sorted((REPO_ROOT / "install" / "targets").glob("*.json"))
         self.assertTrue(paths, "no install manifests to check")
         return paths
 
@@ -389,7 +389,7 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
         repo_path from raw.githubusercontent.com, so a stale one is a
         download that can never succeed.
         """
-        database = ROOT / "database.json"
+        database = REPO_ROOT / "database.json"
         if not database.is_file():
             self.skipTest("database.json not generated")
         files = json.loads(database.read_text(encoding="utf-8"))["files"]
@@ -463,7 +463,7 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
         database.json and the manifests agreeing on the old path: the tests
         above compare them with each other, so all passed, and the installer
         got a 404 (issue 78, with the database stale too)."""
-        database = ROOT / "database.json"
+        database = REPO_ROOT / "database.json"
         if not database.is_file():
             self.skipTest("database.json not generated")
         files = json.loads(database.read_text(encoding="utf-8"))["files"]
@@ -776,12 +776,12 @@ class InstallerJsonKindsNeverOverwriteEachOther(unittest.TestCase):
     def _run(self, *flags: str, held: str) -> tuple:
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp, "retroarch.json")
-            before = (ROOT / held).read_text(encoding="utf-8")
+            before = (REPO_ROOT / held).read_text(encoding="utf-8")
             target.write_text(before, encoding="utf-8")
             proc = subprocess.run(
                 [sys.executable, "scripts/generate_pack.py", *flags,
                  "--offline", "--output-dir", tmp],
-                cwd=ROOT, capture_output=True, text=True, timeout=600,
+                cwd=REPO_ROOT, capture_output=True, text=True, timeout=600,
                 check=False,
             )
             return proc, before, target.read_text(encoding="utf-8")

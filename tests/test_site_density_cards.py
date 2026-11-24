@@ -11,6 +11,7 @@ sits in closed folds, every fact still on the page.
 from __future__ import annotations
 
 import tests
+from tests.sitepages import DIST
 
 import re
 import types
@@ -25,7 +26,6 @@ from sitegen import markup
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
-DIST = REPO_ROOT / "website" / "dist"
 SITE_TS = REPO_ROOT / "website" / "src" / "scripts" / "site.ts"
 
 SHA1 = "30a33f3651f8e1b0967a5dfe6ff714baebcce41a"

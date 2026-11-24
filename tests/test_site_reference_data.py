@@ -44,7 +44,7 @@ from model.registry import list_release_pack_platforms
 from model import releaserecord
 from acquire.provenance import build_report
 from model.dumpcatalog import load_provenance_snapshots
-from tests.sitereferencesupport import API, DIST, PUBLIC, REPO_ROOT, SITE, _built
+from tests.sitepages import API, DIST, PUBLIC, REPO_ROOT, SITE, built
 
 
 class ExportsComplete(unittest.TestCase):
@@ -134,11 +134,11 @@ class TheExportsKeepWhatACheckNeeds(unittest.TestCase):
             self.assertIn(field, exportrows.ENTRY_EXPORT_FIELDS)
 
     def test_the_built_csv_has_the_column(self):
-        text = _built(PUBLIC / "downloads" / "platform-files.csv").read_text(encoding="utf-8")
+        text = built(PUBLIC / "downloads" / "platform-files.csv").read_text(encoding="utf-8")
         rows = list(csv.DictReader(io.StringIO(text)))
         batocera = [row for row in rows if row["platform_id"] == "batocera"]
         self.assertGreater(sum(1 for row in batocera if row["zipped_file"]), 300)
-        with sqlite3.connect(_built(PUBLIC / "downloads" / "retrobios.sqlite")) as db:
+        with sqlite3.connect(built(PUBLIC / "downloads" / "retrobios.sqlite")) as db:
             count = db.execute("SELECT count(*) FROM platform_files "
                                "WHERE platform_id = 'batocera' AND zipped_file != ''").fetchone()[0]
             license_row = db.execute("SELECT value FROM metadata WHERE key = 'license'").fetchone()
@@ -184,7 +184,7 @@ class TheContractsValidate(unittest.TestCase):
                 self.assertEqual(schema.get("$id"), f"{SITE}api/v1/schemas/{path.name}")
 
     def test_every_schema_is_published(self):
-        published = {p.name for p in _built(API / "schemas").glob("*.json")}
+        published = {p.name for p in built(API / "schemas").glob("*.json")}
         self.assertEqual(published, {p.name for p in (REPO_ROOT / "schemas").glob("*.schema.json")})
 
     def test_the_built_api_validates(self):
@@ -196,7 +196,7 @@ class TheContractsValidate(unittest.TestCase):
         schemas = {p.name: json.loads(p.read_text()) for p in (REPO_ROOT / "schemas").glob("*.json")}
         envelope = Draft202012Validator(schemas["site-api-envelope.schema.json"])
         platform = Draft202012Validator(schemas["platform.schema.json"])
-        document = json.loads(_built(API / "platforms.json").read_text())
+        document = json.loads(built(API / "platforms.json").read_text())
         self.assertEqual(list(envelope.iter_errors(document)), [])
         for item in document["items"]:
             with self.subTest(platform=item["id"]):
@@ -213,8 +213,8 @@ class TheIndexSaysWhatTheCatalogLists(unittest.TestCase):
     in none of its 80 items."""
 
     def test_the_description_matches_the_items(self):
-        index = json.loads(_built(API / "index.json").read_text())
-        catalog = json.loads(_built(API / "catalog.json").read_text())
+        index = json.loads(built(API / "index.json").read_text())
+        catalog = json.loads(built(API / "catalog.json").read_text())
         described = next(i["description"] for i in index["items"] if i["url"] == "catalog.json")
         self.assertNotIn("Every published file", described)
         listed = {item["url"].split("/", 1)[0] for item in catalog["items"]}
@@ -237,7 +237,7 @@ class EveryEnvelopeCarriesTheCommit(unittest.TestCase):
         self.assertIn("source_commit()", block)
 
     def test_every_built_envelope_has_it(self):
-        _built(API / "catalog.json")
+        built(API / "catalog.json")
         if not exportrows.source_commit():
             raise unittest.SkipTest("not a git checkout")
         lacking = [
@@ -253,7 +253,7 @@ class ManifestsArePublished(unittest.TestCase):
     """8.2: the manifest a pack installs, byte for byte, in the catalog."""
 
     def test_each_manifest_is_the_repository_file(self):
-        catalog = json.loads(_built(API / "catalog.json").read_text())
+        catalog = json.loads(built(API / "catalog.json").read_text())
         listed = {item["url"]: item for item in catalog["items"]}
         for source in sorted((REPO_ROOT / "install").glob("*.json")):
             with self.subTest(manifest=source.name):
@@ -298,7 +298,7 @@ class AnIdLeadsToItsData(unittest.TestCase):
 
     def test_the_built_index_resolves_ids_to_sections(self):
         items = {item["id"]: item for item in
-                 json.loads(_built(API / "systems.json").read_text())["items"]}
+                 json.loads(built(API / "systems.json").read_text())["items"]}
         color = items["wonderswan-color"]
         self.assertEqual(color["name"], "Bandai WonderSwan Color")
         self.assertTrue(color["url"].startswith("/retrobios/systems/bandai/"), color["url"])
@@ -328,7 +328,7 @@ class ManifestFieldsAreComplete(unittest.TestCase):
                 self.assertIn(f"| `{key}` |", page)
 
     def test_no_link_carries_an_escaped_bracket(self):
-        html = _built(DIST / "data" / "index.html").read_text(encoding="utf-8")
+        html = built(DIST / "data" / "index.html").read_text(encoding="utf-8")
         self.assertNotRegex(html, r'href="[^"]*&amp;lt;')
         self.assertNotRegex(html, r'href="[^"]*&lt;')
 
@@ -337,7 +337,7 @@ class EverySystemIdWithFilesHasAPage(unittest.TestCase):
     """8.5: tyrian, scummvm, dos and 25 more had files and a null url."""
 
     def test_built_index(self):
-        items = json.loads(_built(API / "systems.json").read_text())["items"]
+        items = json.loads(built(API / "systems.json").read_text())["items"]
         orphans = [item["id"] for item in items if item["sha1"] and not item["url"]]
         self.assertEqual(orphans, [])
 
@@ -388,7 +388,7 @@ class OneAnswerOnReleasePacks(unittest.TestCase):
 
     def test_api_release_pack_set_equals_the_registry(self):
         found = set()
-        for path in _built(API / "platforms").glob("*.json"):
+        for path in built(API / "platforms").glob("*.json"):
             item = json.loads(path.read_text())["items"][0]
             if item["registry"].get("release_pack"):
                 found.add(item["id"])
@@ -403,7 +403,7 @@ class OneAnswerOnReleasePacks(unittest.TestCase):
         self.assertLessEqual(served, _released())
 
     def test_the_built_picker_file(self):
-        written = json.loads(_built(GENERATED / "release-advertised.json").read_text())
+        written = json.loads(built(GENERATED / "release-advertised.json").read_text())
         self.assertEqual(written, releaserecord.load_advertised())
 
 
@@ -461,7 +461,7 @@ class TheDataPageListsWhatIsServed(unittest.TestCase):
             self.assertIn(f"- [`{path.name}`](api/v1/schemas/{path.name}): ", page)
 
     def test_target_lists_are_published_and_catalogued(self):
-        catalog = json.loads(_built(API / "catalog.json").read_text())
+        catalog = json.loads(built(API / "catalog.json").read_text())
         listed = {item["url"] for item in catalog["items"]}
         for source in (REPO_ROOT / "install" / "targets").glob("*.json"):
             self.assertIn(f"targets/{source.name}", listed)
@@ -483,7 +483,7 @@ class SystemItemsCarryTheirApi(unittest.TestCase):
     """8.7."""
 
     def test_each_api_address_is_served(self):
-        items = json.loads(_built(API / "systems.json").read_text())["items"]
+        items = json.loads(built(API / "systems.json").read_text())["items"]
         playstation = next(i for i in items if i["id"] == "sony-playstation")
         self.assertEqual(playstation["api"], "/retrobios/api/v1/systems/sony.json")
         for item in items:

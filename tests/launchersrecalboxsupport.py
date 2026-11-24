@@ -29,7 +29,7 @@ from scraper.recalbox_configgen import (
     Configgen,
 )
 
-from tests.test_launchers import placed
+from tests.launcherssupport import placed
 
 
 # recalboxFiles.py:1-12, 173-174

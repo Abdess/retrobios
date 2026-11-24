@@ -695,14 +695,13 @@ class StartPagesStayInBudget(unittest.TestCase):
     """The built pages: the new answers fit the level 0 ceilings."""
 
     def test_ceilings(self):
-        from tests import test_site_copy
+        from tests.sitecopy import START_PAGES, _load
 
         sitepages.require()
         for name in ("wiki/faq.md", "wiki/troubleshooting.md", "wiki/first-install.md",
                      "wiki/what-are-bios-files.md"):
             with self.subTest(page=name):
-                self.assertLessEqual(test_site_copy._load(name).words(),
-                                     test_site_copy.START_PAGES[name])
+                self.assertLessEqual(_load(name).words(), START_PAGES[name])
 
 
 ARCADE_ANCHOR = "technical-faq.md#which-mame-version-do-the-arcade-bios-sets-match"

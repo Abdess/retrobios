@@ -32,7 +32,7 @@ from sitegen import wanted as sitewanted
 from resolve import review, reviewhashes, sendable
 import yaml
 from model.database import load_database
-from tests.test_site_pronouns import pronouns
+from tests.sitepages import pronouns
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

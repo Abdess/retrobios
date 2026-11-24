@@ -11,6 +11,7 @@ every name and hash back.
 from __future__ import annotations
 
 import tests
+from tests.sitepages import DIST
 
 import re
 import unittest
@@ -28,7 +29,6 @@ from sitegen import validate
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 EMPTY_DB = {"files": {}, "indexes": {"by_name": {}}}
-DIST = REPO_ROOT / "website" / "dist"
 
 
 def _archive(i: int, members: int = 3, **fields: object) -> dict:

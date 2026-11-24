@@ -239,7 +239,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in (bios / "dolphin-emu").iterdir()), ["Sys"])
 
     def test_the_run_ends_on_the_archive_bytes_too(self):
-        from tests.test_install_selection import FakeRepository
+        from tests.installsupport import FakeRepository
 
         member = os.urandom(300_000)
         with FakeRepository() as repo:
@@ -262,7 +262,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
     def test_the_plan_announces_the_archive_not_the_tree(self):
         """yaps2's tarball is 21.2 MB for a 6.5 MB tree, Cemu's 21.4 MB for
         9.9 KB: the plan announced the tree, and the run downloaded far more."""
-        from tests.test_install_selection import FakeRepository
+        from tests.installsupport import FakeRepository
 
         member = b"profile"
         archive_size = 21_360_579

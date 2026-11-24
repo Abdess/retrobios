@@ -62,7 +62,7 @@ from sitegen import sources
 from core import upstream
 from core import forgehttp
 from packs.verdicts import Severity, blocking_missing, compute_severity
-from tests.sitereferencesupport import DIST, REPO_ROOT, _built
+from tests.sitepages import DIST, REPO_ROOT, built
 
 
 PLATFORMS = str(REPO_ROOT / "platforms")
@@ -586,7 +586,7 @@ class SourceLinksOnlyWhereTheFileIs(unittest.TestCase):
 
     def test_every_rendered_link_is_recorded(self):
         record = json.loads(sources.SOURCE_PATHS.read_text(encoding="utf-8"))
-        pages = sorted(_built(DOCS / "emulators").rglob("*.md*")) + sorted(DOCS.glob("gaps*.md*"))
+        pages = sorted(built(DOCS / "emulators").rglob("*.md*")) + sorted(DOCS.glob("gaps*.md*"))
         from model import measurements as mr
 
         # A Tested block links a record line and its data file in this
@@ -644,7 +644,7 @@ class TheReferencePagesAnswerTheirWords(unittest.TestCase):
                       "(`native_list: none`). An empty list does not mean nothing is needed.", page)
 
     def test_overview_ids_and_counts_are_not_indexed(self):
-        html = _built(DIST / "platforms" / "batocera" / "index.html").read_text(encoding="utf-8")
+        html = built(DIST / "platforms" / "batocera" / "index.html").read_text(encoding="utf-8")
         self.assertRegex(html, r"<small data-pagefind-ignore(=\"true\")?>sony-playstation</small>")
         self.assertRegex(html, r"<span data-pagefind-ignore(=\"true\")?>\d+/\d+</span>")
 
@@ -660,7 +660,7 @@ class NoEmptyCoreTable(unittest.TestCase):
         self.assertIn(platformpage.OWN_LIST_ONLY, page)
 
     def test_built_pages(self):
-        _built(DOCS / "cross-reference.md")
+        built(DOCS / "cross-reference.md")
         for name in ("misterfpga", "bizhawk"):
             self.assertFalse((DOCS / f"cross-reference-{name}.md").exists())
             page = sitepages.page(f"platforms/{name}.md").read_text(encoding="utf-8")
@@ -674,7 +674,7 @@ class FilesToSourceOnAPhone(unittest.TestCase):
     """8.12: 601 rows on one page, no way to give a file."""
 
     def test_parts_of_a_hundred_rows_each_with_an_upload(self):
-        _built(DOCS / "gaps-files-to-source.md")
+        built(DOCS / "gaps-files-to-source.md")
         parts = sorted(DOCS.glob("gaps-files-to-source*.md"))
         self.assertGreater(len(parts), 1)
         for part in parts:

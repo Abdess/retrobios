@@ -14,9 +14,6 @@ from tests import loopback
 from tests.sources import script_source
 
 import contextlib
-import functools
-import hashlib
-import http.server
 import importlib.util
 import io
 import json
@@ -26,19 +23,13 @@ import shlex
 import shutil
 import subprocess
 import sys
-import tempfile
-import threading
 import unittest
 from unittest import mock
 from pathlib import Path
 
 from model import region
-
-# The screen tests run under 3.8 and import this module for its fakes. The
-# build scripts stop below 3.9 (core.cli), so their modules load only above
-# that floor.
-if sys.version_info >= (3, 9):
-    from resolve import regions as resolve_regions
+from resolve import regions as resolve_regions
+from tests.installsupport import FakeRepository
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -515,78 +506,6 @@ class TheBoundaryChecksTheNewFields(unittest.TestCase):
             manifest["system_titles"] = bad
             with self.subTest(value=bad), self.assertRaises(ValueError):
                 install._validate_manifest(manifest, "retroarch")
-
-
-class FakeRepository:
-    """A loopback copy of the repository: one manifest and its payloads."""
-
-    PAYLOADS = {
-        "scph5500.bin": (b"jp bios", ["sony-playstation"], ["japan"], None),
-        "scph5501.bin": (b"us bios", ["sony-playstation"], ["north-america"], None),
-        "gba_bios.bin": (b"gba bios", ["nintendo-gba"], None, None),
-        "pcsx/extra.bin": (b"pcsx", ["sony-playstation"], None, ["pcsx_rearmed"]),
-        "mgba/extra.bin": (b"mgba", ["nintendo-gba"], None, ["mgba"]),
-    }
-
-    def __init__(self, selection: bool = True):
-        self.selection = selection
-
-    def __enter__(self) -> FakeRepository:
-        self.root = Path(tempfile.mkdtemp())
-        (self.root / "install").mkdir()
-        (self.root / "bios").mkdir()
-        files = []
-        for name, (payload, systems, regions, cores) in self.PAYLOADS.items():
-            stored = name.replace("/", "_")
-            (self.root / "bios" / stored).write_bytes(payload)
-            entry = {
-                "dest": name,
-                "sha1": hashlib.sha1(payload).hexdigest(),
-                "sha256": hashlib.sha256(payload).hexdigest(),
-                "size": len(payload),
-                "repo_path": f"bios/{stored}",
-                "cores": cores,
-            }
-            if self.selection:
-                entry["systems"] = systems
-                if regions:
-                    entry.update(regions=regions, region_system_groups=systems)
-            files.append(entry)
-        manifest = {"manifest_version": 2, "platform": "retroarch", "files": files}
-        (self.root / "install" / "retroarch.json").write_text(json.dumps(manifest))
-        handler = functools.partial(loopback.Quiet, directory=str(self.root))
-        self.httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-        threading.Thread(target=self.httpd.serve_forever, daemon=True).start()
-        self.dest = self.root / "dest"
-        return self
-
-    def __exit__(self, *exc) -> None:
-        self.httpd.shutdown()
-        self.httpd.server_close()
-        shutil.rmtree(self.root, ignore_errors=True)
-
-    def env(self) -> dict:
-        env = dict(os.environ)
-        env["RETROBIOS_BASE_URL"] = f"http://127.0.0.1:{self.httpd.server_address[1]}"
-        return env
-
-    def command(self, *options: str) -> list[str]:
-        return [sys.executable, str(REPO_ROOT / "install.py"), "--platform",
-                "retroarch", "--dest", str(self.dest), *options]
-
-    def run(self, *options: str) -> subprocess.CompletedProcess:
-        return subprocess.run(
-            self.command(*options), env=self.env(), capture_output=True,
-            text=True, timeout=60, check=False, stdin=subprocess.DEVNULL,
-        )
-
-    def installed(self) -> list[str]:
-        if not self.dest.exists():
-            return []
-        return sorted(
-            p.relative_to(self.dest).as_posix()
-            for p in self.dest.rglob("*") if p.is_file()
-        )
 
 
 class TheOneLinerNarrows(unittest.TestCase):

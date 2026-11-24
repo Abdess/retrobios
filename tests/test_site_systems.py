@@ -31,6 +31,7 @@ three times before the first file.
 from __future__ import annotations
 
 import tests
+from tests.sitepages import DIST
 
 import re
 import tempfile
@@ -63,7 +64,6 @@ from core.anchors import toc_slug
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
-DIST = REPO_ROOT / "website" / "dist"
 
 
 def _sony_file(name: str, char: str, path: str = "") -> dict:

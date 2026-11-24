@@ -15,7 +15,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 import yaml
-from tests.auditsupport import HAS_JSONSCHEMA, ROOT
+from tests import HAS_JSONSCHEMA, REPO_ROOT
 
 
 class UnreachableCitationRegressions(unittest.TestCase):
@@ -59,7 +59,7 @@ class UnreachableCitationRegressions(unittest.TestCase):
         from schemas import citations
 
         errors = []
-        for path in sorted((ROOT / "emulators").glob("*.yml")):
+        for path in sorted((REPO_ROOT / "emulators").glob("*.yml")):
             with path.open(encoding="utf-8") as handle:
                 errors.extend(
                     citations.unreachable_citations(path, yaml.safe_load(handle))
@@ -97,7 +97,7 @@ class DoubledCitationPaths(unittest.TestCase):
         from schemas import citations
 
         errors = []
-        for path in sorted((ROOT / "emulators").glob("*.yml")):
+        for path in sorted((REPO_ROOT / "emulators").glob("*.yml")):
             errors.extend(citations.doubled_paths(path))
         self.assertEqual(errors, [])
 
@@ -118,7 +118,7 @@ class KidVidTapesStayWithTheContent(unittest.TestCase):
             read_from_system_dir,
         )
 
-        profiles = load_emulator_profiles(str(ROOT / "emulators"))
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         for name in ("stella", "stella2014", "stella2023"):
             tapes = [f for f in profiles[name]["files"]
                      if f["name"].lower().endswith(".wav")]
@@ -140,10 +140,10 @@ class GeneralUserGSReachesEveryCoreThatNamesIt(unittest.TestCase):
         from model import profiles as model_profiles
         from resolve import localfile
 
-        if not (ROOT / "database.json").exists():
+        if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
-        db = json.loads((ROOT / "database.json").read_text())
-        profiles = model_profiles.load_emulator_profiles(str(ROOT / "emulators"))
+        db = json.loads((REPO_ROOT / "database.json").read_text())
+        profiles = model_profiles.load_emulator_profiles(str(REPO_ROOT / "emulators"))
         held = "bios/Other/GeneralUser GS/GeneralUser-GS.sf2"
         for emulator, name in (("dosbox_pure", "DOSBOX.SF2"),
                                ("dosbox-staging", "GeneralUser-GS.sf2"),
@@ -165,10 +165,10 @@ class APlatformPinDoesNotReplaceTheCoresRevision(unittest.TestCase):
         from model import profiles as model_profiles
         from resolve import localfile
 
-        if not (ROOT / "database.json").exists():
+        if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
-        db = json.loads((ROOT / "database.json").read_text())
-        profiles = model_profiles.load_emulator_profiles(str(ROOT / "emulators"))
+        db = json.loads((REPO_ROOT / "database.json").read_text())
+        profiles = model_profiles.load_emulator_profiles(str(REPO_ROOT / "emulators"))
         for emulator, name, pinned in (("scummvm", "kyra.dat", "21a57f79886e46f410cfb50186ed8d77"),
                                        ("fbneo", "hiscore.dat", "37fc4e050b53a1ef2c2e7f3042553025")):
             with self.subTest(emulator=emulator):
@@ -202,7 +202,7 @@ class ProseCitationsUseTheTrackedForm(unittest.TestCase):
     def test_no_profile_writes_a_line_number_profile_sync_cannot_see(self):
         found = [
             f"{path.name}:{number}: {match.group(0)}"
-            for path in sorted((ROOT / "emulators").glob("*.yml"))
+            for path in sorted((REPO_ROOT / "emulators").glob("*.yml"))
             for number, line in enumerate(path.read_text().splitlines(), 1)
             for match in self.UNTRACKED.finditer(line)
         ]
@@ -259,9 +259,9 @@ class OpenMsxRomsSitInItsSystemroms(unittest.TestCase):
         from scripts.model.platforms import load_platform_config
         from scripts.resolve.standalone import platform_layouts, platform_launches
 
-        profiles = load_emulator_profiles(str(ROOT / "emulators"))
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         profile = profiles["openmsx"]
-        retrobat = yaml.safe_load((ROOT / "platforms" / "retrobat.yml").read_text())
+        retrobat = yaml.safe_load((REPO_ROOT / "platforms" / "retrobat.yml").read_text())
         declared_dirs = {
             fe["destination"].rsplit("/", 1)[0].lower()
             for system in retrobat["systems"].values()
@@ -269,7 +269,7 @@ class OpenMsxRomsSitInItsSystemroms(unittest.TestCase):
             if "systemroms" in fe.get("destination", "")
         }
         self.assertEqual(declared_dirs, {"openmsx/share/systemroms"})
-        config = load_platform_config("retrobat", str(ROOT / "platforms"))
+        config = load_platform_config("retrobat", str(REPO_ROOT / "platforms"))
         ((view, _standalone),) = platform_layouts("openmsx", profile, platform_launches(config, profiles))
         placed = {f["name"]: f for f in view["files"]}
         for entry in profile["files"]:
@@ -290,12 +290,12 @@ class EmuDeckRunsItsEmulatorsStandalone(unittest.TestCase):
         from scripts.resolve.launches import PlatformLaunches
         from scripts.model.profiles import load_emulator_profiles
 
-        config = load_platform_config("emudeck", str(ROOT / "platforms"))
+        config = load_platform_config("emudeck", str(REPO_ROOT / "platforms"))
         self.assertEqual(
             sorted(config["standalone_cores"]),
             sorted(c for c in config["cores"] if c != "retroarch"),
         )
-        profiles = load_emulator_profiles(str(ROOT / "emulators"))
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         standalone = PlatformLaunches(standalone=frozenset(config["standalone_cores"]))
         for name in ("dolphin", "cemu", "armsx2", "supermodel"):
             with self.subTest(emulator=name):
@@ -309,9 +309,9 @@ class EmuDeckRunsItsEmulatorsStandalone(unittest.TestCase):
         from scripts.model.platforms import load_platform_config
         from scripts.resolve.cores import resolve_platform_cores
 
-        config = load_platform_config("emudeck", str(ROOT / "platforms"))
+        config = load_platform_config("emudeck", str(REPO_ROOT / "platforms"))
         self.assertIn("retroarch", config["cores"])
-        cores = resolve_platform_cores(config, load_emulator_profiles(str(ROOT / "emulators")))
+        cores = resolve_platform_cores(config, load_emulator_profiles(str(REPO_ROOT / "emulators")))
         for name in ("np2kai", "neocd", "dolphin"):
             with self.subTest(core=name):
                 self.assertIn(name, cores)
@@ -409,10 +409,10 @@ class BundledFilesAreNotToSource(unittest.TestCase):
         from model.registry import list_registered_platforms
         from model.profiles import load_emulator_profiles
 
-        known = set(list_registered_platforms(str(ROOT / "platforms")))
+        known = set(list_registered_platforms(str(REPO_ROOT / "platforms")))
         unknown = sorted({
             (name, platform)
-            for name, profile in load_emulator_profiles(str(ROOT / "emulators")).items()
+            for name, profile in load_emulator_profiles(str(REPO_ROOT / "emulators")).items()
             for entry in (profile.get("files") or []) + (profile.get("data_directories") or [])
             if isinstance(entry, dict)
             for field in ("installed_on", "not_bundled_on")
@@ -436,7 +436,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
         self.assertIn("installed=installed_data_refs_in(plan.platform_name", source)
 
     def test_the_pack_builder_skips_it(self):
-        source = (ROOT / "scripts" / "packs" / "extras.py").read_text(encoding="utf-8")
+        source = (REPO_ROOT / "scripts" / "packs" / "extras.py").read_text(encoding="utf-8")
         self.assertIn('if u.get("bundled"):', source)
 
 
@@ -478,7 +478,7 @@ const _EJS_NIGHTLY_CORES_MAP: Record<string, string[]> = {
     def test_the_platform_file_carries_the_nightly_cores(self):
         from model.platforms import load_platform_config
 
-        cores = set(load_platform_config("romm", str(ROOT / "platforms"))["cores"])
+        cores = set(load_platform_config("romm", str(REPO_ROOT / "platforms"))["cores"])
         self.assertTrue({"azahar", "bsnes", "genesis_plus_gx_wide"} <= cores)
 
 
@@ -514,7 +514,7 @@ class RommNeoGeoFoldersGetTheirBios(unittest.TestCase):
         self.assertEqual(_slug_for({"profile": "melonds"}, *args), "nds")
 
     def test_the_platform_file_carries_it(self):
-        text = (ROOT / "platforms" / "romm.yml").read_text(encoding="utf-8")
+        text = (REPO_ROOT / "platforms" / "romm.yml").read_text(encoding="utf-8")
         self.assertIn("destination: neogeoaes/neogeo.zip", text)
         self.assertIn("destination: neogeomvs/neogeo.zip", text)
         self.assertNotIn("neogeoaes/pgm.zip", text)
@@ -559,7 +559,7 @@ class AHashScanningCoreContradictsNoPlatform(unittest.TestCase):
         from scripts.model.registry import list_registered_platforms
         from scripts.model.profiles import load_emulator_profiles
 
-        root = ROOT
+        root = REPO_ROOT
         if not (root / "database.json").exists():
             self.skipTest("database.json is not built")
         profiles = load_emulator_profiles(str(root / "emulators"))
@@ -582,7 +582,7 @@ class FsUaeKickstartIsFoundByContent(unittest.TestCase):
     def test_the_kickstart_is_an_optional_label(self):
         from scripts.resolve.entryscope import opens_by_name
 
-        profile = yaml.safe_load((ROOT / "emulators" / "fs-uae.yml").read_text(encoding="utf-8"))
+        profile = yaml.safe_load((REPO_ROOT / "emulators" / "fs-uae.yml").read_text(encoding="utf-8"))
         entry = next(f for f in profile["files"] if f.get("sha1") == "891e9a547772fe0c6c19b610baf8bc4ea7fcb785")
         self.assertFalse(opens_by_name(entry, profile, standalone=True))
         self.assertFalse(entry.get("required"))
@@ -601,7 +601,7 @@ class NoProfileHashFromASecondarySource(unittest.TestCase):
 
     def test_no_hashed_entry_names_a_secondary_source(self):
         found = []
-        for path in sorted((ROOT / "emulators").glob("*.yml")):
+        for path in sorted((REPO_ROOT / "emulators").glob("*.yml")):
             profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
             for entry in profile.get("files") or []:
                 if not isinstance(entry, dict):
@@ -621,7 +621,7 @@ class XeniosFollowsItsReleaseBranch(unittest.TestCase):
     default branch, so the profile names no other branch."""
 
     def test_the_profile_follows_the_branch_its_pin_is_on(self):
-        profile = yaml.safe_load((ROOT / "emulators" / "xenios.yml").read_text(encoding="utf-8"))
+        profile = yaml.safe_load((REPO_ROOT / "emulators" / "xenios.yml").read_text(encoding="utf-8"))
         self.assertIn(profile.get("source_branch"), (None, "xenios"))
         self.assertEqual(profile["source_commit"][:7], "cf7c7ee")
 
@@ -634,7 +634,7 @@ class PcemUpstreamPinIsTheLastSync(unittest.TestCase):
     bump cannot move it to a HEAD the port never contained."""
 
     def test_the_upstream_pin_is_held_at_the_last_sync(self):
-        profile = yaml.safe_load((ROOT / "emulators" / "pcem.yml").read_text(encoding="utf-8"))
+        profile = yaml.safe_load((REPO_ROOT / "emulators" / "pcem.yml").read_text(encoding="utf-8"))
         self.assertEqual(profile["upstream_commit"], "10739b9618e388a5bf8c21e752f12b3952fa83e1")
         self.assertTrue(profile.get("upstream_frozen"))
 
@@ -690,10 +690,10 @@ class AHashScanLabelNamesNoOtherDump(unittest.TestCase):
 
         from scripts.model.profiles import load_emulator_profiles
 
-        if not (ROOT / "database.json").exists():
+        if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not built")
-        db = json.loads((ROOT / "database.json").read_text(encoding="utf-8"))
-        profiles = load_emulator_profiles(str(ROOT / "emulators"))
+        db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         by_name: dict[str, list[tuple[str, dict]]] = {}
         for emulator, profile in profiles.items():
             for entry in profile.get("files") or []:
@@ -738,7 +738,7 @@ class ANoteOutsideTheSystemDirCarriesLoadFrom(unittest.TestCase):
 
     def test_prose_and_load_from_agree(self):
         offenders = []
-        for path in sorted((ROOT / "emulators").glob("*.yml")):
+        for path in sorted((REPO_ROOT / "emulators").glob("*.yml")):
             profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
             if profile.get("type") != "libretro":
                 continue
@@ -756,11 +756,11 @@ class TheTreeKeepsStandaloneEntries(unittest.TestCase):
     Batocera and RetroBat run standalone and no platform declares."""
 
     def test_a_standalone_only_entry_is_reported(self):
-        if not (ROOT / "database.json").exists():
+        if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not built")
         out = subprocess.run(
             [sys.executable, "scripts/cross_reference.py", "--emulator", "eka2l1"],
-            cwd=ROOT, capture_output=True, text=True, timeout=600, check=True,
+            cwd=REPO_ROOT, capture_output=True, text=True, timeout=600, check=True,
         ).stdout
         undeclared = re.search(r"(\d+) undeclared", out)
         self.assertIsNotNone(undeclared, out[-500:])
@@ -851,9 +851,9 @@ class WhatOnlyAnInstallProvidesIsListed(unittest.TestCase):
         from model.profiles import load_emulator_profiles
 
         rows = bundledonly.bundled_only(
-            load_database(str(ROOT / "database.json")),
-            load_emulator_profiles(str(ROOT / "emulators")),
-            str(ROOT / "platforms"), ROOT / "install",
+            load_database(str(REPO_ROOT / "database.json")),
+            load_emulator_profiles(str(REPO_ROOT / "emulators")),
+            str(REPO_ROOT / "platforms"), REPO_ROOT / "install",
         )
         self.assertEqual([f"{r['path']} ({', '.join(r['emulators'])})" for r in rows], [],
                          "remove the copy: the emulator's own install provides it")
@@ -888,7 +888,7 @@ class AmigaCdDriversLiveInTheExtendedRom(unittest.TestCase):
 
     def test_both_extended_roms_are_required_without_fallback(self):
         profile = yaml.safe_load(
-            (ROOT / "emulators" / "winuae.yml").read_text(encoding="utf-8")
+            (REPO_ROOT / "emulators" / "winuae.yml").read_text(encoding="utf-8")
         )
         entries = {f["name"]: f for f in profile["files"]}
         for name in ("amiga-ext-310-cd32.rom", "amiga-ext-130-cdtv.rom"):
@@ -906,7 +906,7 @@ class BizHawkListsEveryDsiNandSlot(unittest.TestCase):
 
     def test_the_six_regional_nands_are_declared(self):
         profile = yaml.safe_load(
-            (ROOT / "emulators" / "bizhawk.yml").read_text(encoding="utf-8")
+            (REPO_ROOT / "emulators" / "bizhawk.yml").read_text(encoding="utf-8")
         )
         entries = {f["name"]: f for f in profile["files"]}
         for region_code in ("JPN", "EUR", "USA", "AUS", "CHN", "KOR"):
@@ -927,7 +927,7 @@ class HiganSuperGameBoyFolderIsFree(unittest.TestCase):
         import yaml
 
         file_names: set[str] = set()
-        for path in (ROOT / "emulators").glob("*.yml"):
+        for path in (REPO_ROOT / "emulators").glob("*.yml"):
             document = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
             for entry in document.get("files") or []:
                 for name in [entry.get("name"), *(entry.get("aliases") or [])]:
@@ -937,7 +937,7 @@ class HiganSuperGameBoyFolderIsFree(unittest.TestCase):
                     file_names.add(str(entry["path"]).casefold())
         for profile in ("higan_sfc", "higan_sfc_balanced"):
             document = yaml.safe_load(
-                (ROOT / "emulators" / f"{profile}.yml").read_text(encoding="utf-8")
+                (REPO_ROOT / "emulators" / f"{profile}.yml").read_text(encoding="utf-8")
             )
             folders = {
                 str(entry["path"]).split("/", 1)[0]
@@ -960,10 +960,10 @@ class ProfileNotesDescribeTheCoreAlone(unittest.TestCase):
     SHOUT = re.compile(r"\b(NOT|NEVER|ONLY|MUST|ALL|DIFFERENT)\b(?! FOUND)")
 
     def test_no_profile_shouts_or_compares_with_another_profile(self):
-        names = {path.stem.casefold() for path in (ROOT / "emulators").glob("*.yml")}
+        names = {path.stem.casefold() for path in (REPO_ROOT / "emulators").glob("*.yml")}
         names |= {name.replace("_", "-") for name in names}
         found = []
-        for path in sorted((ROOT / "emulators").glob("*.yml")):
+        for path in sorted((REPO_ROOT / "emulators").glob("*.yml")):
             text = path.read_text(encoding="utf-8")
             for number, line in enumerate(text.splitlines(), 1):
                 if self.SHOUT.search(line):
@@ -991,7 +991,7 @@ class Ps2BiosImagesAreFoundByContent(unittest.TestCase):
         from resolve.entryscope import opens_by_name
 
         named = []
-        for path in sorted((ROOT / "emulators").glob("*.yml")):
+        for path in sorted((REPO_ROOT / "emulators").glob("*.yml")):
             profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
             # Whatever the profile's own flags: TeknoParrot documents its
             # pcsx2x6 component, whose scan is the same (BiosTools.cpp:268-291
@@ -1021,7 +1021,7 @@ class SynthRomsAreFoundByContent(unittest.TestCase):
         from resolve.entryscope import opens_by_name
 
         profile = yaml.safe_load(
-            (ROOT / "emulators" / "dosbox-staging.yml").read_text(encoding="utf-8")
+            (REPO_ROOT / "emulators" / "dosbox-staging.yml").read_text(encoding="utf-8")
         )
         named = [
             entry["name"]
@@ -1042,7 +1042,7 @@ class Dev9FilesAreReadFromTheWorkingDirectory(unittest.TestCase):
         import yaml
 
         unset = []
-        for path in sorted((ROOT / "emulators").glob("*.yml")):
+        for path in sorted((REPO_ROOT / "emulators").glob("*.yml")):
             profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
             unset.extend(
                 f"{path.stem}: {entry['name']}"
@@ -1067,7 +1067,7 @@ class OpenMsxSystemRomsAreFoundBySha1(unittest.TestCase):
 
         from resolve.entryscope import opens_by_name
 
-        profile = yaml.safe_load((ROOT / "emulators" / "openmsx.yml").read_text())
+        profile = yaml.safe_load((REPO_ROOT / "emulators" / "openmsx.yml").read_text())
         named = [
             entry["name"] for entry in profile["files"]
             if "share/systemroms/" in str(entry.get("path"))
@@ -1087,7 +1087,7 @@ class PrboomPlusCitesFullPaths(unittest.TestCase):
 
         from scripts.model.sourceref import source_ref_values, split_source_ref
 
-        profile = yaml.safe_load((ROOT / "emulators" / "prboom-plus.yml").read_text(encoding="utf-8"))
+        profile = yaml.safe_load((REPO_ROOT / "emulators" / "prboom-plus.yml").read_text(encoding="utf-8"))
         refs: list[str] = []
 
         def walk(node):

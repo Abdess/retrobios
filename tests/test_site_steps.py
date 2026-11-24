@@ -10,6 +10,7 @@ and the words never disagree. And it draws in the theme's colours.
 from __future__ import annotations
 
 import tests
+from tests.sitepages import DIST
 
 import re
 import unittest
@@ -23,7 +24,6 @@ from sitegen.guidedata import terminals
 ROOT = Path(__file__).resolve().parent.parent
 
 SVG = "{http://www.w3.org/2000/svg}"
-DIST = ROOT / "website" / "dist"
 
 
 class EachDrawingNamesItsSteps(unittest.TestCase):

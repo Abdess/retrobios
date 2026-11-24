@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import tests
 from tests.sources import script_source
+from tests.sitepages import DIST
 
 import json
 import re
@@ -36,11 +37,7 @@ import sys
 from model.registry import list_release_pack_platforms
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-
-
-REPO_ROOT = Path(__file__).resolve().parents[1]
 WEBSITE = REPO_ROOT / "website"
-DIST = WEBSITE / "dist"
 COMPONENTS = WEBSITE / "src" / "components"
 SITE_TS = WEBSITE / "src" / "scripts" / "site.ts"
 HASHES_TS = WEBSITE / "src" / "scripts" / "hashes.ts"

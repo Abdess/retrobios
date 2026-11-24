@@ -20,7 +20,7 @@ from unittest import mock
 from packs import verdicts
 from scripts.resolve.localfile import resolve_local_file
 from scripts.core.ziptools import safe_extract_zip
-from tests.auditsupport import ROOT
+from tests import REPO_ROOT
 
 
 class AutoFetchReadsListsAndPlacesWithoutClobbering(unittest.TestCase):
@@ -348,14 +348,14 @@ class AnotherEmulatorsTreeProvesNothing(unittest.TestCase):
         from scripts.model.platforms import load_platform_config
         from scripts.model.targets import load_target_config
 
-        if not (ROOT / "database.json").exists():
+        if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
-        db = load_database(str(ROOT / "database.json"))
-        config = load_platform_config("retroarch", str(ROOT / "platforms"))
-        profiles = load_emulator_profiles(str(ROOT / "emulators"))
-        cores = set(load_target_config("retroarch", "x86_64", str(ROOT / "platforms")))
+        db = load_database(str(REPO_ROOT / "database.json"))
+        config = load_platform_config("retroarch", str(REPO_ROOT / "platforms"))
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        cores = set(load_target_config("retroarch", "x86_64", str(REPO_ROOT / "platforms")))
         overrides = slots.pack_overrides(
-            config, profiles, db, None, load_data_dir_registry(str(ROOT / "platforms")),
+            config, profiles, db, None, load_data_dir_registry(str(REPO_ROOT / "platforms")),
             target_cores=cores,
         )
         self.assertFalse([d for d, p in overrides.items() if "/armsx2/" in p])
@@ -614,9 +614,9 @@ class HashMergeBackupsAreNotSources(unittest.TestCase):
 
     def test_the_backup_suffix_is_written_once(self):
         offenders = [
-            str(path.relative_to(ROOT))
-            for path in sorted(ROOT.glob("scripts/**/*.py"))
-            if path.relative_to(ROOT).as_posix() != "scripts/model/profiles.py"
+            str(path.relative_to(REPO_ROOT))
+            for path in sorted(REPO_ROOT.glob("scripts/**/*.py"))
+            if path.relative_to(REPO_ROOT).as_posix() != "scripts/model/profiles.py"
             and '".old.yml"' in path.read_text()
         ]
         self.assertEqual(offenders, [])

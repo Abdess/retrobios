@@ -14,9 +14,7 @@ from tests import scratch_dir
 import hashlib
 import io
 import json
-import shutil
 import stat
-import subprocess
 import sys
 import unittest
 import zipfile
@@ -24,90 +22,14 @@ from pathlib import Path
 from unittest import mock
 
 import install
-from tests.test_install_selection import FakeRepository
+from tests.installsupport import INDEX, AppRepository, FakeRepository, make_card
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-
-INDEX = REPO_ROOT / "install" / "launchers" / "index.json"
-
-
-def make_card(root: Path, system: str) -> Path:
-    """A card as each system leaves it, and the BIOS folder on it."""
-    bios = _card_files(root, system)
-    bios.mkdir(parents=True, exist_ok=True)
-    return bios
-
-
-def _card_files(root: Path, system: str) -> Path:
-    root.mkdir(parents=True, exist_ok=True)
-    if system == "muOS":
-        (root / "MUOS" / "bios").mkdir(parents=True)
-        return root / "MUOS" / "bios"
-    if system == "KNULLI":
-        (root / "system").mkdir()
-        (root / "system" / "batocera.conf").write_text("system.hostname=KNULLI\n")
-        return root / "bios"
-    if system == "ROCKNIX":
-        (root / ".config" / "system" / "configs").mkdir(parents=True)
-        (root / ".config" / "system" / "configs" / "system.cfg").write_text(
-            "root.password=rocknix\n")
-        return root / "roms" / "bios"
-    if system == "Onion":
-        (root / ".tmp_update" / "onionVersion").mkdir(parents=True)
-        (root / ".tmp_update" / "onionVersion" / "version.txt").write_text("4.3.1\n")
-        return root / "BIOS"
-    if system == "spruceOS":
-        (root / "spruce").mkdir()
-        return root / "BIOS"
-    if system == "MinUI":
-        (root / ".system").mkdir()
-        (root / ".system" / "version.txt").write_text("MinUI-20250101\n")
-        return root
-    raise ValueError(system)
 
 
 # The file list each card's system gets.
 CARD_PLATFORMS = {"muOS": "retroarch", "KNULLI": "knulli", "ROCKNIX": "rocknix",
                   "Onion": "retroarch", "spruceOS": "retroarch", "MinUI": "minui"}
-
-
-class AppRepository(FakeRepository):
-    """The fake repository with the launcher list and every file it names,
-    and the BIOS lists of the systems whose cards are tried."""
-
-    def __enter__(self) -> AppRepository:
-        super().__enter__()
-        index = json.loads(INDEX.read_text(encoding="utf-8"))
-        (self.root / "install" / "launchers").mkdir()
-        (self.root / "install" / "launchers" / "index.json").write_text(json.dumps(index))
-        for launcher in index["launchers"].values():
-            for entry in launcher.get("files", launcher.get("members", [])):
-                if "repo_path" in entry:
-                    target = self.root / entry["repo_path"]
-                    target.parent.mkdir(parents=True, exist_ok=True)
-                    shutil.copyfile(REPO_ROOT / entry["repo_path"], target)
-        base = json.loads((self.root / "install" / "retroarch.json").read_text())
-        for plat in ("knulli", "rocknix", "minui"):
-            (self.root / "install" / f"{plat}.json").write_text(
-                json.dumps({**base, "platform": plat}))
-        return self
-
-    def card(self, system: str) -> tuple[Path, Path]:
-        root = self.root / "cards" / system
-        return root, make_card(root, system)
-
-    def tamper(self, repo_path: str) -> None:
-        """One byte changed, the size kept: only the hash tells."""
-        path = self.root / repo_path
-        data = bytearray(path.read_bytes())
-        data[-1] ^= 0x20
-        path.write_bytes(bytes(data))
-
-    def cli(self, *options: str, env: dict | None = None) -> subprocess.CompletedProcess:
-        return subprocess.run(
-            [sys.executable, str(REPO_ROOT / "install.py"), *options],
-            env={**self.env(), **(env or {})}, capture_output=True, text=True,
-            timeout=120, check=False, stdin=subprocess.DEVNULL)
 
 
 class Placement(unittest.TestCase):

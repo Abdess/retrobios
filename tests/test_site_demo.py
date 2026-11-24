@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import tests
 from tests.sources import script_source
+from tests.sitepages import DIST
 
 import json
 import re
@@ -29,7 +30,6 @@ ROOT = Path(__file__).resolve().parent.parent
 
 DEMO = ROOT / "docs_assets" / "demo"
 COMPONENT = ROOT / "website" / "src" / "components" / "InstallDemo.astro"
-DIST = ROOT / "website" / "dist"
 
 
 def _all_facts() -> dict:

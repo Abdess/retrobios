@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import tests
 from tests import mdsections
+from tests.sitepages import DIST
 
 import glob
 import json
@@ -33,7 +34,6 @@ from model import collection
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
-DIST = REPO_ROOT / "website" / "dist"
 
 
 def _profile(name: str) -> dict:

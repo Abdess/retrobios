@@ -62,15 +62,15 @@ Every module in `tests/`, by the area it guards.
 
 | Area | Fixtures | Modules |
 |------|----------|---------|
-| Core regression suites | synthetic | `test_e2e_resolution`, `test_e2e_emulator`, `test_e2e_pack_options`, `test_e2e_truth`, `test_e2e_diff_export`, `test_e2e_pack_sources`, `test_e2e_region`, `test_e2e_search_sets`, `test_audit_project`, `test_audit_docs`, `test_audit_site`, `test_audit_cli`, `test_audit_packs`, `test_audit_manifests`, `test_audit_resolution`, `test_audit_profiles`, `test_tool_messages` |
+| Core regression suites | synthetic | `test_audit_cli`, `test_audit_docs`, `test_audit_manifests`, `test_audit_packs`, `test_audit_profiles`, `test_audit_project`, `test_audit_resolution`, `test_audit_site`, `test_e2e_diff_export`, `test_e2e_emulator`, `test_e2e_pack_options`, `test_e2e_pack_sources`, `test_e2e_region`, `test_e2e_resolution`, `test_e2e_search_sets`, `test_e2e_truth`, `test_tool_messages` |
 | Import layers | the source of `scripts/` | `test_layers` |
-| File resolution and identity | synthetic + collection | `test_adler32_resolution`, `test_agnostic_scan`, `test_agnostic_scan_mode`, `test_agnostic_scope`, `test_agnostic_substitute`, `test_archive_build`, `test_archive_choice`, `test_archive_recipes`, `test_bios_companions`, `test_bundled_identity`, `test_casefold_cache`, `test_db_aliases`, `test_declared_names`, `test_derivations`, `test_directory_entries`, `test_extra_identity`, `test_foreign_tree`, `test_foreign_tree_names`, `test_frontend_digest`, `test_game_data_homonyms`, `test_hashing`, `test_held_record`, `test_identity`, `test_maker_folder_names`, `test_md5_pack_context`, `test_name_tiebreak`, `test_nec_filing`, `test_np2_fonts`, `test_owner_resolution`, `test_path_suffix`, `test_proven_name`, `test_resolution_evidence`, `test_sega_filing`, `test_shipped_content`, `test_switch_nca`, `test_twin_declaration_status`, `test_twin_declarations`, `test_validated_choice`, `test_variant_archives`, `test_variant_copies`, `test_variant_choice`, `test_variant_identity`, `test_zipped_member` |
+| File resolution and identity | synthetic + collection | `test_adler32_resolution`, `test_agnostic_scan`, `test_agnostic_scan_mode`, `test_agnostic_scope`, `test_agnostic_substitute`, `test_archive_build`, `test_archive_choice`, `test_archive_recipes`, `test_bios_companions`, `test_bundled_identity`, `test_casefold_cache`, `test_db_aliases`, `test_declared_names`, `test_derivations`, `test_directory_entries`, `test_extra_identity`, `test_foreign_tree`, `test_foreign_tree_names`, `test_frontend_digest`, `test_game_data_homonyms`, `test_hashing`, `test_held_record`, `test_identity`, `test_maker_folder_names`, `test_md5_pack_context`, `test_name_tiebreak`, `test_nec_filing`, `test_np2_fonts`, `test_owner_resolution`, `test_path_suffix`, `test_proven_name`, `test_resolution_evidence`, `test_sega_filing`, `test_shipped_content`, `test_switch_nca`, `test_twin_declaration_status`, `test_twin_declarations`, `test_validated_choice`, `test_variant_archives`, `test_variant_choice`, `test_variant_copies`, `test_variant_identity`, `test_zipped_member` |
 | Verification, cross-reference and profile checks | synthetic + profiles | `test_bios_layout`, `test_cache_independent_counts`, `test_case_insensitive_platforms`, `test_checks_have_values`, `test_content_checks`, `test_content_declarations`, `test_core_file_fills_declaration`, `test_core_size_refusal`, `test_cross_reference_sources`, `test_crypto_aes`, `test_crypto_unique_data`, `test_crypto_verify`, `test_data_only_refs`, `test_entry_categories`, `test_file_consumers`, `test_fileless_audit`, `test_flycast_layout`, `test_gap_settlement`, `test_hidden_extras`, `test_launcher_aliases`, `test_launcher_evidence`, `test_launcher_gaps`, `test_launcher_layer`, `test_launcher_paths`, `test_launcher_placement`, `test_native_mode`, `test_no_case_collisions`, `test_path_conflict_status`, `test_path_null_copies`, `test_profile_checks`, `test_profile_names`, `test_profile_paths`, `test_profile_repositories`, `test_romm_hash_rule`, `test_shared_groups`, `test_standalone_links`, `test_standalone_mode`, `test_undeclared_dedup`, `test_unplaced_extras`, `test_validation_scope`, `test_verify_all_dir`, `test_verify_data_dir_notice`, `test_verify_emulator_evidence`, `test_verify_listing`, `test_verify_pack_choice`, `test_verify_release_asset` |
 | Packs and manifests | synthetic + real packs | `test_artifact_lock`, `test_atomic_artifacts`, `test_batocera_cores`, `test_core_data_trees`, `test_deterministic_zip`, `test_emulator_pack_counts`, `test_finalize_pack_names`, `test_large_file_cache`, `test_libretro_layout`, `test_manifest_entry`, `test_manifest_narrowings`, `test_minui_platform`, `test_no_game_data`, `test_pack_conformance_dirs`, `test_pack_core_extras`, `test_pack_counts`, `test_pack_destinations`, `test_pack_failures`, `test_pack_file_names`, `test_pack_grouping`, `test_pack_integrity`, `test_pack_member_identity`, `test_pack_readme`, `test_platform_inheritance`, `test_platform_keys`, `test_release_packs`, `test_required_only_archives`, `test_required_only_twins`, `test_save_root`, `test_split_extras`, `test_split_names`, `test_split_pack`, `test_system_pack_extras`, `test_system_pack_parity`, `test_torrentzip`, `test_which_pack` |
 | Slots and regions | synthetic + profiles | `test_region`, `test_region_agnostic_scan`, `test_region_groups`, `test_region_held`, `test_region_platform_index`, `test_region_required_only`, `test_slot`, `test_slots`, `test_slots_shipped_file` |
 | Hardware targets and systems | synthetic + target files | `test_amberelec_targets`, `test_emuelec_targets`, `test_extract_targets`, `test_lakka_targets`, `test_libretro_slugs`, `test_system_ids`, `test_system_selection`, `test_target_names`, `test_target_scrapers`, `test_target_systems`, `test_target_verify` |
 | Installer and downloads | loopback server | `test_build_installer`, `test_check_release`, `test_download`, `test_install_app`, `test_install_bootstrap`, `test_install_config`, `test_install_cores`, `test_install_data_trees`, `test_install_detection`, `test_install_devices`, `test_install_downloads`, `test_install_events`, `test_install_experience`, `test_install_expert`, `test_install_filesystems`, `test_install_from`, `test_install_games`, `test_install_journeys`, `test_install_kept`, `test_install_offline`, `test_install_pack`, `test_install_pack_parity`, `test_install_platforms`, `test_install_removal`, `test_install_runs`, `test_install_selection`, `test_install_standalone`, `test_pypi_package`, `test_tui_card_counts`, `test_tui_card_setups`, `test_tui_card_space`, `test_tui_choices`, `test_tui_devices`, `test_tui_flow`, `test_tui_folders`, `test_tui_line_mode`, `test_tui_mouse`, `test_tui_packs`, `test_tui_pty`, `test_tui_screens`, `test_tui_terminal`, `test_tui_views` |
-| Handheld launchers | a pty as the console, fake installer and firmware tools, stubbed PortMaster dialogs | `test_handheld_frontends`, `test_handheld_portmaster`, `test_handheld_scripts`, `test_port`, `test_site_handheld` |
+| Handheld launchers | a pty as the console, fake installer and firmware tools, stubbed PortMaster dialogs | `test_handheld_frontends`, `test_handheld_port`, `test_handheld_portmaster`, `test_handheld_scripts` |
 | Running cores | parsers on fixed inputs, a libretro core built from C in the test when a compiler exists | `test_core_probe` |
 | Measurement records | synthetic record files, the committed `measurements/` against HEAD, the **Proof** line naming the BIOS a core ran, and that no page shows a Tested block, a region outcome or a time per frame | `test_measurements` |
 | Real-condition campaign | synthetic profiles, records and content folders, a fake host for load, disk, clock and commands, and whole passes against a libretro core built from C when a compiler and strace exist | `test_campaign` |
@@ -80,8 +80,45 @@ Every module in `tests/`, by the area it guards.
 | Automation runner, disk cleanup, asset sync and bit-flip repair | fake jobs, git repositories with a bare origin and session worktrees, a committed file with one bit flipped, canned CI runs in place of `gh` | `test_autorun` |
 | Flat-tree migration | a flat system folder copied into a temporary tree, its plan said through the caller, and a failed copy named once by `migrate.py` | `test_bios_migrate` |
 | Truth and native export | synthetic + cached originals | `test_export_counts`, `test_export_native_layer`, `test_export_report`, `test_exporters_contract`, `test_exporters_fidelity`, `test_exporters_lists`, `test_exporters_reconciliation`, `test_exporters_scripts`, `test_truth_data_dir_readers`, `test_truth_diff`, `test_truth_layout` |
-| Scrapers, upstream and provenance | inline sources, synthetic | `test_auto_fetch_lookup`, `test_batocera_md5_list`, `test_find_embedded`, `test_report_excerpt`, `test_check_freshness`, `test_cited_lines`, `test_contributing_text`, `test_coverage_cache`, `test_data_dir_refs`, `test_dataclass_defaults`, `test_dedup`, `test_doc_pages_installer`, `test_doc_pages_rules`, `test_doc_pages_style`, `test_doc_pages_tools`, `test_doc_surfaces`, `test_elec_scrapers`, `test_fbneo_parser`, `test_find_pinned_revision`, `test_hash_merge`, `test_launchers`, `test_launchers_amberelec`, `test_launchers_emudeck`, `test_launchers_emuelec`, `test_launchers_knulli`, `test_launchers_recalbox`, `test_launchers_retrobat_configs`, `test_launchers_retrobat_files`, `test_launchers_retrodeck`, `test_launchers_retropie`, `test_launchers_rocknix`, `test_lines`, `test_listxml`, `test_mame_devices`, `test_mame_parser`, `test_mame_ref_audit`, `test_optional_dependencies`, `test_pin_build`, `test_profile_sync_anchoring`, `test_profile_sync_cli`, `test_profile_sync_prose`, `test_profile_sync_report`, `test_profile_sync_repositories`, `test_profile_sync_versions`, `test_profile_sync_writes`, `test_prose_style`, `test_provenance`, `test_refresh_data_dirs`, `test_refresh_failures`, `test_refresh_stale`, `test_retired_files`, `test_retrodeck_component_md5`, `test_retrodeck_scraper_errors`, `test_romset_recipes`, `test_schema_semantic_gate`, `test_scraper_contract`, `test_scraper_dropped`, `test_scraper_network`, `test_site_agents`, `test_site_arcade_boards`, `test_site_availability`, `test_site_bootstrap`, `test_site_built_gate`, `test_site_components`, `test_site_console_folders`, `test_site_content_data`, `test_site_copy`, `test_site_cores`, `test_site_css`, `test_site_demo`, `test_site_density_cards`, `test_site_emulator_page`, `test_site_emulators`, `test_site_entry`, `test_site_entry_tables`, `test_site_exports`, `test_site_freshness`, `test_site_funnel`, `test_site_images`, `test_site_inputs`, `test_site_insights`, `test_site_integration`, `test_site_nav`, `test_site_page_text`, `test_site_picker`, `test_site_platform_density`, `test_site_platform_hashes`, `test_site_privacy`, `test_site_pronouns`, `test_site_reference_data`, `test_site_reference_lookup`, `test_site_reference_pages`, `test_site_render`, `test_site_search`, `test_site_steps`, `test_site_system_links`, `test_site_system_names`, `test_site_system_sections`, `test_site_systems`, `test_site_validation`, `test_site_wanted`, `test_site_weight`, `test_site_wiki`, `test_site_write`, `test_source_ref_targets`, `test_text`, `test_upstream`, `test_upstream_index`, `test_validate_pr`, `test_validate_pr_flow`, `test_validate_pr_hashes`, `test_version_basis`, `test_workflow_paths` |
+| Scrapers, upstream and provenance | inline sources, synthetic | `test_auto_fetch_lookup`, `test_batocera_md5_list`, `test_check_freshness`, `test_data_dir_refs`, `test_dedup`, `test_elec_scrapers`, `test_fbneo_parser`, `test_find_embedded`, `test_find_pinned_revision`, `test_hash_merge`, `test_lines`, `test_listxml`, `test_mame_devices`, `test_mame_parser`, `test_provenance`, `test_refresh_data_dirs`, `test_refresh_failures`, `test_refresh_stale`, `test_retrodeck_component_md5`, `test_retrodeck_scraper_errors`, `test_romset_recipes`, `test_scraper_contract`, `test_scraper_dropped`, `test_scraper_network`, `test_upstream`, `test_upstream_index` |
+| Site and published pages | the generated pages, the built site, the published data | `test_coverage_cache`, `test_retired_files`, `test_site_agents`, `test_site_arcade_boards`, `test_site_availability`, `test_site_bootstrap`, `test_site_built_gate`, `test_site_components`, `test_site_console_folders`, `test_site_content_data`, `test_site_copy`, `test_site_cores`, `test_site_css`, `test_site_demo`, `test_site_density_cards`, `test_site_emulator_page`, `test_site_emulators`, `test_site_entry`, `test_site_entry_tables`, `test_site_exports`, `test_site_freshness`, `test_site_funnel`, `test_site_handheld`, `test_site_images`, `test_site_inputs`, `test_site_insights`, `test_site_integration`, `test_site_nav`, `test_site_page_text`, `test_site_picker`, `test_site_platform_density`, `test_site_platform_hashes`, `test_site_privacy`, `test_site_pronouns`, `test_site_reference_data`, `test_site_reference_lookup`, `test_site_reference_pages`, `test_site_render`, `test_site_search`, `test_site_steps`, `test_site_system_links`, `test_site_system_names`, `test_site_system_sections`, `test_site_systems`, `test_site_validation`, `test_site_wanted`, `test_site_weight`, `test_site_wiki`, `test_site_write` |
+| Documentation pages | the wiki, the README and CONTRIBUTING read against the code | `test_contributing_text`, `test_doc_pages_installer`, `test_doc_pages_rules`, `test_doc_pages_style`, `test_doc_pages_tools`, `test_doc_surfaces`, `test_prose_style`, `test_report_excerpt`, `test_text` |
+| Profile sync and citations | an injected fetch, synthetic profiles, the committed profiles at their pins | `test_cited_lines`, `test_mame_ref_audit`, `test_pin_build`, `test_profile_sync_anchoring`, `test_profile_sync_cli`, `test_profile_sync_prose`, `test_profile_sync_report`, `test_profile_sync_repositories`, `test_profile_sync_versions`, `test_profile_sync_writes`, `test_source_ref_targets`, `test_version_basis` |
+| Launcher extractors | upstream source blocks placed at the lines they hold at the pinned revision | `test_launchers_amberelec`, `test_launchers_batocera`, `test_launchers_emudeck`, `test_launchers_emuelec`, `test_launchers_knulli`, `test_launchers_recalbox`, `test_launchers_retrobat_configs`, `test_launchers_retrobat_files`, `test_launchers_retrodeck`, `test_launchers_retropie`, `test_launchers_rocknix` |
+| PR validation and CI | synthetic contributor files, the workflow files, the source of `scripts/` | `test_dataclass_defaults`, `test_optional_dependencies`, `test_schema_semantic_gate`, `test_validate_pr`, `test_validate_pr_flow`, `test_validate_pr_hashes`, `test_workflow_paths` |
 | Games on the card | small DATs, listxml and setup sources, a fake fetcher, fixture install lists, and the committed data against its schemas | `test_arcade_parents`, `test_game_catalogs`, `test_game_headers`, `test_game_regions`, `test_games_index`, `test_romfolders_card`, `test_romfolders_es` |
+
+A module named `test_tui_*` also runs on Python 3.8, the installer's floor: CI
+and `scripts/pr_checks.py` run every module with that prefix under
+`python3.8`, so it imports nothing the build scripts alone need.
+
+## Shared helpers
+
+The modules of `tests/` that hold no test. A test module imports its fixtures
+from these, never from another test module (`tests/test_layers.py` refuses
+it).
+
+| Module | What it holds |
+|--------|---------------|
+| `__init__` | `REPO_ROOT`, `scratch_dir`, `ONLINE`, `HAS_JSONSCHEMA`, and the setup every module gets by importing the package: offline, scratch under `tmp/tests/`, its own installer cache |
+| `docpagessupport` | The wiki pages and their sections, the registry and the schemas, the marketing vocabulary, the prose of a Python module, sentence case |
+| `e2esupport` | `E2EFixture`, the synthetic scenario of the end-to-end modules |
+| `exporterssupport` | The native exporter fixtures |
+| `gamessupport` | The games on a card: the games index, the BIOS list, disc and cartridge images, a card |
+| `handheldsupport` | A simulated handheld, its fake firmware tools and the pad models |
+| `installsupport` | `install.py` loaded once, loopback runs, served trees, `FakeRepository` and `AppRepository`, the cards, the offline payloads and packs |
+| `launchersrecalboxsupport` | The Recalbox configgen blocks |
+| `launcherssupport` | Source blocks placed at their lines, C# sources by path |
+| `loopback` | A folder served over loopback HTTP |
+| `mdsections` | Sections of a markdown page |
+| `netguard` | The network guard a module turns on for itself and the Python it starts |
+| `profilesyncsupport` | The profile_sync fixtures |
+| `readmeinputs` | Fixture inputs for the README renderer |
+| `scratchtree` | A disposable copy of the checkout |
+| `sitecopy` | The reader the copy budgets measure a generated page with |
+| `sitepages` | The generated pages, the built site and its data (`DIST`, `PUBLIC`, `API`, `built`), the navigation, the pronoun scanner |
+| `sources` | The source text of a command across the modules that hold its code |
+| `tuisupport` | The full-screen states, manifests and the pseudo-terminal driver |
 
 ## Test architecture
 
@@ -102,22 +139,22 @@ for the per-emulator build mode beside the search-list and archive-set classes.
 
 `tearDown` removes the temporary tree.
 
-**Test numbering.** Tests are grouped by category:
+**One module per subject.** A test goes in the module of its subject:
 
-| Range | Category |
-|-------|----------|
-| `test_01`--`test_14` | File resolution (SHA1, MD5, name, alias, truncated MD5, composite, zip contents, variants, hash mismatch) |
-| `test_20`--`test_31` | Verification (existence mode, MD5 mode, required/optional severity, zipped file, multi-hash) |
-| `test_40`--`test_51` | Cross-reference and platform grouping (undeclared files, standalone skip, alias profiles, data dir suppression, exclusion notes) |
-| `test_60`--`test_61` | Storage tiers (external, user-provided) |
-| `test_70`--`test_84` | Emulator-level validation (index build, size, CRC32, MD5, SHA1, crypto) |
-| `test_90`--`test_125` | Per-emulator and per-system verification, `dest_hint` resolution, registry metadata |
-| `test_130`--`test_183` | Pack generation (required-only, split, `--from-md5`, path conflicts, archive extras, truth generation, exporters) |
-| `test_200`--`test_227` | Pack source variants, deterministic ZIPs, SHA256/CRC32 resolution, MiSTer scraper, manifests |
+| Module | Subject |
+|--------|---------|
+| `test_e2e_resolution` | File resolution, platform verification, cross-reference and validation checks |
+| `test_e2e_emulator` | Per-emulator verification and hardware target filtering |
+| `test_e2e_pack_options` | Ground truth reporting and pack narrowing options |
+| `test_e2e_pack_sources` | Hash scrapers, pack source variants, hashed archives and the MiSTer scraper |
+| `test_e2e_region` | Region filtering, pack narrowings and gap analysis |
+| `test_e2e_truth` | Scraper parsing, archive cross-reference, truth generation and manifests |
+| `test_e2e_diff_export` | Installer configuration, truth diff, exporters and registry merge |
+| `test_e2e_search_sets` | Standalone layouts, search lists and archive sets |
 
-Numbers are stable anchors, not an execution order. When a range fills up, a
-letter suffix keeps a new test next to the behavior it covers
-(`test_130b_existence_pack_reports_hash_mismatch`).
+The numbers in the test names (`test_130b_existence_pack_reports_hash_mismatch`)
+are anchors kept from the single module these came from, not an order and not a
+category: a new test takes a name that says what it checks.
 
 Each test calls the same functions that `verify.py` and `generate_pack.py` use
 in production, against the synthetic fixtures.
@@ -207,8 +244,31 @@ module level, so nothing leaves the machine.
 
 ### Tests that read the working tree
 
-Four modules assert on real repository data instead of fixtures. Each skips
-when its input is missing, so a partial checkout still runs green.
+These modules assert on real repository data (`bios/`, `database.json`, the
+packs in `dist/`) in some or all of their tests. Each such test skips when its
+input is missing, so a partial checkout still runs green:
+`test_adler32_resolution`, `test_agnostic_scan_mode`, `test_agnostic_scope`,
+`test_archive_build`, `test_archive_choice`, `test_archive_recipes`,
+`test_audit_cli`, `test_audit_docs`, `test_audit_manifests`, `test_audit_packs`,
+`test_audit_profiles`, `test_audit_resolution`, `test_bios_layout`,
+`test_bundled_identity`, `test_emulator_pack_counts`, `test_exporters_contract`,
+`test_file_consumers`, `test_foreign_tree`, `test_foreign_tree_names`,
+`test_game_data_homonyms`, `test_hidden_extras`, `test_identity`,
+`test_install_cores`, `test_install_expert`, `test_install_pack_parity`,
+`test_install_selection`, `test_large_file_cache`, `test_launcher_placement`,
+`test_libretro_layout`, `test_maker_folder_names`, `test_manifest_entry`,
+`test_md5_pack_context`, `test_minui_platform`, `test_nec_filing`,
+`test_no_case_collisions`, `test_pack_destinations`, `test_pack_grouping`,
+`test_pack_integrity`, `test_path_null_copies`, `test_region_agnostic_scan`,
+`test_region_groups`, `test_required_only_archives`, `test_sega_filing`,
+`test_shipped_content`, `test_site_arcade_boards`, `test_site_availability`,
+`test_site_console_folders`, `test_site_platform_density`, `test_site_render`,
+`test_site_system_links`, `test_site_system_sections`, `test_site_systems`,
+`test_slots`, `test_switch_nca`, `test_system_pack_parity`,
+`test_system_selection`, `test_target_names`, `test_torrentzip`,
+`test_tui_choices`, `test_validate_pr`, `test_validated_choice`,
+`test_variant_identity`, `test_verify_emulator_evidence`. Four of them hold the
+collection or the packs as a whole:
 
 **test_archive_build.** Reads `database.json` and `recipes/archives.json` and
 fails when an archive has no recipe, when a recipe outlives its archive or
@@ -235,18 +295,23 @@ disambiguated by a hash suffix on purpose.
 
 ## How to add a test
 
-1. **Pick the right category.** Find the number range that matches the
-   subsystem under test. If none fits, start a new range after the last
-   existing one.
+1. **Pick the module of the subject.** The table of modules above names the
+   module that covers each area, and the `test_e2e_*` table the subject of
+   each end-to-end module. A new module is named after its subject, with the
+   prefix of its family (`test_install_`, `test_site_`, `test_tui_`).
 
 2. **Create synthetic fixtures.** Write the minimum YAML configs and fake
-   files needed to isolate the behavior. Use `tempfile.mkdtemp` for a clean
-   workspace. Avoid depending on the repo's real `bios/` or `platforms/`
-   directories.
+   files needed to isolate the behavior. `tests.scratch_dir(self)` gives a
+   clean folder under `tmp/tests/`, removed after the test. Avoid depending on
+   the repo's real `bios/` or `platforms/` directories. A fixture two modules
+   share goes in a helper module (table below), never imported from a test
+   module.
 
-3. **Call production functions.** Import from `common`, `verify`, `validation`,
-   or `truth` and call the same entry points that the CLI scripts use. Do not
-   re-implement logic in tests.
+3. **Call production functions.** Import from the packages under `scripts/`
+   (`resolve.localfile`, `resolve.validation`, `resolve.truth`,
+   `packs.coverage.verify_platform`, `model.platforms`) and call the same
+   entry points that the commands use. A test reaches a command through its
+   `main` or `build_parser` only. Do not re-implement logic in tests.
 
 4. **Assert specific outcomes.** Check `Status`, `Severity`, resolution
    method, file counts, or pack contents. Avoid brittle assertions on log
@@ -319,7 +384,7 @@ port, the muOS app and the Tools entry, all built on `ports/shared/tui.txt`.
 installed), the gptokeyb and evmapy mappings decoded by the interface's own
 key decoder, and the four archives `scripts/build_port.py` writes (layout,
 reproducibility, the bundled `install.py` equal to the one `install.sh`
-pins), in `test_handheld_scripts`.
+pins, the port's `port.json`), in `test_handheld_scripts`.
 
 Each launcher then runs from its extracted archive on a simulated device (`test_handheld_portmaster`
 for the PortMaster port, `test_handheld_frontends` for the others): a
@@ -339,9 +404,10 @@ What reaches the screen and the pad on a real device is not exercised.
 python -m unittest tests.test_handheld_scripts tests.test_handheld_portmaster tests.test_handheld_frontends -v
 ```
 
-### test_port.py
+### test_handheld_port.py
 
-The PortMaster port's fallback screens, drawn by pugwash, and its event
+The PortMaster port's fallback screens, drawn by pugwash, the dialog commands
+they send (only those the oldest PortMaster releases define), and its event
 reader. The screens run in bash with PortMasterDialog's functions replaced by
 stubs that record each command and answer from a script, against a fake
 `install.py` whose event streams follow `EVENT_KEYS`: all files present, some
@@ -351,7 +417,7 @@ arrives after the 30-second wait of the older PortMaster releases. Drawing,
 the pad, `mount` and the network belong to a device and are not exercised.
 
 ```bash
-python -m unittest tests.test_port -v
+python -m unittest tests.test_handheld_port -v
 ```
 
 ## Verification discipline

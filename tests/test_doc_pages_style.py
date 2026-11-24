@@ -9,8 +9,7 @@ from tests.sources import script_source
 import re
 import unittest
 
-from tests.test_prose_style import _python_prose, _sentence_case
-from tests.docpagessupport import PUBLISHED, ROOT, WIKI
+from tests.docpagessupport import PUBLISHED, ROOT, WIKI, _python_prose, _sentence_case
 
 
 class PublishedHeadings(unittest.TestCase):

@@ -24,8 +24,7 @@ from pathlib import Path
 from unittest import mock
 
 import install
-from tests.test_install_app import make_card
-from tests.test_install_selection import FakeRepository
+from tests.installsupport import FakeRepository, make_card
 from tests.netguard import module_guard
 from tests.tuisupport import (
     _args, BUILDER_FLOOR, CHECK, checked_state, DriveRuns, engine_events, FILES, fresh_state,
@@ -112,7 +111,7 @@ class PacksWordingAndDocs(unittest.TestCase):
         self.assertIn("systems", schema["properties"]["files"]["items"]["properties"])
 
     def pack(self, systems: bool) -> Path:
-        from tests.test_install_offline import GBA, US
+        from tests.installsupport import GBA, US
 
         members = {"scph5501.bin": US, "gba_bios.bin": GBA}
         listed = [{"path": path, "sha1": hashlib.sha1(data).hexdigest(),
@@ -161,7 +160,7 @@ class PacksWordingAndDocs(unittest.TestCase):
     def test_a_pack_cannot_write_escapes_through_its_system_names(self):
         """The titles and ids a pack
         records reached print() raw in the systems list."""
-        from tests.test_install_offline import GBA, US
+        from tests.installsupport import GBA, US
 
         members = {"scph5501.bin": US, "gba_bios.bin": GBA}
         listed = [{"path": path, "sha1": hashlib.sha1(data).hexdigest(), "size": len(data),
@@ -1072,15 +1071,15 @@ class GamesEndToEnd(unittest.TestCase):
     """The real --tui on a card with games, against a loopback repository."""
 
     def test_the_plan_opens_on_the_games_and_installs_only_them(self):
-        from tests import test_install_games as games
+        from tests.gamessupport import Card, manifest, mcd_iso
 
-        card = games.Card()
+        card = Card()
         self.addCleanup(card.close)
-        card.game("SEGACD", "sonic.iso", games.mcd_iso(100))
+        card.game("SEGACD", "sonic.iso", mcd_iso(100))
         root = card.root / "repo"
         (root / "install").mkdir(parents=True)
         shutil.copytree(card.lists / "games", root / "install" / "games")
-        listed = games.manifest()
+        listed = manifest()
         (root / "bios").mkdir()
         for entry in listed["files"]:
             payload = entry["dest"].encode().ljust(entry["size"], b".")[:entry["size"]]

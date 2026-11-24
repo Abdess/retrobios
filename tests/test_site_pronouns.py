@@ -11,8 +11,6 @@ from __future__ import annotations
 
 import tests
 
-import html
-import re
 import subprocess
 import sys
 import unittest
@@ -20,107 +18,10 @@ from functools import cache
 from pathlib import Path
 
 from tests.scratchtree import scratch_checkout
+from tests.sitepages import INSTALLER, NAMES, SOURCE, pronouns
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = Path("website") / "src" / "content" / "docs"
-
-PRONOUN = re.compile(
-    r"(?<![\w-])((?-i:I)|me|my|mine|myself|we|us|our|ours|ourselves"
-    r"|you|your|yours|yourself|yourselves)(?![\w-])",
-    re.I,
-)
-
-FENCED = re.compile(r"^[ \t]*(```|~~~).*?^[ \t]*\1[^\n]*$", re.S | re.M)
-INLINE_CODE = re.compile(r"(`+)(?:(?!\n\n)[^`])*?\1")
-HTML_COMMENT = re.compile(r"<!--.*?-->", re.S)
-SCRIPT_STYLE = re.compile(r"<(script|style|pre|code)\b.*?</\1>", re.S | re.I)
-TAG = re.compile(r"</?[A-Za-z][^<>]*>")
-ENTITY = re.compile(r"&#(?:\d+|x[0-9a-fA-F]+);")
-URL = re.compile(r"(?:https?|ftp|smb)://\S+|\bwww\.\S+")
-LINK_TARGET = re.compile(r"\]\([^)\s]*(?:\s+\"[^\"]*\")?\)|^\[[^\]]+\]:\s*\S+.*$", re.M)
-ANCHOR = re.compile(r"\{[^{}\n]*#[^{}\n]*\}")
-PATHLIKE = re.compile(r"\S*[/\\]\S*")
-# File names, domains and dotted initials: baserom.us.z64, delete.me, A.I.R.
-DOTTED = re.compile(r"[\w-]+(?:\.[\w-]+)+\.?")
-# A list of single letters or digits (D, F, I, P), or of lowercase option
-# values in parentheses (euro, us, asia), names keys, not people.
-LETTERS = re.compile(r"(?<!\w)[A-Z0-9](?:,\s?[A-Z0-9#@^](?!\w))+")
-VALUES = re.compile(r"\((?:[a-z][\w-]*, )+[a-z][\w-]*\)")
-LETTER_HEADING = re.compile(r"^#+ [A-Z]\s*$", re.M)
-# Search keywords, written the way readers type a query. Pagefind matches
-# them, the page never shows them.
-TERMS = re.compile(r"^terms: .*$", re.M)
-# A capitalised "US" names the country and its region code.
-COUNTRY = re.compile(r"(?<![\w-])US(?![\w-])")
-
-# Proper names that hold one of the words.
-NAMES: dict[str, str] = {
-    r"I(?:'|''|&#x27;|&#39;)Max": "I'Max MACS, an arcade board maker",
-    r"My (?:Old)?Boy!": "My Boy! and My OldBoy!, Android emulators",
-    r"My Vision": "Nichibutsu My Vision, a console",
-    r"On My iPhone": "the Files app location on iOS",
-    r"Us vs Them": "a game title",
-    r"Aliens Ate My Railway|Fell Apart On Me": "OpenTTD music track titles",
-    r"\b(?:Model|Level|Series|Mk|MK|Ultima|Interface|Type) I\b(?!')":
-        "a roman numeral in a machine or game name (Model I, Ultima I)",
-    r"\bI(?= \([A-Z])": "a model letter, I (Palladium)",
-    r"Java ME": "Java ME, the mobile Java platform",
-    r"\bME(?=,? (?:and )?MA\b)": "FM Towns ME, a model name beside the MA (geartowns)",
-    r"laseractive us(?=:)": "the LaserActive region key of geargrafx's BIOS list",
-}
-
-# Program output quoted word for word. INSTALLER holds install.py's own
-# messages, empty since the installer speaks without pronouns. SOURCE holds what an emulator prints, quoted in its
-# profile from the emulator's code, which this project does not write.
-INSTALLER: dict[str, str] = {}
-SOURCE: dict[str, str] = {
-    "You do not have a ROM image installed for Model": "sdltrs message, emulators/sdl2trs.yml",
-    "You might not get sound because": "lindbergh-loader message, emulators/lindbergh-loader.yml",
-    '"Your Card"': "KEGS disk name, emulators/kegs.yml",
-    "How do I use SC3000": "MG.html question title, emulators/mastergear.yml",
-    "How do I use SF7000 disk images?": "MG.html question title, emulators/mastergear.yml",
-    "There is no version of MG for my Unix!": "MG.html question title, emulators/mastergear.yml",
-    "rename your own SFX dat file to this name": "Zelda Classic README, emulators/zc210.yml",
-    "Could not load ROM images! You must supply these.":
-        "hypseus message, emulators/hypseus-singe.yml",
-    "Please copy pak0.pk3 from the 'etmain' path of your":
-        "ET: Legacy message, emulators/etlegacy.yml",
-    '"keyconf.dat(us)"': "file name px68k ships, emulators/px68k-sdl.yml",
-}
-
-_SPACED = [
-    re.compile(r"\s+".join(map(re.escape, phrase.split())))
-    for phrase in (*INSTALLER, *SOURCE)
-]
-_NAMES = [re.compile(pattern) for pattern in NAMES]
-
-
-def _blank(match: re.Match[str]) -> str:
-    return re.sub(r"[^\n]", " ", match[0])
-
-
-def prose(text: str) -> str:
-    """The text of a page with everything that is not prose blanked."""
-    for pattern in (HTML_COMMENT, SCRIPT_STYLE, TAG):
-        text = pattern.sub(_blank, text)
-    # &#95; and &#x27; spell a file name or a name: read them as characters.
-    text = ENTITY.sub(lambda m: html.unescape(m[0]), text)
-    for pattern in (
-        *_SPACED, FENCED, INLINE_CODE, LINK_TARGET, URL, ANCHOR, PATHLIKE,
-        TERMS, *_NAMES, DOTTED, LETTERS, VALUES, LETTER_HEADING, COUNTRY,
-    ):
-        text = pattern.sub(_blank, text)
-    return text
-
-
-def pronouns(text: str) -> list[tuple[int, str]]:
-    """(line number, line) for each prose line holding a personal pronoun."""
-    lines = text.splitlines()
-    return [
-        (number, lines[number - 1].strip())
-        for number, line in enumerate(prose(text).splitlines(), 1)
-        if PRONOUN.search(line)
-    ]
 
 
 def _hits(paths: list[Path], root: Path = ROOT) -> list[str]:

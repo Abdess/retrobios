@@ -21,7 +21,7 @@ import yaml
 from scripts.resolve import regionaudit, regions
 from scripts.packs.extraregions import _emulator_region_group
 from scripts.packs.platformcheck import verify_pack_against_platform
-from tests.auditsupport import ROOT
+from tests import REPO_ROOT
 
 
 class APackIsSwappedInWhole(unittest.TestCase):
@@ -33,7 +33,7 @@ class APackIsSwappedInWhole(unittest.TestCase):
         import shutil
         import tempfile
 
-        (ROOT / "tmp").mkdir(exist_ok=True)
+        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         directory = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, directory, True)
         return directory
@@ -84,8 +84,8 @@ class EverySharedGroupServesAPlatform(unittest.TestCase):
         from model.registry import list_registered_platforms
         from model.platforms import load_platform_config
 
-        platforms_dir = str(ROOT / "platforms")
-        with (ROOT / "platforms" / "_shared.yml").open(encoding="utf-8") as handle:
+        platforms_dir = str(REPO_ROOT / "platforms")
+        with (REPO_ROOT / "platforms" / "_shared.yml").open(encoding="utf-8") as handle:
             groups = set((yaml.safe_load(handle) or {}).get("shared_groups") or {})
         served = {
             entry.get("shared_group")
@@ -205,7 +205,7 @@ class StandaloneCopiesComeFromTheProfiles(unittest.TestCase):
     def test_the_published_retroarch_list_reaches_cemu(self):
         import json
 
-        manifest = json.loads((ROOT / "install" / "retroarch.json").read_text())
+        manifest = json.loads((REPO_ROOT / "install" / "retroarch.json").read_text())
         files = {copy["file"]: copy for copy in manifest["standalone_copies"]
                  if "file" in copy}
         for name in ("Cemu/keys.txt", "Cemu/otp.bin", "Cemu/seeprom.bin"):
@@ -1058,7 +1058,7 @@ class ReportsHoldTheDataTrees(unittest.TestCase):
         # check calls too (TheExportHoldsTheDataTrees in test_export_report).
         for script in ("generate_readme.py", "generate_site.py", "slots.py",
                        "cross_reference.py"):
-            tree = ast.parse((ROOT / "scripts" / script).read_text(encoding="utf-8"))
+            tree = ast.parse((REPO_ROOT / "scripts" / script).read_text(encoding="utf-8"))
             main = next(
                 node for node in tree.body
                 if isinstance(node, ast.FunctionDef) and node.name == "main"
@@ -1155,7 +1155,7 @@ class RequiredOnlyReachesDataDirectories(unittest.TestCase):
         self.assertIn("data_refs, required_only=required_only,", source)
 
     def test_the_overlays_are_declared_optional(self):
-        retroarch = yaml.safe_load((ROOT / "platforms" / "retroarch.yml").read_text())
+        retroarch = yaml.safe_load((REPO_ROOT / "platforms" / "retroarch.yml").read_text())
         trees = retroarch["systems"]["mattel-intellivision"]["data_directories"]
         self.assertEqual(trees, [
             {"ref": "freeintv-overlays", "destination": "freeintv_overlays",
@@ -1168,7 +1168,7 @@ class RequiredOnlyReachesDataDirectories(unittest.TestCase):
         emulator pack of the core itself left the overlays out."""
         profiles = {
             path.stem: yaml.safe_load(path.read_text(encoding="utf-8"))
-            for path in (ROOT / "emulators").glob("*.yml")
+            for path in (REPO_ROOT / "emulators").glob("*.yml")
         }
 
         def trees(profile: dict) -> dict:
@@ -1331,7 +1331,7 @@ class NoArchiveRepeatsAMemberName(unittest.TestCase):
     warnings and Info-ZIP stops on an interactive replace? at extraction."""
 
     def test_member_names_are_unique(self):
-        archives = sorted((ROOT / "bios").rglob("*.zip"))
+        archives = sorted((REPO_ROOT / "bios").rglob("*.zip"))
         if not archives:
             self.skipTest("no archive under bios/")
         repeated = []
@@ -1342,7 +1342,7 @@ class NoArchiveRepeatsAMemberName(unittest.TestCase):
             except (zipfile.BadZipFile, OSError):
                 continue
             if len(names) != len(set(names)):
-                repeated.append(str(path.relative_to(ROOT)))
+                repeated.append(str(path.relative_to(REPO_ROOT)))
         self.assertEqual(repeated, [])
 
 

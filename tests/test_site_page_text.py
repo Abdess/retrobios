@@ -13,6 +13,7 @@ styles, and hold the page to one reading of each thing it says.
 from __future__ import annotations
 
 import tests
+from tests.sitepages import DIST
 
 import json
 import re
@@ -31,7 +32,6 @@ ROOT = Path(__file__).resolve().parent.parent
 
 WEBSITE = ROOT / "website"
 DOCS = WEBSITE / "src" / "content" / "docs"
-DIST = WEBSITE / "dist"
 PLUGIN = WEBSITE / "src" / "plugins" / "rehype-stack-tables.mjs"
 SATTERI = WEBSITE / "node_modules" / "satteri" / "dist" / "index.js"
 

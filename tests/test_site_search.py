@@ -42,7 +42,7 @@ from sitegen import sidebartopics
 from sitegen import validate
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
-from tests.test_site_nav import ANCHORS, _nav, _present
+from tests.sitepages import ANCHORS, DIST, _nav, _present
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -50,7 +50,6 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 TOOLS = REPO_ROOT / "website" / "tools"
 WORKFLOW = REPO_ROOT / ".github" / "workflows" / "deploy-site.yml"
 DOCS = REPO_ROOT / "website" / "src" / "content" / "docs"
-DIST = REPO_ROOT / "website" / "dist"
 
 
 def _front(text: str) -> dict:

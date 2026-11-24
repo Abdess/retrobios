@@ -18,8 +18,7 @@ from pathlib import Path, PurePosixPath, PureWindowsPath
 from unittest import mock
 
 import install
-from tests.test_install_app import make_card
-from tests.test_install_selection import FakeRepository
+from tests.installsupport import FakeRepository, make_card
 from tests.netguard import module_guard
 from tests.tuisupport import (
     _args, checked_state, ChoiceRuns, ChoiceScreens, DriveRuns, fresh_state, games_part, HOME,

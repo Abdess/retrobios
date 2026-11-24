@@ -530,10 +530,10 @@ python -m unittest tests.test_e2e_region -v   # single module
 
 `test_e2e_*.py`, `test_install_detection.py`, `test_provenance.py`, the parser tests,
 `test_profile_sync_*.py` and `test_upstream.py` run on synthetic fixtures with no
-network and no real BIOS files. `test_pack_integrity.py`, `test_torrentzip.py` and
-`test_no_case_collisions.py` read the working tree and skip when the data they
-need is absent. See the [testing guide](testing-guide.md) for the fixture
-pattern and how to add a test.
+network and no real BIOS files. The modules that read the working tree, and skip
+when the data they need is absent, are listed in the testing guide
+([tests that read the working tree](testing-guide.md#tests-that-read-the-working-tree)),
+with the fixture pattern and how to add a test.
 
 ## CI workflows
 

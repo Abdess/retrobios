@@ -17,7 +17,7 @@ from pathlib import Path
 from unittest import mock
 
 import install
-from tests.test_install_app import make_card
+from tests.installsupport import make_card
 from tests.netguard import module_guard
 from tests.tuisupport import (
     _args, BUILDER_FLOOR, _CardFixtures, checked_state, _Decided, engine_events, fresh_state, HOME,
@@ -739,7 +739,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
     def test_a_pack_gets_the_menu_and_its_folder_named(self):
         """No menu and no folder before the copy, the pack's list
         recording no system."""
-        from tests.test_install_offline import _pack, PAYLOAD
+        from tests.installsupport import _pack, PAYLOAD
 
         downloads = self.root / "downloads"
         downloads.mkdir()

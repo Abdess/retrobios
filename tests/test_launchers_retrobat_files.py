@@ -22,10 +22,11 @@ from scraper.retrobat_config_files import (
     desmume,
 )
 from scraper.retrobat_config_folders import eka2l1, tsugaru, dosbox_copies
+from scraper.retrobat_generators import GENERATORS
 from scraper.retrobat_render import render
 from scraper.retrobat_xbox import CXBX_DATA_FOLDER, cxbx, xemu_saves
 from scraper.csharp_source import LauncherPatternMissing, Source
-from tests.launchersretrobatsupport import G, _sources
+from tests.launcherssupport import _sources
 
 
 DESMUME = """
@@ -386,7 +387,7 @@ XROAR = """
 
 class FilesNeededTogether(unittest.TestCase):
     def test_desmume_pair_and_firmware_override(self):
-        pair, firmware = desmume(_sources(**{f"{G}/Desmume.Generator.cs": DESMUME}))
+        pair, firmware = desmume(_sources(**{f"{GENERATORS}/Desmume.Generator.cs": DESMUME}))
         self.assertEqual(pair["names"], ["bios7.bin", "bios9.bin"])
         self.assertEqual(
             pair["passes_to"],
@@ -402,7 +403,7 @@ class FilesNeededTogether(unittest.TestCase):
 
     def test_melonds_dsi_files_and_nand_region(self):
         fixed, region = melonds_dsi(
-            _sources(**{f"{G}/MelonDS.Generator.cs": MELONDS_DSI, retrobat_generators.FEATURES: MELONDS_FEATURES})
+            _sources(**{f"{GENERATORS}/MelonDS.Generator.cs": MELONDS_DSI, retrobat_generators.FEATURES: MELONDS_FEATURES})
         )
         self.assertEqual(fixed["names"], ["dsi_bios9.bin", "dsi_nand.bin"])
         self.assertEqual(fixed["passes_to"], "melonDS.toml [DSi] BIOS9Path, NANDPath")
@@ -419,7 +420,7 @@ class FilesNeededTogether(unittest.TestCase):
         self.assertEqual(region["fails_when_missing"], "falls back to dsi_nand.bin")
 
     def test_jzintv_flags_in_command_line_order(self):
-        both, ecs = jzintv(_sources(**{f"{G}/Jzintv.Generator.cs": JZINTV}))
+        both, ecs = jzintv(_sources(**{f"{GENERATORS}/Jzintv.Generator.cs": JZINTV}))
         self.assertEqual(both["names"], ["exec.bin", "grom.bin"])
         self.assertEqual(both["passes_to"], "command line -e <bios>/exec.bin -g <bios>/grom.bin")
         self.assertEqual(ecs["names"], ["ecs.bin"])
@@ -535,17 +536,17 @@ CXBX = """
 
 class XboxFilesTheLauncherWrites(unittest.TestCase):
     def test_xemu_keeps_its_eeprom_and_disk_below_saves(self):
-        records = xemu_saves(_sources(**{f"{G}/Xemu.Generator.cs": XEMU_SAVES}))
+        records = xemu_saves(_sources(**{f"{GENERATORS}/Xemu.Generator.cs": XEMU_SAVES}))
         self.assertEqual(
             [(r["emulator"], r["kind"], r["names"], r["search_dir"], r["source_ref"])
              for r in records],
             [
                 ("xemu", "fixed_name", ["eeprom.bin", "xbox_hdd.qcow2"], "saves/<system>",
-                 f"{G}/Xemu.Generator.cs:3-19, 27-29"),
+                 f"{GENERATORS}/Xemu.Generator.cs:3-19, 27-29"),
                 ("xemu, xemu-chihiro", "copies", ["chihiro_eeprom.bin"], "saves/chihiro",
-                 f"{G}/Xemu.Generator.cs:3, 40-51"),
+                 f"{GENERATORS}/Xemu.Generator.cs:3, 40-51"),
                 ("xemu, xemu-chihiro", "fixed_name", ["chihiro_snapshots.qcow2"], "saves/chihiro",
-                 f"{G}/Xemu.Generator.cs:3, 34-37"),
+                 f"{GENERATORS}/Xemu.Generator.cs:3, 34-37"),
             ],
         )
         self.assertIn("eeprom_path, hdd_path", records[0]["passes_to"])
@@ -553,23 +554,23 @@ class XboxFilesTheLauncherWrites(unittest.TestCase):
                       records[0]["depends_on_option"])
 
     def test_cxbx_runs_from_its_folder_and_gets_the_eeprom_there(self):
-        records = cxbx(_sources(**{f"{G}/Cxbx.Generator.cs": CXBX}))
+        records = cxbx(_sources(**{f"{GENERATORS}/Cxbx.Generator.cs": CXBX}))
         self.assertEqual(
             [(r["emulator"], r["kind"], r["names"], r["search_dir"], r["source_ref"])
              for r in records],
             [
                 ("chihiro", "passes_path", [], '<AppConfig.GetFullPath("chihiro")>',
-                 f"{G}/Cxbx.Generator.cs:19-21, 31"),
+                 f"{GENERATORS}/Cxbx.Generator.cs:19-21, 31"),
                 ("chihiro-gun", "passes_path", [], '<AppConfig.GetFullPath("chihiro-ds")>',
-                 f"{G}/Cxbx.Generator.cs:23-25, 31"),
+                 f"{GENERATORS}/Cxbx.Generator.cs:23-25, 31"),
                 ("cxbx-reloaded", "passes_path", [], '<AppConfig.GetFullPath("cxbx-reloaded")>',
-                 f"{G}/Cxbx.Generator.cs:27-31"),
+                 f"{GENERATORS}/Cxbx.Generator.cs:27-31"),
                 ("chihiro, chihiro-gun, cxbx-reloaded", "fixed_name", ["xbox-iso-vfs.exe"],
-                 "<emulatorLauncher folder>", f"{G}/Cxbx.Generator.cs:3-7"),
+                 "<emulatorLauncher folder>", f"{GENERATORS}/Cxbx.Generator.cs:3-7"),
                 ("chihiro, chihiro-gun, cxbx-reloaded", "fixed_name", ["dokan2.dll"],
-                 "%DokanLibrary2%", f"{G}/Cxbx.Generator.cs:3-4, 8-13"),
+                 "%DokanLibrary2%", f"{GENERATORS}/Cxbx.Generator.cs:3-4, 8-13"),
                 ("cxbx-reloaded", "fixed_name", ["EEPROM.bin"],
-                 '<AppConfig.GetFullPath("cxbx-reloaded")>', f"{G}/Cxbx.Generator.cs:34-41"),
+                 '<AppConfig.GetFullPath("cxbx-reloaded")>', f"{GENERATORS}/Cxbx.Generator.cs:34-41"),
             ],
         )
         self.assertTrue(all(r["passes_to"].startswith(CXBX_DATA_FOLDER) for r in records[:3]))
@@ -579,7 +580,7 @@ class XboxFilesTheLauncherWrites(unittest.TestCase):
 
 class HelpersAndCopies(unittest.TestCase):
     def test_blastem_one_record_per_helper_call(self):
-        records = blastem(_sources(**{f"{G}/Blastem.Generator.cs": BLASTEM}))
+        records = blastem(_sources(**{f"{GENERATORS}/Blastem.Generator.cs": BLASTEM}))
         self.assertEqual(
             [(r["names"], r["passes_to"]) for r in records],
             [
@@ -590,10 +591,10 @@ class HelpersAndCopies(unittest.TestCase):
                 ),
             ],
         )
-        self.assertEqual(records[0]["source_ref"], f"{G}/Blastem.Generator.cs:9-10, 14-21")
+        self.assertEqual(records[0]["source_ref"], f"{GENERATORS}/Blastem.Generator.cs:9-10, 14-21")
 
     def test_dolphin_unchecked_write_and_segaboot_candidates(self):
-        gba, segaboot = dolphin(_sources(**{f"{G}/Dolphin.Generator.cs": DOLPHIN}))
+        gba, segaboot = dolphin(_sources(**{f"{GENERATORS}/Dolphin.Generator.cs": DOLPHIN}))
         self.assertEqual(gba["names"], ["gba_bios.bin"])
         self.assertEqual(
             gba["passes_to"],
@@ -608,7 +609,7 @@ class HelpersAndCopies(unittest.TestCase):
 
     def test_dosbox_copies_grouped_by_target_folder(self):
         sources = _sources(
-            **{f"{G}/DosBoxPure.Generator.cs": DOSBOX, f"{G}/DosBoxStaging.Generator.cs": DOSBOX}
+            **{f"{GENERATORS}/DosBoxPure.Generator.cs": DOSBOX, f"{GENERATORS}/DosBoxStaging.Generator.cs": DOSBOX}
         )
         records = dosbox_copies(sources)
         self.assertEqual(
@@ -630,7 +631,7 @@ class HelpersAndCopies(unittest.TestCase):
         self.assertEqual(records[0]["depends_on_option"], "the target does not exist")
 
     def test_tsugaru_folder_chain(self):
-        [record] = tsugaru(_sources(**{f"{G}/Tsugaru.Generator.cs": TSUGARU}))
+        [record] = tsugaru(_sources(**{f"{GENERATORS}/Tsugaru.Generator.cs": TSUGARU}))
         self.assertEqual(record["names"], ["FMT_SYS.ROM"])
         self.assertEqual(
             record["search_dir"], "bios/fmtowns, then bios/fmtownsux, then <emulator>/roms"
@@ -640,15 +641,15 @@ class HelpersAndCopies(unittest.TestCase):
         )
 
     def test_commented_code_is_not_read(self):
-        [record] = eka2l1(_sources(**{f"{G}/Eka2l1.Generator.cs": EKA2L1}))
+        [record] = eka2l1(_sources(**{f"{GENERATORS}/Eka2l1.Generator.cs": EKA2L1}))
         self.assertEqual(record["passes_to"], "config.yml data-storage = bios/eka2l1/data")
 
     def test_bizhawk_gb_one_slot_per_system(self):
         records = bizhawk_gb(
             _sources(
                 **{
-                    f"{G}/Bizhawk.CoreOptions.cs": BIZHAWK_GB,
-                    f"{G}/Bizhawk.Generator.cs": BIZHAWK_CONFIG,
+                    f"{GENERATORS}/Bizhawk.CoreOptions.cs": BIZHAWK_GB,
+                    f"{GENERATORS}/Bizhawk.Generator.cs": BIZHAWK_CONFIG,
                 }
             )
         )
@@ -669,9 +670,9 @@ class HelpersAndCopies(unittest.TestCase):
 
 class FolderArguments(unittest.TestCase):
     def test_mess_folders_shared_with_the_libretro_core(self):
-        sources = _sources(**{f"{G}/MessSystem.cs": MESS, f"{G}/Mame64.Generator.cs": MAME64})
+        sources = _sources(**{f"{GENERATORS}/MessSystem.cs": MESS, f"{GENERATORS}/Mame64.Generator.cs": MAME64})
         records = mame(sources)
-        mess = [r for r in records if r["source_ref"].startswith(f"{G}/MessSystem.cs")]
+        mess = [r for r in records if r["source_ref"].startswith(f"{GENERATORS}/MessSystem.cs")]
         self.assertEqual(
             [(r["emulator"], r["passes_to"]) for r in mess],
             [
@@ -688,8 +689,8 @@ class FolderArguments(unittest.TestCase):
         self.assertNotIn("depends_on_option", mess[4])
 
     def test_mame64_ternary_folder(self):
-        sources = _sources(**{f"{G}/MessSystem.cs": MESS, f"{G}/Mame64.Generator.cs": MAME64})
-        own = [r for r in mame(sources) if r["source_ref"].startswith(f"{G}/Mame64")]
+        sources = _sources(**{f"{GENERATORS}/MessSystem.cs": MESS, f"{GENERATORS}/Mame64.Generator.cs": MAME64})
+        own = [r for r in mame(sources) if r["source_ref"].startswith(f"{GENERATORS}/Mame64")]
         self.assertEqual(own[0]["passes_to"], "command line -rp bios;<rom directory>")
         self.assertEqual(
             own[1]["search_dir"], "bios/hbmame/samples when hbmame, else bios/mame/samples"
@@ -698,7 +699,7 @@ class FolderArguments(unittest.TestCase):
     def test_xroar_reassigned_folder_and_config_line(self):
         # romPath is bios/dragon, rewritten to bios/coco for the coco system.
         default, coco, config = xroar(_sources(**{
-            f"{G}/Xroar.Generator.cs": XROAR, retrobat_generators.FEATURES: XROAR_FEATURES,
+            f"{GENERATORS}/Xroar.Generator.cs": XROAR, retrobat_generators.FEATURES: XROAR_FEATURES,
         }))
         self.assertEqual(
             (default["search_dir"], default["passes_to"], default.get("systems")),
@@ -757,12 +758,12 @@ PICO8 = """
 
 class ProgramsRunFromEmulatorFolders(unittest.TestCase):
     def test_pico8_runs_its_binary_from_its_emulator_folder(self):
-        (record,) = pico8(_sources(**{f"{G}/Pico8.Generator.cs": PICO8}))
+        (record,) = pico8(_sources(**{f"{GENERATORS}/Pico8.Generator.cs": PICO8}))
         self.assertEqual(
             (record["emulator"], record["kind"], record["names"], record["search_dir"],
              record["passes_to"], record["source_ref"]),
             ("pico8", "fixed_name", ["pico8.exe"], '<AppConfig.GetFullPath("pico8")>', "exec",
-             f"{G}/Pico8.Generator.cs:3-7, 11-12"),
+             f"{GENERATORS}/Pico8.Generator.cs:3-7, 11-12"),
         )
 
 
@@ -774,7 +775,7 @@ class EveryBiosReferenceIsRead(unittest.TestCase):
             "    }\n"
         )
         with self.assertRaises(LauncherPatternMissing) as caught:
-            eka2l1(_sources(**{f"{G}/Eka2l1.Generator.cs": extra}))
+            eka2l1(_sources(**{f"{GENERATORS}/Eka2l1.Generator.cs": extra}))
         self.assertIn("bios reference at line", str(caught.exception))
 
     def test_semicolon_inside_a_string_does_not_end_the_value(self):

@@ -31,10 +31,9 @@ from pathlib import Path
 from unittest import mock
 
 import install
-from tests.test_install_offline import (
-    EXTRA, GBA, JP, PAYLOAD, US, Scratch, _entry, _offline_env,
+from tests.installsupport import (
+    EXTRA, GBA, JP, PAYLOAD, US, FakeRepository, Scratch, _entry, _offline_env,
 )
-from tests.test_install_selection import FakeRepository
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

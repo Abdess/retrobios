@@ -208,6 +208,20 @@ class TheArchives(unittest.TestCase):
                     self.assertEqual(top, [])
                     self.assertIn("RetroBIOS/retrobios.gptk", names)
 
+    def test_the_port_describes_itself_to_portmaster(self):
+        """port.json and the files harbourmaster's captain.check_port and the
+        PortMaster listing read, beside the launch script."""
+        name = port.PORT_ZIP
+        with zipfile.ZipFile(port.build_archive(name, self.out / name)) as zf:
+            names = zf.namelist()
+            described = json.loads(zf.read("retrobios/port.json"))
+        for member in ("retrobios/screens.txt", "retrobios/gameinfo.xml", "retrobios/retrobios.md"):
+            self.assertIn(member, names)
+        self.assertEqual(described["version"], 4)
+        self.assertEqual(described["name"], "retrobios.zip")
+        self.assertEqual(described["items"], ["RetroBIOS.sh", "retrobios"])
+        self.assertEqual(described["attr"]["genres"], ["other"])
+
     def test_the_muos_icon_is_the_glyph_its_header_names(self):
         """muOS reads glyph/<ICON>.png in the application's folder, and the
         muxapp named an icon it did not carry."""

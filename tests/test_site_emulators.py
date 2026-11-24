@@ -29,6 +29,7 @@ from __future__ import annotations
 
 import tests
 from tests import sitepages
+from tests.sitepages import DIST
 
 import re
 import unittest
@@ -237,7 +238,6 @@ class TheIndexNamesEmulatorsAndSystems(unittest.TestCase):
         self.assertNotIn("sony-playstation |", row)
 
 
-DIST = REPO_ROOT / "website" / "dist"
 
 
 def _emulator_page(name: str, profile: dict | None = None) -> str:

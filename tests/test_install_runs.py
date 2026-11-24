@@ -217,7 +217,7 @@ class TheDataTreesCountInTheFreeSpace(unittest.TestCase):
         files the first installed."""
         from types import SimpleNamespace
 
-        from tests.test_install_selection import FakeRepository
+        from tests.installsupport import FakeRepository
 
         member = os.urandom(4096)
         results = []
@@ -594,7 +594,7 @@ class ACheckThatFindsFilesMissingIsNoFailure(unittest.TestCase):
     BIOS folder to complete from a tool that never ran."""
 
     def test_missing_is_3_and_a_failure_stays_1(self):
-        from tests.test_install_selection import FakeRepository
+        from tests.installsupport import FakeRepository
 
         with FakeRepository() as repo:
             missing = repo.run("--no-input", "--check")

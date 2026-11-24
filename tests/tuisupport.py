@@ -35,8 +35,7 @@ from pathlib import Path
 from unittest import mock
 
 import install
-from tests.test_install_app import make_card
-from tests.test_install_selection import FakeRepository
+from tests.installsupport import FakeRepository, make_card
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -805,8 +804,6 @@ class SaveDirectoryRepository(FakeRepository):
 
 def _app_card(test: unittest.TestCase, system: str) -> tuple[Path, Path]:
     """A card of system in the repository's tmp/, its root and BIOS folder."""
-    from tests.test_install_app import make_card
-
     root = Path(tempfile.mkdtemp())
     test.addCleanup(shutil.rmtree, root, True)
     return root / "card", make_card(root / "card", system)
@@ -1006,7 +1003,7 @@ class _CardFixtures:
               regions: bool = True) -> tuple[Path, Path, dict]:
         """A list of plat's shape (the MinUI family records cores and regions,
         no system), the pack built from it and the files' payloads."""
-        from tests.test_install_offline import GBA, JP, US
+        from tests.installsupport import GBA, JP, US
 
         payloads = {"Bios/MGBA/gba_bios.bin": (GBA, "nintendo-gba", "mgba", None),
                     "Bios/PS/scph5501.bin": (US, "sony-playstation", "pcsx_rearmed",
@@ -1113,7 +1110,7 @@ class _OutsideTextFindings:
         return out.getvalue() + err.getvalue() + events.getvalue()
 
     def test_a_pack_member_path_is_refused(self):
-        from tests.test_install_offline import _pack, GBA
+        from tests.installsupport import _pack, GBA
 
         pack = _pack(self.root, "RetroArch_v1_BIOS_Pack.zip", {f"x{self.OSC}.bin": GBA})
         text = self.run_install(_args(platform="retroarch", dest=self.dest,

@@ -18,7 +18,7 @@ from pathlib import Path
 from unittest import mock
 from scripts import pipeline
 from orchestrate import checks, consistency, results, runner
-from tests.auditsupport import ROOT
+from tests import REPO_ROOT
 
 
 class VerboseAppliesToJson(unittest.TestCase):
@@ -32,7 +32,7 @@ class VerboseAppliesToJson(unittest.TestCase):
 
         completed = subprocess.run(
             [sys.executable, "scripts/verify.py", *args, "--json"],
-            capture_output=True, text=True, cwd=ROOT, timeout=900, check=False,
+            capture_output=True, text=True, cwd=REPO_ROOT, timeout=900, check=False,
         )
         self.assertEqual(completed.returncode, 0, completed.stderr[-2000:])
         return json.loads(completed.stdout)
@@ -70,7 +70,7 @@ class OnePlatformPerFlag(unittest.TestCase):
                 completed = subprocess.run(
                     [sys.executable, f"scripts/{script}", "--platform",
                      "bizhawk,misterfpga", *extra],
-                    capture_output=True, text=True, cwd=ROOT, timeout=600, check=False,
+                    capture_output=True, text=True, cwd=REPO_ROOT, timeout=600, check=False,
                 )
                 self.assertNotEqual(completed.returncode, 0)
                 self.assertIn("takes one platform", completed.stderr)
@@ -80,7 +80,7 @@ class OnePlatformPerFlag(unittest.TestCase):
         from model.cliargs import require_platform
 
         with self.assertRaises(SystemExit) as caught:
-            require_platform("batocra", str(ROOT / "platforms"))
+            require_platform("batocra", str(REPO_ROOT / "platforms"))
         self.assertIn("batocera", str(caught.exception))
 
     def test_a_file_that_is_no_platform_is_refused(self):
@@ -90,7 +90,7 @@ class OnePlatformPerFlag(unittest.TestCase):
 
         for name in ("_shared", "_registry", "emulatorjs"):
             with self.subTest(name=name), self.assertRaises(SystemExit) as caught:
-                require_platform(name, str(ROOT / "platforms"))
+                require_platform(name, str(REPO_ROOT / "platforms"))
             self.assertIn("unknown platform", str(caught.exception))
 
 
@@ -330,7 +330,7 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
             named = subprocess.run(
                 [sys.executable, "scripts/generate_pack.py", "--platform",
                  "retroarch", "--verify-packs", "--output-dir", directory],
-                capture_output=True, text=True, cwd=str(ROOT), timeout=300,
+                capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=300,
                 check=False,
             )
             self.assertNotEqual(
@@ -343,7 +343,7 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
             swept = subprocess.run(
                 [sys.executable, "scripts/generate_pack.py", "--all",
                  "--verify-packs", "--output-dir", directory],
-                capture_output=True, text=True, cwd=str(ROOT), timeout=300,
+                capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=300,
                 check=False,
             )
             self.assertIn("SKIP (no pack in", swept.stdout)
@@ -374,7 +374,7 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
         import check_buildbot_system as cbs
         from scraper import buildbot_system
 
-        registry = str(ROOT / "platforms" / "_data_dirs.yml")
+        registry = str(REPO_ROOT / "platforms" / "_data_dirs.yml")
         tracked = buildbot_system.load_tracked_entries(registry)
         self.assertTrue(tracked)
         cases = {
@@ -400,7 +400,7 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
         from model.profiles import load_emulator_profiles
 
         with self.assertRaisesRegex(InputMissing, "no emulator profile directory"):
-            load_emulator_profiles(str(ROOT / "no-such-emulator-dir"))
+            load_emulator_profiles(str(REPO_ROOT / "no-such-emulator-dir"))
 
 
 class PipelineStepsSpeakAsTheyGo(unittest.TestCase):
@@ -463,7 +463,7 @@ class VerifyStrictAppliesInEveryMode(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if not (ROOT / "database.json").exists():
+        if not (REPO_ROOT / "database.json").exists():
             raise unittest.SkipTest("database.json is not built")
         cls.dir = Path(tempfile.mkdtemp())
         (cls.dir / "fakeemu.yml").write_text(
@@ -478,7 +478,7 @@ class VerifyStrictAppliesInEveryMode(unittest.TestCase):
 
     def run_verify(self, *flags: str) -> int:
         return subprocess.run(
-            [sys.executable, "scripts/verify.py", *flags], cwd=ROOT,
+            [sys.executable, "scripts/verify.py", *flags], cwd=REPO_ROOT,
             capture_output=True, text=True,
             check=False,
         ).returncode
@@ -562,7 +562,7 @@ class EveryToolRefusesAFlagItWouldDrop(unittest.TestCase):
             for argv in cases:
                 with self.subTest(script=script, argv=argv):
                     proc = subprocess.run(
-                        [sys.executable, script, *argv], cwd=ROOT,
+                        [sys.executable, script, *argv], cwd=REPO_ROOT,
                         capture_output=True, text=True, timeout=120,
                         check=False,
                     )
@@ -575,7 +575,7 @@ class AReaderThatLeavesEarlyIsNoCrash(unittest.TestCase):
 
     def test_a_closed_pipe_ends_quietly(self):
         proc = subprocess.Popen(
-            [sys.executable, "scripts/verify.py", "--list-emulators"], cwd=ROOT,
+            [sys.executable, "scripts/verify.py", "--list-emulators"], cwd=REPO_ROOT,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         )
         # The listing fits a 64 KiB pipe: a child that wrote it all before
@@ -595,7 +595,7 @@ class AReaderThatLeavesEarlyIsNoCrash(unittest.TestCase):
 
     def test_every_entry_point_goes_through_run_cli(self):
         plain = re.compile(r'if __name__ == "__main__":\n    (main\(\)|sys\.exit\(main\(\)\))')
-        found = [p.name for p in sorted((ROOT / "scripts").glob("*.py"))
+        found = [p.name for p in sorted((REPO_ROOT / "scripts").glob("*.py"))
                  if plain.search(p.read_text())]
         self.assertEqual(found, [])
 
@@ -638,7 +638,7 @@ class TargetListsReadThePinnedRelease(unittest.TestCase):
 
     def test_no_target_scraper_asks_for_the_latest_tag(self):
         for name in ("batocera", "rocknix", "recalbox"):
-            source = (ROOT / "scripts" / "scraper" / "targets" / f"{name}_targets_scraper.py").read_text()
+            source = (REPO_ROOT / "scripts" / "scraper" / "targets" / f"{name}_targets_scraper.py").read_text()
             with self.subTest(scraper=name):
                 # The Batocera scraper reads the pin of the platform it is
                 # instantiated for (KNULLI subclasses it).
@@ -649,7 +649,7 @@ class TargetListsReadThePinnedRelease(unittest.TestCase):
                 self.assertNotIn("fetch_stable_tag()", source)
                 self.assertNotIn("fetch_github_latest_version(", source)
         # Lakka inherits its BIOS list and pins the release in its own version:.
-        source = (ROOT / "scripts" / "scraper" / "targets" / "lakka_targets_scraper.py").read_text()
+        source = (REPO_ROOT / "scripts" / "scraper" / "targets" / "lakka_targets_scraper.py").read_text()
         self.assertIn("self.pinned_version(PLATFORM_NAME)", source)
         self.assertNotIn("fetch_github_latest_version(", source)
 
@@ -717,7 +717,7 @@ class OneOutputFormPerRun(unittest.TestCase):
             with self.subTest(script=script, argv=argv):
                 proc = subprocess.run(
                     [sys.executable, f"scripts/{script}", *argv], capture_output=True,
-                    text=True, cwd=str(ROOT), timeout=120, check=False,
+                    text=True, cwd=str(REPO_ROOT), timeout=120, check=False,
                 )
                 self.assertEqual(proc.returncode, 2, proc.stdout[-300:])
                 self.assertIn("not allowed with", proc.stderr)
@@ -731,7 +731,7 @@ class ATargetIsNamedWhenItRemovesTheCore(unittest.TestCase):
         result = subprocess.run(
             [sys.executable, "scripts/cross_reference.py", "--platform", "batocera",
              "--target", "bcm2711", "--emulator", "dolphin"],
-            cwd=ROOT, capture_output=True, text=True, timeout=600,
+            cwd=REPO_ROOT, capture_output=True, text=True, timeout=600,
             check=False,
         )
         self.assertEqual(result.returncode, 1)
@@ -748,7 +748,7 @@ class ANamedPackThatIsAbsentFails(unittest.TestCase):
             result = subprocess.run(
                 [sys.executable, "scripts/generate_pack.py", "--platform", "retroarch",
                  "--verify-packs", "--output-dir", directory],
-                cwd=ROOT, capture_output=True, text=True, timeout=600,
+                cwd=REPO_ROOT, capture_output=True, text=True, timeout=600,
                 check=False,
             )
         self.assertEqual(result.returncode, 1)
@@ -762,7 +762,7 @@ class ANamedPackThatIsAbsentFails(unittest.TestCase):
             result = subprocess.run(
                 [sys.executable, "scripts/generate_pack.py", "--all",
                  "--verify-packs", "--output-dir", directory],
-                cwd=ROOT, capture_output=True, text=True, timeout=600,
+                cwd=REPO_ROOT, capture_output=True, text=True, timeout=600,
                 check=False,
             )
         self.assertEqual(result.returncode, 1)
@@ -804,7 +804,7 @@ class AnAliasSelectsItsProfile(unittest.TestCase):
     def test_verify_runs_the_alias(self):
         result = subprocess.run(
             [sys.executable, "scripts/verify.py", "--emulator", "mednafen_psx"],
-            cwd=ROOT, capture_output=True, text=True, timeout=300, check=False,
+            cwd=REPO_ROOT, capture_output=True, text=True, timeout=300, check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("beetle_psx", result.stdout)
@@ -935,7 +935,7 @@ class VerifyPacksRefusesWhatItCannotDo(unittest.TestCase):
             with self.subTest(args=extra), tempfile.TemporaryDirectory() as out:
                 result = subprocess.run(
                     [sys.executable, "scripts/generate_pack.py", *extra, "--output-dir", out],
-                    cwd=ROOT, capture_output=True, text=True, timeout=300,
+                    cwd=REPO_ROOT, capture_output=True, text=True, timeout=300,
                     check=False,
                 )
                 self.assertEqual(result.returncode, 2, result.stderr[-300:])
@@ -1013,11 +1013,11 @@ class AnUnknownTargetIsRefusedUnderAll(unittest.TestCase):
         from scripts.model.targets import build_target_cores_cache
         from scripts.model.registry import list_registered_platforms
 
-        platforms = list_registered_platforms(str(ROOT / "platforms"))
+        platforms = list_registered_platforms(str(REPO_ROOT / "platforms"))
         with self.assertRaises(ValueError):
-            build_target_cores_cache(platforms, "swtich", str(ROOT / "platforms"), is_all=True)
+            build_target_cores_cache(platforms, "swtich", str(REPO_ROOT / "platforms"), is_all=True)
         _cache, kept, _notes = build_target_cores_cache(
-            platforms, "switch", str(ROOT / "platforms"), is_all=True
+            platforms, "switch", str(REPO_ROOT / "platforms"), is_all=True
         )
         self.assertNotIn("bizhawk", kept)
         self.assertIn("retroarch", kept)
@@ -1112,7 +1112,7 @@ class ThePipelineRunsTheSchemaCheckCIRuns(unittest.TestCase):
     unquoted numeric core name passed it and failed CI on push."""
 
     def test_the_ci_command_is_a_pipeline_step(self):
-        workflow = (ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+        workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
         command = re.search(r"python (scripts/validate_schemas\.py[^\n]*)", workflow).group(1)
         script, *flags = command.split()
         source = script_source("pipeline.py")
@@ -1123,7 +1123,7 @@ class ThePipelineRunsTheSchemaCheckCIRuns(unittest.TestCase):
     def test_the_site_is_rendered_as_the_deploy_renders_it(self):
         """The pipeline generated pages without rendering them: 20 pages with
         duplicate ids passed it and failed the deploy."""
-        workflow = (ROOT / ".github" / "workflows" / "deploy-site.yml").read_text(encoding="utf-8")
+        workflow = (REPO_ROOT / ".github" / "workflows" / "deploy-site.yml").read_text(encoding="utf-8")
         source = script_source("pipeline.py")
         self.assertIn("npm run build --prefix website", workflow)
         self.assertIn('["npm", "run", "build", "--prefix", "website"]', source)
@@ -1136,7 +1136,7 @@ class TheReleaseBuildsEveryServedPackInOneRun(unittest.TestCase):
     the consistency check between verify and the pack never covered it."""
 
     def test_the_pipeline_step_covers_every_platform(self):
-        page = (ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")
+        page = (REPO_ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")
         self.assertIn("python scripts/pipeline.py\n", page)
         self.assertNotIn("generate_pack.py --platform retropie", page)
 
@@ -1152,8 +1152,8 @@ class PlatformSystemTypoGetsTheClosestNames(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp, \
                 contextlib.redirect_stdout(out):
             result = platformpack.generate_pack(
-                "retroarch", str(ROOT / "platforms"), {"files": {}, "indexes": {}},
-                str(ROOT / "bios"), tmp, emulators_dir=str(ROOT / "emulators"),
+                "retroarch", str(REPO_ROOT / "platforms"), {"files": {}, "indexes": {}},
+                str(REPO_ROOT / "bios"), tmp, emulators_dir=str(REPO_ROOT / "emulators"),
                 system_filter=["sony-playstaton"], offline=True,
             )
         self.assertIsNone(result)
@@ -1194,7 +1194,7 @@ class HashInputNamesWhatItAccepts(unittest.TestCase):
     def test_a_sha256_finds_its_file(self):
         from scripts.resolve.packfiles import sha1_for_hash
 
-        db = json.loads((ROOT / "database.json").read_text(encoding="utf-8"))
+        db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
         sha1, entry = next(
             (k, e) for k, e in db["files"].items() if e.get("sha256")
         )
@@ -1251,9 +1251,9 @@ class PipelineOutputDirIsTheOneItWrites(unittest.TestCase):
     def test_the_default_is_the_root_dist_wherever_the_run_starts(self):
         previous = os.getcwd()
         self.addCleanup(os.chdir, previous)
-        os.chdir(ROOT / "scripts")
-        self.assertEqual(runner.pack_output_dir(None), str(ROOT / "dist"))
-        self.assertEqual(runner.pack_output_dir("out"), str(ROOT / "scripts" / "out"))
+        os.chdir(REPO_ROOT / "scripts")
+        self.assertEqual(runner.pack_output_dir(None), str(REPO_ROOT / "dist"))
+        self.assertEqual(runner.pack_output_dir("out"), str(REPO_ROOT / "scripts" / "out"))
 
     def test_main_resolves_it_before_the_lock(self):
         source = script_source("pipeline.py")
@@ -1279,7 +1279,7 @@ class ToolsRunFromAnyDirectory(unittest.TestCase):
         for script in ("verify.py", "generate_pack.py"):
             with self.subTest(script=script):
                 proc = self._run(
-                    ROOT / "scripts", str(ROOT / "scripts" / script),
+                    REPO_ROOT / "scripts", str(REPO_ROOT / "scripts" / script),
                     "--platform", "RetroArch", "--list-systems",
                 )
                 self.assertEqual(proc.returncode, 0, proc.stderr)
@@ -1289,7 +1289,7 @@ class ToolsRunFromAnyDirectory(unittest.TestCase):
     def test_a_typed_path_is_read_from_where_it_was_typed(self):
         with tempfile.TemporaryDirectory() as tmp:
             proc = self._run(
-                Path(tmp), str(ROOT / "scripts" / "generate_pack.py"),
+                Path(tmp), str(REPO_ROOT / "scripts" / "generate_pack.py"),
                 "--manifest-targets", "--output-dir", "lists",
             )
             self.assertEqual(proc.returncode, 0, proc.stderr)
@@ -1306,7 +1306,7 @@ class ATargetTypoIsAnErrorInEveryTool(unittest.TestCase):
                 proc = subprocess.run(
                     [sys.executable, f"scripts/{script}", "--platform", "retroarch",
                      "--target", "swich"],
-                    cwd=ROOT, capture_output=True, text=True, timeout=300,
+                    cwd=REPO_ROOT, capture_output=True, text=True, timeout=300,
                     check=False,
                 )
                 output = proc.stdout + proc.stderr
@@ -1327,7 +1327,7 @@ class AnUnknownSystemIsRefusedBeforeAnyWork(unittest.TestCase):
                 proc = subprocess.run(
                     [sys.executable, "scripts/generate_pack.py", "--platform", "batocera",
                      "--system", "playstaton-nothing", "--output-dir", str(out)],
-                    cwd=ROOT, capture_output=True, text=True, timeout=120,
+                    cwd=REPO_ROOT, capture_output=True, text=True, timeout=120,
                     check=False,
                 )
             self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
@@ -1345,7 +1345,7 @@ class AnUnknownSystemIsRefusedBeforeAnyWork(unittest.TestCase):
         parser = argparse.ArgumentParser()
         args = argparse.Namespace(
             system="sony-playstation", platform="retroarch", all=False,
-            platforms_dir=str(ROOT / "platforms"), manifest=False,
+            platforms_dir=str(REPO_ROOT / "platforms"), manifest=False,
         )
         self.assertEqual(resolve_system_ids(args, parser), ["sony-playstation"])
 

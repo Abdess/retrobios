@@ -23,7 +23,7 @@ from pathlib import Path
 from unittest import mock
 
 import install
-from tests.test_install_selection import FakeRepository
+from tests.installsupport import AppRepository, FakeRepository, make_card
 from tests.netguard import module_guard
 from tests.tuisupport import (
     DOWN, fresh_state, HOME, Pty, pty, pyte, REPO_ROOT, RIGHT, SaveDirectoryRepository, sgr,
@@ -116,8 +116,6 @@ class EndToEnd(unittest.TestCase):
 
 
     def card_repo(self, system: str) -> tuple[Path, Path]:
-        from tests.test_install_app import AppRepository, make_card
-
         repo = self.repo(AppRepository)
         root = repo.root / "card"
         return root, make_card(root, system)
@@ -1132,8 +1130,6 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
         term.close()
 
     def test_the_game_data_row_keeps_the_ticks_to_the_install(self):
-        from tests.test_tui_pty import GameDataRepository
-
         repo = self.repo(GameDataRepository)
         term = self.start()
         term.wait("> Install")

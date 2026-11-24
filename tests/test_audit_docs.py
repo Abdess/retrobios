@@ -15,7 +15,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 import yaml
-from tests.auditsupport import ROOT
+from tests import REPO_ROOT
 
 
 class ReadmeRegressions(unittest.TestCase):
@@ -27,7 +27,7 @@ class ReadmeRegressions(unittest.TestCase):
     """
 
     def _quick_install(self) -> str:
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
         return readme.split("## Install in one line", 1)[1].split(
             "## Or download a ZIP", 1
         )[0]
@@ -45,16 +45,16 @@ class ReadmeRegressions(unittest.TestCase):
         commit = "0" * 40
         for name in sitebootstrap.SOURCES:
             self.assertIn(sitebootstrap.installer_url(commit),
-                          sitebootstrap.served_text(name, ROOT, commit))
+                          sitebootstrap.served_text(name, REPO_ROOT, commit))
         self.assertIn(
             "https://raw.githubusercontent.com/Abdess/retrobios/main/install.py",
-            (ROOT / "install.sh").read_text(encoding="utf-8"),
+            (REPO_ROOT / "install.sh").read_text(encoding="utf-8"),
         )
 
     def test_advertised_installer_flags_exist(self):
         quick_install = self._quick_install()
         advertised = set(re.findall(r"(?<![\w-])--[a-z][a-z-]+", quick_install))
-        parser_source = (ROOT / "install.py").read_text(encoding="utf-8")
+        parser_source = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
         supported = set(re.findall(r'add_argument\(\s*"(--[a-z][a-z-]+)"', parser_source))
         unknown = advertised - supported
         self.assertEqual(unknown, set(), f"README advertises unknown flags: {unknown}")
@@ -64,13 +64,13 @@ class ReadmeRegressions(unittest.TestCase):
         generate_pack, and a 3.10 one through six steps to fail at step 7."""
         floor = re.search(
             r"sys\.version_info < \((\d+), (\d+)\)",
-            (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8"),
+            (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8"),
         )
         self.assertIsNotNone(floor, "pipeline.py checks no interpreter version")
         version = f"Python {floor.group(1)}.{floor.group(2)}"
         for page in ("README.md", "wiki/tools.md", "wiki/testing-guide.md"):
             with self.subTest(page=page):
-                self.assertIn(version, (ROOT / page).read_text(encoding="utf-8"))
+                self.assertIn(version, (REPO_ROOT / page).read_text(encoding="utf-8"))
         self.assertIn(
             version, script_source("generate_readme.py")
         )
@@ -87,7 +87,7 @@ class ReadmeRegressions(unittest.TestCase):
         # rebuild database.json under an interpreter missing pyyaml.
         proc = subprocess.run(
             [python38, "-I", "scripts/pipeline.py", "--help"],
-            cwd=ROOT, capture_output=True, text=True, timeout=60, check=False,
+            cwd=REPO_ROOT, capture_output=True, text=True, timeout=60, check=False,
         )
         self.assertEqual(proc.returncode, 1)
         self.assertIn("needs Python 3.9", proc.stderr)
@@ -104,7 +104,7 @@ class ReadmeRegressions(unittest.TestCase):
             self.skipTest("no python3.8 on PATH")
         proc = subprocess.run(
             [python38, "-I", "scripts/generate_pack.py", "--help"],
-            cwd=ROOT, capture_output=True, text=True, timeout=60, check=False,
+            cwd=REPO_ROOT, capture_output=True, text=True, timeout=60, check=False,
         )
         self.assertEqual(proc.returncode, 1)
         self.assertNotIn("SyntaxError", proc.stderr)
@@ -138,7 +138,7 @@ class ReadmeRegressions(unittest.TestCase):
                 # sys.path, so the imports would fail before any check.
                 proc = subprocess.run(
                     [python38, "-E", "-s", f"scripts/{command[0]}", *command[1:]],
-                    cwd=ROOT, capture_output=True, text=True, timeout=60,
+                    cwd=REPO_ROOT, capture_output=True, text=True, timeout=60,
                     check=False,
                 )
                 self.assertEqual(proc.returncode, 1, proc.stderr)
@@ -155,7 +155,7 @@ class ReadmeRegressions(unittest.TestCase):
 
         floor = re.search(
             r"sys\.version_info < \((\d+), (\d+)\)",
-            (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8"),
+            (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8"),
         )
         name = f"python{floor.group(1)}.{floor.group(2)}"
         interpreter = shutil.which(name)
@@ -180,7 +180,7 @@ class ReadmeRegressions(unittest.TestCase):
             "print(json.dumps(failed))\n"
         )
         proc = subprocess.run(
-            [interpreter, "-I", "-c", check], cwd=ROOT, capture_output=True,
+            [interpreter, "-I", "-c", check], cwd=REPO_ROOT, capture_output=True,
             text=True, timeout=600, check=False,
             env={**os.environ, "RETROBIOS_OFFLINE": "1"},
         )
@@ -209,7 +209,7 @@ class PackReadmesSayWhatTheInstallerDoes(unittest.TestCase):
     def _guide(self, platform: str) -> str:
         from packs.readme import build_readme
 
-        registry = yaml.safe_load((ROOT / "platforms" / "_registry.yml").read_text())
+        registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text())
         install = registry["platforms"][platform].get("install") or {}
         text = build_readme(platform, platform, "", 1, 1,
                              detect=install.get("detect", []),
@@ -230,7 +230,7 @@ class PackReadmesSayWhatTheInstallerDoes(unittest.TestCase):
         self.assertIn("--standalone-copies", guide)
         self.assertNotIn("emulator keys automatically", guide)
         self.assertNotIn("handles this for you", guide)
-        with (ROOT / "platforms" / "_registry.yml").open(encoding="utf-8") as handle:
+        with (REPO_ROOT / "platforms" / "_registry.yml").open(encoding="utf-8") as handle:
             registry = yaml.safe_load(handle)
         targets = {
             target.rstrip("/").replace("$HOME", "~")
@@ -263,13 +263,13 @@ class FaqRegressions(unittest.TestCase):
     def _faq() -> str:
         # The questions about hashes and checks moved to the technical FAQ.
         return "\n\n".join(
-            (ROOT / "wiki" / name).read_text(encoding="utf-8")
+            (REPO_ROOT / "wiki" / name).read_text(encoding="utf-8")
             for name in ("faq.md", "technical-faq.md")
         )
 
     @staticmethod
     def _profile(key: str) -> dict:
-        with (ROOT / "emulators" / f"{key}.yml").open(encoding="utf-8") as handle:
+        with (REPO_ROOT / "emulators" / f"{key}.yml").open(encoding="utf-8") as handle:
             return yaml.safe_load(handle)
 
     def test_the_romset_table_is_written_from_the_profiles(self):
@@ -279,8 +279,8 @@ class FaqRegressions(unittest.TestCase):
         from sitegen import emulatormetadata
         from model.profiles import load_emulator_profiles
 
-        profiles = load_emulator_profiles(str(ROOT / "emulators"), skip_aliases=False)
-        page = (ROOT / "wiki" / "technical-faq.md").read_text(encoding="utf-8")
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False)
+        page = (REPO_ROOT / "wiki" / "technical-faq.md").read_text(encoding="utf-8")
         self.assertEqual(
             page, emulatormetadata.with_romset_table(page, profiles),
             "wiki/technical-faq.md romset table is stale: run scripts/generate_site.py",
@@ -303,7 +303,7 @@ class FaqRegressions(unittest.TestCase):
             "IPL.bin gained an Adler-32 hash, but the docs say it has none",
         )
         for page in ("faq.md", "profiling.md"):
-            text = (ROOT / "wiki" / page).read_text(encoding="utf-8")
+            text = (REPO_ROOT / "wiki" / page).read_text(encoding="utf-8")
             for line in text.splitlines():
                 if "Adler-32" in line or "adler32" in line:
                     self.assertNotIn(
@@ -390,11 +390,11 @@ class CatalogRatioRegressions(unittest.TestCase):
         from scripts.model.composition import compute_composition, count_catalog_matched
         from scripts.model.database import load_database
 
-        database = ROOT / "database.json"
+        database = REPO_ROOT / "database.json"
         if not database.exists():
             self.skipTest("database.json not generated")
         db = load_database(str(database))
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
         match = re.search(
             r"\*\*([\d,]+) of ([\d,]+) system files\*\* matched to", readme
         )
@@ -454,7 +454,7 @@ class ContributorsSurviveAFailedRequest(unittest.TestCase):
 
     def test_the_committed_readme_still_carries_its_contributors(self):
         """Regenerating offline must never be the reason this disappears."""
-        text = (ROOT / "README.md").read_text()
+        text = (REPO_ROOT / "README.md").read_text()
         # Missing is the failure this guards, never a reason to skip.
         self.assertIn("## Contributors", text)
         self.assertGreater(
@@ -542,7 +542,7 @@ class EveryReadmeNamesItsFolder(unittest.TestCase):
     def test_the_registry_folder_is_in_the_guide(self):
         from scripts.packs.readme import build_readme
 
-        registry = yaml.safe_load((ROOT / "platforms" / "_registry.yml").read_text())
+        registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text())
         for name, entry in registry["platforms"].items():
             folder = (entry.get("extract_to") or "").rstrip("/")
             if not folder:
@@ -563,7 +563,7 @@ class TheToolsPageSaysWhatDedupDoes(unittest.TestCase):
         from scripts.model import nodedup
 
         line = next(
-            row for row in (ROOT / "wiki" / "tools.md").read_text().splitlines()
+            row for row in (REPO_ROOT / "wiki" / "tools.md").read_text().splitlines()
             if row.startswith("| `dedup.py`")
         )
         self.assertNotIn(".variants", line)
@@ -578,7 +578,7 @@ class ThePipelineTableNamesEveryStep(unittest.TestCase):
         labels = set(re.findall(
             r'"(\d[a-z]?\d?)(?:/8)? [a-z]', script_source("pipeline.py")
         ))
-        doc = (ROOT / "wiki" / "tools.md").read_text()
+        doc = (REPO_ROOT / "wiki" / "tools.md").read_text()
         documented = set(re.findall(r"^\| (\d[a-z]?\d?)(?:/8)? \|", doc, re.MULTILINE))
         self.assertEqual(labels - documented, set())
 
@@ -588,10 +588,10 @@ class DocumentedHashLookupsFindTheirFile(unittest.TestCase):
     it answered NOT FOUND, which then exited 0."""
 
     def test_every_documented_lookup_is_in_the_database(self):
-        db = json.loads((ROOT / "database.json").read_text(encoding="utf-8"))
+        db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
         by_md5 = db["indexes"]["by_md5"]
         found = 0
-        for page in sorted((ROOT / "wiki").glob("*.md")):
+        for page in sorted((REPO_ROOT / "wiki").glob("*.md")):
             text = page.read_text(encoding="utf-8")
             for md5 in re.findall(r"--from-md5 ([0-9a-f]{32})\b", text):
                 found += 1
@@ -606,17 +606,17 @@ class ToolReferenceListsEveryModule(unittest.TestCase):
     recalbox and rocknix. A contributor reads these tables as the map."""
 
     def _rows(self, heading: str) -> set[str]:
-        text = (ROOT / "wiki" / "tools.md").read_text(encoding="utf-8")
+        text = (REPO_ROOT / "wiki" / "tools.md").read_text(encoding="utf-8")
         section = text.split(f"## {heading}\n", 1)[1].split("\n## ", 1)[0]
         return set(re.findall(r"^\| `(\w+)` \|", section, re.M))
 
     def test_every_exporter_has_a_row(self):
-        modules = {p.stem for p in (ROOT / "scripts" / "exporter").glob("*_exporter.py")}
+        modules = {p.stem for p in (REPO_ROOT / "scripts" / "exporter").glob("*_exporter.py")}
         self.assertEqual(self._rows("Exporters"), modules - {"base_exporter"})
 
     def test_every_target_scraper_has_a_row(self):
         modules = {
-            p.stem for p in (ROOT / "scripts" / "scraper" / "targets").glob("*_targets_scraper.py")
+            p.stem for p in (REPO_ROOT / "scripts" / "scraper" / "targets").glob("*_targets_scraper.py")
         }
         self.assertEqual(self._rows("Target scrapers"), modules)
 
@@ -626,10 +626,10 @@ class ToolReferenceCountsMatchTheirArtifacts(unittest.TestCase):
     archives for 1,181: counts written by hand drift from the tools."""
 
     def setUp(self):
-        self.text = (ROOT / "wiki" / "tools.md").read_text(encoding="utf-8")
+        self.text = (REPO_ROOT / "wiki" / "tools.md").read_text(encoding="utf-8")
 
     def test_recipe_store_counts(self):
-        store = json.loads((ROOT / "recipes" / "mame.json").read_text(encoding="utf-8"))
+        store = json.loads((REPO_ROOT / "recipes" / "mame.json").read_text(encoding="utf-8"))
         versions = {dat for entry in store["entries"] for dat in entry.get("dats") or [entry["dat"]]}
         listed = sum(len(entry.get("dats") or [entry["dat"]]) for entry in store["entries"])
         match = re.search(
@@ -654,7 +654,7 @@ class WikiProseHasNoTornSentence(unittest.TestCase):
                 "If", "They", "These", "That", "There"}
 
     def test_no_line_ends_on_a_function_word_before_a_new_sentence(self):
-        for page in sorted((ROOT / "wiki").glob("*.md")):
+        for page in sorted((REPO_ROOT / "wiki").glob("*.md")):
             lines = page.read_text(encoding="utf-8").splitlines()
             in_code = False
             for number, (line, following) in enumerate(zip(lines, lines[1:]), 1):
@@ -676,18 +676,18 @@ class EveryOptionIsDocumented(unittest.TestCase):
     def test_every_long_option_of_a_tracked_script_is_in_the_docs(self):
         tracked = subprocess.run(
             ["git", "ls-files", "scripts"], capture_output=True, text=True,
-            cwd=str(ROOT), check=True,
+            cwd=str(REPO_ROOT), check=True,
         ).stdout.split()
         docs = "\n".join(
             path.read_text(encoding="utf-8")
-            for path in [*sorted((ROOT / "wiki").glob("*.md")),
-                         ROOT / "README.md", ROOT / "CONTRIBUTING.md"]
+            for path in [*sorted((REPO_ROOT / "wiki").glob("*.md")),
+                         REPO_ROOT / "README.md", REPO_ROOT / "CONTRIBUTING.md"]
         )
         option = re.compile(r'add_argument\(\s*(?:"-\w",\s*)?"(--[\w-]+)"')
         undocumented = sorted(
             f"{name}: {flag}"
             for name in tracked if name.endswith(".py")
-            for flag in set(option.findall((ROOT / name).read_text(encoding="utf-8")))
+            for flag in set(option.findall((REPO_ROOT / name).read_text(encoding="utf-8")))
             if not re.search(re.escape(flag) + r"(?![\w-])", docs)
         )
         self.assertEqual(undocumented, [])
@@ -703,7 +703,7 @@ class OfflineHelpSaysWhatItCuts(unittest.TestCase):
             with self.subTest(script=script):
                 out = subprocess.run(
                     [sys.executable, f"scripts/{script}", "--help"],
-                    capture_output=True, text=True, cwd=str(ROOT), check=True,
+                    capture_output=True, text=True, cwd=str(REPO_ROOT), check=True,
                 ).stdout
                 block = out.split("--offline", 2)[-1].split("\n  --", 1)[0]
                 self.assertIn("release", " ".join(block.split()))
@@ -717,7 +717,7 @@ class PipelineDocstringNamesThePrintedSteps(unittest.TestCase):
     def test_the_two_lists_hold_the_same_steps(self):
         import ast
 
-        source = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
         doc = ast.get_docstring(ast.parse(source))
         listed = set(re.findall(r"^  (\d[a-z0-9]*)\s{2,}", doc, re.M))
         from orchestrate.labels import STEP_LABELS, step_number
@@ -736,7 +736,7 @@ class DocumentedExamplesHoldTogether(unittest.TestCase):
         import fnmatch
         import re
 
-        page = (ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")
+        page = (REPO_ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")
         patterns = re.findall(r"--pattern '([^']*Pack[^']*)'", page)
         self.assertTrue(patterns)
         for name in ("RetroArch_Lakka_v1.22.2_BIOS_Pack.part1of2.zip",
@@ -748,7 +748,7 @@ class DocumentedExamplesHoldTogether(unittest.TestCase):
         import re
 
         # The annotated run moved from First install to the installer page.
-        page = (ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
+        page = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
         downloading = re.search(r"Downloading (\d+) files", page).group(1)
         done = re.search(r"Done\. (\d+) files installed", page).group(1)
         # The data trees come after the download, counted in the index.
@@ -770,9 +770,9 @@ class TheReadmeCountsSystemsAsListSystemsDoes(unittest.TestCase):
 
         out = io.StringIO()
         with redirect_stdout(out):
-            list_system_ids(str(ROOT / "emulators"))
+            list_system_ids(str(REPO_ROOT / "emulators"))
         listed = len(out.getvalue().splitlines())
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
         announced = int(re.search(r"\*\*(\d+) systems\*\*", readme).group(1))
         self.assertEqual(announced, listed)
 
@@ -786,18 +786,18 @@ class DocsDescribeTheRegistriesTheyName(unittest.TestCase):
     SIZE_RULE = re.compile(r"(over|larger than|>)\s*50\s*MB[^\n]*(release|asset)", re.I)
 
     def _texts(self):
-        paths = sorted((ROOT / "wiki").glob("*.md"))
-        paths += [ROOT / "scripts" / "generate_readme.py", ROOT / "CONTRIBUTING.md"]
+        paths = sorted((REPO_ROOT / "wiki").glob("*.md"))
+        paths += [REPO_ROOT / "scripts" / "generate_readme.py", REPO_ROOT / "CONTRIBUTING.md"]
         return [(p, p.read_text(encoding="utf-8")) for p in paths]
 
     def test_no_page_says_size_decides_a_release_asset(self):
-        offenders = [str(p.relative_to(ROOT)) for p, text in self._texts()
+        offenders = [str(p.relative_to(REPO_ROOT)) for p, text in self._texts()
                      if self.SIZE_RULE.search(text)]
         self.assertEqual(offenders, [])
 
     def test_the_dedup_list_is_named_whole_or_by_its_constant(self):
         from model.nodedup import NODEDUP_DIRS
-        tools = (ROOT / "wiki" / "tools.md").read_text(encoding="utf-8")
+        tools = (REPO_ROOT / "wiki" / "tools.md").read_text(encoding="utf-8")
         line = next(entry for entry in tools.splitlines() if "NODEDUP_DIRS" in entry)
         # Compared as list items: `mame` was missing while the substring
         # test found it in `_mame_clones.json` on the same line.
@@ -817,7 +817,7 @@ class SkipPacksHelpSaysWhatRuns(unittest.TestCase):
     def test_the_help_names_the_steps_that_still_run(self):
         proc = subprocess.run(
             [sys.executable, "scripts/pipeline.py", "--help"],
-            cwd=ROOT, capture_output=True, text=True, timeout=60, check=True,
+            cwd=REPO_ROOT, capture_output=True, text=True, timeout=60, check=True,
         )
         text = " ".join(proc.stdout.split())
         self.assertNotIn("Only regenerate DB and verify", text)

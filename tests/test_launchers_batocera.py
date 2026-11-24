@@ -28,6 +28,7 @@ from scraper.batocera_launchers import (
 from scraper.batocera_searches import duckstation, hatari
 from scraper.batocera_config_writes import lexaloffle
 from scraper.retropie_scripts import Launcher as PackageLauncher
+from tests.launcherssupport import placed
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -300,17 +301,6 @@ class LexaloffleGenerator(Generator):
 
     def getInGameRatio(self, config, gameResolution, rom):
         return 4/3'''
-
-
-def placed(blocks: dict[int, str]) -> str:
-    """Each block starting at its line, blank lines between."""
-    lines: list[str] = []
-    for start, block in sorted(blocks.items()):
-        if len(lines) >= start:
-            raise AssertionError(f"block at line {start} overlaps the previous one")
-        lines += [""] * (start - 1 - len(lines))
-        lines += block.splitlines()
-    return "\n".join(lines) + "\n"
 
 
 def configgen(files: dict[str, str]) -> Configgen:

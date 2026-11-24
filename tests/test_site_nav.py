@@ -41,56 +41,15 @@ from sitegen import parts
 from sitegen import starlight as sitestarlight
 from sitegen import sidebartopics
 from core import anchors as core_anchors
-from model.registry import list_registered_platforms, load_platform_registry
-from model.platforms import load_platform_config
+from model.registry import list_registered_platforms
 
-from sitegen.guidedata import device_groups
+from tests.sitepages import ANCHORS, DIST, _index_anchors, _nav, _present
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
-DIST = REPO_ROOT / "website" / "dist"
 ROUTE = REPO_ROOT / "website" / "src" / "routeData.ts"
 TAB_ROOTS = {"/retrobios/", "/retrobios/platforms/", "/retrobios/explore/",
              "/retrobios/wiki/", "/retrobios/contributing/"}
-def _nav() -> list:
-    platforms = REPO_ROOT / "platforms"
-    registry = load_platform_registry(str(platforms))
-    coverages = {
-        key: {"platform": load_platform_config(key, str(platforms))["platform"]}
-        for key in list_registered_platforms(str(platforms))
-    }
-    manufacturers = {"Sony": {}, "Sega": {}, "ScummVM": {}}
-    profiles = {
-        "duckstation": {"emulator": "DuckStation", "systems": ["sony-playstation"]},
-        "dolphin": {"emulator": "Dolphin", "systems": ["nintendo-gamecube"]},
-        "mame": {"emulator": "MAME", "systems": ["arcade"]},
-    }
-    return sitegen_nav.generate_nav(coverages, manufacturers, profiles, registry)
-def _targets(value: object) -> set[str]:
-    if isinstance(value, str):
-        return {value}
-    if isinstance(value, list):
-        return set().union(*(_targets(v) for v in value)) if value else set()
-    return set().union(*(_targets(v) for v in value.values()))
-def _present(nav: list) -> set[str]:
-    return {t for t in _targets(nav) if not t.startswith("http")}
-
-
-def _index_anchors(markdown: str) -> set[str]:
-    """The heading ids a generated page carries once written."""
-    _title, title_id, body = sitestarlight.split_title(markdown)
-    return sitestarlight.heading_ids(sitestarlight.pin_heading_ids(body, title_id))
-
-
-ANCHORS = {
-    "platforms/index.md": {core_anchors.toc_slug(label) for label, _ in device_groups().values()},
-    "systems/index.md": {"consoles-and-computers"},
-    "emulators/index.md": _index_anchors(emulatorsindex.generate_emulators_index({
-        "duckstation": {"emulator": "DuckStation", "systems": ["sony-playstation"]},
-        "dolphin": {"emulator": "Dolphin", "systems": ["nintendo-gamecube"]},
-        "mame": {"emulator": "MAME", "systems": ["arcade"]},
-    })),
-}
 
 
 class NotFoundPage(unittest.TestCase):
@@ -362,7 +321,6 @@ class PlatformShareCards(unittest.TestCase):
         self.assertEqual(shared["twitter:title"], "mGBA BIOS files")
         plain = sitestarlight.page_head("wiki/faq.md", "start", "FAQ", "FAQ", {})
         self.assertFalse(any(tag.get("attrs", {}).get("property") == "og:title" for tag in plain))
-
 
 
 # The built site

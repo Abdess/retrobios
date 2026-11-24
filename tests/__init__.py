@@ -13,6 +13,7 @@ temporary directory instead of naming the missing parent.
 
 from __future__ import annotations
 
+import importlib.util
 import os
 import shutil
 import sys
@@ -27,10 +28,13 @@ os.environ.setdefault("RETROBIOS_OFFLINE", "1")
 ONLINE = mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""})
 # The modules under test import each other by bare name (common, verify), as
 # the scripts do when run from scripts/, and install.py sits at the root.
-_REPOSITORY = Path(__file__).resolve().parent.parent
-for _path in (str(_REPOSITORY), str(_REPOSITORY / "scripts")):
+REPO_ROOT = Path(__file__).resolve().parent.parent
+for _path in (str(REPO_ROOT), str(REPO_ROOT / "scripts")):
     if _path not in sys.path:
         sys.path.insert(0, _path)
+# jsonschema is a tooling dependency: the tests that validate a schema skip
+# without it.
+HAS_JSONSCHEMA = importlib.util.find_spec("jsonschema") is not None
 # The installer reads the XDG base directories as RetroArch and the
 # emulators do. The CI runner sets XDG_CONFIG_HOME to its own home, so tests
 # that fake HOME found the runner's folders instead of theirs. A test that
@@ -48,7 +52,7 @@ os.environ.setdefault("RETROBIOS_PROBE_LOCK", str(_SCRATCH / "probe.lock"))
 # The repository's own hold (database.json, install/, README.md) too: a
 # pipeline run by one module no longer refuses another module's, nor the
 # maintainer's real run beside the suite.
-os.environ.setdefault("RETROBIOS_REPOSITORY_LOCK_DIR", str(_SCRATCH / "repository-lock"))
+os.environ.setdefault("RETROBIOSREPO_ROOT_LOCK_DIR", str(_SCRATCH / "repository-lock"))
 # A TemporaryDirectory() without dir= landed in /tmp, a 4 GB tmpfs here: once
 # another run filled it, modules unrelated to any change failed with ENOSPC.
 # The default is the repository's tmp/, for this process and its children.

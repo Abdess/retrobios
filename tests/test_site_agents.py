@@ -6,6 +6,7 @@ the fewest files the games need, and every address they give must exist.
 from __future__ import annotations
 
 import tests
+from tests.sitepages import DIST
 
 import re
 import unittest
@@ -15,7 +16,6 @@ from sitegen import agents as siteagents
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-DIST = REPO_ROOT / "website" / "dist"
 TOOLS = REPO_ROOT / "website" / "src" / "scripts" / "agent-tools.ts"
 FOOTER = REPO_ROOT / "website" / "src" / "components" / "Footer.astro"
 CONFIG = REPO_ROOT / "website" / "astro.config.mjs"

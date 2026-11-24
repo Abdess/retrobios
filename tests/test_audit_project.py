@@ -16,7 +16,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 import yaml
-from tests.auditsupport import HAS_JSONSCHEMA, ROOT, jsonschema
+from tests import HAS_JSONSCHEMA, REPO_ROOT
 
 
 class AModuleRunAloneHasItsScratchDirectory(unittest.TestCase):
@@ -29,7 +29,7 @@ class AModuleRunAloneHasItsScratchDirectory(unittest.TestCase):
             clone = Path(directory)
             (clone / "tests").mkdir()
             (clone / "tests" / "__init__.py").write_bytes(
-                (ROOT / "tests" / "__init__.py").read_bytes()
+                (REPO_ROOT / "tests" / "__init__.py").read_bytes()
             )
             # The folder a module gets alone, not the one scripts/run_tests.py
             # names for each module it runs beside others.
@@ -56,7 +56,7 @@ class EveryTestModuleImportsTheIsolation(unittest.TestCase):
 
     def test_the_package_import_comes_before_any_other(self):
         missing = []
-        for path in sorted((ROOT / "tests").glob("test_*.py")):
+        for path in sorted((REPO_ROOT / "tests").glob("test_*.py")):
             body = ast.parse(path.read_text(encoding="utf-8")).body
             imports = [
                 node for node in body
@@ -79,14 +79,14 @@ class EveryTestModuleImportsTheIsolation(unittest.TestCase):
              "unittest.TestLoader().discover('tests', pattern='test_artifact_lock.py')\n"
              "print(os.environ.get('RETROBIOS_OFFLINE'), tempfile.gettempdir(),"
              " os.environ.get('RETROBIOS_CACHE'))\n"],
-            cwd=ROOT, env=env, capture_output=True, text=True, timeout=120,
+            cwd=REPO_ROOT, env=env, capture_output=True, text=True, timeout=120,
             check=False,
         )
         self.assertEqual(proc.returncode, 0, proc.stderr)
         offline, scratch, cache = proc.stdout.split()
         self.assertEqual(offline, "1")
-        self.assertEqual(scratch, str(ROOT / "tmp" / "tests"))
-        self.assertEqual(cache, str(ROOT / "tmp" / "tests" / "cache"))
+        self.assertEqual(scratch, str(REPO_ROOT / "tmp" / "tests"))
+        self.assertEqual(cache, str(REPO_ROOT / "tmp" / "tests" / "cache"))
 
 
 class ReleaseSigningRegressions(unittest.TestCase):
@@ -101,7 +101,7 @@ class ReleaseSigningRegressions(unittest.TestCase):
     PRINCIPAL = "releases@retrobios"
 
     def test_allowed_signers_names_one_usable_key(self):
-        path = ROOT / "allowed_signers"
+        path = REPO_ROOT / "allowed_signers"
         self.assertTrue(path.exists(), "allowed_signers is the published trust root")
         lines = [
             line for line in path.read_text(encoding="utf-8").splitlines()
@@ -115,7 +115,7 @@ class ReleaseSigningRegressions(unittest.TestCase):
             self.assertTrue(len(blob) > 40, "key material looks truncated")
 
     def test_the_release_signs_the_list_and_ships_the_signature(self):
-        process = (ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")
+        process = (REPO_ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")
         self.assertIn(
             "ssh-keygen -Y sign", process, "the release no longer signs the list"
         )
@@ -129,7 +129,7 @@ class ReleaseSigningRegressions(unittest.TestCase):
         )
 
     def test_the_documented_verification_matches_the_published_principal(self):
-        process = (ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")
+        process = (REPO_ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")
         self.assertIn("ssh-keygen -Y verify", process)
         self.assertIn(f"-I {self.PRINCIPAL}", process)
         self.assertIn("allowed_signers", process)
@@ -145,7 +145,7 @@ class WorkflowRegressions(unittest.TestCase):
 
     @staticmethod
     def _workflow(name: str) -> dict:
-        with (ROOT / ".github" / "workflows" / name).open(encoding="utf-8") as f:
+        with (REPO_ROOT / ".github" / "workflows" / name).open(encoding="utf-8") as f:
             document = yaml.safe_load(f)
         # PyYAML resolves the bare `on:` key to the boolean True.
         document["on"] = document.pop(True, document.get("on"))
@@ -244,7 +244,7 @@ class WorkflowRegressions(unittest.TestCase):
 
     def test_no_workflow_relies_on_a_yaml_anchor(self):
         """The workflow parser reads no anchor, and PyYAML would hide the break."""
-        for path in sorted((ROOT / ".github" / "workflows").glob("*.yml")):
+        for path in sorted((REPO_ROOT / ".github" / "workflows").glob("*.yml")):
             for number, line in enumerate(
                 path.read_text(encoding="utf-8").splitlines(), 1
             ):
@@ -264,7 +264,7 @@ class PatchesTargetWhatRuns(unittest.TestCase):
     def test_no_test_creates_the_attribute_it_patches(self):
         needle = "create" + "=True"
         offenders = []
-        for path in sorted((ROOT / "tests").glob("test_*.py")):
+        for path in sorted((REPO_ROOT / "tests").glob("test_*.py")):
             for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
                 code = line.split("#", 1)[0]
                 if needle in code:
@@ -282,7 +282,7 @@ class NoParserAcceptsAnAbbreviation(unittest.TestCase):
         import ast
 
         lax = []
-        for path in sorted([*(ROOT / "scripts").rglob("*.py"), ROOT / "install.py"]):
+        for path in sorted([*(REPO_ROOT / "scripts").rglob("*.py"), REPO_ROOT / "install.py"]):
             for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
                 if not isinstance(node, ast.Call):
                     continue
@@ -295,7 +295,7 @@ class NoParserAcceptsAnAbbreviation(unittest.TestCase):
                     and isinstance(kw.value, ast.Constant) and kw.value.value is False
                     for kw in node.keywords
                 ):
-                    lax.append(f"{path.relative_to(ROOT)}:{node.lineno}")
+                    lax.append(f"{path.relative_to(REPO_ROOT)}:{node.lineno}")
         self.assertEqual(lax, [])
 
 
@@ -314,7 +314,7 @@ class SchemaFormatsAreChecked(unittest.TestCase):
     def test_every_install_asks_for_the_extras(self):
         for path in (".github/workflows/validate.yml", ".github/workflows/deploy-site.yml",
                      "pyproject.toml"):
-            text = (ROOT / path).read_text(encoding="utf-8")
+            text = (REPO_ROOT / path).read_text(encoding="utf-8")
             with self.subTest(path=path):
                 self.assertNotRegex(text, r"jsonschema(?!\[format)[=>]")
 
@@ -328,7 +328,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
     """
 
     def _steps(self, workflow: str, job: str) -> list[dict]:
-        data = yaml.safe_load((ROOT / ".github" / "workflows" / workflow).read_text())
+        data = yaml.safe_load((REPO_ROOT / ".github" / "workflows" / workflow).read_text())
         return data["jobs"][job]["steps"]
 
     def _index(self, steps: list[dict], needle: str) -> int:
@@ -385,7 +385,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
             with self.assertRaises(FileNotFoundError):
                 gitignored_paths(missing)
             proc = subprocess.run(
-                [sys.executable, str(ROOT / "scripts" / "restore_large_files.py"),
+                [sys.executable, str(REPO_ROOT / "scripts" / "restore_large_files.py"),
                  "--gitignore", missing, "--cache", directory],
                 capture_output=True, text=True, timeout=120,
                 check=False,
@@ -494,7 +494,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
                 }}),
                 encoding="utf-8",
             )
-            command = [sys.executable, str(ROOT / "scripts" / "restore_large_files.py")]
+            command = [sys.executable, str(REPO_ROOT / "scripts" / "restore_large_files.py")]
             proc = subprocess.run(
                 [*command, "--cache", "cache"],
                 capture_output=True, text=True, cwd=str(root), timeout=120,
@@ -533,14 +533,14 @@ class PreservedBytesAreNeverNormalised(unittest.TestCase):
 
         out = subprocess.run(
             ["git", "check-attr", "text", "--", path],
-            capture_output=True, text=True, cwd=ROOT,
+            capture_output=True, text=True, cwd=REPO_ROOT,
             check=False,
         ).stdout
         return out.rsplit(":", 1)[-1].strip()
 
     def test_gitattributes_exists(self):
         self.assertTrue(
-            (ROOT / ".gitattributes").is_file(),
+            (REPO_ROOT / ".gitattributes").is_file(),
             "without it git guesses, and guesses wrong on Windows",
         )
 
@@ -642,7 +642,7 @@ class AMissingDependencyStopsTheBuild(unittest.TestCase):
             proc = subprocess.run(
                 [sys.executable, "-S", "scripts/generate_db.py", "--force",
                  "--bios-dir", "bios", "--output", str(output)],
-                cwd=ROOT, capture_output=True, text=True, timeout=600, check=False,
+                cwd=REPO_ROOT, capture_output=True, text=True, timeout=600, check=False,
             )
             self.assertNotEqual(proc.returncode, 0, proc.stdout)
             self.assertIn("PyYAML required", proc.stderr)
@@ -655,7 +655,7 @@ class AMissingDependencyStopsTheBuild(unittest.TestCase):
             with self.subTest(command=command[0]):
                 proc = subprocess.run(
                     [sys.executable, "-S", *command],
-                    cwd=ROOT, capture_output=True, text=True, timeout=120, check=False,
+                    cwd=REPO_ROOT, capture_output=True, text=True, timeout=120, check=False,
                 )
                 self.assertEqual(proc.returncode, 1, proc.stdout)
                 self.assertEqual(
@@ -664,10 +664,10 @@ class AMissingDependencyStopsTheBuild(unittest.TestCase):
 
     def test_no_script_swallows_an_import_error(self):
         offenders = []
-        for path in sorted((ROOT / "scripts").rglob("*.py")):
+        for path in sorted((REPO_ROOT / "scripts").rglob("*.py")):
             tree = ast.parse(path.read_text(encoding="utf-8"))
             offenders.extend(
-                f"{path.relative_to(ROOT)}:{node.lineno}"
+                f"{path.relative_to(REPO_ROOT)}:{node.lineno}"
                 for node in ast.walk(tree)
                 if (
                     isinstance(node, ast.ExceptHandler)
@@ -685,7 +685,7 @@ class TestsCleanUpTheirScratch(unittest.TestCase):
 
     def test_every_class_that_makes_a_directory_removes_it(self):
         offenders = []
-        for path in sorted((ROOT / "tests").glob("test_*.py")):
+        for path in sorted((REPO_ROOT / "tests").glob("test_*.py")):
             source = path.read_text(encoding="utf-8")
             for node in ast.parse(source).body:
                 if not isinstance(node, ast.ClassDef):
@@ -710,7 +710,7 @@ class DeclaredDependenciesMatchTheDocumentedWorkflows(unittest.TestCase):
     def _pyproject() -> dict:
         import tomllib
 
-        with (ROOT / "pyproject.toml").open("rb") as handle:
+        with (REPO_ROOT / "pyproject.toml").open("rb") as handle:
             return tomllib.load(handle)
 
     def test_every_package_ci_installs_is_declared(self):
@@ -723,7 +723,7 @@ class DeclaredDependenciesMatchTheDocumentedWorkflows(unittest.TestCase):
         declared |= set(self._pyproject()["project"]["dependencies"])
         installed: set[str] = set()
         for workflow in ("validate.yml", "deploy-site.yml"):
-            body = (ROOT / ".github" / "workflows" / workflow).read_text(
+            body = (REPO_ROOT / ".github" / "workflows" / workflow).read_text(
                 encoding="utf-8"
             )
             for line in body.splitlines():
@@ -749,12 +749,12 @@ class TheAnnotationsAreChecked(unittest.TestCase):
     type error, and CI runs mypy bare, so any new one fails."""
 
     def test_ci_runs_mypy_without_a_baseline(self):
-        body = (ROOT / ".github" / "workflows" / "validate.yml").read_text(
+        body = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(
             encoding="utf-8"
         )
         self.assertRegex(body, r"(?m)^\s+mypy$")
         self.assertNotIn("mypy-baseline", body)
-        self.assertFalse((ROOT / "mypy-baseline.txt").exists())
+        self.assertFalse((REPO_ROOT / "mypy-baseline.txt").exists())
 
     def test_the_code_reports_no_type_error(self):
         try:
@@ -763,7 +763,7 @@ class TheAnnotationsAreChecked(unittest.TestCase):
             self.skipTest("mypy is not installed (pip install -e '.[dev]')")
         report = subprocess.run(
             [sys.executable, "-m", "mypy"],
-            cwd=ROOT, capture_output=True, text=True, check=False,
+            cwd=REPO_ROOT, capture_output=True, text=True, check=False,
         )
         self.assertEqual(report.returncode, 0, report.stdout[-4000:])
 
@@ -789,13 +789,13 @@ class TheProjectInstallsWithPip(unittest.TestCase):
             "dist.set_defaults()\n"
             "print(sorted(dist.packages or []), sorted(dist.py_modules or []))\n"
         )
-        done = subprocess.run([sys.executable, "-c", program], cwd=ROOT,
+        done = subprocess.run([sys.executable, "-c", program], cwd=REPO_ROOT,
                               capture_output=True, text=True, check=False)
         self.assertEqual(done.returncode, 0, done.stderr[-2000:])
         self.assertEqual(done.stdout.strip(), "[] []")
         import tomllib
 
-        with (ROOT / "pyproject.toml").open("rb") as handle:
+        with (REPO_ROOT / "pyproject.toml").open("rb") as handle:
             build = tomllib.load(handle)["build-system"]
         self.assertEqual(build["build-backend"], "setuptools.build_meta")
 
@@ -809,7 +809,7 @@ class TestEntryPointsRunEveryClass(unittest.TestCase):
     """
 
     def test_no_module_calls_main_before_its_last_class(self):
-        for path in sorted((ROOT / "tests").glob("test_*.py")):
+        for path in sorted((REPO_ROOT / "tests").glob("test_*.py")):
             lines = path.read_text(encoding="utf-8").splitlines()
             # Column zero only: the same text appears inside this very test as
             # a string literal, and a substring search matched that instead.
@@ -845,7 +845,7 @@ class ScriptsImportThreeWays(unittest.TestCase):
 
         return subprocess.run(
             [sys.executable, *args],
-            capture_output=True, text=True, cwd=str(ROOT), timeout=300,
+            capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=300,
             check=False,
         )
 
@@ -873,7 +873,7 @@ class NoHandlerSwallowsEverything(unittest.TestCase):
         import ast
 
         offenders = []
-        for path in [*sorted((ROOT / "scripts").rglob("*.py")), ROOT / "install.py"]:
+        for path in [*sorted((REPO_ROOT / "scripts").rglob("*.py")), REPO_ROOT / "install.py"]:
             tree = ast.parse(path.read_text(encoding="utf-8"))
             for node in ast.walk(tree):
                 if not isinstance(node, ast.ExceptHandler):
@@ -883,7 +883,7 @@ class NoHandlerSwallowsEverything(unittest.TestCase):
                     and node.type.id in ("Exception", "BaseException")
                 )
                 if broad and all(isinstance(stmt, ast.Pass) for stmt in node.body):
-                    offenders.append(f"{path.relative_to(ROOT)}:{node.lineno}")
+                    offenders.append(f"{path.relative_to(REPO_ROOT)}:{node.lineno}")
         self.assertEqual(offenders, [])
 
 
@@ -913,7 +913,7 @@ class ModuleConstantsDeclaredOnce(unittest.TestCase):
 
     def test_no_module_assigns_the_same_constant_twice(self):
         offenders = {}
-        for path in sorted(ROOT.glob("scripts/**/*.py")) + [ROOT / "install.py"]:
+        for path in sorted(REPO_ROOT.glob("scripts/**/*.py")) + [REPO_ROOT / "install.py"]:
             again = self._redeclared(path)
             if again:
                 offenders[path.name] = again
@@ -940,9 +940,9 @@ class OnlyTheSchemaValidatorNeedsJsonschema(unittest.TestCase):
 
     def test_no_other_module_imports_it(self):
         offenders = [
-            str(path.relative_to(ROOT))
-            for path in sorted(ROOT.glob("scripts/**/*.py")) + [ROOT / "install.py"]
-            if path.parent != ROOT / "scripts" / "schemas"
+            str(path.relative_to(REPO_ROOT))
+            for path in sorted(REPO_ROOT.glob("scripts/**/*.py")) + [REPO_ROOT / "install.py"]
+            if path.parent != REPO_ROOT / "scripts" / "schemas"
             and self._imports_jsonschema(path.read_text())
         ]
         self.assertEqual(offenders, [])
@@ -973,7 +973,7 @@ class NoSourceWarnsWhenCompiled(unittest.TestCase):
     def test_every_script_compiles_clean(self):
         import warnings
 
-        sources = [ROOT / "install.py", *sorted((ROOT / "scripts").rglob("*.py"))]
+        sources = [REPO_ROOT / "install.py", *sorted((REPO_ROOT / "scripts").rglob("*.py"))]
         for path in sources:
             with self.subTest(path=path.name), warnings.catch_warnings():
                 warnings.simplefilter("error", SyntaxWarning)
@@ -994,7 +994,7 @@ class TestsRunOffline(unittest.TestCase):
 
         listed = subprocess.run(
             ["git", "grep", "-n", "unittest discover", "--", ":!tests"],
-            capture_output=True, text=True, cwd=ROOT, check=False,
+            capture_output=True, text=True, cwd=REPO_ROOT, check=False,
         ).stdout.splitlines()
         self.assertTrue(listed)
         self.assertEqual([line for line in listed if "-t ." not in line], [])
@@ -1008,7 +1008,7 @@ class MessagesSeparateWithAColon(unittest.TestCase):
 
     def test_no_message_uses_a_dash_separator(self):
         found = []
-        for path in [ROOT / "install.py", *sorted((ROOT / "scripts").rglob("*.py"))]:
+        for path in [REPO_ROOT / "install.py", *sorted((REPO_ROOT / "scripts").rglob("*.py"))]:
             for number, line in enumerate(path.read_text().splitlines(), 1):
                 if self.PATTERN.search(line):
                     found.append(f"{path.name}:{number}: {line.strip()}")
@@ -1023,14 +1023,14 @@ class TheIssueFormListsEveryPlatform(unittest.TestCase):
         from scripts.model.platforms import load_platform_config
 
         form = yaml.safe_load(
-            (ROOT / ".github" / "ISSUE_TEMPLATE" / "missing-bios.yml").read_text()
+            (REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "missing-bios.yml").read_text()
         )
         options = next(
             item["attributes"]["options"] for item in form["body"]
             if item.get("id") == "platform"
         )
-        for name in list_registered_platforms(str(ROOT / "platforms")):
-            display = load_platform_config(name, str(ROOT / "platforms"))["platform"]
+        for name in list_registered_platforms(str(REPO_ROOT / "platforms")):
+            display = load_platform_config(name, str(REPO_ROOT / "platforms"))["platform"]
             self.assertIn(display, options)
 
 
@@ -1040,7 +1040,7 @@ class TheTestJobHasTheDataTrees(unittest.TestCase):
 
     def test_the_trees_are_fetched_before_the_suite(self):
         steps = yaml.safe_load(
-            (ROOT / ".github" / "workflows" / "validate.yml").read_text()
+            (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text()
         )["jobs"]["run-tests"]["steps"]
         runs = [step.get("run", "") for step in steps]
         fetch = next(i for i, run in enumerate(runs) if "refresh_data_dirs.py" in run)
@@ -1055,7 +1055,7 @@ class GeneratedArtifactsMeetTheirSchemas(unittest.TestCase):
     @unittest.skipUnless(HAS_JSONSCHEMA, "needs jsonschema")
     def test_the_full_schema_check_passes(self):
         proc = subprocess.run(
-            [sys.executable, "scripts/validate_schemas.py"], cwd=ROOT,
+            [sys.executable, "scripts/validate_schemas.py"], cwd=REPO_ROOT,
             capture_output=True, text=True, timeout=600,
             check=False,
         )
@@ -1088,12 +1088,12 @@ class SignaturesCarryTheirTypes(unittest.TestCase):
         return found
 
     def test_the_count_only_goes_down(self):
-        paths = [ROOT / "install.py", *sorted((ROOT / "scripts").rglob("*.py"))]
+        paths = [REPO_ROOT / "install.py", *sorted((REPO_ROOT / "scripts").rglob("*.py"))]
         missing = [m for path in paths for m in self._missing(path)]
         self.assertLessEqual(len(missing), self.CEILING, missing[:20])
         for name in self.COMPLETE:
             with self.subTest(module=name):
-                self.assertEqual(self._missing(ROOT / "scripts" / name), [])
+                self.assertEqual(self._missing(REPO_ROOT / "scripts" / name), [])
 
 
 class TheApiSchemaHoldsTheFieldsItPromises(unittest.TestCase):
@@ -1106,7 +1106,7 @@ class TheApiSchemaHoldsTheFieldsItPromises(unittest.TestCase):
             import jsonschema
         except ImportError:
             self.skipTest("jsonschema is tooling only")
-        schema = json.loads((ROOT / "schemas" / "site-api-envelope.schema.json").read_text())
+        schema = json.loads((REPO_ROOT / "schemas" / "site-api-envelope.schema.json").read_text())
         envelope = {"schema_version": 1, "generated_at": "2026-10-20T00:00:00Z",
                     "kind": "file-locations", "count": 1,
                     "items": [{"sha1": "a" * 40, "url": "https://x/y"}]}
@@ -1132,13 +1132,13 @@ class CommentsSayWhy(unittest.TestCase):
         """Three scripts were read, and 22 labels stood in 13 others."""
         tracked = subprocess.run(
             ["git", "ls-files", "--", "scripts/*.py", "scripts/**/*.py", "install.py"],
-            cwd=ROOT, capture_output=True, text=True, check=True,
+            cwd=REPO_ROOT, capture_output=True, text=True, check=True,
         ).stdout.split()
         self.assertIn("install.py", tracked)
         self.assertIn("scripts/scraper/mame_parser.py", tracked)
         found = []
         for name in sorted(set(tracked)):
-            lines = (ROOT / name).read_text(encoding="utf-8").splitlines()
+            lines = (REPO_ROOT / name).read_text(encoding="utf-8").splitlines()
             for index, line in enumerate(lines):
                 if not self.LABEL.match(line) or self.REASON.search(line):
                     continue
@@ -1177,7 +1177,7 @@ class TupleAnnotationsMatchTheirReturns(unittest.TestCase):
             stack.extend(ast.iter_child_nodes(node))
 
     def test_a_fixed_tuple_annotation_counts_its_returned_values(self):
-        sources = sorted((ROOT / "scripts").rglob("*.py")) + [ROOT / "install.py"]
+        sources = sorted((REPO_ROOT / "scripts").rglob("*.py")) + [REPO_ROOT / "install.py"]
         mismatched = []
         for path in sources:
             for fn in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
@@ -1196,7 +1196,7 @@ class TupleAnnotationsMatchTheirReturns(unittest.TestCase):
                             and not any(isinstance(e, ast.Starred) for e in value.elts)
                             and len(value.elts) != len(declared)):
                         mismatched.append(
-                            f"{path.relative_to(ROOT)}:{ret.lineno} "
+                            f"{path.relative_to(REPO_ROOT)}:{ret.lineno} "
                             f"{len(value.elts)} returned, {len(declared)} declared"
                         )
         self.assertEqual(mismatched, [])

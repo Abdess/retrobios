@@ -19,7 +19,7 @@ from pathlib import Path
 from unittest import mock
 
 import install
-from tests.test_install_app import make_card
+from tests.installsupport import make_card
 from tests.netguard import module_guard
 from tests.tuisupport import (
     _args, CHECK, checked_state, FILES, found, fresh_state, HOME, in_full, install_run,

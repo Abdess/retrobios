@@ -10,14 +10,14 @@ from __future__ import annotations
 
 import tests
 
-import io
 import re
 import subprocess
-import tokenize
 import unittest
 from pathlib import Path
 
 import yaml
+
+from tests.docpagessupport import MARKETING_WORDS, _python_prose, _sentence_case
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -67,20 +67,6 @@ def _semicolons(text: str) -> list[str]:
     ]
 
 
-def _python_prose(source: str) -> str:
-    """Comments and docstrings of a module, one per line."""
-    parts: list[str] = []
-    previous = tokenize.INDENT
-    for token in tokenize.generate_tokens(io.StringIO(source).readline):
-        if token.type == tokenize.COMMENT or token.type == tokenize.STRING and previous in (
-            tokenize.INDENT, tokenize.NEWLINE, tokenize.NL, tokenize.DEDENT,
-        ):
-            parts.append(token.string)
-        if token.type not in (tokenize.COMMENT, tokenize.NL):
-            previous = token.type
-    return "\n".join(parts)
-
-
 class _TagTolerantLoader(yaml.SafeLoader):
     """mkdocs.yml names Python callables with !!python/name tags."""
 
@@ -113,28 +99,6 @@ def _yaml_prose(text: str) -> str:
     return "\n".join(parts)
 
 
-# Words a heading keeps capitalized: names of platforms, systems and programs.
-_HEADING_KEEP = set(["Batocera", "Recalbox", "Lakka", "Dolphin", "Redump", "Linux", "Windows", "Android", "Python", "Steam", "Deck", "macOS", "Termux", "Flatpak", "Switch", "Raspberry", "Pi", "Mega", "Drive", "Genesis", "Saturn", "Dreamcast", "Amiga", "Atari", "Sega", "Nintendo", "Sony", "Neo", "Geo", "Lynx", "Jaguar", "Commodore", "Apple", "Mac", "Spectrum", "Sinclair", "Amstrad", "MSX", "GameCube", "Wii", "Game", "Boy", "Advance", "Famicom", "Disk", "System", "Super", "Master", "PlayStation", "Vita", "Xbox", "Arcade", "English", "French", "Spanish", "I", "Lua", "Unity", "Qt", "Kodi", "Discord", "Pages", "Actions", "Docker", "Windows", "Mac", "Ubuntu", "Debian", "Arch", "SteamOS", "Chihiro", "NAOMI", "Triforce", "Lindbergh", "Model", "PinMAME", "ScummVM", "Dinothawr", "Cemu", "Citra", "Yuzu", "Ryujinx", "Mednafen", "Beetle", "Stella", "Hatari", "Caprice", "Vice", "Fuse", "Daphne", "Hypseus", "Singe", "Supermodel", "Flycast", "Redream", "DuckStation", "SwanStation", "Opera", "Gearsystem", "Picodrive", "Snes9x", "Nestopia", "Mesen", "Gambatte", "SameBoy", "mGBA", "melonDS", "DeSmuME", "Azahar", "Eden", "Sudachi", "Torzu", "Xemu", "Cxbx", "PCSX2", "AetherSX2", "NetherSX2", "ARMSX2", "RPCS3", "Vita3K", "Zinc", "Raine", "FBNeo", "FinalBurn", "Neo", "MAME", "Clrmamepro", "RomVault"])
-
-
-def _sentence_case(title: str) -> str:
-    words = title.split(" ")
-    out = []
-    starts = True
-    for w in words:
-        core = w.strip("()[],:.")
-        if starts:
-            # The first word of a heading or of a clause after ":", "." or " - ".
-            head, sep, tail = core.partition("-")
-            if sep and re.fullmatch(r"[A-Z][a-z]+", tail) and tail not in _HEADING_KEEP:
-                w = w.replace(core, f"{head}-{tail.lower()}", 1)
-        elif re.fullmatch(r"[A-Z][a-z]+(-[A-Z]?[a-z]+)*", core) and core not in _HEADING_KEEP:
-            w = w.replace(core, core.lower(), 1)
-        out.append(w)
-        starts = w.endswith((":", ".")) or w == "-" or re.fullmatch(r"\d+[a-z]?\.?", w) is not None
-    return " ".join(out)
-
-
 class NoGeneratedTypography(unittest.TestCase):
     def test_no_dash_arrow_ellipsis_or_banner_glyphs(self):
         offenders = []
@@ -161,16 +125,14 @@ class NoMarketingVocabulary(unittest.TestCase):
     """The project bans these words in published text, and nothing checked
     it: "streamlined interface" reached the site's platform table."""
 
-    WORDS = re.compile(
-        r"\b(comprehensive|robust|seamless(ly)?|leverag\w*|streamlin\w*|delv(e|ing))\b",
-        re.IGNORECASE,
-    )
+    WORDS = MARKETING_WORDS
 
     def test_no_tracked_text_uses_them(self):
         offenders = []
         for path in _tracked():
-            # This file and the commit rules have to name the words they refuse.
-            if path.name in {"test_prose_style.py", "commit_rules.py", "commitrules.py"}:
+            # The list, this file and the commit rules have to name the words they refuse.
+            if path.name in {"docpagessupport.py", "test_prose_style.py", "commit_rules.py",
+                             "commitrules.py"}:
                 continue
             text = path.read_text(encoding="utf-8", errors="replace")
             for number, line in enumerate(text.splitlines(), 1):

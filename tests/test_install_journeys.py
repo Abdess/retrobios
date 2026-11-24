@@ -28,7 +28,7 @@ import unittest
 from pathlib import Path
 
 import install
-from tests import test_install_games as games
+from tests.gamessupport import SETUP, manifest, write_index
 from tests.tuisupport import DOWN, UP, Pty, pty, pyte
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -143,13 +143,13 @@ class Repository:
         self.site = self.root / "site"
         (self.site / "install" / "games").mkdir(parents=True)
         (self.site / "bios").mkdir()
-        self.listed = games.manifest()
+        self.listed = manifest()
         self.write_list()
-        muos = dict(games.SETUP, setup="muos", name="muOS",
+        muos = dict(SETUP, setup="muos", name="muOS",
                     roms_root={"path": "/mnt/mmc/ROMS", "from_bios": "../../ROMS"})
-        retroarch = dict(games.SETUP, roms_root={"path": None, "from_bios": None})
-        games.write_index(self.site / "install" / "games", setup=retroarch,
-                          more_setups={"muos": muos})
+        retroarch = dict(SETUP, roms_root={"path": None, "from_bios": None})
+        write_index(self.site / "install" / "games", setup=retroarch,
+                    more_setups={"muos": muos})
         base = loopback.serve(test, self.site)
         self.home = self.root / "home"
         self.home.mkdir()
