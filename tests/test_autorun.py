@@ -843,6 +843,26 @@ class Cleanup(Origin):
         cd.apply(self.repo, decisions.values())
         self.assertEqual((work / ".gitignore").read_text(), "edited")
 
+    def test_old_kept_tmp_entries_survive(self):
+        """What every gate runs under and the backups outlive any age:
+        the scheduled cleaner removed the TUI environments and a wip patch."""
+        tmp = self.repo / "tmp"
+        names = ("acquire", "tuienv312", "tuienv38", "py38bin", "ci_guardian.log",
+                 "ci_guardian_seen.txt", "main.bundle", "wip-2026-11-12.patch")
+        stamp = time.time() - 1000 * 3600
+        for name in names:
+            path = tmp / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            if "." in name:
+                path.write_bytes(b"")
+            else:
+                path.mkdir()
+            os.utime(path, (stamp, stamp))
+        decisions = cd.judge_tmp(self.repo, [], 72, time.time())
+        self.assertEqual({d.path.name: d.action for d in decisions},
+                         dict.fromkeys(names, "keep"))
+        self.assertTrue(all(d.reason for d in decisions))
+
     def test_low_space_raises_the_alert_line(self):
         line, low = cd.disk_line(self.tmp, alert_gb=10 ** 9)
         self.assertTrue(low)

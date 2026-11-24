@@ -14,8 +14,10 @@ kept, so committed work stays reachable. A worktree with real uncommitted
 code is listed, never removed.
 
 tmp/ entries older than --hours that no process uses are removed, except
-tmp/acquire, git bundles (*.bundle, which are backups) and an entry that
-holds a linked worktree, which the worktree rule judges.
+what KEPT_TMP in devtools/diskcleanup.py lists (tmp/acquire, git bundles and
+patches, the TUI test environments, the Python 3.8 wrapper, the CI
+guardian's state) and an entry that holds a linked worktree, which the
+worktree rule judges.
 
 The last line reports free space, and an ALERT line when it is under
 --alert-gb. The exit code is 1 under that threshold, so a timer sees it.

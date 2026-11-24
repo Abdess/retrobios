@@ -895,8 +895,9 @@ theirs. One is removed only when no process uses it, it is older than
 `CONTRIBUTING.md`, `website/src/data/*.json`). One holding real changes is listed, never removed. Branches
 are always kept. A worktree elsewhere on disk and the automation worktree are
 never candidates. `tmp/` entries older than `--hours` that no process uses
-are removed, except `tmp/acquire`, `*.bundle` and an entry that holds a
-linked worktree.
+are removed, except `tmp/acquire`, `*.bundle`, `*.patch`, the TUI test
+environments (`tuienv*`), the Python 3.8 wrapper (`py38bin`), the CI
+guardian's files and an entry that holds a linked worktree.
 
 The last line gives free space, with an `ALERT` line under `--alert-gb`
 (default 100), and the exit code is then 1. `--check` reports space only.

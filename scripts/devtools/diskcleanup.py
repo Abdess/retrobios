@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import contextlib
+import fnmatch
 import os
 import shutil
 import subprocess
@@ -13,7 +14,20 @@ from pathlib import Path
 from core.generated import is_generated
 from core.paths import AUTORUN_WORKTREE
 
-KEPT_TMP = ("acquire",)
+# What tmp/ keeps whatever its age, by name pattern, with the reason printed.
+KEPT_TMP: dict[str, str] = {
+    # auto_fetch writes the files it found and verified here.
+    "acquire": "backup",
+    # A git bundle or a patch saved before a risky operation.
+    "*.bundle": "backup",
+    "*.patch": "backup",
+    # The TUI pty tests run under tmp/tuienv312 and tmp/tuienv38.
+    "tuienv*": "test environment",
+    # The Python 3.8 wrapper the installer floor is checked with.
+    "py38bin": "test environment",
+    # The CI guardian's log, scripts and the runs it has already seen.
+    "ci_guardian*": "CI guardian state",
+}
 ALERT_GB = 100
 
 
@@ -107,6 +121,12 @@ def judge_worktree(path: Path, busy: Iterable[str], hours: float, now: float) ->
     return Decision(path, "worktree", "remove", f"{age:.0f}h old, clean")
 
 
+def kept_reason(name: str) -> str:
+    """Why tmp/ keeps an entry of this name whatever its age, or ''."""
+    return next((reason for pattern, reason in KEPT_TMP.items()
+                 if fnmatch.fnmatchcase(name, pattern)), "")
+
+
 def judge_tmp(
     repo: Path, busy: Iterable[str], hours: float, now: float,
     worktrees: Iterable[Path] = (),
@@ -117,8 +137,9 @@ def judge_tmp(
     worktrees = list(worktrees)
     decisions = []
     for entry in sorted(tmp.iterdir()):
-        if entry.name in KEPT_TMP or entry.name.endswith(".bundle"):
-            action, reason = "keep", "backup"
+        kept = kept_reason(entry.name)
+        if kept:
+            action, reason = "keep", kept
         elif any(inside(w, entry) for w in worktrees):
             action, reason = "keep", "holds a worktree"
         elif age_hours(entry, now) <= hours:
