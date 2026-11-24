@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING, BinaryIO
 
 from installer.console import Progress
 from installer.events import EVENTS
-from installer.from_folders import FOLDER_IN_PLACE, _copy_local
+from installer.folder_index import FOLDER_IN_PLACE, _copy_local
 from installer.host_fs import (
     DRIVE_FULL,
     NOT_WRITABLE,
@@ -47,7 +47,7 @@ from installer.safe_replace import KEPT, NOT_KEPT, _NotKept, _kept_slot
 from installer.terminal import Terminal
 
 if TYPE_CHECKING:
-    from installer.from_folders import LocalCopy
+    from installer.folder_index import LocalCopy
 
 
 def _folder_failure(exc: OSError) -> str:

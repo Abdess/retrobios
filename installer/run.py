@@ -18,15 +18,15 @@ from installer.events import EVENTS, _event_mode
 from installer.failure_causes import OfflineReason, failure_events
 from installer.fetch_plan import emit_fetch_plan, fetch_plan
 from installer.filesystems import NOMEDIA, hide_from_media_scanner
-from installer.from_folders import (
+from installer.local_copies import (
     copy_plan_lines,
     emit_copies,
     emit_unreadable,
     plan_local_copies,
-    sources_line,
     unreadable_copies,
     unreadable_lines,
 )
+from installer.from_folders import sources_line
 from installer.frontend_folders import _retroarch_config_at
 from installer.handheld_app import finish_app
 from installer.host_fs import DRIVE_FULL, NOT_WRITABLE, _folder_writable
@@ -86,7 +86,7 @@ from installer.tally import (
 from installer.text import _plural, agree, format_size, screen_text
 
 if TYPE_CHECKING:
-    from installer.from_folders import FolderIndex
+    from installer.folder_index import FolderIndex
     from installer.run_files import _PlatformPass
     from installer.run_setups import _InstallRun
 

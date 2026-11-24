@@ -93,7 +93,8 @@ from installer.tally import (
 from installer.text import _plural, format_size, screen_text
 
 if TYPE_CHECKING:
-    from installer.from_folders import FolderIndex, LocalCopy, Unreadable
+    from installer.folder_index import FolderIndex, LocalCopy
+    from installer.local_copies import Unreadable
     from installer.game_folders import GamesPlan
     from installer.run_setups import _InstallRun
 

@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, NamedTuple
 
 from installer.destination import _last_name
-from installer.from_folders import MAX_SCANNED_FILES
+from installer.folder_index import MAX_SCANNED_FILES
 from installer.frontend_folders import SAVE_NOT_KNOWN, UNPLACED_FOLDERS, save_where_words, unplaced_line
 from installer.install_record import record_changes, record_says
 from installer.manifest import GAME_DATA, OTHER_SYSTEMS

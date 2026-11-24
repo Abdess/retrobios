@@ -25,7 +25,8 @@ from installer.destination import (
     copy_source_refusal,
 )
 from installer.detect_os import _os_default_dests, card_title
-from installer.from_folders import _read_from_folder, from_folder_problem, plan_local_copies
+from installer.from_folders import _read_from_folder, from_folder_problem
+from installer.local_copies import plan_local_copies
 from installer.host_fs import _exists, _is_dir
 from installer.invocation import _INVOCATION, Invocation
 from installer.offline import LOCAL

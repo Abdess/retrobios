@@ -43,7 +43,7 @@ from installer.standalone import _install_standalone_folders
 from installer.terminal import Terminal
 
 if TYPE_CHECKING:
-    from installer.from_folders import FolderIndex
+    from installer.folder_index import FolderIndex
     from installer.handheld_app import CardApp
 
 

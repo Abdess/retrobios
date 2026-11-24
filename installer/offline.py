@@ -12,7 +12,7 @@ from installer.platforms import AVAILABLE_PLATFORMS
 from installer.remote import MAX_MANIFEST_BYTES
 
 if TYPE_CHECKING:
-    from installer.from_folders import FolderIndex
+    from installer.folder_index import FolderIndex
     from installer.pack_source import PackSource
 
 

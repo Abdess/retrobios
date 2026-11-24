@@ -4,12 +4,14 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, NamedTuple
 
-from installer.from_folders import (
+from installer.folder_index import (
     FOLDER_IN_PLACE,
     SHOWN_CORES,
     _ARCHIVE_SUFFIXES,
     FolderIndex,
     _ZippedLookup,
+)
+from installer.local_copies import (
     _copy_reason,
     _counts_by_folder,
     _known_destinations,
@@ -23,7 +25,7 @@ from installer.regions import WORLD_REGION
 from installer.text import _plural, shown_lines
 
 if TYPE_CHECKING:
-    from installer.from_folders import LocalCopy
+    from installer.folder_index import LocalCopy
 
 
 def _copies(entry: dict) -> list[dict]:

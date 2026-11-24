@@ -22,7 +22,7 @@ from installer.datadirs import install_data_directory
 from installer.download import download_files
 from installer.events import EVENTS
 from installer.filesystems import fat32_drive
-from installer.from_folders import plan_local_copies
+from installer.local_copies import plan_local_copies
 from installer.host_fs import DRIVE_FULL, _drive_full, _is_dir, _stop
 from installer.lists import ListFailure, held_targets, load_targets, targets_file_words
 from installer.offline import LOCAL

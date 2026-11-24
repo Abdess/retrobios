@@ -502,7 +502,7 @@ those it imports:
 | Terminal and line output | `terminal`, `console` |
 | Files and folders | `host_fs`, `paths`, `filesystems`, `config_values`, `local_check`, `safe_replace` |
 | This machine | `detection_notes`, `detect_os`, `detect_frontends`, `cards`, `device`, `cores`, `frontend_folders`, `setups` |
-| Sources of files | `offline`, `network`, `lists`, `pack_source`, `from_folders`, `diagnosis`, `download`, `datadirs`, `standalone` |
+| Sources of files | `offline`, `network`, `lists`, `pack_source`, `folder_index`, `local_copies`, `from_folders`, `diagnosis`, `download`, `datadirs`, `standalone` |
 | What a run keeps | `narrowing`, `choices`, `romm`, `install_record`, `game_files`, `games_index`, `game_regions`, `game_folders`, `games`, `tally`, `space`, `fetch_plan` |
 | Line mode | `destination`, `line_folder`, `line_menu`, `plan_words`, `plan`, `failure_causes`, `outcome` |
 | Runs and actions | `arguments`, `run_setups`, `run_files`, `run`, `pack`, `removal_plan`, `removal`, `backups`, `handheld_app`, `cli` |

@@ -17,7 +17,7 @@ from installer.choices import (
 from installer.console import _ask, _quit
 from installer.datadirs import data_directory_state, data_fetch_bytes, select_data_directories
 from installer.destination import _last_name, on_its_card, shown_bios_folder
-from installer.from_folders import plan_local_copies
+from installer.local_copies import plan_local_copies
 from installer.frontend_folders import save_lines
 from installer.host_fs import _is_file
 from installer.install_record import _RECORD_TAKEN
