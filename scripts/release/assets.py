@@ -16,6 +16,7 @@ from core.sizes import size_text
 from model.composition import composition_tier
 from model.registry import data_dir_registry_at
 from model.largefiles import (
+    LARGE_FILES_CACHE,
     LARGE_FILES_RELEASE,
     LARGE_FILES_REPO,
     RELEASE_DOWNLOAD,
@@ -248,7 +249,7 @@ def registry_bundles(registry_path: str = DATA_DIRS_FILE) -> dict[str, str]:
     return bundles
 
 
-def cache_hashes(names: set[str], cache_dir: str = ".cache/large") -> dict[str, str]:
+def cache_hashes(names: set[str], cache_dir: str = LARGE_FILES_CACHE) -> dict[str, str]:
     """SHA1 of the cached copy of each named asset that the cache holds."""
     hashes: dict[str, str] = {}
     for name in names:

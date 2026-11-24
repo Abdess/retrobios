@@ -22,13 +22,14 @@ import sys
 from pathlib import Path
 
 from core.cli import add_repo_inputs
+from model.largefiles import LARGE_FILES_CACHE
 from release.restore import restore
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__)
     parser.add_argument(
-        "--cache", default=".cache/large",
+        "--cache", default=LARGE_FILES_CACHE,
         help="where release assets are cached (default: %(default)s)",
     )
     add_repo_inputs(parser, "db")
