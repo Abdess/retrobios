@@ -29395,7 +29395,7 @@ def tui_view(state: TuiState, cols: int, rows: int) -> list[str]:
     return lines
 
 
-# --- installer/tui_actions.py ------------------------------------------------
+# --- installer/tui_steps.py --------------------------------------------------
 
 def _choose_board(state: TuiState, name: str) -> list[tuple]:
     """A board chosen on Device, back on Change. The board the run reads
@@ -29845,6 +29845,8 @@ def tui_interrupt(state: TuiState) -> list[tuple]:
         return [("stop",)]
     return tui_quit(state, asked=False)
 
+
+# --- installer/tui_folder_actions.py -----------------------------------------
 
 def _closed_status(state: TuiState, closed: tuple[Path, str]) -> TuiLine:
     folder = _short_path(closed[0], state.home)
@@ -30304,6 +30306,15 @@ def _activate_cardroot(state: TuiState, row: TuiRow) -> list[tuple]:
     return _back(state)
 
 
+def _platform_focus(state: TuiState, plat: str) -> int:
+    """The platform list's row for plat, below its filter row."""
+    rows = _platform_rows(state)
+    return next((index for index, row in enumerate(rows)
+                 if row.action == "platform" and row.value == plat), 1)
+
+
+# --- installer/tui_actions.py ------------------------------------------------
+
 def _plan_close(state: TuiState, row: TuiRow) -> list[tuple]:
     """Close on the plan: every file in place."""
     state.exit_code = 0
@@ -30520,13 +30531,6 @@ def _checklist(state: TuiState, row: TuiRow) -> list[tuple]:
         # On the first item: the next A ticks the one in focus alone.
         state.focus[screen] = _first_item(state)
     return []
-
-
-def _platform_focus(state: TuiState, plat: str) -> int:
-    """The platform list's row for plat, below its filter row."""
-    rows = _platform_rows(state)
-    return next((index for index, row in enumerate(rows)
-                 if row.action == "platform" and row.value == plat), 1)
 
 
 def _option_flag(state: TuiState, action: str, step: int) -> bool:

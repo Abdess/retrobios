@@ -44,16 +44,15 @@ from installer.regions import resolve_regions
 from installer.setups import _default_dest, found_setups, setup_list
 from installer.terminal import _enable_ansi
 from installer.text import _pad, cell_width, screen_text
-from installer.tui_actions import (
+from installer.tui_folder_actions import (
     _card_status,
     _choose,
     _open_folder_screen,
     _platform_focus,
     _take_card,
-    open_tui_pack,
-    tui_interrupt,
-    use_tui_pack,
 )
+from installer.tui_actions import open_tui_pack, use_tui_pack
+from installer.tui_steps import tui_interrupt
 from installer.tui_commands import _tui_passthrough, tui_argv, tui_run_env
 from installer.tui_engine import (
     _EngineRun,

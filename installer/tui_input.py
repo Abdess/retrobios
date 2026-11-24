@@ -7,23 +7,9 @@ from typing import TYPE_CHECKING, NamedTuple
 from installer.host_fs import closed_folder
 from installer.terminal import TUI_MIN_COLS, TUI_MIN_ROWS
 from installer.text import cell_width
-from installer.tui_actions import (
-    _activate,
-    _back,
-    _card_refusal,
-    _checklist,
-    _choose_card,
-    _closed_status,
-    _open_details,
-    _option,
-    _push,
-    _start_run,
-    _tick,
-    _toggle_region,
-    tui_interrupt,
-    tui_quit,
-    typed_path,
-)
+from installer.tui_actions import _activate, _checklist, _option, _tick, _toggle_region
+from installer.tui_steps import _back, _open_details, _push, _start_run, tui_interrupt, tui_quit
+from installer.tui_folder_actions import _card_refusal, _choose_card, _closed_status, typed_path
 from installer.tui_commands import _tui_standalone_fits
 from installer.tui_frame import _armed, _bar_click, _bar_commits, _pager_starts
 from installer.tui_keys import TuiKey, TuiMouse
