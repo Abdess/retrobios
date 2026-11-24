@@ -605,7 +605,7 @@ Read the platform's source code to understand its exact verification behavior be
 
 An exporter writes the platform's own BIOS file back, updated with what the
 emulator code shows. Every registered platform has one, unless its registry
-entry says `native_list: none`: `tests/test_exporters.py` fails otherwise.
+entry says `native_list: none`: `tests/test_exporters_contract.py` fails otherwise.
 Exporters live in `scripts/exporter/` and are found the same way as scrapers
 (`*_exporter.py`).
 
