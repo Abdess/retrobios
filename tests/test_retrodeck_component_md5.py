@@ -26,7 +26,8 @@ from pathlib import Path
 
 from exporter import discover_exporters
 from model.declarations import declared_components
-from packs.coverage import _twin_unmet, verify_platform
+from packs.platformtally import _twin_unmet
+from packs.coverage import verify_platform
 from resolve.reconcile import build_native_model
 from scraper.base_scraper import systems_from_requirements
 from scripts.scraper import retrodeck_scraper

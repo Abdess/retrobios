@@ -28,7 +28,8 @@ COMMANDS = {
         "packs/declsettle.py",
     ),
     "verify.py": (
-        "packs/verdicts.py", "packs/gaps.py", "packs/coverage.py", "packs/emulatorcheck.py",
+        "packs/verdicts.py", "packs/gaps.py", "packs/coverage.py", "packs/platformtally.py",
+        "packs/emulatorcheck.py",
         "packs/report.py", "packs/shares.py", "packs/verifyplatforms.py", "packs/verifysummary.py",
         "packs/verifyoutput.py", "packs/strictgate.py", "packs/verifyoptions.py",
         "packs/verifyprint.py", "packs/runscope.py", "packs/verifyrun.py",

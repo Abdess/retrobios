@@ -94,6 +94,7 @@ on:
       - "scripts/packs/naming.py"
       - "scripts/packs/parts.py"
       - "scripts/packs/paths.py"
+      - "scripts/packs/platformtally.py"
       - "scripts/packs/shares.py"
       - "scripts/packs/slots.py"
       - "scripts/packs/supplemental.py"

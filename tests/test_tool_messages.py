@@ -25,7 +25,7 @@ import pipeline
 from orchestrate import guards, labels, prepare, runner
 from resolve import truth
 from resolve.platformdiff import diff_platform_truth
-from packs import coverage
+from packs import platformtally
 from packs import report as packs_report
 from packs import verdicts
 from packs import verifysummary
@@ -564,7 +564,7 @@ class TheVerifySummaryCountsDiscrepancies(unittest.TestCase):
     def test_a_shared_destination_names_the_path_and_both_sides(self):
         result = {"name": "disk.rom", "status": verdicts.Status.UNTESTED}
         entry = {"name": "disk.rom", "md5": "793f8678" + "0" * 24}
-        self.assertTrue(coverage._twin_unmet(
+        self.assertTrue(platformtally._twin_unmet(
             result, "coco", entry, "nec-pc-88", "bios/disk.rom"
         ))
         message = result["discrepancy"]

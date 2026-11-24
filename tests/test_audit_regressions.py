@@ -1595,7 +1595,7 @@ class OneBaselineVerdict(unittest.TestCase):
     def test_verify_finds_the_cached_release_asset(self):
         # verify imports the scripts directory's modules by their bare names.
         from resolve import packfiles as packresolve
-        from scripts.packs.coverage import _resolve_for_platform
+        from scripts.packs.platformtally import _resolve_for_platform
 
         with tempfile.TemporaryDirectory() as directory:
             cached = Path(directory) / "BIG.PUP"
@@ -5870,11 +5870,11 @@ class GapsPageCountsOneWay(unittest.TestCase):
         self.assertIn("bios/quasi88/N88_KNJ1.ROM", shown)
 
     def test_verify_marks_the_settled_entry(self):
-        from packs import coverage as packs_coverage
+        from packs import platformtally
         from packs import verdicts
 
         result = {"name": "cdibios.zip", "status": verdicts.Status.UNTESTED}
-        self.assertTrue(packs_coverage._twin_unmet(result, "arcade"))
+        self.assertTrue(platformtally._twin_unmet(result, "arcade"))
         self.assertEqual(result["settled_by"], "arcade")
 
 

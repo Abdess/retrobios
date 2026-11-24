@@ -545,7 +545,7 @@ class TestBuilderAndVerifierAgree(unittest.TestCase):
         # override lookup both sides must perform. The old anchor was a string
         # the test above forbids, so the window was the whole file.
         mode_test = re.compile(r"""[=!]=\s*["'](?:md5|sha1|existence)["']""")
-        for name in ("packs/platformpack.py", "packs/manifestbuild.py", "packs/coverage.py"):
+        for name in ("packs/platformpack.py", "packs/manifestbuild.py", "packs/platformtally.py"):
             source = Path(__file__).resolve().parents[1] / "scripts" / name
             body = source.read_text(encoding="utf-8")
             anchors = [m.start() for m in re.finditer(r"slot_overrides\.get\(", body)]
