@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from core.cli import add_repo_inputs
 from model.database import load_database
 from core.artifacts import repository_output_lock
-from sitegen.readme import write_readme, generate_readme
+from sitegen.readme import README_PATH, load_readme_inputs, render_readme, write_readme
 
 
 def main() -> None:
@@ -35,10 +35,10 @@ def main() -> None:
 
     # Coverage resolves against data/: a refresh swapping a tree mid-read
     # published counts taken from half of it.
-    with repository_output_lock("README.md"), contextlib.ExitStack() as held:
+    with repository_output_lock(str(README_PATH)), contextlib.ExitStack() as held:
         hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
-        readme = generate_readme(db, args.platforms_dir, args.db)
-        write_readme(readme)
+        inputs = load_readme_inputs(db, args.platforms_dir, args.db)
+        write_readme(render_readme(inputs))
 
 
 if __name__ == "__main__":

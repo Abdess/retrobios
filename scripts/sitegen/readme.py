@@ -6,12 +6,14 @@ import json
 import re
 import sys
 from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import datetime, timezone
+from pathlib import Path
 
 from core.text import series
 from romrecipes import ledger
 from devtools import prchecks
-from model import releaserecord
+from model import releaserecord, siteinputs
 from core.artifacts import write_if_changed
 from core.paths import DB_FILE, REPO_ROOT
 from core.sizes import size_text
@@ -94,6 +96,8 @@ def collection_line(total_files: int, comp: dict) -> str:
 # The installer demo (scripts/make_demo.py): the recording and what it shows.
 DEMO_GIF = "docs_assets/demo/install.gif"
 REPO = REPO_SLUG
+README_PATH = REPO_ROOT / "README.md"
+CONTRIBUTING_PATH = REPO_ROOT / "CONTRIBUTING.md"
 # GitHub's "Add file > Upload files" page for bios/: a browser upload by
 # someone without write access lands on a fork and opens a pull request.
 UPLOAD_URL = f"{UPLOAD_ROOT}bios"
@@ -122,7 +126,7 @@ def clone_line(db: dict) -> str:
     )
 
 
-def _existing_contributor_block(readme_path: str = "README.md") -> list[str]:
+def _existing_contributor_block(readme_path: str | Path = README_PATH) -> list[str]:
     """The contributors already published, read back from the file.
 
     The section is the one part of this document that comes from the network.
@@ -219,22 +223,78 @@ def archive_line(counts: dict[str, int]) -> str:
             f" ([rebuilding an archive]({SITE_URL}wiki/archive-recipes/))")
 
 
-def generate_readme(db: dict, platforms_dir: str, db_path: str = DB_FILE) -> str:
-    total_files = db.get("total_files", 0)
-    ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+@dataclass(frozen=True)
+class ReadmeInputs:
+    """Everything the README text is made of, gathered before it is written."""
 
-    platform_names = list_registered_platforms(platforms_dir)
+    total_files: int
+    coverages: dict
+    profiles: dict
+    record: dict
+    extract_paths: dict[str, str]
+    archive_counts: dict[str, int]
+    clone: str
+    # The list from the GitHub API, and the published block kept from the
+    # README when the request returned nothing.
+    contributors: list[dict]
+    kept_contributors: list[str]
+    generated_at: str
 
+
+def load_readme_inputs(db: dict, platforms_dir: str, db_path: str = DB_FILE) -> ReadmeInputs:
+    """Read the registry, the coverages, the profiles, the release record and the contributors."""
     from model.registry import load_data_dir_registry
 
+    platform_names = list_registered_platforms(platforms_dir)
     data_registry = load_data_dir_registry(platforms_dir)
-
     coverages = platform_coverages(platform_names, platforms_dir, db, data_registry,
                                    db_path=db_path)
-
     profiles = unique_emulator_profiles(
-        load_emulator_profiles("emulators", skip_aliases=False)
+        load_emulator_profiles(str(siteinputs.current().emulators), skip_aliases=False)
     )
+    contributors = fetch_contributors()
+    kept: list[str] = []
+    if not contributors:
+        # The request failed. Republish what is already there rather than
+        # dropping the section: losing it is a worse answer than a stale list.
+        kept = _existing_contributor_block(README_PATH)
+        if kept:
+            print("contributors: request failed, keeping the published list")
+    return ReadmeInputs(
+        total_files=db.get("total_files", 0),
+        coverages=coverages,
+        profiles=profiles,
+        record=releaserecord.load_advertised(REPO_ROOT / releaserecord.RECORD, platforms_dir),
+        extract_paths=_extract_cells(platforms_dir),
+        archive_counts=ledger.rebuild_counts(),
+        clone=clone_line(db),
+        contributors=contributors,
+        kept_contributors=kept,
+        generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    )
+
+
+def _contributor_lines(inputs: ReadmeInputs) -> list[str]:
+    if not inputs.contributors:
+        return inputs.kept_contributors + [""] if inputs.kept_contributors else []
+    lines = ["## Contributors", ""]
+    for c in inputs.contributors:
+        login = c["login"]
+        avatar = c.get("avatar_url", "")
+        url = c.get("html_url", f"https://github.com/{login}")
+        lines.append(
+            f'<a href="{url}"><img src="{avatar}" width="50" alt="{login}"'
+            f' title="{login}"></a>'
+        )
+    return [*lines, ""]
+
+
+def render_readme(inputs: ReadmeInputs) -> str:
+    """The README text from its gathered inputs."""
+    total_files = inputs.total_files
+    ts = inputs.generated_at
+    coverages = inputs.coverages
+    profiles = inputs.profiles
     emulator_count = len(profiles)
     profile_files = [f for prof in profiles.values() for f in prof.get("files") or []
                      if isinstance(f, dict)]
@@ -253,8 +313,8 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = DB_FILE) -> str
     # the project does, gives the one line that installs, shows it, and leads
     # on to the site, where every detail lives. The figures and the lists it
     # once carried (coverage, collection, build commands) are the site's.
-    record = releaserecord.load_advertised(platforms_dir=platforms_dir)
-    extract_paths = _extract_cells(platforms_dir)
+    record = inputs.record
+    extract_paths = inputs.extract_paths
     lines = [
         '<p align="center">',
         "  <picture>",
@@ -342,13 +402,13 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = DB_FILE) -> str
         " the file name for RetroArch, as their own code does",
         f"- **{len(system_ids)} systems**, {total_files:,} files in the collection,"
         f" [what is still missing]({SITE_URL}gaps/) named file by file",
-        archive_line(ledger.rebuild_counts()),
+        archive_line(inputs.archive_counts),
         f"- Public data: [JSON, CSV and SQLite]({SITE_URL}data/), the metadata under MIT",
         "",
         "<details>",
         "<summary><strong>For developers: build a pack</strong></summary>",
         "",
-        clone_line(db),
+        inputs.clone,
         "",
         "```bash",
         "python scripts/generate_pack.py --platform retroarch --output-dir dist/",
@@ -365,30 +425,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = DB_FILE) -> str
         "",
     ]
 
-    contributors = fetch_contributors()
-    if not contributors:
-        # The request failed. Republish what is already there rather than
-        # dropping the section: losing it is a worse answer than a stale list.
-        kept = _existing_contributor_block("README.md")
-        if kept:
-            print("contributors: request failed, keeping the published list")
-            lines.extend(kept + [""])
-    if contributors:
-        lines.extend(
-            [
-                "## Contributors",
-                "",
-            ]
-        )
-        for c in contributors:
-            login = c["login"]
-            avatar = c.get("avatar_url", "")
-            url = c.get("html_url", f"https://github.com/{login}")
-            lines.append(
-                f'<a href="{url}"><img src="{avatar}" width="50" alt="{login}"'
-                f' title="{login}"></a>'
-            )
-        lines.append("")
+    lines.extend(_contributor_lines(inputs))
 
     lines.extend(
         [
@@ -579,13 +616,13 @@ def generate_contributing() -> str:
 
 
 def write_readme(readme: str) -> None:
-    status = "Generated" if write_if_changed("README.md", readme) else "Unchanged"
+    status = "Generated" if write_if_changed(str(README_PATH), readme) else "Unchanged"
     print(f"{status} ./README.md")
 
     contributing = generate_contributing()
     status = (
         "Generated"
-        if write_if_changed("CONTRIBUTING.md", contributing)
+        if write_if_changed(str(CONTRIBUTING_PATH), contributing)
         else "Unchanged"
     )
     print(f"{status} ./CONTRIBUTING.md")

@@ -3467,6 +3467,57 @@ class ContributorsSurviveAFailedRequest(unittest.TestCase):
             "the section is present but empty",
         )
 
+    def test_a_failed_request_republishes_the_kept_block(self):
+        from sitegen.readme import render_readme
+        from tests.readmeinputs import readme_inputs
+
+        kept = ["## Contributors", "", '<a href="https://github.com/a"><img src="x" alt="a"></a>']
+        text = render_readme(readme_inputs(kept_contributors=kept))
+        self.assertIn("\n".join(kept) + "\n\n\n## Community tools", text)
+
+    def test_a_fetched_list_replaces_the_kept_block(self):
+        from sitegen.readme import render_readme
+        from tests.readmeinputs import readme_inputs
+
+        text = render_readme(readme_inputs(
+            contributors=[{"login": "someone", "avatar_url": "https://a/x"}],
+            kept_contributors=["## Contributors", "", "stale"],
+        ))
+        self.assertIn(
+            '## Contributors\n\n<a href="https://github.com/someone"><img src="https://a/x"'
+            ' width="50" alt="someone" title="someone"></a>\n', text)
+        self.assertNotIn("stale", text)
+
+    def test_no_list_and_nothing_kept_leaves_the_section_out(self):
+        from sitegen.readme import render_readme
+        from tests.readmeinputs import readme_inputs
+
+        self.assertNotIn("## Contributors", render_readme(readme_inputs()))
+
+    def test_the_loader_keeps_the_published_block_when_the_request_fails(self):
+        import tempfile
+
+        from sitegen import readme
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "README.md"
+            path.write_text("# T\n\n## Contributors\n\nkept line\n\n## Other\n", encoding="utf-8")
+            with mock.patch.object(readme, "README_PATH", path), \
+                    mock.patch.object(readme, "fetch_contributors", return_value=[]), \
+                    mock.patch.object(readme, "list_registered_platforms", return_value=[]), \
+                    mock.patch("model.registry.load_data_dir_registry", return_value={}), \
+                    mock.patch.object(readme, "platform_coverages", return_value={}), \
+                    mock.patch.object(readme, "load_emulator_profiles", return_value={}), \
+                    mock.patch.object(readme.releaserecord, "load_advertised", return_value={}), \
+                    mock.patch.object(readme, "_extract_cells", return_value={}), \
+                    mock.patch.object(readme.ledger, "rebuild_counts",
+                                      return_value={"total": 0, "exact": 0, "canonical": 0}), \
+                    mock.patch.object(readme, "clone_line", return_value=""), \
+                    mock.patch("sys.stdout", new_callable=io.StringIO):
+                inputs = readme.load_readme_inputs({}, "platforms")
+        self.assertEqual(inputs.kept_contributors, ["## Contributors", "", "kept line"])
+        self.assertIn("## Contributors\n\nkept line\n", readme.render_readme(inputs))
+
     def test_the_contributor_list_is_not_asked_offline(self):
         from sitegen import readme
 

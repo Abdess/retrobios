@@ -796,11 +796,10 @@ class ReadmeInstallerOptions(unittest.TestCase):
 
     def test_quick_install_gives_the_powershell_form_and_the_page(self):
         from sitegen import readme as sitegen_readme
+        from tests.readmeinputs import readme_inputs
 
-        source = inspect.getsource(sitegen_readme.generate_readme)
-        self.assertIn("wiki/installer/#passing-options", source)
+        readme = sitegen_readme.render_readme(readme_inputs())
         self.assertIn("## Passing options", _page("installer.md"))
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
         quick = _section(readme, "Install in one line")
         # The README gives the bare line and sends options to the page that
         # writes their PowerShell form: an option after `| iex` reaches iex.
@@ -816,10 +815,11 @@ class PublishedNumbersShareOneFormat(unittest.TestCase):
         from core.sizes import size_text
         from sitegen import readme as sitegen_readme
 
-        readme_source = (inspect.getsource(sitegen_readme.generate_readme)
-                         + inspect.getsource(sitegen_readme.download_table))
-        self.assertNotIn("size_mb", readme_source)
-        self.assertIn("size_text(size)", readme_source)
+        from tests.readmeinputs import RELEASED_SIZE, readme_inputs
+
+        rendered = sitegen_readme.render_readme(readme_inputs())
+        self.assertIn(f"| RetroArch | 4,525 | {size_text(RELEASED_SIZE)} |", rendered)
+        self.assertIn("19,526 files in the collection", rendered)
         self.assertIn("{total_files:,}", script_source("generate_site.py"))
         self.assertEqual(size_text(16011 * 1024 * 1024), "15.6 GB")
 
