@@ -15,7 +15,7 @@ from core import upstream
 from profiling.bump import bump_commit, pins_changed
 from profiling.detection import detect_upstream_changes, print_extras
 from profiling.realign import realign_prose
-from profiling.rebase import attribute_refs, rebase_refs
+from profiling.rebase import Recale, attribute_refs, rebase_refs
 from profiling.reports import (
     ProfileReport,
     SkipKind,
@@ -174,9 +174,12 @@ def _apply_writes(
         target = Path(scratch) / path.name
         target.write_bytes(path.read_bytes())
         recale, bumped = ("would recale ", "would set ") if args.dry_run else ("", "")
-        applied = []
+        outcome = Recale()
         if args.rebase_refs and not report.skipped:
-            applied = rebase_refs(target, report, args.accept_changed)
+            outcome = rebase_refs(target, report, args.accept_changed)
+        for reason in outcome.refused:
+            print(f"{name}: not recaled, cannot move {reason}", file=sys.stderr)
+        applied = outcome.applied
         bump = bump_commit(target, report, args.accept_changed,
                            args.cache_dir, args.offline)
         moved = bump.moved
@@ -190,7 +193,8 @@ def _apply_writes(
                 file=sys.stderr,
             )
             return
-        if bump.refusal:
+        if bump.refusal and not outcome.refused:
+            # A refused recale has named the citations that hold the pin.
             print(f"{name}: {bump.refusal}", file=sys.stderr)
         messages = [f"{name}: {recale}{line}" for line in applied]
         if moved:

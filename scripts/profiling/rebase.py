@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import sys
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import yaml
@@ -205,16 +205,28 @@ def _recaled_ref(entry: EntryReport, statuses: tuple[str, ...]) -> str | None:
     return ", ".join(rendered) if touched else None
 
 
+@dataclass(frozen=True)
+class Recale:
+    """The refs a recale wrote, and each citation that kept it from writing."""
+
+    applied: list[str] = field(default_factory=list)
+    refused: list[str] = field(default_factory=list)
+
+
 def _recale_statuses(
-    path: Path, report: ProfileReport, accept_changed: bool
-) -> tuple[str, ...] | None:
-    """The statuses a recale moves, None when the profile must not move."""
+    report: ProfileReport, accept_changed: bool
+) -> tuple[tuple[str, ...] | None, list[str]]:
+    """The statuses a recale moves, None when the profile must not move.
+
+    The list names what refuses the move. It stays empty when nothing is
+    refused but nothing may move either: a pinned tag, a ref to review.
+    """
     if report.pinned_tag:
-        return None
+        return None, []
     statuses = REBASE_STATUSES + (("CHANGED",) if accept_changed else ())
     blocking = [s for s in REVIEW_STATUSES if s not in statuses]
     if any((report.counts or {}).get(s) for s in blocking):
-        return None
+        return None, []
     blockers = pin_blockers(report, accept_changed)
     if blockers:
         # Something here will not move: an annotated ref, one under a mode
@@ -222,14 +234,13 @@ def _recale_statuses(
         # bump_commit will refuse while it stands, and recaling the rest
         # would leave the profile describing two revisions at once. All or
         # nothing means the pin too, not only the refs.
-        _refuse_recale(path, blockers)
-        return None
-    return statuses
+        return None, blockers
+    return statuses, []
 
 
 def rebase_refs(
     path: Path, report: ProfileReport, accept_changed: bool = False
-) -> list[str]:
+) -> Recale:
     """Recale the line ranges of parts whose content is unchanged.
 
     All or nothing per profile. `source_commit` names the revision the refs
@@ -239,9 +250,9 @@ def rebase_refs(
     that only make sense at HEAD. Prose citations move with everything else:
     only their located tokens are rewritten, the sentence stays.
     """
-    statuses = _recale_statuses(path, report, accept_changed)
+    statuses, blockers = _recale_statuses(report, accept_changed)
     if statuses is None:
-        return []
+        return Recale(refused=blockers)
     text = path.read_text(encoding="utf-8")
     document = yaml.safe_load(text)
     citations = collect_citations(document, text)
@@ -293,18 +304,11 @@ def rebase_refs(
     if refused:
         # A citation left on the pinned lines holds the pin, so writing the
         # others would leave the profile describing two revisions.
-        _refuse_recale(path, refused)
-        return []
+        return Recale(refused=refused)
     applied.extend(prose_applied)
     if applied:
         apply_edit(path, text, document)
-    return applied
-
-
-def _refuse_recale(path: Path, reasons: list[str]) -> None:
-    """Name each citation that keeps a recale from being written."""
-    for reason in reasons:
-        print(f"{path.stem}: not recaled, cannot move {reason}", file=sys.stderr)
+    return Recale(applied=applied)
 
 
 def _pending_refs(

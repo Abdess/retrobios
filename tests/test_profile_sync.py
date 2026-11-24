@@ -72,7 +72,7 @@ from profiling.detection import (
     watch_hashes,
 )
 from profiling.triage import drift_score
-from profiling.rebase import rebase_refs
+from profiling.rebase import Recale, rebase_refs
 from profiling.repos import select_repo
 from model.sourceref import RefPart, parse_source_ref, split_source_ref
 from core import upstream
@@ -2554,7 +2554,7 @@ class TestRebaseRefs(unittest.TestCase):
         applied = rebase_refs(
             self.path,
             self._report([EntryReport("a.bin", "a.c:10-12", "SHIFTED", [part])]),
-        )
+        ).applied
         self.assertEqual(applied, ["a.c:10-12 -> a.c:20-22"])
         self.assertIn('source_ref: "a.c:20-22"', self.path.read_text())
 
@@ -2572,7 +2572,7 @@ class TestRebaseRefs(unittest.TestCase):
             rebase_refs(
                 self.path,
                 self._report([EntryReport("b.bin", "b.c:5", "CHANGED", [part])]),
-            ),
+            ).applied,
             [],
         )
         self.assertIn('source_ref: "b.c:5"', self.path.read_text())
@@ -2583,7 +2583,7 @@ class TestRebaseRefs(unittest.TestCase):
             rebase_refs(
                 self.path,
                 self._report([EntryReport("b.bin", "b.c:5", "AMBIGUOUS", [part])]),
-            ),
+            ).applied,
             [],
         )
 
@@ -2596,8 +2596,8 @@ class TestRebaseRefs(unittest.TestCase):
         )
         report.counts = {"RENAMED": 1}
         report.pinned_tag = "v1.6.0"
-        self.assertEqual(rebase_refs(self.path, report), [])
-        self.assertEqual(rebase_refs(self.path, report, accept_changed=True), [])
+        self.assertEqual(rebase_refs(self.path, report), Recale())
+        self.assertEqual(rebase_refs(self.path, report, accept_changed=True), Recale())
         self.assertIn('source_ref: "a.c:10-12"', self.path.read_text())
 
     def test_nothing_is_rebased_while_a_ref_needs_review(self):
@@ -2606,7 +2606,7 @@ class TestRebaseRefs(unittest.TestCase):
             [EntryReport("a.bin", "a.c:10-12", "SHIFTED", [shifted])]
         )
         report.counts = {"SHIFTED": 1, "CHANGED": 1}
-        self.assertEqual(rebase_refs(self.path, report), [])
+        self.assertEqual(rebase_refs(self.path, report), Recale())
         self.assertIn('source_ref: "a.c:10-12"', self.path.read_text())
 
     def test_accept_changed_recales_a_reviewed_diff(self):
@@ -2615,8 +2615,8 @@ class TestRebaseRefs(unittest.TestCase):
             [EntryReport("a.bin", "a.c:10-12", "CHANGED", [part])]
         )
         report.counts = {"CHANGED": 1}
-        self.assertEqual(rebase_refs(self.path, report), [])
-        applied = rebase_refs(self.path, report, accept_changed=True)
+        self.assertEqual(rebase_refs(self.path, report), Recale())
+        applied = rebase_refs(self.path, report, accept_changed=True).applied
         self.assertEqual(applied, ["a.c:10-12 -> a.c:30-32"])
 
     def test_accept_changed_does_not_cover_gone(self):
@@ -2625,7 +2625,7 @@ class TestRebaseRefs(unittest.TestCase):
             [EntryReport("a.bin", "a.c:10-12", "CHANGED", [part])]
         )
         report.counts = {"CHANGED": 1, "GONE": 1}
-        self.assertEqual(rebase_refs(self.path, report, accept_changed=True), [])
+        self.assertEqual(rebase_refs(self.path, report, accept_changed=True), Recale())
 
     def test_accept_changed_is_refused_on_every_profile(self):
         args = profile_sync.build_parser().parse_args(["--all", "--accept-changed"])
@@ -2650,7 +2650,7 @@ class TestRebaseRefs(unittest.TestCase):
                     )
                 ]
             ),
-        )
+        ).applied
         self.assertEqual(len(applied), 1)
         text = self.path.read_text()
         self.assertIn('source_ref: "a.c:20-22 (loads the kernel)"', text)
@@ -2666,7 +2666,7 @@ class TestRebaseRefs(unittest.TestCase):
             self._report(
                 [EntryReport("a.bin [libretro]", "a.c:10-12", "SHIFTED", [part])]
             ),
-        )
+        ).applied
         self.assertEqual(applied, [])
 
     def test_shifted_part_beside_changed_part_is_rebased(self):
@@ -3180,7 +3180,7 @@ class TestDeliberatelyFrozenPin(TestBuildReport):
         report = build_report("test", self._frozen(), self.dir)
         path = Path(self.dir) / "p.yml"
         path.write_text(SAMPLE, encoding="utf-8")
-        self.assertEqual(rebase_refs(path, report), [])
+        self.assertEqual(rebase_refs(path, report).applied, [])
         self.assertFalse(bump_commit(path, report).moved)
 
     def test_the_builds_platforms_hold_say_so(self):
@@ -3354,8 +3354,13 @@ class TestRebaseWaitsForThePin(unittest.TestCase):
             {"SHIFTED": 2},
         )
         self.assertTrue(rebase.pending_recale(report))
-        self.assertEqual(rebase_refs(self.path, report), [])
+        blocker = "b.bin: b.c:5, (just a note) (annotated, a rewrite would drop the annotation)"
+        self.assertEqual(rebase_refs(self.path, report), Recale(refused=[blocker]))
         self.assertIn('source_ref: "a.c:10-12"', self.path.read_text())
+        # --bump-commit alone names the same ref instead of staying silent.
+        bump = bump_commit(self.path, report)
+        self.assertFalse(bump.moved)
+        self.assertEqual(bump.refusal, f"pin not advanced, cannot move {blocker}")
 
     def test_asking_for_both_writes_nothing_when_the_pin_cannot_follow(self):
         """The pass is atomic: refs and pin move together or not at all."""
@@ -3385,7 +3390,7 @@ class TestRebaseWaitsForThePin(unittest.TestCase):
             {"SHIFTED": 1},
         )
         self.assertFalse(rebase.pending_recale(report))
-        self.assertEqual(rebase_refs(self.path, report), ["a.c:10-12 -> a.c:30-32"])
+        self.assertEqual(rebase_refs(self.path, report).applied, ["a.c:10-12 -> a.c:30-32"])
 
     def test_chained_shifts_are_judged_at_their_own_entry(self):
         # tr1x: cut2 508->531, cut3 531->552, cut4 552->575. Once written,
@@ -3408,7 +3413,7 @@ class TestRebaseWaitsForThePin(unittest.TestCase):
             for n, old, new in ((2, 508, 531), (3, 531, 552), (4, 552, 575))
         ]
         report = self._report(entries, {"SHIFTED": 3})
-        self.assertEqual(len(rebase_refs(self.path, report)), 3)
+        self.assertEqual(len(rebase_refs(self.path, report).applied), 3)
         written = self.path.read_text()
         self.assertIn('source_ref: "g.json5:575"', written)
         self.assertEqual(
@@ -3608,7 +3613,7 @@ class TestBumpCommit(unittest.TestCase):
         )
         self.assertFalse(bump_commit(self.path, report).moved)
         self.assertNotIn("newhead", self.path.read_text())
-        self.assertEqual(rebase_refs(self.path, report), ["a.c:10-12 -> a.c:30-32"])
+        self.assertEqual(rebase_refs(self.path, report).applied, ["a.c:10-12 -> a.c:30-32"])
         self.assertTrue(bump_commit(self.path, report).moved)
 
     def test_an_upstream_on_its_release_tag_stays_there(self):
@@ -4469,7 +4474,7 @@ class TestRebaseProse(unittest.TestCase):
         part = PartResult(RefPart("a.c", 10, 10, "10"), "SHIFTED", None, 14, 14, [])
         applied = rebase_refs(
             self.path, self._report([self._prose_entry("a.c:10", [part])])
-        )
+        ).applied
         self.assertEqual(applied, ["notes: a.c:10 -> a.c:14"])
         text = self.path.read_text()
         self.assertIn("system directory (a.c:14) and reads", text)
@@ -4484,7 +4489,7 @@ class TestRebaseProse(unittest.TestCase):
         ]
         applied = rebase_refs(
             self.path, self._report([self._prose_entry("b.c:2,8-9", parts)])
-        )
+        ).applied
         self.assertEqual(applied, ["notes: b.c:2,8-9 -> b.c:5,11-12"])
         self.assertIn("both ranges (b.c:5,11-12) on boot", self.path.read_text())
 
@@ -4497,7 +4502,7 @@ class TestRebaseProse(unittest.TestCase):
                 self._prose_entry("a.c:10", [prose]),
                 EntryReport("a.bin", "a.c:10-12", "SHIFTED", [structured]),
             ]),
-        )
+        ).applied
         self.assertEqual(len(applied), 2)
         text = self.path.read_text()
         self.assertIn('source_ref: "a.c:14-16"', text)
@@ -4508,7 +4513,7 @@ class TestRebaseProse(unittest.TestCase):
         report = self._report(
             [self._prose_entry("a.c:10", [part])], counts={"GONE": 1}
         )
-        self.assertEqual(rebase_refs(self.path, report), [])
+        self.assertEqual(rebase_refs(self.path, report).applied, [])
         self.assertIn("(a.c:10)", self.path.read_text())
 
     def test_ambiguous_sentence_location_is_left_alone(self):
@@ -4516,7 +4521,7 @@ class TestRebaseProse(unittest.TestCase):
         part = PartResult(RefPart("q.c", 7, 7, "7"), "SHIFTED", None, 9, 9, [])
         applied = rebase_refs(
             self.path, self._report([self._prose_entry("q.c:7", [part], "twice")])
-        )
+        ).applied
         self.assertEqual(applied, [])
         self.assertEqual(self.path.read_text(), FOLDED_TWICE)
 
@@ -4536,7 +4541,7 @@ class TestRebaseProse(unittest.TestCase):
             self._prose_entry("a.c:10", [part], "quirks"),
         ])
         self.assertEqual(
-            rebase_refs(self.path, report),
+            rebase_refs(self.path, report).applied,
             ["notes: a.c:10 -> a.c:14", "quirks: a.c:10 -> a.c:14"],
         )
         written = self.path.read_text()
@@ -4554,13 +4559,9 @@ class TestRebaseProse(unittest.TestCase):
             self._prose_entry("q.c:7", [prose], "twice"),
             EntryReport("a.bin", "a.c:10-12", "SHIFTED", [structured]),
         ])
-        err = io.StringIO()
-        with contextlib.redirect_stderr(err):
-            self.assertEqual(rebase_refs(self.path, report), [])
-        self.assertIn(
-            "p: not recaled, cannot move twice: q.c:7 (0 lines carry its sentence)",
-            err.getvalue(),
-        )
+        recale = rebase_refs(self.path, report)
+        self.assertEqual(recale.applied, [])
+        self.assertIn("twice: q.c:7 (0 lines carry its sentence)", recale.refused)
         self.assertEqual(self.path.read_text(), FOLDED_TWICE)
 
     def test_folded_scalar_moves_through_its_run_token(self):
@@ -4574,7 +4575,7 @@ class TestRebaseProse(unittest.TestCase):
         applied = rebase_refs(
             self.path,
             self._report([self._prose_entry("q.c:7", [part], "quirk_note")]),
-        )
+        ).applied
         self.assertEqual(applied, ["quirk_note: q.c:7 -> q.c:9"])
         content = self.path.read_text()
         self.assertIn("(q.c:9). Checked", content)
@@ -4599,7 +4600,7 @@ class TestRebaseProse(unittest.TestCase):
         applied = rebase_refs(
             self.path,
             self._report([self._prose_entry("q.c:10-12, 30-40", parts, "quirk_note")]),
-        )
+        ).applied
         self.assertEqual(
             applied, ["quirk_note: q.c:10-12, 30-40 -> src/q.c:20-22, 50-60"]
         )
@@ -4615,7 +4616,7 @@ class TestRebaseProse(unittest.TestCase):
         ]
         applied = rebase_refs(
             self.path, self._report([self._prose_entry("b.c:2,8-9", parts)])
-        )
+        ).applied
         self.assertEqual(applied, [])
 
     def test_renamed_prose_path_is_rewritten(self):
@@ -4624,7 +4625,7 @@ class TestRebaseProse(unittest.TestCase):
         )
         applied = rebase_refs(
             self.path, self._report([self._prose_entry("a.c:10", [part])])
-        )
+        ).applied
         self.assertEqual(applied, ["notes: a.c:10 -> src/a.c:14"])
         self.assertIn("(src/a.c:14)", self.path.read_text())
 
@@ -4680,7 +4681,7 @@ class TestPendingProse(unittest.TestCase):
         report.entries[0] = EntryReport(
             "twice", "q.c:7", "SHIFTED", [part], "prose", "twice"
         )
-        self.assertEqual(rebase_refs(self.path, report), [])
+        self.assertEqual(rebase_refs(self.path, report).applied, [])
         self.assertFalse(bump_commit(self.path, report).moved)
 
 
@@ -4745,7 +4746,7 @@ class TestWrappedProse(unittest.TestCase):
                        "SHIFTED", None, 2438, 2442, []),
         ]
         report = self._report("libretro.cpp:2372-2373, 2429-2433", parts)
-        self.assertEqual(len(rebase_refs(self.path, report)), 1)
+        self.assertEqual(len(rebase_refs(self.path, report).applied), 1)
         text = self.path.read_text()
         self.assertIn("(libretro.cpp:\n  2381-2382, 2438-2442) and by", text)
         self.assertTrue(bump_commit(self.path, report).moved)
@@ -4763,7 +4764,7 @@ class TestWrappedProse(unittest.TestCase):
         report = self._report("src/content.rs:111-199", [part])
         report.counts = {"CHANGED": 1}
         self.assertEqual(
-            rebase_refs(self.path, report, accept_changed=True),
+            rebase_refs(self.path, report, accept_changed=True).applied,
             ["adam: src/content.rs:111-199 -> src/content.rs:111-204"],
         )
         self.assertIn("(src/content.rs\n  :111-204). No", self.path.read_text())
@@ -4836,7 +4837,7 @@ class TestCommentCitations(unittest.TestCase):
                           "SHIFTED", None, 3268, 3507, [])
         report = self._report(0, part)
         self.assertEqual(
-            rebase_refs(self.path, report),
+            rebase_refs(self.path, report).applied,
             ["comment line 10: src/cpu.c:3212-3451 -> src/cpu.c:3268-3507"],
         )
         self.assertEqual(
@@ -4851,7 +4852,7 @@ class TestCommentCitations(unittest.TestCase):
         part = PartResult(RefPart("z.c", 9, 9, "9"), "RENAMED", "src/z.c", 9, 9, [])
         report = self._report(1, part)
         self.assertEqual(
-            rebase_refs(self.path, report), ["comment line 16: z.c:9 -> src/z.c:9"]
+            rebase_refs(self.path, report).applied, ["comment line 16: z.c:9 -> src/z.c:9"]
         )
         self.assertIn('"a.c:10-12"  # see src/z.c:9', self.path.read_text())
         self.assertTrue(bump_commit(self.path, report).moved)

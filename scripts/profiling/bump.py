@@ -17,7 +17,7 @@ from model.profiles import load_emulator_profiles
 from model.registry import list_registered_platforms
 from profiling import version_basis
 from profiling.anchoring import REVIEW_STATUSES
-from profiling.rebase import pending_recale
+from profiling.rebase import pending_recale, pin_blockers
 from profiling.reports import ProfileReport, SkipKind
 from profiling.yamledit import apply_edit, insert_after_line, replace_field_line, set_version_fields
 from resolve.cores import resolve_platform_cores
@@ -127,6 +127,9 @@ def bump_commit(
         return Bump(False)
     text = path.read_text(encoding="utf-8")
     if pending_recale(report, accept_changed, text):
+        blockers = pin_blockers(report, accept_changed)
+        if blockers:
+            return Bump(False, f"pin not advanced, cannot move {'; '.join(blockers)}")
         return Bump(False)
     document = yaml.safe_load(text)
     if document.get("built_by") and not document.get("pin_follows"):
