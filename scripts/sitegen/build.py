@@ -669,10 +669,14 @@ def generate_site(args: argparse.Namespace) -> None:
         [cov["config"] for cov in coverages.values()], db, profiles, run.suppl_names)
     # Built once, the derivable dumps taken out once: the provenance page and
     # the CSV it links to must list the same dumps.
+    # The snapshots and the pipeline's derivable.json sit beside the
+    # database, as its paths do: read from the working directory, a run on
+    # another collection published this checkout's Wanted list.
+    collection = siteinputs.current().db.parent
     dumps = wanted_dumps(
-        build_report(db, load_provenance_snapshots(), needs=profile_needs(profiles, db),
-                     root=siteinputs.current().db.parent),
-        load_derivable(),
+        build_report(db, load_provenance_snapshots(str(collection / "provenance")),
+                     needs=profile_needs(profiles, db), root=collection),
+        load_derivable(str(collection / "derivable.json")),
     )
 
     # The test each emulator page builds for itself: the parts a page is
