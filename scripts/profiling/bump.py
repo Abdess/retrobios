@@ -18,8 +18,7 @@ from model.registry import list_registered_platforms
 from profiling import version_basis
 from profiling.anchoring import REVIEW_STATUSES
 from profiling.rebase import pending_recale
-from profiling.reports import ProfileReport
-from profiling.resolver import NO_SOURCE_REF
+from profiling.reports import ProfileReport, SkipKind
 from profiling.yamledit import apply_edit, insert_after_line, replace_field_line, set_version_fields
 from resolve.cores import resolve_platform_cores
 
@@ -73,7 +72,7 @@ def _needs_review(report: ProfileReport, accept_changed: bool) -> bool:
     """Whether the report leaves a ref to read before the pin may move."""
     # A profile citing nothing has nothing to read again: anarch's pin sat
     # behind a CI-only commit through every bulk advance.
-    if report.skipped not in (None, NO_SOURCE_REF) or not report.head or report.pinned_tag:
+    if report.skip_kind not in (None, SkipKind.NO_SOURCE_REF) or not report.head or report.pinned_tag:
         return True
     blocking = REVIEW_STATUSES if not accept_changed else (
         s for s in REVIEW_STATUSES if s != "CHANGED"
@@ -164,7 +163,7 @@ def bump_commit(
         report.upstream_head
         and report.upstream_pin != report.upstream_head
         and not report.upstream_tag
-        and report.skipped != NO_SOURCE_REF
+        and report.skip_kind is not SkipKind.NO_SOURCE_REF
     )
     if document.get("source_commit") == report.head and not upstream_moves:
         # Rewriting the pin to the value it already holds is not a bump, and

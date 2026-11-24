@@ -18,6 +18,7 @@ from profiling.realign import realign_prose
 from profiling.rebase import attribute_refs, rebase_refs
 from profiling.reports import (
     ProfileReport,
+    SkipKind,
     fetch_plan,
     format_markdown,
     format_report,
@@ -368,13 +369,11 @@ def read_one_profile(
         # nothing about the 600 profiles on GitHub. upstream stops asking
         # that host, so the rest of the pass costs it nothing.
         print(f"{name}: {exc}", file=sys.stderr)
-        reports.append(ProfileReport(
-            name=name, entries=[], counts={},
-            skipped=f"rate limited: {exc.host or exc}",
-        ))
-        failed.add(name)
-        return
+        report = _skipped(name, SkipKind.RATE_LIMITED, f"rate limited: {exc.host or exc}")
+        writes = False
     reports.append(report)
+    if report.unreached():
+        failed.add(name)
     if writes:
         try:
             with record_write(profile_path, name, written):
@@ -389,6 +388,13 @@ def read_one_profile(
             # profile must not end the pass for the others.
             print(f"{name}: not written: {exc}", file=sys.stderr)
             failed.add(name)
+
+
+def _skipped(name: str, kind: SkipKind, reason: str) -> ProfileReport:
+    """The report of a profile no forge comparison could be made for."""
+    report = ProfileReport(name=name, entries=[], counts={})
+    report.skip(kind, reason)
+    return report
 
 
 def read_selected(
@@ -446,24 +452,17 @@ def _build_full_report(
         # Offline with a cache that never stored this file: the profile
         # is unverified, not wrong. Reporting GONE sent readers after
         # files that exist.
-        report = ProfileReport(
-            name=name, entries=[], counts={}, skipped=f"offline: {exc}"
-        )
+        report = _skipped(name, SkipKind.OFFLINE, f"offline: {exc}")
     except upstream.GoneError as exc:
         # The forge is not coming back: a takedown, or a host that no
         # longer resolves. Saying so once in the summary beats repeating
         # it on stderr every pass, and it keeps the profile out of the
         # backlog, where nobody can act on it anyway.
-        report = ProfileReport(
-            name=name, entries=[], counts={}, skipped=f"upstream gone: {exc}"
-        )
+        report = _skipped(name, SkipKind.GONE, f"upstream gone: {exc}")
     except upstream.UpstreamError as exc:
         # One unreachable forge must not abandon the other profiles.
         print(f"{name}: {exc}", file=sys.stderr)
-        report = ProfileReport(
-            name=name, entries=[], counts={}, skipped=f"upstream error: {exc}"
-        )
-        failed.add(name)
+        report = _skipped(name, SkipKind.UPSTREAM_ERROR, f"upstream error: {exc}")
     if not report.skipped and profile_path.is_file():
         report.stale_prose = _read_stale_prose(name, profile_path, args, failed)
     if args.check_version and profile.get("version_source"):

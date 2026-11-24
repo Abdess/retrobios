@@ -69,7 +69,7 @@ from model.registry import load_platform_registry
 from model.romfolders import load_sources, sources_dir
 from model.safeparse import yaml_load
 from model.targets import platform_overrides
-from profiling.reports import ProfileReport, report_to_dict
+from profiling.reports import ProfileReport, SkipKind, report_to_dict
 from scripts.scraper import game_dat_importer
 from tests.sources import SCRIPTS
 
@@ -658,8 +658,14 @@ class ProfileSummaryTests(unittest.TestCase):
             ProfileReport("a", pin="1" * 40, head="1" * 40),
             ProfileReport("b", pin="1" * 40, head="2" * 40),
             ProfileReport("c", pin="1" * 40, head="2" * 40, counts={"CHANGED": 3}),
-            ProfileReport("d", skipped="no declared repository answers"),
-            ProfileReport("e", skipped="upstream gone (declared): archived 2019"),
+            ProfileReport("d", skipped="no declared repository answers",
+                          skip_kind=SkipKind.UNANSWERED),
+            ProfileReport("e", skipped="upstream gone (declared): archived 2019",
+                          skip_kind=SkipKind.GONE_DECLARED),
+            ProfileReport("f", skipped="upstream error: github.com/x/y answered 500",
+                          skip_kind=SkipKind.UPSTREAM_ERROR),
+            ProfileReport("g", skipped="rate limited: github.com",
+                          skip_kind=SkipKind.RATE_LIMITED),
         )
         findings = summarize_profile_sync(report)
         by_subject = {f.subject: f for f in findings}
@@ -667,6 +673,10 @@ class ProfileSummaryTests(unittest.TestCase):
         self.assertEqual(by_subject["profile_sync"].local, "1 at tip, 1 anchored past the tip")
         self.assertEqual(by_subject["c"].status, STALE)
         self.assertEqual(by_subject["d"].status, UNKNOWN)
+        # A forge that failed this time fails profile_sync's exit code: the
+        # row says the profile was not read, it is not skipped by nature.
+        self.assertEqual(by_subject["f"].status, UNKNOWN)
+        self.assertEqual(by_subject["g"].status, UNKNOWN)
         # Never checkable by nature: it does not hold the exit code.
         self.assertEqual(by_subject["e"].status, SKIPPED)
         self.assertNotIn("a", by_subject)

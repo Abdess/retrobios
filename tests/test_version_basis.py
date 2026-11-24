@@ -30,7 +30,7 @@ from core import upstream
 from profiling import version_basis
 from model.profilerepos import pin_field
 from model.profiles import load_emulator_profiles
-from profiling.reports import ProfileReport
+from profiling.reports import ProfileReport, SkipKind
 from profiling.bump import bump_commit
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -381,7 +381,7 @@ class AnAdvanceReadsTheVersionAgain(unittest.TestCase):
         self.path.write_text(SAMPLE, encoding="utf-8")
         self.report = ProfileReport(
             name="p", repo="o/n", pin="aaaaaaa", head="bbbbbbb", entries=[], counts={},
-            skipped=resolver.NO_SOURCE_REF,
+            skipped=resolver.NO_SOURCE_REF, skip_kind=SkipKind.NO_SOURCE_REF,
         )
 
     def tearDown(self):

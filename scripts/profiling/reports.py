@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
+from enum import Enum
 
 from core import upstream
 from model.sourceref import ANNOTATION_RE, trim_prose
@@ -58,6 +59,42 @@ class Attention:
     detail: str
 
 
+class SkipKind(str, Enum):
+    """Why a profile was not compared, set where the skip is decided.
+
+    The sentence in ``skipped`` is for a reader. Every verdict on a skip
+    reads this field: the JSON attention, --strict, the triage and the exit
+    code, so rewording a sentence moves no profile out of any of them.
+    """
+
+    NO_SOURCE_REF = "no_source_ref"
+    UNSUPPORTED_HOST = "unsupported_host"
+    # The profile declares the forge gone and the forge agrees.
+    GONE_DECLARED = "gone_declared"
+    # The forge says it is gone and the profile does not.
+    GONE = "gone"
+    # The profile declares the forge gone and the forge answers.
+    GONE_CONTRADICTED = "gone_contradicted"
+    # No declared repository answers, or none has a pin to read.
+    UNANSWERED = "unanswered"
+    # A forge failed this time: the profile is unread, not settled.
+    UPSTREAM_ERROR = "upstream_error"
+    RATE_LIMITED = "rate_limited"
+    OFFLINE = "offline"
+
+
+# Skips that say the profile cannot be checked as written: a repository
+# that no longer answers, no pin to read, a death the forge contradicts.
+# --strict passed them, and the CI job meant to stop an unchecked profile
+# let a mistyped repository through.
+UNCHECKABLE_SKIPS = frozenset({
+    SkipKind.UNANSWERED, SkipKind.GONE_CONTRADICTED, SkipKind.GONE,
+})
+# Skips that leave the run incomplete: a forge that failed or refused this
+# time. The profile fails the run, and its JSON row says it was not read.
+UNREACHED_SKIPS = frozenset({SkipKind.UPSTREAM_ERROR, SkipKind.RATE_LIMITED})
+
+
 @dataclass
 class ProfileReport:
     name: str
@@ -72,6 +109,7 @@ class ProfileReport:
     head: str | None = None
     entries: list[EntryReport] = field(default_factory=list)
     skipped: str | None = None
+    skip_kind: SkipKind | None = None
     counts: dict[str, int] = field(default_factory=dict)
     # Declared repositories whose forge the tool cannot read. They are named
     # rather than dropped: a `source` on an unknown host used to fall back to
@@ -135,20 +173,18 @@ class ProfileReport:
     # profile was read from does not carry. Not part of the JSON form.
     cited_sources: list[CitedSource] = field(default_factory=list)
 
-    # Skips that say the profile cannot be checked as written: a repository
-    # that no longer answers, no pin to read, a death the forge contradicts.
-    # --strict passed them, and the CI job meant to stop an unchecked profile
-    # let a mistyped repository through.
-    UNCHECKABLE = (
-        "no declared repository answers",
-        "no source_commit and no resolvable profiled_date",
-        "upstream_gone is declared but the forge answers",
-        "upstream gone:",
-    )
+    def skip(self, kind: SkipKind, reason: str) -> None:
+        """Mark the profile skipped, for a verdict and for a reader."""
+        self.skip_kind = kind
+        self.skipped = reason
 
     def uncheckable(self) -> bool:
         """Whether the skip is a defect of the profile rather than its nature."""
-        return bool(self.skipped and self.skipped.startswith(self.UNCHECKABLE))
+        return self.skip_kind in UNCHECKABLE_SKIPS
+
+    def unreached(self) -> bool:
+        """Whether a forge failing this time left the profile unread."""
+        return self.skip_kind in UNREACHED_SKIPS
 
     def needs_review(self) -> int:
         counts = self.counts or {}
@@ -200,6 +236,8 @@ class ProfileReport:
         reasons = []
         if self.uncheckable():
             reasons.append(Attention("uncheckable", UNKNOWN_LEVEL, self.skipped or ""))
+        if self.unreached():
+            reasons.append(Attention("unreached", UNKNOWN_LEVEL, self.skipped or ""))
         if self.page_version:
             # Off any forge, the release page is the feed: a version there
             # beyond the declared one is a release the profile does not cover.
@@ -409,6 +447,8 @@ def report_to_dict(report: ProfileReport) -> dict:
     """Serialisable form of one report."""
     payload = asdict(report)
     del payload["cited_sources"]
+    # The verdicts it decides are in "attention".
+    del payload["skip_kind"]
     payload["needs_review"] = report.needs_review()
     payload["attention"] = [asdict(reason) for reason in report.attention()]
     return payload

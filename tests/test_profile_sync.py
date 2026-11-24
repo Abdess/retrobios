@@ -41,6 +41,7 @@ from profiling.reports import (
     CitedSource,
     EntryReport,
     ProfileReport,
+    SkipKind,
     fetch_plan,
     format_markdown,
     format_report,
@@ -348,15 +349,18 @@ class TestGoneUpstreamIsNotAnError(unittest.TestCase):
         report = ProfileReport(
             name="yuzu", entries=[], counts={},
             skipped="upstream gone: https://host/x: HTTP 451, withdrawn for legal reasons",
+            skip_kind=SkipKind.GONE,
         )
         self.assertEqual(report.needs_review(), 0)
         self.assertTrue(report.skipped.startswith("upstream gone:"))
 
     def test_gone_and_failing_forges_land_in_different_buckets(self):
         gone = ProfileReport(name="a", entries=[], counts={},
-                             skipped="upstream gone: h: HTTP 451, withdrawn for legal reasons")
+                             skipped="upstream gone: h: HTTP 451, withdrawn for legal reasons",
+                             skip_kind=SkipKind.GONE)
         failing = ProfileReport(name="b", entries=[], counts={},
-                                skipped="upstream error: h: HTTP 403")
+                                skipped="upstream error: h: HTTP 403",
+                                skip_kind=SkipKind.UPSTREAM_ERROR)
         buffer = io.StringIO()
         with contextlib.redirect_stdout(buffer):
             profiling_run._print_elided([gone, failing], 0)
@@ -2311,7 +2315,8 @@ class TestReportToDict(unittest.TestCase):
         from profiling.reports import STRICT_KINDS, ProfileReport
 
         self.assertTrue(_sample_report().fails(STRICT_KINDS))
-        dead = ProfileReport("x", skipped="no declared repository answers")
+        dead = ProfileReport("x", skipped="no declared repository answers",
+                             skip_kind=SkipKind.UNANSWERED)
         self.assertTrue(dead.fails(STRICT_KINDS))
         warned = ProfileReport("y", pin="a", head="a", version_warning="behind")
         self.assertFalse(warned.fails(STRICT_KINDS))
@@ -2821,7 +2826,8 @@ class TestWriteDryRun(unittest.TestCase):
         from unittest import mock
 
         before = self.path.read_bytes()
-        skipped = ProfileReport(name="p", entries=[], counts={}, skipped="offline: not cached")
+        skipped = ProfileReport(name="p", entries=[], counts={}, skipped="offline: not cached",
+                                skip_kind=SkipKind.OFFLINE)
         cold = upstream.NotCachedError("o/n@pin:a.c is not in the offline cache")
         reports: list[ProfileReport] = []
         failed: set[str] = set()
@@ -3438,7 +3444,7 @@ class TestBumpCommit(unittest.TestCase):
         # report skips a profile with no source_ref, and the skip blocked it.
         report = ProfileReport(
             name="p", repo="o/n", pin="pin", head="newhead", entries=[], counts={},
-            skipped=resolver.NO_SOURCE_REF,
+            skipped=resolver.NO_SOURCE_REF, skip_kind=SkipKind.NO_SOURCE_REF,
         )
         report.upstream_head, report.upstream_pin = "uphead", "uppin"
         self.assertTrue(bump_commit(self.path, report).moved)
@@ -3461,7 +3467,7 @@ class TestBumpCommit(unittest.TestCase):
         )
         report = ProfileReport(
             name="advanced_drastic", repo="o/n", pin="pin", head="newhead", entries=[],
-            counts={}, skipped=resolver.NO_SOURCE_REF,
+            counts={}, skipped=resolver.NO_SOURCE_REF, skip_kind=SkipKind.NO_SOURCE_REF,
         )
         platforms = str(root / "platforms")
         self.assertEqual(
@@ -3481,7 +3487,7 @@ class TestBumpCommit(unittest.TestCase):
     def test_any_other_skip_still_holds_the_pin(self):
         report = ProfileReport(
             name="p", repo="o/n", pin="pin", head="newhead", entries=[], counts={},
-            skipped="rate limited: gitlab.com",
+            skipped="rate limited: gitlab.com", skip_kind=SkipKind.RATE_LIMITED,
         )
         self.assertFalse(bump_commit(self.path, report).moved)
 
@@ -6179,18 +6185,32 @@ class StrictRefusesAnUncheckableProfile(unittest.TestCase):
     was skipped with empty counts and --strict passed it in CI."""
 
     def test_defects_are_told_from_the_profiles_nature(self):
-        from profiling.reports import ProfileReport
+        def report(kind):
+            return ProfileReport(name="p", entries=[], counts={}, skipped="any words",
+                                 skip_kind=kind)
 
-        def report(reason):
-            return ProfileReport(name="p", entries=[], counts={}, skipped=reason)
+        self.assertTrue(report(SkipKind.UNANSWERED).uncheckable())
+        self.assertTrue(report(SkipKind.GONE).uncheckable())
+        self.assertTrue(report(SkipKind.GONE_CONTRADICTED).uncheckable())
+        self.assertFalse(report(SkipKind.UNSUPPORTED_HOST).uncheckable())
+        self.assertFalse(report(SkipKind.GONE_DECLARED).uncheckable())
+        self.assertFalse(report(SkipKind.NO_SOURCE_REF).uncheckable())
+        self.assertFalse(report(SkipKind.OFFLINE).uncheckable())
 
-        self.assertTrue(report("no declared repository answers (moved)").uncheckable())
-        self.assertTrue(report(
-            "no source_commit and no resolvable profiled_date on any declared repository"
-        ).uncheckable())
-        self.assertFalse(report("unsupported host: https://example.org").uncheckable())
-        self.assertFalse(report("upstream gone (declared): taken down").uncheckable())
-        self.assertFalse(report("no source_ref").uncheckable())
+    def test_a_forge_failing_this_time_is_unread_in_the_json_too(self):
+        """profile_sync exited 1 on a forge answering 500 or 429 while its
+        JSON row carried no attention, so check_freshness --profiles showed
+        SKIPPED and exited 0."""
+        for kind in (SkipKind.UPSTREAM_ERROR, SkipKind.RATE_LIMITED):
+            report = ProfileReport(name="p", skipped="x", skip_kind=kind)
+            self.assertTrue(report.unreached())
+            self.assertEqual(
+                [(r.kind, r.level) for r in report.attention()],
+                [("unreached", profiling_reports.UNKNOWN_LEVEL)],
+            )
+            self.assertNotIn("skip_kind", report_to_dict(report))
+        self.assertFalse(ProfileReport(name="p", skipped="x",
+                                       skip_kind=SkipKind.OFFLINE).unreached())
 
 
 class AnOffForgeProfileWatchesItsReleasePage(unittest.TestCase):
@@ -6558,6 +6578,7 @@ class TheTriageCountsWhatBlocksThePin(unittest.TestCase):
         while the triage put them at 0 under the clean profiles."""
         gone = ProfileReport(
             name="gone", pin="p", skipped="no declared repository answers (o/n)",
+            skip_kind=SkipKind.UNANSWERED,
         )
         reports = [self._report("clean", 1), gone]
         selected = {r.name: {"source": "https://github.com/o/n"} for r in reports}

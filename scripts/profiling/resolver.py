@@ -39,7 +39,7 @@ from profiling.citations import (
     strip_repo_word,
     symlink_target,
 )
-from profiling.reports import CitedSource, EntryReport, ProfileReport
+from profiling.reports import CitedSource, EntryReport, ProfileReport, SkipKind
 from model.profilerepos import declared_repositories
 from profiling.repos import (
     PIN,
@@ -237,7 +237,9 @@ def _readable_views(
     ]
     if select_repo(profile) is None:
         declared = str(profile.get("source") or profile.get("upstream") or "")
-        report.skipped = f"unsupported host: {declared or 'none declared'}"
+        report.skip(
+            SkipKind.UNSUPPORTED_HOST, f"unsupported host: {declared or 'none declared'}"
+        )
         return None
 
     stated_gone = str(profile.get("upstream_gone") or "").strip()
@@ -253,21 +255,22 @@ def _readable_views(
             # The profile says the forge is gone and the forge agrees. That is
             # a recorded fact, not an open problem: the refs describe the last
             # revision anyone can reach, and nothing further is possible.
-            report.skipped = f"upstream gone (declared): {stated_gone}"
+            report.skip(SkipKind.GONE_DECLARED, f"upstream gone (declared): {stated_gone}")
             return None
         raise
     if stated_gone and any(view.field != "source_mirror" for view in views):
         # Declared dead, yet it answered. A profile that keeps saying so stops
         # being read, so the contradiction is the finding.
-        report.skipped = (
-            f"upstream_gone is declared but the forge answers: {stated_gone}"
+        report.skip(
+            SkipKind.GONE_CONTRADICTED,
+            f"upstream_gone is declared but the forge answers: {stated_gone}",
         )
         return None
     if not views and stated_gone:
-        report.skipped = f"upstream gone (declared): {stated_gone}"
+        report.skip(SkipKind.GONE_DECLARED, f"upstream gone (declared): {stated_gone}")
         return None
     if not views:
-        report.skipped = _unanswered_skip(profile)
+        report.skip(SkipKind.UNANSWERED, _unanswered_skip(profile))
         return None
     return views
 
@@ -918,7 +921,7 @@ def build_report(
     # A profile carrying no source_ref still has a pin worth writing and a
     # version worth checking, so the revisions above are resolved first.
     if not refs:
-        report.skipped = NO_SOURCE_REF
+        report.skip(SkipKind.NO_SOURCE_REF, NO_SOURCE_REF)
         return report
 
     resolver = _Resolver(
