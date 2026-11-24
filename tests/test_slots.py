@@ -27,7 +27,10 @@ def _db(entries: dict[str, dict]) -> dict:
     The resolver reads the disk before it answers, so the fixture writes the
     files it indexes and the caller runs from the directory holding them.
     """
-    files, by_md5, by_name, by_path_suffix = {}, {}, {}, {}
+    files: dict[str, dict] = {}
+    by_md5: dict[str, str] = {}
+    by_name: dict[str, list[str]] = {}
+    by_path_suffix: dict[str, list[str]] = {}
     for sha1, info in entries.items():
         path = info["path"]
         name = path.rsplit("/", 1)[-1]
@@ -57,12 +60,12 @@ def _db(entries: dict[str, dict]) -> dict:
 
 
 _ROOT = Path(tempfile.mkdtemp(prefix="slots-"))
-_ENTRIES = {
+_ENTRIES: dict[str, dict[str, str | int]] = {
     "a" * 40: {"path": "bios/Console/GC/USA/IPL.bin", "md5": "m" * 32, "size": 3},
     "b" * 40: {"path": "bios/Console/GC/JAP/IPL.bin", "md5": "n" * 32, "size": 3},
 }
 for _info in _ENTRIES.values():
-    _target = _ROOT / _info["path"]
+    _target = _ROOT / str(_info["path"])
     _target.parent.mkdir(parents=True, exist_ok=True)
     _target.write_bytes(b"rom")
 
