@@ -79,7 +79,7 @@ from installer.tui_routes import (
     tui_pad_route,
     tui_wants_mouse,
 )
-from installer.tui_screens import tui_view
+from installer.tui_help import tui_view
 from installer.tui_state import TUI_MAX_WIDTH, TuiState
 
 if TYPE_CHECKING:

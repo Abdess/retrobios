@@ -14,7 +14,8 @@ from installer.tui_commands import _tui_standalone_fits
 from installer.tui_frame import _armed, _bar_click, _bar_commits, _pager_starts
 from installer.tui_keys import TuiKey, TuiMouse
 from installer.tui_rows import TUI_TICK_ROWS, _CHECKLISTS, _PAGERS, _first_item, tui_rows
-from installer.tui_screens import _only_match, _pager_items, tui_view
+from installer.tui_screens import _only_match, _pager_items
+from installer.tui_help import tui_view
 from installer.tui_state import TUI_MAX_WIDTH
 
 if TYPE_CHECKING:
