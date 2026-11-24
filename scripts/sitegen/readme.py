@@ -19,7 +19,6 @@ from core.paths import DB_FILE, REPO_ROOT
 from core.sizes import size_text
 from core import upstream
 from installer_build.module import installer_module
-from model.composition import compute_composition, count_catalog_matched
 from model.guides import PACKAGE_COMMAND
 from sitegen.guidedata import install_command
 from model.largefiles import load_registered_paths
@@ -175,26 +174,6 @@ def fetch_contributors() -> list[dict]:
         and not c.get("login", "").endswith("[bot]")
         and c.get("type") == "User"
         and c.get("login") != owner
-    ]
-
-
-_CATALOG_LABELS = {"redump": "Redump", "no-intro": "No-Intro", "tosec": "TOSEC"}
-
-
-def _catalog_matched_line(db: dict) -> list[str]:
-    """Bullet line for files matched to dump-preservation catalogs."""
-    matched = count_catalog_matched(db)
-    if not matched:
-        return []
-    sources: set[str] = set()
-    for entry in db.get("files", {}).values():
-        sources.update(entry.get("provenance") or ())
-    system_files = compute_composition(db)["systems"]["files"]
-    labels = ", ".join(_CATALOG_LABELS.get(s, s) for s in sorted(sources))
-    return [
-        f"- **{matched:,} of {system_files:,} system files** matched to"
-        f" dump-preservation catalogs ({labels}). Arcade sets and engine data"
-        f" fall outside what those catalogs index"
     ]
 
 
