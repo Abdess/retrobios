@@ -112,7 +112,7 @@ def _settle_untracked(
     return "untracked", file_name
 
 
-def _same_members(pack: zipfile.ZipFile, name: str, source: str) -> bool:
+def same_members(pack: zipfile.ZipFile, name: str, source: str) -> bool:
     """Whether a ZIP inside the pack holds the members of a ZIP on disk.
 
     A rebuilt archive (TorrentZip) differs byte for byte and is the same
@@ -164,7 +164,7 @@ def _rebuilt_from(zf: zipfile.ZipFile, name: str, by_name: dict, files_db: dict)
         _src_path = files_db[_src_sha1]["path"]
         if not os.path.exists(_src_path):
             continue
-        if _same_members(zf, name, _src_path):
+        if same_members(zf, name, _src_path):
             return _bn
     return None
 
@@ -200,7 +200,7 @@ def _cached_as(
             return _bn
         if (
             name.endswith(".zip") and _dp.endswith(".zip")
-            and _same_members(zf, name, _dp)
+            and same_members(zf, name, _dp)
         ):
             return _bn
     return None
@@ -604,7 +604,7 @@ def _same_content(zf: zipfile.ZipFile, member: str, local: str) -> bool:
     with open(local, "rb") as handle:
         if zf.read(member) == handle.read():
             return True
-    return is_archive_path(local) and _same_members(zf, member, local)
+    return is_archive_path(local) and same_members(zf, member, local)
 
 
 class ConformanceOptions(TypedDict, total=False):
@@ -853,7 +853,7 @@ def _count_baseline(
     return count
 
 
-def _native_hash_errors(
+def native_hash_errors(
     zf: zipfile.ZipFile, decl_by_member: dict[str, list[dict]], config: dict, db: dict | None,
 ) -> list[str]:
     """The platform's native hash check replayed on the pack's bytes."""
@@ -1001,7 +1001,7 @@ def verify_pack_against_platform(
         # 1. Baseline file presence + native hash check
         baseline_groups, system_of = _baseline_groups(expect, view.is_flat)
         baseline = _count_baseline(expect, view, baseline_groups, system_of, errors)
-        errors.extend(_native_hash_errors(zf, baseline.decl_by_member, expect.config, db))
+        errors.extend(native_hash_errors(zf, baseline.decl_by_member, expect.config, db))
         core_checked, core_present = _check_core_extras(expect, view, baseline_groups, errors)
 
     return (

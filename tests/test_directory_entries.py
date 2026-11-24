@@ -314,13 +314,13 @@ class PackCarriesADirectory(DirectoryFixture):
 
 class UnansweredDirectoryDestination(unittest.TestCase):
     def test_a_directory_gap_is_named_by_its_path(self):
-        from packs.extras import _extra_dest
+        from packs.extras import extra_dest
 
         tree = {"name": "registered/", "type": "directory",
                 "path": "nand/system/Contents/registered/"}
-        self.assertEqual(_extra_dest(tree), "nand/system/Contents/registered/")
+        self.assertEqual(extra_dest(tree), "nand/system/Contents/registered/")
         folder = {"name": "snd_user.rpl", "path": "cafeLibs/"}
-        self.assertEqual(_extra_dest(folder), "cafeLibs/snd_user.rpl")
+        self.assertEqual(extra_dest(folder), "cafeLibs/snd_user.rpl")
 
 
 @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")

@@ -66,7 +66,7 @@ class Companions(unittest.TestCase):
         import os
         import tempfile
 
-        from packs.extras import _agnostic_scan_extras
+        from packs.extras import agnostic_scan_extras
 
         profile = {
             "emulator": "PCSX2", "bios_mode": "agnostic", "files": [
@@ -99,7 +99,7 @@ class Companions(unittest.TestCase):
                 db = {"files": files, "indexes": {
                     "by_name": by_name, "by_md5": {}, "by_crc32": {}, "by_path_suffix": {},
                 }}
-                extras = _agnostic_scan_extras(
+                extras = agnostic_scan_extras(
                     {"pcsx2": profile}, {"pcsx2"}, db, by_name, set(), "",
                 )
             finally:
@@ -117,7 +117,7 @@ class Companions(unittest.TestCase):
         import os
         import tempfile
 
-        from packs.extras import _agnostic_scan_extras
+        from packs.extras import agnostic_scan_extras
 
         def profile(name: str, ext: str) -> dict:
             return {"emulator": name, "bios_mode": "agnostic", "files": [
@@ -148,7 +148,7 @@ class Companions(unittest.TestCase):
                     "by_name": by_name, "by_md5": {}, "by_crc32": {}, "by_path_suffix": {},
                 }}
                 profiles = {"a": profile("A", "rom1"), "b": profile("B", "erom")}
-                extras = _agnostic_scan_extras(
+                extras = agnostic_scan_extras(
                     profiles, {"a", "b"}, db, by_name, set(), "", taken={},
                 )
             finally:

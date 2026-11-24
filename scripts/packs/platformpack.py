@@ -209,7 +209,7 @@ def _matches_an_alternative(fe: dict, local_path: str, profiles: dict) -> bool:
     return False
 
 
-def _left_out_lines(cut: GameDataCut, systems: set[str], cores: bool) -> list[str]:
+def left_out_lines(cut: GameDataCut, systems: set[str], cores: bool) -> list[str]:
     """The game data a --no-game-data build left out, and why, one line each.
 
     ``systems`` limits the platform layer to the systems this pack covers,
@@ -261,7 +261,7 @@ class PackOptions(PackNarrowing, _PartScope, total=False):
 
 
 @dataclass(frozen=True)
-class _PackSettings:
+class PackSettings:
     """PackOptions with their defaults."""
 
     emulators_dir: str = EMULATORS_DIR
@@ -288,14 +288,14 @@ class _PackSettings:
 
 
 @dataclass
-class _PlatformPlan:
+class PlatformPlan:
     """What a platform pack is built from, settled before its first member."""
 
     platform_name: str
     platforms_dir: str
     db: dict
     bios_dir: str
-    opts: _PackSettings
+    opts: PackSettings
     config: dict
     emu_profiles: dict
     zip_contents: dict
@@ -333,14 +333,14 @@ class _PlatformPlan:
         return self.config.get("case_insensitive_fs", False)
 
 
-def _plan_platform_pack(
+def plan_platform_pack(
     platform_name: str,
     platforms_dir: str,
     db: dict,
     bios_dir: str,
     output_dir: str,
-    opts: _PackSettings,
-) -> _PlatformPlan | str:
+    opts: PackSettings,
+) -> PlatformPlan | str:
     """The configuration, scope and checks a platform pack reads, or the
     reason the systems asked for leave nothing to build."""
     config = load_platform_config(platform_name, platforms_dir)
@@ -402,7 +402,7 @@ def _plan_platform_pack(
         # owns: the platform's own files and trees went to the other parts.
         pack_systems = {}
 
-    plan = _PlatformPlan(
+    plan = PlatformPlan(
         platform_name, platforms_dir, db, bios_dir, opts, config, emu_profiles,
         zip_contents, cut, narrowings, zip_path, validation_index, platform_profiles,
         validation_owners, slot_overrides, pack_systems,
@@ -411,7 +411,7 @@ def _plan_platform_pack(
     return plan
 
 
-def _settle_pack_choices(plan: _PlatformPlan) -> None:
+def _settle_pack_choices(plan: PlatformPlan) -> None:
     """The declaration each destination takes and the variants left out."""
     opts = plan.opts
     if opts.source != "truth":
@@ -473,14 +473,14 @@ class PlatformPackOutcome:
 
 
 @dataclass
-class _PlatformPackBuild:
+class PlatformPackBuild:
     """One platform pack being written: its members and what each slot came to.
 
     A platform file is settled by the DeclarationJudge the install manifest
     reads too, and a core extra by the lookup build_platform_pack binds.
     """
 
-    plan: _PlatformPlan
+    plan: PlatformPlan
     zf: zipfile.ZipFile | PackRecord
     declarations: DeclarationJudge
     resolve_extra: Callable[[dict, str], tuple[str | None, str, str]]
@@ -1013,7 +1013,7 @@ class _PlatformPackBuild:
             slot_undecidable=plan.slot_undecidable,
             uncached=self.uncached,
             left_out=(
-                _left_out_lines(
+                left_out_lines(
                     plan.cut,
                     systems=set(plan.pack_systems) if opts.source != "truth" else set(),
                     cores=opts.source != "platform" and opts.precomputed_extras is None,
@@ -1063,8 +1063,8 @@ def build_platform_pack(
     for leave nothing to build.
     """
     reject_unknown("generate_pack", options, PackOptions.__optional_keys__)
-    opts = _PackSettings(**options)
-    plan = _plan_platform_pack(platform_name, platforms_dir, db, bios_dir, output_dir, opts)
+    opts = PackSettings(**options)
+    plan = plan_platform_pack(platform_name, platforms_dir, db, bios_dir, output_dir, opts)
     if isinstance(plan, str):
         return PlatformPackOutcome(zip_path=None, refusal=plan)
 
@@ -1086,7 +1086,7 @@ def build_platform_pack(
         contextlib.nullcontext(opts.record) if opts.record is not None
         else writing_pack(plan.zip_path)
     ) as zf:
-        build = _PlatformPackBuild(plan, zf, declarations, resolve_extra)
+        build = PlatformPackBuild(plan, zf, declarations, resolve_extra)
         build.run()
     if opts.counts is not None:
         opts.counts.append(
@@ -1161,7 +1161,7 @@ def _split_extras(
     else:
         all_extras = []
     left_out = (
-        _left_out_lines(cut, systems=set(), cores=True)
+        left_out_lines(cut, systems=set(), cores=True)
         if cut is not None and source != "platform" else []
     )
     return all_extras, left_out

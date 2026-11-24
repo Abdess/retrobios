@@ -508,7 +508,7 @@ def _record_placed(
         placed_local[full] = local
 
 
-def _extra_dest(u: dict) -> str:
+def extra_dest(u: dict) -> str:
     """Where a report entry lands before any platform prefix.
 
     An archive entry goes by the archive's name, and a directory path takes
@@ -542,7 +542,7 @@ def unplaceable_extras(
         if (not placement.slug_based and u.get("root") not in ("save", *OUTER_ROOTS)
                 and not u.get("unplaced")):
             continue
-        dest = _extra_dest(u)
+        dest = extra_dest(u)
         if not placement.places(u, dest):
             key = (u.get("emulator", ""), u.get("name", ""), u.get("path") or "")
             unplaced[key] = placement.unplaced_reason(u, dest)
@@ -586,7 +586,7 @@ class _ScanSeed:
     folder: str
 
 
-def _agnostic_scan_extras(
+def agnostic_scan_extras(
     profiles: dict,
     relevant: set,
     db: dict,
@@ -842,7 +842,7 @@ def _seed_extras(context: _ScanContext, seed: _ScanSeed) -> list[dict]:
         if full_dest in context.seen_dests and (taken is None or full_dest not in taken):
             continue
         extra = _scan_extra(seed, scan_name, dest, sha1)
-        if _take(extra, full_dest, context.seen_dests, taken):
+        if take(extra, full_dest, context.seen_dests, taken):
             extras.append(extra)
         else:
             # The image another core's scan placed is this core's
@@ -960,7 +960,7 @@ def expand_agnostic_entries(
         layout = (entry.get("standalone_path") if standalone else None) or entry.get("path") or ""
         return layout.rsplit("/", 1)[0] if "/" in layout else ""
 
-    scanned = _agnostic_scan_extras(
+    scanned = agnostic_scan_extras(
         {emu_name: {**profile, "files": files}}, {emu_name}, db,
         db.get("indexes", {}).get("by_name", {}), set(), "",
         PlatformLaunches(standalone=frozenset({emu_name})) if standalone else PlatformLaunches(),
@@ -1049,7 +1049,7 @@ def _companion_extras(
             "agnostic_scan": True,
         }
         extra["claim_order"] = (4, 0, emu_name)
-        if _take(extra, companion_full, seen_dests, taken):
+        if take(extra, companion_full, seen_dests, taken):
             extras.append(extra)
     return extras
 
@@ -1160,7 +1160,7 @@ def _files_by_directory(files_db: dict) -> dict[str, list[tuple[str, dict]]]:
     return _DIRECTORY_INDEX[1]
 
 
-def _archive_prefix_extras(
+def archive_prefix_extras(
     profiles: dict,
     relevant: set,
     covered_names: set,
@@ -1253,7 +1253,7 @@ def _archive_prefix_copies(
         if archive_entry.get("system_dir"):
             extra["system_dir"] = archive_entry["system_dir"]
         extra["claim_order"] = (3, 0, emu_name)
-        if _take(extra, full_dest, seen_dests, taken):
+        if take(extra, full_dest, seen_dests, taken):
             extras.append(extra)
 
     return extras
@@ -1576,18 +1576,18 @@ def collect_emulator_extras(
             ))
         extras.extend(
             extra for extra in claims
-            if _take(extra, full_dest, state.seen_dests, state.taken)
+            if take(extra, full_dest, state.seen_dests, state.taken)
         )
 
     extras.extend(
-        _archive_prefix_extras(
+        archive_prefix_extras(
             profiles, relevant, covered_names, state.seen_dests, extras_prefix,
             by_name, state.taken, launches,
         )
     )
 
     extras.extend(
-        _agnostic_scan_extras(
+        agnostic_scan_extras(
             profiles, relevant, db, by_name, state.seen_dests, extras_prefix,
             launches, state.taken,
         )
@@ -1615,7 +1615,7 @@ def _place_report_entry(state: _FirstPass, u: dict) -> None:
     # For archive entries, use the archive name for resolution
     archive = u.get("archive")
     name = archive if archive else u["name"]
-    dest = _extra_dest(u)
+    dest = extra_dest(u)
 
     # Slug-based platforms: prefix dest with system slug. A file read
     # below a save directory kept per system goes below each system.
@@ -1673,12 +1673,12 @@ def _claim_placement(
         )
     candidates.sort(key=lambda item: item["claim_order"])
     extra, claims = candidates[0], candidates[1:]
-    if not _take(extra, full_dest, state.seen_dests, state.taken):
+    if not take(extra, full_dest, state.seen_dests, state.taken):
         for claim in claims:
-            _another_claim(state.taken.get(full_dest), claim)
+            another_claim(state.taken.get(full_dest), claim)
         return
     for claim in claims:
-        _another_claim(extra, claim)
+        another_claim(extra, claim)
     state.extras.append(extra)
 
 
@@ -1814,7 +1814,7 @@ class _ClaimRanks:
         counts: dict[str, int] = {}
         for u in undeclared:
             placed = (
-                placement.places(u, _extra_dest(u))
+                placement.places(u, extra_dest(u))
                 if u.get("in_repo") and not u.get("bundled") else []
             )
             self._placed[id(u)] = placed
@@ -1998,13 +1998,13 @@ def _report_extra(u: dict, name: str, dest: str) -> dict:
     return extra
 
 
-def _take(
+def take(
     extra: dict, full_dest: str, seen_dests: set[str], taken: dict[str, dict] | None
 ) -> bool:
     """Whether an extra takes its destination. A taken one records the claim."""
     if full_dest in seen_dests:
         if taken is not None:
-            _another_claim(taken.get(full_dest), extra)
+            another_claim(taken.get(full_dest), extra)
         return False
     seen_dests.add(full_dest)
     if taken is not None:
@@ -2012,7 +2012,7 @@ def _take(
     return True
 
 
-def _another_claim(extra: dict | None, claim: dict) -> None:
+def another_claim(extra: dict | None, claim: dict) -> None:
     """Record a core that reads a destination another core's extra took.
 
     The pack ships one file per destination, so the first claimant's extra

@@ -101,7 +101,7 @@ class ManifestOptions(InstallListOptions, total=False):
 
 
 @dataclass(frozen=True)
-class _ManifestSettings:
+class ManifestSettings:
     """ManifestOptions with their defaults."""
 
     emulators_dir: str = EMULATORS_DIR
@@ -123,7 +123,7 @@ class _ManifestSettings:
 
 
 @dataclass
-class _ManifestBuild:
+class ManifestBuild:
     """One install manifest being listed: its files, omissions and the slots
     they take, settled by the rules the pack builder follows."""
 
@@ -131,7 +131,7 @@ class _ManifestBuild:
     platforms_dir: str
     db: dict
     bios_dir: str
-    opts: _ManifestSettings
+    opts: ManifestSettings
     config: dict
     emu_profiles: dict
     zip_contents: dict
@@ -582,8 +582,8 @@ def _start_manifest(
     db: dict,
     bios_dir: str,
     registry_path: str,
-    opts: _ManifestSettings,
-) -> tuple[_ManifestBuild, dict]:
+    opts: ManifestSettings,
+) -> tuple[ManifestBuild, dict]:
     """The manifest's configuration and scope, and the profiles before the
     game data cut."""
     config = load_platform_config(platform_name, platforms_dir)
@@ -610,7 +610,7 @@ def _start_manifest(
     plat_registry = platform_registry_at(registry_path).get(platform_name) or {}
 
     pack_systems = platform_scope_systems(config, emu_profiles, opts.target_cores)
-    build = _ManifestBuild(
+    build = ManifestBuild(
         platform_name, platforms_dir, db, bios_dir, opts, config, emu_profiles,
         zip_contents, data_registry, game_entries, plat_registry.get("install", {}),
         str(REPO_ROOT), pack_systems,
@@ -625,7 +625,7 @@ def _start_manifest(
     return build, full_profiles
 
 
-def _settle_manifest_scope(build: _ManifestBuild) -> None:
+def _settle_manifest_scope(build: ManifestBuild) -> None:
     """Game data destinations, slot choices and the region selection."""
     opts, config, emu_profiles = build.opts, build.config, build.emu_profiles
     # A destination is game data when every declaration of it is: a firmware
@@ -698,7 +698,7 @@ def generate_manifest(
     does not hold to its cache folder: the caller reports it.
     """
     reject_unknown("generate_manifest", options, ManifestOptions.__optional_keys__)
-    opts = _ManifestSettings(**options)
+    opts = ManifestSettings(**options)
     build, full_profiles = _start_manifest(
         platform_name, platforms_dir, db, bios_dir, registry_path, opts
     )
@@ -779,7 +779,7 @@ def generate_install_list(
     built under a case fold override, is no list install.py reads by default
     and gets neither.
     """
-    settings = _ManifestSettings(**options)
+    settings = ManifestSettings(**options)
     built: dict = {}
     result = generate_manifest(platform_name, platforms_dir, db, bios_dir, registry_path,
                                build_out=built, **options)

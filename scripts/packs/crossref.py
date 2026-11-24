@@ -322,7 +322,7 @@ def entry_source(f: dict, index: dict) -> str | None:
     return "bios" if held is not None else found
 
 
-def _resolve_archive_source(
+def resolve_archive_source(
     archive_name: str,
     by_name: dict[str, list],
     by_name_lower: dict[str, str],
@@ -522,7 +522,7 @@ class _ProfileComparison:
             f.get("mode", "both"),
         )
         if archive_key not in self.archive_gaps:
-            source = _resolve_archive_source(
+            source = resolve_archive_source(
                 archive, self.index["by_name"], self.index["by_name_lower"],
                 self.index["data_names"], self.index["by_path_suffix"],
             )

@@ -175,13 +175,13 @@ def _builder_placement(
     return shipped, occupied
 
 
-def _dest_key(file_entry: dict, sys_id: str) -> str:
+def dest_key(file_entry: dict, sys_id: str) -> str:
     """The path a declaration occupies, as the builder keys its pack."""
     dest = declared_destination(file_entry)
     return dest or f"{sys_id}/{file_entry.get('name', '')}"
 
 
-def _twin_index(
+def twin_index(
     verify_systems: dict, db: dict, base_dest: str, zip_contents: dict,
 ) -> tuple[dict[str, int], dict[int, tuple[str, dict]]]:
     """Which declaration the pack ships at each destination, and every declaration by id."""
@@ -202,7 +202,7 @@ def _twin_index(
 
 
 @dataclass(frozen=True)
-class _DeclarationResolver:
+class DeclarationResolver:
     """How a platform run resolves its declarations, as the builder does."""
 
     db: dict
@@ -212,14 +212,14 @@ class _DeclarationResolver:
     mode: str
     platform_profiles: dict
     # Which declaration the pack ships at each destination, and every
-    # declaration by id (_twin_index).
+    # declaration by id (twin_index).
     preferred_entries: dict[str, int]
     winners: dict[int, tuple[str, dict]]
     base_dest: str
 
 
 def _resolve_declaration(
-    file_entry: dict, sys_id: str, resolver: _DeclarationResolver,
+    file_entry: dict, sys_id: str, resolver: DeclarationResolver,
 ) -> tuple[str | None, str, str | None, dict]:
     """Resolve a declaration to the file the pack ships at its destination.
 
@@ -338,7 +338,7 @@ def _resolve_for_platform(
 
 
 @dataclass(frozen=True)
-class _PlatformRun:
+class PlatformRun:
     """The inputs of one verify_platform run, read by each of its stages."""
 
     config: dict
@@ -359,12 +359,12 @@ class _PlatformRun:
 
 
 @dataclass
-class _PlatformTally:
+class PlatformTally:
     """Each declaration's verdict, and the verdicts aggregated by destination."""
 
-    run: _PlatformRun
+    run: PlatformRun
     platform: str
-    resolver: _DeclarationResolver
+    resolver: DeclarationResolver
     region_drops: set[str]
     validation_index: dict
     validation_owners: dict[str, list[tuple[str, str]]]
@@ -415,7 +415,7 @@ class _PlatformTally:
             )[1] is None
         ):
             self.packed_order.append((sys_id, self.run.full(destination), local_path))
-            self.shipped_keys.add(_dest_key(file_entry, sys_id))
+            self.shipped_keys.add(dest_key(file_entry, sys_id))
         if _twin_unmet(
             result, held_by, file_entry, sys_id, self.run.full(destination), holder,
         ):
@@ -445,7 +445,7 @@ class _PlatformTally:
             # stayed out of pack_destinations and step 5 read the pack's
             # copy as a file only the pack holds.
             self.packed_order.append((sys_id, self.run.full(destination), local_path))
-            self.shipped_keys.add(_dest_key(file_entry, sys_id))
+            self.shipped_keys.add(dest_key(file_entry, sys_id))
             return result, None
         if stored is not None:
             # The builder keeps the slot: instructions for a user_provided
@@ -490,7 +490,7 @@ class _PlatformTally:
         # A declaration that finds nothing leaves the path to one that
         # holds a file: the builder packs that file there, whatever the
         # order the two are read in.
-        dest = _dest_key(file_entry, sys_id)
+        dest = dest_key(file_entry, sys_id)
         self.results_at.setdefault(dest, []).append(result)
         required = file_entry.get("required", True)
         cur = result["status"]
@@ -530,7 +530,7 @@ class _PlatformTally:
         for sys_id, system in self.run.config.get("systems", {}).items():
             for file_entry in system.get("files", []):
                 if file_entry.get("group"):
-                    dest = _dest_key(file_entry, sys_id)
+                    dest = dest_key(file_entry, sys_id)
                     if dest in self.file_status:
                         members.setdefault((sys_id, file_entry["group"]), []).append(dest)
         for dests in members.values():
@@ -610,7 +610,7 @@ def _required_declarations(verify_systems: dict) -> dict:
 
 
 def _region_pass(
-    run: _PlatformRun, verify_systems: dict, pack_overrides: dict, regions: list[str],
+    run: PlatformRun, verify_systems: dict, pack_overrides: dict, regions: list[str],
 ) -> tuple[set[str], list[str], dict[tuple[str, str, str], str]]:
     """The destinations a region run withdraws, the groups no file answers,
     and the destination of each core extra."""
@@ -652,7 +652,7 @@ def _region_pass(
 
 
 def _narrowed(
-    run: _PlatformRun,
+    run: PlatformRun,
     rows: list[dict],
     region_drops: set[str],
     region_extra_dests: dict[tuple[str, str, str], str],
@@ -678,7 +678,7 @@ def _narrowed(
 
 
 def _platform_gaps(
-    run: _PlatformRun,
+    run: PlatformRun,
     occupied: dict[str, str | None],
     region_drops: set[str],
     region_extra_dests: dict[tuple[str, str, str], str],
@@ -750,7 +750,7 @@ def _profile_coverage(
     dest_to_name: dict[str, str] = {}
     for sys_id, system in verify_systems.items():
         for fe in system.get("files", []):
-            dest_to_name.setdefault(_dest_key(fe, sys_id), fe.get("name", ""))
+            dest_to_name.setdefault(dest_key(fe, sys_id), fe.get("name", ""))
     with_validation = sum(
         1 for dest in file_status if dest_to_name.get(dest, "") in gt_filenames
     )
@@ -858,7 +858,7 @@ def verify_platform(
         verify_systems = _required_declarations(verify_systems)
 
     categories = EntryCategories(config, profiles, data_dir_registry)
-    run = _PlatformRun(
+    run = PlatformRun(
         config, db, emulators_dir, emu_profiles, profiles, target_cores,
         data_dir_registry, zip_contents, system_filter, required_only, mode, base_dest,
     )
@@ -875,12 +875,12 @@ def verify_platform(
     # one the builder prefers. The other declaration is scored against that
     # file, as the frontend will score it after installation: RetroDECK's
     # xroar component hashes bios/disk.rom and finds the PC-88 ROM.
-    preferred_entries, winners = _twin_index(
+    preferred_entries, winners = twin_index(
         verify_systems, db, base_dest, zip_contents
     )
-    tally = _PlatformTally(
+    tally = PlatformTally(
         run, platform,
-        _DeclarationResolver(
+        DeclarationResolver(
             db, zip_contents, data_dir_registry, slot_overrides, mode,
             platform_profiles, preferred_entries, winners, base_dest,
         ),

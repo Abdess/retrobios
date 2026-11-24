@@ -22,7 +22,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class AgnosticScan(unittest.TestCase):
     def test_only_the_bios_directory_seeds_and_finds_keep_its_folder(self):
-        from packs.extras import _agnostic_scan_extras
+        from packs.extras import agnostic_scan_extras
 
         with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
@@ -48,7 +48,7 @@ class AgnosticScan(unittest.TestCase):
                            {"name": "scph1.bin", "path": "pcsx2/bios/scph1.bin", "size": 64},
                            {"name": "message.wav", "path": "pcsx2/resources/message.wav", "size": 8},
                        ]}
-            extras = _agnostic_scan_extras({"y": profile}, {"y"}, db, by_name, set(), "")
+            extras = agnostic_scan_extras({"y": profile}, {"y"}, db, by_name, set(), "")
             self.assertEqual(sorted(e["destination"] for e in extras),
                              ["pcsx2/bios/scph1.bin", "pcsx2/bios/scph2.bin"])
 
@@ -61,7 +61,7 @@ class AgnosticScan(unittest.TestCase):
         folder where another profile of the system resolves a hashed dump of
         that shape is the evidence, that folder only.
         """
-        from packs.extras import _agnostic_scan_extras
+        from packs.extras import agnostic_scan_extras
 
         with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
@@ -95,7 +95,7 @@ class AgnosticScan(unittest.TestCase):
                 {"name": "scph1.bin", "size": 64,
                  "sha1": hashlib.sha1(b"a" * 64).hexdigest()},
             ]}
-            extras = _agnostic_scan_extras(
+            extras = agnostic_scan_extras(
                 {"l": placeholders, "s": pinned}, {"l"}, db, by_name, set(), "")
             self.assertEqual(sorted(e["destination"] for e in extras), [
                 "pcsx2/bios/scph1.bin", "pcsx2/bios/scph1.nvm", "pcsx2/bios/scph2.bin",
@@ -105,12 +105,12 @@ class AgnosticScan(unittest.TestCase):
             # An image the platform already ships there still gets its
             # companion: RetroBat lists pcsx2/bios/scph39001.bin itself.
             shipped = {"pcsx2/bios/scph1.bin"}
-            extras = _agnostic_scan_extras(
+            extras = agnostic_scan_extras(
                 {"l": placeholders, "s": pinned}, {"l"}, db, by_name, shipped, "")
             self.assertIn("pcsx2/bios/scph1.nvm", {e["destination"] for e in extras})
             # Nothing proves the folder: nothing is scanned.
             self.assertEqual(
-                _agnostic_scan_extras({"l": placeholders}, {"l"}, db, by_name, set(), ""), [])
+                agnostic_scan_extras({"l": placeholders}, {"l"}, db, by_name, set(), ""), [])
 
 
 class OneContentTwoPaths(unittest.TestCase):

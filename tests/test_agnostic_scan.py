@@ -292,7 +292,7 @@ class ArchivePrefixCopies(unittest.TestCase):
                 ],
             }
         }
-        return packextras._archive_prefix_extras(
+        return packextras.archive_prefix_extras(
             profiles, {"fbneo"}, {"neogeo.zip"}, set(), "", by_name
         )
 
@@ -313,7 +313,7 @@ class ArchivePrefixCopies(unittest.TestCase):
                            "system": "arcade"}],
             }
         }
-        extras = packextras._archive_prefix_extras(
+        extras = packextras.archive_prefix_extras(
             profiles, {"fbneo"}, {"neogeo.zip"}, {"fbneo/neogeo.zip"}, "",
             {"neogeo.zip": ["abc"]},
         )

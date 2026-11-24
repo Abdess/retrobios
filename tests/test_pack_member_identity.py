@@ -92,7 +92,7 @@ class OneComparisonOfArchiveMembers(unittest.TestCase):
         import tempfile
         import zipfile
 
-        from packs.integrity import _same_members
+        from packs.integrity import same_members
 
         def archive(members: dict) -> bytes:
             buffer = io.BytesIO()
@@ -110,9 +110,9 @@ class OneComparisonOfArchiveMembers(unittest.TestCase):
                 zf.writestr("other.zip", archive({"a.rom": b"X"}))
                 zf.writestr("broken.zip", b"not a zip")
             with zipfile.ZipFile(pack) as zf:
-                self.assertTrue(_same_members(zf, "same.zip", str(held)))
-                self.assertFalse(_same_members(zf, "other.zip", str(held)))
-                self.assertFalse(_same_members(zf, "broken.zip", str(held)))
+                self.assertTrue(same_members(zf, "same.zip", str(held)))
+                self.assertFalse(same_members(zf, "other.zip", str(held)))
+                self.assertFalse(same_members(zf, "broken.zip", str(held)))
         source = (Path(__file__).resolve().parents[1] / "scripts" / "packs" / "integrity.py").read_text()
         self.assertNotIn("import io as _io", source)
 
