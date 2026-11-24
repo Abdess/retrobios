@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import tests
 import ast
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -336,6 +337,38 @@ class ThinCommands(unittest.TestCase):
                         and not node.attr.startswith("__")):
                     found.append(f"{path.name}: {bound[node.value.id]}.{node.attr}")
         self.assertEqual(sorted(set(found)), [], "import it from the package that holds it")
+
+
+# How a module is named in each package: the domain packages join the words
+# of a name (crossreflaunchers), the plugin packages end a module in its kind
+# (batocera_exporter), scraper/ and installer/ separate words with an
+# underscore. One style per package, so a name says where it belongs.
+PLUGIN_SUFFIXES = {"exporter": "_exporter"}
+UNDERSCORED = frozenset({"scraper"})
+
+
+class ModuleNames(unittest.TestCase):
+    def test_each_package_keeps_one_naming_style(self):
+        found = []
+        for path in sorted(SCRIPTS.rglob("*.py")):
+            if "__pycache__" in path.parts or path.stem.startswith("_"):
+                continue
+            parts = path.relative_to(SCRIPTS).parts
+            if len(parts) == 1 or parts[0] in UNDERSCORED:
+                rule = r"[a-z][a-z0-9_]*"
+            elif parts[0] in PLUGIN_SUFFIXES:
+                rule = r"[a-z][a-z0-9]*(" + PLUGIN_SUFFIXES[parts[0]] + ")?"
+            else:
+                rule = r"[a-z][a-z0-9]*"
+            if not re.fullmatch(rule, path.stem):
+                found.append(str(path.relative_to(SCRIPTS)))
+        self.assertEqual(found, [], "name it as the other modules of its package")
+
+    def test_installer_modules_separate_their_words(self):
+        installer = SCRIPTS.parent / "installer"
+        found = [p.name for p in sorted(installer.glob("*.py"))
+                 if not p.stem.startswith("_") and not re.fullmatch(r"[a-z][a-z0-9_]*", p.stem)]
+        self.assertEqual(found, [])
 
 
 if __name__ == "__main__":
