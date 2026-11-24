@@ -18,8 +18,8 @@ from .retrobat_generators import (
     FEATURES,
     GENERATORS,
     TARGET_ABSENT,
-    _joined,
-    _record,
+    joined,
+    launcher_record,
     feature_choices,
 )
 
@@ -73,7 +73,7 @@ def hatari(sources: dict[str, Source]) -> list[Record]:
     head = src.lines(folder.start(), emutos.end())
     tail = src.lines(write.start(), write.end())
     return [
-        _record(
+        launcher_record(
             "hatari",
             "standalone",
             "fixed_name",
@@ -85,7 +85,7 @@ def hatari(sources: dict[str, Source]) -> list[Record]:
             fails_when_missing=f"{tos_folder}/{emutos.group(2)} instead, else {message}",
             depends_on_option=f"{option} unset, no hard disk image",
         ),
-        _record(
+        launcher_record(
             "hatari",
             "standalone",
             "core_option",
@@ -100,7 +100,7 @@ def hatari(sources: dict[str, Source]) -> list[Record]:
             fails_when_missing=message,
             depends_on_option=option,
         ),
-        _record(
+        launcher_record(
             "hatari",
             "standalone",
             "fixed_name",
@@ -112,7 +112,7 @@ def hatari(sources: dict[str, Source]) -> list[Record]:
             fails_when_missing=f"{name} is used, as without a hard disk image",
             depends_on_option=f"{option} unset, a hard disk image mounted or no {name}",
         ),
-        _record(
+        launcher_record(
             "hatari",
             "standalone",
             "names_searched",
@@ -145,7 +145,7 @@ def hatari_libretro(sources: dict[str, Source]) -> list[Record]:
         features, "libretro", tosimage.group(2), core=guard.group(1)
     )
     records.append(
-        _record(
+        launcher_record(
             guard.group(1),
             "libretro",
             "core_option",
@@ -210,7 +210,7 @@ def hatari_libretro(sources: dict[str, Source]) -> list[Record]:
     files = [c for c in choices if c != named.group(1) and not c.startswith(builtin.group(1))]
     head = src.lines(tos_img.start(), own.end())
     records.append(
-        _record(
+        launcher_record(
             "hatarib",
             "libretro",
             "fixed_name",
@@ -228,7 +228,7 @@ def hatari_libretro(sources: dict[str, Source]) -> list[Record]:
         )
     )
     records.append(
-        _record(
+        launcher_record(
             "hatarib",
             "libretro",
             "core_option",
@@ -245,7 +245,7 @@ def hatari_libretro(sources: dict[str, Source]) -> list[Record]:
         )
     )
     records.append(
-        _record(
+        launcher_record(
             "hatarib",
             "libretro",
             "copies",
@@ -255,7 +255,7 @@ def hatari_libretro(sources: dict[str, Source]) -> list[Record]:
             search_dir="/".join(["bios", *folders]),
             passes_to=f"bios/{own.group(2)}/<value>",
             fails_when_missing=False,
-            depends_on_option=_joined(key, TARGET_ABSENT),
+            depends_on_option=joined(key, TARGET_ABSENT),
         )
     )
     return records
@@ -318,7 +318,7 @@ def amiberry(sources: dict[str, Source]) -> list[Record]:
     for field, names, spans in lists:
         stage = src.find(rf"StageKickstart\(_model\.{field}\)", f"StageKickstart({field})")
         records.append(
-            _record(
+            launcher_record(
                 "amiberry",
                 "standalone",
                 "names_searched",
@@ -354,7 +354,7 @@ def amiberry(sources: dict[str, Source]) -> list[Record]:
     for directory, match, key in ((roms.group(2), roms, "rom_path"),
                                   (whdboot.group(1), whdboot, "whdboot_path")):
         records.append(
-            _record(
+            launcher_record(
                 "amiberry",
                 "standalone",
                 "passes_path",
@@ -377,7 +377,7 @@ def amiberry(sources: dict[str, Source]) -> list[Record]:
     for field, names, spans in lists:
         call = src.find(rf"StageKickstart\(_model\.{field}\)", f"StageKickstart({field})")
         records.append(
-            _record(
+            launcher_record(
                 "amiberry",
                 "standalone",
                 "copies",
@@ -402,7 +402,7 @@ def amiberry(sources: dict[str, Source]) -> list[Record]:
     ):
         raise LauncherPatternMissing(src.path, "StageRomKey copy when absent or resized")
     records.append(
-        _record(
+        launcher_record(
             "amiberry",
             "standalone",
             "copies",
@@ -434,7 +434,7 @@ def winuae(sources: dict[str, Source]) -> list[Record]:
         )
         message, throw_line = _throw_message(src, lookup.end(), body[1])
         records.append(
-            _record(
+            launcher_record(
                 "winuae",
                 "standalone",
                 "names_searched",
@@ -465,7 +465,7 @@ def winuae(sources: dict[str, Source]) -> list[Record]:
         loop.start(),
     )
     records.append(
-        _record(
+        launcher_record(
             "winuae",
             "standalone",
             "copies",
@@ -507,7 +507,7 @@ def openmsx(sources: dict[str, Source]) -> list[Record]:
     ):
         start = block[0] + entry.start()
         records.append(
-            _record(
+            launcher_record(
                 "openmsx",
                 "standalone",
                 "fixed_name",
@@ -538,7 +538,7 @@ def openmsx(sources: dict[str, Source]) -> list[Record]:
         "OPENMSX_HOME environment", home.end(),
     )
     records.append(
-        _record(
+        launcher_record(
             "openmsx",
             "standalone",
             "passes_path",

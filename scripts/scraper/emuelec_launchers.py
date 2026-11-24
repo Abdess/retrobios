@@ -40,16 +40,16 @@ from .emuelec_runs import (
     Runs,
     SX05RE,
     UTILS,
-    _ADVMAME_INSTALL,
-    _evidence,
-    _read,
-    _under,
+    ADVMAME_INSTALL,
+    evidence,
+    read,
+    under,
 )
 
 
 def retroarch(tree: RepoTree, runs: Runs) -> list[Launcher]:
     """system_directory, written by sed into the retroarch.cfg the package installs."""
-    mk = _read(tree, RETROARCH_MK)
+    mk = read(tree, RETROARCH_MK)
     sed_line, sed = mk.find(
         r"s/# system_directory =/system_directory =((?:\\/|[^/])+)/", "system_directory sed"
     )
@@ -99,7 +99,7 @@ def freej2me(tree: RepoTree, runs: Runs) -> list[Launcher]:
     export_line, _ = script.find(rf"^\s*export {java.group(1)}\s*$", "export", java_line)
     core = test.group(1)
     path = f"{LIBRETRO}/{core}/scripts/{call.group(1)}"
-    started = _read(tree, path)
+    started = read(tree, path)
     guard_line, guard = started.find(r'if \[\[ -f "([^"]+)" \]\]; then$', "JDK version test")
     copy_line, copy = started.find(r"^\s*cp -rf (\S+) (\S+)$", "jar copy", guard_line)
     source = copy.group(1)
@@ -133,7 +133,7 @@ def freej2me(tree: RepoTree, runs: Runs) -> list[Launcher]:
 def pico8(tree: RepoTree, runs: Runs) -> list[Launcher]:
     """The folder the user drops in bios/ is moved where the binary runs from."""
     path = f"{BIN}/pico8.sh"
-    script = _read(tree, path)
+    script = read(tree, path)
     guard_line, guard = script.find(r'if \[\[ -e "([^"]+)" \]\]; then$', "new version test")
     folder = guard.group(1)
     copy_line, copy = script.find(
@@ -199,7 +199,7 @@ LINK_PACKAGES = (
 def links(tree: RepoTree, runs: Runs) -> list[Launcher]:
     records = []
     for path in LINK_SCRIPTS:
-        script = _read(tree, path)
+        script = read(tree, path)
         found = script.links(BIOS_ROOT)
         if not found:
             raise script.missing(f"ln -s of a path under {BIOS_ROOT}")
@@ -209,7 +209,7 @@ def links(tree: RepoTree, runs: Runs) -> list[Launcher]:
             record.source_ref = f"{source_ref([runs.ref(name)])}, {record.source_ref}"
             records.append(record)
     for package in LINK_PACKAGES:
-        script = _read(tree, f"{package}/package.mk")
+        script = read(tree, f"{package}/package.mk")
         found = script.links(BIOS_ROOT, fixed={"INSTALL": ""})
         if not found:
             raise script.missing(f"ln -s of a path under {BIOS_ROOT}")
@@ -231,14 +231,14 @@ def duckstation(tree: RepoTree, runs: Runs) -> list[Launcher]:
     set_files = [k for k in file_keys if k in found and found[k].value]
     if set_files:
         raise LauncherPatternMissing(path, f"empty [BIOS] {set_files[0][1]}")
-    mk = _read(tree, f"{package}/package.mk")
+    mk = read(tree, f"{package}/package.mk")
     mk_line, _ = mk.find(r"cp -rf \$\{PKG_DIR\}/config/\* ", "config install")
-    script = _read(tree, f"{package}/scripts/duckstation.sh")
+    script = read(tree, f"{package}/scripts/duckstation.sh")
     run_line, _ = script.find(r'-settings "\$\{CONFIG_DIR\}/settings\.ini"', "-settings")
     name = posixpath.basename(script.path)
     lines = {found[k].line for k in (folder_key, *file_keys) if k in found}
     unset = describe_keys("", file_keys).strip()
-    return [_evidence(
+    return [evidence(
         Launcher(
             emulator=runs.emulator(name),
             build="standalone",
@@ -268,7 +268,7 @@ def yabasanshiro(tree: RepoTree, runs: Runs) -> list[Launcher]:
     """The BIOS flag, set when the HLE option is off and the file exists."""
     records = []
     for path in YABASANSHIRO_SCRIPTS:
-        script = _read(tree, path)
+        script = read(tree, path)
         option_line, option = script.find(r"^\s*(\w+)=\$\(get_ee_setting (\w+) ", "HLE option")
         test_line, test = script.find(
             rf'if \[ "\$\{{{option.group(1)}\}}" != (\w+) \]', "HLE option test", option_line
@@ -306,7 +306,7 @@ def yabasanshiro(tree: RepoTree, runs: Runs) -> list[Launcher]:
 
 def jzintv(tree: RepoTree, runs: Runs) -> list[Launcher]:
     path = f"{EMULATORS}/jzintv/scripts/jzintv.sh"
-    script = _read(tree, path)
+    script = read(tree, path)
     run_line, run = script.find(r"^\s*exec (\S+) .*\s(-p)\s+(\S+)\s", "start with -p")
     name = posixpath.basename(path)
     return [
@@ -325,7 +325,7 @@ def jzintv(tree: RepoTree, runs: Runs) -> list[Launcher]:
 def mupen64plus(tree: RepoTree, runs: Runs) -> list[Launcher]:
     """The 64DD IPL names, tried in order, passed only beside a .ndd disk."""
     path = f"{EMULATORS}/mupen64plussa/mupen64plussa-core/m64p.sh"
-    script = _read(tree, path)
+    script = read(tree, path)
     fallbacks = [
         (number, found)
         for number, line in script.code()
@@ -377,7 +377,7 @@ def mupen64plus(tree: RepoTree, runs: Runs) -> list[Launcher]:
 
 def hatari(tree: RepoTree, runs: Runs) -> list[Launcher]:
     package = f"{EMULATORS}/hatarisa"
-    script = _read(tree, f"{package}/scripts/hatari.start")
+    script = read(tree, f"{package}/scripts/hatari.start")
     copy_line, copy = script.find(r'^\s*cp \S+/([\w.-]+\.cfg) "\$(\w+)"', "default config copy")
     run_lines = {
         n
@@ -391,15 +391,15 @@ def hatari(tree: RepoTree, runs: Runs) -> list[Launcher]:
     keys = [
         (s.section, s.key)
         for s in found
-        if _under(s.value) and "." in posixpath.basename(s.value)
+        if under(s.value) and "." in posixpath.basename(s.value)
     ]
     if not keys:
         raise LauncherPatternMissing(path, f"key naming a file under {BIOS_ROOT}")
     value, lines = fixed_paths(found, keys, path)
-    mk = _read(tree, f"{package}/package.mk")
+    mk = read(tree, f"{package}/package.mk")
     mk_line, _ = mk.find(r"cp -R \$\{PKG_DIR\}/config/\* ", "config install")
     name = posixpath.basename(script.path)
-    return [_evidence(
+    return [evidence(
         Launcher(
             emulator=runs.emulator(name),
             build="standalone",
@@ -432,26 +432,26 @@ def advancemame(tree: RepoTree, runs: Runs) -> list[Launcher]:
     system reads its own record.
     """
     package = f"{EMULATORS}/advancemame"
-    mk = _read(tree, f"{package}/package.mk")
+    mk = read(tree, f"{package}/package.mk")
     installs = [
         (number, found.group(1))
         for number, line in mk.code()
-        if (found := _ADVMAME_INSTALL.search(line))
+        if (found := ADVMAME_INSTALL.search(line))
     ]
     if not installs:
         raise mk.missing("advmame.rc install")
     by_value: dict[tuple[tuple[str, str], ...], list[tuple[str, set[int], int]]] = {}
     for mk_line, file in installs:
         path = f"{package}/config/{file}"
-        keys = [s for s in settings(tree.read(path), separator=" ") if _under(s.value, ROMS_ROOT)]
-        if not any(_under(s.value) for s in keys):
+        keys = [s for s in settings(tree.read(path), separator=" ") if under(s.value, ROMS_ROOT)]
+        if not any(under(s.value) for s in keys):
             raise LauncherPatternMissing(path, f"key naming a folder under {BIOS_ROOT}")
         value = tuple((s.key, s.value) for s in keys)
         by_value.setdefault(value, []).append((path, {s.line for s in keys}, mk_line))
     if len(by_value) != 1:
         raise mk.missing("one set of BIOS folders for every device")
     ((value, configs),) = by_value.items()
-    script = _read(tree, f"{package}/bin/advmame.sh")
+    script = read(tree, f"{package}/bin/advmame.sh")
     run_line, _ = script.find(r"^\s*(?:\w+=\S+ )*advmame ", "advmame start")
     test_line, test = script.find(_ADVMAME_SYSTEM.pattern, "system test", end=run_line)
     sed_line, sed = script.find(_ADVMAME_SED.pattern, "system rewrite", test_line + 1, test_line + 1)
@@ -468,7 +468,7 @@ def advancemame(tree: RepoTree, runs: Runs) -> list[Launcher]:
     target = script.expand("${CONFIG_DIR}/advmame.rc", run_line, set())
 
     def proved(record: Launcher, key: str) -> Launcher:
-        return _evidence(record, script, target, [key], rewrites={sed_line}, tree=tree,
+        return evidence(record, script, target, [key], rewrites={sed_line}, tree=tree,
                          installed=[(mk.path, {mk_line for _, _, mk_line in configs})])
 
     records = []
@@ -499,7 +499,7 @@ def advancemame(tree: RepoTree, runs: Runs) -> list[Launcher]:
 def mame(tree: RepoTree, runs: Runs) -> list[Launcher]:
     """The files mame.sh copies into bios/mame, and the folders mame.ini hands the core."""
     package = f"{LIBRETRO}/mame"
-    script = _read(tree, f"{package}/scripts/mame.sh")
+    script = read(tree, f"{package}/scripts/mame.sh")
     name = posixpath.basename(script.path)
     emulator = runs.emulator(name)
     records = []
@@ -513,7 +513,7 @@ def mame(tree: RepoTree, runs: Runs) -> list[Launcher]:
             continue
         if guard is None:
             raise script.missing(f"test before the copy at line {number}")
-        if not _under(copy.group(3)):
+        if not under(copy.group(3)):
             continue
         records.append(
             Launcher(
@@ -541,7 +541,7 @@ def mame(tree: RepoTree, runs: Runs) -> list[Launcher]:
 def scummvm(tree: RepoTree, runs: Runs) -> list[Launcher]:
     """--extrapath for the standalone build, and the scummvm.ini copied for the core."""
     path = f"{EMULATORS}/scummvmsa/bin/scummvm.start"
-    script = _read(tree, path)
+    script = read(tree, path)
     name = posixpath.basename(path)
     test_line, test = script.find(r'^\s*if \[ -d "([^"]+)" \]; then\s*$', "extra folder test")
     set_line, set_ = script.find(r'^\s*(\w+)="(--[\w-]+)=([^"]+)"', "extra path", test_line)
@@ -562,7 +562,7 @@ def scummvm(tree: RepoTree, runs: Runs) -> list[Launcher]:
     used = {copy_line}
     source = script.expand(copy.group(1), copy_line, used)
     target = script.expand(copy.group(2), copy_line, used)
-    if not _under(target):
+    if not under(target):
         raise script.missing(f"copy into {BIOS_ROOT}")
     return [
         Launcher(
@@ -591,7 +591,7 @@ def scummvm(tree: RepoTree, runs: Runs) -> list[Launcher]:
 
 def dolphin(tree: RepoTree, runs: Runs) -> list[Launcher]:
     path = f"{EMULATORS}/dolphinSA/scripts/dolphin.sh"
-    script = _read(tree, path)
+    script = read(tree, path)
     run_line, run = script.find(r"\b(XDG_DATA_HOME)=(\S+) .*\bdolphin-emu", "XDG_DATA_HOME start")
     name = posixpath.basename(path)
     return [
@@ -616,7 +616,7 @@ def midi(tree: RepoTree, runs: Runs) -> list[Launcher]:
     call_line, _ = script.find(
         rf'set_midi_source "\$\{{{setting.group(1)}\}}"', "set_midi_source call", setting_line
     )
-    utils = _read(tree, UTILS)
+    utils = read(tree, UTILS)
     head_line, _ = utils.find(r"^\s*function set_midi_source\(\)", "set_midi_source")
     end_line, _ = utils.find(r"^\s*esac\b", "end of the source case", head_line)
     records = []
@@ -636,7 +636,7 @@ def midi(tree: RepoTree, runs: Runs) -> list[Launcher]:
         if not paths or arm is None:
             continue
         ((flag, value),) = paths
-        is_file = "." in posixpath.basename(value) and _under(value)
+        is_file = "." in posixpath.basename(value) and under(value)
         records.append(
             Launcher(
                 emulator=command[0],

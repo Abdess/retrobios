@@ -50,13 +50,13 @@ from .recalbox_configgen import (
     SYSTEM_DIRECTORY,
     XEMU,
     XROAR,
-    _expr_call,
-    _handler_map,
-    _local_lists,
-    _setter,
-    _setter_branches,
-    _string,
-    _text,
+    expr_call,
+    handler_map,
+    local_string_lists,
+    is_setter_call,
+    setter_branches,
+    string,
+    string_constant,
     spell,
 )
 from .recalbox_emulators import amiberry, dolphin, mupen64plus, pcsx2, xemu, xroar
@@ -76,7 +76,7 @@ def system_directories(cg: Configgen) -> list[Launcher]:
         node for node in ast.walk(src.tree)
         if isinstance(node, ast.Match)
         and ast.unparse(node.subject) == "self.system.Core"
-        and any(_setter(c, SYSTEM_DIRECTORY) for c in _calls(node, attr="setString"))
+        and any(is_setter_call(c, SYSTEM_DIRECTORY) for c in _calls(node, attr="setString"))
     ]
     if len(matches) != 1:
         src.fail(f"expected one match on the core writing {SYSTEM_DIRECTORY}, "
@@ -84,7 +84,7 @@ def system_directories(cg: Configgen) -> list[Launcher]:
     match = matches[0]
     scope = _innermost_function(src, match)
     env = cg.env(src, scope)
-    local_lists = _local_lists(src, scope)
+    local_lists = local_string_lists(src, scope)
     lists = {name: values for name, (values, _node) in local_lists.items()}
 
     def record(emulator: str, condition: str | None, call: ast.Call,
@@ -104,11 +104,11 @@ def system_directories(cg: Configgen) -> list[Launcher]:
         options = pattern.patterns if isinstance(pattern, ast.MatchOr) else [pattern]
         cores = [core for p in options
                  if isinstance(p, ast.MatchValue)
-                 and (core := _text(src, p.value, "core name")) is not None]
+                 and (core := string_constant(src, p.value, "core name")) is not None]
         wildcard = isinstance(pattern, ast.MatchAs) and pattern.pattern is None
         if not wildcard and len(cores) != len(options):
             src.fail(f"line {pattern.lineno}: case pattern is not a list of core names")
-        branches = _setter_branches(src, case.body, SYSTEM_DIRECTORY, lists)
+        branches = setter_branches(src, case.body, SYSTEM_DIRECTORY, lists)
         if not branches:
             src.fail(f"line {pattern.lineno}: case writes no {SYSTEM_DIRECTORY}")
         for condition, call, start in branches:
@@ -124,7 +124,7 @@ def system_directories(cg: Configgen) -> list[Launcher]:
     if located is None:
         src.fail(f"no statement list holds the match on the core writing {SYSTEM_DIRECTORY}")
     body, index = located
-    overrides = _setter_branches(src, body[index + 1:], SYSTEM_DIRECTORY, lists)
+    overrides = setter_branches(src, body[index + 1:], SYSTEM_DIRECTORY, lists)
     if not overrides:
         src.fail(f"no per-system {SYSTEM_DIRECTORY} after the match on the core")
     tests = {node.lineno: node.test for node in ast.walk(scope) if isinstance(node, ast.If)}
@@ -166,10 +166,10 @@ def core_assets(cg: Configgen) -> list[Launcher]:
             and isinstance(node.test.ops[0], ast.Eq)
         ):
             continue
-        core = _text(src, node.test.comparators[0], "core name")
+        core = string_constant(src, node.test.comparators[0], "core name")
         if core is None:
             continue
-        calls = [c for stmt in node.body if (c := _expr_call(stmt)) and _setter(c, CORE_ASSETS)]
+        calls = [c for stmt in node.body if (c := expr_call(stmt)) and is_setter_call(c, CORE_ASSETS)]
         if len(calls) != 1:
             continue
         call = calls[0]
@@ -197,7 +197,7 @@ def content_files(cg: Configgen) -> list[Launcher]:
             and ast.unparse(node.test.left) == "core"
         ):
             continue
-        core = _text(src, node.test.comparators[0], "core name")
+        core = string_constant(src, node.test.comparators[0], "core name")
         if core is None:
             continue
         refs = [n for n in ast.walk(node) if isinstance(n, ast.Attribute)
@@ -231,7 +231,7 @@ def content_files(cg: Configgen) -> list[Launcher]:
 def core_file_options(cg: Configgen, directories: list[Launcher]) -> list[Launcher]:
     """System handlers that set a core option naming the file the core opens."""
     src = cg.source(CORES)
-    handlers = _handler_map(src, "fillCoresConfiguration", "specificSystemHandlers")
+    handlers = handler_map(src, "fillCoresConfiguration", "specificSystemHandlers")
     table = src.assignment(
         "specificSystemHandlers", src.function("fillCoresConfiguration")
     ).value
@@ -245,10 +245,10 @@ def core_file_options(cg: Configgen, directories: list[Launcher]) -> list[Launch
             continue
         for call in _calls(function, attr="setString"):
             if not (len(call.args) == 2 and all(isinstance(a, ast.Constant) for a in call.args)
-                    and _string(call.args[0]) in FILE_OPTIONS):
+                    and string(call.args[0]) in FILE_OPTIONS):
                 continue
-            option = _text(src, call.args[0], "core option")
-            value = _text(src, call.args[1], "core option value")
+            option = string_constant(src, call.args[0], "core option")
+            value = string_constant(src, call.args[1], "core option value")
             if option is None or value is None:
                 continue
             core = FILE_OPTIONS[option]

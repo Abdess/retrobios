@@ -131,7 +131,7 @@ def per_device(
     ]
 
 
-def _file_under(value: str, root: str) -> bool:
+def file_under(value: str, root: str) -> bool:
     return value.startswith(root.rstrip("/") + "/")
 
 
@@ -141,7 +141,7 @@ def bios_keys(tree: RepoTree, paths: list[str], root: str = BIOS_ROOT) -> list[t
     for path in paths:
         for setting in settings(tree.read(path)):
             key = (setting.section, setting.key)
-            if _file_under(setting.value, root) and key not in keys:
+            if file_under(setting.value, root) and key not in keys:
                 keys.append(key)
     if not keys:
         raise LauncherPatternMissing(paths[0], f"key naming a file under {root}")
@@ -171,7 +171,7 @@ def with_evidence(
     return apply_evidence(record, placements)
 
 
-def _keys(value: FixedPaths) -> list[str]:
+def fixed_path_keys(value: FixedPaths) -> list[str]:
     return [f"[{section}] {key}" if section else key for section, key in value.keys]
 
 
@@ -226,7 +226,7 @@ def config_records(
                 depends_on_option=depends_on_option,
             ),
             installed.target or f"{CONFIG_ROOT}/{posixpath.basename(package)}/{name}",
-            _keys(value),
+            fixed_path_keys(value),
             installed.start,
         ))
     return records

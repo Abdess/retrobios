@@ -24,12 +24,12 @@ from .csharp_source import (
 from .retrobat_generators import (
     FEATURES,
     GENERATORS,
-    _BIOS_ROOT,
-    _IF,
-    _TRANSPARENT,
-    _negate,
-    _record,
-    _root_writes,
+    BIOS_ROOT,
+    IF,
+    TRANSPARENT,
+    negate,
+    launcher_record,
+    root_writes,
     feature_choices,
 )
 
@@ -56,7 +56,7 @@ def _negated(condition: str) -> str:
     """not condition, written as a C# reader would."""
     if re.fullmatch(_ATOM, condition):
         return condition[1:] if condition.startswith("!") else f"!{condition}"
-    return _negate(condition)
+    return negate(condition)
 
 
 def _owner_condition(src: Source, start: int) -> str | None:
@@ -65,7 +65,7 @@ def _owner_condition(src: Source, start: int) -> str | None:
     before = code[:start].rstrip()
     if before.endswith("}"):
         block = max(b for b in src.blocks() if b[1] == len(before))
-        owner = _IF.fullmatch(src.header(block))
+        owner = IF.fullmatch(src.header(block))
         return owner.group(1) if owner else None
     if not before.endswith(";"):
         return None
@@ -94,7 +94,7 @@ def _braceless_if(src: Source, offset: int) -> str | None:
     return " ".join(condition.split())
 
 
-def _render(src: Source, expr: str, scope: int, before: int) -> Rendered | None:
+def render(src: Source, expr: str, scope: int, before: int) -> Rendered | None:
     """A path expression as text, with the lines of the declarations it read."""
     expr = " ".join(expr.split())
     fixed = _render_fixed(expr)
@@ -102,11 +102,11 @@ def _render(src: Source, expr: str, scope: int, before: int) -> Rendered | None:
         return fixed
     replaced = re.fullmatch(rf"(.+)\.Replace\({STRING}, {STRING}\)", expr)
     if replaced:
-        return _render(src, replaced.group(1), scope, before)
+        return render(src, replaced.group(1), scope, before)
     for wrapper in _WRAPPERS:
         inner = _wrapped(expr, wrapper)
         if inner is not None:
-            return _render(src, inner, scope, before)
+            return render(src, inner, scope, before)
     ternary = _split_top(expr, "?")
     if len(ternary) == 2:
         branches = _split_top(ternary[1], ":")
@@ -118,7 +118,7 @@ def _render(src: Source, expr: str, scope: int, before: int) -> Rendered | None:
     combine = _wrapped(expr, "Path.Combine")
     if combine is not None:
         base, *rest = _split_top(combine, ",")
-        root = _render(src, base, scope, before)
+        root = render(src, base, scope, before)
         literals = [re.fullmatch(STRING, part) for part in rest]
         if root is None or not all(literals):
             return None
@@ -132,7 +132,7 @@ def _render(src: Source, expr: str, scope: int, before: int) -> Rendered | None:
 
 def _render_fixed(expr: str) -> Rendered | None:
     """The expressions that name one known folder or file."""
-    if re.fullmatch(_BIOS_ROOT, expr):
+    if re.fullmatch(BIOS_ROOT, expr):
         return "bios", []
     changed = re.fullmatch(r'Path\.ChangeExtension\(exe, "(\.\w+)"\)', expr)
     if changed:
@@ -149,8 +149,8 @@ def _render_choice(
     src: Source, condition: str, branches: list[str], scope: int, before: int
 ) -> Rendered | None:
     """A `condition ? a : b` expression."""
-    first = _render(src, branches[0], scope, before)
-    second = _render(src, branches[1], scope, before)
+    first = render(src, branches[0], scope, before)
+    second = render(src, branches[1], scope, before)
     if first is None or second is None:
         return None
     return f"{first[0]} when {condition}, else {second[0]}", first[1] + second[1]
@@ -167,7 +167,7 @@ def _render_terms(src: Source, terms: list[str], scope: int, before: int) -> Ren
         if term == '";"':
             pieces.append(";")
             continue
-        done = _render(src, term, scope, before)
+        done = render(src, term, scope, before)
         if done is None:
             return None
         pieces.append(done[0])
@@ -183,13 +183,13 @@ def _render_variable(src: Source, expr: str, scope: int, before: int) -> Rendere
         return (_PATH_PARAMS[expr], []) if expr in _PATH_PARAMS else None
     decl = decls[-1]
     decl_end = _statement_end(src, decl.end())
-    declared = _render(src, src.text[decl.end() : decl_end], scope, decl.start())
+    declared = render(src, src.text[decl.end() : decl_end], scope, decl.start())
     if declared is None:
         return None
     text, spans = declared[0], [*declared[1], src.lines(decl.start(), decl_end)]
     for again in re.compile(rf"(?<![\w.]){expr}\s*=(?!=)\s*").finditer(code, decl_end, before):
         again_end = _statement_end(src, again.end())
-        value = _render(src, src.text[again.end() : again_end], scope, again.start())
+        value = render(src, src.text[again.end() : again_end], scope, again.start())
         if value is None:
             return None
         condition = _braceless_if(src, again.start())
@@ -222,7 +222,7 @@ _EMULATOR_MISSING = (
 )
 
 
-def _when(src: Source, offset: int) -> tuple[list[str], list[tuple[int, int]]]:
+def when(src: Source, offset: int) -> tuple[list[str], list[tuple[int, int]]]:
     """Conditions under which the statement at offset runs, outermost first,
     with the lines of the early returns among them.
 
@@ -249,14 +249,14 @@ def _when(src: Source, offset: int) -> tuple[list[str], list[tuple[int, int]]]:
                     returns.append(_readable(_negated(cond)))
                     spans.append(src.lines(block[0] + early.start(), tail.end()))
             return returns + found[::-1], spans
-        condition = _IF.fullmatch(header)
+        condition = IF.fullmatch(header)
         if condition:
             found.append(_readable(condition.group(1)))
         elif header == "else":
             previous = max(b for b in src.blocks() if b[1] <= block[0])
-            owner = _IF.fullmatch(src.header(previous))
+            owner = IF.fullmatch(src.header(previous))
             found.append(f"not ({_readable(owner.group(1))})" if owner else "else")
-        elif not _TRANSPARENT.fullmatch(header) and not header.startswith(("catch", "lock")):
+        elif not TRANSPARENT.fullmatch(header) and not header.startswith(("catch", "lock")):
             found.append(header)
     raise LauncherPatternMissing(src.path, f"method around line {src.line(offset)}")
 
@@ -280,10 +280,10 @@ def _argument_of(src: Source, method: tuple[int, int], parameter: str) -> Render
         return None
     arguments = _split_top(_call_args(src, calls[0].end() - 1), ",")
     caller = _method_of(src, calls[0].start())
-    return _render(src, arguments[names.index(parameter)], caller[0], calls[0].start())
+    return render(src, arguments[names.index(parameter)], caller[0], calls[0].start())
 
 
-def _config_label(src: Source, offset: int, writer: str) -> str:
+def config_label(src: Source, offset: int, writer: str) -> str:
     """The file the writer variable opens, as a path under the emulator folder."""
     method = _method_of(src, offset)
     code = _code(src)
@@ -293,7 +293,7 @@ def _config_label(src: Source, offset: int, writer: str) -> str:
         ):
             paren = scope[0] + opened.end() - 1
             target = _split_top(_call_args(src, paren), ",")[0]
-            rendered = _render(src, target, _method_of(src, paren)[0], paren)
+            rendered = render(src, target, _method_of(src, paren)[0], paren)
             if rendered is None:
                 rendered = _argument_of(src, _method_of(src, paren), target)
             if rendered is not None:
@@ -311,7 +311,7 @@ def _bios_lines(src: Source) -> list[int]:
     )
 
 
-def _covered(src: Source, records: list[Record], skip: tuple[str, ...] = ()) -> list[Record]:
+def covered_records(src: Source, records: list[Record], skip: tuple[str, ...] = ()) -> list[Record]:
     """records, once every line of src that names the bios folder is in one.
 
     A line no record cites and no skip pattern describes is a construct the
@@ -333,7 +333,7 @@ def _covered(src: Source, records: list[Record], skip: tuple[str, ...] = ()) -> 
     return records
 
 
-def _path_parts(src: Source, *spans: tuple[int, int]) -> str:
+def path_parts(src: Source, *spans: tuple[int, int]) -> str:
     return source_ref((src.path, list(spans)))
 
 
@@ -341,7 +341,7 @@ def _option_path_in(src: Source, features: Source, emulator: str) -> list[Record
     """A default name under bios that an option replaces before it is written."""
     code = _code(src)
     override = src.find(
-        rf"(?:string )?(\w+) = Path\.Combine\({_BIOS_ROOT}, SystemConfig\[\"(\w+)\"\]\);",
+        rf"(?:string )?(\w+) = Path\.Combine\({BIOS_ROOT}, SystemConfig\[\"(\w+)\"\]\);",
         "path taken from an option",
     )
     var, option = override.groups()
@@ -364,7 +364,7 @@ def _option_path_in(src: Source, features: Source, emulator: str) -> list[Record
     skipped = re.findall(
         rf'SystemConfig\["{option}"\] != "(\w+)"', code[gate.start() : write.end()]
     )
-    config = _config_label(src, write.start(), writer)
+    config = config_label(src, write.start(), writer)
     target = f"{config} [{section}] {key}" if section else f"{config} {key}"
     suffix = ", only if the file exists" if guarded else ", written without an existence check"
     fails = f"{key} not written" if guarded else "path written without an existence check"
@@ -377,18 +377,18 @@ def _option_path_in(src: Source, features: Source, emulator: str) -> list[Record
         fails = f"{', then '.join(fallback[0])}, instead, else {fails}"
     records = []
     default = list(
-        re.compile(rf'string {var} = Path\.Combine\({_BIOS_ROOT}, "([^"]+)"\);').finditer(
+        re.compile(rf'string {var} = Path\.Combine\({BIOS_ROOT}, "([^"]+)"\);').finditer(
             code, method[0], gate.start()
         )
     )
     if default:
         records.append(
-            _record(
+            launcher_record(
                 emulator,
                 "standalone",
                 "fixed_name",
                 [default[-1].group(1)],
-                _path_parts(src, src.lines(default[-1].start(), default[-1].end()), write_span),
+                path_parts(src, src.lines(default[-1].start(), default[-1].end()), write_span),
                 case_insensitive=True,
                 search_dir="bios",
                 passes_to=target + suffix,
@@ -397,7 +397,7 @@ def _option_path_in(src: Source, features: Source, emulator: str) -> list[Record
             )
         )
     records.append(
-        _record(
+        launcher_record(
             emulator,
             "standalone",
             "core_option",
@@ -420,12 +420,12 @@ def _option_path_in(src: Source, features: Source, emulator: str) -> list[Record
             f", {option} not {' or '.join(skipped)}" if skipped else ""
         )
         records.append(
-            _record(
+            launcher_record(
                 emulator,
                 "standalone",
                 "names_searched",
                 names,
-                _path_parts(src, span, write_span),
+                path_parts(src, span, write_span),
                 case_insensitive=True,
                 search_dir="bios",
                 passes_to=f"{target} = <first found>{suffix}",
@@ -433,7 +433,7 @@ def _option_path_in(src: Source, features: Source, emulator: str) -> list[Record
                 depends_on_option=" or ".join(c for c in (unset, chosen) if c),
             )
         )
-    return records + _root_writes(src, emulator)
+    return records + root_writes(src, emulator)
 
 
 def _gate_span(src: Source, gate: re.Match[str], override: re.Match[str]) -> tuple[int, int]:
@@ -471,7 +471,7 @@ def _fallback_names(
     found = re.compile(
         rf"if \(([^\n]*!File\.Exists\({var}\)[^\n]*)\)\s*"
         rf"{var} = new\[\] \{{ (?P<names>(?:{STRING}(?:, )?)+) \}}\.Select\((?P<arg>\w+) => "
-        rf"Path\.Combine\({_BIOS_ROOT}, (?P=arg)\)\)\.FirstOrDefault\(File\.Exists\) \?\? {var};"
+        rf"Path\.Combine\({BIOS_ROOT}, (?P=arg)\)\)\.FirstOrDefault\(File\.Exists\) \?\? {var};"
     ).search(_code(src), start, end)
     if found is None:
         return None
@@ -491,7 +491,7 @@ def option_paths(sources: dict[str, Source]) -> list[Record]:
     return [
         record
         for path, emulator in OPTION_PATHS.items()
-        for record in _covered(
+        for record in covered_records(
             sources[path], _option_path_in(sources[path], sources[FEATURES], emulator)
         )
     ]

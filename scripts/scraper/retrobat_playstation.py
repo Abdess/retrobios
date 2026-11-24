@@ -15,7 +15,7 @@ from .csharp_source import (
     _unique,
     source_ref,
 )
-from .retrobat_generators import BIOS, FEATURES, GENERATORS, _record, feature_choices
+from .retrobat_generators import BIOS, FEATURES, GENERATORS, launcher_record, feature_choices
 
 
 def pcsx2(sources: dict[str, Source]) -> list[Record]:
@@ -49,7 +49,7 @@ def pcsx2(sources: dict[str, Source]) -> list[Record]:
         decl = src.find(rf"var {var} = new string\[\] \{{", f"Qt {var}", qt_body[0], qt_body[1])
         names, lines = _array_at(src, decl.end() - 1)
         records.append(
-            _record(
+            launcher_record(
                 "pcsx2",
                 "standalone",
                 "names_searched",
@@ -89,7 +89,7 @@ def pcsx2(sources: dict[str, Source]) -> list[Record]:
     )
     sub = "/".join(_strings(folder.group(1)))
     records.append(
-        _record(
+        launcher_record(
             "pcsx2",
             "standalone",
             "names_searched",
@@ -129,7 +129,7 @@ def pcsx2_libretro(sources: dict[str, Source]) -> list[Record]:
     choices, choice_lines = feature_choices(features, "libretro", option.group(1), core="pcsx2")
     sub = "/".join(_strings(folder.group(1)))
     records = [
-        _record(
+        launcher_record(
             "pcsx2",
             "libretro",
             "core_option",
@@ -173,7 +173,7 @@ def pcsx2_libretro(sources: dict[str, Source]) -> list[Record]:
     )
     auto_message, _ = _throw_message(src, auto.end(), auto_write.start())
     records.append(
-        _record(
+        launcher_record(
             "pcsx2",
             "libretro",
             "scans_dir",
@@ -259,7 +259,7 @@ def psx_cascades(sources: dict[str, Source]) -> list[Record]:
             keys = _unique(re.findall(r'\w+\["([^"]+)"\]\s*=', src.text[branch[0] : branch[1]]))
             ref = source_ref((path, [src.lines(cascade.start(), original_end)]))
             records.append(
-                _record(
+                launcher_record(
                     emulator,
                     build,
                     "names_searched",
@@ -277,7 +277,7 @@ def psx_cascades(sources: dict[str, Source]) -> list[Record]:
             if fallback:
                 checked = "File.Exists" in fallback_text
                 records.append(
-                    _record(
+                    launcher_record(
                         emulator,
                         build,
                         "fixed_name",
@@ -311,7 +311,7 @@ def duckstation(sources: dict[str, Source]) -> list[Record]:
     cleared = src.block_at(block[1])
     choices, choice_lines = feature_choices(features, "duckstation", option.group(1))
     return [
-        _record(
+        launcher_record(
             "duckstation",
             "standalone",
             "passes_path",
@@ -322,7 +322,7 @@ def duckstation(sources: dict[str, Source]) -> list[Record]:
             fails_when_missing=False,
             depends_on_option=f"{option.group(1)} unset",
         ),
-        _record(
+        launcher_record(
             "duckstation",
             "standalone",
             "core_option",

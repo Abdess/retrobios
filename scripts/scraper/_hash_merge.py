@@ -260,7 +260,7 @@ def diff_mame(
 
         required_moved = old_entry.get("required", True) != settled_required(old_entry, set_data)
 
-        if _contents_differ(old_contents, new_contents) or ref_moved or required_moved:
+        if contents_differ(old_contents, new_contents) or ref_moved or required_moved:
             updated.append(set_name)
         else:
             unchanged += 1
@@ -399,7 +399,7 @@ def _build_source_ref(set_data: dict, role: str = "") -> str:
     return f"{role}{source_file}"
 
 
-def _contents_differ(old: list[dict], new: list[dict]) -> bool:
+def contents_differ(old: list[dict], new: list[dict]) -> bool:
     if len(old) != len(new):
         return True
     old_by_name = {c["name"]: c for c in old}

@@ -30,13 +30,13 @@ from .recalbox_configgen import (
     SYSTEM_PLACEHOLDER,
     XEMU,
     XROAR,
-    _assignments,
-    _class_strings,
-    _expr_call,
-    _setter,
-    _string,
-    _systems,
-    _text,
+    assignments,
+    class_strings,
+    expr_call,
+    is_setter_call,
+    string,
+    accepted_systems,
+    string_constant,
     spell,
 )
 
@@ -44,7 +44,7 @@ from .recalbox_configgen import (
 def amiberry(cg: Configgen) -> list[Launcher]:
     """BIOS_PER_SYSTEM tried in order, the AROS pair, then Amiberry's own."""
     kick = cg.source(AMIBERRY_KICKSTARTS)
-    subsystems = _class_strings(cg.source(AMIBERRY_SUBSYSTEMS), {})
+    subsystems = class_strings(cg.source(AMIBERRY_SUBSYSTEMS), {})
     computers = subsystems.get("SubSystems.COMPUTERS")
     if not isinstance(computers, list):
         cg.source(AMIBERRY_SUBSYSTEMS).fail("SubSystems.COMPUTERS is not a tuple of systems")
@@ -72,23 +72,23 @@ def amiberry(cg: Configgen) -> list[Launcher]:
         message for node in ast.walk(chooser)
         if isinstance(node, ast.Raise) and isinstance(node.exc, ast.Call)
         and node.exc.args
-        and (message := _text(kick, node.exc.args[0], "failure message")) is not None
+        and (message := string_constant(kick, node.exc.args[0], "failure message")) is not None
     ]
     aros = [
         aros_name for call in _calls(chooser, name="AmigaBios")
-        if call.args and (aros_name := _text(kick, call.args[0], "AROS name")) is not None
+        if call.args and (aros_name := string_constant(kick, call.args[0], "AROS name")) is not None
     ]
     builtin = [
         rom for node in ast.walk(chooser)
         if isinstance(node, ast.Assign) and ast.unparse(node.targets[0]) == "self.rom"
-        and (rom := _text(kick, node.value, "built-in rom")) is not None
+        and (rom := string_constant(kick, node.value, "built-in rom")) is not None
     ]
     if len(messages) != 2 or len(aros) != 2 or len(builtin) != 1:
         kick.fail("GetKickstartsFor no longer has two failures, the AROS pair and a built-in")
     config = cg.source(AMIBERRY_CONFIG)
     setter = config.function("SetKickstarts")
     keys = [setting for c in _calls(setter, attr="setString")
-            if (setting := _text(config, c.args[0], "kickstart key")) is not None]
+            if (setting := string_constant(config, c.args[0], "kickstart key")) is not None]
     if len(keys) != 2:
         config.fail("SetKickstarts no longer writes a kickstart and an extended ROM")
     rom_key, ext_key = keys
@@ -139,7 +139,7 @@ def _amiberry_rom_path(cg: Configgen, emulator: str) -> Launcher:
     """amiberry.conf rom_path, the folder Amiberry scans for every ROM."""
     src = cg.source(AMIBERRY_GLOBAL)
     create = src.function("createGlobalSettings")
-    found = [c for c in _calls(create, attr="setString") if _setter(c, "rom_path")]
+    found = [c for c in _calls(create, attr="setString") if is_setter_call(c, "rom_path")]
     if len(found) != 1 or len(found[0].args) != 2:
         src.fail(f"expected one rom_path setter, found {len(found)}")
     call = found[0]
@@ -178,7 +178,7 @@ def _region_branch(node: ast.If, helper: str) -> tuple[str, ast.expr, ast.expr |
     ):
         return None
     compare, call = test.values
-    token = _string(compare.left) if isinstance(compare, ast.Compare) else None
+    token = string(compare.left) if isinstance(compare, ast.Compare) else None
     if not (
         token is not None
         and isinstance(call, ast.Call)
@@ -241,7 +241,7 @@ def pcsx2(cg: Configgen) -> list[Launcher]:
         src.fail("the chosen BIOS is not written to one config key")
     constants = {v: k.removeprefix("self.").removeprefix("Pcsx2Generator.")
                  for k, v in env.items() if k.startswith("Pcsx2Generator.BIOS_")}
-    names_lines = [node.lineno for node, name, _value in _assignments(ast.walk(src.tree))
+    names_lines = [node.lineno for node, name, _value in assignments(ast.walk(src.tree))
                    if name in set(constants.values())]
     ref = src.ref([(min(names_lines), max(names_lines)), (chooser.lineno, end_line(chooser)),
                    (writes[0].lineno, end_line(writes[0]))])
@@ -290,7 +290,7 @@ def _presence(cg: Configgen, src: Source, scope: ast.FunctionDef) -> tuple[list[
 
 def _returned(stmts: list[ast.stmt]) -> str | None:
     if len(stmts) == 1 and isinstance(stmts[0], ast.Return):
-        return _string(stmts[0].value)
+        return string(stmts[0].value)
     return None
 
 
@@ -307,14 +307,14 @@ def dolphin(cg: Configgen) -> list[Launcher]:
         and any(
             name == bound.id and isinstance(value, ast.Call)
             and isinstance(value.func, ast.Attribute) and value.func.attr == checker.name
-            for _node, name, value in _assignments(ast.walk(src.tree))
+            for _node, name, value in assignments(ast.walk(src.tree))
         )
     ]
     if found is None or missing is None or len(calls) != 1:
         src.fail("CheckGamecubeIpl's answer is not written to one config key")
     call, answer = calls[0]
     section, key = spell(call.args[0], env), spell(call.args[1], env)
-    binding = next(node for node, name, _value in _assignments(ast.walk(src.tree))
+    binding = next(node for node, name, _value in assignments(ast.walk(src.tree))
                    if name == answer)
     standalone = Launcher(
         emulator=cg.emulator(DOLPHIN), build="standalone", kind="fixed_name", names=names,
@@ -328,14 +328,14 @@ def dolphin(cg: Configgen) -> list[Launcher]:
     configure = cores.function("configureDolphin")
     names, test = _presence(cg, cores, configure)
     options = [(option, value) for branch in (test.body, test.orelse)
-               for stmt in branch if (c := _expr_call(stmt)) and len(c.args) == 2
-               and (option := _text(cores, c.args[0], "core option")) is not None
-               and (value := _text(cores, c.args[1], "core option value")) is not None]
+               for stmt in branch if (c := expr_call(stmt)) and len(c.args) == 2
+               and (option := string_constant(cores, c.args[0], "core option")) is not None
+               and (value := string_constant(cores, c.args[1], "core option value")) is not None]
     if len(options) != 2 or options[0][0] != options[1][0]:
         cores.fail("configureDolphin's presence test does not set one core option both ways")
     option = options[0][0]
     on, off = (value.strip('"') for _o, value in options)
-    first = min(node.lineno for node, _name, value in _assignments(ast.walk(configure))
+    first = min(node.lineno for node, _name, value in assignments(ast.walk(configure))
                 if cg.under_bios(spell(value, cg.env(cores, configure))) is not None)
     libretro = Launcher(
         emulator=cg.core("configureDolphin"), build="libretro", kind="fixed_name", names=names,
@@ -371,7 +371,7 @@ def _config_paths(cg: Configgen, path: str, emulator: str) -> Launcher:
         )
         if test is not None:
             spans.append((test.lineno, test.lineno))
-            systems = _systems(src, test.test, {})
+            systems = accepted_systems(src, test.test, {})
             words = f"system {', '.join(systems)}" if systems else _enclosing_test(function, call)
             if words is not None and words not in conditions:
                 conditions.append(words)

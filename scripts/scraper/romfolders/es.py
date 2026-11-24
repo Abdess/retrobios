@@ -34,12 +34,12 @@ from model.safeparse import parse_untrusted_xml, yaml_load_upstream
 from . import Fetcher, SourceError, register
 
 
-def _board(core: str | None, emulator: str | None, source_ref: str) -> dict:
+def board_entry(core: str | None, emulator: str | None, source_ref: str) -> dict:
     out = {"core": core or emulator, "emulator": emulator, "source_ref": source_ref}
     return {k: str(v) for k, v in out.items() if v}
 
 
-def _offers(choices: list[dict], core: str | None, emulator: str | None) -> list[dict]:
+def folder_offers(choices: list[dict], core: str | None, emulator: str | None) -> list[dict]:
     """Every (emulator, core) a folder can start, in the list's order, or
     none when the default is the only one.
 
@@ -87,7 +87,7 @@ def _top_key_lines(text: str) -> dict[str, int]:
     return out
 
 
-def _strip_prefix(path: str, prefixes: list[str]) -> str | None:
+def strip_prefix(path: str, prefixes: list[str]) -> str | None:
     """The folder under the roms root, or None for a path outside it."""
     for prefix in prefixes:
         if path.startswith(prefix):
@@ -96,7 +96,7 @@ def _strip_prefix(path: str, prefixes: list[str]) -> str | None:
     return None
 
 
-def _extensions(raw: str | list | None) -> list[str]:
+def extension_list(raw: str | list | None) -> list[str]:
     words = raw.split() if isinstance(raw, str) else [str(w) for w in raw or []]
     return [w if w.startswith(".") else f".{w}" for w in words if w]
 
@@ -163,14 +163,14 @@ def batocera_es(spec: dict, fetcher: Fetcher) -> list[dict]:
             override = data.get(name) or {}
             b_emu, b_core = override.get("emulator", emulator), override.get("core", core)
             if (b_emu, b_core) != (emulator, core) and b_core:
-                board_defaults[board] = _board(b_core, b_emu, format_ref(key, real, lines.get(name)))
+                board_defaults[board] = board_entry(b_core, b_emu, format_ref(key, real, lines.get(name)))
         refs = [format_ref(key, es_path, es_lines.get(name))]
         if name in def_lines:
             refs.append(format_ref(key, def_path, def_lines[name]))
         rows.append({
             "folder": str(folder),
             "name": name,
-            "extensions": _extensions(system.get("extensions")),
+            "extensions": extension_list(system.get("extensions")),
             "core": str(core) if core else None,
             "emulator": str(emulator) if emulator else None,
             "source_ref": "; ".join(refs),
@@ -184,7 +184,7 @@ def batocera_es(spec: dict, fetcher: Fetcher) -> list[dict]:
 # Static es_systems.cfg (XML) and EmuELEC's es_systems.json
 
 
-def _first_lines(text: str, pattern: str) -> dict[str, int]:
+def first_lines(text: str, pattern: str) -> dict[str, int]:
     out: dict[str, int] = {}
     for number, line in enumerate(text.splitlines(), 1):
         match = re.search(pattern, line)
@@ -261,7 +261,7 @@ def es_xml(spec: dict, fetcher: Fetcher) -> list[dict]:
         for row in rows:
             alt = other.get(row["name"])
             if alt and alt["core"] and (alt["core"], alt["emulator"]) != (row["core"], row["emulator"]):
-                row.setdefault("board_defaults", {})[board] = _board(
+                row.setdefault("board_defaults", {})[board] = board_entry(
                     alt["core"], alt["emulator"], alt["source_ref"])
     return rows
 
@@ -270,7 +270,7 @@ _BARE_AMPERSAND = re.compile(r"&(?!(?:[A-Za-z]+|#\d+|#x[0-9A-Fa-f]+);)")
 _COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
 
 
-def _lenient_xml(text: str) -> str:
+def lenient_xml(text: str) -> str:
     """The list as EmulationStation's pugixml reads it, lines kept in place.
 
     pugixml keeps a bare `&` as text (ArkOS ships `2>&1` in a command) and
@@ -283,7 +283,7 @@ def _lenient_xml(text: str) -> str:
 
 
 def _xml_rows(text: str, key: str, path: str, params: dict) -> list[dict]:
-    text = _lenient_xml(text)
+    text = lenient_xml(text)
     root = parse_untrusted_xml(text, path)
     lines = _all_lines(text, r"<name>([^<]+)</name>")
     seen: dict[str, int] = {}
@@ -296,7 +296,7 @@ def _xml_rows(text: str, key: str, path: str, params: dict) -> list[dict]:
         row = _name_once({"name": name}, lines, seen)
         if not name or "ignore" in (command, platform):
             continue
-        folder = _strip_prefix((system.findtext("path") or "").strip(), params["path_prefixes"])
+        folder = strip_prefix((system.findtext("path") or "").strip(), params["path_prefixes"])
         if not folder:
             continue
         emulators = [
@@ -313,11 +313,11 @@ def _xml_rows(text: str, key: str, path: str, params: dict) -> list[dict]:
         rows.append({
             "folder": folder,
             "name": row["name"],
-            "extensions": _extensions(system.findtext("extension")),
+            "extensions": extension_list(system.findtext("extension")),
             "core": core or emulator,
             "emulator": emulator,
             "source_ref": format_ref(key, path, row["line"]),
-            "offers": _offers(
+            "offers": folder_offers(
                 [{"emulator": e, "core": c} for e, cores in emulators for c, _d in cores or [(e, False)]],
                 core, emulator),
             "arcade": _is_arcade(system.findtext("hardware"), platform),
@@ -340,7 +340,7 @@ def es_json(spec: dict, fetcher: Fetcher) -> list[dict]:
         row = _name_once({"name": name}, lines, seen)
         if "ignore" in (system.get("command"), system.get("platform")):
             continue
-        folder = _strip_prefix(system.get("path") or "", params["path_prefixes"])
+        folder = strip_prefix(system.get("path") or "", params["path_prefixes"])
         if not name or not folder:
             continue
         emulators = [
@@ -352,11 +352,11 @@ def es_json(spec: dict, fetcher: Fetcher) -> list[dict]:
         rows.append({
             "folder": folder,
             "name": row["name"],
-            "extensions": _extensions(system.get("extensions")),
+            "extensions": extension_list(system.get("extensions")),
             "core": core or emulator,
             "emulator": emulator,
             "source_ref": format_ref(key, path, row["line"]),
-            "offers": _offers(
+            "offers": folder_offers(
                 [{"emulator": e, "core": c} for e, cores in emulators for c, _d in cores or [(e, False)]],
                 core, emulator),
             "arcade": _is_arcade(system.get("hardware"), system.get("platform")),

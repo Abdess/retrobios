@@ -16,8 +16,8 @@ from .csharp_source import (
     _unescape,
     source_ref,
 )
-from .retrobat_generators import FEATURES, GENERATORS, _record, system_feature_choices
-from .retrobat_render import _covered, _path_parts, _render, _when
+from .retrobat_generators import FEATURES, GENERATORS, launcher_record, system_feature_choices
+from .retrobat_render import covered_records, path_parts, render, when
 
 
 def _argument_paths(src: Source, emulator: str, build: str) -> list[tuple[Record, list[str]]]:
@@ -30,22 +30,22 @@ def _argument_paths(src: Source, emulator: str, build: str) -> list[tuple[Record
         if re.fullmatch(STRING, expr.strip()):
             continue
         method = _method_of(src, add.start())
-        rendered = _render(src, expr, method[0], add.start())
+        rendered = render(src, expr, method[0], add.start())
         if rendered is None or not rendered[0].startswith("bios"):
             continue
         flags = list(re.finditer(r'"(-[\w-]+)"', code[method[0] : add.start()]))
         if not flags:
             raise LauncherPatternMissing(src.path, f"flag before line {src.line(add.start())}")
         flag_at = method[0] + flags[-1].start()
-        conditions, returns = _when(src, add.start())
+        conditions, returns = when(src, add.start())
         found.append(
             (
-                _record(
+                launcher_record(
                     emulator,
                     build,
                     "passes_path",
                     [],
-                    _path_parts(
+                    path_parts(
                         src,
                         *returns,
                         *rendered[1],
@@ -80,7 +80,7 @@ def mame(sources: dict[str, Source]) -> list[Record]:
     found = _argument_paths(own, "mame64", "standalone")
     if not found:
         raise LauncherPatternMissing(own.path, "MAME folder arguments")
-    records = _covered(
+    records = covered_records(
         own,
         [
             split
@@ -102,7 +102,7 @@ def mame(sources: dict[str, Source]) -> list[Record]:
         shared.append(_with_conditions(record, conditions))
         libretro = dict(record, emulator="mame", build="libretro", names=[])
         shared.append(_with_conditions(libretro, conditions))
-    return records + _covered(
+    return records + covered_records(
         mess,
         shared,
         # The softlist file and the Lua autoboot script are named after the game.
@@ -119,7 +119,7 @@ def psxmame(sources: dict[str, Source]) -> list[Record]:
     found = _argument_paths(src, "psxmame", "standalone")
     if not found:
         raise LauncherPatternMissing(src.path, "rompath argument")
-    return _covered(src, [_with_conditions(record, conditions) for record, conditions in found])
+    return covered_records(src, [_with_conditions(record, conditions) for record, conditions in found])
 
 
 def xroar(sources: dict[str, Source]) -> list[Record]:
@@ -158,12 +158,12 @@ def xroar(sources: dict[str, Source]) -> list[Record]:
     if "bios" not in parts:
         raise LauncherPatternMissing(src.path, "bios in the config rompath")
     records.append(
-        _record(
+        launcher_record(
             "xroar",
             "standalone",
             "passes_path",
             [],
-            _path_parts(
+            path_parts(
                 src, src.lines(line.start(), line.end()), src.lines(use.start(), use.end())
             ),
             search_dir="/".join(parts[parts.index("bios") :]),
@@ -171,7 +171,7 @@ def xroar(sources: dict[str, Source]) -> list[Record]:
             fails_when_missing=False,
         )
     )
-    return _covered(src, records)
+    return covered_records(src, records)
 
 
 _EMULATOR_BRANCH = re.compile(r"([^\s;<>]+) when (\w+), else ([^\s;<>]+)")
@@ -205,7 +205,7 @@ def _per_emulator(src: Source, record: Record) -> list[Record]:
     for emulator, directory in ((declared.group(1), chosen), (record["emulator"], default)):
         split = {k: v for k, v in record.items() if k != "source_ref"}
         split.update(emulator=emulator, search_dir=directory, passes_to=f"{prefix} {directory}")
-        split["source_ref"] = _path_parts(src, *spans)
+        split["source_ref"] = path_parts(src, *spans)
         out.append(split)
     return out
 
@@ -292,7 +292,7 @@ def portable_users(sources: dict[str, Source]) -> list[Record]:
         if alternate:
             spans.append(src.lines(alternate.start(), alternate.end()))
             depends = "unless saves/switch/ryujinx/portable exists, passed with -r"
-        records.append(_record(
+        records.append(launcher_record(
             emulator,
             "standalone",
             "passes_path",
@@ -321,7 +321,7 @@ def pico8(sources: dict[str, Source]) -> list[Record]:
     check = src.find(r"if \(!File\.Exists\(exe\)\)\s*return null;", "binary check", exe.end())
     run = src.find(r"FileName = exe,\s*WorkingDirectory = path,", "binary run", check.end())
     return [
-        _record(
+        launcher_record(
             "pico8",
             "standalone",
             "fixed_name",

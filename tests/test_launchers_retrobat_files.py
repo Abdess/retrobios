@@ -22,7 +22,7 @@ from scraper.retrobat_config_files import (
     desmume,
 )
 from scraper.retrobat_config_folders import eka2l1, tsugaru, dosbox_copies
-from scraper.retrobat_render import _render
+from scraper.retrobat_render import render
 from scraper.retrobat_xbox import CXBX_DATA_FOLDER, cxbx, xemu_saves
 from scraper.csharp_source import LauncherPatternMissing, Source
 from tests.launchersretrobatsupport import G, _sources
@@ -782,7 +782,7 @@ class EveryBiosReferenceIsRead(unittest.TestCase):
             "x.cs",
             'void f(string rom)\n{\n    string p = AppConfig.GetFullPath("bios") + ";" + Path.GetDirectoryName(rom);\n}\n',
         )
-        self.assertEqual(_render(src, "p", 0, len(src.text))[0], "bios;<rom directory>")
+        self.assertEqual(render(src, "p", 0, len(src.text))[0], "bios;<rom directory>")
 
 
 if __name__ == "__main__":

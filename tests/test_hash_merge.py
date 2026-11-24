@@ -255,7 +255,7 @@ class TestMameMerge(unittest.TestCase):
         The manager set loads "01", but written unquoted it re-parses as the
         integer 1 and the profile stops naming the file the driver opens.
         """
-        from scripts.scraper._hash_write import _append_new_entries, _format_contents
+        from scripts.scraper._hash_write import _append_new_entries, format_contents
 
         contents = [
             {"name": "01", "description": "ROM bank 0-1", "size": 8192,
@@ -264,7 +264,7 @@ class TestMameMerge(unittest.TestCase):
              "crc32": "46489d88"},
         ]
         document = yaml.safe_load(
-            "files:\n  - name: manager.zip\n" + _format_contents(contents)
+            "files:\n  - name: manager.zip\n" + format_contents(contents)
         )
         names = [rom["name"] for rom in document["files"][0]["contents"]]
         self.assertEqual(names, ["01", "23"])

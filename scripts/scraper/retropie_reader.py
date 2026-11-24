@@ -12,8 +12,8 @@ from .retropie_scripts import (
     LauncherPatternMissing,
     Module,
     Scripts,
-    _FUNCTION,
-    _split,
+    FUNCTION,
+    split,
     source_ref,
 )
 
@@ -73,7 +73,7 @@ def _search_list_in_roms(event: Event, separator: str = DEFAULT_LIST_SEPARATOR) 
     )
 
 
-def _mentions_bios(text: str) -> bool:
+def mentions_bios(text: str) -> bool:
     return BIOSDIR in text or "${biosdir}" in text or BIOS_SPELLED in text
 
 
@@ -81,7 +81,7 @@ def _is_file(path: str) -> bool:
     return bool(_EXTENSION.search(PurePosixPath(path).name)) and "*" not in path
 
 
-def _split_path(path: str) -> tuple[str, str]:
+def split_path(path: str) -> tuple[str, str]:
     pure = PurePosixPath(path.rstrip("/"))
     return str(pure.parent), pure.name
 
@@ -146,13 +146,13 @@ class PackageReader:
     def _classify(self, event: Event) -> None:
         command = event.words[0][0]
         if event.heredoc:
-            if _mentions_bios(event.raw):
+            if mentions_bios(event.raw):
                 self._heredoc_setting(event)
             return
         if command == "addEmulator":
             self._add_emulator(event)
             return
-        if command == "iniSet" and not _mentions_bios(event.raw):
+        if command == "iniSet" and not mentions_bios(event.raw):
             # A search path below the roms root: MAME reads its samples from
             # samplepath $romdir/mame/samples;$romdir/arcade/samples.
             if _search_list_in_roms(
@@ -160,7 +160,7 @@ class PackageReader:
             ):
                 self._ini_set(event)
             return
-        if not _mentions_bios(event.raw):
+        if not mentions_bios(event.raw):
             return
         if command in HOUSEKEEPING:
             return
@@ -186,10 +186,10 @@ class PackageReader:
 
     def _is_bios_link(self, event: Event) -> bool:
         words = event.words
-        if words[0][0] != "ln" or not _mentions_bios(event.raw):
+        if words[0][0] != "ln" or not mentions_bios(event.raw):
             return False
         paths = [w for w in words[1:] if not w[0].startswith("-")]
-        if len(paths) != 2 or not all(_mentions_bios(v) for v in paths[0]):
+        if len(paths) != 2 or not all(mentions_bios(v) for v in paths[0]):
             raise LauncherPatternMissing(
                 f"{event.path}:{event.line}", f"link without a BIOS source: {event.raw}"
             )
@@ -210,10 +210,10 @@ class PackageReader:
             paths = [w for w in event.words[1:] if not w[0].startswith("-")]
             source, target = paths
             if len(target) == 1 and len(source) > 1:
-                target = [f"{target[0].rstrip('/')}/{_split_path(s)[1]}" for s in source]
+                target = [f"{target[0].rstrip('/')}/{split_path(s)[1]}" for s in source]
             sources += source
             targets += target
-        folders = {_split_path(s)[0] for s in sources}
+        folders = {split_path(s)[0] for s in sources}
         whole_dir = all(
             not _is_file(s) and "/" not in s.replace(BIOSDIR, "", 1).strip("/") for s in sources
         )
@@ -228,7 +228,7 @@ class PackageReader:
                     "links from several BIOS folders in one run",
                 )
             search_dir = folders.pop()
-            names = [_split_path(s)[1] for s in sources]
+            names = [split_path(s)[1] for s in sources]
             passes_to = _render_targets(names, targets)
         self.record(
             "links", names, [(e.path, e.line) for e in events],
@@ -239,15 +239,15 @@ class PackageReader:
     def _copy(self, event: Event) -> None:
         paths = [v for w in event.words[1:] if not w[0].startswith("-") for v in w]
         *sources, target = paths
-        if not _mentions_bios(target):
+        if not mentions_bios(target):
             raise LauncherPatternMissing(
                 f"{event.path}:{event.line}", f"copy out of the BIOS directory: {event.raw}"
             )
-        folders = {_split_path(s)[0] for s in sources}
+        folders = {split_path(s)[0] for s in sources}
         if len(folders) != 1:
             raise LauncherPatternMissing(f"{event.path}:{event.line}", "copy from several folders")
         self.record(
-            "copies", [_split_path(s)[1] for s in sources], [(event.path, event.line)],
+            "copies", [split_path(s)[1] for s in sources], [(event.path, event.line)],
             search_dir=folders.pop(), passes_to=target.rstrip("/"),
             fails_when_missing=False, depends_on_option=self._depends(event),
         )
@@ -264,7 +264,7 @@ class PackageReader:
             raise LauncherPatternMissing(f"{event.path}:{event.line}", "unzip without -d")
         target = values[values.index("-d") + 1]
         archives = [v for v in values if v.endswith(".zip")]
-        if len(archives) != 1 or not _mentions_bios(target):
+        if len(archives) != 1 or not mentions_bios(target):
             raise LauncherPatternMissing(f"{event.path}:{event.line}", f"unzip of {event.raw}")
         self.record(
             "copies", [], [(event.path, event.line)],
@@ -274,25 +274,25 @@ class PackageReader:
 
     def _move(self, event: Event) -> None:
         source, target = (w for w in event.words[1:] if not w[0].startswith("-"))
-        if not all(_mentions_bios(v) for v in source + target):
+        if not all(mentions_bios(v) for v in source + target):
             raise LauncherPatternMissing(
                 f"{event.path}:{event.line}", f"move across folders: {event.raw}"
             )
-        folders = {_split_path(s)[0] for s in source}
-        destinations = {_split_path(t)[0] for t in target}
+        folders = {split_path(s)[0] for s in source}
+        destinations = {split_path(t)[0] for t in target}
         if len(folders) != 1 or len(destinations) != 1:
             raise LauncherPatternMissing(
                 f"{event.path}:{event.line}", "move between several folders"
             )
         self.record(
-            "moves", [_split_path(s)[1] for s in source], [(event.path, event.line)],
+            "moves", [split_path(s)[1] for s in source], [(event.path, event.line)],
             case_insensitive=False, search_dir=folders.pop(), passes_to=destinations.pop(),
             fails_when_missing=False, depends_on_option=self._depends(event),
         )
 
     def _move_dir(self, event: Event) -> None:
         link, real = (w[0] for w in event.words[1:3])
-        if not _mentions_bios(real) or _mentions_bios(link):
+        if not mentions_bios(real) or mentions_bios(link):
             raise LauncherPatternMissing(
                 f"{event.path}:{event.line}", f"moveConfigDir into a non-BIOS folder: {event.raw}"
             )
@@ -307,7 +307,7 @@ class PackageReader:
         target = self._ini_file(event)
         passes_to = f"{key} in {self.final(target)}" if target else key
         if _is_file(value) and ";" not in value:
-            folder, name = _split_path(value)
+            folder, name = split_path(value)
             self.record(
                 "fixed_name", [name], [(event.path, event.line)],
                 case_insensitive=False, search_dir=folder, passes_to=passes_to,
@@ -326,21 +326,21 @@ class PackageReader:
             return event.words[3][0]
         lines = self.scripts.files[event.path].splitlines()
         for number in range(event.line - 1, 0, -1):
-            words = _split(lines[number - 1].strip())
+            words = split(lines[number - 1].strip())
             if words and words[0] == "iniConfig" and len(words) >= 4:
                 return words[3]
-            if _FUNCTION.match(lines[number - 1]):
+            if FUNCTION.match(lines[number - 1]):
                 break
         return None
 
     def _written(self, event: Event) -> None:
         """A file the package writes into the BIOS directory itself."""
         target = next(
-            (v for w in reversed(event.words[1:]) for v in w if _mentions_bios(v)), None
+            (v for w in reversed(event.words[1:]) for v in w if mentions_bios(v)), None
         )
         if target is None or not _is_file(target):
             raise LauncherPatternMissing(f"{event.path}:{event.line}", f"write of {event.raw}")
-        folder, name = _split_path(target)
+        folder, name = split_path(target)
         self.record(
             "copies", [name], [(event.path, event.line)],
             search_dir=None, passes_to=folder,
@@ -350,7 +350,7 @@ class PackageReader:
     def _build_flag(self, event: Event) -> None:
         flags = [
             v for w in event.words[1:] for v in w
-            if v.startswith("-D") and "=" in v and _mentions_bios(v)
+            if v.startswith("-D") and "=" in v and mentions_bios(v)
         ]
         if not flags:
             raise LauncherPatternMissing(f"{event.path}:{event.line}", f"cmake of {event.raw}")
@@ -375,7 +375,7 @@ class PackageReader:
         key, value = found.group(1), found.group(2)
         kind, names, folder = "passes_path", [], value
         if _is_file(value):
-            folder, name = _split_path(value)
+            folder, name = split_path(value)
             kind, names = "fixed_name", [name]
         written = _redirect_target(event.opener)
         if written is None:
@@ -393,17 +393,17 @@ class PackageReader:
         if len(event.words) < 5:
             return
         command = event.words[4][0]
-        if not _mentions_bios(command):
+        if not mentions_bios(command):
             return
         names = event.words[2]
-        tokens = _split(command)
+        tokens = split(command)
         found = [
             (flag, value) for flag, value in zip(tokens, tokens[1:])
-            if flag.startswith("-") and _mentions_bios(value)
+            if flag.startswith("-") and mentions_bios(value)
         ]
         found += [
             (head, tail) for head, sep, tail in (token.partition("=") for token in tokens)
-            if head.startswith("-") and sep and _mentions_bios(tail)
+            if head.startswith("-") and sep and mentions_bios(tail)
         ]
         if not found:
             raise LauncherPatternMissing(
@@ -415,7 +415,7 @@ class PackageReader:
                 self._command_line(event, emulator, flag, value)
 
     def _command_line(self, event: Event, emulator: str, flag: str, value: str) -> None:
-        folder, name = _split_path(value)
+        folder, name = split_path(value)
         if _is_file(value):
             kind, names, search = "fixed_name", [name], folder
         else:
@@ -435,7 +435,7 @@ class PackageReader:
         for event in events:
             if event.words[0][0] != "addEmulator" or len(event.words) < 5:
                 continue
-            tokens = _split(event.words[4][0])
+            tokens = split(event.words[4][0])
             for flag, value in zip(tokens, tokens[1:]):
                 if flag in flags:
                     seen.add(flag)
@@ -474,7 +474,7 @@ class PackageReader:
             )
 
         for event in events:
-            if event.heredoc or not event.words or _mentions_bios(event.raw):
+            if event.heredoc or not event.words or mentions_bios(event.raw):
                 continue
             command = event.words[0][0]
             if command == "moveConfigDir" and len(event.words) >= 3:
@@ -533,8 +533,8 @@ def _redirect_target(words: list[list[str]]) -> str | None:
 
 def _render_targets(names: list[str], targets: list[str]) -> str:
     """Where linked names land: one folder when the names are kept, each path when renamed."""
-    folders = {_split_path(t)[0] for t in targets}
-    kept = [_split_path(t)[1] for t in targets] == names
+    folders = {split_path(t)[0] for t in targets}
+    kept = [split_path(t)[1] for t in targets] == names
     if kept and len(folders) == 1:
         return f"{folders.pop()}/<name>"
     return ", ".join(targets)

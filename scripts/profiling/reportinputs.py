@@ -32,7 +32,7 @@ from profiling.repos import (
 )
 
 
-def _resolve_project_words(
+def resolve_project_words(
     refs: list, tree_order: Callable[[], Iterable[list[str] | None]],
     link_order: Callable[[], Iterable[Iterable[str]]] = lambda: (),
 ) -> list:
@@ -60,7 +60,7 @@ def _resolve_project_words(
     return out
 
 
-def _path_roles(refs: list) -> dict[str, set[str]]:
+def cited_path_roles(refs: list) -> dict[str, set[str]]:
     """The roles each cited path is written under across the profile."""
     roles: dict[str, set[str]] = {}
     for *_, parts, _citation in refs:
@@ -70,7 +70,7 @@ def _path_roles(refs: list) -> dict[str, set[str]]:
     return roles
 
 
-def _check_build_refs(
+def check_build_refs(
     profile: dict,
     deferred: list[tuple[Citation, dict]],
     views: list[RepoView],
@@ -120,7 +120,7 @@ def _check_build_refs(
     return results
 
 
-def _gather_refs(
+def gather_refs(
     profile: dict, text: str | None
 ) -> tuple[list, list[tuple[Citation, dict]]]:
     """The citations to anchor, and the refs read at a shipped build instead.
@@ -175,7 +175,7 @@ def _gather_refs(
     return refs, deferred
 
 
-def _cited_dirs(refs: list) -> set[str]:
+def cited_directories(refs: list) -> set[str]:
     """Directories the profile already cites, deepest first, to settle a bare
     filename that several trees of one repository carry."""
     cited_dirs: set[str] = set()
@@ -202,7 +202,7 @@ def _unanswered_skip(profile: dict) -> str:
     )
 
 
-def _readable_views(
+def readable_views(
     profile: dict, report: ProfileReport, cache_dir: str, offline: bool
 ) -> list[RepoView] | None:
     """The repositories to read, None once the report says why it is skipped."""
@@ -251,7 +251,7 @@ def _readable_views(
     return views
 
 
-def _record_revisions(
+def record_revisions(
     profile: dict, report: ProfileReport, views: list[RepoView],
     cache_dir: str, offline: bool,
 ) -> dict[tuple[str, str], str]:

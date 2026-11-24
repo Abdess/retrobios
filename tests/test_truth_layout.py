@@ -338,16 +338,16 @@ class ASizeOutsideARangeIsAnotherFile(unittest.TestCase):
     def test_exact_sizes_and_a_window_admit_both(self):
         """An entry admits its exact sizes and the window declared beside
         them, as size_refusal reads it. Two windows with no common size clash."""
-        from resolve.truthsystems import _sizes_clash
+        from resolve.truthsystems import sizes_clash
 
         disk = {"size": [143360, 143403, 143488], "min_size": 143105, "max_size": 143364}
-        self.assertFalse(_sizes_clash(disk, {"size": 143200}))
-        self.assertFalse(_sizes_clash(disk, {"size": 143488}))
-        self.assertTrue(_sizes_clash(disk, {"size": 143400}))
-        self.assertFalse(_sizes_clash(disk, {"min_size": 143300, "max_size": 143500}))
-        self.assertTrue(_sizes_clash({"min_size": 12288, "max_size": 16384},
+        self.assertFalse(sizes_clash(disk, {"size": 143200}))
+        self.assertFalse(sizes_clash(disk, {"size": 143488}))
+        self.assertTrue(sizes_clash(disk, {"size": 143400}))
+        self.assertFalse(sizes_clash(disk, {"min_size": 143300, "max_size": 143500}))
+        self.assertTrue(sizes_clash({"min_size": 12288, "max_size": 16384},
                                      {"min_size": 32768}))
-        self.assertFalse(_sizes_clash({"min_size": 12288}, {"name": "unsized"}))
+        self.assertFalse(sizes_clash({"min_size": 12288}, {"name": "unsized"}))
 
 
 class TruthRecordsWhoOpensByName(unittest.TestCase):

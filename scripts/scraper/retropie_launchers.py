@@ -23,7 +23,7 @@ import re
 from pathlib import PurePosixPath
 from typing import Any
 
-from .retropie_reader import PackageReader, _mentions_bios, _split_path
+from .retropie_reader import PackageReader, mentions_bios, split_path
 from .retropie_scripts import (
     Launcher,
     LauncherPatternMissing,
@@ -31,7 +31,7 @@ from .retropie_scripts import (
     SCRIPTMODULES,
     SECTIONS,
     Scripts,
-    _VAR,
+    VAR,
     merge_records,
     source_ref,
 )
@@ -81,7 +81,7 @@ def launch_script_records(scripts: Scripts) -> list[Launcher]:
             len(parts) == 4 and parts[0] == SCRIPTMODULES and parts[1] in SECTIONS
             and path.endswith(".sh")
         )
-        if not is_script or not _mentions_bios(text):
+        if not is_script or not mentions_bios(text):
             continue
         package = scripts.modules.get(parts[2])
         if package is None:
@@ -102,7 +102,7 @@ def _launch_script(path: str, lines: list[str], package: Module) -> list[Launche
             continue
         assign = re.match(r'^([A-Za-z_]\w*)="([^"]*)"$', stripped)
         if assign is not None:
-            env[assign.group(1)] = _VAR.sub(
+            env[assign.group(1)] = VAR.sub(
                 lambda m: env.get(m.group(1) or m.group(3), m.group(0)), assign.group(2)
             )
             continue
@@ -110,8 +110,8 @@ def _launch_script(path: str, lines: list[str], package: Module) -> list[Launche
         if check is None:
             continue
         tested = check.group(1)
-        resolved = _VAR.sub(lambda m: env.get(m.group(1) or m.group(3), m.group(0)), tested)
-        if not _mentions_bios(resolved):
+        resolved = VAR.sub(lambda m: env.get(m.group(1) or m.group(3), m.group(0)), tested)
+        if not mentions_bios(resolved):
             continue
         block_start = number
         message: str | None = None
@@ -137,7 +137,7 @@ def _launch_script(path: str, lines: list[str], package: Module) -> list[Launche
                     passes_to = f"command line {flag.group(1)}"
                     cited.append(later)
                     break
-        folder, name = _split_path(resolved)
+        folder, name = split_path(resolved)
         records.append(Launcher(
             emulator=package.id, package=package.id, build=package.build,
             kind="fixed_name", names=[name], case_insensitive=False,

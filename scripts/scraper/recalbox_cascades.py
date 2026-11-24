@@ -23,11 +23,11 @@ from .recalbox_configgen import (
     GSPLUS,
     HATARI,
     TOS_FUNCTIONS,
-    _assignments,
-    _expr_call,
-    _setter,
-    _string,
-    _text,
+    assignments,
+    expr_call,
+    is_setter_call,
+    string,
+    string_constant,
     spell,
 )
 
@@ -77,7 +77,7 @@ def _tos_setter(
 ) -> tuple[ast.Call, str, str]:
     """The setting written from str(<path>), the path variable, and where it goes."""
     paths = {
-        name for _node, name, value in _assignments(ast.walk(scope))
+        name for _node, name, value in assignments(ast.walk(scope))
         if isinstance(value, ast.Call) and ast.unparse(value.func) == "os.path.join"
     }
     setters = [
@@ -168,7 +168,7 @@ def _rom_override(src: Source, stmt: ast.If, var: str) -> tuple[str, ast.expr] |
         and len(stmt.body) == 1
     ):
         return None
-    marker = _text(src, stmt.test.left, "rom path marker")
+    marker = string_constant(src, stmt.test.left, "rom path marker")
     value = _assigns(stmt.body[0], var)
     return None if marker is None or value is None else (marker, value)
 
@@ -220,7 +220,7 @@ def _machine_depends(src: Source, scope: ast.FunctionDef, table: ast.stmt) -> st
     }
     options = [
         option for call in _calls(scope, attr="getInt")
-        if call.args and (option := _text(src, call.args[0], "machine option")) is not None
+        if call.args and (option := string_constant(src, call.args[0], "machine option")) is not None
         and isinstance(call.func, ast.Attribute)
         and isinstance(call.func.value, ast.Name) and call.func.value.id in bound
     ]
@@ -274,7 +274,7 @@ def tos_cascade(cg: Configgen, src: Source, scope: ast.FunctionDef, emulator: st
         n.id for stmt in body[index:body.index(setter_stmt) + 1]
         for n in ast.walk(stmt) if isinstance(n, ast.Name)
     }
-    helpers = [src.span(node) for node, name, value in _assignments(scope.body)
+    helpers = [src.span(node) for node, name, value in assignments(scope.body)
                if name in read - {var} and spell(value, env) is not None]
     ref = src.ref([
         (min(machine_lines), max(machine_lines)),
@@ -348,7 +348,7 @@ def _gsplus_tries(
             isinstance(test, ast.If) and var is not None and exists_of(test.test, var)
         ):
             src.fail(f"line {stmts[i].lineno}: path is not tried with os.path.exists")
-        calls = [c for stmt in test.body if (c := _expr_call(stmt))]
+        calls = [c for stmt in test.body if (c := expr_call(stmt))]
         for c in calls:
             if not isinstance(c.func, ast.Attribute):
                 src.fail(f"line {c.lineno}: a call of the found branch is not a method call")
@@ -357,7 +357,7 @@ def _gsplus_tries(
             if isinstance(c.func, ast.Attribute) and c.func.attr == "setString"
             and ast.unparse(c.args[1]) == var
         ]
-        found = _string(written[0].args[0]) if len(written) == 1 else None
+        found = string(written[0].args[0]) if len(written) == 1 else None
         if found is None or (key is not None and found != key):
             src.fail(f"line {test.lineno}: the found path is not written to one key")
         key = found
@@ -367,7 +367,7 @@ def _gsplus_tries(
             stmts, i = orelse, 0
             continue
         removed = [
-            c for stmt in orelse if (c := _expr_call(stmt)) and _setter(c, key, "removeOption")
+            c for stmt in orelse if (c := expr_call(stmt)) and is_setter_call(c, key, "removeOption")
         ]
         if len(orelse) != 1 or not removed:
             src.fail(f"line {test.lineno}: the last miss does not remove {key}")
@@ -394,7 +394,7 @@ def gsplus(cg: Configgen) -> list[Launcher]:
         node for node in ast.walk(generate)
         if isinstance(node, ast.If) and any(child is body[index] for child in node.orelse)
     )
-    marker = _string(guard.test.left) if isinstance(guard.test, ast.Compare) else None
+    marker = string(guard.test.left) if isinstance(guard.test, ast.Compare) else None
     if marker is None:
         src.fail("the BIOS search is not the else of a rom path test")
     launchers = [Launcher(
@@ -408,13 +408,13 @@ def gsplus(cg: Configgen) -> list[Launcher]:
             isinstance(node, ast.If)
             and isinstance(node.test, ast.Compare)
             and isinstance(node.test.left, ast.Call)
-            and _setter(node.test.left, key, "getString")
+            and is_setter_call(node.test.left, key, "getString")
         ):
             continue
-        placeholder = _text(src, node.test.comparators[0], "placeholder")
+        placeholder = string_constant(src, node.test.comparators[0], "placeholder")
         if placeholder is None:
             continue
-        written = [c for stmt in node.body if (c := _expr_call(stmt)) and _setter(c, key)]
+        written = [c for stmt in node.body if (c := expr_call(stmt)) and is_setter_call(c, key)]
         name = cg.under_bios(spell(written[0].args[1], env)) if len(written) == 1 else None
         if name is None:
             src.fail(f"line {node.lineno}: placeholder branch writes no BIOS path")

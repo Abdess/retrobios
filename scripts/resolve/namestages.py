@@ -23,7 +23,7 @@ from resolve.content import (
     shape_fits,
 )
 from resolve.datadirs import resolve_in_data_dirs
-from resolve.lookup import Resolution, _Lookup, _name_size_ok
+from resolve.lookup import Resolution, Lookup, name_size_ok
 from resolve.ownership import (
     affinity_tokens,
     engine_tree,
@@ -83,7 +83,7 @@ def _by_affinity(paths: list[str], file_entry: dict, dest_hint: str) -> list[str
     return sorted(paths, key=score, reverse=True)
 
 
-def _exact_name_candidates(q: _Lookup) -> list[str]:
+def _exact_name_candidates(q: Lookup) -> list[str]:
     """The held files answering to the entry's names, exact casing."""
     candidates: list[str] = []
     # The entry's own names first, the destination's basename only when
@@ -99,7 +99,7 @@ def _exact_name_candidates(q: _Lookup) -> list[str]:
             for match_sha1 in (
                 by_proven_name.get(try_name) or q.by_name.get(try_name, [])
             ):
-                if match_sha1 in q.files_db and _name_size_ok(q, match_sha1):
+                if match_sha1 in q.files_db and name_size_ok(q, match_sha1):
                     path = q.files_db[match_sha1]["path"]
                     if os.path.exists(path) and path not in candidates:
                         candidates.append(path)
@@ -108,7 +108,7 @@ def _exact_name_candidates(q: _Lookup) -> list[str]:
     return candidates
 
 
-def _add_variant_primaries(q: _Lookup, candidates: list[str]) -> None:
+def _add_variant_primaries(q: Lookup, candidates: list[str]) -> None:
     """Add the primaries that variants answering the exact casing stand in for."""
     # Only variants answer the exact casing, but the primary they
     # stand in for may be stored under another one: x1 asked for
@@ -127,14 +127,14 @@ def _add_variant_primaries(q: _Lookup, candidates: list[str]) -> None:
                 "/.variants/" not in path
                 and os.path.dirname(path) in homes
                 and os.path.basename(path).casefold() == wanted
-                and _name_size_ok(q, match_sha1)
+                and name_size_ok(q, match_sha1)
                 and os.path.exists(path)
                 and path not in candidates
             ):
                 candidates.append(path)
 
 
-def _add_casefold_candidates(q: _Lookup, candidates: list[str], owners: set[str]) -> None:
+def _add_casefold_candidates(q: Lookup, candidates: list[str], owners: set[str]) -> None:
     """Add the held files answering to the entry's names in another casing."""
     # Case-insensitive fallback: upstream platforms disagree on
     # casing (VEC_MineStorm.vec vs VEC_Minestorm.vec). Two casings
@@ -148,7 +148,7 @@ def _add_casefold_candidates(q: _Lookup, candidates: list[str], owners: set[str]
     folded = _casefold_name_index(q.by_name)
     for try_name in q.names_to_try:
         for match_sha1 in folded.get(try_name.casefold(), []):
-            if match_sha1 in q.files_db and _name_size_ok(q, match_sha1):
+            if match_sha1 in q.files_db and name_size_ok(q, match_sha1):
                 path = q.files_db[match_sha1]["path"]
                 if foreign_tree(path, owners):
                     continue
@@ -156,7 +156,7 @@ def _add_casefold_candidates(q: _Lookup, candidates: list[str], owners: set[str]
                     candidates.append(path)
 
 
-def _same_maker(q: _Lookup, candidates: list[str], makers: frozenset[str]) -> list[str]:
+def _same_maker(q: Lookup, candidates: list[str], makers: frozenset[str]) -> list[str]:
     """The candidates filed under the system's maker, or its shadowed aliases."""
     candidates = [p for p in candidates if not other_maker(p, makers, q.db)]
     if candidates:
@@ -173,7 +173,7 @@ def _same_maker(q: _Lookup, candidates: list[str], makers: frozenset[str]) -> li
             if (
                 maker_folder(path, str(q.db.get("bios_dir") or "bios"))
                 in makers
-                and _name_size_ok(q, match_sha1)
+                and name_size_ok(q, match_sha1)
                 and os.path.exists(path)
                 and path not in candidates
             ):
@@ -182,7 +182,7 @@ def _same_maker(q: _Lookup, candidates: list[str], makers: frozenset[str]) -> li
 
 
 def _choose_by_name(
-    q: _Lookup,
+    q: Lookup,
     candidates: list[str],
     owners: set[str],
     exact_foreign: bool,
@@ -244,8 +244,8 @@ def _choose_by_name(
     return chosen, "name_exact"
 
 
-def _by_name(
-    q: _Lookup, makers: frozenset[str], data_dir_registry: dict | None
+def name_or_alias_match(
+    q: Lookup, makers: frozenset[str], data_dir_registry: dict | None
 ) -> tuple[Resolution | None, bool]:
     """Any file with that name or alias (existence check).
 
@@ -287,7 +287,7 @@ def _by_name(
     return _choose_by_name(q, candidates, owners, exact_foreign, data_dir_registry), False
 
 
-def _named_candidates(q: _Lookup, makers: frozenset[str]) -> list[tuple[str, str, int | None]]:
+def named_candidates(q: Lookup, makers: frozenset[str]) -> list[tuple[str, str, int | None]]:
     """Every held file of the entry's names: path, md5, size."""
     named: list[tuple[str, str, int | None]] = []
     seen_paths = set()
@@ -320,7 +320,7 @@ def _named_candidates(q: _Lookup, makers: frozenset[str]) -> list[tuple[str, str
     return named
 
 
-def _named_md5_match(q: _Lookup, named: list[tuple[str, str, int | None]]) -> Resolution | None:
+def named_md5_match(q: Lookup, named: list[tuple[str, str, int | None]]) -> Resolution | None:
     """A named file whose md5, or archive composite, is a declared one.
 
     Sorts *named* in place for a composite-only entry, as the steps after
@@ -350,8 +350,8 @@ def _named_md5_match(q: _Lookup, named: list[tuple[str, str, int | None]]) -> Re
     return None
 
 
-def _zipped_named(
-    q: _Lookup, named: list[tuple[str, str, int | None]], zipped_file: str
+def zipped_named(
+    q: Lookup, named: list[tuple[str, str, int | None]], zipped_file: str
 ) -> Resolution | None:
     """When zipped_file is set, only accept candidates that contain it."""
     valid = []
@@ -376,14 +376,14 @@ def _zipped_named(
     return None
 
 
-def _ranked_mismatch(q: _Lookup, named: list[tuple[str, str, int | None]]) -> Resolution:
+def ranked_mismatch(q: Lookup, named: list[tuple[str, str, int | None]]) -> Resolution:
     """The named file the entry would take, reported as a hash mismatch."""
     ordered = _by_affinity([c[0] for c in named], q.file_entry, q.dest_hint)
     primary = [c for c in ordered if "/.variants/" not in c]
     return (primary[0] if primary else ordered[0]), "hash_mismatch"
 
 
-def _by_zip_contents(q: _Lookup, zip_contents: dict | None) -> Resolution | None:
+def by_zip_contents(q: Lookup, zip_contents: dict | None) -> Resolution | None:
     """zipped_file content match via pre-built index.
 
     Last resort: matches inner ROM MD5 across ALL ZIPs in the repo, so only

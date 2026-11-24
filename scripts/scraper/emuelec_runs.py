@@ -38,7 +38,7 @@ _EMU_TEST = re.compile(r'\$\{?EMU\}?"?\s*==?\s*"([^"]+)"')
 _ARM = re.compile(r'^\s*((?:"[^"]+"\|?)+)\)\s*$')
 _RUNTHIS = re.compile(r"""^\s*RUNTHIS\+?=(['"])(.*)\1\s*$""")
 _SCRIPT = re.compile(r"[\w./-]+\.(?:sh|start)$")
-_ADVMAME_INSTALL = re.compile(r"cp -r \$\{PKG_DIR\}/config/(advmame\.rc\w*) \S+/advmame\.rc$")
+ADVMAME_INSTALL = re.compile(r"cp -r \$\{PKG_DIR\}/config/(advmame\.rc\w*) \S+/advmame\.rc$")
 
 
 @dataclass
@@ -108,14 +108,14 @@ def _storage_path(tree: RepoTree, target: str) -> str:
     The emuelec package links /emuelec to /storage/.config/emuelec, where
     the first-boot copy of /usr/config lands.
     """
-    mk = _read(tree, EMUELEC_MK)
+    mk = read(tree, EMUELEC_MK)
     _line, link = mk.find(r"ln -sf (/storage/\S+) \$\{INSTALL\}(/emuelec)$", "/emuelec link")
     if target == link.group(2) or target.startswith(link.group(2) + "/"):
         return link.group(1) + target[len(link.group(2)):]
     return target
 
 
-def _evidence(
+def evidence(
     record: Launcher,
     script: Script,
     target: str,
@@ -135,7 +135,7 @@ def _evidence(
     """
     placements = []
     if tree is not None:
-        placements.append(first_boot_placement(_read(tree, USERCONFIG), _storage_path(tree, target)))
+        placements.append(first_boot_placement(read(tree, USERCONFIG), _storage_path(tree, target)))
     placement = config_placement(script, target, keys, source_name=source_name,
                                  required=not placements or not placements[0].install)
     placement.overrides |= set(rewrites)
@@ -143,9 +143,9 @@ def _evidence(
     return apply_evidence(record, placements, installed)
 
 
-def _read(tree: RepoTree, path: str) -> Script:
+def read(tree: RepoTree, path: str) -> Script:
     return Script(path, tree.read(path))
 
 
-def _under(path: str, root: str = BIOS_ROOT) -> bool:
+def under(path: str, root: str = BIOS_ROOT) -> bool:
     return path.rstrip("/") == root or path.startswith(root + "/")

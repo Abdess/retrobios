@@ -33,7 +33,7 @@ def write_mame_profile(path: str | Path, data: dict) -> None:
         patched, "upstream_commit", data.get("upstream_commit", ""),
         after=("source_commit", "upstream"),
     )
-    patched = _patch_bios_entries(patched, data.get("files", []))
+    patched = patch_bios_entries(patched, data.get("files", []))
     patched = _append_new_entries(patched, data.get("files", []), original)
 
     write_text_atomic(str(p), patched)
@@ -162,12 +162,12 @@ def _patch_entry(lines: list[str], start_line: int, fe: dict) -> None:
 
     # Insert new contents after last owned line
     if contents:
-        new_lines = _format_contents(contents).split("\n")
+        new_lines = format_contents(contents).split("\n")
         for k, cl in enumerate(new_lines):
             lines.insert(last_owned + 1 + k, cl)
 
 
-def _patch_bios_entries(text: str, files: list[dict]) -> str:
+def patch_bios_entries(text: str, files: list[dict]) -> str:
     """Patch contents, source_ref and required of bios_zip entries in-place.
 
     Processes entries in reverse order to preserve line offsets.
@@ -221,14 +221,14 @@ def _append_new_entries(text: str, files: list[dict], original: str) -> str:
     lines = []
     profile_type = str(existing_data.get("type") or "")
     for fe in new_entries:
-        lines.append(f"\n  - name: {_yaml_scalar(fe['name'])}")
+        lines.append(f"\n  - name: {yaml_scalar(fe['name'])}")
         lines.extend(set_path_lines(profile_type, fe["name"]))
         lines.append(f"    required: {str(fe['required']).lower()}")
         lines.append("    category: bios_zip")
         if fe.get("source_ref"):
             lines.append(f'    source_ref: "{fe["source_ref"]}"')
         if fe.get("contents"):
-            lines.append(_format_contents(fe["contents"]))
+            lines.append(format_contents(fe["contents"]))
 
     if lines:
         # New BIOS root sets go before the generated sections, which run to
@@ -242,13 +242,13 @@ def _append_new_entries(text: str, files: list[dict], original: str) -> str:
     return text
 
 
-def _device_section_start(text: str) -> int | None:
+def device_section_start(text: str) -> int | None:
     """Offset of the generated device section header, if the profile has one."""
     match = re.search(rf"^{re.escape(DEVICE_SECTION)}$", text, re.M)
     return match.start() if match else None
 
 
-def _softlist_section_start(text: str) -> int | None:
+def softlist_section_start(text: str) -> int | None:
     """Offset of the generated software list section header, if any."""
     match = re.search(rf"^{re.escape(SOFTLIST_SECTION)}$", text, re.M)
     return match.start() if match else None
@@ -256,7 +256,7 @@ def _softlist_section_start(text: str) -> int | None:
 
 def generated_start(text: str) -> int | None:
     """Offset of the first generated section: what a reader wrote ends there."""
-    found = [at for at in (_softlist_section_start(text), _device_section_start(text)) if at is not None]
+    found = [at for at in (softlist_section_start(text), device_section_start(text)) if at is not None]
     return min(found) if found else None
 
 
@@ -276,7 +276,7 @@ def set_path_lines(profile_type: str, name: str) -> list[str]:
     return lines
 
 
-def _yaml_scalar(value: object) -> str:
+def yaml_scalar(value: object) -> str:
     """Quote a scalar so YAML reads back exactly what the source said.
 
     A MAME ROM named ``01`` written bare re-parses as the integer 1, and the
@@ -285,13 +285,13 @@ def _yaml_scalar(value: object) -> str:
     return json.dumps(str(value), ensure_ascii=False)
 
 
-def _format_contents(contents: list[dict]) -> str:
+def format_contents(contents: list[dict]) -> str:
     """Format a contents list as YAML text."""
     lines = ["    contents:"]
     for rom in contents:
-        lines.append(f"      - name: {_yaml_scalar(rom['name'])}")
+        lines.append(f"      - name: {yaml_scalar(rom['name'])}")
         if rom.get("description"):
-            lines.append(f"        description: {_yaml_scalar(rom['description'])}")
+            lines.append(f"        description: {yaml_scalar(rom['description'])}")
         if rom.get("size"):
             lines.append(f"        size: {rom['size']}")
         if rom.get("crc32"):
@@ -397,8 +397,8 @@ def write_fbneo_profile(path: str | Path, data: dict) -> None:
     if new_roms:
         lines = []
         for fe in new_roms:
-            lines.append(f"  - name: {_yaml_scalar(fe['name'])}")
-            lines.append(f"    archive: {_yaml_scalar(fe['archive'])}")
+            lines.append(f"  - name: {yaml_scalar(fe['name'])}")
+            lines.append(f"    archive: {yaml_scalar(fe['archive'])}")
             lines.append(f"    required: {str(fe.get('required', True)).lower()}")
             if fe.get("size"):
                 lines.append(f"    size: {fe['size']}")

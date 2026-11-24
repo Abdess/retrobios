@@ -27,7 +27,7 @@ from resolve.launcherconfig import (
 )
 from resolve.launchers import handed_directories
 from resolve.launcherplaces import launcher_places
-from profiling.reportinputs import _check_build_refs
+from profiling.reportinputs import check_build_refs
 from profiling.repos import shipped_build_holders
 from scraper.retrobat_launchers import _choices_apart
 from scraper.shell_launchers import LauncherPatternMissing, Script, config_placement
@@ -372,7 +372,7 @@ class BuildRefs(unittest.TestCase):
             asked.append((revision, path))
             return ["line"] * 5 if path == "src/a.c" else None
 
-        rows = _check_build_refs(
+        rows = check_build_refs(
             document,
             [(Citation("src/a.c:2", "c"), document["config_reads"][0]),
              (Citation("src/a.c:9, ROCKNIX x.patch:1", "k"), document["config_reads"][0])],
@@ -404,7 +404,7 @@ class BuildRefs(unittest.TestCase):
             asked.append(path)
             return None
 
-        rows = _check_build_refs(
+        rows = check_build_refs(
             {"config_reads": [read]},
             [(Citation("SSF.exe 0x10-0x20"), read), (Citation("src/a.c:3"), read)],
             [View()], fetch,

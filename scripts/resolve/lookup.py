@@ -27,7 +27,7 @@ Resolution = tuple[str, str]
 
 
 @dataclass(frozen=True)
-class _Lookup:
+class Lookup:
     """One entry as resolve_local_file reads it: its names and declared hashes."""
 
     file_entry: dict
@@ -76,9 +76,9 @@ def _lookup_names(name: str, aliases: list, dest_hint: str) -> tuple[list[str], 
     return names_to_try, own_names
 
 
-def _lookup(
+def lookup(
     file_entry: dict, db: dict, dest_hint: str, md5_list: list[str], *, composite_only: bool
-) -> _Lookup:
+) -> Lookup:
     """Read the names and every declared hash of an entry once."""
     sha1 = file_entry.get("sha1")
     name = file_entry.get("name", "")
@@ -107,7 +107,7 @@ def _lookup(
         if candidate.strip()
     )
     indexes = db.get("indexes", {})
-    return _Lookup(
+    return Lookup(
         file_entry=file_entry,
         db=db,
         dest_hint=dest_hint,
@@ -127,7 +127,7 @@ def _lookup(
     )
 
 
-def _record_match_status(q: _Lookup, match_sha1: str) -> str | None:
+def record_match_status(q: Lookup, match_sha1: str) -> str | None:
     """Return hash evidence when a DB record satisfies every declaration."""
     entry = q.files_db.get(match_sha1)
     if not entry:
@@ -174,7 +174,7 @@ def held_record_for(file_entry: dict, db: dict) -> str | None:
         (cut_md5_owner(value, by_md5) or value) if len(value) < 32 else value
         for value in parse_hash_list(file_entry.get("md5"))
     ]
-    q = _lookup(
+    q = lookup(
         file_entry, db, "", md5_list,
         composite_only=file_entry.get("zip_digest") == "composite",
     )
@@ -187,7 +187,7 @@ def held_record_for(file_entry: dict, db: dict) -> str | None:
     if not (q.sha1_candidates or q.sha256_candidates or q.md5_list or q.zipped_file):
         candidates += [indexes.get("by_crc32", {}).get(v) for v in q.crc_candidates]
     return next(
-        (c for c in candidates if c and c in q.files_db and _record_match_status(q, c)),
+        (c for c in candidates if c and c in q.files_db and record_match_status(q, c)),
         None,
     )
 
@@ -203,8 +203,8 @@ def variant_copies(
     A copy passes the shape the entry's code checks and, when the entry
     declares hashes, agrees with every one of them, as the resolver requires.
     """
-    q = _lookup(
-        file_entry, db, _entry_hint(file_entry, dest_hint), [
+    q = lookup(
+        file_entry, db, entry_hint(file_entry, dest_hint), [
             (cut_md5_owner(value, db.get("indexes", {}).get("by_md5", {})) or value)
             if len(value) < 32 else value
             for value in parse_hash_list(file_entry.get("md5"))
@@ -229,8 +229,8 @@ def variant_copies(
                 os.path.dirname(os.path.normpath(path)) == home
                 and os.path.normpath(path) != primary
                 and variant_base_name(os.path.basename(path)) in names
-                and (not hashed or _record_match_status(q, match_sha1))
-                and _name_size_ok(q, match_sha1)
+                and (not hashed or record_match_status(q, match_sha1))
+                and name_size_ok(q, match_sha1)
                 and os.path.exists(path)
                 and path not in out
             ):
@@ -238,7 +238,7 @@ def variant_copies(
     return out
 
 
-def _name_size_ok(q: _Lookup, match_sha1: str) -> bool:
+def name_size_ok(q: Lookup, match_sha1: str) -> bool:
     """Whether a record found by name has the shape the entry's code checks."""
     record = q.files_db.get(match_sha1, {})
     return name_match_size_ok(q.file_entry, record.get("size")) and adler32_fits(
@@ -246,7 +246,7 @@ def _name_size_ok(q: _Lookup, match_sha1: str) -> bool:
     ) and content_fits(q.file_entry, record.get("path", ""))
 
 
-def _entry_hint(file_entry: dict, dest_hint: str) -> str:
+def entry_hint(file_entry: dict, dest_hint: str) -> str:
     """The destination tail the collection indexes the entry under."""
     # A platform that hands each core a system directory of its own (MinUI's
     # Bios/<TAG>/) writes that folder in front of the core's path. The tail

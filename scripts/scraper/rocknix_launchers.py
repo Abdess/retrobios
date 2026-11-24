@@ -34,8 +34,8 @@ from .rocknix_configs import (
     Installed,
     RETROARCH,
     STANDALONE,
-    _file_under,
-    _keys,
+    file_under,
+    fixed_path_keys,
     config_records,
     device_configs,
     directory_records,
@@ -121,7 +121,7 @@ def amiberry(tree: RepoTree) -> list[Launcher]:
             Setting(s.section, s.key, s.value.replace(sed.group(1), root), s.line)
             for s in settings(tree.read(path))
         ]
-        keys = [(s.section, s.key) for s in found if _file_under(s.value, root)]
+        keys = [(s.section, s.key) for s in found if file_under(s.value, root)]
         if not keys:
             raise LauncherPatternMissing(path, f"key naming a file under {sed.group(1)}")
         value, lines = fixed_paths(found, keys, path)
@@ -140,7 +140,7 @@ def amiberry(tree: RepoTree) -> list[Launcher]:
                 depends_on_option=f"{condition}, {content}",
             ),
             target,
-            _keys(value),
+            fixed_path_keys(value),
             script,
             source_name=config,
         ))
@@ -191,7 +191,7 @@ def hatari(tree: RepoTree) -> list[Launcher]:
     run_line, _ = script.find(r"--configfile", "--configfile", copy_line)
     path = f"{package}/config/conf/{copy.group(1)}"
     found = settings(tree.read(path))
-    keys = [(s.section, s.key) for s in found if _file_under(s.value, BIOS_ROOT)]
+    keys = [(s.section, s.key) for s in found if file_under(s.value, BIOS_ROOT)]
     if not keys:
         raise LauncherPatternMissing(path, f"key naming a file under {BIOS_ROOT}")
     value, lines = fixed_paths(found, keys, path)
@@ -210,7 +210,7 @@ def hatari(tree: RepoTree) -> list[Launcher]:
             passes_to=f"{describe_keys(copy.group(1), value.keys)} (--configfile)",
         ),
         script.expand(copied.group(1), copy_line, set()),
-        _keys(value),
+        fixed_path_keys(value),
         script,
         source_name=copy.group(1),
     )]
@@ -293,7 +293,7 @@ def nanoboyadvance(tree: RepoTree) -> list[Launcher]:
     package = f"{STANDALONE}/nanoboyadvance-sa"
     path = f"{package}/config/config.toml"
     found = settings(tree.read(path))
-    keys = [(s.section, s.key) for s in found if _file_under(s.value, BIOS_ROOT)]
+    keys = [(s.section, s.key) for s in found if file_under(s.value, BIOS_ROOT)]
     if not keys:
         raise LauncherPatternMissing(path, f"key naming a file under {BIOS_ROOT}")
     value, lines = fixed_paths(found, keys, path)
@@ -317,7 +317,7 @@ def nanoboyadvance(tree: RepoTree) -> list[Launcher]:
             fails_when_missing=True,
         ),
         f"{CONFIG_ROOT}/nanoboyadvance/config.toml",
-        _keys(value),
+        fixed_path_keys(value),
         Script(start_path, tree.read(start_path)),
     )]
 

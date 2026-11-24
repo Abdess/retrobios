@@ -51,14 +51,14 @@ FILE_OPTIONS = {"o2em_bios": "o2em"}
 BUILTIN_TOKEN = re.compile(r"<[^<>/]+>")
 
 
-def _string(node: ast.AST | None) -> str | None:
+def string(node: ast.AST | None) -> str | None:
     """The value of a string constant."""
     if isinstance(node, ast.Constant) and isinstance(node.value, str):
         return node.value
     return None
 
 
-def _text(source: Source, node: ast.AST | None, what: str) -> str | None:
+def string_constant(source: Source, node: ast.AST | None, what: str) -> str | None:
     """The value of a string constant, None for any other node. A constant
     that is not a string is a shape the reader does not know."""
     if not isinstance(node, ast.Constant):
@@ -68,7 +68,7 @@ def _text(source: Source, node: ast.AST | None, what: str) -> str | None:
     return node.value
 
 
-def _assignments(
+def assignments(
     nodes: Iterable[ast.AST],
 ) -> Iterator[tuple[ast.Assign | ast.AnnAssign, str, ast.expr]]:
     """Each single-name assignment among `nodes`, its name and its value."""
@@ -116,14 +116,14 @@ def spell(node: ast.AST | None, env: Mapping[str, str]) -> str | None:
 def module_strings(source: Source, prefix: str) -> dict[str, str]:
     """Module-level string constants, keyed as `prefix.NAME`."""
     local: dict[str, str] = {}
-    for _node, name, expr in _assignments(source.tree.body):
+    for _node, name, expr in assignments(source.tree.body):
         value = spell(expr, local)
         if value is not None:
             local[name] = value
     return {f"{prefix}.{name}": value for name, value in local.items()}
 
 
-def _class_strings(source: Source, env: dict[str, str]) -> dict[str, Any]:
+def class_strings(source: Source, env: dict[str, str]) -> dict[str, Any]:
     """Class attributes readable as strings or as tuples of strings."""
     found: dict[str, Any] = {}
     for cls in source.tree.body:
@@ -131,7 +131,7 @@ def _class_strings(source: Source, env: dict[str, str]) -> dict[str, Any]:
             continue
         # The class body reads its own attributes by their bare names.
         bare: dict[str, str] = {}
-        for _node, name, expr in _assignments(cls.body):
+        for _node, name, expr in assignments(cls.body):
             scope = {**env, **found, **bare}
             value: Any = spell(expr, scope)
             if value is None and isinstance(expr, ast.Tuple):
@@ -149,7 +149,7 @@ def _class_strings(source: Source, env: dict[str, str]) -> dict[str, Any]:
 def _bound_once(scope: ast.AST, env: dict[str, str]) -> dict[str, str]:
     """Names a function binds exactly once to a readable string."""
     counts: dict[str, int] = {}
-    found = list(_assignments(ast.walk(scope)))
+    found = list(assignments(ast.walk(scope)))
     for _node, name, _expr in found:
         counts[name] = counts.get(name, 0) + 1
     local: dict[str, str] = {}
@@ -171,11 +171,11 @@ def launcher_names(source: Source) -> dict[str, list[str]]:
             and isinstance(node.test.ops[0], ast.Eq)
         ):
             continue
-        emulator = _text(source, node.test.comparators[0], "emulator name")
+        emulator = string_constant(source, node.test.comparators[0], "emulator name")
         if emulator is None:
             continue
         for call in _calls(ast.Module(body=node.body, type_ignores=[]), name="__import__"):
-            module = _text(source, call.args[0], "generator module") if call.args else None
+            module = string_constant(source, call.args[0], "generator module") if call.args else None
             if module is not None:
                 names.setdefault(module, []).append(emulator)
     if not names:
@@ -183,14 +183,14 @@ def launcher_names(source: Source) -> dict[str, list[str]]:
     return names
 
 
-def _handler_map(source: Source, function: str, table: str) -> dict[str, list[str]]:
+def handler_map(source: Source, function: str, table: str) -> dict[str, list[str]]:
     """Function name -> the keys a dispatch table of `function` sends to it."""
     node = source.assignment(table, source.function(function)).value
     if not isinstance(node, ast.Dict):
         source.fail(f"{table} is not a dict display")
     handlers: dict[str, list[str]] = {}
     for key, value in zip(node.keys, node.values):
-        name = _text(source, key, f"{table} key")
+        name = string_constant(source, key, f"{table} key")
         if name is not None and isinstance(value, ast.Attribute):
             handlers.setdefault(value.attr, []).append(name)
     if not handlers:
@@ -226,7 +226,7 @@ class Configgen:
 
     def core(self, function: str) -> str:
         """The libretro cores fillCoresConfiguration hands to `function`."""
-        cores = _handler_map(self.source(CORES), "fillCoresConfiguration", "specificCoreHandlers")
+        cores = handler_map(self.source(CORES), "fillCoresConfiguration", "specificCoreHandlers")
         if function not in cores:
             self.source(CORES).fail(f"no core is configured by {function}")
         return join_emulators(cores[function])
@@ -235,7 +235,7 @@ class Configgen:
         """recalboxFiles, the module's class attributes and the strings
         `scope` binds once, with the system name left as a placeholder."""
         env: dict[str, Any] = dict(self.files)
-        env.update(_class_strings(source, env))
+        env.update(class_strings(source, env))
         env.update({name: SYSTEM_PLACEHOLDER for name in SYSTEM_NAMES})
         if scope is not None:
             env.update(_bound_once(scope, env))
@@ -255,7 +255,7 @@ class Configgen:
         return value.rstrip("/")
 
 
-def _setter(call: ast.Call, key: str, attr: str = "setString") -> bool:
+def is_setter_call(call: ast.Call, key: str, attr: str = "setString") -> bool:
     return (
         isinstance(call.func, ast.Attribute)
         and call.func.attr == attr
@@ -265,18 +265,18 @@ def _setter(call: ast.Call, key: str, attr: str = "setString") -> bool:
     )
 
 
-def _expr_call(stmt: ast.stmt) -> ast.Call | None:
+def expr_call(stmt: ast.stmt) -> ast.Call | None:
     if isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call):
         return stmt.value
     return None
 
 
-def _systems(
+def accepted_systems(
     source: Source, test: ast.expr, lists: Mapping[str, list[str]]
 ) -> list[str] | None:
     """The systems a `system.Name == x`, `or` or `in list` test accepts."""
     if isinstance(test, ast.BoolOp) and isinstance(test.op, ast.Or):
-        parts = [_systems(source, value, lists) for value in test.values]
+        parts = [accepted_systems(source, value, lists) for value in test.values]
         systems: list[str] = []
         for part in parts:
             if part is None:
@@ -289,7 +289,7 @@ def _systems(
         and ast.unparse(test.left) in SYSTEM_NAMES
     ):
         right = test.comparators[0]
-        system = _text(source, right, "system name")
+        system = string_constant(source, right, "system name")
         if isinstance(test.ops[0], ast.Eq) and system is not None:
             return [system]
         if isinstance(test.ops[0], ast.In) and isinstance(right, ast.Name) and right.id in lists:
@@ -310,7 +310,7 @@ def _condition(source: Source, tests: list[ast.expr], negated: bool,
     systems: list[str] = []
     flags: list[str] = []
     for test in tests:
-        found = _systems(source, test, lists)
+        found = accepted_systems(source, test, lists)
         flag = _flag(test)
         if found is not None:
             systems += found
@@ -337,18 +337,18 @@ def _else_line(source: Source, first: ast.stmt) -> int:
     return line if line > 0 else first.lineno
 
 
-def _setter_branches(
+def setter_branches(
     source: Source, stmts: list[ast.stmt], key: str, lists: Mapping[str, list[str]]
 ) -> list[tuple[str | None, ast.Call, int]]:
     """(condition, setter call, first line) for each branch writing `key`."""
     found: list[tuple[str | None, ast.Call, int]] = []
     for stmt in stmts:
-        call = _expr_call(stmt)
-        if call is not None and _setter(call, key):
+        call = expr_call(stmt)
+        if call is not None and is_setter_call(call, key):
             found.append((None, call, stmt.lineno))
             continue
         if not isinstance(stmt, ast.If):
-            if any(_setter(c, key) for c in _calls(stmt, attr="setString")):
+            if any(is_setter_call(c, key) for c in _calls(stmt, attr="setString")):
                 source.fail(f"line {stmt.lineno}: {key} is written outside an if chain")
             continue
         node, tests = stmt, []
@@ -370,19 +370,19 @@ def _setter_branches(
 def _branch(
     source: Source, stmts: list[ast.stmt], key: str, condition: str, start: int
 ) -> list[tuple[str | None, ast.Call, int]]:
-    calls = [c for stmt in stmts if (c := _expr_call(stmt)) is not None and _setter(c, key)]
-    nested = [c for stmt in stmts for c in _calls(stmt, attr="setString") if _setter(c, key)]
+    calls = [c for stmt in stmts if (c := expr_call(stmt)) is not None and is_setter_call(c, key)]
+    nested = [c for stmt in stmts for c in _calls(stmt, attr="setString") if is_setter_call(c, key)]
     if len(calls) != len(nested) or len(calls) > 1:
         source.fail(f"line {start}: {key} is written in a nested branch")
     return [(condition, call, start) for call in calls]
 
 
-def _local_lists(source: Source, scope: ast.AST) -> dict[str, tuple[list[str], ast.stmt]]:
+def local_string_lists(source: Source, scope: ast.AST) -> dict[str, tuple[list[str], ast.stmt]]:
     found: dict[str, tuple[list[str], ast.stmt]] = {}
-    for node, name, value in _assignments(ast.walk(scope)):
+    for node, name, value in assignments(ast.walk(scope)):
         if isinstance(value, ast.List):
             values = [text for e in value.elts
-                      if (text := _text(source, e, f"{name} item")) is not None]
+                      if (text := string_constant(source, e, f"{name} item")) is not None]
             if len(values) == len(value.elts):
                 found[name] = (values, node)
     return found

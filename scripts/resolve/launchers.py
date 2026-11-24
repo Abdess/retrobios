@@ -10,11 +10,11 @@ from model.declarations import CONFIGS_ROOT, ROMS_ROOT, declared_root, declared_
 from model.launcherrecords import record_emulators
 from core.paths import sanitize_pack_path
 from resolve.launcherconfig import bound_launchers
-from resolve.launcherplaces import _bios_relative, record_directories
+from resolve.launcherplaces import bios_relative, record_directories
 
 
 # The names a platform's launch code gives its BIOS root, besides the
-# base_destination _bios_relative reads: RetroPie's scriptmodules set
+# base_destination bios_relative reads: RetroPie's scriptmodules set
 # biosdir="$home/RetroPie/BIOS", EmuDeck's scripts ${biosPath}, RetroDECK's
 # component scripts $bios_path.
 BIOS_ROOT_VARIABLES = ("$biosdir", "$home/RetroPie/BIOS", "${biosPath}", "$bios_path")
@@ -96,7 +96,7 @@ def ini_keys(passes_to: str) -> frozenset[str]:
 
 def _folder_in_bios(directory: str, base: str) -> str | None:
     """A directory relative to the BIOS root, None when it lies outside."""
-    relative = _bios_relative(directory, base)
+    relative = bios_relative(directory, base)
     if relative is not None:
         return relative
     directory = directory.strip().rstrip("/")

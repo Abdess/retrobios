@@ -10,7 +10,7 @@ from model.romfolders import format_ref
 from model.safeparse import parse_untrusted_xml
 
 from . import Fetcher, SourceError, register
-from .es import _extensions, _first_lines, _lenient_xml, _offers, _strip_prefix
+from .es import extension_list, first_lines, lenient_xml, folder_offers, strip_prefix
 
 
 # ---------------------------------------------------------------------------
@@ -33,13 +33,13 @@ def command_core(command: str) -> tuple[str | None, str | None]:
 
 
 def esde_systems(text: str, path: str) -> Iterator[tuple[str, str, list[str], list[tuple[str, str]]]]:
-    root = parse_untrusted_xml(_lenient_xml(text), path)
+    root = parse_untrusted_xml(lenient_xml(text), path)
     for system in root.iter("system"):
         name = (system.findtext("name") or "").strip()
         rom_path = (system.findtext("path") or "").strip()
         commands = [((c.get("label") or "").strip(), (c.text or "").strip())
                     for c in system.findall("command")]
-        yield name, rom_path, _extensions(system.findtext("extension")), commands
+        yield name, rom_path, extension_list(system.findtext("extension")), commands
 
 
 def _alternative_emulators(text: str, function: str) -> dict[str, tuple[str, int]]:
@@ -116,7 +116,7 @@ def _searched_by(commands: list[tuple[str, str, int | None]], key: str, path: st
             continue
         reads = [
             folder for part in words[at + 1].split(";")
-            if (folder := _strip_prefix(part, ["%ROMPATH%/", "%ROMPATH%\\"]))
+            if (folder := strip_prefix(part, ["%ROMPATH%/", "%ROMPATH%\\"]))
         ]
         if not reads:
             continue
@@ -167,11 +167,11 @@ def esde(spec: dict, fetcher: Fetcher) -> list[dict]:
     systems: dict[str, dict] = {}
     for item in [params["systems"], *params.get("custom", [])]:
         key, path = item["source"], item["path"]
-        text = _lenient_xml(fetcher.text(key, path))
-        lines = _first_lines(text, r"<name>([^<]+)</name>")
+        text = lenient_xml(fetcher.text(key, path))
+        lines = first_lines(text, r"<name>([^<]+)</name>")
         command_lines = _command_lines(text)
         for name, rom_path, extensions, commands in esde_systems(text, path):
-            folder = _strip_prefix(rom_path, ["%ROMPATH%/", "%ROMPATH%\\"])
+            folder = strip_prefix(rom_path, ["%ROMPATH%/", "%ROMPATH%\\"])
             if not name or not folder:
                 continue
             start = lines.get(name) or 0
@@ -207,7 +207,7 @@ def esde(spec: dict, fetcher: Fetcher) -> list[dict]:
             else:
                 note = f"alternative emulator '{label}' names no command of this system"
         emulator, core = command_core(chosen[1])
-        offers = _offers([
+        offers = folder_offers([
             {"emulator": e, "core": c, "source_ref": format_ref(key_, path_, line)}
             for _label, command, line, key_, path_ in system["placed"]
             for e, c in [command_core(command)] if e

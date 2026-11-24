@@ -17,15 +17,15 @@ from resolve.entryscope import (
     installed_with_emulator,
 )
 from resolve.truthsystems import (
-    _SystemMap,
-    _brought,
-    _cover,
-    _enrich_hashes,
-    _has_exploitable_data,
-    _platform_entries,
-    _require_by_slot,
-    _serialize_systems,
-    _sizes_clash,
+    SystemMap,
+    brought_by,
+    cover,
+    enrich_hashes,
+    has_exploitable_data,
+    platform_entries,
+    require_by_slot,
+    serialize_systems,
+    sizes_clash,
 )
 
 
@@ -151,7 +151,7 @@ def _shares_hash(a: dict, b: dict) -> bool:
 
 def _contents_disagree(a: dict, b: dict) -> bool:
     """A hash both declare without a value in common, or no size both admit."""
-    return contradicts(declared_hashes(a), declared_hashes(b)) or _sizes_clash(a, b)
+    return contradicts(declared_hashes(a), declared_hashes(b)) or sizes_clash(a, b)
 
 
 def _fold_into(existing: dict, file_entry: dict, emu_name: str) -> None:
@@ -160,7 +160,7 @@ def _fold_into(existing: dict, file_entry: dict, emu_name: str) -> None:
     existing["_cores"] = existing.get("_cores", set()) | {emu_name}
     if file_entry.get("_opens_by_name", True):
         existing["_named_by"] = existing.get("_named_by", set()) | {emu_name}
-    existing["_brought_by"] = existing.get("_brought_by", set()) | _brought(file_entry, emu_name)
+    existing["_brought_by"] = existing.get("_brought_by", set()) | brought_by(file_entry, emu_name)
     sr = file_entry.get("source_ref")
     if sr is not None:
         sr_key = _serialize_source_ref(sr)
@@ -310,11 +310,11 @@ def _new_truth_entry(file_entry: dict, emu_name: str, db: dict | None) -> dict:
     if grouped:
         _fold_set_member(entry, file_entry, emu_name)
     entry["_named_by"] = {emu_name} if file_entry.get("_opens_by_name", True) else set()
-    entry["_brought_by"] = _brought(file_entry, emu_name)
+    entry["_brought_by"] = brought_by(file_entry, emu_name)
     sr = file_entry.get("source_ref")
     entry["_source_refs"] = {_serialize_source_ref(sr)} if sr is not None else set()
     if db:
-        _enrich_hashes(entry, db)
+        enrich_hashes(entry, db)
     # Which core gave each hash, for the conflict warning. Dropped before
     # the model is written.
     entry["_hash_by"] = {h: emu_name for h in HASH_FIELDS if entry.get(h)}
@@ -440,7 +440,7 @@ def generate_platform_truth(
     # 1. File-based: if the scraped platform already has this file, use its system
     # 2. Exact match: profile system ID == platform system ID
     # 3. Normalized match: strip manufacturer prefix + separators
-    mapping = _SystemMap.of(config, db)
+    mapping = SystemMap.of(config, db)
 
     systems: dict[str, dict] = {}
     unattributed: dict[str, int] = {}
@@ -459,7 +459,7 @@ def generate_platform_truth(
         on_platform = {
             mapping.map_sys_id(sid) for sid in profile.get("systems", [])
         } & mapping.platform_sys_ids
-        for fe in _platform_entries(emu_name, profile, launches, platform_name):
+        for fe in platform_entries(emu_name, profile, launches, platform_name):
             sys_targets = mapping.targets(fe, profile, on_platform)
             if not sys_targets:
                 unattributed[emu_name] = unattributed.get(emu_name, 0) + 1
@@ -469,7 +469,7 @@ def generate_platform_truth(
                 _merge_file_into_system(
                     system, fe if position == 0 else copy.deepcopy(fe), emu_name, db
                 )
-                _cover(system_cores, sys_id, "profiled", emu_name)
+                cover(system_cores, sys_id, "profiled", emu_name)
 
     # Ensure all systems of resolved cores have entries (even with 0 files).
     # This documents that the system is covered: the core was analyzed and
@@ -480,12 +480,12 @@ def generate_platform_truth(
         for prof_sid in profile.get("systems", []):
             sys_id = mapping.map_sys_id(prof_sid)
             systems.setdefault(sys_id, {})
-            _cover(system_cores, sys_id, "profiled", emu_name)
+            cover(system_cores, sys_id, "profiled", emu_name)
 
     # Track unprofiled cores per system based on profile system lists
     for emu_name in cores_unprofiled:
         for sys_id in systems:
-            _cover(system_cores, sys_id, "unprofiled", emu_name)
+            cover(system_cores, sys_id, "unprofiled", emu_name)
 
     _fold_data_directory_readers(
         systems, profiles, sorted(cores_profiled), launches, platform_name,
@@ -493,7 +493,7 @@ def generate_platform_truth(
     )
 
     for sys_data in systems.values():
-        _require_by_slot(sys_data.get("files", []))
+        require_by_slot(sys_data.get("files", []))
 
     # Drop files with no exploitable data AFTER all cores have contributed.
     # A file declared by one core without hash/size/path may be enriched by
@@ -502,9 +502,9 @@ def generate_platform_truth(
     for sys_data in systems.values():
         files_list = sys_data.get("files", [])
         if files_list:
-            sys_data["files"] = [fe for fe in files_list if _has_exploitable_data(fe)]
+            sys_data["files"] = [fe for fe in files_list if has_exploitable_data(fe)]
 
-    _serialize_systems(systems, system_cores)
+    serialize_systems(systems, system_cores)
 
     return {
         "platform": platform_name,

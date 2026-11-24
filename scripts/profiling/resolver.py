@@ -42,13 +42,13 @@ from profiling.repos import (
     reads_own_revision,
 )
 from profiling.reportinputs import (
-    _check_build_refs,
-    _cited_dirs,
-    _gather_refs,
-    _path_roles,
-    _readable_views,
-    _record_revisions,
-    _resolve_project_words,
+    check_build_refs,
+    cited_directories,
+    gather_refs,
+    cited_path_roles,
+    readable_views,
+    record_revisions,
+    resolve_project_words,
 )
 
 
@@ -635,14 +635,14 @@ def build_report(
 ) -> ProfileReport:
     """Confront one profile with its upstream."""
     report = ProfileReport(name=name, entries=[], counts={})
-    refs, deferred = _gather_refs(profile, text)
-    path_roles = _path_roles(refs)
-    cited_dirs = _cited_dirs(refs)
+    refs, deferred = gather_refs(profile, text)
+    path_roles = cited_path_roles(refs)
+    cited_dirs = cited_directories(refs)
 
-    views = _readable_views(profile, report, cache_dir, offline)
+    views = readable_views(profile, report, cache_dir, offline)
     if views is None:
         return report
-    tagged = _record_revisions(profile, report, views, cache_dir, offline)
+    tagged = record_revisions(profile, report, views, cache_dir, offline)
 
     # A profile carrying no source_ref still has a pin worth writing and a
     # version worth checking, so the revisions above are resolved first.
@@ -653,10 +653,10 @@ def build_report(
     resolver = _Resolver(
         name, profile, cache_dir, offline, views, report, tagged, path_roles, cited_dirs
     )
-    refs = _resolve_project_words(
+    refs = resolve_project_words(
         refs, resolver.trees_in_order, resolver.gitlinks_in_order
     )
-    report.build_refs = _check_build_refs(profile, deferred, views, resolver.fetch_from)
+    report.build_refs = check_build_refs(profile, deferred, views, resolver.fetch_from)
     _judge_refs(resolver, refs, report)
     return report
 

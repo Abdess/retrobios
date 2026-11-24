@@ -172,7 +172,7 @@ def set_by(entry: dict, passes_to: str) -> bool:
     return bool(key) and key in setting_tokens(passes_to)
 
 
-def _bios_relative(directory: str, base: str) -> str | None:
+def bios_relative(directory: str, base: str) -> str | None:
     """A launcher directory relative to the BIOS root, None when it is not one."""
     directory = directory.strip().rstrip("/")
     roots = {base, "<system_directory>", *BIOS_ROOT_TOKENS}
@@ -205,7 +205,7 @@ def record_directories(record: dict, base: str) -> list[str] | None:
     for part in re.split(r",|\bthen\b|\belse\b", text):
         if not part.strip():
             continue
-        relative = _bios_relative(part, base)
+        relative = bios_relative(part, base)
         if relative is None:
             return []
         if relative not in found:

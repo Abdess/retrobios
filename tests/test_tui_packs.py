@@ -403,7 +403,7 @@ class PacksWordingAndDocs(unittest.TestCase):
         self.assertIn("BIOS folder:", menu)
         self.assertIn("f) copy from a folder or an old card", menu)
         # The owner's request of 2026-10-27: game data counted apart, g.
-        # test_doc_pages checks that the figures add up.
+        # test_doc_pages_installer checks that the figures add up.
         self.assertRegex(menu, r"\d+ BIOS files \([\d.]+ [KMG]B\)(,| and) \d+ game data files")
         self.assertRegex(menu, r"g\) Game data: kept \(\d+ files")
         env = page[page.index("## Environment overrides"):]

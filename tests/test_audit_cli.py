@@ -1204,13 +1204,13 @@ class HashInputNamesWhatItAccepts(unittest.TestCase):
     def test_the_truth_anchors_a_sha256_only_entry(self):
         """rust_dos and ares name files by sha256 alone: the truth left their
         md5 empty, so md5 platforms never received them."""
-        from scripts.resolve.truthsystems import _enrich_hashes
+        from scripts.resolve.truthsystems import enrich_hashes
 
         db = {"files": {"s" * 40: {"sha1": "s" * 40, "md5": "m" * 32, "sha256": "f" * 64,
                                    "crc32": "0badf00d", "size": 16}},
               "indexes": {"by_sha256": {"f" * 64: "s" * 40}}}
         entry = {"name": "5200.rom", "sha256": "F" * 64}
-        _enrich_hashes(entry, db)
+        enrich_hashes(entry, db)
         self.assertEqual((entry["md5"], entry["sha1"], entry["size"]), ("m" * 32, "s" * 40, 16))
 
 

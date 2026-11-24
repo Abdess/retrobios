@@ -6,7 +6,7 @@ import ast
 from collections.abc import Callable
 
 from .batocera_configgen import Configgen, _path_value
-from .batocera_searches import _option_names
+from .batocera_searches import option_names
 from .configgen_launchers import (
     Launcher,
     Source,
@@ -78,7 +78,7 @@ def melonds(cg: Configgen) -> list[Launcher]:
         node for node in ast.walk(generate)
         if isinstance(node, ast.Assign)
         and ast.unparse(node.targets[0]).startswith("base_config['Emu']['ConsoleType']")
-        and _option_names(node.value)
+        and option_names(node.value)
     ]
     enabled = [
         (key, value) for key, value in zip(base.value.keys, base.value.values)
@@ -89,7 +89,7 @@ def melonds(cg: Configgen) -> list[Launcher]:
     ]
     if len(console) != 1 or len(enabled) != 1:
         src.fail("generate no longer sets Emu.ConsoleType from an option with external BIOS on")
-    option = _option_names(console[0].value)[0]
+    option = option_names(console[0].value)[0]
     enabled_key, enabled_value = enabled[0]
     if enabled_key is None:
         src.fail("base_config unpacks the section that enables the external BIOS")
@@ -169,7 +169,7 @@ def gsplus(cg: Configgen) -> list[Launcher]:
     )]
 
 
-def _system_branches(scope: ast.FunctionDef) -> list[tuple[str, ast.If]]:
+def system_branches(scope: ast.FunctionDef) -> list[tuple[str, ast.If]]:
     """(system, branch) for each `if system.name == "<name>":` of an if/elif chain."""
     branches: list[tuple[str, ast.If]] = []
     for node in ast.walk(scope):
@@ -217,7 +217,7 @@ def _raised_fstring(node: ast.If) -> ast.JoinedStr | None:
     return None
 
 
-def _render(message: ast.JoinedStr, var: str, value: str) -> str:
+def render(message: ast.JoinedStr, var: str, value: str) -> str:
     parts = []
     for part in message.values:
         if isinstance(part, ast.Constant):
@@ -285,7 +285,7 @@ def lexaloffle(cg: Configgen) -> list[Launcher]:
 
     prefix = cg.bios.rstrip("/") + "/"
     launchers = []
-    for system, branch in _system_branches(generate):
+    for system, branch in system_branches(generate):
         bound = {
             assigned[0]: (stmt, assigned[1], _path_value(assigned[1], constants))
             for stmt in branch.body if (assigned := assigned_value(stmt)) is not None
@@ -317,7 +317,7 @@ def lexaloffle(cg: Configgen) -> list[Launcher]:
             slot=system, names=[path[len(prefix):]],
             case_insensitive=False, search_dir=cg.bios, passes_to="exec",
             fails_when_missing=", ".join(
-                _render(message, binary, path) for message in (missing, not_executable)
+                render(message, binary, path) for message in (missing, not_executable)
             ),
             source_ref=src.ref(spans),
         ))

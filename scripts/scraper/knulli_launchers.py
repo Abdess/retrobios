@@ -37,7 +37,7 @@ from .batocera_launchers import (
     patched_paths,
     working_directories,
 )
-from .batocera_config_writes import _render, _system_branches, melonds, mupen64plus, x16emu, xemu
+from .batocera_config_writes import render, system_branches, melonds, mupen64plus, x16emu, xemu
 from .batocera_searches import duckstation, duckstation_legacy, hatari
 from .batocera_configgen import Configgen, _path_value
 from .configgen_launchers import (
@@ -151,7 +151,7 @@ def lexaloffle(cg: Configgen) -> list[Launcher]:
         src.fail(f"expected one command line starting with {binary}, found {len(commands)}")
     prefix = cg.bios.rstrip("/") + "/"
     launchers = []
-    for system, branch in _system_branches(generate):
+    for system, branch in system_branches(generate):
         bound = [
             (stmt, held) for stmt in branch.body
             if _assigned_name(stmt) == binary and isinstance((held := _bound(stmt)), ast.Name)
@@ -163,7 +163,7 @@ def lexaloffle(cg: Configgen) -> list[Launcher]:
         path = constants.get(constant)
         if path is None or not path.startswith(prefix):
             src.fail(f"{constant} is not a path under {cg.bios}")
-        messages = [_render(m, binary, path) for m in (missing_message, access_message)]
+        messages = [render(m, binary, path) for m in (missing_message, access_message)]
         launchers.append(Launcher(
             emulator=cg.emulator(module), build="standalone", kind="fixed_name",
             slot=system, names=[path[len(prefix):]], case_insensitive=False,

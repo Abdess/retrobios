@@ -21,7 +21,7 @@ from .configgen_launchers import (
 LANGUAGE_PLACEHOLDER = "L"
 
 
-def _option_names(node: ast.AST) -> list[str]:
+def option_names(node: ast.AST) -> list[str]:
     """Options a node reads: system.config.get*(o), system.config[o], system.isOptSet(o)."""
     found: list[str] = []
     for child in ast.walk(node):
@@ -395,7 +395,7 @@ def hatari(cg: Configgen) -> list[Launcher]:
         src.fail("findBestTos is not given a batoceraPaths directory")
     search_dir = cg.paths[call.args[0].id]
     kept = _trace(body, index)
-    options = list(dict.fromkeys(name for stmt in kept for name in _option_names(stmt)))
+    options = list(dict.fromkeys(name for stmt in kept for name in option_names(stmt)))
     spans = [src.span(stmt) for stmt in kept] + [(finder.lineno, end_line(finder))]
     second = call.args[1] if len(call.args) > 1 else None
     args = _tos_command_args(

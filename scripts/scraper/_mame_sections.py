@@ -10,15 +10,15 @@ from pathlib import Path
 from core.artifacts import write_text_atomic
 from model.profiles import PROFILE_BACKUP_SUFFIX
 from model.safeparse import yaml_load
-from ._hash_merge import _build_contents, _build_source_ref, _contents_differ, mame_ref_role
+from ._hash_merge import _build_contents, _build_source_ref, contents_differ, mame_ref_role
 from ._hash_write import (
     DEVICE_SECTION,
     SOFTLIST_SECTION,
-    _device_section_start,
-    _format_contents,
-    _patch_bios_entries,
-    _softlist_section_start,
-    _yaml_scalar,
+    device_section_start,
+    format_contents,
+    patch_bios_entries,
+    softlist_section_start,
+    yaml_scalar,
     generated_start,
     set_path_lines,
 )
@@ -49,7 +49,7 @@ def _device_note(description: str) -> str:
 
 def _zip_scalar(name: str) -> str:
     """An archive name as the written entries spell it: bare when YAML keeps it."""
-    return name if re.fullmatch(r"[a-z0-9_]+\.zip", name) else _yaml_scalar(name)
+    return name if re.fullmatch(r"[a-z0-9_]+\.zip", name) else yaml_scalar(name)
 
 
 _PLAIN_SYSTEM = re.compile(r"^[a-z][a-z0-9-]*$")
@@ -58,7 +58,7 @@ _PLAIN_SYSTEM = re.compile(r"^[a-z][a-z0-9-]*$")
 def _system_lines(systems: list[str]) -> list[str]:
     """`system:` for one system, `systems:` for several, nothing for none."""
     def scalar(value: str) -> str:
-        return value if _PLAIN_SYSTEM.match(value) else _yaml_scalar(value)
+        return value if _PLAIN_SYSTEM.match(value) else yaml_scalar(value)
 
     if not systems:
         return []
@@ -76,7 +76,7 @@ def _entry_systems(entry: dict) -> list[str]:
 
 def _section_names(text: str) -> set[str]:
     """Entry names inside the generated device section."""
-    start = _device_section_start(text)
+    start = device_section_start(text)
     if start is None:
         return set()
     end = _FILES_END.search(text, text.index("\n", start) + 1)
@@ -95,7 +95,7 @@ def _set_section_systems(text: str, systems: dict[str, list[str]]) -> str:
     """
     if not systems:
         return text
-    start = _device_section_start(text)
+    start = device_section_start(text)
     if start is None:
         return text
     return text[:start] + _rewrite_systems(text[start:], systems)
@@ -146,7 +146,7 @@ def _format_device_entry(name: str, device: dict, role: str, profile_type: str =
             break_on_hyphens=False,
         )
     )
-    lines.append(_format_contents(_device_contents(device["roms"], [])))
+    lines.append(format_contents(_device_contents(device["roms"], [])))
     return "\n".join(lines)
 
 
@@ -201,7 +201,7 @@ def merge_mame_devices(
         old = existing[0]
         contents = _device_contents(device["roms"], old.get("contents") or [])
         changed = False
-        if _contents_differ(old.get("contents") or [], contents):
+        if contents_differ(old.get("contents") or [], contents):
             contents_patches.append({"name": name, "category": "bios_zip", "contents": contents})
             changed = True
         if not old.get("source_ref") and device.get("source_line"):
@@ -219,7 +219,7 @@ def merge_mame_devices(
     if write and (contents_patches or ref_patches or system_patches or new_blocks):
         patched = _add_source_refs(text, ref_patches)
         patched = _set_section_systems(patched, system_patches)
-        patched = _patch_bios_entries(patched, contents_patches)
+        patched = patch_bios_entries(patched, contents_patches)
         patched = _insert_device_entries(patched, new_blocks)
         shutil.copy2(path, path.with_suffix(PROFILE_BACKUP_SUFFIX))
         write_text_atomic(str(path), patched)
@@ -244,8 +244,8 @@ def _softlist_section(profile: dict, lists: dict[str, list[str]], role: str) -> 
         base = str(tree.get("path") or tree["name"])
         for name, systems in sorted(lists.items()):
             lines = [
-                f"  - name: {_yaml_scalar(name + '.xml')}",
-                f"    path: {_yaml_scalar(base + name + '.xml')}",
+                f"  - name: {yaml_scalar(name + '.xml')}",
+                f"    path: {yaml_scalar(base + name + '.xml')}",
             ]
             if tree.get("mode"):
                 lines.append(f"    mode: {tree['mode']}")
@@ -291,9 +291,9 @@ def merge_mame_support(
     role = mame_ref_role(profile)
 
     original = text
-    start = _softlist_section_start(text)
+    start = softlist_section_start(text)
     if start is not None:
-        device = _device_section_start(text)
+        device = device_section_start(text)
         if device is not None and device > start:
             end = device
         else:
@@ -364,7 +364,7 @@ def _insert_device_entries(text: str, blocks: dict[str, str]) -> str:
     """
     if not blocks:
         return text
-    start = _device_section_start(text)
+    start = device_section_start(text)
     if start is None:
         files_at = re.search(r"^files:[ \t]*$", text, re.M)
         if files_at is None or _FILES_END.search(text, files_at.end()):
@@ -372,7 +372,7 @@ def _insert_device_entries(text: str, blocks: dict[str, str]) -> str:
                 "files: must be the last top-level key to hold a device section"
             )
         text = text.rstrip("\n") + "\n\n" + DEVICE_SECTION + "\n"
-        start = _device_section_start(text)
+        start = device_section_start(text)
     body_at = text.index("\n", start) + 1
     end_match = _FILES_END.search(text, body_at)
     end = end_match.start() if end_match else len(text)

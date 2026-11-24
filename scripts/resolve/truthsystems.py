@@ -19,7 +19,7 @@ from resolve.launches import PlatformLaunches
 from resolve.standalone import platform_layouts
 
 
-def _enrich_hashes(entry: dict, db: dict) -> None:
+def enrich_hashes(entry: dict, db: dict) -> None:
     """Fill the hashes a profile omits from the record its own hash names.
 
     The record is found by sha1, sha256, then md5, then crc32 with the size
@@ -60,7 +60,7 @@ def _enrich_hashes(entry: dict, db: dict) -> None:
         entry["size"] = record["size"]
 
 
-def _require_by_slot(files: list[dict]) -> None:
+def require_by_slot(files: list[dict]) -> None:
     """A core that requires a name an entry answers for requires the entry.
 
     Merged by name, one core's alternatives land in several entries. Ymir
@@ -90,7 +90,7 @@ def _require_by_slot(files: list[dict]) -> None:
             entry["required"] = True
 
 
-def _brought(file_entry: dict, emu_name: str) -> set[str]:
+def brought_by(file_entry: dict, emu_name: str) -> set[str]:
     """The core and build that need the file brought, empty when the
     emulator installs it. An entry read without layer (a test, a caller of
     its own) is brought by its core's libretro build."""
@@ -98,7 +98,7 @@ def _brought(file_entry: dict, emu_name: str) -> set[str]:
     return {brought} if brought else set()
 
 
-def _has_exploitable_data(entry: dict) -> bool:
+def has_exploitable_data(entry: dict) -> bool:
     """Check if an entry has any data beyond its name that can drive verification.
 
     Applied AFTER merging all cores so entries benefit from enrichment by
@@ -189,7 +189,7 @@ def _sizes(entry: dict) -> tuple[set[int], tuple[int, float] | None]:
     return exact, (low or 0, float("inf") if high is None else high)
 
 
-def _sizes_clash(a: dict, b: dict) -> bool:
+def sizes_clash(a: dict, b: dict) -> bool:
     """No size both entries admit, lists and windows included."""
     exact_a, window_a = _sizes(a)
     exact_b, window_b = _sizes(b)
@@ -210,7 +210,7 @@ def _identity(entry: dict, db: dict | None) -> dict:
     """The entry with the hashes and size the database knows for its hash."""
     probe = {k: entry[k] for k in ("sha1", "md5", "crc32", "size") if entry.get(k)}
     if db and probe and not any(isinstance(v, list) for v in probe.values()):
-        _enrich_hashes(probe, db)
+        enrich_hashes(probe, db)
     return {**entry, **{k: v for k, v in probe.items() if not entry.get(k)}}
 
 
@@ -232,13 +232,13 @@ def _declaration_verdict(entry: dict, declaration: dict, db: dict | None) -> str
     ours, theirs = _identity(entry, db), _identity(declaration, db)
     if _identity_values(ours) & _identity_values(theirs):
         return "same"
-    if _sizes_clash(ours, theirs):
+    if sizes_clash(ours, theirs):
         return "other"
     return "undecided"
 
 
 @dataclass(frozen=True)
-class _SystemMap:
+class SystemMap:
     """How a profile's systems and entries map onto a platform's systems."""
 
     platform_sys_ids: set[str]
@@ -252,7 +252,7 @@ class _SystemMap:
     db: dict | None
 
     @classmethod
-    def of(cls, config: dict, db: dict | None) -> _SystemMap:
+    def of(cls, config: dict, db: dict | None) -> SystemMap:
         declared_by_name: dict[str, list[tuple[str, dict]]] = {}
         for psid, sys_data in config.get("systems", {}).items():
             for fe in sys_data.get("files", []):
@@ -333,7 +333,7 @@ class _SystemMap:
         return sys_targets
 
 
-def _cover(
+def cover(
     system_cores: dict[str, dict[str, set[str]]], sys_id: str, kind: str, emu_name: str,
 ) -> None:
     sys_cov = system_cores.setdefault(
@@ -346,7 +346,7 @@ def _cover(
     sys_cov[kind].add(emu_name)
 
 
-def _platform_entries(
+def platform_entries(
     emu_name: str, profile: dict, launches: PlatformLaunches, platform_name: str,
 ) -> list[dict]:
     # The pack's rule (validation.deliverable), per build: a file the
@@ -365,7 +365,7 @@ def _platform_entries(
     ])
 
 
-def _serialize_systems(
+def serialize_systems(
     systems: dict[str, dict], system_cores: dict[str, dict[str, set[str]]],
 ) -> None:
     # Convert sets to sorted lists for serialization

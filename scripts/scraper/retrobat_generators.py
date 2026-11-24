@@ -86,12 +86,12 @@ def feature_choices(
 TARGET_ABSENT = "the target does not exist"
 
 
-def _joined(*parts: str | None) -> str | None:
+def joined(*parts: str | None) -> str | None:
     """Conditions of a record, joined, None when there are none."""
     return ", ".join(part for part in parts if part) or None
 
 
-def _record(
+def launcher_record(
     emulator: str, build: str, kind: str, names: list[str], ref: str, **fields: object
 ) -> Record:
     record: Record = {"emulator": emulator, "build": build, "kind": kind, "names": names}
@@ -112,15 +112,15 @@ GUARDED_WRITES = {
     f"{GENERATORS}/mGBA.Generator.cs": "mgba",
 }
 
-_TRANSPARENT = re.compile(r"(?:using\s*\(.*\)|try)")
-_IF = re.compile(r"(?:else\s+)?if\s*\((.*)\)")
+TRANSPARENT = re.compile(r"(?:using\s*\(.*\)|try)")
+IF = re.compile(r"(?:else\s+)?if\s*\((.*)\)")
 _GUARD = re.compile(
     r'if \(File\.Exists\((\w+)\)\)\s*(\w+)\.WriteValue\("([^"]*)", "([^"]+)", ([^;\n]+)\);'
 )
-_BIOS_ROOT = r'(?:Program\.)?AppConfig\.GetFullPath\("bios"\)'
+BIOS_ROOT = r'(?:Program\.)?AppConfig\.GetFullPath\("bios"\)'
 
 
-def _negate(condition: str) -> str:
+def negate(condition: str) -> str:
     """The condition under which an early return is not taken.
 
     A conjunction of inequalities becomes the disjunction of equalities,
@@ -157,17 +157,17 @@ def _conditions(src: Source, offset: int) -> Reach | None:
                 cond = _call_args(src, paren)
                 tail = re.compile(r"\s*return\b[^;]*;").match(src.text, paren + len(cond) + 2)
                 if tail:
-                    returns.append(_negate(" ".join(cond.split())))
+                    returns.append(negate(" ".join(cond.split())))
                     spans.append(src.lines(block[0] + found.start(), tail.end()))
             return block, returns + enclosing[::-1], spans
-        condition = _IF.fullmatch(header)
+        condition = IF.fullmatch(header)
         if condition:
             text = " ".join(condition.group(1).split())
             switch = re.fullmatch(
                 r'SystemConfig\.isOptSet\("(\w+)"\) && SystemConfig\.getOptBoolean\("\1"\)', text
             )
             enclosing.append(f"{switch.group(1)} on" if switch else text)
-        elif not _TRANSPARENT.fullmatch(header):
+        elif not TRANSPARENT.fullmatch(header):
             return None
     return None
 
@@ -194,10 +194,10 @@ def _config_name(src: Source, method: tuple[int, int], writer: str) -> str:
     return files.pop()
 
 
-def _root_writes(src: Source, emulator: str) -> list[Record]:
+def root_writes(src: Source, emulator: str) -> list[Record]:
     """Configuration keys that receive the bios folder itself."""
     records = []
-    for root in re.finditer(rf"string (\w+) = {_BIOS_ROOT};", src.text):
+    for root in re.finditer(rf"string (\w+) = {BIOS_ROOT};", src.text):
         root_reach = _conditions(src, root.start())
         if root_reach is None:
             continue
@@ -225,7 +225,7 @@ def _root_writes(src: Source, emulator: str) -> list[Record]:
             folder, declared = folders[held]
             target = f"[{section}] {key}" if section else key
             records.append(
-                _record(
+                launcher_record(
                     emulator,
                     "standalone",
                     "passes_path",
@@ -271,20 +271,20 @@ def _guarded_write(src: Source, emulator: str, guard: re.Match[str]) -> Record |
     method, conditions, returns = reached
     decls = list(
         re.compile(
-            rf"string {var} = Path\.Combine\((\w+|{_BIOS_ROOT}), ((?:{STRING}, )*{STRING})\);"
+            rf"string {var} = Path\.Combine\((\w+|{BIOS_ROOT}), ((?:{STRING}, )*{STRING})\);"
         ).finditer(src.text, method[0], guard.start())
     )
     if not decls or re.search(rf"\b{var}\s*=[^=]", src.text[decls[-1].end() : guard.start()]):
         return None
     decl = decls[-1]
     root = decl.group(1)
-    if not re.fullmatch(_BIOS_ROOT, root) and not re.search(
-        rf"string {root} = {_BIOS_ROOT};", src.text[method[0] : decl.start()]
+    if not re.fullmatch(BIOS_ROOT, root) and not re.search(
+        rf"string {root} = {BIOS_ROOT};", src.text[method[0] : decl.start()]
     ):
         return None
     *folders, name = _strings(decl.group(2))
     target = f"[{section}] {key}" if section else key
-    return _record(
+    return launcher_record(
         emulator,
         "standalone",
         "fixed_name",
@@ -313,7 +313,7 @@ def guarded_writes_in(src: Source, emulator: str) -> list[Record]:
     records = [record for record in found if record is not None]
     if not records:
         raise LauncherPatternMissing(src.path, "File.Exists guarded WriteValue")
-    return records + _root_writes(src, emulator)
+    return records + root_writes(src, emulator)
 
 
 def guarded_writes(sources: dict[str, Source]) -> list[Record]:

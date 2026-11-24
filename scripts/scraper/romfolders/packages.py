@@ -12,7 +12,7 @@ from model.romfolders import DEFAULT_ROW_SOURCE, format_ref
 from ..recalbox_romfs import Defconfig, defconfig_boards, read_system_ini
 from ..retropie_modules import PLATFORM_FLAGS, module_enabled, module_fields
 from . import Fetcher, SourceError, register
-from .es import _board, _extensions, _offers, _strip_prefix
+from .es import board_entry, extension_list, folder_offers, strip_prefix
 
 
 # ---------------------------------------------------------------------------
@@ -134,7 +134,7 @@ def elec_conf(spec: dict, fetcher: Fetcher) -> list[dict]:
         if conf_text is None:
             continue
         values, value_lines = _conf_values(conf_text)
-        folder = _strip_prefix(values.get("SYSTEM_PATH", ""), params["path_prefixes"])
+        folder = strip_prefix(values.get("SYSTEM_PATH", ""), params["path_prefixes"])
         if not folder:
             continue
         mine = [c for c in cores if c["system"] == name]
@@ -150,7 +150,7 @@ def elec_conf(spec: dict, fetcher: Fetcher) -> list[dict]:
             board = _board_key(c["branches"])
             if c is not pick and board and (c["emulator"], c["core"]) != (
                     pick and pick["emulator"], pick and pick["core"]):
-                board_defaults[board] = _board(c["core"], c["emulator"], format_ref(key, package, c["line"]))
+                board_defaults[board] = board_entry(c["core"], c["emulator"], format_ref(key, package, c["line"]))
         refs = [
             format_ref(key, conf_path, value_lines.get("SYSTEM_PATH"), value_lines.get("SYSTEM_EXTENSION")),
             format_ref(key, package, *lines),
@@ -164,12 +164,12 @@ def elec_conf(spec: dict, fetcher: Fetcher) -> list[dict]:
         rows.append({
             "folder": folder,
             "name": name,
-            "extensions": _extensions(values.get("SYSTEM_EXTENSION")),
+            "extensions": extension_list(values.get("SYSTEM_EXTENSION")),
             "core": pick["core"] if pick else None,
             "emulator": pick["emulator"] if pick else None,
             "source_ref": "; ".join(refs),
             "board_defaults": board_defaults,
-            "offers": _offers([
+            "offers": folder_offers([
                 {"emulator": c["emulator"], "core": c["core"],
                  "when": ", ".join(f"{v} {p}".strip() for v, p in c["branches"]),
                  "source_ref": format_ref(key, package, c["line"])}
@@ -235,7 +235,7 @@ def recalbox(spec: dict, fetcher: Fetcher) -> list[dict]:
         ini = read_system_ini(text)
         sections, lines = ini.sections, ini.lines
         system = sections.get("system", {})
-        folder = _strip_prefix(system.get("roms.folder", ""), ["%ROOT%/"])
+        folder = strip_prefix(system.get("roms.folder", ""), ["%ROOT%/"])
         if not folder:
             continue
         picks: dict[str, dict] = {}
@@ -272,7 +272,7 @@ def recalbox(spec: dict, fetcher: Fetcher) -> list[dict]:
         core, emulator = max(shared, key=lambda pair: shared[pair])
         first = next(pick for pick in picks.values() if (pick["core"], pick["emulator"]) == (core, emulator))
         board_defaults = {
-            board: _board(pick["core"], pick["emulator"], pick["source_ref"])
+            board: board_entry(pick["core"], pick["emulator"], pick["source_ref"])
             for board, pick in picks.items() if (pick["core"], pick["emulator"]) != (core, emulator)
         }
         archive = any(e.endswith("!") for e in extensions)
@@ -380,7 +380,7 @@ def retropie(spec: dict, fetcher: Fetcher) -> list[dict]:
         emulator = "retroarch" if core and core.startswith("lr-") else core
         rows.append({
             "folder": system,
-            "extensions": _extensions(raw),
+            "extensions": extension_list(raw),
             "core": core,
             "emulator": emulator,
             "source_ref": "; ".join(refs),

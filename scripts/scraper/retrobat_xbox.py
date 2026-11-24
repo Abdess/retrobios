@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 
 from .csharp_source import Record, Source, _array_at, _strings, _unique, source_ref
-from .retrobat_generators import BIOS, FEATURES, GENERATORS, _joined, _record, feature_choices
+from .retrobat_generators import BIOS, FEATURES, GENERATORS, joined, launcher_record, feature_choices
 from model.launcherrecords import join_emulators
 
 
@@ -23,7 +23,7 @@ def xemu(sources: dict[str, Source]) -> list[Record]:
         "bootrom_path write",
     )
     records.append(
-        _record(
+        launcher_record(
             "xemu",
             "standalone",
             "fixed_name",
@@ -57,7 +57,7 @@ def xemu(sources: dict[str, Source]) -> list[Record]:
     )
     choices, choice_lines = feature_choices(features, "xemu", flash.group(1))
     records.append(
-        _record(
+        launcher_record(
             "xemu",
             "standalone",
             "core_option",
@@ -103,7 +103,7 @@ def xemu(sources: dict[str, Source]) -> list[Record]:
         body[1],
     )
     records.append(
-        _record(
+        launcher_record(
             "xemu",
             "standalone",
             "names_searched",
@@ -122,7 +122,7 @@ def xemu(sources: dict[str, Source]) -> list[Record]:
     names, _ = _array_at(src, companions.end() - 1)
     loop = src.block_at(src.block_at(companions.end() - 1)[1])
     records.append(
-        _record(
+        launcher_record(
             "xemu",
             "standalone",
             "fixed_name",
@@ -143,7 +143,7 @@ def xemu(sources: dict[str, Source]) -> list[Record]:
         body[1],
     )
     records.append(
-        _record(
+        launcher_record(
             "xemu",
             "standalone",
             "names_searched",
@@ -192,7 +192,7 @@ def xemu_saves(sources: dict[str, Source]) -> list[Record]:
     )
     hdd_key = src.find(r'ini\.WriteValue\("([\w.]+)", "(hdd_path)", "\'" \+ hddPath', "hdd_path write")
     records = [
-        _record(
+        launcher_record(
             "xemu",
             "standalone",
             "fixed_name",
@@ -216,7 +216,7 @@ def xemu_saves(sources: dict[str, Source]) -> list[Record]:
                 " when absent, the disk image unzipped"
             ),
             fails_when_missing="never missing: the launcher writes both",
-            depends_on_option=_joined("the saves folder is set and exists", f"not ({chihiro_when})"),
+            depends_on_option=joined("the saves folder is set and exists", f"not ({chihiro_when})"),
         )
     ]
 
@@ -238,7 +238,7 @@ def xemu_saves(sources: dict[str, Source]) -> list[Record]:
     save = src.find(r"private void SaveChihiroEeprom\(\)", "SaveChihiroEeprom")
     save_body = src.block_at(save.end())
     records.append(
-        _record(
+        launcher_record(
             "xemu, xemu-chihiro",
             "standalone",
             "copies",
@@ -272,7 +272,7 @@ def xemu_saves(sources: dict[str, Source]) -> list[Record]:
         "Chihiro snapshot store",
     )
     records.append(
-        _record(
+        launcher_record(
             "xemu, xemu-chihiro",
             "standalone",
             "fixed_name",
@@ -321,7 +321,7 @@ def cxbx(sources: dict[str, Source]) -> list[Record]:
         " which the launcher writes beside the binary"
     )
     records = [
-        _record(
+        launcher_record(
             match.group(1),
             "standalone",
             "passes_path",
@@ -336,7 +336,7 @@ def cxbx(sources: dict[str, Source]) -> list[Record]:
     first, *rest = fallbacks
     others = "neither core nor emulator is " + " or ".join(f'"{m.group(1)}"' for m in named)
     records.append(
-        _record(
+        launcher_record(
             first.group(1),
             "standalone",
             "passes_path",
@@ -351,7 +351,7 @@ def cxbx(sources: dict[str, Source]) -> list[Record]:
             search_dir=f'<AppConfig.GetFullPath("{first.group(1)}")>',
             passes_to=passes_to,
             fails_when_missing=False,
-            depends_on_option=_joined(
+            depends_on_option=joined(
                 others,
                 *(f'<AppConfig.GetFullPath("{m.group(1)}")> when "{first.group(1)}" is not set'
                   for m in rest),
@@ -366,7 +366,7 @@ def cxbx(sources: dict[str, Source]) -> list[Record]:
         "EEPROM written from resources",
     )
     records.append(
-        _record(
+        launcher_record(
             eeprom.group(3),
             "standalone",
             "fixed_name",
@@ -411,7 +411,7 @@ def _cxbx_mount(src: Source, emulators: list[str]) -> list[Record]:
     when = f'rom extension "{iso.group(1)}"'
     emulator = join_emulators(emulators)
     return [
-        _record(
+        launcher_record(
             emulator,
             "standalone",
             "fixed_name",
@@ -423,7 +423,7 @@ def _cxbx_mount(src: Source, emulators: list[str]) -> list[Record]:
             fails_when_missing=vfs.group(3),
             depends_on_option=when,
         ),
-        _record(
+        launcher_record(
             emulator,
             "standalone",
             "fixed_name",

@@ -24,14 +24,14 @@ from resolve.ownership import (
     owner_tokens,
     system_makers,
 )
-from resolve.lookup import Resolution, _Lookup, _entry_hint, _lookup, _record_match_status
+from resolve.lookup import Resolution, Lookup, entry_hint, lookup, record_match_status
 from resolve.namestages import (
-    _by_name,
-    _by_zip_contents,
-    _named_candidates,
-    _named_md5_match,
-    _ranked_mismatch,
-    _zipped_named,
+    name_or_alias_match,
+    by_zip_contents,
+    named_candidates,
+    named_md5_match,
+    ranked_mismatch,
+    zipped_named,
 )
 
 
@@ -122,16 +122,16 @@ def _rank_tail_candidates(
     )
 
 
-def _held_record(q: _Lookup, match_sha1: str) -> Resolution | None:
+def _held_record(q: Lookup, match_sha1: str) -> Resolution | None:
     """The record's path and evidence, when it satisfies the entry and is on disk."""
     path = q.files_db[match_sha1]["path"]
-    status = _record_match_status(q, match_sha1)
+    status = record_match_status(q, match_sha1)
     if status and os.path.exists(path):
         return path, status
     return None
 
 
-def _by_sha1(q: _Lookup) -> Resolution | None:
+def _by_sha1(q: Lookup) -> Resolution | None:
     """SHA1 exact match (accept list-valued sha1 from profiles)."""
     for cand in q.sha1_candidates:
         if cand in q.files_db:
@@ -141,7 +141,7 @@ def _by_sha1(q: _Lookup) -> Resolution | None:
     return None
 
 
-def _by_sha256(q: _Lookup) -> Resolution | None:
+def _by_sha256(q: Lookup) -> Resolution | None:
     """SHA256 exact match, through the by_sha256 index."""
     if not q.sha256_candidates:
         return None
@@ -155,7 +155,7 @@ def _by_sha256(q: _Lookup) -> Resolution | None:
     return None
 
 
-def _by_crc32(q: _Lookup) -> Resolution | None:
+def _by_crc32(q: Lookup) -> Resolution | None:
     """CRC32 lookup, only when no stronger hash is declared."""
     if (
         not q.crc_candidates
@@ -182,7 +182,7 @@ def _by_crc32(q: _Lookup) -> Resolution | None:
     return None
 
 
-def _md5_hits(q: _Lookup) -> Iterator[tuple[str, str, str]]:
+def _md5_hits(q: Lookup) -> Iterator[tuple[str, str, str]]:
     """Each held record a declared md5 names: path, evidence, md5 asked.
 
     Skipped for zipped_file: the md5 is the inner ROM's, not the container's.
@@ -207,7 +207,7 @@ def _named_or_variant(names: frozenset[str], candidate_path: str) -> bool:
     return any(bn.startswith(n + ".") for n in names)
 
 
-def _tail_candidates(q: _Lookup, start: int, tail: str, owners: set[str]) -> list[str]:
+def _tail_candidates(q: Lookup, start: int, tail: str, owners: set[str]) -> list[str]:
     """The records a destination tail names, ranked, ambiguity read."""
     candidates = _rank_tail_candidates(
         q.by_path_suffix.get(tail, []), start, tail, q.files_db, owners,
@@ -228,7 +228,7 @@ def _tail_candidates(q: _Lookup, start: int, tail: str, owners: set[str]) -> lis
     return candidates
 
 
-def _tail_match(q: _Lookup, candidates: list[str]) -> Resolution | None:
+def _tail_match(q: Lookup, candidates: list[str]) -> Resolution | None:
     """The first candidate of a tail on disk that the entry accepts."""
     for match_sha1 in candidates:
         if match_sha1 not in q.files_db:
@@ -247,13 +247,13 @@ def _tail_match(q: _Lookup, candidates: list[str]) -> Resolution | None:
             ):
                 continue
             return path, "path_exact"
-        status = _record_match_status(q, match_sha1)
+        status = record_match_status(q, match_sha1)
         if status:
             return path, status
     return None
 
 
-def _by_path_suffix(q: _Lookup) -> tuple[Resolution | None, bool]:
+def _by_path_suffix(q: Lookup) -> tuple[Resolution | None, bool]:
     """The file at the destination's tail, and whether the indexed one is absent."""
     own_file_absent = False
     if not (q.dest_hint and q.by_path_suffix):
@@ -296,7 +296,7 @@ def _by_path_suffix(q: _Lookup) -> tuple[Resolution | None, bool]:
     return None, own_file_absent
 
 
-def _by_data_dir_tail(q: _Lookup, data_dir_registry: dict | None) -> Resolution | None:
+def _by_data_dir_tail(q: Lookup, data_dir_registry: dict | None) -> Resolution | None:
     """The same tail in a data directory, for a platform's hashless entry."""
     # by_path_suffix indexes bios/
     # only, so AmberELEC's Machines/MSX - Arabic/config.ini fell through to
@@ -322,7 +322,7 @@ def _by_data_dir_tail(q: _Lookup, data_dir_registry: dict | None) -> Resolution 
 
 
 def _by_mame_clone(
-    q: _Lookup, zip_contents: dict | None, depth: int, data_dir_registry: dict | None
+    q: Lookup, zip_contents: dict | None, depth: int, data_dir_registry: dict | None
 ) -> Resolution | None:
     """If a file was deduped, resolve via canonical."""
     clone_map = get_mame_clone_map(q.db.get("bios_dir"))
@@ -351,7 +351,7 @@ def _by_mame_clone(
     return None
 
 
-def _in_data_dirs(q: _Lookup, data_dir_registry: dict) -> tuple[Resolution | None, str | None]:
+def _in_data_dirs(q: Lookup, data_dir_registry: dict) -> tuple[Resolution | None, str | None]:
     """Data directory fallback: scan data/ caches for matching filename."""
     verdict = functools.partial(
         declared_hash_verdict,
@@ -436,7 +436,7 @@ def resolve_local_file(
 
     A path or filename is never allowed to override a declared strong hash.
     """
-    dest_hint = _entry_hint(file_entry, dest_hint)
+    dest_hint = entry_hint(file_entry, dest_hint)
     # A launcher that moves the layout (EmuDeck links azahar's sysdata to
     # bios/azahar/keys) changes where the file goes, not the tail the
     # collection indexes it under. Both are asked, and the stronger proof
@@ -459,7 +459,7 @@ def resolve_local_file(
     # the container's own md5: neocd.bin's md5 is also the composite of a
     # one-member neocdz.zip, and the raw ROM shipped under the archive's name.
     composite_only = file_entry.get("zip_digest") == "composite"
-    q = _lookup(
+    q = lookup(
         file_entry, db, _name_as_hint(file_entry.get("name", ""), dest_hint),
         [cut_owners.get(value, value) for value in md5_list],
         composite_only=composite_only,
@@ -521,25 +521,25 @@ def resolve_local_file(
     makers: frozenset[str] = frozenset() if has_strong_hash else system_makers(file_entry, db)
 
     if not has_strong_hash and not unsourceable:
-        found, unsourceable = _by_name(q, makers, data_dir_registry)
+        found, unsourceable = name_or_alias_match(q, makers, data_dir_registry)
         if found:
             return found
 
     # 4. Name + alias fallback with md5_composite + direct MD5 per candidate
-    named = _named_candidates(q, makers)
+    named = named_candidates(q, makers)
     if named:
-        found = _named_md5_match(q, named)
+        found = named_md5_match(q, named)
         if q.zipped_file:
-            found = found or _zipped_named(q, named, q.zipped_file)
+            found = found or zipped_named(q, named, q.zipped_file)
         elif not unsourceable:
-            found = found or _ranked_mismatch(q, named)
+            found = found or ranked_mismatch(q, named)
         if found:
             return found
 
     # 5. zipped_file content match via pre-built index (last resort:
     # matches inner ROM MD5 across ALL ZIPs in the repo, so only use
     # when name-based resolution failed entirely)
-    found = _by_zip_contents(q, zip_contents)
+    found = by_zip_contents(q, zip_contents)
 
     # MAME clone fallback: if a file was deduped, resolve via canonical. The
     # clone name is a name step like the others: an unsourceable entry skips

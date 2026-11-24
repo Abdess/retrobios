@@ -16,9 +16,9 @@ from .csharp_source import (
     _throw_message,
     source_ref,
 )
-from .retrobat_config_files import _value_writes
-from .retrobat_generators import GENERATORS, TARGET_ABSENT, _BIOS_ROOT, _joined, _record
-from .retrobat_render import _config_label, _covered, _path_parts, _render, _when
+from .retrobat_config_files import value_writes
+from .retrobat_generators import GENERATORS, TARGET_ABSENT, BIOS_ROOT, joined, launcher_record
+from .retrobat_render import config_label, covered_records, path_parts, render, when
 from model.launcherrecords import join_emulators
 
 
@@ -37,8 +37,8 @@ def _copies_if_absent(
     ).finditer(code, start, end):
         target_var, source_var = copy.groups()
         method = _method_of(src, copy.start())
-        source = _render(src, source_var, method[0], copy.start())
-        target = _render(src, target_var, method[0], copy.start())
+        source = render(src, source_var, method[0], copy.start())
+        target = render(src, target_var, method[0], copy.start())
         if source is None or target is None or not source[0].startswith("bios/"):
             raise LauncherPatternMissing(src.path, f"copy at line {src.line(copy.start())}")
         folder, _, name = source[0].rpartition("/")
@@ -50,19 +50,19 @@ def _copies_if_absent(
         folders = {folder for _, folder, _, _ in copies}
         if len(folders) != 1:
             raise LauncherPatternMissing(src.path, f"one source folder for {destination}")
-        conditions, returns = _when(src, copies[0][0])
+        conditions, returns = when(src, copies[0][0])
         records.append(
-            _record(
+            launcher_record(
                 emulator,
                 build,
                 "copies",
                 [name for _, _, name, _ in copies],
-                _path_parts(src, *returns, *[s for c in copies for s in c[3]]),
+                path_parts(src, *returns, *[s for c in copies for s in c[3]]),
                 case_insensitive=True,
                 search_dir=folders.pop(),
                 passes_to=f"{destination}/<name>",
                 fails_when_missing=False,
-                depends_on_option=_joined(*conditions, TARGET_ABSENT),
+                depends_on_option=joined(*conditions, TARGET_ABSENT),
             )
         )
     if not records:
@@ -78,7 +78,7 @@ def dosbox_copies(sources: dict[str, Source]) -> list[Record]:
             (f"{GENERATORS}/DosBoxPure.Generator.cs", "dosbox-pure"),
             (f"{GENERATORS}/DosBoxStaging.Generator.cs", "dosbox-staging"),
         )
-        for record in _covered(
+        for record in covered_records(
             sources[path], _copies_if_absent(sources[path], emulator, "standalone")
         )
     ]
@@ -101,7 +101,7 @@ def capsimg(sources: dict[str, Source]) -> list[Record]:
     record["source_ref"] = source_ref(
         (src.path, [(src.line(cores.start()), core_lines[1]), src.statement_span(block)])
     )
-    record["depends_on_option"] = _joined(
+    record["depends_on_option"] = joined(
         f'core in {cores.group(1)}, rom extension "{gate.group(1)}"', TARGET_ABSENT
     )
     return [record]
@@ -112,20 +112,20 @@ def tsugaru(sources: dict[str, Source]) -> list[Record]:
     src = sources[f"{GENERATORS}/Tsugaru.Generator.cs"]
     code = _code(src)
     first = src.find(
-        rf'if \(Directory\.Exists\((Path\.Combine\({_BIOS_ROOT}, "[^"]+"\))\)\)\s*(\w+) = \1;',
+        rf'if \(Directory\.Exists\((Path\.Combine\({BIOS_ROOT}, "[^"]+"\))\)\)\s*(\w+) = \1;',
         "first FM Towns folder",
     )
     var = first.group(2)
     method = _method_of(src, first.start())
     unset = src.find(rf"string {var} = null;", f"{var} declaration", method[0], first.start())
-    folders = [_render(src, first.group(1), method[0], first.start())]
+    folders = [render(src, first.group(1), method[0], first.start())]
     names, end = set(), first.end()
     step = re.compile(
         rf'\s*if \(!File\.Exists\(Path\.Combine\({var}, "([^"]+)"\)\)\)\s*{var} = ([^;]+);'
     )
     while more := step.match(code, end):
         names.add(more.group(1))
-        folders.append(_render(src, more.group(2), method[0], more.start()))
+        folders.append(render(src, more.group(2), method[0], more.start()))
         end = more.end()
     final = re.compile(
         rf'\s*if \(!File\.Exists\(Path\.Combine\({var}, "([^"]+)"\)\)\)\s*\{{'
@@ -144,12 +144,12 @@ def tsugaru(sources: dict[str, Source]) -> list[Record]:
     )
     if info is None or len(names) != 1:
         raise LauncherPatternMissing(src.path, "FMT_SYS.ROM missing branch")
-    record = _record(
+    record = launcher_record(
         "tsugaru",
         "standalone",
         "passes_path",
         sorted(names),
-        _path_parts(
+        path_parts(
             src, src.lines(unset.start(), unset.end()), src.lines(first.start(), cmos.end())
         ),
         case_insensitive=True,
@@ -164,7 +164,7 @@ def tsugaru(sources: dict[str, Source]) -> list[Record]:
             f" ({var} stays null otherwise when {final.group(1)} is checked)"
         ),
     )
-    return _covered(src, [record])
+    return covered_records(src, [record])
 
 
 def _indexer_writes(src: Source, emulator: str, writer: str) -> list[Record]:
@@ -173,20 +173,20 @@ def _indexer_writes(src: Source, emulator: str, writer: str) -> list[Record]:
     records = []
     for write in re.compile(rf'\b{writer}\["([^"]+)"\] = ([^;]+);').finditer(code):
         method = _method_of(src, write.start())
-        rendered = _render(src, src.text[write.start(2) : write.end(2)], method[0], write.start())
+        rendered = render(src, src.text[write.start(2) : write.end(2)], method[0], write.start())
         if rendered is None or not rendered[0].startswith("bios"):
             continue
-        conditions, returns = _when(src, write.start())
+        conditions, returns = when(src, write.start())
         records.append(
-            _record(
+            launcher_record(
                 emulator,
                 "standalone",
                 "passes_path",
                 [],
-                _path_parts(src, *returns, *rendered[1], src.lines(write.start(), write.end())),
+                path_parts(src, *returns, *rendered[1], src.lines(write.start(), write.end())),
                 search_dir=rendered[0],
                 passes_to=(
-                    f"{_config_label(src, write.start(), writer)} {write.group(1)} = {rendered[0]}"
+                    f"{config_label(src, write.start(), writer)} {write.group(1)} = {rendered[0]}"
                 ),
                 fails_when_missing=False,
                 depends_on_option=", ".join(conditions) or None,
@@ -199,17 +199,17 @@ def _indexer_writes(src: Source, emulator: str, writer: str) -> list[Record]:
 
 def eka2l1(sources: dict[str, Source]) -> list[Record]:
     src = sources[f"{GENERATORS}/Eka2l1.Generator.cs"]
-    return _covered(src, _indexer_writes(src, "eka2l1", "yml"))
+    return covered_records(src, _indexer_writes(src, "eka2l1", "yml"))
 
 
 def fbneo(sources: dict[str, Source]) -> list[Record]:
     src = sources[f"{GENERATORS}/Fbneo.Generator.cs"]
-    return _covered(src, _indexer_writes(src, "fbneo", "cfg"))
+    return covered_records(src, _indexer_writes(src, "fbneo", "cfg"))
 
 
 def snes9x(sources: dict[str, Source]) -> list[Record]:
     src = sources[f"{GENERATORS}/Snes9x.Generator.cs"]
-    entry = src.find(rf'\{{ "([^"]+)", (Path\.Combine\({_BIOS_ROOT}\)) \}}', "bios folder entry")
+    entry = src.find(rf'\{{ "([^"]+)", (Path\.Combine\({BIOS_ROOT}\)) \}}', "bios folder entry")
     loop = src.find(
         r"foreach \(KeyValuePair<string, string> pair in (\w+)\)", "path loop", entry.end()
     )
@@ -220,18 +220,18 @@ def snes9x(sources: dict[str, Source]) -> list[Record]:
         body[0],
         body[1],
     )
-    config = _config_label(src, write.start(), write.group(1))
-    record = _record(
+    config = config_label(src, write.start(), write.group(1))
+    record = launcher_record(
         "snes9x",
         "standalone",
         "passes_path",
         [],
-        _path_parts(src, src.lines(entry.start(), entry.end()), src.lines(loop.start(), body[1])),
+        path_parts(src, src.lines(entry.start(), entry.end()), src.lines(loop.start(), body[1])),
         search_dir="bios",
         passes_to=f"{config} [{write.group(2)}] {entry.group(1)} = bios",
         fails_when_missing=False,
     )
-    return _covered(src, [record])
+    return covered_records(src, [record])
 
 
 def value_folders(sources: dict[str, Source]) -> list[Record]:
@@ -242,10 +242,10 @@ def value_folders(sources: dict[str, Source]) -> list[Record]:
         (f"{GENERATORS}/Flycast.Generator.cs", "flycast", (r"string libretroPath = ",)),
         (f"{GENERATORS}/ScummVm.Generator.cs", "scummvm", ()),
     ):
-        found = _value_writes(sources[path], emulator, "standalone")
+        found = value_writes(sources[path], emulator, "standalone")
         if not found:
             raise LauncherPatternMissing(path, "bios folder write")
-        records += _covered(sources[path], found, skip=skip)
+        records += covered_records(sources[path], found, skip=skip)
     return records
 
 
@@ -260,21 +260,21 @@ def demul(sources: dict[str, Source]) -> list[Record]:
         block[1],
     )
     method = _method_of(src, listing.start())
-    config = _config_label(src, loop.start(), loop.group(1))
+    config = config_label(src, loop.start(), loop.group(1))
     records = []
     for index, item in enumerate(_split_top(src.text[block[0] + 1 : block[1] - 1].strip(), ",")):
-        rendered = _render(src, item, method[0], listing.start())
+        rendered = render(src, item, method[0], listing.start())
         if rendered is None:
             raise LauncherPatternMissing(src.path, f"rom path {item}")
         if not rendered[0].startswith("bios"):
             continue
         records.append(
-            _record(
+            launcher_record(
                 "demul",
                 "standalone",
                 "passes_path",
                 [],
-                _path_parts(
+                path_parts(
                     src,
                     *rendered[1],
                     src.lines(listing.start(), block[1]),
@@ -285,7 +285,7 @@ def demul(sources: dict[str, Source]) -> list[Record]:
                 fails_when_missing=False,
             )
         )
-    return _covered(src, records)
+    return covered_records(src, records)
 
 
 def bsyndrome(sources: dict[str, Source]) -> list[Record]:
@@ -296,17 +296,17 @@ def bsyndrome(sources: dict[str, Source]) -> list[Record]:
         "path argument",
     ):
         method = _method_of(src, arg.start())
-        rendered = _render(src, arg.group(3), method[0], arg.start())
+        rendered = render(src, arg.group(3), method[0], arg.start())
         if rendered is None or not rendered[0].startswith("bios"):
             continue
-        conditions, returns = _when(src, arg.start())
+        conditions, returns = when(src, arg.start())
         records.append(
-            _record(
+            launcher_record(
                 "bsyndrome",
                 "standalone",
                 "passes_path",
                 [],
-                _path_parts(src, *returns, *rendered[1], src.lines(arg.start(), arg.end())),
+                path_parts(src, *returns, *rendered[1], src.lines(arg.start(), arg.end())),
                 search_dir=rendered[0],
                 passes_to=f"command line {arg.group(2)}={rendered[0]}",
                 fails_when_missing=False,
@@ -315,7 +315,7 @@ def bsyndrome(sources: dict[str, Source]) -> list[Record]:
         )
     if not records:
         raise LauncherPatternMissing(src.path, "bios folder argument")
-    return _covered(src, records)
+    return covered_records(src, records)
 
 
 def xm6pro(sources: dict[str, Source]) -> list[Record]:
@@ -335,23 +335,23 @@ def xm6pro(sources: dict[str, Source]) -> list[Record]:
         loop.end(),
         body[1],
     )
-    folder = _render(src, copy.group(2), body[0], copy.start())
+    folder = render(src, copy.group(2), body[0], copy.start())
     if folder is None or not folder[0].startswith("bios/"):
         raise LauncherPatternMissing(src.path, "keropi folder")
-    conditions, _ = _when(src, loop.start())
-    record = _record(
+    conditions, _ = when(src, loop.start())
+    record = launcher_record(
         "xm6pro",
         "standalone",
         "copies",
         names,
-        _path_parts(src, (src.line(table.start()), lines[1]), src.lines(method.start(), body[1])),
+        path_parts(src, (src.line(table.start()), lines[1]), src.lines(method.start(), body[1])),
         case_insensitive=True,
         search_dir=folder[0],
         passes_to="<emulator>/<name>",
         fails_when_missing=False,
-        depends_on_option=_joined(*conditions, TARGET_ABSENT),
+        depends_on_option=joined(*conditions, TARGET_ABSENT),
     )
-    return _covered(src, [record])
+    return covered_records(src, [record])
 
 
 def arcadeduck(sources: dict[str, Source]) -> list[Record]:
@@ -389,9 +389,9 @@ def arcadeduck(sources: dict[str, Source]) -> list[Record]:
     )
     src.find(r"candidates\.Add\(biosRoot\);", "bios folder last", body[0], body[1])
     message, _ = _throw_message(src, body[0], body[1])
-    root = src.find(rf"string biosPath = {_BIOS_ROOT};", "bios root")
+    root = src.find(rf"string biosPath = {BIOS_ROOT};", "bios root")
     write = src.find(r'ini\.WriteValue\("(\w+)", "(\w+)", biosPath\);', "SearchDirectory write")
-    config = _config_label(src, write.start(), "ini")
+    config = config_label(src, write.start(), "ini")
     target = f"{config} [{write.group(1)}] {write.group(2)}"
     database_file = "/".join(_strings(database.group(1)))
     ref = source_ref(
@@ -409,7 +409,7 @@ def arcadeduck(sources: dict[str, Source]) -> list[Record]:
         ),
     )
     records = [
-        _record(
+        launcher_record(
             "arcadeduck",
             "standalone",
             "names_searched",
@@ -420,7 +420,7 @@ def arcadeduck(sources: dict[str, Source]) -> list[Record]:
             passes_to=f"{target} = <folder found>",
             fails_when_missing=message,
         ),
-        _record(
+        launcher_record(
             "arcadeduck",
             "standalone",
             "names_searched",
@@ -433,7 +433,7 @@ def arcadeduck(sources: dict[str, Source]) -> list[Record]:
             fails_when_missing=message,
             depends_on_option=f"{database_file} names no archive for {fixed.group(1)}",
         ),
-        _record(
+        launcher_record(
             "arcadeduck",
             "standalone",
             "passes_path",
@@ -445,4 +445,4 @@ def arcadeduck(sources: dict[str, Source]) -> list[Record]:
             depends_on_option="no bios archive known for the game's system",
         ),
     ]
-    return _covered(src, records)
+    return covered_records(src, records)

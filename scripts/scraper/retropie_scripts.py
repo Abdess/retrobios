@@ -23,12 +23,12 @@ SECTIONS = ("emulators", "libretrocores", "ports")
 LIBRETRO_FRONTEND = "retroarch"
 
 
-_FUNCTION = re.compile(r"^function\s+([\w.+-]+)\s*\(\)\s*\{\s*$")
+FUNCTION = re.compile(r"^function\s+([\w.+-]+)\s*\(\)\s*\{\s*$")
 _ASSIGN = re.compile(r"^(?:local\s+)?([A-Za-z_]\w*)=(.*)$")
 _DECLARE = re.compile(r"^local\s+([A-Za-z_]\w*(?:\s+[A-Za-z_]\w*)*)\s*$")
 _FOR = re.compile(r"^for\s+([A-Za-z_]\w*)\s+in\s+(.*?)\s*(?:;\s*do)?\s*$")
 _HEREDOC = re.compile(r"(?<!<)<<-?(?!<)\s*['\"]?(\w+)['\"]?")
-_VAR = re.compile(r"\$\{([A-Za-z_]\w*)(\[@\])?\}|\$([A-Za-z_]\w*|\d)")
+VAR = re.compile(r"\$\{([A-Za-z_]\w*)(\[@\])?\}|\$([A-Za-z_]\w*|\d)")
 _SUBST = re.compile(r"\$\(([\w.+-]+(?:\$\{md_id\}|\$md_id)?)\)")
 _MD_ID_TEST = re.compile(r'^!?\s*\[\[\s*"\$md_id"\s*(==|!=)\s*"?([\w.+-]+)"?\s*\]\]$')
 
@@ -131,7 +131,7 @@ def _brace(word: str) -> list[str]:
     ]
 
 
-def _split(text: str) -> list[str]:
+def split(text: str) -> list[str]:
     """Shell words with quotes removed, a line bash itself would accept."""
     try:
         return shlex.split(text, comments=True)
@@ -188,7 +188,7 @@ class Scripts:
             heredoc = _HEREDOC.search(line)
             if heredoc is not None:
                 tag = heredoc.group(1)
-            header = _FUNCTION.match(line)
+            header = FUNCTION.match(line)
             if header is not None:
                 opened = (header.group(1), number)
             elif opened is not None and line.rstrip() == "}":
@@ -206,7 +206,7 @@ class Scripts:
         start, end = module.functions[name]
         body = [line.strip() for line in module.lines[start:end - 1] if line.strip()]
         if len(body) == 1:
-            words = _split(body[0])
+            words = split(body[0])
             if len(words) == 2 and words[0] == "echo":
                 return words[1]
         return None
@@ -250,7 +250,7 @@ class Scripts:
                     events.setdefault((module.path, number), Event(
                         module.path, number, self._expand_all(stripped.split(), package, env),
                         stripped, conditions + self._shown(branches, package, env), True,
-                        self._expand_all(_split(opener), package, env),
+                        self._expand_all(split(opener), package, env),
                     ))
                 continue
             if not stripped or stripped.startswith("#"):
@@ -275,7 +275,7 @@ class Scripts:
                 continue
             if self._bind(stripped, package, env):
                 continue
-            words = [self.expand(w, package, env) for w in _split(stripped)]
+            words = [self.expand(w, package, env) for w in split(stripped)]
             # The first walk to reach a line is the one with its caller's arguments.
             events.setdefault(
                 (module.path, number), Event(module.path, number, words, stripped, shown, False)
@@ -311,7 +311,7 @@ class Scripts:
         closed = body.endswith(")")
         array[1].append(body[:-1] if closed else body)
         if closed:
-            words = _split(" ".join(array[1]))
+            words = split(" ".join(array[1]))
             env[array[0]] = [v for w in words for v in self.expand(w, package, env)]
         return closed
 
@@ -322,7 +322,7 @@ class Scripts:
         """Track for/while/until/done, and say whether the line was one of them."""
         loop = _FOR.match(stripped)
         if loop is not None:
-            values = [v for w in _split(loop.group(2)) for v in self.expand(w, package, env)]
+            values = [v for w in split(loop.group(2)) for v in self.expand(w, package, env)]
             loops.append((loop.group(1), env.get(loop.group(1))))
             env[loop.group(1)] = values
             return True
@@ -419,9 +419,9 @@ class Scripts:
         if value.startswith("("):
             closing = value.rfind(")")
             inner = value[1:closing] if closing > 0 else value[1:]
-            env[name] = [v for w in _split(inner) for v in self.expand(w, package, env)]
+            env[name] = [v for w in split(inner) for v in self.expand(w, package, env)]
             return True
-        words = _split(value) or [""]
+        words = split(value) or [""]
         if "$(" in words[0] and _SUBST.fullmatch(words[0]) is None:
             # A command's output: the variable stays a reference.
             env.pop(name, None)
@@ -444,13 +444,13 @@ class Scripts:
         word = _SUBST.sub(substitute, word)
         results: list[str] = []
         for braced in _brace(word):
-            names = [m.group(1) or m.group(3) for m in _VAR.finditer(braced)]
+            names = [m.group(1) or m.group(3) for m in VAR.finditer(braced)]
             bound = [n for n in names if n in env]
             if not bound:
                 results.append(braced)
                 continue
             results.extend(
-                _VAR.sub(partial(_bound_value, dict(zip(bound, values))), braced)
+                VAR.sub(partial(_bound_value, dict(zip(bound, values))), braced)
                 for values in product(*(env[n] for n in bound))
             )
         return results

@@ -24,12 +24,12 @@ from .retrobat_generators import (
     FEATURES,
     GENERATORS,
     TARGET_ABSENT,
-    _BIOS_ROOT,
-    _joined,
-    _record,
+    BIOS_ROOT,
+    joined,
+    launcher_record,
     feature_choices,
 )
-from .retrobat_render import _config_label, _covered, _path_parts, _render, _when
+from .retrobat_render import config_label, covered_records, path_parts, render, when
 
 
 # Each extractor takes the sources by path and returns its records.
@@ -68,7 +68,7 @@ def ares(sources: dict[str, Source]) -> list[Record]:
         )
         sections = "/".join(m.group(1) for m in container)
         records.append(
-            _record(
+            launcher_record(
                 "ares",
                 "standalone",
                 "names_searched",
@@ -119,7 +119,7 @@ def mesen(sources: dict[str, Source]) -> list[Record]:
         except LauncherPatternMissing:
             fails = False
         records.append(
-            _record(
+            launcher_record(
                 "mesen",
                 "standalone",
                 "copies",
@@ -138,7 +138,7 @@ def mesen(sources: dict[str, Source]) -> list[Record]:
 def _name_of(src: Source, var: str, offset: int) -> tuple[str, str, list[tuple[int, int]]]:
     """A variable holding bios/<folders>/<name>, as (folder, name, lines)."""
     method = _method_of(src, offset)
-    rendered = _render(src, var, method[0], offset)
+    rendered = render(src, var, method[0], offset)
     if rendered is None or not rendered[0].startswith("bios/") or ", " in rendered[0]:
         raise LauncherPatternMissing(
             src.path, f"bios path held by {var} at line {src.line(offset)}"
@@ -168,15 +168,15 @@ def desmume(sources: dict[str, Source]) -> list[Record]:
         folder, name, lines = _name_of(src, var, pair.start())
         names.append(name)
         spans += lines
-    conditions, returns = _when(src, pair.start())
-    config = _config_label(src, pair.start(), "ini")
+    conditions, returns = when(src, pair.start())
+    config = config_label(src, pair.start(), "ini")
     records = [
-        _record(
+        launcher_record(
             "desmume",
             "standalone",
             "fixed_name",
             names,
-            _path_parts(src, *returns, *spans, src.lines(pair.start(), block[1])),
+            path_parts(src, *returns, *spans, src.lines(pair.start(), block[1])),
             case_insensitive=True,
             search_dir=folder,
             passes_to=f"{config} [{flag.group(1)}] "
@@ -187,7 +187,7 @@ def desmume(sources: dict[str, Source]) -> list[Record]:
         )
     ]
     firmware = src.find(
-        rf'string (\w+) = Path\.Combine\({_BIOS_ROOT}, "([^"]+)"\);\s*'
+        rf'string (\w+) = Path\.Combine\({BIOS_ROOT}, "([^"]+)"\);\s*'
         r'if \(SystemConfig\.isOptSet\("(\w+)"\)[^\n]*\)\s*\{\s*'
         r'string (\w+) = SystemConfig\["\3"\];\s*if \(File\.Exists\(\4\)\)\s*\1 = \4;\s*\}\s*'
         r"if \(File\.Exists\(\1\)\)\s*\{",
@@ -206,14 +206,14 @@ def desmume(sources: dict[str, Source]) -> list[Record]:
         fw_block[0],
         fw_block[1],
     )
-    conditions, returns = _when(src, firmware.start())
+    conditions, returns = when(src, firmware.start())
     records.append(
-        _record(
+        launcher_record(
             "desmume",
             "standalone",
             "fixed_name",
             [firmware.group(2)],
-            _path_parts(src, *returns, src.lines(firmware.start(), fw_flag.end())),
+            path_parts(src, *returns, src.lines(firmware.start(), fw_flag.end())),
             case_insensitive=True,
             search_dir="bios",
             passes_to=f"{config} [{fw_write.group(1)}] {fw_write.group(2)}, only if the file exists",
@@ -223,7 +223,7 @@ def desmume(sources: dict[str, Source]) -> list[Record]:
             ),
         )
     )
-    return _covered(src, records)
+    return covered_records(src, records)
 
 
 def melonds_dsi(sources: dict[str, Source]) -> list[Record]:
@@ -256,7 +256,7 @@ def melonds_dsi(sources: dict[str, Source]) -> list[Record]:
             method[0],
             check.start(),
         )
-        root = _render(src, decl.group(1), method[0], decl.start())
+        root = render(src, decl.group(1), method[0], decl.start())
         if root is None or not root[0].startswith("bios"):
             raise LauncherPatternMissing(src.path, f"bios folder of {var}")
         folders.add(root[0])
@@ -302,14 +302,14 @@ def melonds_dsi(sources: dict[str, Source]) -> list[Record]:
     choices, choice_lines = feature_choices(features, "melonds", region.group(1))
     stem, _, extension = region.group(5).rpartition(".")
     nand_name = names[variables.index(region.group(6))]
-    config = _config_label(src, check.start(), "ini")
+    config = config_label(src, check.start(), "ini")
     records = [
-        _record(
+        launcher_record(
             "melonds",
             "standalone",
             "fixed_name",
             names,
-            _path_parts(
+            path_parts(
                 src,
                 src.lines(boot.start(), boot.end()),
                 src.lines(dsi.start(), forced.end()),
@@ -323,7 +323,7 @@ def melonds_dsi(sources: dict[str, Source]) -> list[Record]:
             fails_when_missing=message,
             depends_on_option=mode,
         ),
-        _record(
+        launcher_record(
             "melonds",
             "standalone",
             "scans_dir",
@@ -364,12 +364,12 @@ def jzintv(sources: dict[str, Source]) -> list[Record]:
         passed.append((add.start(), add.group(1), name, lines, add.end()))
     passed.sort()
     records = [
-        _record(
+        launcher_record(
             "jzintv",
             "standalone",
             "fixed_name",
             [name for _, _, name, _, _ in passed],
-            _path_parts(
+            path_parts(
                 src,
                 *[span for p in passed for span in p[3]],
                 (src.line(check.start()), throw_line),
@@ -383,7 +383,7 @@ def jzintv(sources: dict[str, Source]) -> list[Record]:
         )
     ]
     ecs = src.find(
-        rf'string (\w+) = Path\.Combine\({_BIOS_ROOT}, "([^"]+)"\);\s*if \(File\.Exists\(\1\)\)\s*\{{\s*'
+        rf'string (\w+) = Path\.Combine\({BIOS_ROOT}, "([^"]+)"\);\s*if \(File\.Exists\(\1\)\)\s*\{{\s*'
         r'commandArray\.Add\("(-\w+)"\);',
         "ECS ROM",
     )
@@ -400,12 +400,12 @@ def jzintv(sources: dict[str, Source]) -> list[Record]:
         "command file lookup",
     )
     records.append(
-        _record(
+        launcher_record(
             "jzintv",
             "standalone",
             "fixed_name",
             [ecs.group(2)],
-            _path_parts(
+            path_parts(
                 src,
                 src.lines(commands.start(), commands.end()),
                 src.lines(option.start(), warning.end()),
@@ -420,7 +420,7 @@ def jzintv(sources: dict[str, Source]) -> list[Record]:
             ),
         )
     )
-    return _covered(src, records)
+    return covered_records(src, records)
 
 
 def blastem(sources: dict[str, Source]) -> list[Record]:
@@ -445,18 +445,18 @@ def blastem(sources: dict[str, Source]) -> list[Record]:
     for call in src.find_all(
         r'SetBiosPath\((\w+), "(\w+)", (\w+), "([^"]+)"\);', "SetBiosPath call"
     ):
-        root = _render(src, call.group(3), _method_of(src, call.start())[0], call.start())
+        root = render(src, call.group(3), _method_of(src, call.start())[0], call.start())
         if root is None or root[0] != "bios":
             raise LauncherPatternMissing(
                 src.path, f"bios folder passed at line {src.line(call.start())}"
             )
         records.append(
-            _record(
+            launcher_record(
                 "blastem",
                 "standalone",
                 "fixed_name",
                 [call.group(4)],
-                _path_parts(
+                path_parts(
                     src,
                     *root[1],
                     src.lines(call.start(), call.end()),
@@ -468,10 +468,10 @@ def blastem(sources: dict[str, Source]) -> list[Record]:
                 fails_when_missing=f"info log, {call.group(2)} left as it is",
             )
         )
-    return _covered(src, records)
+    return covered_records(src, records)
 
 
-def _value_writes(
+def value_writes(
     src: Source, emulator: str, build: str, start: int = 0, end: int | None = None
 ) -> list[Record]:
     """Configuration values that resolve under the bios folder.
@@ -493,24 +493,24 @@ def _value_writes(
         writer, section, value = write.group(1), args[0].lstrip("@"), args[2]
         key = _unescape(key_literal.group(1))
         method = _method_of(src, write.start())
-        rendered = _render(src, value, method[0], write.start())
+        rendered = render(src, value, method[0], write.start())
         if rendered is None or not rendered[0].startswith("bios"):
             continue
-        conditions, returns = _when(src, write.start())
+        conditions, returns = when(src, write.start())
         section = _unescape(section[1:-1]) if section != "null" else ""
-        target = f"{_config_label(src, write.start(), writer)} " + (
+        target = f"{config_label(src, write.start(), writer)} " + (
             f"[{section}] {key}" if section else key
         )
         span = src.lines(
             _statement_start(src, write.start()),
             write.end() + len(_call_args(src, write.end() - 1)),
         )
-        ref = _path_parts(src, *returns, *rendered[1], span)
+        ref = path_parts(src, *returns, *rendered[1], span)
         depends = ", ".join(conditions) or None
         folder, _, name = rendered[0].rpartition("/")
         if "." not in name or ", " in rendered[0]:
             records.append(
-                _record(
+                launcher_record(
                     emulator,
                     build,
                     "passes_path",
@@ -528,7 +528,7 @@ def _value_writes(
         if guarded:
             depends = ", ".join(c for c in conditions if c != f"File.Exists({variable})") or None
         records.append(
-            _record(
+            launcher_record(
                 emulator,
                 build,
                 "fixed_name",
@@ -553,7 +553,7 @@ def _value_writes(
 
 def dolphin(sources: dict[str, Source]) -> list[Record]:
     src = sources[f"{GENERATORS}/Dolphin.Generator.cs"]
-    records = _value_writes(src, "dolphin", "standalone")
+    records = value_writes(src, "dolphin", "standalone")
     if not records:
         raise LauncherPatternMissing(src.path, "GBA BIOS write")
     method = src.find(r"private void CopySegaBoot\(string path\)", "CopySegaBoot")
@@ -567,7 +567,7 @@ def dolphin(sources: dict[str, Source]) -> list[Record]:
     block = src.block_at(array.end() - 1)
     names = []
     for item in _split_top(src.text[block[0] + 1 : block[1] - 1].strip(), ","):
-        rendered = _render(src, item, body[0], block[0])
+        rendered = render(src, item, body[0], block[0])
         if rendered is None or not rendered[0].startswith("bios/"):
             raise LauncherPatternMissing(src.path, f"segaboot candidate {item}")
         names.append(rendered[0][len("bios/") :])
@@ -585,15 +585,15 @@ def dolphin(sources: dict[str, Source]) -> list[Record]:
         body[1],
     )
     call = src.find(r"CopySegaBoot\(path\);", "CopySegaBoot call")
-    conditions, returns = _when(src, call.start())
-    destination = _render(src, target.group(1), body[0], target.start())
+    conditions, returns = when(src, call.start())
+    destination = render(src, target.group(1), body[0], target.start())
     records.append(
-        _record(
+        launcher_record(
             "dolphin",
             "standalone",
             "copies",
             names,
-            _path_parts(
+            path_parts(
                 src,
                 *returns,
                 src.lines(_statement_start(src, call.start()), call.end()),
@@ -603,21 +603,21 @@ def dolphin(sources: dict[str, Source]) -> list[Record]:
             search_dir="bios",
             passes_to=destination[0] if destination else target.group(1),
             fails_when_missing=f"warning '{_unescape(warning.group(1))}' when the target is absent too",
-            depends_on_option=_joined(
+            depends_on_option=joined(
                 *conditions, "first name found",
                 "the target is absent, smaller or older",
             ),
         )
     )
-    return _covered(src, records, skip=(r"DolphinTool\.exe",))
+    return covered_records(src, records, skip=(r"DolphinTool\.exe",))
 
 
 def raine(sources: dict[str, Source]) -> list[Record]:
     src = sources[f"{GENERATORS}/Raine.Generator.cs"]
-    records = _value_writes(src, "raine", "standalone")
+    records = value_writes(src, "raine", "standalone")
     if not any(r["kind"] == "fixed_name" for r in records):
         raise LauncherPatternMissing(src.path, "neocd_bios write")
-    return _covered(src, records)
+    return covered_records(src, records)
 
 
 def gsplus(sources: dict[str, Source]) -> list[Record]:
@@ -638,16 +638,16 @@ def gsplus(sources: dict[str, Source]) -> list[Record]:
     write = src.find(
         rf'(\w+)\.WriteValue\(null, "(\w+)", {first.group(1)}\);', "ROM path write"
     )
-    conditions, returns = _when(src, write.start())
+    conditions, returns = when(src, write.start())
     # The test on the name found is the selection itself, not a condition.
     conditions = [c for c in conditions if first.group(1) not in c]
-    target = f"{_config_label(src, write.start(), write.group(1))} {write.group(2)}"
-    record = _record(
+    target = f"{config_label(src, write.start(), write.group(1))} {write.group(2)}"
+    record = launcher_record(
         "gsplus",
         "standalone",
         "names_searched",
         _strings(listed.group(2)),
-        _path_parts(
+        path_parts(
             src,
             *returns,
             src.lines(listed.start(), listed.end()),
@@ -660,17 +660,17 @@ def gsplus(sources: dict[str, Source]) -> list[Record]:
         fails_when_missing=False,
         depends_on_option=", ".join(conditions) or None,
     )
-    return _covered(src, [record])
+    return covered_records(src, [record])
 
 
 def rpcs3(sources: dict[str, Source]) -> list[Record]:
     src = sources[f"{GENERATORS}/Rpcs3.Generator.cs"]
     marker = src.find(
-        rf"string (\w+) = (Path\.Combine\(path, [^;]+\));\s*string \w+ = {_BIOS_ROOT};",
+        rf"string (\w+) = (Path\.Combine\(path, [^;]+\));\s*string \w+ = {BIOS_ROOT};",
         "installed firmware marker",
     )
     pup = src.find(
-        rf'string (\w+) = {_BIOS_ROOT};\s*string (\w+) = Path\.Combine\(\1, "([^"]+)"\);',
+        rf'string (\w+) = {BIOS_ROOT};\s*string (\w+) = Path\.Combine\(\1, "([^"]+)"\);',
         "PS3 update file",
         marker.start(),
     )
@@ -687,13 +687,13 @@ def rpcs3(sources: dict[str, Source]) -> list[Record]:
         check.end(),
     )
     returned = src.find(r"return new ProcessStartInfo\(\)", "install launch", install.end())
-    installed = _render(src, marker.group(2), method[0], marker.start())
-    record = _record(
+    installed = render(src, marker.group(2), method[0], marker.start())
+    record = launcher_record(
         "rpcs3",
         "standalone",
         "fixed_name",
         [pup.group(3)],
-        _path_parts(src, src.lines(marker.start(), src.block_at(returned.end())[1])),
+        path_parts(src, src.lines(marker.start(), src.block_at(returned.end())[1])),
         case_insensitive=True,
         search_dir="bios",
         passes_to=(
@@ -702,7 +702,7 @@ def rpcs3(sources: dict[str, Source]) -> list[Record]:
         fails_when_missing=message,
         depends_on_option=f"{installed[0] if installed else marker.group(2)} absent",
     )
-    return _covered(src, [record])
+    return covered_records(src, [record])
 
 
 def bizhawk_gb(sources: dict[str, Source]) -> list[Record]:
@@ -728,7 +728,7 @@ def bizhawk_gb(sources: dict[str, Source]) -> list[Record]:
             flag.start(),
         )
         default = src.find(
-            rf'string {var} = Path\.Combine\({_BIOS_ROOT}, "([^"]+)"\);',
+            rf'string {var} = Path\.Combine\({BIOS_ROOT}, "([^"]+)"\);',
             "default GB BIOS",
             method[0],
             flag.start(),
@@ -736,14 +736,14 @@ def bizhawk_gb(sources: dict[str, Source]) -> list[Record]:
         chosen = list(
             re.compile(
                 rf'(?:else )?if \(system == "(\w+)"\)\s*'
-                rf'{var} = Path\.Combine\({_BIOS_ROOT}, "([^"]+)"\);'
+                rf'{var} = Path\.Combine\({BIOS_ROOT}, "([^"]+)"\);'
             ).finditer(code, default.end(), flag.start())
         )
         if code[default.end() : flag.start()].count(f"{var} =") != len(chosen):
             raise LauncherPatternMissing(
                 src.path, f"{var} choice at line {src.line(default.start())}"
             )
-        ref = _path_parts(
+        ref = path_parts(
             src, src.lines(core.start(), core.end()), src.lines(default.start(), flag.end())
         )
         others = " && ".join(f'system != "{m.group(1)}"' for m in chosen)
@@ -751,7 +751,7 @@ def bizhawk_gb(sources: dict[str, Source]) -> list[Record]:
         slots += [(m.group(1), m.group(2), f'system == "{m.group(1)}"') for m in chosen]
         for slot, name, system in slots:
             records.append(
-                _record(
+                launcher_record(
                     "bizhawk",
                     "standalone",
                     "fixed_name",
@@ -770,7 +770,7 @@ def bizhawk_gb(sources: dict[str, Source]) -> list[Record]:
                     ),
                 )
             )
-    return _covered(
+    return covered_records(
         src,
         records,
         # A DSi NAND boot copies the game itself to bios/dsi_nand.bin.

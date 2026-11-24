@@ -22,8 +22,8 @@ from collections.abc import Callable
 from pathlib import PurePosixPath
 from typing import Any
 
-from .retropie_scripts import Launcher, LauncherPatternMissing, _split, merge_records, source_ref
-from .retropie_reader import _split_path
+from .retropie_scripts import Launcher, LauncherPatternMissing, split, merge_records, source_ref
+from .retropie_reader import split_path
 
 BIOS = "$bios_path"
 PLACEHOLDER = "RETRODECKBIOSDIR"
@@ -93,7 +93,7 @@ class Script:
                 continue
             shown = [c for c in branches if "$action" not in c]
             for part in re.split(r"\s+&&\s+|\s+\|\|\s+", stripped):
-                words = _split(part)
+                words = split(part)
                 if words:
                     found.append((number, words, part, shown))
         return found
@@ -165,7 +165,7 @@ class Component:
                 continue
             if command == "cp" and len(words) >= 3 and _mentions_bios(words[-1]):
                 source, target = words[-2], words[-1]
-                folder, name = _split_path(source)
+                folder, name = split_path(source)
                 copies.setdefault((folder, depends), []).append((number, name, target))
                 continue
             if command == "tar" and "-C" in words and _mentions_bios(words[words.index("-C") + 1]):
@@ -231,12 +231,12 @@ class Component:
         depends = key[-1] or None
         lines = [(path, n) for n, _v, _w in hits]
         if kind == "fixed_name":
-            folders = {_split_path(value)[0] for _n, value, _w in hits}
+            folders = {split_path(value)[0] for _n, value, _w in hits}
             if len(folders) != 1:
                 raise LauncherPatternMissing(
                     f"{path}:{hits[0][0]}", "fixed names in several folders"
                 )
-            names = list(dict.fromkeys(_split_path(value)[1] for _n, value, _w in hits))
+            names = list(dict.fromkeys(split_path(value)[1] for _n, value, _w in hits))
             wheres = list(dict.fromkeys(w for _n, _v, w in hits))
             self.record(
                 "fixed_name", names, lines,
@@ -277,7 +277,7 @@ class Component:
             raise LauncherPatternMissing(
                 f"{path}:{number}", f"link without a bios/ source: {words}"
             )
-        folder, name = _split_path(paths[0])
+        folder, name = split_path(paths[0])
         self.record(
             "links", [name], [(path, number)], case_insensitive=False, search_dir=folder,
             passes_to=f"{paths[1]} is a symlink to it", fails_when_missing=False,
@@ -294,7 +294,7 @@ class Component:
         substitutions = self._substitutions(script, target)
         copied = None
         for line_no, line in enumerate(script.lines[:number], 1):
-            cp = _split(line.strip().split("&&")[0])
+            cp = split(line.strip().split("&&")[0])
             if cp and cp[0] == "cp" and cp[-1] == target and "$component_config/" in cp[-2]:
                 copied = (line_no, cp[-2].split("$component_config/", 1)[1])
         if copied is None:
@@ -422,7 +422,7 @@ class Component:
             if not _mentions_bios(raw):
                 continue
             if words[0] == "exec" and len(words) > 1 and _mentions_bios(words[1]):
-                folder, name = _split_path(words[1])
+                folder, name = split_path(words[1])
                 self.record(
                     "fixed_name", [name], [(path, number)], case_insensitive=False,
                     search_dir=folder, passes_to="exec", fails_when_missing=True,
@@ -468,7 +468,7 @@ class Component:
                 n for n, line in enumerate(script.lines, 1)
                 if line.strip().startswith(f"{source.group(1)}=")
             )
-            folder, name = _split_path(destination)
+            folder, name = split_path(destination)
             self.record(
                 "fixed_name", [name], [(path, assigned), (path, number), (path, install_line)],
                 case_insensitive=False, search_dir=folder,
@@ -492,8 +492,8 @@ def _installs(word: str) -> bool:
 
 def _render_targets(names: list[str], targets: list[str]) -> str:
     """Where copied names land: one folder when each keeps its name, else each path."""
-    folders = {_split_path(t)[0] for t in targets}
-    kept = [_split_path(t)[1] for t in targets] == [PurePosixPath(n).name for n in names]
+    folders = {split_path(t)[0] for t in targets}
+    kept = [split_path(t)[1] for t in targets] == [PurePosixPath(n).name for n in names]
     if kept and len(folders) == 1:
         return f"{folders.pop()}/<name>"
     return ", ".join(targets)
@@ -512,7 +512,7 @@ def core_options(read: Read) -> list[Launcher]:
     ]
     if not copied:
         raise LauncherPatternMissing(prepare_path, "the core options preset is never copied")
-    target = _split(prepare.splitlines()[copied[0] - 1].strip())[-1]
+    target = split(prepare.splitlines()[copied[0] - 1].strip())[-1]
     records = []
     for line_no, line in enumerate(text.splitlines(), 1):
         found = re.match(r'^([\w.-]+)\s*=\s*"([^"]*)"$', line.strip())
