@@ -1730,7 +1730,9 @@ the GitHub and text fetches, and the shared CLI), `dat_parser.py` (clrmamepro DA
 `mame_parser.py` (MAME C source BIOS root set parser),
 `fbneo_parser.py` (FBNeo C source BIOS set parser),
 `dat_fetch.py` (upstream MAME `-listxml` and FBNeo DATs, cached under `.cache/dats/`),
-`_hash_merge.py` (text-based YAML patching that preserves formatting).
+`_hash_merge.py` (fetched hashes merged into a profile), `_hash_write.py` (text-based YAML
+patching that preserves formatting), `_mame_sections.py` (the generated MAME device and
+software list sections).
 
 Adding a scraper: inherit `BaseScraper`, implement `fetch_requirements()` and
 `validate_format()` (a class missing either cannot be instantiated), call

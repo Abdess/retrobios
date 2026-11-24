@@ -26,7 +26,7 @@ from typing import IO, NamedTuple
 
 from model.safeparse import yaml_load
 
-from ._hash_merge import generated_start
+from ._hash_write import generated_start
 from .clex import blank_comments
 from .listxml import LISTXML_CHUNK, attrs, iter_elements, rom_members
 from .mame_parser import _collect_rom_macros, _expand_macros, _parse_rom_entries

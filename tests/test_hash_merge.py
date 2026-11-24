@@ -18,9 +18,8 @@ from scripts.scraper._hash_merge import (
     load_profile,
     merge_fbneo_profile,
     merge_mame_profile,
-    write_fbneo_profile,
-    write_mame_profile,
 )
+from scripts.scraper._hash_write import write_fbneo_profile, write_mame_profile
 
 
 def _refresh_mame(path: Path, hashes: dict) -> None:
@@ -256,10 +255,7 @@ class TestMameMerge(unittest.TestCase):
         The manager set loads "01", but written unquoted it re-parses as the
         integer 1 and the profile stops naming the file the driver opens.
         """
-        from scripts.scraper._hash_merge import (
-            _append_new_entries,
-            _format_contents,
-        )
+        from scripts.scraper._hash_write import _append_new_entries, _format_contents
 
         contents = [
             {"name": "01", "description": "ROM bank 0-1", "size": 8192,

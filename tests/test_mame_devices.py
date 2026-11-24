@@ -17,16 +17,9 @@ import unittest
 from pathlib import Path
 
 from scripts.model.safeparse import yaml_load
-from scripts.scraper._hash_merge import (
-    DEVICE_SECTION,
-    SOFTLIST_SECTION,
-    load_profile,
-    mame_ref_role,
-    merge_mame_devices,
-    merge_mame_profile,
-    merge_mame_support,
-    write_mame_profile,
-)
+from scripts.scraper._hash_write import DEVICE_SECTION, SOFTLIST_SECTION, write_mame_profile
+from scripts.scraper._hash_merge import load_profile, mame_ref_role, merge_mame_profile
+from scripts.scraper._mame_sections import merge_mame_devices, merge_mame_support
 from scripts.scraper.listxml import open_listxml
 from scripts.scraper.mame_devices import (
     ABSENT,

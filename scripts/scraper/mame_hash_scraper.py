@@ -37,12 +37,11 @@ from ._hash_merge import (
     _build_source_ref,
     compute_diff,
     load_profile,
-    merge_mame_devices,
     merge_mame_profile,
-    merge_mame_support,
     settled_required,
-    write_mame_profile,
 )
+from ._mame_sections import merge_mame_devices, merge_mame_support
+from ._hash_write import write_mame_profile
 from .mame_devices import (
     attribute_softlists,
     attribute_systems,

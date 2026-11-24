@@ -25,12 +25,8 @@ from model.profiles import source_yaml_paths
 from core.artifacts import write_text_atomic
 from model.safeparse import yaml_load
 
-from scripts.scraper._hash_merge import (
-    compute_diff,
-    load_profile,
-    merge_fbneo_profile,
-    write_fbneo_profile,
-)
+from scripts.scraper._hash_merge import compute_diff, load_profile, merge_fbneo_profile
+from scripts.scraper._hash_write import write_fbneo_profile
 from scripts.scraper.fbneo_parser import parse_fbneo_source_tree
 from scripts.scraper.sparse_clone import fresh_cache, remove_clone, sparse_clone
 

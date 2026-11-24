@@ -434,6 +434,10 @@ The merge preserves fields the hash data does not generate (system, note, requir
 and leaves entries not present in the hash data untouched. Uses text-level YAML
 manipulation rather than load-dump to maintain human-readable formatting.
 
+`_hash_merge` computes the merge and the diff, `_hash_write` writes the result
+back into the profile text, and `_mame_sections` keeps the device and software
+list sections generated from MAME `-listxml`.
+
 ## Testing
 
 ### Development workflow
