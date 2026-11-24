@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, TextIO
 from installer.console import OUTPUT, Progress, _confirm, detail
 from installer.datadirs import data_directory_state, data_fetch_bytes, install_data_directory
 from installer.destination import _missing_dest, _refuse_closed, _refuse_file, on_its_card
-from installer.detect_frontends import launchbox_bios_dirs, launchbox_root
+from installer.detect_launchbox import launchbox_bios_dirs, launchbox_root
 from installer.detect_os import detected_shown
 from installer.diagnosis import CheckHeld, bios_folder_index, check_lines
 from installer.download import download_files

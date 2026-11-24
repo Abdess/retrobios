@@ -21,7 +21,8 @@ from installer.cards import (
 )
 from installer.console import _ask, _quit
 from installer.detection_notes import note_detection
-from installer.detect_frontends import _UNNAMEABLE, _android_storage_root, detect_platforms
+from installer.detect_frontends import _UNNAMEABLE, detect_platforms
+from installer.detect_android import _android_storage_root
 from installer.detect_os import (
     _DETECTED_OS,
     _FROM_CARD,

@@ -8,7 +8,7 @@ from pathlib import Path, PurePosixPath
 from typing import TYPE_CHECKING
 
 from installer.console import Progress, _confirm
-from installer.detect_frontends import launchbox_bios_dirs, launchbox_root
+from installer.detect_launchbox import launchbox_bios_dirs, launchbox_root
 from installer.download import download_files
 from installer.host_fs import NOT_WRITABLE, _closed_to_this_user, _exists, _is_dir, _replace_with_copy, _write_refused
 from installer.invocation import offline_requested
