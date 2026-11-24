@@ -27,7 +27,7 @@ from resolve.launcherconfig import (
 )
 from resolve.launchers import handed_directories
 from resolve.launcherplaces import launcher_places
-from profiling.resolver import _check_build_refs
+from profiling.reportinputs import _check_build_refs
 from profiling.repos import shipped_build_holders
 from scraper.retrobat_launchers import _choices_apart
 from scraper.shell_launchers import LauncherPatternMissing, Script, config_placement

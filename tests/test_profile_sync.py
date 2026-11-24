@@ -28,6 +28,7 @@ from profiling import rebase
 from profiling import reports as profiling_reports
 from profiling import repos as profiling_repos
 from profiling import resolver
+from profiling import reportinputs
 from profiling import run as profiling_run
 from profiling import sourcepaths as profiling_sourcepaths
 from profiling import worktree as profiling_worktree
@@ -6197,7 +6198,7 @@ class TestAnUnansweringRepository(unittest.TestCase):
     def _report(self, profile):
         from unittest import mock
 
-        with mock.patch.object(resolver, "select_views", return_value=[]):
+        with mock.patch.object(reportinputs, "select_views", return_value=[]):
             return resolver.build_report("p", profile, ".cache", True)
 
     def test_a_declared_pin_names_the_repository(self):
