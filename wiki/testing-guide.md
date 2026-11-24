@@ -35,7 +35,7 @@ python scripts/run_tests.py --jobs 1   # one at a time
 Run a single module, or several:
 
 ```bash
-python -m unittest tests.test_e2e -v
+python -m unittest tests.test_e2e_resolution -v
 python -m unittest tests.test_install tests.test_install_cores -v
 ```
 
@@ -62,7 +62,7 @@ Every module in `tests/`, by the area it guards.
 
 | Area | Fixtures | Modules |
 |------|----------|---------|
-| Core regression suites | synthetic | `test_e2e`, `test_audit_regressions`, `test_tool_messages` |
+| Core regression suites | synthetic | `test_e2e_resolution`, `test_e2e_emulator`, `test_e2e_pack_options`, `test_e2e_truth`, `test_e2e_diff_export`, `test_e2e_pack_sources`, `test_e2e_region`, `test_e2e_search_sets`, `test_audit_project`, `test_audit_docs`, `test_audit_site`, `test_audit_cli`, `test_audit_packs`, `test_audit_manifests`, `test_audit_resolution`, `test_audit_profiles`, `test_tool_messages` |
 | Import layers | the source of `scripts/` | `test_layers` |
 | File resolution and identity | synthetic + collection | `test_adler32_resolution`, `test_agnostic_scan`, `test_agnostic_scan_mode`, `test_agnostic_scope`, `test_agnostic_substitute`, `test_archive_build`, `test_archive_choice`, `test_archive_recipes`, `test_bios_companions`, `test_bundled_identity`, `test_casefold_cache`, `test_db_aliases`, `test_declared_names`, `test_derivations`, `test_directory_entries`, `test_extra_identity`, `test_foreign_tree`, `test_foreign_tree_names`, `test_frontend_digest`, `test_game_data_homonyms`, `test_hashing`, `test_held_record`, `test_identity`, `test_maker_folder_names`, `test_md5_pack_context`, `test_name_tiebreak`, `test_nec_filing`, `test_np2_fonts`, `test_owner_resolution`, `test_path_suffix`, `test_proven_name`, `test_resolution_evidence`, `test_sega_filing`, `test_shipped_content`, `test_switch_nca`, `test_twin_declaration_status`, `test_twin_declarations`, `test_validated_choice`, `test_variant_archives`, `test_variant_copies`, `test_variant_choice`, `test_variant_identity`, `test_zipped_member` |
 | Verification, cross-reference and profile checks | synthetic + profiles | `test_bios_layout`, `test_cache_independent_counts`, `test_case_insensitive_platforms`, `test_checks_have_values`, `test_content_checks`, `test_content_declarations`, `test_core_file_fills_declaration`, `test_core_size_refusal`, `test_cross_reference_sources`, `test_crypto_aes`, `test_crypto_unique_data`, `test_crypto_verify`, `test_data_only_refs`, `test_entry_categories`, `test_file_consumers`, `test_fileless_audit`, `test_flycast_layout`, `test_gap_settlement`, `test_hidden_extras`, `test_launcher_aliases`, `test_launcher_evidence`, `test_launcher_gaps`, `test_launcher_layer`, `test_launcher_paths`, `test_launcher_placement`, `test_native_mode`, `test_no_case_collisions`, `test_path_conflict_status`, `test_path_null_copies`, `test_profile_checks`, `test_profile_names`, `test_profile_paths`, `test_profile_repositories`, `test_romm_hash_rule`, `test_shared_groups`, `test_standalone_links`, `test_standalone_mode`, `test_undeclared_dedup`, `test_unplaced_extras`, `test_validation_scope`, `test_verify_all_dir`, `test_verify_data_dir_notice`, `test_verify_emulator_evidence`, `test_verify_listing`, `test_verify_pack_choice`, `test_verify_release_asset` |
@@ -85,13 +85,15 @@ Every module in `tests/`, by the area it guards.
 
 ## Test architecture
 
-### test_e2e.py
+### test_e2e_*.py
 
-The main regression suite. `TestE2E` exercises the resolution, verification,
-pack generation and cross-reference logic, and `StandaloneModeRequiresAStandaloneBuild`
-sits beside it for the per-emulator build mode.
+The main regression suite, one module per subject. The `TestE2E*` classes
+exercise the resolution, verification, pack generation and cross-reference
+logic, and `test_e2e_search_sets` holds `StandaloneModeRequiresAStandaloneBuild`
+for the per-emulator build mode beside the search-list and archive-set classes.
 
-**Fixture pattern.** `setUp` creates a temporary directory tree with:
+**Fixture pattern.** Every `TestE2E*` class inherits `E2EFixture` from
+`tests/e2esupport.py`, whose `setUp` creates a temporary directory tree with:
 
 - Fake BIOS files (deterministic content for hash computation)
 - Platform YAML configs (existence mode, MD5 mode, inheritance, shared groups)
@@ -253,7 +255,7 @@ A new module starts with `import tests` right after
 `from __future__ import annotations`. The package import is what keeps a run
 offline, puts its scratch under `tmp/` and gives it its own installer cache,
 however the module is started: `discover tests`, `python -m unittest
-tests.test_e2e` or `python -m tests.test_e2e`. A test fails on any module
+tests.test_e2e_resolution` or `python -m tests.test_e2e_resolution`. A test fails on any module
 without it.
 
 A fix comes with a test that fails without it. Write the test first, watch it

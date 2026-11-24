@@ -25,7 +25,7 @@ from __future__ import annotations
 DEFAULT_MODE = "existence"
 
 #: Every verification mode a platform YAML may declare. Mirrors the enum in
-#: schemas/platform.schema.json, and tests/test_audit_regressions.py pins them
+#: schemas/platform.schema.json, and tests/test_native_mode.py pins them
 #: together so a new mode cannot be added to one without the other.
 MODES = ("existence", "md5", "sha1")
 

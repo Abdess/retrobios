@@ -4,7 +4,7 @@
 Usage:
     python scripts/run_tests.py                 # every module, a few at a time
     python scripts/run_tests.py --jobs 1        # one at a time, as discover runs
-    python scripts/run_tests.py tests.test_install tests.test_e2e
+    python scripts/run_tests.py tests.test_install tests.test_e2e_region
 
 unittest's discovery runs 8,500 tests in one process: about 40 minutes
 here and 85 on the CI runner, and a module that left a variable or a flag

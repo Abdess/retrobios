@@ -518,11 +518,11 @@ the fields listed in [BiosRequirement fields](adding-a-platform.md#biosrequireme
 
 ### E2E tests
 
-The project's test suite (`tests/test_e2e.py`) covers scraper integration at the
+The `test_e2e_*` modules of the test suite cover scraper integration at the
 pipeline level. When adding a new scraper, verify that the full pipeline passes:
 
 ```bash
-python -m unittest tests.test_e2e
+python -m unittest tests.test_e2e_truth tests.test_e2e_pack_sources
 python scripts/pipeline.py --offline
 ```
 
