@@ -236,7 +236,6 @@ def _emulator_export_items(profiles: dict) -> list[dict]:
 
 def _gap_export_rows(
     coverages: dict, gap_report: dict | None = None, db: dict | None = None,
-    profiles: dict | None = None,
 ) -> list[dict]:
     """Every gap the site reports, both layers, in one table.
 
@@ -272,10 +271,11 @@ def _gap_export_rows(
             })
     for emu_key, data in sorted((gap_report or {}).items()):
         systems = ";".join(str(s) for s in data.get("systems", []) or [])
-        categories = _profile_categories((profiles or {}).get(emu_key) or {})
+        # The category travels on the row: its path is the destination the
+        # running build reads, not the profile's, and a join on it left 940
+        # rows without one.
         rows.extend({
-            "category": categories.get(
-                (gap.get("name", ""), gap.get("path") or gap.get("name", "")), ""),
+            "category": gap.get("category", ""),
             "collection_path": "",
             "resolved_sha1": "",
             "layer": "emulator",
@@ -300,8 +300,7 @@ def _gap_export_rows(
             "expected": gap.get("identity", ""),
         } for gap in data.get("gap_details", []) or [])
         rows.extend({
-            "category": categories.get(
-                (entry.get("name", ""), entry.get("path") or entry.get("name", "")), ""),
+            "category": entry.get("category", ""),
             "collection_path": "",
             "resolved_sha1": "",
             "layer": "emulator",
@@ -324,17 +323,6 @@ def _gap_export_rows(
     for row in rows:
         unique.setdefault(tuple(sorted((k, str(v)) for k, v in row.items())), row)
     return list(unique.values())
-
-
-def _profile_categories(profile: dict) -> dict[tuple[str, str], str]:
-    """(name, path) -> the category a profile gives the entry, bios by default."""
-    found: dict[tuple[str, str], str] = {}
-    for entry in profile.get("files") or []:
-        if isinstance(entry, dict) and entry.get("name"):
-            name = str(entry["name"])
-            found.setdefault((name, str(entry.get("path") or name)),
-                             str(entry.get("category") or "bios"))
-    return found
 
 
 def _cross_reference_export_rows(coverages: dict, profiles: dict) -> list[dict]:
@@ -640,7 +628,7 @@ def generate_data_exports(
     stamp = {"commit": commit} if commit else {}
     platform_items, platform_files = _platform_export_rows(coverages, db)
     emulator_items = _emulator_export_items(profiles)
-    gap_rows = _gap_export_rows(coverages, gap_report, db, profiles)
+    gap_rows = _gap_export_rows(coverages, gap_report, db)
     cross_rows = _cross_reference_export_rows(coverages, profiles)
 
     members = data_directory_members()

@@ -119,10 +119,19 @@ class Held:
         return False
 
 
-def gap_entries(profile: dict, name: str, identity: str, unsourceable: bool) -> list[dict]:
-    """The profile entries behind one row of the gap report."""
+def gap_entries(profile: dict, row: dict, unsourceable: bool) -> list[dict]:
+    """The profile entries behind one row of the gap report.
+
+    The row names the profile's own path (``profile_path``), which tells
+    apart entries of one name the code reads in two places.
+    """
+    name = str(row.get("name", ""))
+    identity = str(row.get("identity") or "")
+    declared = str(row.get("profile_path") or "")
     named = [f for f in profile.get("files") or []
              if isinstance(f, dict) and f.get("name") == name]
+    if declared:
+        named = [f for f in named if str(f.get("path") or name) == declared] or named
     if unsourceable:
         return [f for f in named if f.get("unsourceable")] or named
     if identity:
@@ -230,8 +239,7 @@ def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> li
         rows += [(row, True) for row in data.get("unsourceable") or []]
         for row, unsourceable in rows:
             reason = str(row.get("reason") or "") if unsourceable else ""
-            for entry in gap_entries(profile, str(row.get("name", "")),
-                                      str(row.get("identity") or ""), unsourceable):
+            for entry in gap_entries(profile, row, unsourceable):
                 if not sendable(entry, reason):
                     continue
                 system = entry.get("system") or (systems[0] if len(systems) == 1 else "")

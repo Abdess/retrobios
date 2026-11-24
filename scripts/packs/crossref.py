@@ -347,6 +347,18 @@ def first_hash(entry: dict) -> str:
     return ""
 
 
+def declared_as(f: dict, fname: str) -> dict[str, str]:
+    """The category and path the profile gives the entry a row stands for.
+
+    A row's own path is the destination the running build reads, so a
+    reader that needs the profile's declaration takes it from here.
+    """
+    return {
+        "category": str(f.get("category") or "bios"),
+        "profile_path": str(f.get("path") or fname),
+    }
+
+
 def slot_key(f: dict, standalone: bool = False) -> tuple:
     """The slot a profile entry fills: its entries on one slot are the
     versions its code accepts there, and holding any of them fills it.
@@ -457,6 +469,7 @@ class _ProfileComparison:
                 "required": f.get("required", False),
                 "reason": unsourceable_reason,
                 "source_ref": f.get("source_ref", ""),
+                **declared_as(f, fname),
             }
             self.unsourceable_list.append(row)
             self.set_records.append((keys, f, False, self.unsourceable_list, row))
@@ -529,6 +542,10 @@ class _ProfileComparison:
             # The archive's own declaration names its sets: an archive
             # is a member like a loose file (Kronos' stvbios.zip).
             own = archive_entry(archive, self.profile.get("files", []))
+            # Without a declaration of its own, the archive is what its
+            # members are.
+            entry.update(declared_as(
+                {**own, "category": own.get("category") or f.get("category")}, archive))
             self.set_records.append((
                 set_keys((self.emu_name, is_standalone), own), own,
                 entry["in_repo"], self.archive_rows, entry,
@@ -578,6 +595,7 @@ class _ProfileComparison:
             "source": source,
             # What tells this file from a homonym another emulator wants.
             "identity": first_hash(f),
+            **declared_as(f, fname),
         }
         if save_root:
             entry["root"] = "save"
@@ -761,6 +779,8 @@ def _settle_launcher_places(
             "identity": entry.get("sha1") or "",
             "launcher": entry["launcher"],
             "launcher_of": entry["launcher_of"],
+            # The entry the launcher's name stands for, under that name.
+            **declared_as(entry, entry["path"]),
         })
     for data in report.values():
         data.update(_gap_counts(data["gap_details"]))

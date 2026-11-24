@@ -458,6 +458,33 @@ class TheGapsSayWhatToSupplyAndWhere(unittest.TestCase):
         self.assertEqual(row["expected"], "sha1:" + "a" * 40)
 
 
+class TheGapCategoryTravelsOnTheRow(unittest.TestCase):
+    """gaps.csv joined each row to its profile entry on the row's path, the
+    destination the running build reads: 940 emulator rows had no category
+    (a system_dir prefix, a standalone path, an unsourceable row without a
+    path, an archive of members)."""
+
+    def test_every_row_carries_the_profile_category(self):
+        from packs.crossref import cross_reference
+        from sitegen.dataexports import _gap_export_rows
+
+        profiles = {"emu": {"emulator": "Emu", "systems": ["sys"], "files": [
+            {"name": "a.bin", "path": "a.bin", "system_dir": "emu", "category": "game_data"},
+            {"name": "b.o2r", "path": "emu/b.o2r", "category": "game_data",
+             "unsourceable": "built by the user"},
+            {"name": "m.rom", "archive": "set.zip", "category": "bios_zip"},
+        ]}}
+        db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_crc32": {},
+                                       "by_sha256": {}, "by_path_suffix": {}}}
+        report = cross_reference(profiles, {}, db)
+        rows = {r["name"]: r for r in _gap_export_rows({}, report)}
+        self.assertEqual(rows["a.bin"]["destination"], "emu/a.bin")
+        self.assertEqual(rows["a.bin"]["category"], "game_data")
+        self.assertEqual(rows["b.o2r"]["category"], "game_data")
+        self.assertEqual(rows["set.zip"]["category"], "bios_zip")
+        self.assertNotIn("_profile_categories", script_source("generate_site.py"))
+
+
 
 class AGoneSourceIsSaid(unittest.TestCase):
     """citron, yuzu and suyu linked sources answering 451 or a domain now

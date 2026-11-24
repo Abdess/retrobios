@@ -530,6 +530,7 @@ def _missing_files(emulator_gaps: list[tuple[str, dict]]) -> _MissingFiles:
                     "name": g["name"],
                     "path": g.get("path") or g["name"],
                     "identity": g.get("identity", ""),
+                    "profile_path": g.get("profile_path", ""),
                     "emulators": [data["emulator"]],
                     "emu_keys": [emu_name],
                     "required": g["required"],
@@ -577,7 +578,7 @@ def _source_row(m: dict, profiles: dict, placer: sitewanted.Placer | None) -> st
         for display, key in zip(m["emulators"], m["emu_keys"])
     )
     owner = profiles[m["emu_keys"][0]]
-    declared = sitewanted.gap_entries(owner, m["name"], m["identity"], False)
+    declared = sitewanted.gap_entries(owner, m, False)
     folder = placer.folder(declared[0]) if placer and declared else ""
     upload = sitewanted.upload_href(sitewanted.UPLOAD_ROOT, folder)
     return (
@@ -752,7 +753,7 @@ def _not_collected_section(report_all: dict, profiles: dict, catalogued: dict | 
             "source_ref": u.get("source_ref", ""),
             # The wanted page's own rule, on the entries behind the row.
             "wanted": any(sendable(entry, str(u["reason"])) for entry in sitewanted.gap_entries(
-                profiles.get(emu_name) or {}, str(u["name"]), "", True)),
+                profiles.get(emu_name) or {}, u, True)),
         }
         for emu_name, data in sorted(report_all.items())
         for u in data.get("unsourceable", [])
