@@ -28,7 +28,7 @@ from model.registry import list_registered_platforms, load_data_dir_registry
 from model.targets import target_scope
 
 from packs.slotreport import report_json, report_lines
-from packs.slotscan import scan_platforms
+from packs.slotscan import decide_platforms, scan_platforms
 
 
 def main() -> int:
@@ -87,10 +87,11 @@ def main() -> int:
         names, profiles, db, args.platforms_dir, target_cores, data_registry,
     )
 
+    decided = decide_platforms(found, args.platforms_dir)
     if args.json:
-        print(json.dumps(report_json(found, collided), indent=2))
+        print(json.dumps(report_json(decided, collided), indent=2))
     else:
-        for line in report_lines(found, collided, args.platforms_dir, args.strict):
+        for line in report_lines(decided, collided, args.strict):
             print(line)
 
     return 1 if ((found or collided) and args.strict) else 0

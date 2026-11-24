@@ -6,9 +6,10 @@ from core.paths import PLATFORMS_DIR
 from core.ziptools import build_zip_contents_index
 from model.platforms import load_platform_config
 from model.registry import load_data_dir_registry
-from packs.slots import Conflict, find_conflicts
+from packs.slots import Conflict, Decision, arbitrate, find_conflicts
 from resolve.collisions import Collision, find_collisions
 from resolve.cores import resolve_platform_cores
+from resolve.nativemode import platform_mode
 from resolve.standalone import standalone_set as platform_standalone_set
 
 
@@ -59,3 +60,21 @@ def scan_platforms(
         if collisions:
             collided[name] = collisions
     return found, collided
+
+
+def decide_platforms(
+    found: dict[str, list[Conflict]], platforms_dir: str,
+) -> dict[str, tuple[str, list[Decision]]]:
+    """Each platform's verification mode and its contested slots as the pack
+    settles them.
+
+    The text and the JSON reports both read this: the JSON one named the
+    platform's file as shipped where arbitrate() serves the profile's.
+    """
+    decided: dict[str, tuple[str, list[Decision]]] = {}
+    for platform, conflicts in found.items():
+        config = load_platform_config(platform, platforms_dir)
+        mode = platform_mode(config)
+        rule = config.get("hash_rule", "")
+        decided[platform] = (mode, [arbitrate(c, mode, rule=rule) for c in conflicts])
+    return decided

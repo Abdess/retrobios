@@ -455,6 +455,25 @@ class TestArbitration(unittest.TestCase):
         served = slotreport.format_decision(packs_slots.arbitrate(self._conflict(), "existence"))
         self.assertIn("both are satisfied", served)
 
+    def test_the_json_names_the_file_the_text_serves(self):
+        """--json named the platform's file as shipped where arbitrate()
+        serves the profile's, and carried no ground for it."""
+        for mode, origin in (("existence", "profile"), ("md5", "platform")):
+            with self.subTest(mode=mode):
+                decision = packs_slots.arbitrate(self._conflict(), mode)
+                decided = {"dolphin-host": (mode, [decision])}
+                [row] = slotreport.report_json(decided, {})["conflicts"]["dolphin-host"]
+                self.assertEqual(decision.winner.origin, origin)
+                self.assertEqual(row["ships"], decision.winner.local_path)
+                self.assertEqual(row["ships_evidence"], decision.winner.status)
+                self.assertEqual(row["reason"], decision.reason)
+                self.assertEqual(row["serves_both"], decision.serves_both)
+                [line] = [
+                    line for line in slotreport.report_lines(decided, {}, strict=False)
+                    if line.startswith("  ")
+                ]
+                self.assertIn(row["ships"], line)
+
     def test_each_emulator_is_given_the_file_it_reads(self):
         """Recalbox's neocdz.zip line said geolith reads the archive fbneo
         reads, while geolith pins another one."""

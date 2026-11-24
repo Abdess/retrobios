@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-from model.platforms import load_platform_config
-from packs.slots import ADDRESSEE, Claim, Conflict, Decision, arbitrate
+from packs.slots import ADDRESSEE, Claim, Conflict, Decision
 from resolve.collisions import Collision
 from resolve.localfile import resolution_is_hash_exact
-from resolve.nativemode import platform_mode
 
 
 def _pinned_elsewhere(claims: list[Claim], winner: str | None) -> set[str]:
@@ -92,7 +90,7 @@ def format_conflict(conflict: Conflict) -> str:
 
 
 def report_json(
-    found: dict[str, list[Conflict]], collided: dict[str, list[Collision]],
+    decided: dict[str, tuple[str, list[Decision]]], collided: dict[str, list[Collision]],
 ) -> dict:
     """The --json document: every contested slot and every doubled destination."""
     # --strict gates on collisions too, so a document that carries only
@@ -101,18 +99,20 @@ def report_json(
         "conflicts": {
             platform: [
                 {
-                    "destination": c.destination,
-                    "ships": c.platform_claim.local_path,
-                    "ships_evidence": c.platform_claim.status,
-                    "emulators": c.emulators,
+                    "destination": d.conflict.destination,
+                    "ships": d.winner.local_path,
+                    "ships_evidence": d.winner.status,
+                    "reason": d.reason,
+                    "serves_both": d.serves_both,
+                    "emulators": d.conflict.emulators,
                     "expected": [
                         {"file": path, "evidence": status, "emulators": emulators}
-                        for path, emulators, status in c.files_read()
+                        for path, emulators, status in d.conflict.files_read()
                     ],
                 }
-                for c in conflicts
+                for d in decisions
             ]
-            for platform, conflicts in found.items()
+            for platform, (_mode, decisions) in decided.items()
         },
         "collisions": {
             platform: [_collision_json(c) for c in platform_collisions]
@@ -122,21 +122,18 @@ def report_json(
 
 
 def report_lines(
-    found: dict[str, list[Conflict]], collided: dict[str, list[Collision]],
-    platforms_dir: str, strict: bool,
+    decided: dict[str, tuple[str, list[Decision]]], collided: dict[str, list[Collision]],
+    strict: bool,
 ) -> list[str]:
     """The text report: each decision with its ground, then the totals."""
     lines: list[str] = []
     fixable = 0
-    for platform, conflicts in found.items():
-        config = load_platform_config(platform, platforms_dir)
-        mode = platform_mode(config)
-        lines.append(f"{platform}: {len(conflicts)} contradicted [{mode}]")
-        for conflict in conflicts:
-            decision = arbitrate(conflict, mode, rule=config.get("hash_rule", ""))
+    for platform, (mode, decisions) in decided.items():
+        lines.append(f"{platform}: {len(decisions)} contradicted [{mode}]")
+        for decision in decisions:
             fixable += decision.serves_both
             lines.append(f"  {format_decision(decision)}")
-    total = sum(len(c) for c in found.values())
+    total = sum(len(decisions) for _mode, decisions in decided.values())
     for platform, collisions in collided.items():
         lines.append(f"{platform}: {len(collisions)} destinations declared twice")
         lines.extend(f"  {format_collision(collision)}" for collision in collisions)
