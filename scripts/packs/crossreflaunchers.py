@@ -9,11 +9,10 @@ from model.launcherrecords import record_emulators
 from model.profiles import lists_files
 from model.registry import list_registered_platforms
 from resolve.content import name_match_size_ok
-from resolve.launchers import (
-    LauncherLayer,
-    bound_launchers,
+from resolve.launcherlayer import LauncherLayer
+from resolve.launcherconfig import bound_launchers, launcher_unproven
+from resolve.launcherplaces import (
     catalogued_model_files,
-    launcher_unproven,
     name_settings,
     record_directories as launcher_directories,
     record_names as launcher_names,

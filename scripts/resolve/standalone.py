@@ -199,7 +199,7 @@ class _StandaloneLaunches:
 
         # The layout folders a search setting stands for (standalone_pools):
         # bound, the launcher passes the setting and the default is not read.
-        from resolve.launchers import pool_folders as _pool_folders
+        from resolve.launcherconfig import pool_folders as _pool_folders
 
         pool_folders = {v.strip("/") for v in _pool_folders(profile).values()} - {""}
         return cls(

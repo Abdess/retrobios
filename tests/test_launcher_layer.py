@@ -24,7 +24,8 @@ import yaml
 from model.profiles import emulator_profiles_cache, load_emulator_profiles
 from model.platforms import load_platform_config
 from resolve.launches import PlatformLaunches
-from resolve.launchers import LauncherLayer, launcher_places, suffixed_stem
+from resolve.launcherlayer import LauncherLayer
+from resolve.launcherplaces import launcher_places, suffixed_stem
 from packs.gaps import find_undeclared_files
 from packs.coverage import verify_platform
 
@@ -396,12 +397,12 @@ class LauncherLayerTest(unittest.TestCase):
                 self.assertEqual(launcher_places(self.config, self.profiles)[2].paths, ("sub/sub/fix.bin",))
 
     def test_every_extractor_spelling_of_the_bios_folder_is_known(self) -> None:
-        from resolve import launchers
+        from resolve.launcherplaces import BIOS_ROOT_TOKENS
         from scraper import emudeck_launchers, retrodeck_launchers, retropie_reader
 
         for token in (emudeck_launchers.BIOS, retrodeck_launchers.BIOS,
                       retropie_reader.BIOSDIR):
-            self.assertIn(token, launchers.BIOS_ROOT_TOKENS)
+            self.assertIn(token, BIOS_ROOT_TOKENS)
 
     def test_no_place_is_filled_twice(self) -> None:
         added = [u["path"] for u in self._report() if u.get("launcher")]

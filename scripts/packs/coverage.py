@@ -31,7 +31,7 @@ from packs.verdicts import (
 )
 from resolve.categories import BIOS, EntryCategories
 from resolve.cores import platform_scope_systems, resolve_platform_cores
-from resolve.launchers import launcher_unproven
+from resolve.launcherconfig import launcher_unproven
 from resolve.nativemode import digest_algorithm, platform_mode, reads_file_contents
 from resolve.validation import (
     accepted_hashes,

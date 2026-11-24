@@ -13,7 +13,8 @@ from packs.paths import core_save_folder
 from resolve.archives import archive_entry, archive_members
 from resolve.cores import resolve_platform_cores
 from resolve.directories import expand_directory_entries
-from resolve.launchers import LauncherLayer, declared_destinations, held_record
+from resolve.launcherlayer import LauncherLayer, held_record
+from resolve.launchers import declared_destinations
 from resolve.layout import system_dir_path
 from resolve.localfile import resolve_local_file
 from resolve.nativemode import hash_mismatch_excludes_file, platform_mode

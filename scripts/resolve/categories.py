@@ -22,7 +22,8 @@ from core.hashing import declared_hashes, parse_hash_list
 from resolve.reconcile import (
     HASH_FIELDS, NativeSystem, comparable, contradicts, entry_names,
 )
-from resolve.launchers import bound_launchers, record_names as launcher_names
+from resolve.launcherconfig import bound_launchers
+from resolve.launcherplaces import record_names as launcher_names
 
 
 def _tails(path: str) -> list[str]:

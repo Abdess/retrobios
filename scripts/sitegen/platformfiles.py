@@ -110,8 +110,8 @@ def _served_line(f: dict, declared_sha1: str = "") -> str:
 
 def _launcher_refs(config: dict) -> dict[str, list[str]]:
     """Entry name, casefolded -> each launcher record that opens it, rendered."""
-    from resolve.launchers import record_names as launcher_names
-    from resolve.launchers import bound_launchers
+    from resolve.launcherplaces import record_names as launcher_names
+    from resolve.launcherconfig import bound_launchers
     from sitegen.sources import launcher_ref_markdown, list_source
 
     # Every scraper reads its launchers in the repository and at the revision
@@ -140,7 +140,7 @@ def launcher_unproven_section(config: dict) -> list[str]:
     A config file is proof only when the code installing it and the code
     reading it are shown: these records place no file.
     """
-    from resolve.launchers import launcher_unproven
+    from resolve.launcherconfig import launcher_unproven
     from sitegen.sources import launcher_ref_markdown, list_source
 
     rows = launcher_unproven({str(config.get("_key") or ""): config}, _site_profiles())

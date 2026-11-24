@@ -1346,7 +1346,7 @@ class MacBootDisksOnKnulli(unittest.TestCase):
         # mameGenerator.py and libretroMAMEConfig.py pass the boot disk as
         # -hard, the brief name of the LC III's one hard disk image
         # (harddriv.h:43, diimage.cpp:1131-1165, maclc3.cpp:266).
-        from resolve.launchers import bound_launchers
+        from resolve.launcherconfig import bound_launchers
 
         config = load_platform_config("knulli", str(REPO_ROOT / "platforms"))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))

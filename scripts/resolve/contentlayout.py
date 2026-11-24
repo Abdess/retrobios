@@ -303,7 +303,7 @@ def _libretro_content_layout(
     # path with stand for these: libretro MAME hands MAME
     # <system>/mame/bios unless the content's command line names
     # another (retro_init.cpp Set_Path_Option, execute_game_cmd).
-    from resolve.launchers import pool_folders
+    from resolve.launcherconfig import pool_folders
 
     pools = set(pool_folders({"standalone_pools": view.get("libretro_pools")}).values())
     out: list = []

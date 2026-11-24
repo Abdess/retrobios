@@ -161,7 +161,8 @@ def standalone_bindings_for(
 
     ``systems`` are those the entry is launched for (entry_launch_systems).
     """
-    from resolve.launchers import directory_handles, pool_folders, standalone_bindings
+    from resolve.launcherconfig import directory_handles, pool_folders
+    from resolve.launchers import standalone_bindings
 
     declared = directory_handles(profile)
     pools = pool_folders(profile)

@@ -19,14 +19,14 @@ from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
 from resolve.categories import EntryCategories
 from resolve.standalone import platform_launches
-from resolve.launchers import (
+from resolve.launcherconfig import (
     bound_launchers,
     config_evidence,
     config_target,
-    handed_directories,
-    launcher_places,
     launcher_unproven,
 )
+from resolve.launchers import handed_directories
+from resolve.launcherplaces import launcher_places
 from profiling.resolver import _check_build_refs
 from profiling.repos import shipped_build_holders
 from scraper.retrobat_launchers import _choices_apart

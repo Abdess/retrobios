@@ -11,7 +11,8 @@ from packs.crossref import (
 )
 from packs.crossrefscope import TreeScope
 from packs.supplemental import build_supplemental_index
-from resolve.launchers import LauncherLayer, declared_destinations
+from resolve.launcherlayer import LauncherLayer
+from resolve.launchers import declared_destinations
 
 
 def scope_gaps(
