@@ -267,7 +267,8 @@ input is missing, so a partial checkout still runs green:
 `test_slots`, `test_switch_nca`, `test_system_pack_parity`,
 `test_system_selection`, `test_target_names`, `test_torrentzip`,
 `test_tui_choices`, `test_validate_pr`, `test_validated_choice`,
-`test_variant_identity`, `test_verify_emulator_evidence`. Four of them hold the
+`test_variant_identity`, `test_variant_naming`,
+`test_verify_emulator_evidence`. Four of them hold the
 collection or the packs as a whole:
 
 **test_archive_build.** Reads `database.json` and `recipes/archives.json` and

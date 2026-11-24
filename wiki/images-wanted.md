@@ -73,6 +73,6 @@ the Recalbox page.
 ## A multi-part pack extracted
 
 A file manager showing two downloaded parts and the single folder both were
-extracted into. For Get your files.
+extracted into. For the download pages (`get/<platform>/`).
 
 **Alt text**: Two downloaded pack parts and the one folder both were extracted into.

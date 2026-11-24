@@ -1,6 +1,6 @@
 ---
 level: setup
-order: 105
+order: 95
 terms: accessibility, screen reader, keyboard, colour, contrast
 ---
 
@@ -52,8 +52,8 @@ Website:
 
 Open an issue at https://github.com/Abdess/retrobios/issues/new (the **Report a problem** link at the bottom of each page leads there). Include:
 
-- the page address, or the installer command you ran and what `python3 install.py --version` prints,
-- your system, browser or terminal, and any assistive technology (screen reader, magnifier, controller, voice control),
-- what you expected and what happened.
+- the page address, or the installer command that was run and what `python3 install.py --version` prints,
+- the system, browser or terminal, and any assistive technology in use (screen reader, magnifier, controller, voice control),
+- what was expected and what happened.
 
 A security problem goes through the private channel described in [SECURITY.md](https://github.com/Abdess/retrobios/blob/main/SECURITY.md).
