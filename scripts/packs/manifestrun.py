@@ -13,7 +13,7 @@ from model.registry import load_platform_registry
 from model.safeparse import require_yaml
 from packs.datatrees import uncached_warning
 from packs.manifest import generate_install_list
-from packs.naming import pack_narrowings, platform_target
+from packs.naming import manifest_suffix, platform_target
 from packs.scope import platform_list_version
 from packs.standalone import STANDALONE_DIR, standalone_copies
 from packs.variants import run_variants, skip_empty_truth
@@ -116,16 +116,12 @@ def run_manifest_mode(
                     uncached_out=uncached,
                 )
                 report_uncached(uncached, getattr(args, "uncached_trees", None))
-                narrow_suffix = "".join(
-                    tag.lower()
-                    for tag, _label in pack_narrowings(
-                        source,
-                        getattr(args, "regions", None),
-                        platform_target(representative, args.target, args.platforms_dir),
-                        False,
-                        required_only,
-                        no_game_data=getattr(args, "no_game_data", False),
-                    )
+                narrow_suffix = manifest_suffix(
+                    source,
+                    getattr(args, "regions", None),
+                    platform_target(representative, args.target, args.platforms_dir),
+                    required_only,
+                    no_game_data=getattr(args, "no_game_data", False),
                 )
                 out_path = os.path.join(
                     args.output_dir,
@@ -137,7 +133,8 @@ def run_manifest_mode(
                     f"{manifest['total_size']} bytes, "
                     f"{manifest['total_omitted']} safely omitted"
                 )
-                for plat in group_platforms if layouts else ():
+                # The layouts file carries no tag: only the default list writes it.
+                for plat in group_platforms if layouts and not narrow_suffix else ():
                     print(f"  {write_standalone_layouts(args.output_dir, plat, layouts)}: "
                           f"{len(layouts)} standalone builds")
                 # Create aliases for grouped platforms (e.g., lakka -> retroarch)

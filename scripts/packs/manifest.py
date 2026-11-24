@@ -51,6 +51,7 @@ from packs.manifestentry import (
     record_unplaceable,
 )
 from packs.manifestselect import SelectionIndex
+from packs.naming import manifest_suffix
 from packs.paths import platform_destination, save_layout
 from packs.scope import pack_sections, platform_list_version, system_titles
 from packs.standalone import standalone_copies, standalone_layouts
@@ -782,15 +783,19 @@ def generate_install_list(
     (install/standalone/<platform>.json) and fetched only by a run given
     --standalone.
 
-    A manifest narrowed by a target, a case fold or --one-per-slot is no
-    list install.py reads by default and gets neither.
+    A manifest whose name carries a narrowing tag (manifest_suffix), or
+    built under a case fold override, is no list install.py reads by default
+    and gets neither.
     """
     settings = _ManifestSettings(**options)
     built: dict = {}
     result = generate_manifest(platform_name, platforms_dir, db, bios_dir, registry_path,
                                build_out=built, **options)
-    if (settings.source != "full" or settings.target_cores is not None
-            or settings.fold_case is not None or settings.one_per_slot):
+    narrowed = manifest_suffix(
+        settings.source, settings.regions, settings.target_name, settings.required_only,
+        one_per_slot=settings.one_per_slot, no_game_data=settings.no_game_data,
+    )
+    if narrowed or settings.target_cores is not None or settings.fold_case is not None:
         return result
     truth_options: InstallListOptions = {**options, "source": "truth"}
     truth = generate_manifest(

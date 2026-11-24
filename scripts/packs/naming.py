@@ -58,6 +58,31 @@ def pack_narrowings(
     return applied
 
 
+def manifest_suffix(
+    source: str,
+    regions: list[str] | None,
+    target_name: str | None,
+    required_only: bool,
+    *,
+    one_per_slot: bool = False,
+    no_game_data: bool = False,
+) -> str:
+    """The narrowing tags an install manifest's file name carries.
+
+    Empty names the default list install.py reads. Only that run builds the
+    truth list and writes standalone/<platform>.json, which carries no tag:
+    a --required-only run rewrote the layouts every --standalone install
+    reads.
+    """
+    return "".join(
+        tag.lower()
+        for tag, _label in pack_narrowings(
+            source, regions, target_name, one_per_slot, required_only,
+            no_game_data=no_game_data,
+        )
+    )
+
+
 def _target_tag(target_name: str) -> str:
     """Filename tag for a hardware target.
 
