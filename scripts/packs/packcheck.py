@@ -12,7 +12,7 @@ from model.database import load_database
 from model.profiles import load_emulator_profiles
 from model.registry import list_release_pack_platforms, load_data_dir_registry
 from model.targets import target_scope
-from packs.integrity import check_pack_conformance
+from packs.platformcheck import check_pack_conformance
 from packs.naming import expected_pack_names
 from packs.variants import ALL_VARIANTS
 

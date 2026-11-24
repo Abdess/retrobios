@@ -17,7 +17,7 @@ from pathlib import Path
 
 from model.database import declared_records, record_for_hash, records_for_hash
 from packs.crossrefsource import entry_source
-from packs.integrity import _repo_satisfies_declaration
+from packs.packhashes import _repo_satisfies_declaration
 from resolve.lookup import held_record_for
 from resolve.acceptance import _variant_candidates
 

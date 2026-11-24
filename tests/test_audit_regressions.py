@@ -37,7 +37,7 @@ from scripts.resolve import regionaudit, regions
 from scripts.resolve.localfile import resolve_local_file
 from scripts.core.ziptools import safe_extract_zip
 from scripts.packs.extras import _emulator_region_group
-from scripts.packs.integrity import verify_pack_against_platform
+from scripts.packs.platformcheck import verify_pack_against_platform
 from scripts.packs.targets import generate_target_manifests
 
 HAS_JSONSCHEMA = jsonschema is not None
@@ -1471,7 +1471,7 @@ class OneBaselineVerdict(unittest.TestCase):
         without d32.rom is one the builder left out on purpose."""
         import hashlib
 
-        from scripts.packs.integrity import _intentional_hash_exclusion
+        from scripts.packs.platformcheck import _intentional_hash_exclusion
 
         entry = {"name": "dragon32.zip", "zipped_file": "d32.rom", "md5": ""}
         with tempfile.TemporaryDirectory() as directory:
@@ -6267,7 +6267,7 @@ class ZippedFileMd5IsParsedOnce(unittest.TestCase):
         for module in ("resolve/acceptance.py", "verify.py"):
             source = script_source(module)
             self.assertIn("parse_hash_list(", source, module)
-        self.assertIn("inner_rom_data_check(", script_source("packs/integrity.py"))
+        self.assertIn("inner_rom_data_check(", script_source("packs/packhashes.py"))
 
 
 
@@ -6960,7 +6960,7 @@ class ThePackCheckAppliesTheFrontendRule(unittest.TestCase):
         import hashlib
         import zipfile
 
-        from scripts.packs.integrity import _check_member_hash
+        from scripts.packs.packhashes import _check_member_hash
 
         payload = b"revision B"
         entry = {

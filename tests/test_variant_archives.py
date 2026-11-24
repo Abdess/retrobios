@@ -18,7 +18,7 @@ from pathlib import Path
 
 from core.ziptools import build_zip_contents_index, zip_members
 from packs.supplemental import archive_members
-from packs.integrity import _same_content
+from packs.platformcheck import _same_content
 from sitegen.cards import _release_name
 from sitegen.lookup import _archive_member_records
 

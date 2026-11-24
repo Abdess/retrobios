@@ -17,7 +17,8 @@ from core.options import reject_unknown
 from model.registry import list_registered_platforms
 from model.targets import load_target_config
 from packs.archive import write_generated_member
-from packs.integrity import check_pack_conformance, verify_pack
+from packs.platformcheck import check_pack_conformance
+from packs.integrity import verify_pack
 from packs.naming import expected_pack_names, pack_archives
 from packs.scope import annotate_pack_systems
 

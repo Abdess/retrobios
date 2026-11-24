@@ -34,7 +34,7 @@ class OnlyThePlatformsCores(unittest.TestCase):
         self.assertTrue(regions.build_region_index(PROFILES)["bios_CD_E.bin"]["has_untagged"])
 
     def test_every_platform_site_reads_it(self):
-        for module in ("verify.py", "generate_pack.py", "packs/integrity.py"):
+        for module in ("verify.py", "generate_pack.py", "packs/platformcheck.py"):
             source = script_source(module)
             self.assertNotIn("build_region_index(emu_profiles", source, module)
             self.assertNotIn("build_region_index(profiles)", source, module)

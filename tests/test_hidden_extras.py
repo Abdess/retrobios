@@ -68,7 +68,7 @@ class TheIntegrityCheckFoldsCaseLikeTheBuilder(unittest.TestCase):
     of the two passed step 6."""
 
     def test_case_folding_reads_the_platform(self):
-        source = (REPO_ROOT / "scripts" / "packs" / "integrity.py").read_text(encoding="utf-8")
+        source = (REPO_ROOT / "scripts" / "packs" / "platformcheck.py").read_text(encoding="utf-8")
         compact = " ".join(source.split())
         self.assertRegex(
             compact,

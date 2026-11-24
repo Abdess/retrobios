@@ -96,7 +96,7 @@ class PackIntegrityChecksTheMember(unittest.TestCase):
     def _verdict(self, members: dict[str, bytes], entry: dict) -> str | None:
         import io
 
-        from packs.integrity import _check_member_hash
+        from packs.packhashes import _check_member_hash
 
         inner = io.BytesIO()
         with zipfile.ZipFile(inner, "w") as zf:
@@ -128,7 +128,7 @@ class PackIntegrityChecksTheMember(unittest.TestCase):
         import contextlib
         import io
 
-        from packs.integrity import _check_member_hash
+        from packs.packhashes import _check_member_hash
 
         pack = io.BytesIO()
         with zipfile.ZipFile(pack, "w") as zf:

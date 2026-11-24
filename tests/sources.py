@@ -23,7 +23,7 @@ COMMANDS = {
         "packs/manifest.py", "packs/manifestbuild.py", "packs/finalize.py", "packs/outputdir.py", "packs/variants.py",
         "packs/manifestrun.py", "packs/packcheck.py", "packs/runscope.py", "packs/platformrun.py",
         "packs/packoptions.py", "packs/packmodes.py", "packs/packcounts.py",
-        "packs/emulatorentries.py", "packs/integrity.py",
+        "packs/emulatorentries.py", "packs/integrity.py", "packs/packhashes.py", "packs/platformcheck.py",
         "packs/hashinput.py", "packs/hashlookup.py", "packs/executable.py",
         "packs/declsettle.py",
     ),

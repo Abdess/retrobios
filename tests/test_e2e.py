@@ -5429,7 +5429,7 @@ struct BurnDriver BurnDrvneogeo = {
         """Pack verification reproduces the native md5 check per member."""
         import tempfile
 
-        from packs.integrity import verify_pack_against_platform
+        from packs.platformcheck import verify_pack_against_platform
 
         with tempfile.TemporaryDirectory() as tmpdir:
             plat_dir, bios_root, out_dir, db, h, hl = self._make_hash_zip_fixture(
@@ -5452,7 +5452,7 @@ struct BurnDriver BurnDrvneogeo = {
         """Pack verification passes when member bytes match declared md5."""
         import tempfile
 
-        from packs.integrity import verify_pack_against_platform
+        from packs.platformcheck import verify_pack_against_platform
 
         with tempfile.TemporaryDirectory() as tmpdir:
             plat_dir, bios_root, out_dir, db, h, hl = self._make_hash_zip_fixture(
@@ -5474,7 +5474,7 @@ struct BurnDriver BurnDrvneogeo = {
         import tempfile
 
         from packs.platformpack import generate_pack
-        from packs.integrity import verify_pack_against_platform
+        from packs.platformcheck import verify_pack_against_platform
 
         profiles = {"eng": {"emulator": "Eng", "type": "game", "cores": ["eng"],
                             "systems": ["arcade-sys"],
@@ -5724,7 +5724,7 @@ struct BurnDriver BurnDrvneogeo = {
         import hashlib as hl
         import tempfile
 
-        from packs.integrity import _check_member_hash
+        from packs.packhashes import _check_member_hash
 
         rom = b"inner rom bytes"
         rom_md5 = hl.md5(rom).hexdigest()
@@ -6427,13 +6427,13 @@ struct BurnDriver BurnDrvneogeo = {
         """
         import inspect
 
-        from packs import integrity as packverify
+        from packs import platformcheck
         from packs.naming import pack_narrowings, pack_variant
 
-        source = inspect.getsource(packverify.verify_pack_against_platform)
+        source = inspect.getsource(platformcheck.verify_pack_against_platform)
         self.assertIn(
             "target_cores",
-            inspect.signature(packverify.verify_pack_against_platform).parameters,
+            inspect.signature(platformcheck.verify_pack_against_platform).parameters,
             "the pack verifier takes no target, so it cannot narrow by one",
         )
         self.assertIn(
@@ -6687,7 +6687,7 @@ struct BurnDriver BurnDrvneogeo = {
         import typing
 
         from packs.platformpack import generate_pack
-        from packs.integrity import verify_pack_against_platform
+        from packs.platformcheck import verify_pack_against_platform
 
         self._create_region_fixtures()
         profiles = self._region_profiles()
@@ -6775,7 +6775,7 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertIn("All are included", text)
 
     def test_verify_agrees_with_region_filtered_pack(self):
-        from packs.integrity import verify_pack_against_platform
+        from packs.platformcheck import verify_pack_against_platform
 
         out = self._region_pack(regions=["north-america"])
         result = verify_pack_against_platform(
@@ -6790,7 +6790,7 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertTrue(ok, errors)
 
     def test_verify_reports_the_gap_without_the_region_filter(self):
-        from packs.integrity import verify_pack_against_platform
+        from packs.platformcheck import verify_pack_against_platform
 
         out = self._region_pack(regions=["north-america"])
         result = verify_pack_against_platform(

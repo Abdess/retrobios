@@ -18,7 +18,7 @@ from unittest import mock
 
 from packs import platformrun
 from packs import finalize as packs_finalize
-from packs import integrity as packverify
+from packs import platformcheck
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -75,7 +75,7 @@ class ConformanceUsesTheRunDirectories(unittest.TestCase):
                 ), \
                 mock.patch.object(packs_finalize, "inject_manifest"), \
                 mock.patch.object(packs_finalize, "_target_cores_for", return_value=None), \
-                mock.patch.object(packverify, "verify_pack_against_platform", record):
+                mock.patch.object(platformcheck, "verify_pack_against_platform", record):
             packs_finalize.verify_and_finalize_packs(
                 str(out), {"files": {}, "indexes": {}},
                 platforms_dir="fixture-platforms",
@@ -110,7 +110,7 @@ class TheBuildChecksEachVariantAsVerifyPacksDoes(unittest.TestCase):
                 ), \
                 mock.patch.object(packs_finalize, "inject_manifest"), \
                 mock.patch.object(packs_finalize, "_target_cores_for", return_value=None), \
-                mock.patch.object(packverify, "verify_pack_against_platform", record):
+                mock.patch.object(platformcheck, "verify_pack_against_platform", record):
             packs_finalize.verify_and_finalize_packs(
                 tmp, {"files": {}, "indexes": {}}, platforms_dir="fixture-platforms",
             )

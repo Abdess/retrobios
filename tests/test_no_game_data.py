@@ -34,7 +34,7 @@ from packs import archive as packs_archive
 from packs import manifest as packs_manifest
 from packs import platformpack
 import install
-from packs import integrity as packverify
+from packs import platformcheck
 from packs import coverage
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -190,14 +190,14 @@ class PackNarrowing(_Fixture):
         )
         self.assertEqual(set(result["pack_destinations"]), members)
         self.assertTrue(any("doom/doom1.wad" in line for line in result["left_out"]))
-        checked = packverify.verify_pack_against_platform(
+        checked = platformcheck.verify_pack_against_platform(
             zip_path, "handheld", str(self.platforms), db=self.db,
             emulators_dir=str(self.emulators), emu_profiles=PROFILES,
             no_game_data=True,
         )
         self.assertTrue(checked[0], checked[3])
         # Held to the full list, the narrowed pack is short of the game data.
-        full = packverify.verify_pack_against_platform(
+        full = platformcheck.verify_pack_against_platform(
             zip_path, "handheld", str(self.platforms), db=self.db,
             emulators_dir=str(self.emulators), emu_profiles=PROFILES,
         )

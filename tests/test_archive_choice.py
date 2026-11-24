@@ -141,7 +141,7 @@ class IntegrityChecksEveryMember(unittest.TestCase):
     def test_a_missing_member_is_an_error_when_the_repository_holds_it(self):
         import yaml
 
-        from packs import integrity as packverify
+        from packs import platformcheck
 
         roms = {f"r{i}.bin": bytes([i]) * 32 for i in range(3)}
         with tempfile.TemporaryDirectory() as tmp:
@@ -172,7 +172,7 @@ class IntegrityChecksEveryMember(unittest.TestCase):
                 zf.writestr("r0.bin", roms["r0.bin"])
             with zipfile.ZipFile("pack.zip", "w") as zf:
                 zf.writestr("bios/set.zip", inner.getvalue())
-            ok, *_rest, = packverify.verify_pack_against_platform(
+            ok, *_rest, = platformcheck.verify_pack_against_platform(
                 "pack.zip", "p", "platforms", db, emulators_dir="emulators", emu_profiles={})
             errors = _rest[2]
             self.assertFalse(ok)

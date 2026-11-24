@@ -22,7 +22,7 @@ import yaml
 from packs import naming
 from packs import platformpack
 
-from packs import integrity as packverify
+from packs import platformcheck
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -69,7 +69,7 @@ class CoreFilesAsTheBuilderPlacesThem(unittest.TestCase):
         with zipfile.ZipFile("pack.zip", "w") as zf:
             zf.writestr("fuse/trdos.rom", b"platform dump")
             zf.writestr("core/other.rom", other)
-        return packverify.verify_pack_against_platform(
+        return platformcheck.verify_pack_against_platform(
             "pack.zip", "p", "platforms", self.db, emulators_dir="emulators",
             emu_profiles=self.profiles,
         )
@@ -122,7 +122,7 @@ class ARefusedPinLeavesItsPathToTheCore(unittest.TestCase):
     def _check(self, member: bytes) -> tuple:
         with zipfile.ZipFile("pack.zip", "w") as zf:
             zf.writestr("dc/naomi.zip", member)
-        return packverify.verify_pack_against_platform(
+        return platformcheck.verify_pack_against_platform(
             "pack.zip", "p", "platforms", self.db, emulators_dir="emulators",
             emu_profiles=self.profiles,
         )
@@ -200,7 +200,7 @@ class NarrowedPacksAgainstTheirOwnList(unittest.TestCase):
             return zip_path, set(zf.namelist()) - {"README.txt"}
 
     def _check(self, zip_path: str, source: str, required: bool) -> tuple:
-        return packverify.verify_pack_against_platform(
+        return platformcheck.verify_pack_against_platform(
             zip_path, "p", "platforms", self.db, emulators_dir="emulators",
             emu_profiles=self.profiles, source=source, required_only=required,
         )

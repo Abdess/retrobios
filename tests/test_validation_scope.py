@@ -21,7 +21,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 class ValidationIndexScope(unittest.TestCase):
     def test_no_index_over_every_profile(self):
         pattern = re.compile(r"build_validation_index\(\s*(emu_)?profiles\s*\)")
-        for name in ("verify.py", "generate_pack.py", "packs/integrity.py", "packs/extras.py"):
+        for name in (
+            "verify.py", "generate_pack.py", "packs/integrity.py", "packs/packhashes.py",
+            "packs/platformcheck.py", "packs/extras.py",
+        ):
             source = script_source(name)
             with self.subTest(module=name):
                 self.assertIsNone(pattern.search(source))
