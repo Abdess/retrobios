@@ -60,7 +60,7 @@ class RealListParity(unittest.TestCase):
         cls.config = staticmethod(
             lambda plat: load_platform_config(plat, str(REPO_ROOT / "platforms")))
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
-        cls.zip_contents = build_zip_contents_index(cls.db)
+        cls.zip_contents = build_zip_contents_index(cls.db, REPO_ROOT)
         cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         cls.by_path = {entry["path"]: sha1 for sha1, entry in cls.db["files"].items()}
         cls.platforms = list_registered_platforms(str(REPO_ROOT / "platforms"))

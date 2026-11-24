@@ -207,7 +207,7 @@ class DirectoryMembersNameTheirEmulator(unittest.TestCase):
         if cls.SHA1 not in cls.db.get("files", {}):
             raise unittest.SkipTest("the collection does not hold the alephone plugin")
         cls.profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["alephone"]
-        cls.consumers = FileConsumers(cls.db, build_zip_contents_index(cls.db))
+        cls.consumers = FileConsumers(cls.db, build_zip_contents_index(cls.db, REPO_ROOT))
         cls.consumers.add_emulators({"alephone": cls.profile})
 
     def test_a_member_names_the_emulator_and_its_directory_entry(self):

@@ -40,7 +40,7 @@ class DeclaredFilesResolveWithoutDataCaches(unittest.TestCase):
         os.chdir(REPO_ROOT)
         try:
             db = load_database("database.json")
-            zip_contents = build_zip_contents_index(db)
+            zip_contents = build_zip_contents_index(db, REPO_ROOT)
             offenders = []
             for platform in list_registered_platforms(str(platforms_dir)):
                 config = load_platform_config(platform, str(platforms_dir))

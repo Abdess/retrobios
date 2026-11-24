@@ -821,7 +821,7 @@ class ManifestFollowsTheArbitration(unittest.TestCase):
         config = load_platform_config("retroarch", str(repo / "platforms"))
         profiles = load_emulator_profiles(str(repo / "emulators"))
         overrides = packs_slots.pack_overrides(
-            config, profiles, db, build_zip_contents_index(db),
+            config, profiles, db, build_zip_contents_index(db, repo),
             load_data_dir_registry(str(repo / "platforms")),
         )
         # RetroArch serves a core's own copy at contested slots (ATARIOSB.ROM,

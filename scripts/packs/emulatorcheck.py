@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+from model.dbpaths import collection_root
 import os
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -510,7 +512,7 @@ def verify_emulator(
     # The member index only answers a zipped_file entry, and decompressing
     # every archive took 23 of the 24 seconds of a run that had none.
     zip_contents = (
-        build_zip_contents_index(db)
+        build_zip_contents_index(db, collection_root(Path(BIOS_DIR)))
         if any(f.get("zipped_file") for _name, profile in selected
                for f in profile.get("files") or [])
         else {}

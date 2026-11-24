@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from core.paths import PLATFORMS_DIR
+from pathlib import Path
+from model.dbpaths import collection_root
+from core.paths import BIOS_DIR, PLATFORMS_DIR
 from core.ziptools import build_zip_contents_index
 from model.platforms import load_platform_config
 from model.registry import load_data_dir_registry
@@ -31,7 +33,7 @@ def scan_platform(
         db,
         config.get("base_destination", ""),
         platform_launches(config, profiles),
-        build_zip_contents_index(db) if zip_index is None else zip_index,
+        build_zip_contents_index(db, collection_root(Path(BIOS_DIR))) if zip_index is None else zip_index,
         load_data_dir_registry(platforms_dir) if data_registry is None else data_registry,
     )
 
@@ -41,7 +43,7 @@ def scan_platforms(
     target_cores: dict[str, set[str] | None], data_registry: dict,
 ) -> tuple[dict[str, list[Conflict]], dict[str, list[Collision]]]:
     """The platforms with a contested destination, and those declaring one twice."""
-    zip_index = build_zip_contents_index(db)
+    zip_index = build_zip_contents_index(db, collection_root(Path(BIOS_DIR)))
     found: dict[str, list[Conflict]] = {}
     collided: dict[str, list[Collision]] = {}
     for name in names:

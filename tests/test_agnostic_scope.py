@@ -163,7 +163,7 @@ class BundledHashIsProof(unittest.TestCase):
         os.chdir(REPO_ROOT)
         self.addCleanup(os.chdir, previous)
         db = load_database("database.json")
-        zips = build_zip_contents_index(db)
+        zips = build_zip_contents_index(db, REPO_ROOT)
         registry = load_data_dir_registry("platforms")
         wrong = []
         for name, profile in sorted(load_emulator_profiles("emulators", skip_aliases=False).items()):

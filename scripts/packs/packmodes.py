@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+from model.dbpaths import collection_root
 import argparse
 import contextlib
 import os
@@ -97,7 +99,7 @@ def _run_hash_mode(args: argparse.Namespace) -> None:
         if print_hash_lookup(lookup_hashes(hashes, db, args.bios_dir)):
             sys.exit(1)
         return
-    zip_contents = build_zip_contents_index(db)
+    zip_contents = build_zip_contents_index(db, collection_root(Path(args.bios_dir)))
     try:
         with pack_output_lock(args.output_dir):
             outcome = generate_md5_pack(
@@ -222,7 +224,7 @@ def run_pack_command(
         return args
 
     db = load_database(args.db)
-    zip_contents = build_zip_contents_index(db)
+    zip_contents = build_zip_contents_index(db, collection_root(Path(args.bios_dir)))
     if args.emulator or (args.system and not args.platform and not args.all):
         _run_profile_mode(args, db, zip_contents)
         return args

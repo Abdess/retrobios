@@ -438,7 +438,7 @@ class CollectionCarriesNoGameDataHomonym(unittest.TestCase):
         try:
             db = load_database(str(database))
             profiles = load_emulator_profiles("emulators", skip_aliases=False)
-            zip_index = build_zip_contents_index(db)
+            zip_index = build_zip_contents_index(db, REPO_ROOT)
             registry = load_data_dir_registry("platforms")
             claims = []
             for name, profile in sorted(profiles.items()):

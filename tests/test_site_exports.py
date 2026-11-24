@@ -739,7 +739,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
         cwd = Path.cwd()
         try:
             os.chdir(root)
-            consumers = FileConsumers(db, build_zip_contents_index(db))
+            consumers = FileConsumers(db, build_zip_contents_index(db, root))
             archive = consumers.sha1_of(entry)
         finally:
             os.chdir(cwd)

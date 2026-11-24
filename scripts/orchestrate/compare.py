@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+from core.paths import BIOS_DIR
+from model.dbpaths import collection_root
 from model.registry import load_data_dir_registry
 
 
@@ -29,5 +32,5 @@ def comparison_inputs(
 
     db = load_database(db_path)
     groups = group_identical_platforms(list_registered_platforms(platforms_dir), platforms_dir)
-    return (db, build_zip_contents_index(db), load_emulator_profiles(emulators_dir),
+    return (db, build_zip_contents_index(db, collection_root(Path(BIOS_DIR))), load_emulator_profiles(emulators_dir),
             load_data_dir_registry(platforms_dir), groups)

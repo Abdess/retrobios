@@ -69,7 +69,7 @@ class SplitPartsCoverTheExtras(unittest.TestCase):
             parts = generate_split_packs(
                 "plat", str(root / "platforms"), db, str(root / "bios"), str(root / "dist"),
                 emulators_dir=str(root / "emulators"),
-                zip_contents=build_zip_contents_index(db),
+                zip_contents=build_zip_contents_index(db, root),
                 emu_profiles=load_emulator_profiles(str(root / "emulators")),
             )
             members = {n for p in parts for n in zipfile.ZipFile(p).namelist()}
@@ -120,7 +120,7 @@ class SplitPartsHoldWhatTheFullPackHolds(unittest.TestCase):
             (root / "emulators" / f"{name}.yml").write_text(yaml.dump(profile))
         args = dict(
             emulators_dir=str(root / "emulators"),
-            zip_contents=build_zip_contents_index(db),
+            zip_contents=build_zip_contents_index(db, root),
             emu_profiles=load_emulator_profiles(str(root / "emulators")),
             offline=True,
         )

@@ -16594,7 +16594,7 @@ class EmulatorChoiceMatchesTheEmulatorPack(unittest.TestCase):
         from packs import emulatorpack
         cls.packs_archive, cls.emulatorpack = packs_archive, emulatorpack
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
-        cls.zip_contents = build_zip_contents_index(cls.db)
+        cls.zip_contents = build_zip_contents_index(cls.db, REPO_ROOT)
         cls.by_path = {entry["path"]: sha1 for sha1, entry in cls.db["files"].items()}
 
     def pack(self, emulator: str) -> dict[str, str]:

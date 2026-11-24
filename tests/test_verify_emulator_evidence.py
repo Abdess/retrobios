@@ -377,7 +377,7 @@ class RepositoryWideEvidence(unittest.TestCase):
             self.skipTest("no database.json")
         db = load_database(str(db_path))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
-        zip_contents = build_zip_contents_index(db)
+        zip_contents = build_zip_contents_index(db, REPO_ROOT)
         registry = load_data_dir_registry(str(REPO_ROOT / "platforms"))
 
         offenders: list[str] = []

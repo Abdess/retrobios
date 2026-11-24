@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+from model.dbpaths import collection_root
 import os
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
@@ -816,7 +818,7 @@ def verify_platform(
         for sys in config.get("systems", {}).values()
         for fe in sys.get("files", [])
     )
-    zip_contents = build_zip_contents_index(db) if has_zipped else {}
+    zip_contents = build_zip_contents_index(db, collection_root(Path(BIOS_DIR))) if has_zipped else {}
 
     # Loaded before the slot overrides: a caller passing no profiles (the
     # README's coverage) got no override and reported a discrepancy at a slot

@@ -32,7 +32,7 @@ from sitegen.releasepacks import NO_PACK, download_links, release_state
 
 def build_file_consumers(db: dict, coverages: dict, profiles: dict) -> FileConsumers:
     """Which platforms and emulators read each collected file."""
-    consumers = FileConsumers(db, build_zip_contents_index(db))
+    consumers = FileConsumers(db, build_zip_contents_index(db, siteinputs.current().db.parent))
     consumers.add_platforms({name: cov["config"] for name, cov in coverages.items()})
     consumers.add_emulators(profiles)
     consumers.add_manifests(siteinputs.manifests_dir())

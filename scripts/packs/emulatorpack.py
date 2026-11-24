@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+from model.dbpaths import collection_root
 import contextlib
 import functools
 import os
@@ -481,7 +483,7 @@ def build_emulator_pack(
     all_profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
     zip_contents = options.get("zip_contents")
     if zip_contents is None:
-        zip_contents = build_zip_contents_index(db)
+        zip_contents = build_zip_contents_index(db, collection_root(Path(bios_dir)))
 
     try:
         selected = select_emulator_profiles(profile_names, all_profiles, standalone)

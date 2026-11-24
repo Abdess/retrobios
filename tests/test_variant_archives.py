@@ -65,7 +65,7 @@ class VariantArchives(unittest.TestCase):
             "p": {"path": str(self.primary)},
             "v": {"path": str(self.variant)},
         }}
-        index = build_zip_contents_index(db, cache_path=None)
+        index = build_zip_contents_index(db, self.root, cache_path=None)
         self.assertEqual(index[hashlib.md5(b"a" * 16).hexdigest()], "p")
         self.assertEqual(index[hashlib.md5(b"v" * 16).hexdigest()], "v")
 

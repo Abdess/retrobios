@@ -38,7 +38,7 @@ class ReadersNameTheOwner(unittest.TestCase):
 
     def test_the_site_credits_the_copy_the_pack_ships(self):
         consumers = FileConsumers(
-            self.db, build_zip_contents_index(self.db)
+            self.db, build_zip_contents_index(self.db, REPO_ROOT)
         )
         consumers.add_emulators(self.profiles)
         sha1 = self.sha1_by_path.get("bios/Arcade/MAME/neogeo.zip")

@@ -5,6 +5,7 @@ file from the platform's original, and a report lists every change."""
 
 from __future__ import annotations
 
+from model.dbpaths import collection_root
 import contextlib
 import functools
 import json
@@ -14,7 +15,7 @@ from pathlib import Path
 import yaml
 
 from core.artifacts import write_bytes_atomic, write_if_changed
-from core.paths import EMULATORS_DIR
+from core.paths import BIOS_DIR, EMULATORS_DIR
 from core.text import count_text
 from core.ziptools import build_zip_contents_index
 from .base_exporter import BaseExporter
@@ -141,7 +142,7 @@ def refresh_cache(
 def _collection(db_path: str) -> tuple[dict, dict]:
     """The database and its archive index, read once for every platform."""
     db = load_database(db_path)
-    return db, build_zip_contents_index(db)
+    return db, build_zip_contents_index(db, collection_root(Path(BIOS_DIR)))
 
 
 def doubled_in(scraped: dict | None, platforms_dir: str) -> list[dict]:

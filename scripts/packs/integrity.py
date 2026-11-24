@@ -6,6 +6,8 @@ coverage report that disagree describe different collections."""
 
 from __future__ import annotations
 
+from pathlib import Path
+from model.dbpaths import collection_root
 from collections import Counter
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
@@ -214,7 +216,7 @@ def verify_pack(
     by_md5 = db.get("indexes", {}).get("by_md5", {})  # MD5 -> SHA1
     # Built on the first archive no hash recognises, once per pack: the
     # index opens every archive of the collection.
-    held_inside = _once(lambda: build_zip_contents_index(db))
+    held_inside = _once(lambda: build_zip_contents_index(db, collection_root(Path(BIOS_DIR))))
     by_name = db.get("indexes", {}).get("by_name", {})  # name -> [SHA1]
 
     # Data directory file index
@@ -581,7 +583,7 @@ def _builder_extras(
         config, expect.opts.emulators_dir, db, emu_profiles, shipped, expect.target_cores,
         expect.region_drops or None,
         resolver=ExtraResolver(
-            db, BIOS_DIR, build_zip_contents_index(db), data_registry,
+            db, BIOS_DIR, build_zip_contents_index(db, collection_root(Path(BIOS_DIR))), data_registry,
             build_validation_index(platform_profiles),
             destination_owners(platform_profiles), True, profiles=emu_profiles,
         ),
@@ -707,7 +709,7 @@ def _region_drops(
         config, emu_profiles, target_cores
     )
     held: set[str] = set()
-    held_zip_contents = build_zip_contents_index(db) if db is not None else {}
+    held_zip_contents = build_zip_contents_index(db, collection_root(Path(BIOS_DIR))) if db is not None else {}
     region_groups, _extra_dests = platform_region_groups(
         config,
         expected_systems,
@@ -803,7 +805,7 @@ def _count_baseline(
         for fe in declarations
         if fe.get("group")
     }
-    exclusion_index = build_zip_contents_index(db) if db is not None else {}
+    exclusion_index = build_zip_contents_index(db, collection_root(Path(BIOS_DIR))) if db is not None else {}
     categories = EntryCategories(expect.config, expect.emu_profiles, data_registry)
     for expected, declarations in baseline_groups.items():
         if expected in view.zip_set:

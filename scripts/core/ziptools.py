@@ -16,6 +16,7 @@ import stat
 import sys
 import tempfile
 import zipfile
+from pathlib import Path
 
 from core.artifacts import process_umask, write_text_atomic
 from core.hashing import MAX_HASHED_MEMBER, md5sum
@@ -199,15 +200,18 @@ def _members_md5(path: str) -> list[list] | None:
 
 def build_zip_contents_index(
     db: dict,
+    root: Path,
     max_entry_size: int = MAX_HASHED_MEMBER,
     cache_path: str | None = MEMBER_CACHE,
 ) -> dict:
     """Build {inner_rom_md5: zip_file_sha1} for ROMs inside ZIP files.
 
-    A ``.variants/`` copy counts (``neogeo.zip.1a2b3c4d`` is an archive), and
-    a member a primary archive holds answers with the primary, as the
-    resolver prefers it. Cached in-process, and on disk per archive sha1
-    when cache_path is set.
+    Each database path is read under ``root``, the folder that holds the
+    collection's bios tree (model.dbpaths.collection_root). A ``.variants/``
+    copy counts (``neogeo.zip.1a2b3c4d`` is an archive), and a member a
+    primary archive holds answers with the primary, as the resolver prefers
+    it. Cached in-process, and on disk per archive sha1 when cache_path is
+    set.
     """
     global _zip_contents_cache
 
@@ -217,7 +221,10 @@ def build_zip_contents_index(
     variant_entries: list[tuple[str, str]] = []
     for sha1, entry in db.get("files", {}).items():
         path = entry["path"]
-        if is_archive_path(path) and os.path.exists(path):
+        if not is_archive_path(path):
+            continue
+        path = str(root / path)
+        if os.path.exists(path):
             primary = path.lower().endswith(".zip")
             (zip_entries if primary else variant_entries).append((path, sha1))
     primaries = len(zip_entries)
@@ -227,6 +234,7 @@ def build_zip_contents_index(
     # second call with a smaller bound got members the first one admitted,
     # and a regenerated database got the sha1 of the old one.
     fingerprint = (
+        str(root),
         max_entry_size,
         frozenset((path, os.path.getmtime(path), sha1) for path, sha1 in zip_entries),
     )

@@ -823,7 +823,7 @@ class TestE2E(unittest.TestCase):
         self.assertNotIn(".variants", path)
 
     def test_09_resolve_zip_contents(self):
-        zc = build_zip_contents_index(self.db)
+        zc = build_zip_contents_index(self.db, Path(self.root))
         inner_md5 = self.files["good.zip"]["inner_md5s"]["inner.rom"]
         entry = {"name": "good.zip", "md5": inner_md5, "zipped_file": "inner.rom"}
         path, status = resolve_local_file(entry, self.db, zc)
@@ -2618,7 +2618,7 @@ class TestE2E(unittest.TestCase):
             from model.profiles import load_emulator_profiles
             from packs.platformpack import generate_split_packs
 
-            zip_contents = build_zip_contents_index(db)
+            zip_contents = build_zip_contents_index(db, Path(tmpdir))
             emu_profiles = load_emulator_profiles(emu_dir)
 
             zip_paths = generate_split_packs(
@@ -2885,7 +2885,7 @@ class TestE2E(unittest.TestCase):
             from core.ziptools import build_zip_contents_index
             from packs.md5pack import generate_md5_pack
 
-            zip_contents = build_zip_contents_index(db)
+            zip_contents = build_zip_contents_index(db, Path(tmpdir))
 
             zip_path = generate_md5_pack(
                 hashes=[("md5", h["md5"])],

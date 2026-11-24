@@ -79,7 +79,7 @@ class SplitPartNames(unittest.TestCase):
         return generate_split_packs(
             "longplat", str(self.platforms), self.db, self.tmp.name, str(self.out),
             group_by=group_by, emulators_dir=str(self.emulators),
-            zip_contents=build_zip_contents_index(self.db), emu_profiles={},
+            zip_contents=build_zip_contents_index(self.db, Path(self.tmp.name)), emu_profiles={},
         )
 
     def test_a_large_group_is_written(self):

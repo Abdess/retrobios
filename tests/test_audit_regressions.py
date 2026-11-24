@@ -3891,11 +3891,11 @@ class TheZipIndexCacheKnowsItsInputs(unittest.TestCase):
                 archive.writestr("big.bin", b"x" * 4096)
             ziptools._zip_contents_cache = None
             db = {"files": {"a" * 40: {"path": str(path)}}}
-            self.assertEqual(len(ziptools.build_zip_contents_index(db)), 1)
-            self.assertEqual(ziptools.build_zip_contents_index(db, max_entry_size=10), {})
+            self.assertEqual(len(ziptools.build_zip_contents_index(db, Path(directory))), 1)
+            self.assertEqual(ziptools.build_zip_contents_index(db, Path(directory), max_entry_size=10), {})
             other = {"files": {"b" * 40: {"path": str(path)}}}
             self.assertEqual(
-                set(ziptools.build_zip_contents_index(other).values()), {"b" * 40}
+                set(ziptools.build_zip_contents_index(other, Path(directory)).values()), {"b" * 40}
             )
             ziptools._zip_contents_cache = None
 

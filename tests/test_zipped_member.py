@@ -50,7 +50,7 @@ class ZippedMemberIsChecked(unittest.TestCase):
             }))
             pack = generate_pack(
                 "plat", str(root / "platforms"), db, str(root / "bios"), str(root / "dist"),
-                emulators_dir=str(root / "emulators"), zip_contents=build_zip_contents_index(db),
+                emulators_dir=str(root / "emulators"), zip_contents=build_zip_contents_index(db, root),
                 emu_profiles={}, offline=True,
             )
             names = zipfile.ZipFile(pack).namelist() if pack else []
@@ -82,7 +82,7 @@ class VariantArchivesAreIndexed(unittest.TestCase):
                 files[hashlib.sha1(data).hexdigest()] = {"path": str(path), "name": path.name}
             sha1_of = {entry["path"]: sha1 for sha1, entry in files.items()}
             ziptools._zip_contents_cache = None
-            index = build_zip_contents_index({"files": files}, cache_path=None)
+            index = build_zip_contents_index({"files": files}, root, cache_path=None)
             self.assertEqual(index[hashlib.md5(b"own").hexdigest()], sha1_of[str(variant)])
             self.assertEqual(index[hashlib.md5(b"shared").hexdigest()], sha1_of[str(primary)])
 
@@ -159,19 +159,48 @@ class TheMemberIndexIsCachedByContent(unittest.TestCase):
             sha1 = hashlib.sha1(archive.read_bytes()).hexdigest()
             db = {"files": {sha1: {"path": str(archive), "name": "set.zip"}}}
             cache = str(Path(tmp) / "members.json")
-            first = ziptools.build_zip_contents_index(db, cache_path=cache)
+            first = ziptools.build_zip_contents_index(db, Path(tmp), cache_path=cache)
             ziptools._zip_contents_cache = None
             with mock.patch.object(ziptools, "_members_md5",
                                    side_effect=AssertionError("archive reopened")):
-                second = ziptools.build_zip_contents_index(db, cache_path=cache)
+                second = ziptools.build_zip_contents_index(db, Path(tmp), cache_path=cache)
                 ziptools._zip_contents_cache = None
-                bounded = ziptools.build_zip_contents_index(db, max_entry_size=32,
+                bounded = ziptools.build_zip_contents_index(db, Path(tmp), max_entry_size=32,
                                                             cache_path=cache)
             ziptools._zip_contents_cache = None
         self.assertEqual(first, second)
         self.assertEqual(set(first), {hashlib.md5(b"a" * 16).hexdigest(),
                                       hashlib.md5(b"b" * 64).hexdigest()})
         self.assertEqual(set(bounded), {hashlib.md5(b"a" * 16).hexdigest()})
+
+
+class TheMemberIndexReadsUnderTheCollection(unittest.TestCase):
+    """The index tested each database path against the working directory: a
+    site built from another collection's database read this checkout's
+    archives, and a run started elsewhere found none."""
+
+    def test_paths_are_read_under_the_root_whatever_the_working_directory(self):
+        import os
+
+        from core import ziptools
+
+        with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as elsewhere:
+            root = Path(tmp)
+            archive = root / "bios" / "set.zip"
+            archive.parent.mkdir()
+            with zipfile.ZipFile(archive, "w") as zf:
+                zf.writestr("own.rom", b"own")
+            db = {"files": {"s" * 40: {"path": "bios/set.zip", "name": "set.zip"}}}
+            previous = os.getcwd()
+            os.chdir(elsewhere)
+            self.addCleanup(os.chdir, previous)
+            ziptools._zip_contents_cache = None
+            self.addCleanup(setattr, ziptools, "_zip_contents_cache", None)
+            found = build_zip_contents_index(db, root, cache_path=None)
+            self.assertEqual(found, {hashlib.md5(b"own").hexdigest(): "s" * 40})
+            # Another root is another answer, never the cached one.
+            self.assertEqual(build_zip_contents_index(db, Path(elsewhere), cache_path=None), {})
+
 
 if __name__ == "__main__":
     unittest.main()

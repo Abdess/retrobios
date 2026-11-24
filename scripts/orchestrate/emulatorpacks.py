@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+from model.dbpaths import collection_root
 import contextlib
 import io
 
-from core.paths import DB_FILE, EMULATORS_DIR, PLATFORMS_DIR
+from core.paths import BIOS_DIR, DB_FILE, EMULATORS_DIR, PLATFORMS_DIR
 from model.profiles import reads_own_files
 from orchestrate.compare import set_difference_lines
 from orchestrate.labels import STEP_LABELS, step_title
@@ -66,7 +68,7 @@ def check_emulator_packs(
 
     print(f"\n--- {step_title(STEP_LABELS['consistency'])}, emulator packs ---")
     db = load_database(db_path)
-    zip_contents = build_zip_contents_index(db)
+    zip_contents = build_zip_contents_index(db, collection_root(Path(BIOS_DIR)))
     profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
 
     def compare(names: list[str], standalone: bool, label: str, **narrowing: object) -> bool | None:

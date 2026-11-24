@@ -254,7 +254,7 @@ class EveryReaderIsTheEmulatorPackFile(unittest.TestCase):
         os.chdir(REPO_ROOT)
         self.addCleanup(os.chdir, previous)
         db = json.loads(db_path.read_text(encoding="utf-8"))
-        zips = build_zip_contents_index(db)
+        zips = build_zip_contents_index(db, REPO_ROOT)
         registry = load_data_dir_registry(str(REPO_ROOT / "platforms"))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         consumers = FileConsumers(db, zips, registry)
