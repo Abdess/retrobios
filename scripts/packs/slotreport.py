@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from packs.slots import ADDRESSEE, Claim, Conflict, Decision
+from packs.slots import ADDRESSEE, Claim, Decision
 from resolve.collisions import Collision
 from resolve.localfile import resolution_is_hash_exact
 
@@ -76,17 +76,6 @@ def format_collision(collision: Collision) -> str:
         for path in collision.resolved
     ]
     return f"{collision.destination}: " + ", ".join(parts)
-
-
-def format_conflict(conflict: Conflict) -> str:
-    """One line per conflict, naming both answers and who gave them."""
-    emus = ", ".join(conflict.emulators) or "profile"
-    return (
-        f"{conflict.destination}: pack ships {conflict.platform_claim.local_path} "
-        f"({conflict.platform_claim.status}), {emus} says "
-        f"{conflict.profile_claims[0].local_path} "
-        f"({conflict.profile_claims[0].status})"
-    )
 
 
 def report_json(

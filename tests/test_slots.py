@@ -350,7 +350,7 @@ class TestConflicts(unittest.TestCase):
         conflicts = packs_slots.find_conflicts(
             self._config("m" * 32), self._profile("GC/JAP/IPL.bin"), REGIONS_DB
         )
-        line = slotreport.format_conflict(conflicts[0])
+        line = slotreport.format_decision(packs_slots.arbitrate(conflicts[0], "md5"))
         self.assertIn("USA/IPL.bin", line)
         self.assertIn("JAP/IPL.bin", line)
         self.assertIn("dolphin", line)
