@@ -22,7 +22,7 @@ from model.platforms import _platform_config_cache, load_platform_config
 from model.profiles import load_emulator_profiles, emulator_profiles_cache
 from collection.indexes import build_indexes
 from packs import manifest as packs_manifest
-from packs.extras import platform_region_groups
+from packs.extraregions import platform_region_groups
 from packs.coverage import verify_platform
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

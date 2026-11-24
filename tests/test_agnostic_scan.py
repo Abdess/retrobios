@@ -22,6 +22,7 @@ from pathlib import Path
 from model.profiles import load_emulator_profiles, emulator_profiles_cache
 from resolve.localfile import resolve_local_file
 from packs import extras as packextras
+from packs import extraplace
 
 SIZE = 1024
 
@@ -292,7 +293,7 @@ class ArchivePrefixCopies(unittest.TestCase):
                 ],
             }
         }
-        return packextras.archive_prefix_extras(
+        return extraplace.archive_prefix_extras(
             profiles, {"fbneo"}, {"neogeo.zip"}, set(), "", by_name
         )
 
@@ -313,7 +314,7 @@ class ArchivePrefixCopies(unittest.TestCase):
                            "system": "arcade"}],
             }
         }
-        extras = packextras.archive_prefix_extras(
+        extras = extraplace.archive_prefix_extras(
             profiles, {"fbneo"}, {"neogeo.zip"}, {"fbneo/neogeo.zip"}, "",
             {"neogeo.zip": ["abc"]},
         )

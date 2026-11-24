@@ -16,7 +16,7 @@ from model.profiles import entry_system_ids, installed_data_refs_in
 from model.systems import norm_system_id
 from packs.archive import PackRecord, Placed, add_pack_member
 from packs.datadirs import cache_lock, revisioned
-from packs.extras import prefixed_destination
+from packs.extraplace import prefixed_destination
 from packs.paths import MEDIA_MARKER, lands_on_android
 from resolve.cores import resolve_platform_cores as _platform_cores
 from resolve.layout import core_system_dirs

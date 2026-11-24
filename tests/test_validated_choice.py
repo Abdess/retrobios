@@ -114,7 +114,7 @@ class ValidatedChoice(unittest.TestCase):
             )
         }
         self.assertLessEqual({"build_platform_pack", "manifest_core_entries"}, resolvers)
-        extras = ast.parse((REPO_ROOT / "scripts" / "packs" / "extras.py").read_text(encoding="utf-8"))
+        extras = ast.parse((REPO_ROOT / "scripts" / "packs" / "extraresolver.py").read_text(encoding="utf-8"))
         resolve = next(
             node for node in ast.walk(extras)
             if isinstance(node, ast.FunctionDef) and node.name == "resolve"
@@ -143,7 +143,7 @@ class ValidatedChoice(unittest.TestCase):
             and getattr(call.func.value, "id", None) == "extra_resolver"
             for call in ast.walk(builder)
         ))
-        extras = ast.parse((REPO_ROOT / "scripts" / "packs" / "extras.py").read_text(encoding="utf-8"))
+        extras = ast.parse((REPO_ROOT / "scripts" / "packs" / "extraresolver.py").read_text(encoding="utf-8"))
         resolve = next(
             node for node in ast.walk(extras)
             if isinstance(node, ast.FunctionDef) and node.name == "resolve"
@@ -309,25 +309,24 @@ class AlternativesAreLookedUpBySlot(unittest.TestCase):
     def test_same_answer_one_pass_per_profile(self):
         from unittest import mock
 
-        from packs import extras as packextras
-        from resolve import acceptance as verdicts
-        from resolve.acceptance import extra_alternatives
+        from packs import extraresolver
+        from resolve import acceptance
 
         files = [{"name": "DUKE3D.GRP", "size": n} for n in (1, 2)] + [
             {"name": "a.bin", "path": "dir/a.bin"}, {"name": "a.bin"}, "not an entry",
         ]
         profiles = {"raze": {"files": files}}
-        resolver = packextras.ExtraResolver({}, "bios", None, None, {}, None, profiles=profiles)
+        resolver = extraresolver.ExtraResolver({}, "bios", None, None, {}, None, profiles=profiles)
         extras = [
             {"source_profile": "raze", "name": "DUKE3D.GRP"},
             {"source_profile": "raze", "name": "a.bin", "source_path": "dir/a.bin"},
             {"source_profile": "raze", "source_name": "a.bin", "name": "renamed"},
             {"source_profile": "other", "name": "a.bin"},
         ]
-        with mock.patch.object(verdicts, "slot_index", side_effect=verdicts.slot_index) as built:
+        with mock.patch.object(acceptance, "slot_index", side_effect=acceptance.slot_index) as built:
             for fe in extras:
                 self.assertEqual(resolver.alternatives(fe),
-                                 extra_alternatives(fe, profiles))
+                                 acceptance.extra_alternatives(fe, profiles))
         self.assertEqual(built.call_count, 2)
 
 

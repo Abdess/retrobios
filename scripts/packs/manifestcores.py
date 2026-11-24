@@ -12,16 +12,15 @@ from model.alternatives import core_file_spares
 from model.declarations import OUTER_ROOTS, ROMS_ROOT, declared_root
 from model.profiles import core_key_index, upstream_profile_index
 from model.targets import list_available_targets, load_target_config
-from packs.extras import (
-    ExtraResolver,
+from packs.extraresolver import ExtraResolver
+from packs.extraplace import (
     detect_extras_prefix,
-    extra_system_ids,
     extra_full_destination,
     extra_region_key,
-    platform_region_groups,
     save_entry_fields,
     save_manifest_dest,
 )
+from packs.extraregions import extra_system_ids, platform_region_groups
 from packs.manifestentry import (
     ClaimContext,
     attach_claims,

@@ -24,7 +24,7 @@ from resolve.validation import content_alternatives
 from resolve.entryscope import outside_gap_scope, read_from_save_dir, with_archive_members
 
 if TYPE_CHECKING:
-    from packs.extras import ExtraPlacement
+    from packs.extraplace import ExtraPlacement
 
 
 # A profile entry can prove a slot without declaring a hash: Dolphin names no
@@ -165,7 +165,7 @@ def profile_claims(
     standalone_cores = standalone_cores or PlatformLaunches()
     placement = None
     if config is not None:
-        from packs.extras import ExtraPlacement
+        from packs.extraplace import ExtraPlacement
 
         placement = ExtraPlacement(config, base_dest, profiles)
     claims: list[Claim] = []

@@ -23,7 +23,8 @@ class ValidationIndexScope(unittest.TestCase):
         pattern = re.compile(r"build_validation_index\(\s*(emu_)?profiles\s*\)")
         for name in (
             "verify.py", "generate_pack.py", "packs/integrity.py", "packs/packhashes.py",
-            "packs/platformcheck.py", "packs/extras.py",
+            "packs/platformcheck.py", "packs/extras.py", "packs/extraplace.py", "packs/extrascan.py",
+            "packs/extraregions.py", "packs/extraresolver.py",
         ):
             source = script_source(name)
             with self.subTest(module=name):

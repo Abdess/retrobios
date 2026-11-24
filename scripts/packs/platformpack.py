@@ -17,11 +17,9 @@ from packs.archive import (
 )
 from packs.declsettle import DeclarationJudge
 from packs.naming import system_display_name
-from packs.extras import (
-    ExtraResolver,
-    collect_emulator_extras,
-    extras_for_systems as _extras_for_systems,
-)
+from packs.extraresolver import ExtraResolver
+from packs.extras import collect_emulator_extras
+from packs.extraregions import extras_for_systems as _extras_for_systems
 from packs.naming import file_name_part, pack_narrowings, platform_pack_stem
 from packs.packcounts import PackCounts, pack_counts
 from packs.platformreport import print_platform_pack, print_split_packs

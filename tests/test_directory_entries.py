@@ -314,7 +314,7 @@ class PackCarriesADirectory(DirectoryFixture):
 
 class UnansweredDirectoryDestination(unittest.TestCase):
     def test_a_directory_gap_is_named_by_its_path(self):
-        from packs.extras import extra_dest
+        from packs.extraplace import extra_dest
 
         tree = {"name": "registered/", "type": "directory",
                 "path": "nand/system/Contents/registered/"}

@@ -23,6 +23,7 @@ from model.profiles import emulator_profiles_cache, load_emulator_profiles
 from resolve.content import content_fits, size_fits, size_refusal, _masked_sha1_verdict
 from resolve.localfile import resolve_local_file
 from packs import extras as packextras
+from packs import extrascan
 from core.romdir import romdir_accepts, walk
 from resolve.validation import build_validation_index, check_file_validation
 
@@ -354,7 +355,7 @@ class ScannerVerifyManifestAgree(unittest.TestCase):
 
     def test_emulator_pack_and_verify_expansion(self):
         demo = self.profiles["demo"]
-        expanded = packextras.expand_agnostic_entries(
+        expanded = extrascan.expand_agnostic_entries(
             demo["files"], "demo", demo, self.db, False, self.profiles,
         )
         names = {f["name"] for f in expanded if f.get("agnostic_scan")}

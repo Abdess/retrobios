@@ -13,7 +13,7 @@ from tests.sources import script_source
 import unittest
 from pathlib import Path
 
-from packs.extras import extras_for_systems as _extras_for_systems
+from packs.extraregions import extras_for_systems as _extras_for_systems
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

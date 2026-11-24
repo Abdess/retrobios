@@ -28,13 +28,9 @@ from packs.archive import (
 )
 from packs.datatrees import core_data_trees, data_directory_members, pack_markers
 from packs.declsettle import DeclarationJudge, Settlement
-from packs.extras import (
-    collect_emulator_extras,
-    detect_extras_prefix,
-    extra_full_destination,
-    extra_region_key,
-    extras_for_systems as _extras_for_systems,
-)
+from packs.extras import collect_emulator_extras
+from packs.extraplace import detect_extras_prefix, extra_full_destination, extra_region_key
+from packs.extraregions import extras_for_systems as _extras_for_systems
 from packs.packplan import PlatformPlan
 from packs.paths import flat_arcname, platform_destination, save_layout
 from packs.readme import build_agnostic_rename_readme, build_readme, save_place

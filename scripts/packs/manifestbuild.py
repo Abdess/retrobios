@@ -21,12 +21,8 @@ from packs.datatrees import (
     pack_markers,
     tree_readers,
 )
-from packs.extras import (
-    collect_emulator_extras,
-    extra_region_key,
-    save_entry_fields,
-    save_manifest_dest,
-)
+from packs.extras import collect_emulator_extras
+from packs.extraplace import extra_region_key, save_entry_fields, save_manifest_dest
 from packs.manifestcores import (
     downloaded_cores,
     manifest_core_entries,

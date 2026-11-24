@@ -21,13 +21,13 @@ from resolve import regions as resolve_regions
 from resolve import slot as slot_mod
 from model.systems import norm_system_id
 from core.paths import declared_destination
-from packs.extras import (
+from packs.extraregions import (
     kept_entries,
     serving_system_ids,
     extra_region_groups,
-    extra_region_key,
     system_spellings,
 )
+from packs.extraplace import extra_region_key
 
 
 @dataclass(frozen=True)

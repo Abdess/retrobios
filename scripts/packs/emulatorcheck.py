@@ -527,7 +527,7 @@ def verify_emulator(
     # The emulator pack withdraws these, and the report withdraws the same.
     region_drops: set[str] = set()
     if regions:
-        from packs.extras import emulator_region_drops
+        from packs.extraregions import emulator_region_drops
 
         region_drops = emulator_region_drops(
             selected, standalone, regions, required_only, db=db,

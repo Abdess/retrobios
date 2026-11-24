@@ -14,13 +14,13 @@ from model.declarations import OUTER_ROOTS, declared_root
 from model.profiles import profile_names
 from model.largefiles import asset_name, load_registered_paths, published_asset_name
 from packs.executable import ships_executable
-from packs.extras import (
+from packs.extraplace import (
     detect_extras_prefix,
-    extra_system_ids,
     extra_full_destination,
     extra_region_key,
     save_manifest_dest,
 )
+from packs.extraregions import extra_system_ids
 from resolve.packfiles import resolve_file
 from resolve.acceptance import validated_choice
 

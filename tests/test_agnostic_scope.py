@@ -22,7 +22,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class AgnosticScan(unittest.TestCase):
     def test_only_the_bios_directory_seeds_and_finds_keep_its_folder(self):
-        from packs.extras import agnostic_scan_extras
+        from packs.extrascan import agnostic_scan_extras
 
         with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
@@ -61,7 +61,7 @@ class AgnosticScan(unittest.TestCase):
         folder where another profile of the system resolves a hashed dump of
         that shape is the evidence, that folder only.
         """
-        from packs.extras import agnostic_scan_extras
+        from packs.extrascan import agnostic_scan_extras
 
         with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()

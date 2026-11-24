@@ -450,7 +450,7 @@ class ASystemReportCountsTheClaimsThePackCounts(unittest.TestCase):
     read only the entry's own system."""
 
     def test_a_claim_riding_on_an_entry_selects_it(self):
-        from packs.extras import extras_for_systems, report_owned_by_systems
+        from packs.extraregions import extras_for_systems, report_owned_by_systems
 
         entry = {
             "name": "taitofx1.zip", "system": "arcade", "systems": ["arcade"],

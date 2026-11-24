@@ -36,7 +36,7 @@ from orchestrate import checks, consistency, results, runner
 from scripts.resolve import regionaudit, regions
 from scripts.resolve.localfile import resolve_local_file
 from scripts.core.ziptools import safe_extract_zip
-from scripts.packs.extras import _emulator_region_group
+from scripts.packs.extraregions import _emulator_region_group
 from scripts.packs.platformcheck import verify_pack_against_platform
 from scripts.packs.targets import generate_target_manifests
 
@@ -1580,7 +1580,7 @@ class OneBaselineVerdict(unittest.TestCase):
         gives: a gitignored file absent from bios/ read as missing in verify
         while the pack shipped its cached release asset."""
         for module, name in (("verify.py", "_resolve_for_platform"),
-                             ("packs/extras.py", "_ships")):
+                             ("packs/extraregions.py", "_ships")):
             source = script_source(module)
             function = next(
                 node for node in ast.parse(source).body
@@ -1889,7 +1889,7 @@ class RegionRegressions(unittest.TestCase):
         under none of its four systems: emulator mode grouped them and
         dropped pac-n1.bin for --region us, platform mode isolated each and
         kept it."""
-        from packs.extras import extra_region_groups
+        from packs.extraregions import extra_region_groups
 
         profile = {"systems": ["nec-pc-engine", "nec-pc-engine-cd", "nec-supergrafx",
                                "pioneer-laseractive"]}
@@ -1911,7 +1911,7 @@ class RegionRegressions(unittest.TestCase):
         platform side. Emulator mode read only `system:`, so --emulator
         --region us kept the Japanese file --platform --region us dropped."""
         from model.profiles import entry_system_ids
-        from packs.extras import emulator_region_drops, extra_region_groups
+        from packs.extraregions import emulator_region_drops, extra_region_groups
 
         profile = {"systems": ["sys-a", "sys-b"], "files": [
             {"name": "us.bin", "systems": ["sys-a"], "region": ["north-america"]},
@@ -3634,7 +3634,7 @@ class ARegionDroppedExtraBlocksNothing(unittest.TestCase):
     def test_the_report_skips_what_the_region_pass_drops(self):
         from unittest import mock
 
-        from scripts.packs import extras as packextras
+        from scripts.packs import extraresolver
 
         with tempfile.TemporaryDirectory() as directory:
             other = Path(directory) / "FOO.ROM"
@@ -3649,12 +3649,12 @@ class ARegionDroppedExtraBlocksNothing(unittest.TestCase):
             config = {"case_insensitive_fs": True, "base_destination": ""}
 
             def report(region_drops):
-                with mock.patch.object(packextras, "collect_emulator_extras",
+                with mock.patch.object(extraresolver, "collect_emulator_extras",
                                        return_value=extras), \
-                        mock.patch.object(packextras, "resolve_local_file",
+                        mock.patch.object(extraresolver, "resolve_local_file",
                                           side_effect=lambda fe, *a, **k: (
                                               copies[fe["name"]], "name_exact")):
-                    return packextras.hidden_extras(
+                    return extraresolver.hidden_extras(
                         config, "emulators", {"files": {}}, {}, {}, None, region_drops
                     )
 
@@ -5287,7 +5287,7 @@ class CompanionsComeFromADirectoryIndex(unittest.TestCase):
     """_companions walked the whole database per scanned image."""
 
     def test_same_answer_one_walk(self):
-        from scripts.packs import extras as packextras
+        from scripts.packs import extrascan
 
         files_db = {
             "a": {"path": "bios/Sony/PS2/ps2.bin", "name": "ps2.bin"},
@@ -5295,10 +5295,10 @@ class CompanionsComeFromADirectoryIndex(unittest.TestCase):
             "c": {"path": "bios/Sony/PS2/ps2.nvm", "name": "ps2.nvm"},
             "d": {"path": "bios/Other/ps2.nvm", "name": "ps2.nvm"},
         }
-        found = packextras._companions("bios/Sony/PS2/ps2.bin", "ps2.bin", {"rom1", "nvm"}, files_db)
+        found = extrascan._companions("bios/Sony/PS2/ps2.bin", "ps2.bin", {"rom1", "nvm"}, files_db)
         self.assertEqual([sha1 for sha1, _ in found], ["b", "c"])
-        index = packextras._files_by_directory(files_db)
-        self.assertIs(packextras._files_by_directory(files_db), index)
+        index = extrascan._files_by_directory(files_db)
+        self.assertIs(extrascan._files_by_directory(files_db), index)
 
 
 
@@ -5693,7 +5693,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
 
         entry = {"name": "n64.psh", "required": True, "in_repo": True,
                  "emulator": "daedalusx64", "category": "bios", "bundled": True}
-        with mock.patch("packs.extras.unplaceable_extras", return_value={}):
+        with mock.patch("packs.extraresolver.unplaceable_extras", return_value={}):
             packs_coverage._mark_unplaced({}, [entry], {})
         self.assertFalse(entry["in_pack"])
         self.assertIn("installed with its emulator", entry["omitted"])
@@ -6350,7 +6350,7 @@ class RommNeoGeoFoldersGetTheirBios(unittest.TestCase):
         # into neogeoaes/, and FBNeo's CPS3 sets already sat in colecovision/:
         # a system the platform lacks has no folder, and a mirror-only
         # folder attracts no system-less file.
-        from scripts.packs.extras import _slug_for
+        from scripts.packs.extraplace import _slug_for
 
         config_systems = {"arcade", "snk-neogeo-aes", "nintendo-ds"}
         sys_to_slug = {"arcade": "arcade", "snk-neogeo-aes": "neogeoaes",

@@ -6604,7 +6604,7 @@ struct BurnDriver BurnDrvneogeo = {
         --region compared nothing."""
         import hashlib
 
-        from packs.extras import platform_region_groups
+        from packs.extraregions import platform_region_groups
 
         files, by_name = {}, {}
         for name in ("core_us.bin", "core_jp.bin"):
@@ -6642,7 +6642,7 @@ struct BurnDriver BurnDrvneogeo = {
         --region us pack kept the declared Japanese BIOS."""
         import hashlib
 
-        from packs.extras import platform_region_groups
+        from packs.extraregions import platform_region_groups
 
         files, by_name = {}, {}
         for name in ("bios_U.sms", "bios_J.sms"):

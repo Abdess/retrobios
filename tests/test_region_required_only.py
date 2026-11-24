@@ -15,7 +15,7 @@ import ast
 import unittest
 from pathlib import Path
 
-from packs.extras import platform_region_groups
+from packs.extraregions import platform_region_groups
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -49,7 +49,7 @@ class EmulatorModeToo(unittest.TestCase):
     the optional US cards won the group, then --required-only removed them."""
 
     def test_the_required_card_survives(self):
-        from packs.extras import emulator_region_drops
+        from packs.extraregions import emulator_region_drops
 
         profile = {"systems": ["nec-pc-engine"], "files": [
             {"name": "syscard3.pce", "required": True, "region": ["japan"]},

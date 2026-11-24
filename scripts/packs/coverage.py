@@ -28,7 +28,7 @@ from resolve.validation import build_validation_index
 from resolve.acceptance import destination_owners
 
 if TYPE_CHECKING:
-    from packs.extras import ExtraResolver
+    from packs.extraresolver import ExtraResolver
     from typing_extensions import Unpack
 from packs.platformtally import (
     DeclarationResolver,
@@ -57,7 +57,7 @@ _UNPLACED_REASONS = {
 
 def _mark_unplaced(config: dict, undeclared: list[dict], profiles: dict) -> None:
     """What the builder cannot place is not in the pack, held or not."""
-    from packs.extras import unplaceable_extras
+    from packs.extraresolver import unplaceable_extras
 
     unplaced = unplaceable_extras(config, undeclared, profiles)
     for u in undeclared:
@@ -116,7 +116,7 @@ def _mark_hidden(
     ``builder.report`` is the gap report the caller already computed with the
     builder's arguments. Without it the builder's pass computes its own.
     """
-    from packs.extras import hidden_extras
+    from packs.extraresolver import hidden_extras
 
     placed: set[str] = set()
     hidden = hidden_extras(
@@ -215,7 +215,7 @@ def _region_pass(
     # pass reads.  Grouping the platform files here and the core extras
     # there let the two answer differently on one request: the report kept
     # every core extra a region run withdraws from the pack.
-    from packs.extras import platform_region_groups
+    from packs.extraregions import platform_region_groups
 
     config = run.config
     held: set[str] = set()
@@ -255,7 +255,7 @@ def _narrowed(
     """The rows of the core walk a narrowed pack keeps, as the builder keeps them."""
     if run.system_filter:
         # A system pack carries the extras its systems own.
-        from packs.extras import report_owned_by_systems
+        from packs.extraregions import report_owned_by_systems
 
         rows = report_owned_by_systems(rows, run.system_filter)
     if run.required_only:
@@ -308,7 +308,7 @@ def _platform_gaps(
         spares = core_file_spares(undeclared)
         undeclared = [u for u in undeclared if id(u) not in spares]
     _mark_unplaced(config, undeclared, run.profiles)
-    from packs.extras import ExtraResolver
+    from packs.extraresolver import ExtraResolver
 
     placed_kind: dict[str, str] = {}
     placed = _mark_hidden(config, undeclared, occupied, _BuilderPass(

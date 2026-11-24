@@ -18,7 +18,7 @@ from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
 from packs import slots
 from packs.archive import PACK_DOCUMENTS
-from packs.extras import platform_region_groups
+from packs.extraregions import platform_region_groups
 from packs.integrity import same_members
 from packs.naming import pack_variant
 from packs.packhashes import native_hash_errors
@@ -165,7 +165,7 @@ def _builder_extras(
     refuses, is left free, since the builder then places a core's file
     there: taken by the refused file, that core file was never compared.
     """
-    from packs.extras import ExtraResolver, hidden_extras
+    from packs.extraresolver import ExtraResolver, hidden_extras
     from resolve.validation import build_validation_index
     from resolve.acceptance import destination_owners
 

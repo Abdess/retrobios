@@ -468,9 +468,10 @@ class LauncherLayerTest(unittest.TestCase):
         self.assertIn(
             "find_undeclared_files(", inspect.getsource(packextras.undeclared_report)
         )
+        extras_family = ("extras", "extraplace", "extrascan", "extraregions", "extraresolver")
         for name, source in (
             ("generate_pack", script_source("generate_pack.py")),
-            ("packs.extras", inspect.getsource(packextras)),
+            *((f"packs.{module}", script_source(f"packs/{module}.py")) for module in extras_family),
             ("verify", script_source("verify.py")),
         ):
             with self.subTest(module=name):

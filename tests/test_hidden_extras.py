@@ -43,7 +43,7 @@ class OneRule(unittest.TestCase):
 
     def test_builder_and_report_read_it(self):
         self.assertIn("placement_block(", script_source("packs/archive.py"))
-        for module in ("generate_pack.py", "packs/extras.py"):
+        for module in ("generate_pack.py", "packs/extraresolver.py"):
             source = script_source(module)
             self.assertIn("Placed(", source, module)
             self.assertIn(".block(", source, module)
@@ -180,7 +180,7 @@ class TheReplayResolvesAsTheBuilder(unittest.TestCase):
     def test_an_unresolved_extra_blocks_nothing(self):
         from unittest import mock
 
-        from packs import extras as packextras
+        from packs import extraresolver
 
         extras = [
             {"destination": "box.bin/inner.rom", "name": "inner.rom",
@@ -196,8 +196,8 @@ class TheReplayResolvesAsTheBuilder(unittest.TestCase):
                 )
 
         placed: set[str] = set()
-        with mock.patch.object(packextras, "collect_emulator_extras", return_value=extras):
-            hidden = packextras.hidden_extras(
+        with mock.patch.object(extraresolver, "collect_emulator_extras", return_value=extras):
+            hidden = extraresolver.hidden_extras(
                 {"systems": {}}, "emulators", {"files": {}}, {}, {},
                 placed=placed, resolver=Resolver(),
             )

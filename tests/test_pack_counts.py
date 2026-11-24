@@ -669,7 +669,8 @@ class CoreCopiesKeepTheirCategory(unittest.TestCase):
     copies, game data, under core files."""
 
     def test_a_copy_counts_as_its_entry_says(self):
-        from packs.extras import collect_emulator_extras, hidden_extras
+        from packs.extras import collect_emulator_extras
+        from packs.extraresolver import hidden_extras
 
         with tempfile.TemporaryDirectory() as tmp:
             held = Path(tmp) / "x.dat"

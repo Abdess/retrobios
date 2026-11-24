@@ -29,7 +29,7 @@ class ScanCopiesStay(unittest.TestCase):
         from model.database import load_database
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
-        from packs.extras import platform_region_groups
+        from packs.extraregions import platform_region_groups
 
         db = load_database("database.json")
         profiles = load_emulator_profiles("emulators")

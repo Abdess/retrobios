@@ -40,7 +40,7 @@ from packs.archive import (
 )
 from packs.datatrees import carried_trees, pack_data_tree
 from packs.emulatorentries import EmulatorSelection, emulator_pack_entries
-from packs.extras import emulator_region_drops
+from packs.extraregions import emulator_region_drops
 from packs.naming import (
     MAX_PACK_NAME_BYTES, bounded_join, file_name_part, pack_narrowings, system_display_name,
 )

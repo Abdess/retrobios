@@ -17,7 +17,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from packs.extras import _ships
+from packs.extraregions import _ships
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -91,7 +91,7 @@ class ADataDirectoryCopyIsHeld(unittest.TestCase):
         )
 
     def test_emulator_entry_from_a_data_tree(self):
-        from packs.extras import _emulator_ships
+        from packs.extraregions import _emulator_ships
         from resolve.validation import build_validation_index
 
         profile = self.profiles["dolphin-mmjr2"]

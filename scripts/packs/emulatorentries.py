@@ -5,7 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from model.profiles import entry_serves_systems
-from packs.extras import emulator_required_spares, expand_agnostic_entries
+from packs.extraregions import emulator_required_spares
+from packs.extrascan import expand_agnostic_entries
 from packs.paths import archive_destination, resolve_destination
 from resolve.archives import archive_entry, archive_is_optional
 from resolve.directories import expand_directory_entries

@@ -12,7 +12,8 @@ from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
 from packs import slots
 from packs.archive import PackRecord
-from packs.extras import platform_region_groups, undeclared_report
+from packs.extraregions import platform_region_groups
+from packs.extras import undeclared_report
 from packs.naming import pack_narrowings, platform_pack_name
 from packs.packcounts import PackCounts
 from resolve import regions as resolve_regions, slot as slot_mod
