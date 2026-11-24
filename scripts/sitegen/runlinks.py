@@ -9,13 +9,9 @@ from dataclasses import dataclass, field
 
 from model import siteinputs
 from model.collection import card_moves
-from model.systemnames import (
-    SYSTEM_PARENTS,
-    ensure_console_sections,
-    section_without_boards,
-    sections_generation,
-    system_name,
-)
+from model.systemnames import SYSTEM_PARENTS
+from sitegen import runsections
+from sitegen.runsections import section_without_boards, system_name
 from sitegen import markup
 from sitegen.arcadeboards import ArcadeBoards, read_arcade_boards
 from sitegen.pageprep import ICON_DIR
@@ -33,9 +29,9 @@ class LinkTables:
     stem holding that card. ``board_sections``: boards whose section the
     system pages wrote. ``emulator_card_pages``: (emulator, anchor) -> the
     emulators/ stem a card moved to. ``icons``: icon name -> whether the site
-    holds a copy. ``arcade``: the boards elected, with the sections_generation
+    holds a copy. ``arcade``: the boards elected, with the runsections generation
     they were elected under. ``aliases``: page_aliases() built from the rest,
-    with the sections_generation it read, dropped whenever a table it reads
+    with the runsections generation it read, dropped whenever a table it reads
     changes.
     """
 
@@ -220,20 +216,20 @@ def use_arcade_boards(boards: ArcadeBoards) -> None:
     """Install the boards elected for the sections installed now. Without
     it, or once the sections change, they are read from the site inputs on
     first use."""
-    ensure_console_sections()
+    generation = runsections.current().generation
     tables = current()
-    tables.arcade = (sections_generation[0], boards)
+    tables.arcade = (generation, boards)
     tables.aliases = None
 
 
 def _boards() -> ArcadeBoards:
-    ensure_console_sections()
+    generation = runsections.current().generation
     tables = current()
     held = tables.arcade
-    if held is not None and held[0] == sections_generation[0]:
+    if held is not None and held[0] == generation:
         return held[1]
     boards = read_arcade_boards()
-    tables.arcade = (sections_generation[0], boards)
+    tables.arcade = (generation, boards)
     return boards
 
 
@@ -343,8 +339,8 @@ def page_aliases(rel: str) -> list[str]:
     tables = current()
     if not tables.system_pages:
         return []
-    ensure_console_sections()
-    if tables.aliases is None or tables.aliases[0] != sections_generation[0]:
+    generation = runsections.current().generation
+    if tables.aliases is None or tables.aliases[0] != generation:
         by_page: dict[str, set[str]] = {}
         for sys_id in list(tables.system_pages):
             section = system_section(sys_id)
@@ -353,6 +349,6 @@ def page_aliases(rel: str) -> list[str]:
                 continue
             target = console_href(*section).partition("#")[0]
             by_page.setdefault(urllib.parse.unquote(target), set()).update(names)
-        tables.aliases = (sections_generation[0], {
+        tables.aliases = (generation, {
             page: sorted(names, key=str.casefold) for page, names in by_page.items()})
     return list(tables.aliases[1].get(rel, []))

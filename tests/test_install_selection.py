@@ -1389,11 +1389,11 @@ class ThePlatformsOwnSystemNamesAreAccepted(unittest.TestCase):
         # from the repository's collection, read inside the name lookup.
         from unittest import mock
 
-        from model import systemnames
+        from model import siteinputs, systemnames
         from packs.scope import system_titles
 
         sections = systemnames.console_sections({("Acme", "Widget")})
-        with mock.patch.object(systemnames, "ensure_console_sections",
+        with mock.patch.object(siteinputs, "current",
                                side_effect=AssertionError("site inputs read")):
             self.assertEqual(
                 system_titles(sections, [{"dest": "a.bin", "systems": ["acme-widget"]}]),

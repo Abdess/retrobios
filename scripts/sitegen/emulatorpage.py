@@ -10,7 +10,7 @@ from dataclasses import dataclass
 
 from core.hashing import parse_hash_list
 from core.sizes import size_text
-from model.systemnames import system_name
+from sitegen.runsections import system_name
 from model.profiles import is_emulator
 from packs.consumers import FileConsumers
 from packs.supplemental import SupplementalIndex

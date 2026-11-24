@@ -7,7 +7,7 @@ from collections.abc import Callable
 
 from model.collection import group_by_manufacturer, manufacturer_slug
 from model.database import declared_records, sha1_at
-from model.systemnames import system_name
+from sitegen.runsections import system_name
 from model.profiles import is_emulator
 from sitegen.config import SITE_URL
 from core.hashing import declared_hash_lists

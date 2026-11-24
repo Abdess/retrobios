@@ -25,6 +25,7 @@ from pathlib import Path
 
 from sitegen import render as siterender
 from sitegen import runlinks
+from sitegen import runsections
 from model import siteinputs, systemnames
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -160,7 +161,7 @@ class SystemLinks(unittest.TestCase):
                 db = json.load(handle)
             cls.manufacturers = group_by_manufacturer(db)
             profiles = load_emulator_profiles("emulators", skip_aliases=False)
-            systemnames.set_console_sections(
+            runsections.install(
                 cls.manufacturers, systemnames.program_names(profiles))
             # The system pages give every arcade board a section of its own
             # and record it. The built pages are checked by
@@ -243,12 +244,12 @@ class SystemLinks(unittest.TestCase):
                     by_heading.setdefault(name.casefold(), set()).add((mfr, console))
         missed = []
         for sys_id in sorted(self.ids):
-            places = by_heading.get(systemnames.system_name(sys_id).casefold(), set())
+            places = by_heading.get(runsections.system_name(sys_id).casefold(), set())
             if len(places) != 1:
                 continue
             mfr, console = next(iter(places))
             if mfr == "Other" or (
-                mfr == "Arcade" and console.casefold() in systemnames.known_program_names
+                mfr == "Arcade" and console.casefold() in runsections.current().sections.programs
             ):
                 continue
             if runlinks.system_section(sys_id) is None:
@@ -268,12 +269,12 @@ class SystemLinks(unittest.TestCase):
         An entry its own section shadows is never read and is not judged."""
         by_name: dict[str, set[tuple[str, str]]] = {}
         for sys_id, sections in self.held.items():
-            by_name.setdefault(systemnames.system_name(sys_id), set()).update(sections)
+            by_name.setdefault(runsections.system_name(sys_id), set()).update(sections)
         wrong = []
         for sys_id, parent in sorted(systemnames.SYSTEM_PARENTS.items()):
-            if systemnames.own_section(sys_id) is not None:
+            if runsections.own_section(sys_id) is not None:
                 continue
-            held = by_name.get(systemnames.system_name(sys_id))
+            held = by_name.get(runsections.system_name(sys_id))
             if held is not None and parent not in held:
                 wrong.append((sys_id, parent))
         self.assertEqual(wrong, [])

@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 import urllib.parse
 
-from model.systemnames import system_name
+from sitegen.runsections import system_name
 from model.profiles import is_emulator
 from resolve.cores import resolve_platform_cores
 from sitegen import markup

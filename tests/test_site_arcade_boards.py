@@ -23,7 +23,7 @@ from pathlib import Path
 from sitegen import arcadeboards
 from sitegen import render as siterender
 from sitegen import runlinks
-from model import systemnames
+from sitegen import runsections
 from core.anchors import toc_slug
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -70,7 +70,7 @@ STAYS_PLAIN = {
 def _reset() -> None:
     """Back to the repository's sections and boards, none written."""
     runlinks.current().arcade = None
-    systemnames._sections_installed[0] = False
+    runsections.reset()
     runlinks.reset_console_pages()
 
 
@@ -102,7 +102,7 @@ class Boards(unittest.TestCase):
         names = set(boards.values())
         for sys_id, name in NAMED_BOARDS.items():
             with self.subTest(sys_id=sys_id):
-                self.assertEqual(systemnames.system_name(sys_id), name)
+                self.assertEqual(runsections.system_name(sys_id), name)
                 self.assertIn(name, names)
 
     def test_every_copy_names_its_board(self) -> None:
@@ -227,7 +227,7 @@ class BoardRules(unittest.TestCase):
     def setUp(self) -> None:
         self._tmp = tempfile.TemporaryDirectory()
         self.root = Path(self._tmp.name)
-        systemnames.set_console_sections({("Arcade", "MAME"), ("SNK", "Neo Geo")})
+        runsections.install({("Arcade", "MAME"), ("SNK", "Neo Geo")})
 
     def tearDown(self) -> None:
         self._tmp.cleanup()

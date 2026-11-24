@@ -6,7 +6,7 @@ import json
 import re
 
 from sitegen.guidedata import platform_guides
-from model.systemnames import system_name
+from sitegen.runsections import system_name
 from resolve.nativemode import check_label, reads_file_contents
 from sitegen import markup
 from sitegen.config import REPO_URL, date_line

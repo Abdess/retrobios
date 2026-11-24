@@ -7,7 +7,6 @@ from collections.abc import Set as AbstractSet
 from dataclasses import dataclass
 from pathlib import Path
 
-from model import siteinputs
 from model.collection import (
     SECTION_LABELS,
     PROGRAM_TOPS,
@@ -16,50 +15,35 @@ from model.collection import (
 )
 
 
-# (manufacturer slug, console) -> the id of the console's heading. Two
-# folders spelled alike (Sega's "Mega CD" and "Mega-CD") share a slug, and
-# the second heading took "mega-cd_1" while every link said "mega-cd".
-console_anchors: dict[tuple[str, str], str] = {}
-
-
-# How many times set_console_sections installed sections: what a page
-# derives from them (the arcade boards) is stale once it moves.
-sections_generation = [0]
-
-
-# Every (manufacturer, console) section the system pages carry.
-section_pairs: set[tuple[str, str]] = set()
-# Normalized id -> the console sections spelled that way.
-_console_sections: dict[str, set[tuple[str, str]]] = {}
-# A console section by the name its heading reads (Bandai WonderSwan).
-sections_by_name: dict[str, set[tuple[str, str]]] = {}
-# Emulator and engine names. A heading spelled like one (Game Engines >
-# Solarus, ZC > ZC210) files that program's copies and names no system.
-known_program_names: set[str] = set()
-
-
 @dataclass(frozen=True)
 class ConsoleSections:
-    """The console sections a collection files, by normalized id, and the
-    program names (casefolded) whose headings name no system."""
+    """The console sections a collection files: every (manufacturer,
+    console) pair, by normalized id and by the name its heading reads, and
+    the program names (casefolded) whose headings name no system."""
     index: Mapping[str, set[tuple[str, str]]]
     programs: AbstractSet[str]
-
-
-# The sections the site installed (set_console_sections): the same objects,
-# filled in place.
-_installed = ConsoleSections(_console_sections, known_program_names)
+    pairs: AbstractSet[tuple[str, str]]
+    by_name: Mapping[str, set[tuple[str, str]]]
 
 
 def console_sections(
     sections: dict[str, dict] | set[tuple[str, str]],
     programs: Iterable[str] = (),
 ) -> ConsoleSections:
-    """The sections ``sections`` carries, as set_console_sections reads
-    them, without installing anything."""
+    """The sections ``sections`` carries: a map of each manufacturer to its
+    consoles, as the system pages group them, or a set of (manufacturer,
+    console) pairs. ``programs`` are the emulator names, which never name a
+    system."""
+    pairs = section_pairs_of(sections)
+    by_name: dict[str, set[tuple[str, str]]] = {}
+    for mfr, console in pairs:
+        for name in {heading_name(mfr, console).casefold(), console.casefold()}:
+            by_name.setdefault(name, set()).add((mfr, console))
     return ConsoleSections(
-        console_index(section_pairs_of(sections)),
+        console_index(pairs),
         frozenset(name.casefold() for name in programs),
+        frozenset(pairs),
+        by_name,
     )
 
 
@@ -105,58 +89,6 @@ def section_pairs_of(sections: dict[str, dict] | set[tuple[str, str]]) -> set[tu
     return pairs
 
 
-def set_console_sections(
-    sections: dict[str, dict] | set[tuple[str, str]],
-    programs: set[str] | frozenset[str] = frozenset(),
-) -> None:
-    """Install the console sections the system pages carry.
-
-    ``sections`` maps each manufacturer to its consoles, as the system pages
-    group them, or is a set of (manufacturer, console) pairs. ``programs``
-    are the emulator names, which never name a system.
-    """
-    pairs = section_pairs_of(sections)
-    from core.anchors import unique_anchor, toc_slug
-
-    _console_sections.clear()
-    sections_by_name.clear()
-    console_anchors.clear()
-    section_pairs.clear()
-    section_pairs.update(pairs)
-    by_maker: dict[str, list[str]] = {}
-    for mfr, console in pairs:
-        by_maker.setdefault(mfr, []).append(console)
-        for name in {heading_name(mfr, console).casefold(), console.casefold()}:
-            sections_by_name.setdefault(name, set()).add((mfr, console))
-    # In the order the page lists them, after the page title's own id.
-    for mfr, consoles in by_maker.items():
-        used = {toc_slug(mfr)}
-        for console in sorted(consoles):
-            console_anchors[(manufacturer_slug(mfr), console)] = unique_anchor(toc_slug(console), used)
-    _console_sections.update(console_index(pairs))
-    known_program_names.clear()
-    known_program_names.update(name.casefold() for name in programs)
-    _sections_installed[0] = True
-    sections_generation[0] += 1
-
-
-_sections_installed = [False]
-
-
-def ensure_console_sections() -> None:
-    """Read the sections from the repository when no generator installed
-    them, so a page rendered on its own names systems as the site does."""
-    if _sections_installed[0]:
-        return
-    from model.database import load_database
-    from model.profiles import load_emulator_profiles
-
-    inputs = siteinputs.current()
-    db = load_database(str(inputs.db))
-    profiles = load_emulator_profiles(str(inputs.emulators), skip_aliases=False)
-    set_console_sections(group_by_manufacturer(db), program_names(profiles))
-
-
 def console_index(pairs: Iterable[tuple[str, str]]) -> dict[str, set[tuple[str, str]]]:
     """Normalized system name -> the console sections that spell it.
 
@@ -190,13 +122,6 @@ def spelled_section(
             if sys_id.lower().startswith(manufacturer_slug(mfr) + "-")
         }
     return next(iter(places)) if len(places) == 1 else None
-
-
-def own_section(sys_id: str) -> tuple[str, str] | None:
-    """The console section that is this id's own among the sections the
-    site installed, or None (own_section_in)."""
-    ensure_console_sections()
-    return own_section_in(sys_id, _installed)
 
 
 def own_section_in(sys_id: str, sections: ConsoleSections) -> tuple[str, str] | None:
@@ -237,36 +162,31 @@ def heading_name(mfr: str, console: str) -> str:
 _NAMELESS_TOPS = frozenset({"Other"})
 
 
-def section_without_boards(sys_id: str) -> tuple[str, str] | None:
-    """The console section a system id leads to before arcade boards, as
-    (manufacturer slug, console): what the folders and the reviewed parents
-    give."""
-    own = own_section(sys_id)
+def section_without_boards_in(
+    sys_id: str, sections: ConsoleSections,
+) -> tuple[str, str] | None:
+    """The console section a system id leads to among ``sections`` before
+    arcade boards, as (manufacturer slug, console): what the folders and the
+    reviewed parents give."""
+    own = own_section_in(sys_id, sections)
     if own is not None:
         return manufacturer_slug(own[0]), own[1]
     parent = SYSTEM_PARENTS.get(sys_id)
-    if parent is not None and parent in section_pairs:
+    if parent is not None and parent in sections.pairs:
         return manufacturer_slug(parent[0]), parent[1]
     try:
-        name = system_name(sys_id)
+        name = system_name_in(sys_id, sections)
     except KeyError:
         return None
-    places = sections_by_name.get(name.casefold(), set())
+    places = sections.by_name.get(name.casefold(), set())
     if len(places) != 1:
         return None
     mfr, console = next(iter(places))
     if mfr in _NAMELESS_TOPS or (
-        mfr in PROGRAM_TOPS and console.casefold() in known_program_names
+        mfr in PROGRAM_TOPS and console.casefold() in sections.programs
     ):
         return None
     return manufacturer_slug(mfr), console
-
-
-def system_name(sys_id: str) -> str:
-    """The display name of a system id, the only one a page prints, among
-    the sections the site installed (system_name_in)."""
-    ensure_console_sections()
-    return system_name_in(sys_id, _installed)
 
 
 def system_name_in(sys_id: str, sections: ConsoleSections) -> str:

@@ -1259,11 +1259,10 @@ class TheOneLinerIsWhereUsersLand(unittest.TestCase):
     def test_a_system_is_offered_only_where_the_manifest_records_it(self):
         from sitegen import cards
         from sitegen import runlinks
+        from sitegen import runsections
 
-        from model import systemnames
-
-        systemnames.set_console_sections({("Sony", "PlayStation")})
-        self.addCleanup(systemnames._sections_installed.__setitem__, 0, False)
+        runsections.install({("Sony", "PlayStation")})
+        self.addCleanup(runsections.reset)
         runlinks.reset_console_pages()
         self.addCleanup(runlinks.reset_console_pages)
         # "playstation" leads to the same section, but the manifest records

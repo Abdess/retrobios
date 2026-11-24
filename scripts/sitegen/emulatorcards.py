@@ -13,7 +13,7 @@ from pathlib import Path
 
 from core.sizes import size_text
 from model.collection import manufacturer_slug
-from model.systemnames import system_name
+from sitegen.runsections import system_name
 from model.profiles import reads_own_files
 from packs.consumers import FileConsumers, entry_target, held_copy
 from resolve.cores import resolve_platform_cores

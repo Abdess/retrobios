@@ -39,6 +39,28 @@ class _Inputs(unittest.TestCase):
         self.addCleanup(siteinputs.use, siteinputs.SiteInputs())
 
 
+class SectionsFollowTheInputs(_Inputs):
+    """Sections installed under one collection named systems after another
+    once the inputs moved: the old ones answered until a test reset a
+    private flag."""
+
+    def test_new_inputs_drop_the_installed_sections(self) -> None:
+        from sitegen import runsections
+
+        self.addCleanup(runsections.reset)
+        runsections.install({("Sony", "PlayStation")})
+        self.assertEqual(runsections.system_name("sony-playstation"), "Sony PlayStation")
+        tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, tmp)
+        (tmp / "emulators").mkdir()
+        (tmp / "database.json").write_text(json.dumps({"files": {}}), encoding="utf-8")
+        self.use(db=tmp / "database.json", emulators=tmp / "emulators")
+        self.assertIsNone(runsections.installed())
+        with self.assertRaises(KeyError):
+            runsections.system_name("sony-playstation")
+        self.assertEqual(runsections.current().anchors, {})
+
+
 class TheGivenDatabase(_Inputs):
     def setUp(self) -> None:
         tmp = Path(tempfile.mkdtemp())
@@ -215,7 +237,7 @@ class NoPageModuleReadsTheRepositoryInputs(unittest.TestCase):
 
     MODULES = (*script_paths("generate_site.py"), SCRIPTS / "sitegen" / "render.py",
                SCRIPTS / "sitegen" / "diagrams.py", SCRIPTS / "model" / "collection.py",
-               SCRIPTS / "model" / "systemnames.py")
+               SCRIPTS / "model" / "systemnames.py", SCRIPTS / "sitegen" / "runsections.py")
     INPUTS = {"database.json", "emulators", "platforms"}
 
     def test_no_literal_input_path(self) -> None:

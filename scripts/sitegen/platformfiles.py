@@ -12,7 +12,7 @@ from model import siteinputs
 from model.collection import profiles_in, profiles_on_disk
 from model.database import load_database, sha1_at
 from model.profiles import is_emulator, upstream_profile_index
-from model.systemnames import system_name
+from sitegen.runsections import system_name
 from sitegen import entries as siteentries, markup
 from sitegen.config import REPO_URL, date_line
 from core.sizes import size_text

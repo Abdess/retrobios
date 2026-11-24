@@ -22,7 +22,8 @@ from model.dumpcatalog import load_provenance_snapshots
 from sitegen.guidedata import handheld_guide
 from model.profiles import is_emulator, lists_files, load_emulator_profiles
 from model.registry import list_registered_platforms, load_platform_registry
-from model.systemnames import program_names, set_console_sections, system_name
+from model.systemnames import program_names
+from sitegen.runsections import system_name
 from packs.consumers import FileConsumers
 from packs.crossref import whole_tree_gaps
 from packs.supplemental import SupplementalIndex
@@ -37,6 +38,7 @@ from sitegen import (
     handheld as sitehandheld,
     measurements as sitemeasurements,
     runlinks,
+    runsections,
     starlight as sitestarlight,
     steps as sitesteps,
     wanted as sitewanted,
@@ -649,6 +651,7 @@ def generate_site(args: argparse.Namespace) -> None:
     ))
     # Where this run puts systems, consoles and cards, nothing of a run before.
     runlinks.use(runlinks.LinkTables())
+    runsections.reset()
     db = load_database(args.db)
     docs = Path(args.docs_dir)
     # Files the site serves as they are (data, downloads, images), in the
@@ -676,7 +679,7 @@ def generate_site(args: argparse.Namespace) -> None:
     run.file_held = availability_check(db, run.suppl_names)
     # The plan names systems: the sections must be this run's data first.
     run.manufacturers = group_by_manufacturer(db)
-    set_console_sections(run.manufacturers, program_names(profiles))
+    runsections.install(run.manufacturers, program_names(profiles))
     # Which archive is which board's depends on the sections: elected once
     # they are this run's.
     use_arcade_boards(elect_arcade_boards(profiles, db))

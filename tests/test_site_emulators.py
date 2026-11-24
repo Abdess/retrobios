@@ -45,7 +45,7 @@ from sitegen import emulatorsindex
 from sitegen import install as sitegen_install
 from sitegen import lookup
 from sitegen import runlinks
-from model import systemnames
+from sitegen import runsections
 from sitegen import validate
 from resolve import layout
 from sitegen.pageregistry import PageRegistry
@@ -228,7 +228,7 @@ class TheIndexNamesEmulatorsAndSystems(unittest.TestCase):
         self.assertNotIn("| Engine |", page)
         self.assertNotIn(" -- ", page)
         row = next(line for line in page.splitlines() if line.startswith("| [DuckStation]"))
-        self.assertIn(f"[{systemnames.system_name('sony-playstation')}]", row)
+        self.assertIn(f"[{runsections.system_name('sony-playstation')}]", row)
         self.assertIn("(../systems/sony.md#playstation)", row)
         self.assertNotIn("sony-playstation |", row)
 

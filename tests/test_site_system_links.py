@@ -25,6 +25,7 @@ from sitegen import systempages
 from sitegen import systemsindex
 from sitegen import whichpack
 from sitegen import runlinks
+from sitegen import runsections
 from model import systemnames
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -279,7 +280,7 @@ class PagesFollowOwnSection(unittest.TestCase):
         db = load_database(str(REPO_ROOT / "database.json"))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False)
         manufacturers = collection.group_by_manufacturer(db)
-        systemnames.set_console_sections(manufacturers, systemnames.program_names(profiles))
+        runsections.install(manufacturers, systemnames.program_names(profiles))
         platforms = REPO_ROOT / "platforms"
         coverages = {
             name: {"config": load_platform_config(name, str(platforms))}
@@ -293,7 +294,7 @@ class PagesFollowOwnSection(unittest.TestCase):
 
     def test_every_own_section_is_the_page(self):
         for sys_id in self.ids:
-            own = systemnames.own_section(sys_id)
+            own = runsections.own_section(sys_id)
             if own is None:
                 continue
             with self.subTest(system=sys_id):
@@ -304,7 +305,7 @@ class PagesFollowOwnSection(unittest.TestCase):
         self.assertEqual(self.pages.get("atari-lynx"), ("atari", "Lynx"))
         self.assertEqual(self.pages.get("atom"), ("acorn", "Atom"))
         # A program's folder places its page, though it is no system's own.
-        self.assertIsNone(systemnames.own_section("scummvm"))
+        self.assertIsNone(runsections.own_section("scummvm"))
         self.assertEqual(self.pages.get("scummvm"), ("scummvm", "ScummVM"))
         self.assertEqual(self.pages.get("solarus"), ("game-engines", "Solarus"))
 
@@ -331,7 +332,7 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
 
         db = load_database(str(REPO_ROOT / "database.json"))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False)
-        systemnames.set_console_sections(collection.group_by_manufacturer(db), systemnames.program_names(profiles))
+        runsections.install(collection.group_by_manufacturer(db), systemnames.program_names(profiles))
         platforms = REPO_ROOT / "platforms"
         ids = {str(sid) for profile in profiles.values() for sid in profile.get("systems") or []}
         for name in list_registered_platforms(str(platforms)):

@@ -14,7 +14,7 @@ from model import siteinputs
 from model.collection import manufacturer_slug
 from model.database import declared_records
 from model.registry import load_versions, versions_file_for
-from model.systemnames import system_name
+from sitegen.runsections import system_name
 from model.profiles import is_emulator
 from packs.consumers import FileConsumers
 from sitegen.cards import PROVENANCE_LABELS, emulator_card_anchor, emulator_file_anchors
@@ -260,7 +260,7 @@ def _console_system_names(profiles: dict, coverages: dict) -> dict[tuple[str, st
     own section that folder is: a collection file is named after the console
     it is filed under. A folder no id owns, or that two names own, is left out.
     """
-    from model.systemnames import own_section
+    from sitegen.runsections import own_section
     from sitegen.render import system_ids
 
     found: dict[tuple[str, str], set[str]] = {}

@@ -300,7 +300,8 @@ def _start_groups(
     the Mega CD BIOS for its Genesis), and one under Other is a single
     emulator's, its shaders and fonts. A file the emulator ships with is
     no file to fetch."""
-    from model.systemnames import heading_name, system_name
+    from model.systemnames import heading_name
+    from sitegen.runsections import system_name
     from model.collection import manufacturer_slug
 
     here = (manufacturer_slug(section[0]), section[1]) if section else None

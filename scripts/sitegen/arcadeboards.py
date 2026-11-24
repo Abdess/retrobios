@@ -7,13 +7,9 @@ from dataclasses import dataclass, field
 
 from core.memo import DerivedView
 from model import siteinputs
-from model.systemnames import (
-    SYSTEM_PARENTS,
-    ensure_console_sections,
-    section_pairs,
-    section_without_boards,
-    system_name,
-)
+from model.systemnames import SYSTEM_PARENTS
+from sitegen import runsections
+from sitegen.runsections import section_without_boards, system_name
 
 # A board is a system id that a profile entry with ``category: bios_zip``
 # names, through its ``system:``/``systems:`` or the profile's single
@@ -118,7 +114,7 @@ def _machine_section(sys_id: str) -> tuple[str, str] | None:
     of the folder holding it: an id with a section of its own keeps its
     archives where the collection files them."""
     parent = SYSTEM_PARENTS.get(sys_id)
-    if parent is None or parent[0] == "Arcade" or parent not in section_pairs:
+    if parent is None or parent[0] == "Arcade" or parent not in runsections.current().sections.pairs:
         return None
     return parent
 
@@ -182,7 +178,7 @@ class _Ballots:
 def elect_arcade_boards(profiles: dict[str, dict], db: dict) -> ArcadeBoards:
     """The board of each archive, elected from the profiles' ``bios_zip``
     entries against the console sections installed."""
-    ensure_console_sections()
+    runsections.current()
     files = db.get("files", {})
     by_name = db.get("indexes", {}).get("by_name", {})
     ballots = _Ballots()

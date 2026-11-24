@@ -7,7 +7,7 @@ from collections.abc import Callable
 
 from core.text import count_text as count_text
 from model.collection import manufacturer_slug
-from model.systemnames import console_anchors, system_name
+from sitegen.runsections import installed, system_name
 
 
 WIKI_SRC_DIR = "wiki"  # manually maintained wiki sources
@@ -80,8 +80,9 @@ def console_anchor(manufacturer: str, console: str) -> str:
     """The id of a console's heading on its manufacturer's page."""
     from core.anchors import toc_slug
 
+    run = installed()
     key = (manufacturer_slug(manufacturer), console)
-    return console_anchors.get(key) or toc_slug(console)
+    return (run.anchors.get(key) if run else None) or toc_slug(console)
 
 
 def board_slug(sys_id: str) -> str:

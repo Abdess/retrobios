@@ -9,7 +9,7 @@ from pathlib import Path
 
 from model import siteinputs
 from model.collection import collection_paths
-from model.systemnames import system_name
+from sitegen.runsections import system_name
 from sitegen import starlight as sitestarlight
 from sitegen.cards import emulator_file_anchors
 from sitegen.config import REPO_URL, SITE_NAME, SITE_URL

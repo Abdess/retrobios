@@ -17,6 +17,7 @@ import unittest
 from pathlib import Path
 
 from model import systemnames
+from sitegen import runsections
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
@@ -47,7 +48,7 @@ class SystemNames(unittest.TestCase):
         cls.manufacturers = group_by_manufacturer(db)
         cls.profiles = load_emulator_profiles(
             str(REPO_ROOT / "emulators"), skip_aliases=False)
-        systemnames.set_console_sections(
+        runsections.install(
             cls.manufacturers, systemnames.program_names(cls.profiles))
         platforms_dir = str(REPO_ROOT / "platforms")
         cls.platform_ids = {
@@ -64,7 +65,7 @@ class SystemNames(unittest.TestCase):
         unnamed = []
         for sys_id in sorted(self._all_ids()):
             try:
-                name = systemnames.system_name(sys_id)
+                name = runsections.system_name(sys_id)
             except KeyError:
                 unnamed.append(sys_id)
                 continue
@@ -75,9 +76,9 @@ class SystemNames(unittest.TestCase):
         taken = {name.casefold() for name in self.manufacturers}
         taken |= {name.casefold() for name in systemnames.program_names(self.profiles)}
         clashes = sorted(
-            (sys_id, systemnames.system_name(sys_id))
+            (sys_id, runsections.system_name(sys_id))
             for sys_id in self._all_ids()
-            if systemnames.system_name(sys_id).casefold() in taken
+            if runsections.system_name(sys_id).casefold() in taken
         )
         self.assertEqual(clashes, [])
 
@@ -86,36 +87,36 @@ class SystemNames(unittest.TestCase):
         no platform or profile names is a leftover."""
         shadowed = sorted(
             sys_id for sys_id in systemnames.SYSTEM_NAMES
-            if systemnames.own_section(sys_id) is not None
+            if runsections.own_section(sys_id) is not None
         )
         self.assertEqual(shadowed, [])
         unused = sorted(set(systemnames.SYSTEM_NAMES) - self._all_ids())
         self.assertEqual(unused, [])
 
     def test_names_that_read_a_folder_vote(self) -> None:
-        self.assertEqual(systemnames.system_name("nintendo-gba"), "Nintendo Game Boy Advance")
-        self.assertEqual(systemnames.system_name("camplynx"), "Camputers Lynx")
-        self.assertEqual(systemnames.system_name("atari-lynx"), "Atari Lynx")
-        self.assertEqual(systemnames.system_name("arcade"), "Arcade games")
-        self.assertEqual(systemnames.system_name("sega-naomi"), "Sega NAOMI")
+        self.assertEqual(runsections.system_name("nintendo-gba"), "Nintendo Game Boy Advance")
+        self.assertEqual(runsections.system_name("camplynx"), "Camputers Lynx")
+        self.assertEqual(runsections.system_name("atari-lynx"), "Atari Lynx")
+        self.assertEqual(runsections.system_name("arcade"), "Arcade games")
+        self.assertEqual(runsections.system_name("sega-naomi"), "Sega NAOMI")
 
     def test_own_section_names_from_its_heading(self) -> None:
-        self.assertEqual(systemnames.system_name("nintendo-snes"), "Nintendo SNES")
-        self.assertEqual(systemnames.system_name("sony-playstation"), "Sony PlayStation")
+        self.assertEqual(runsections.system_name("nintendo-snes"), "Nintendo SNES")
+        self.assertEqual(runsections.system_name("sony-playstation"), "Sony PlayStation")
 
     def test_an_unknown_id_raises(self) -> None:
         with self.assertRaises(KeyError):
-            systemnames.system_name("no-such-system-anywhere")
+            runsections.system_name("no-such-system-anywhere")
 
     def test_mame_names_systems_not_emulators(self) -> None:
-        names = {systemnames.system_name(s) for s in self.profiles["mame"].get("systems") or []}
+        names = {runsections.system_name(s) for s in self.profiles["mame"].get("systems") or []}
         self.assertNotIn("FBNeo", names)
         self.assertNotIn("Arcade", names)
         self.assertFalse(names & systemnames.program_names(self.profiles))
 
 
 class SectionsComeBeforeThePlan(unittest.TestCase):
-    """plan_emulator_pages names systems. Run before set_console_sections,
+    """plan_emulator_pages names systems. Run before runsections.install,
     it made siterender read ./database.json and ./emulators whatever --db
     and --emulators-dir gave, so the parts were cut on another collection."""
 
@@ -128,9 +129,9 @@ class SectionsComeBeforeThePlan(unittest.TestCase):
         tree = ast.parse(inspect.getsource(build.generate_site))
         lines = {}
         for node in ast.walk(tree):
-            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
-                lines.setdefault(node.func.id, node.lineno)
-        self.assertLess(lines["set_console_sections"], lines["plan_emulator_pages"])
+            if isinstance(node, ast.Call):
+                lines.setdefault(ast.unparse(node.func), node.lineno)
+        self.assertLess(lines["runsections.install"], lines["plan_emulator_pages"])
 
 
 if __name__ == "__main__":
