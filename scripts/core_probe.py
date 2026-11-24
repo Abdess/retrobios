@@ -1148,7 +1148,7 @@ def build_parser() -> argparse.ArgumentParser:
                         help="seconds per repetition, after which the run is killed and judged a hang")
     common.add_argument("--oracle", default=None, metavar="FILE",
                         help="reference frames and error patterns the verdicts are judged against "
-                             "(default: tests/campaign/oracle.yml)")
+                             "(default: campaign/oracle.yml)")
     common.add_argument("--no-trace", action="store_true", help="do not run the worker under strace")
     common.add_argument("--require-sandbox", action="store_true",
                         help="refuse to run the core unless bubblewrap can isolate it")
@@ -1175,7 +1175,7 @@ def build_parser() -> argparse.ArgumentParser:
     rejudge.add_argument("--emulator", action="append", default=[],
                          help="only these emulators' records (default: every one)")
     rejudge.add_argument("--oracle", default=None, metavar="FILE",
-                         help="the oracle to judge against (default: tests/campaign/oracle.yml)")
+                         help="the oracle to judge against (default: campaign/oracle.yml)")
     rejudge.add_argument("--dry-run", action="store_true",
                          help="print what would be appended, write nothing")
     worker = sub.add_parser("_worker", help="internal: one run in this process, started by the others")
@@ -1348,7 +1348,7 @@ def check_result(variants: list[dict], observable: str) -> dict:
 
 BOOTS, BIOS_ERROR, CRASH, HANG, UNKNOWN = "boots", "bios_error", "crash", "hang", "unknown"
 VERDICTS = (BOOTS, BIOS_ERROR, CRASH, HANG, UNKNOWN)
-DEFAULT_ORACLE = ROOT / "tests" / "campaign" / "oracle.yml"
+DEFAULT_ORACLE = ROOT / "campaign" / "oracle.yml"
 
 
 def oracle_for(data: dict, content_sha1: str | None, library_name: str | None) -> dict:

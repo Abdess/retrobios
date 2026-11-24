@@ -950,7 +950,7 @@ Runs a libretro core with no window, no sound and no input device, and
 reports what it did. It is the test in real conditions behind a claim about
 a core: which files it opens, what it shows, which BIOS it ran.
 
-These probes run on demand only, for three cases: to settle a dispute or an issue, to back a correction sent to a platform, and to check the packs before a release. They are never run as a campaign over every emulator, and the site keeps no showcase of their runs: an emulator page shows a run only when a profile's `evidence:` names it or it answers an issue (`issue<N>-` subjects). Its **Proof** section has one line per claim, every record of that claim linked on it, and says what the runs showed: the BIOS the core ran, or the file strace saw it open. What an issue's run showed comes from `tests/campaign/observations.yml`, written by whoever watched it, and a run with nothing to state stays off the page. Every record stays in `measurements/` and on the Measurements page. Benchmarks (`bench`) stay in the records and the SQLite files and
+These probes run on demand only, for three cases: to settle a dispute or an issue, to back a correction sent to a platform, and to check the packs before a release. They are never run as a campaign over every emulator, and the site keeps no showcase of their runs: an emulator page shows a run only when a profile's `evidence:` names it or it answers an issue (`issue<N>-` subjects). Its **Proof** section has one line per claim, every record of that claim linked on it, and says what the runs showed: the BIOS the core ran, or the file strace saw it open. What an issue's run showed comes from `campaign/observations.yml`, written by whoever watched it, and a run with nothing to state stays off the page. Every record stays in `measurements/` and on the Measurements page. Benchmarks (`bench`) stay in the records and the SQLite files and
 only choose between variants: no page shows a time per frame.
 
 ```bash
@@ -1002,7 +1002,7 @@ strace the record says that tracing was unavailable.
 
 **Boot oracle.** Every repetition and every variant carries a `verdict` and
 the `verdict_evidence` that decided it (record version 4), judged against
-`tests/campaign/oracle.yml` (`--oracle`), in this order:
+`campaign/oracle.yml` (`--oracle`), in this order:
 
 | Verdict | Evidence |
 |---------|----------|
@@ -1152,7 +1152,7 @@ python scripts/campaign.py gate              # the checks behind a commit
 | Step | What happens |
 |------|--------------|
 | Core | The x86_64 Linux nightly from `buildbot.libretro.com`, for each name of the profile's `cores:` the buildbot publishes, downloaded again only when its `ETag` or `Last-Modified` changes. The record keeps the artifact URL, the `.so` sha256 and the `retro_get_system_info` version. With no nightly, the profile's `source_commit` is cloned and built once with `make` (`Makefile.libretro` first), the failure kept so it is not tried again for that commit. Host git only fetches into bare mirrors (`.cache/campaign/mirrors/`), one per repository, submodules included, that it alone touches: no working tree, never bound into a sandbox, and earlier working-tree clones are deleted. It runs with no user or system config, https as the only transport, and `-c` overrides emptying hooks, `core.fsmonitor`, `core.sshCommand`, `core.gitProxy`, credential helpers and every filter driver the mirror's config defines. The commit and each submodule at the commit its tree records are exported with `git archive` into a fresh folder, and `make` runs there in the same bubblewrap sandbox as a core, that folder the one writable path. The core copied out is the newest `*_libretro.so` that is a regular file inside that folder, opened without following links. The record's `build_command` says which isolation was used. A standalone emulator is `pending: standalone` |
-| Content | Each system's games come from `tests/campaign/content.yml`, by catalog name and with the reason each was chosen. They are read from `.cache/test-content/<romfetch system>/<name>/`, each file checked against its `identity.json`. Missing content is fetched with `romfetch get <system> <name> --json` when romfetch is on `PATH`, in `RETROBIOS_ROMFETCH` or given with `--romfetch`. Otherwise the checks are `pending: content`, with romfetch's exit code and error code when it failed. Content never enters git, and a record keeps only its identity |
+| Content | Each system's games come from `campaign/content.yml`, by catalog name and with the reason each was chosen. They are read from `.cache/test-content/<romfetch system>/<name>/`, each file checked against its `identity.json`. Missing content is fetched with `romfetch get <system> <name> --json` when romfetch is on `PATH`, in `RETROBIOS_ROMFETCH` or given with `--romfetch`. Otherwise the checks are `pending: content`, with romfetch's exit code and error code when it failed. Content never enters git, and a record keeps only its identity |
 | Checks | `files` stages every declared file the collection holds (the full set) and reads which ones the core opens (strace). `none` runs the game with no BIOS at all. `negative` runs, for each declared file of the game's region the collection holds, the file alone, then zeros of its size, its first half and up to two other regions' dumps staged under its name. An entry neither the full set nor its own run opened is staged where the core looked for it (`path`), else flagged. The `boot_file:` entry is also staged under the names the core looked for with no BIOS (`alias`). `variants` runs each `.variants/` copy of a file the core opened. Each runs twice from a fresh process and is judged by the boot oracle. `bench` (only with `--bench`) times the game once the full set boots, warm-up excluded, 5 repetitions |
 | Rules | `probes/rules.py`, a fixed table of pure functions (below). A field the table settles is written into the profile, with `evidence:` naming the record ids. Anything else is a line of `measurements/findings.jsonl` |
 | Content reuse | A game stays on disk until the last emulator that needs it in the pass is done, then the campaign deletes it if it fetched it. Past `--cache-cap-gb` (default 20) the least recently used goes first. An entry marked `pinned:`, or one the campaign did not fetch, is never deleted |
@@ -1183,7 +1183,7 @@ field again, those ids leave its `evidence:`.
 frame written as PNG under `tmp/campaign/references/<core>/<content>/`, and
 prints the record id with the screens that stay on for 3 samples or more in
 every repetition. A reviewer opens those PNGs and writes the chosen frames
-into `tests/campaign/oracle.yml` with their stage and what they show.
+into `campaign/oracle.yml` with their stage and what they show.
 
 The rules run on every pass, from the kept records when no check needs to run
 again, so a change of the table applies without a run. A run that agrees with
@@ -1240,7 +1240,7 @@ Schemas: `campaign-finding.schema.json` and `campaign-run.schema.json`.
 ### region_check.py
 
 Proves the `region:` fields of a profile on a real run. For each test game
-of a region in `tests/campaign/content.yml`, it runs `core_probe.py` four
+of a region in `campaign/content.yml`, it runs `core_probe.py` four
 times, each a record whose subject is `region-<core>-<game>-<variant>`.
 
 | Variant | BIOS staged |
@@ -1306,7 +1306,7 @@ python scripts/standalone_probe.py check pcsx2 \
 | Sandbox | The allowlist bubblewrap sandbox of `core_probe.py`: the unpacked emulator, the content folder and the staged BIOS folder read-only, the repetition's scratch folder the one writable path, no network. Xvfb runs inside it, on the sandbox's own `/tmp`, so the display is private to the run. `--require-sandbox` refuses to run without bubblewrap |
 | Screen | Xvfb keeps its screen as a file (`-fbdir`). The probe reads it every `--interval` seconds, `--samples` times, and hashes each sample's pixels. `--png-dir` writes each distinct sample as PNG for review |
 | Files | `strace -f` inside the sandbox: the files the emulator opened in the staged BIOS folder, and the ones it looked for there and did not find |
-| Verdict | `core_probe.judge` on each repetition, with the oracle of `tests/campaign/oracle.yml` looked up by the content's sha1 and the emulator's name, plus the emulator's own error strings `probes/standaloneemulators.py` lists (DuckStation's "No BIOS image found for", PCSX2's "Unable to auto locate a BIOS image"). An emulator that exits before the last sample is a crash |
+| Verdict | `core_probe.judge` on each repetition, with the oracle of `campaign/oracle.yml` looked up by the content's sha1 and the emulator's name, plus the emulator's own error strings `probes/standaloneemulators.py` lists (DuckStation's "No BIOS image found for", PCSX2's "Unable to auto locate a BIOS image"). An emulator that exits before the last sample is a crash |
 
 `standalone_probe.py <mode> --help` lists the options. `--sha256` runs an
 older fetched asset than the newest. The ones it shares with `core_probe.py`
@@ -1343,8 +1343,8 @@ downloads the nightlies again, and `--keep` leaves the laid-out folders in
 
 | Step | What happens |
 |------|--------------|
-| Layout | `generate_pack.py --platform X --offline` builds the pack into `tmp/pack_probe/<platform>/dist` (`--pack` reuses one). `pack`: the archive extracted at the root of the BIOS folder, each file mapped to its member. `installer`: `install.py --platform X --dest <root>/system --save-dir <root>/saves --from-pack <pack> --manifest install/X.json --offline`, each file mapped to the manifest entry that names it (`files:`, `case_variants:`, `data_directories:`). Both by default, `--install` picks one |
-| Games | `tests/campaign/content.yml` and `tests/campaign/pack_content.yml`, same format, read from `.cache/test-content` of the main checkout and checked against their `identity.json`. `--fetch` gets a missing one through romfetch |
+| Layout | `generate_pack.py --platform X --offline` builds the pack into `tmp/pack_probe/<platform>/dist` (`--pack` reuses one). `pack`: the archive extracted at the root of the BIOS folder, each file mapped to its member. `installer`: `install.py --platform X --dest <root>/system --save-dir <root>/saves --from-pack <pack> --manifest install/<platform>.json --offline`, each file mapped to the manifest entry that names it (`files:`, `case_variants:`, `data_directories:`). Both by default, `--install` picks one |
+| Games | `campaign/content.yml` and `campaign/pack_content.yml`, same format, read from `.cache/test-content` of the main checkout and checked against their `identity.json`. `--fetch` gets a missing one through romfetch |
 | Cores | `resolve_platform_cores` with the target of the platform (`linux-x86_64` for RetroArch, `x86_64` for Batocera, `windows` for RetroBat), kept when the profile serves the system and its libretro build runs there: not a `standalone_cores` entry, unless `dual_mode_cores` names it. The `.so` is the buildbot's x86_64 Linux nightly, every build the target names, else the one named after the profile, else the first of its `cores:`. Kept in `.cache/pack-probe/cores` with its URL and `Last-Modified` |
 | Staging | `core_probe.py` copies what it stages, and a pack holds gigabytes, so the probe stages what the core can reach: the profile's libretro entries (path or name, and aliases), the platform's list for the system, every file of the folders those sit in, and for a profile with `found_by: content` every root file of a size it declares. A file or folder the core then looks for that the layout holds is staged and the run repeated, up to 6 runs |
 | Run | `core_probe.py run --require-sandbox --record`, the game's frames and frame sampling from its content entry, no core option set. The first run is recorded. When the staging grew, the closed staging runs again, recorded with `--supersedes` the first. Each run holds the probe lock. Before a recorded run, lock held, the probe waits for the 1-minute load to fall to a quarter of the CPUs, up to 30 minutes, then stops with exit 3 |

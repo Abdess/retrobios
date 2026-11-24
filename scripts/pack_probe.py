@@ -8,8 +8,8 @@ root, in one or both of the ways a user gets it:
   installer  install.py --dest on the scratch root, from that pack and the
              published manifest (install/<platform>.json), with no network
 
-Then for each system a test game covers (tests/campaign/content.yml and
-tests/campaign/pack_content.yml), it resolves the libretro cores the platform
+Then for each system a test game covers (campaign/content.yml and
+campaign/pack_content.yml), it resolves the libretro cores the platform
 runs for that system (platform config, target file, standalone and dual-mode
 lists), and runs the game through core_probe.py with the system directory
 taken from that layout.

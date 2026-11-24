@@ -38,7 +38,7 @@ hosted runner should rebuild and re-upload.
 (`platforms/`, `emulators/`, `provenance/`, `exports/`, `measurements/`,
 `database.json`, `release.json`, `derivable.json`, `install/`), the pages and
 their assets (`wiki/`, `docs_assets/`, `website/`), the installer and its two
-bootstraps the site serves, `tests/campaign/observations.yml` (the Proof lines
+bootstraps the site serves, `campaign/observations.yml` (the Proof lines
 of the emulator pages), the workflow itself, and every script the build runs
 or imports. Also manual dispatch.
 

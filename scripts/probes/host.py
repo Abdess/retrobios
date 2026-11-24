@@ -26,7 +26,7 @@ if TYPE_CHECKING:
     from typing_extensions import Unpack
 
 
-CONTENT_FILE = REPO_ROOT / "tests" / "campaign" / "content.yml"
+CONTENT_FILE = REPO_ROOT / "campaign" / "content.yml"
 
 
 

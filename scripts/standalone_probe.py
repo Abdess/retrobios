@@ -65,7 +65,7 @@ def build_parser() -> argparse.ArgumentParser:
     common.add_argument("--samples", type=int, default=60, help="screen samples per repetition")
     common.add_argument("--interval", type=float, default=1.0, help="seconds between two samples")
     common.add_argument("--oracle", metavar="FILE",
-                        help="the boot oracle (default: tests/campaign/oracle.yml, as core_probe)")
+                        help="the boot oracle (default: campaign/oracle.yml, as core_probe)")
     common.add_argument("--png-dir", help="write each distinct sampled screen of repetition 0 as PNG")
     common.add_argument("--record", metavar="DIR", nargs="?", const=str(REPO_ROOT),
                         help="append the record to measurements/<emulator>.jsonl in the checkout DIR")

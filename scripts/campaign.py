@@ -4,10 +4,10 @@
 A maintainer starts each pass. For each emulator profile in scope, the
 campaign takes the core (the libretro x86_64 Linux nightly, else a build of
 the profile's pinned commit), the test content of each of its systems
-(tests/campaign/content.yml, fetched through romfetch when it is not on
+(campaign/content.yml, fetched through romfetch when it is not on
 disk), and runs core_probe.py. The boot oracle of core_probe judges every
 run: boots, bios_error, crash, hang or unknown, against the reference frames
-and error patterns of tests/campaign/oracle.yml.
+and error patterns of campaign/oracle.yml.
 
   files      every declared file the collection holds, staged: the full set,
              and which files the core opens
@@ -96,7 +96,7 @@ def build_parser() -> argparse.ArgumentParser:
                        help=f"romfetch command (default: ${ROMFETCH_ENV}, else romfetch on PATH)")
     scope.add_argument("--offline", action="store_true", help="no buildbot, no romfetch, no build")
     scope.add_argument("--content-file", default=str(CONTENT_FILE),
-                       help="the test content list (default: tests/campaign/content.yml)")
+                       help="the test content list (default: campaign/content.yml)")
     scope.add_argument("--allow-unsandboxed", action="store_true",
                        help="run cores and builds without bubblewrap when it is missing (refused by default)")
     run_p = sub.add_parser("run", parents=[scope], help="one pass: cores, content, checks, rules")

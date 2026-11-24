@@ -36,6 +36,7 @@ on:
       - "retired.json"
       - "recipes/**"
       - "measurements/**"
+      - "campaign/**"
       - "website/**"
       # The type check's and the lint's configuration.
       - "pyproject.toml"
@@ -67,6 +68,7 @@ on:
       - "retired.json"
       - "recipes/**"
       - "measurements/**"
+      - "campaign/**"
       - "website/**"
       - "pyproject.toml"
 

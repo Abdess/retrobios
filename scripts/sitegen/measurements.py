@@ -51,7 +51,7 @@ SQLITE_SCHEMA_VERSION = "3"
 BULKY_OBSERVABLES = ("frame_hashes",)
 INDEX_SCHEMA_VERSION = 1
 # What a maintainer saw in an issue's runs, by record subject.
-OBSERVATIONS = Path("tests") / "campaign" / "observations.yml"
+OBSERVATIONS = Path("campaign") / "observations.yml"
 # A Proof line lists this many record links at most, else one link to the file.
 MAX_RECORD_LINKS = 8
 

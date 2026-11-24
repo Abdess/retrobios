@@ -4,7 +4,7 @@
 # records it was seen in (`records:`), or every record of a subject when the
 # sentence is about all of them (`subjects:`). A run of an issue with no
 # entry here and no boot verdict reaches no page.
-# Read by scripts/sitemeasurements.py for the Proof lines of emulator pages.
+# Read by scripts/sitegen/measurements.py for the Proof lines of emulator pages.
 issue85:
   - said: the Lunar opening movie plays with sound
     records: [2026-10-27-f17b2280e1af]

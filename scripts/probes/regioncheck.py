@@ -278,7 +278,7 @@ def collect(root: Path = REPO_ROOT, stored_records: list | None = None) -> list[
     from model.measurements import live, read_records
 
     content: dict[str, list[tuple[str, Content]]] = {}
-    for system, items in load_content(root / "tests" / "campaign" / "content.yml").items():
+    for system, items in load_content(root / "campaign" / "content.yml").items():
         for item in items:
             content.setdefault(item.name, []).append((system, item))
     profiles = load_emulator_profiles(str(root / "emulators"))

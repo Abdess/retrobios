@@ -261,7 +261,7 @@ on:
       - "recipes/archives.json"
       - "measurements/**"
       # The Proof lines of the emulator pages read what an issue's runs showed.
-      - "tests/campaign/observations.yml"
+      - "campaign/observations.yml"
       # The Starlight project: config, components, styles, lockfile. Its
       # generated folders are gitignored and never trigger anything.
       - "website/**"

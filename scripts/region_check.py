@@ -3,7 +3,7 @@
 the game boots without it.
 
 For a system whose profile marks its BIOS entries with `region:`, each test
-game of a region (tests/campaign/content.yml) runs through core_probe four
+game of a region (campaign/content.yml) runs through core_probe four
 times, each a record in measurements/<emulator>.jsonl:
 
   full    every regional BIOS the profile declares

@@ -126,7 +126,7 @@ def run_variant(args: argparse.Namespace, emu: Emulator, tree: Path, oracle: dic
 
 
 def emulator_oracle(emu: Emulator, path: Path, content_sha1: str) -> dict:
-    """The oracle core_probe reads (tests/campaign/oracle.yml), looked up by
+    """The oracle core_probe reads (campaign/oracle.yml), looked up by
     the content's sha1 and the emulator's name, with the emulator's own
     error strings added as patterns. Without the file the oracle names the
     module that holds every pattern."""
