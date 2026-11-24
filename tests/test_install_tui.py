@@ -1373,6 +1373,22 @@ class RecordedPlan(unittest.TestCase):
     def row(self, state: install.TuiState, action: str) -> install.TuiRow:
         return next(row for row in install.tui_rows(state) if row.action == action)
 
+    def test_a_part_of_the_record_that_cannot_apply_is_left_out_as_line_mode_does(self):
+        """Each region tested alone, as line mode keeps them, and the systems
+        and emulators the list no longer names left out and said."""
+        for choice, kept, said in (
+                (["--region", "us", "--region", "zz"], ["--region", "us"],
+                 "--region (a region this installer does not know)"),
+                (["--system", "nintendo-gba", "--system", "zz-gone"],
+                 ["--system", "nintendo-gba"], "--system (zz-gone no longer on the list)"),
+                (["--emulator", "nosuch"], [], "--emulator (nosuch no longer on the list)")):
+            with self.subTest(choice=choice):
+                state = record_state(record_setup(choice))
+                self.assertEqual(state.status, f"Left out of the recorded choice: {said}.")
+                self.assertEqual(state.record["choice"], kept)
+        self.assertEqual(record_state(record_setup(
+            ["--region", "us", "--region", "zz"])).regions, ["north-america"])
+
     def test_opens_on_the_plan_of_the_one_setup_found(self):
         state = record_state()
         self.assertTrue(state.opened_on_plan)

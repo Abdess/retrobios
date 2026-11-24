@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import argparse
 from collections.abc import Collection, Iterable
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, NamedTuple
 
 from installer.console import detail
 from installer.install_record import drop_recorded
@@ -411,31 +411,20 @@ def _known_names(values: list[str] | None, known: list[str], label: str,
     return kept
 
 
-def _recorded_names(args: argparse.Namespace, plat: str, flag: str, known: list[str],
-                    aliases: dict[str, str] | None = None) -> None:
-    """A recorded --system, --core or --emulator kept to the names the list
-    still holds, the others left out in one line."""
-    name = flag[2:].replace("-", "_")
-    values = list(getattr(args, name) or [])
-    kept = _known_names(values, known, flag[2:], aliases)
-    if kept != values:
-        gone = ", ".join(value for value in values if value not in kept)
-        drop_recorded(args, plat, flag, f"{gone} no longer on the list", kept)
+class LeftOut(NamedTuple):
+    """A recorded option that cannot apply: its flag, why, and the names of
+    it that still do (none: the option goes)."""
+
+    flag: str
+    why: str
+    keep: list[str]
 
 
-def _recorded_emulators(args: argparse.Namespace, plat: str, manifest: dict,
-                        files: list[dict], omitted: list[dict]) -> None:
-    """A recorded --emulator that cannot narrow this list, left out."""
-    if "system_cores" not in manifest:
-        drop_recorded(args, plat, "--emulator", "the list does not say which emulators "
-                      "read which systems")
-        return
-    _recorded_names(args, plat, "--emulator", sorted(emulator_names(manifest, files, omitted)))
+_RECORDED_AXES = {"--system": "systems", "--core": "cores", "--region": "regions"}
 
 
-def _recorded_regions(args: argparse.Namespace, plat: str) -> None:
-    """A recorded --region kept to the regions this installer knows."""
-    values = list(args.region or [])
+def known_regions(values: Iterable[str]) -> list[str]:
+    """The regions of values this installer knows, one tested at a time."""
     kept = []
     for value in values:
         try:
@@ -443,8 +432,61 @@ def _recorded_regions(args: argparse.Namespace, plat: str) -> None:
         except ValueError:
             continue
         kept.append(value)
-    if kept != values:
-        drop_recorded(args, plat, "--region", "a region this installer does not know", kept)
+    return kept
+
+
+class _Trim:
+    """A recorded choice being trimmed: the names still kept, the parts left out."""
+
+    def __init__(self, asked: dict[str, list[str]]) -> None:
+        self.values = {flag: list(names) for flag, names in asked.items() if names}
+        self.left: list[LeftOut] = []
+
+    def drop(self, flag: str, why: str, keep: list[str] | None = None) -> None:
+        self.left.append(LeftOut(flag, why, list(keep or [])))
+        if keep:
+            self.values[flag] = list(keep)
+        else:
+            self.values.pop(flag, None)
+
+    def names(self, flag: str, known: list[str], aliases: dict[str, str] | None = None) -> None:
+        if flag not in self.values:
+            return
+        given = self.values[flag]
+        kept = _known_names(given, known, flag[2:], aliases)
+        if kept != given:
+            gone = ", ".join(value for value in given if value not in kept)
+            self.drop(flag, f"{gone} no longer on the list", kept)
+
+
+def trim_recorded(asked: dict[str, list[str]], plat: str, manifest: dict | None,
+                  files: list[dict], omitted: list[dict]) -> list[LeftOut]:
+    """The parts of a recorded choice that cannot apply to this list, in the
+    order a run leaves them out. asked maps --system, --core, --region and
+    --emulator to the names recorded. Nothing is changed or said here: line
+    mode and the screen each apply the result to their own state."""
+    trim = _Trim(asked)
+    if any(flag in trim.values for flag in _RECORDED_AXES):
+        recorded = recorded_axes(files, omitted)
+        if _pack_alone(plat):
+            recorded = recorded & {"systems"}
+        for flag, axis in _RECORDED_AXES.items():
+            if flag in trim.values and axis not in recorded:
+                trim.drop(flag, f"the list records no {axis}")
+    if "--region" in trim.values:
+        kept = known_regions(trim.values["--region"])
+        if kept != trim.values["--region"]:
+            trim.drop("--region", "a region this installer does not know", kept)
+    if "--system" in trim.values or "--core" in trim.values:
+        choices = available_choices(files, omitted)
+        trim.names("--system", choices["systems"], system_aliases(manifest))
+        trim.names("--core", choices["cores"])
+    if "--emulator" in trim.values:
+        if manifest is None or "system_cores" not in manifest:
+            trim.drop("--emulator", "the list does not say which emulators read which systems")
+        else:
+            trim.names("--emulator", sorted(emulator_names(manifest, files, omitted)))
+    return trim.left
 
 
 def _requested_narrowing(
@@ -466,17 +508,10 @@ def _requested_narrowing(
     if getattr(args, "from_record", False):
         # A recorded option that cannot narrow this list is left out: nobody
         # typed it, and every run without options would stop on it.
-        for flag, axis in asked:
-            if axis not in recorded:
-                drop_recorded(args, plat, flag, f"the list records no {axis}")
+        given = {flag: list(getattr(args, flag[2:])) for flag, _axis in asked}
+        for part in trim_recorded(given, plat, manifest, files, omitted):
+            drop_recorded(args, plat, part.flag, part.why, part.keep)
         asked = [(flag, axis) for flag, axis in asked if axis in recorded]
-        _recorded_regions(args, plat)
-        choices = available_choices(files, omitted)
-        if args.system:
-            _recorded_names(args, plat, "--system", choices["systems"],
-                            system_aliases(manifest))
-        if args.core:
-            _recorded_names(args, plat, "--core", choices["cores"])
         if not (args.system or args.core or args.region):
             return None
     for flag, axis in asked:

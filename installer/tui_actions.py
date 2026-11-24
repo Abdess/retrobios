@@ -17,7 +17,7 @@ from installer.cards import (
     card_setup,
     card_system,
 )
-from installer.choices import emulator_names
+from installer.choices import emulator_names, known_regions, trim_recorded
 from installer.console import QUIT_CODE, _typed_folder
 from installer.cores import CORE_PLATFORMS, core_dirs, installed_cores
 from installer.destination import (
@@ -39,6 +39,8 @@ from installer.host_fs import _exists, _folder_writable, _is_dir, _nearest_folde
 from installer.install_record import (
     RECORD_NARROWING,
     _RECORD_SAID,
+    choice_words,
+    options_without,
     record_options,
     setup_record,
     take_recorded_choice,
@@ -238,18 +240,23 @@ def _tui_record_take(state: TuiState) -> None:
         state.record = None
         return
     parsed = taken.parsed
-    if taken.left_out:
+    left_out, choice = list(taken.left_out), taken.choice
+    recorded_regions = list(parsed.region or [])
+    regions = known_regions(recorded_regions)
+    if regions != recorded_regions:
+        # One region at a time, as line mode keeps them: a known region
+        # beside an unknown one stays.
+        left_out.append("--region (a region this installer does not know)")
+        choice = choice_words(options_without(record_options(choice), "--region", regions))
+    if left_out:
         # What the run takes, as line mode keeps it: the plan reads as the
         # record's own choice again.
-        setup = state.record = {**setup, "choice": taken.choice}
-        state.status = f"Left out of the recorded choice: {', '.join(taken.left_out)}."
+        setup = state.record = {**setup, "choice": choice}
+        state.status = f"Left out of the recorded choice: {', '.join(left_out)}."
     state.cli_systems = list(parsed.system or [])
     state.cores = [token.strip() for value in parsed.core or [] for token in value.split(",")
                    if token.strip()]
-    try:
-        state.regions = resolve_regions(parsed.region) if parsed.region else []
-    except ValueError:
-        state.regions = []
+    state.regions = resolve_regions(regions) if regions else []
     state.no_game_data = bool(parsed.no_game_data)
     state.installed_only = bool(parsed.installed_cores)
     state.for_games = parsed.for_games is not None
@@ -262,6 +269,36 @@ def _tui_record_take(state: TuiState) -> None:
     state.emulators = list(parsed.emulator or [])
     state.record_flags = [(flag, value) for flag, value in record_options(setup["choice"])
                           if flag == "--declared-only"]
+    if state.manifest is not None and state.manifest_for == state.platform:
+        _tui_record_trim(state, state.platform, state.manifest)
+
+
+def _tui_record_trim(state: TuiState, plat: str, manifest: dict) -> None:
+    """The systems, cores, regions and emulators of the recorded choice
+    that this list cannot take, left out by the rule line mode follows
+    (trim_recorded) and said on the status line."""
+    if state.record is None:
+        return
+    asked = {"--system": list(state.cli_systems), "--core": list(state.cores),
+             "--region": list(state.regions), "--emulator": list(state.emulators)}
+    parts = trim_recorded(asked, plat, manifest, manifest.get("files") or [],
+                          manifest.get("omitted_files") or [])
+    if not parts:
+        return
+    choice = record_options(state.record["choice"])
+    for part in parts:
+        if part.flag == "--system":
+            state.cli_systems = list(part.keep)
+        elif part.flag == "--core":
+            state.cores = list(part.keep)
+        elif part.flag == "--region":
+            state.regions = list(part.keep)
+        else:
+            state.emulators = list(part.keep)
+        choice = options_without(choice, part.flag, part.keep)
+    state.record = {**state.record, "choice": choice_words(choice)}
+    words = ", ".join(f"{part.flag} ({part.why})" for part in parts)
+    state.status = f"Left out of the recorded choice: {words}."
 
 
 def _tui_record_drop(state: TuiState) -> None:
@@ -523,6 +560,8 @@ def _known_choice(state: TuiState, plat: str, manifest: dict) -> None:
     """The emulators and the board chosen, kept to those the list now read
     names, the others left out and said in one line: a pack's list can
     lack what the network's held, and the check then failed."""
+    if tui_record_kept(state):
+        _tui_record_trim(state, plat, manifest)
     names = emulator_names(manifest, manifest.get("files") or [],
                            manifest.get("omitted_files") or [])
     gone = [f"--emulator {name}" for name in state.emulators if name not in names]

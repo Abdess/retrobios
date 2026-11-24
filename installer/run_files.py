@@ -15,13 +15,13 @@ from installer.choices import (
     GamesChoice,
     _narrow_to_emulators,
     _older_list_advice,
-    _recorded_emulators,
     _requested_narrowing,
     _standalone_builds,
     available_choices,
     core_files,
     emulator_names,
     records_selection,
+    trim_recorded,
 )
 from installer.console import OUTPUT, detail
 from installer.cores import _unprofiled_cores_firmware
@@ -467,7 +467,9 @@ def _pass_emulators(run: _InstallRun, p: _PlatformPass) -> bool:
         return True
 
     if args.emulator and by_record(args):
-        _recorded_emulators(args, p.plat_name, p.manifest, p.files, p.omitted_files)
+        for part in trim_recorded({"--emulator": list(args.emulator)}, p.plat_name,
+                                  p.manifest, p.files, p.omitted_files):
+            drop_recorded(args, p.plat_name, part.flag, part.why, part.keep)
     if args.emulator:
         names = emulator_names(p.manifest, p.files, p.omitted_files)
         before = len(p.files)

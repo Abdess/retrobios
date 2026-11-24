@@ -243,6 +243,12 @@ def record_options(argv: list[str]) -> list[tuple[str, str | None]]:
     return options
 
 
+def choice_words(options: Iterable[tuple[str, str | None]]) -> list[str]:
+    """(option, value) pairs as the words of a record's choice, in their order."""
+    return [word for flag, value in options
+            for word in ([flag] if value is None else [flag, value])]
+
+
 def record_argv(options: Iterable[tuple[str, str | None]]) -> list[str]:
     """The choice options a record keeps, as words, in the command's order."""
     kept = sorted((option for option in options if option[0] in RECORD_CHOICE),
@@ -403,15 +409,16 @@ def drop_recorded(args: argparse.Namespace, plat: str, flag: str, why: str,
     goes on, and the record written after it no longer holds it. keep, for
     an option of several names, is the names that still apply."""
     name = flag[2:].replace("-", "_")
-    chosen = _INVOCATION.chosen.get(plat, [])
-    if keep:
-        setattr(args, name, list(keep))
-        _INVOCATION.chosen[plat] = [option for option in chosen if option[0] != flag] + [
-            (flag, value) for value in keep]
-    else:
-        setattr(args, name, build_parser().get_default(name))
-        _INVOCATION.chosen[plat] = [option for option in chosen if option[0] != flag]
+    setattr(args, name, list(keep) if keep else build_parser().get_default(name))
+    _INVOCATION.chosen[plat] = options_without(_INVOCATION.chosen.get(plat, []), flag, keep)
     print(f"  Left out of the recorded choice: {flag} ({why}).")
+
+
+def options_without(options: Iterable[tuple[str, str | None]], flag: str,
+                    keep: Iterable[str] | None = None) -> list[tuple[str, str | None]]:
+    """options with flag left out, then given again for each name of keep."""
+    return [option for option in options if option[0] != flag] + [
+        (flag, value) for value in keep or []]
 
 
 class RecordedChoice(NamedTuple):
@@ -433,10 +440,8 @@ def take_recorded_choice(choice: list[str]) -> RecordedChoice | None:
     words, left_out = list(choice), []
     if isinstance(parsed.for_games, Path) and not _is_dir(parsed.for_games):
         parsed.for_games = True
-        options = [(flag, None if flag == "--for-games" else value)
-                   for flag, value in record_options(choice)]
-        words = [word for flag, value in options
-                 for word in ([flag] if value is None else [flag, value])]
+        words = choice_words([(flag, None if flag == "--for-games" else value)
+                              for flag, value in record_options(choice)])
         left_out.append("its games folder (no longer there)")
     return RecordedChoice(parsed, words, left_out)
 

@@ -10296,6 +10296,12 @@ def record_options(argv: list[str]) -> list[tuple[str, str | None]]:
     return options
 
 
+def choice_words(options: Iterable[tuple[str, str | None]]) -> list[str]:
+    """(option, value) pairs as the words of a record's choice, in their order."""
+    return [word for flag, value in options
+            for word in ([flag] if value is None else [flag, value])]
+
+
 def record_argv(options: Iterable[tuple[str, str | None]]) -> list[str]:
     """The choice options a record keeps, as words, in the command's order."""
     kept = sorted((option for option in options if option[0] in RECORD_CHOICE),
@@ -10456,15 +10462,16 @@ def drop_recorded(args: argparse.Namespace, plat: str, flag: str, why: str,
     goes on, and the record written after it no longer holds it. keep, for
     an option of several names, is the names that still apply."""
     name = flag[2:].replace("-", "_")
-    chosen = _INVOCATION.chosen.get(plat, [])
-    if keep:
-        setattr(args, name, list(keep))
-        _INVOCATION.chosen[plat] = [option for option in chosen if option[0] != flag] + [
-            (flag, value) for value in keep]
-    else:
-        setattr(args, name, build_parser().get_default(name))
-        _INVOCATION.chosen[plat] = [option for option in chosen if option[0] != flag]
+    setattr(args, name, list(keep) if keep else build_parser().get_default(name))
+    _INVOCATION.chosen[plat] = options_without(_INVOCATION.chosen.get(plat, []), flag, keep)
     print(f"  Left out of the recorded choice: {flag} ({why}).")
+
+
+def options_without(options: Iterable[tuple[str, str | None]], flag: str,
+                    keep: Iterable[str] | None = None) -> list[tuple[str, str | None]]:
+    """options with flag left out, then given again for each name of keep."""
+    return [option for option in options if option[0] != flag] + [
+        (flag, value) for value in keep or []]
 
 
 class RecordedChoice(NamedTuple):
@@ -10486,10 +10493,8 @@ def take_recorded_choice(choice: list[str]) -> RecordedChoice | None:
     words, left_out = list(choice), []
     if isinstance(parsed.for_games, Path) and not _is_dir(parsed.for_games):
         parsed.for_games = True
-        options = [(flag, None if flag == "--for-games" else value)
-                   for flag, value in record_options(choice)]
-        words = [word for flag, value in options
-                 for word in ([flag] if value is None else [flag, value])]
+        words = choice_words([(flag, None if flag == "--for-games" else value)
+                              for flag, value in record_options(choice)])
         left_out.append("its games folder (no longer there)")
     return RecordedChoice(parsed, words, left_out)
 
@@ -11250,31 +11255,20 @@ def _known_names(values: list[str] | None, known: list[str], label: str,
     return kept
 
 
-def _recorded_names(args: argparse.Namespace, plat: str, flag: str, known: list[str],
-                    aliases: dict[str, str] | None = None) -> None:
-    """A recorded --system, --core or --emulator kept to the names the list
-    still holds, the others left out in one line."""
-    name = flag[2:].replace("-", "_")
-    values = list(getattr(args, name) or [])
-    kept = _known_names(values, known, flag[2:], aliases)
-    if kept != values:
-        gone = ", ".join(value for value in values if value not in kept)
-        drop_recorded(args, plat, flag, f"{gone} no longer on the list", kept)
+class LeftOut(NamedTuple):
+    """A recorded option that cannot apply: its flag, why, and the names of
+    it that still do (none: the option goes)."""
+
+    flag: str
+    why: str
+    keep: list[str]
 
 
-def _recorded_emulators(args: argparse.Namespace, plat: str, manifest: dict,
-                        files: list[dict], omitted: list[dict]) -> None:
-    """A recorded --emulator that cannot narrow this list, left out."""
-    if "system_cores" not in manifest:
-        drop_recorded(args, plat, "--emulator", "the list does not say which emulators "
-                      "read which systems")
-        return
-    _recorded_names(args, plat, "--emulator", sorted(emulator_names(manifest, files, omitted)))
+_RECORDED_AXES = {"--system": "systems", "--core": "cores", "--region": "regions"}
 
 
-def _recorded_regions(args: argparse.Namespace, plat: str) -> None:
-    """A recorded --region kept to the regions this installer knows."""
-    values = list(args.region or [])
+def known_regions(values: Iterable[str]) -> list[str]:
+    """The regions of values this installer knows, one tested at a time."""
     kept = []
     for value in values:
         try:
@@ -11282,8 +11276,61 @@ def _recorded_regions(args: argparse.Namespace, plat: str) -> None:
         except ValueError:
             continue
         kept.append(value)
-    if kept != values:
-        drop_recorded(args, plat, "--region", "a region this installer does not know", kept)
+    return kept
+
+
+class _Trim:
+    """A recorded choice being trimmed: the names still kept, the parts left out."""
+
+    def __init__(self, asked: dict[str, list[str]]) -> None:
+        self.values = {flag: list(names) for flag, names in asked.items() if names}
+        self.left: list[LeftOut] = []
+
+    def drop(self, flag: str, why: str, keep: list[str] | None = None) -> None:
+        self.left.append(LeftOut(flag, why, list(keep or [])))
+        if keep:
+            self.values[flag] = list(keep)
+        else:
+            self.values.pop(flag, None)
+
+    def names(self, flag: str, known: list[str], aliases: dict[str, str] | None = None) -> None:
+        if flag not in self.values:
+            return
+        given = self.values[flag]
+        kept = _known_names(given, known, flag[2:], aliases)
+        if kept != given:
+            gone = ", ".join(value for value in given if value not in kept)
+            self.drop(flag, f"{gone} no longer on the list", kept)
+
+
+def trim_recorded(asked: dict[str, list[str]], plat: str, manifest: dict | None,
+                  files: list[dict], omitted: list[dict]) -> list[LeftOut]:
+    """The parts of a recorded choice that cannot apply to this list, in the
+    order a run leaves them out. asked maps --system, --core, --region and
+    --emulator to the names recorded. Nothing is changed or said here: line
+    mode and the screen each apply the result to their own state."""
+    trim = _Trim(asked)
+    if any(flag in trim.values for flag in _RECORDED_AXES):
+        recorded = recorded_axes(files, omitted)
+        if _pack_alone(plat):
+            recorded = recorded & {"systems"}
+        for flag, axis in _RECORDED_AXES.items():
+            if flag in trim.values and axis not in recorded:
+                trim.drop(flag, f"the list records no {axis}")
+    if "--region" in trim.values:
+        kept = known_regions(trim.values["--region"])
+        if kept != trim.values["--region"]:
+            trim.drop("--region", "a region this installer does not know", kept)
+    if "--system" in trim.values or "--core" in trim.values:
+        choices = available_choices(files, omitted)
+        trim.names("--system", choices["systems"], system_aliases(manifest))
+        trim.names("--core", choices["cores"])
+    if "--emulator" in trim.values:
+        if manifest is None or "system_cores" not in manifest:
+            trim.drop("--emulator", "the list does not say which emulators read which systems")
+        else:
+            trim.names("--emulator", sorted(emulator_names(manifest, files, omitted)))
+    return trim.left
 
 
 def _requested_narrowing(
@@ -11305,17 +11352,10 @@ def _requested_narrowing(
     if getattr(args, "from_record", False):
         # A recorded option that cannot narrow this list is left out: nobody
         # typed it, and every run without options would stop on it.
-        for flag, axis in asked:
-            if axis not in recorded:
-                drop_recorded(args, plat, flag, f"the list records no {axis}")
+        given = {flag: list(getattr(args, flag[2:])) for flag, _axis in asked}
+        for part in trim_recorded(given, plat, manifest, files, omitted):
+            drop_recorded(args, plat, part.flag, part.why, part.keep)
         asked = [(flag, axis) for flag, axis in asked if axis in recorded]
-        _recorded_regions(args, plat)
-        choices = available_choices(files, omitted)
-        if args.system:
-            _recorded_names(args, plat, "--system", choices["systems"],
-                            system_aliases(manifest))
-        if args.core:
-            _recorded_names(args, plat, "--core", choices["cores"])
         if not (args.system or args.core or args.region):
             return None
     for flag, axis in asked:
@@ -22671,7 +22711,9 @@ def _pass_emulators(run: _InstallRun, p: _PlatformPass) -> bool:
         return True
 
     if args.emulator and by_record(args):
-        _recorded_emulators(args, p.plat_name, p.manifest, p.files, p.omitted_files)
+        for part in trim_recorded({"--emulator": list(args.emulator)}, p.plat_name,
+                                  p.manifest, p.files, p.omitted_files):
+            drop_recorded(args, p.plat_name, part.flag, part.why, part.keep)
     if args.emulator:
         names = emulator_names(p.manifest, p.files, p.omitted_files)
         before = len(p.files)
@@ -29419,18 +29461,23 @@ def _tui_record_take(state: TuiState) -> None:
         state.record = None
         return
     parsed = taken.parsed
-    if taken.left_out:
+    left_out, choice = list(taken.left_out), taken.choice
+    recorded_regions = list(parsed.region or [])
+    regions = known_regions(recorded_regions)
+    if regions != recorded_regions:
+        # One region at a time, as line mode keeps them: a known region
+        # beside an unknown one stays.
+        left_out.append("--region (a region this installer does not know)")
+        choice = choice_words(options_without(record_options(choice), "--region", regions))
+    if left_out:
         # What the run takes, as line mode keeps it: the plan reads as the
         # record's own choice again.
-        setup = state.record = {**setup, "choice": taken.choice}
-        state.status = f"Left out of the recorded choice: {', '.join(taken.left_out)}."
+        setup = state.record = {**setup, "choice": choice}
+        state.status = f"Left out of the recorded choice: {', '.join(left_out)}."
     state.cli_systems = list(parsed.system or [])
     state.cores = [token.strip() for value in parsed.core or [] for token in value.split(",")
                    if token.strip()]
-    try:
-        state.regions = resolve_regions(parsed.region) if parsed.region else []
-    except ValueError:
-        state.regions = []
+    state.regions = resolve_regions(regions) if regions else []
     state.no_game_data = bool(parsed.no_game_data)
     state.installed_only = bool(parsed.installed_cores)
     state.for_games = parsed.for_games is not None
@@ -29443,6 +29490,36 @@ def _tui_record_take(state: TuiState) -> None:
     state.emulators = list(parsed.emulator or [])
     state.record_flags = [(flag, value) for flag, value in record_options(setup["choice"])
                           if flag == "--declared-only"]
+    if state.manifest is not None and state.manifest_for == state.platform:
+        _tui_record_trim(state, state.platform, state.manifest)
+
+
+def _tui_record_trim(state: TuiState, plat: str, manifest: dict) -> None:
+    """The systems, cores, regions and emulators of the recorded choice
+    that this list cannot take, left out by the rule line mode follows
+    (trim_recorded) and said on the status line."""
+    if state.record is None:
+        return
+    asked = {"--system": list(state.cli_systems), "--core": list(state.cores),
+             "--region": list(state.regions), "--emulator": list(state.emulators)}
+    parts = trim_recorded(asked, plat, manifest, manifest.get("files") or [],
+                          manifest.get("omitted_files") or [])
+    if not parts:
+        return
+    choice = record_options(state.record["choice"])
+    for part in parts:
+        if part.flag == "--system":
+            state.cli_systems = list(part.keep)
+        elif part.flag == "--core":
+            state.cores = list(part.keep)
+        elif part.flag == "--region":
+            state.regions = list(part.keep)
+        else:
+            state.emulators = list(part.keep)
+        choice = options_without(choice, part.flag, part.keep)
+    state.record = {**state.record, "choice": choice_words(choice)}
+    words = ", ".join(f"{part.flag} ({part.why})" for part in parts)
+    state.status = f"Left out of the recorded choice: {words}."
 
 
 def _tui_record_drop(state: TuiState) -> None:
@@ -29704,6 +29781,8 @@ def _known_choice(state: TuiState, plat: str, manifest: dict) -> None:
     """The emulators and the board chosen, kept to those the list now read
     names, the others left out and said in one line: a pack's list can
     lack what the network's held, and the check then failed."""
+    if tui_record_kept(state):
+        _tui_record_trim(state, plat, manifest)
     names = emulator_names(manifest, manifest.get("files") or [],
                            manifest.get("omitted_files") or [])
     gone = [f"--emulator {name}" for name in state.emulators if name not in names]
