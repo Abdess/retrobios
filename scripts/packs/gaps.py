@@ -189,6 +189,9 @@ class _GapScan:
     # entry, the entry it is a claim on)): settled once every core is read.
     set_records: list[SetRecord] = field(default_factory=list)
     undeclared: list[dict] = field(default_factory=list)
+    # Files the pack would carry that a profile documents unsourceable: one
+    # per slot, as a gap is counted.
+    unsourceable: list[dict] = field(default_factory=list)
     seen_files: set[tuple] = field(default_factory=set)
     # Key -> the entry reported for it. A later profile reading the same
     # requirement is kept on that entry rather than counted again: a pack
@@ -241,6 +244,19 @@ class _GapScan:
             None if outer else self.declared_contents,
         )
         if verdict == "settled":
+            if (f.get("unsourceable") and not duplicate
+                    and not outside_gap_scope(f, is_standalone)):
+                self.unsourceable.append({
+                    "profile": emu_name,
+                    "emulator": layout.get("emulator", emu_name),
+                    "systems": entry_system_ids(f, layout),
+                    "system": f.get("system"),
+                    "name": fname,
+                    "path": dest,
+                    "required": f.get("required", False),
+                    "category": f.get("category", "bios"),
+                    "reason": f["unsourceable"],
+                })
             self.seen_files.add(seen_key)
             if (self.launcher_layer and not f.get("unsourceable") and not outer
                     and not f.get("unplaced")):
@@ -472,6 +488,33 @@ def find_undeclared_files(
     platform_declarations.  Pass the strict ones (YAML names only) when
     building packs so alias-only names still get packed.
     """
+    return scan_core_files(
+        config, emulators_dir, db, emu_profiles, target_cores, data_names,
+        include_all, declared_names,
+    ).undeclared
+
+
+@dataclass(frozen=True)
+class CoreFiles:
+    """The core files a platform leaves undeclared, and those a profile
+    documents unsourceable, each read once by one walk of the cores."""
+
+    undeclared: list[dict]
+    unsourceable: list[dict]
+
+
+def scan_core_files(
+    config: dict,
+    emulators_dir: str,
+    db: dict,
+    emu_profiles: dict | None = None,
+    target_cores: set[str] | None = None,
+    data_names: set[str] | None = None,
+    include_all: bool = False,
+    declared_names: Mapping[str, list[tuple[int | None, str]]] | None = None,
+) -> CoreFiles:
+    """find_undeclared_files, with the unsourceable files the same walk
+    settles: under its mode, unread_on and slot rules, never recounted."""
     if declared_names is None:
         declared_names = platform_declarations(config, db)
     folded_slots = case_folded_slots(config, declared_names)
@@ -528,8 +571,11 @@ def find_undeclared_files(
 
     undeclared.extend(sorted(scan.archive_entries.values(), key=lambda e: e["name"]))
 
-    return _split_bundled_claims(
-        _settle_core_sets(undeclared, scan.set_records, settled, profiles)
+    return CoreFiles(
+        _split_bundled_claims(
+            _settle_core_sets(undeclared, scan.set_records, settled, profiles)
+        ),
+        scan.unsourceable,
     )
 
 

@@ -459,8 +459,8 @@ class LauncherLayerTest(unittest.TestCase):
         from packs import extras as packextras
         from packs import gaps as packs_gaps
 
-        self.assertIn("LauncherLayer(", inspect.getsource(packs_gaps.find_undeclared_files))
-        self.assertIn(".settle(", inspect.getsource(packs_gaps.find_undeclared_files))
+        self.assertIn("LauncherLayer(", inspect.getsource(packs_gaps.scan_core_files))
+        self.assertIn(".settle(", inspect.getsource(packs_gaps.scan_core_files))
         self.assertIn(
             "undeclared_report(", inspect.getsource(packextras.collect_emulator_extras)
         )

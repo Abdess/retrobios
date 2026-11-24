@@ -14,7 +14,7 @@ from model.profiles import lists_files, load_emulator_profiles
 from model.systems import select_systems
 from packs import slots
 from packs.crossreflaunchers import launcher_reads_not_held
-from packs.gaps import find_exclusion_notes, find_undeclared_files
+from packs.gaps import find_exclusion_notes, scan_core_files
 from packs.verdicts import (
     RELEASE_ASSET_PENDING,
     Severity,
@@ -651,6 +651,32 @@ def _region_pass(
     return region_drops, region_fallbacks, region_extra_dests
 
 
+def _narrowed(
+    run: _PlatformRun,
+    rows: list[dict],
+    region_drops: set[str],
+    region_extra_dests: dict[tuple[str, str, str], str],
+) -> list[dict]:
+    """The rows of the core walk a narrowed pack keeps, as the builder keeps them."""
+    if run.system_filter:
+        # A system pack carries the extras its systems own.
+        from packs.extras import report_owned_by_systems
+
+        rows = report_owned_by_systems(rows, run.system_filter)
+    if run.required_only:
+        rows = [u for u in rows if u.get("required") is not False]
+    if region_drops:
+        rows = [
+            u
+            for u in rows
+            if region_extra_dests.get(
+                (u.get("emulator", ""), u.get("name", ""), u.get("path") or "")
+            )
+            not in region_drops
+        ]
+    return rows
+
+
 def _platform_gaps(
     run: _PlatformRun,
     occupied: dict[str, str | None],
@@ -658,9 +684,10 @@ def _platform_gaps(
     region_extra_dests: dict[tuple[str, str, str], str],
     validation_index: dict,
     validation_owners: dict[str, list[tuple[str, str]]],
-) -> tuple[list[dict], set[str], dict[str, str]]:
+) -> tuple[list[dict], set[str], dict[str, str], list[dict]]:
     """The core files of the pack: the gap report as the builder narrows it,
-    the destinations it fills, and the category of each."""
+    the destinations it fills, the category of each, and the files of the
+    pack a profile documents unsourceable."""
     config = run.config
     # Cross-reference undeclared files, called exactly as the builder calls
     # it: its declarations, not the enriched ones (a core file the platform
@@ -668,7 +695,7 @@ def _platform_gaps(
     # such files in the RetroArch pack), and no names from inside archives
     # or data trees (a loose file whose name exists only as a member of
     # naomi2.zip was counted "in pack" while the builder shipped nothing).
-    undeclared = find_undeclared_files(
+    core_files = scan_core_files(
         config,
         run.emulators_dir,
         run.db,
@@ -676,25 +703,11 @@ def _platform_gaps(
         target_cores=run.target_cores,
         declared_names=platform_declarations(config, run.db, enrich=False),
     )
+    undeclared = core_files.undeclared
     # The builder's own pass reads the same report: computed once here and
     # handed over as it stands now, before the markings below.
     report_for_builder = [dict(u) for u in undeclared]
-    if run.system_filter:
-        # A system pack carries the extras its systems own.
-        from packs.extras import report_owned_by_systems
-
-        undeclared = report_owned_by_systems(undeclared, run.system_filter)
-    if run.required_only:
-        undeclared = [u for u in undeclared if u.get("required") is not False]
-    if region_drops:
-        undeclared = [
-            u
-            for u in undeclared
-            if region_extra_dests.get(
-                (u.get("emulator", ""), u.get("name", ""), u.get("path") or "")
-            )
-            not in region_drops
-        ]
+    undeclared = _narrowed(run, undeclared, region_drops, region_extra_dests)
     if run.required_only:
         # One member of a required set, as the builder keeps it.
         spares = core_file_spares(undeclared)
@@ -715,7 +728,8 @@ def _platform_gaps(
         run.system_filter,
         run.required_only,
     ))
-    return undeclared, placed, placed_kind
+    unsourceable = _narrowed(run, core_files.unsourceable, region_drops, region_extra_dests)
+    return undeclared, placed, placed_kind, unsourceable
 
 
 def _profile_coverage(
@@ -880,7 +894,7 @@ def verify_platform(
     shipped, occupied = _builder_placement(
         tally.packed_order, bool(config.get("case_insensitive_fs", False))
     )
-    undeclared, placed, placed_kind = _platform_gaps(
+    undeclared, placed, placed_kind, unsourceable = _platform_gaps(
         run, occupied, region_drops, region_extra_dests, validation_index,
         validation_owners,
     )
@@ -943,6 +957,9 @@ def verify_platform(
         "excluded_files": excluded,
         "packed_extras": packed_extras,
         "undeclared_files": undeclared,
+        # Files of the pack a profile documents unsourceable: needed, never
+        # held, counted by the same walk as the undeclared ones.
+        "unsourceable_files": unsourceable,
         # Reported apart, never scored: no severity, count or exit code reads it.
         "launcher_reads_not_held": launcher_reads_not_held(
             {config.get("_key", platform): config}, db, profiles, data_dir_registry

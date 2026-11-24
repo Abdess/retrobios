@@ -36,5 +36,31 @@ class StandaloneFallsBackOnPath(unittest.TestCase):
         )
 
 
+class UnsourceableFilesCountedLikeGaps(unittest.TestCase):
+    """The site counted a platform's unsourceable core files by distinct
+    name over every profile: gamecontrollerdb.txt read at four paths by four
+    cores was one, and hatari's standalone keymap counted where hatari runs
+    as a core only."""
+
+    def test_one_per_slot_in_the_build_the_platform_runs(self):
+        from packs.gaps import scan_core_files
+
+        reason = {"unsourceable": "written by the user"}
+        profiles = {
+            "a": {"emulator": "A", "type": "libretro", "systems": ["s"], "files": [
+                {"name": "db.txt", "path": "a/db.txt", **reason},
+                {"name": "keymap", "path": "keymap", "mode": "standalone", **reason},
+                {"name": "<font>.ttf", "path": "<font>.ttf", **reason},
+            ]},
+            "b": {"emulator": "B", "type": "libretro", "systems": ["s"], "files": [
+                {"name": "db.txt", "path": "b/db.txt", **reason},
+            ]},
+        }
+        config = {"cores": ["a", "b"], "systems": {}}
+        db = {"files": {}, "indexes": {}}
+        found = scan_core_files(config, "emulators", db, emu_profiles=profiles).unsourceable
+        self.assertEqual(sorted(r["path"] for r in found), ["a/db.txt", "b/db.txt"])
+
+
 if __name__ == "__main__":
     unittest.main()

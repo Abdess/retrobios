@@ -162,9 +162,10 @@ class TheGapReportIsComputedOnce(unittest.TestCase):
             db = load_database("database.json")
             profiles = load_emulator_profiles("emulators")
             config = load_platform_config("emudeck", "platforms")
+            # find_undeclared_files is the same walk: counted through it too.
             with mock.patch.object(
-                gaps, "find_undeclared_files", wraps=gaps.find_undeclared_files
-            ) as counted, mock.patch.object(packs_coverage, "find_undeclared_files", counted):
+                gaps, "scan_core_files", wraps=gaps.scan_core_files
+            ) as counted, mock.patch.object(packs_coverage, "scan_core_files", counted):
                 coverage.verify_platform(config, db, "emulators", profiles)
         finally:
             os.chdir(previous)

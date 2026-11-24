@@ -13,12 +13,10 @@ from core.paths import DB_FILE, EMULATORS_DIR, REPO_ROOT
 from model import siteinputs
 from model.largefiles import LARGE_FILES_CACHE
 from model.platforms import load_platform_config
-from model.profiles import load_emulator_profiles
 from model.registry import load_data_dir_registry, versions_file_for
 from packs.coverage import verify_platform
 from packs.shares import core_shares
 from packs.verdicts import blocking_missing
-from resolve.cores import resolve_platform_cores
 from sitegen.install import display_name
 
 
@@ -55,15 +53,6 @@ def compute_coverage(
     # the gap entries here said 7956 packed and 419 missing for RetroArch,
     # where verify says 7977 and 66.
     shares = core_shares(result)
-    # Files a profile marks unsourceable never reach the undeclared list, so
-    # the gap they represent has to be counted back in.
-    profiles = load_emulator_profiles(emulators_dir)
-    unsourceable_names = {
-        f.get("name", "")
-        for emu in resolve_platform_cores(config, profiles)
-        for f in (profiles.get(emu) or {}).get("files", []) or []
-        if f.get("unsourceable")
-    }
     return {
         "platform": display_name(config, platform_name),
         "total": total,
@@ -79,7 +68,9 @@ def compute_coverage(
         "core_present": shares.packed,
         "core_missing": shares.missing,
         "core_unplaced": shares.held_unplaced,
-        "core_unsourceable": len(unsourceable_names),
+        # Files a profile marks unsourceable never reach the undeclared list:
+        # verify counts them apart, one per slot, under the same rules.
+        "core_unsourceable": len(result.get("unsourceable_files", [])),
         "mode": config.get("verification_mode", "existence"),
         # The gaps page badge: verify's count, never refiltered from details.
         "required_missing": blocking_missing(

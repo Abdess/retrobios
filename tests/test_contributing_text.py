@@ -48,8 +48,7 @@ class CoverageReadsTheGivenProfiles(unittest.TestCase):
             return {"status_counts": {}, "severity_counts": {}, "verification_mode": "existence",
                     "total_files": 0, "undeclared_files": [], "details": []}
 
-        with mock.patch.object(sitecoverage, "verify_platform", fake_verify), \
-                mock.patch.object(sitecoverage, "load_emulator_profiles", return_value={}):
+        with mock.patch.object(sitecoverage, "verify_platform", fake_verify):
             sitecoverage.compute_coverage(
                 "retroarch", str(REPO_ROOT / "platforms"), {"files": {}}, emulators_dir="elsewhere"
             )
