@@ -493,9 +493,10 @@ class Scrapers(unittest.TestCase):
 
     def test_rocknix_patched_data_directory(self) -> None:
         from scraper import rocknix_launchers as rl
+        from scraper.rocknix_configs import STANDALONE
         from scraper.shell_launchers import LauncherPatternMissing, RepoTree
 
-        path = f"{rl.STANDALONE}/flycast-sa/patches/000-conf-dir.patch"
+        path = f"{STANDALONE}/flycast-sa/patches/000-conf-dir.patch"
         patch = textwrap.dedent("""\
             --- a/core/linux-dist/main.cpp
             +++ b/core/linux-dist/main.cpp

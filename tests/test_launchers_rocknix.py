@@ -18,12 +18,14 @@ from pathlib import Path
 import yaml
 
 from scraper import rocknix_launchers as rl
+from scraper import rocknix_configs
+from scraper.rocknix_configs import ROCKNIX, DEVICES, STANDALONE
 from model.sourcerevision import required_revision
 from scraper.shell_launchers import LauncherPatternMissing, RepoTree
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-SA = rl.STANDALONE
+SA = STANDALONE
 
 
 def text(block: str) -> str:
@@ -31,7 +33,7 @@ def text(block: str) -> str:
 
 
 def devices(*names: str) -> dict[str, str]:
-    return {f"{rl.DEVICES}/{name}/options": "" for name in names}
+    return {f"{DEVICES}/{name}/options": "" for name in names}
 
 
 MELONDS_MK = text(
@@ -304,7 +306,7 @@ USERCONFIG = text(
 
 def rocknix_tree(files: dict[str, str], links: dict[str, str] | None = None) -> RepoTree:
     """A ROCKNIX tree holding the first-boot copy every config record cites."""
-    return RepoTree.from_files({rl.USERCONFIG: USERCONFIG, **files}, links)
+    return RepoTree.from_files({rocknix_configs.USERCONFIG: USERCONFIG, **files}, links)
 
 
 def by(records: list[dict], emulator: str) -> list[dict]:
@@ -683,7 +685,7 @@ class PlatformRecords(unittest.TestCase):
         for record in self.config["launchers"]:
             for part in record["source_ref"].split(", "):
                 if ":" in part:
-                    self.assertTrue(part.startswith(f"{rl.ROCKNIX}/"), record)
+                    self.assertTrue(part.startswith(f"{ROCKNIX}/"), record)
 
     def test_a_device_is_named_only_beside_another_device_record(self):
         with_device: dict[tuple[str, str], int] = {}
