@@ -18,12 +18,14 @@ from pathlib import Path
 import yaml
 
 from scraper import emuelec_launchers as el
+from scraper import emuelec_runs
+from scraper.emuelec_runs import SX05RE, BIN, Runs, LIBRETRO, EMULATORS
 from model.sourcerevision import required_revision
 from scraper.shell_launchers import LauncherPatternMissing, RepoTree
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-EMU = el.EMULATORS
+EMU = EMULATORS
 
 
 def text(block: str) -> str:
@@ -399,21 +401,21 @@ DOLPHIN_SH = text(
 )
 
 FILES = {
-    el.RUN_EMU: RUN_EMU,
-    el.UTILS: UTILS,
-    el.RETROARCH_MK: RETROARCH_MK,
-    f"{el.LIBRETRO}/freej2me/scripts/freej2me.sh": FREEJ2ME_SH,
-    f"{el.BIN}/pico8.sh": PICO8_SH,
+    emuelec_runs.RUN_EMU: RUN_EMU,
+    emuelec_runs.UTILS: UTILS,
+    emuelec_runs.RETROARCH_MK: RETROARCH_MK,
+    f"{LIBRETRO}/freej2me/scripts/freej2me.sh": FREEJ2ME_SH,
+    f"{BIN}/pico8.sh": PICO8_SH,
     f"{EMU}/flycastsa/scripts/flycast.sh": FLYCAST_SH,
     f"{EMU}/flycast-dojo/scripts/flycastdojo.sh": FLYCASTDOJO_SH,
     f"{EMU}/amiberry/package.mk": AMIBERRY_MK,
     f"{EMU}/amiberry-lite/package.mk": AMIBERRY_MK.replace("amiberry/", "amiberry-lite/"),
-    f"{el.SX05RE}/tools/sound/timidity/package.mk": TIMIDITY_MK,
+    f"{SX05RE}/tools/sound/timidity/package.mk": TIMIDITY_MK,
     f"{EMU}/duckstation/config/settings.ini": DUCKSTATION_INI,
     f"{EMU}/duckstation/package.mk": DUCKSTATION_MK,
     f"{EMU}/duckstation/scripts/duckstation.sh": DUCKSTATION_SH,
-    el.USERCONFIG: USERCONFIG,
-    el.EMUELEC_MK: EMUELEC_MK,
+    emuelec_runs.USERCONFIG: USERCONFIG,
+    emuelec_runs.EMUELEC_MK: EMUELEC_MK,
     el.YABASANSHIRO_SCRIPTS[0]: yabasanshiro_sh("yabasanshiro"),
     el.YABASANSHIRO_SCRIPTS[1]: yabasanshiro_sh("yabasanshiro1_5"),
     f"{EMU}/jzintv/scripts/jzintv.sh": JZINTV_SH,
@@ -425,9 +427,9 @@ FILES = {
     f"{EMU}/advancemame/config/advmame.rc": ADVMAME_RC,
     f"{EMU}/advancemame/config/advmame.rc_oga": ADVMAME_RC,
     f"{EMU}/advancemame/bin/advmame.sh": ADVMAME_SH,
-    f"{el.LIBRETRO}/mame/scripts/mame.sh": MAME_SH,
-    f"{el.LIBRETRO}/mame/config/ini/mame.ini": MAME_INI,
-    f"{el.LIBRETRO}/mame/config/MAME/MAME.opt": MAME_OPT,
+    f"{LIBRETRO}/mame/scripts/mame.sh": MAME_SH,
+    f"{LIBRETRO}/mame/config/ini/mame.ini": MAME_INI,
+    f"{LIBRETRO}/mame/config/MAME/MAME.opt": MAME_OPT,
     f"{EMU}/scummvmsa/bin/scummvm.start": SCUMMVM_START,
     f"{EMU}/dolphinSA/scripts/dolphin.sh": DOLPHIN_SH,
 }
@@ -445,7 +447,7 @@ def tree(**changes: str | None) -> RepoTree:
 
 def records(extractor, **changes: str | None) -> list[dict]:
     built = tree(**changes)
-    return [r.entry() for r in extractor(built, el.Runs(built))]
+    return [r.entry() for r in extractor(built, Runs(built))]
 
 
 def ref(path: str, lines: str) -> str:
@@ -459,7 +461,7 @@ def revision_of(url: str) -> str:
 
 class Dispatch(unittest.TestCase):
     def test_each_script_is_named_after_the_core_that_starts_it(self):
-        runs = el.Runs(tree())
+        runs = Runs(tree())
         self.assertEqual(runs.emulator("flycast.sh"), "flycastsa")
         self.assertEqual(runs.emulator("flycastdojo.sh"), "flycast_dojo")
         self.assertEqual(runs.emulator("m64p.sh"), "rice, glide64mk2")
@@ -467,16 +469,16 @@ class Dispatch(unittest.TestCase):
         self.assertEqual(runs.emulator("freej2me.sh"), "freej2me")
 
     def test_an_arm_without_a_core_test_names_its_platform(self):
-        self.assertEqual(el.Runs(tree()).emulator("pico8.sh"), "pico8")
+        self.assertEqual(Runs(tree()).emulator("pico8.sh"), "pico8")
 
     def test_a_script_no_longer_started_raises(self):
-        runs = el.Runs(tree())
+        runs = Runs(tree())
         with self.assertRaises(LauncherPatternMissing):
             runs.of("gone.sh")
 
     def test_a_dispatch_without_any_script_raises(self):
         with self.assertRaises(LauncherPatternMissing):
-            el.Runs(tree(**{el.RUN_EMU: "echo nothing\n"}))
+            Runs(tree(**{emuelec_runs.RUN_EMU: "echo nothing\n"}))
 
 
 class LibretroRecords(unittest.TestCase):
@@ -485,7 +487,7 @@ class LibretroRecords(unittest.TestCase):
         self.assertEqual(record["search_dir"], "/storage/roms/bios")
         self.assertEqual(record["kind"], "passes_path")
         self.assertEqual(
-            record["source_ref"], f"{ref(el.RETROARCH_MK, '2')}, {ref(el.RUN_EMU, '80')}"
+            record["source_ref"], f"{ref(emuelec_runs.RETROARCH_MK, '2')}, {ref(emuelec_runs.RUN_EMU, '80')}"
         )
 
     def test_retrorun_is_handed_the_folder_with_d(self):
@@ -494,7 +496,7 @@ class LibretroRecords(unittest.TestCase):
             (record["emulator"], record["search_dir"], record["passes_to"]),
             ("retrorun", "/storage/roms/bios", "retrorun -d"),
         )
-        self.assertEqual(record["source_ref"], ref(el.RUN_EMU, "4, 81-82"))
+        self.assertEqual(record["source_ref"], ref(emuelec_runs.RUN_EMU, "4, 81-82"))
 
     def test_freej2me_gets_java_home_and_its_jar_copied(self):
         java, jar = records(el.freej2me)
@@ -522,13 +524,13 @@ class StandaloneRecords(unittest.TestCase):
         self.assertEqual(record["passes_to"], "/emuelec/bin/pico-8")
         self.assertEqual(
             record["source_ref"],
-            f"{ref(el.RUN_EMU, '57-58')}, {ref(f'{el.BIN}/pico8.sh', '1-5, 8-10')}",
+            f"{ref(emuelec_runs.RUN_EMU, '57-58')}, {ref(f'{BIN}/pico8.sh', '1-5, 8-10')}",
         )
 
     def test_pico8_without_the_removal_is_not_a_move(self):
         changed = PICO8_SH.replace("    rm -rf /storage/roms/bios/pico-8\n", "")
         with self.assertRaises(LauncherPatternMissing):
-            records(el.pico8, **{f"{el.BIN}/pico8.sh": changed})
+            records(el.pico8, **{f"{BIN}/pico8.sh": changed})
 
     def test_links_from_scripts_and_packages(self):
         found = records(el.links)
@@ -544,7 +546,7 @@ class StandaloneRecords(unittest.TestCase):
         )
         self.assertEqual(
             found[1]["source_ref"],
-            f"{ref(el.RUN_EMU, '26-27')}, "
+            f"{ref(emuelec_runs.RUN_EMU, '26-27')}, "
             f"{ref(f'{EMU}/flycast-dojo/scripts/flycastdojo.sh', '1-5')}",
         )
         self.assertEqual(
@@ -567,7 +569,7 @@ class StandaloneRecords(unittest.TestCase):
         self.assertEqual(
             record["installs"],
             {"path": "/storage/.config/emuelec/configs/duckstation/settings.ini",
-             "source_ref": f"{EMU}/duckstation/package.mk:1, {el.USERCONFIG}:2"},
+             "source_ref": f"{EMU}/duckstation/package.mk:1, {emuelec_runs.USERCONFIG}:2"},
         )
         self.assertIs(record["kept_if_present"], True)
         self.assertEqual(record["overrides"], [])
@@ -582,11 +584,11 @@ class StandaloneRecords(unittest.TestCase):
 
     def test_without_a_boot_copy_the_quoted_glob_installs_nothing(self):
         with self.assertRaises(LauncherPatternMissing):
-            records(el.duckstation, **{el.USERCONFIG: "#!/bin/sh\n"})
+            records(el.duckstation, **{emuelec_runs.USERCONFIG: "#!/bin/sh\n"})
 
     def test_an_overwriting_boot_copy_does_not_keep_the_file(self):
         (record,) = records(el.duckstation, **{
-            el.USERCONFIG: "cp -Rp /usr/config/* /storage/.config/ &>/dev/null\n",
+            emuelec_runs.USERCONFIG: "cp -Rp /usr/config/* /storage/.config/ &>/dev/null\n",
         })
         self.assertIs(record["kept_if_present"], False)
 
@@ -670,7 +672,7 @@ class StandaloneRecords(unittest.TestCase):
         )
         self.assertEqual(found[0]["depends_on_option"], "ra_midi_output = fluidsynth")
         self.assertEqual(
-            found[1]["source_ref"], f"{ref(el.RUN_EMU, '7-9')}, {ref(el.UTILS, '1, 10-11')}"
+            found[1]["source_ref"], f"{ref(emuelec_runs.RUN_EMU, '7-9')}, {ref(emuelec_runs.UTILS, '1, 10-11')}"
         )
 
     def test_every_extractor_runs_on_the_fixtures(self):
@@ -706,7 +708,7 @@ class PlatformRecords(unittest.TestCase):
         for record in self.config["launchers"]:
             for part in record["source_ref"].split(", "):
                 if ":" in part:
-                    self.assertTrue(part.startswith(f"{el.SX05RE}/"), record)
+                    self.assertTrue(part.startswith(f"{SX05RE}/"), record)
 
 
 if __name__ == "__main__":
