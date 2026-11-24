@@ -12,6 +12,9 @@ import zipfile
 from pathlib import Path
 
 from scripts.scraper import arcade_parent_importer as api
+from scripts.scraper import arcade_drivers
+from scripts.scraper import arcade_sets
+from scripts.scraper import clex
 from scripts.scraper import listxml
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -94,7 +97,7 @@ class RunnableMarker(unittest.TestCase):
 
 class FlycastTable(unittest.TestCase):
     def setUp(self) -> None:
-        self.index = api.flycast_index((FIXTURES / "naomi_roms.cpp").read_text())
+        self.index = arcade_sets.flycast_index((FIXTURES / "naomi_roms.cpp").read_text())
 
     def test_null_bios_is_naomi_and_filename_names_the_archive(self) -> None:
         self.assertEqual(self.index["bios"]["naomi"], ["gram2000", "ikaruga", "jpgame"])
@@ -298,7 +301,7 @@ class DriverSource(unittest.TestCase):
 
     def test_the_source_is_named_by_its_tree(self) -> None:
         tree = self.doc["source"]["files"]["src"]
-        source = api.read_driver_source(self.cache / "src" / "libretro" / "mame2003-libretro" / f"{COMMIT}.tar.gz")
+        source = arcade_drivers.read_driver_source(self.cache / "src" / "libretro" / "mame2003-libretro" / f"{COMMIT}.tar.gz")
         self.assertEqual(tree, source.tree)
         self.assertEqual(list(self.doc["source"]["files"]), ["src"])
 
@@ -309,11 +312,11 @@ class DriverSource(unittest.TestCase):
         self.assertIn("built1", gaps["code_only"])
 
     def test_an_undeclared_driver_is_refused(self) -> None:
-        with self.assertRaises(api.DriverSourceError):
-            api.driver_source_sets("DRIVER( nosuch )", {"src/drivers/a.c": ""}, {})
+        with self.assertRaises(clex.DriverSourceError):
+            arcade_drivers.driver_source_sets("DRIVER( nosuch )", {"src/drivers/a.c": ""}, {})
 
     def test_the_empty_tree(self) -> None:
-        self.assertEqual(api.git_tree_sha({}), "4b825dc642cb6eb9a060e54bf8d69288fbee4904")
+        self.assertEqual(arcade_drivers.git_tree_sha({}), "4b825dc642cb6eb9a060e54bf8d69288fbee4904")
 
     @unittest.skipIf(Draft202012Validator is None, "jsonschema not installed")
     def test_output_matches_the_schema(self) -> None:
@@ -346,7 +349,7 @@ class FbneoNamespaces(unittest.TestCase):
     """Each FBNeo DAT is its own namespace, a console set is its driver."""
 
     def setUp(self) -> None:
-        names = api.fbneo_drivers(FBNEO_LIST)
+        names = arcade_sets.fbneo_drivers(FBNEO_LIST)
         arcade = _dat(_game("1942", "pre90s/d_1942.cpp"))
         msx = _dat(
             _game("1942", "msx/d_msx.cpp", "msx"),
@@ -354,7 +357,7 @@ class FbneoNamespaces(unittest.TestCase):
             '<rom name="msx.rom" size="1" crc="87654321"/></game>',
         )
         nes = _dat(_game("zelda", "nes/d_nes.cpp"), _game("smb", "nes/d_nes.cpp"))
-        sets, self.archives = api.fbneo_sets(
+        sets, self.archives = arcade_sets.fbneo_sets(
             [lambda d=d: io.BytesIO(d) for d in (arcade, msx, nes)], names
         )
         self.sets = sets
