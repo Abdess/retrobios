@@ -51,6 +51,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from core.cli import add_repo_inputs, require_directory
+from core.paths import RECIPES_DIR
 from model.database import load_database
 from romrecipes.ledger import ARCHIVES_FILE
 from romrecipes.runs import run_build, run_capture
@@ -76,7 +77,7 @@ def build_parser() -> argparse.ArgumentParser:
     add_repo_inputs(parser, "bios", "platforms", "emulators", "db")
     parser.add_argument(
         "--dat-recipes",
-        default="recipes",
+        default=RECIPES_DIR,
         help="recipe snapshot file, or a directory of them",
     )
     parser.add_argument(

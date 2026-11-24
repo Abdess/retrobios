@@ -40,6 +40,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import IO
 
+from core.paths import RECIPES_DIR
 from core.ziptools import is_archive_path, zip_members
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
@@ -61,7 +62,7 @@ from .listxml import (
 from .logiqx_parser import LogiqxDat, parse_logiqx
 
 SOURCES = ("mame", "fbneo")
-DEFAULT_OUTPUT = "recipes/{source}.json"
+DEFAULT_OUTPUT = f"{RECIPES_DIR}/{{source}}.json"
 
 
 def relevant_archives(emulators_dir: str, platforms_dir: str) -> set[str]:
