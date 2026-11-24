@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from core import upstream
+
 # Read in this order: a declared repository decides attribution before the
 # mirror that only keeps a gone forge's history reachable.
 REPOSITORY_FIELDS = ("source", "upstream", "source_mirror")
@@ -28,6 +30,29 @@ def declared_repositories(profile: dict) -> list[tuple[str, str, str]]:
         elif value:
             urls.append((field_name, "", str(value)))
     return urls
+
+
+def _identity(url: str) -> tuple[str, str] | str:
+    """What two URLs naming one repository share: host and slug on a known
+    forge, the URL itself elsewhere."""
+    repo = upstream.parse_repo(url)
+    return (repo.host, repo.slug) if repo is not None else url.strip().rstrip("/")
+
+
+def serving_url(profile: dict, url: str) -> str:
+    """The URL that serves a declared repository: the `source_mirror` of a
+    `source` the profile declares gone, the URL itself otherwise.
+
+    The mirror carries the same commits: simple64/simple64 and
+    teknogods/TeknoParrotUI answer 404, and the site linked every citation
+    into them while profile_sync read the mirror. An `upstream` naming the
+    gone source is served by the mirror too.
+    """
+    mirror = str(profile.get("source_mirror") or "")
+    if not mirror or not str(profile.get("upstream_gone") or "").strip():
+        return url
+    gone = {_identity(u) for field, _mode, u in declared_repositories(profile) if field == "source"}
+    return mirror if _identity(url) in gone else url
 
 
 def pin_field(field: str) -> str:

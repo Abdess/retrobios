@@ -297,6 +297,21 @@ class PerModeSourcePins(unittest.TestCase):
             [("gone/emu", "d" * 40), ("keeper/emu", "d" * 40)],
         )
 
+    def test_a_source_declared_gone_is_linked_through_its_mirror(self):
+        """simple64/simple64 answers 404, and every citation on its page
+        linked there while profile_sync read simple64-vault/simple64."""
+        profile = {
+            "source": "https://github.com/gone/emu",
+            "upstream": "https://github.com/gone/emu",
+            "source_mirror": "https://github.com/keeper/emu",
+            "source_commit": "d" * 40,
+            "upstream_gone": "gone/emu answers 404",
+        }
+        self.assertEqual(
+            [(repo.slug, pin) for repo, pin in _forge_sources(profile)],
+            [("keeper/emu", "d" * 40)],
+        )
+
     def test_sqlite_export_accepts_a_per_mode_commit(self):
         from core.artifacts import json_text as _json_text
 

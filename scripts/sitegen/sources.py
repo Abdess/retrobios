@@ -29,6 +29,7 @@ from model.profilerepos import (
     declared_pin,
     declared_repositories,
     pin_field,
+    serving_url,
 )
 from model.sourcerevision import parse_source
 from sitegen.render import escape_tags
@@ -41,10 +42,11 @@ def _repo_pins(profile: dict, field: str, label: str) -> list[tuple[str, str, st
     and the revision by build mode. Reading them apart would pin a libretro
     fork to the standalone revision and produce a permalink into a tree that
     never held the cited line. Each tuple is (url, pin, source_commit
-    fallback for that same mode). A mirror is pinned by source_commit.
+    fallback for that same mode). A mirror is pinned by source_commit, and
+    a source the profile declares gone is given as the mirror serving it.
     """
-    declared = [(mode, url) for name, mode, url in declared_repositories(profile)
-                if name == field]
+    declared = [(mode, serving_url(profile, url))
+                for name, mode, url in declared_repositories(profile) if name == field]
     # The requested build mode first, so it wins when several repositories
     # would otherwise be equally good candidates.
     declared.sort(key=lambda pair: bool(pair[0]) and pair[0] != label)

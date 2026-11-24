@@ -59,7 +59,6 @@
  "codeberg.org/virtualxt/virtualxt@a400adb0abf242c2fecbe926618338a00dc557c5": [
   "virtualxt_libretro.info"
  ],
- "git.citron-emu.org/citron-emu/Citron@79dee42601deff2077160906f9a89756fca820a9": [],
  "git.eden-emu.dev/eden-emu/eden@26a03d2473787abf3223b2d0e65b291eee00c1e1": [
   "src/android/app/src/main/java/org/yuzu/yuzu_emu/fragments/InstallableFragment.kt",
   "src/android/app/src/main/java/org/yuzu/yuzu_emu/utils/DirectoryInitialization.kt",
@@ -10329,30 +10328,6 @@
   "simple64-input-qt/configdialog.cpp",
   "simple64-input-qt/main.cpp"
  ],
- "github.com/simple64/simple64@d8c969c7b932e3d76e6a25549d76348839dbaefd": [
-  "build.sh",
-  "mupen64plus-core/CMakeLists.txt",
-  "mupen64plus-core/src/api/config.c",
-  "mupen64plus-core/src/api/frontend.c",
-  "mupen64plus-core/src/api/m64p_types.h",
-  "mupen64plus-core/src/device/controllers/vru_controller.c",
-  "mupen64plus-core/src/device/pif/bootrom_hle.c",
-  "mupen64plus-core/src/device/pif/pif.c",
-  "mupen64plus-core/src/device/pif/pif.h",
-  "mupen64plus-core/src/device/r4300/interrupt.c",
-  "mupen64plus-core/src/main/main.c",
-  "mupen64plus-core/src/main/rom.c",
-  "mupen64plus-core/src/main/screenshot.c",
-  "mupen64plus-core/src/osal/files_unix.c",
-  "mupen64plus-core/src/osd/osd.h",
-  "parallel-rdp-standalone/parallel-rdp/rdp_renderer.cpp",
-  "simple64-gui/cheats.cpp",
-  "simple64-gui/interface/common.cpp",
-  "simple64-gui/main.cpp",
-  "simple64-gui/mainwindow.cpp",
-  "simple64-input-qt/configdialog.cpp",
-  "simple64-input-qt/main.cpp"
- ],
  "github.com/skmp/reicast-emulator@ad61f95dd6b4c6218846a25de6194550311a5d28": [
   "core/hw/flashrom/flashrom.h",
   "core/hw/holly/sb_mem.cpp",
@@ -10471,7 +10446,6 @@
   "src/io/file_manager.cpp",
   "src/utils/constants.cpp"
  ],
- "github.com/suyu-emu/suyu@ee365bad9501c73ff49936e72ec91cd9c3ce5c24": [],
  "github.com/sydarn/yabause@a40dace1ae0af3ebd45848549fdf396f40e3930f": [
   "yabause/CMakeLists.txt",
   "yabause/src/config.h.in",
@@ -10481,12 +10455,6 @@
   "yabause/src/memory.h",
   "yabause/src/retro_arena/main.cpp",
   "yabause/src/yabause.c"
- ],
- "github.com/teknogods/TeknoParrotUI@b75872addc1d5cce81a62f4c1468eab59e2d3cbe": [
-  "TeknoParrotUi.Common/EmulatorType.cs",
-  "TeknoParrotUi.Common/TeknoNaomiCatalog.cs",
-  "TeknoParrotUi.Common/TeknoNaomiLaunch.cs",
-  "TeknoParrotUi/MainWindow.xaml.cs"
  ],
  "github.com/thecrixux/TeknoParrotUI@b75872addc1d5cce81a62f4c1468eab59e2d3cbe": [
   "TeknoParrotUi.Common/EmulatorType.cs",
@@ -10992,7 +10960,6 @@
   "src/common/filesystem.c",
   "src/common/header/common.h"
  ],
- "github.com/yuzu-emu-mirror/yuzu@15e6e48bef0216480661444a8d8b348c1cca47bb": [],
  "github.com/zelurker/raine@8e25d5d8907ae459181610912b0030c955683015": [
   "makefile",
   "source/emudx.c",

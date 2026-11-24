@@ -7,7 +7,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass, replace
 
 from core import upstream
-from model.profilerepos import declared_pin, declared_repositories, pin_field
+from model.profilerepos import declared_pin, declared_repositories, pin_field, serving_url
 
 
 PIN = "pin"
@@ -66,6 +66,25 @@ def resolve_pin(
     return (sha, f"profiled_date {date}") if sha else (None, None)
 
 
+def _read_order(profile: dict) -> list[tuple[str, str, str]]:
+    """The declared repositories in the order they are asked, as
+    (field, build mode, url): a source declared gone is followed at once by
+    the mirror that serves it, before the upstream.
+
+    The gone source is still asked, so a forge that answers again
+    contradicts the declaration. Listed last, the mirror ranked after a live
+    upstream and took no part in attribution, while the prose pass and the
+    site read it in the source's place.
+    """
+    order: list[tuple[str, str, str]] = []
+    for field_name, mode, url in declared_repositories(profile):
+        order.append((field_name, mode, url))
+        served = serving_url(profile, url)
+        if field_name != "source_mirror" and served != url:
+            order.append(("source_mirror", mode, served))
+    return order
+
+
 def select_views(
     profile: dict, cache_dir: str, offline: bool
 ) -> list[RepoView]:
@@ -81,7 +100,7 @@ def select_views(
     # A port living on a branch of a fork is absent from the default tip, so
     # the branch it was read from is followed when the profile names one.
     declared = str(profile.get("source_branch") or "") or None
-    for field_name, mode, url in declared_repositories(profile):
+    for field_name, mode, url in _read_order(profile):
         repo = upstream.parse_repo(url)
         if repo is None or (repo.host, repo.slug) in seen:
             continue

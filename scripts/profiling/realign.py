@@ -17,7 +17,7 @@ from profiling.anchoring import anchor_block
 from profiling.attribution import owner_order
 from profiling.citations import Citation, citation_key, collect_citations, is_external_citation
 from profiling.proseedit import apply_prose_edits, run_after_moves
-from model.profilerepos import declared_repositories
+from model.profilerepos import declared_repositories, serving_url
 from profiling.yamledit import apply_edit
 
 
@@ -359,24 +359,21 @@ def _prose_repos(document: dict) -> _ProseRepos | None:
     # Every repository the profile declares, by build mode where it keys
     # them so: eka2l1, mesence, supermodel and xemu pin a dict, and reading
     # str(dict) found no repository at all, so their prose was never judged.
-    repos = [
-        (field, mode, repo)
+    urls = {
+        (field, mode, repo): url
         for field, mode, url in declared_repositories(document)
         if field != "source_mirror" and (repo := upstream.parse_repo(url)) is not None
-    ]
-    if not repos:
+    }
+    if not urls:
         return None
+    repos = list(urls)
     # A source declared gone is read through its mirror, which carries the
     # same commits: teknoparrot's notes stayed blocked once
     # teknogods/TeknoParrotUI answered 404, every reading of the old pin
     # calling the files absent.
-    mirror = (
-        upstream.parse_repo(str(document.get("source_mirror") or ""))
-        if document.get("upstream_gone") else None
-    )
     served = {
-        repo: mirror for field, _mode, repo in repos
-        if mirror is not None and field == "source"
+        repo: mirror for (_field, _mode, repo), url in urls.items()
+        if (mirror := upstream.parse_repo(serving_url(document, url))) not in (None, repo)
     }
     pinned = [
         (served.get(repo, repo), pin)

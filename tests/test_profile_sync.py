@@ -5871,6 +5871,55 @@ class AMirrorOutlivesAGoneSource(unittest.TestCase):
             views = profiling_repos.select_views(profile, "cache", True)
         self.assertEqual([(v.repo, v.field) for v in views], [(mirror, "source_mirror")])
 
+    def test_the_mirror_takes_the_gone_source_place_before_the_upstream(self):
+        """Read last, the mirror ranked after a live upstream, while the
+        prose pass and the site read it in the source's place."""
+        from unittest import mock
+
+        gone_repo = upstream.make_repo("github.com", "gone", "emu")
+        mirror = upstream.make_repo("github.com", "fork", "emu")
+        live = upstream.make_repo("github.com", "up", "emu")
+
+        def head(repo, cache_dir, offline=False, branch=None):
+            if repo == gone_repo:
+                raise upstream.GoneError("HTTP 404")
+            return "tip"
+
+        profile = {
+            "source": "https://github.com/gone/emu",
+            "upstream": "https://github.com/up/emu",
+            "source_mirror": "https://github.com/fork/emu",
+            "source_commit": "pin",
+            "upstream_gone": "gone/emu answers 404",
+        }
+        with mock.patch.object(upstream, "resolve_head", side_effect=head), \
+                mock.patch.object(profiling_repos, "resolve_pin", return_value=("pin", "c")):
+            views = profiling_repos.select_views(profile, "cache", True)
+        self.assertEqual([(v.repo, v.field) for v in views],
+                         [(mirror, "source_mirror"), (live, "upstream")])
+
+    def test_the_gone_source_is_still_asked(self):
+        """A forge answering again contradicts upstream_gone, so it is asked."""
+        from unittest import mock
+
+        asked = []
+
+        def head(repo, cache_dir, offline=False, branch=None):
+            asked.append(repo.slug)
+            return "tip"
+
+        profile = {
+            "source": "https://github.com/gone/emu",
+            "source_mirror": "https://github.com/fork/emu",
+            "source_commit": "pin",
+            "upstream_gone": "gone/emu answers 404",
+        }
+        with mock.patch.object(upstream, "resolve_head", side_effect=head), \
+                mock.patch.object(profiling_repos, "resolve_pin", return_value=("pin", "c")):
+            views = profiling_repos.select_views(profile, "cache", True)
+        self.assertEqual(asked[0], "gone/emu")
+        self.assertEqual(views[0].field, "source")
+
 
 class AHeldUpstreamStaysOnItsPin(unittest.TestCase):
     """aps3e vendors RPCS3 1f080485 and yaps2 PCSX2 342db515: a bump moved
