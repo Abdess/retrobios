@@ -3,8 +3,8 @@
 KNULLI is built on Batocera and keeps configgen under its own package
 (package/system/knulli-configgen). Where a generator is still Batocera's
 code (DuckStation, xemu, mupen64plus, x16emu, the flycast environment, the
-hatari and melonDS forms batocera_launchers accepts), Batocera's extractor
-reads it. The others are older or KNULLI's own: the lexaloffle generator logs
+hatari and melonDS forms batocera_searches and batocera_config_writes accept),
+Batocera's extractor reads it. The others are older or KNULLI's own: the lexaloffle generator logs
 and returns instead of raising, libretroOptions is one function of
 `if (system.config['core'] == ...)` blocks, and the PICO-8 binary is
 installed by board/fsoverlay/usr/bin/knulli-install-pico8.
@@ -33,19 +33,12 @@ from .batocera_launchers import (
     Extraction,
     extraction,
     config_directories,
-    _render,
-    _system_branches,
-    duckstation,
-    duckstation_legacy,
     environment_directories,
-    hatari,
-    melonds,
-    mupen64plus,
     patched_paths,
-    x16emu,
     working_directories,
-    xemu,
 )
+from .batocera_config_writes import _render, _system_branches, melonds, mupen64plus, x16emu, xemu
+from .batocera_searches import duckstation, duckstation_legacy, hatari
 from .batocera_configgen import Configgen, _path_value
 from .configgen_launchers import (
     Launcher,

@@ -23,11 +23,10 @@ from scraper.batocera_launchers import (
     Launcher,
     LauncherShapeError,
     config_directories,
-    duckstation,
     extract_launchers,
-    hatari,
-    lexaloffle,
 )
+from scraper.batocera_searches import duckstation, hatari
+from scraper.batocera_config_writes import lexaloffle
 from scraper.retropie_scripts import Launcher as PackageLauncher
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
