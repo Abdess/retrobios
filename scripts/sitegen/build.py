@@ -670,7 +670,8 @@ def generate_site(args: argparse.Namespace) -> None:
     # Built once, the derivable dumps taken out once: the provenance page and
     # the CSV it links to must list the same dumps.
     dumps = wanted_dumps(
-        build_report(db, load_provenance_snapshots(), needs=profile_needs(profiles, db)),
+        build_report(db, load_provenance_snapshots(), needs=profile_needs(profiles, db),
+                     root=siteinputs.current().db.parent),
         load_derivable(),
     )
 

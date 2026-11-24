@@ -22,6 +22,7 @@ import argparse
 import json
 import os
 import sys
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from core.cli import add_repo_inputs
@@ -79,13 +80,15 @@ def main() -> int:
         print(f"No provenance snapshots in {args.provenance_dir}/")
         return 0
 
+    # The database's paths and its recipes sit under its own folder.
+    root = Path(args.db).resolve().parent
     needs = profile_needs(load_emulator_profiles(args.emulators_dir), db)
-    report = build_report(db, snapshots, archive_members(db), needs=needs)
+    report = build_report(db, snapshots, archive_members(db, root), needs=needs, root=root)
     derived: dict[str, dict] = {}
     if args.derive:
         from acquire.derivations import derivable
 
-        derived = derivable((e for d in report.values() for e in d["missing"]), db)
+        derived = derivable((e for d in report.values() for e in d["missing"]), db, root)
         for data in report.values():
             data["derivable"] = {
                 e["sha1"]: derived[e["sha1"]] for e in data["missing"]

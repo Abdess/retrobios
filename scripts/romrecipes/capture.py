@@ -13,7 +13,7 @@ from typing import BinaryIO
 
 from core.hashing import parse_hash_list
 from core.torrentzip import has_torrentzip_comment, write_torrentzip, zlib_ng_version
-from romrecipes.collection import on_disk
+from model.dbpaths import on_disk
 from romrecipes.ledger import database_archives, load_ledger, write_ledger
 from romrecipes.members import member_sha1, member_opener
 from romrecipes.pins import container_entries

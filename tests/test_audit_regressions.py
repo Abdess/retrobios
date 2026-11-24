@@ -4898,7 +4898,7 @@ class TheWantedPageCountsRomsetMembers(unittest.TestCase):
 
         calls = []
 
-        def members(db):
+        def members(db, root):
             calls.append(db)
             return {}
 

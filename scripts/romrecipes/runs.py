@@ -9,7 +9,7 @@ from pathlib import Path
 from core.torrentzip import zlib_ng_version
 from romrecipes.build import AtomIndex, BuildTally, build_records, build_targets
 from romrecipes.capture import ZlibNgError, capture_ledger
-from romrecipes.collection import collection_root
+from model.dbpaths import collection_root
 from romrecipes.ledger import load_ledger
 from romrecipes.text import print_build_result, print_build_totals, print_capture
 

@@ -13,6 +13,7 @@ from pathlib import Path
 
 from core.paths import REPO_ROOT
 from model import releaserecord
+from model.dbpaths import on_disk
 
 
 @dataclass(frozen=True)
@@ -48,7 +49,7 @@ def bios_dir(db: dict) -> Path:
 
 def collection_path(rel: str) -> Path:
     """A path database.json names, under the database's own folder."""
-    return current().db.parent / rel
+    return on_disk(current().db.parent, rel)
 
 
 def manifests_dir() -> Path:

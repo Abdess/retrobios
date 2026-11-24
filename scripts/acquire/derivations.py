@@ -13,12 +13,13 @@ from __future__ import annotations
 import array
 import functools
 import hashlib
-import os
 import zipfile
 from collections import defaultdict
 from collections.abc import Callable, Iterable, Sequence
+from pathlib import Path
 
 from core.ziptools import is_archive_path, zip_members
+from model.dbpaths import on_disk
 
 # A held file larger than this is not read: no chip image is near it.
 MAX_SOURCE_SIZE = 64 * 1024 * 1024
@@ -117,53 +118,56 @@ def _shift_operator(len2: int) -> tuple[int, ...]:
     return tuple(columns)
 
 
-def _read(held: dict, archives: dict[str, zipfile.ZipFile] | None = None) -> bytes | None:
+def _read(held: dict, archives: dict[Path, zipfile.ZipFile] | None = None) -> bytes | None:
     """The bytes of a held file, or of a member read out of its archive.
 
     `archives` keeps each archive open across its members: reopened for
     every one, a MAME set of a hundred chips parsed its directory a
-    hundred times.
+    hundred times. `file` is where the bytes sit on disk, the archive for a
+    member, and `path` the name the database gives them.
     """
     try:
         if held.get("member"):
             if archives is None:
-                with zipfile.ZipFile(held["archive"]) as zf:
+                with zipfile.ZipFile(held["file"]) as zf:
                     return zf.read(held["member"])
-            opened = archives.get(held["archive"])
+            opened = archives.get(held["file"])
             if opened is None:
-                opened = archives[held["archive"]] = zipfile.ZipFile(held["archive"])
+                opened = archives[held["file"]] = zipfile.ZipFile(held["file"])
             return opened.read(held["member"])
-        with open(held["path"], "rb") as handle:
+        with open(held["file"], "rb") as handle:
             return handle.read()
     except (OSError, KeyError, zipfile.BadZipFile):
         return None
 
 
-def _held_sources(db: dict) -> list[dict]:
+def _held_sources(db: dict, root: Path) -> list[dict]:
     """Every file the collection holds, the members of its archives included.
 
     A romset holds chips a catalog lists on their own: cdi910.rom inside
     cdi910.zip is the CD-i 910 BIOS byte-swapped, and the two halves of the
     Salora Manager sit in manager.zip. Read from the top level alone, they
     stayed MISSING. A member's group is its archive, as a file's is its
-    directory: the pairs a catalog splits come from one machine.
+    directory: the pairs a catalog splits come from one machine. Paths are
+    read under *root*, the database's own folder.
     """
     sources: list[dict] = []
     for record in db.get("files", {}).values():
         path = record.get("path", "")
-        if not os.path.exists(path):
+        file = on_disk(root, path)
+        if not file.exists():
             continue
         if 0 < record.get("size", 0) <= MAX_SOURCE_SIZE:
-            sources.append({**record, "group": os.path.dirname(path)})
+            sources.append({**record, "file": file, "group": str(Path(path).parent)})
         if not is_archive_path(path):
             continue
         try:
-            members = zip_members(path)
+            members = zip_members(file)
         except (OSError, zipfile.BadZipFile):
             continue
         sources.extend(
             {
-                "path": f"{path}/{member.name}", "archive": path,
+                "path": f"{path}/{member.name}", "file": file,
                 "member": member.name, "size": member.size,
                 "crc32": member.crc32, "group": path,
             }
@@ -173,19 +177,20 @@ def _held_sources(db: dict) -> list[dict]:
     return sources
 
 
-def derivable(entries: Iterable[dict], db: dict) -> dict[str, dict]:
+def derivable(entries: Iterable[dict], db: dict, root: Path) -> dict[str, dict]:
     """Missing sha1 to the held file or member and the transform that
-    produce its bytes. Archives stay open for the whole pass."""
-    archives: dict[str, zipfile.ZipFile] = {}
+    produce its bytes, the database's paths read under *root*. Archives
+    stay open for the whole pass."""
+    archives: dict[Path, zipfile.ZipFile] = {}
     try:
-        return _derivable(entries, db, archives)
+        return _derivable(entries, db, root, archives)
     finally:
         for zf in archives.values():
             zf.close()
 
 
 def _derivable(
-    entries: Iterable[dict], db: dict, archives: dict[str, zipfile.ZipFile]
+    entries: Iterable[dict], db: dict, root: Path, archives: dict[Path, zipfile.ZipFile]
 ) -> dict[str, dict]:
     """Only held files whose size can produce a wanted size are read, and a
     concatenation is only tried within one directory or one archive: the
@@ -203,7 +208,7 @@ def _derivable(
     sizes = {size for size, _sha1 in wanted}
     found: dict[str, dict] = {}
 
-    files = _held_sources(db)
+    files = _held_sources(db, root)
     _find_transformed(files, wanted, sizes, archives, found)
     _find_concatenated(files, by_size_crc, sizes, archives, found)
     return found
@@ -213,7 +218,7 @@ def _find_transformed(
     files: list[dict],
     wanted: dict[tuple[int, str], str],
     sizes: set[int],
-    archives: dict[str, zipfile.ZipFile],
+    archives: dict[Path, zipfile.ZipFile],
     found: dict[str, dict],
 ) -> None:
     """Record each wanted sha1 one transform of a held file produces."""
@@ -247,7 +252,7 @@ def _find_concatenated(
     files: list[dict],
     by_size_crc: dict[tuple[int, int], list[str]],
     sizes: set[int],
-    archives: dict[str, zipfile.ZipFile],
+    archives: dict[Path, zipfile.ZipFile],
     found: dict[str, dict],
 ) -> None:
     """Record each wanted sha1 two held files of one group make end to end."""
@@ -280,7 +285,7 @@ def _try_pair(
     total: int,
     combined: dict[tuple[str, str, int], int],
     by_size_crc: dict[tuple[int, int], list[str]],
-    archives: dict[str, zipfile.ZipFile],
+    archives: dict[Path, zipfile.ZipFile],
     found: dict[str, dict],
 ) -> None:
     """Record the wanted sha1 first + second makes, if their crc names one."""

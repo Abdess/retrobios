@@ -573,7 +573,7 @@ class ArchiveMembersAreHeld(unittest.TestCase):
             }
             wrong = dict(entry, name="other.bin", sha1="0" * 40)
             snapshots = {"no-intro": {"entries": [entry, wrong]}}
-            report = build_report(db, snapshots, archive_members(db))
+            report = build_report(db, snapshots, archive_members(db, Path(tmp)))
         self.assertEqual(report["no-intro"]["matched"], 1)
         self.assertEqual([e["name"] for e in report["no-intro"]["missing"]], ["other.bin"])
 
@@ -586,8 +586,42 @@ class ArchiveMembersAreHeld(unittest.TestCase):
             copy = Path(tmp) / "bbcm.zip.4cc3e25a"
             with zipfile.ZipFile(copy, "w") as zf:
                 zf.writestr("mos.rom", b"mos")
-            members = archive_members({"files": {"z": {"path": str(copy)}}})
+            members = archive_members({"files": {"z": {"path": str(copy)}}}, Path(tmp))
         self.assertEqual([m for ms in members.values() for _p, m in ms], ["mos.rom"])
+
+
+class CollectionPathsAreReadUnderItsRoot(unittest.TestCase):
+    """The site installs --db, then built the Wanted page from the archives
+    of the working directory's tree: a dump held in the named collection's
+    set.zip was listed missing."""
+
+    def test_members_and_recipes_come_from_the_root(self):
+        import hashlib
+        import zlib
+
+        from scripts.acquire import provenance as acquire_provenance
+
+        data = b"held" * 100
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "bios" / "X").mkdir(parents=True)
+            with zipfile.ZipFile(root / "bios" / "X" / "set.zip", "w") as zf:
+                zf.writestr("a.rom", data)
+            (root / "recipes").mkdir()
+            (root / "recipes" / "mame.json").write_text(json.dumps({"source": "mame", "entries": [
+                {"name": "other.zip", "dat": "mame0289", "members": [
+                    {"name": "b.rom", "size": 5, "crc32": f"{zlib.crc32(b'other'):08x}"}]}]}),
+                encoding="utf-8")
+            db = {"files": {"s": {"path": "bios/X/set.zip", "md5": "x", "size": 1}}}
+            held = {"name": "held.bin", "dat": "D", "size": len(data),
+                    "crc32": f"{zlib.crc32(data):08x}", "sha1": hashlib.sha1(data).hexdigest()}
+            other = {"name": "other.bin", "dat": "D", "size": 5,
+                     "crc32": f"{zlib.crc32(b'other'):08x}"}
+            report = acquire_provenance.build_report(
+                db, {"no-intro": {"entries": [held, other]}}, root=root)
+        missing = report["no-intro"]["missing"]
+        self.assertEqual([e["name"] for e in missing], ["other.bin"])
+        self.assertEqual([h["archive"] for h in missing[0]["romsets"]], ["other.zip"])
 
 
 class OneDumpIsCountedOnce(unittest.TestCase):

@@ -48,7 +48,7 @@ class HeldDumpsAnswerCatalogEntries(unittest.TestCase):
         image = os.urandom(64)
         db = {"files": {"x": _held(self.tmp / "kick.rom", image)}}
         high = derivations._swap16(derivations._words(image, 0))
-        found = derivations.derivable([_wanted(high)], db)
+        found = derivations.derivable([_wanted(high)], db, self.tmp)
         self.assertEqual(found[hashlib.sha1(high).hexdigest()]["transform"],
                          "even words, byte-swapped")
 
@@ -56,14 +56,41 @@ class HeldDumpsAnswerCatalogEntries(unittest.TestCase):
         low, high = os.urandom(32), os.urandom(32)
         db = {"files": {"a": _held(self.tmp / "basiclo.bin", low),
                         "b": _held(self.tmp / "basichi.bin", high)}}
-        found = derivations.derivable([_wanted(low + high)], db)
+        found = derivations.derivable([_wanted(low + high)], db, self.tmp)
         self.assertEqual(found[hashlib.sha1(low + high).hexdigest()]["from"],
                          [str(self.tmp / "basiclo.bin"), str(self.tmp / "basichi.bin")])
 
     def test_unrelated_bytes_are_not_claimed(self):
         db = {"files": {"a": _held(self.tmp / "a.bin", os.urandom(64))}}
-        self.assertEqual(derivations.derivable([_wanted(os.urandom(32))], db), {})
+        self.assertEqual(derivations.derivable([_wanted(os.urandom(32))], db, self.tmp), {})
 
+
+
+class PathsAreReadUnderTheCollection(unittest.TestCase):
+    """provenance_report --db tmp/x/database.json --derive moved to the
+    repository root, then read the database's relative paths from there: the
+    checkout's bios/, not the collection the run named."""
+
+    def test_a_relative_path_is_read_under_the_root_not_the_working_directory(self):
+        import zipfile
+
+        root = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, root, True)
+        chip, image = os.urandom(64), os.urandom(32)
+        (root / "bios" / "X").mkdir(parents=True)
+        with zipfile.ZipFile(root / "bios" / "X" / "set.zip", "w") as zf:
+            zf.writestr("chip.rom", chip)
+        (root / "bios" / "X" / "loose.bin").write_bytes(image)
+        db = {"files": {
+            "a" * 40: {"path": "bios/X/set.zip", "size": 1},
+            "b" * 40: {"path": "bios/X/loose.bin", "size": len(image)},
+        }}
+        swapped, reversed_image = derivations._swap16(chip), derivations._swap16(image)
+        found = derivations.derivable([_wanted(swapped), _wanted(reversed_image)], db, root)
+        self.assertEqual(found[hashlib.sha1(swapped).hexdigest()]["from"],
+                         ["bios/X/set.zip/chip.rom"])
+        self.assertEqual(found[hashlib.sha1(reversed_image).hexdigest()]["from"],
+                         ["bios/X/loose.bin"])
 
 
 class ARomsetMemberIsASource(unittest.TestCase):
@@ -86,7 +113,7 @@ class ARomsetMemberIsASource(unittest.TestCase):
         swapped = derivations._swap16(chip)
         found = derivations.derivable(
             [_wanted(swapped), {**_wanted(low + high), "crc32": f"{zlib.crc32(low + high):08x}"}],
-            db,
+            db, root,
         )
         self.assertEqual(found[hashlib.sha1(swapped).hexdigest()]["transform"], "byte-swapped")
         self.assertEqual(found[hashlib.sha1(low + high).hexdigest()]["transform"], "concatenated")
@@ -131,7 +158,7 @@ class OneContentIsTransformedOnce(unittest.TestCase):
         transforms = tuple((name, size, counted(fn)) for name, size, fn in derivations.TRANSFORMS)
         swapped = derivations._swap16(chip)
         with unittest.mock.patch.object(derivations, "TRANSFORMS", transforms):
-            found = derivations.derivable([_wanted(swapped)], {"files": files})
+            found = derivations.derivable([_wanted(swapped)], {"files": files}, root)
         self.assertEqual(found[hashlib.sha1(swapped).hexdigest()]["from"],
                          [f"{root / 'a.zip'}/chip.rom"])
         useful = [t for t in transforms if t[1](len(chip)) == len(chip)]

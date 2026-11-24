@@ -11,7 +11,7 @@ from pathlib import Path
 from core.hashing import compute_hashes
 from core.torrentzip import write_torrentzip, zlib_ng_version
 from core.ziptools import is_archive_path, zip_members
-from romrecipes.collection import on_disk
+from model.dbpaths import on_disk
 from romrecipes.members import member_sha1, member_opener
 
 

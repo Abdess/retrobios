@@ -11,7 +11,7 @@ from pathlib import Path
 from core.paths import REPO_ROOT
 from core.torrentzip import build_torrentzip, writer_identity, zlib_ng_version
 from core.ziptools import is_archive_path, zip_members
-from romrecipes.collection import collection_root, on_disk
+from model.dbpaths import collection_root, on_disk
 from romrecipes.romsets import Recipe
 
 

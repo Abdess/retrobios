@@ -50,6 +50,7 @@ on:
       - "scripts/model/collection.py"
       - "scripts/model/composition.py"
       - "scripts/model/database.py"
+      - "scripts/model/dbpaths.py"
       - "scripts/model/declarations.py"
       - "scripts/model/dumpcatalog.py"
       - "scripts/model/exportchanges.py"

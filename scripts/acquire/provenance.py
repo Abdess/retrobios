@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 import sys
 import zipfile
 from pathlib import Path
@@ -12,6 +11,7 @@ from pathlib import Path
 from core.hashing import parse_hash_list
 from core.paths import REPO_ROOT
 from core.ziptools import is_archive_path, zip_members
+from model.dbpaths import on_disk
 from resolve.content import size_fits
 from resolve.validation import installed_everywhere
 
@@ -124,22 +124,28 @@ def needs_filled(entry: dict, needs: dict) -> list[dict]:
     return sorted(found.values(), key=lambda n: (not n["required"], n["emulator"], n["name"]))
 
 
-def archive_members(db: dict) -> dict[tuple[str, int], list[tuple[str, str]]]:
+def archive_members(db: dict, root: Path) -> dict[tuple[str, int], list[tuple[str, str]]]:
     """(crc32, size) of every member of the collection's ZIPs -> (zip, member).
 
     Read from the central directories alone: a romset member is a dump the
     collection already holds, and listing it as an acquisition target sent
-    searches after astrocdw.zip's bioswhit.bin and the Gamate BIOS.
+    searches after astrocdw.zip's bioswhit.bin and the Gamate BIOS. *root* is
+    the folder the database's paths are relative to, never the working
+    directory: the site read another tree's archives for a collection named
+    by --db.
     """
     members: dict[tuple[str, int], list[tuple[str, str]]] = {}
     for entry in db.get("files", {}).values():
         path = entry.get("path", "")
-        if not is_archive_path(path) or not os.path.exists(path):
+        if not is_archive_path(path):
+            continue
+        file = on_disk(root, path)
+        if not file.exists():
             continue
         try:
-            for member in zip_members(path):
+            for member in zip_members(file):
                 key = (member.crc32, member.size)
-                members.setdefault(key, []).append((path, member.name))
+                members.setdefault(key, []).append((str(file), member.name))
         except (zipfile.BadZipFile, OSError) as exc:
             print(f"  WARNING: {path}: {exc}", file=sys.stderr)
     return members
@@ -169,10 +175,7 @@ def _held_in_archive(entry: dict, members: dict) -> bool:
     return False
 
 
-RECIPES_DIR = REPO_ROOT / "recipes"
-
-
-def romset_index(recipes_dir: Path = RECIPES_DIR) -> dict[tuple[str, int], list[dict]]:
+def romset_index(recipes_dir: Path) -> dict[tuple[str, int], list[dict]]:
     """(crc32, size) of every member of an imported romset -> where it sits.
 
     A dump the collection lacks may still ship inside an emulator's romset:
@@ -244,6 +247,7 @@ def build_report(
     members: dict | None = None,
     romsets: dict | None = None,
     needs: dict | None = None,
+    root: Path = REPO_ROOT,
 ) -> dict:
     """Compare each snapshot against the collection.
 
@@ -253,13 +257,14 @@ def build_report(
     all are out of scope and only counted. No-Intro tags every non-game
     dump "[BIOS]", including digital title distribution, so without this
     split the target list is swamped by content the project never ships.
+    Archives and recipes are read under *root*, the database's own folder.
     """
     by_sha1 = db.get("files", {})
     # The members a romset holds are held too, whoever asks: the site built
     # its Wanted page without them and asked the public for the Astrocade
     # and Gamate BIOS that astrocdw.zip and gamate.zip already carry.
-    members = archive_members(db) if members is None else members
-    romsets = romset_index() if romsets is None else romsets
+    members = archive_members(db, root) if members is None else members
+    romsets = romset_index(root / "recipes") if romsets is None else romsets
     by_md5_size = {
         (entry.get("md5", ""), entry.get("size", 0)) for entry in by_sha1.values()
     }

@@ -10,7 +10,7 @@ from pathlib import Path
 
 from core.torrentzip import is_torrentzip
 from core.ziptools import zip_members
-from romrecipes.collection import on_disk
+from model.dbpaths import on_disk
 from romrecipes.pins import container_entries
 from romrecipes.pool import AtomPool
 from romrecipes.romsets import Recipe
