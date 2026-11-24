@@ -13,9 +13,9 @@ import json
 import unittest
 from pathlib import Path
 
-from model.romfolders import format_ref, row_sources, source_refs, split_refs
+from model.romfolders import format_ref, load_sources, row_sources, source_refs, split_refs
 from model.safeparse import yaml_load
-from scraper.romfolders import SourceError, dump_setup, load_sources, scrape_setup
+from scraper.romfolders import SourceError, dump_setup, scrape_setup
 from scraper.romfolders.card import (
     libretro_core,
     parse_allium,

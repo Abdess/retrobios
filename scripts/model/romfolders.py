@@ -24,8 +24,19 @@ from model.profiles import load_emulator_profiles, preferred_profile, upstream_p
 from model.platforms import load_platform_config, native_layer
 from model.sources import source_yaml_file
 
-ROMFOLDERS_DIR = Path("platforms") / "romfolders"
-SOURCES_DIR = ROMFOLDERS_DIR / "_sources"
+
+def romfolders_dir(platforms_dir: str | Path = PLATFORMS_DIR) -> Path:
+    """The rom-folder setups of a platforms directory."""
+    return Path(platforms_dir) / "romfolders"
+
+
+def sources_dir(platforms_dir: str | Path = PLATFORMS_DIR) -> Path:
+    """The setups' declared sources and pins, beside the setup files."""
+    return romfolders_dir(platforms_dir) / "_sources"
+
+
+ROMFOLDERS_DIR = romfolders_dir()
+SOURCES_DIR = sources_dir()
 
 # "<source key> <path>:<line>[-<line>]", several joined by "; ".
 _REF_PART = re.compile(r"^(?P<key>[a-z0-9][a-z0-9-]*) (?P<path>\S+?)(?::(?P<lines>\d+(?:-\d+)?(?:,\d+(?:-\d+)?)*))?$")
@@ -85,6 +96,11 @@ def row_sources(spec: dict) -> list[str]:
 def setup_paths(directory: Path = ROMFOLDERS_DIR) -> list[Path]:
     """The setup files of a directory, without the sources file."""
     return sorted(p for p in Path(directory).glob("*.yml") if not p.name.startswith("_"))
+
+
+def load_sources(directory: Path = SOURCES_DIR) -> dict[str, dict]:
+    """Each setup's declared sources and facts, keyed by its file name."""
+    return {path.stem: source_yaml_file(path) or {} for path in sorted(Path(directory).glob("*.yml"))}
 
 
 def load_setup(path: Path) -> dict:

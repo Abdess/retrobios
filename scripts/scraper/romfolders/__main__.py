@@ -11,11 +11,10 @@ import argparse
 import sys
 from pathlib import Path
 
-from . import Fetcher, SourceError, dump_setup, load_sources, scrape_setup
+from . import Fetcher, SourceError, dump_setup, scrape_setup
 from core.upstream import UpstreamError
 from core.artifacts import write_if_changed
-
-DEFAULT_DIR = Path("platforms") / "romfolders"
+from model.romfolders import ROMFOLDERS_DIR, SOURCES_DIR, load_sources
 
 
 def main() -> int:
@@ -24,10 +23,10 @@ def main() -> int:
     which.add_argument("--setup", action="append", help="setup id (repeatable)")
     which.add_argument("--all", action="store_true", help="every setup of the sources file")
     which.add_argument("--list", action="store_true", help="list the setups and their format")
-    parser.add_argument("--sources", type=Path, default=DEFAULT_DIR / "_sources",
+    parser.add_argument("--sources", type=Path, default=SOURCES_DIR,
                         help="the setups, their repositories and pinned revisions")
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_DIR,
-                        help=f"where <setup>.yml is written (default {DEFAULT_DIR})")
+    parser.add_argument("--output-dir", type=Path, default=ROMFOLDERS_DIR,
+                        help=f"where <setup>.yml is written (default {ROMFOLDERS_DIR})")
     parser.add_argument("--offline", action="store_true", help="read the revision cache only")
     parser.add_argument("--dry-run", action="store_true", help="print counts, write nothing")
     args = parser.parse_args()

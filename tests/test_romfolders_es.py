@@ -15,13 +15,12 @@ import json
 import unittest
 from pathlib import Path
 
-from model.romfolders import setup_paths, source_refs, split_refs
+from model.romfolders import load_sources, setup_paths, source_refs, split_refs
 from scraper.romfolders import (
     Fetcher,
     SourceError,
     dump_setup,
     load_formats,
-    load_sources,
     scrape_setup,
 )
 from scraper.retropie_modules import module_enabled

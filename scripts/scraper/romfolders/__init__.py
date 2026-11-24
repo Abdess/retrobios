@@ -26,7 +26,6 @@ if (_SCRIPTS_DIR := str(Path(__file__).resolve().parents[2])) not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 
 from core import upstream
-from model.sources import source_yaml_file
 
 from ..base_scraper import PlatformDumper
 
@@ -158,14 +157,6 @@ def load_formats() -> dict[str, Parser]:
         if not info.name.startswith("_"):
             importlib.import_module(f"{__name__}.{info.name}")
     return FORMATS
-
-
-def load_sources(directory: Path) -> dict[str, dict]:
-    """Each setup's declared sources and facts, keyed by its file name."""
-    out: dict[str, dict] = {}
-    for path in sorted(Path(directory).glob("*.yml")):
-        out[path.stem] = source_yaml_file(path) or {}
-    return out
 
 
 def _clean_row(row: dict) -> dict:

@@ -6,18 +6,9 @@ from pathlib import Path
 
 from core import upstream
 from model.registry import load_platform_registry
-from model.romfolders import row_sources
-from model.sources import source_yaml_file
+from model.romfolders import load_sources, row_sources, sources_dir
 from model.sourcerevision import scraped_revision
 from freshness.findings import OK, SKIPPED, STALE, UNKNOWN, Finding
-
-
-def romfolder_sources(platforms_dir: Path) -> dict[str, dict]:
-    """setup -> its platforms/romfolders/_sources/<setup>.yml."""
-    out = {}
-    for path in sorted((platforms_dir / "romfolders" / "_sources").glob("*.yml")):
-        out[path.stem] = source_yaml_file(path) or {}
-    return out
 
 
 def watched_sources(doc: dict) -> list[str]:
@@ -73,7 +64,7 @@ def check_romfolders(platforms_dir: Path, cache_dir: str, offline: bool) -> list
     """
     return [
         _romfolder_pin(_subject(setup, doc, key), setup, doc["sources"][key], platforms_dir, cache_dir, offline)
-        for setup, doc in romfolder_sources(platforms_dir).items()
+        for setup, doc in load_sources(sources_dir(platforms_dir)).items()
         for key in watched_sources(doc)
     ]
 

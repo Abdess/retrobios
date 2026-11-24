@@ -55,7 +55,7 @@ from freshness.platformdiff import diff_platform, diff_targets
 from freshness.platforms import _scrapable_platforms, emulatorjs_pin
 from freshness.profiles import check_profiles, summarize_profile_sync
 from freshness.report import exit_code, render, unknown_areas_message
-from freshness.romfolders import check_romfolders, romfolder_pin_drift, romfolder_sources, watched_sources
+from freshness.romfolders import check_romfolders, romfolder_pin_drift, watched_sources
 from freshness.scrapers import rescrape_command, target_scrapers
 from freshness.targets import (
     _declared_cores,
@@ -66,6 +66,7 @@ from freshness.targets import (
     unresolved_target_cores,
 )
 from model.registry import load_platform_registry
+from model.romfolders import load_sources, sources_dir
 from model.safeparse import yaml_load
 from model.targets import platform_overrides
 from profiling.reports import ProfileReport, report_to_dict
@@ -524,7 +525,7 @@ class RomFolderPins(unittest.TestCase):
 
     def test_the_committed_setups_agree_with_their_platform_files(self):
         platforms = REPO_ROOT / "platforms"
-        drift = [d for setup, doc in romfolder_sources(platforms).items()
+        drift = [d for setup, doc in load_sources(sources_dir(platforms)).items()
                  for key in watched_sources(doc)
                  if (d := romfolder_pin_drift(setup, doc["sources"][key], platforms))]
         self.assertEqual(drift, [])
@@ -551,7 +552,7 @@ class RomFolderPins(unittest.TestCase):
                          (STALE, "5 commits behind the branch head"))
 
     def test_the_committed_mister_setup_watches_its_distribution(self):
-        doc = romfolder_sources(REPO_ROOT / "platforms")["misterfpga"]
+        doc = load_sources(sources_dir(REPO_ROOT / "platforms"))["misterfpga"]
         self.assertEqual(watched_sources(doc), ["main", "dist"])
 
 
