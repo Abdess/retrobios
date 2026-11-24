@@ -1,8 +1,4 @@
-"""Platform truth generation and diffing.
-
-Generates ground-truth YAML from emulator profiles for gap analysis,
-and diffs truth against scraped platform data to find divergences.
-"""
+"""Platform truth generated from emulator profiles, for gap analysis and the native export."""
 
 from __future__ import annotations
 

@@ -108,7 +108,7 @@ file itself: `Bios::Scan` takes the composite for every `.zip`
 The registry gives Recalbox `zip_digest: composite`. For a platform so marked, a
 `.zip` entry is checked against its composite alone, by the resolver
 (`resolve_local_file`) and by the pack check (`digest_verdict` in
-`scripts/resolve/validation.py`). On other platforms the ZIP file's direct MD5 is tried first
+`scripts/resolve/acceptance.py`). On other platforms the ZIP file's direct MD5 is tried first
 and the composite after it.
 
 ### Multi-hash (Recalbox)
@@ -449,7 +449,7 @@ pack verification apply the same rule.
 
 ### Variant search
 
-`validated_choice()` (`scripts/resolve/validation.py`) decides the file a platform
+`validated_choice()` (`scripts/resolve/acceptance.py`) decides the file a platform
 destination ships when the emulators reading that destination check it. The
 pack, verify and the install manifest all read it, so they name the same file.
 

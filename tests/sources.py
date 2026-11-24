@@ -41,7 +41,7 @@ COMMANDS = {
     ),
     "slots.py": ("packs/slots.py", "resolve/collisions.py", "packs/slotscan.py", "packs/slotreport.py"),
     "validate_pr.py": (
-        "resolve/review.py", "devtools/reviewfiles.py", "devtools/reviewreport.py",
+        "resolve/review.py", "resolve/reviewhashes.py", "devtools/reviewfiles.py", "devtools/reviewreport.py",
         "core/gitclone.py",
     ),
     "refresh_data_dirs.py": ("packs/datadirs.py", "packs/datadirextract.py"),
@@ -183,7 +183,7 @@ COMMANDS = {
         "model/citations.py",
         "profiling/attribution.py",
     ),
-    "generate_truth.py": ("resolve/truth.py",),
+    "generate_truth.py": ("resolve/truth.py", "resolve/truthsystems.py"),
     "diff_truth.py": ("exporter/truthdiff.py", "exporter/diffreport.py"),
     "fetch_site_images.py": ("sitegen/imagefetch.py", "sitegen/imagenormalize.py"),
     "make_site_icons.py": ("sitegen/brand.py", "sitegen/chromium.py"),

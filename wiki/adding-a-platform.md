@@ -521,7 +521,7 @@ that names the BIOS directory must match a known construct, else the scrape
 stops with `LauncherPatternMissing`.
 
 `verify.py` and the pack builder read the records through one function,
-`LauncherLayer.settle()` in `scripts/resolve/launchers.py`, applied inside the
+`LauncherLayer.settle()` in `scripts/resolve/launcherlayer.py`, applied inside the
 cross-reference both of them consume. A `names_searched` list is one place:
 the names are tried in order and one held file fills it, so a core file the
 launcher would never open once another name of the list is there is not

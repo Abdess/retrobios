@@ -1,18 +1,4 @@
-"""The platform's launcher layer, read by verify and by the pack builder.
-
-A platform's own launch code often decides which name a file is read under.
-Batocera's DuckStation generator tries 22 names per region and keeps the
-first it finds, RetroBat's ares launcher writes the LaserActive image it
-finds into ares's settings. The platform scraper records that code under
-``launchers:`` and this module turns the records into places: a set of
-destinations, relative to the directory core files go to, any one of which
-the launcher reads for one purpose.
-
-Two consequences follow, both computed here once for every reader. A core
-file the launcher would not read because another name of the same place is
-held is not missing on that platform. A place nothing fills yet receives,
-under the launcher's name, a file the core accepts by content.
-"""
+"""Where a platform's launch code puts an emulator's files: handed directories, executed files, standalone bindings."""
 
 from __future__ import annotations
 
